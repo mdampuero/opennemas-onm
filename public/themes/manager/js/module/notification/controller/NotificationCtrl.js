@@ -6,21 +6,17 @@
      * @ngdoc controller
      * @name  NotificationCtrl
      *
-     * @requires $filter
      * @requires $location
-     * @requires $uibModal
      * @requires $scope
-     * @requires itemService
-     * @requires routing
+     * @requires http
      * @requires messenger
-     * @requires data
      *
      * @description
      *   Handles actions for notification edition form
      */
     .controller('NotificationCtrl', [
-      '$filter', '$location', '$uibModal', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
-      function ($filter, $location, $uibModal, $routeParams, $scope, itemService, routing, messenger) {
+      '$location', '$routeParams', '$scope', 'http', 'messenger',
+      function ($location, $routeParams, $scope, http, messenger) {
         /**
          * @memberOf NotificationCtrl
          *
@@ -43,7 +39,7 @@
           body: {
             en: '',
             es: '',
-            gl: '',
+            gl: ''
           },
           target: [],
           enabled: '0',
@@ -73,8 +69,12 @@
          * @return {Array} A list of targets
          */
         $scope.autocomplete = function(query) {
-          return itemService.list('manager_ws_notification_autocomplete',
-            { query: query }).then(function(response) {
+          var route = {
+              name: 'manager_ws_notification_autocomplete',
+              params: { query: query }
+          };
+
+          return http.get(route).then(function(response) {
               var tags = [];
 
               for (var i = 0; i < response.data.target.length; i++) {
@@ -131,17 +131,6 @@
          *   Creates a new notification.
          */
         $scope.save = function() {
-          if ($scope.notificationForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
           $scope.saving = 1;
 
           var data = angular.copy($scope.notification);
@@ -160,24 +149,19 @@
             data.end = data.end.toString();
           }
 
-          itemService.save('manager_ws_notification_create', data)
-            .then(function (response) {
-              messenger.post({ message: response.data, type: 'success' });
+          http.post('manager_ws_notification_save', data)
+            .then(function(response) {
+              messenger.post(response.data);
 
               if (response.status === 201) {
-                // Get new notification id
-                var url = response.headers()['location'];
-                var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                url = routing.ngGenerateShort(
-                  'manager_notification_show', { id: id });
+                var url = response.headers().location.replace('/managerws', '');
                 $location.path(url);
               }
 
               $scope.saving = 0;
             }, function(response) {
+              messenger.post(response.data);
               $scope.saving = 0;
-              messenger.post({ message: response, type: 'error' });
             });
         };
 
@@ -189,17 +173,6 @@
          *   Updates an notification.
          */
         $scope.update = function() {
-          if ($scope.notificationForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
           $scope.saving = 1;
 
           var data = angular.copy($scope.notification);
@@ -218,51 +191,56 @@
             data.end = data.end.toString();
           }
 
-          itemService.update('manager_ws_notification_update', data.id,
-            data).success(function (response) {
-              messenger.post({ message: response, type: 'success' });
-              $scope.saving = 0;
-            }).error(function(response) {
-              messenger.post({ message: response, type: 'error' });
-              $scope.saving = 0;
-            });
+          var route = {
+            name: 'manager_ws_notification_update',
+            params: { id:  $scope.notification.id }
+          };
+
+          http.put(route, data).then(function(response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          });
         };
 
         $scope.$on('$destroy', function() {
           $scope.notification = null;
         });
 
+        var route =  'manager_ws_notification_new';
+
         if ($routeParams.id) {
-          itemService.show('manager_ws_notification_show', $routeParams.id).then(
-            function(response) {
-              $scope.extra        = response.data.extra;
-              $scope.notification = response.data.notification;
+          route = {
+            name:   'manager_ws_notification_show',
+            params: { id: $routeParams.id }
+          }
+        }
 
-              var target = [];
+        http.get(route).then(function(response) {
+          $scope.extra = response.data.extra;
 
-              for (var i = 0; i < $scope.notification.target.length; i++) {
-                var id   = $scope.notification.target[i];
-                var name = id;
+          if (response.data.notification) {
+            $scope.notification = response.data.notification;
+            var target = [];
 
-                if (name === 'all') {
-                  name = $scope.extra.target.filter(function (e) {
-                    return e.id === id;
-                  })[0].name;
-                }
+            for (var i = 0; i < $scope.notification.target.length; i++) {
+              var id   = $scope.notification.target[i];
+              var name = id;
 
-                target.push({ id: id, name: name });
+              if (name === 'all') {
+                name = $scope.extra.target.filter(function (e) {
+                  return e.id === id;
+                })[0].name;
               }
 
-              $scope.notification.target = target;
+              target.push({ id: id, name: name });
             }
-          );
-        } else {
-          itemService.new('manager_ws_notification_new').then(
-            function(response) {
-              $scope.extra = response.data.extra;
-            }
-          );
-        }
+
+            $scope.notification.target = target;
+          }
+        });
       }
     ]);
 })();

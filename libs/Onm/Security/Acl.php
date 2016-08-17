@@ -43,7 +43,6 @@ class Acl
     {
         try {
             if (!isset($categoryID) || is_null($categoryID)) {
-                $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
                 return true;
             }
 
@@ -57,10 +56,9 @@ class Acl
                 return true;
             }
 
-            if (!isset($_SESSION['accesscategories'])
-                || empty($_SESSION['accesscategories'])
-                || !in_array($categoryID, $_SESSION['accesscategories'])
-            ) {
+            $categories = $user->getAccessCategoryIds();
+
+            if (empty($categories) || !in_array($categoryID, $categories)) {
                 return false;
             }
         } catch (Exception $e) {

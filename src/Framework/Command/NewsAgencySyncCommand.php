@@ -45,29 +45,21 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // TODO: Remove ASAP
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid']   = '0';
-
-        $logger = $this->getContainer()->get('logger');
-        $dbConn = $this->getContainer()->get('db_conn');
-        $im     = $this->getContainer()->get('instance_manager');
-
-        $instanceName = $input->getArgument('instance');
-
-        $instance = $im->findOneBy(
-            ['internal_name' => [ ['value' => $instanceName] ] ]
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
         );
 
-        if (!is_object($instance)) {
-            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
-        }
+        $logger       = $this->getContainer()->get('logger');
+        $instanceName = $input->getArgument('instance');
+
+        $instance = $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName($instanceName);
 
         if ($instance->activated != '1') {
             $message = _('Instance not activated');
             throw new \Onm\Instance\NotActivatedException($message);
         }
-
-        $instance->boot();
 
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;
@@ -76,26 +68,18 @@ EOF
         $cache->setNamespace($instance->internal_name);
 
         $database = $instance->settings['BD_DATABASE'];
-        $dbConn->selectDatabase($database);
 
         $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
         $logger->info("Start synchronizing {$instance->internal_name} instance", array('cron'));
 
-        // CRAP: take this out, Workaround
-        \Application::load();
-        \Application::initDatabase($dbConn);
+        $servers = $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'instance')->get('news_agency_config');
 
-        $sm = $this->getContainer()->get('setting_repository');
-        $sm->setConfig([
-            'database' => $database,
-            'cache_prefix' => $instance->internal_name
-        ]);
+        $tpl  = $this->getContainer()->get('view')->getBackendTemplate();
+        $path = $this->getContainer()->getParameter('core.paths.cache')
+            . '/' . $instance->internal_name;
 
-        $servers = $sm->get('news_agency_config');
-
-        $syncParams = array('cache_path' => CACHE_PATH);
-
-        $synchronizer = new Synchronizer($syncParams);
+        $synchronizer = new Synchronizer($path, $tpl);
 
         if (!$synchronizer->isSyncEnvironmetReady()) {
             $synchronizer->setupSyncEnvironment();

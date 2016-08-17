@@ -183,9 +183,9 @@
          * @return {Float} The domain price.
          */
         $scope.getPrice = function() {
-          for (var i = 0; i < $scope.extension.metas['price'].length; i++) {
-            if ($scope.extension.metas['price'][i].type === 'yearly') {
-              return $scope.extension.metas['price'][i].value;
+          for (var i = 0; i < $scope.extension.price.length; i++) {
+            if ($scope.extension.price[i].type === 'yearly') {
+              return $scope.extension.price[i].value;
             }
           }
         };
@@ -315,11 +315,11 @@
             ? 1 : 0;
 
           var url = routing.generate('backend_ws_domain_check_available',
-              { domain: domain, create: create });
+              { create: create, domain: domain });
 
           if (!create) {
             var url = routing.generate('backend_ws_domain_check_valid',
-                { domain: domain, create: create });
+                { create: create, domain: domain });
           }
 
           $scope.loading = true;
@@ -329,7 +329,7 @@
               uuid:        $scope.extension.uuid,
               name:        $scope.extension.name + ': ' + domain,
               description: domain,
-              price:       $scope.extension.metas.price
+              price:       $scope.extension.price
             });
 
             $scope.domain  = '';

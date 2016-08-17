@@ -12,7 +12,6 @@
 namespace Onm\Instance;
 
 use Repository\BaseManager;
-use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 use Onm\Instance\Instance;
 use Onm\Exception\AssetsNotRestoredException;
@@ -69,10 +68,10 @@ class InstanceManager extends BaseManager
     /**
      * Initializes the InstanceManager.
      *
-     * @param DbalWrapper    $dbConn The custom DBAL wrapper.
+     * @param Connection     $dbConn The custom DBAL wrapper.
      * @param CacheInterface $cache  The cache instance.
      */
-    public function __construct(DbalWrapper $conn, CacheInterface $cache, SettingManager $sm)
+    public function __construct($conn, CacheInterface $cache, SettingManager $sm)
     {
         $this->conn  = $conn;
         $this->cache = $cache;
@@ -329,39 +328,6 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Counts total contents in for an instance.
-     *
-     * @param array $settings The instance settings.
-     */
-    public function getExternalInformation(Instance &$instance)
-    {
-        if (empty($instance->getDatabaseName())) {
-            return false;
-        }
-
-        $cacheId = 'instance' . $this->cacheSeparator . $instance->id
-            . $this->cacheSeparator . 'information';
-
-        $instance->external = $this->cache->fetch($cacheId);
-
-        if (!$instance->external) {
-            $this->conn->selectDatabase($instance->getDatabaseName());
-            $sql = "SELECT * FROM `settings`";
-
-            $rs = $this->conn->executeQuery($sql);
-
-            $settings = array();
-            if ($rs !== false) {
-                foreach ($rs as $value) {
-                    $settings[$value['name'] ] = @unserialize($value['value']);
-                }
-            }
-
-            $instance->external = $settings;
-        }
-    }
-
-    /**
      * Check if an instance already exists.
      *
      * @param string $name The instance internal name.
@@ -393,7 +359,7 @@ class InstanceManager extends BaseManager
         $instance->activated = true;
 
         $instance->settings = array(
-            'TEMPLATE_USER' => '',
+            'TEMPLATE_USER' => 'es.openhost.theme.manager',
             'BD_DATABASE'   => 'onm-instances',
         );
 

@@ -1,26 +1,17 @@
 parameters:
-    onm_user_provider.class:       Backend\Security\OnmUserProvider
-    onm_oauth_user_provider.class: Backend\Security\OnmOAuthUserProvider
 
 services:
+    backend.security.user_provider:
+        class:     Backend\Security\UserProvider
+        arguments: [ '@orm.manager' ]
     backend_login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
-        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha', '@application.log' ]
-    frontend_login_success_handler:
-        class:     Frontend\EventListeners\LoginSuccessHandler
-        arguments: [ '@security.token_storage', '@instance', '@router', '@session', '@google_recaptcha', '@application.log' ]
+        arguments: [ '@service_container' ]
     oauth_login_success_handler:
         class:     Backend\EventListener\OAuthLoginSuccessHandler
         arguments: [ '@security.token_storage', '@router', '@session' ]
     onm_oauth_user_provider:
-        class:     %onm_oauth_user_provider.class%
+        class:     Backend\Security\OnmOAuthUserProvider
         arguments: [ '@service_container' ]
     onm_password_encoder:
         class:     Backend\Security\OnmPasswordEncoder
-    onm_user_provider:
-        class:     %onm_user_provider.class%
-        arguments: [ '@cache', '@instance_manager', '@user_repository' ]
-    check_module_access:
-        class:     Backend\EventListener\AnnotationListener
-        arguments: [ '@router', '@annotation_reader' ]
-        tags: [{name: kernel.event_listener, event: kernel.controller, method: onKernelController}]

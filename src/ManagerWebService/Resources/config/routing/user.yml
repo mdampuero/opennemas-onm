@@ -1,47 +1,47 @@
-manager_ws_user_create:
-    path:     /user
-    defaults: { _controller: ManagerWebServiceBundle:User:create }
-    methods:  [ POST ]
-    options:
-        expose: true
-
 manager_ws_user_delete:
-    path:     /user/{id}
+    path:     /users/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:delete }
     methods:  [ DELETE ]
     options:
         expose: true
 
 manager_ws_user_new:
-    path:     /user/new
+    path:     /users/new
     defaults: { _controller: ManagerWebServiceBundle:User:new }
     methods:  [ GET ]
     options:
         expose: true
 
 manager_ws_user_patch:
-    path:     /user/{id}
+    path:     /users/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:patch }
     methods:  [ PATCH ]
     options:
         expose: true
 
-manager_ws_user_show_me:
-    path:     /user/me
-    defaults: { _controller: ManagerWebServiceBundle:User:showMe }
-    methods:  [ GET ]
+manager_ws_user_save:
+    path:     /users
+    defaults: { _controller: ManagerWebServiceBundle:User:save }
+    methods:  [ POST ]
     options:
         expose: true
 
 manager_ws_user_show:
-    path:     /user/{id}
+    path:     /users/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:show }
     methods:  [ GET ]
     options:
         expose: true
 
+manager_ws_user_show_me:
+    path:     /users/me
+    defaults: { _controller: ManagerWebServiceBundle:User:showMe }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_user_update:
-    path:     /user/{id}
+    path:     /users/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:update }
     methods:  [ PUT ]
     options:

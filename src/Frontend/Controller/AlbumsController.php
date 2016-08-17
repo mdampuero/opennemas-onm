@@ -39,8 +39,6 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
-
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
@@ -97,7 +95,7 @@ class AlbumsController extends Controller
 
         // Don't execute the action logic if was cached before
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
             $albumSettings = s::get('album_settings');
@@ -188,7 +186,7 @@ class AlbumsController extends Controller
         $itemsPerPage = 8;
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $album->id);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
             $album->with_comment = 1;
@@ -375,11 +373,11 @@ class AlbumsController extends Controller
         $category = $ccm->get_id($categoryName);
 
         // Get album_inner positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = getService('core.manager.advertisement');
         if ($position == 'inner') {
-            $positions = $positionManager->getAdsPositionsForGroup('album_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('album_inner', array(7, 9));
         } else {
-            $positions = $positionManager->getAdsPositionsForGroup('album_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('album_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

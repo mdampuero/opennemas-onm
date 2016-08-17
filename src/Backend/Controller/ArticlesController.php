@@ -2,17 +2,16 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -27,10 +26,10 @@ class ArticlesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_PENDINGS') and has_role('ARTICLE_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_ADMIN')
+     *     and hasPermission('ARTICLE_PENDINGS')")
+     */
     public function listAction(Request $request)
     {
         $this->loadCategories($request);
@@ -70,8 +69,6 @@ class ArticlesController extends Controller
             }
         }
 
-        $_SESSION['_from'] = $this->generateUrl('admin_articles');
-
         return $this->render(
             'article/list.tpl',
             array(
@@ -88,10 +85,9 @@ class ArticlesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_CREATE')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_CREATE')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
@@ -214,10 +210,9 @@ class ArticlesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = (int) $request->query->getDigits('id', null);
@@ -238,9 +233,6 @@ class ArticlesController extends Controller
         if (is_string($article->params)) {
             $article->params = unserialize($article->params);
         }
-
-        // Para usar el id de articulo al borrar un comentario
-        $_SESSION['olderId'] = $id;
 
         // Photos de noticia
         if (!empty($article->img1)) {
@@ -358,10 +350,9 @@ class ArticlesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -381,7 +372,7 @@ class ArticlesController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$article->isOwner($_SESSION['userid'])
+            && !$article->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -491,7 +482,7 @@ class ArticlesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
+     * @Security("hasExtension('ARTICLE_MANAGER')")
      */
     public function contentProviderInFrontpageAction(Request $request)
     {
@@ -547,7 +538,7 @@ class ArticlesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
+     * @Security("hasExtension('ARTICLE_MANAGER')")
      */
     public function contentProviderSuggestedAction(Request $request)
     {
@@ -596,7 +587,7 @@ class ArticlesController extends Controller
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
+     * @Security("hasExtension('ARTICLE_MANAGER')")
      */
     public function contentProviderCategoryAction(Request $request)
     {
@@ -649,7 +640,7 @@ class ArticlesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
+     * @Security("hasExtension('ARTICLE_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -705,10 +696,9 @@ class ArticlesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_ADMIN')")
+     */
     public function previewAction(Request $request)
     {
         $this->loadCategories($request);
@@ -719,9 +709,9 @@ class ArticlesController extends Controller
         $articleContents = $request->request->filter('contents');
 
         // Load config
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
         $this->view->setConfig('articles');
-        $this->view->caching = 0;
+        $this->view->setCaching(0);
 
         // Fetch all article properties and generate a new object
         foreach ($articleContents as $key => $value) {
@@ -810,10 +800,9 @@ class ArticlesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ARTICLE_MANAGER")
-     **/
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_ADMIN')")
+     */
     public function getPreviewAction()
     {
         $session = $this->get('session');

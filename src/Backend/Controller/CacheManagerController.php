@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -47,16 +46,15 @@ class CacheManagerController extends Controller
      *
      * @return string the string response
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function configAction(Request $request)
     {
         // Init template cache config manager with frontend user template
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->get('view')->getTemplate();
         $configDir         = $frontpageTemplate ->config_dir[0];
-        $configContainer   = $this->container->get('template_cache_config_manager');
+        $configContainer   = $this->get('template_cache_config_manager');
         $configManager     = $configContainer->setConfigDir($configDir);
 
         // If the request is post then save the configuration with the data provided
@@ -86,7 +84,7 @@ class CacheManagerController extends Controller
                 $flashBag->add('error', _('Unable to save the cache configuration.'));
             }
 
-            return $this->redirect($this->generateUrl('admin_cache_manager'));
+            return $this->redirect($this->generateUrl('admin_cache_manager_config'));
         } else {
             // Load cache manager config and show the form with that info
             $config = $configManager->load();
@@ -104,14 +102,13 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function clearCacheAction()
     {
         // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->get('view')->getTemplate();
         $frontpageTemplate->clearAllCache();
 
         $this->get('session')->getFlashBag()
@@ -126,14 +123,13 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function clearCompiledTemplatesAction()
     {
         // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->get('view')->getTemplate();
         $frontpageTemplate->clearCompiledTemplate();
 
         $this->get('session')->getFlashBag()
@@ -147,10 +143,9 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function clearVarnishCacheAction()
     {
         // Initialization of the frontend template object
@@ -158,7 +153,7 @@ class CacheManagerController extends Controller
             return false;
         }
 
-        $instanceName = $this->get('instance')->internal_name;
+        $instanceName = $this->get('core.instance')->internal_name;
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));

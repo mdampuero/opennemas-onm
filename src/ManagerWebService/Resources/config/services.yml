@@ -1,7 +1,4 @@
-parameters:
-   onm_test.example.class: Onm\TestBundle\Example
-
 services:
-    manager_ws_login_success_handler:
-        class:     ManagerWebService\EventListener\LoginSuccessHandler
-        arguments: [ '@security.token_storage', '@router', '@session', '@application.log' ]
+    manager_ws.security.user_provider:
+        class:     ManagerWebService\Security\UserProvider
+        arguments: [ '@orm.manager' ]

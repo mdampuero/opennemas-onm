@@ -35,15 +35,10 @@ class SubscribersController extends Controller
     {
         $ads = $this->getAds();
 
-        $this->view = new \Template(TEMPLATE_USER);
-        $this->view->assign(
-            [
-                'advertisements'  => $ads,
-                'actual_category' => 'newsletter'
-            ]
-        );
-
-        return $this->render('static_pages/subscription.tpl');
+        return $this->render('static_pages/subscription.tpl', [
+            'advertisements'  => $ads,
+            'actual_category' => 'newsletter'
+        ]);
     }
 
     /**
@@ -108,7 +103,6 @@ class SubscribersController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'static_pages/subscription.tpl',
             [
@@ -315,8 +309,8 @@ class SubscribersController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

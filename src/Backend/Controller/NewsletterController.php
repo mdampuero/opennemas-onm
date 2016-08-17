@@ -14,11 +14,10 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -36,10 +35,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function listAction(Request $request)
     {
         $maxAllowed     = s::get('max_mailing');
@@ -77,10 +75,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function createAction(Request $request)
     {
         $configurations = s::get('newsletter_maillist');
@@ -142,10 +139,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function showContentsAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -181,10 +177,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function saveContentsAction(Request $request)
     {
         $id = (int) $request->request->getDigits('id');
@@ -252,23 +247,17 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function previewAction(Request $request)
     {
-        $id = (int) $request->query->getDigits('id');
-
+        $id         = (int) $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
-        $sessId = 'data-recipients-'.$newsletter->id;
-        if (array_key_exists($sessId, $_SESSION)) {
-            $_SESSION['data-recipients-'.$newsletter->id] = array();
-        }
 
         return $this->render(
             'newsletter/steps/2-preview.tpl',
-            array('newsletter' => $newsletter,)
+            [ 'newsletter' => $newsletter ]
         );
     }
 
@@ -279,10 +268,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function saveHtmlContentAction(Request $request)
     {
         $id = (int) $request->query->getDigits('id');
@@ -315,10 +303,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function pickRecipientsAction(Request $request)
     {
         $id         = $request->query->getDigits('id');
@@ -361,12 +348,7 @@ class NewsletterController extends Controller
             );
         }
 
-        $recipients = array();
-
-        $sessId = 'data-recipients-'.$newsletter->id;
-        if (array_key_exists($id, $_SESSION) && is_string($_SESSION[$sessId])) {
-            $recipients = json_decode($_SESSION['data-recipients-'.$newsletter->id]);
-        }
+        $recipients = [];
 
         return $this->render(
             'newsletter/steps/3-pick-recipients.tpl',
@@ -386,10 +368,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function sendAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -399,17 +380,6 @@ class NewsletterController extends Controller
 
         $sentResult = array();
         $newsletter = new \Newsletter($id);
-        $sessId = 'data-recipients-'.$newsletter->id;
-        if (array_key_exists($sessId, $_SESSION) && !empty($_SESSION[$sessId])) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Sorry, newsletter "%d" was been sent previously'), $newsletter->id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_newsletters'));
-        }
-
-        $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
@@ -498,10 +468,9 @@ class NewsletterController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

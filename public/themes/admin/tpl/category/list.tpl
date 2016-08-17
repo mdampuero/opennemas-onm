@@ -76,21 +76,17 @@
                 </tr>
               </thead>
               <tbody>
-                {section name=c loop=$categorys}
-                {if $categorys[c]->internal_category eq '1'}
-                {include file="category/_partials/print_list_category.tpl"
-                category=$categorys[c]
-                subcategorys=$subcategorys[c]
-                num_contents=$num_contents[c]
-                num_sub_contents=$num_sub_contents[c]|default:array()}
-                {/if}
-                {sectionelse}
+                {foreach $categories as $category}
+                  {if $category->internal_category eq '1'}
+                    {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                  {/if}
+                {foreachelse}
                 <tr>
                   <td class="empty">
                     {t}No available categories for listing{/t}
                   </td>
                 </tr>
-                {/section}
+                {/foreach}
               </tbody>
             </table>
           </div>
@@ -108,21 +104,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {section name=c loop=$categorys}
-                  {if $categorys[c]->internal_category eq '7'}
-                  {include file="category/_partials/print_list_category.tpl"
-                  category=$categorys[c]
-                  subcategorys=$subcategorys[c]
-                  num_contents=$num_contents[c]
-                  num_sub_contents=$num_sub_contents[c]}
-                  {/if}
-                  {sectionelse}
+                  {foreach $categories as $category}
+                    {if $category->internal_category eq '7'}
+                      {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                    {/if}
+                  {foreachelse}
                   <tr>
                     <td class="empty">
                       {t}No available categories for listing{/t}
                     </td>
                   </tr>
-                  {/section}
+                  {/foreach}
                 </tbody>
               </table>
             </div>
@@ -141,22 +133,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {section name=c loop=$categorys}
-                  {if $categorys[c]->internal_category eq '9'}
-                  {include file="category/_partials/print_list_category.tpl"
-                  category=$categorys[c]
-                  subcategorys=$subcategorys[c]
-                  num_contents=$num_contents[c]
-                  num_sub_contents=$num_sub_contents[c]}
-                  {/if}
-                  {sectionelse}
+                  {foreach $categories as $category}
+                    {if $category->internal_category eq '9'}
+                      {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                    {/if}
+                  {foreachelse}
                   <tr>
                     <td class="empty">
                       {t}No available categories for listing{/t}
                     </td>
                   </tr>
-                  {/section}
-
+                  {/foreach}
                 </tbody>
               </table>
             </div>
@@ -175,21 +162,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {section name=c loop=$categorys}
-                  {if $categorys[c]->internal_category eq '14'}
-                  {include file="category/_partials/print_list_category.tpl"
-                  category=$categorys[c]
-                  subcategorys=$subcategorys[c]
-                  num_contents=$num_contents[c]
-                  num_sub_contents=$num_sub_contents[c]}
-                  {/if}
-                  {sectionelse}
+                  {foreach $categories as $category}
+                    {if $category->internal_category eq '14'}
+                      {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                    {/if}
+                  {foreachelse}
                   <tr>
                     <td class="empty">
                       {t}No available categories for listing{/t}
                     </td>
                   </tr>
-                  {/section}
+                  {/foreach}
                 </tbody>
               </table>
             </div>
@@ -208,21 +191,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {section name=c loop=$categorys}
-                  {if $categorys[c]->internal_category eq '11'}
-                  {include file="category/_partials/print_list_category.tpl"
-                  category=$categorys[c]
-                  subcategorys=$subcategorys[c]
-                  num_contents=$num_contents[c]
-                  num_sub_contents=$num_sub_contents[c]}
-                  {/if}
-                  {sectionelse}
+                  {foreach $categories as $category}
+                    {if $category->internal_category eq '11'}
+                      {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                    {/if}
+                  {foreachelse}
                   <tr>
                     <td class="empty">
                       {t}No available categories for listing{/t}
                     </td>
                   </tr>
-                  {/section}
+                  {/foreach}
                 </tbody>
               </table>
             </div>
@@ -241,21 +220,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {section name=c loop=$categorys}
-                  {if $categorys[c]->internal_category eq '10'}
-                  {include file="category/_partials/print_list_category.tpl"
-                  category=$categorys[c]
-                  subcategorys=$subcategorys[c]
-                  num_contents=$num_contents[c]
-                  num_sub_contents=$num_sub_contents[c]}
-                  {/if}
-                  {sectionelse}
+                  {foreach $categories as $category}
+                    {if $category->internal_category eq '10'}
+                      {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                    {/if}
+                  {foreachelse}
                   <tr>
                     <td class="empty">
                       {t}No available categories for listing{/t}
                     </td>
                   </tr>
-                  {/section}
+                  {/foreach}
                 </tbody>
               </table>
             </div>
@@ -274,21 +249,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {section name=c loop=$categorys}
-                  {if $categorys[c]->internal_category eq '15'}
-                  {include file="category/_partials/print_list_category.tpl"
-                  category=$categorys[c]
-                  subcategorys=$subcategorys[c]
-                  num_contents=$num_contents[c]
-                  num_sub_contents=$num_sub_contents[c]}
-                  {/if}
-                  {sectionelse}
+                  {foreach $categories as $category}
+                    {if $category->internal_category eq '15'}
+                      {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                    {/if}
+                  {foreachelse}
                   <tr>
                     <td class="empty">
                       {t}No available categories for listing{/t}
                     </td>
                   </tr>
-                  {/section}
+                  {/foreach}
                 </tbody>
               </table>
             </div>
@@ -307,21 +278,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {section name=c loop=$categorys}
-                  {if $categorys[c]->internal_category eq '0'}
-                  {include file="category/_partials/print_list_category.tpl"
-                  category=$categorys[c]
-                  subcategorys=$subcategorys[c]
-                  num_contents=$num_contents[c]
-                  num_sub_contents=$num_sub_contents[c]}
+                {foreach $categories as $category}
+                  {if $category->internal_category eq '0'}
+                    {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
                   {/if}
-                  {sectionelse}
-                  <tr>
-                    <td class="empty">
-                      {t}No available categories for listing{/t}
-                    </td>
-                  </tr>
-                  {/section}
+                {foreachelse}
+                <tr>
+                  <td class="empty">
+                    {t}No available categories for listing{/t}
+                  </td>
+                </tr>
+                {/foreach}
                 </tbody>
               </table>
             </div>

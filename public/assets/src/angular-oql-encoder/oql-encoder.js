@@ -20,8 +20,6 @@ angular.module('onm.oqlEncoder', [])
               value:    criteria[name]
             }];
 
-            cleaned[name] = [];
-
             if (name.indexOf('_like') !== -1 ) {
               var values = criteria[name].split(' ');
 

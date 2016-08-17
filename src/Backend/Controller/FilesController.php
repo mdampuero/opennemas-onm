@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -34,7 +33,8 @@ class FilesController extends Controller
     public function init()
     {
         $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
-        $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category    = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $this->ccm         = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
@@ -66,9 +66,8 @@ class FilesController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function listAction()
     {
@@ -99,9 +98,8 @@ class FilesController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function widgetAction()
     {
@@ -118,9 +116,8 @@ class FilesController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function statisticsAction()
     {
@@ -221,9 +218,8 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_CREATE')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -270,7 +266,7 @@ class FilesController extends Controller
         if (!preg_match($regexp, $uploadedFile->getClientOriginalExtension())) {
             error_log(sprintf(
                 'User %s tried to upload a not allowed file type %s (%s).',
-                $_SESSION['userid'],
+                $this->getUser()->id,
                 $uploadedFile->getClientOriginalExtension(),
                 $uploadedFile->getClientOriginalName()
             ));
@@ -312,7 +308,7 @@ class FilesController extends Controller
             'content_status' => 1,
             'description'    => $request->request->get('description', ''),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'fk_publisher'   => $_SESSION['userid'],
+            'fk_publisher'   => $this->getUser()->id,
         );
 
         // Move uploaded file
@@ -356,9 +352,8 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -394,9 +389,8 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -410,7 +404,7 @@ class FilesController extends Controller
             'id'             => (int) $id,
             'description'    => $request->request->filter('description', null),
             'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'fk_publisher'   => $_SESSION['userid'],
+            'fk_publisher'   => $this->getUser()->id,
         );
 
         if ($file->update($data)) {
@@ -434,14 +428,11 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ATTACHMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')
+     *     and hasPermission('ATTACHMENT_ADMIN')")
      */
     public function savePositionsAction(Request $request)
     {
-        $request = $this->get('request');
-
         $positions = $request->request->get('positions');
 
         $result = true;
@@ -478,7 +469,7 @@ class FilesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="FILE_MANAGER")
+     * @Security("hasExtension('FILE_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {

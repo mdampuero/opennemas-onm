@@ -9,25 +9,31 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TranslationThemeCommand extends Command
+class TranslationThemeCommand extends ContainerAwareCommand
 {
+    /**
+     * The list of supported languages.
+     *
+     * @var array
+     */
     public $supportedLanguages = array('es_ES', 'gl_ES', 'pt_BR');
 
-    public $translationDir = '/locale';
-
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
             ->setDefinition(
                 array(
-                    new InputArgument('theme', InputArgument::REQUIRED, 'theme'),
+                    new InputArgument('uuid', InputArgument::REQUIRED, 'The theme UUID in format es.openhost.theme.name'),
                 )
             )
             ->setName('translation:theme')
@@ -42,34 +48,33 @@ EOF
             );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = APPLICATION_PATH;
-
         chdir($basePath);
 
-        $this->input = $input;
-        $this->output = $output;
+        $uuid = 'es.openhost.theme.' . str_replace('es.openhost.theme.', '', $input->getArgument('uuid'));
 
-        $theme = $input->getArgument('theme');
+        $theme = $this->getContainer()->get('orm.manager')
+            ->getRepository('Theme')->findOneBy(sprintf('uuid = "%s"', $uuid));
 
-        $this->themeFolder = 'public/themes/'.$theme;
-
-        if (!file_exists($this->themeFolder)) {
-            $output->writeln("<error>Theme $theme doesn't exists</error>");
+        if (empty($theme->text_domain)) {
+            $output->writeln("<error>[FAIL] Theme $uuid has no translation support</error>");
             return;
         }
 
-        $this->theme = include($this->themeFolder.'/init.php');
+        $output->writeln("Translating <info>$uuid</> theme...");
 
-        if (!$this->theme->hasL10nSupport()) {
-            $output->writeln('<error>This theme has no support for translations</error>');
+        $this->themeFolder = 'public/' . $theme->path;
 
-            return false;
-        }
+        $path  = $this->getContainer()->getParameter('core.paths.themes') . '/'
+            . str_replace('es.openhost.theme.', '', $theme->uuid) . '/locale';
 
-        $this->translationsDir      = $this->theme->getTranslationsDir();
-        $this->translationsDomain = $this->theme->getTranslationDomain();
+        $this->translationsDir    = $path;
+        $this->translationsDomain = $theme->text_domain;
 
         if (!file_exists($this->translationsDir)) {
             $output->writeln(" * Creating the locale folder");
@@ -83,10 +88,10 @@ EOF
     }
 
     /**
-     * Extract translations from a list of modules
+     * Extract translations from the theme.
      *
-     * @return void
-     **/
+     * @param OutputInterface $output The output interface.
+     */
     private function extractTrans($output)
     {
         $output->writeln(" * Extracting strings");
@@ -156,18 +161,17 @@ EOF
     }
 
     /**
-     * Updates the translation files for the given theme
+     * Updates the translation files for the theme.
      *
-     * @return void
-     **/
+     * @param OutputInterface $output The output interface.
+     */
     private function updateTrans($output)
     {
         $output->writeln(" * Updating translation files");
 
-        $translationsDir = $this->theme->getTranslationsDir();
         foreach ($this->supportedLanguages as $language) {
             $output->writeln("\t- Language ".$language);
-            $languageDir = $translationsDir.'/'.$language.'/LC_MESSAGES';
+            $languageDir = $this->translationsDir.'/'.$language.'/LC_MESSAGES';
 
             if (!is_dir($languageDir)) {
                 $output->writeln("\t\t- Creating target directory");
@@ -185,10 +189,10 @@ EOF
     }
 
     /**
-     * Compiles the translation files for the given theme
+     * Compiles the translation files for the theme.
      *
-     * @return void
-     **/
+     * @param OutputInterface $output The output interface.
+     */
     private function compileTrans($output)
     {
         $output->writeln(" * Compiling translation databases");

@@ -73,7 +73,6 @@ class AdvertisementManager extends EntityManager
             WHERE $filterSQL AND pk_content=pk_advertisement
             ORDER BY $orderBySQL $limitSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
         $contentIdentifiers = array();

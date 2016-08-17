@@ -4,7 +4,7 @@ manager_clients_list:
         expose: true
 
 manager_client_show:
-    path: /clients/{id}/show
+    path: /clients/{id}
     requirements:
         id: \d+
     options:

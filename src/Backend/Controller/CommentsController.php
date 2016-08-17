@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -50,10 +49,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function defaultAction()
     {
         // Select between comments system
@@ -87,10 +85,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function selectAction(Request $request)
     {
         $type = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
@@ -137,10 +134,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function defaultDisqusAction()
     {
         $disqusShortName = s::get('disqus_shortname');
@@ -172,10 +168,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function configDisqusAction(Request $request)
     {
         if ($request->getMethod() != 'POST') {
@@ -213,10 +208,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function defaultFacebookAction()
     {
         $fbSettings = s::get('facebook');
@@ -237,10 +231,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function configFacebookAction(Request $request)
     {
         $fbSettings = s::get('facebook');
@@ -281,10 +274,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function listAction()
     {
         return $this->render(
@@ -302,10 +294,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -335,10 +326,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id      = $request->query->getDigits('id');
@@ -392,10 +382,9 @@ class CommentsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('COMMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="COMMENT_MANAGER")
-     **/
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_ADMIN')")
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

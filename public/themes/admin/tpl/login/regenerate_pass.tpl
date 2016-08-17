@@ -12,8 +12,7 @@
   <meta name="robots"    content="noindex, nofollow" />
   <meta name="description" content="OpenNeMaS - An specialized CMS focused in journalism." />
   <meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
-
-  <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
+  <link rel="icon" href="{$_template->getImageDir()}/favicon.png">
 
   {block name="header-css"}
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">

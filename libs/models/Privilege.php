@@ -103,6 +103,8 @@ class Privilege
             $this->{$k} = $v;
         }
 
+        $this->pk_privilege = (int) $this->pk_privilege;
+
         // Lazy setting
         $this->id = $this->pk_privilege;
 
@@ -182,6 +184,8 @@ class Privilege
             }
             $groupedPrivileges[$privilegeData['module']] []= $privilege;
         }
+
+        ksort($groupedPrivileges);
 
         return $groupedPrivileges;
     }
@@ -1177,7 +1181,7 @@ class Privilege
                 'module'       => 'SYNC_MANAGER',
             ),
             180 => array(
-                'pk_privilege' => '178',
+                'pk_privilege' => '180',
                 'name'         => 'INSTANCE_SYNC_ADMIN',
                 'description'  => _('Administer instances'),
                 'module'       => 'INSTANCE_SYNC',

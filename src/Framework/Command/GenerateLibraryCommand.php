@@ -70,13 +70,6 @@ EOF
         $cache = $this->getContainer()->get('cache');
         $cache->setNamespace($instance->internal_name);
 
-        // Initialize the instance database connection
-        $databaseInstanceConnection = $this->getContainer()->get('db_conn');
-
-        // CRAP: take this out, Workaround
-        \Application::load();
-        \Application::initDatabase($databaseInstanceConnection);
-
         $urlBase = "http://www.cronicasdelaemigracion.es/seccion/";
 
         $date          = new \DateTime();

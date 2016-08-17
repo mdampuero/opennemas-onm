@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-29 16:09+0000\n"
-"PO-Revision-Date: 2016-07-29 18:14+0200\n"
+"POT-Creation-Date: 2016-08-16 13:31+0000\n"
+"PO-Revision-Date: 2016-08-16 15:48+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -20,34 +20,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
 
-msgid ""
-"You have reach the maximum users allowed. If you want to create more users, "
-"please contact us."
-msgstr ""
-"Alcanzouse o máximo de usuarios permitidos. Se queres crear máis usuarios "
-"contacta connosco."
-
-msgid "Not assigned"
-msgstr "Non asignado"
-
-msgid "All"
-msgstr "Todos"
-
-#, php-format
-msgid "Unable to find the user with the id '%d'"
-msgstr "Non se puido atopar unha foto con identificador «%d»"
-
 msgid "Frontpage"
 msgstr "Portada"
-
-msgid "English"
-msgstr "Inglés"
-
-msgid "Spanish"
-msgstr "Español"
-
-msgid "Galician"
-msgstr "Galego"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado do sistema"
@@ -63,39 +37,6 @@ msgstr "Muller"
 
 msgid "Other"
 msgstr "Outro"
-
-msgid "The data send by the user is not valid."
-msgstr "Os datos enviados do usuario non son válidos."
-
-msgid "User data updated successfully."
-msgstr "Datos do usuario actualizados correctamente."
-
-msgid "Unable to update the user with that information"
-msgstr "Non se puido actualizar o usuario coa información fornecida"
-
-msgid ""
-"Unable to change user backend access. You have reached the max number of "
-"users."
-msgstr ""
-"Non foi posíbel cambiar o acceso ao administrador do usuario. Alcanzouse o "
-"número máximo de usuarios."
-
-msgid "User created successfully."
-msgstr "Usuario creado correctamente."
-
-msgid "Unable to create the user with that information"
-msgstr "Non se puido crear o usuario con información fornecida"
-
-#, php-format
-msgid "Successfully deleted user with id \"%d\"."
-msgstr "Usuario co identificador «%d» eliminado correctamente."
-
-#, php-format
-msgid "You have deleted %d users."
-msgstr "Elimináronse %d usuarios."
-
-msgid "You haven't selected any user to delete."
-msgstr "Debes seleccionar un usuario para eliminalo."
 
 #, php-format
 msgid "Password reminder for %s"
@@ -123,9 +64,11 @@ msgstr "Contrasinal actualizado correctamente"
 msgid "Password and confirmation must be equal."
 msgstr "O contrasinal e a confirmación deben que ser iguais."
 
-#, php-format
-msgid "Unable to find user group with id '%d'"
-msgstr "Non se puido atopar o grupo de usuarios co identificador «%d»"
+msgid "User created successfully."
+msgstr "Usuario creado correctamente."
+
+msgid "User data updated successfully."
+msgstr "Datos do usuario actualizados correctamente."
 
 msgid "User group created successfully."
 msgstr "Grupo de usuarios creado correctamente."
@@ -140,12 +83,8 @@ msgstr "Grupo de usuario actualizado correctamente."
 msgid "Unable to update the user group with id \"%d\""
 msgstr "Non se puido actualizar o grupo de usuario «%d»"
 
-msgid "User group deleted successfully."
-msgstr "Grupo de usuarios eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the user group with id \"%d\""
-msgstr "Non se puido eliminar o grupo de usuarios co identificador «%d»"
+msgid "All"
+msgstr "Todos"
 
 msgid "Multimedia"
 msgstr "Multimedia"
@@ -271,6 +210,9 @@ msgstr "Autor creado correctamente."
 
 msgid "Unable to create the author with that information"
 msgstr "Non se puido crear o autor coa información fornecida"
+
+msgid "The data send by the user is not valid."
+msgstr "Os datos enviados do usuario non son válidos."
 
 msgid "Author updated successfully."
 msgstr "Datos do autor actualizados correctamente."
@@ -731,10 +673,6 @@ msgstr "%d boletíns enviados desde %s."
 msgid "Content saved successfully"
 msgstr "Contido gardado correctamente"
 
-#, php-format
-msgid "Sorry, newsletter \"%d\" was been sent previously"
-msgstr "Desculpe, o boletin de novas «%d» xa foi enviado anteriormente"
-
 msgid ""
 "Your newsletter configuration is not complete. You must complete the sender "
 "email address."
@@ -910,28 +848,32 @@ msgstr "Debe fornecer un identificador para eliminar un especial."
 msgid "Unable to save positions for the specials widget."
 msgstr "Non se puideron gardar as posicións do widget de especiais."
 
-#, php-format
-msgid "Unable to find a static page with the id \"%d\"."
-msgstr "Non se puido atopar unha páxina estática co identificador «%d»."
-
-msgid "Static page created successfully."
-msgstr "Páxina estática creada correctamente."
-
-msgid ""
-"You can't modify this static page because you don't have enough privileges."
-msgstr "Non tes permisos dabondo para modificar esta páxina estática."
-
-msgid "Static Page data sent not valid."
-msgstr "Os datos enviados da páxina estática non son válidos."
-
-msgid "Static page updated successfully."
-msgstr "Páxina estática actualizada correctamente."
-
 msgid "Can't get static page title. Check the title"
 msgstr "No foi posibel obter o titulo da páxina estática. Comprobe o titulo"
 
+msgid "There were errors while creating the content"
+msgstr "Produciuse un erro ao actualizar o contido"
+
+msgid "You don't have enough privileges to execute this action"
+msgstr "Non tes permisos para executar esta acción"
+
+msgid "Content updated successfully"
+msgstr "Contido actualizado correctamente"
+
+msgid "There were errors while updating the content"
+msgstr "Produciuse un erro ao actualizar o contido"
+
 msgid "Others"
 msgstr "Outros"
+
+msgid "English"
+msgstr "Inglés"
+
+msgid "Spanish"
+msgstr "Español"
+
+msgid "Galician"
+msgstr "Galego"
 
 msgid ""
 "The maximum height for the \"Site Logo\" is 120px. Please adjust your image "
@@ -1167,10 +1109,6 @@ msgstr "Elemento eliminado correctamente"
 msgid "Item updated successfully"
 msgstr "Elemento actualizado correctamente"
 
-#, php-format
-msgid "Access denied (%s)"
-msgstr "Acceso denegado (%s)"
-
 msgid "Item restored successfully"
 msgstr "Elemento restaurado correctamente"
 
@@ -1201,6 +1139,10 @@ msgstr "Non se puido atopar o elemento co identificador «%s»"
 #, php-format
 msgid "%d item(s) permanently removed successfully"
 msgstr "%d elemento(s) eliminado(s) permanentemente correctamente"
+
+#, php-format
+msgid "Access denied (%s)"
+msgstr "Acceso denegado (%s)"
 
 msgid "Item published successfully"
 msgstr "Elemento publicado correctamente"
@@ -1247,6 +1189,10 @@ msgstr ""
 
 msgid "Positions saved successfully"
 msgstr "Posicións gardadas correctamente"
+
+#, php-format
+msgid "%d items updated successfully"
+msgstr "%d elementos actualizados correctamente"
 
 #, php-format
 msgid "The domain %s is not valid"
@@ -1397,6 +1343,9 @@ msgstr "Creado"
 msgid "Description"
 msgstr "Descrición"
 
+msgid "From"
+msgstr "Desde"
+
 msgid "Pick the item to insert"
 msgstr "Seleccione o elemento a insertar"
 
@@ -1420,6 +1369,9 @@ msgstr "Filtrar por nome"
 
 msgid "Title"
 msgstr "Titulo"
+
+msgid "To"
+msgstr "Ate"
 
 msgid "Thumbnail details"
 msgstr "Detalles da miniatura"
@@ -1452,37 +1404,15 @@ msgstr "A túa solicitude non foi enviada"
 msgid "Your request has been registered"
 msgstr "A túa solicitude foi enviada"
 
-msgid "Invalid theme"
-msgstr "Tema non válido"
+msgid "User deleted successfully"
+msgstr "Usuario eliminado con éxito"
+
+msgid "Bad request"
+msgstr "Solicitude incorrecta"
 
 #, php-format
-msgid "Unable to delete the item with the id \"%s\""
-msgstr "Non se puido eliminar o elemento co identificador «%s»"
-
-#, php-format
-msgid "Unable to find the item with the id \"%s\""
-msgstr "Non se puido atopar o elemento co identificador «%s»"
-
-#, php-format
-msgid "%s item(s) deleted successfully"
-msgstr "%s elemento(s) eliminado(s) correctamente"
-
-msgid "Selected items deleted successfully"
-msgstr "Elementos seleccionados eliminados correctamente"
-
-msgid ""
-"Unable to change user backend access. You have reach the maximum allowed"
-msgstr ""
-"Non foi posíbel cambiar o acceso ao administrador do usuario. Alcanzouse o "
-"número máximo de usuarios."
-
-#, php-format
-msgid "Unable to delete the item with the id \"%d\""
-msgstr "Non se puido eliminar o elemento co identificador «%d»."
-
-#, php-format
-msgid "Unable to find the item with the id \"%d\""
-msgstr "Non se puido atopar o elemento co identificador «%d»"
+msgid "%s users deleted successfully"
+msgstr "%s usuarios eliminados correctamente"
 
 msgid "Name"
 msgstr "Nome"
@@ -1510,6 +1440,20 @@ msgstr "Data de rexistro"
 
 msgid "Not defined"
 msgstr "Non definido"
+
+msgid "User saved successfully"
+msgstr "Usuario gardado con éxito"
+
+#, php-format
+msgid "%s users saved successfully"
+msgstr "%s usuarios gardados correctamente"
+
+msgid "User group deleted successfully"
+msgstr "Grupo de usuarios eliminado correctamente"
+
+#, php-format
+msgid "%s user groups deleted successfully"
+msgstr "%s grupos de usuarios eliminados correctamente"
 
 msgid "Application upgraded"
 msgstr "Aplicativo actualizado"
@@ -1676,7 +1620,7 @@ msgid "Latest Albums"
 msgstr "Últimos álbums"
 
 msgid "Check the form and try again"
-msgstr ""
+msgstr "Revisa o formulario e inténtao de novo"
 
 msgid "You have been subscribed to the newsletter."
 msgstr "Subscribicheste ao boletin de novas."
@@ -1724,11 +1668,11 @@ msgstr ""
 msgid "Data updated successfully"
 msgstr "Datos actualizados correctamente."
 
-msgid "Unable to update the user."
-msgstr "Non se puido actualizar o usuario."
-
 msgid "The user does not exists."
 msgstr "O usuario non existe."
+
+msgid "Unable to update the user."
+msgstr "Non se puido actualizar o usuario."
 
 msgid "Log in succesful."
 msgstr "Inicio de sesión correcto."
@@ -1770,25 +1714,33 @@ msgstr "Arrincando a imprenta…"
 msgid "Reinventing Gutenberg machine..."
 msgstr "Reinventando a máquina de Gutenberg…"
 
-msgid "Client removed successfully"
-msgstr "Contido eliminado correctamente"
-
-msgid "Unable to find the instances for the given criteria"
-msgstr "Non foi posíbel atopar unha instancia co criterio fornecido"
+msgid "Client deleted successfully"
+msgstr "Cliente eliminado correctamente"
 
 #, php-format
-msgid "Unable to find the client with id \"%s\""
-msgstr "Non se puido atopar o cliente co identificador «%s»"
-
-#, php-format
-msgid "%d clients deleted successfully."
-msgstr "%d cliente(s) eliminados correctamente"
+msgid "%s clients deleted successfully"
+msgstr "%d clientes eliminados correctamente"
 
 msgid "Client saved successfully"
 msgstr "Cliente gardado correctamente"
 
+msgid "Instance deleted successfully"
+msgstr "Instancia eliminada correctamente"
+
+#, php-format
+msgid "Error while deleting instance with id \"%s\""
+msgstr "Non se puido eliminar a instancia co identificador «%s»"
+
+#, php-format
+msgid "%s instances deleted successfully"
+msgstr "%s instancias eliminadas correctamente"
+
 msgid "Instance saved successfully"
 msgstr "Instancia gardada correctamente"
+
+#, php-format
+msgid "%s instances saved successfully"
+msgstr "%s instancias gardadas correctamente"
 
 msgid "The instance already exists"
 msgstr "A instancia xa existe"
@@ -1796,35 +1748,9 @@ msgstr "A instancia xa existe"
 msgid "Unable to create the database for the instance"
 msgstr "No se puido crear a base de datos para a instancia"
 
-msgid "Instance deleted successfully."
-msgstr "Instancia eliminada correctamente."
-
 #, php-format
-msgid "Unable to find the instance with id \"%s\""
-msgstr "Non se puido atopar a instancia co identificador «%s»"
-
-#, php-format
-msgid "Error while deleting instance with id \"%s\""
-msgstr "Non se puido eliminar a instancia co identificador «%s»"
-
-#, php-format
-msgid "%s instances deleted successfully."
-msgstr "%s instancias eliminadas correctamente."
-
-#, php-format
-msgid "%s instances updated successfully."
-msgstr "%s instancias actualizadas correctamente."
-
-#, php-format
-msgid "A module with the uuid %d already exists"
-msgstr "Xa existe un módulo co UUID %d"
-
-#, php-format
-msgid "A module with uuid '%s' already exists"
-msgstr "Xa existe un módulo co UUID «%s»"
-
-msgid "Module saved successfully"
-msgstr "Módulo gardado con éxito"
+msgid "A module with the uuid '%s' already exists"
+msgstr "Xa existe un módulo con UUID '%d'"
 
 msgid "Module deleted successfully."
 msgstr "Módulo eliminado correctamente."
@@ -1833,40 +1759,26 @@ msgstr "Módulo eliminado correctamente."
 msgid "%s modules deleted successfully."
 msgstr "%s módulos eliminados correctamente."
 
-msgid "Manager"
-msgstr "Xestor"
+msgid "Module saved successfully"
+msgstr "Módulo gardado con éxito"
 
 #, php-format
-msgid "Unable to find the module with id \"%s\""
-msgstr "Non se puido atopar o módulo co identificador «%s»"
-
-msgid "Unable to find the modules for the given criteria"
-msgstr "Non se atoparon módulos para o criterio fornecido"
-
-#, php-format
-msgid "%s modules updated successfully."
-msgstr "%s módulos actualizados correctamente."
-
-#, php-format
-msgid "Unable to find the entity with id \"%s\""
-msgstr "Non se puido atopar a entidade co identificador «%s»"
-
-msgid "Notification saved successfully"
-msgstr "Notificación gardada correctamente"
+msgid "%s modules saved successfully"
+msgstr "%s módulos gardados correctamente"
 
 msgid "Notification deleted successfully."
 msgstr "Notificación eliminada correctamente."
 
-msgid "Unable to find the notifications for the given criteria"
-msgstr "Non foi posíbel atopar ningunha notificación co criterio fornecido"
+#, php-format
+msgid "%s notifications deleted successfully"
+msgstr "%s notificacións eliminadas correctamente"
+
+msgid "Notification saved successfully"
+msgstr "Notificación gardada correctamente"
 
 #, php-format
-msgid "%s notifications deleted successfully."
-msgstr "%s notificacións eliminadas correctamente."
-
-#, php-format
-msgid "%s notifications updated successfully."
-msgstr "%s notificacións actualizadas correctamente."
+msgid "%s notifications saved successfully"
+msgstr "%s notificacións gardadas correctamente"
 
 msgid "Help"
 msgstr "Axuda"
@@ -1874,16 +1786,12 @@ msgstr "Axuda"
 msgid "Information"
 msgstr "Información"
 
-msgid "Purchased removed successfully"
+msgid "Purchase deleted successfully"
 msgstr "Compra eliminada correctamente"
 
 #, php-format
-msgid "Unable to find the purchase with id \"%s\""
-msgstr "Non se puido atopar a compra co identificador «%s»"
-
-#, php-format
-msgid "%d purchases deleted successfully."
-msgstr "%d compras eliminadas correctamente."
+msgid "%s purchases deleted successfully"
+msgstr "%d compras eliminadas correctamente"
 
 msgid "Cart"
 msgstr "Carro"
@@ -1950,62 +1858,8 @@ msgstr "Grupos de usuarios"
 msgid "Show/hide sidebar"
 msgstr "Mostrar/ocultar barra lateral"
 
-msgid "User saved successfully"
-msgstr "Usuario gardado con éxito"
-
-msgid "User deleted successfully"
-msgstr "Usuario eliminado con éxito"
-
-#, php-format
-msgid "Unable to delete the user with the id \"%d\""
-msgstr "Non se puido eliminar o usuario co identificador «%d»."
-
-msgid "Unable to find users for the given criteria"
-msgstr "Non se atoparon usuarios para o criterio fornecido"
-
-#, php-format
-msgid "%s users deleted successfully."
-msgstr "%s usuarios eliminados correctamente."
-
-msgid "User updated successfully."
-msgstr "Usuario actualizado correctamente."
-
-#, php-format
-msgid "Error while updating user with id \"%s\""
-msgstr "Produciuse un erro ao actualizar o usuario co identificador «%s»"
-
-#, php-format
-msgid "Unable to find the user with id \"%s\""
-msgstr "Non se puido atopar o usuario co identificador «%s»"
-
-msgid "Unable to find the users for the given criteria"
-msgstr "Non se atoparon usuarios para o criterio fornecido"
-
-#, php-format
-msgid "%s users updated successfully."
-msgstr "%s usuarios actualizados correctamente."
-
-msgid "Unable to find the current user"
-msgstr "Non foi posíbel atopar o usuario actual"
-
-msgid "User group name cannot be empty"
-msgstr "O nome do grupo de usuarios non pode quedar baleiro"
-
-msgid "Unable to create a new usergroup"
-msgstr "No se puido crear un novo grupo de usuarios"
-
 msgid "User group saved successfully"
 msgstr "Grupo de usuario gardado correctamente"
-
-msgid "Unable to find user groups for the given criteria"
-msgstr "Non se atoparon grupos para o criterio fornecido"
-
-#, php-format
-msgid "%s user groups deleted successfully."
-msgstr "%s grupos de usuarios eliminados correctamente."
-
-msgid "User group updated successfully"
-msgstr "Grupo de usuario actualizado correctamente"
 
 msgid "A new opennemas instance has been created"
 msgstr "Creouse unha nova instancia de Opennemas"
@@ -2031,33 +1885,6 @@ msgstr "Anterior"
 
 msgid "Content already imported"
 msgstr "Contido xa importado"
-
-#, php-format
-msgid "The client with id '%d' was not found in %s"
-msgstr "Non se puido atopar o cliente con id «%d» en %s"
-
-#, php-format
-msgid "The criteria (%s) is not valid in %s"
-msgstr "O criterio (%s) non é válido en %s"
-
-#, php-format
-msgid "The persister '%s' does not exist in %s"
-msgstr "O persistor «%s» non existe en %s"
-
-#, php-format
-msgid "The repository '%s' does not exist in %s"
-msgstr "O repositorio «%s» non existe en %s"
-
-#, php-format
-msgid "The invoice with id '%d' was not found in %s"
-msgstr "Non se puido atopar a factura con id «%d» en %s"
-
-#, php-format
-msgid "The payment with id '%d' was not found in %s"
-msgstr "Non se puido atopar o pago con id «%d» en %s"
-
-msgid "Unable to load plugins. No folder specified."
-msgstr "Non se puideron cargar os plugins. Non se especificou un cartafol."
 
 msgid "Advertisement"
 msgstr "Publicidade"
@@ -2374,36 +2201,6 @@ msgstr "Opinión: interior"
 
 msgid "RSS"
 msgstr "RSS"
-
-msgid "Name of the newspaper must be longer than 5 characters"
-msgstr "O nome do periódico debe conter cando menos 5 caracteres"
-
-msgid ""
-"Url must be longer than 4 characters and only must content characters and "
-"numbers"
-msgstr "A url debe ter cando menos 4 letras ou números"
-
-msgid "The url that you entered is already in use"
-msgstr "A url xa está en uso"
-
-msgid "Please enter a valid url"
-msgstr "Escribe un URL válido"
-
-msgid "Your newspaper name cointains disallowed words."
-msgstr "O nome do periódico contén palabras non permitidas."
-
-msgid "Your desired address contains disallowed words."
-msgstr "O enderezo desexado contén palabras non permitidas."
-
-msgid "Your user name contains disallowed words."
-msgstr "O nome de usuario contén palabras non permitidas."
-
-msgid "There was an error while validating your data against disallowed words."
-msgstr ""
-"Produciuse un erro ao validar os teus datos fronte a palabras non permitidas."
-
-msgid "The email that you entered is already in use"
-msgstr "O enderezo que escribiu xa está en uso"
 
 msgid "Accelerated Mobile Pages integration"
 msgstr "Integración de Accelerated Mobile Pages"
@@ -4304,8 +4101,8 @@ msgid ""
 "showPopupWidget();\">support team</a>."
 msgstr ""
 "Para evitar cargos indesexados na túa conta, por favor, non reintentes o "
-"proceso de compra e contacta co noso <a href=\""
-"javascript:UserVoice.showPopupWidget();\">equipo de soporte</a>."
+"proceso de compra e contacta co noso <a href=\"javascript:UserVoice."
+"showPopupWidget();\">equipo de soporte</a>."
 
 msgid "Delete letter"
 msgstr "Eliminar carta"
@@ -5173,6 +4970,12 @@ msgstr "Creando grupo de usuario"
 msgid "Privileges"
 msgstr "Privilexios"
 
+msgid "Toggle all privileges"
+msgstr "Activar/desactivar todos os privilexios"
+
+msgid "[% section.title %]"
+msgstr "[% section.title %]"
+
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "Tes certeza que queres eliminar «<span>%title%</span>»?"
 
@@ -5213,17 +5016,16 @@ msgid "Are you sure you want to update the user?"
 msgstr "Tes certeza que queres actualizar o usuario?"
 
 msgid ""
-"Are you sure you want to disable [% template.selected.contents.length %] "
+"Are you sure you want to disable [% template.selected.items.length %] "
 "user(s)?"
 msgstr ""
-"Tes certeza que queres desactivar [% template.selected.contents.length %] "
+"Tes certeza que queres desactivar [% template.selected.items.length %] "
 "usuario(s)?"
 
 msgid ""
-"Are you sure you want to enable [% template.selected.contents.length %] "
-"user(s)?"
+"Are you sure you want to enable [% template.selected.items.length %] user(s)?"
 msgstr ""
-"Tes certeza que queres activar [% template.selected.contents.length %] "
+"Tes certeza que queres activar [% template.selected.items.length %] "
 "usuario(s)?"
 
 msgid "I understand and accept the charges."
@@ -5267,6 +5069,9 @@ msgstr "Correo electrónico"
 
 msgid "Backend access"
 msgstr "Acceso ao panel"
+
+msgid "Not assigned"
+msgstr "Non asignado"
 
 msgid "Your account is connected to %1."
 msgstr "A túa conta está conectada a %1."
@@ -5756,89 +5561,6 @@ msgstr "Datas"
 msgid "Grouped by date"
 msgstr "Agrupadas por data"
 
-msgid "Upgrade instance"
-msgstr "Actualizar instancia"
-
-msgid "Are you sure you want to proceed with this upgrade ?"
-msgstr "Tes certeza que queres proceder coa actualización?"
-
-msgid "Request upgrade"
-msgstr "Solicitude de actualización"
-
-msgid "List of modules to hire"
-msgstr "Lista de módulos para adquirir"
-
-msgid "List of modules to unsubscribe"
-msgstr "Lista de módulos para desuscribir"
-
-msgid "My account"
-msgstr "A miña conta"
-
-msgid "This is the email used to create your newspaper"
-msgstr "Este foi o correo-e usado para creare o seu periódico"
-
-msgid "Your newspaper was created on %1"
-msgstr "O seu periódico foi creado en %1"
-
-msgid "Support plan"
-msgstr "Plan de asistencia técnica"
-
-msgid "Support by tickets"
-msgstr "Soporte por tickets"
-
-msgid "Storage size"
-msgstr "Amacenamento ocupado"
-
-msgid "Page views this month"
-msgstr "Páxinas vistas este mes"
-
-msgid "coming soon... work in progress..."
-msgstr "pronto terás esta información…"
-
-msgid "Opennemas offers many more modules and solutions"
-msgstr "Opennemas ofrece moitos máis módulos e solucións"
-
-msgid "Check out our modules"
-msgstr "Comprobe os nosos módulos"
-
-msgid ""
-"If you need a custom plan or you want to purchase a plan or module please "
-"click in the next link:"
-msgstr ""
-"Se precisa un plan personalizado ou quere mercar un plan ou un módulo prema "
-"na seguinte ligazón:"
-
-msgid "Contact Us"
-msgstr "Contacta connosco"
-
-msgid "Address"
-msgstr "Enderezo"
-
-msgid "Postal code"
-msgstr "Código postal"
-
-msgid "City"
-msgstr "Cidade"
-
-msgid "State"
-msgstr "Provincia/Estado"
-
-msgid "Country"
-msgstr "País"
-
-msgid ""
-"Something wrong? Contact our <a href=\"javascript:UserVoice."
-"showPopupWidget();\">support team</a>."
-msgstr ""
-"Hai algo mal? Contacta co noso <a href=\"javascript:UserVoice."
-"showPopupWidget();\">equipo de soporte</a>."
-
-msgid "You have no billing information"
-msgstr "Non tes ningunha información de facturación"
-
-msgid "You will be asked to add it during the checkout in our store"
-msgstr "Solicitaraseche esta información durante o proceso de compra na tenda"
-
 msgid "IntelligentWidget"
 msgstr "IntelligentWidget"
 
@@ -6016,9 +5738,11 @@ msgid "Welcome"
 msgstr "Benvido"
 
 msgid ""
-"Are you sure that do you want send to the trash \"[% template.content.title "
-"%]\"?"
-msgstr "Tes certeza que queres enviar ao lixo «[% template.content.title %]»?"
+"Are you sure that do you want send to the trash \"[% template.content."
+"title ? template.content.title : template.content.name %]\"?"
+msgstr ""
+"Tes certeza que queres enviar ao lixo «[% template.content.title ? "
+"template.content.title : template.content.name %]»?"
 
 msgid "Deleting"
 msgstr "Eliminando"
@@ -6151,6 +5875,9 @@ msgstr ""
 
 msgid "Drop"
 msgstr "Quitar"
+
+msgid "Are you sure you want to delete [% template.selected %] item(s)?"
+msgstr "¿Seguro que queres eliminar [% template.selected %] elemento(s)?"
 
 msgid "-- All categories --"
 msgstr "-- Todas as categorías --"
@@ -6403,6 +6130,12 @@ msgstr "Cor do sitio"
 
 msgid "Color used for links, menus and some widgets."
 msgstr "Cor usado para as ligazóns, menús e algúns widgets."
+
+msgid "Site secondary color"
+msgstr "Cor secundario do sitio"
+
+msgid "Color used for custom elements."
+msgstr "Cor usado para elementos personalizados."
 
 msgid "Use custom logo"
 msgstr "Usar logotipo personalizado"
@@ -7019,9 +6752,6 @@ msgstr "Rango de datas"
 
 msgid "Show this ad if satisfy one condition"
 msgstr "Mostra esta publicidade só se cumpre unha condición"
-
-msgid "From"
-msgstr "Desde"
 
 msgid "Until"
 msgstr "Até"
@@ -7688,6 +7418,9 @@ msgstr "http://exemplo.gal"
 msgid "Where are you from?"
 msgstr "De onde es?"
 
+msgid "Country"
+msgstr "País"
+
 msgid "Select a country"
 msgstr "Seleccione un país"
 
@@ -7721,14 +7454,23 @@ msgstr "Número de identificación fiscal"
 msgid "What is a VAT identification number?"
 msgstr "Que é un número de identificación fiscal?"
 
+msgid "Address"
+msgstr "Enderezo"
+
 msgid "This is not a valid address"
 msgstr "Este non é un enderezo válido"
 
 msgid "This is not a valid postal_code"
 msgstr "Este non é un código postal válido"
 
+msgid "Postal code"
+msgstr "Código postal"
+
 msgid "This is not a valid city"
 msgstr "Este non é unha cidade válida"
+
+msgid "City"
+msgstr "Cidade"
 
 msgid "This is not a valid state"
 msgstr "Este non é un estado válido"
@@ -8032,6 +7774,62 @@ msgstr ""
 "\">nosa axuda</a> ou comprobar os <a href=\"http://youtube.com/opennemas"
 "\">nosos vídeos</a> para ver o fácil que é usar Opennemas."
 
+msgid "My account"
+msgstr "A miña conta"
+
+msgid "This is the email used to create your newspaper"
+msgstr "Este foi o correo-e usado para creare o seu periódico"
+
+msgid "Your newspaper was created on %1"
+msgstr "O seu periódico foi creado en %1"
+
+msgid "Support plan"
+msgstr "Plan de asistencia técnica"
+
+msgid "Support by tickets"
+msgstr "Soporte por tickets"
+
+msgid "Storage size"
+msgstr "Amacenamento ocupado"
+
+msgid "Page views this month"
+msgstr "Páxinas vistas este mes"
+
+msgid "coming soon... work in progress..."
+msgstr "pronto terás esta información…"
+
+msgid "Opennemas offers many more modules and solutions"
+msgstr "Opennemas ofrece moitos máis módulos e solucións"
+
+msgid "Check out our modules"
+msgstr "Comprobe os nosos módulos"
+
+msgid ""
+"If you need a custom plan or you want to purchase a plan or module please "
+"click in the next link:"
+msgstr ""
+"Se precisa un plan personalizado ou quere mercar un plan ou un módulo prema "
+"na seguinte ligazón:"
+
+msgid "Contact Us"
+msgstr "Contacta connosco"
+
+msgid "State"
+msgstr "Provincia/Estado"
+
+msgid ""
+"Something wrong? Contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+"Hai algo mal? Contacta co noso <a href=\"javascript:UserVoice."
+"showPopupWidget();\">equipo de soporte</a>."
+
+msgid "You have no billing information"
+msgstr "Non tes ningunha información de facturación"
+
+msgid "You will be asked to add it during the checkout in our store"
+msgstr "Solicitaraseche esta información durante o proceso de compra na tenda"
+
 msgid "Completed purchases"
 msgstr "Compras completadas"
 
@@ -8040,9 +7838,6 @@ msgstr "Compras non completadas"
 
 msgid "Search by client"
 msgstr "Buscar por cliente"
-
-msgid "To"
-msgstr "Ate"
 
 msgid "Step"
 msgstr "Paso"
@@ -8166,78 +7961,6 @@ msgstr ""
 "Aquí pode eliminar en lote ficheiros de cache, compiles, sesións e outras "
 "cousas<br> dunha instancia específica"
 
-msgid "We seem to have lost you in the clouds."
-msgstr "Semella que te perdemos nas nubes."
-
-msgid "The page your looking for is not here"
-msgstr "A páxina que estás buscando non está aquí"
-
-msgid "Search by UUID"
-msgstr "Buscar por UUID"
-
-msgid "UUID"
-msgstr "UUID"
-
-msgid "Translations"
-msgstr "Traducións"
-
-msgid "Pack"
-msgstr "Pack"
-
-msgid "Partner"
-msgstr "Socio"
-
-msgid "Translations completed"
-msgstr "Tradución completa"
-
-msgid "translations left"
-msgstr "traducciones sen completar"
-
-msgid "New module"
-msgstr "Novo módulo"
-
-msgid "Edit module"
-msgstr "Editar módulo"
-
-msgid "This UUID is invalid"
-msgstr "Este UUID é válido"
-
-msgid "Select a type..."
-msgstr "Seleccione unha tipo…"
-
-msgid "Domain"
-msgstr "Dominio"
-
-msgid "Theme"
-msgstr "Tema"
-
-msgid "Theme addon"
-msgstr "Engadido de tema"
-
-msgid "Select a category..."
-msgstr "Seleccione unha categoría…"
-
-msgid "Monthly"
-msgstr "Mensual"
-
-msgid "Yearly"
-msgstr "Anual"
-
-msgid "Single"
-msgstr "Único"
-
-msgid "Modules included"
-msgstr "Módulos incluídos"
-
-msgid "Modules in conflict"
-msgstr "Módulos en conflito"
-
-msgid "Do you want to delete the module?"
-msgstr "Tes certeza que queres eliminar o usuario?"
-
-msgid "Do you want to delete the selected modules?"
-msgstr "Tes certeza que queres eliminar os módulos seleccionados?"
-
 msgid "Search"
 msgstr "Buscar"
 
@@ -8264,12 +7987,6 @@ msgstr "Páx. vistas"
 
 msgid "No rank"
 msgstr "Sen calificar"
-
-msgid "Select modules"
-msgstr "Módulos seleccionados"
-
-msgid "Select all"
-msgstr "Seleccionar todo"
 
 msgid "There was an error while creating an instance with the following data:"
 msgstr "Produciuse un erro ao crear unha instancia cos seguintes datos:"
@@ -8380,17 +8097,14 @@ msgstr "Os dominios da instancia non poden quedar valeiros."
 msgid "Domain expire date:"
 msgstr "Data de expiración do dominio:"
 
+msgid "Select all"
+msgstr "Seleccionar todo"
+
 msgid "Support"
 msgstr "Asistencia técnica"
 
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
-
-msgid "Maximun activated users"
-msgstr "Número máximo de usuarios activados"
-
-msgid "0 for unlimited users"
-msgstr "0 para usuarios ilimitados"
 
 msgid "Minimum password level"
 msgstr "Nivel minimo de contrasinal"
@@ -8429,20 +8143,83 @@ msgstr "Desexas eliminar a instancia?"
 msgid "Do you want to delete the selected instances?"
 msgstr "Tes certeza que queres eliminar as instancias seleccionadas?"
 
+msgid "We seem to have lost you in the clouds."
+msgstr "Semella que te perdemos nas nubes."
+
+msgid "The page your looking for is not here"
+msgstr "A páxina que estás buscando non está aquí"
+
+msgid "Search by UUID"
+msgstr "Buscar por UUID"
+
+msgid "UUID"
+msgstr "UUID"
+
+msgid "Translations"
+msgstr "Traducións"
+
+msgid "Pack"
+msgstr "Pack"
+
+msgid "Partner"
+msgstr "Socio"
+
+msgid "Translations completed"
+msgstr "Tradución completa"
+
+msgid "translations left"
+msgstr "traducciones sen completar"
+
+msgid "New module"
+msgstr "Novo módulo"
+
+msgid "Edit module"
+msgstr "Editar módulo"
+
+msgid "This UUID is invalid"
+msgstr "Este UUID é válido"
+
+msgid "Select a type..."
+msgstr "Seleccione unha tipo…"
+
+msgid "Domain"
+msgstr "Dominio"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Theme addon"
+msgstr "Engadido de tema"
+
+msgid "Select a category..."
+msgstr "Seleccione unha categoría…"
+
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Yearly"
+msgstr "Anual"
+
+msgid "Single"
+msgstr "Único"
+
+msgid "Modules included"
+msgstr "Módulos incluídos"
+
+msgid "Modules in conflict"
+msgstr "Módulos en conflito"
+
+msgid "Do you want to delete the module?"
+msgstr "Tes certeza que queres eliminar o usuario?"
+
+msgid "Do you want to delete the selected modules?"
+msgstr "Tes certeza que queres eliminar os módulos seleccionados?"
+
 msgid "Edit group"
 msgstr "Editar grupo"
 
 msgid "New user group"
 msgstr "Nuevo grupo de usuario"
-
-msgid "Selected privileges"
-msgstr "Privilexios seleccionados"
-
-msgid "Toggle all privileges"
-msgstr "Activar/desactivar todos os privilexios"
-
-msgid "[% section.title %]"
-msgstr "[% section.title %]"
 
 msgid "Do you want to delete the user group?"
 msgstr "Tes certeza que queres eliminar o grupo de usuarios?"
@@ -8531,6 +8308,12 @@ msgstr "Tes certeza que queres eliminar as notificacións seleccionadas?"
 msgid "Initializing"
 msgstr "Iniciando"
 
+msgid "Welcome, Master"
+msgstr "Benvido, Maestro"
+
+msgid "Login"
+msgstr "Iniciar sesión"
+
 msgid ""
 "Your browser was unable to load all of Opennemas's resources. They may have "
 "been blocked by your firewall, proxy or browser configuration."
@@ -8543,15 +8326,6 @@ msgstr "Prema Ctrl+F5 ou Ctrl+Maiús+R para que o navegador os recargue"
 
 msgid "Notification"
 msgstr "Notificación"
-
-msgid "Opennemas manager"
-msgstr "Xestor de opennemas"
-
-msgid "Use manager account to sign in."
-msgstr "Use unha conta do xestor para iniciar sesión."
-
-msgid "Login"
-msgstr "Iniciar sesión"
 
 msgid "Download CSV of selected"
 msgstr "Descargar CSV dos seleccionados"
@@ -8690,6 +8464,12 @@ msgstr "Buscar por nome ou nome de usuario"
 msgid "New user"
 msgstr "Novo usuario"
 
+msgid "This field is invalid"
+msgstr "Este campo é inválido"
+
+msgid "The passwords don't match"
+msgstr "Os contrasinais non coinciden"
+
 msgid "User type"
 msgstr "Tipo de usuario"
 
@@ -8723,8 +8503,271 @@ msgstr "Desexas eliminar o cliente?"
 msgid "Do you want to delete the selected clients?"
 msgstr "Tes certeza que queres eliminar os clientes seleccionados?"
 
+msgid "Do you want to log out?"
+msgstr "¿Quere cerrar a sesión?"
+
 msgid "Action"
 msgstr "Acción"
+
+#, fuzzy
+#~ msgid "You don't have enough privileges to modify this content"
+#~ msgstr "Non tes permisos dabondo para modificar este álbum."
+
+#, fuzzy
+#~ msgid "Content saved successfully."
+#~ msgstr "Contido gardado correctamente"
+
+#~ msgid ""
+#~ "You have reach the maximum users allowed. If you want to create more "
+#~ "users, please contact us."
+#~ msgstr ""
+#~ "Alcanzouse o máximo de usuarios permitidos. Se queres crear máis usuarios "
+#~ "contacta connosco."
+
+#~ msgid "Unable to find the user with the id '%d'"
+#~ msgstr "Non se puido atopar unha foto con identificador «%d»"
+
+#~ msgid "Unable to update the user with that information"
+#~ msgstr "Non se puido actualizar o usuario coa información fornecida"
+
+#~ msgid ""
+#~ "Unable to change user backend access. You have reached the max number of "
+#~ "users."
+#~ msgstr ""
+#~ "Non foi posíbel cambiar o acceso ao administrador do usuario. Alcanzouse "
+#~ "o número máximo de usuarios."
+
+#~ msgid "Unable to create the user with that information"
+#~ msgstr "Non se puido crear o usuario con información fornecida"
+
+#~ msgid "Successfully deleted user with id \"%d\"."
+#~ msgstr "Usuario co identificador «%d» eliminado correctamente."
+
+#~ msgid "You have deleted %d users."
+#~ msgstr "Elimináronse %d usuarios."
+
+#~ msgid "You haven't selected any user to delete."
+#~ msgstr "Debes seleccionar un usuario para eliminalo."
+
+#~ msgid "Unable to find user group with id '%d'"
+#~ msgstr "Non se puido atopar o grupo de usuarios co identificador «%d»"
+
+#~ msgid "Unable to delete the user group with id \"%d\""
+#~ msgstr "Non se puido eliminar o grupo de usuarios co identificador «%d»"
+
+#~ msgid "Sorry, newsletter \"%d\" was been sent previously"
+#~ msgstr "Desculpe, o boletin de novas «%d» xa foi enviado anteriormente"
+
+#~ msgid "Unable to find a static page with the id \"%d\"."
+#~ msgstr "Non se puido atopar unha páxina estática co identificador «%d»."
+
+#~ msgid "Static page created successfully."
+#~ msgstr "Páxina estática creada correctamente."
+
+#~ msgid ""
+#~ "You can't modify this static page because you don't have enough "
+#~ "privileges."
+#~ msgstr "Non tes permisos dabondo para modificar esta páxina estática."
+
+#~ msgid "Static Page data sent not valid."
+#~ msgstr "Os datos enviados da páxina estática non son válidos."
+
+#~ msgid "Static page updated successfully."
+#~ msgstr "Páxina estática actualizada correctamente."
+
+#~ msgid "Invalid theme"
+#~ msgstr "Tema non válido"
+
+#~ msgid "Unable to delete the item with the id \"%s\""
+#~ msgstr "Non se puido eliminar o elemento co identificador «%s»"
+
+#~ msgid "Unable to find the item with the id \"%s\""
+#~ msgstr "Non se puido atopar o elemento co identificador «%s»"
+
+#~ msgid "%s item(s) deleted successfully"
+#~ msgstr "%s elemento(s) eliminado(s) correctamente"
+
+#~ msgid "Selected items deleted successfully"
+#~ msgstr "Elementos seleccionados eliminados correctamente"
+
+#~ msgid ""
+#~ "Unable to change user backend access. You have reach the maximum allowed"
+#~ msgstr ""
+#~ "Non foi posíbel cambiar o acceso ao administrador do usuario. Alcanzouse "
+#~ "o número máximo de usuarios."
+
+#~ msgid "Unable to delete the item with the id \"%d\""
+#~ msgstr "Non se puido eliminar o elemento co identificador «%d»."
+
+#~ msgid "Unable to find the item with the id \"%d\""
+#~ msgstr "Non se puido atopar o elemento co identificador «%d»"
+
+#~ msgid "Client removed successfully"
+#~ msgstr "Contido eliminado correctamente"
+
+#~ msgid "Unable to find the instances for the given criteria"
+#~ msgstr "Non foi posíbel atopar unha instancia co criterio fornecido"
+
+#~ msgid "Unable to find the client with id \"%s\""
+#~ msgstr "Non se puido atopar o cliente co identificador «%s»"
+
+#~ msgid "Unable to find the instance with id \"%s\""
+#~ msgstr "Non se puido atopar a instancia co identificador «%s»"
+
+#~ msgid "%s instances updated successfully."
+#~ msgstr "%s instancias actualizadas correctamente."
+
+#~ msgid "A module with uuid '%s' already exists"
+#~ msgstr "Xa existe un módulo co UUID «%s»"
+
+#~ msgid "Manager"
+#~ msgstr "Xestor"
+
+#~ msgid "Unable to find the module with id \"%s\""
+#~ msgstr "Non se puido atopar o módulo co identificador «%s»"
+
+#~ msgid "Unable to find the modules for the given criteria"
+#~ msgstr "Non se atoparon módulos para o criterio fornecido"
+
+#~ msgid "%s modules updated successfully."
+#~ msgstr "%s módulos actualizados correctamente."
+
+#~ msgid "Unable to find the entity with id \"%s\""
+#~ msgstr "Non se puido atopar a entidade co identificador «%s»"
+
+#~ msgid "Unable to find the notifications for the given criteria"
+#~ msgstr "Non foi posíbel atopar ningunha notificación co criterio fornecido"
+
+#~ msgid "%s notifications updated successfully."
+#~ msgstr "%s notificacións actualizadas correctamente."
+
+#~ msgid "Purchased removed successfully"
+#~ msgstr "Compra eliminada correctamente"
+
+#~ msgid "Unable to find the purchase with id \"%s\""
+#~ msgstr "Non se puido atopar a compra co identificador «%s»"
+
+#~ msgid "Unable to delete the user with the id \"%d\""
+#~ msgstr "Non se puido eliminar o usuario co identificador «%d»."
+
+#~ msgid "Unable to find users for the given criteria"
+#~ msgstr "Non se atoparon usuarios para o criterio fornecido"
+
+#~ msgid "User updated successfully."
+#~ msgstr "Usuario actualizado correctamente."
+
+#~ msgid "Error while updating user with id \"%s\""
+#~ msgstr "Produciuse un erro ao actualizar o usuario co identificador «%s»"
+
+#~ msgid "Unable to find the user with id \"%s\""
+#~ msgstr "Non se puido atopar o usuario co identificador «%s»"
+
+#~ msgid "Unable to find the users for the given criteria"
+#~ msgstr "Non se atoparon usuarios para o criterio fornecido"
+
+#~ msgid "%s users updated successfully."
+#~ msgstr "%s usuarios actualizados correctamente."
+
+#~ msgid "Unable to find the current user"
+#~ msgstr "Non foi posíbel atopar o usuario actual"
+
+#~ msgid "User group name cannot be empty"
+#~ msgstr "O nome do grupo de usuarios non pode quedar baleiro"
+
+#~ msgid "Unable to create a new usergroup"
+#~ msgstr "No se puido crear un novo grupo de usuarios"
+
+#~ msgid "Unable to find user groups for the given criteria"
+#~ msgstr "Non se atoparon grupos para o criterio fornecido"
+
+#~ msgid "User group updated successfully"
+#~ msgstr "Grupo de usuario actualizado correctamente"
+
+#~ msgid "The client with id '%d' was not found in %s"
+#~ msgstr "Non se puido atopar o cliente con id «%d» en %s"
+
+#~ msgid "The criteria (%s) is not valid in %s"
+#~ msgstr "O criterio (%s) non é válido en %s"
+
+#~ msgid "The persister '%s' does not exist in %s"
+#~ msgstr "O persistor «%s» non existe en %s"
+
+#~ msgid "The repository '%s' does not exist in %s"
+#~ msgstr "O repositorio «%s» non existe en %s"
+
+#~ msgid "The invoice with id '%d' was not found in %s"
+#~ msgstr "Non se puido atopar a factura con id «%d» en %s"
+
+#~ msgid "The payment with id '%d' was not found in %s"
+#~ msgstr "Non se puido atopar o pago con id «%d» en %s"
+
+#~ msgid "Unable to load plugins. No folder specified."
+#~ msgstr "Non se puideron cargar os plugins. Non se especificou un cartafol."
+
+#~ msgid "Name of the newspaper must be longer than 5 characters"
+#~ msgstr "O nome do periódico debe conter cando menos 5 caracteres"
+
+#~ msgid ""
+#~ "Url must be longer than 4 characters and only must content characters and "
+#~ "numbers"
+#~ msgstr "A url debe ter cando menos 4 letras ou números"
+
+#~ msgid "The url that you entered is already in use"
+#~ msgstr "A url xa está en uso"
+
+#~ msgid "Please enter a valid url"
+#~ msgstr "Escribe un URL válido"
+
+#~ msgid "Your newspaper name cointains disallowed words."
+#~ msgstr "O nome do periódico contén palabras non permitidas."
+
+#~ msgid "Your desired address contains disallowed words."
+#~ msgstr "O enderezo desexado contén palabras non permitidas."
+
+#~ msgid "Your user name contains disallowed words."
+#~ msgstr "O nome de usuario contén palabras non permitidas."
+
+#~ msgid ""
+#~ "There was an error while validating your data against disallowed words."
+#~ msgstr ""
+#~ "Produciuse un erro ao validar os teus datos fronte a palabras non "
+#~ "permitidas."
+
+#~ msgid "The email that you entered is already in use"
+#~ msgstr "O enderezo que escribiu xa está en uso"
+
+#~ msgid "Upgrade instance"
+#~ msgstr "Actualizar instancia"
+
+#~ msgid "Are you sure you want to proceed with this upgrade ?"
+#~ msgstr "Tes certeza que queres proceder coa actualización?"
+
+#~ msgid "Request upgrade"
+#~ msgstr "Solicitude de actualización"
+
+#~ msgid "List of modules to hire"
+#~ msgstr "Lista de módulos para adquirir"
+
+#~ msgid "List of modules to unsubscribe"
+#~ msgstr "Lista de módulos para desuscribir"
+
+#~ msgid "Select modules"
+#~ msgstr "Módulos seleccionados"
+
+#~ msgid "Maximun activated users"
+#~ msgstr "Número máximo de usuarios activados"
+
+#~ msgid "0 for unlimited users"
+#~ msgstr "0 para usuarios ilimitados"
+
+#~ msgid "Selected privileges"
+#~ msgstr "Privilexios seleccionados"
+
+#~ msgid "Opennemas manager"
+#~ msgstr "Xestor de opennemas"
+
+#~ msgid "Use manager account to sign in."
+#~ msgstr "Use unha conta do xestor para iniciar sesión."
 
 #~ msgid "Domain + redirection: "
 #~ msgstr "Dominio + redirección:"

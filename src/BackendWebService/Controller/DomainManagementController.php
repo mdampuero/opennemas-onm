@@ -2,10 +2,10 @@
 
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Entity\Client;
-use Framework\ORM\Entity\Invoice;
-use Framework\ORM\Entity\Payment;
-use Framework\ORM\Entity\Purchase;
+use Common\ORM\Entity\Client;
+use Common\ORM\Entity\Invoice;
+use Common\ORM\Entity\Payment;
+use Common\ORM\Entity\Purchase;
 use Onm\Framework\Controller\Controller;
 use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
@@ -56,7 +56,7 @@ class DomainManagementController extends Controller
     {
         $domain   = $request->query->get('domain');
         $end      = substr($domain, strrpos($domain, '.') + 1);
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $expected = "{$instance->internal_name}.{$end}.opennemas.net";
 
@@ -102,7 +102,7 @@ class DomainManagementController extends Controller
      */
     public function delete($domain)
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $index = array_search($instance->domains, $domain);
 
@@ -128,7 +128,7 @@ class DomainManagementController extends Controller
      */
     public function listAction()
     {
-        $instance = $this->get('instance');
+        $instance = $this->get('core.instance');
 
         $base    = $instance->internal_name
             . $this->getParameter('opennemas.base_domain');
@@ -162,24 +162,19 @@ class DomainManagementController extends Controller
     {
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $date      = new \DateTime();
-
-        $date->setTimeZone(new \DateTimeZone('UTC'));
 
         $em = $this->get('orm.manager');
 
         try {
-            $client = $em->getRepository('manager.client', 'Database')
-                ->find($instance->getClient());
-
-            $purchase = $em->getRepository('manager.purchase', 'Database')
-                ->find($purchase);
+            $client   = $em->getRepository('Client')->find($instance->getClient());
+            $purchase = $em->getRepository('Purchase')->find($purchase);
 
             $payment = new Payment([
                 'client_id' => $client->id,
-                'amount'    => str_replace(',', '.', (string) round($purchase->total, 2)),
-                'date'      => $date->format('Y-m-d'),
+                'amount'    => round($purchase->total, 2),
+                'date'      => $date,
                 'type'      => 'Check'
             ]);
 
@@ -187,36 +182,38 @@ class DomainManagementController extends Controller
                 $payment->nonce = $nonce;
             }
 
-            $em->persist($payment, 'Braintree');
+            $em->persist($payment, 'braintree');
 
             $purchase->payment_id = $payment->payment_id;
+
             $em->persist($purchase);
 
             $invoice = new Invoice([
                 'client_id' => $client->id,
-                'date'      => date('Y-m-d'),
+                'date'      => new \DateTime(),
                 'status'    => 'sent',
                 'lines'     => $purchase->details
             ]);
 
-            $em->persist($invoice, 'FreshBooks');
+            $em->persist($invoice, 'freshbooks');
 
             $payment->invoice_id = $invoice->invoice_id;
-            $payment->notes      = 'Braintree Transaction Id:' . $payment->payment_id;
+            $payment->notes      = 'Braintree Transaction Id: '
+                . $payment->payment_id;
 
-            $em->persist($payment, 'FreshBooks');
+            $em->persist($payment, 'freshbooks');
 
             $purchase->invoice_id = $invoice->invoice_id;
-            $purchase->updated    = $date->format('Y-m-d H:i:s');
-
-            $em->persist($purchase);
-
-            $domains = $purchase->details;
+            $purchase->updated    = $date;
 
             // Remove payment method line from details
             if ($purchase->method === 'CreditCard') {
                 array_pop($domains);
             }
+
+            $em->persist($purchase);
+
+            $domains = $purchase->details;
 
             $this->sendEmailToCustomer($client, $domains, $purchase->id);
             $this->sendEmailToSales($client, $domains);
@@ -304,7 +301,7 @@ class DomainManagementController extends Controller
      */
     private function sendEmailToCustomer($client, $domains, $purchase)
     {
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $params    = $this->getParameter('manager_webservice');
         $countries = Intl::getRegionBundle()
             ->getCountryNames(CURRENT_LANGUAGE_LONG);
@@ -347,7 +344,7 @@ class DomainManagementController extends Controller
     private function sendEmailToSales($client, $domains)
     {
         $countries = Intl::getRegionBundle()->getCountryNames();
-        $instance  = $this->get('instance');
+        $instance  = $this->get('core.instance');
         $params    = $this->getParameter("manager_webservice");
 
         $message = \Swift_Message::newInstance()

@@ -11,16 +11,12 @@
 
 namespace Framework\EventListener;
 
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Framework\Messenger\Messenger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -28,6 +24,23 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class WebServiceExceptionsListener implements EventSubscriberInterface
 {
+    /**
+     * The messenger service.
+     *
+     * @var Messenger
+     */
+    protected $msg;
+
+    /**
+     * Initializes the listener.
+     *
+     * @param Messenger $msg The messenger service.
+     */
+    public function __construct(Messenger $msg)
+    {
+        $this->msg = $msg;
+    }
+
     /**
      * Checks and handles exceptions that are not handled by any other listener.
      *
@@ -47,11 +60,17 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         $uri = $event->getRequest()->getRequestUri();
 
         if (!($exception instanceof AuthenticationException)
-            && strpos($uri, '/managerws') !== false
+            && (strpos($uri, '/managerws') !== false
+            || strpos($uri, '/entityws') !== false)
         ) {
-            $event->setResponse(
-                new JsonResponse([ 'text' => $exception->getMessage() ])
-            );
+            error_log($exception->getMessage());
+
+            $this->msg->add($exception->getMessage(), 'error');
+
+            $event->setResponse(new JsonResponse(
+                $this->msg->getMessages(),
+                $this->msg->getCode()
+            ));
 
             $handling = false;
         }

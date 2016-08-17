@@ -21,7 +21,7 @@ $menuXml = [
     [
         'id'      => 'my-newspaper',
         'class'   => 'visible-xs',
-        'link'    => url('admin_client_info_page'),
+        'link'    => url('backend_account_show'),
         'title'   => _("My newspaper"),
         'icon'    => 'fa fa-bullseye',
     ],
@@ -125,7 +125,7 @@ $menuXml = [
                 "id"          => "static_pages_manager",
                 "title"       => _("Static Pages"),
                 "icon"        => "fa fa-file",
-                "link"        => url('admin_static_pages'),
+                "link"        => url('backend_static_pages_list'),
                 "module_name" => "STATIC_PAGES_MANAGER",
                 "privilege"   => "STATIC_PAGE_ADMIN",
             ],

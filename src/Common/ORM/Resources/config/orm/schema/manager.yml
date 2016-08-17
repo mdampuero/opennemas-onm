@@ -1,0 +1,12 @@
+schema:
+    name: manager
+    entities:
+        - Client
+        - Extension
+        - Instance
+        - Notification
+        - Purchase
+        - User
+        - UserNotification
+        - UserGroup
+        - UserGroupPrivileges

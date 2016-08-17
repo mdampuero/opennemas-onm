@@ -405,18 +405,17 @@ class Album extends Content
      **/
     public function render($params, $tpl = null)
     {
-        $tpl = new Template(TEMPLATE_USER);
+        $tpl = getService('core.template');
 
-        $tpl->assign('item', $this);
-        $tpl->assign('cssclass', $params['cssclass']);
+        $params['item'] = $this;
+        $template       = 'frontpage/contents/_album.tpl';
 
-        $template = 'frontpage/contents/_album.tpl';
         if ($params['custom'] == 1) {
             $template = $params['tpl'];
         }
 
         try {
-            $html = $tpl->fetch($template);
+            $html = $tpl->fetch($template, $params);
         } catch (\Exception $e) {
             $html = _('Album not available');
         }

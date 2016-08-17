@@ -44,18 +44,25 @@ EOF
     {
         $databaseName = $input->getArgument('database');
         $category     = $input->getOption('category');
+        $file         = $input->getOption('file');
 
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
-        $this->connection = $this->getContainer()->get('db_conn');
-        $this->connection->selectDatabase($databaseName);
+        $conn   = getService('orm.manager')->getConnection('instance');
+        $conn->selectDatabase($databaseName);
+        $logger = getService('application.log');
 
-        $GLOBALS['application'] = new \Application();
-        $GLOBALS['application']->conn = $this->connection;
+        $rs = $conn->fetchAssoc('SELECT count(*) FROM contents');
 
-        $positions = file_get_contents($input->getOption('file'));
-        $positions = json_decode($positions, true);
+        $positionsJson = file_get_contents($file);
+        $positions = json_decode($positionsJson, true);
+        if (is_null($positions)) {
+            $output->writeln('<error>File provided is not valid</error>');
+            return 1;
+        }
 
         $done = \ContentManager::saveContentPositionsForHomePage($category, $positions);
 

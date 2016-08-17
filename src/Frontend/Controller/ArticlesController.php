@@ -56,7 +56,6 @@ class ArticlesController extends Controller
         }
 
         // Load config
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
@@ -73,7 +72,7 @@ class ArticlesController extends Controller
         $this->view->assign('layoutFile', $layoutFile);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
             // Categories code -------------------------------------------
@@ -255,14 +254,16 @@ class ArticlesController extends Controller
      * @param string category the category identifier
      *
      * @return array the list of advertisements for this page
+     *
+     * TODO: Make this function non-static
      **/
     public static function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // Get article_inner positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        // TODO: Use $this->get when the function changes to non-static
+        $positionManager = getService('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

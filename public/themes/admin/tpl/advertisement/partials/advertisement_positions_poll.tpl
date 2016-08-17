@@ -91,6 +91,6 @@
 <div class="col-md-3">
   <div id="advertisement-mosaic-poll">
     <div id="advertisement-mosaic-frame-poll"></div>
-    <img src="{$params.IMAGE_DIR}/advertisement/right2Ads.png" style="width:100%" usemap="#mapGallery" />
+    <img src="{$_template->getImageDir()}/advertisement/right2Ads.png" style="width:100%" usemap="#mapGallery" />
   </div>
 </div>

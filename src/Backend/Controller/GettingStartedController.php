@@ -17,8 +17,10 @@ class GettingStartedController extends Controller
      */
     public function finishWizardAction()
     {
-        $user = $this->getUser();
-        $user->updateUserToken($user->id, null);
+        $user = $this->get('core.user');
+
+        $user->token = null;
+        $this->get('orm.manager')->persist($user, $user->getOrigin());
 
         return $this->redirect($this->generateUrl('admin_welcome'));
     }
@@ -38,37 +40,17 @@ class GettingStartedController extends Controller
             $this->generateUrl('admin_login_callback')
         );
 
-        $params = array();
+        $user = $this->get('core.user');
 
-        $instance = $this->get('instance');
-        $database  = $instance->getDatabaseName();
-        $namespace = $this->get('cache')->getNamespace();
-
-        $user = $this->get('onm_user_provider')->loadUserByUsername(
-            $this->getUser()->getUsername()
-        );
-
-        $this->get('dbal_connection')->selectDatabase($database);
-        $this->get('cache')->setNamespace($namespace);
-
-        if ($user->getMeta('facebook_id')) {
+        if ($user->facebook_id) {
             $params['facebook'] = true;
         }
 
-        if ($user->getMeta('twitter_id')) {
+        if ($user->twitter_id) {
             $params['twitter'] = true;
         }
 
         $params['user'] = $this->getUser();
-        $params['master'] = $this->getUser()->isMaster();
-
-        $params['billing'] = [];
-
-        if (!empty($instance->metas)
-            && array_key_exists('billing', $instance->metas)
-        ) {
-            $params['billing'] = $instance->metas['billing'];
-        }
 
         return $this->render('gstarted/getting_started.tpl', $params);
     }

@@ -1,235 +1,122 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace ManagerWebService\Controller;
 
+use Common\ORM\Entity\User;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use Onm\Framework\Controller\Controller;
-
+/**
+ * Displays, saves, modifies and removes users.
+ */
 class UserController extends Controller
 {
     /**
-     * Creates a new user.
+     * @api {delete} /users/:id Delete an user
+     * @apiName DeleteUser
+     * @apiGroup User
      *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function createAction(Request $request)
-    {
-        $user = new \User();
-
-        $data = array(
-            'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
-            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
-            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
-            'passwordconfirm' => $request->request->filter('rpassword', null, FILTER_SANITIZE_STRING),
-            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
-            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'id_user_group'   => $request->request->get('id_user_group') ? : array(),
-            'ids_category'    => $request->request->get('ids_category'),
-            'activated'       => 1,
-            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
-            'deposit'         => 0,
-            'token'           => null,
-        );
-
-        $file = $request->files->get('avatar');
-
-        try {
-            // Upload user avatar if exists
-            if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
-                $data['avatar_img_id'] = $photoId;
-            } else {
-                $data['avatar_img_id'] = 0;
-            }
-
-            if ($user->create($data)) {
-                // Set all usermeta information (twitter, rss, language)
-                $meta = $request->request->get('meta');
-                foreach ($meta as $key => $value) {
-                    $user->setMeta(array($key => $value));
-                }
-
-                // Set usermeta paywall time limit
-                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
-                if (!empty($paywallTimeLimit)) {
-                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
-                    $time->setTimeZone(new \DateTimeZone('UTC'));
-
-                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
-                }
-
-                $response = new JsonResponse(_('User saved successfully'), 201);
-
-                // Add permanent URL for the current instance
-                $response->headers->set(
-                    'Location',
-                    $this->generateUrl(
-                        'manager_ws_user_show',
-                        [ 'id' => $user->id ]
-                    )
-                );
-
-                return $response;
-            } else {
-                return new JsonResponse(
-                    _('Unable to create the user with that information'),
-                    400
-                );
-            }
-        } catch (\Exception $e) {
-            return new JsonResponse(
-                _('Unable to create the user with that information'),
-                409
-            );
-        }
-    }
-
-    /**
-     * Deletes an user.
-     *
-     * @param integer $id The user's id.
-     *
-     * @return JsonResponse The response object.
+     * @apiSuccess {String} message The success message.
      */
     public function deleteAction($id)
     {
-        $um   = $this->get('user_repository');
-        $user = $um->find($id);
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
 
-        if ($user) {
-            $user->delete($id);
-            $user->deleteMeta($id);
+        $user = $em->getRepository('User', 'manager')->find($id);
 
-            return new JsonResponse(_('User deleted successfully'));
-        } else {
-            return new JsonResponse(
-                sprintf(_('Unable to delete the user with the id "%d"'), $id),
-                404
-            );
-        }
+        $em->remove($user);
+        $msg->add(_('User deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Deletes the selected users.
+     * @api {delete} /users Delete selected users
+     * @apiName DeleteUsers
+     * @apiGroup User
      *
-     * @param Request $request The request object.
+     * @apiParam {Array} ids The user ids.
      *
-     * @return JsonResponse The response object.
+     * @apiSuccess {Object} The success message.
      */
     public function deleteSelectedAction(Request $request)
     {
-        $messages   = [ 'errors' => [], 'success' => [] ];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = [];
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
 
-        if (!is_array($selected)
-            || (is_array($selected) && count($selected) == 0)
-        ) {
-            return new JsonResponse(
-                _('Unable to find users for the given criteria'),
-                404
-            );
+        if (!is_array($ids) || empty($ids)) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $um   = $this->get('user_repository');
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
 
-        foreach ($selected as $id) {
-            $user = $um->find($id);
+        $users = $em->getRepository('User', 'manager')->findBy($oql);
 
-            if ($user) {
-                $user->delete($id);
-                $user->deleteMeta($id);
-
-                $updated[] = $id;
-            } else {
-                $messages['errors'][] = array(
-                    'error' => sprintf(_('Unable to delete the user with the id "%d"'), $id),
-                );
+        $deleted = 0;
+        foreach ($users as $user) {
+            try {
+                $em->remove($user);
+                $deleted++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error');
             }
         }
 
-        if (count($updated) > 0) {
-            $messages['success'] = [
-                'ids'     => $updated,
-                'message' => sprintf(_('%s users deleted successfully.'), count($updated)),
-            ];
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s users deleted successfully'), $deleted),
+                'success'
+            );
         }
 
-        // Return the proper status code
-        if (count($messages['errors']) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($messages['errors']) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse($messages, $statusCode);
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns the list of users as JSON.
+     * @api {get} /purchases List of users
+     * @apiName GetUsers
+     * @apiGroup User
      *
-     * @param Request $request The request object.
+     * @apiParam {String} oql The OQL query.
      *
-     * @return JsonResponse The response object.
+     * @apiSuccess {Integer} total   The total number of elements.
+     * @apiSuccess {Array}   results The list of users.
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : array();
-        $orderBy  = $request->query->filter('orderBy') ? : array();
+        $oql = $request->query->get('oql', '');
 
-        $order = array();
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
+        $repository = $this->get('orm.manager')->getRepository('User', 'manager');
+        $converter  = $this->get('orm.manager')->getConverter('User');
 
-        $um    = $this->get('user_repository');
-        $users = $um->findBy($criteria, $order, $epp, $page);
-        $total = $um->countBy($criteria);
+        $total  = $repository->countBy($oql);
+        $users  = $repository->findBy($oql);
+        $groups = [];
 
-        $userGroups = $this->get('usergroup_repository')->findBy();
+        $users = array_map(function ($a) use ($converter, &$groups) {
+            $groups = array_unique(array_merge($groups, $a->fk_user_group));
 
-        foreach ($users as &$user) {
-            $user->eraseCredentials();
-        }
+            $a->eraseCredentials();
 
-        $groups = array();
-        foreach ($userGroups as $group) {
-            $groups[$group->id] = $group;
-        }
+            return $converter->responsify($a->getData());
+        }, $users);
 
-        $flatGroups = array_values($groups);
-        array_unshift($flatGroups, [ 'id' => null, 'name' => _('All') ]);
-
-        return new JsonResponse(
-            array(
-                'epp'      => $epp,
-                'extra'    => array(
-                    'flatGroups' => $flatGroups,
-                    'groups'     => $groups
-                ),
-                'page'     => $page,
-                'results'  => $users,
-                'total'    => $total,
-            )
-        );
+        return new JsonResponse([
+            'results' => $users,
+            'total'   => $total,
+            'extra'   => $this->getExtraData($users),
+        ]);
     }
 
     /**
@@ -239,12 +126,11 @@ class UserController extends Controller
      */
     public function newAction()
     {
-        return new JsonResponse(
-            array(
-                'user'  => null,
-                'extra' => $this->templateParams()
-            )
-        );
+        $extra = $this->getExtraData();
+
+        array_shift($extra['user_groups']);
+
+        return new JsonResponse([ 'extra' => $extra ]);
     }
 
     /**
@@ -256,32 +142,19 @@ class UserController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
-        $success  = false;
-        $activated = $request->request->getDigits('activated');
-        $message   = array();
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
+        $data = $em->getConverter('User')
+            ->objectify($request->request->all());
 
-        $user = $this->get('user_repository')->find($id);
-        if ($user) {
-            try {
-                if ($activated) {
-                    $user->activateUser($id);
-                } else {
-                    $user->deactivateUser($id);
-                }
+        $user = $em->getRepository('User', 'manager')->find($id);
+        $user->merge($data);
 
-                return new JsonResponse(_('User updated successfully.'));
-            } catch (Exception $e) {
-                return new JsonResponse(
-                    sprintf(_('Error while updating user with id "%s"'), $id),
-                    409
-                );
-            }
-        } else {
-            return new JsonResponse(
-                sprintf(_('Unable to find the user with id "%s"'), $id),
-                404
-            );
-        }
+        $em->persist($user, 'manager');
+
+        $msg->add(_('User saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -293,114 +166,98 @@ class UserController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
-        $messages   = [ 'errors' => [], 'success' => [] ];
-        $selected   = $request->request->get('selected', null);
-        $activated = $request->request->getDigits('activated', 0);
-        $statusCode = 200;
-        $updated    = [];
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
 
-        if (is_array($selected) && count($selected) == 0) {
-            return new JsonResponse(
-                _('Unable to find the users for the given criteria'),
-                404
-            );
+        unset($params['ids']);
+
+        if (!is_array($ids) || count($ids) === 0) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $um = $this->get('user_repository');
+        $em   = $this->get('orm.manager');
+        $oql  = sprintf('id in [%s]', implode(',', $ids));
+        $data = $em->getConverter('User')->objectify($params);
 
-        foreach ($selected as $id) {
-            $user = $um->find($id);
+        $users = $em->getRepository('User', 'manager')->findBy($oql);
 
-            if ($user) {
-                try {
-                    if ($activated) {
-                        $user->activateUser($id);
-                    } else {
-                        $user->deactivateUser($id);
-                    }
-
-                    $updated[] = $id;
-                } catch (Exception $e) {
-                    $messages['errors'][] = [
-                        'id'    => $id,
-                        'error' => sprintf(_('Error while updating user with id "%s"'), $id),
-                    ];
-                }
-            } else {
-                $messages['errors'][] = [
-                    'id'    => $id,
-                    'error' => sprintf(_('Unable to find the user with id "%s"'), $id),
-                ];
+        $updated = 0;
+        foreach ($users as $user) {
+            try {
+                $user->merge($data);
+                $em->persist($user, 'manager');
+                $updated++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error', 409);
             }
         }
 
-        if (count($updated) > 0) {
-            $messages['success'] = [
-                'ids'     => $updated,
-                'message' => sprintf(_('%s users updated successfully.'), count($updated))
-            ];
-        }
-
-        if (count($messages['errors']) > 0 && count($updated) > 0) {
-            $statusCode = 207;
-        } elseif (count($messages['errors']) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse($messages, $statusCode);
-    }
-
-    /**
-     * Returns an user as JSON.
-     *
-     * @param integer $id The user's id.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function showAction($id)
-    {
-        $user = $this->get('user_repository')->find($id);
-
-        if (!$user) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the user with id "%s"'), $id),
-                404
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s users saved successfully'), $updated),
+                'success'
             );
         }
 
-        $user->eraseCredentials();
-
-        return new JsonResponse(
-            array(
-                'user'  => $user,
-                'extra' => $this->templateParams()
-            )
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Returns the current user as JSON.
+     * Creates a new user.
      *
-     * @return JsonResponse The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
-    public function showMeAction()
+    public function saveAction(Request $request)
     {
-        $id = $this->getUser()->id;
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('User')
+            ->objectify($request->request->all());
 
-        $user = $this->get('user_repository')->find($id);
+        $user = new User($data);
 
-        if (!$user) {
-            return new JsonResponse(_('Unable to find the current user'), 404);
-        }
+        $em->persist($user, 'manager');
+        $msg->add(_('User saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'manager_ws_user_show',
+                [ 'id' => $user->id ]
+            )
+        );
+
+        return $response;
+    }
+
+    /**
+     * @api {get} /users/:id Show a user
+     * @apiName GetUser
+     * @apiGroup User
+     *
+     * @apiSuccess {Array} The user.
+     */
+    public function showAction($id)
+    {
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
+        $user      = $em->getRepository('User', 'manager')->find($id);
 
         $user->eraseCredentials();
 
-        return new JsonResponse(
-            array(
-                'user'  => $user,
-                'extra' => $this->templateParams()
-            )
-        );
+        $extra = $this->getExtraData();
+
+        array_shift($extra['user_groups']);
+
+        return new JsonResponse([
+            'extra' => $extra,
+            'user'  => $converter->responsify($user->getData())
+        ]);
     }
 
     /**
@@ -413,77 +270,24 @@ class UserController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $data = array(
-            'id'              => $id,
-            'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
-            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
-            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
-            'passwordconfirm' => $request->request->filter('rpassword', null, FILTER_SANITIZE_STRING),
-            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
-            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
-            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-            'id_user_group'   => $request->request->get('id_user_group') ? : array(),
-            'ids_category'    => $request->request->get('ids_category'),
-            'activated'       => $request->request->filter('activated', 0, FILTER_SANITIZE_STRING),
-            'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
-        );
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('User')
+            ->objectify($request->request->all());
 
-        $file = $request->files->get('avatar');
-        $user = new \User($id);
+        $user     = $em->getRepository('User', 'manager')->find($id);
+        $password = $user->password;
+        $user->setData($data);
 
-        try {
-            // Upload user avatar if exists
-            if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
-                $data['avatar_img_id'] = $photoId;
-            } elseif (($data['avatar_img_id']) == 1) {
-                $data['avatar_img_id'] = $user->avatar_img_id;
-            }
-
-            // Process data
-            if ($user->update($data)) {
-                // Set all usermeta information (twitter, rss, language)
-                $meta = $request->request->get('meta');
-                if ($meta) {
-                    foreach ($meta as $key => $value) {
-                        $user->setMeta(array($key => $value));
-                    }
-                }
-
-                // Set usermeta paywall time limit
-                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
-                if (!empty($paywallTimeLimit)) {
-                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
-                    $time->setTimeZone(new \DateTimeZone('UTC'));
-
-                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
-                }
-
-                $this->dispatchEvent('user.update', array('user' => $user));
-
-                if ($id == $this->getUser()->id) {
-                    $request->getSession()->set('user_language', $user->getMeta('user_language'));
-                }
-
-                return new JsonResponse(_('User saved successfully'));
-            } else {
-                return new JsonResponse(
-                    _('Unable to update the user with that information'),
-                    400
-                );
-            }
-        } catch (FileException $e) {
-            return new JsonResponse($e->getMessage(), 409);
+        if (empty($user->password)) {
+            $user->password = $password;
         }
 
-        return new JsonResponse(
-            array(
-                'success' => $success,
-                'message' => $message
-            )
-        );
+        $em->persist($user, 'manager');
+
+        $msg->add(_('User saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -491,18 +295,29 @@ class UserController extends Controller
      *
      * @return array Array of template parameters.
      */
-    private function templateParams()
+    private function getExtraData()
     {
-        $groups = $this->get('usergroup_repository')->findBy();
-        $languages = $this->container->getParameter('available_languages');
-        $languages = array_merge(
-            array('default' => _('Default system language')),
-            $languages
+        $extra = [
+            'languages' => array_merge(
+                [ 'default' => _('Default system language') ],
+                $this->get('core.locale')->getLocales()
+            )
+        ];
+
+        $repository = $this->get('orm.manager')->getRepository('UserGroup');
+        $converter  = $this->get('orm.manager')->getConverter('UserGroup');
+
+        $userGroups = $repository->findBy();
+
+        $extra['user_groups'] = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $userGroups);
+
+        $extra['user_groups'] = array_merge(
+            [[ 'pk_user_group' => null, 'name' => _('All') ]],
+            $extra['user_groups']
         );
 
-        return array(
-            'groups'    => $groups,
-            'languages' => $languages
-        );
+        return $extra;
     }
 }

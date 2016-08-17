@@ -1,0 +1,80 @@
+backend_ws2_content_delete:
+    path:     /{contentType}/{id}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:delete }
+    methods: [ DELETE ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_delete_selected:
+    path:     /{contentType}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:deleteSelected }
+    methods: [ DELETE ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_list:
+    path:     /{contentType}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:list }
+    methods: [ GET ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_new:
+    path:     /{contentType}/new
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:new }
+    methods: [ GET ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_patch:
+    path:     /{contentType}/{id}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:patch }
+    methods: [ PATCH ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_patch_selected:
+    path:     /{contentType}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:patchSelected }
+    methods: [ PATCH ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_save:
+    path:     /{contentType}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:save }
+    methods: [ POST ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_show:
+    path:     /{contentType}/{id}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:show }
+    methods: [ GET ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true
+
+backend_ws2_content_update:
+    path:     /{contentType}/{id}
+    defaults: { _controller: BackendWebServiceBundle:ContentV2:update }
+    methods: [ PUT ]
+    requirements:
+        contentType: static_page
+    options:
+        expose: true

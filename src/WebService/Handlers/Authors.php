@@ -40,18 +40,21 @@ class Authors
     {
         $this->validateInt($id);
 
-        $sql = 'SELECT `avatar_img_id` FROM users WHERE id = ?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT `avatar_img_id` FROM users WHERE id = ?',
+                [ $id ]
+            );
 
-        if (!$rs) {
+            // Get photo object from avatar_img_id
+            $er = getService('entity_repository');
+            $photo = $er->find('Photo', $rs['avatar_img_id']);
+
+            return $photo;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        // Get photo object from avatar_img_id
-        $er = getService('entity_repository');
-        $photo = $er->find('Photo', $rs->fields['avatar_img_id']);
-
-        return $photo;
     }
 
     private function validateInt($number)

@@ -47,7 +47,7 @@
       {if !empty($disqus_shortname) && !empty($disqus_secret_key)}
         <a href="http://{$disqus_shortname}.disqus.com/admin/moderate/" target="_blank">
           <div class="disqus-link">
-            <img src="{$params.IMAGE_DIR}/disqus-icon.png" alt="Disqus" />
+            <img src="{$_template->getImageDir()}/disqus-icon.png" alt="Disqus" />
             {t}To moderate your Disqus comments, click here{/t}
           </div>
         </a>

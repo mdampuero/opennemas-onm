@@ -92,7 +92,7 @@ EOF
      **/
     public function getDatabaseName($instanceName, $instanceId)
     {
-        $dbConn = $this->getContainer()->get('dbal_connection');
+        $dbConn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
         if (!empty($instanceName)) {
             $sql    = 'SELECT settings FROM instances WHERE internal_name=?';

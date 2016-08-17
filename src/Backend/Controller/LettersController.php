@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -33,9 +32,8 @@ class LettersController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('LETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="LETTER_MANAGER")
+     * @Security("hasExtension('LETTER_MANAGER')
+     *     and hasPermission('LETTER_ADMIN')")
      */
     public function listAction()
     {
@@ -48,9 +46,8 @@ class LettersController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('LETTER_CREATE')")
-     *
-     * @CheckModuleAccess(module="LETTER_MANAGER")
+     * @Security("hasExtension('LETTER_MANAGER')
+     *     and hasPermission('LETTER_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -97,9 +94,8 @@ class LettersController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('LETTER_UPDATE')")
-     *
-     * @CheckModuleAccess(module="LETTER_MANAGER")
+     * @Security("hasExtension('LETTER_MANAGER')
+     *     and hasPermission('LETTER_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -130,9 +126,8 @@ class LettersController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('LETTER_UPDATE')")
-     *
-     * @CheckModuleAccess(module="LETTER_MANAGER")
+     * @Security("hasExtension('LETTER_MANAGER')
+     *     and hasPermission('LETTER_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -179,7 +174,7 @@ class LettersController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="LETTER_MANAGER")
+     * @Security("hasExtension('LETTER_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
@@ -227,7 +222,7 @@ class LettersController extends Controller
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @CheckModuleAccess(module="LETTER_MANAGER")
+     * @Security("hasExtension('LETTER_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {

@@ -50,7 +50,6 @@ class StaticPagesController extends Controller
 
         $ads = $this->getAds();
 
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'static_pages/statics.tpl',
             array(
@@ -74,8 +73,8 @@ class StaticPagesController extends Controller
         $category = 0;
 
         // Get static_pages positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(1, 2, 5, 6, 7, 9));
+        $positionManager = getService('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(1, 2, 5, 6, 7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

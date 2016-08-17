@@ -59,6 +59,7 @@
         "imagine/imagine": "0.6.*",
         "jagandecapri/symfony-parallel-process": "*",
         "jeremykendall/php-domain-parser": "~2.0",
+        "jdorn/sql-formatter": "1.2.16",
         "league/csv": "~8.0",
         "lexik/jwt-authentication-bundle": "dev-master",
         "luracast/restler": "3.0.0",

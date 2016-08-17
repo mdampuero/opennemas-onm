@@ -39,12 +39,11 @@ class BlogsController extends Controller
         $page = $request->query->getDigits('page', 1);
 
         // Setup view layer
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', '', $page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
             $authors = array();
@@ -148,12 +147,11 @@ class BlogsController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', $slug, $page);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
             $itemsPerPage = s::get('items_per_page');
@@ -273,7 +271,6 @@ class BlogsController extends Controller
         }
 
         // Setup view
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
@@ -281,7 +278,7 @@ class BlogsController extends Controller
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId('blog', '', $blog->id);
-        if (($this->view->caching == 0)
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
             $this->view->assign('contentId', $blog->id);
@@ -342,11 +339,11 @@ class BlogsController extends Controller
     private function getAds($context = '')
     {
         // Get opinion positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = $this->get('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getAdsPositionsForGroup('opinion_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
         } else {
-            $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, '4');

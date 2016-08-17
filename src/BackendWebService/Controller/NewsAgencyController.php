@@ -9,10 +9,9 @@
  */
 namespace BackendWebService\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
-use Framework\Import\Synchronizer\Synchronizer;
+use Common\Core\Annotation\Security;
 use Framework\Import\Repository\LocalRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Framework\Import\Synchronizer\Synchronizer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +29,8 @@ class NewsAgencyController extends Controller
      *
      * @return Response The response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
      */
     public function importAction(Request $request)
     {
@@ -115,7 +114,7 @@ class NewsAgencyController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')")
      */
     public function listAction(Request $request)
     {
@@ -243,9 +242,12 @@ class NewsAgencyController extends Controller
     {
         $params = [];
 
+        $path = $this->getParameter('core.paths.cache') .  DS
+            . $this->get('core.instance')->internal_name;
+        $tpl  = $this->get('view')->getBackendTemplate();
+
         // Check last synchronization
-        $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new Synchronizer($syncParams);
+        $synchronizer        = new Synchronizer($path, $tpl);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         if ($minutesFromLastSync > 0) {

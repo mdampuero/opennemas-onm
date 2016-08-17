@@ -14,10 +14,9 @@
  **/
 namespace BackendWebService\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -34,10 +33,9 @@ class KeywordsController extends Controller
      *
      * @return Response
      *
-     * @Security("has_role('PCLAVE_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
-     **/
+     * @Security("hasExtension('KEYWORD_MANAGER')
+     *     and hasPermission('PCLAVE_ADMIN')")
+     */
     public function listAction(Request $request)
     {
         $search = $request->request->get('search');
@@ -75,9 +73,8 @@ class KeywordsController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      *
-     * @Security("has_role('PCLAVE_DELETE')")
-     *
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
+     * @Security("hasExtension('KEYWORD_MANAGER')
+     *     and hasPermission('PCLAVE_DELETE')")
      */
     public function deleteAction($id)
     {

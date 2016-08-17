@@ -150,7 +150,7 @@
               <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
                 <button class="btn btn-block btn-loading btn-success" ng-click="check()" type="button">
                   <span class="no-animate" ng-if="checking">
-                    <i class="fa fa-circle-o-notch fa-spin m-t-10 ng-cloak"></i>
+                    <i class="fa fa-absolute fa-circle-o-notch fa-spin m-l-10 m-t-10 ng-cloak"></i>
                   </span>
                   <h5 class="text-uppercase text-white">{t}Test{/t}</h5>
                 </button>

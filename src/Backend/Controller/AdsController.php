@@ -9,10 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 
@@ -58,16 +57,15 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_ADMIN')")
      */
     public function listAction()
     {
         // Get ads positions
-        $positionManager = $this->get('instance')->theme->getAdsPositionManager();
-        $map             = $positionManager->getAllAdsPositions();
-        $adsNames        = $positionManager->getAllAdsNames();
+        $positionManager = $this->get('core.manager.advertisement');
+        $map             = $positionManager->getPositions();
+        $adsNames        = $positionManager->getPositionNames();
 
         $typeAdvertisement = [ [ 'name' => _("All"), 'value' => -1 ] ];
 
@@ -125,9 +123,8 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_CREATE')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -140,8 +137,7 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $ads = $this->get('instance')->theme->getAdsPositionManager()
-                ->getThemeAdsPositions();
+            $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
 
             return $this->render(
                 'advertisement/new.tpl',
@@ -179,8 +175,8 @@ class AdsController extends Controller
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
-            'fk_author'          => $_SESSION['userid'],
-            'fk_publisher'       => $_SESSION['userid'],
+            'fk_author'          => $this->getUser()->id,
+            'fk_publisher'       => $this->getUser()->id,
             'params'             => [
                 'width'             => json_decode($request->request->get('params_width', '')),
                 'height'            => json_decode($request->request->get('params_height', '')),
@@ -217,9 +213,8 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -241,7 +236,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
-        if ($ad->fk_publisher != $_SESSION['userid']
+        if ($ad->fk_publisher != $this->getUser()->id
             && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -262,12 +257,12 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positionManager = $this->container->get('core.manager.advertisement');
         return $this->render(
             'advertisement/new.tpl',
             array(
                 'advertisement' => $ad,
-                'themeAds'      => $positionManager->getThemeAdsPositions(),
+                'themeAds'      => $positionManager->getPositionsForTheme(),
                 'filter'        => $filter,
                 'page'          => $page,
                 'server_url'    => $serverUrl,
@@ -282,9 +277,8 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -301,7 +295,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
-        if (!$ad->isOwner($_SESSION['userid'])
+        if (!$ad->isOwner($this->getUser()->id)
             && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -335,8 +329,8 @@ class AdsController extends Controller
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
-            'fk_author'          => $_SESSION['userid'],
-            'fk_publisher'       => $_SESSION['userid'],
+            'fk_author'          => $this->getUser()->id,
+            'fk_publisher'       => $this->getUser()->id,
             'params'             => array(
                 'width'             => json_decode($request->request->get('params_width', '')),
                 'height'            => json_decode($request->request->get('params_height', '')),
@@ -375,7 +369,7 @@ class AdsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
@@ -421,9 +415,8 @@ class AdsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ADVERTISEMENT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ADS_MANAGER")
+     * @Security("hasExtension('ADS_MANAGER')
+     *     and hasPermission('ADVERTISEMENT_ADMIN')")
      */
     public function configAction(Request $request)
     {

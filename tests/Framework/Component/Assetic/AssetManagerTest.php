@@ -33,7 +33,7 @@ abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
                 return $kernel;
                 break;
 
-            case 'instance':
+            case 'core.instance':
                 $instance = new \StdClass();
                 $instance->settings = [ 'TEMPLATE_USER' => 'foo' ];
 

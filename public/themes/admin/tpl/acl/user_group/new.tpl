@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if isset($user_group->id)}{url name="admin_acl_usergroups_update" id=$user_group->id}{else}{url name="admin_acl_usergroups_create"}{/if}" method="post">
+<form action="{if isset($user_group->pk_user_group)}{url name="admin_acl_usergroups_update" id=$user_group->pk_user_group}{else}{url name="admin_acl_usergroups_save"}{/if}" method="post" ng-controller="UserGroupCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -17,7 +17,7 @@
           </li>
           <li class="quicklinks hidden-xs">
             <h5>
-              {if isset($user_group->id)}{t}Editing group{/t}{else}{t}Creating user group{/t}{/if}
+              {if isset($user_group->pk_user_group)}{t}Editing group{/t}{else}{t}Creating user group{/t}{/if}
             </h5>
           </li>
         </ul>
@@ -55,42 +55,45 @@
         </div>
       </div>
     </div>
-
-    <div class="grid simple">
+    <div class="grid simple" ng-init="{if !empty($user_group)}user_group = {json_encode($user_group->getData())|clear_json}; {/if}extra.modules = {json_encode($modules)|clear_json}">
       <div class="grid-title">
         <h4>{t}Privileges{/t}</h4>
       </div>
       <div class="grid-body" id="privileges">
-        {foreach $modules as $mod => $privileges}
-          <div class="panel-group">
-            <div class="panel panel-default">
-              <div class="panel-heading" id="accordion_{$privileges@index}" data-toggle="collapse">
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion_{$privileges@index}" href="#module{$privileges@index}">
-                    {$mod} ({$total_activated[{$mod}]|default:0})
-                  </a>
-                </h4>
-              </div>
-              <div id="module{$privileges@index}" class="panel-collapse collapse in">
-                <div class="panel-body">
-                  {foreach $privileges as $privilege}
-                  <div class="col-xs-12 col-md-6 col-lg-4">
-                    <div class="checkbox check-default">
-                      <input id="checkbox_{$privileges@index}{$privilege@index}" type="checkbox" name="privileges[]" value="{$privilege->id}" {if $user_group->containsPrivilege($privilege->id)}checked="checked"{/if}>
-                      <label for="checkbox_{$privileges@index}{$privilege@index}">
-                        {t}{$privilege->description}{/t}
-                      </label>
-                    </div>
+        <div class="checkbox check-default check-title">
+          <input id="checkbox-all" ng-change="selectAll()" ng-checked="areAllSelected()" ng-model="selected.allSelected" type="checkbox">
+          <label for="checkbox-all">
+            <h5>{t}Toggle all privileges{/t}</h5>
+          </label>
+        </div>
+        <div class="ng-cloak">
+          <div ng-repeat="section in sections">
+            <h5>{t}[% section.title %]{/t}</h5>
+            <div class="row" ng-repeat="columns in section.rows">
+              <div class="col-sm-3" ng-repeat="name in columns">
+                <div class="col-sm-12 m-b-10">
+                  <div class="checkbox check-default check-title">
+                    <input id="checkbox-[% name %]" ng-change="selectModule(name)" ng-checked="isModuleSelected(name)" ng-model="selected.all[name]" type="checkbox">
+                    <label for="checkbox-[% name %]">
+                      <h5>[% name %]</h5>
+                    </label>
                   </div>
-                  {/foreach}
+                </div>
+                <div class="col-sm-12 m-b-5" ng-repeat="privilege in extra.modules[name]">
+                  <div class="checkbox check-default">
+                    <input id="checkbox-[% name + '-' + $index %]" checklist-model="user_group.privileges" checklist-value="privilege.id" type="checkbox">
+                    <label for="checkbox-[% name + '-' + $index %]">
+                      [% privilege.description %]
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        {/foreach}
+        </div>
       </div>
     </div>
   </div>
-  <input type="hidden" name="id" value="{$user_group->id}">
+  <input type="hidden" name="privileges" value="[% user_group.privileges %]">
 </form>
 {/block}

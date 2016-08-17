@@ -77,16 +77,26 @@
               </div>
               <div class="form-group">
                 <label class="form-label" for="visualization">{t}Visualization format{/t}</label>
-                <div class="controls">
-                  <label for="visualization_bars" class="col-md-6">
-                    <input type="radio" name="visualization" value="0" class="required" id="visualization_bars"{if $poll->visualization eq 0} checked {/if}>
-                    <div class="fa fa-bar-chart fa-4x"></div>
-                    <div class="poll-type">{t}Bars{/t}</div>
+                <div class="row">
+                  <label class="col-md-6 pointer" for="visualization_bars">
+                    <div class="m-t-30 pull-left radio">
+                      <input type="radio" name="visualization" value="0" class="required" id="visualization_bars"{if $poll->visualization eq 0} checked {/if}>
+                      <label for="visualization_bars">&nbsp;</label>
+                    </div>
+                    <div class="controls pull-left">
+                      <div class="fa fa-bar-chart fa-4x"></div>
+                      <div class="poll-type">{t}Bars{/t}</div>
+                    </div>
                   </label>
-                  <label for="visualization_pie" class="col-md-6">
-                    <input type="radio" name="visualization" value="1" class="required" id="visualization_pie"{if $poll->visualization eq 1} checked {/if}>
-                    <div class="fa fa-pie-chart fa-4x"></div>
-                    <div class="poll-type">{t}Circular{/t}</div>
+                  <label class="col-md-6 pointer" for="visualization_pie">
+                    <div class="m-t-30 pull-left radio">
+                      <input type="radio" name="visualization" value="1" class="required" id="visualization_pie"{if $poll->visualization eq 1} checked {/if}>
+                      <label for="visualization_pie">&nbsp;</label>
+                    </div>
+                    <div class="controls pull-left">
+                      <div class="fa fa-pie-chart fa-4x"></div>
+                      <div class="poll-type">{t}Circular{/t}</div>
+                    </div>
                   </label>
                 </div>
               </div>

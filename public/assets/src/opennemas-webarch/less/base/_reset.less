@@ -58,6 +58,10 @@ i.ng-hide-add-active, i.ng-hide-remove {
 .row [class*=' col-'] {
   padding-left: 0 !important;
   padding-right: 15px !important;
+
+  &.no-padding {
+    padding: 0 !important;
+  }
 }
 
 .table td {
@@ -82,6 +86,13 @@ i.ng-hide-add-active, i.ng-hide-remove {
 
 .fa-spin {
   animation-duration: .75s;
+
+  &.ng-hide {
+    display: none !important;
+    animation-duration: 0s !important;
+    -webkit-transition: none !important;
+    transition: none !important;
+  }
 }
 
 // Set old alerts colors
@@ -97,3 +108,36 @@ i.ng-hide-add-active, i.ng-hide-remove {
 .alert-error .link {color: #fff;}
 .alert-danger .alert-heading,
 .alert-error .alert-heading {color: #fff !important;}
+
+.fa-circle-o-notch.fa-spin {
+  border: 3px solid @text-color;
+  border-radius: 50%;
+  border-top-color: transparent;
+  display: inline-block;
+  height: 14px;
+  text-align: center;
+  width: 14px;
+
+  &:before {
+    content: "";
+  }
+
+  &.fa-2x {
+    height: 28px;
+    width: 28px;
+  }
+
+  &.fa-3x {
+    border: 6px solid @text-color;
+    border-top-color: transparent;
+    height: 42px;
+    width: 42px;
+  }
+
+  &.fa-4x {
+    border: 6px solid @text-color;
+    border-top-color: transparent;
+    height: 56px;
+    width: 56px;
+  }
+}

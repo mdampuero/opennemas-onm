@@ -11,6 +11,7 @@ namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
+use Symfony\Component\Finder\Finder;
 
 /**
  * An EntityRepository serves as a repository for entities with generic as well
@@ -24,6 +25,13 @@ use Onm\Database\DbalWrapper;
  */
 class WidgetManager extends EntityManager
 {
+    /**
+     * The array of widget paths.
+     *
+     * @var array
+     */
+    protected $paths = [];
+
     /**
      * Searches for widgets given a criteria
      *
@@ -83,5 +91,83 @@ class WidgetManager extends EntityManager
         }
 
         return $rs[0];
+    }
+
+    /**
+     * Adds a path to the list of paths.
+     *
+     * @param string $path The path to add.
+     */
+    public function addPath($path)
+    {
+        $this->paths[] = $path;
+    }
+
+    /**
+     * Returns the list of all available widgets.
+     *
+     * @return array The list of all intelligent widgets.
+     */
+    public function getWidgets()
+    {
+        $finder  = new Finder();
+        $widgets = [];
+
+        foreach ($this->paths as $path) {
+            if (is_dir($path)) {
+                $files = $finder->followLinks()->files()->in($path)
+                    ->name('/[Ww]idget.*(\.class)?[^\.form]\.(php|tpl)/');
+
+                foreach ($files as $file) {
+                    $widgets[] = $this->parseWidgetName($file->getFileName());
+                }
+            }
+        }
+
+        $widgets = array_unique($widgets);
+        sort($widgets);
+
+        return $widgets;
+    }
+
+    /**
+     * Loads a widget given its name.
+     *
+     * @param string $widgetName The widget name.
+     */
+    public function loadWidget($widgetName)
+    {
+        $widgetName = 'Widget' . str_replace('Widget', '', $widgetName);
+        $filename   = \underscore($widgetName);
+
+        foreach ($this->paths as $path) {
+            if (file_exists($path . DS . $filename . '.class.php')) {
+                require_once $path . DS . $filename . '.class.php';
+                return;
+            }
+
+            if (file_exists($path . DS . $widgetName . '.php')) {
+                require_once $path . DS . $widgetName . '.php';
+                return;
+            }
+        }
+    }
+
+    /**
+     * Parses and returns the widget name.
+     *
+     * @param string $name The widget name.
+     *
+     * @return string The parsed widget name.
+     */
+    protected function parseWidgetName($name)
+    {
+        $name = preg_replace('/(.class)?\.(php|tpl)/', '', $name);
+        $name = preg_replace('/[wW]idget/', '', $name);
+        $name = ucfirst(preg_replace_callback('/_([a-z])/', function ($matches) {
+            return ucfirst($matches[1]);
+        }, $name));
+
+        return $name;
     }
 }

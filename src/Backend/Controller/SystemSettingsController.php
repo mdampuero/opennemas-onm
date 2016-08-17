@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -32,10 +31,9 @@ class SystemSettingsController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('ONM_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="SETTINGS_MANAGER")
-     **/
+     * @Security("hasExtension('SETTINGS_MANAGER')
+     *     and hasPermission('ONM_SETTINGS')")
+     */
     public function defaultAction()
     {
         $keys = [
@@ -48,7 +46,7 @@ class SystemSettingsController extends Controller
             'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',
             'onm_digest_pass', 'onm_digest_user', 'paypal_mail',
             'pinterest_page', 'piwik', 'recaptcha', 'refresh_interval',
-            'section_settings', 'site_agency', 'site_color',
+            'section_settings', 'site_agency', 'site_color', 'site_color_secondary',
             'site_description', 'site_footer', 'site_footer', 'site_keywords',
             'site_language', 'site_logo', 'site_name', 'site_title',
             'time_zone', 'twitter_page', 'vimeo_page', 'webmastertools_bing',
@@ -90,10 +88,9 @@ class SystemSettingsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ONM_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="SETTINGS_MANAGER")
-     **/
+     * @Security("hasExtension('SETTINGS_MANAGER')
+     *     and hasPermission('ONM_SETTINGS')")
+     */
     public function saveAction(Request $request)
     {
         // Get files from symfony request

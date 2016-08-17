@@ -61,13 +61,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public $name = null;
 
     /**
-     * Seconds the session will be valid
-     *
-     * @var int
-     **/
-    public $sessionexpire = null;
-
-    /**
      * The user blog/page url
      *
      * @var int
@@ -94,13 +87,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      * @var string
      **/
     public $type = null;
-
-    /**
-     * The amount of money in the user wallet
-     *
-     * @var int
-     **/
-    public $deposit = null;
 
     /**
      * The login token, used for restore passwords and more
@@ -178,13 +164,12 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         $sql =
             "INSERT INTO users "
-            ."(`username`, `password`, `sessionexpire`, `url`, `bio`, `avatar_img_id`, "
+            ."(`username`, `password`, `url`, `bio`, `avatar_img_id`, "
             ."`email`, `name`, `type`, `token`, `activated`, `fk_user_group`) "
-            ."VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            ."VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['username'],
             md5($data['password']),
-            (int) $data['sessionexpire'],
             $data['url'],
             $data['bio'],
             (int) $data['avatar_img_id'],
@@ -241,13 +226,11 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $this->id               = (int) $data['id'];
         $this->username         = $data['username'];
         $this->password         = $data['password'];
-        $this->sessionexpire    = (int) $data['sessionexpire'];
         $this->url              = $data['url'];
         $this->bio              = $data['bio'];
         $this->avatar_img_id    = (int) $data['avatar_img_id'];
         $this->email            = $data['email'];
         $this->name             = $data['name'];
-        $this->deposit          = $data['deposit'];
         $this->type             = (int) $data['type'];
         $this->token            = $data['token'];
         $this->activated        = (int) $data['activated'];
@@ -265,24 +248,32 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM users WHERE id = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        try {
+            $conn = getService('dbal_connection');
+            $rs = $conn->fetchAll(
+                'SELECT * FROM users WHERE id = ?',
+                [ intval($id) ]
+            );
 
-        if (!$rs) {
-            return null;
+            if (!$rs) {
+                return null;
+            }
+
+            $this->load($rs->fields);
+
+            $database = $conn->connectionParams['dbname'];
+            if ($database != 'onm-instances') {
+                $this->accesscategories = $this->readAccessCategories();
+            }
+
+            // Get user meta information
+            $this->meta = $this->getMeta();
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        $this->load($rs->fields);
-
-        $database = $GLOBALS['application']->conn->connectionParams['dbname'];
-        if ($database != 'onm-instances') {
-            $this->accesscategories = $this->readAccessCategories();
-        }
-
-        // Get user meta information
-        $this->meta = $this->getMeta();
-
-        return $this;
     }
 
     /**
@@ -315,14 +306,13 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             && $data['password'] === $data['passwordconfirm']
         ) {
             $sql = "UPDATE users
-                    SET `username`=?, `password`= ?, `sessionexpire`=?, `url`=?, `bio`=?,
+                    SET `username`=?, `password`= ?, `url`=?, `bio`=?,
                         `avatar_img_id`=?, `email`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
             $values = [
                 $data['username'],
                 md5($data['password']),
-                (int) $data['sessionexpire'],
                 $data['url'],
                 $data['bio'],
                 (int) $data['avatar_img_id'],
@@ -335,13 +325,12 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             ];
         } else {
             $sql = "UPDATE users
-                    SET `username`=?, `sessionexpire`=?, `email`=?, `url`=?, `bio`=?,
+                    SET `username`=?, `email`=?, `url`=?, `bio`=?,
                         `avatar_img_id`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
             $values = [
                 $data['username'],
-                (int) $data['sessionexpire'],
                 $data['email'],
                 $data['url'],
                 $data['bio'],
@@ -605,85 +594,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     }
 
     /**
-     * Tries to login a user given a username information
-     *
-     * @param string $username the username
-     * @param string $password the password
-     * @param string $loginToken the login token provided
-     * @param string $loginCaptcha
-     * @param int    $time
-     *
-     * @return boolean true if the user has access
-     **/
-    public function login(
-        $username,
-        $password,
-        $loginToken = null,
-        $loginCaptcha = null,
-        $time = null
-    ) {
-        $result = false;
-
-        $result = $this->authDatabase($username, $password, false, $time);
-        if (!$result) {
-            $result = $this->authDatabase($username, $password, true, $time);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Authenticate by using the database
-     *
-     * @param  string  $username
-     * @param  string  $password
-     * @param  boolean $managerDb
-     * @param  int     $time
-     *
-     * @return boolean Return true if username exists and password match
-     */
-    public function authDatabase($username, $password, $managerDb = false, $time = null)
-    {
-        $sql = 'SELECT * FROM users WHERE username=? OR email=?';
-        if (!$managerDb) {
-            $rs = $GLOBALS['application']->conn->Execute($sql, array(strval($username), strval($username)));
-        } else {
-            $conn = getService('db_conn_manager');
-            $rs =  $conn->Execute($sql, array(strval($username), strval($username)));
-        }
-
-        if (!$rs) {
-            return false;
-        }
-
-        $this->setValues($rs->fields);
-
-        // Check if password came with md5 tag otherwise js is disabled
-        if (strstr($password, 'md5:') && 'md5:'.md5($this->password.$time) === $password) {
-            // Set access categories
-            $this->accesscategories = $this->readAccessCategories();
-            $this->authMethod = 'database';
-
-            return true;
-        } elseif ($this->password === md5($password)) { // Pass not md5 ecrypted, js disabled
-            // Set access categories
-            $this->accesscategories = $this->readAccessCategories();
-            $this->authMethod = 'database';
-
-            return true;
-        } elseif ($this->password === $password) { // Frontend login from mail activation
-            $this->authMethod = 'database';
-
-            return true;
-        }
-
-        // Reset members properties
-        $this->resetValues();
-
-        return false;
-    }
-
-    /**
      * Get user data by email
      *
      * @param  string     $email
@@ -742,13 +652,11 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->id            = $data['id'];
             $this->username      = $data['username'];
             $this->password      = $data['password'];
-            $this->sessionexpire = $data['sessionexpire'];
             $this->url           = $data['url'];
             $this->bio           = $data['bio'];
             $this->avatar_img_id = $data['avatar_img_id'];
             $this->email         = $data['email'];
             $this->name          = $data['name'];
-            $this->deposit       = array_key_exists('deposit', $data) ? $data['deposit'] : '';
             $this->type          = $data['type'];
             $this->token         = $data['token'];
             $this->activated     = $data['activated'];
@@ -770,13 +678,11 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $this->id               = null;
         $this->username         = null;
         $this->password         = null;
-        $this->sessionexpire    = null;
         $this->url              = null;
         $this->bio              = null;
         $this->avatar_img_id    = null;
         $this->email            = null;
         $this->name             = null;
-        $this->deposit          = null;
         $this->type             = null;
         $this->token            = null;
         $this->activated        = null;

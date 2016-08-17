@@ -16,8 +16,46 @@ select.form-control {
   }
 }
 
+.form-control:focus {
+  border-color: #faf5f7;
+}
+
 .form-group .tooltip .tooltip-inner {
   white-space: nowrap;
+}
+
+.has-error .input-group-addon {
+  border-color: @error-color;
+}
+
+.input-group-status {
+  padding: 8px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.input-with-icon {
+  .icon {
+    bottom: 0;
+    color: @default-color;
+    display: block;
+    font-size: 16px;
+    height: auto;
+    left: 0;
+    margin: 11px 2px 4px 10px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 16px;
+
+    &.right {
+      left: auto;
+      margin: 7px 10px;
+      right: 0;
+    }
+  }
 }
 
 .has-error {

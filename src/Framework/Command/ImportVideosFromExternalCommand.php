@@ -59,6 +59,8 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        throw new \Exception('I am using the old Youtube API. Please, update me.');
+
         $start = time();
 
         // Get arguments
@@ -76,9 +78,9 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
         chdir($basePath);
 
-        $dbConn = $this->getContainer()->get('db_conn_manager');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
-        $rs = $dbConn->GetAll('SELECT internal_name, settings FROM instances');
+        $rs = $conn->fetchAll('SELECT internal_name, settings FROM instances');
 
         $instances = array();
         foreach ($rs as $database) {
@@ -95,21 +97,14 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
         // Initialize internal constants for logger
         define('INSTANCE_UNIQUE_NAME', $instance);
 
-        // Initialize database connection
-        $this->connection = $this->getContainer()->get('db_conn');
-        $this->connection->selectDatabase($instances[$instance]['BD_DATABASE']);
-
-        // Initialize application
-        $GLOBALS['application'] = new \Application();
-        \Application::load();
-        \Application::initDatabase($this->connection);
-
         // Initialize the template system
         define('CACHE_PREFIX', '');
 
         // Set session variable
-        $_SESSION['username'] = 'console';
-        $_SESSION['userid'] = '0';
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         $commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
         if (!file_exists($commonCachepath)) {
@@ -118,7 +113,9 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
         $this->tpl = new \TemplateAdmin('admin');
 
-        $conn = $this->getContainer()->get('dbal_connection');
+        $conn = $this->getContainer()->get('orm.manager')
+            ->getConnection('instance');
+
         $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
 
         switch ($source) {

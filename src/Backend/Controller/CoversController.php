@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -67,10 +66,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function listAction()
     {
         $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
@@ -103,10 +101,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function widgetAction()
     {
         $category = 'widget';
@@ -127,10 +124,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_UPDATE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -162,10 +158,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_CREATE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_CREATE')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
@@ -183,7 +178,7 @@ class CoversController extends Controller
             'favorite'       => (int) $postInfo->getDigits('favorite', 1),
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
-            'fk_publisher'   => (int) $_SESSION['userid'],
+            'fk_publisher'   => (int) $this->getUser()->id,
         );
 
         $dateTime = new \DateTime($coverData['date']);
@@ -241,10 +236,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_UPDATE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -265,7 +259,7 @@ class CoversController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$cover->isOwner($_SESSION['userid'])
+            && !$cover->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -293,7 +287,7 @@ class CoversController extends Controller
                 'category'       => $postReq->getDigits('category', 0),
                 'name'           => $cover->name,
                 'thumb_url'      => $cover->thumb_url,
-                'fk_user_last_editor' => $_SESSION['userid'],
+                'fk_user_last_editor' => $this->getUser()->id,
             ];
 
             if (!$request->request->get('cover') && !empty($cover->name)) {
@@ -362,10 +356,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_DELETE')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_DELETE')")
+     */
     public function deleteAction(Request $request)
     {
         $id   = $request->query->getDigits('id');
@@ -377,7 +370,7 @@ class CoversController extends Controller
             // Delete related and relations
             getService('related_contents')->deleteAll($id);
 
-            $cover->delete($id, $_SESSION['userid']);
+            $cover->delete($id, $this->getUser()->id);
 
             $this->get('session')->getFlashBag()->add(
                 'successs',
@@ -408,10 +401,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function savePositionsAction(Request $request)
     {
         $positions = $request->query->get('positions');
@@ -446,10 +438,9 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="KIOSKO_MANAGER")
-     **/
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
     public function configAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {

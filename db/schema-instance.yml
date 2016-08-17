@@ -771,10 +771,10 @@ kioskos:
             options: { default: null }
         type:
             type: boolean
-            options: { default: '0', comment: '0-item, 1-subscription' }
+            options: { default: 0, comment: '0 item - 1 subscription' }
         price:
-            type: decimal
-            options: { default: '0' }
+            type: float
+            options: { default: 0 }
     index:
         -
             name: PRIMARY
@@ -1487,22 +1487,19 @@ users:
             options: { default: null, unsigned: true, autoincrement: true }
         username:
             type: string
-            options: { default: null, notnull: false, length: 100 }
+            options: { default: null, notnull: true, length: 100 }
         password:
             type: string
             options: { default: null, notnull: false, length: 50 }
-        sessionexpire:
-            type: boolean
-            options: { default: '15', unsigned: true }
         url:
             type: string
-            options: { default: '', length: 255 }
+            options: { default: null, notnull: false, length: 255 }
         bio:
             type: text
-            options: { default: null, length: 65532 }
+            options: { default: null, notnull: false, length: 65532 }
         avatar_img_id:
             type: bigint
-            options: { default: '0', unsigned: true }
+            options: { default: null, notnull: false, unsigned: true }
         email:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -1510,17 +1507,14 @@ users:
             type: string
             options: { default: null, notnull: false, length: 100 }
         type:
-            type: boolean
-            options: { default: '0', comment: '0-backend, 1-frontend' }
-        deposit:
-            type: decimal
-            options: { default: '0' }
+            type: integer
+            options: { default: 1, notnull: true, comment: '0 backend - 1 frontend' }
         token:
             type: string
             options: { default: null, notnull: false, length: 50 }
         activated:
-            type: boolean
-            options: { default: '1', comment: '1 activated - 0 deactivated' }
+            type: integer
+            options: { default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
         fk_user_group:
             type: string
             options: { default: null, notnull: false, length: 100 }

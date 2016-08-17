@@ -50,7 +50,7 @@
 
         var defaults = {
             shortPass:  "alert-error",
-            badPass:    "alert-error",
+            badPass:    "alert-warning",
             goodPass:   "",
             strongPass: "alert-success",
             baseStyle:  "alert-pass ",

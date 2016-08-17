@@ -5,23 +5,17 @@ manager_ws_module_check:
     options:
         expose: true
 
-
-manager_ws_module_create:
-    path:     /modules
-    defaults: { _controller: ManagerWebServiceBundle:Module:create }
-    methods:  [ POST ]
-    options:
-        expose: true
-
 manager_ws_module_delete:
     path:     /modules/{id}
     defaults: { _controller: ManagerWebServiceBundle:Module:delete }
     methods:  [ DELETE ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
 manager_ws_module_new:
-    path:     /module/new
+    path:     /modules/new
     defaults: { _controller: ManagerWebServiceBundle:Module:new }
     methods:  [ GET ]
     options:
@@ -31,6 +25,15 @@ manager_ws_module_patch:
     path:     /modules/{id}
     defaults: { _controller: ManagerWebServiceBundle:Module:patch }
     methods:  [ PATCH ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_module_save:
+    path:     /modules
+    defaults: { _controller: ManagerWebServiceBundle:Module:save }
+    methods:  [ POST ]
     options:
         expose: true
 
@@ -38,6 +41,8 @@ manager_ws_module_show:
     path:     /modules/{id}
     defaults: { _controller: ManagerWebServiceBundle:Module:show }
     methods:  [ GET ]
+    requirements:
+        id: \d+
     options:
         expose: true
 
@@ -45,9 +50,10 @@ manager_ws_module_update:
     path:     /modules/{id}
     defaults: { _controller: ManagerWebServiceBundle:Module:update }
     methods:  [ PUT ]
+    requirements:
+        id: \d+
     options:
         expose: true
-    methods:  [ GET ]
 
 manager_ws_modules_delete:
     path:     /modules

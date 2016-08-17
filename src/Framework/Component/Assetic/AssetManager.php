@@ -93,7 +93,7 @@ abstract class AssetManager
 
         // Get current instance theme path
         $this->themePath = $this->sitePath . 'themes' . DS .
-            $container->get('instance')->settings['TEMPLATE_USER'];
+            $container->get('core.instance')->settings['TEMPLATE_USER'];
 
         $this->am = new BaseAssetManager();
     }
