@@ -135,13 +135,12 @@ class ContentManager
         }
         try {
             $rs = getService('dbal_connection')->fetchAll(
-                "SELECT $fields FROM contents LEFT JOIN $table ON pk_content = pk_$contentType"
+                "SELECT $fields FROM contents JOIN $table ON pk_content = pk_$contentType"
                 ." WHERE ".$where .' '.$orderBy
             );
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-
             error_log($e->getMessage());
             return [];
         }
