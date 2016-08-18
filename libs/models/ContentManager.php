@@ -923,7 +923,7 @@ class ContentManager
                 );
             }
 
-            if (!is_array()) {
+            if (empty($rs) || !is_array($rs)) {
                 return [];
             }
 
