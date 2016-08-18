@@ -136,7 +136,7 @@
          */
         $scope.$on('auth-login-required', function (event, args) {
           if (args.config.ignoreAuthModule) {
-            messenger.post({ id: 1, type: 'error', message: args.data.message });
+            messenger.post(args.data);
           }
 
           $scope.auth.status = false;
@@ -263,10 +263,7 @@
          * @param array  args  The list of arguments.
          */
         $scope.$on('http-error', function (event, args) {
-          messenger.post({
-            type: 'error',
-            message: args.data.text
-          });
+          messenger.post(args.data);
         });
 
         webStorage.prefix('ONM-');
