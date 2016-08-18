@@ -228,7 +228,7 @@ class InstanceController extends Controller
         return new JsonResponse(
             [
                 'data'     => null,
-                'template' => $this->templateParams()
+                'template' => $this->getTemplateParams()
             ]
         );
     }
