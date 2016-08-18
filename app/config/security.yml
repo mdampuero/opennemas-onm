@@ -13,7 +13,7 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [ users.instance, users.manager, users.oauth ]
+                providers: [ users.manager, users.instance, users.oauth ]
         users.oauth:
             id: onm_oauth_user_provider
         users.instance:

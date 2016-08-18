@@ -76,9 +76,13 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function getPayload()
     {
-        $this->eraseCredentials();
+        $data = $this->getData();
 
-        return $this->getData();
+        unset($data['password']);
+        unset($data['roles']);
+        unset($data['token']);
+
+        return $data;
     }
 
     /**
