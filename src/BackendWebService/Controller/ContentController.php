@@ -10,9 +10,10 @@
 
 namespace BackendWebService\Controller;
 
+use Common\Core\Annotation\Security;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
 
 class ContentController extends Controller
 {
@@ -423,28 +424,13 @@ class ContentController extends Controller
     }
 
     /**
-     * undocumented function
+     * Removes contents from trash.
      *
-     * @return void
-     * @author
-     **/
-    public function emptyTrashAction(Request $request)
+     * @Security("hasExtension('TRASH_MANAGER')
+     *     and hasPermission('TRASH_ADMIN')")
+     */
+    public function emptyTrashAction()
     {
-        // Check permissions
-        if (!in_array('TRASH_ADMIN', $this->getUser()->getRoles())) {
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), 'TRASH_ADMIN')
-                        )
-                    )
-                )
-            );
-        }
-
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
