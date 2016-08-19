@@ -31,7 +31,6 @@
         $scope.instance = {
           domains: [],
           activated_modules: [],
-          changes_in_modules: [],
           support_plan: 'SUPPORT_NONE',
           settings: {
             TEMPLATE_USER: 'base'

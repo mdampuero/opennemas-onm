@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-<div class="content my-account-page" ng-controller="AccountCtrl" ng-init="init({json_encode($instance)|clear_json}, {json_encode($plans)|clear_json}, {json_encode($available_modules)|clear_json})">
+<div class="content my-account-page" ng-controller="AccountCtrl" ng-init="instance = {json_encode($instance)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
