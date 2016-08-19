@@ -91,13 +91,6 @@ class Instance
     public $activated_modules = array();
 
     /**
-     * The requested changes in modules of the current instance.
-     *
-     * @var array
-     */
-    public $changes_in_modules = array();
-
-    /**
      * The array of settings.
      *
      * @var array

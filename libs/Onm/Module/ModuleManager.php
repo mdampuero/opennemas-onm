@@ -78,18 +78,6 @@ class ModuleManager
     }
 
     /**
-     * Returns changes in modules.
-     *
-     * @return array array of changes in modules
-     */
-    public static function getChangesInModules()
-    {
-        $changesInModules = getService('core.instance')->changes_in_modules;
-
-        return $changesInModules;
-    }
-
-    /**
      * Returns the description for the module.
      *
      * @return string The module description
