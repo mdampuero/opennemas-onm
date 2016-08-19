@@ -138,20 +138,22 @@ class ContentsController extends Controller
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            // Check direct access
-            // if ($this->get('session')->get('sendformtoken') != $request->request->get('token')) {
-            //     throw new ResourceNotFoundException();
-            // }
+            $valid = false;
+            $errors = [];
 
             // Validate captcha
-            $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
-            $resp = $recaptcha->verify(
-                $request->get('g-recaptcha-response'),
-                $request->getClientIp()
-            );
-            $valid = $resp->isSuccess();
+            if (!empty($request->get('g-recaptcha-response'))
+                && is_array($request->get('g-recaptcha-response'))
+            ) {
+                $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
+                $resp = $recaptcha->verify(
+                    $request->get('g-recaptcha-response'),
+                    $request->getClientIp()
+                );
 
-            $errors = [];
+                $valid = $resp->isSuccess();
+            }
+
             if (!$valid) {
                 $errors []= _(
                     'The reCAPTCHA was not entered correctly.'.
