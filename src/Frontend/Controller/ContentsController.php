@@ -142,9 +142,7 @@ class ContentsController extends Controller
             $errors = [];
 
             // Validate captcha
-            if (!empty($request->get('g-recaptcha-response'))
-                && is_array($request->get('g-recaptcha-response'))
-            ) {
+            if (!empty($request->get('g-recaptcha-response'))) {
                 $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
                 $resp = $recaptcha->verify(
                     $request->get('g-recaptcha-response'),
