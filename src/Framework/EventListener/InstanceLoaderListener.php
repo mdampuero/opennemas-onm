@@ -164,6 +164,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
         } elseif (getContainerParameter('opennemas.redirect_frontend')
             && strpos($request->getRequestUri(), '/admin') !== 0
             && strpos($request->getRequestUri(), '/manager') !== 0
+            && strpos($request->getRequestUri(), '/content/share-by-email') !== 0
             && strpos($request->getRequestUri(), '/ws') !== 0
             && strpos($request->getRequestUri(), '/_wdt') !== 0
         ) {
