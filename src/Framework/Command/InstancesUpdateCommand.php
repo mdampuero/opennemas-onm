@@ -125,8 +125,16 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 $output->writeln('Getting info about \''.$instance->internal_name.'\'');
             }
 
-            $this->getInstanceInfo($instance, $options);
-            $this->im->persist($instance);
+            try {
+                $this->getInstanceInfo($instance, $options);
+                $this->im->persist($instance);
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                $output->writeln(
+                    '<error>Error while getting info about \''
+                    . $instance->internal_name.'\': ' . $e->getMessage() . '</>'
+                );
+            }
         }
     }
 
