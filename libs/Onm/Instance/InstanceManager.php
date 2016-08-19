@@ -603,11 +603,6 @@ class InstanceManager extends BaseManager
 
         $instance->_metas = $instance->metas;
 
-        // Check for changes in modules
-        if (is_null($instance->changes_in_modules)) {
-            $instance->changes_in_modules = [];
-        }
-
         $this->checkPacksActivated($instance);
     }
 

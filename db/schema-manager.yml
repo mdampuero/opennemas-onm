@@ -30,9 +30,6 @@ instances:
         activated_modules:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        changes_in_modules:
-            type: text
-            options: { default: null, length: 65532, notnull: false }
         activated:
             type: boolean
             options: { default: null }

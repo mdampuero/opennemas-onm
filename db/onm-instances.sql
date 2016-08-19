@@ -52,7 +52,6 @@ CREATE TABLE `instances` (
   `emails` int(10) unsigned NOT NULL DEFAULT '0',
   `users` int(10) unsigned NOT NULL DEFAULT '0',
   `activated_modules` text,
-  `changes_in_modules` text,
   `support_plan` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `domain_name` (`domains`)
