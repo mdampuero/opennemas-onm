@@ -209,9 +209,13 @@ class Importer
 
         if (array_key_exists('email', $data)) {
             $um = $this->container->get('user_repository');
-            $user = $um->findOneBy();
+            $user = $um->findOneBy([
+                'union'    => 'or',
+                'email'    => [ [ 'value' => $data['email'] ] ],
+                'username' => [ [ 'value' => $data['email'] ] ]
+            ]);
 
-            if (empty($user)) {
+            if (!empty($user)) {
                 return $user->id;
             }
         }
