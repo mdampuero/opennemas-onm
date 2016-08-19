@@ -68,9 +68,10 @@ class NewsAgencyServerController extends Controller
     public function checkAction(Request $request)
     {
         $server = [
-            'password' => $request->query->get('password'),
-            'url'      => $request->query->get('url'),
-            'username' => $request->query->get('username'),
+            'password'  => $request->query->get('password'),
+            'url'       => $request->query->get('url'),
+            'username'  => $request->query->get('username'),
+            'sync_from' => ''
         ];
 
         $sf = new ServerFactory();
