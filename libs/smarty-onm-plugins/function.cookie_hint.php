@@ -11,8 +11,12 @@ function smarty_function_cookie_hint($params, &$smarty)
         $url = s::get('cookies_hint_url');
         $message = sprintf(
             _(
-                'We use cookies to offer you a better experience. By using this site you '
-                .'agree to our use of cookies. <a target="_blank" href="%s"> Learn more &gt; </a>'
+                'We use cookies to personalise content and ads, to provide social media '
+                .'features and to analyse our traffic. We also share information about '
+                .'your use of our site with our social media, advertising and analytics '
+                .'partners who may combine it with other information you’ve provided '
+                .'to them or they’ve collected from your use of their services. '
+                .'<a target="_blank" href="%s"> See details </a>'
             ),
             $url
         );
