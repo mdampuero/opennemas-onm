@@ -198,6 +198,10 @@ class AclUserController extends Controller
                     $mailer = $this->get('mailer');
                     $mailer->send($message);
 
+                    $this->get('application.log')->notice(
+                        "Email sent. Backend restore user password (to: ".$user->email.")"
+                    );
+
                     $this->view->assign(
                         array(
                             'mailSent' => true,
