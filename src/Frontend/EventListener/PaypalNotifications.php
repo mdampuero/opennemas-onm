@@ -111,6 +111,10 @@ class PaypalNotifications implements EventSubscriberInterface
                 try {
                     $mailer = getService('mailer');
                     $mailer->send($email);
+
+                    $this->get('application.log')->notice(
+                        "Email sent. Frontend Paypal IPN (to: ".$ipnData['payer_email'].")"
+                    );
                 } catch (\Swift_SwiftException $e) {
                     // Write in log
                     $logger = getService('logger');
