@@ -36,7 +36,9 @@ class CacheManagerController extends Controller
      **/
     public function indexAction(Request $request)
     {
-        return $this->render('cache_manager/index.tpl');
+        $hasRedis = method_exists($this->get('cache'), 'getRedis');
+
+        return $this->render('cache_manager/index.tpl', [ 'redis_enabled' => $hasRedis ]);
 
     }
     /**
@@ -97,6 +99,25 @@ class CacheManagerController extends Controller
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function clearAllCacheAction()
+    {
+        $this->clearSmartyCache();
+        $this->clearSmartyCompiles();
+        $this->clearRedis();
+        $this->clearVarnishCache();
+
+        $this->get('session')->getFlashBag()
+            ->add('success', _('Cleared all cache for the instance (smarty compiles, smarty cache, redis and varnish.'));
+
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
+    }
+
+    /**
      * Deletes all the frontend cache files
      * DANGER: this action is really CPU expensive
      *
@@ -107,9 +128,7 @@ class CacheManagerController extends Controller
      */
     public function clearCacheAction()
     {
-        // Initialization of the frontend template object
-        $frontpageTemplate = $this->get('view')->getTemplate();
-        $frontpageTemplate->clearAllCache();
+        $this->clearSmartyCache();
 
         $this->get('session')->getFlashBag()
             ->add('success', _('Smarty cache removed for the instance.'));
@@ -128,9 +147,7 @@ class CacheManagerController extends Controller
      */
     public function clearCompiledTemplatesAction()
     {
-        // Initialization of the frontend template object
-        $frontpageTemplate = $this->get('view')->getTemplate();
-        $frontpageTemplate->clearCompiledTemplate();
+        $this->clearSmartyCompiles();
 
         $this->get('session')->getFlashBag()
             ->add('success', _('Smarty compiled templates removed for the instance.'));
@@ -153,14 +170,77 @@ class CacheManagerController extends Controller
             return false;
         }
 
-        $instanceName = $this->get('core.instance')->internal_name;
-
-        $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));
+        $this->clearVarnishCache();
 
         $this->get('session')->getFlashBag()
             ->add('success', _('Varnish BAN queued for current instance.'));
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function clearRedisCacheForInstanceAction()
+    {
+        $this->clearRedis();
+        $this->get('session')->getFlashBag()
+            ->add('success', _('Redis cache cleared for current instance.'));
+
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
+    }
+
+    /**
+     * Removes the redis cache for the current instance
+     *
+     * @return void
+     **/
+    private function clearRedis()
+    {
+        $cache = $this->get('cache');
+
+        if (method_exists($cache, 'getRedis')) {
+            $redis = $cache->getRedis();
+            $instanceName = $this->get('core.instance')->internal_name;
+            $redis->eval("redis.call('del', unpack(redis.call('keys', ARGV[1])))", [$instanceName."*"]);
+        }
+    }
+
+    /**
+     * Sends a BAN to varnish to purge all the cache for the current instance
+     *
+     * @return void
+     **/
+    private function clearVarnishCache()
+    {
+        $instanceName = $this->get('core.instance')->internal_name;
+
+        $this->container->get('varnish_ban_message_exchanger')
+            ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));
+    }
+
+    /**
+     * Removes all the smarty cache for the current instance
+     *
+     * @return void
+     **/
+    public function clearSmartyCache()
+    {
+        $frontpageTemplate = $this->get('view')->getTemplate();
+        $frontpageTemplate->clearAllCache();
+    }
+
+    /**
+     * Removes all the smarty compiles for the current instance
+     *
+     * @return void
+     **/
+    public function clearSmartyCompiles()
+    {
+        $frontpageTemplate = $this->get('view')->getTemplate();
+        $frontpageTemplate->clearCompiledTemplate();
     }
 }

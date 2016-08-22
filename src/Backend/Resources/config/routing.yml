@@ -888,6 +888,10 @@ admin_cache_manager_banvarnishcache:
     path:     /system/cachemanager/ban-varnish-cache
     defaults: { _controller  : BackendBundle:CacheManager:clearVarnishCache }
 
+admin_cache_manager_clearrediscache:
+    path:     /system/cachemanager/clear-redis-cache
+    defaults: { _controller  : BackendBundle:CacheManager:clearRedisCacheForInstance }
+
 # User management routes
 admin_acl_user:
     path:     /acl/users
