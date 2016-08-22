@@ -154,6 +154,10 @@ class UserController extends Controller
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
 
+                        $this->get('application.log')->notice(
+                            "Email sent. Frontend register user (to: ".$data['email'].")"
+                        );
+
                         $this->view->assign([
                             'mailSent' => true,
                             'email'    => $data['email'],
@@ -301,6 +305,10 @@ class UserController extends Controller
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
 
+                $this->get('application.log')->notice(
+                    "Email sent. Frontend activate user (to: ".$uiser->email.")"
+                );
+
                 $this->view->assign('mailSent', true);
             } catch (\Exception $e) {
                 // Log this error
@@ -374,6 +382,10 @@ class UserController extends Controller
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
+
+                $this->get('application.log')->notice(
+                    "Email sent. Frontend recover password (to: ".$user->email.")"
+                );
 
                 $this->view->assign(
                     array(
