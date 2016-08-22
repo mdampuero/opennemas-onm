@@ -263,17 +263,18 @@ class SimpleMenu
      **/
     private function checkAcl($privilege)
     {
-        if (isset($privilege) && !is_null($privilege)) {
-            $privileges = explode(',', $privilege);
-            $hasAccess = false;
-            foreach ($privileges as $priv) {
-                $hasAccess = $hasAccess || Acl::checkPrivileges($priv);
-            }
-
-            return $hasAccess;
+        if (empty($privilege)) {
+            return true;
         }
 
-        return true;
+        $security   = getService('core.security');
+        $privileges = explode(',', $privilege);
+        $hasAccess  = false;
+        foreach ($privileges as $privilege) {
+            $hasAccess = $hasAccess || $security->hasPermission($privilege);
+        }
+
+        return $hasAccess;
     }
 
     /**
