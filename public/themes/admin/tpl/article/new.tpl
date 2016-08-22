@@ -41,8 +41,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario" ng-controller="ArticleCtrl">
-
+<form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario" ng-controller="ArticleCtrl" ng-init="{if !isset($article->id)}draftEnabled = true; checkDraft(){else}article = {json_encode($article)|clear_json}{/if}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -124,7 +123,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" name="title" ng-model="title" ng-trim="false" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
+                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 80, 'text-danger': title.length >= 80 }">
                         [% title.length %]
@@ -139,7 +138,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title_int">
-                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="title_int" ng-trim="false" value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
+                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': title_int.length >= 50 && title_int.length < 100, 'text-danger': title_int.length >= 100 }">
                         [% title_int.length %]
@@ -154,7 +153,7 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency" name="agency" type="text"
+                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" type="text"
                     {if is_object($article)}
                     value="{$article->agency|clearslash|escape:"html"}"
                     {else}
@@ -168,7 +167,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" type="text"
+                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" type="text"
                     {if is_object($article)}
                     value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
                     {else}
@@ -184,7 +183,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="subtitle">
-                    <input class="form-control" name="subtitle" ng-model="subtitle" ng-trim="false" type="text" value="{$article->subtitle|clearslash|escape:"html"}"/>
+                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" type="text" value="{$article->subtitle|clearslash|escape:"html"}"/>
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': subtitle.length >= 50 && subtitle.length < 100, 'text-danger': subtitle.length >= 100 }">
                         [% subtitle.length %]
@@ -207,7 +206,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" ng-model="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                  <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" ng-model="article.summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                 </div>
               </div>
               <div class="form-group">
@@ -222,7 +221,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea name="body" id="body" ng-model="body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
+                  <textarea name="body" id="body" ng-model="article.body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
                 </div>
               </div>
             </div>
@@ -236,7 +235,7 @@
                   {acl isAllowed="ARTICLE_AVAILABLE"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="content_status" name="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                        <input id="content_status" name="content_status" ng-model="article.content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
                         <label for="content_status">
                           {t}Published{/t}
                         </label>
@@ -246,7 +245,7 @@
                   {is_module_activated name="COMMENT_MANAGER"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} id="with_comment" name="with_comment" type="checkbox" value="1"/>
+                        <input {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} id="with_comment" name="with_comment" ng-model="article.with_comments" type="checkbox" value="1"/>
                         <label class="form-label" for="with_comment">
                           {t}Allow comments{/t}
                         </label>
@@ -271,7 +270,7 @@
                       {acl isAllowed="CONTENT_OTHER_UPDATE"}
                         <div class="form-group">
                           <div class="controls">
-                            <select id="fk_author" name="fk_author">
+                            <select id="fk_author" name="fk_author" ng-model="article.fk_author">
                               {html_options options=$authors selected=$article->fk_author}
                             </select>
                           </div>
@@ -279,10 +278,10 @@
                       {aclelse}
                         {if !isset($article->fk_author) || empty($article->fk_author)}
                           {$smarty.session._sf2_attributes.user->name}
-                          <input type="hidden" name="fk_author" value="{$smarty.session._sf2_attributes.user->id}">
+                          <input type="hidden" name="fk_author" ng-model="article.fk_author" value="{$smarty.session._sf2_attributes.user->id}">
                         {else}
                           {$authors[$article->fk_author]}
-                          <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                          <input type="hidden" name="fk_author" ng-model="article.fk_author" value="{$article->fk_author}">
                         {/if}
                       {/acl}
                     </div>
@@ -292,7 +291,7 @@
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select id="category" name="category" required="required">
+                      <select id="category" name="category" ng-model="article.category" required="required">
                         <option value="" >{t}- Select a category -{/t}</option>
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
@@ -321,7 +320,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$article->metadata|clearslash|escape:"html"}"/>
+                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" ng-model="article.metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$article->metadata|clearslash|escape:"html"}"/>
                     </div>
                   </div>
                   <div class="form-group">
@@ -329,7 +328,7 @@
                       {t}Slug{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id) && $article->content_status != 0}disabled{/if}>
+                      <input class="form-control" id="slug" name="slug" ng-model="article.slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id) && $article->content_status != 0}disabled{/if}>
                       {if $article && $article->content_status eq 1}
                       {assign var=uri value="\" "|explode:$article->uri}
                       <span class="help-block">
@@ -345,7 +344,7 @@
                       {t}External link{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="bodyLink" name="params[bodyLink]" type="text" value="{$article->params['bodyLink']}">
+                      <input class="form-control" id="bodyLink" name="params[bodyLink]" ng-model="article.params.bodyLink" type="text" value="{$article->params['bodyLink']}">
                     </div>
                   </div>
                 </div>
@@ -363,7 +362,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $article->starttime neq '0000-00-00 00:00:00'}{$article->starttime}{/if}">
+                            <input class="form-control" id="starttime" name="starttime" ng-model="article.starttime" type="datetime" value="{if $article->starttime neq '0000-00-00 00:00:00'}{$article->starttime}{/if}">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -379,7 +378,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $article->endtime neq '0000-00-00 00:00:00'}{$article->endtime}{/if}">
+                            <input class="form-control" id="endtime" name="endtime" ng-model="article.endtime" type="datetime" value="{if $article->endtime neq '0000-00-00 00:00:00'}{$article->endtime}{/if}">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -420,7 +419,7 @@
                 </div>
                 <div class="grid-body">
                   <div class="checkbox">
-                    <input {if $article->params["only_subscribers"] == "1"}checked=checked{/if} id="only_subscribers" name="params[only_subscribers]" type="checkbox" value="1">
+                    <input {if $article->params["only_subscribers"] == "1"}checked=checked{/if} id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" type="checkbox" value="1">
                     <label for="only_subscribers">
                       {t}Only available for subscribers{/t}
                     </label>
@@ -441,9 +440,9 @@
         <input type="hidden" name="relatedInner" ng-value="relatedInner"/>
         <input type="hidden" name="relatedHome" ng-value="relatedHome"/>
 
-        <input type="hidden" name="params[withGallery]" ng-value="withGallery"/>
-        <input type="hidden" name="params[withGalleryInt]" ng-value="withGalleryInt"/>
-        <input type="hidden" name="params[withGalleryHome]" ng-value="withGalleryHome"/>
+        <input type="hidden" name="params[withGallery]" ng-model="article.params.withGallery" ng-value="withGallery"/>
+        <input type="hidden" name="params[withGalleryInt]" ng-model="article.params.withGalleryInt" ng-value="withGalleryInt"/>
+        <input type="hidden" name="params[withGalleryHome]" ng-model="article.params.withGalleryHome" ng-value="withGalleryHome"/>
       </div>
 
       {is_module_activated name="CRONICAS_MODULES"}
@@ -464,6 +463,9 @@
       <div class="modal-body clearfix no-padding">
         <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
       </div>
+    </script>
+    <script type="text/ng-template" id="modal-draft">
+      {include file="article/modal/_draft.tpl"}
     </script>
   </form>
 {/block}
