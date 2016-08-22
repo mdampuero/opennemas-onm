@@ -229,22 +229,20 @@ class ImagesController extends Controller
     public function createAction(Request $request)
     {
         $response = new Response();
-        $response->headers->add(
-            array(
-                'Pragma'                       => 'text/plain',
-                'Cache-Control'                => 'private, no-cache',
-                'Content-Disposition'          => 'inline; filename="files.json"',
-                'X-Content-Type-Options'       => 'nosniff',
-                'Access-Control-Allow-Origin'  => '*',
-                'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-                'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
-            )
-        );
+        $response->headers->add([
+            'Pragma'                       => 'text/plain',
+            'Cache-Control'                => 'private, no-cache',
+            'Content-Disposition'          => 'inline; filename="files.json"',
+            'X-Content-Type-Options'       => 'nosniff',
+            'Access-Control-Allow-Origin'  => '*',
+            'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+            'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
+        ]);
 
         switch ($request->getMethod()) {
             case 'HEAD':
             case 'GET':
-                return  $response->setContent(json_encode(array()));
+                return  $response->setContent(json_encode([]));
                 break;
             case 'POST':
                 // check if category, and filesizes are properly setted and category_name is valid
