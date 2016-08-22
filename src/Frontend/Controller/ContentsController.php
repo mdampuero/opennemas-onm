@@ -267,6 +267,10 @@ class ContentsController extends Controller
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
 
+                $this->get('application.log')->notice(
+                    "Email sent. Share-by-email (sender:".$senderEmail.", to: ".$recipients[0].", content_id:".$contentID.")"
+                );
+
                 $content = _('Article sent successfully');
                 $httpCode = 200;
             } catch (\Exception $e) {
