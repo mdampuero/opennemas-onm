@@ -94,6 +94,6 @@
       </div>
     </div>
   </div>
-  <input type="hidden" name="privileges" value="[% user_group.privileges %]">
+  <input type="hidden" name="privileges" ng-value="permissions">
 </form>
 {/block}

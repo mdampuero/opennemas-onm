@@ -91,7 +91,7 @@
          *
          * @type Object
          */
-        $scope.selected = { all: {}, privileges: {}, allSelected: {} };
+        $scope.selected = { all: {}, privileges: {}, allSelected: false };
 
         /**
          * @memberOf UserGroupCtrl
@@ -277,6 +277,15 @@
                 $scope.selected.all[name] = false;
               }
             }
+          }
+        }, true);
+
+        // Update privilege value in form when user.privileges change
+        $scope.$watch('user_group.privileges', function(nv) {
+          $scope.permissions = '';
+
+          if (nv) {
+            $scope.permissions = nv.join(',');
           }
         }, true);
       }
