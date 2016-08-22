@@ -312,7 +312,8 @@ class AclUserController extends Controller
             }
 
             if (!empty($data['password'])) {
-                $data['password'] = md5($data['password']);
+                $data['password'] = $this->get('onm_password_encoder')
+                    ->encodePassword($data['password'], null);
             }
         }
 
@@ -547,7 +548,10 @@ class AclUserController extends Controller
             }
 
             if (!empty($data['password'])) {
-                $data['password'] = md5($data['password']);
+                if (!empty($data['password'])) {
+                    $data['password'] = $this->get('onm_password_encoder')
+                        ->encodePassword($data['password'], null);
+                }
             }
         }
 

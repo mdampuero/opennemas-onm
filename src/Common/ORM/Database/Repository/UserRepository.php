@@ -25,6 +25,8 @@ class UserRepository extends BaseRepository
             if (array_key_exists($key, $categories)) {
                 $value->categories = $categories[$key];
             }
+
+            $value->refresh();
         }
 
         return $entities;

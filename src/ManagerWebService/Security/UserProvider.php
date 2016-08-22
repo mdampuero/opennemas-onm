@@ -44,7 +44,10 @@ class UserProvider implements UserProviderInterface
         $oql  = sprintf('username = "%s" or email = "%s"', $username, $username);
 
         try {
-            return $this->em->getRepository('User', 'manager')->findOneBy($oql);
+            $user = $this->em->getRepository('User', 'manager')->findOneBy($oql);
+
+            // Prevent password deletion after external eraseCredentials call
+            return clone($user);
         } catch (\Exception $e) {
             error_log($e->getMessage());
         }

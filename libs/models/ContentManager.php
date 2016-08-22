@@ -124,7 +124,9 @@ class ContentManager
         $table       = tableize($contentType);
         $contentType = underscore($contentType);
 
-        $where = '`contents`.`in_litter`=0';
+        $where = '`contents`.`content_type_name` = "' . $contentType . '"'
+            . 'AND `contents`.`in_litter` = 0';
+
         if (!is_null($filter)) {
             // se busca desde la litter.php
             if ($filter == 'in_litter=1') {
@@ -135,13 +137,12 @@ class ContentManager
         }
         try {
             $rs = getService('dbal_connection')->fetchAll(
-                "SELECT $fields FROM contents LEFT JOIN $table ON pk_content = pk_$contentType"
+                "SELECT $fields FROM contents JOIN $table ON pk_content = pk_$contentType"
                 ." WHERE ".$where .' '.$orderBy
             );
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-
             error_log($e->getMessage());
             return [];
         }
@@ -923,7 +924,7 @@ class ContentManager
                 );
             }
 
-            if (!is_array()) {
+            if (empty($rs) || !is_array($rs)) {
                 return [];
             }
 

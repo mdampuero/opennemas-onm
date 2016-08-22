@@ -259,7 +259,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                 return null;
             }
 
-            $this->load($rs->fields);
+            $this->load($rs[0]);
 
             $database = $conn->connectionParams['dbname'];
             if ($database != 'onm-instances') {

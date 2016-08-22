@@ -220,6 +220,12 @@ class UserController extends Controller
 
         $user = new User($data);
 
+        // Encode password
+        if (!empty($user->password)) {
+            $user->password = $this->get('onm_password_encoder')
+                ->encodePassword($data['password'], null);
+        }
+
         $em->persist($user, 'manager');
         $msg->add(_('User saved successfully'), 'success', 201);
 
@@ -277,12 +283,19 @@ class UserController extends Controller
 
         $user     = $em->getRepository('User', 'manager')->find($id);
         $password = $user->password;
-        $user->setData($data);
 
-        if (empty($user->password)) {
-            $user->password = $password;
+        // Encode password
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = $this->get('onm_password_encoder')
+                ->encodePassword($data['password'], null);
         }
 
+        // Keep old password if password empty
+        if (!array_key_exists('password', $data) || empty($data['password'])) {
+            $data['password'] = $password;
+        }
+
+        $user->setData($data);
         $em->persist($user, 'manager');
 
         $msg->add(_('User saved successfully'), 'success');

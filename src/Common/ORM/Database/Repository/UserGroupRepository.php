@@ -25,6 +25,8 @@ class UserGroupRepository extends BaseRepository
             if (array_key_exists($key, $privileges)) {
                 $value->privileges = $privileges[$key];
             }
+
+            $value->refresh();
         }
 
         return $entities;
