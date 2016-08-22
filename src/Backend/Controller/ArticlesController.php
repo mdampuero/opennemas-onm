@@ -189,7 +189,7 @@ class ArticlesController extends Controller
         }
 
         // Return user to list if has no update acl
-        if (Acl::check('ARTICLE_UPDATE')) {
+        if ($article->pk_article && Acl::check('ARTICLE_UPDATE')) {
             return $this->redirect(
                 $this->generateUrl(
                     'admin_article_show',
