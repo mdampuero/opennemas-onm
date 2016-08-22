@@ -74,7 +74,8 @@ class CoreListener implements EventSubscriberInterface
         $this->configure($instance);
 
         // Ignore manager requests
-        if (strpos($uri, '/manager') === 0
+        if ((strpos($uri, '/manager') === 0
+            || strpos($uri, '/content/share-by-email') === 0)
             && strpos($uri, '/ws') !== 0
             && strpos($uri, '/_wdt') !== 0
         ) {
