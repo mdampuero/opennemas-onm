@@ -124,7 +124,9 @@ class ContentManager
         $table       = tableize($contentType);
         $contentType = underscore($contentType);
 
-        $where = '`contents`.`in_litter`=0';
+        $where = '`contents`.`content_type_name` = "' . $contentType . '"'
+            . 'AND `contents`.`in_litter` = 0';
+
         if (!is_null($filter)) {
             // se busca desde la litter.php
             if ($filter == 'in_litter=1') {
