@@ -408,7 +408,7 @@ CREATE TABLE `contents` (
   `content_type_name` varchar(20) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `description` text,
-  `body` text NOT NULL,
+  `body` longtext DEFAULT NULL,
   `metadata` varchar(255) DEFAULT NULL,
   `starttime` datetime DEFAULT CURRENT_TIMESTAMP,
   `endtime` datetime DEFAULT NULL,
