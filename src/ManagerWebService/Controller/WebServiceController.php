@@ -238,7 +238,8 @@ class WebServiceController extends Controller
                         'domain'      => $domain,
                         'plan'        => $plan
                     )
-                )
+                ),
+                'text/html'
             );
 
         // Send message
@@ -265,7 +266,8 @@ class WebServiceController extends Controller
                         'companyMail'       => $companyMail['company_mail'],
                         'instance_base_url' => $instanceBaseURL,
                     )
-                )
+                ),
+                'text/html'
             );
 
         // Send message
@@ -288,7 +290,8 @@ class WebServiceController extends Controller
                         'instance'  => $instance,
                         'exception' => $exception
                     )
-                )
+                ),
+                'text/html'
             );
 
         // Send message
