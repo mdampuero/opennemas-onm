@@ -256,13 +256,18 @@
           });
         });
 
+        // Redirects to /403
+        $scope.$on('error-403', function (event, args) {
+          $location.url('/403');
+        });
+
         /**
          * Shows a message when an error while sending an Ajax request occurs.
          *
          * @param Object event The event object.
          * @param array  args  The list of arguments.
          */
-        $scope.$on('http-error', function (event, args) {
+        $scope.$on('error-404', function (event, args) {
           messenger.post(args.data);
         });
 

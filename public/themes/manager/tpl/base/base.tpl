@@ -259,8 +259,11 @@
   <script type="text/ng-template" id="modal-upgrade">
     {include file="common/modal_application_upgrade.tpl"}
   </script>
-  <script type="text/ng-template" id="error">
-    {include file="error/ws_404.tpl"}
+  <script type="text/ng-template" id="403">
+    {include file="error/403.tpl"}
+  </script>
+  <script type="text/ng-template" id="404">
+    {include file="error/404.tpl"}
   </script>
   <!--[if lt IE 7 ]>
       <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
