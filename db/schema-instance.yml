@@ -1375,7 +1375,7 @@ translation_ids:
             type: string
             options: { default: null, length: 100 }
         slug:
-            type: string
+            type: text
             options: { default: '', notnull: false, length: 65535 }
     index:
         -
