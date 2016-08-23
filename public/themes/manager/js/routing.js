@@ -10,7 +10,10 @@
             templateUrl: '/managerws/template/index:index.' + appVersion + '.tpl'
           })
           .when('/404', {
-            templateUrl: 'error',
+            templateUrl: '404',
+          })
+          .when('/403', {
+            templateUrl: '403'
           })
           .otherwise({
             redirectTo: '/404',
