@@ -173,7 +173,6 @@ class ArticlesController extends Controller
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Setup view
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
 
