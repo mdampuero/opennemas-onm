@@ -46,7 +46,7 @@ class Acl
                 return true;
             }
 
-            $user = getService('security.token_storage')->getToken()->getUser();
+            $user = getService('core.user');
 
             if (is_null($user) || $user == 'anon.') {
                 return false;
@@ -56,9 +56,9 @@ class Acl
                 return true;
             }
 
-            $categories = $user->getAccessCategoryIds();
-
-            if (empty($categories) || !in_array($categoryID, $categories)) {
+            if (empty($user->categories)
+                || !in_array($categoryID, $user->categories)
+            ) {
                 return false;
             }
         } catch (Exception $e) {
