@@ -3,7 +3,7 @@
     <div class="navbar-inner">
       <ul class="nav quick-section pull-left">
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="bottom"type="button">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-arrow-left fa-lg"></i>
           </button>
         </li>
@@ -22,6 +22,19 @@
             <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
               <i class="fa fa-download fa-lg"></i>
             </a>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="setEnabledSelected(0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-times fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="setEnabledSelected(1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-check fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
           </li>
         {/if}
         {if $list === 'notification'}
@@ -51,13 +64,15 @@
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks">
-            <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
+        {/if}
+        {if $list === 'notification' || $list === 'extension' || $list === 'user'}
+        <li class="quicklinks">
+            <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
@@ -65,14 +80,14 @@
             <span class="h-seperate"></span>
           </li>
         {/if}
-        {if $list !== 'notification' && list !== 'user_group'}
+        {if $list === 'notification' || $list === 'extension'}
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="setEnabledSelected(0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="setEnabledSelected(1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>

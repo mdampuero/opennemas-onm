@@ -34,8 +34,8 @@
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="input-min-45 input-250" ng-class="{ 'dirty': criteria.name_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="{t}Search by name{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name_like[0].value = null" ng-show="criteria.name_like[0].value">
+            <input class="input-min-45 input-250" ng-class="{ 'dirty': criteria.name }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name = null" ng-show="criteria.name">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -44,7 +44,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -69,7 +69,7 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -107,9 +107,9 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="pointer" ng-click="sort('id')" width="50">
+              <th class="pointer" ng-click="sort('pk_user_group')" width="50">
                 #
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc'}"></i>
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('pk_user_group') == 'asc', 'fa fa-caret-down': isOrderedBy('pk_user_group') == 'desc'}"></i>
               </th>
               <th class="pointer" ng-click="sort('name')" ng-if="isColumnEnabled('name')">
                 {t}Group name{/t}
@@ -118,23 +118,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.pk_user_group) }">
               <td>
                 <div class="checkbox check-default">
-                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
+                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.pk_user_group" type="checkbox">
                   <label for="checkbox[%$index%]"></label>
                 </div>
               </td>
               <td>
-                [% item.id %]
+                [% item.pk_user_group %]
               </td>
               <td ng-if="isColumnEnabled('name')">
                 [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.id }); %]" title="{t}Edit group{/t}">
+                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" title="{t}Edit group{/t}">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item)" type="button">
+                  <button class="link link-danger" ng-click="delete(item.pk_user_group)" type="button">
                     <i class="fa fa-trash-o"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -146,7 +146,7 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

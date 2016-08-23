@@ -9,12 +9,11 @@
  */
 namespace BackendWebService\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Framework\Import\Compiler\Compiler;
 use Framework\Import\Repository\LocalRepository;
 use Framework\Import\ServerFactory;
 use Onm\Framework\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -74,7 +73,7 @@ class NewsAgencyServerController extends Controller
             'sync_from' => ''
         ];
 
-        $sf = new ServerFactory();
+        $sf = new ServerFactory($this->get('view')->getBackendTemplate());
 
         try {
             $sf->get($server);
@@ -98,8 +97,8 @@ class NewsAgencyServerController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
     public function cleanAction(Request $request)
     {
@@ -154,7 +153,7 @@ class NewsAgencyServerController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')")
      */
     public function listAction()
     {
@@ -178,8 +177,8 @@ class NewsAgencyServerController extends Controller
      *
      * @return Response the response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
     public function toggleAction(Request $request)
     {
@@ -217,8 +216,8 @@ class NewsAgencyServerController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
     public function deleteAction(Request $request)
     {

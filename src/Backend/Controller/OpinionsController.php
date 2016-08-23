@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,9 +34,8 @@ class OpinionsController extends Controller
      * @param  $blog      Blog flag for listing
      * @return Response   The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
     public function listAction($blog)
     {
@@ -83,9 +81,8 @@ class OpinionsController extends Controller
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @Security("has_role('OPINION_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_FRONTPAGE')")
      */
     public function frontpageAction(Request $request)
     {
@@ -189,9 +186,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_UPDATE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -212,7 +208,7 @@ class OpinionsController extends Controller
         // Check if you can see others opinions
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && $opinion->fk_author != $_SESSION['userid']
+            && $opinion->fk_author != $this->getUser()->id
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -262,9 +258,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_CREATE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -297,7 +292,7 @@ class OpinionsController extends Controller
             'endtime'             => $request->request->get('endtime', ''),
             'fk_author'           => $request->request->getDigits('fk_author'),
             'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $_SESSION['userid'],
+            'fk_publisher'        => $this->getUser()->id,
             'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
             'img1'                => $request->request->getDigits('img1', ''),
             'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
@@ -342,9 +337,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_UPDATE')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -364,7 +358,7 @@ class OpinionsController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$opinion->isOwner($_SESSION['userid'])
+            && !$opinion->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -395,7 +389,7 @@ class OpinionsController extends Controller
             'endtime'             => $request->request->get('endtime', ''),
             'fk_author'           => $request->request->getDigits('fk_author'),
             'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $_SESSION['userid'],
+            'fk_publisher'        => $this->getUser()->id,
             'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
             'id'                  => $id,
             'img1'                => $request->request->getDigits('img1', ''),
@@ -450,9 +444,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_HOME')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_HOME')")
      */
     public function toggleInHomeAction(Request $request)
     {
@@ -469,7 +462,7 @@ class OpinionsController extends Controller
                 sprintf(_('Unable to find an opinion with the id "%d"'), $id)
             );
         } else {
-            $opinion->setInHome($status, $_SESSION['userid']);
+            $opinion->setInHome($status, $this->getUser()->id);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -498,7 +491,7 @@ class OpinionsController extends Controller
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
@@ -546,7 +539,7 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -588,9 +581,8 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_SETTINGS')")
      */
     public function configAction(Request $request)
     {
@@ -634,15 +626,15 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
     public function previewAction(Request $request)
     {
         $opinion = new \Opinion();
         $cm = new  \ContentManager();
-        $this->view = new \Template(TEMPLATE_USER);
+        $this->view = $this->get('core.template');
+        $this->view->setCaching(0);
 
         $opinionContents = $request->request->filter('contents');
 
@@ -717,8 +709,6 @@ class OpinionsController extends Controller
             $otOpinion->uri              = $otOpinion->uri;
         }
 
-        $this->view->caching = 0;
-
         $session = $this->get('session');
 
         $this->view->assign([
@@ -744,9 +734,8 @@ class OpinionsController extends Controller
      *
      * @return Response  The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
     public function getPreviewAction()
     {

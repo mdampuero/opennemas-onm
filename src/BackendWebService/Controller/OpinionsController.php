@@ -10,8 +10,7 @@
 
 namespace BackendWebService\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -70,9 +69,8 @@ class OpinionsController extends ContentController
      *
      * @return Response The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
     public function saveFrontpageAction(Request $request)
     {

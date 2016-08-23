@@ -46,7 +46,6 @@ class AmpController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->assign('site_color', $siteColor);
     }
 
@@ -95,7 +94,7 @@ class AmpController extends Controller
         $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached("amp/article.tpl", $cacheID)
         ) {
             // Categories code -------------------------------------------

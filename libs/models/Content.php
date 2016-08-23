@@ -488,7 +488,7 @@ class Content
             'title'               => $data['title'],
             'description'         => (empty($data['description']) && !isset($data['description'])) ? '' :$data['description'],
             'body'                => (!array_key_exists('body', $data))? '': $data['body'],
-            'metadata'            => $data['metadata'],
+            'metadata'            => (!array_key_exists('metadata', $data)) ? '' : $data['metadata'],
             'starttime'           => $data['starttime'],
             'endtime'             => (empty($data['endtime']))? null: $data['endtime'],
             'created'             => (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'],
@@ -497,8 +497,8 @@ class Content
             'position'            => (empty($data['position']))? 2: (int) $data['position'],
             'frontpage'           => (!isset($data['frontpage']) || empty($data['frontpage'])) ? 0: intval($data['frontpage']),
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : (int) $data['fk_author'],
-            'fk_publisher'        => (int) $_SESSION['userid'],
-            'fk_user_last_editor' => (int) $_SESSION['userid'],
+            'fk_publisher'        => (int) getService('session')->get('user')->id,
+            'fk_user_last_editor' => (int) getService('session')->get('user')->id,
             'in_home'             => (empty($data['in_home']))? 0: intval($data['in_home']),
             'favorite'            => (empty($data['favorite'])) ? 0: intval($data['favorite']),
             'available'           => (int) $data['content_status'],
@@ -516,10 +516,10 @@ class Content
             // Insert into contents table
             $conn->insert('contents', $contentData);
 
-            $this->id            = $conn->lastInsertId();
+            $this->id           = $conn->lastInsertId();
+            $this->pk_content   = $this->id;
             $data['pk_content'] = $this->id;
             $data['id']         = $this->id;
-            $this->pk_content    = $this->id;
 
             self::load($contentData);
 
@@ -567,15 +567,18 @@ class Content
                 $data['starttime'] = date("Y-m-d H:i:s");
             }
         }
+
         if ($data['category'] != $this->category) {
             $ccm     = ContentCategoryManager::get_instance();
             $catName = $ccm->getName($data['category']);
+        } else {
+            $catName = $this->category_name;
         }
 
         if (empty($data['fk_user_last_editor'])
             && !isset($data['fk_user_last_editor'])
         ) {
-            $data['fk_user_last_editor'] = $_SESSION['userid'];
+            $data['fk_user_last_editor'] = getService('session')->get('user')->id;
         }
 
         if (!isset($data['slug']) || empty($data['slug'])) {
@@ -586,13 +589,6 @@ class Content
             }
         } else {
             $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
-        }
-
-        if ($data['category'] != $this->category) {
-            $ccm     = ContentCategoryManager::get_instance();
-            $catName = $ccm->getName($data['category']);
-        } else {
-            $catName = $this->category_name;
         }
 
         $contentData = [
@@ -607,7 +603,7 @@ class Content
             'endtime'        => (empty($data['endtime'])) ? null: $data['endtime'],
             'favorite'       => (!isset($data['favorite'])) ? (int) $this->favorite: (int) $data['favorite'],
             'fk_author'      => (!isset($data['fk_author']) || is_null($data['fk_author']))? (int) $this->fk_author : (int) $data['fk_author'],
-            'fk_publisher'   => (empty($data['content_status']))? null : (int) $_SESSION['userid'],
+            'fk_publisher'   => (empty($data['content_status']))? null : (int) getService('session')->get('user')->id,
             'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
             'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage: (int) $data['frontpage'],
             'in_home'        => (!isset($data['in_home'])) ? $this->in_home: (int) $data['in_home'],
@@ -642,6 +638,8 @@ class Content
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', array('content' => $this));
+
+            return true;
         } catch (\Exception $e) {
             error_log('Error updating content (ID:'.$data['id'].'):'.$e->getMessage());
             return false;
@@ -1632,7 +1630,7 @@ class Content
             );
 
             /* Notice log of this action */
-            getService('logger')->notice(
+            getService('application.log')->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
                 .' action Content::dropFromHomePageOfCategory '.$categoryName
                 .' an '.$this->content_type_name.' Id '.$pkContent
@@ -1658,7 +1656,7 @@ class Content
                 [ 'pk_fk_content' => $this->id ]
             );
 
-            getService('logger')->notice(
+            getService('application.log')->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
                 .'action Drop from frontpage to content with ID id '.$this->id
             );

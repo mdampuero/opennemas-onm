@@ -62,8 +62,7 @@ class ModuleManager
     {
         //global $activatedModules;
 
-        $activatedModules = getService('instance_manager')->current_instance
-            ->activated_modules;
+        $activatedModules = getService('core.instance')->activated_modules;
 
         if (is_null(self::$activatedModules)) {
             if (!isset($activatedModules) or (count($activatedModules) < 1)) {
@@ -1018,8 +1017,7 @@ class ModuleManager
      */
     public static function checkAllModulesActivated()
     {
-        $activatedModules = getService('instance_manager')->current_instance
-            ->activated_modules;
+        $activatedModules = getService('core.instance')->activated_modules;
 
         if (!isset($activatedModules) or !is_array($activatedModules)) {
             return true;
@@ -1062,30 +1060,6 @@ class ModuleManager
     }
 
     /**
-     * Returns true if a given module is activated or
-     * forward  if is not activated
-     *
-     * @param string $module the module canonical name.
-     *
-     * @return boolean true if module is activated, otherwise false
-     *
-     * @throws <b>ModuleException</b> If module is not available.
-     */
-    public static function checkActivatedOrForward($module = '')
-    {
-        try {
-            // Check if module exists
-            if (self::isActivated($module)) {
-                return true;
-            }
-        } catch (ModuleException $e) {
-            $_SESSION['error'] = $e->getMessage();
-            throw new AccessDeniedException();
-        }
-
-    }
-
-    /**
      * Check if a given module exists.
      *
      * @param string $moduleName the name of the module to check.
@@ -1097,6 +1071,5 @@ class ModuleManager
         $moduleNames = self::getAvailableModuleNames();
 
         return in_array($moduleName, $moduleNames);
-
     }
 }

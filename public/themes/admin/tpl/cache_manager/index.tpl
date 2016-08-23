@@ -8,7 +8,7 @@
         <li class="quicklinks">
           <h4>
             <i class="fa fa-database"></i>
-            {t}Cache Manager{/t}
+            Cache Manager
           </h4>
         </li>
       </ul>
@@ -30,27 +30,37 @@
       <div class="pull-right b-grey">
         <i class="fa fa-trash-o fa-4x"></i>
       </div>
-      <h4 class="alert-heading text-error semi-bold"><i class="icon-warning-sign"></i> Dangerous action!</h4>
-      <p>Clean internal template files generated for this instance by pushing buttons below. <br>These actions could take some time depending on the number of present cache/compiled files.</p>
+      <h4 class="alert-heading text-error semi-bold"><i class="icon-warning-sign"></i> Dangerous actions!</h4>
+      <p>Clean <strong>edge cache, object and templating files</strong> generated for this instance by pushing buttons below. <br>These actions could take some time depending on the number of present cache/compiled files.</p>
+      <hr>
+      <a href="{url name=admin_cache_manager_clearcache}" class="btn btn-danger btn-cons btn-large btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">
+        Remove ALL cache <span class="hidden-xs"><small>(Smarty compiles/cache, Varnish{if $redis_enabled}, Redis{/if})</small></span>
+      </a>
       <hr>
 
       <h6 class="text-error semi-bold">Smarty</h6>
-      <a href="{url name=admin_cache_manager_clearcache}" class="btn btn-white btn-cons btn-large btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">
-        <span class="hidden-xs">{t}Remove smarty cache{/t}</span>
+      <a href="{url name=admin_cache_manager_clearcache}" class="span-6 btn btn-white btn-cons btn-large btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">
+        Remove smarty cache
       </a>
-      <a href="{url name=admin_cache_manager_clearcompiled}" class="btn btn-white btn-cons btn-large btn-block">
-        <span class="hidden-xs">{t}Remove smarty compiles{/t}</span>
+      <a href="{url name=admin_cache_manager_clearcompiled}" class="span-6 btn btn-white btn-cons btn-large btn-block">
+        Remove smarty compiles
       </a>
 
       <h6 class="text-error semi-bold">Edge cache</h6>
       <a href="{url name=admin_cache_manager_banvarnishcache}" class="btn btn-white btn-cons btn-large btn-block">
-        <span class="hidden-xs">{t}Remove varnish cache{/t}</span>
+        Remove varnish cache
       </a>
 
       <h6 class="text-error semi-bold">Object cache</h6>
-      <a href="#" class="btn btn-white btn-cons btn-large btn-block">
-        <span class="hidden-xs">{t}Remove redis cache{/t} (not implemented)</span>
+      {if $redis_enabled}
+      <a href="{url name=admin_cache_manager_clearrediscache}" class="btn btn-white btn-cons btn-large btn-block">
+        Remove redis cache
       </a>
+      {else}
+      <span class="text-center">
+        This action is not available as Opennemas is not using Redis cache.
+      </span>
+      {/if}
     </div>
   </div>
 </div>

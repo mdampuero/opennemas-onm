@@ -83,6 +83,6 @@
 <div class="col-md-3">
   <div id="advertisement-mosaic-video" style="">
     <div id="advertisement-mosaic-frame-video"></div>
-    <img src="{$params.IMAGE_DIR}advertisement/videoAds.png" style="width:100%" height="401" usemap="#mapVideo" />
+    <img src="{$_template->getImageDir()}/advertisement/videoAds.png" style="width:100%" height="401" usemap="#mapVideo" />
   </div>
 </div>

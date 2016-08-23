@@ -113,8 +113,7 @@ class HttpRss extends Http
         $article->updated_datetime = new \DateTime($content->pubDate);
         $article->category_name    = (string) $content->category;
 
-        $tpl = new \TemplateAdmin();
-        $newsMLString = $tpl->fetch(
+        $newsMLString = $this->tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
             array('article' => $article)
         );

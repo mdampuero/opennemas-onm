@@ -9,9 +9,8 @@
  */
 namespace Backend\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Onm\Framework\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -60,8 +59,8 @@ class NewsAgencyServerController extends Controller
      *
      * @return Response the response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
     public function createAction(Request $request)
     {
@@ -123,8 +122,8 @@ class NewsAgencyServerController extends Controller
      *
      * @return Response the response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
      */
     public function listAction()
     {
@@ -138,8 +137,8 @@ class NewsAgencyServerController extends Controller
      *
      * @return Response the response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
     public function showAction(Request $request)
     {
@@ -185,8 +184,8 @@ class NewsAgencyServerController extends Controller
      *
      * @return Response The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
     public function updateAction(Request $request)
     {

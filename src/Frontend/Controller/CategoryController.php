@@ -36,7 +36,6 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         $categoryManager = $this->get('category_repository');
@@ -169,7 +168,6 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         // Get sync params
@@ -220,7 +218,6 @@ class CategoryController extends Controller
             );
         }
 
-        //$this->getInnerAds();
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
         $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
 
@@ -241,13 +238,13 @@ class CategoryController extends Controller
      *
      * @return void
      **/
-    public static function getInnerAds($category = 'home')
+    public function getInnerAds($category = 'home')
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

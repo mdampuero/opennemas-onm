@@ -2,10 +2,9 @@
 
 namespace BackendWebService\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 class ImagesController extends ContentController
@@ -17,9 +16,8 @@ class ImagesController extends ContentController
      *
      * @return Response
      *
-     * @Security("has_role('PHOTO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="IMAGE_MANAGER")
+     * @Security("hasExtension('IMAGE_MANAGER')
+     *     and hasPermission('PHOTO_ADMIN')")
      */
     public function listAction(Request $request, $contentType = null)
     {

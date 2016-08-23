@@ -14,16 +14,14 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\LayoutManager;
 
 /**
  * Handles the actions for the system information
@@ -39,15 +37,12 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function showAction(Request $request)
     {
         $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
-
-        $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', ['category' => $categoryId]);
 
         // Check if the user can access a frontpage from other category
         if ((int) $categoryId !== 0 && !Acl::checkCategoryAccess($categoryId)) {
@@ -112,11 +107,10 @@ class FrontpagesController extends Controller
 
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_'.$categoryId, 'default');
-        $lm = new LayoutManager(
-            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
-        );
-        $layoutSettings = $this->container->get('instance_manager')
-            ->current_instance->theme->getLayout($layoutTheme);
+        $lm = $this->get('core.manager.layout');
+        $lm->load(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml");
+
+        $layoutSettings = $lm->getLayout($layoutTheme);
 
         // Get contents for this home
         $cm = new \ContentManager();
@@ -153,8 +147,7 @@ class FrontpagesController extends Controller
             )
         );
 
-        $layouts = $this->container->get('instance_manager')
-            ->current_instance->theme->getLayouts();
+        $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
         // Get last saved and check
         $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_'.$categoryId);
@@ -188,10 +181,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function savePositionsAction(Request $request)
     {
         $savedProperly         = false;
@@ -252,7 +244,7 @@ class FrontpagesController extends Controller
             }
 
             $logger->info(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
+                'User '.$this->getUser()->name.' ('.$this->getUser()->id.') was failed '.$message.' to execute'
                 .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
             );
 
@@ -281,7 +273,7 @@ class FrontpagesController extends Controller
 
         // Notice log of this action
         $logger->info(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            'User '.$this->getUser()->name.' ('.$this->getUser()->id.') has executed'
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
         );
 
@@ -305,10 +297,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function pickLayoutAction(Request $request)
     {
         $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
@@ -318,7 +309,7 @@ class FrontpagesController extends Controller
             $category = 0;
         }
 
-        $availableLayouts = $this->container->get('instance_manager')->current_instance->theme->getLayouts();
+        $availableLayouts = $this->container->get('core.manager.layout')->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
 
         $layoutValid  = in_array($layout, $availableLayouts);
@@ -360,10 +351,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response instance
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function lastVersionAction(Request $request)
     {
         $dateRequest = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
@@ -394,15 +384,14 @@ class FrontpagesController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function previewAction(Request $request)
     {
-        $categoryName        = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->view          = new \Template(TEMPLATE_USER);
-        $this->view->caching = false;
+        $categoryName = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->view   = $this->get('core.template');
+        $this->view->setCaching(0);
 
         $this->view->assign(
             array(
@@ -482,10 +471,9 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ARTICLE_FRONTPAGE')")
-     *
-     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
-     **/
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function getPreviewAction()
     {
         $session = $this->get('session');

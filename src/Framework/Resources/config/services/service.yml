@@ -1,7 +1,7 @@
 services:
     core.service.assetic.asset_bag:
         class: Framework\Component\Assetic\AssetBag
-        arguments: [ %assetic%, '@instance' ]
+        arguments: [ %assetic%, '@core.instance' ]
 
     core.service.assetic.stylesheet_manager:
         class: Framework\Component\Assetic\StylesheetManager

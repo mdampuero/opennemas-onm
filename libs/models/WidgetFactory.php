@@ -47,7 +47,7 @@ class WidgetFactory
             $this->cachedId .= '-' . $this->content->pk_content;
         }
 
-        $this->tpl = new Template(TEMPLATE_USER);
+        $this->tpl = getService('core.template');
 
         $this->tpl->caching       = 0;
         $this->tpl->force_compile = true;

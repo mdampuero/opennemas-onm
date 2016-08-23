@@ -9,10 +9,8 @@
  */
 namespace Backend\Controller;
 
-use Backend\Annotation\CheckModuleAccess;
-use Framework\Import\Synchronizer\Synchronizer;
+use Common\Core\Annotation\Security;
 use Framework\Import\Repository\LocalRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,8 +66,8 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
      */
     public function listAction()
     {
@@ -83,10 +81,9 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function importAction(Request $request)
     {
         $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -139,10 +136,9 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function batchImportAction(Request $request)
     {
         $selected = $request->request->get('ids', null);
@@ -178,10 +174,9 @@ class NewsAgencyController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function selectCategoryWhereToImportAction(Request $request)
     {
         $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -236,10 +231,9 @@ class NewsAgencyController extends Controller
      *
      * @return int Category id
      *
-     * @Security("has_role('IMPORT_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     **/
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
     public function getSimilarCategoryIdForElement($element)
     {
         $finalCategory = 0;
@@ -275,17 +269,13 @@ class NewsAgencyController extends Controller
      *
      * @return Response The response object.
      *
-     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
-     * @Security("has_role('IMPORT_ADMIN')")
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
      */
     public function syncAction(Request $request)
     {
-        $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
-
-        $servers = s::get('news_agency_config');
-
-        $syncParams = array('cache_path' => CACHE_PATH);
-        $synchronizer = new Synchronizer($syncParams);
+        $servers      = s::get('news_agency_config');
+        $synchronizer = $this->get('core.agency.synchronizer');
 
         try {
             $synchronizer->syncMultiple($servers);
@@ -293,9 +283,7 @@ class NewsAgencyController extends Controller
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_news_agency', array('page' => $page))
-        );
+        return $this->redirect($this->generateUrl('admin_news_agency'));
     }
 
     /**
@@ -436,7 +424,7 @@ class NewsAgencyController extends Controller
                             $logger->info(
                                 'User '.$authorArray['username'].
                                 ' was created from importer by user '.
-                                $_SESSION['username'].' ('.$_SESSION['userid'].')'
+                                $this->getUser()->name.' ('.$this->getUser()->id.')'
                             );
                         }
 
@@ -560,7 +548,7 @@ class NewsAgencyController extends Controller
             'body'           => $element->getBody(),
             'posic'          => 0,
             'id'             => 0,
-            'fk_publisher'   => $_SESSION['userid'],
+            'fk_publisher'   => $this->getUser()->id,
             'img1'           => (isset($frontPhoto) ? $frontPhoto->id : ''),
             'img1_footer'    => (isset($frontPhoto) ? $frontPhoto->description : ''),
             'img2'           => (isset($innerPhoto) ? $innerPhoto->id : ''),
@@ -575,7 +563,6 @@ class NewsAgencyController extends Controller
 
         $article           = new \Article();
         $newArticleID      = $article->create($values);
-        $_SESSION['desde'] = 'efe_press_import';
 
         return $newArticleID;
     }

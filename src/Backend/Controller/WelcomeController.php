@@ -36,9 +36,9 @@ class WelcomeController extends Controller
      **/
     public function defaultAction()
     {
-        $termsAccepted = $this->getUser()->getMeta('terms_accepted');
+        $user = $this->get('core.user');
 
-        if (/*(*/!$termsAccepted
+        if (empty($user->terms_accepted)
             //|| $termsAccepted && $termsAccepted < '2015-07-23 15:24:15')
             && !$this->getUser()->isMaster()
         ) {

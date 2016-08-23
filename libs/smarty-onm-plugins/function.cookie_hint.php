@@ -16,7 +16,7 @@ function smarty_function_cookie_hint($params, &$smarty)
                 .'your use of our site with our social media, advertising and analytics '
                 .'partners who may combine it with other information you’ve provided '
                 .'to them or they’ve collected from your use of their services. '
-                .'<a target="_blank" href="%s"> See details </a>'
+                .'<a target="_blank" href="%s"> See details &gt; </a>'
             ),
             $url
         );

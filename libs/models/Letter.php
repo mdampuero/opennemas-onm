@@ -282,13 +282,12 @@ class Letter extends Content
      */
     public function render($params)
     {
-        $tpl = new Template(TEMPLATE_USER);
+        $tpl = getService('core.template');
 
-        $tpl->assign('item', $this);
-        $tpl->assign('cssclass', $params['cssclass']);
+        $params['item'] = $this;
 
         try {
-            $html = $tpl->fetch('frontpage/contents/_content.tpl');
+            $html = $tpl->fetch('frontpage/contents/_content.tpl', $params);
         } catch (\Exception $e) {
             $html = '';
         }

@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -33,10 +32,9 @@ class TrashController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('TRASH_ADMIN')")
-     *
-     * @CheckModuleAccess(module="TRASH_MANAGER")
-     **/
+     * @Security("hasExtension('TRASH_MANAGER')
+     *     and hasPermission('TRASH_ADMIN')")
+     */
     public function defaultAction()
     {
         $cm           = new \ContentManager();

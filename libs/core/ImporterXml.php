@@ -222,7 +222,7 @@ class ImporterXml
         }
         $values = self::parseXMLtoArray($docXml);
 
-        $this->data['pk_author']      = $_SESSION['userid'];
+        $this->data['pk_author']      = getService('session')->get('user')->id;
         $this->data['content_status'] = 0;
         $this->data['available']      = 0;
         $this->data['frontpage']      = 0;

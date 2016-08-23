@@ -9,10 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -25,8 +24,9 @@ class KeywordsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('PCLAVE_ADMIN')")
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
+     * @Security("hasExtension('KEYWORD_MANAGER')
+     *     and hasPermission('PCLAVE_ADMIN')")
+     *
      */
     public function listAction()
     {
@@ -40,8 +40,8 @@ class KeywordsController extends Controller
      *
      * @return Response The response object
      *
-     * @Security("has_role('PCLAVE_UPDATE')")
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
+     * @Security("hasExtension('KEYWORD_MANAGER')
+     *     and hasPermission('PCLAVE_UPDATE')")
      */
     public function showAction($id)
     {
@@ -61,8 +61,9 @@ class KeywordsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('PCLAVE_CREATE')")
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
+     * @Security("hasExtension('KEYWORD_MANAGER')
+     *     and hasPermission('PCLAVE_CREATE')")
+     *
      */
     public function createAction(Request $request)
     {
@@ -99,8 +100,9 @@ class KeywordsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("has_role('PCLAVE_UPDATE')")
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
+     * @Security("hasExtension('KEYWORD_MANAGER')
+     *     and hasPermission('PCLAVE_UPDATE')")
+     *
      */
     public function updateAction(Request $request)
     {
@@ -132,8 +134,8 @@ class KeywordsController extends Controller
      *
      * @return Reponse the response object
      *
-     * @CheckModuleAccess(module="KEYWORD_MANAGER")
-     **/
+     * @Security("hasExtension('KEYWORD_MANAGER')")
+     */
     public function autolinkAction(Request $request)
     {
         $content = $request->request->get('text', null);

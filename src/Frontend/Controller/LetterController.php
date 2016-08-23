@@ -42,11 +42,10 @@ class LetterController extends Controller
         }
         $page = $request->query->getDigits('page', 1);
 
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-frontpage');
 
         $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter_frontpage.tpl', $cacheID)
         ) {
             $itemsPerPage = 12;
@@ -121,11 +120,10 @@ class LetterController extends Controller
         }
 
         // Setup view
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-inner');
 
         $cacheID = $this->view->generateCacheId('letter-inner', '', $letter->id);
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
             $letter->with_comment = 1;
@@ -165,7 +163,6 @@ class LetterController extends Controller
      **/
     public function showFormAction()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
@@ -181,8 +178,6 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
-
         $recaptcha_challenge_field =
             $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
         $recaptcha_response_field =
@@ -228,18 +223,20 @@ class LetterController extends Controller
                     }
                 }
 
-                $data['url']        = $url;
-                $data['body']       = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
-                $data['author']     = $name;
-                $data['title']      = $subject;
-                $data['email']      = $mail;
-                $_SESSION['userid'] = 0;
-                $data['content_status']  = 0; //pendding
-                $data['image']      = $this->saveImage($data);
+                $data['url']            = $url;
+                $data['body']           = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
+                $data['author']         = $name;
+                $data['title']          = $subject;
+                $data['email']          = $mail;
+                $data['content_status'] = 0; //pendding
+                $data['image']          = $this->saveImage($data);
 
                 $letter = new \Letter();
-                $_SESSION['username'] = $data['author'];
-                $_SESSION['userid'] = 'user';
+
+                $request->getSession()->set(
+                    'user',
+                    json_decode(json_encode([ 'id' => 'user', 'username' => $data['author'] ]))
+                );
 
                 // Prevent XSS attack
                 $data = array_map('strip_tags', $data);
@@ -272,6 +269,10 @@ class LetterController extends Controller
                             try {
                                 $mailer = $this->get('mailer');
                                 $mailer->send($text);
+
+                                $this->get('application.log')->notice(
+                                    "Email sent. Frontend letter (sender:".$mail.", to: ".$recipient.")"
+                                );
                             } catch (\Swift_SwiftException $e) {
                             }
                         }
@@ -346,8 +347,8 @@ class LetterController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions       = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

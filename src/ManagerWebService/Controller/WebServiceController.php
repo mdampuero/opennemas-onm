@@ -2,17 +2,18 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace ManagerWebService\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Onm\Instance\Instance;
+use Common\ORM\Entity\Instance;
+use Common\ORM\Entity\User;
 use Onm\Instance\InstanceCreator;
 use Onm\Framework\Controller\Controller;
 use Onm\Exception\InstanceNotConfiguredException;
@@ -28,9 +29,9 @@ class WebServiceController extends Controller
     /**
      * Checks if it is an authorized request.
      *
-     * @param  Request $request The request object.
-     * @return boolean          True if the request is authorized. Otherwise,
-     *                          returns false.
+     * @param Request $request The request object.
+     *
+     * @return boolean True if the request is authorized. False, otherwise.
      */
     private function checkAuth(Request $request)
     {
@@ -58,80 +59,47 @@ class WebServiceController extends Controller
      */
     public function createAction(Request $request)
     {
-        $instanceCreator = $this->container->getParameter("instance_creator");
-
         if (is_object($this->checkAuth($request))) {
             return new JsonResponse('Auth not valid', 403);
         }
 
-        $companyMail = array(
-            'company_mail' => $this->params["company_mail"],
-            'info_mail'    => $this->params["info_mail"],
-            'sender_mail'  => $this->params["no_reply_sender"],
-            'from_mail'    => $this->params["no_reply_from"],
-        );
+        $params    = $this->container->getParameter("instance_creator");
+        $subdomain = $request->request->filter('subdomain', '', FILTER_SANITIZE_STRING);
 
-        $instance = new Instance();
+        $instance = new Instance([
+            'internal_name' => $subdomain,
+            'name'          => $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING),
+            'contact_mail'  => $request->request->filter('user_email', '', FILTER_SANITIZE_STRING),
+            'domains'           => [ $subdomain . '.' . $params['base_domain'] ],
+            'main_domain'       => 1,
+            'activated'         => true,
+            'plan'              => $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING),
+            'price'             => 0,
+            'activated_modules' => [
+                'ADVANCED_SEARCH', 'ARTICLE_MANAGER', 'CATEGORY_MANAGER',
+                'COMMENT_MANAGER', 'FILE_MANAGER', 'FRONTPAGE_MANAGER',
+                'IMAGE_MANAGER', 'KEYWORD_MANAGER', 'LIBRARY_MANAGER',
+                'MENU_MANAGER', 'OPINION_MANAGER', 'SETTINGS_MANAGER',
+                'STATIC_PAGES_MANAGER', 'TRASH_MANAGER', 'USERVOICE_SUPPORT',
+                'WIDGET_MANAGER', 'es.openhost.theme.basic',
+            ],
+            'purchased'    => [ 'es.openhost.theme.basic' ],
+            'created'      => new \DateTime(),
+            'settings'     => [ 'TEMPLATE_USER' => $params['template'] ],
+            'support_plan' => 'SUPPORT_NONE'
+        ]);
 
-        $instance->internal_name = $request->request->filter('subdomain', '', FILTER_SANITIZE_STRING);
-        $instance->name          = $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING);
-        $instance->contact_mail  = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
+        $validator = $this->get('core.instance.validator');
+        $validator->validate($instance);
 
-        $errors = $this->validateInstanceData(array(
-            'subdomain'     => $instance->internal_name,
-            'instance_name' => $instance->name,
-            'user_email'    => $instance->contact_mail,
-        ));
+        if ($validator->hasErrors()) {
+            error_log('Instance data validation not passed: ' . json_encode($validator->getErrors()));
 
-        $im = $this->get('instance_manager');
-
-        // Check for repeated internalnameshort and if so, add a number at the end
-        $iv = $this->get('onm.validator.instance');
-        $iv->validateInternalName($instance);
-
-        if (count($errors) > 0) {
-            error_log('Instance data validation not passed: ' . json_encode($errors));
-
-            return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
+            return new JsonResponse([
+                'success' => false,
+                'errors' => $validator->getErrors()
+            ], 400);
         }
-
-        $instance->domains           = array($instance->internal_name . '.' . $instanceCreator['base_domain']);
-        $instance->main_domain       = 1;
-        $instance->activated         = 1;
-        $instance->plan              = $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING);
-        $instance->price             = 0;
-        $instance->activated_modules = [
-            'ADVANCED_SEARCH',
-            'ARTICLE_MANAGER',
-            'CATEGORY_MANAGER',
-            'COMMENT_MANAGER',
-            'FILE_MANAGER',
-            'FRONTPAGE_MANAGER',
-            'IMAGE_MANAGER',
-            'KEYWORD_MANAGER',
-            'LIBRARY_MANAGER',
-            'MENU_MANAGER',
-            'OPINION_MANAGER',
-            'SETTINGS_MANAGER',
-            'STATIC_PAGES_MANAGER',
-            'TRASH_MANAGER',
-            'USERVOICE_SUPPORT',
-            'WIDGET_MANAGER',
-
-            // Themes included
-            'es.openhost.theme.basic',
-        ];
-
-        $instance->metas = [ 'purchased' => [ 'es.openhost.theme.basic' ] ];
-
-        $date = new \DateTime();
-        $date->setTimezone(new \DateTimeZone("UTC"));
-        $instance->created = $date->format('Y-m-d H:i:s');
-
-        $instance->settings = array(
-            'TEMPLATE_USER' => $instanceCreator['template'],
-            'MEDIA_URL'     => "",
-        );
 
         // Also get timezone if comes from openhost form
         $timezone = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
@@ -144,40 +112,57 @@ class WebServiceController extends Controller
             }
         }
 
-        $instance->external = array(
-            'contact_IP'    => $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING),
-            'contact_mail'  => $instance->contact_mail,
-            'contact_name'  => $instance->contact_mail,
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
+        $creator   = new InstanceCreator($em->getConnection('instance'));
+
+        $settings = [
             'site_language' => $request->request->filter('language', '', FILTER_SANITIZE_STRING),
             'time_zone'     => $timezone,
-            'site_created'  => $date->format('Y-m-d H:i:s'),
-            'name'          => $instance->name,
-            'internal_name' => $instance->internal_name,
-        );
+            'site_created'  => $instance->created,
+        ];
 
-        $user = array(
-            'username' => $instance->contact_mail,
-            'email'    => $instance->contact_mail,
-            'password' => $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
-            'token'    => md5(uniqid(mt_rand(), true))
-        );
+        $user = new User($converter->objectify([
+            'activated'     => true,
+            'email'         => $instance->contact_mail,
+            'fk_user_group' => [ 5 ],
+            'name'          => $instance->contact_mail,
+            'password'      => $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
+            'token'         => md5(uniqid(mt_rand(), true)),
+            'type'          => 0,
+            'username'      => $instance->contact_mail
+        ]));
 
-        $errors = array();
         try {
-            $creator = new InstanceCreator($im->getConnection());
-            $im->persist($instance);
+            $errors = [];
+            $companyMail = array(
+                'company_mail' => $this->params["company_mail"],
+                'info_mail'    => $this->params["info_mail"],
+                'sender_mail'  => $this->params["no_reply_sender"],
+                'from_mail'    => $this->params["no_reply_from"],
+            );
 
+            $em->persist($instance);
+            $instance->refresh();
+            $instance->settings['BD_DATABASE'] = $instance->id;
+            $em->persist($instance);
+
+            // Create instance database and media files
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
-            $im->configureInstance($instance);
-            $im->createUser($instance->id, $user);
+            $em->getConnection('instance')
+                ->selectDatabase($instance->getDatabaseName());
+
+            // Save settings and user
+            $em->getDataSet('Settings', 'instance')->set($settings);
+            $em->persist($user, 'instance');
         } catch (DatabaseNotRestoredException $e) {
             // Can not create database
             $errors[] = $e->getMessage();
 
             $creator->deleteDatabase($instance->id);
-            $im->remove($instance);
+            $em->remove($instance);
             $this->reportInstanceCreationError($companyMail, $instance, $e);
         } catch (IOException $e) {
             // Can not copy default assets
@@ -191,7 +176,7 @@ class WebServiceController extends Controller
 
             $creator->deleteAssets($instance->internal_name);
             $creator->deleteDatabase($instance->id);
-            $im->remove($instance);
+            $em->remove($instance);
             $this->reportInstanceCreationError($companyMail, $instance, $e);
         }
 
@@ -205,42 +190,36 @@ class WebServiceController extends Controller
                         'user_name'     => $instance->contact_mail,
                     ],
                     $companyMail,
-                    $instanceCreator['base_domain'],
+                    $params['base_domain'],
                     $instance->external['site_language'],
                     $instance->plan
                 );
             }
         } catch (\Exception $e) {
             $errors['all'] = ['Unable to send emails'];
-            error_log('Error while sending instance creation emails: '.$e->getMessage());
+            error_log('Error while sending instance creation emails: ' . $e->getMessage());
         }
 
         if (is_array($errors) && count($errors) > 0) {
             return new JsonResponse(['success' => false, 'errors' => $errors], 400);
         }
 
-        return new JsonResponse(
-            [
-                'success'      => true,
-                'instance_url' => $instance->domains[0],
-                'enable_url'   => $instance->domains[0].'/admin/login?token='.$user['token']
-            ],
-            200
-        );
+        return new JsonResponse([
+            'success'      => true,
+            'instance_url' => $instance->domains[0],
+            'enable_url'   => $instance->domains[0] . '/admin/login?token='
+                . $user->token
+        ]);
     }
 
-    private function sendMails($data, $companyMail, $domain, $language, $plan)
+    private function sendMails($data, $companyMail, $domain, $plan)
     {
         $this->sendMailToUser($data, $companyMail, $domain);
         $this->sendMailToCompany($data, $companyMail, $domain, $plan);
-        // Unused var $language
-        unset($language);
     }
 
     private function sendMailToCompany($data, $companyMail, $domain, $plan)
     {
-        $this->view = new \TemplateManager();
-
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($companyMail['from_mail'])
@@ -249,7 +228,7 @@ class WebServiceController extends Controller
             ->setSubject(_("A new opennemas instance has been created"))
             ->setBody(
                 $this->renderView(
-                    'instances/mails/newInstanceToCompany.tpl',
+                    'instance/emails/newInstanceToCompany.tpl',
                     array(
                         'data'        => $data,
                         'domain'      => $domain,
@@ -260,25 +239,22 @@ class WebServiceController extends Controller
 
         // Send message
         $this->get('mailer')->send($message);
-        $this->get('logger')->notice("Sending mail to company {$companyMail['info_mail']} - new instance - {$data['name']}");
+        $this->get('application.log')->notice("Sending mail to company {$companyMail['info_mail']} - new instance - {$data['name']}");
     }
 
     private function sendMailToUser($data, $companyMail, $domain)
     {
-        $this->view = new \TemplateManager();
-
         $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
 
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom([$companyMail['from_mail'] => 'Opennemas'])
             ->setTo([$data['user_mail'] => $data['user_name']])
-            ->setBody($htmlContent, 'text/html')
             ->setSender($companyMail['sender_mail'], "Opennemas")
             ->setSubject(sprintf(_("Your newspaper is now live"), $data['name']))
             ->setBody(
                 $this->renderView(
-                    'instances/mails/newInstanceToUser.tpl',
+                    'instance/emails/newInstanceToUser.tpl',
                     array(
                         'data'              => $data,
                         'domain'            => $domain,
@@ -290,13 +266,11 @@ class WebServiceController extends Controller
 
         // Send message
         $this->get('mailer')->send($message);
-        $this->get('logger')->notice("Sending mail to user - new instance - {$data['name']}");
+        $this->get('application.log')->notice("Sending mail to user - new instance - {$data['name']}");
     }
 
     private function reportInstanceCreationError($emails, $instance, $exception)
     {
-        $this->view = new \TemplateManager();
-
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($emails['from_mail'])
@@ -305,7 +279,7 @@ class WebServiceController extends Controller
             ->setSubject(_("Error when creating a new instance"))
             ->setBody(
                 $this->renderView(
-                    'instances/mails/instanceCreationError.tpl',
+                    'instance/emails/instanceCreationError.tpl',
                     array(
                         'instance'  => $instance,
                         'exception' => $exception
@@ -317,17 +291,5 @@ class WebServiceController extends Controller
         $this->get('mailer')->send($message);
         error_log("Error while creating instance. ".$exception->getMessage()
             .'. Instance Data: '.json_encode($instance));
-    }
-
-    /**
-     * Execute all validate methods defined in validatorComponent class
-     * These method are detected because their name begins with validate
-     * @return boolean
-     */
-    private function validateInstanceData($data)
-    {
-        $validator = new \Onm\Instance\Validator($data, $this->get('instance_manager'));
-
-        return $validator->validate();
     }
 }

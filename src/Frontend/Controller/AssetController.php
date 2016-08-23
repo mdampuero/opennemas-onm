@@ -1,17 +1,12 @@
 <?php
 /**
- * Defines the frontend controller for the dynamic assets
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -21,31 +16,25 @@ use Onm\Settings as s;
 use Imagine\Image\ImageInterface;
 
 /**
- * Handles the actions for assets
- *
- * @package Backend_Controllers
- **/
+ * Handles the actions for assets.
+ */
 class AssetController extends Controller
 {
     /**
-     * Description of the action
+     * Description of the action.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function imageAction(Request $request)
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         $parameters = $request->query->get('parameters');
-        $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
-
         $parameters = explode(',', urldecode($parameters));
-
-        $method = array_shift($parameters);
+        $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
+        $method     = array_shift($parameters);
 
         if (file_exists($path) && is_file($path)) {
             $imagine = new \Imagine\Imagick\Imagine();
-
-            $image = $imagine->open($path);
+            $image   = $imagine->open($path);
 
             $imageFormat = strtolower($image->getImagick()->getImageFormat());
             $imageSize   = $image->getSize();
@@ -235,8 +224,8 @@ class AssetController extends Controller
             array(
                 // 'Expire'       => new \DateTime("+5 min"),
                 'Content-Type' => 'text/css',
-                'x-instance'   => $this->get('instance')->internal_name,
-                'x-tags'       => 'instance-'.$this->get('instance')->internal_name.',frontpagecss',
+                'x-instance'   => $this->get('core.instance')->internal_name,
+                'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',frontpagecss',
             )
         );
     }
@@ -250,12 +239,11 @@ class AssetController extends Controller
      **/
     public function globalCssAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         $cacheID = 'css|global';
 
-        if ($this->view->caching == 0
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
         ) {
             $ccm = \ContentCategoryManager::get_instance();
@@ -312,8 +300,8 @@ class AssetController extends Controller
             array(
                 // 'Expire'       => new \DateTime("+5 min"),
                 'Content-Type' => 'text/css',
-                'x-instance'   => $this->get('instance')->internal_name,
-                'x-tags'       => 'instance-'.$this->get('instance')->internal_name.',customcss',
+                'x-instance'   => $this->get('core.instance')->internal_name,
+                'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',
             )
         );
     }

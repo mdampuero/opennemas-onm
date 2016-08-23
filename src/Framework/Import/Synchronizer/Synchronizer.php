@@ -19,6 +19,13 @@ use Framework\Import\ServerFactory;
 class Synchronizer
 {
     /**
+     * The service container.
+     *
+     * @var Template
+     */
+    protected $tpl;
+
+    /**
      * The array of synchronization statistics.
      *
      * @var array
@@ -42,17 +49,18 @@ class Synchronizer
     /**
      * Initializes the object and initializes configuration
      *
-     * @param array $params The synchronizer parameters.
+     * @param string   $path The path to synchronized files.
+     * @param Template $tpl  The template service.
      */
-    public function __construct($params = [])
+    public function __construct($path, $tpl)
     {
-        $this->syncPath     = $params['cache_path'] . DS .'importers';
+        $this->syncPath     = $path . DS .'importers';
         $this->syncFilePath = $this->syncPath . DS . '.sync';
         $this->lockFilePath = $this->syncPath . DS . '.lock';
 
         $this->compiler      = new Compiler($this->syncPath);
-        $this->serverFactory = new ServerFactory();
         $this->parserFactory = new ParserFactory();
+        $this->serverFactory = new ServerFactory($tpl);
     }
 
     /**

@@ -9,7 +9,7 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use PayPal\CoreComponentTypes\BasicAmountType;
@@ -28,7 +28,6 @@ use PayPal\PayPalAPI\SetExpressCheckoutRequestType;
 use PayPal\PayPalAPI\RefundTransactionReq;
 use PayPal\PayPalAPI\RefundTransactionRequestType;
 use PayPal\Service\PayPalAPIInterfaceServiceService;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 class PaywallController extends Controller
@@ -76,9 +75,8 @@ class PaywallController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function defaultAction()
     {
@@ -125,9 +123,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function usersAction(Request $request)
     {
@@ -211,9 +208,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function userListExportAction(Request $request)
     {
@@ -285,9 +281,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function purchasesListExportAction(Request $request)
     {
@@ -350,9 +345,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function purchasesAction(Request $request)
     {
@@ -415,9 +409,8 @@ class PaywallController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function settingsAction()
     {
@@ -438,9 +431,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function settingsSaveAction(Request $request)
     {
@@ -475,9 +467,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function validateCredentialsAction(Request $request)
     {
@@ -532,9 +523,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function setValidateIpnAction(Request $request)
     {
@@ -602,9 +592,8 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('PAYWALL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="PAYWALL")
+     * @Security("hasExtension('PAYWALL')
+     *     and hasPermission('PAYWALL_ADMIN')")
      */
     public function doValidateIpnAction(Request $request)
     {

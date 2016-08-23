@@ -50,7 +50,7 @@ class InstanceCreator
      *
      * @param DbalWrapper $conn The database connection.
      */
-    public function __construct(DbalWrapper $conn)
+    public function __construct($conn)
     {
         $this->conn = $conn;
         $this->fs   = new Filesystem();
@@ -67,9 +67,11 @@ class InstanceCreator
     {
         $tarFile = $this->getBackupPath() . DS . 'media.tar';
 
-        if ($this->fs->exists($mediaPath)
-            && !\Onm\Compress\Compress::compressOnlyTar($tarFile, $mediaPath)
-        ) {
+        if (!$this->fs->exists($mediaPath)) {
+            return;
+        }
+
+        if (!\Onm\Compress\Compress::compressOnlyTar($tarFile, $mediaPath)) {
             throw new BackupException(
                 'Could not create a backup of the directory'
             );
@@ -85,19 +87,15 @@ class InstanceCreator
      */
     public function backupDatabase($database)
     {
-        $this->conn->selectDatabase($database);
+        $rs = $this->conn->fetchAll("SHOW DATABASES LIKE '$database'");
 
-        // Skip if no database
-        try {
-            $this->conn->executeQuery('SHOW variables');
-        } catch (\Exception $e) {
+        if (empty($rs)) {
             return;
         }
 
-        $target = $this->getBackupPath() . 'database.sql';
-
-        $cmd = "mysqldump -u{$this->conn->connectionParams['user']}"
-            . " -p{$this->conn->connectionParams['password']}"
+        $target = $this->getBackupPath() . '/database.sql';
+        $cmd    = "mysqldump -u{$this->conn->user}"
+            . " -p{$this->conn->password}"
             . " --databases $database  > $target";
 
         exec($cmd, $output, $result);
@@ -116,14 +114,13 @@ class InstanceCreator
      */
     public function backupInstance($id)
     {
-        $target = $this->getBackupPath() . "instance.sql";
+        $target   = $this->getBackupPath() . "instance.sql";
+        $database = $this->conn->dbname;
 
-        $database = 'onm-instances';
-
-        $cmd = "mysqldump -u{$this->conn->connectionParams['user']}"
-            . " -p{$this->conn->connectionParams['password']}"
-            . " --no-create-info --where 'id=" . $id . "' "
-            . ' onm-instances instances > ' . $target;
+        $cmd = 'mysqldump -u' . $this->conn->user
+            . ' -p' . $this->conn->password
+            . ' --no-create-info --where \'id=' . $id . '\' '
+            . $database . ' instances > ' . $target;
 
         exec($cmd, $output, $result);
 
@@ -203,8 +200,6 @@ class InstanceCreator
      */
     public function deleteDatabase($database)
     {
-        $this->conn->selectDatabase('onm-instances');
-
         $sql = "DROP DATABASE IF EXISTS `$database`";
 
         if (!$this->conn->executeQuery($sql)) {
@@ -258,9 +253,9 @@ class InstanceCreator
      */
     public function restoreDatabase($source, $target = null)
     {
-        $cmd = "mysql -u{$this->conn->connectionParams['user']}"
-            . " -p{$this->conn->connectionParams['password']}"
-            . " -h{$this->conn->connectionParams['host']}"
+        $cmd = "mysql -u{$this->conn->user}"
+            . " -p{$this->conn->password}"
+            . " -h{$this->conn->host}"
             . ($target ? " $target"  : '')
             . " < $source";
 

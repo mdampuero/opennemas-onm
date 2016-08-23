@@ -9,10 +9,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -63,9 +62,8 @@ class ImagesController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('PHOTO_ADMIN')")
-     *
-     * @CheckModuleAccess(module="IMAGE_MANAGER")
+     * @Security("hasExtension('IMAGE_MANAGER')
+     *     and hasPermission('PHOTO_ADMIN')")
      */
     public function listAction()
     {
@@ -78,9 +76,8 @@ class ImagesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('PHOTO_UPDATE')")
-     *
-     * @CheckModuleAccess(module="IMAGE_MANAGER")
+     * @Security("hasExtension('IMAGE_MANAGER')
+     *     and hasPermission('PHOTO_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -141,9 +138,8 @@ class ImagesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('PHOTO_UPDATE')")
-     *
-     * @CheckModuleAccess(module="IMAGE_MANAGER")
+     * @Security("hasExtension('IMAGE_MANAGER')
+     *     and hasPermission('PHOTO_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -190,9 +186,8 @@ class ImagesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('PHOTO_DELETE')")
-     *
-     * @CheckModuleAccess(module="IMAGE_MANAGER")
+     * @Security("hasExtension('IMAGE_MANAGER')
+     *     and hasPermission('PHOTO_DELETE')")
      */
     public function deleteAction(Request $request)
     {
@@ -209,7 +204,7 @@ class ImagesController extends Controller
             return $this->redirect($this->generateUrl('admin_images'));
         }
         // $contents = $photo->isUsed($id);
-        $photo->delete($id, $_SESSION['userid']);
+        $photo->delete($id, $this->getUser()->id);
 
         return $this->redirect(
             $this->generateUrl(
@@ -228,29 +223,26 @@ class ImagesController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('PHOTO_CREATE')")
-     *
-     * @CheckModuleAccess(module="IMAGE_MANAGER")
+     * @Security("hasExtension('IMAGE_MANAGER')
+     *     and hasPermission('PHOTO_CREATE')")
      */
     public function createAction(Request $request)
     {
         $response = new Response();
-        $response->headers->add(
-            array(
-                'Pragma'                       => 'text/plain',
-                'Cache-Control'                => 'private, no-cache',
-                'Content-Disposition'          => 'inline; filename="files.json"',
-                'X-Content-Type-Options'       => 'nosniff',
-                'Access-Control-Allow-Origin'  => '*',
-                'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-                'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
-            )
-        );
+        $response->headers->add([
+            'Pragma'                       => 'text/plain',
+            'Cache-Control'                => 'private, no-cache',
+            'Content-Disposition'          => 'inline; filename="files.json"',
+            'X-Content-Type-Options'       => 'nosniff',
+            'Access-Control-Allow-Origin'  => '*',
+            'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
+            'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
+        ]);
 
         switch ($request->getMethod()) {
             case 'HEAD':
             case 'GET':
-                return  $response->setContent(json_encode(array()));
+                return  $response->setContent(json_encode([]));
                 break;
             case 'POST':
                 // check if category, and filesizes are properly setted and category_name is valid

@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -68,12 +67,11 @@ class MenusController extends Controller
             array_push($this->pages, array('title'=>_("Archive"),'link'=>"archive/content/"));
         }
 
-        $this->menuPositions = array('' => _('Without position'));
-
         $this->menuPositions = array_merge(
-            $this->menuPositions,
-            $this->container->get('instance_manager')->current_instance->theme->getMenus()
+            [ '' => _('Without position') ],
+            $this->container->get('core.manager.menu')->getMenus()
         );
+
         $this->view->assign('menu_positions', $this->menuPositions);
 
     }
@@ -83,10 +81,9 @@ class MenusController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('MENU_ADMIN')")
-     *
-     * @CheckModuleAccess(module="MENU_MANAGER")
-     **/
+     * @Security("hasExtension('MENU_MANAGER')
+     *     and hasPermission('MENU_ADMIN')")
+     */
     public function listAction()
     {
         return $this->render('menues/list.tpl');
@@ -99,10 +96,9 @@ class MenusController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('MENU_UPDATE')")
-     *
-     * @CheckModuleAccess(module="MENU_MANAGER")
-     **/
+     * @Security("hasExtension('MENU_MANAGER')
+     *     and hasPermission('MENU_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -128,7 +124,15 @@ class MenusController extends Controller
                 $pollCategories[] = $category;
             }
         }
-        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ', 'title, slug, pk_content');
+
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('Content');
+
+        $oql = 'content_type_name = "static_page" and in_litter = 0'
+           . ' order by created desc';
+
+        $staticPages = $em->getRepository('Content')->findBy($oql);
+        $staticPages = $converter->responsify($staticPages);
 
         // Get categories from menu
         $menu = new \Menu($id);
@@ -164,10 +168,9 @@ class MenusController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('MENU_CREATE')")
-     *
-     * @CheckModuleAccess(module="MENU_MANAGER")
-     **/
+     * @Security("hasExtension('MENU_MANAGER')
+     *     and hasPermission('MENU_CREATE')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -222,7 +225,15 @@ class MenusController extends Controller
                     $pollCategories[] = $category;
                 }
             }
-            $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ', 'title');
+
+            $em        = $this->get('orm.manager');
+            $converter = $em->getConverter('Content');
+
+            $oql = 'content_type_name = "static_page" and in_litter = 0'
+               . ' order by created desc';
+
+            $staticPages = $em->getRepository('Content')->findBy($oql);
+            $staticPages = $converter->responsify($staticPages);
 
             // Fetch synchronized elements if exists
             $syncSites = [];
@@ -254,10 +265,9 @@ class MenusController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('MENU_UPDATE')")
-     *
-     * @CheckModuleAccess(module="MENU_MANAGER")
-     **/
+     * @Security("hasExtension('MENU_MANAGER')
+     *     and hasPermission('MENU_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id = $this->request->query->getDigits('id');

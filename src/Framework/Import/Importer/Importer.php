@@ -236,7 +236,8 @@ class Importer
         $logger = $this->container->get('application.log');
         $logger->info(
             'User ' . $data['username'] . ' was created from importer by user '
-            . $_SESSION['username'] . ' (' . $_SESSION['userid'] . ')'
+            . $this->container->get('session')->get('user')->username
+            . ' (' . $this->container->get('session')->get('user')->id . ')'
         );
 
         // Set user meta if exists

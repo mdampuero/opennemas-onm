@@ -10,9 +10,10 @@
 
 namespace BackendWebService\Controller;
 
+use Common\Core\Annotation\Security;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
 
 class ContentController extends Controller
 {
@@ -25,27 +26,7 @@ class ContentController extends Controller
      */
     public function listAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
@@ -92,27 +73,7 @@ class ContentController extends Controller
      */
     public function listHomeAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em = $this->get('entity_repository');
 
@@ -153,27 +114,7 @@ class ContentController extends Controller
      */
     public function sendToTrashAction($id, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -220,27 +161,7 @@ class ContentController extends Controller
      */
     public function batchSendToTrashAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -298,27 +219,7 @@ class ContentController extends Controller
      */
     public function restoreFromTrashAction($id, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -365,27 +266,7 @@ class ContentController extends Controller
      */
     public function batchRestoreFromTrashAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'trash');
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, 'trash');
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -443,27 +324,7 @@ class ContentController extends Controller
      */
     public function removePermanentlyAction($id, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'trash');
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, 'trash');
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -510,27 +371,7 @@ class ContentController extends Controller
      */
     public function batchRemovePermanentlyAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -583,28 +424,13 @@ class ContentController extends Controller
     }
 
     /**
-     * undocumented function
+     * Removes contents from trash.
      *
-     * @return void
-     * @author
-     **/
-    public function emptyTrashAction(Request $request)
+     * @Security("hasExtension('TRASH_MANAGER')
+     *     and hasPermission('TRASH_ADMIN')")
+     */
+    public function emptyTrashAction()
     {
-        // Check permissions
-        if (!in_array('TRASH_ADMIN', $this->getUser()->getRoles())) {
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), 'TRASH_ADMIN')
-                        )
-                    )
-                )
-            );
-        }
-
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -670,27 +496,7 @@ class ContentController extends Controller
      */
     public function setContentStatusAction(Request $request, $id, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $status  = $request->request->getDigits('value');
 
@@ -739,27 +545,7 @@ class ContentController extends Controller
      */
     public function batchSetContentStatusAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -828,27 +614,7 @@ class ContentController extends Controller
      */
     public function toggleFavoriteAction($id, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em       = $this->get('entity_repository');
         $errors   = array();
@@ -898,27 +664,7 @@ class ContentController extends Controller
      */
     public function toggleInHomeAction($id, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -967,27 +713,7 @@ class ContentController extends Controller
      */
     public function batchToggleInHomeAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -1055,27 +781,7 @@ class ContentController extends Controller
      */
     public function savePositionsAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
-
-        if (!$hasRoles) {
-            $roles = '';
-            foreach ($required as $role) {
-                $roles .= $role;
-            }
-            $roles = rtrim($roles, ',');
-
-            return new JsonResponse(
-                array(
-                    'messages' => array(
-                        array(
-                            'id'      => '500',
-                            'type'    => 'error',
-                            'message' => sprintf(_('Access denied (%s)'), $roles)
-                        )
-                    )
-                )
-            );
-        }
+        $this->hasRoles(__FUNCTION__, $contentType);
 
         $errors    = array();
         $positions = $request->request->get('positions');
@@ -1127,49 +833,51 @@ class ContentController extends Controller
      * @param  string  $contentType Content type name.
      * @return boolean              [description]
      */
-    private function hasRoles($action, $contentType)
+    protected function hasRoles($action, $contentType)
     {
-        $required = array();
-        $roles    = $this->getUser()->getRoles();
-        $types    = array();
+        $permissions = [];
+        $types[]     = $contentType;
 
-        // Add all admin roles for generic list (trash,)
+        // Add all admin permissions for generic list (trash,)
         if ($contentType == 'content') {
-            $type = [ 'advertisement', 'album', 'article', 'book', 'cover',
+            $types = [ 'advertisement', 'album', 'article', 'book', 'cover',
                 'file', 'letter', 'opinion', 'photo', 'poll', 'special',
                 'static', 'trash', 'video', 'widget',
             ];
-        } else {
-            $type[] = $contentType;
         }
 
-        foreach ($types as $type) {
-            $required[] = strtoupper($type) . '_ADMIN';
-        }
+        $permissions = array_map(function ($a) {
+            return strtoupper($a) . '_ADMIN';
+        }, $types);
 
         switch ($action) {
             case 'batchSendToTrashAction':
             case 'sendToTrashAction':
-                $required[] = strtoupper($contentType) . '_DELETE';
+                $permissions[] = strtoupper($contentType) . '_DELETE';
                 break;
             case 'batchSetContentStatusAction':
             case 'setContentStatusAction':
-                $required[] = strtoupper($contentType) . '_AVAILABLE';
+                $permissions[] = strtoupper($contentType) . '_AVAILABLE';
                 break;
             case 'batchToggleFavoriteAction': // Not implemented
             case 'toggleFavoriteAction':
-                $required[] = strtoupper($contentType) . '_FAVORITE';
+                $permissions[] = strtoupper($contentType) . '_FAVORITE';
                 break;
             case 'batchToggleInHomeAction':
             case 'toggleInHomeAction':
-                $required[] = strtoupper($contentType) . '_HOME';
+                $permissions[] = strtoupper($contentType) . '_HOME';
                 break;
         }
 
-        return array(
-            empty(array_diff($required, $roles)),
-            array_diff($required, $roles)
-        );
+        $msg      = $this->get('core.messenger');
+        $security = $this->get('core.security');
+        foreach ($permissions as $permission) {
+            if (!$security->hasPermission($permission)) {
+                $msg->add(sprintf(_('Access denied (%s)'), $permission), 'error', 500);
+
+                return new JsonResponse($msg->getMessages(), $msg->getCode());
+            }
+        }
     }
 
     /**
@@ -1180,6 +888,10 @@ class ContentController extends Controller
      */
     protected function loadExtraData($contents)
     {
+        if (empty($contents)) {
+            return [];
+        }
+
         $extra      = [];
         $ids        = [];
         $contentIds = [];
@@ -1206,11 +918,15 @@ class ContentController extends Controller
             unset($ids[$key]);
         }
 
-        $users = $this->get('user_repository')->findMulti($ids);
+        $converter = $this->get('orm.manager')->getConverter('User');
+        $users     = $this->get('orm.manager')->getRepository('User')
+            ->findBy(sprintf('id in [%s]', implode(',', $ids)));
 
         $extra['authors'] = array();
         foreach ($users as $user) {
-            $extra['authors'][$user->id] = $user->eraseCredentials();
+            $user->eraseCredentials();
+
+            $extra['authors'][$user->id] = $converter->responsify($user->getData());
         }
 
         $ccm = \ContentCategoryManager::get_instance();

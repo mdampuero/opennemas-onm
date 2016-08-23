@@ -1,9 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}
-    <link rel="stylesheet" href="{$asset_url}">
-  {/stylesheets}
+  {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}{/stylesheets}
 {/block}
 
 {block name="body"}
@@ -95,7 +93,7 @@
         </div>
       </div>
     </div>
-    {if $smarty.session._sf2_attributes.user->isAdmin()}
+    {if $user->isAdmin()}
       <div class="wizard-container store" ng-class="{ 'active': step == 4, 'previous': previous == 4 }">
         <div class="wizard-overlay"></div>
         <div class="wizard-content">
@@ -137,13 +135,13 @@
         </div>
       </div>
     {/if}
-    <div class="wizard-container ready" ng-class="{ 'active': step == {if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if},  'previous': previous == {if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if}}">
+    <div class="wizard-container ready" ng-class="{ 'active': step == {if $user->isAdmin()}5{else}4{/if},  'previous': previous == {if $user->isAdmin()}5{else}4{/if}}">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
           <h1>{t}That's it!{/t}</h1>
         </div>
-        {if !$smarty.session._sf2_attributes.user->isMaster()}
+        {if $user->getOrigin() !== 'manager'}
           <h4>{t}Wait...Do you have a Facebook or a Twitter account?{/t}</h4>
           <p>
             {t}Then you can associate those accounts to access your opennemas. It will make easier to get into your administration panel.{/t}
@@ -185,14 +183,14 @@
             <h5 class="wizard-step-list-item-text top">{t}Help{/t}</h5>
           </div>
         </li>
-        {if $smarty.session._sf2_attributes.user->isAdmin()}
+        {if $user->isAdmin()}
           <li class="wizard-step-list-item" ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
             <div class="wizard-step-list-item-fill">
               <h5 class="wizard-step-list-item-text bottom">{t}Opennemas Store{/t}</h5>
             </div>
           </li>
         {/if}
-        <li class="wizard-step-list-item"  ng-class="{ 'active': step > {if $smarty.session._sf2_attributes.user->isAdmin()}4{else}3{/if} }" ng-click="goToStep({if $smarty.session._sf2_attributes.user->isAdmin()}5{else}4{/if})" ng-disabled="!termsAccepted">
+        <li class="wizard-step-list-item"  ng-class="{ 'active': step > {if $user->isAdmin()}4{else}3{/if} }" ng-click="goToStep({if $user->isAdmin()}5{else}4{/if})" ng-disabled="!termsAccepted">
           <div class="wizard-step-list-item-fill">
             <h5 class="wizard-step-list-item-text top">{t}Ready!{/t}</h5>
           </div>

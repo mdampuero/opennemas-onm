@@ -136,6 +136,10 @@ class ContentCategory
                 }
             }
         }
+
+        if (!empty($this->params) && is_string($this->params)) {
+            $this->params = unserialize($this->params);
+        }
     }
 
     /**
@@ -156,10 +160,6 @@ class ContentCategory
             }
 
             $this->load($rs);
-
-            if (!empty($this->params) && is_string($this->params)) {
-                $this->params = unserialize($this->params);
-            }
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;

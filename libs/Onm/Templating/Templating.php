@@ -1,9 +1,8 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,37 +12,16 @@ namespace Onm\Templating;
 class Templating
 {
     /**
-     * The container that this class will use to fetch services
+     * The service container.
      *
-     * @var string
+     * @var ServiceContainer
      */
-    public $container;
+    protected $container;
 
     /**
-     * The frontend template engine
+     * Initializes the Templating.
      *
-     * @var string
-     */
-    private $frontendTemplateEngine;
-
-    /**
-     * The backend template engine
-     *
-     * @var string
-     */
-    private $backendTemplateEngine;
-
-    /**
-     * The manage template engine
-     *
-     * @var string
-     */
-    private $managerTemplateEngine;
-
-    /**
-     * Initializes the templating.
-     *
-     * @param Container $container The service container.
+     * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
@@ -51,10 +29,10 @@ class Templating
     }
 
     /**
-     * Bridge method calls to the proper Template engine
+     * Redirects function calls to the right Template service.
      *
      * @param string $method The method name.
-     * @param array  $args   The array of method arguments.
+     * @param array  $params The method parameters.
      *
      * @return mixed The template engine response.
      */
@@ -62,16 +40,15 @@ class Templating
     {
         $bundleName = $this->getBundleName();
 
-        if ($method == 'fetch' && $this->container->has('debug.stopwatch')) {
+        if ($method === 'fetch' && $this->container->has('debug.stopwatch')) {
             $stopwatch = $this->container->get('debug.stopwatch');
             $stopwatch->start("template ({$bundleName} {$params[0]})");
         }
 
-        $template = $this->getTemplateObject($bundleName);
+        $template = $this->getTemplate($bundleName);
+        $response = call_user_func_array([ $template, $method ], $params);
 
-        $response = call_user_func_array(array($template, $method), $params);
-
-        if ($method == 'fetch' && $this->container->has('debug.stopwatch')) {
+        if ($method === 'fetch' && $this->container->has('debug.stopwatch')) {
             $stopwatch = $this->container->get('debug.stopwatch');
             $stopwatch->stop("template ({$bundleName} {$params[0]})");
         }
@@ -80,44 +57,82 @@ class Templating
     }
 
     /**
-     * Returns the bundle name from the matched controller
+     * Returns the template service for backend.
      *
-     * @return string The bundle name.
+     * @return Template The template service.
      */
-    public function getBundleName()
+    public function getBackendTemplate()
     {
-        $controller = $this->container->get('request')->get('_controller');
-        $controllerNameParts = explode('\\', $controller);
+        $template =  $this->container->get('core.template.admin');
 
-        return  $controllerNameParts[0];
-    }
+        if (empty($template->getTheme())) {
+            $theme = $this->container->get('orm.manager')
+                ->getRepository('theme', 'file')
+                ->findOneBy('uuid = "es.openhost.theme.admin"');
 
-    /**
-     * Returns the proper Template object for a given module name
-     *
-     * @param string $module The module name.
-     *
-     * @return mixed The template object.
-     */
-    public function getTemplateObject($module)
-    {
-        if ($module == 'Manager') {
-            if (!isset($this->managerTemplateEngine)) {
-                $this->managerTemplateEngine = new \TemplateManager();
-            }
-            $template = $this->managerTemplateEngine;
-        } elseif ($module == 'Backend' || $module == 'BackendWebService') {
-            if (!isset($this->backendTemplateEngine)) {
-                $this->backendTemplateEngine = new \TemplateAdmin();
-            }
-            $template = $this->backendTemplateEngine;
-        } else {
-            if (!isset($this->frontendTemplateEngine)) {
-                $this->frontendTemplateEngine = new \Template(TEMPLATE_USER);
-            }
-            $template = $this->frontendTemplateEngine;
+            $template->addInstance($this->container->get('core.instance'));
+            $template->addActiveTheme($theme);
         }
 
         return $template;
+    }
+
+    /**
+     * Returns the template service for manager.
+     *
+     * @return Template The template service.
+     */
+    public function getManagerTemplate()
+    {
+        $template = $this->container->get('core.template.manager');
+
+        if (empty($template->getTheme())) {
+            $theme = $this->container->get('orm.manager')
+                ->getRepository('theme', 'file')
+                ->findOneBy('uuid = "es.openhost.theme.manager"');
+
+            $template->addInstance($this->container->get('core.instance'));
+            $template->addActiveTheme($theme);
+        }
+
+        return $template;
+    }
+
+    /**
+     * Returns the template service basing on the module name.
+     *
+     * @param string $module The module name.
+     *
+     * @return mixed The template service.
+     */
+    public function getTemplate($module = null)
+    {
+        if ($module === 'Manager' || $module === 'ManagerWebService') {
+            return $this->getManagerTemplate();
+        }
+
+        if ($module === 'Backend' || $module === 'BackendWebService') {
+            return $this->getBackendTemplate();
+        }
+
+        $template = $this->container->get('core.template');
+
+        $template->addInstance($this->container->get('core.instance'));
+        $template->addActiveTheme($this->container->get('core.theme'));
+
+        return $template;
+    }
+
+    /**
+     * Returns the bundle name from the matched controller.
+     *
+     * @return string The bundle name.
+     */
+    protected function getBundleName()
+    {
+        $controller = $this->container->get('request')->get('_controller');
+        $controller = explode('\\', $controller);
+
+        return $controller[0];
     }
 }

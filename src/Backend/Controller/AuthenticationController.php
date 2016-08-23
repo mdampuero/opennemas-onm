@@ -2,14 +2,14 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Backend\Controller;
 
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -17,12 +17,8 @@ use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
-use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
-
 /**
  * Handles the actions for the user authentication in backend.
- *
  */
 class AuthenticationController extends Controller
 {
@@ -40,42 +36,34 @@ class AuthenticationController extends Controller
 
         $session->set('login_callback', $referer);
 
-        if ($token) {
-            $user = $this->get('user_repository')->findBy(
-                ['token' => [['value' => $token]]],
-                ['token' => 'asc'],
-                1,
-                1
-            );
+        // Login from URL token
+        if (!empty($token)) {
+            $em = $this->get('orm.manager');
 
-            if (!$user) {
-                $request->getSession()->getFlashBag()->add('error', _('Invalid token'));
+            try {
+                $user = $em->getRepository('User')
+                    ->findOneBy(sprintf('token = "%s"', $token));
+            } catch (\Exception $e) {
+                $session->getFlashBag()->add('error', _('Invalid token'));
                 return $this->redirect($this->generateUrl('admin_login'));
             }
 
-            $user = array_pop($user);
-            $user->updateUserToken($user->id, null);
+            $user->token = null;
+            $em->persist($user);
             $token = new UsernamePasswordToken($user, null, 'backend', $user->getRoles());
 
             $securityContext = $this->get('security.token_storage');
             $securityContext->setToken($token);
             $session->set('user', $user);
-            $_SESSION['userid'] = $user->id;
-
-            $request = $this->getRequest();
             $session->set('_security_backend', serialize($token));
 
-            if ($session->get('_security.backend.target_path')) {
-                $referer = $session->get('_security.backend.target_path');
-            }
-
             // Set last_login date
-            $time = new \DateTime();
-            $time->setTimezone(new \DateTimeZone('UTC'));
-            $time = $time->format('Y-m-d H:i:s');
-
             if (!$user->isMaster()) {
-                s::set('last_login', $time);
+                $time = new \DateTime();
+                $time->setTimezone(new \DateTimeZone('UTC'));
+                $time = $time->format('Y-m-d H:i:s');
+
+                $this->get('setting_repository')->set('last_login', $time);
             }
 
             return $this->redirect($this->generateUrl('admin_welcome'));
@@ -91,8 +79,7 @@ class AuthenticationController extends Controller
             $error = $request->getSession()->get(Security::AUTHENTICATION_ERROR);
         }
 
-        if ($error) {
-            $msg = '';
+        if (!empty($error)) {
             if ($error instanceof BadCredentialsException) {
                 $msg = _('Username or password incorrect.');
             } elseif ($error instanceof InvalidCsrfTokenException) {
@@ -102,33 +89,24 @@ class AuthenticationController extends Controller
             }
 
             $session->getFlashBag()->add('error', $msg);
-
-            $_SESSION['failed_login_attempts'] =
-                isset($_SESSION['failed_login_attempts']) ?
-                $_SESSION['failed_login_attempts'] + 1 : 1;
+            $session->set('failed_login_attempts', $session->get('failed_login_attempts') + 1);
         }
 
+        // Generate CSRF token
         $intention = time() . rand();
         $token     = $this->get('security.csrf.token_manager')->getToken($intention);
 
-        $this->request->getSession()->set('intention', $intention);
-
-        $currentLanguage  = \Application::$language;
-
-        $failedLoginAttempts =  0;
-        if (isset($_SESSION['failed_login_attempts'])) {
-            $failedLoginAttempts = $_SESSION['failed_login_attempts'];
-        }
+        $session->set('intention', $intention);
 
         return $this->render(
             'login/login.tpl',
-            array(
-                'failed_login_attempts' => $failedLoginAttempts,
-                'current_language'      => $currentLanguage,
+            [
+                'failed_login_attempts' => $session->get('failed_login_attempts'),
+                'current_language'      => \Application::$language,
                 'token'                 => $token,
                 'referer'               => $referer,
-                'languages'             => $this->container->getParameter('available_languages')
-            )
+                'languages'             => $this->get('core.locale')->getLocales()
+            ]
         );
     }
 
@@ -141,12 +119,14 @@ class AuthenticationController extends Controller
     {
         $redirect = $request->getSession()->get('_security.backend.target_path');
 
-        if ($redirect == '/admin/login/callback') {
+        if ($redirect === '/admin/login/callback') {
             return $this->render('common/close_popup.tpl');
-        } elseif (!empty($redirect)) {
-            return $this->redirect($redirect);
-        } else {
-            return $this->redirect($this->generateUrl('admin_welcome'));
         }
+
+        if (!empty($redirect)) {
+            return $this->redirect($redirect);
+        }
+
+        return $this->redirect($this->generateUrl('admin_welcome'));
     }
 }

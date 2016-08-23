@@ -35,25 +35,27 @@ angular.module('onm.picker')
               <div class=\"picker-panel-body\">\
                 <div class=\"picker-panel-topbar\">\
                   <ul>\
-                    <li ng-if=\"isTypeEnabled('photo')\">\
-                      <select name=\"month\" ng-model=\"$parent.date\">\
+                    <li>\
+                      <div class=\"controls\">\
+                        <div class=\"input-group\">\
+                          <span class=\"input-group-addon\">\
+                            <i class=\"fa fa-search\"></i>\
+                          </span>\
+                          <input ng-model=\"$parent.title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
+                        </div>\
+                      </div>\
+                    </li>\
+                    <li ng-if=\"picker.isTypeEnabled('photo')\">\
+                      <select name=\"month\" ng-model=\"$parent.$parent.date\">\
                         <option value=\"\">[% picker.params.explore.allMonths %]</option>\
                         <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
                           <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
-                            [% month.name %]\
+                            [% month.name %] ([% year.name %])\
                           </option>\
                         </optgroup>\
                       </select>\
                     </li>\
-                    <li>\
-                      <div class=\"input-group\">\
-                        <span class=\"input-group-addon\">\
-                          <i class=\"fa fa-search\"></i>\
-                        </span>\
-                        <input ng-model=\"$parent.title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
-                      </div>\
-                    </li>\
-                    <li ng-if=\"isTypeEnabled('video')\">\
+                    <li class=\"hidden-xs\" ng-if=\"picker.isTypeEnabled('video')\">\
                       <select name=\"category\" ng-model=\"$parent.category\">\
                         <option value=\"\">[% picker.params.explore.allCategories %]</option>\
                         <option value=\"[% category.id %]\" ng-repeat=\"category in picker.params.explore.categories\">\
@@ -326,8 +328,8 @@ angular.module('onm.picker')
              *                 Otherwise, returns false.
              */
             isTypeOnlyEnabled: function(type) {
-              return this.types.enabled.indexOf(type) !== -1
-                && this.types.enabled.length === 1;
+              return this.types.enabled.indexOf(type) !== -1 &&
+                this.types.enabled.length === 1;
             },
 
             /**
@@ -686,6 +688,14 @@ angular.module('onm.picker')
           data.date = $scope.date;
         }
 
+        if ($scope.from) {
+          data.from = $scope.from;
+        }
+
+        if ($scope.to) {
+          data.to = $scope.to;
+        }
+
         var url = routing.generate('backend_ws_picker_list', data);
 
         $http.get(url).then(function(response) {
@@ -913,7 +923,7 @@ angular.module('onm.picker')
        * @param array ov The old values.
        */
       var search;
-      $scope.$watch('[date,title]', function(nv, ov) {
+      $scope.$watch('[date, title, from, to]', function(nv, ov) {
         if (nv === ov) {
           return false;
         }

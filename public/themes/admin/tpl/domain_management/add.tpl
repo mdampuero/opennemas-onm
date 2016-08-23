@@ -157,7 +157,7 @@
                   </div>
                   <div class="col-sm-4 col-sm-offset-4 m-t-15">
                     <button class="btn btn-block btn-loading btn-success" ng-click="next()" ng-disabled="loading">
-                      <i class="fa fa-circle-o-notch fa-spin m-t-15 pull-left" ng-if="loading"></i>
+                      <i class="fa fa-circle-o-notch fa-spin m-l-15 m-t-15 fa-absolute" ng-if="loading"></i>
                       <h4 class="text-uppercase text-white">
                         {t}Next{/t}
                       </h4>
@@ -194,7 +194,7 @@
                   </div>
                   <div class="col-sm-4 col-sm-offset-4 m-t-15">
                     <button class="btn btn-block btn-loading btn-success" ng-disabled="paymentLoading" type="submit">
-                      <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="paymentLoading"></i>
+                      <i class="fa fa-circle-o-notch fa-spin fa-absolute m-l-15 m-t-15" ng-if="paymentLoading"></i>
                       <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
                     </button>
                   </div>
@@ -232,7 +232,7 @@
                 </div>
                 <div class="col-sm-4 col-sm-offset-4 m-t-15">
                   <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="domains.length === 0 || !terms || !client || !payment || loading">
-                    <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="loading"></i>
+                    <i class="fa fa-circle-o-notch fa-absolute fa-spin m-l-15 m-t-15" ng-if="loading"></i>
                     <h4 class="text-uppercase text-white">
                       {t}Confirm{/t}
                     </h4>

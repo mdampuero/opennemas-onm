@@ -1,0 +1,19 @@
+entity:
+    name: UserGroupPrivileges
+    mapping:
+        database:
+            table: user_groups_privileges
+            columns:
+                pk_fk_user_group:
+                    type:    integer
+                    options: { default: null, unsigned: true, notnull: false }
+                pk_fk_privilege:
+                    type:    integer
+                    options: { default: null, unsigned: true, notnull: false }
+            index:
+                -
+                    name:    PRIMARY
+                    columns: [ pk_fk_user_group, pk_fk_privilege ]
+                    primary: true
+                    unique:  true
+                    flags:   {  }

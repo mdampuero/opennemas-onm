@@ -149,8 +149,10 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $start        = time();
+        $this->getContainer()->get('session')
+            ->set('user', json_decode(json_encode(['id' => 0, 'username' => 'cli'])));
 
+        $start        = time();
         $basePath     = APPLICATION_PATH;
         $this->debug  = $input->getOption('debug');
         $this->output = $output;

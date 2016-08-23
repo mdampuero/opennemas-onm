@@ -273,11 +273,12 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
      */
     protected function createDatabase($database, $default = null)
     {
-        $dbconn = getService('db_conn');
+        $dbconn = $this->getContainer()->get('orm.manager')
+            ->getConnection('manager');
 
         // Create instance database
         $sql = "CREATE DATABASE IF NOT EXISTS `$database`";
-        $rs  = $dbconn->Execute($sql);
+        $rs  = $dbconn->executeQuery($sql);
 
         if (!$rs) {
             throw new \Exception(

@@ -1,0 +1,15 @@
+frontend_author_frontpage:
+    path: /author/{slug}
+    defaults: { _controller: FrontendBundle:Author:authorFrontpage }
+    requirements:
+        slug: '[A-Za-z\d-.]+'
+
+frontend_frontpage_authors:
+    path: /authors
+    defaults: { _controller: FrontendBundle:Author:frontpageAuthors }
+
+frontend_external_author_frontpage:
+    path: /extauthor/{slug}
+    defaults: { _controller: FrontendBundle:Author:extAuthorFrontpage }
+    requirements:
+        slug: '[A-Za-z\d-]+'

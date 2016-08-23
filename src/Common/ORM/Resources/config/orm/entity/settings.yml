@@ -1,0 +1,26 @@
+entity:
+    name: Settings
+    datasets:
+        instance:
+            class:     Common\ORM\Database\DataSet\BaseDataSet
+            arguments: [ '@orm.connection.instance', '@orm.metadata.settings', '@cache.connection.instance' ]
+        manager:
+            class:     Common\ORM\Database\DataSet\BaseDataSet
+            arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.instance' ]
+    mapping:
+        database:
+            table: settings
+            columns:
+                name:
+                    type:    string
+                    options: { length: 128, notnull: true }
+                value:
+                    type:    text
+                    options: { length: 65532, notnull: true }
+            index:
+                -
+                    name:    PRIMARY
+                    columns: [ name ]
+                    primary: true
+                    unique:  true
+                    flags:   {  }

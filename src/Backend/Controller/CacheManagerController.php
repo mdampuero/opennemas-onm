@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -37,7 +36,9 @@ class CacheManagerController extends Controller
      **/
     public function indexAction(Request $request)
     {
-        return $this->render('cache_manager/index.tpl');
+        $hasRedis = method_exists($this->get('cache'), 'getRedis');
+
+        return $this->render('cache_manager/index.tpl', [ 'redis_enabled' => $hasRedis ]);
 
     }
     /**
@@ -47,16 +48,15 @@ class CacheManagerController extends Controller
      *
      * @return string the string response
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function configAction(Request $request)
     {
         // Init template cache config manager with frontend user template
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate = $this->get('view')->getTemplate();
         $configDir         = $frontpageTemplate ->config_dir[0];
-        $configContainer   = $this->container->get('template_cache_config_manager');
+        $configContainer   = $this->get('template_cache_config_manager');
         $configManager     = $configContainer->setConfigDir($configDir);
 
         // If the request is post then save the configuration with the data provided
@@ -81,12 +81,12 @@ class CacheManagerController extends Controller
 
             $flashBag = $this->get('session')->getFlashBag();
             if ($saved) {
-                $flashBag->add('success', _('Cache configuration saved successfully.'));
+                $flashBag->add('success', 'Cache configuration saved successfully.');
             } else {
-                $flashBag->add('error', _('Unable to save the cache configuration.'));
+                $flashBag->add('error', 'Unable to save the cache configuration.');
             }
 
-            return $this->redirect($this->generateUrl('admin_cache_manager'));
+            return $this->redirect($this->generateUrl('admin_cache_manager_config'));
         } else {
             // Load cache manager config and show the form with that info
             $config = $configManager->load();
@@ -99,23 +99,20 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Deletes all the frontend cache files
-     * DANGER: this action is really CPU expensive
+     * undocumented function
      *
-     * @return string the result string
-     *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
+     * @return void
+     * @author
      **/
-    public function clearCacheAction()
+    public function clearAllCacheAction()
     {
-        // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
-        $frontpageTemplate->clearAllCache();
+        $this->clearSmartyCache();
+        $this->clearSmartyCompiles();
+        $this->clearRedis();
+        $this->clearVarnishCache();
 
         $this->get('session')->getFlashBag()
-            ->add('success', _('Smarty cache removed for the instance.'));
+            ->add('success', 'Cleared all cache for the instance (smarty compiles, smarty cache, redis and varnish).');
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
@@ -126,18 +123,34 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
-    public function clearCompiledTemplatesAction()
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
+    public function clearCacheAction()
     {
-        // Initialization of the frontend template object
-        $frontpageTemplate = new \Template(TEMPLATE_USER);
-        $frontpageTemplate->clearCompiledTemplate();
+        $this->clearSmartyCache();
 
         $this->get('session')->getFlashBag()
-            ->add('success', _('Smarty compiled templates removed for the instance.'));
+            ->add('success', 'Smarty cache removed for the instance.');
+
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
+    }
+
+    /**
+     * Deletes all the frontend cache files
+     * DANGER: this action is really CPU expensive
+     *
+     * @return string the result string
+     *
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
+    public function clearCompiledTemplatesAction()
+    {
+        $this->clearSmartyCompiles();
+
+        $this->get('session')->getFlashBag()
+            ->add('success', 'Smarty compiled templates removed for the instance.');
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
@@ -147,10 +160,9 @@ class CacheManagerController extends Controller
      *
      * @return string the result string
      *
-     * @Security("has_role('CACHE_TPL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CACHE_MANAGER")
-     **/
+     * @Security("hasExtension('CACHE_MANAGER')
+     *     and hasPermission('CACHE_TPL_ADMIN')")
+     */
     public function clearVarnishCacheAction()
     {
         // Initialization of the frontend template object
@@ -158,14 +170,77 @@ class CacheManagerController extends Controller
             return false;
         }
 
-        $instanceName = $this->get('instance')->internal_name;
+        $this->clearVarnishCache();
+
+        $this->get('session')->getFlashBag()
+            ->add('success', 'Varnish BAN queued for current instance.');
+
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function clearRedisCacheForInstanceAction()
+    {
+        $this->clearRedis();
+        $this->get('session')->getFlashBag()
+            ->add('success', 'Redis cache cleared for current instance.');
+
+        return $this->redirect($this->generateUrl('admin_cache_manager'));
+    }
+
+    /**
+     * Removes the redis cache for the current instance
+     *
+     * @return void
+     **/
+    private function clearRedis()
+    {
+        $cache = $this->get('cache');
+
+        if (method_exists($cache, 'getRedis')) {
+            $redis = $cache->getRedis();
+            $instanceName = $this->get('core.instance')->internal_name;
+            $redis->eval("redis.call('del', unpack(redis.call('keys', ARGV[1])))", [$instanceName."*"]);
+        }
+    }
+
+    /**
+     * Sends a BAN to varnish to purge all the cache for the current instance
+     *
+     * @return void
+     **/
+    private function clearVarnishCache()
+    {
+        $instanceName = $this->get('core.instance')->internal_name;
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));
+    }
 
-        $this->get('session')->getFlashBag()
-            ->add('success', _('Varnish BAN queued for current instance.'));
+    /**
+     * Removes all the smarty cache for the current instance
+     *
+     * @return void
+     **/
+    public function clearSmartyCache()
+    {
+        $frontpageTemplate = $this->get('view')->getTemplate();
+        $frontpageTemplate->clearAllCache();
+    }
 
-        return $this->redirect($this->generateUrl('admin_cache_manager'));
+    /**
+     * Removes all the smarty compiles for the current instance
+     *
+     * @return void
+     **/
+    public function clearSmartyCompiles()
+    {
+        $frontpageTemplate = $this->get('view')->getTemplate();
+        $frontpageTemplate->clearCompiledTemplate();
     }
 }

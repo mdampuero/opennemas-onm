@@ -14,10 +14,9 @@
  **/
 namespace BackendWebService\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 /**
@@ -34,10 +33,9 @@ class NewslettersController extends Controller
      *
      * @return string the string response
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function listAction(Request $request)
     {
         // Initialization of the newsletter provider
@@ -72,10 +70,9 @@ class NewslettersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
+     */
     public function deleteAction(Request $request)
     {
         $id = $request->query->getDigits('id');

@@ -1,0 +1,118 @@
+parameters:
+    core.locale.available: [ 'en_US', 'es_ES', 'gl_ES' ]
+    core.locale.path:      '%kernel.root_dir%/Resources/locale'
+    core.maintenance.file: '%kernel.root_dir%/../.maintenance'
+    core.template.filters:
+        output:
+            - ads_generator
+            - ads_scripts
+            - canonical_url
+            - comscore
+            - css_includes
+            - generate_fb_admin_tag
+            - generate_fb_pages_tag
+            - google_analytics
+            - js_includes
+            - meta_amphtml
+            - ojd
+            - piwik
+    core.template.admin.filters:
+        output:
+            - backend_analytics
+            - canonical_url
+            - css_includes
+            - js_includes
+            - trimwhitespace
+        ignore_cli:
+            - backend_analytics
+    core.template.manager.filters:
+        output:
+            - canonical_url
+            - css_includes
+            - js_includes
+services:
+    core.dispatcher:
+        class:     Common\Core\Component\EventDispatcher\EventDispatcher
+        arguments: [ '@event_dispatcher' ]
+
+    core.instance:
+        class:     Common\ORM\Entity\Instance
+        factory:   [ '@core.loader', 'getInstance' ]
+
+    core.instance.checker:
+        class:     Common\Core\Component\Instance\Checker
+        arguments: [ '@orm.manager' ]
+
+    core.instance.validator:
+        class:     Common\Core\Component\Instance\Validator
+        arguments: [ '@orm.manager' ]
+
+    core.listener.core:
+        class:     Common\Core\EventListener\CoreListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
+
+    core.listener.locale:
+        class:     Common\Core\EventListener\LocaleListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
+    core.listener.maintenance:
+        class:     Common\Core\EventListener\MaintenanceListener
+        arguments: [ '%core.maintenance.file%' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+
+    core.listener.security:
+        class:     Common\Core\EventListener\SecurityListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 5 }
+
+    core.listener.security.annotation:
+        class:     Common\Core\EventListener\SecurityAnnotationListener
+        arguments: [ '@annotation_reader', '@core.security' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+
+    core.listener.template.annotation:
+        class:     Common\Core\EventListener\TemplateAnnotationListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    core.loader:
+        class:     Common\Core\Component\Loader\Loader
+        arguments: [ '@service_container' ]
+
+    core.locale:
+        class:     Common\Core\Component\Locale\Locale
+        arguments: [ '%core.locale.available%', '%core.locale.path%' ]
+
+    core.security:
+        class:     Common\Core\Component\Security\Security
+
+    core.security.user:
+        class:     Common\ORM\Entity\User
+        factory:   [ '@core.security', 'getUser' ]
+
+    core.template:
+        class:     Common\Core\Component\Template\Template
+        arguments: [ '@service_container', '%core.template.filters%' ]
+
+    core.template.admin:
+        class:     Common\Core\Component\Template\Template
+        arguments: [ '@service_container', '%core.template.admin.filters%' ]
+
+    core.template.manager:
+        class:     Common\Core\Component\Template\Template
+        arguments: [ '@service_container', '%core.template.manager.filters%' ]
+
+    core.theme:
+        class:     Common\ORM\Entity\Extension
+        factory:   [ '@core.loader', 'getTheme' ]
+
+    core.user:
+        alias:     'core.security.user'

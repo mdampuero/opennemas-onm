@@ -8,18 +8,18 @@
      *
      * @requires $filter
      * @requires $location
-     * @requires $uibModal
+     * @required $routeParams
      * @requires $scope
-     * @requires itemService
-     * @requires routing
+     * @requires $uibModal
+     * @requires http
      * @requires messenger
      *
      * @description
      *   Handles actions for instance edition form
      */
     .controller('InstanceCtrl', [
-      '$filter', '$location', '$uibModal', '$routeParams', '$scope', 'itemService', 'routing', 'messenger',
-      function ($filter, $location, $uibModal, $routeParams, $scope, itemService, routing, messenger) {
+      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'http', 'messenger', 'oqlBuilder',
+      function ($filter, $location, $routeParams, $scope, $uibModal, http, messenger, oqlBuilder) {
         /**
          * @memberOf InstanceCtrl
          *
@@ -35,16 +35,6 @@
           settings: {
             TEMPLATE_USER: 'base'
           },
-          external: {
-            site_language: 'es_ES',
-            pass_level:    -1,
-            max_mailing:   0,
-            max_users:   0,
-            time_zone:     '335'
-          },
-          metas: {
-            billing: []
-          }
         };
 
         /**
@@ -94,6 +84,21 @@
          * @memberOf InstanceCtrl
          *
          * @description
+         *   The instance settings.
+         *
+         * @type {Object}
+         */
+        $scope.settings = {
+          site_language: 'es_ES',
+          pass_level:    -1,
+          max_mailing:   0,
+          time_zone:     '335'
+        };
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
          *  Array of support modules
          *
          * @type {Array}
@@ -127,13 +132,20 @@
         $scope.getClients = function(search) {
           $scope.loading = 1;
 
-          var data = {
-            criteria: {
-              name: [ { value: '%' + search + '%', operator: 'like' } ]
-            },
+          oqlBuilder.configure({
+            placeholder: {
+              name: 'first_name ~ "[value]" or last_name ~ "[value]" or' +
+                ' address ~ "[value]" or city ~ "[value]" or state ~ "[value]"'
+            }
+          });
+
+          var oql   = oqlBuilder.getOql($scope.criteria);
+          var route = {
+            name: 'manager_ws_clients_list',
+            params: { oql:  oql }
           };
 
-          return itemService.list('manager_ws_clients_list', data).then(
+          return http.get(route).then(
             function(response) {
               $scope.clients = response.data.results;
               $scope.loading = 0;
@@ -206,7 +218,7 @@
         $scope.removeDomain = function(index) {
           $scope.instance.domains.splice(index, 1);
 
-          if ($scope.instance.main_domain -1 > index) {
+          if ($scope.instance.main_domain - 1 > index) {
             $scope.instance.main_domain--;
           }
 
@@ -223,45 +235,27 @@
          *   Creates a new instance.
          */
         $scope.save = function() {
-          if ($scope.instanceForm.$invalid || !$scope.instance.domains[0]) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
           $scope.saving = 1;
 
-          if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
-            $scope.instance.domain_expire = $scope.instance.domain_expire.toString();
-          }
+          //if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
+            //$scope.instance.domain_expire = $scope.instance.domain_expire.toString();
+          //}
 
-          if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
-            $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
-          }
+          //if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
+            //$scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
+          //}
 
-          itemService.save('manager_ws_instance_create', $scope.instance)
-            .then(function (response) {
-              messenger.post({ message: response.data, type: 'success' });
+          http.post('manager_ws_instance_save', { instance: $scope.instance,
+            settings: $scope.settings }).then(function (response) {
+              messenger.post(response.data);
 
               if (response.status === 201) {
-                // Get new instance id
-                var url = response.headers()['location'];
-                var id  = url.substr(url.lastIndexOf('/') + 1);
-
-                url = routing.ngGenerateShort(
-                  'manager_instance_show', { id: id });
+                var url = response.headers().location.replace('/managerws', '');
                 $location.path(url);
               }
-
-              $scope.saving = 0;
             }, function(response) {
+              messenger.post(response.data);
               $scope.saving = 0;
-              messenger.post({ message: response.data, type: 'error' });
             });
         };
 
@@ -275,9 +269,9 @@
          * @param {Object} item The selected client.
          */
         $scope.selectClient = function(item) {
-          $scope.instance.metas.client = item.id;
+          $scope.instance.client = item.id;
           $scope.client = item;
-          $scope.search = '';
+          $scope.criteria = { name: '' };
         };
 
         /**
@@ -328,35 +322,29 @@
          *   Updates an instance.
          */
         $scope.update = function() {
-          if ($scope.instanceForm.$invalid) {
-            $scope.formValidated = 1;
-
-            messenger.post({
-              message: $filter('translate')('FormErrors'),
-              type:    'error'
-            });
-
-            return false;
-          }
-
           $scope.saving = 1;
 
-          if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
-            $scope.instance.domain_expire = $scope.instance.domain_expire.toString();
-          }
+          //if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
+            //$scope.instance.domain_expire = $scope.instance.domain_expire.toString();
+          //}
 
-          if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
-            $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
-          }
+          //if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
+            //$scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
+          //}
 
-          itemService.update('manager_ws_instance_update', $scope.instance.id,
-            $scope.instance).success(function (response) {
-              messenger.post({ message: response, type: 'success' });
-              $scope.saving = 0;
-            }).error(function(response) {
-              messenger.post({ message: response, type: 'error' });
-              $scope.saving = 0;
-            });
+          var data  = { instance: $scope.instance, settings: $scope.settings };
+          var route = {
+            name:   'manager_ws_instance_update',
+            params: { id: $scope.instance.id }
+          };
+
+          http.put(route, data).then(function (response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          });
         };
 
         /**
@@ -384,16 +372,6 @@
 
           $scope.instance.activated_modules.push(id);
         };
-
-        // Forces values to be integer.
-        $scope.$watch(
-          '[instance.external.max_users, instance.external.max_mailing]',
-          function(newValues, oldValues) {
-            $scope.instance.external.max_users = parseInt($scope.instance.external.max_users);
-            $scope.instance.external.max_mailing = parseInt($scope.instance.external.max_mailing);
-          },
-          true
-        );
 
         $scope.$watch('instance.support_plan', function(nv, ov) {
           if (nv === ov) {
@@ -426,7 +404,7 @@
         },true);
 
         // Remove client when instance meta is deleted
-        $scope.$watch('instance.metas.client', function(nv) {
+        $scope.$watch('instance.client', function(nv) {
           if (!nv) {
             $scope.client = null;
           }
@@ -449,27 +427,27 @@
             }
 
             // Ignore grouping for PACKS and SUPPORT
-            if (module.metas.modules_included || /SUPPORT_/.test(module.uuid)) {
+            if (module.modules_included || /SUPPORT_/.test(module.uuid)) {
               modulesInAPack.push(module.uuid);
             }
 
             // If it is a pack
-            if (module.metas && module.metas.modules_included) {
+            if (module.modules_included) {
               $scope.packs.push(module.uuid);
 
               // Get modules that this pack adds to the previous pack
               $scope.modulesByPack[module.uuid] = _.difference(
-                  module.metas.modules_included, modulesInAPack);
+                  module.modules_included, modulesInAPack);
 
               // Other packs, get all modules in the pack
               if (module.uuid !== 'BASIC_PACK' &&
                   module.uuid !== 'PROFESSIONAL_PACK' &&
                   module.uuid !== 'ADVANCED_PACK' &&
                   module.uuid !== 'EXPERT_PACK') {
-                $scope.modulesByPack[module.uuid] = module.metas.modules_included;
+                $scope.modulesByPack[module.uuid] = module.modules_included;
               }
 
-              modulesInAPack = modulesInAPack.concat(module.metas.modules_included);
+              modulesInAPack = modulesInAPack.concat(module.modules_included);
             }
           }
 
@@ -478,49 +456,45 @@
           $scope.modulesByPack.OTHER_PACK = _.difference(modules, modulesInAPack);
           $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
               $scope.instance.activated_modules) == 0;
-        }
+        };
 
         $scope.$on('$destroy', function() {
           $scope.instance = null;
-          $scope.changed_modules = null;
           $scope.template = null;
           $scope.selected = null;
         });
 
+        var route = 'manager_ws_instance_new';
+
         if ($routeParams.id) {
-          itemService.show('manager_ws_instance_show', $routeParams.id).then(
-            function(response) {
-              $scope.template = response.data.template;
-              $scope.instance = response.data.instance;
-
-              if ($scope.template.client) {
-                $scope.client = $scope.template.client;
-              }
-
-              if (!$scope.instance.metas) {
-                $scope.instance.metas = {};
-              }
-
-              $scope.initModules();
-            }
-          );
-        } else {
-          itemService.new('manager_ws_instance_new').then(
-            function(response) {
-              $scope.template = response.data.template;
-
-              // Select Base plan as default
-              for (var i = 0; i < response.data.template.modules.length; i++) {
-                if (response.data.template.modules[i].plan == 'Base') {
-                  $scope.instance.activated_modules.push(
-                      response.data.template.modules[i].id);
-                }
-              }
-
-              $scope.initModules();
-            }
-          );
+          route = {
+            name:   'manager_ws_instance_show',
+            params: { id: $routeParams.id }
+          };
         }
+
+        http.get(route).then(function(response) {
+          $scope.template = response.data.template;
+
+          if ($scope.template.client) {
+            $scope.client = $scope.template.client;
+          }
+
+          if (response.data.instance) {
+            $scope.instance = angular.merge($scope.instance, response.data.instance);
+            $scope.settings = angular.merge($scope.settings, response.data.settings);
+          }
+
+          // Select Base plan as default
+          for (var i = 0; i < response.data.template.modules.length; i++) {
+            if (response.data.template.modules[i].plan === 'Base') {
+              $scope.instance.activated_modules.push(
+                  response.data.template.modules[i].id);
+            }
+          }
+
+          $scope.initModules();
+        });
       }
     ]);
 })();

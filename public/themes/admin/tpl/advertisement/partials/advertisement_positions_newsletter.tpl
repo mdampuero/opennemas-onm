@@ -24,6 +24,6 @@
 <div class="col-md-3">
   <div id="advertisement-mosaic-newsletter">
     <div id="advertisement-mosaic-frame-newsletter"></div>
-    <img src="{$params.IMAGE_DIR}/advertisement/newsletter.png" style="width:100%" usemap="#mapGallery" />
+    <img src="{$_template->getImageDir()}/advertisement/newsletter.png" style="width:100%" usemap="#mapGallery" />
   </div>
 </div>

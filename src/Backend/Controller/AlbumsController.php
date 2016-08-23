@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -63,9 +62,8 @@ class AlbumsController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')
+     *     and hasPermission('ALBUM_ADMIN')")
      */
     public function listAction()
     {
@@ -96,9 +94,8 @@ class AlbumsController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')
+     *     and hasPermission('ALBUM_ADMIN')")
      */
     public function widgetAction()
     {
@@ -116,9 +113,8 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_CREATE')")
-     *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')
+     *     and hasPermission('ALBUM_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -166,7 +162,7 @@ class AlbumsController extends Controller
         // TODO: remove cache cleaning actions
         // Clean cache album home and frontpage for category
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->get('core.template'));
         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
         $cacheManager->delete('home|1');
 
@@ -188,9 +184,8 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_DELETE')")
-     *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')
+     *     and hasPermission('ALBUM_DELETE')")
      */
     public function deleteAction(Request $request)
     {
@@ -209,7 +204,7 @@ class AlbumsController extends Controller
         // Delete all related and relations
         getService('related_contents')->deleteAll($id);
 
-        $album->delete($id, $_SESSION['userid']);
+        $album->delete($id, $this->getUser()->id);
 
         $this->get('session')->getFlashBag()->add(
             'success',
@@ -237,9 +232,8 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')
+     *     and hasPermission('ALBUM_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -281,9 +275,8 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_UPDATE')")
-     *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')
+     *     and hasPermission('ALBUM_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -301,7 +294,7 @@ class AlbumsController extends Controller
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$album->isOwner($_SESSION['userid'])
+            && !$album->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -353,7 +346,7 @@ class AlbumsController extends Controller
 
         // TODO: remove cache cleaning actions
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty($this->get('core.template'));
         $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
         $cacheManager->delete('home|1');
 
@@ -368,9 +361,8 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')
+     *     and hasPermission('ALBUM_ADMIN')")
      */
     public function savePositionsAction(Request $request)
     {
@@ -405,7 +397,7 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
@@ -454,7 +446,7 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -507,9 +499,9 @@ class AlbumsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('ALBUM_SETTINGS')")
+     * @Security("hasPermission('ALBUM_SETTINGS')")
      *
-     * @CheckModuleAccess(module="ALBUM_MANAGER")
+     * @Security("hasExtension('ALBUM_MANAGER')")
      */
     public function configAction(Request $request)
     {

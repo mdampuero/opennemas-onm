@@ -188,6 +188,16 @@ class Poll extends Content
 
         $conn = getService('dbal_connection');
         try {
+            $conn->insert(
+                'polls',
+                [
+                    'pk_poll'       => (int) $this->id,
+                    'subtitle'      => $data['subtitle'],
+                    'total_votes'   => 0,
+                    'visualization' => $data['visualization'],
+                ]
+            );
+
             // Save poll items
             if (is_array($data['item']) && !empty($data['item'])) {
                 foreach ($data['item'] as $item) {
@@ -201,16 +211,6 @@ class Poll extends Content
                     );
                 }
             }
-
-            $conn->insert(
-                'polls',
-                [
-                    'pk_poll'       => (int) $this->id,
-                    'subtitle'      => $data['subtitle'],
-                    'total_votes'   => 0,
-                    'visualization' => $data['visualization'],
-                ]
-            );
 
             return $this;
         } catch (\Exception $e) {
@@ -236,23 +236,8 @@ class Poll extends Content
                 $data['item'] = [];
             }
 
-            $conn->executeUpdate(
-                "DELETE FROM poll_items WHERE fk_pk_poll =?",
-                [ (int) $this->id ]
-            );
-
-            // Save poll items
             $total = 0;
             foreach ($data['item'] as $key => &$item) {
-                $conn->insert(
-                    'poll_items',
-                    [
-                        'pk_item'    => (int) $item->pk_item,
-                        'fk_pk_poll' => (int) $this->id,
-                        'item'       => $item->item,
-                        'votes'      => $item->votes,
-                    ]
-                );
                 $total += $item->votes;
             }
 
@@ -269,6 +254,25 @@ class Poll extends Content
 
             $this->total   = $total;
             $this->pk_poll = $data['id'];
+
+            $conn->executeUpdate(
+                "DELETE FROM poll_items WHERE fk_pk_poll =?",
+                [ (int) $this->id ]
+            );
+
+            // Save poll items
+            foreach ($data['item'] as $key => &$item) {
+                $conn->insert(
+                    'poll_items',
+                    [
+                        'pk_item'    => (int) $item->pk_item,
+                        'fk_pk_poll' => (int) $this->id,
+                        'item'       => $item->item,
+                        'votes'      => $item->votes,
+                    ]
+                );
+                $total += $item->votes;
+            }
 
             return true;
         } catch (\Exception $e) {
@@ -433,13 +437,12 @@ class Poll extends Content
      **/
     public function render($params)
     {
-        $tpl = new Template(TEMPLATE_USER);
+        $tpl = getService('core.template');
 
-        $tpl->assign('item', $this);
-        $tpl->assign('cssclass', $params['cssclass']);
+        $params['item'] = $this;
 
         try {
-            $html = $tpl->fetch('frontpage/contents/_poll.tpl');
+            $html = $tpl->fetch('frontpage/contents/_poll.tpl', $params);
         } catch (\Exception $e) {
             $html = _('Poll not available');
         }

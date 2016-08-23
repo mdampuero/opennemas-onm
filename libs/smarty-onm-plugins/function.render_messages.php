@@ -8,10 +8,6 @@
 */
 function smarty_function_render_messages($params, &$smarty)
 {
-    if (!isset($_SESSION)) {
-        session_start();
-    }
-
     $session = getService('session');
 
     $messagesByType = $session->getFlashBag()->all();

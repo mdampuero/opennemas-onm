@@ -25,8 +25,8 @@ class Ads
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get frontpage positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('frontpage');
+        $positionManager = getService('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('frontpage');
 
         $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
@@ -48,8 +48,8 @@ class Ads
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = getService('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
         $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
@@ -71,8 +71,8 @@ class Ads
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get opinion positions
-        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('opinion_inner', array(7, 9));
+        $positionManager = getService('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
 
         $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 

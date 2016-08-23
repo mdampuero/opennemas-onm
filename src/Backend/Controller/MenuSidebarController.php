@@ -23,7 +23,7 @@ class MenuSidebarController extends Controller
             $pinned = true;
         }
 
-        $_SESSION['sidebar_pinned'] = $pinned;
+        $request->getSession()->set('sidebar_pinned', $pinned);
 
         return new JsonResponse();
     }
@@ -31,14 +31,12 @@ class MenuSidebarController extends Controller
     /**
      * Returns the current sidebar pinned status.
      *
+     * @param Request $request The request object.
+     *
      * @return JsonResponse The response object.
      */
-    public function getAction()
+    public function getAction(Request $request)
     {
-        if (array_key_exists('sidebar_pinned', $_SESSION)) {
-            return new JsonResponse($_SESSION['sidebar_pinned']);
-        }
-
-        return new JsonResponse(1);
+        return !empty($request->getSession()->get('sidebar_pinned'));
     }
 }

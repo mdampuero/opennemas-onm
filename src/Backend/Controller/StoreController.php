@@ -15,12 +15,12 @@ class StoreController extends Controller
      */
     public function checkoutAction()
     {
-        $id     = $this->get('instance')->getClient();
+        $id     = $this->get('core.instance')->getClient();
         $client = [];
 
         if (!empty($id)) {
             $client = $this->get('orm.manager')
-                ->getRepository('manager.client', 'Database')
+                ->getRepository('Client', 'manager')
                 ->find($id);
 
             $client = $client->getData();

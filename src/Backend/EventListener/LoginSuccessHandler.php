@@ -1,25 +1,18 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Backend\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\SecurityContext;
-
-use Onm\Settings as s;
-use \Privileges;
 
 /**
  * Handler to load user data when an user logs in the system successfully.
@@ -27,42 +20,20 @@ use \Privileges;
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * @var SecurityContext
+     * The service container.
+     *
+     * @var ServiceContainer
      */
-    private $context;
-
-    /**
-     * @var Instance
-     */
-    private $instance;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    /**
-     * @var Session
-     */
-    private $session;
+    protected $container;
 
     /**
      * Constructs a new handler.
      *
-     * @param SecurityContext $context   The security context.
-     * @param Router          $router    The router service.
-     * @param Instance        $instance  The current instance.
-     * @param Session         $session   The session.
-     * @param Recaptcha       $recaptcha The Google Recaptcha.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct($context, $instance, $router, $session, $recaptcha, $logger)
+    public function __construct($container)
     {
-        $this->context   = $context;
-        $this->instance  = $instance;
-        $this->router    = $router;
-        $this->session   = $session;
-        $this->recaptcha = $recaptcha;
-        $this->logger    = $logger;
+        $this->container = $container;
     }
 
     /**
@@ -73,101 +44,97 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      *
      * @return Response The response to return.
      */
-    public function onAuthenticationSuccess(
-        Request $request,
-        TokenInterface $token
-    ) {
-        $user  = $token->getUser();
-        $valid = true;
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token) {
+        $session  = $request->getSession();
+        $attempts = $session->get('failed_login_attempts', 0);
+        $user     = $token->getUser();
 
-        // Check reCaptcha if is set
-        $response = $request->get('g-recaptcha-response');
-        if (!is_null($response)) {
-            $recaptcha = $this->recaptcha->getOnmRecaptcha();
-            $resp = $recaptcha->verify(
-                $request->get('g-recaptcha-response'),
-                $request->getClientIp()
-            );
-            $valid = $resp->isSuccess();
-        }
+        $recaptchaValid = $this->isRecaptchaValid($request);
+        $csrfTokenValid = $this->isCsrfTokenValid($request);
 
-        // Set session array
-        $_SESSION['userid']           = $user->id;
-        $_SESSION['realname']         = $user->name;
-        $_SESSION['username']         = $user->username;
-        $_SESSION['email']            = $user->email;
-        $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
-
-        $this->session->set('user', $user);
-        $this->session->set('user_language', $user->getMeta('user_language'));
-        $this->session->set('instance', $this->instance);
-
-        $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
-            $this->session->get('intention'),
-            $request->get('_token')
-        );
+        // TODO: Remove when Smarty can get services from service container
+        $session->set('user', $user);
 
         // Check token, user type and reCaptcha
-        if (!$isTokenValid || $valid === false || $user->type != 0) {
-            if (isset($_SESSION['failed_login_attempts'])) {
-                $_SESSION['failed_login_attempts']++;
-            } else {
-                $_SESSION['failed_login_attempts'] = 1;
-            }
-
-            if (!$isTokenValid) {
-                $this->session->getFlashBag()->add(
-                    'error',
-                    _('Login token is not valid. Try to authenticate again.')
-                );
-                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Invalid token");
-            }
-
-            if ($valid === false) {
-                $this->session->getFlashBag()->add(
-                    'error',
-                    _('The reCAPTCHA was not entered correctly. Try to authenticate again.')
-                );
-                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Recaptcha failed.");
-            }
-
-            if ($user->type != 0) {
-                $this->session->getFlashBag()->add(
-                    'error',
-                    _('Your user is not allowed to access, please contact your administrator')
-                );
-                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Not enought privileges to access backend.");
-            }
-
-            $this->context->setToken(null);
-
-            return new RedirectResponse($request->headers->get('referer'));
-        } else {
-            $im = getService('instance_manager');
-            $um = getService('user_repository');
-            $cache = getService('cache');
-
-            $database = $im->current_instance->getDatabaseName();
-            $namespace = $im->current_instance->internal_name;
-
-            $um->selectDatabase($database);
-            $cache->setNamespace($namespace);
-            $GLOBALS['application']->conn->selectDatabase($database);
-
-            unset($_SESSION['failed_login_attempts']);
-
-            // Set last_login date
+        if ($recaptchaValid && $csrfTokenValid && $user->type === 0) {
             $time = new \DateTime();
             $time->setTimezone(new \DateTimeZone('UTC'));
             $time = $time->format('Y-m-d H:i:s');
 
             if (!$user->isMaster()) {
-                s::set('last_login', $time);
+                $this->container->get('setting_repository')
+                    ->set('last_login', $time);
             }
-
-            $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
 
             return new RedirectResponse($request->get('_referer'));
         }
+
+        $session->set('failed_login_attempts', $attempts + 1);
+
+        if (!$csrfTokenValid) {
+            $session->getFlashBag()->add(
+                'error',
+                _('Login token is not valid. Try to authenticate again.')
+            );
+        }
+
+        if (!$recaptchaValid) {
+            $session->getFlashBag()->add(
+                'error',
+                _('The reCAPTCHA was not entered correctly. Try to authenticate'
+                . ' again.')
+            );
+        }
+
+        if (!$user->type != 0) {
+            $session->getFlashBag()->add(
+                'error',
+                _('Your user is not allowed to access, please contact your administrator')
+            );
+        }
+
+        $this->container->get('security.token_storage')->setToken(null);
+
+        return new RedirectResponse($request->headers->get('referer'));
+    }
+
+    /**
+     * Checks if the CSRF token is valid basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return boolean True if the CSRF token is valid. False otherwise.
+     */
+    protected function isCsrfTokenValid(Request $request)
+    {
+        if (empty($request->get('_token'))) {
+            return false;
+        }
+
+        return $this->container->get('form.csrf_provider')->isCsrfTokenValid(
+            $request->getSession()->get('intention'),
+            $request->get('_token')
+        );
+    }
+
+    /**
+     * Checks if the recaptcha is valid basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return boolean True if the recaptcha code is valid or missing. False
+     *                 otherwise.
+     */
+    protected function isRecaptchaValid(Request $request)
+    {
+        if (empty($request->get('g-recaptcha-response'))) {
+            return true;
+        }
+
+        $ip       = $request->getClientIp();
+        $response = $request->get('g-recaptcha-response');
+
+        return $this->container->get('google_recaptcha')->getOnmRecaptcha()
+            ->verify($response, $ip)->isSuccess();
     }
 }

@@ -9,7 +9,7 @@
  */
 namespace Framework\Service;
 
-use Framework\ORM\Entity\Notification;
+use Common\ORM\Entity\Notification;
 
 class NotificationService
 {
@@ -40,7 +40,7 @@ class NotificationService
     public function count($criteria)
     {
         return $this->container->get('orm.manager')
-            ->getRepository('manager.notification')
+            ->getRepository('Notification')
             ->countBy($criteria);
     }
 
@@ -56,7 +56,7 @@ class NotificationService
         $notification = new Notification();
 
         $notification->id          = 'comments';
-        $notification->instances   = [ $this->container->get('instance')->id ];
+        $notification->instances   = [ $this->container->get('core.instance')->id ];
         $notification->fixed       = 0;
         $notification->forced      = 1;
         $notification->read        = 0;
@@ -65,9 +65,10 @@ class NotificationService
             'font_color'       => '#ffffff',
             'icon'             => 'comment'
         ];
-        $notification->type        = 'comment';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+
+        $notification->type  = 'comment';
+        $notification->start = new \DateTime();
+        $notification->end   = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT => sprintf(
@@ -100,17 +101,17 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = 'media';
-        $notification->instances   = [ $instance->id ];
-        $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 0;
-        $notification->forced      = 1;
-        $notification->generated   = 1;
-        $notification->read        = 0;
-        $notification->style       = 'danger';
-        $notification->type        = 'info';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+        $notification->id        = 'media';
+        $notification->instances = [ $instance->id ];
+        $notification->creator   = 'cron.update_instances';
+        $notification->fixed     = 0;
+        $notification->forced    = 1;
+        $notification->generated = 1;
+        $notification->read      = 0;
+        $notification->style     = 'danger';
+        $notification->type      = 'info';
+        $notification->start     = new \DateTime();
+        $notification->end       = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT =>
@@ -138,21 +139,21 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = 'users';
-        $notification->instances   = [ $instance->id ];
-        $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 0;
-        $notification->forced      = 1;
-        $notification->generated   = 1;
-        $notification->read        = 0;
-        $notification->style       = [
+        $notification->id         = 'users';
+        $notification->instances  = [ $instance->id ];
+        $notification->creator    = 'cron.update_instances';
+        $notification->fixed      = 0;
+        $notification->forced     = 1;
+        $notification->generated  = 1;
+        $notification->read       = 0;
+        $notification->style      = [
             'background_color' => '#f35958',
             'font_color'       => '#ffffff',
             'icon'             => 'user'
         ];
-        $notification->type        = 'info';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+        $notification->type       = 'info';
+        $notification->start      = new \DateTime();
+        $notification->end        = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT =>
@@ -180,17 +181,17 @@ class NotificationService
     {
         $notification = new Notification();
 
-        $notification->id          = 'views';
-        $notification->instances   = [ $instance->id ];
-        $notification->creator     = 'cron.update_instances';
-        $notification->fixed       = 0;
-        $notification->forced      = 1;
-        $notification->generated   = 1;
-        $notification->read        = 0;
-        $notification->style       = 'danger';
-        $notification->type        = 'info';
-        $notification->start       = date('Y-m-d H:i:s');
-        $notification->end         = date('Y-m-d H:i:s', time() + 86400);
+        $notification->id        = 'views';
+        $notification->instances = [ $instance->id ];
+        $notification->creator   = 'cron.update_instances';
+        $notification->fixed     = 0;
+        $notification->forced    = 1;
+        $notification->generated = 1;
+        $notification->read      = 0;
+        $notification->style     = 'danger';
+        $notification->type      = 'info';
+        $notification->start     = new \DateTime();
+        $notification->end       = new \Datetime(date('Y-m-d H:i:s', time() + 86400));
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT =>
@@ -218,7 +219,7 @@ class NotificationService
     public function getItem($id)
     {
         return $this->container->get('orm.manager')
-            ->getRepository('manager.notification')
+            ->getRepository('Notification')
             ->find($id);
     }
 
@@ -232,10 +233,10 @@ class NotificationService
      *
      * @return array A list of notifications.
      */
-    public function getList($criteria, $order = [], $epp = 10, $page = 1)
+    public function getList($oql)
     {
         return $this->container->get('orm.manager')
-            ->getRepository('manager.notification')
-            ->findBy($criteria, $order, $epp, $page);
+            ->getRepository('Notification')
+            ->findBy($oql);
     }
 }

@@ -61,29 +61,6 @@ admin_frontpage_last_version:
     path:     /frontpages/{category}/exists-new-version
     defaults: { _controller  : BackendBundle:Frontpages:lastVersion }
 
-# Static Pages controller
-admin_static_pages:
-    path:     /static-pages
-    defaults: { _controller  : BackendBundle:StaticPages:list }
-
-admin_static_page_show:
-    path:     /static-pages/{id}/show
-    defaults: { _controller  : BackendBundle:StaticPages:show }
-    options:
-        expose: true
-
-admin_static_pages_create:
-    path:     /static-pages/create
-    defaults: { _controller  : BackendBundle:StaticPages:create }
-
-admin_static_pages_update:
-    path:     /static-pages/{id}/update
-    defaults: { _controller  : BackendBundle:StaticPages:update }
-
-admin_static_pages_build_slug:
-    path:     /static-pages/{id}/build-slug
-    defaults: { _controller  : BackendBundle:StaticPages:buildSlug }
-
 # Widget manager routes
 admin_widgets:
     path:     /widgets
@@ -911,6 +888,10 @@ admin_cache_manager_banvarnishcache:
     path:     /system/cachemanager/ban-varnish-cache
     defaults: { _controller  : BackendBundle:CacheManager:clearVarnishCache }
 
+admin_cache_manager_clearrediscache:
+    path:     /system/cachemanager/clear-redis-cache
+    defaults: { _controller  : BackendBundle:CacheManager:clearRedisCacheForInstance }
+
 # User management routes
 admin_acl_user:
     path:     /acl/users
@@ -919,6 +900,10 @@ admin_acl_user:
 admin_acl_user_create:
     path:     /acl/users/create
     defaults: { _controller  : BackendBundle:AclUser:create }
+
+admin_acl_user_save:
+    path:     /acl/users/save
+    defaults: { _controller  : BackendBundle:AclUser:save }
 
 admin_acl_user_show:
     path:     /acl/users/{id}/show
@@ -963,10 +948,13 @@ admin_acl_usergroups_create:
     path:     /acl/usergroups/create
     defaults: { _controller  : BackendBundle:AclUserGroups:create }
 
+admin_acl_usergroups_save:
+    path:     /acl/usergroup/save
+    defaults: { _controller  : BackendBundle:AclUserGroups:save }
+
 admin_acl_usergroups_update:
     path:     /acl/usergroup/{id}/update
     defaults: { _controller  : BackendBundle:AclUserGroups:update }
-
 # System settings routes
 admin_system_settings:
     path:     /system/settings
@@ -1039,23 +1027,14 @@ admin_menu_sidebar_get:
     options:
         expose: true
 
-# Client info page routes
-admin_client_info_page:
-    path:     /my-account
-    defaults: { _controller  : BackendBundle:ClientInformation:default }
-
-admin_client_send_upgrade_mail:
-    path:     /my-account/upgrade-instance
-    defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
-
 # Routing refactoring starts here
+backend_account:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/account.yml'
+
 backend_domain_mapping:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/domain_management.yml'
-
-backend_store:
-    prefix: /
-    resource: '@BackendBundle/Resources/config/routing/store.yml'
 
 backend_news_agency_server:
     prefix: /
@@ -1064,6 +1043,14 @@ backend_news_agency_server:
 backend_notification:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
+
+backend_static_pages:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/static_page.yml'
+
+backend_store:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/store.yml'
 
 backend_theme:
     prefix: /

@@ -14,7 +14,7 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: token })%]">
+            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: token })%]" target="_blank">
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>
@@ -42,8 +42,8 @@
             <span class="input-group-addon">
               <i class="fa fa-search fa-lg"></i>
             </span>
-            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.title_like[0].value }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title_like[0].value" placeholder="{t}Search by title{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.title_like[0].value = null" ng-show="criteria.title_like[0].value">
+            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.title }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.title = null" ng-show="criteria.title">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -52,7 +52,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -80,7 +80,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks form-inline pagination-links">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -192,15 +192,13 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th class="pointer" ng-click="sort('title')" ng-show="isColumnEnabled('title')">
+              <th ng-show="isColumnEnabled('title')">
                 {t}Title{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('title') == 'asc', 'fa fa-caret-down': isOrderedBy('title') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('target')" ng-show="isColumnEnabled('target')" width="130">
+              <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="130">
                 {t}Target{/t}
-                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('target') == 'asc', 'fa fa-caret-down': isOrderedBy('target') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-show="isColumnEnabled('l10n')" width="60">
+              <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')">
                 l10n
               </th>
               <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="250">
@@ -258,10 +256,10 @@
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
+                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
-                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_report', { id: item.id, token: token }) %]" target="_blank" title="{t}Download report{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_csv', { id: item.id, token: token }) %]" target="_blank" title="{t}Download report{/t}">
                     <i class="fa fa-download m-r-5"></i>{t}Report{/t}
                   </button>
                 </div>
@@ -327,7 +325,7 @@
     </div>
     <div class="grid-footer clearfix">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

@@ -278,8 +278,8 @@ class Photo extends Content
             'height'              => $fileInformation->height,
             'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'],
-            'fk_user_last_editor' => $_SESSION['userid'],
-            'fk_publisher'        => $_SESSION['userid'],
+            'fk_user_last_editor' => getService('session')->get('user')->id,
+            'fk_publisher'        => getService('session')->get('user')->id,
         );
 
         if ($filePathInfo['extension'] != 'swf') {
@@ -308,7 +308,7 @@ class Photo extends Content
                     );
                 }
             } catch (\RuntimeException $e) {
-                $logger = getService('logger');
+                $logger = getService('application.log');
                 $logger->notice(
                     sprintf(
                         'Unable to create the photo file %s (destination: %s).',
@@ -325,7 +325,7 @@ class Photo extends Content
             );
 
             if (!$fileCopied) {
-                $logger = getService('logger');
+                $logger = getService('application.log');
                 $logger->notice(
                     sprintf(
                         'Unable to create the photo file %s (destination: %s).',
@@ -341,7 +341,7 @@ class Photo extends Content
         $photoID = $photo->create($dataPhoto);
 
         if (!$photoID) {
-            $logger = getService('logger');
+            $logger = getService('application.log');
             $logger->notice(
                 sprintf(
                     'Unable to save the image object %s (destination: %s).',

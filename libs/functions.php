@@ -61,8 +61,9 @@ function logContentEvent($action = null, $content = null)
 {
     $logger = getService('application.log');
 
-    $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
-    .'the action '.$action;
+    $msg = 'User '.getService('session')->get('user')->username
+        .' ('.getService('session')->get('user')->id.') has executed '
+        .'the action '.$action;
     if (!empty($content)) {
         $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
     }

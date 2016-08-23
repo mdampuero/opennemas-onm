@@ -144,7 +144,7 @@
   <div class="col-md-3">
     <div id="advertisement-mosaic-interior" style="">
       <div id="advertisement-mosaic-interior-frame"></div>
-      <img src="{$params.IMAGE_DIR}advertisement/ArticleAds.png" style="width:100%" usemap="#mapInterior" />
+      <img src="{$_template->getImageDir()}/advertisement/ArticleAds.png" style="width:100%" usemap="#mapInterior" />
     </div>
   </div>
 </div>

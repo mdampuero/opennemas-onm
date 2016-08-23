@@ -14,10 +14,9 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -33,62 +32,19 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_ADMIN')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_ADMIN')")
+     */
     public function listAction()
     {
-        $ccm = \ContentCategoryManager::get_instance();
-
-        // Get contents by group
-        $groups['articles']       = $ccm->countContentsByGroupType(1);
-
-        $allcategorys  = $this->get('category_repository')->findBy(null, 'name ASC');
-
-        $categorygorys = $subcategorys =array();
-        $contentsCount =  $subContentsCount = array();
-
-        $i = 0;
-        foreach ($allcategorys as $category) {
-            if ($category->fk_content_category == 0) {
-                if (isset($groups['articles'][$category->pk_content_category])) {
-                    $contentsCount[$i]['articles'] =
-                        $groups['articles'][$category->pk_content_category];
-                } else {
-                    $contentsCount[$i]['articles'] = 0;
-                }
-
-                //Unserialize category param field
-                $categorygorys[$i] = $category;
-
-                $resul = $ccm->getSubcategories($category->pk_content_category);
-                $j=0;
-                foreach ($resul as $category) {
-                    if (isset($groups['articles'][$category->pk_content_category])) {
-                        $subContentsCount[$i][$j]['articles'] = $groups['articles'][$category->pk_content_category];
-                    } else {
-                        $subContentsCount[$i][$j]['articles'] = 0;
-                    }
-
-                    //Unserialize subcategory param field
-                    $category->params = unserialize($category->params);
-                    $j++;
-                }
-                $subcategorys[$i]=$resul;
-                    $i++;
-            }
-        }
+        $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
+        $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
 
         return $this->render(
             'category/list.tpl',
             array(
-                'categorys'        => $categorygorys,
-                'num_contents'     => $contentsCount,
-                'num_sub_contents' => $subContentsCount,
-                'subcategorys'     => $subcategorys,
-                'ordercategorys'   => $allcategorys,
-                'allcategorys'     => $allcategorys
+                'categories'    => $categories,
+                'contents_count' => $contentsCount,
             )
         );
     }
@@ -100,10 +56,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_CREATE')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_CREATE')")
+     */
     public function createAction(Request $request)
     {
         $configurations = s::get('section_settings');
@@ -137,8 +92,7 @@ class CategoriesController extends Controller
 
             if ($category->create($data)) {
                 $user = new \User();
-                $user->addCategoryToUser($_SESSION['userid'], $category->pk_content_category);
-                $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
+                $user->addCategoryToUser($this->getUser()->id, $category->pk_content_category);
 
                 dispatchEventWithParams('category.create', ['category' => $category]);
 
@@ -182,10 +136,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_UPDATE')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -232,10 +185,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_UPDATE')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id     = $request->query->getDigits('id');
@@ -296,10 +248,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_DELETE')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_DELETE')")
+     */
     public function deleteAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -308,10 +259,7 @@ class CategoriesController extends Controller
         if ($category->pk_content_category != null) {
             if ($category->delete($id)) {
                 $user = new \User();
-                $user->delCategoryToUser($_SESSION['userid'], $id);
-
-                $_SESSION['accesscategories'] =
-                    $user->getAccessCategoryIds($_SESSION['userid']);
+                $user->delCategoryToUser($this->getUser()->id, $id);
 
                 dispatchEventWithParams('category.delete', ['category' => $category]);
 
@@ -346,10 +294,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_DELETE')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_DELETE')")
+     */
     public function emptyAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -391,10 +338,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_AVAILABLE')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_AVAILABLE')")
+     */
     public function toggleAvailableAction(Request $request)
     {
         $id       = $request->query->getDigits('id', 0);
@@ -428,10 +374,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_AVAILABLE')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_AVAILABLE')")
+     */
     public function toggleRssAction(Request $request)
     {
         $id       = $request->query->getDigits('id', 0);
@@ -465,10 +410,9 @@ class CategoriesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('CATEGORY_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="CATEGORY_MANAGER")
-     **/
+     * @Security("hasExtension('CATEGORY_MANAGER')
+     *     and hasPermission('CATEGORY_SETTINGS')")
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

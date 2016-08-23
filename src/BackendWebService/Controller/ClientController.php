@@ -9,7 +9,7 @@
  */
 namespace BackendWebService\Controller;
 
-use Framework\ORM\Entity\Client;
+use Common\ORM\Entity\Client;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,12 +28,12 @@ class ClientController extends Controller
      */
     public function showAction($id)
     {
-        if ($this->get('instance')->getClient() !== $id) {
+        if ($this->get('core.instance')->getClient() !== $id) {
             return JsonResponse('', 400);
         }
 
         $client = $this->get('orm.manager')
-            ->getRepository('manager.Client', 'Database')
+            ->getRepository('Client', 'manager')
             ->find($id);
 
         return new JsonResponse($client->getData());
@@ -48,15 +48,19 @@ class ClientController extends Controller
      */
     public function saveAction(Request $request)
     {
+        $em     = $this->get('orm.manager');
         $client = new Client($request->request->all());
 
-        $this->get('orm.manager')->persist($client, 'FreshBooks');
-        $this->get('orm.manager')->persist($client, 'Braintree');
-        $this->get('orm.manager')->persist($client, 'Database');
+        $em->persist($client, 'freshbooks');
+        $em->persist($client, 'braintree');
+        $em->persist($client, 'manager');
 
-        $instance = $this->get('instance');
-        $instance->metas['client'] = $client->id;
-        $this->get('instance_manager')->persist($instance);
+        $instance = $this->get('core.instance');
+        $instance->client = $client->id;
+        $em->persist($instance);
+
+        $this->get('core.dispatcher')
+            ->dispatch('instance.client.update', [ 'instance' => $instance ]);
 
         return new JsonResponse($client->id);
     }
@@ -70,15 +74,14 @@ class ClientController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $client = $this->get('orm.manager')
-            ->getRepository('manager.client', 'Database')
-            ->find($id);
+        $em     = $this->get('orm.manager');
+        $client = $em->getRepository('Client', 'manager')->find($id);
 
         $client->merge($request->request->all());
 
-        $this->get('orm.manager')->persist($client, 'FreshBooks');
-        $this->get('orm.manager')->persist($client, 'Braintree');
-        $this->get('orm.manager')->persist($client, 'Database');
+        $em->persist($client, 'freshbooks');
+        $em->persist($client, 'braintree');
+        $em->persist($client, 'manager');
 
         return new JsonResponse();
     }

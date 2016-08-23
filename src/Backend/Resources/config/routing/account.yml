@@ -1,0 +1,3 @@
+backend_account_show:
+    path:     /my-account
+    defaults: { _controller: BackendBundle:Account:default }

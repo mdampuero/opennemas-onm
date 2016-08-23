@@ -70,7 +70,7 @@ class RedirectorsController extends Controller
 
         $url =  SITE_URL . $content->uri;
         if ($content->content_type_name === 'photo') {
-            $url = SITE_URL . '/media/' . $this->get('instance')->internal_name
+            $url = SITE_URL . '/media/' . $this->get('core.instance')->internal_name
                 . '/images' . $content->path_img;
         }
 

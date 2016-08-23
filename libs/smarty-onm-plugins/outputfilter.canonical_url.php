@@ -10,20 +10,26 @@
  */
 function smarty_outputfilter_canonical_url($output, $smarty)
 {
-    // Check if is user template
-    if ($smarty->smarty->theme != "admin" && $smarty->smarty->theme != "manager") {
-        // Generate canonical url
-        $url = SITE_URL.substr(strtok($_SERVER["REQUEST_URI"], '?'), 1);
+    $theme = $smarty->getTheme();
 
-        // Create tag <link> with the canonical url and check for amp
-        if (preg_match('/amp.html/', $url)) {
-            $url = preg_replace('/amp.html/', 'html', $url);
-        }
-        $canonical = '<link rel="canonical" href="'.$url.'"/>';
-
-        // Change output html
-        $output = str_replace('</head>', $canonical.'</head>', $output);
+    if (empty($theme)
+        || $theme->uuid === 'es.openhost.theme.admin'
+        || $theme->uuid === 'es.openhost.theme.manager'
+    ) {
+        return $output;
     }
+
+    // Generate canonical url
+    $url = SITE_URL.substr(strtok($_SERVER["REQUEST_URI"], '?'), 1);
+
+    // Create tag <link> with the canonical url and check for amp
+    if (preg_match('/amp.html/', $url)) {
+        $url = preg_replace('/amp.html/', 'html', $url);
+    }
+    $canonical = '<link rel="canonical" href="'.$url.'"/>';
+
+    // Change output html
+    $output = str_replace('</head>', $canonical.'</head>', $output);
 
     return $output;
 }

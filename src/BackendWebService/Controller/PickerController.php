@@ -21,6 +21,8 @@ class PickerController extends Controller
         $date         = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $title        = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
+        $from         = $request->query->filter('from', '', FILTER_SANITIZE_STRING);
+        $to           = $request->query->filter('to', '', FILTER_SANITIZE_STRING);
         $contentTypes = $request->query->filter('content_type_name', null, FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
@@ -45,6 +47,14 @@ class PickerController extends Controller
 
         if (!empty($date)) {
             $filter[] = "DATE_FORMAT(created, '%Y-%c') = '$date'";
+        }
+
+        if (!empty($from)) {
+            $filter[] = "created >= '$from 00:00:00'";
+        }
+
+        if (!empty($to)) {
+            $filter[] = "created <= '$to 00:00:00'";
         }
 
         if (!empty($title)) {
@@ -114,7 +124,7 @@ class PickerController extends Controller
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
         $sql         = "UPDATE contents SET `description`=? WHERE pk_content=?";
 
-        $conn = $this->get('dbal_connection');
+        $conn = $this->get('orm.manager')->getConnection('instance');
 
         $this->get('cache')->delete('Photo' . "-" . $id);
 
@@ -135,7 +145,7 @@ class PickerController extends Controller
     {
         $years = array();
 
-        $conn = $this->get('dbal_connection');
+        $conn = $this->get('orm.manager')->getConnection('instance');
 
         $results = $conn->fetchAll(
             "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%c')) as date_month FROM contents
@@ -148,7 +158,7 @@ class PickerController extends Controller
 
             $years[$date->format('Y')]['name'] = $date->format('Y');
             $years[$date->format('Y')]['months'][]= array(
-                'name' => $fmt->format($date),
+                'name'  => ucfirst($fmt->format($date)),
                 'value' => $value['date_month']
             );
         }
@@ -206,6 +216,7 @@ class PickerController extends Controller
             'created'             => _('Created'),
             'dates'               => $this->getDates(),
             'description'         => _('Description'),
+            'from'                => _('From'),
             'header'              => _('Pick the item to insert'),
             'insert'              => _('Insert'),
             'itemDetails'         => _('Item details'),
@@ -215,6 +226,7 @@ class PickerController extends Controller
             'menuItem'            => _('Browse'),
             'search'              => _('Search by name'),
             'title'               => _('Title'),
+            'to'                  => _('To'),
             'thumbnailDetails'    => _('Thumbnail details'),
         ];
     }

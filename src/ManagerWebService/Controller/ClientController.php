@@ -9,7 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
-use Framework\ORM\Entity\Client;
+use Common\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
@@ -31,15 +31,18 @@ class ClientController extends Controller
      */
     public function deleteAction($id)
     {
-        $client = $this->get('orm.manager')
-            ->getRepository('client', 'Database')
-            ->find($id);
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
 
-        $this->get('orm.manager')->remove($client, 'FreshBooks');
-        $this->get('orm.manager')->remove($client, 'Braintree');
-        $this->get('orm.manager')->remove($client, 'Database');
+        $client = $em->getRepository('client')->find($id);
 
-        return new JsonResponse(_('Client removed successfully'));
+        $em->remove($client, 'freshbooks');
+        $em->remove($client, 'braintree');
+        $em->remove($client, 'manager');
+
+        $msg->add(_('Client deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -53,64 +56,39 @@ class ClientController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $error      = [];
-        $messages   = [];
-        $selected   = $request->request->get('selected', null);
-        $statusCode = 200;
-        $updated    = 0;
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
 
-        if (!is_array($selected)
-            || (is_array($selected) && count($selected) == 0)
-        ) {
-            return new JsonResponse(
-                _('Unable to find the instances for the given criteria'),
-                404
-            );
+        if (!is_array($ids) || empty($ids)) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $em       = $this->get('orm.manager');
-        $criteria = [ 'id' => [ [ 'value' => $selected, 'operator' => 'IN'] ] ];
-        $clients  = $em->getRepository('client', 'Database')->findBy($criteria);
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
 
+        $clients = $em->getRepository('Client')->findBy($oql);
+
+        $deleted = 0;
         foreach ($clients as $client) {
             try {
-                $em->remove($client, 'FreshBooks');
-                $em->remove($client, 'Braintree');
-                $em->remove($client, 'Database');
-                $updated++;
-            } catch (EntityNotFoundException $e) {
-                $error[]    = $client->id;
-                $messages[] = [
-                    'message' => sprintf(_('Unable to find the client with id "%s"'), $client->id),
-                    'type'    => 'error'
-                ];
+                $em->remove($client, 'freshbooks');
+                $em->remove($client, 'braintree');
+                $em->remove($client, 'manager');
+                $deleted++;
             } catch (\Exception $e) {
-                $error[]    = $client->id;
-                $messages[] = [
-                    'message' => _($e->getMessage()),
-                    'type'    => 'error'
-                ];
+                $msg->add($e->getMessage(), 'error');
             }
         }
 
-        if ($updated > 0) {
-            $messages = [
-                'message' => sprintf(_('%d clients deleted successfully.'), $updated),
-                'type'    => 'success'
-            ];
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s clients deleted successfully'), $deleted),
+                'success'
+            );
         }
 
-        // Return the proper status code
-        if (count($error) > 0 && $updated > 0) {
-            $statusCode = 207;
-        } elseif (count($error) > 0) {
-            $statusCode = 409;
-        }
-
-        return new JsonResponse(
-            [ 'error' => $error, 'messages' => $messages ],
-            $statusCode
-        );
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -132,85 +110,21 @@ class ClientController extends Controller
      */
     public function listAction(Request $request)
     {
-        $q        = $request->query->filter('q');
-        $epp      = $request->query->getDigits('epp', 10);
-        $page     = $request->query->getDigits('page', 1);
-        $criteria = $request->query->filter('criteria') ? : [];
-        $orderBy  = $request->query->filter('orderBy') ? : [];
-        $extra    = $this->getTemplateParams();
+        $oql   = $request->query->get('oql', '');
+        $extra = $this->getExtraData();
 
-        $countries = Intl::getRegionBundle()
-            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+        $repository = $this->get('orm.manager')->getRepository('Client');
+        $converter  = $this->get('orm.manager')->getConverter('Client');
 
-        $order = [];
-        foreach ($orderBy as $value) {
-            $order[$value['name']] = $value['value'];
-        }
+        $total   = $repository->countBy($oql);
+        $clients = $repository->findBy($oql);
 
-        if (array_key_exists('name', $criteria)) {
-            $value = $criteria['name'][0]['value'];
-
-            $criteria['first_name'] =
-                $criteria['last_name'] =
-                $criteria['email'] =
-                $criteria['address'] =
-                $criteria['city'] =
-                $criteria['state'] = [
-                    [ 'value' => $value, 'operator' => 'like' ]
-                ];
-
-            $key = array_search(str_replace('%', '', $value), $countries);
-
-            if (!empty($key)) {
-                $criteria['country'] = [
-                    [ 'value' => $key, 'operator' => 'like' ]
-                ];
-            }
-
-            $criteria['union'] = 'OR';
-
-            unset($criteria['name']);
-        }
-
-        $repository = $this->get('orm.manager')
-            ->getRepository('manager.client', 'Database');
-
-        $ids       = [];
-        $clients = $repository->findBy($criteria, $order, $epp, $page);
-        $total   = $repository->countBy($criteria);
-
-        // Clean clients
-        foreach ($clients as $client) {
-            $ids[]  = $client->id;
-        }
-
-        $rs  = $this->get('instance_manager')->findByClient($ids);
-        $ids = [];
-
-        foreach ($clients as $key => $client) {
-            if (array_key_exists($client->id, $rs)) {
-                $client->instances = $rs[$client->id];
-                $ids = array_merge($ids, $client->instances);
-            }
-
-            $clients[$key] = $client->getData();
-        }
-
-        // Find instances by ids
-        if (!empty($ids)) {
-            $instances = $this->get('instance_manager')->findBy([
-                'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
-            ]);
-
-            foreach ($instances as $instance) {
-                $extra['instances'][$instance->id] = $instance->internal_name;
-            }
-        }
+        $clients = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $clients);
 
         return new JsonResponse([
-            'epp'     => $epp,
             'extra'   => $extra,
-            'page'    => $page,
             'results' => $clients,
             'total'   => $total,
         ]);
@@ -226,7 +140,7 @@ class ClientController extends Controller
     public function newAction()
     {
         return new JsonResponse([
-            'extra'  => $this->getTemplateParams()
+            'extra'  => $this->getExtraData()
         ]);
     }
 
@@ -251,13 +165,20 @@ class ClientController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $client = new Client($request->request->all());
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('Client')
+            ->objectify($request->request->all());
 
-        $this->get('orm.manager')->persist($client, 'FreshBooks');
-        $this->get('orm.manager')->persist($client, 'Braintree');
-        $this->get('orm.manager')->persist($client, 'Database');
+        $client = new Client($data);
 
-        $response =  new JsonResponse(_('Client saved successfully'), 201);
+        $em->persist($client, 'freshbooks');
+        $em->persist($client, 'braintree');
+        $em->persist($client, 'manager');
+
+        $msg->add(_('Client saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
 
         // Add permanent URL for the current notification
         $response->headers->set(
@@ -283,12 +204,12 @@ class ClientController extends Controller
     public function showAction($id)
     {
         $client = $this->get('orm.manager')
-            ->getRepository('client', 'Database')
+            ->getRepository('Client')
             ->find($id);
 
         return new JsonResponse([
             'client' => $client->getData(),
-            'extra'  => $this->getTemplateParams()
+            'extra'  => $this->getExtraData()
         ]);
     }
 
@@ -314,19 +235,21 @@ class ClientController extends Controller
      */
     public function updateAction($id, Request $request)
     {
-        $client = $this->get('orm.manager')
-            ->getRepository('client', 'Database')
-            ->find($id);
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('Client')
+            ->objectify($request->request->all());
 
-        foreach ($request->request as $key => $value) {
-            $client->{$key} = $value;
-        }
+        $client = $em->getRepository('client')->find($id);
+        $client->setData($data);
 
-        $this->get('orm.manager')->persist($client, 'FreshBooks');
-        $this->get('orm.manager')->persist($client, 'Braintree');
-        $this->get('orm.manager')->persist($client, 'Database');
+        $em->persist($client, 'freshbooks');
+        $em->persist($client, 'braintree');
+        $em->persist($client, 'manager');
 
-        return new JsonResponse(_('Client saved successfully'));
+        $msg->add(_('Client saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -334,10 +257,10 @@ class ClientController extends Controller
      *
      * @return array Array of extra parameters for template.
      */
-    protected function getTemplateParams()
+    protected function getExtraData()
     {
         $countries = Intl::getRegionBundle()
-            ->getCountryNames(CURRENT_LANGUAGE_SHORT);
+            ->getCountryNames($this->get('core.locale')->getLocaleShort());
 
         asort($countries);
 

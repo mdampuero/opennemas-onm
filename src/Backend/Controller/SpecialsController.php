@@ -14,12 +14,11 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for the specials
@@ -62,10 +61,9 @@ class SpecialsController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('SPECIAL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_ADMIN')")
+     */
     public function listAction()
     {
         $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
@@ -95,10 +93,9 @@ class SpecialsController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('SPECIAL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_ADMIN')")
+     */
     public function widgetAction()
     {
         if (isset($configurations['total_widget'])
@@ -125,10 +122,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_CREATE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_CREATE')")
+     */
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
@@ -156,16 +152,15 @@ class SpecialsController extends Controller
                 'success',
                 _('Special successfully created.')
             );
+
+            return $this->redirect(
+                $this->generateUrl('admin_special_show', ['id' => $special->id])
+            );
         } else {
             $this->get('session')->getFlashBag()->add('error', _('Unable to create the new special.'));
-        }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_special_show',
-                array('id' => $special->id)
-            )
-        );
+            return $this->redirect($this->generateUrl('admin_special_create'));
+        }
     }
 
     /**
@@ -175,10 +170,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_UPDATE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_UPDATE')")
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -194,6 +188,7 @@ class SpecialsController extends Controller
         }
 
         $contents = $special->getContents($id);
+
         if (!empty($special->img1)) {
             $photo1 = new \Photo($special->img1);
             $this->view->assign('photo1', $photo1);
@@ -234,10 +229,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_UPDATE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_UPDATE')")
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -265,8 +259,8 @@ class SpecialsController extends Controller
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
-                'noticias_right' => json_decode($request->request->get('noticias_right_input')),
                 'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
+                'noticias_right' => json_decode($request->request->get('noticias_right_input')),
             );
 
             if ($special->update($data)) {
@@ -297,10 +291,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_DELETE')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_DELETE')")
+     */
     public function deleteAction(Request $request)
     {
         $id       = $request->query->getDigits('id');
@@ -310,7 +303,7 @@ class SpecialsController extends Controller
         if (!empty($id)) {
             $special = new \Special($id);
 
-            $special->delete($id, $_SESSION['userid']);
+            $special->delete($id, $this->getUser()->id);
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _("Special deleted successfully.")
@@ -344,10 +337,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_ADMIN')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_ADMIN')")
+     */
     public function savePositionsAction(Request $request)
     {
         $positions = $request->get('positions');
@@ -368,7 +360,7 @@ class SpecialsController extends Controller
 
             // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
+            $cacheManager->setSmarty($this->get('core.template'));
             $cacheManager->delete('home|0');
         }
 
@@ -388,10 +380,9 @@ class SpecialsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SPECIAL_SETTINGS')")
-     *
-     * @CheckModuleAccess(module="SPECIAL_MANAGER")
-     **/
+     * @Security("hasExtension('SPECIAL_MANAGER')
+     *     and hasPermission('SPECIAL_SETTINGS')")
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

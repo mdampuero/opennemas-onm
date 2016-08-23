@@ -1,18 +1,13 @@
 <?php
 /**
- * Handles all the events after content updates
- *
- * @package Framework_EventListeners
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
-namespace Frontend\EventListeners;
+ */
+namespace Frontend\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
@@ -102,7 +97,7 @@ class PaypalNotifications implements EventSubscriberInterface
 
 
                 // Send mail to user notificating that subscription is activated
-                $tplMail = new \Template(TEMPLATE_USER);
+                $tplMail = getService('view')->getBackendTemplate();
                 $tplMail->caching = 0;
                 $mailBody = $tplMail->fetch('paywall/emails/payment_success.tpl');
                 $email = \Swift_Message::newInstance();
@@ -116,6 +111,10 @@ class PaypalNotifications implements EventSubscriberInterface
                 try {
                     $mailer = getService('mailer');
                     $mailer->send($email);
+
+                    $this->get('application.log')->notice(
+                        "Email sent. Frontend Paypal IPN (to: ".$ipnData['payer_email'].")"
+                    );
                 } catch (\Swift_SwiftException $e) {
                     // Write in log
                     $logger = getService('logger');

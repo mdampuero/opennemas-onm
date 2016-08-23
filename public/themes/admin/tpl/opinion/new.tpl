@@ -205,7 +205,7 @@
                                             </select>
                                         {aclelse}
                                             <select id="fk_author" name="fk_author">
-                                                <option value="{$smarty.session.id}" selected >{$smarty.session.realname}</option>
+                                              <option value="{$smarty.session._sf2_attributes.user->id}" selected >{$smarty.session._sf2_attributes.user->name}</option>
                                             </select>
                                         {/acl}
                                     </div>
@@ -220,7 +220,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="row">
@@ -270,7 +269,7 @@
                       </div>
                       <div class="grid-body">
                         <div class="checkbox">
-                          <input {if array_key_exists('only_registered', $params) && $opinion->params["only_registered"] == "1"}checked=checked{/if} id="only_registered" name="params[only_registered]" type="checkbox" value="1">
+                          <input {if array_key_exists('only_registered', $opinion->params) && $opinion->params["only_registered"] == "1"}checked=checked{/if} id="only_registered" name="params[only_registered]" type="checkbox" value="1">
                           <label for="only_registered">
                             {t}Only available for registered users{/t}
                           </label>

@@ -53,12 +53,12 @@ class ShareByEmailListener implements EventSubscriberInterface
         $baseDomain = $this->container->getParameter('opennemas.base_domain');
         $request    = $event->getRequest();
 
-        if (preg_match("@^\/content\/share-by-email/@", $request->getRequestUri())
+        if (preg_match("@^\/content\/share-by-email/[0-9]+@", $request->getRequestUri())
             && !preg_match('@' . $baseDomain . '@', $request->getHost())
             && $request->getMethod() === 'GET'
         ) {
             $url  = $request->getUri();
-            $host = $this->container->get('instance')->internal_name . $baseDomain;
+            $host = $this->container->get('core.instance')->internal_name . $baseDomain;
             $url  = str_replace($request->getHost(), $host, $url);
 
             $event->setResponse(new RedirectResponse($url, 301));

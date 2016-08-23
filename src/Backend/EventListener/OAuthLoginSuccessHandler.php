@@ -18,9 +18,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerI
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
-use Onm\Settings as s;
-use \Privileges;
-
 /**
  * Handler to load user data when an user logs in the system successfully by
  * using their social accounts.
@@ -28,32 +25,29 @@ use \Privileges;
 class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
+     * The security context.
+     *
      * @var SecurityContext
      */
     private $context;
 
     /**
+     * The router service.
+     *
      * @var Router
      */
     protected $router;
-
-    /**
-     * @var Session
-     */
-    private $session;
 
     /**
      * Constructs a new handler.
      *
      * @param SecurityContext $context The security context.
      * @param Router          $router  The router service.
-     * @param Session         $session The session.
      */
-    public function __construct($context, $router, $session)
+    public function __construct($context, $router)
     {
         $this->context = $context;
         $this->router  = $router;
-        $this->session = $session;
     }
 
     /**
@@ -68,22 +62,14 @@ class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $referer    = $this->router->generate('admin_welcome');
-        $user       = $token->getUser();
-        $valid      = true;
+        $referer = $this->router->generate('admin_welcome');
+        $user    = $token->getUser();
 
         // Set session array
-        $_SESSION['userid']           = $user->id;
-        $_SESSION['realname']         = $user->name;
-        $_SESSION['username']         = $user->username;
-        $_SESSION['email']            = $user->email;
-        $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
+        $request->getSession()->set('user', $user);
 
-        $this->session->set('user', $user);
-        $this->session->set('user_language', $user->getMeta('user_language'));
-
-        if ($this->session->get('_security.backend.target_path')) {
-            $referer = $this->session->get('_security.backend.target_path');
+        if ($request->getSession()->get('_security.backend.target_path')) {
+            $referer = $request->getSession()->get('_security.backend.target_path');
         }
 
         return new RedirectResponse($referer);

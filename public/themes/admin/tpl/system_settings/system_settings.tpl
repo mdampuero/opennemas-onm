@@ -147,6 +147,28 @@
                       </div>
                     </div>
                     <div class="form-group">
+                      <label class="form-label" for="site_color_secondary">
+                        {t}Site secondary color{/t}
+                      </label>
+                      <span class="help">
+                        {t}Color used for custom elements.{/t}
+                      </span>
+                      <div class="controls">
+                        <div class="input-group">
+                          <span class="input-group-addon" ng-if="site_color_secondary.indexOf('#') > -1" ng-style="{ 'background-color': site_color_secondary }">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                          </span>
+                          <span class="input-group-addon" ng-if="site_color_secondary.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + site_color_secondary }">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                          </span>
+                          <input class="form-control" id="site_color_secondary" name="site_color_secondary" colorpicker="hex" ng-model="site_color_secondary" type="text" ng-init="site_color_secondary='{$configs['site_color_secondary']|default:""}'">
+                          <div class="input-group-btn">
+                            <button class="btn btn-default" ng-click="site_color_secondary='{$configs['site_color_secondary']|default:""}'" type="button">{t}Reset{/t}</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <div class="checkbox">
                         <input class="form-control" id="allow_logo" name="section_settings[allowLogo]" type="checkbox" value="1" {if $configs['section_settings']['allowLogo'] eq "1"}checked{/if}/>
                         <label class="form-label" for="allow_logo">

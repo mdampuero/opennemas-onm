@@ -9,10 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,13 +27,12 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_ADMIN')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_ADMIN')")
      */
     public function listAction()
     {
-        $allInteligentWidgets = \Widget::getAllInteligentWidgets();
+        $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
         $allInteligentWidgetsContents = [];
         foreach ($allInteligentWidgets as $type) {
@@ -58,9 +56,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_UPDATE')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_UPDATE')")
      */
     public function showAction(Request $request)
     {
@@ -84,9 +81,7 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widgets'));
         }
 
-        $allInteligentWidgets = \Widget::getAllInteligentWidgets();
-
-        $_SESSION['from'] = $request->server->get("HTTP_REFERER").'?'.$request->getQueryString();
+        $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
         return $this->render(
             'widget/new.tpl',
@@ -107,9 +102,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_CREATE')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -153,7 +147,7 @@ class WidgetsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_widget_show', ['id' => $widget->id]));
         } else {
-            $allInteligentWidgets = \Widget::getAllInteligentWidgets();
+            $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
             return $this->render(
                 'widget/new.tpl',
@@ -172,9 +166,8 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_UPDATE')")
-     *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')
+     *     and hasPermission('WIDGET_UPDATE')")
      */
     public function updateAction(Request $request)
     {
@@ -244,7 +237,7 @@ class WidgetsController extends Controller
      * @param  Request  $request the request object
      * @return Response          the response object
      *
-     * @CheckModuleAccess(module="WIDGET_MANAGER")
+     * @Security("hasExtension('WIDGET_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {

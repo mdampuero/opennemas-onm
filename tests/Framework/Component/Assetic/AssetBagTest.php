@@ -3,14 +3,15 @@
 namespace Tests\Framework\Component\Assetic;
 
 use Framework\Component\Assetic\AssetBag;
-use Onm\Instance\Instance;
+use Common\ORM\Entity\Instance;
 
 class AssetBagTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $instance = new Instance();
-        $instance->settings = [ 'TEMPLATE_USER' => 'es.openhost.theme.foo' ];
+        $instance = new Instance([
+            'settings' => [ 'TEMPLATE_USER' => 'es.openhost.theme.foo' ]
+        ]);
 
         $this->config = [
             'folders' => [

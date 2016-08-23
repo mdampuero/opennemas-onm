@@ -1,19 +1,15 @@
 <?php
 /**
- * Handles the actions for the user profile
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,67 +17,52 @@ use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the user profile
- *
- * @package Frontend_Controllers
- **/
+ * Handles the actions for the user profile.
+ */
 class UserController extends Controller
 {
     /**
-     * Shows the user information
+     * Shows the user information.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function showAction()
     {
-        if (!is_array($_SESSION)
-            || (is_array($_SESSION) && !array_key_exists('userid', $_SESSION))
-            && (
-                is_array($_SESSION)
-                && !array_key_exists('userid', $_SESSION)
-                && empty($_SESSION['userid'])
-            )
-        ) {
+        if (empty($this->getUser())) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        $user = new \User($_SESSION['userid']);
-        $user->getMeta();
+        $user = $this->get('orm.manager')->getRepository('User')
+            ->find($this->getUser()->id);
 
         // Get current time
         $currentTime = new \DateTime();
 
         // Get user orders
-        $order = new \Order();
-        $userOrders = $order->find('user_id = '.$_SESSION['userid']);
+        $order      = new \Order();
+        $userOrders = $order->find('user_id = ' . $user->id);
 
         // Fetch paywall settings
-        $paywallSettings = s::get('paywall_settings');
+        $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
 
-        $this->view = new \Template(TEMPLATE_USER);
-        return $this->render(
-            'user/show.tpl',
-            array(
-                'user'             => $user,
-                'current_time'     => $currentTime,
-                'paywall_settings' => $paywallSettings,
-                'user_orders'      => $userOrders
-            )
-        );
+        return $this->render( 'user/show.tpl', [
+            'user'             => $user,
+            'current_time'     => $currentTime,
+            'paywall_settings' => $paywallSettings,
+            'user_orders'      => $userOrders
+        ]);
     }
 
-
-
     /**
-     * Handles the registration of a new user in frontend
+     * Handles the registration of a new user in frontend.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function registerAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
+        $sm = $this->get('setting_repository');
 
         $errors = [];
         if ('POST' == $request->getMethod()) {
@@ -144,10 +125,10 @@ class UserController extends Controller
             if (count($errors) <= 0) {
                 $url = $this->generateUrl('frontend_user_activate', array('token' => $data['token']), true);
 
-                $tplMail = new \Template(TEMPLATE_USER);
-                $tplMail->caching = 0;
+                $this->view->setCaching(0);
+
                 $mailSubject = sprintf(_('New user account in %s'), s::get('site_title'));
-                $mailBody = $tplMail->fetch(
+                $mailBody    = $this->renderView(
                     'user/emails/register.tpl',
                     array(
                         'name' => $data['name'],
@@ -168,10 +149,14 @@ class UserController extends Controller
                             ->setSubject($mailSubject)
                             ->setBody($mailBody, 'text/plain')
                             ->setTo($data['email'])
-                            ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+                            ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
 
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
+
+                        $this->get('application.log')->notice(
+                            "Email sent. Frontend register user (to: ".$data['email'].")"
+                        );
 
                         $this->view->assign([
                             'mailSent' => true,
@@ -205,118 +190,102 @@ class UserController extends Controller
     }
 
     /**
-     * Updates the user data
+     * Updates the user data.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function updateAction(Request $request)
     {
-        if (!isset($_SESSION['userid'])) {
+        if (empty($this->getUser())) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        // Fetch user data and update
-        $user = $this->get('user_repository')->find($_SESSION['userid']);
+        $data = $request->request->all();
 
-        // Get variables from the user FORM an set some manually
-        $data['id']              = $_SESSION['userid'];
-        $data['username']        = $request->request->filter('username', null, FILTER_SANITIZE_STRING);
-        $data['name']            = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
-        $data['email']           = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-        $data['password']        = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
-        $data['passwordconfirm'] = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
-        $data['sessionexpire']   = $user->sessionexpire;
-        $data['type']            = $user->type;
-        $data['activated']       = $user->activated;
-        $data['bio']             = $user->bio;
-        $data['url']             = $user->url;
-        $data['avatar_img_id']   = $user->avatar_img_id;
-
-        if ($data['password'] != $data['passwordconfirm']) {
+        if ($data['password'] !== $data['password-verify']) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('Password and confirmation must be equal.')
             );
+
             return $this->redirect($this->generateUrl('frontend_user_show'));
         }
 
-        if (!is_null($user) && $user->id > 0) {
-            if ($user->update($data)) {
-                // Set usermeta information
-                $meta = $request->request->get('meta');
-                foreach ($meta as $key => $value) {
-                    $user->setMeta(array($key => $value));
-                }
-                // Clear caches
-                $this->dispatchEvent('author.update', array('id' => $data['id']));
-
-                $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
-            } else {
-                $this->get('session')->getFlashBag()->add('error', _('Unable to update the user.'));
-            }
-        } else {
-            $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
+        // Remove to prevent password changes when empty
+        if (empty($data['password'])) {
+            unset($data['password']);
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
+        unset($data['password-verify']);
+
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
+
+        try {
+            $user = $em->getRepository('User')->find($this->getUser()->id);
+
+            if (!empty($data['password'])) {
+                $encoder = $this->get('security.password_encoder');
+                $data['password'] = $encoder->encodePassword($user, $data['password']);
+            }
+
+            $user->merge($converter->objectify($data));
+            $em->persist($user);
+
+            $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
+            $this->dispatchEvent('author.update', array('id' => $user->id));
+        } catch (EntityNotFoundException $e) {
+            $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', _('Unable to update the user.'));
+        }
 
         return $this->redirect($this->generateUrl('frontend_user_show'));
     }
 
     /**
-     * Activates an user account given an token
+     * Activates an user account given an token.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function activateAction(Request $request)
     {
         // When user confirms registration from email
         $token    = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-        $captcha  = '';
-        $user     = new \User();
-        $userData = $user->findByToken($token);
+        $em       = $this->get('orm.manager');
+        $oql      = sprintf('token = "%s"', $token);
 
-        if ($userData) {
-            $user->activateUser($userData->id);
+        try {
+            $user = $em->getRepository('User')->findOneBy($oql);
 
-            if ($user->login($userData->username, $userData->password, $userData->token, $captcha)) {
-                // Increase security by regenerating the id
-                $request->getSession()->migrate();
+            $user->activated  = 1;
+            $user->last_login = new \DateTime('now');
+            $user->token      = null;
 
-                // Set last login date
-                $user->setLastLoginDate();
+            $em->persist($user);
 
-                // Set token to null
-                $user->updateUserToken($user->id, null);
+            $sm = $this->get('setting_repository');
+            $request->getSession()->migrate();
 
-                $_SESSION['userid']           = $user->id;
-                $_SESSION['realname']         = $user->name;
-                $_SESSION['username']         = $user->username;
-                $_SESSION['email']            = $user->email;
-                $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
+            $token   = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
+            $session = $request->getSession();
 
-                $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
-                $session = $request->getSession();
-
-                $securityContext = $this->get('security.token_storage');
-                $securityContext->setToken($token);
-                $session->set('user', $user);
-                $session->set('_security_frontend', serialize($token));
-            }
+            $securityContext = $this->get('security.token_storage');
+            $securityContext->setToken($token);
+            $session->set('user', $user);
+            $session->set('_security_frontend', serialize($token));
 
             $session->getFlashBag()->add('success', _('Log in succesful.'));
 
             // Send welcome mail with link to subscribe action
             $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
 
-            $mailSubject      = sprintf(_('Welcome to %s'), s::get('site_name'));
-
-            $tplMail          = new \Template(TEMPLATE_USER);
-            $mailBody         = $tplMail->fetch(
+            $mailSubject = sprintf(_('Welcome to %s'), $sm->get('site_name'));
+            $mailBody    = $this->renderView(
                 'user/emails/welcome.tpl',
                 array(
                     'name' => $user->name,
@@ -330,12 +299,15 @@ class UserController extends Controller
                 ->setSubject($mailSubject)
                 ->setBody($mailBody, 'text/plain')
                 ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
+                ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
 
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
+
+                $this->get('application.log')->notice(
+                    "Email sent. Frontend activate user (to: ".$uiser->email.")"
+                );
 
                 $this->view->assign('mailSent', true);
             } catch (\Exception $e) {
@@ -347,9 +319,7 @@ class UserController extends Controller
 
                 $this->get('session')->getFlashBag()->add('error', _('Unable to send your welcome email.'));
             }
-
-            return $this->redirect($this->generateUrl('frontend_frontpage'));
-        } else {
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('There was an error while creating your user account.')
@@ -357,16 +327,18 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }
+
+        return $this->redirect($this->generateUrl('frontend_frontpage'));
     }
 
     /**
-     * Shows the form for recovering the pass of a user and
-     * sends the mail to the user
+     * Shows the form for recovering the pass of a user and send the mail to the
+     * user.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function recoverPasswordAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
@@ -374,6 +346,7 @@ class UserController extends Controller
         }
 
         $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        $sm    = $this->get('setting_repository');
 
         // Get user by email
         $user = new \User();
@@ -387,11 +360,10 @@ class UserController extends Controller
 
             $url = $this->generateUrl('frontend_user_resetpass', array('token' => $token), true);
 
-            $tplMail = new \Template(TEMPLATE_USER);
-            $tplMail->caching = 0;
+            $this->view->setCaching(0);
 
-            $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
-            $mailBody = $tplMail->fetch(
+            $mailSubject = sprintf(_('Password reminder for %s'), $sm->get('site_title'));
+            $mailBody = $this->renderView(
                 'user/emails/recoverpassword.tpl',
                 array(
                     'user' => $user,
@@ -405,11 +377,15 @@ class UserController extends Controller
                 ->setSubject($mailSubject)
                 ->setBody($mailBody, 'text/plain')
                 ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+                ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
 
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
+
+                $this->get('application.log')->notice(
+                    "Email sent. Frontend recover password (to: ".$user->email.")"
+                );
 
                 $this->view->assign(
                     array(
@@ -438,12 +414,12 @@ class UserController extends Controller
     }
 
     /**
-     * Regenerates the pass for a user
+     * Regenerates the pass for a user.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function regeneratePasswordAction(Request $request)
     {
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
@@ -482,234 +458,19 @@ class UserController extends Controller
             }
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
-        return $this->render('user/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+        return $this->render('user/regenerate_pass.tpl', [
+            'token' => $token,
+            'user'  => $user
+        ]);
     }
 
     /**
-     * Generates the HTML for the user menu by ajax
+     * Generates the HTML for the user menu by ajax.
      *
-     *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function getUserMenuAction()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         return $this->render('user/menu.tpl');
-    }
-
-    /**
-     * Shows the author frontpage
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function authorFrontpageAction(Request $request)
-    {
-        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 12;
-
-        $this->view = new \Template(TEMPLATE_USER);
-        $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
-
-        if (($this->view->caching == 0)
-           || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
-        ) {
-            // Get user by slug
-            $ur = $this->get('user_repository');
-            $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
-            if (!empty($user)) {
-                $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
-                $user->getMeta();
-
-                $criteria = array(
-                    'fk_author'       => array(array('value' => $user->id)),
-                    'fk_content_type' => array(array('value' => array(1, 4, 7, 9), 'operator' => 'IN')),
-                    'content_status'  => array(array('value' => 1)),
-                    'in_litter'       => array(array('value' => 0)),
-                );
-
-                $er = $this->get('entity_repository');
-                $contentsCount  = $er->countBy($criteria);
-                $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
-
-                foreach ($contents as &$item) {
-                    $item = $item->get($item->id);
-                    $item->author = $user;
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = $this->get('entity_repository')->find('Photo', $item->img1);
-                        $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
-                    }
-
-                    if ($item->fk_content_type == 7) {
-                        $image = $this->get('entity_repository')->find('Photo', $item->cover_id);
-                        $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
-                        $item->summary = $item->subtitle;
-                        $item->subtitle= '';
-                    }
-
-                    if ($item->fk_content_type == 9) {
-                        $item->obj_video = $item;
-                        $item->summary = $item->description;
-                    }
-
-                    if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                        $item->video = $this->get('entity_repository')->find('Video', $item->fk_video2);
-                    }
-                }
-                // Build the pagination
-                $pagination = $this->get('paginator')->get([
-                    'directional' => true,
-                    'epp'         => $itemsPerPage,
-                    'page'        => $page,
-                    'total'       => $contentsCount,
-                    'route'       => [
-                        'name'   => 'frontend_author_frontpage',
-                        'params' => [ 'slug' => $slug, ]
-                    ],
-                ]);
-
-                $this->view->assign([
-                    'contents'   => $contents,
-                    'author'     => $user,
-                    'pagination' => $pagination,
-                ]);
-            }
-        }
-
-        $ads = $this->getInnerAds();
-        $this->view->assign('advertisements', $ads);
-
-        return $this->render(
-            'user/author_frontpage.tpl',
-            array(
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'author_user_frontpage,'.$slug.','.$page,
-                'x-cache-for' => '+1 day'
-            )
-        );
-    }
-
-    /**
-     * Shows the author frontpage from external source
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function extAuthorFrontpageAction(Request $request)
-    {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-
-        // Get sync params
-        $wsUrl = '';
-        $syncParams = s::get('sync_params');
-        if ($syncParams) {
-            foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-                }
-            }
-        }
-
-        if (empty($wsUrl)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-        }
-
-        return $this->redirect($wsUrl.'/author/'.$slug);
-    }
-
-    /**
-     * Shows the author frontpage
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function frontpageAuthorsAction(Request $request)
-    {
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 16;
-
-        $this->view = new \Template(TEMPLATE_USER);
-        $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
-
-        if (($this->view->caching == 0)
-           || (!$this->view->isCached('user/frontpage_author.tpl', $cacheID))
-        ) {
-            $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "
-                ." WHERE users.fk_user_group  LIKE '%3%' "
-                ." AND contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
-                ." AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
-
-            $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-
-            $authorsContents = $rs->GetArray();
-
-            $totalUsers = count($authorsContents);
-
-            if (empty($page)) {
-                $authorsContents = array_slice($authorsContents, ($page)*$itemsPerPage, $itemsPerPage);
-            } else {
-                $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
-            }
-
-            // Build the pagination
-            $pagination = $this->get('paginator')->get([
-                'directional' => true,
-                'epp'         => $itemsPerPage,
-                'page'        => $page,
-                'total'       => $totalUsers,
-                'route'       => 'frontend_frontpage_authors'
-            ]);
-
-            // Get user by slug
-            $ur = $this->get('user_repository');
-            foreach ($authorsContents as &$element) {
-                $user = $ur->find($element['id']);
-                $user->total_contents = $element['total_contents'];
-                $element = $user;
-            }
-
-            $this->view->assign(
-                array(
-                    'authors_contents' => $authorsContents,
-                    'pagination'       => $pagination,
-                )
-            );
-        }
-
-        $ads = $this->getInnerAds();
-        $this->view->assign('advertisements', $ads);
-
-        return $this->render(
-            'user/frontpage_authors.tpl',
-            array(
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'authors_users_frontpage,'.$page,
-                'x-cache-for' => '+1 day'
-            )
-        );
-    }
-
-    /**
-     * Fetches advertisements for article inner
-     *
-     * @param string category the category identifier
-     *
-     * @return void
-     **/
-    public static function getInnerAds($category = 0)
-    {
-        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

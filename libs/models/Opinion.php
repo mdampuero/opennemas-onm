@@ -179,8 +179,6 @@ class Opinion extends Content
 
         parent::create($data);
 
-        $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `fk_author_img`, `type_opinion`) VALUES (?,?,?,?)';
-
         $values = [
             $this->id,
             (int) $data['fk_author'],
@@ -188,28 +186,39 @@ class Opinion extends Content
             $data['type_opinion']
         ];
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        try {
+            $rs = getService('dbal_connection')->insert(
+                "opinions",
+                [
+                    'pk_opinion'    => $this->id,
+                    'fk_author'     => (int) $data['fk_author'],
+                    'fk_author_img' => (int) $data['fk_author_img'],
+                    'type_opinion'  => $data['type_opinion'],
+                ]
+            );
+
+            if (array_key_exists('summary', $data) && !empty($data['summary'])) {
+                parent::setMetadata('summary', $data['summary']);
+            }
+
+            if (array_key_exists('img1', $data) && !empty($data['img1'])) {
+                parent::setMetadata('img1', $data['img1']);
+            }
+            if (array_key_exists('img2', $data) && !empty($data['img2'])) {
+                parent::setMetadata('img2', $data['img2']);
+            }
+            if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
+                parent::setMetadata('img1_footer', $data['img1_footer']);
+            }
+            if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
+                parent::setMetadata('img2_footer', $data['img2_footer']);
+            }
+
+            return $this->id;
+        } catch (\Exception $e) {
+            error_log('Error on Opinion::create: '.$e->getMessage());
             return false;
         }
-
-        if (array_key_exists('summary', $data) && !empty($data['summary'])) {
-            parent::setMetadata('summary', $data['summary']);
-        }
-
-        if (array_key_exists('img1', $data) && !empty($data['img1'])) {
-            parent::setMetadata('img1', $data['img1']);
-        }
-        if (array_key_exists('img2', $data) && !empty($data['img2'])) {
-            parent::setMetadata('img2', $data['img2']);
-        }
-        if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
-            parent::setMetadata('img1_footer', $data['img1_footer']);
-        }
-        if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
-            parent::setMetadata('img2_footer', $data['img2_footer']);
-        }
-
-        return $this->id;
     }
 
     /**
@@ -273,49 +282,49 @@ class Opinion extends Content
 
         parent::update($data);
 
-        $sql = "UPDATE opinions "
-             . "SET `fk_author`=?, `fk_author_img`=?, `type_opinion`=? "
-             . "WHERE pk_opinion=?";
+        try {
+            $rs = getService('dbal_connection')->update(
+                "opinions",
+                [
+                    'fk_author'     => (int) $data['fk_author'],
+                    'fk_author_img' => (int) $data['fk_author_img'],
+                    'type_opinion'  => $data['type_opinion'],
+                ],
+                [ 'pk_opinion' => (int) $data['id'] ]
+            );
 
-        $values = array(
-            (int) $data['fk_author'],
-            (int) $data['fk_author_img'],
-            $data['type_opinion'],
-            (int) $data['id']
-        );
+            if (array_key_exists('summary', $data) && !empty($data['summary'])) {
+                parent::setMetadata('summary', $data['summary']);
+            } else {
+                parent::removeMetadata('summary');
+            }
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if (array_key_exists('img1', $data) && !empty($data['img1'])) {
+                parent::setMetadata('img1', $data['img1']);
+            } else {
+                parent::removeMetadata('img1');
+            }
+            if (array_key_exists('img2', $data) && !empty($data['img2'])) {
+                parent::setMetadata('img2', $data['img2']);
+            } else {
+                parent::removeMetadata('img2');
+            }
+            if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
+                parent::setMetadata('img1_footer', $data['img1_footer']);
+            } else {
+                parent::removeMetadata('img1_footer');
+            }
+            if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
+                parent::setMetadata('img2_footer', $data['img2_footer']);
+            } else {
+                parent::removeMetadata('img2_footer');
+            }
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error on Opinion::update: '.$e->getMessage());
             return false;
         }
-
-        if (array_key_exists('summary', $data) && !empty($data['summary'])) {
-            parent::setMetadata('summary', $data['summary']);
-        } else {
-            parent::removeMetadata('summary');
-        }
-
-        if (array_key_exists('img1', $data) && !empty($data['img1'])) {
-            parent::setMetadata('img1', $data['img1']);
-        } else {
-            parent::removeMetadata('img1');
-        }
-        if (array_key_exists('img2', $data) && !empty($data['img2'])) {
-            parent::setMetadata('img2', $data['img2']);
-        } else {
-            parent::removeMetadata('img2');
-        }
-        if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
-            parent::setMetadata('img1_footer', $data['img1_footer']);
-        } else {
-            parent::removeMetadata('img1_footer');
-        }
-        if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
-            parent::setMetadata('img2_footer', $data['img2_footer']);
-        } else {
-            parent::removeMetadata('img2_footer');
-        }
-
-        return true;
     }
 
     /**
@@ -327,15 +336,25 @@ class Opinion extends Content
      **/
     public function remove($id)
     {
+        if ((int) $id <= 0) return false;
+
         parent::remove($id);
 
-        $sql = 'DELETE FROM opinions WHERE pk_opinion =?';
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "opinions",
+                [ 'pk_opinion' => $id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+            if (!$rs) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -345,7 +364,7 @@ class Opinion extends Content
      **/
     public function render($params)
     {
-        $tpl = new Template(TEMPLATE_USER);
+        $tpl = getService('core.template');
 
         if ((int) $this->type_opinion == 1) {
             $this->author_name_slug = 'editorial';
@@ -357,24 +376,24 @@ class Opinion extends Content
             $this->author_name_slug = $this->name;
 
             if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
-                $tpl->assign('item', $this);
+                $params['item'] = $this;
                 $template = 'frontpage/contents/_blog.tpl';
                 if ($params['custom'] == 1) {
                     $template = $params['tpl'];
                 }
-                return $tpl->fetch($template);
+                return $tpl->fetch($template, $params);
             }
         }
 
-        $tpl->assign('item', $this);
-        $tpl->assign('actual_category', $params['actual_category']);
-        $tpl->assign('actual_category_id', $params['actual_category_id']);
-        $tpl->assign('cssclass', 'opinion');
-        $template = 'frontpage/contents/_opinion.tpl';
+        $params['item']     = $this;
+        $params['cssclass'] = 'opinion';
+        $template           = 'frontpage/contents/_opinion.tpl';
+
         if ($params['custom'] == 1) {
             $template = $params['tpl'];
         }
-        return $tpl->fetch($template);
+
+        return $tpl->fetch($template, $params);
     }
 
     /**

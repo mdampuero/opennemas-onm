@@ -103,6 +103,11 @@ function smarty_function_structured_data_tags($params, &$smarty)
             $author = getService('setting_repository')->get('site_name');
         }
 
+        $created = $content->created instanceof \DateTime ?
+            $content->created->format('Y-m-d H:i:s') : $content->created;
+        $changed = $content->changed instanceof \DateTime ?
+            $content->changed->format('Y-m-d H:i:s') : $content->changed;
+
         // Generate tags
         $output = '<script type="application/ld+json">';
         $output .= '{
@@ -121,8 +126,8 @@ function smarty_function_structured_data_tags($params, &$smarty)
                             "name" : "'.$author.'"
                         },';
         $output .= '
-                        "datePublished" : "'.$content->created.'",
-                        "dateModified": "'.$content->changed.'",';
+                        "datePublished" : "'.$created.'",
+                        "dateModified": "'.$changed.'",';
 
         if (!empty($imageUrl)) {
             if (empty($imageWidth)) {

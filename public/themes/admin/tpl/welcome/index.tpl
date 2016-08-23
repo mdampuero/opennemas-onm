@@ -107,7 +107,7 @@
             {is_module_activated name="STATIC_PAGES_MANAGER"}
             {acl isAllowed="STATIC_PAGE_CREATE"}
             <div class="button">
-              <a href="{url name=admin_static_pages_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
+              <a href="{url name=backend_static_page_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-file-text-o"></i>{t}Static page{/t}
               </a>
             </div>

@@ -75,13 +75,12 @@
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
-      var instanceMainDomain = '{$smarty.const.INSTANCE_MAIN_DOMAIN}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
   {block name="body"}
     <div class="overlay"></div>
     <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl" ng-init="{block name="ng-init"}{/block}getLatest()">
@@ -99,7 +98,7 @@
               <ul class="nav quick-section">
                 {acl isAllowed="ROLE_ADMIN"}
                   <li class="quicklinks">
-                    <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                    <a href="{url name=backend_account_show}" title="{t}Instance information{/t}">
                       <i class="fa fa-bullseye"></i>
                       {t}My newspaper{/t}
                     </a>
@@ -148,7 +147,7 @@
                       {is_module_activated name="STATIC_PAGES_MANAGER"}
                         {acl isAllowed="STATIC_PAGE_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_static_pages_create}">
+                            <a href="{url name=backend_static_page_create}">
                               <i class="fa fa-file-o"></i>
                               <span class="title">{t}Page{/t}</span>
                             </a>
@@ -362,10 +361,10 @@
                     {/if}
                     <i class="fa fa-angle-down"></i>
                     <div class="profile-pic">
-                      {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
+                      {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$_template->getImageDir() image=true size="25"}
                     </div>
                     <span class="title">
-                      {$smarty.session.realname}
+                      {$smarty.session._sf2_attributes.user->name}
                     </span>
                   </span>
                   <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
@@ -385,7 +384,7 @@
                     </li>
                     <li>
                       {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                        <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session.userid}/show" target="_blank">
+                        <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session._sf2_attributes.user->id}/show" target="_blank">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>
@@ -458,6 +457,7 @@
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/ckeditor/ckeditor.js,
       @Common/components/fastclick/lib/fastclick.js,
+      @Common/components/lodash/dist/lodash.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
@@ -465,6 +465,7 @@
       @Common/components/messenger/build/js/messenger-theme-flat.js,
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
+      @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
       @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
       @Common/components/select2/select2.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
@@ -498,6 +499,7 @@
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-gravatar/gravatar.js,
+      @Common/src/angular-datetimepicker/datetimepicker.js,
       @Common/src/angular-http/http.js,
       @Common/src/angular-history/history.js,
       @Common/src/angular-item-service/itemService.js,
@@ -514,6 +516,8 @@
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-routing/routing.js,
       @Common/src/angular-scroll/angular-scroll.js,
+      @Common/src/angular-oql/*,
+      @Common/src/angular-serializer/serializer.js,
       @Common/src/sidebar/js/sidebar.js,
       @Common/js/onm/md5.min.js,
       @Common/js/routes.js,

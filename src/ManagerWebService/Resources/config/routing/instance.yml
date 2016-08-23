@@ -1,10 +1,3 @@
-manager_ws_instance_create:
-    path:     /instances
-    defaults: { _controller: ManagerWebServiceBundle:Instance:create }
-    methods:  [ POST ]
-    options:
-        expose: true
-
 manager_ws_instance_delete:
     path:     /instances/{id}
     defaults: { _controller: ManagerWebServiceBundle:Instance:delete }
@@ -23,6 +16,13 @@ manager_ws_instance_patch:
     path:     /instances/{id}
     defaults: { _controller: ManagerWebServiceBundle:Instance:patch }
     methods:  [ PATCH ]
+    options:
+        expose: true
+
+manager_ws_instance_save:
+    path:     /instances
+    defaults: { _controller: ManagerWebServiceBundle:Instance:save }
+    methods:  [ POST ]
     options:
         expose: true
 

@@ -112,44 +112,6 @@ class Special extends Content
     }
 
     /**
-     * Creates an special from a data array and stores it in db
-     *
-     * @param array $data the data of the special
-     *
-     * @return bool true if the object was stored
-     */
-    public function create($data)
-    {
-        parent::create($data);
-
-        $data['id'] = $this->id;
-
-        if (!array_key_exists('pdf_path', $data)) {
-            $data['pdf_path'] = '';
-        }
-
-        $sql = "INSERT INTO specials "
-             . "(`pk_special`, `subtitle`, `img1`, `pdf_path`)"
-             . " VALUES (?,?,?,?)";
-
-        $values = array(
-            $this->id,
-            $data['subtitle'],
-            (int) $data['img1'],
-            $data['pdf_path']
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-        $this->saveItems($data);
-
-        $this->read($this->id);
-
-        return $this;
-    }
-
-    /**
      * Loads a special information given its special id
      *
      * @param int $id the special id
@@ -159,7 +121,9 @@ class Special extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -171,14 +135,13 @@ class Special extends Content
             if (!$rs) {
                 return false;
             }
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
@@ -200,6 +163,46 @@ class Special extends Content
     }
 
     /**
+     * Creates an special from a data array and stores it in db
+     *
+     * @param array $data the data of the special
+     *
+     * @return bool true if the object was stored
+     */
+    public function create($data)
+    {
+        try {
+            if (!parent::create($data)) {
+                return false;
+            }
+
+            $data['id'] = $this->id;
+
+            if (!array_key_exists('pdf_path', $data)) {
+                $data['pdf_path'] = '';
+            }
+
+            getService('dbal_connection')->insert(
+                'specials',
+                [
+                    'pk_special' => $this->id,
+                    'subtitle'   => $data['subtitle'],
+                    'img1'       => (int) $data['img1'],
+                    'pdf_path'   => $data['pdf_path']
+                ]
+            );
+
+            $this->saveItems($data);
+            $this->read($this->id);
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log('Error on Special::create: '.$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Updates an special from a data array
      *
      * @param array $data the data of the special
@@ -208,27 +211,32 @@ class Special extends Content
      */
     public function update($data)
     {
-        parent::update($data);
+        try {
+            if (!parent::update($data)) {
+                return false;
+            }
 
-        if (!array_key_exists('pdf_path', $data)) {
-            $data['pdf_path'] = '';
-        }
+            if (!array_key_exists('pdf_path', $data)) {
+                $data['pdf_path'] = '';
+            }
 
-        $sql = "UPDATE specials SET `subtitle`=?, `img1`=?,  `pdf_path`=? WHERE pk_special=?";
-        $values = array(
-            $data['subtitle'],
-            (int) $data['img1'],
-            $data['pdf_path'],
-            intval($data['id']),
-        );
+            $rs = getService('dbal_connection')->update(
+                'specials',
+                [
+                    'subtitle' => $data['subtitle'],
+                    'img1'     => (int) $data['img1'],
+                    'pdf_path' => $data['pdf_path'],
+                ],
+                [ 'pk_special' => intval($data['id']) ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $this->saveItems($data);
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error on Special::update: '.$e->getMessage());
             return false;
         }
-
-        $this->saveItems($data);
-
-        return true;
     }
 
     /**
@@ -240,23 +248,35 @@ class Special extends Content
      */
     public function remove($id)
     {
-        parent::remove($id);
+        if ((int) $id <= 0) return false;
 
-        $sql    = 'DELETE FROM specials WHERE pk_special=?';
-        $values = array(intval($id));
+        try {
+            if (!parent::remove($id)) {
+                return false;
+            }
+            $rs = getService('dbal_connection')->delete(
+                "specials",
+                [ 'pk_special' => (int) $id ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if (!$rs) {
+                return false;
+            }
+
+            $rs = getService('dbal_connection')->delete(
+                'special_contents',
+                [ 'fk_special' => intval($id) ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error on Special:'.$e->getMessage());
             return false;
         }
-
-        $sql    = 'DELETE FROM special_contents WHERE fk_special=?';
-        $values = array(intval($id));
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -268,7 +288,9 @@ class Special extends Content
      */
     public function saveItems($data)
     {
-        $this->deleteAllContents($data['id']);
+        if (array_key_exists('id', $data) && !empty($data['id'])) {
+            $this->deleteAllContents($data['id']);
+        }
 
         if (isset($data['noticias_left'])) {
             $contents = $data['noticias_left'];
@@ -316,19 +338,26 @@ class Special extends Content
         if ($id == null) {
             return $items;
         }
-
-        $sql = 'SELECT * FROM `special_contents` WHERE fk_special=? ORDER BY position ASC';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
-
-        while (!$rs->EOF) {
-            $items[] = array(
-                'fk_content'   => $rs->fields['fk_content'],
-                'name'         => $rs->fields['name'],
-                'position'     => $rs->fields['position'],
-                'visible'      => $rs->fields['visible'],
-                'type_content' => $rs->fields['type_content'],
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT * FROM `special_contents` WHERE fk_special=? ORDER BY position ASC',
+                [ $id ]
             );
-            $rs->MoveNext();
+
+            foreach ($rs as $row) {
+                $items[] = array(
+                    'fk_content'   => $row['fk_content'],
+                    'name'         => $row['name'],
+                    'position'     => $row['position'],
+                    'visible'      => $row['visible'],
+                    'type_content' => $row['type_content'],
+                );
+            }
+
+            return $items;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
 
         return $items;
@@ -351,24 +380,24 @@ class Special extends Content
             return false;
         }
 
-        $sql = "INSERT INTO special_contents "
-            . "(`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`)"
-            . " VALUES (?,?,?,?,?,?)";
-        $values  = array(
-            $id,
-            $pkContent,
-            $position,
-            $name,
-            1,
-            $typeContent
-        );
+        try {
+            $rs = getService('dbal_connection')->insert(
+                "special_contents",
+                [
+                    'fk_special'   => $id,
+                    'fk_content'   => $pkContent,
+                    'position'     => $position,
+                    'name'         => $name,
+                    'visible'      => 1,
+                    'type_content' => $typeContent
+                ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -384,11 +413,16 @@ class Special extends Content
         if (is_null($id)) {
             return false;
         }
-        $sql    = 'DELETE FROM special_contents WHERE fk_content=? AND fk_special=?';
-        $values = array(intval($contentId), intval($id));
-        $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
 
-        if ($rs === false) {
+        $rs = getService('dbal_connection')->delete(
+            "special_contents",
+            [
+                'fk_content' => (int) $contentId,
+                'fk_special' => (int) $id,
+            ]
+        );
+
+        if (!$rs) {
             return false;
         }
 
@@ -407,10 +441,13 @@ class Special extends Content
         if (is_null($id)) {
             return false;
         }
-        $sql = 'DELETE FROM special_contents WHERE fk_special=?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
-        if ($rs === false) {
+        $rs = getService('dbal_connection')->delete(
+            "special_contents",
+            [ 'fk_special' => (int) $id ]
+        );
+
+        if (!$rs) {
             return false;
         }
 

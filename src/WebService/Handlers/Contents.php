@@ -75,16 +75,23 @@ class Contents
     {
         $this->validateInt($contentID);
 
-        $sql = "SELECT path FROM attachments WHERE `pk_attachment`=?";
-        $rs  = $GLOBALS['application']->conn->Execute($sql, $contentID);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT path FROM attachments WHERE `pk_attachment`=?",
+                [ $contentID ]
+            );
 
-        if ($rs->_numOfRows < 1) {
-            $returnValue = false;
-        } else {
-            $returnValue = $rs->fields['path'];
+            if (count($rs) < 1) {
+                $returnValue = false;
+            } else {
+                $returnValue = $rs['path'];
+            }
+
+            return $returnValue;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return $returnValue;
     }
 
     /*
@@ -92,13 +99,24 @@ class Contents
     */
     public function loadCategoryName($id)
     {
-        $ccm = \ContentCategoryManager::get_instance();
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT name FROM `contents_categories`,`content_categories` '
+                .'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
+                [ $id ]
+            );
 
-        $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
+            if (count($rs) < 1) {
+                $returnValue = false;
+            } else {
+                $returnValue = $rs['name'];
+            }
 
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
-
-        return $ccm->getName($rs);
+            return $returnValue;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
 
     }
 
@@ -107,93 +125,22 @@ class Contents
     */
     public function loadCategoryTitle($id)
     {
-        $ccm = \ContentCategoryManager::get_instance();
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT title FROM `contents_categories`,`content_categories` '
+                .'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
+                [ $id ]
+            );
 
-        $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
-
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
-
-        return $ccm->getTitle($rs);
-    }
-
-    /*
-    * @url GET /contents/setnumviews/:contentId
-    */
-    public function setNumViews($id = null)
-    {
-
-        if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
-            && empty($_SERVER['HTTP_USER_AGENT'])
-        ) {
-            return false;
-        }
-
-        $botStrings = array(
-            "google",
-            "bot",
-            "msnbot",
-            "facebookexternal",
-            "yahoo",
-            "spider",
-            "archiver",
-            "curl",
-            "python",
-            "nambu",
-            "twitt",
-            "perl",
-            "sphere",
-            "PEAR",
-            "java",
-            "wordpress",
-            "radian",
-            "crawl",
-            "yandex",
-            "eventbox",
-            "monitor",
-            "mechanize",
-        );
-
-        $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
-
-        foreach ($botStrings as $bot) {
-            if (stristr($httpUserAgent, $bot) != false) {
-                return false;
-            }
-            // if (preg_match("@".strtolower($httpUserAgent)."@", $bot) > 0) {
-            //     return false;
-            // }
-        }
-
-        if (is_null($id) || empty($id)) {
-            return false;
-        }
-
-        // Multiple exec SQL
-        if (is_array($id)) {
-            $ads = array();
-
-            if (count($id)>0) {
-                foreach ($id as $item) {
-                    if (is_object($item)
-                       && isset($item->pk_advertisement)
-                       && !empty($item->pk_advertisement)
-                    ) {
-                        $ads[] = $item->pk_advertisement;
-                    }
-                }
-            }
-            if (empty($ads)) {
-                return false;
+            if (count($rs) < 1) {
+                $returnValue = false;
+            } else {
+                $returnValue = $rs['title'];
             }
 
-            $sql =  'UPDATE `contents` SET `views`=`views`+1'
-                    .' WHERE  `pk_content` IN ('.implode(',', $ads).')';
-        } else {
-            $sql =  'UPDATE `contents` SET `views`=`views`+1 '
-                    .'WHERE `content_status`=1 AND `pk_content`='.$id;
-        }
-
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+            return $returnValue;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
     }

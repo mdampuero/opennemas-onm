@@ -43,16 +43,22 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        throw new \Exception('Not updated to the new model, please reimplement. This command uses ContentManager::getContentsIdsForHomepageOfCategory, it was deleted on July 29th 2016.');
+
         $instance = $input->getArgument('instance-name');
+
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
 
         // Initialize application
         $basePath = APPLICATION_PATH;
 
         chdir($basePath);
 
-        $dbConn = $this->getContainer()->get('db_conn_manager');
-
-        $rs = $dbConn->GetAll('SELECT internal_name, settings FROM instances');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $rs = $conn->fetchAll('SELECT internal_name, settings FROM instances');
 
         $instances = array();
         foreach ($rs as $database) {
@@ -70,15 +76,8 @@ EOF
         define('INSTANCE_UNIQUE_NAME', $instance);
 
         // Initialize database connection
-        $this->connection = $this->getContainer()->get('db_conn');
-        $this->connection->selectDatabase($instances[$instance]['BD_DATABASE']);
-        $conn = getService('dbal_connection');
+        $conn = getService('orm.manager')->getConnection('instance');
         $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
-
-        // Initialize application
-        $GLOBALS['application'] = new \Application();
-        \Application::load();
-        \Application::initDatabase($this->connection);
 
         define('CACHE_PREFIX', $instance);
 
@@ -90,8 +89,6 @@ EOF
 
         $cm = new \ContentManager();
         foreach ($allcategorys as $category) {
-            $_SESSION['username'] = 'console';
-            $_SESSION['userid'] = '0';
             $cache = getService('cache');
             $cache->delete('frontpage_elements_map_' . $category->id);
 
@@ -112,9 +109,6 @@ EOF
                     'content_type' => $content->content_type_l10n_name,
                 ];
             }
-
-            $_SESSION['username'] = 'console';
-            $_SESSION['userid'] = '0';
 
             // Save contents
             $savedProperly = \ContentManager::saveContentPositionsForHomePage(

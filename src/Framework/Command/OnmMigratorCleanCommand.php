@@ -2,13 +2,10 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Diego Blanco Estévez <diego@openhost.es>
- *
  */
 namespace Framework\Command;
 
@@ -76,7 +73,8 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
         $debug    = $input->getOption('debug');
 
         // Initialize target database
-        $this->targetConnection = getService('db_conn');
+        $this->targetConnection = $this->getContainer()->get('orm.manager')
+            ->getConnection('instance');
         $this->targetConnection->selectDatabase($database);
 
         $files = array_merge($files, $this->getPhotos());
@@ -128,11 +126,10 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
         $files = array();
         $sql   = 'SELECT name FROM photos';
 
-        $rs = $this->targetConnection->Execute($sql);
-        $rss = $rs->getArray();
+        $rs = $this->targetConnection->fetchAll($sql);
 
-        if ($rss) {
-            foreach ($rss as $value) {
+        if ($rs) {
+            foreach ($rs as $value) {
                 $files[] = $value['name'];
             }
         }
@@ -151,11 +148,10 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
         $files = array();
         $sql   = 'SELECT path FROM attachments';
 
-        $rs = $this->targetConnection->Execute($sql);
-        $rss = $rs->getArray();
+        $rs = $this->targetConnection->fetchAll($sql);
 
-        if ($rss) {
-            foreach ($rss as $value) {
+        if ($rs) {
+            foreach ($rs as $value) {
                 $files[] = substr(
                     $value['path'],
                     strrpos($value['path'], '/') + 1

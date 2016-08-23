@@ -14,12 +14,11 @@
  **/
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Backend\Annotation\CheckModuleAccess;
+use Common\Core\Annotation\Security;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for the system information
@@ -33,10 +32,9 @@ class SearchController extends Controller
      *
      * @return void
      *
-     * @Security("has_role('SEARCH_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ADVANCED_SEARCH")
-     **/
+     * @Security("hasExtension('ADVANCED_SEARCH')
+     *     and hasPermission('SEARCH_ADMIN')")
+     */
     public function defaultAction()
     {
         $contentTypesAvailable = $this->getContentTypesFiltered();
@@ -63,10 +61,8 @@ class SearchController extends Controller
      *
      * @return Response the response object
      *
-     * #@Security("has_role('SEARCH_ADMIN')")
-     *
-     * @CheckModuleAccess(module="ADVANCED_SEARCH")
-     **/
+     * @Security("hasExtension('ADVANCED_SEARCH')")
+     */
     public function contentProviderAction(Request $request)
     {
         $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
@@ -97,7 +93,7 @@ class SearchController extends Controller
 
             // Complete where clause
             $criteria = ' in_litter = 0 AND content_status = 1 '.
-                        ' AND fk_content_type IN (1, 2, 4, 7, 9, 10, 11, 12)'.
+                        ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'.
                         ' AND '.$search;
 
             $order    = [ 'starttime' => 'desc' ];

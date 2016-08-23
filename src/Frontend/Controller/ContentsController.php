@@ -58,7 +58,6 @@ class ContentsController extends Controller
             $this->paywallHook($content);
         }
 
-        $this->view = new \Template(TEMPLATE_USER);
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
@@ -104,8 +103,6 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
-
-        $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         // Fetch content
@@ -142,6 +139,26 @@ class ContentsController extends Controller
             $errors = [];
 
             // Validate captcha
+            if (!empty($request->get('g-recaptcha-response'))) {
+                $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
+                $resp = $recaptcha->verify(
+                    $request->get('g-recaptcha-response'),
+                    $request->getClientIp()
+                );
+
+                $valid = $resp->isSuccess();
+            }
+
+            if (!$valid) {
+                $errors []= _(
+                    'The reCAPTCHA was not entered correctly.'.
+                    ' Try to authenticate again.'
+                );
+            }
+
+            $valid = false;
+            $errors = [];
+
             if (!empty($request->get('g-recaptcha-response'))) {
                 $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
                 $resp = $recaptcha->verify(
@@ -223,9 +240,8 @@ class ContentsController extends Controller
                 return new Response($content, $httpCode);
             }
 
-            $tplMail = new \Template(TEMPLATE_USER);
-            $tplMail->caching = 0;
-            $tplMail->assign(
+            $this->view->setCaching(0);
+            $this->view->assign(
                 array(
                     'content'     => $content,
                     'senderName'  => $senderName,
@@ -233,8 +249,8 @@ class ContentsController extends Controller
                 )
             );
 
-            $mailBody      = $tplMail->fetch('email/send_to_friend.tpl');
-            $mailBodyPlain = $tplMail->fetch('email/send_to_friend_just_text.tpl');
+            $mailBody      = $this->renderView('email/send_to_friend.tpl');
+            $mailBodyPlain = $this->renderView('email/send_to_friend_just_text.tpl');
 
             //  Build the message
             $message = \Swift_Message::newInstance();
@@ -250,6 +266,10 @@ class ContentsController extends Controller
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
+
+                $this->get('application.log')->notice(
+                    "Email sent. Share-by-email (sender:".$senderEmail.", to: ".$recipients[0].", content_id:".$contentID.")"
+                );
 
                 $content = _('Article sent successfully');
                 $httpCode = 200;
@@ -293,7 +313,6 @@ class ContentsController extends Controller
                 $content = new \Content($contentID);
             }
 
-            $this->view = new \Template(TEMPLATE_USER);
             return $this->render(
                 'common/share_by_mail.tpl',
                 array(
@@ -357,11 +376,12 @@ class ContentsController extends Controller
                 array('id' => $content->id)
             );
 
-            $isLogged = is_array($_SESSION) && array_key_exists('userid', $_SESSION);
-            if ($isLogged) {
-                if (array_key_exists('meta', $_SESSION)
-                    && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {
-                    $userSubscriptionDateString = $_SESSION['meta']['paywall_time_limit'];
+            $user = $this->getUser();
+            if (!empty($user) && is_object($user)) {
+                if (!empty($user->meta)
+                    && array_key_exists('paywall_time_limit', $user->meta)
+                ) {
+                    $userSubscriptionDateString = $user->meta['paywall_time_limit'];
                 } else {
                     $userSubscriptionDateString = '';
                 }

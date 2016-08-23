@@ -127,8 +127,8 @@
             return true;
           }
 
-          if (item.metas && item.metas.modules_included) {
-            var notActivated = item.metas.modules_included.filter(function(a) {
+          if (item && item.modules_included) {
+            var notActivated = item.modules_included.filter(function(a) {
               return $scope.activated.indexOf(a) === -1;
             });
 
@@ -159,9 +159,9 @@
           for (var i = 0; i < $scope.cart.length; i++) {
             itemsInCart.push($scope.cart[i].uuid);
 
-            if ($scope.cart[i].metas && $scope.cart[i].metas.modules_included) {
+            if ($scope.cart[i] && $scope.cart[i].modules_included) {
               itemsInCart = itemsInCart.concat(
-                  $scope.cart[i].metas.modules_included);
+                  $scope.cart[i].modules_included);
             }
           }
 
@@ -186,12 +186,12 @@
          *                   false.
          */
         $scope.isFree = function(module) {
-          if (!module.metas || !module.metas.price) {
+          if (!module || !module.price) {
             return true;
           }
 
-          for (var i = 0; i < module.metas.price.length; i++) {
-            if (module.metas.price[i].value == 0) {
+          for (var i = 0; i < module.price.length; i++) {
+            if (module.price[i].value == 0) {
               return true;
             }
           }
@@ -223,24 +223,24 @@
               var module = response.results[i];
 
               if ($scope.isFree(module) &&
-                  module.metas.category !== 'partner') {
+                  module.category !== 'partner') {
                 $scope.free.push(module);
               } else if (response.activated.indexOf(module.uuid) !== -1) {
                 $scope.purchased.push(module);
               } else {
-                if (module.metas && module.metas.modules_included) {
+                if (module && module.modules_included) {
                   // Check submodules
-                  var activated = module.metas.modules_included.filter(function(a) {
+                  var activated = module.modules_included.filter(function(a) {
                     return response.activated.indexOf(a) === -1;
                   });
 
                   if (activated.length === 0) {
                     $scope.purchased.push(module);
                   } else {
-                    $scope[module.metas.category].push(module);
+                    $scope[module.category].push(module);
                   }
                 }  else {
-                  $scope[module.metas.category].push(module);
+                  $scope[module.category].push(module);
                 }
               }
             }

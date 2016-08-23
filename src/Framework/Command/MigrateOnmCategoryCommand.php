@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Onm\DatabaseConnection;
+use Onm\Database\DbalWrapper;
 
 class MigrateOnmCategoryCommand extends ContainerAwareCommand
 {
@@ -71,18 +71,24 @@ EOF
         // Initialize Globals and Database
         $GLOBALS['application'] = new \Application();
 
-        $this->targetConnection = $this->getContainer()->get('db_conn');
+        $this->targetConnection = new DbalWrapper(
+            $this->getContainer()->getParameter('database'),
+            $this->getContainer()->getParameter('environment')
+        );
         $this->targetConnection->selectDatabase($targetDatabase);
 
         \Application::initDatabase($this->targetConnection);
 
-        $this->originConnection = new DatabaseConnection(
+        $this->originConnection = new DbalWrapper(
             getContainerParameter('database')
         );
         $this->originConnection->selectDatabase($originDatabase);
 
-        $_SESSION['username'] = 'script';
-        $_SESSION['userid'] = 11;
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        );
+
         // Execute functions
         $output->writeln("\t<fg=blue;bg=white>Migrating ".$originCategory.": ".$originDatabase."->". $finalCategory."-".$targetDatabase."</fg=blue;bg=white>");
         // Migrate database
@@ -103,8 +109,8 @@ EOF
     {
         $sql = 'SELECT * FROM articles, contents, contents_categories '
                 .' WHERE  pk_fk_content_category = ?'
-                .'\' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
-                .'AND  `articles`.`pk_article` = `contents`.`pk_content` ';
+                .' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                .' AND  `articles`.`pk_article` = `contents`.`pk_content` ';
 
         $request = $this->originConnection->Prepare($sql);
         $rs = $this->originConnection->Execute(
@@ -189,8 +195,8 @@ EOF
     {
         $sql = 'SELECT * FROM photos, contents, contents_categories '
                 .' WHERE  pk_fk_content_category = ?'
-                .'\' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
-                .' AND  `photos`.`pk_photo` = `contents`.`pk_content` ';
+                .' AND `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                .' AND `photos`.`pk_photo` = `contents`.`pk_content` ';
 
         $request = $this->originConnection->Prepare($sql);
         $rs = $this->originConnection->Execute(
