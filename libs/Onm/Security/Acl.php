@@ -110,27 +110,10 @@ class Acl
                 return true;
             }
 
-            $isGranted = false;
-            if (getService('security.token_storage')->getToken()) {
-                $user = getService('security.token_storage')->getToken()->getUser();
+            $security = getService('core.security');
 
-                if ($user && $user !== 'anon.') {
-                    $isGranted = in_array(
-                        $privilege,
-                        $user->getRoles()
-                    );
-                }
-            }
-
-            if ($isGranted
-                && (!is_null($categoryID)
-                    && self::checkCategoryAccess($categoryID)
-                )
-            ) {
-                return false;
-            }
-
-            return $isGranted;
+            return $security->hasPermission($privilege)
+                && $security->hasCategory($categoryID);
         } catch (Exception $e) {
             return false;
         }
