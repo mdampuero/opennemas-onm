@@ -65,6 +65,10 @@ class Security
      */
     public function hasCategory($category)
     {
+        if (empty($category)) {
+            return true;
+        }
+
         if ($this->user->getOrigin() === 'manager') {
             return true;
         }
@@ -101,7 +105,7 @@ class Security
     public function hasPermission($permission)
     {
         if ($this->user->getOrigin() === 'manager'
-            || $this->user->isAdmin()
+            || ($this->user->isAdmin() && $permission !='ONLY_MASTERS')
         ) {
             return true;
         }
