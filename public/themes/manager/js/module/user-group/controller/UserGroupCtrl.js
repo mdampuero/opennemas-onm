@@ -48,38 +48,17 @@
          */
         $scope.sections = [
         {
-          title: 'Web',
+          title: 'Security',
           rows: [
-            ['ADVERTISEMENT', 'WIDGET', 'MENU']
+            [ 'SECURITY' ]
           ]
         },
         {
-          title: 'Contents',
+          title: 'Manager',
           rows: [
-            ['ARTICLE', 'OPINION', 'AUTHOR', 'COMMENT'],
-            ['POLL', 'STATIC', 'SPECIAL', 'LETTER'],
-            ['CATEGORY', 'CONTENT']
-          ]
-        },
-        {
-          title: 'Multimedia',
-          rows: [
-            ['IMAGE', 'FILE', 'VIDEO', 'ALBUM'],
-            ['KIOSKO', 'BOOK'],
-          ]
-        },
-        {
-          title: 'Utils',
-          rows: [
-            ['SEARCH', 'NEWSLETTER', 'PCLAVE', 'PAYWALL'],
-            ['INSTANCE_SYNC', 'SYNC_MANAGER', 'IMPORT', 'SCHEDULE'],
-          ]
-        },
-        {
-          title: 'System',
-          rows: [
-            ['BACKEND', 'USER', 'GROUP', 'CACHE'],
-            ['ONM']
+            [ 'INSTANCE', 'EXTENSION', 'NOTIFICATION', 'CLIENT' ],
+            [ 'PURCHASE', 'REPORT', 'COMMAND', 'OPCACHE' ],
+            [ 'USER', 'GROUP' ],
           ]
         }
         ];
