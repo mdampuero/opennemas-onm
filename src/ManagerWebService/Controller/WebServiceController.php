@@ -238,8 +238,7 @@ class WebServiceController extends Controller
                         'domain'      => $domain,
                         'plan'        => $plan
                     )
-                ),
-                'text/html'
+                )
             );
 
         // Send message
