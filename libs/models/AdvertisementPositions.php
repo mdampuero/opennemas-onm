@@ -568,9 +568,9 @@ class AdvertisementPositions
      */
     public function addPositions($positions)
     {
-        foreach ($positions as $id => $data) {
+        foreach ($positions as $data) {
             $data['custom'] = true;
-            $this->positions[$id] = $data;
+            $this->positions[$data['position']] = $data;
         }
 
         return $this;
