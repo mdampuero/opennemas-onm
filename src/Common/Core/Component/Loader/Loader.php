@@ -192,7 +192,7 @@ class Loader
             }
         }
 
-        $oql = 'domains regexp "^%s|,\s*%s\s*,|\s*%s$"';
+        $oql = 'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"';
 
         $this->loadInstanceFromOql(sprintf($oql, $host, $host, $host));
 
