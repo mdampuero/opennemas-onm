@@ -50,11 +50,11 @@ class ErrorController extends Controller
 
         $preview = self::highlightSource($error->getFile(), $error->getLine(), 7);
 
-        $this->view = $this->get('core.template.admin');
+        $this->view = $this->get('onm_templating')->getBackendTemplate();
         $this->view->assign('preview', $preview);
 
         switch ($exceptionName) {
-            case 'Onm\Exception\InstanceNotRegisteredException':
+            case 'Common\Core\Component\Exception\InstanceNotRegisteredException':
                 $trace = $error->getTrace();
 
                 $errorMessage = _('Instance not found');
@@ -77,7 +77,7 @@ class ErrorController extends Controller
 
                 break;
 
-            case 'Onm\Instance\NotActivatedException':
+            case 'Common\Core\Component\Exception\InstanceNotActivatedException':
                 $trace = $error->getTrace();
 
                 $errorMessage = _('Instance not activated');
