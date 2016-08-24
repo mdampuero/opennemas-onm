@@ -255,8 +255,10 @@ class Template extends \Smarty
         // Keep this to ignore notice
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
-        $this->image_dir = preg_replace('/https?:/', '', SITE_URL)
-            . $this->theme->path . 'images/';
+        if (!empty($this->theme)) {
+            $this->image_dir = preg_replace('/https?:/', '', SITE_URL)
+                . $this->theme->path . 'images/';
+        }
 
         $this->assign([
             '_template' => $this,
