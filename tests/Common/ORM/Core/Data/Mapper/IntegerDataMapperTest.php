@@ -16,8 +16,8 @@ class IntegerDataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->mapper->fromInteger(1));
         $this->assertEquals(1, $this->mapper->fromInteger(1.21));
         $this->assertEquals(1, $this->mapper->fromInteger('1.21'));
-        $this->assertEquals(null, $this->mapper->fromInteger(null));
-        $this->assertEquals(null, $this->mapper->fromInteger(''));
+        $this->assertNull($this->mapper->fromInteger(null));
+        $this->assertNull($this->mapper->fromInteger(''));
     }
 
     public function testToInteger()
@@ -25,7 +25,7 @@ class IntegerDataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->mapper->toInteger(1));
         $this->assertEquals(1, $this->mapper->toInteger(1.21));
         $this->assertEquals(1, $this->mapper->toInteger('1.21'));
-        $this->assertEquals(null, $this->mapper->toInteger(null));
-        $this->assertEquals(null, $this->mapper->toInteger(''));
+        $this->assertNull($this->mapper->toInteger(null));
+        $this->assertNull($this->mapper->toInteger(''));
     }
 }
