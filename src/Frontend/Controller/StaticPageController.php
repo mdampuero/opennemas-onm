@@ -30,11 +30,11 @@ class StaticPageController extends Controller
     {
         $oql = 'content_type_name = "static_page" and slug = "%s"';
 
-        $content = $this->get('orm.manager')->getRepository('Content')
-            ->findOneBy(sprintf($oql, $slug));
-
-        // If static page does not exist or is not published
-        if (empty($content) || !$content->content_status) {
+        try {
+            $content = $this->get('orm.manager')->getRepository('Content')
+                ->findOneBy(sprintf($oql, $slug));
+        } catch (\Exception $e) {
+            // If static page does not exist or is not published raise an error
             throw new ResourceNotFoundException();
         }
 
