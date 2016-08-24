@@ -1667,7 +1667,7 @@ class Content
             $cache = getService('cache');
             foreach ($rs as $row) {
                 $contentIds = $cache->delete('frontpage_elements_map_'.$row['fk_category']);
-                getService('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $categoryID));
+                getService('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $row['fk_category']));
             }
 
             getService('application.log')->notice(
