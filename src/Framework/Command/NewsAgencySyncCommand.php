@@ -58,11 +58,8 @@ EOF
 
         if ($instance->activated != '1') {
             $message = _('Instance not activated');
-            throw new \Onm\Instance\NotActivatedException($message);
+            throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
         }
-
-        $im->current_instance = $instance;
-        $im->cache_prefix     = $instance->internal_name;
 
         $cache = $this->getContainer()->get('cache');
         $cache->setNamespace($instance->internal_name);
