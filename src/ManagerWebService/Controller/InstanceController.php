@@ -2,15 +2,16 @@
 
 namespace ManagerWebService\Controller;
 
-use Onm\Framework\Controller\Controller;
-use Onm\Exception\InstanceAlreadyExistsException;
-use Onm\Exception\InstanceNotFoundException;
+use Common\Core\Annotation\Security;
+use Common\ORM\Entity\Instance;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;
 use Onm\Exception\DatabaseNotRestoredException;
+use Onm\Exception\InstanceAlreadyExistsException;
+use Onm\Exception\InstanceNotFoundException;
+use Onm\Framework\Controller\Controller;
 use Onm\Instance\InstanceCreator;
-use Common\ORM\Entity\Instance;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
@@ -23,6 +24,8 @@ class InstanceController extends Controller
      * @param integer $id The instance id.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -82,6 +85,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -160,6 +165,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('INSTANCE_REPORT')")
      */
     public function exportAction(Request $request)
     {
@@ -197,6 +204,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_LIST')")
      */
     public function listAction(Request $request)
     {
@@ -222,6 +231,8 @@ class InstanceController extends Controller
      * Returns the data to create a new instance.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_CREATE')")
      */
     public function newAction()
     {
@@ -239,6 +250,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -270,6 +283,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -322,6 +337,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('INSTANCE_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -398,6 +415,8 @@ class InstanceController extends Controller
      * @param integer  $id The instance id.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function showAction($id)
     {
@@ -440,6 +459,8 @@ class InstanceController extends Controller
      * @param  Request  $request The request object.
      * @param  integer  $id      The instance id.
      * @return Response          The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {
@@ -488,6 +509,15 @@ class InstanceController extends Controller
             ->findBy('type = "module" or type = "theme-addon"');
         $themes = $this->get('orm.manager')->getRepository('theme')
             ->findBy();
+
+        $users = $this->get('orm.manager')->getRepository('User', 'manager')
+            ->findBy('order by name asc');
+
+        $users = array_map(function ($a) {
+            return [ 'id' => $a->id, 'name' => $a->name ];
+        }, $users);
+
+        array_unshift($users, [ 'id' => null, 'name' => _('Select an user...') ]);
 
         $modules = array_map(function (&$a) {
             foreach ([ 'about', 'description', 'name' ] as $key) {
@@ -541,6 +571,7 @@ class InstanceController extends Controller
             'themes'    => $themes,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'modules'   => $modules,
+            'users'     => $users
         ];
     }
 }

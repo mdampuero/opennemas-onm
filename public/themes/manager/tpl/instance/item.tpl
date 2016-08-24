@@ -114,6 +114,14 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="form-label" for="owner_id">
+                    {t}Owner{/t}
+                  </label>
+                  <div class="controls">
+                    <select id="owner_id" name="owner_id" ng-model="instance.owner_id" ng-options="value.id as value.name for value in template.users"></select>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="form-label" for="template">{t}Activated{/t}</label>
                   <div class="controls">
                     <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" ng-true-value="1" ng-false-value="0"  ng-checked="instance.activated == 1"/>
