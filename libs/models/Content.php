@@ -1651,10 +1651,24 @@ class Content
     public function dropFromAllHomePages()
     {
         try {
-            getService('dbal_connection')->delete(
+            // Fetch the list of frontpages where this article is included
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT fk_category FROM content_positions WHERE pk_fk_content = ?",
+                [ $this->id ]
+            );
+
+            // Remove the content from all frontpages
+            $rs = getService('dbal_connection')->delete(
                 'content_positions',
                 [ 'pk_fk_content' => $this->id ]
             );
+
+            // Clean cache for each frontpage element listing
+            $cache = getService('cache');
+            foreach ($rs as $row) {
+                $contentIds = $cache->delete('frontpage_elements_map_'.$row['fk_category']);
+                getService('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $categoryID));
+            }
 
             getService('application.log')->notice(
                 'User '.$user->username.' ('.(int) getService('session')->get('user')->id.') has executed '
