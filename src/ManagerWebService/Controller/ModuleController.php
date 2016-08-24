@@ -9,6 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Extension;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
@@ -28,6 +29,9 @@ class ModuleController extends Controller
      * @param string  $uuid    The UUID to check.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('EXTENSION_CREATE')
+     *     || hasPermission('EXTENSION_UPDATE')")
      */
     public function checkAction(Request $request, $uuid)
     {
@@ -56,6 +60,8 @@ class ModuleController extends Controller
      * @param integer $id The module id.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('EXTENSION_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -76,6 +82,8 @@ class ModuleController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('EXTENSION_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -118,6 +126,8 @@ class ModuleController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('EXTENSION_LIST')")
      */
     public function listAction(Request $request)
     {
@@ -144,6 +154,8 @@ class ModuleController extends Controller
      * Returns the data to create a new module.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('EXTENSION_CREATE')")
      */
     public function newAction()
     {
@@ -156,6 +168,8 @@ class ModuleController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('EXTENSION_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -180,6 +194,8 @@ class ModuleController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('EXTENSION_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -227,6 +243,8 @@ class ModuleController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('EXTENSION_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -292,6 +310,8 @@ class ModuleController extends Controller
      * @param integer $id The module id.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('EXTENSION_UPDATE')")
      */
     public function showAction($id)
     {
@@ -318,6 +338,8 @@ class ModuleController extends Controller
      * @param  Request  $request The request object.
      * @param  integer  $id      The instance id.
      * @return Response          The response object.
+     *
+     * @Security("hasPermission('EXTENSION_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {
