@@ -187,6 +187,6 @@ class CoreListener implements EventSubscriberInterface
             $scheme = $request->headers->get('x-forwarded-proto');
         }
 
-        return str_replace($request->getScheme(), $scheme, $uri);
+        return preg_replace('@^' . $request->getScheme() . '@', $scheme, $uri);
     }
 }
