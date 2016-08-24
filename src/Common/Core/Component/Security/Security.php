@@ -84,11 +84,27 @@ class Security
      */
     public function hasExtension($uuid)
     {
-        if ($this->user->getOrigin() === 'manager') {
+        if ($this->hasPermission('MASTER')) {
             return true;
         }
 
         return in_array($uuid, $this->instance->activated_modules);
+    }
+
+    /**
+     * Checks if the user owns the instance.
+     *
+     * @param string $name The instance name.
+     *
+     * @return boolean True if the user owns the instance. False otherwise.
+     */
+    public function hasInstance($name)
+    {
+        if ($this->hasPermission('MASTER')) {
+            return true;
+        }
+
+        return in_array($name, $this->user->instances);
     }
 
     /**
@@ -100,14 +116,24 @@ class Security
      */
     public function hasPermission($permission)
     {
-        if ($this->user->getOrigin() === 'manager'
-            || $this->user->isAdmin()
-        ) {
+        if (empty($this->permissions)) {
+            return false;
+        }
+
+        if (in_array('MASTER', $this->permissions)) {
             return true;
         }
 
-        if (empty($this->permissions)) {
-            return false;
+        // ADMIN and PARTER have all permissions for their instances
+        if ($this->instance->internal_name !== 'manager'
+            && $permission !== 'MASTER'
+            && (in_array('ADMIN', $this->permissions)
+                || (in_array('PARTNER', $this->permissions)
+                    && $this->hasInstance($this->instance->internal_name)
+                )
+            )
+        ) {
+            return true;
         }
 
         return in_array($permission, $this->permissions);
