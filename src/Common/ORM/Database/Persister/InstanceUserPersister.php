@@ -12,9 +12,9 @@ namespace Common\ORM\Database\Persister;
 use Common\ORM\Core\Entity;
 
 /**
- * The BasePersister class defines actions to persist User.
+ * The InstanceUserPersister class defines actions to persist Users.
  */
-class UserPersister extends BasePersister
+class InstanceUserPersister extends BasePersister
 {
     /**
      * {@inheritdoc}
@@ -33,6 +33,7 @@ class UserPersister extends BasePersister
         $id = $this->metadata->getId($entity);
 
         $this->persistCategories($id, $categories);
+        $entity->categories = $categories;
     }
 
     /**
@@ -58,6 +59,7 @@ class UserPersister extends BasePersister
 
         try {
             $this->persistCategories($id, $categories);
+            $entity->categories = $categories;
         } catch (\Exception $e) {
         }
     }
