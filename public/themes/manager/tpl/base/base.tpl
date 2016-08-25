@@ -199,17 +199,17 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right" ng-if="user.id">
+        <div class="pull-right" ng-if="security.user.id">
           <ul class="nav quick-section">
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
                 <i class="fa fa-rebel text-danger pull-left"></i>
                 <span class="title">
-                  [% user.name %]
+                  [% security.user.name %]
                 </span>
                 <i class="fa fa-angle-down"></i>
                 <div class="profile-pic">
-                  <gravatar ng-model="user.email" size="25"></gravatar>
+                  <gravatar ng-model="security.user.email" size="25"></gravatar>
                 </div>
               </span>
               <ul class="dropdown-menu dropdown-menu-right no-padding">
@@ -220,7 +220,7 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: user.id }) %]">
+                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: security.user.id }) %]">
                     <i class="fa fa-user"></i>
                     {t}Profile{/t}
                   </a>

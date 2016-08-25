@@ -14,16 +14,26 @@
     .controller('MasterCtrl', [ '$http', '$location', '$uibModal', '$rootScope',
       '$scope', '$translate', '$timeout', '$window', 'vcRecaptchaService',
       'jwtHelper', 'httpInterceptor', 'authService', 'routing', 'history',
-      'webStorage', 'messenger', 'cfpLoadingBar',
+      'webStorage', 'messenger', 'cfpLoadingBar', 'security',
       function ($http, $location, $uibModal, $rootScope, $scope, $translate,
           $timeout, $window, vcRecaptchaService, jwtHelper, httpInterceptor,
-          authService, routing, history, webStorage, messenger, cfpLoadingBar) {
+          authService, routing, history, webStorage, messenger, cfpLoadingBar, security) {
         /**
          * The routing service.
          *
          * @type Object
          */
         $scope.routing = routing;
+
+        /**
+         * @memberOf MasterCtrl
+         *
+         * @description
+         *  The security service.
+         *
+         * @type {Object}
+         */
+        $scope.security = security;
 
         /**
          * Flag to show modal window for login only once.
@@ -85,7 +95,7 @@
          * Logs the user out.
          */
         $scope.logout = function() {
-          var modal = $uibModal.open({
+          $uibModal.open({
             templateUrl: 'modal-logout',
             controller:  'modalCtrl',
             resolve: {
@@ -104,8 +114,7 @@
 
                   $scope.user = {};
 
-                  webStorage.local.remove('token');
-                  webStorage.local.remove('user');
+                  webStorage.local.remove('security');
 
                   modalWindow.close({ success: true });
                 };
@@ -143,8 +152,8 @@
           $scope.loaded      = true;
           $scope.loading     = false;
 
-          webStorage.local.remove('token');
-          webStorage.local.remove('user');
+          //webStorage.local.remove('token');
+          //webStorage.local.remove('user');
 
           cfpLoadingBar.complete();
 
@@ -196,13 +205,21 @@
          */
         $scope.$on('auth-login-confirmed', function (event, args) {
           $http.defaults.headers.common.Authorization = 'Bearer ' + args.token;
-          $scope.user            = jwtHelper.decodeToken(args.token).user;
           $scope.auth.inprogress = false;
           $scope.auth.modal      = false;
           $scope.auth.status     = true;
 
-          webStorage.local.set('token', args.token);
-          webStorage.local.set('user', $scope.user);
+          security.instance    = args.instance;
+          security.permissions = args.permissions;
+          security.token       = args.token;
+          security.user        = jwtHelper.decodeToken(args.token).user;
+
+          webStorage.local.set('security', {
+            instance:    security.instance,
+            permissions: security.permissions,
+            token:       security.token,
+            user:        security.user
+          });
         });
 
         /**
@@ -272,10 +289,16 @@
         });
 
         webStorage.prefix('ONM-');
-        if (webStorage.local.get('token') && webStorage.local.get('user')) {
-          $http.defaults.headers.common.Authorization = 'Bearer ' +
-            webStorage.local.get('token');
-          $scope.user = webStorage.local.get('user');
+        if (webStorage.local.has('security')) {
+          var s = webStorage.local.get('security');
+
+          security.user        = s.user;
+          security.token       = s.token;
+          security.permissions = s.permissions;
+
+          $http.defaults.headers.common.Authorization =
+            'Bearer ' + security.token;
+
           $scope.loaded = true;
         }
 
