@@ -69,7 +69,6 @@ class AuthenticationListener implements EventSubscriberInterface
 
         $data['instance']    = $this->container->get('core.instance')->getData();
         $data['permissions'] = $this->getPermissions($user);
-        $data['instances']   = $user->instances;
 
         $response->setContent(json_encode($data));
 
