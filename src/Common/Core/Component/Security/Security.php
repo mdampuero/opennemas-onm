@@ -47,6 +47,26 @@ class Security
     protected $user;
 
     /**
+     * Returns the current categories.
+     *
+     * @return array The current categories.
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Returns the current permissions.
+     *
+     * @return array The current permissions.
+     */
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    /**
      * Returns the current authorized user.
      *
      * @return UserInterface The current authorized user.
