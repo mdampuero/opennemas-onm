@@ -51,16 +51,23 @@ class AuthenticationListener implements EventSubscriberInterface
             return;
         }
 
-        $user = $this->context->getToken()->getUser();
+        $response = $event->getResponse();
+        $token    = $this->context->getToken();
+
+        if (empty($token)) {
+            return $response;
+        }
+
+        $user = $token->getUser();
         $uri  = $event->getRequest()->getRequestUri();
 
         if (empty($user) || !preg_match('/\/managerws\/check/', $uri)) {
-            return;
+            return $response;
         }
 
-        $response = $event->getResponse();
-        $data     = json_decode($response->getContent(), true);
+        $data = json_decode($response->getContent(), true);
 
+        $data['instance']    = $this->container->get('core.instance')->getData();
         $data['permissions'] = $this->getPermissions($user);
         $data['instances']   = $user->instances;
 
