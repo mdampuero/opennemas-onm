@@ -3,12 +3,6 @@ manager_ws_auth_check:
     options:
         expose: true
 
-manager_ws_auth_check_user:
-    path: /check-user
-    defaults: { _controller: ManagerWebServiceBundle:Authentication:checkUser }
-    options:
-        expose: true
-
 manager_ws_auth_fake_login:
     path: /fake-login
     defaults: { _controller: ManagerWebServiceBundle:Authentication:fakeLogin }
@@ -23,5 +17,11 @@ manager_ws_auth_login:
 
 manager_ws_auth_logout:
     path: /logout
+    options:
+        expose: true
+
+manager_ws_auth_refresh:
+    path: /refresh
+    defaults: { _controller: ManagerWebServiceBundle:Authentication:refresh }
     options:
         expose: true
