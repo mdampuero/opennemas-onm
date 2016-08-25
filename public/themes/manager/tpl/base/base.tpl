@@ -327,6 +327,7 @@
       @Common/src/angular-serializer/serializer.js,
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-routing/routing.js,
+      @Common/src/angular-security/security.js,
       @Common/src/sidebar/js/sidebar.js,
       @Common/js/onm/md5.min.js,
       @Common/js/routes.js,
