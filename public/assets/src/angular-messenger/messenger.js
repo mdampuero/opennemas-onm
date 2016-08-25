@@ -143,7 +143,7 @@
          * @param {Object} message The message to post.
          */
         this._post = function(message) {
-          if (message.text) {
+          if (message.message) {
             $window.Messenger().post(message);
           }
         };
