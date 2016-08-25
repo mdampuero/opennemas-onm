@@ -124,6 +124,11 @@ class Template extends \Smarty
             . '/tpl/widgets';
 
         $wm->addPath($path);
+
+        if (!empty($theme->text_domain)) {
+            $this->container->get('core.locale')
+                ->addTextDomain($theme->text_domain, $theme->path . '/locale');
+        }
     }
 
     /**
