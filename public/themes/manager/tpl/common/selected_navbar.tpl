@@ -18,23 +18,31 @@
       </ul>
       <ul class="nav quick-section pull-right">
         {if $list === 'instance'}
-          <li class="quicklinks">
-            <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
+          <li class="quicklinks" ng-if="hasPermission('MASTER') && hasPermission('INSTANCE_REPORT')">
+            <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% security.token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="hasPermission('MASTER') && hasPermission('INSTANCE_REPORT')">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks" ng-if="hasPermission('INSTANCE_UPDATE')">
             <button class="btn btn-link" ng-click="setEnabledSelected(0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="hasPermission('INSTANCE_UPDATE')">
             <button class="btn btn-link" ng-click="setEnabledSelected(1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
             <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks" ng-if="hasPermission('INSTANCE_DELETE')">
+            <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-trash-o fa-lg"></i>
+            </button>
           </li>
         {/if}
         {if $list === 'notification'}
@@ -79,6 +87,11 @@
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-trash-o fa-lg"></i>
+            </button>
+          </li>
         {/if}
         {if $list === 'notification' || $list === 'extension'}
           <li class="quicklinks">
@@ -94,12 +107,12 @@
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-trash-o fa-lg"></i>
+            </button>
+          </li>
         {/if}
-        <li class="quicklinks">
-          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
-            <i class="fa fa-trash-o fa-lg"></i>
-          </button>
-        </li>
       </ul>
     </div>
   </div>

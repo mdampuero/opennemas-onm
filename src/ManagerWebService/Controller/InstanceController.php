@@ -15,6 +15,7 @@ use Onm\Instance\InstanceCreator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class InstanceController extends Controller
 {
@@ -35,6 +36,10 @@ class InstanceController extends Controller
 
         try {
             $instance = $em->getRepository('Instance')->find($id);
+
+            if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+                throw new AccessDeniedException();
+            }
 
             $assetFolder = realpath(
                 SITE_PATH . DS . 'media' . DS . $instance->internal_name
@@ -107,6 +112,10 @@ class InstanceController extends Controller
         $deleted = 0;
         foreach ($instances as $instance) {
             try {
+                if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+                    throw new AccessDeniedException();
+                }
+
                 $assetFolder = realpath(
                     SITE_PATH . DS . 'media' . DS . $instance->internal_name
                 );
@@ -172,6 +181,17 @@ class InstanceController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
+        if (!$this->get('core.security')->hasPermission('MASTER')
+            && $this->get('core.security')->hasPermission('PARTNER')
+        ) {
+            if (!empty($oql) && !preg_match('/^(order|limit)/', $oql)) {
+                $oql = ' and ' . $oql;
+            }
+
+            $oql = sprintf('owner_id = "%s"', $this->get('core.user')->id)
+                .  $oql;
+        }
+
         $repository = $this->get('orm.manager')->getRepository('Instance');
         $instances  = $repository->findBy($oql);
 
@@ -210,6 +230,17 @@ class InstanceController extends Controller
     public function listAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
+
+        if (!$this->get('core.security')->hasPermission('MASTER')
+            && $this->get('core.security')->hasPermission('PARTNER')
+        ) {
+            if (!empty($oql) && !preg_match('/^(order|limit)/', $oql)) {
+                $oql = ' and ' . $oql;
+            }
+
+            $oql = sprintf('owner_id = "%s"', $this->get('core.user')->id)
+                .  $oql;
+        }
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
         $converter  = $this->get('orm.manager')->getConverter('Instance');
@@ -262,6 +293,10 @@ class InstanceController extends Controller
 
         $instance = $em->getRepository('Instance')->find($id);
 
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
+
         $old = $instance->activated;
         $instance->merge($data);
 
@@ -308,6 +343,10 @@ class InstanceController extends Controller
         $updated = 0;
         foreach ($instances as $instance) {
             try {
+                if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+                    throw new AccessDeniedException();
+                }
+
                 $old = $instance->activated;
                 $instance->merge($data);
                 $updated++;
@@ -317,7 +356,7 @@ class InstanceController extends Controller
                         ->dispatch('instance.update', [ 'instance' => $instance ]);
                 }
             } catch (\Exception $e) {
-                $msg->add($e->getMessage(), 'error', 409);
+                $msg->add($e->getMessage(), 'error', $e->getCode());
             }
         }
 
@@ -422,6 +461,11 @@ class InstanceController extends Controller
     {
         $em        = $this->get('orm.manager');
         $instance  = $em->getRepository('Instance')->find($id);
+
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
+
         $converter = $em->getConverter('Instance');
         $ds        = $em->getDataSet('Settings', 'instance');
 
@@ -470,16 +514,30 @@ class InstanceController extends Controller
         $data     = $em->getConverter('Instance')
             ->objectify($request->request->get('instance'));
 
-        $instance   = $em->getRepository('Instance')->find($id);
+        $instance = $em->getRepository('Instance')->find($id);
+
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
+
+        $owners     = [ 'user-' . $instance->owner_id ];
         $oldDomains = $instance->domains;
 
         $instance->setData($data);
+        $owners[] = 'user-' . $instance->owner_id;
+        $owners = array_unique(array_filter($owners, function ($a) {
+            return !empty($a);
+        }));
 
         $deletedDomains = array_diff($oldDomains, $instance->domains);
 
         $cache = $this->get('cache.manager')->getConnection('manager');
         if (!empty($deletedDomains)) {
             $cache->delete($deletedDomains);
+        }
+
+        if (!empty($owners)) {
+            $cache->delete($owners);
         }
 
         $em->persist($instance);
