@@ -1670,8 +1670,9 @@ class Content
                 getService('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $row['fk_category']));
             }
 
+            $user = getService('session')->get('user');
             getService('application.log')->notice(
-                'User '.$user->username.' ('.(int) getService('session')->get('user')->id.') has executed '
+                'User '.$user->username.' ('.(int) $user->id.') has executed '
                 .'action Drop from frontpage to content with ID id '.$this->id
             );
 
