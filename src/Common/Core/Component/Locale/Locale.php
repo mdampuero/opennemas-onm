@@ -54,6 +54,18 @@ class Locale
     }
 
     /**
+     * Adds a new text domain.
+     *
+     * @param string $domain Text domain name.
+     * @param string $path   Path to text domain.
+     */
+    public function addTextDomain($domain, $path)
+    {
+        bindtextdomain($domain, $path);
+        textdomain($domain);
+    }
+
+    /**
      * Returns the current locale.
      *
      * @return string The current locale.
@@ -121,8 +133,7 @@ class Locale
 
         $domain = 'messages';
 
-        bindtextdomain($domain, $this->path);
-        textdomain($domain);
+        $this->addTextDomain($domain, $this->path);
     }
 
     /**
