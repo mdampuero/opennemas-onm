@@ -33,7 +33,7 @@ class UserGroupController extends Controller
 
         $userGroup = $em->getRepository('UserGroup', 'manager')->find($id);
 
-        $em->remove($userGroup);
+        $em->remove($userGroup, $userGroup->getOrigin());
         $msg->add(_('User group deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -64,7 +64,7 @@ class UserGroupController extends Controller
         $deleted = 0;
         foreach ($userGroups as $userGroup) {
             try {
-                $em->remove($userGroup);
+                $em->remove($userGroup, $userGroup->getOrigin());
                 $deleted++;
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error');
@@ -134,7 +134,7 @@ class UserGroupController extends Controller
 
         $userGroup = new UserGroup($data);
 
-        $em->persist($userGroup);
+        $em->persist($userGroup, $userGroup->getOrigin());
         $msg->add(_('User group saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -185,7 +185,7 @@ class UserGroupController extends Controller
         $userGroup = $em->getRepository('UserGroup', 'manager')->find($id);
         $userGroup->setData($data);
 
-        $em->persist($userGroup);
+        $em->persist($userGroup, $userGroup->getOrigin());
 
         $msg->add(_('User group saved successfully'), 'success');
 
