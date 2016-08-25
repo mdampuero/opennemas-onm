@@ -19,19 +19,19 @@
             </span>
             <ul class="dropdown-menu dropdown-menu-right m-r-5">
               <li>
-                <a ng-href="[% routing.generate('manager_ws_purchases_export_all', { token: token }) %]" target="_blank">
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_all', { token: security.token }) %]" target="_blank">
                   <i class="fa fa-circle-thin"></i>
                   {t}All{/t}
                 </a>
               </li>
               <li>
-                <a ng-href="[% routing.generate('manager_ws_purchases_export_completed', { token: token }) %]" target="_blank">
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_completed', { token: security.token }) %]" target="_blank">
                   <i class="fa fa-check text-success"></i>
                   {t}Completed purchases{/t}
                 </a>
               </li>
               <li>
-                <a ng-href="[% routing.generate('manager_ws_purchases_export_uncompleted', { token: token }) %]" target="_blank">
+                <a ng-href="[% routing.generate('manager_ws_purchases_export_uncompleted', { token: security.token }) %]" target="_blank">
                   <i class="fa fa-times text-danger"></i>
                   {t}Uncompleted purchases{/t}
                 </a>

@@ -55,7 +55,7 @@
                 </div>
               </td>
               <td class="text-center">
-                <a class="btn btn-success text-uppercase" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
+                <a class="btn btn-success text-uppercase" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% security.token %]">
                   <i class="fa fa-download m-r-5"></i>
                   {t}Download{/t}
                 </a>
