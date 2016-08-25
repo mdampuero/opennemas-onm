@@ -104,9 +104,7 @@ class Security
             return true;
         }
 
-        if ($this->instance->internal_name === 'manager'
-            && $this->hasPermission('PARTNER')
-        ) {
+        if ($name === 'manager' && $this->hasPermission('PARTNER')) {
             return true;
         }
 
