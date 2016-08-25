@@ -13,11 +13,11 @@
      */
     .controller('MasterCtrl', [ '$http', '$location', '$uibModal', '$rootScope',
       '$scope', '$translate', '$timeout', '$window', 'vcRecaptchaService',
-      'jwtHelper', 'httpInterceptor', 'authService', 'routing', 'history',
+      'jwtHelper', 'httpInterceptor', 'authService', 'routing', 'history', 'http',
       'webStorage', 'messenger', 'cfpLoadingBar', 'security',
       function ($http, $location, $uibModal, $rootScope, $scope, $translate,
           $timeout, $window, vcRecaptchaService, jwtHelper, httpInterceptor,
-          authService, routing, history, webStorage, messenger, cfpLoadingBar, security) {
+          authService, routing, history, http, webStorage, messenger, cfpLoadingBar, security) {
         /**
          * The routing service.
          *
@@ -276,6 +276,19 @@
         // Redirects to /403
         $scope.$on('error-403', function (event, args) {
           $location.url('/403');
+
+          http.get('manager_ws_auth_refresh').then(function(response) {
+            security.instance    = response.data.instance;
+            security.permissions = response.data.permissions;
+            security.user        = response.data.user;
+
+            webStorage.local.set('security', {
+              instance:    security.instance,
+              permissions: security.permissions,
+              token:       security.token,
+              user:        security.user
+            });
+          });
         });
 
         /**
