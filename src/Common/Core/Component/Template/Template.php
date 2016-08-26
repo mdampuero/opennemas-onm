@@ -134,8 +134,11 @@ class Template extends \Smarty
         $wm->addPath($path);
 
         if (!empty($theme->text_domain)) {
+            $path = $this->container->getParameter('core.paths.public')
+                . $theme->path . 'locale';
+
             $this->container->get('core.locale')
-                ->addTextDomain($theme->text_domain, $theme->path . '/locale');
+                ->addTextDomain($theme->text_domain, $path);
         }
     }
 
