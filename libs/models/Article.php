@@ -268,6 +268,9 @@ class Article extends Content
                 'footer_video2' => $data['footer_video2'],
             ]);
 
+            $conn->commit();
+
+            // Moving related contents saving code out of transaction due to ONM-1368
             if (!empty($data['relatedFront'])) {
                 $this->saveRelated($data['relatedFront'], $this->id, 'setRelationPosition');
             }
@@ -278,8 +281,6 @@ class Article extends Content
             if (!empty($data['relatedHome'])) {
                 $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
             }
-
-            $conn->commit();
 
             return $this->id;
         } catch (\Exception $e) {
@@ -331,6 +332,9 @@ class Article extends Content
                 [ 'pk_article' => $data['id'] ]
             );
 
+            $conn->commit();
+
+            // Moving related contents saving code out of transaction due to ONM-1368
             // Drop related and insert new ones
             getService('related_contents')->delete($data['id']);
 
@@ -357,7 +361,6 @@ class Article extends Content
                     'setHomeRelations'
                 );
             }
-            $conn->commit();
             $this->category_name = $this->loadCategoryName($this->id);
 
             return true;
