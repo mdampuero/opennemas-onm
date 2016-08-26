@@ -45,7 +45,8 @@ class Locale
     /**
      * Initializes the Locale.
      *
-     * @param array $locales The available locales.
+     * @param array  $locales The available locales.
+     * @param string $path    The available locales.
      */
     public function __construct($locales, $path)
     {
@@ -62,7 +63,6 @@ class Locale
     public function addTextDomain($domain, $path)
     {
         bindtextdomain($domain, $path);
-        textdomain($domain);
     }
 
     /**
@@ -134,6 +134,7 @@ class Locale
         $domain = 'messages';
 
         $this->addTextDomain($domain, $this->path);
+        textdomain($domain);
     }
 
     /**
