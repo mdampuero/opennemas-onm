@@ -40,6 +40,13 @@ class Template extends \Smarty
     public $image_dir = null;
 
     /**
+     * The active instance.
+     *
+     * @var Instance
+     */
+    protected $instance = null;
+
+    /**
      * The active theme.
      *
      * @var Theme
@@ -104,6 +111,7 @@ class Template extends \Smarty
      */
     public function addInstance($instance)
     {
+        $this->instance = $instance;
         $this->setupCache($instance);
     }
 
@@ -179,6 +187,16 @@ class Template extends \Smarty
 
         return $this->container->get('request_stack')->getCurrentRequest()
             ->getSchemeAndHttpHost() . $this->theme->path . 'images/';
+    }
+
+    /**
+     * Returns the current instance.
+     *
+     * @return Instance The current instance.
+     */
+    public function getInstance()
+    {
+        return $this->instance;
     }
 
     /**
