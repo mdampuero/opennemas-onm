@@ -43,6 +43,7 @@ class UserGroupPersister extends BasePersister
         $id = $this->metadata->getId($entity);
 
         $this->persistPrivileges($id, $privileges);
+        $entity->privileges = $privileges;
     }
 
     /**
@@ -52,7 +53,9 @@ class UserGroupPersister extends BasePersister
     {
         $privileges = [];
 
-        if (!empty($entity->privileges)) {
+        if (!empty($entity->privileges)
+            && array_key_exists('privileges', $entity->getChanges())
+        ) {
             $privileges = $entity->privileges;
             unset($entity->privileges);
         }
@@ -61,7 +64,15 @@ class UserGroupPersister extends BasePersister
 
         $id = $this->metadata->getId($entity);
 
-        $this->persistPrivileges($id, $privileges);
+        if (!empty($privileges)) {
+            $this->persistPrivileges($id, $privileges);
+
+            if ($this->hasCache()) {
+                $this->cache->delete($this->metadata->getPrefixedId($entity));
+            }
+        }
+
+        $entity->privileges = $privileges;
     }
 
     /**
