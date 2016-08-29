@@ -120,8 +120,8 @@ class AuthenticationController extends Controller
     {
         return new JsonResponse([
             'instance'    => $this->get('core.instance')->getData(),
-            'permissions' => $this->get('core.security')->getPermissions(),
-            'user'        => $this->get('core.user'),
+            'permissions' => array_values($this->get('core.security')->getPermissions()),
+            'user'        => $this->get('core.user')->getData(),
         ]);
     }
 }
