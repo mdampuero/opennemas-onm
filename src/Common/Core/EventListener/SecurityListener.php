@@ -63,6 +63,7 @@ class SecurityListener implements EventSubscriberInterface
 
         $instance    = $this->container->get('core.instance');
         $user        = $this->context->getToken()->getUser();
+        $instances   = $this->getInstances($user);
         $categories  = $this->getCategories($user);
         $permissions = $this->getPermissions($user);
 
@@ -71,6 +72,7 @@ class SecurityListener implements EventSubscriberInterface
             ->find($user->id);
 
         $this->security->setInstance($instance);
+        $this->security->setInstances($instances);
         $this->security->setUser($user);
         $this->security->setCategories($categories);
         $this->security->setPermissions($permissions);
@@ -141,6 +143,26 @@ class SecurityListener implements EventSubscriberInterface
         return array_map(function ($a) {
             return $a->name;
         }, $categories);
+    }
+
+    /**
+     * Returns the list of instances this user owns.
+     *
+     * @param UserInterface $user The current user.
+     *
+     * @return array The list of instances.
+     */
+    protected function getInstances(UserInterface $user)
+    {
+        $oql = sprintf('owner_id ="%s"', $user->id);
+
+        $instances = $this->container->get('orm.manager')
+            ->getRepository('Instance')
+            ->findBy($oql);
+
+        return array_map(function ($a) {
+            return $a->internal_name;
+        }, $instances);
     }
 
     /**

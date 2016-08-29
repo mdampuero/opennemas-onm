@@ -33,6 +33,13 @@ class Security
     protected $instance;
 
     /**
+     * The list of instances.
+     *
+     * @var array
+     */
+    protected $instances = [];
+
+    /**
      * The list of permissions.
      *
      * @var array
@@ -54,6 +61,16 @@ class Security
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Returns the list of instances.
+     *
+     * @return array The list of instances.
+     */
+    public function getInstances()
+    {
+        return $this->instances;
     }
 
     /**
@@ -128,7 +145,7 @@ class Security
             return true;
         }
 
-        return in_array($name, $this->user->instances);
+        return in_array($name, $this->instances);
     }
 
     /**
@@ -201,6 +218,16 @@ class Security
     public function setInstance(Instance $instance)
     {
         $this->instance = $instance;
+    }
+
+    /**
+     * Changes the list of instances.
+     *
+     * @param array $instances The list of instances.
+     */
+    public function setInstances($instances)
+    {
+        $this->instances = $instances;
     }
 
     /**
