@@ -115,9 +115,7 @@
             return true;
           }
 
-          console.log(instance, this.user.instances);
-
-          return this.user.instances.indexOf(instance) !== -1;
+          return this.instances.indexOf(instance) !== -1;
         };
 
         /**
@@ -136,8 +134,6 @@
           if (this.permissions.indexOf('MASTER') !== -1) {
             return true;
           }
-
-          console.log(permission, this.permissions);
 
           return this.permissions.indexOf(permission) !== -1;
         };

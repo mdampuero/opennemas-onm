@@ -210,12 +210,14 @@
           $scope.auth.status     = true;
 
           security.instance    = args.instance;
+          security.instance    = args.instances;
           security.permissions = args.permissions;
           security.token       = args.token;
           security.user        = jwtHelper.decodeToken(args.token).user;
 
           webStorage.local.set('security', {
             instance:    security.instance,
+            instances:   security.instances,
             permissions: security.permissions,
             token:       security.token,
             user:        security.user
