@@ -1,38 +1,30 @@
 <?php
 /**
- * Handles the actions for the framework status
- *
- * @package Manager_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
-/**
- * Handles the actions for the framework status
- *
- * @package Manager_Controllers
- **/
 class FrameworkStatusController extends Controller
 {
     /**
-     * Shows the APC information iframe
+     * Shows the APC information iframe.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     *
+     * @Security("hasPermission('OPCACHE_LIST')")
+     */
     public function opcacheStatusAction(Request $request)
     {
         $config = $status = $mem = $opcacheStats =  $freeKeys =  $notSupportedMessage = null;
