@@ -32,7 +32,73 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="notification"}
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section pull-left">
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <i class="fa fa-arrow-left fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <h4>
+            [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+          </h4>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('fixed', 0)" uib-tooltip="{t}Unfixed{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-unlock fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('fixed', 1)" uib-tooltip="{t}Fixed{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-lock fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('forced', 0)" uib-tooltip="{t}Unforced{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-eye-slash fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('forced', 1)" uib-tooltip="{t}Forced{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-eye fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-times fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-check fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE') && security.hasPermission('NOTIFICATION_DELETE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_DELETE')">
+          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
