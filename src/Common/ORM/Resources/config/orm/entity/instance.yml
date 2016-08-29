@@ -41,7 +41,7 @@ entity:
             arguments: [ '@orm.metadata.instance' ]
     repositories:
         database:
-            class:     Common\ORM\Database\Repository\BaseRepository
+            class:     Common\ORM\Database\Repository\InstanceRepository
             arguments: [ '@orm.connection.manager', '@orm.metadata.instance', '@cache.connection.manager' ]
     persisters:
         database:
