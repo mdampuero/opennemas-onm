@@ -13,15 +13,15 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_REPORT')">
             <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: security.token })%]" target="_blank">
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_CREATE') && security.hasPermission('NOTIFICATION_REPORT')">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_CREATE')">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -253,13 +253,13 @@
               <td ng-show="isColumnEnabled('title')">
                 <div ng-bind-html="item.title['en']"></div>
                 <div class="listing-inline-actions">
-                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" ng-if="security.hasPermission('NOTIFICATION_DELETE')" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" type="button">
+                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" ng-if="security.hasPermission('NOTIFICATION_DELETE')" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
-                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_csv', { id: item.id, token: security.token }) %]" target="_blank" title="{t}Download report{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_csv', { id: item.id, token: security.token }) %]" ng-if="security.hasPermission('NOTIFICATION_REPORT')" target="_blank" title="{t}Download report{/t}">
                     <i class="fa fa-download m-r-5"></i>{t}Report{/t}
                   </button>
                 </div>
@@ -304,19 +304,28 @@
                 </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('fixed')">
-                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">
+                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
                   <i class="fa" ng-class="{ 'fa-lock text-success' : !item.fixedLoading && item.fixed == 1, 'fa-unlock text-error': !item.fixedLoading && item.fixed == 0, 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-lock text-success' : item.fixed == 1, 'fa-unlock text-error': item.fixed == 0 }"></i>
+                </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('forced')">
-                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" type="button">
+                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
                   <i class="fa" ng-class="{ 'fa-eye text-success' : !item.forcedLoading && item.forced == 1, 'fa-eye-slash text-error': !item.forcedLoading && item.forced == 0, 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-eye text-success' : item.forced == 1, 'fa-eye-slash text-error': item.forced == 0 }"></i>
+                </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('enabled')">
-                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" type="button">
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
                   <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0, 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : item.enabled == 1, 'fa-times text-error': item.enabled == 0 }"></i>
+                </span>
               </td>
             </tr>
           </tbody>

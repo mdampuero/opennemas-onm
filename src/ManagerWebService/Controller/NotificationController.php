@@ -9,6 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Notification;
 use League\Csv\Writer;
 use Onm\Framework\Controller\Controller;
@@ -27,6 +28,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_LIST')")
      */
     public function autocompleteAction(Request $request)
     {
@@ -86,6 +89,8 @@ class NotificationController extends Controller
      * @param integer $id The notification id.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -106,6 +111,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -149,6 +156,8 @@ class NotificationController extends Controller
      * @param integer $id The notification id.
      *
      * @return Response The response object
+     *
+     * @Security("hasPermission('NOTIFICATION_REPORT')")
      */
     public function exportAction($id)
     {
@@ -197,6 +206,8 @@ class NotificationController extends Controller
      * has been read, view, clicked and opened.
      *
      * @return Response The response object
+     *
+     * @Security("hasPermission('NOTIFICATION_REPORT')")
      */
     public function exportAllAction()
     {
@@ -243,6 +254,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_LIST')")
      */
     public function listAction(Request $request)
     {
@@ -274,6 +287,8 @@ class NotificationController extends Controller
      * Returns the data to create a new notification.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_CREATE')")
      */
     public function newAction()
     {
@@ -288,6 +303,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -312,6 +329,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -359,6 +378,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -395,6 +416,8 @@ class NotificationController extends Controller
      * @param integer  $id The instance id.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function showAction($id)
     {
@@ -416,7 +439,10 @@ class NotificationController extends Controller
      *
      * @param  Request  $request The request object.
      * @param  integer  $id      The instance id.
+     *
      * @return Response          The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {
