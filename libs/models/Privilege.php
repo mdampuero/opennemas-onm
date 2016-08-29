@@ -1438,7 +1438,7 @@ class Privilege
             ],
             222 => [
                 'pk_privilege' => '222',
-                'name'         => 'OPCACHE',
+                'name'         => 'OPCACHE_LIST',
                 'description'  => _('List'),
                 'module'       => 'OPCACHE',
             ],
