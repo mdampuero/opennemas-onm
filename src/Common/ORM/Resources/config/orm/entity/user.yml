@@ -34,7 +34,7 @@ entity:
             class:     Common\ORM\Database\Repository\InstanceUserRepository
             arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
         manager:
-            class:     Common\ORM\Database\Repository\ManagerUserRepository
+            class:     Common\ORM\Database\Repository\BaseRepository
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     persisters:
         instance:

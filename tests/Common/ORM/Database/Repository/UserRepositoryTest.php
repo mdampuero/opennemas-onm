@@ -10,9 +10,9 @@
 namespace tests\Common\ORM\File\Repository;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Repository\ManagerUserRepository;
+use Common\ORM\Database\Repository\UserRepository;
 
-class ManagerUserRepositoryTest extends \PHPUnit_Framework_TestCase
+class UserRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the test environment.
@@ -59,7 +59,7 @@ class ManagerUserRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository =
-            new ManagerUserRepository('foo', $this->conn, $this->metadata, $this->cache);
+            new UserRepository('foo', $this->conn, $this->metadata, $this->cache);
     }
 
     /**
@@ -72,9 +72,8 @@ class ManagerUserRepositoryTest extends \PHPUnit_Framework_TestCase
             [ 'id' => 2, 'name' => 'thud' ]
         ]);
         $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
-            [ 'id' => 1, 'internal_name' => 'quux', 'owner_id' => 1 ],
-            [ 'id' => 2, 'internal_name' => 'fred', 'owner_id' => 2 ],
-            [ 'id' => 3, 'internal_name' => 'fubar', 'owner_id' => 1 ],
+            [ 'pk_fk_user' => 1, 'pk_fk_content_category' => '1' ],
+            [ 'pk_fk_user' => 2, 'pk_fk_content_category' => '2' ]
         ]);
 
         $method = new \ReflectionMethod($this->repository, 'refresh');
@@ -83,12 +82,12 @@ class ManagerUserRepositoryTest extends \PHPUnit_Framework_TestCase
         $users = $method->invokeArgs($this->repository, [ [ [ 'id' => 1 ] , [ 'id' => 2 ] ] ]);
 
         $this->assertEquals(
-            [ 'id' => 1, 'name' => 'glork', 'instances' => [ 'quux', 'fubar' ] ],
+            [ 'id' => 1, 'name' => 'glork', 'categories' => [ 1 ] ],
             $users[1]->getData()
         );
 
         $this->assertEquals(
-            [ 'id' => 2, 'name' => 'thud', 'instances' => [ 'fred' ] ],
+            [ 'id' => 2, 'name' => 'thud', 'categories' => [ 2 ] ],
             $users[2]->getData()
         );
     }

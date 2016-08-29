@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Database\Repository;
 
-class InstanceUserRepository extends BaseRepository
+class UserRepository extends BaseRepository
 {
     /**
      * {@inheritdoc}
