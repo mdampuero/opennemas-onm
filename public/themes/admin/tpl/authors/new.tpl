@@ -1,13 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/onm/video.js,
-    @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
+  {javascripts}
     <script>
       $(document).ready(function($){
         $('.fileinput').fileinput({

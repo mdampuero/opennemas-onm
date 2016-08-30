@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{stylesheets
-  src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
+  {stylesheets}
     <style type="text/css">
       .colorpicker {
         z-index: 10;
@@ -12,7 +11,7 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
+  {javascripts}
     <script type="text/javascript">
       jQuery(document).ready(function($) {
         $('#allow_logo').on('click', function(){
