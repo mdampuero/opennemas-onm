@@ -111,9 +111,18 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         $amount = ($offset) ? 30: null;
 
         $this->getContainer()->get('cache_manager')->setNamespace('manager');
-        $this->im  = $this->getContainer()->get('instance_manager');
-        $this->em  = $this->getContainer()->get('orm.manager');
-        $instances = $this->im->findBy(null, array('id', 'asc'), $amount, $offset);
+        $this->em = $this->getContainer()->get('orm.manager');
+        $oql      = 'order by id asc';
+
+        if ($amount) {
+            $oql = ' limit ' . $amount;
+        }
+
+        if ($offset) {
+            $oql .= ' offset ' . $offset;
+        }
+
+        $instances = $this->em->getRepository('Instance')->findBy($oql);
 
         if (count($instances) == 0) {
             $output->writeln('No instances');
@@ -127,7 +136,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
             try {
                 $this->getInstanceInfo($instance, $options);
-                $this->im->persist($instance);
+                $this->em->persist($instance);
             } catch (\Exception $e) {
                 error_log($e->getMessage());
                 $output->writeln(
@@ -149,7 +158,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         if (empty($i->getDatabaseName())) {
             return false;
         }
-        $this->im->getConnection()->selectDatabase($i->getDatabaseName());
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $conn->selectDatabase($i->getDatabaseName());
 
         // Update instance stats
         if ($options['instance_stats']) {
@@ -177,14 +187,13 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             }
         }
 
-
         // Get the page views from Piwik
         if ($options['views']) {
             if ($this->output->isVeryVerbose()) {
                 $this->output->write("\t- Getting page num views ");
             }
             $sql = 'SELECT value FROM settings WHERE name=\'piwik\'';
-            $rs  = $this->im->getConnection()->fetchAll($sql);
+            $conn->fetchAll($sql);
 
             if ($rs !== false && !empty($rs)) {
                 $piwik = unserialize($rs[0]['value']);
@@ -203,7 +212,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             }
         }
 
-        $this->im->getConnection()->close();
+        $conn->close();
 
         // Check domain's rank in Alexa
         if ($options['alexa'] && !empty($i->domains)) {
@@ -241,12 +250,14 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      **/
     public function getInstanceStats(&$i)
     {
+        $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $stats = [];
+
         // Count contents
         $sql = 'SELECT content_type_name as type, count(*) as total '
             .'FROM contents GROUP BY `fk_content_type`, `content_type_name`';
 
-        $rs = $this->im->conn->fetchAll($sql);
+        $rs = $conn->fetchAll($sql);
 
         if ($rs !== false && !empty($rs)) {
             $contents = 0;
@@ -279,7 +290,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         // Count users
         $sql = "SELECT COUNT(id) FROM users WHERE type = 0 and activated = 1 and
             fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
-        $rs  = $this->im->getConnection()->fetchArray($sql);
+        $rs  = $conn->fetchArray($sql);
 
         if ($rs !== false && !empty($rs)) {
             $i->users = $rs[0];
@@ -287,7 +298,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         // Count emails
         $sql = 'SELECT counter FROM action_counters WHERE action_name = \'newsletter\'';
-        $rs  = $this->im->getConnection()->fetchArray($sql);
+        $rs  = $conn->fetchArray($sql);
 
         if ($rs) {
             $i->emails = $rs[0];
@@ -295,19 +306,24 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         // Get last login date
         $sql = 'SELECT * FROM settings WHERE name=\'last_login\'';
-        $rs  = $this->im->getConnection()->fetchAll($sql);
+        $rs  = $conn->fetchAll($sql);
+
+        $i->last_login = null;
 
         if ($rs !== false && !empty($rs)) {
-            $i->last_login = unserialize($rs[0]['value']);
+            $value = unserialize($rs[0]['value']);
+            if (!empty($value)) {
+                $i->last_login = new \DateTime(unserialize($rs[0]['value']));
+            }
         }
 
         // Get the creation date of the last created content
         $sql = 'SELECT created FROM contents ORDER BY created desc LIMIT 1 ';
-        $rs  = $this->im->getConnection()->fetchAll($sql);
+        $rs  = $conn->fetchAll($sql);
 
         if ($rs !== false && !empty($rs)) {
-            if ($rs[0]['created'] > $i->last_login) {
-                $i->last_login = $rs[0]['created'];
+            if (!empty($rs[0]['created']) && $rs[0]['created'] > $i->last_login) {
+                $i->last_login = new \DateTime($rs[0]['created']);
             }
         }
     }
@@ -320,8 +336,9 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      **/
     public function getCreatedDate(&$i)
     {
-        $sql = 'SELECT * FROM settings WHERE name=\'site_created\'';
-        $rs  = $this->im->getConnection()->fetchAll($sql);
+        $sql  = 'SELECT * FROM settings WHERE name=\'site_created\'';
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $rs   = $conn->fetchAll($sql);
 
         if ($rs !== false && !empty($rs)) {
             foreach ($rs as $value) {
