@@ -447,30 +447,57 @@ class MigrationSaver
 
             $values = $this->merge($values, $item, $schema);
 
+            $items = [];
+            if (is_array($values['local_file'])) { // Inline attachments
+                foreach ($values['local_file'] as $key => $fileName) {
+                    $info  = pathinfo($fileName);
+                    $value = array_merge($values, [
+                        'source_path'       => $values['source_path'] . $fileName,
+                        'target_path'       => $values['target_path'] . $info['basename'],
+                        'path'              => $values['path'] . $info['basename'],
+                        'title'             => $info['basename'],
+                        'slug'              => $fileName,
+                        'id'                => $values['id'].'-'.$key
+                    ]);
+
+                    $items[] = $value;
+                }
+            } else {
+                $items[] = $values;
+            }
+
             try {
-                if ($this->matchTranslation(
-                    $values[$schema['translation']['field']],
-                    $schema['translation']['name']
-                ) === false
-                ) {
-                    $fs = new Filesystem();
-                    $fs->copy($values['source_path'], $values['target_path']);
+                // Inline attachments
+                foreach ($items as $key => $i) {
+                    if ($this->matchTranslation(
+                        $i[$schema['translation']['field']],
+                        $schema['translation']['name']
+                    ) === false
+                    ) {
+                        $fs = new Filesystem();
+                        $fs->copy($i['source_path'], $i['target_path']);
 
-                    $attachment = new \Attachment();
-                    $attachment->create($values);
-                    $slug = array_key_exists('slug', $schema['translation']) ?
-                        $values[$schema['translation']['slug']] : '';
+                        $attachment = new \Attachment();
+                        $id = $attachment->create($i);
 
-                    $this->createTranslation(
-                        $values[$schema['translation']['field']],
-                        $attachment->id,
-                        $schema['translation']['name'],
-                        $slug
-                    );
+                        if ($id) {
+                            $slug = array_key_exists('slug', $schema['translation']) ?
+                                $i[$schema['translation']['slug']] : $i['slug'];
 
-                    $this->stats[$name]['imported']++;
-                } else {
-                    $this->stats[$name]['already_imported']++;
+                            $this->createTranslation(
+                                $i[$schema['translation']['field']],
+                                $attachment->id,
+                                $schema['translation']['name'],
+                                $slug
+                            );
+
+                            $this->stats[$name]['imported']++;
+                        } else {
+                            $this->stats[$name]['already_imported']++;
+                        }
+                    } else {
+                        $this->stats[$name]['already_imported']++;
+                    }
                 }
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
@@ -943,6 +970,7 @@ class MigrationSaver
                     $info  = pathinfo($fileName);
                     $value = array_merge($values, [
                         'local_file'        => $values['path'] . $fileName,
+                        'match'             => $fileName,
                         'extension'         => $info['extension'],
                         'original_filename' => $info['basename'],
                         'title'             => $values['title'].' - '.$info['basename'],
@@ -1045,7 +1073,7 @@ class MigrationSaver
 
                             $this->createTranslation(
                                 $i[$schema['translation']['field']],
-                                $id.'-'.$key,
+                                $id,
                                 $schema['translation']['name'],
                                 $slug
                             );
@@ -1806,6 +1834,10 @@ class MigrationSaver
                         $field,
                         $params['translation']
                     );
+                    break;
+                case 'translation_from_slug':
+                    list($type, $field) =
+                        \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
                     break;
                 case 'username':
                     $field = \Onm\StringUtils::getTitle(
