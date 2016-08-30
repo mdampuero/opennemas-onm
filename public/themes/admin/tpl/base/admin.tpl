@@ -29,9 +29,21 @@
   {block name="header-css"}
     {stylesheets src="
       @Common/components/bootstrap/dist/css/bootstrap.min.css,
+      @Common/src/webarch/css/custom-icon-set.css,
+      @Common/src/webarch/css/magic_space.css,
+      @Common/src/webarch/css/responsive.css,
+      @Common/src/webarch/css/style.css" filters="cssrewrite" output="core"}
+    {/stylesheets}
+    {stylesheets src="
+      @Common/src/sidebar/less/main.less,
+      @Common/src/opennemas-webarch/css/layout/*,
+      @Common/src/opennemas-webarch/less/main.less,
+      @Common/src/sidebar/less/main.less" filters="cssrewrite,less" output="core"}
+    {/stylesheets}
+
+    {stylesheets src="
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/angular-bootstrap/ui-bootstrap-csp.css,
-      @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
@@ -39,36 +51,26 @@
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
+      @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/messenger/build/css/messenger.css,
       @Common/components/messenger/build/css/messenger.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
-      @Common/components/nanoscroller/bin/css/nanoscroller.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/select2/select2.css,
-      @Common/components/spinkit/css/spinkit.css" filters="cssrewrite"}
+      @Common/components/spinkit/css/spinkit.css" filters="cssrewrite" output="vendor"}
     {/stylesheets}
     {stylesheets src="
-      @Common/src/webarch/css/custom-icon-set.css,
-      @Common/src/webarch/css/magic_space.css,
-      @Common/src/webarch/css/responsive.css,
-      @Common/src/webarch/css/style.css,
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
-      @Common/src/sidebar/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
-      @Common/src/opennemas-webarch/css/layout/*,
-      @Common/src/opennemas-webarch/less/main.less,
       @AdminTheme/less/_album.less,
       @AdminTheme/less/_article.less,
       @AdminTheme/less/_comment.less,
       @AdminTheme/less/_image.less,
-      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less"}
+      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less" output="vendor"}
     {/stylesheets}
   {/block}
   {block name="header-js"}
@@ -463,6 +465,7 @@
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/messenger/build/js/messenger.min.js,
       @Common/components/messenger/build/js/messenger-theme-flat.js,
+      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
