@@ -29,6 +29,8 @@
   {block name="header-css"}
     {stylesheets src="
       @Common/components/bootstrap/dist/css/bootstrap.min.css,
+      @Common/components/select2/select2.css,
+      @Common/components/angular-ui-select/dist/select.min.css,
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
       @Common/src/webarch/css/responsive.css,
@@ -45,7 +47,6 @@
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
-      @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
       @Common/components/animate.css/animate.min.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
@@ -58,7 +59,6 @@
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
-      @Common/components/select2/select2.css,
       @Common/components/spinkit/css/spinkit.css" filters="cssrewrite" output="vendor"}
     {/stylesheets}
     {stylesheets src="
