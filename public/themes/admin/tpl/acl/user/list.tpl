@@ -56,12 +56,12 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="USER_AVAILABLE"}
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', 0, 'loading')" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                 <i class="fa fa-times fa-lg"></i>
               </button>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', 1, 'loading')" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
                 <i class="fa fa-check fa-lg"></i>
               </button>
             </li>
