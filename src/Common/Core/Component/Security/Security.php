@@ -69,7 +69,7 @@ class Security
             return true;
         }
 
-        if ($this->user->getOrigin() === 'manager') {
+        if (!empty($this->user) && $this->user->getOrigin() === 'manager') {
             return true;
         }
 
@@ -88,7 +88,7 @@ class Security
      */
     public function hasExtension($uuid)
     {
-        if ($this->user->getOrigin() === 'manager') {
+        if (!empty($this->user) && $this->user->getOrigin() === 'manager') {
             return true;
         }
 
@@ -104,8 +104,9 @@ class Security
      */
     public function hasPermission($permission)
     {
-        if ($this->user->getOrigin() === 'manager'
-            || ($this->user->isAdmin() && $permission !='ONLY_MASTERS')
+        if (!empty($this->user)
+            && ($this->user->getOrigin() === 'manager'
+            || ($this->user->isAdmin() && $permission !='ONLY_MASTERS'))
         ) {
             return true;
         }
@@ -126,7 +127,7 @@ class Security
      */
     public function hasRole($role)
     {
-        if (empty($this->user->getRoles())) {
+        if (empty($this->user) || empty($this->user->getRoles())) {
             return false;
         }
 
