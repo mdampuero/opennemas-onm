@@ -49,7 +49,6 @@ class UserProvider implements UserProviderInterface
             // Prevent password deletion after external eraseCredentials call
             return clone($user);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
         }
 
         throw new UsernameNotFoundException();
