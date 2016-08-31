@@ -117,8 +117,17 @@ class Templating
 
         $template = $this->container->get('core.template');
 
-        $template->addInstance($this->container->get('core.instance'));
-        $template->addActiveTheme($this->container->get('core.theme'));
+        if (empty($template->getInstance())
+            || $template->getInstance() !== $this->container->get('core.instance')
+        ) {
+            $template->addInstance($this->container->get('core.instance'));
+        }
+
+        if (empty($template->getTheme())
+            || $template->getTheme() !== $this->container->get('core.theme')
+        ) {
+            $template->addActiveTheme($this->container->get('core.theme'));
+        }
 
         return $template;
     }

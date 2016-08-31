@@ -81,9 +81,9 @@ class CacheManagerController extends Controller
 
             $flashBag = $this->get('session')->getFlashBag();
             if ($saved) {
-                $flashBag->add('success', _('Cache configuration saved successfully.'));
+                $flashBag->add('success', 'Cache configuration saved successfully.');
             } else {
-                $flashBag->add('error', _('Unable to save the cache configuration.'));
+                $flashBag->add('error', 'Unable to save the cache configuration.');
             }
 
             return $this->redirect($this->generateUrl('admin_cache_manager_config'));
@@ -112,7 +112,7 @@ class CacheManagerController extends Controller
         $this->clearVarnishCache();
 
         $this->get('session')->getFlashBag()
-            ->add('success', _('Cleared all cache for the instance (smarty compiles, smarty cache, redis and varnish.'));
+            ->add('success', 'Cleared all cache for the instance (smarty compiles, smarty cache, redis and varnish).');
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
@@ -131,7 +131,7 @@ class CacheManagerController extends Controller
         $this->clearSmartyCache();
 
         $this->get('session')->getFlashBag()
-            ->add('success', _('Smarty cache removed for the instance.'));
+            ->add('success', 'Smarty cache removed for the instance.');
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
@@ -150,7 +150,7 @@ class CacheManagerController extends Controller
         $this->clearSmartyCompiles();
 
         $this->get('session')->getFlashBag()
-            ->add('success', _('Smarty compiled templates removed for the instance.'));
+            ->add('success', 'Smarty compiled templates removed for the instance.');
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
@@ -173,7 +173,7 @@ class CacheManagerController extends Controller
         $this->clearVarnishCache();
 
         $this->get('session')->getFlashBag()
-            ->add('success', _('Varnish BAN queued for current instance.'));
+            ->add('success', 'Varnish BAN queued for current instance.');
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
     }
@@ -188,7 +188,7 @@ class CacheManagerController extends Controller
     {
         $this->clearRedis();
         $this->get('session')->getFlashBag()
-            ->add('success', _('Redis cache cleared for current instance.'));
+            ->add('success', 'Redis cache cleared for current instance.');
 
         return $this->redirect($this->generateUrl('admin_cache_manager'));
     }

@@ -7,7 +7,8 @@ parameters:
     cache_prefix: onm
     core.paths.cache: %kernel.root_dir%/../tmp/instances
     core.paths.cache.common: %kernel.root_dir%/../tmp/compiles
-    core.paths.themes: %kernel.root_dir%/../public/themes
+    core.paths.public: %kernel.root_dir%/../public
+    core.paths.themes: %core.paths.public%/themes
 
 framework:
     #esi:             ~

@@ -309,6 +309,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $user = $event->getArgument('user');
 
         $this->cacheHandler->delete('user-' . $user->id);
+        $this->cacheHandler->delete('categories_for_user_'.$user->id);
     }
 
     /**

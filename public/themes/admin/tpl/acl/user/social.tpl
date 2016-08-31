@@ -5,7 +5,7 @@
     {block name="header-css"}
     {stylesheets src="
     @Common/components/font-awesome/css/font-awesome.min.css,
-    @Common/components/bootstrap/dist/css/bootstrap.min.css" filters="cssrewrite"}
+    @Common/components/bootstrap/dist/css/bootstrap.min.css" filters="cssrewrite" output="social_iframe"}
     <link rel="stylesheet" href="{$asset_url}">
     {/stylesheets}
     {/block}

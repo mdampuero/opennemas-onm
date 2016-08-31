@@ -405,6 +405,8 @@ class InstanceController extends Controller
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
+            $this->get('core.loader')->configureInstance($instance);
+
             $em->getConnection('instance')
                 ->selectDatabase($instance->getDatabaseName());
 
@@ -471,6 +473,8 @@ class InstanceController extends Controller
 
         $instance->settings['TEMPLATE_USER'] = 'es.openhost.theme.'
             . str_replace('es.openhost.theme.', '', $instance->settings['TEMPLATE_USER']);
+
+        $this->get('core.loader')->configureInstance($instance);
 
         $em->getConnection('instance')
             ->selectDatabase($instance->getDatabaseName());
@@ -543,9 +547,14 @@ class InstanceController extends Controller
         $em->persist($instance);
 
         // Update settings for instance
-        $em->getConnection('instance')
-            ->selectDatabase($instance->getDatabaseName());
+        $this->get('core.loader')->configureInstance($instance);
         $em->getDataSet('Settings', 'instance')->set($settings);
+
+        // TODO: Fix clean caches
+        foreach ($settings as $key => $setting) {
+            $this->get('setting_repository')
+                ->invalidate($key, $instance->internal_name);
+        }
 
         $this->get('core.dispatcher')
             ->dispatch('instance.update', [ 'instance' => $instance ]);

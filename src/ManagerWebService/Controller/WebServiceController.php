@@ -127,11 +127,15 @@ class WebServiceController extends Controller
             'email'         => $instance->contact_mail,
             'fk_user_group' => [ 5 ],
             'name'          => $instance->contact_mail,
-            'password'      => $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
             'token'         => md5(uniqid(mt_rand(), true)),
             'type'          => 0,
             'username'      => $instance->contact_mail
         ]));
+
+        $user->password = $this->get('onm_password_encoder')->encodePassword(
+            $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
+            null
+        );
 
         try {
             $errors = [];
@@ -261,7 +265,8 @@ class WebServiceController extends Controller
                         'companyMail'       => $companyMail['company_mail'],
                         'instance_base_url' => $instanceBaseURL,
                     )
-                )
+                ),
+                'text/html'
             );
 
         // Send message
@@ -284,7 +289,8 @@ class WebServiceController extends Controller
                         'instance'  => $instance,
                         'exception' => $exception
                     )
-                )
+                ),
+                'text/html'
             );
 
         // Send message

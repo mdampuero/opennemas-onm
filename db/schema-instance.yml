@@ -524,8 +524,8 @@ contents:
             type: text
             options: { default: null, length: 65532, notnull: false }
         body:
-            type: text
-            options: { default: null, length: 65532 }
+            type: string
+            options: { default: null, length: 4294967295, notnull: false }
         metadata:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -1366,17 +1366,17 @@ static_pages:
 translation_ids:
     columns:
         pk_content_old:
-            type: bigint
+            type: string
             options: { default: null }
         pk_content:
-            type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            type: string
+            options: { default: null, length: 255 }
         type:
             type: string
             options: { default: null, length: 100 }
         slug:
-            type: string
-            options: { default: '', notnull: false, length: 200 }
+            type: text
+            options: { default: '', notnull: false, length: 65535 }
     index:
         -
             name: PRIMARY

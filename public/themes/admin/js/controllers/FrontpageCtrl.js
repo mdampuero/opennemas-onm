@@ -93,7 +93,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       });
 
       modal.result.then(function(response) {
-        if(response.status == 200) {
+        if(response.success) {
           var selected =
             $('.content-provider-element input[type="checkbox"]:checked')
               .closest('.content-provider-element');
@@ -105,8 +105,6 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
                   });
                });
           });
-
-          showMessage(frontpage_messages.remember_save_positions, 'info', 5);
 
           $scope.selected.contents = [];
         }

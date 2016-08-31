@@ -1,19 +1,19 @@
 <?php
 /* {renderplaceholder items=$articles tpl='xxx.tpl' placeholder="placeholder_0_0"} */
-function smarty_function_renderplaceholder($params, &$smarty) {
-
+function smarty_function_renderplaceholder($params, &$smarty)
+{
     $outputHTML    = '';
-    $filteredContents = array();
 
-    // get all the parameters passed to the function
+    // Get all the parameters passed to the function
     $items       = $params['items'];
     $tpl         = $params['tpl'];
     $placeholder = $params['placeholder'];
     $cssclass    = $params['cssclass'];
     $order       = (array_key_exists('order', $params))? $params['order'] : 'normal';
     unset($params['items']);
-    $category_name = $smarty->getTemplateVars('category_name');
-    $varname       = (!isset($params['varname']))? 'item': $params['varname'];
+
+    // Assign smarty variables to params
+    $params['category_name'] = $smarty->getTemplateVars('category_name');
 
     // Doing some checks if this method was called properly
     if (!isset($items)) {
@@ -26,6 +26,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
 
     $tpl->setCaching(\Smarty::CACHING_OFF);
 
+    $filteredContents = [];
     if (isset($items) && count($items>0)) {
         foreach ($items as $i => $item) {
             if ($item->placeholder == $placeholder && ($item->content_status == 1)) {
@@ -42,6 +43,6 @@ function smarty_function_renderplaceholder($params, &$smarty) {
 
     $tpl->caching = $caching;
 
-    // return all the html collected
+    // Return all the html collected
     return $outputHTML;
 }

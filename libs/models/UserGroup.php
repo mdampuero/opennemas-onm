@@ -50,7 +50,7 @@ class UserGroup
     public function __construct($id = null)
     {
         if (!is_null($id)) {
-            $this->read($id);
+            return $this->read($id);
         }
     }
 
@@ -63,25 +63,34 @@ class UserGroup
      **/
     public function create($data)
     {
-        $sql = "INSERT INTO user_groups (`name`) VALUES (?)";
-        $values = array($data['name']);
+        $conn = getService('dbal_connection');
+        try {
+            $conn->beginTransaction();
+            $rs = $conn->insert(
+                "user_groups",
+                [ 'name' => $data['name'] ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $this->id = (int) getService('dbal_connection')->lastInsertId();
+            $this->name = $data['name'];
+
+            //Se insertan los privilegios
+            if (!is_null($data['privileges'])
+                && count($data['privileges'] > 0)
+            ) {
+                $this->insertPrivileges($data['privileges']);
+            }
+
+            $conn->commit();
+
+            dispatchEventWithParams('usergroup.create', array('usergroup' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log($e->getMessage());
             return false;
         }
-        $this->id = (int) $GLOBALS['application']->conn->Insert_ID();
-        $this->name = $data['name'];
-
-        //Se insertan los privilegios
-        if (!is_null($data['privileges'])
-            && count($data['privileges'] > 0)
-        ) {
-            return $this->insertPrivileges($data['privileges']);
-        }
-
-        dispatchEventWithParams('usergroup.create', array('usergroup' => $this));
-
-        return true;
     }
 
     /**
@@ -93,29 +102,33 @@ class UserGroup
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM user_groups WHERE pk_user_group=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        try {
+            // Load the user group info
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM user_groups WHERE pk_user_group=?',
+                [ $id ]
+            );
 
-        if (!$rs) {
-            return;
+            if (is_null($rs)) {
+                return;
+            }
+
+            $this->load($rs);
+
+            // Load the user group privileges
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT pk_fk_privilege"." FROM user_groups_privileges WHERE pk_fk_user_group = ?",
+                [ $id ]
+            );
+            foreach ($rs as $row) {
+                $this->privileges[] = $row['pk_fk_privilege'];
+            }
+
+            return $this;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return null;
         }
-        $this->load($rs->fields);
-
-        //Se cargan los privileges asociados
-        $sql =  "SELECT pk_fk_privilege"
-                ." FROM user_groups_privileges"
-                ." WHERE pk_fk_user_group = ?";
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
-
-        if (!$rs) {
-            return;
-        }
-        while (!$rs->EOF) {
-            $this->privileges[] = $rs->fields['pk_fk_privilege'];
-            $rs->MoveNext();
-        }
-
-        return $this;
     }
 
     /**
@@ -127,39 +140,45 @@ class UserGroup
      **/
     public function update($data)
     {
-        if (!is_null($data['id'])) {
-            $this->id = $data['id'];
+        if ((int) $data['id'] <= 0) {
+            return false;
+        }
 
-            $sql = "UPDATE user_groups
-                    SET `name`=?
-                    WHERE pk_user_group=?";
-            $values = array(
-                $data['name'],
-                (int) $data['id']
+        try {
+            $conn = getService('dbal_connection');
+            $conn->beginTransaction();
+
+            // Updating the user group data
+            $rs = $conn->update(
+                "user_groups",
+                [
+                  'name' => $data['name']
+                ],
+                [ 'pk_user_group' => (int) $data['id'] ]
             );
 
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            $data['pk_user_group'] = $data['id'];
+            $this->load($data);
 
-            if (!$rs) {
-                return false;
-            }
-
-            // Se actualizan los privileges
+            // Updating the privileges, first remove previous and later insert new privileges
             $this->deletePrivileges($data['id']);
 
             if (!is_null($data['privileges'])
                 && count($data['privileges'] > 0)
             ) {
-                //print 'Insertamos los privilegios';
-                return $this->insertPrivileges($data['privileges']);
+                $this->insertPrivileges($data['privileges']);
             }
+
+            $conn->commit();
 
             dispatchEventWithParams('usergroup.update', array('usergroup' => $this));
 
             return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log($e->getMessage());
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -171,19 +190,34 @@ class UserGroup
      **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM user_groups WHERE pk_user_group=?';
-
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
+        if ((int) $id <= 0) {
             return false;
         }
 
-        $isDeleted = $this->deletePrivileges($id);
+        try {
+            $conn = getService('dbal_connection');
+            $conn->beginTransaction();
+            $rs = $conn->delete(
+                "user_groups",
+                [ 'pk_user_group' => $id ]
+            );
 
-        dispatchEventWithParams('usergroup.delete', array('usergroup' => $this));
+            if (!$rs) {
+                return false;
+            }
 
-        return $isDeleted;
+            $this->deletePrivileges($id);
+
+            $conn->commit();
+
+            dispatchEventWithParams('usergroup.delete', array('usergroup' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -195,10 +229,21 @@ class UserGroup
      **/
     public static function getGroupName($id)
     {
-        $sql = 'SELECT name FROM user_groups WHERE pk_user_group=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT name FROM user_groups WHERE pk_user_group=?',
+                [ $id ]
+            );
 
-        return $rs;
+            if (!is_array($rs) || (is_array($rs) && !array_key_exists('name', $rs))) {
+                return false;
+            }
+
+            return $rs['name'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -208,17 +253,20 @@ class UserGroup
      **/
     public function find()
     {
-        $userGroups = array();
+        $userGroups = [];
 
-        $rs = $GLOBALS['application']->conn->Execute(
-            "SELECT pk_user_group, name FROM user_groups WHERE name <>'Masters'"
-        );
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT pk_user_group, name FROM user_groups WHERE name <>'Masters'"
+            );
 
-        while (!$rs->EOF) {
-            $userGroup = new UserGroup();
-            $userGroup->load($rs->fields);
-            $userGroups[] = $userGroup;
-            $rs->MoveNext();
+            foreach ($rs as $row) {
+                $userGroup = new UserGroup();
+                $userGroup->load($row);
+                $userGroups[] = $userGroup;
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
         }
 
         return $userGroups;
@@ -250,18 +298,14 @@ class UserGroup
     private function insertPrivileges($privilegeIds)
     {
         foreach ($privilegeIds as $privilegeId) {
-            $rs = $GLOBALS['application']->conn->Execute(
-                "INSERT INTO user_groups_privileges
-                (`pk_fk_user_group`, `pk_fk_privilege`)
-                VALUES (?,?)",
-                array((int) $this->id, (int) $privilegeId)
+            $rs = getService('dbal_connection')->insert(
+                "user_groups_privileges",
+                [
+                  'pk_fk_user_group' => (int) $this->id,
+                  'pk_fk_privilege'  => (int) $privilegeId
+                ]
             );
-            if (!$rs) {
-                return false;
-            }
         }
-
-        return true;
     }
 
     /**
@@ -273,14 +317,21 @@ class UserGroup
      **/
     private function deletePrivileges($id)
     {
-        $sql = 'DELETE FROM user_groups_privileges WHERE pk_fk_user_group=?';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
-        if (!$rs) {
+        if ((int) $id <= 0) {
             return false;
         }
 
-        return true;
+        try {
+            $rs = getService('dbal_connection')->delete(
+                "user_groups_privileges",
+                [ 'pk_fk_user_group' => intval($id) ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**

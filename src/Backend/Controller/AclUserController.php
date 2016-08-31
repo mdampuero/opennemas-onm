@@ -330,7 +330,7 @@ class AclUserController extends Controller
             // Upload user avatar if exists
             if (!empty($file)) {
                 $user->avatar_img_id =
-                    $user->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
+                    $this->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
             }
 
             $em->persist($user);

@@ -16,9 +16,9 @@
           </div>
         </div>
         <div class="text-right price">
-          <h3 class="no-margin" ng-show="item.metas.price">
-            <div ng-repeat="price in item.metas.price">
-              <span ng-if="price.value">
+          <h3 class="no-margin" ng-show="item.price">
+            <div ng-repeat="price in item.price">
+              <span ng-if="price.value && price.type !== 'item'">
                 <strong>[% price.value %]</strong>
                 <small ng-if="price.type === 'monthly'">€/{t}month{/t}</small>
                 <small ng-if="price.type === 'yearly'">€/{t}year{/t}</small>

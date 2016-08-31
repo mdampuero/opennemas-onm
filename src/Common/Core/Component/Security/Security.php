@@ -102,7 +102,11 @@ class Security
      */
     public function hasCategory($category)
     {
-        if ($this->user->getOrigin() === 'manager') {
+        if (empty($category)) {
+            return true;
+        }
+
+        if (!empty($this->user) && $this->user->getOrigin() === 'manager') {
             return true;
         }
 
@@ -121,7 +125,7 @@ class Security
      */
     public function hasExtension($uuid)
     {
-        if ($this->hasPermission('MASTER')) {
+        if (!empty($this->user) && $this->hasPermission('MASTER')) {
             return true;
         }
 
@@ -189,7 +193,7 @@ class Security
      */
     public function hasRole($role)
     {
-        if (empty($this->user->getRoles())) {
+        if (empty($this->user) || empty($this->user->getRoles())) {
             return false;
         }
 

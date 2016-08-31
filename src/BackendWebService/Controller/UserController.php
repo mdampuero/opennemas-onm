@@ -296,7 +296,10 @@ class UserController extends Controller
 
         $extra['user_groups'] = $converter->responsify($userGroups);
         $extra['user_groups'] = array_merge(
-            [[ 'pk_user_group' => null, 'name' => _('All') ]],
+            [
+                [ 'pk_user_group' => null, 'name' => _('All') ],
+                [ 'pk_user_group' => [], 'name' => _('Not assigned') ],
+            ],
             $extra['user_groups']
         );
 

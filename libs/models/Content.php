@@ -777,14 +777,14 @@ class Content
                 'contents',
                 [
                     'in_litter'           => 1,
-                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'fk_user_last_editor' => (int) getService('session')->get('user')->id,
                     'changed'             => date("Y-m-d H:i:s")
                 ],
                 [ 'pk_content' => $this->id ]
             );
 
             $this->in_litter           = 1;
-            $this->fk_user_last_editor = $_SESSION['userid'];
+            $this->fk_user_last_editor = (int) getService('session')->get('user')->id;
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -978,7 +978,7 @@ class Content
         }
 
         if ($lastEditor == null) {
-            $lastEditor = $_SESSION['userid'];
+            $lastEditor = (int) getService('session')->get('user')->id;
         }
 
         try {
@@ -1098,7 +1098,7 @@ class Content
                 [
                     'content_status'      => 0,
                     'available'           => 0,
-                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'fk_user_last_editor' => (int) getService('session')->get('user')->id,
                     'changed'             => date("Y-m-d H:i:s"),
                 ],
                 [ 'pk_content' => $this->id, ]
@@ -1206,7 +1206,7 @@ class Content
                 [
                     'content_status'      => $this->content_status,
                     'frontpage'           => $this->frontpage,
-                    'fk_user_last_editor' => $_SESSION['userid'],
+                    'fk_user_last_editor' => (int) getService('session')->get('user')->id,
                     'changed'             => date("Y-m-d H:i:s")
                 ],
                 [ 'pk_content' => $this->id ]
@@ -1631,7 +1631,7 @@ class Content
 
             /* Notice log of this action */
             getService('application.log')->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+                'User '.$user->username.' ('.(int) getService('session')->get('user')->id.') has executed'
                 .' action Content::dropFromHomePageOfCategory '.$categoryName
                 .' an '.$this->content_type_name.' Id '.$pkContent
             );
@@ -1651,13 +1651,28 @@ class Content
     public function dropFromAllHomePages()
     {
         try {
+            // Fetch the list of frontpages where this article is included
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT fk_category FROM content_positions WHERE pk_fk_content = ?",
+                [ $this->id ]
+            );
+
+            // Remove the content from all frontpages
             getService('dbal_connection')->delete(
                 'content_positions',
                 [ 'pk_fk_content' => $this->id ]
             );
 
+            // Clean cache for each frontpage element listing
+            $cache = getService('cache');
+            foreach ($rs as $row) {
+                $contentIds = $cache->delete('frontpage_elements_map_'.$row['fk_category']);
+                getService('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $row['fk_category']));
+            }
+
+            $user = getService('session')->get('user');
             getService('application.log')->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+                'User '.$user->username.' ('.(int) $user->id.') has executed '
                 .'action Drop from frontpage to content with ID id '.$this->id
             );
 

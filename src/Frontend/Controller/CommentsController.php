@@ -233,6 +233,8 @@ class CommentsController extends Controller
                         );
                         $data = array_map('strip_tags', $data);
 
+                        $data['body'] = '<p>'.preg_replace('@\\n@', '</p><p>', $data['body']).'</p>';
+
                         // Check moderation option
                         $commentsOpt = s::get('comments_config');
                         if (is_array($commentsOpt)

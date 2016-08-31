@@ -918,15 +918,17 @@ class ContentController extends Controller
             unset($ids[$key]);
         }
 
-        $converter = $this->get('orm.manager')->getConverter('User');
-        $users     = $this->get('orm.manager')->getRepository('User')
-            ->findBy(sprintf('id in [%s]', implode(',', $ids)));
+        $extra['authors'] = [];
+        if (!empty($ids)) {
+            $converter = $this->get('orm.manager')->getConverter('User');
+            $users     = $this->get('orm.manager')->getRepository('User')
+                ->findBy(sprintf('id in [%s]', implode(',', $ids)));
 
-        $extra['authors'] = array();
-        foreach ($users as $user) {
-            $user->eraseCredentials();
+            foreach ($users as $user) {
+                $user->eraseCredentials();
 
-            $extra['authors'][$user->id] = $converter->responsify($user->getData());
+                $extra['authors'][$user->id] = $converter->responsify($user->getData());
+            }
         }
 
         $ccm = \ContentCategoryManager::get_instance();

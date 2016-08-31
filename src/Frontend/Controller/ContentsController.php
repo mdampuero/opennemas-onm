@@ -156,26 +156,6 @@ class ContentsController extends Controller
                 );
             }
 
-            $valid = false;
-            $errors = [];
-
-            if (!empty($request->get('g-recaptcha-response'))) {
-                $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
-                $resp = $recaptcha->verify(
-                    $request->get('g-recaptcha-response'),
-                    $request->getClientIp()
-                );
-
-                $valid = $resp->isSuccess();
-            }
-
-            if (!$valid) {
-                $errors []= _(
-                    'The reCAPTCHA was not entered correctly.'.
-                    ' Try to authenticate again.'
-                );
-            }
-
             // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
             $ext       = $request->request->getDigits('ext', 0);
