@@ -34,7 +34,9 @@
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
       @Common/src/webarch/css/responsive.css,
-      @Common/src/webarch/css/style.css" filters="cssrewrite" output="core"}
+      @Common/src/webarch/css/style.css,
+      @Common/components/messenger/build/css/messenger-theme-flat.css,
+      @Common/components/messenger/build/css/messenger.css" filters="cssrewrite" output="core"}
     {/stylesheets}
     {stylesheets src="
       @Common/src/sidebar/less/main.less,
@@ -54,8 +56,6 @@
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
-      @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/messenger/build/css/messenger.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
