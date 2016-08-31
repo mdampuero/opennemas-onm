@@ -1658,7 +1658,7 @@ class Content
             );
 
             // Remove the content from all frontpages
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 'content_positions',
                 [ 'pk_fk_content' => $this->id ]
             );
