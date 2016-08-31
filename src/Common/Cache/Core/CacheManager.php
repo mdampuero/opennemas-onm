@@ -42,7 +42,7 @@ class CacheManager
         $this->container = $container;
 
         $internal = $this->getInternalConnection();
-        $caches   = $internal->get('orm_' . DEPLOYED_AT);
+        $caches   = $internal->get('cache_' . DEPLOYED_AT);
 
         if (empty($caches)) {
             $caches = $container->get('cache.loader')->load();
@@ -56,7 +56,7 @@ class CacheManager
             $this->container->set('cache.connection.' . $cache->name, $cache);
         }
 
-        $internal->set('orm_' . DEPLOYED_AT, $this->caches);
+        $internal->set('cache_' . DEPLOYED_AT, $this->caches);
     }
 
     /**
