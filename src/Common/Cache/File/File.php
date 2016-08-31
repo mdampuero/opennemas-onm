@@ -27,6 +27,9 @@ class File extends Cache
     {
         parent::__construct($data);
 
+        // Force cache directory creation
+        $this->getFileSystem();
+
         if (empty($this->path) || empty($this->name)) {
             throw new \InvalidArgumentException();
         }
@@ -95,7 +98,7 @@ class File extends Cache
     protected function getFileSystem()
     {
         $fs = new Filesystem();
-        $path = $this->path . DS . $this->name;
+        $path = $this->path;
 
         if (!$fs->exists($path)) {
             $fs->mkdir($path, 0755);
@@ -136,7 +139,6 @@ class File extends Cache
     protected function deleteMulti($ids)
     {
         foreach ($ids as $id) {
-            var_dump($id);
             $this->remove($id);
         }
     }
