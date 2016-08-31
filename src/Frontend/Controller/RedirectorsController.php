@@ -58,8 +58,10 @@ class RedirectorsController extends Controller
             }
         } elseif ($type == 'opinion') {
             $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
-        } elseif ($type === 'photo-inline'){
+        } elseif ($type === 'photo-inline') {
             $content = new \Photo($newContentID);
+        } elseif ($type === 'attachment') {
+            $content = new \Attachment($newContentID);
         } else {
             $content = new \Content($newContentID);
         }
