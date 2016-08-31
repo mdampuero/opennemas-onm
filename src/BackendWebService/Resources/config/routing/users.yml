@@ -20,7 +20,7 @@ backend_ws_users_delete:
         expose: true
 
 backend_ws_users_export:
-    path:     /users.csv
+    path:     /users/csv
     defaults: { _controller: BackendWebServiceBundle:User:export }
     methods:  [ GET ]
     options:
