@@ -81,7 +81,7 @@ class Loader
         $this->path    = $path;
 
         if (!empty($cm)) {
-            $this->cache = $cm->getConnection('manager');
+            $this->cache = $cm->getConnection('internal');
         }
     }
 
