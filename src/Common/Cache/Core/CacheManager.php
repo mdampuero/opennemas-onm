@@ -9,6 +9,7 @@
  */
 namespace Common\Cache\Core;
 
+use Common\Cache\File\File;
 use Common\ORM\Core\Exception\InvalidCacheException;
 
 /**
@@ -38,12 +39,24 @@ class CacheManager
      */
     public function __construct($container)
     {
-        $this->caches    = $container->get('cache.loader')->load();
         $this->container = $container;
+
+        $internal = $this->getInternalConnection();
+        $caches   = $internal->get('orm_' . DEPLOYED_AT);
+
+        if (empty($caches)) {
+            $caches = $container->get('cache.loader')->load();
+        }
+
+        if (!empty($caches)) {
+            $this->caches = array_merge($this->caches, $caches);
+        }
 
         foreach ($this->caches as $cache) {
             $this->container->set('cache.connection.' . $cache->name, $cache);
         }
+
+        $internal->set('orm_' . DEPLOYED_AT, $this->caches);
     }
 
     /**
@@ -64,5 +77,18 @@ class CacheManager
         }
 
         return $this->caches[$name];
+    }
+
+    /**
+     * Returns an internal filesystem cache.
+     *
+     * @return File The filesystem cache instance.
+     */
+    public function getInternalConnection()
+    {
+        $this->caches['internal'] =
+            new File($this->container->getParameter('cache.default')['file']);
+
+        return $this->caches['internal'];
     }
 }
