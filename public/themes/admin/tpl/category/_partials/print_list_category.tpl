@@ -13,7 +13,7 @@
                   {/if}
               {/acl}
               {acl isAllowed="CATEGORY_DELETE"}
-                 {if $category->internal_category != 0 && $contents_count['articles'][$category->id] == 0}
+                 {if $category->internal_category != 0 && array_key_exists($category->id, $contents_count['articles']) &&  $contents_count['articles'][$category->id] !== 0}
                   <a class="link empty-category"
                       href="{url name=admin_category_empty id=$category->pk_content_category}"
                       data-url="{url name=admin_category_empty id=$category->pk_content_category}"
@@ -89,7 +89,7 @@
                           </a>
                       {/acl}
                       {acl isAllowed="CATEGORY_DELETE"}
-                          {if $subcategory->internal_category == 1 && $contents_count['articles'][$category->id] == 0}
+                         {if $subcategory->internal_category != 0 && array_key_exists($subcategory->id, $contents_count['articles']) &&  $contents_count['articles'][$subcategory->id] !== 0}
                           <a class="link empty-category"
                               href="{url name=admin_category_empty id=$subcategory->pk_content_category}"
                               data-url="{url name=admin_category_empty id=$subcategory->pk_content_category}"
