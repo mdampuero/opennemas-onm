@@ -49,6 +49,7 @@ class CacheManager
         }
 
         if (!empty($caches)) {
+            $internal->set('cache_' . DEPLOYED_AT, $caches);
             $this->caches = array_merge($this->caches, $caches);
         }
 
@@ -56,7 +57,6 @@ class CacheManager
             $this->container->set('cache.connection.' . $cache->name, $cache);
         }
 
-        $internal->set('cache_' . DEPLOYED_AT, $this->caches);
     }
 
     /**
