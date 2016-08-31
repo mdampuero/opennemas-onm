@@ -70,7 +70,7 @@ class WebServiceController extends Controller
             'internal_name' => $subdomain,
             'name'          => $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING),
             'contact_mail'  => $request->request->filter('user_email', '', FILTER_SANITIZE_STRING),
-            'domains'           => [ $subdomain . '.' . $params['base_domain'] ],
+            'domains'           => [ strtolower($subdomain) . '.' . $params['base_domain'] ],
             'main_domain'       => 1,
             'activated'         => true,
             'plan'              => $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING),
