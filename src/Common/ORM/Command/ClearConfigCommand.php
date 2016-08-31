@@ -39,7 +39,7 @@ class ClearConfigCommand extends ContainerAwareCommand
             ->getConnection('manager');
 
         try {
-            $cache->delete('orm_' . DEPLOYED_AT);
+            $cache->remove('orm_' . DEPLOYED_AT);
             $output->writeln('<info>[OK]</>   ORM configuration deleted from cache');
         } catch (\Exception $e) {
             $output->writeln('<fg=red>[FAIL]</> Unable to delete the ORM configuration from cache');

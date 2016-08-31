@@ -9,9 +9,12 @@
  */
 namespace Common\Cache\Redis;
 
-use Redis as RedisBase;
 use Common\Cache\Core\Cache;
+use Redis as RedisBase;
 
+/**
+ * The Redis class provides methods to use a Redis based cache.
+ */
 class Redis extends Cache
 {
     /**
@@ -44,6 +47,21 @@ class Redis extends Cache
         return $this->getRedis()->exists($id);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function delete($id)
+    {
+        $this->getRedis()->delete($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function deleteMulti($id)
+    {
+        $this->getRedis()->delete($id);
+    }
     /**
      * {@inheritdoc}
      */
@@ -86,22 +104,6 @@ class Redis extends Cache
         }
 
         return $this->redis;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function remove($id)
-    {
-        $this->getRedis()->delete($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function removeMulti($id)
-    {
-        $this->getRedis()->delete($id);
     }
 
     /**

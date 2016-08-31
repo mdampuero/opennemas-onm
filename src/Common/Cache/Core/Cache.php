@@ -46,7 +46,7 @@ abstract class Cache extends DataBuffer
      *
      * @param mixed $id The cache id (or array of cache ids).
      */
-    public function delete($id)
+    public function remove($id)
     {
         $this->addToBuffer('delete', $id);
 
@@ -55,13 +55,13 @@ abstract class Cache extends DataBuffer
         if (is_array($id)) {
             $this->mru = array_diff_key($this->mru, array_flip($id));
 
-            $this->removeMulti($cacheId);
+            $this->deleteMulti($cacheId);
             return;
         }
 
         unset($this->mru[$id]);
 
-        $this->remove($cacheId);
+        $this->delete($cacheId);
     }
 
     /**
@@ -217,6 +217,20 @@ abstract class Cache extends DataBuffer
     abstract protected function contains($id);
 
     /**
+     * Removes data from cache given an id.
+     *
+     * @param mixed $id A cache id.
+     */
+    abstract protected function delete($id);
+
+    /**
+     * Removes data from cache given an array of ids.
+     *
+     * @param mixed $id An array of cache ids.
+     */
+    abstract protected function deleteMulti($ids);
+
+    /**
      * Returns data from cache given an id.
      *
      * @param string $id The cache id.
@@ -233,20 +247,6 @@ abstract class Cache extends DataBuffer
      * @return array The data from cache.
      */
     abstract protected function fetchMulti($id);
-
-    /**
-     * Removes data from cache given an id.
-     *
-     * @param mixed $id A cache id.
-     */
-    abstract protected function remove($id);
-
-    /**
-     * Removes data from cache given an array of ids.
-     *
-     * @param mixed $id An array of cache ids.
-     */
-    abstract protected function removeMulti($ids);
 
     /**
      * Saves data into the cache.
