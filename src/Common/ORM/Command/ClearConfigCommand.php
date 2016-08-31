@@ -36,7 +36,7 @@ class ClearConfigCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $cache = $this->getContainer()->get('cache.manager')
-            ->getConnection('manager');
+            ->getConnection('internal');
 
         try {
             $cache->remove('orm_' . DEPLOYED_AT);
