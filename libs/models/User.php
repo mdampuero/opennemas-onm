@@ -114,7 +114,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      *
      * @var string
      **/
-    public $accesscategories = null;
+    public $accesscategories = [];
 
     /**
      * The user group id
@@ -494,7 +494,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         self::readAccessCategories($idUser);
 
         $cache = getService('cache');
-        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
+        $cache->delete("categories_for_user_".$idUser);
 
         dispatchEventWithParams('user.update', array('user' => $this));
 
@@ -511,9 +511,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function delCategoryToUser($idUser, $idCategory)
     {
-        $cache = getService('cache');
-        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
-
         $sql = 'DELETE FROM users_content_categories '
              . 'WHERE pk_fk_content_category=?';
         $values = array(intval($idCategory));
@@ -541,7 +538,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         $id = (!is_null($id))? $id: $this->id;
 
-        $contentCategories = $cache->fetch(CACHE_PREFIX . "categories_for_user_".$id);
+        $contentCategories = $cache->fetch("categories_for_user_".$id);
          // If was not fetched from APC now is turn of DB
         if (!$contentCategories) {
             $sql = 'SELECT pk_fk_content_category '
@@ -561,7 +558,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                  $rs->MoveNext();
             }
 
-            $cache->save(CACHE_PREFIX . "categories_for_user_".$id, $contentCategories);
+            $cache->save("categories_for_user_".$id, $contentCategories);
         }
 
         return $contentCategories;
@@ -585,8 +582,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
             return false;
         }
-
-        $cache->delete(CACHE_PREFIX . "categories_for_user_".$this->id);
 
         dispatchEventWithParams('user.update', array('user' => $this));
 
@@ -1599,7 +1594,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function getUsername()
     {
-
         return $this->username;
     }
 
