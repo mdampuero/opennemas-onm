@@ -10,6 +10,7 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
+use Framework\Import\Synchronizer\Synchronizer;
 use Framework\Import\Repository\LocalRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -274,8 +275,12 @@ class NewsAgencyController extends Controller
      */
     public function syncAction(Request $request)
     {
-        $servers      = s::get('news_agency_config');
-        $synchronizer = $this->get('core.agency.synchronizer');
+        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $tpl     = $this->get('view')->getBackendTemplate();
+        $path    = $this->getParameter('core.paths.cache') . DS
+            . $this->get('core.instance')->internal_name;
+
+        $synchronizer = new Synchronizer($path, $tpl);
 
         try {
             $synchronizer->syncMultiple($servers);
