@@ -65,6 +65,31 @@
         this.user = null;
 
         /**
+         * @function canEnable
+         * @memberOf security
+         *
+         * @description
+         *  Checks if the current user can enable the item basing on a extension
+         *  UUID.
+         *
+         * @param {String} uuid The extensions UUID.
+         *
+         * @return {Boolean} True if the user can enable the item basing on the
+         *                   extension UUID. False otherwise.
+         */
+        this.canEnable = function(uuid) {
+          if (this.hasPermission('MASTER')) {
+            return true;
+          }
+
+          if (!this.user.extensions) {
+            return false;
+          }
+
+          return this.user.extensions.indexOf(uuid) !== -1;
+        };
+
+        /**
          * @function hasCategory
          * @memberOf security
          *
