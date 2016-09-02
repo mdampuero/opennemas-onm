@@ -148,12 +148,10 @@
             messenger.post(args.data);
           }
 
-          $scope.auth.status = false;
-          $scope.loaded      = true;
-          $scope.loading     = false;
-
-          //webStorage.local.remove('token');
-          //webStorage.local.remove('user');
+          $scope.auth.status  = false;
+          $scope.loaded       = true;
+          $scope.loading      = false;
+          $scope.loginLoading = false;
 
           cfpLoadingBar.complete();
 
