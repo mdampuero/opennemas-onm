@@ -115,7 +115,7 @@
                     <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="text">
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="security.hasPermission('MASTER')">
                   <label class="form-label" for="owner_id">
                     {t}Owner{/t}
                   </label>
@@ -340,7 +340,7 @@
             </div>
             <div class="form-group" ng-repeat="uuid in supportModules">
               <div class="radio" ng-init="initializeSupportPlan()">
-                <input id="[% uuid %]" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
+                <input id="[% uuid %]" ng-disabled="!security.canEnable(uuid)" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
                 <label for="[% uuid %]">
                   [% template.modules[map[uuid]].name %]
                 </label>
@@ -349,7 +349,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-7 col-sm-7 col-xs-12">
+      <div class="col-lg-6 col-md-7 col-sm-7 col-xs-12" ng-show="security.hasPermission('MASTER')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Internal settings{/t}</h4>
@@ -394,7 +394,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" ng-if="security.hasPermission('MASTER')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>External services</h4>
