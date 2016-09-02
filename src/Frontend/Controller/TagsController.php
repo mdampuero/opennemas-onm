@@ -40,12 +40,16 @@ class TagsController extends Controller
 
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $tagName = \Onm\StringUtils::normalize($tagName);
-        $page    =  1; //$request->query->getDigits('page', 1);
+        $page    =  $request->query->getDigits('page', 1);
+
+        if ($page > 1) {
+            $page = 2;
+        }
 
         // Load config
         $this->view->setConfig('frontpages');
 
-        $cacheId = "tag|$tagName";
+        $cacheId = "tag|$tagName|$page";
 
         if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
@@ -68,7 +72,8 @@ class TagsController extends Controller
             );
 
             $er = $this->get('entity_repository');
-            $contents = $er->findBy($criteria, 'starttime DESC', 20, 1);
+            $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
+            $total = count($contents)+1;
 
             // TODO: review this piece of CRAP
             $filteredContents = array();
@@ -112,9 +117,21 @@ class TagsController extends Controller
                 }
             }
 
-            $filteredContents = array_slice($filteredContents, ($page-1)*$itemsPerPage, $itemsPerPage);
-
             $this->view->assign('contents', $filteredContents);
+
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'maxLinks'    => 0,
+                'page'        => $page,
+                'total'       => $total+1,
+                'route'       => [
+                    'name'   => 'tag_frontpage',
+                    'params' => [ 'tag_name' => $tagName ]
+                ]
+            ]);
+
+            $this->view->assign([ 'pagination' => $pagination, ]);
         }
 
         return $this->render(

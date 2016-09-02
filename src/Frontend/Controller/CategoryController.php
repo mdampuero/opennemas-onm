@@ -36,6 +36,10 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
+        if ($page > 1) {
+            $page = 2;
+        }
+
         $this->view->setConfig('frontpages');
 
         $categoryManager = $this->get('category_repository');
@@ -123,17 +127,12 @@ class CategoryController extends Controller
                 'epp'         => $itemsPerPage,
                 'maxLinks'    => 0,
                 'page'        => $page,
-                'total'       => $total,
+                'total'       => $total+1,
                 'route'       => [
                     'name'   => 'category_frontpage',
                     'params' => [ 'category_name' => $categoryName ]
                 ]
             ]);
-
-            # Only allow user to see 2 pages
-            if ($page > 1) {
-                $pagination = null;
-            }
 
             $this->view->assign(
                 [
