@@ -30,7 +30,7 @@ entity:
             arguments: [ '@orm.metadata.user' ]
     repositories:
         instance:
-            class:     Common\ORM\Database\Repository\InstanceUserRepository
+            class:     Common\ORM\Database\Repository\UserRepository
             arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
         manager:
             class:     Common\ORM\Database\Repository\BaseRepository
