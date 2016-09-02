@@ -107,7 +107,11 @@ EOF
         }
 
         $output->writeln("Exporting contents from instance $instance");
-        $this->getContainer()->get('core.loader')->loadInstanceFromInternalName($instance);
+        $instanceObject = $this->getContainer()->get('core.loader')->loadInstanceFromInternalName($instance);
+
+        $this->getContainer()->get('dbal_connection')->selectDatabase(
+            $instanceObject->getDatabaseName()
+        );
 
         // Initialize internal constants for logger
         define('INSTANCE_UNIQUE_NAME', $instance);
