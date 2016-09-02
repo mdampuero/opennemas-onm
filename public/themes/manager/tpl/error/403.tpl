@@ -72,5 +72,4 @@
     />
   </svg>
 </div>
-<h2 class="m-t-15 semi-bold text-center text-uppercase">{t}Fly, you fools!{/t}</h2>
 <h3 class="text-center">{t}You are not allowed to access this resource.{/t}</h2>
