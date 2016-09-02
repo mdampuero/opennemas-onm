@@ -4,15 +4,6 @@ parameters:
 #    parameter_name: value
 
 services:
-    session.memcache:
-        class: Memcached
-        calls:
-             - [ addServer, [ %session_memcache_host%, %session_memcache_port% ]]
-
-    session.handler.memcache:
-        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
-        arguments: [ "@session.memcache", { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]
-
     session.handler.drak.redis:
         class: Drak\NativeSession\NativeRedisSessionHandler
         arguments: [%session_handler_savepath%]
