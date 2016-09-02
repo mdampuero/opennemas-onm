@@ -575,7 +575,7 @@ class InstanceController extends Controller
         $modules = $this->get('orm.manager')->getRepository('extension')
             ->findBy('type = "module" or type = "theme-addon"');
         $themes = $this->get('orm.manager')->getRepository('theme')
-            ->findBy();
+            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"]');
 
         $users = $this->get('orm.manager')->getRepository('User', 'manager')
             ->findBy('order by name asc');
