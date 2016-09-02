@@ -58,6 +58,9 @@ class UserPersister extends BasePersister
 
         try {
             $this->persistCategories($id, $categories);
+            if ($this->hasCache()) {
+                $this->cache->delete($this->metadata->getPrefixedId($entity));
+            }
         } catch (\Exception $e) {
         }
     }

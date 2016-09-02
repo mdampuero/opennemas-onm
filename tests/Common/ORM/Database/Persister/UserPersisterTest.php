@@ -119,7 +119,7 @@ class UserPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
-        $this->cache->expects($this->once())->method('delete');
+        $this->cache->expects($this->exactly(2))->method('delete');
         $this->persister->update($entity);
     }
 
