@@ -281,11 +281,13 @@
 
           http.get('manager_ws_auth_refresh').then(function(response) {
             security.instance    = response.data.instance;
+            security.instances   = response.data.instances;
             security.permissions = response.data.permissions;
             security.user        = response.data.user;
 
             webStorage.local.set('security', {
               instance:    security.instance,
+              instances:   security.instances,
               permissions: security.permissions,
               token:       security.token,
               user:        security.user
