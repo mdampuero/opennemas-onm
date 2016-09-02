@@ -354,7 +354,6 @@ class AdvertisementPositions
             'group' => 'album_inner'
         ],
 
-        // Intersticial banner album inner
         591 => [
             'name'  => '[AI] Left Skyscraper',
             'group' => 'album_inner'
@@ -396,7 +395,6 @@ class AdvertisementPositions
             'group' => 'opinion_frontpage'
         ],
 
-        // Intersticial banner opinion front
         691 => [
             'name'  => '[O] Left Skyscraper',
             'group' => 'opinion_frontpage'
@@ -454,7 +452,6 @@ class AdvertisementPositions
             'group' => 'opinion_inner'
         ],
 
-        // Intersticial banner opinion inner
         791 => [
             'name'  => '[OI] Left Skyscraper',
             'group' => 'opinion_inner'
@@ -540,7 +537,6 @@ class AdvertisementPositions
             'group' => 'polls_inner'
         ],
 
-        // Intersticial banner polls inner
         991 => [
             'name'  => '[EI] Left Skyscraper',
             'group' => 'polls_inner'
