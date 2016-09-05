@@ -38,6 +38,16 @@
          * @memberOf security
          *
          * @description
+         *  The list of instances.
+         *
+         * @type {Array}
+         */
+        this.instances = [];
+
+        /**
+         * @memberOf security
+         *
+         * @description
          *  The list of permissions.
          *
          * @type {Array}
