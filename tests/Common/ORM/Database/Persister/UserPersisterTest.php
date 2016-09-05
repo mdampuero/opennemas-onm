@@ -124,6 +124,34 @@ class UserPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests remove for an user group with categories.
+     */
+    public function testRemove()
+    {
+        $entity = new User([
+            'id'         => 1,
+            'name'       => 'garply',
+            'categories' => [ 1 ],
+        ]);
+
+        $entity->refresh();
+
+        $this->conn->expects($this->once())->method('delete')->with(
+            'users',
+            [ 'id' => 1 ]
+        );
+
+        $this->conn->expects($this->once())->method('executeQuery')->with(
+            'delete from users_content_categories where pk_fk_user = ?',
+            [ 1 ]
+        );
+
+        $this->cache->expects($this->exactly(2))->method('delete');
+
+        $this->persister->remove($entity);
+    }
+
+    /**
      * Tests save categories with no categories.
      */
     public function testSaveCategories()
