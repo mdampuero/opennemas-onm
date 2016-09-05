@@ -494,8 +494,8 @@
                 [% item.page_views %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('activated')">
-                <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.activated == '1' ? '0' : '1')">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading &&item.activated == '1', 'fa-times text-error': !item.loading && item.activated == '0' }"></i>
+                <button class="btn btn-white" type="button" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLloding && item.activated == '0' }"></i>
                 </button>
               </td>
             </tr>

@@ -295,6 +295,7 @@ class InstanceController extends Controller
             try {
                 $old = $instance->activated;
                 $instance->merge($data);
+                $em->persist($instance);
                 $updated++;
 
                 if ($old !== $instance->activated) {

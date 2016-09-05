@@ -206,7 +206,7 @@
           data[property] = value;
 
           var route = {
-            name: 'manager_ws_module_patch',
+            name:   'manager_ws_instance_patch',
             params: { id: item.id }
           };
 
@@ -214,7 +214,7 @@
             item[property + 'Loading'] = 0;
             item[property] = value;
             messenger.post(response.data);
-          }).error(function(response) {
+          }, function(response) {
             item[property + 'Loading'] = 0;
             messenger.post(response.data);
           });
