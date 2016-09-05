@@ -50,18 +50,44 @@ class UserGroupPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
+        $changes    = $entity->getChanges();
         $privileges = [];
 
-        if (!empty($entity->privileges)) {
-            $privileges = $entity->privileges;
-            unset($entity->privileges);
+        // Privileges change
+        if (array_key_exists('privileges', $changes)) {
+            $privileges = $changes['privileges'];
         }
+
+        unset($entity->privileges);
+        $entity->setNotStored('privileges');
 
         parent::update($entity);
 
         $id = $this->metadata->getId($entity);
 
-        $this->persistPrivileges($id, $privileges);
+        if (array_key_exists('privileges', $changes)) {
+            $this->persistPrivileges($id, $privileges);
+
+            if ($this->hasCache()) {
+                $this->cache->delete($this->metadata->getPrefixedId($entity));
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Entity $entity)
+    {
+        parent::remove($entity);
+
+        $id = $this->metadata->getId($entity);
+
+        $this->removePrivileges($id);
+
+        if ($this->hasCache()) {
+            $this->cache->delete($this->metadata->getPrefixedId($entity));
+        }
     }
 
     /**
@@ -92,7 +118,7 @@ class UserGroupPersister extends BasePersister
      * @param array $id         The entity id.
      * @param array $privileges The privileges keys to keep.
      */
-    protected function removePrivileges($id, $keep)
+    protected function removePrivileges($id, $keep = [])
     {
         $sql      = "delete from user_groups_privileges where pk_fk_user_group = ?";
         $params[] = $id['pk_user_group'];
