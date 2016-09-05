@@ -46,15 +46,20 @@
          */
         $scope.getExtensions = function(query) {
           var tags = [];
+          var oql  = 'order by uuid asc limit 10';
+
+          if (query) {
+            oql = 'uuid ~ "' + query + '" ' + oql;
+          }
 
           var route = {
-            name:   'manager_ws_modules_list',
-            params: { oql: 'uuid ~ "' + query + '" limit 10' }
+            name:   'manager_ws_user_autocomplete',
+            params: { oql: oql }
           };
 
           return http.get(route).then(function(response) {
-            for (var i = 0; i < response.data.results.length;  i++) {
-              tags.push(response.data.results[i].uuid);
+            for (var i = 0; i < response.data.extensions.length;  i++) {
+              tags.push(response.data.extensions[i]);
             }
 
             return tags;

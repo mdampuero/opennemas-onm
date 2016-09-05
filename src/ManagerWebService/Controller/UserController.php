@@ -22,6 +22,51 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class UserController extends Controller
 {
     /**
+     * Returns a list of targets basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_CREATE')")
+     */
+    public function autocompleteAction(Request $request)
+    {
+        $target   = [];
+        $oql      = strtolower($request->query->get('oql'));
+        $security = $this->get('core.security');
+
+        $extensions = $this->get('orm.manager')->getRepository('Extension')
+            ->findBy($oql);
+
+        foreach ($extensions as $extension) {
+            $target[] = [
+                'id'   => $extension->uuid,
+                'name' => $extension->uuid
+            ];
+        }
+
+        if (!empty($query)) {
+            $oql = 'uuid ~ "%s" ' . $oql;
+            $oql  = sprintf($oql, $query);
+        }
+
+        if ($security->hasPermission('MASTER')) {
+            $themes = $this->get('orm.manager')->getRepository('Theme')
+                ->findBy($oql);
+
+            foreach ($themes as $theme) {
+                $target[] = [
+                    'id'   => $theme->uuid,
+                    'name' => $theme->uuid
+                ];
+            }
+        }
+
+        return new JsonResponse([ 'extensions' => $target ]);
+    }
+
+    /**
      * @api {delete} /users/:id Delete an user
      * @apiName DeleteUser
      * @apiGroup User
