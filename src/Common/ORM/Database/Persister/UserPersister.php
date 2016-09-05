@@ -56,12 +56,28 @@ class UserPersister extends BasePersister
 
         $id = $this->metadata->getId($entity);
 
-        try {
+        if (array_key_exists('categories', $changes)) {
             $this->persistCategories($id, $categories);
+
             if ($this->hasCache()) {
                 $this->cache->delete($this->metadata->getPrefixedId($entity));
             }
-        } catch (\Exception $e) {
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Entity $entity)
+    {
+        parent::remove($entity);
+
+        $id = $this->metadata->getId($entity);
+
+        $this->removeCategories($id);
+
+        if ($this->hasCache()) {
+            $this->cache->delete($this->metadata->getPrefixedId($entity));
         }
     }
 
@@ -93,7 +109,7 @@ class UserPersister extends BasePersister
      * @param array $id         The entity id.
      * @param array $categories The categories keys to keep.
      */
-    protected function removeCategories($id, $keep)
+    protected function removeCategories($id, $keep = [])
     {
         $sql      = "delete from users_content_categories where pk_fk_user = ?";
         $params[] = $id['id'];
