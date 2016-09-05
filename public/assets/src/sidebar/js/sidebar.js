@@ -12,7 +12,7 @@
    *   The `onm.sidebar` module provides a factory and a directive to create and
    *   manipulate page sidebars.
    */
-  angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
+  angular.module('onm.sidebar', ['onm.routing', 'onm.security'])
     /**
      * @ngdoc factory
      * @name  Sidebar
@@ -20,15 +20,15 @@
      * @requires $http
      * @requires $location
      * @requires $window
-     * @requires history
      * @requires routing
+     * @requires security
      *
      * @description
      *   Factory to create and configure new sidebar instances.
      */
     .factory(
-      'Sidebar', ['$http', '$location', '$window', 'history', 'routing',
-      function($http, $location, $window, history, routing) {
+      'Sidebar', ['$http', '$location', '$window', 'routing', 'security',
+      function($http, $location, $window, routing, security) {
         /**
          * Default template for the sidebar.
          *
@@ -43,50 +43,46 @@
         '</div>';
 
         /**
-         * Template for the sidebar footer.
-         *
-         * @type {String}
-         */
-        var footerTpl = '<div class="sidebar-footer-widget">' +
-          '<ul>' +
-            '<li class="support"><li>' +
-            '<li class="pin" ng-click="ngModel.pin()" tooltip="[% ngModel.data.translations[\'Show/hide sidebar\']%]" tooltip-placement="right">' +
-              '<i class="fa fa-lg" ng-class="{ \'fa-angle-double-left\': ngModel.isPinned(), \'fa-angle-double-right\': !ngModel.isPinned()}"></i>' +
-            '</li>' +
-          '</ul>' +
-        '</div>';
-
-        /**
          * Template for a sidebar item.
          *
          * @type {String}
          */
-        var itemTpl = '<li ng-class="{\'active open\': [urls]}"[click]>' +
-          '<a ng-href="#">' +
-            '<i class="fa[icon-class]"></i>' +
-            '<span class="title">[name]</span>' +
-            '[arrow]' +
+        var itemTpl = '<script type="text/ng-template" id="item">' +
+          '<a ng-href="[% ngModel.getUrl(item) %]">' +
+            '<i class="fa [% item.icon %]"></i>' +
+            '<span class="title">[% item.name %]</span>' +
+            '<span class="arrow" ng-class="{ \'open\': false }" ng-if="item.items"></span>' +
           '</a>' +
-          '[submenu]' +
-        '</li>';
+          '<ul class="sub-menu" ng-if="item.items">' +
+            '<li ng-class="{ \'active\': ngModel.isActive(item) }" ng-click="ngModel.itemClick(item)" ng-if="ngModel.isEnabled(item.security)" ng-repeat="item in item.items" ng-include="\'item\'"></li>' +
+          '</ul>' +
+        '</script>';
 
         /**
-         * Template for the sidebar.
+         * Template for sidebar
          *
          * @type {String}
          */
-        var sidebarTpl = '<div class="[class][position][inverted]"[id][ngAttrs][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
+        var sidebarTpl = '<div class="sidebar [% ngModel.class %]" ng-class="{ \'sidebar-right\': ngModel.position === \'right\'\, \'inverted\': ngModel.inverted }" [id][ngAttrs][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
           '<div class="overlay" ng-click="ngModel.open()" ng-mouseenter="ngModel.mouseEnter()"></div>' +
           '<div class="sidebar-wrapper">' +
             '<scrollable>' +
               '<ul>' +
-                '[items]' +
+                '<li ng-class="{ \'active open\': ngModel.isActive(item) }" ng-click="ngModel.itemClick(item)" ng-if="ngModel.isEnabled(item.security)" ng-repeat="item in ngModel.data.items" ng-include="\'item\'"></li>' +
               '</ul>' +
             '</scrollable>' +
           '</div>' +
-          '[footer]' +
+          '<div class="sidebar-footer-widget" ng-if="ngModel.footer">' +
+            '<ul>' +
+              '<li class="support"><li>' +
+              '<li class="pin" ng-click="ngModel.pin()" tooltip="[% ngModel.data.translations[\'Show/hide sidebar\']%]" tooltip-placement="right">' +
+                '<i class="fa fa-lg" ng-class="{ \'fa-angle-double-left\': ngModel.isPinned(), \'fa-angle-double-right\': !ngModel.isPinned()}"></i>' +
+              '</li>' +
+            '</ul>' +
+          '</div>' +
         '</div>' +
-        '[border]';
+        '<div class="sidebar-border ng-cloak" ng-click="ngModel.pin()" ng-if="ngModel.pinnable"></div>' +
+        itemTpl;
 
         /**
          * @memberOf Sidebar
@@ -97,7 +93,6 @@
          * @type {Object}
          */
         this.defaults = {
-          changing:  false,
           class:     'sidebar',
           collapsed: false,
           data:      {},
@@ -127,13 +122,6 @@
           var sidebar = angular.extend({}, this.defaults, options);
 
           /**
-           * Resets the changing status for the sidebar.
-           */
-          sidebar.changed = function() {
-            this.changing = {};
-          };
-
-          /**
            * Checks the sidebar status basing on the current window width.
            */
           sidebar.check = function() {
@@ -158,7 +146,7 @@
            *
            * @param {Object} attrs Object with angular attributes.
            *
-           * @return string The default HTML code for the sidebar.
+           * @return {String} The default HTML code for the sidebar.
            */
           sidebar.default = function(attrs) {
             var ngAttrs = '';
@@ -176,7 +164,7 @@
           /**
            * Updates the model for the current sidebar.
            *
-           * @param object sidebar The sidebar values.
+           * @param {Object} sidebar The sidebar values.
            */
           sidebar.init = function(route) {
             return $http.get(routing.generate(route)).then(function(response) {
@@ -185,47 +173,96 @@
           };
 
           /**
-           * Checks if an URL is active.
+           * Returns the URL for the item.
            *
-           * @param string url The URL to check.
+           * @param {Object} item The sidebar item.
            *
-           * @return boolean True if the URL is active. Otherwise, return false.
+           * @return {String} The URL for the item.
            */
-          sidebar.isActive = function(url) {
-            if (url === '') {
-              return $location.path() === '/';
+          sidebar.getUrl = function(item) {
+            if (item.route) {
+              var url = routing.ngGenerate(item.route);
+
+              // Fix default url (# => #/)
+              if (url === '#') {
+                return '#/';
+              }
+
+              return url;
             }
 
-            return $location.path().indexOf(url.replace('#', '')) !== -1;
+            return '#';
           };
 
           /**
-           * Checks if an item is active (waiting for the response from server)
-           * given its route.
+           * Checks if an URL is active.
            *
-           * @param string route The route name.
+           * @param {String} item The item to check.
            *
-           * @return boolean True if the item active. Otherwise, returns false.
+           * @return {Boolean} True if the URL is active. False otherwise.
            */
-          sidebar.isChanging = function(route) {
-            return this.changing && this.changing[route];
+          sidebar.isActive = function(item) {
+            if (!item && !item.route && !item.items) {
+              return $location.path() === '/';
+            }
+
+            if (item.route) {
+              var url = routing.ngGenerate(item.route).replace('#', '');
+
+              if (url === '') {
+                url = '/';
+              }
+
+              return $location.path() === url;
+            }
+
+            var active = false;
+
+            if (item.items) {
+              for (var i = 0; i < item.items.length; i++) {
+                active  = active || sidebar.isActive(item.items[i]);
+              }
+            }
+
+            return active;
           };
 
           /**
            * Returns the current sidebar status.
            *
-           * @return boolean True if the sidebar is collapsed. Otherwise, returns
-           *                 false
+           * @return {Boolean} True if the sidebar is collapsed. False
+           *                   otherwise.
            */
           sidebar.isCollapsed = function() {
             return this.collapsed;
           };
 
           /**
+           * Checks if an item is enabled.
+           *
+           * @return {Boolean} True if the item is enabled. False otherwise.
+           */
+          sidebar.isEnabled = function(constraints) {
+            var enabled = true;
+
+            if (!constraints) {
+              return enabled;
+            }
+
+            if (constraints.permission) {
+              for (var i = 0; i < constraints.permission.length; i++) {
+                enabled = enabled &&
+                  security.hasPermission(constraints.permission[i]);
+              }
+            }
+
+            return enabled;
+          };
+
+          /**
            * Returns the current sidebar pinned  status.
            *
-           * @return boolean True if the sidebar is pinned. Otherwise, returns
-           *                 false
+           * @return {Boolean} True if the sidebar is pinned. False otherwise.
            */
           sidebar.isPinned = function() {
             return this.pinned;
@@ -234,17 +271,9 @@
           /**
            * Clears history for the given route on item click.
            *
-           * @param string route The section route name.
+           * @param {String} route The section route name.
            */
-          sidebar.itemClick = function(route) {
-            var url = routing.ngGenerateShort(route);
-            history.clear(url);
-
-            // Show spinner
-            if (!this.changing[route] && !this.isActive(url)) {
-              this.changing[route] = true;
-            }
-
+          sidebar.itemClick = function(item) {
             this.collapsed = !this.pinned;
 
             // Collapse this for small screens
@@ -287,94 +316,17 @@
           };
 
           /**
-           * Returns the HTML for an item.
-           *
-           * @param Object item The item to render.
-           *
-           * @return string The HTML code for the given item.
-           */
-          sidebar.renderItem = function(item) {
-            var arrow     = '';
-            var click     = '';
-            var iconClass = '';
-            var li        = itemTpl;
-            var submenu   = '';
-            var urls      = [];
-
-            if (item.route) {
-              urls.push('ngModel.isActive(\'' +
-                routing.ngGenerateShort(item.route) + '\')');
-            }
-
-            // Get children URLs
-            if (item.items && item.items.length > 0) {
-              for (var i = 0; i < item.items.length; i++) {
-                if (item.items[i].route) {
-                  urls.push('ngModel.isActive(\'' +
-                    routing.ngGenerateShort(item.items[i].route) + '\')');
-                }
-              }
-            }
-
-            urls = urls.join(' || ');
-
-            if (item.route && item.click) {
-              click = ' ng-click="ngModel.itemClick(\'' + item.route + '\')"';
-            }
-
-            // Item with route
-            if (item.route) {
-              li = li.replace('#', routing.ngGenerate(item.route) + '/');
-            }
-
-            // Custom icon class
-            if (item.icon) {
-              iconClass = ' ' + item.icon;
-            }
-
-            // Arrow & sub-menu
-            if (item.items && item.items.length > 0) {
-              arrow = '<span class="arrow" ng-class="{ \'open\':' + urls +
-                '}"></span>';
-
-              submenu += '<ul class="sub-menu">';
-
-              for (var i = 0; i < item.items.length; i++) {
-                submenu += this.renderItem(item.items[i]);
-              }
-
-              submenu += '</ul>';
-            }
-
-            li = li.replace('[urls]', urls);
-            li = li.replace('[click]', click);
-            li = li.replace('[icon-class]', iconClass);
-            li = li.replace('[name]', item.name);
-            li = li.replace('[arrow]', arrow);
-            li = li.replace('[submenu]', submenu);
-
-            return li;
-          };
-
-          /**
-           * Returns the HTML for a sidebar.
+           * Returns the HTML for the current model.
            *
            * @param {Object} attrs Object with angular attributes.
            *
-           * @return string The HTML code for the given sidebar
+           * @return string The HTML code for the current model.
            */
-          sidebar.renderSidebar = function(attrs) {
-            var border    = '';
+          sidebar.render = function(attrs) {
             var div       = sidebarTpl;
             var id        = '';
-            var inverted  = '';
-            var footer    = '';
-            var items     = '';
-            var position  = '';
             var swipeable = '';
-            var ngAttrs = '';
-
-            var ngAttrs = '';
+            var ngAttrs   = '';
 
             for (var key in attrs) {
               var newKey = key.replace(/([A-Z]{1})/, '-$1'.toLowerCase());
@@ -385,14 +337,6 @@
               id = ' id="' + this.id + '"';
             }
 
-            if (this.position !== 'left') {
-              position = ' on-right';
-            }
-
-            if (this.inverted) {
-              inverted = ' inverted';
-            }
-
             if (this.swipeable) {
               if (this.position === 'left') {
                 swipeable = ' ng-swipe-left="ngModel.mouseLeave()" ng-swipe-right="ngModel.mouseEnter()"';
@@ -401,40 +345,11 @@
               }
             }
 
-            if (this.footer) {
-              footer = footerTpl;
-            }
-
-            if (this.pinnable) {
-              border = '<div class="sidebar-border ng-cloak"' + ngAttrs + ' ng-click="ngModel.pin()"></div>';
-            }
-
-            for (var i = 0; i < this.data.items.length; i++) {
-              items += this.renderItem(this.data.items[i]);
-            }
-
-            div = div.replace('[class]', this.class);
             div = div.replace('[id]', id);
-            div = div.replace('[footer]', footer);
-            div = div.replace('[border]', border);
-            div = div.replace('[items]', items);
-            div = div.replace('[inverted]', inverted);
             div = div.replace('[ngAttrs]', ngAttrs);
-            div = div.replace('[position]', position);
             div = div.replace('[swipeable]', swipeable);
 
             return div;
-          };
-
-          /**
-           * Returns the HTML for the current model.
-           *
-           * @param {Object} attrs Object with angular attributes.
-           *
-           * @return string The HTML code for the current model.
-           */
-          sidebar.render = function(attrs) {
-            return this.renderSidebar(attrs);
           };
 
           /**
@@ -506,14 +421,15 @@
      * <sidebar class="sidebar" footer="true" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" pinnable="true"></sidebar>
      */
     .directive('sidebar', ['$compile', '$filter', '$http', '$rootScope', '$window',
-      'routing', 'Sidebar',
-      function($compile, $filter, $http, $rootScope, $window, routing, Sidebar) {
+      'routing', 'security', 'Sidebar',
+      function($compile, $filter, $http, $rootScope, $window, routing, security, Sidebar) {
         return {
           restrict: 'E',
           scope: {
             ngModel: '='
           },
           link: function($scope, elm, attrs) {
+
             if (!attrs.src) {
               return;
             }
@@ -543,11 +459,6 @@
             return $http.get(url).then(function(response) {
               $scope.ngModel.data = response.data;
 
-              // Restart the loading status for sidebar and check the top margin
-              $rootScope.$on('$routeChangeSuccess', function () {
-                  $scope.ngModel.changed();
-              });
-
               // Updates sidebar status when window width changes
               $scope.$watch(function() {
                 return $window.innerWidth;
@@ -568,7 +479,7 @@
                 $scope.$apply();
               });
 
-              e.find('li > a').on('click', function (e) {
+              $('body').on('click', '.sidebar li > a', function (e) {
                 var item = $(this).parent();
                 var visible = item.hasClass('open');
                 var submenu = $(this).next();
@@ -596,13 +507,6 @@
               });
 
               dft.replaceWith(e);
-
-              if ($scope.ngModel.pinnable) {
-                e.find('.sidebar-border').on('click', function () {
-                  $scope.ngModel.pin();
-                  $scope.$apply();
-                });
-              }
             });
           }
         };
