@@ -119,8 +119,36 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
-        $this->cache->expects($this->once())->method('delete');
+        $this->cache->expects($this->exactly(2))->method('delete');
         $this->persister->update($entity);
+    }
+
+    /**
+     * Tests remove for an user group with privileges.
+     */
+    public function testRemove()
+    {
+        $entity = new UserGroup([
+            'pk_user_group' => 1,
+            'name'          => 'garply',
+            'privileges'    => [ 1 ],
+        ]);
+
+        $entity->refresh();
+
+        $this->conn->expects($this->once())->method('delete')->with(
+            'user_groups',
+            [ 'pk_user_group' => 1 ]
+        );
+
+        $this->conn->expects($this->once())->method('executeQuery')->with(
+            'delete from user_groups_privileges where pk_fk_user_group = ?',
+            [ 1 ]
+        );
+
+        $this->cache->expects($this->exactly(2))->method('delete');
+
+        $this->persister->remove($entity);
     }
 
     /**
