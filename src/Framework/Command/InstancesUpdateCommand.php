@@ -251,27 +251,34 @@ class InstancesUpdateCommand extends ContainerAwareCommand
     public function getInstanceStats(&$i)
     {
         $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
-        $stats = [];
 
         // Count contents
+        $sql = 'SELECT count(*) as total FROM contents';
+        $rs = $conn->fetchAll($sql);
+
+        if (!empty($rs)) {
+            $i->contents = $rs[0]['total'];
+        }
+
         $sql = 'SELECT content_type_name as type, count(*) as total '
-            .'FROM contents GROUP BY `fk_content_type`, `content_type_name`';
+            .'FROM contents WHERE in_litter != 1 GROUP BY `fk_content_type`, `content_type_name`';
 
         $rs = $conn->fetchAll($sql);
 
-        if ($rs !== false && !empty($rs)) {
-            $contents = 0;
-
+        if (!empty($rs)) {
             foreach ($rs as $value) {
                 $allowedContentTypes = array(
-                    'article',
-                    'opinion',
                     'advertisement',
+                    'attachment',
                     'album',
+                    'article',
+                    'letter',
+                    'opinion',
                     'photo',
+                    'poll',
+                    'static_page',
                     'video',
-                    'widget',
-                    'static_page'
+                    'widget'
                 );
 
                 if (!in_array($value['type'], $allowedContentTypes)) {
@@ -280,11 +287,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
                 $type = $value['type'] . 's';
                 $i->{$type} = $value['total'];
-                $contents += $value['total'];
             }
-
-            $stats['contents'] = $contents;
-            $i->contents = $contents;
         }
 
         // Count users
