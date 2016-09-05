@@ -24,12 +24,12 @@
             </a>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="setEnabledSelected(0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="setEnabledSelected(1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
@@ -65,7 +65,7 @@
             <span class="h-seperate"></span>
           </li>
         {/if}
-        {if $list === 'notification' || $list === 'extension' || $list === 'user'}
+        {if $list === 'user'}
         <li class="quicklinks">
             <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
