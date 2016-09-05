@@ -624,13 +624,17 @@ class Content
             );
 
             if ($data['category'] != $this->category) {
-                $conn->update(
+                $conn->delete(
                     'contents_categories',
-                    [
-                        'pk_fk_content_category' => $data['category'],
-                        'catName' => $catName,
-                    ],
                     [ 'pk_fk_content' => $data['id'] ]
+                );
+                $conn->executeUpdate(
+                    'INSERT INTO contents_categories SET pk_fk_content_category=:cat_id, pk_fk_content=:content_id, catName=:cat_name',
+                    [
+                        'content_id' => $data['id'],
+                        'cat_id'     => $data['category'],
+                        'cat_name'   => $catName,
+                    ]
                 );
             } else {
                 $catName = $this->category_name;
