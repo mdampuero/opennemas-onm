@@ -324,10 +324,11 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         $sql = 'SELECT created FROM contents ORDER BY created desc LIMIT 1 ';
         $rs  = $conn->fetchAll($sql);
 
-        if ($rs !== false && !empty($rs)) {
-            if (!empty($rs[0]['created']) && $rs[0]['created'] > $i->last_login) {
-                $i->last_login = new \DateTime($rs[0]['created']);
-            }
+        if ($rs !== false && !empty($rs)
+            && !empty($rs[0]['created'])
+            && $rs[0]['created'] > $i->last_login->format('Y-m-d H:i:s')
+        ) {
+            $i->last_login = new \DateTime($rs[0]['created']);
         }
     }
 
