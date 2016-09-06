@@ -268,10 +268,11 @@
 
         webStorage.prefix('ONM-');
         if (webStorage.local.get('token') && webStorage.local.get('user')) {
-          $http.defaults.headers.common.Authorization = 'Bearer ' +
-            webStorage.local.get('token');
-          $scope.user = webStorage.local.get('user');
+          $scope.token  = webStorage.local.get('token');
+          $scope.user   = webStorage.local.get('user');
           $scope.loaded = true;
+
+          $http.defaults.headers.common.Authorization = 'Bearer ' + $scope.token;
         }
 
         // Prevent empty links to change angular route
