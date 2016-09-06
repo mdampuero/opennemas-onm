@@ -39,8 +39,8 @@ class MonographsController extends Controller
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
-        $this->categoryName = $this->get('request')->query
-            ->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->categoryName = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
             $this->category     = $this->ccm->get_id($this->categoryName);

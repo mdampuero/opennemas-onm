@@ -41,7 +41,8 @@ class CoversController extends Controller
 
         $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
 
-        $category = $this->get('request')->query->getDigits('category', 'all');
+        $category = $this->get('request_stack')->getCurrentRequest()
+            ->query->getDigits('category', 'all');
 
         $ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =

@@ -38,7 +38,8 @@ class BooksController extends Controller
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
-        $this->category = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =

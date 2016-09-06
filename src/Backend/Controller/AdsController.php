@@ -30,7 +30,8 @@ class AdsController extends Controller
         $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
 
         // Sometimes category is array. When create & update advertisement
-        $this->category = $this->get('request')->query->getDigits('category', 0);
+        $this->category = $this->get('request_stack')->getCurrentRequest()
+            ->query->getDigits('category', 0);
 
         // Fetch categories to all internal categories
         $contentTypes = [$contentType, 7, 9, 11, 14];

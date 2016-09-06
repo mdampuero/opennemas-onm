@@ -33,7 +33,7 @@ class AlbumsController extends Controller
      */
     public function init()
     {
-        $request = $this->get('request');
+        $request = $this->get('request_stack')->getCurrentRequest();
 
         $contentType = \ContentManager::getContentTypeIdFromName('album');
 
