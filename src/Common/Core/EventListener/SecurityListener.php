@@ -78,10 +78,11 @@ class SecurityListener implements EventSubscriberInterface
         $this->security->setPermissions($permissions);
 
         if ($user->isEnabled()
-            && ($this->security->hasPermission('MASTER')
+            && (
+                $this->security->hasPermission('MASTER')
                 || ($this->security->hasPermission('PARTNER')
-                    && $this->security->hasInstance($instance->internal_name)
-                )
+                    && $this->security->hasInstance($instance->internal_name))
+                || $user->type === 0
             )
         ) {
             return;
