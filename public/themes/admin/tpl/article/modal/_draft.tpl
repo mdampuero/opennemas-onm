@@ -2,8 +2,8 @@
   <button class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">
     <i class="fa fa-times"></i>
   </button>
-  <h3 class="p-b-30 p-t-30 text-center">{t}There is an existing draf{/t}</h3>
-  <h4 class="p-b-30 text-center">{t}Do you want to edit delete the user?{/t}</h4>
+  <h3 class="p-b-30 p-t-30 text-center">{t}There is a previous draft{/t}</h3>
+  <h4 class="p-b-30 text-center">{t}Do you want to edit the existing draft?{/t}</h4>
 </div>
 <div class="modal-footer row">
   <div class="col-xs-6">
