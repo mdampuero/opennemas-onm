@@ -264,7 +264,7 @@ class SettingManager extends BaseManager
 
         $names = array();
         foreach ($rs as $setting) {
-            $value = unserialize($setting['value']);
+            $value = @unserialize($setting['value']);
             $names[] = $setting['name'];
 
             $this->autoloaded[$setting['name']] = $value;
