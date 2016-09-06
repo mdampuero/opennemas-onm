@@ -238,8 +238,8 @@ class InstanceController extends Controller
                 $oql = ' and ' . $oql;
             }
 
-            $oql = sprintf('owner_id = "%s"', $this->get('core.user')->id)
-                .  $oql;
+            $oql = sprintf('owner_id = %s ', $this->get('core.user')->id)
+                . $oql;
         }
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
