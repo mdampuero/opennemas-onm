@@ -37,7 +37,7 @@
         $scope.mode = 'list';
 
         // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', {$scope: $scope}));
+        $.extend(this, $controller('OpinionListCtrl', { $scope: $scope }));
 
         /**
          * @function _import
