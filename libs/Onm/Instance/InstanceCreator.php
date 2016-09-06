@@ -200,6 +200,10 @@ class InstanceCreator
      */
     public function deleteDatabase($database)
     {
+        if (empty($database)) {
+            return;
+        }
+
         $sql = "DROP DATABASE IF EXISTS `$database`";
 
         if (!$this->conn->executeQuery($sql)) {
