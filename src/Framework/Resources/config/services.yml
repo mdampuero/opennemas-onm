@@ -158,7 +158,7 @@ services:
 
     newsletter_manager:
         class: Repository\NewsletterManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, @core.template ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, '@core.template' ]
 
     automatic_contents:
         class: Onm\MachineSearcher
@@ -221,7 +221,7 @@ services:
 
     onm.braintree.factory:
         class: Framework\Braintree\BraintreeFactory
-        arguments: [ @comet_cult_braintree.factory ]
+        arguments: [ '@comet_cult_braintree.factory' ]
 
     paginator:
         class: Framework\Component\Paginator\Paginator
