@@ -2,12 +2,72 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ArticleCtrl', [
-  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
-  function($controller, $http, $uibModal, $rootScope, $scope, routing) {
+  '$controller', '$uibModal', '$rootScope', '$scope', '$window', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
+  function($controller, $uibModal, $rootScope, $scope, $window, Editor, http, messenger, routing, webStorage) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
+    /**
+     * @function checkDraft
+     * @memberOf ArticleCtrl
+     *
+     * @description
+     *   Checks if there is a draft from a previous article.
+     */
+    $scope.checkDraft = function() {
+      var key = 'article-draft';
+
+      if ($scope.article.pk_article) {
+        key = 'article-' + $scope.article.pk_article + '-draft';
+      }
+
+      if (!webStorage.has(key)) {
+        return;
+      }
+
+      $uibModal.open({
+        templateUrl: 'modal-draft',
+        controller: 'YesNoModalCtrl',
+        resolve: {
+          template: function() {
+            return {};
+          },
+          yes: function() {
+            return function(modalWindow) {
+              $scope.article = webStorage.get(key);
+              modalWindow.close({ response: true, success: true });
+
+              // Force Editor update
+              Editor.get('summary').setData($scope.article.summary);
+              Editor.get('body').setData($scope.article.body);
+
+              // Force metadata
+              for (var tag of $scope.article.metadata.split(',')) {
+                $('#metadata').tagsinput('add', tag);
+              }
+
+              if ($scope.article.starttime) {
+                $scope.article.starttime = $window.moment($scope.article.starttime)
+                  .format('YYYY-MM-DD HH:mm:ss');
+              }
+
+              if ($scope.article.endtime) {
+                $scope.article.endtime = $window.moment($scope.article.endtime)
+                  .format('YYYY-MM-DD HH:mm:ss');
+              }
+            };
+          },
+          no: function() {
+            return function(modalWindow) {
+              webStorage.local.remove(key);
+              modalWindow.close({ response: false, success: true });
+            };
+          }
+        }
+      });
+    };
 
     /**
      * Opens a modal with the preview of the article.
@@ -18,14 +78,14 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     $scope.preview = function(previewUrl, getPreviewUrl) {
       $scope.loading = true;
 
-      // Force ckeditor
-      CKEDITOR.instances.body.updateElement();
-      CKEDITOR.instances.summary.updateElement();
+      // Force Editor update
+      Editor.get('body').updateElement();
+      Editor.get('summary').updateElement();
 
       var data = {'contents': $('#formulario').serializeArray()};
       var url  = routing.generate(previewUrl);
 
-      $http.post(url, data).success(function() {
+      http.post(url, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
@@ -269,5 +329,26 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       }
     }, true);
 
+    $scope.$watch('article', function(nv, ov) {
+      var key = 'article-draft';
+
+      if (ov && nv !== ov) {
+        if (nv.pk_article) {
+          key = 'article-' + nv.pk_article + '-draft';
+        }
+
+        webStorage.local.set(key, nv);
+      }
+    }, true);
+
+    $('form').submit(function() {
+      var key = 'article-draft';
+
+      if ($scope.article.pk_article) {
+        key = 'article-' + $scope.article.pk_article + '-draft';
+      }
+
+      webStorage.local.remove(key);
+    });
   }
 ]);

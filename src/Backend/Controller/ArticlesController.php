@@ -189,7 +189,9 @@ class ArticlesController extends Controller
         }
 
         // Return user to list if has no update acl
-        if (Acl::check('ARTICLE_UPDATE')) {
+        if (!empty($article->pk_content)
+            && $this->get('core.security')->hasPermission('ARTICLE_UPDATE')
+        ) {
             return $this->redirect(
                 $this->generateUrl(
                     'admin_article_show',

@@ -53,8 +53,8 @@
                       {t}Footer text{/t}
                     </label>
                     <div class="controls">
-                      <textarea class="form-control" name="img1_footer" ng-model="img1_footer">{if isset($article->img1_footer)}{$article->img1_footer|clearslash|escape:'html'}{/if}</textarea>
-                      <input type="hidden" name="img1" ng-value="img1"/>
+                      <textarea class="form-control" name="img1_footer" ng-model="article.img1_footer">{if isset($article->img1_footer)}{$article->img1_footer|clearslash|escape:'html'}{/if}</textarea>
+                      <input type="hidden" name="img1" ng-model="article.img1" ng-value="img1"/>
                     </div>
                   </div>
                 </div>
