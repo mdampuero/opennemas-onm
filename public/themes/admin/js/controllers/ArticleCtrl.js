@@ -17,7 +17,13 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      *   Checks if there is a draft from a previous article.
      */
     $scope.checkDraft = function() {
-      if (!webStorage.has('article-draft')) {
+      var key = 'article-draft';
+
+      if ($scope.article.pk_article) {
+        key = 'article-' + $scope.article.pk_article + '-draft';
+      }
+
+      if (!webStorage.has(key)) {
         return;
       }
 
@@ -30,7 +36,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
           },
           yes: function() {
             return function(modalWindow) {
-              $scope.article = webStorage.get('article-draft');
+              $scope.article = webStorage.get(key);
               modalWindow.close({ response: true, success: true });
 
               // Force Editor update
@@ -55,7 +61,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
           },
           no: function() {
             return function(modalWindow) {
-              webStorage.local.remove('article-draft');
+              webStorage.local.remove(key);
               modalWindow.close({ response: false, success: true });
             };
           }
@@ -323,16 +329,26 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       }
     }, true);
 
-    $scope.$watch('article', function(nv) {
-      if (nv && $scope.draftEnabled) {
-        webStorage.local.set('article-draft', nv);
+    $scope.$watch('article', function(nv, ov) {
+      var key = 'article-draft';
+
+      if (ov && nv !== ov) {
+        if (nv.pk_article) {
+          key = 'article-' + nv.pk_article + '-draft';
+        }
+
+        webStorage.local.set(key, nv);
       }
     }, true);
 
     $('form').submit(function() {
-      if ($scope.draftEnabled) {
-        webStorage.local.remove('article-draft');
+      var key = 'article-draft';
+
+      if ($scope.article.pk_article) {
+        key = 'article-' + $scope.article.pk_article + '-draft';
       }
+
+      webStorage.local.remove(key);
     });
   }
 ]);

@@ -41,7 +41,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario" ng-controller="ArticleCtrl" ng-init="{if !isset($article->id)}draftEnabled = true; checkDraft(){else}article = {json_encode($article)|clear_json}{/if}">
+<form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario" ng-controller="ArticleCtrl" ng-init="{if isset($article->id)}article = {json_encode($article)|clear_json}; {/if}checkDraft()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
