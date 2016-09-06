@@ -9,6 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Framework\ORM\Entity\Purchase;
 use League\Csv\Writer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,6 +29,8 @@ class PurchaseController extends Controller
      * @apiGroup Purchase
      *
      * @apiSuccess {String} message The success message.
+     *
+     * @Security("hasPermission('PURCHASE_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -50,6 +53,8 @@ class PurchaseController extends Controller
      * @apiParam {Integer} ids The clients ids.
      *
      * @apiSuccess {Object} The success message.
+     *
+     * @Security("hasPermission('PURCHASE_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -90,6 +95,8 @@ class PurchaseController extends Controller
      * @api {get} /purchases.csv Returns the report with purchases.
      * @apiName ExportAll
      * @apiGroup Purchase
+     *
+     * @Security("hasPermission('PURCHASE_REPORT')")
      */
     public function exportAllAction()
     {
@@ -109,6 +116,8 @@ class PurchaseController extends Controller
      *                                     purchases.
      * @apiName ExportCompleted
      * @apiGroup Purchase
+     *
+     * @Security("hasPermission('PURCHASE_REPORT')")
      */
     public function exportCompletedAction()
     {
@@ -128,6 +137,8 @@ class PurchaseController extends Controller
      *                                       purchases.
      * @apiName ExportUncompleted
      * @apiGroup Purchase
+     *
+     * @Security("hasPermission('PURCHASE_REPORT')")
      */
     public function exportUncompletedAction()
     {
@@ -148,6 +159,8 @@ class PurchaseController extends Controller
      * @apiGroup Purchase
      *
      * @apiParam {String} id  The purchase id.
+     *
+     * @Security("hasPermission('PURCHASE_REPORT')")
      */
     public function getPdfAction($id)
     {
@@ -155,7 +168,7 @@ class PurchaseController extends Controller
 
         $purchase = $em->getRepository('Purchase')->find($id);
 
-        $pdf = $em->getRepository('invoice', 'FreshBooks')
+        $pdf = $em->getRepository('invoice', 'freshbooks')
             ->getPDF($purchase->invoice_id);
 
         $response = new Response($pdf);
@@ -174,6 +187,8 @@ class PurchaseController extends Controller
      *
      * @apiSuccess {Integer} total   The total number of elements.
      * @apiSuccess {Array}   results The list of purchases.
+     *
+     * @Security("hasPermission('PURCHASE_LIST')")
      */
     public function listAction(Request $request)
     {
@@ -222,6 +237,8 @@ class PurchaseController extends Controller
      * @apiGroup Purchase
      *
      * @apiSuccess {Array} The purchases.
+     *
+     * @Security("hasPermission('PURCHASE_UPDATE')")
      */
     public function showAction($id)
     {
@@ -283,11 +300,13 @@ class PurchaseController extends Controller
     protected function export($data, $name)
     {
         $data = array_map(function ($a) {
+            $name  = '';
+            $email = '';
             if (array_key_exists('client', $a) && !empty($a['client'])) {
                 $client = unserialize($a['client']);
 
-                $a['client']       = $client->lastName . ', ' . $client->firstName;
-                $a['client_email'] = $client->email;
+                $name  = $client['last_name'] . ', ' . $client['first_name'];
+                $email = $client['email'];
             }
 
             if (array_key_exists('items', $a) && !empty($a['items'])) {
@@ -305,9 +324,9 @@ class PurchaseController extends Controller
 
             return [
                 'id'             => $a['id'],
-                'client'         => $a['client'],
+                'client'         => $name,
                 'instance'       => $a['instance'],
-                'client_email'   => $a['client_email'],
+                'client_email'   => $email,
                 'instance_email' => $a['instance_email'],
                 'items'          => $a['items'],
                 'created'        => $a['created'],

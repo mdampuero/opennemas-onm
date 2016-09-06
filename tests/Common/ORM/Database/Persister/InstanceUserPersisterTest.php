@@ -11,9 +11,9 @@ namespace tests\Common\ORM\Database\Persister;
 
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\User;
-use Common\ORM\Database\Persister\UserPersister;
+use Common\ORM\Database\Persister\InstanceUserPersister;
 
-class UserPersisterTest extends \PHPUnit_Framework_TestCase
+class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the test environment.
@@ -60,7 +60,7 @@ class UserPersisterTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'delete' ])
             ->getMock();
 
-        $this->persister = new UserPersister($this->conn, $this->metadata, $this->cache);
+        $this->persister = new InstanceUserPersister($this->conn, $this->metadata, $this->cache);
     }
 
     /**

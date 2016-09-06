@@ -36,13 +36,46 @@
         };
 
         /**
-         * @function autocomplete
+         * @function getExtensions
          * @memberOf UserCtrl
          *
          * @description
-         *   Adds a new price to the list.
+         *   Search user groups that macht the query.
+         *
+         * @param {String} query The query to match.
          */
-        $scope.autocomplete = function(query) {
+        $scope.getExtensions = function(query) {
+          var tags = [];
+          var oql  = 'order by uuid asc limit 10';
+
+          if (query) {
+            oql = 'uuid ~ "' + query + '" ' + oql;
+          }
+
+          var route = {
+            name:   'manager_ws_user_autocomplete',
+            params: { oql: oql }
+          };
+
+          return http.get(route).then(function(response) {
+            for (var i = 0; i < response.data.extensions.length;  i++) {
+              tags.push(response.data.extensions[i]);
+            }
+
+            return tags;
+          });
+        };
+
+        /**
+         * @function getGroups
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Search user groups that macht the query.
+         *
+         * @param {String} query The query to match.
+         */
+        $scope.getGroups = function(query) {
           var tags = [];
 
           for (var i = 0; i < $scope.extra.user_groups.length;  i++) {
@@ -54,7 +87,6 @@
 
           return tags;
         };
-
 
         /**
          * @function save
@@ -71,6 +103,11 @@
           if (data.fk_user_group) {
             data.fk_user_group = data.fk_user_group
               .map(function(e) { return e.pk_user_group; });
+          }
+
+          if (data.extensions) {
+            data.extensions = data.extensions
+              .map(function(e) { return e.name; });
           }
 
           http.post('manager_ws_user_save', data).then(function (response) {
@@ -105,6 +142,11 @@
           if (data.fk_user_group) {
             data.fk_user_group = data.fk_user_group
               .map(function(e) { return e.pk_user_group; });
+          }
+
+          if (data.extensions) {
+            data.extensions = data.extensions
+              .map(function(e) { return e.name; });
           }
 
           http.put(route, data).then(function (response) {

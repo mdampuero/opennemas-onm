@@ -199,17 +199,17 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right" ng-if="user.id">
+        <div class="pull-right" ng-if="security.user.id">
           <ul class="nav quick-section">
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
                 <i class="fa fa-rebel text-danger pull-left"></i>
                 <span class="title">
-                  [% user.name %]
+                  [% security.user.name %]
                 </span>
                 <i class="fa fa-angle-down"></i>
                 <div class="profile-pic">
-                  <gravatar ng-model="user.email" size="25"></gravatar>
+                  <gravatar ng-model="security.user.email" size="25"></gravatar>
                 </div>
               </span>
               <ul class="dropdown-menu dropdown-menu-right no-padding">
@@ -220,7 +220,7 @@
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: user.id }) %]">
+                  <a ng-href="[% routing.ngGenerate('manager_user_show', { id: security.user.id }) %]">
                     <i class="fa fa-user"></i>
                     {t}Profile{/t}
                   </a>
@@ -259,8 +259,11 @@
   <script type="text/ng-template" id="modal-upgrade">
     {include file="common/modal_application_upgrade.tpl"}
   </script>
-  <script type="text/ng-template" id="error">
-    {include file="error/ws_404.tpl"}
+  <script type="text/ng-template" id="403">
+    {include file="error/403.tpl"}
+  </script>
+  <script type="text/ng-template" id="404">
+    {include file="error/404.tpl"}
   </script>
   <!--[if lt IE 7 ]>
       <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
@@ -324,6 +327,7 @@
       @Common/src/angular-serializer/serializer.js,
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-routing/routing.js,
+      @Common/src/angular-security/security.js,
       @Common/src/sidebar/js/sidebar.js,
       @Common/js/onm/md5.min.js,
       @Common/js/routes.js,

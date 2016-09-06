@@ -59,9 +59,11 @@
 
             $rootScope.$broadcast('auth-login-required', rejection);
             return deferred.promise;
-          } else if ((rejection.status === 404 || rejection.status === 500)
-                && !rejection.config.ignoreAuthModule) {
-            $rootScope.$broadcast('http-error', rejection);
+          } else if ((rejection.status === 404 || rejection.status === 500) &&
+              !rejection.config.ignoreAuthModule) {
+            $rootScope.$broadcast('error-404', rejection);
+          } else if (rejection.status === 403) {
+            $rootScope.$broadcast('error-403', rejection);
           } else if (rejection.status === 426 && !rejection.config.ignoreAuthModule) {
             $rootScope.$broadcast('application-need-upgrade', rejection);
           }

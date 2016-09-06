@@ -12,6 +12,7 @@ entity:
         bio_description:    string
         categories:         array
         email:              string
+        extensions:         array
         fk_user_group:      array
         id:                 integer
         name:               string
@@ -36,10 +37,10 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     persisters:
         instance:
-            class:     Common\ORM\Database\Persister\UserPersister
+            class:     Common\ORM\Database\Persister\InstanceUserPersister
             arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
         manager:
-            class:     Common\ORM\Database\Persister\BasePersister
+            class:     Common\ORM\Database\Persister\ManagerUserPersister
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     mapping:
         database:

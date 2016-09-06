@@ -33,6 +33,13 @@ class Security
     protected $instance;
 
     /**
+     * The list of instances.
+     *
+     * @var array
+     */
+    protected $instances = [];
+
+    /**
      * The list of permissions.
      *
      * @var array
@@ -45,6 +52,36 @@ class Security
      * @var UserInterface
      */
     protected $user;
+
+    /**
+     * Returns the current categories.
+     *
+     * @return array The current categories.
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Returns the list of instances.
+     *
+     * @return array The list of instances.
+     */
+    public function getInstances()
+    {
+        return $this->instances;
+    }
+
+    /**
+     * Returns the current permissions.
+     *
+     * @return array The current permissions.
+     */
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
 
     /**
      * Returns the current authorized user.
@@ -88,11 +125,31 @@ class Security
      */
     public function hasExtension($uuid)
     {
-        if (!empty($this->user) && $this->user->getOrigin() === 'manager') {
+        if (!empty($this->user) && $this->hasPermission('MASTER')) {
             return true;
         }
 
         return in_array($uuid, $this->instance->activated_modules);
+    }
+
+    /**
+     * Checks if the user owns the instance.
+     *
+     * @param string $name The instance name.
+     *
+     * @return boolean True if the user owns the instance. False otherwise.
+     */
+    public function hasInstance($name)
+    {
+        if ($this->hasPermission('MASTER')) {
+            return true;
+        }
+
+        if ($name === 'manager' && $this->hasPermission('PARTNER')) {
+            return true;
+        }
+
+        return in_array($name, $this->instances);
     }
 
     /**
@@ -104,15 +161,24 @@ class Security
      */
     public function hasPermission($permission)
     {
-        if (!empty($this->user)
-            && ($this->user->getOrigin() === 'manager'
-            || ($this->user->isAdmin() && $permission !='ONLY_MASTERS'))
-        ) {
+        if (empty($this->permissions)) {
+            return false;
+        }
+
+        if (in_array('MASTER', $this->permissions)) {
             return true;
         }
 
-        if (empty($this->permissions)) {
-            return false;
+        // ADMIN and PARTER have all permissions for their instances
+        if ($this->instance->internal_name !== 'manager'
+            && $permission !== 'MASTER'
+            && (in_array('ADMIN', $this->permissions)
+                || (in_array('PARTNER', $this->permissions)
+                    && $this->hasInstance($this->instance->internal_name)
+                )
+            )
+        ) {
+            return true;
         }
 
         return in_array($permission, $this->permissions);
@@ -156,6 +222,16 @@ class Security
     public function setInstance(Instance $instance)
     {
         $this->instance = $instance;
+    }
+
+    /**
+     * Changes the list of instances.
+     *
+     * @param array $instances The list of instances.
+     */
+    public function setInstances($instances)
+    {
+        $this->instances = $instances;
     }
 
     /**

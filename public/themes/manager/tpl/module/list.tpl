@@ -13,7 +13,7 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('EXTENSION_CREATE')">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_module_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -24,7 +24,47 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="extension"}
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section pull-left">
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <i class="fa fa-arrow-left fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <h4>
+            [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+          </h4>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('EXTENSION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-times fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('EXTENSION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-check fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('EXTENSION_UPDATE') && security.hasPermission('EXTENSION_DELETE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('EXTENSION_DELETE')">
+          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -243,14 +283,12 @@
                 <dynamic-image class="img-thumbnail" path="[% item.images[0] %]" raw="true"></dynamic-image>
               </td>
               <td ng-show="isColumnEnabled('name')">
-                <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                  [% item.name['en'] %]
-                </a>
+                [% item.name['en'] %]
                 <div class="listing-inline-actions">
-                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_module_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_module_show', { id: item.id }) %]" ng-if="security.hasPermission('EXTENSION_UPDATE')" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" type="button">
+                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" ng-if="security.hasPermission('EXTENSION_DELETE')" type="button">
                     <i class="fa fa-trash- m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -287,9 +325,12 @@
                 [% item.updated %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('enabled')">
-                <button class="btn btn-white" type="button" ng-click="patch(item, 'enabled', item.enabled == '1' ? '0' : '1')">
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == '1' ? '0' : '1')" ng-if="security.hasPermission('EXTENSION_UPDATE')" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading &&item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('EXTENSION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : item.enabled == '1', 'fa-times text-error': item.enabled == '0' }"></i>
+                </span>
               </td>
             </tr>
           </tbody>
