@@ -1,7 +1,7 @@
 function getVideoInformation(url) {
     var container = jQuery('#video-information');
     jQuery.ajax({
-        url: video_manager_url.get_information + '?url=' + encodeURIComponent(url),
+        url: video_manager_url.get_information + '?url=' + encodeURI(url),
         async: true,
         beforeSend: function() {
             container.html('<div class="spinner"></div>Loading request...');
