@@ -11,6 +11,7 @@
 
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Symfony\Component\Console\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,8 @@ class CommandController extends Controller
      * Returns the list of available commands.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('COMMAND_LIST')")
      */
     public function listAction()
     {
@@ -62,7 +65,9 @@ class CommandController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     *
+     * @Security("hasPermission('COMMAND_EXECUTE')")
+     */
     public function executeAction(Request $request)
     {
         $command = $request->query->get('command', null, FILTER_SANITIZE_STRING);

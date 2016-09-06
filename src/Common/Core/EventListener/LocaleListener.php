@@ -51,8 +51,8 @@ class LocaleListener implements EventSubscriberInterface
         }
 
         // Get locale from instance settings
-        $settings = $this->container->get('orm.manager')->getDataSet('Settings')
-            ->get([ 'time_zone', 'site_language' ], [ 421, 'en_US' ]);
+        $settings = $this->container->get('setting_repository')
+            ->get([ 'time_zone' => 421, 'site_language' => 'en_US' ]);
 
         $locale   = $settings['site_language'];
         $timezone = $settings['time_zone'];
@@ -61,7 +61,9 @@ class LocaleListener implements EventSubscriberInterface
         if ($this->container->has('core.user')) {
             $user = $this->container->get('core.user');
 
-            if (!empty($user->user_language)) {
+            if (!empty($user->user_language)
+                && $user->user_language !== 'default'
+            ) {
                 $locale = $user->user_language;
             }
 

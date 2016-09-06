@@ -9,10 +9,12 @@
  */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Common\ORM\Entity\User;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Displays, saves, modifies and removes users.
@@ -20,11 +22,58 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController extends Controller
 {
     /**
+     * Returns a list of targets basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_CREATE')")
+     */
+    public function autocompleteAction(Request $request)
+    {
+        $target   = [];
+        $oql      = strtolower($request->query->get('oql'));
+        $security = $this->get('core.security');
+
+        $extensions = $this->get('orm.manager')->getRepository('Extension')
+            ->findBy($oql);
+
+        foreach ($extensions as $extension) {
+            $target[] = [
+                'id'   => $extension->uuid,
+                'name' => $extension->uuid
+            ];
+        }
+
+        if (!empty($query)) {
+            $oql = 'uuid ~ "%s" ' . $oql;
+            $oql  = sprintf($oql, $query);
+        }
+
+        if ($security->hasPermission('MASTER')) {
+            $themes = $this->get('orm.manager')->getRepository('Theme')
+                ->findBy($oql);
+
+            foreach ($themes as $theme) {
+                $target[] = [
+                    'id'   => $theme->uuid,
+                    'name' => $theme->uuid
+                ];
+            }
+        }
+
+        return new JsonResponse([ 'extensions' => $target ]);
+    }
+
+    /**
      * @api {delete} /users/:id Delete an user
      * @apiName DeleteUser
      * @apiGroup User
      *
      * @apiSuccess {String} message The success message.
+     *
+     * @Security("hasPermission('USER_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -47,6 +96,8 @@ class UserController extends Controller
      * @apiParam {Array} ids The user ids.
      *
      * @apiSuccess {Object} The success message.
+     *
+     * @Security("hasPermission('USER_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -92,6 +143,8 @@ class UserController extends Controller
      *
      * @apiSuccess {Integer} total   The total number of elements.
      * @apiSuccess {Array}   results The list of users.
+     *
+     * @Security("hasPermission('USER_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -123,6 +176,8 @@ class UserController extends Controller
      * Returns the data to create a new user.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_CREATE')")
      */
     public function newAction()
     {
@@ -139,6 +194,8 @@ class UserController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -163,6 +220,8 @@ class UserController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -210,6 +269,8 @@ class UserController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('USER_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -219,6 +280,12 @@ class UserController extends Controller
             ->objectify($request->request->all());
 
         $user = new User($data);
+
+        // Encode password
+        if (!empty($user->password)) {
+            $user->password = $this->get('onm_password_encoder')
+                ->encodePassword($data['password'], null);
+        }
 
         $em->persist($user, 'manager');
         $msg->add(_('User saved successfully'), 'success', 201);
@@ -244,6 +311,15 @@ class UserController extends Controller
      */
     public function showAction($id)
     {
+        $security = $this->get('core.security');
+
+        if (!$security->hasPermission('USER_EDIT')
+            && (!$security->hasPermission('USER_EDIT_OWN_PROFILE')
+            || $id != $this->get('core.user')->id)
+        ) {
+            throw new AccessDeniedException();
+        }
+
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('User');
         $user      = $em->getRepository('User', 'manager')->find($id);
@@ -256,7 +332,7 @@ class UserController extends Controller
 
         return new JsonResponse([
             'extra' => $extra,
-            'user'  => $converter->responsify($user->getData())
+            'user'  => $converter->responsify($user)
         ]);
     }
 
@@ -270,6 +346,15 @@ class UserController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $security = $this->get('core.security');
+
+        if (!$security->hasPermission('USER_EDIT')
+            && (!$security->hasPermission('USER_EDIT_OWN_PROFILE')
+            || $id != $this->get('core.user')->id)
+        ) {
+            throw new AccessDeniedException();
+        }
+
         $em   = $this->get('orm.manager');
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('User')
@@ -277,12 +362,19 @@ class UserController extends Controller
 
         $user     = $em->getRepository('User', 'manager')->find($id);
         $password = $user->password;
-        $user->setData($data);
 
-        if (empty($user->password)) {
-            $user->password = $password;
+        // Encode password
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = $this->get('onm_password_encoder')
+                ->encodePassword($data['password'], null);
         }
 
+        // Keep old password if password empty
+        if (!array_key_exists('password', $data) || empty($data['password'])) {
+            $data['password'] = $password;
+        }
+
+        $user->setData($data);
         $em->persist($user, 'manager');
 
         $msg->add(_('User saved successfully'), 'success');

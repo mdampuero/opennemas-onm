@@ -15,15 +15,15 @@ class StringDataMapperTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('foo', $this->mapper->fromString('foo'));
         $this->assertEquals('1', $this->mapper->fromString(1));
-        $this->assertEquals(null, $this->mapper->fromString(null));
-        $this->assertEquals(null, $this->mapper->fromString(''));
+        $this->assertEmpty($this->mapper->fromString(''));
+        $this->assertNull($this->mapper->fromString(null));
     }
 
     public function testToString()
     {
         $this->assertEquals('foo', $this->mapper->toString('foo'));
         $this->assertEquals('1', $this->mapper->toString(1));
-        $this->assertEquals(null, $this->mapper->toString(null));
-        $this->assertEquals(null, $this->mapper->toString(''));
+        $this->assertEmpty($this->mapper->toString(''));
+        $this->assertNull($this->mapper->toString(null));
     }
 }

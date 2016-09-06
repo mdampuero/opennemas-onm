@@ -142,6 +142,17 @@
 
         $scope.checkGoogleDFP(nv);
       });
+
+      // Track all radio buttons type_advertisement and update the model property
+      // in the $scope
+      var type_advertisement_el = $('input[name=type_advertisement]');
+      $scope.type_advertisement = parseInt(type_advertisement_el.val());
+      type_advertisement_el.on('change', function() {
+        var value = parseInt(this.value);
+        $scope.$apply(function(){
+          $scope.type_advertisement = value;
+        });
+      });
     }
   ]);
 })();

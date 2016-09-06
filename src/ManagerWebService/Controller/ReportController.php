@@ -11,6 +11,7 @@
 
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use League\Csv\Writer;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,6 +26,8 @@ class ReportController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('REPORT_LIST')")
      */
     public function listAction()
     {
@@ -50,19 +53,21 @@ class ReportController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('REPORT_DOWNLOAD')")
      */
     public function exportAction(Request $request)
     {
-        $id = $request->query->get('id');
-        $im = $this->get('instance_manager');
+        $id         = $request->query->get('id');
+        $repository = $this->get('orm.manager')->getRepository('Instance');
 
         switch ($id) {
             case 'not-used':
-                $instances = $im->findNotUsedInstances();
+                $instances = $repository->findNotUsedInstances();
                 break;
 
             case 'last-created':
-                $instances = $im->findLastCreatedInstances();
+                $instances = $repository->findLastCreatedInstances();
                 break;
 
             default:
@@ -83,8 +88,8 @@ class ReportController extends Controller
                 $instance->name,
                 $instance->contact_mail,
                 implode(',', $instance->domains),
-                $instance->created,
-                $instance->last_login
+                !empty($instance->created) ? $instance->created->format('Y-m-d H:i:s') : '',
+                !empty($instance->last_login) ? $instance->last_login->format('Y-m-d H:i:s') : ''
             ];
         }
 

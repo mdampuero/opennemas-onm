@@ -84,7 +84,7 @@ class FormController extends Controller
                 $class = 'error';
             } else {
                 // Correct CAPTCHA, bad mail and name empty
-                $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
+                $email = trim($request->request->filter('email', null, FILTER_SANITIZE_STRING));
 
                 if (empty($email)) {
                     $message = _(
@@ -107,7 +107,7 @@ class FormController extends Controller
 
                     $name      = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
                     $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
-                    $recipient = $request->request->filter('recipient', null, FILTER_SANITIZE_STRING);
+                    $recipient = trim($request->request->filter('recipient', null, FILTER_SANITIZE_STRING));
 
 
                     $mailSender = s::get('mail_sender');
@@ -140,6 +140,10 @@ class FormController extends Controller
                     try {
                         $mailer = $this->get('swiftmailer.mailer.direct');
                         $mailer->send($text);
+
+                        $this->get('application.log')->notice(
+                            "Email sent. Frontend form (sender:".$email.", to: ".$recipient.")"
+                        );
 
                         $action = new \Action();
                         $action->set(array(

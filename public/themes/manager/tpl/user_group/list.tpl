@@ -13,7 +13,7 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('GROUP_CREATE')">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_user_group_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -24,7 +24,34 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="user_group"}
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section pull-left">
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <i class="fa fa-arrow-left fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <h4>
+            [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+          </h4>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('GROUP_DELETE')">
+          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -131,10 +158,10 @@
               <td ng-if="isColumnEnabled('name')">
                 [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" title="{t}Edit group{/t}">
+                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" ng-if="security.hasPermission('GROUP_UPDATE')" title="{t}Edit group{/t}">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item.pk_user_group)" type="button">
+                  <button class="link link-danger" ng-click="delete(item.pk_user_group)" ng-if="security.hasPermission('GROUP_DELETE')" type="button">
                     <i class="fa fa-trash-o"></i>{t}Delete{/t}
                   </button>
                 </div>

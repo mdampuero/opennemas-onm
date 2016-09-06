@@ -1,16 +1,16 @@
+manager_instance_create:
+    path: /instances/new
+    options:
+        expose: true
+
 manager_instances_list:
     path: /instances
     options:
         expose: true
 
 manager_instance_show:
-    path: /instance/{id}/show
+    path: /instances/{id}
     requirements:
         id: \d+
-    options:
-        expose: true
-
-manager_instance_create:
-    path: /instance/create
     options:
         expose: true

@@ -71,9 +71,9 @@ class Entity extends DataObject implements Validable
                     && array_key_exists($key, $this->stored))
                 || (array_key_exists($key, $this->data)
                     && !array_key_exists($key, $this->stored))
-                || $this->stored[$key] != $this->data[$key]
+                || $this->stored[$key] != $this->{$key}
             ) {
-                $changes[$key] = $this->data[$key];
+                $changes[$key] = $this->{$key};
             }
         }
 

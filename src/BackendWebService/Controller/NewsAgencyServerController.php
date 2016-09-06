@@ -180,10 +180,9 @@ class NewsAgencyServerController extends Controller
      * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
      *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
-    public function toggleAction(Request $request)
+    public function toggleAction(Request $request, $id)
     {
-        $id     = $request->query->getDigits('id');
-        $status = $request->request->get('value');
+        $status = $request->request->get('activated');
         $sm     = $this->get('setting_repository');
 
         $servers = $sm->get('news_agency_config');

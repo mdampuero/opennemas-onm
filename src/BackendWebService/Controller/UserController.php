@@ -169,19 +169,22 @@ class UserController extends Controller
         $total  = $repository->countBy($oql);
         $users  = $repository->findBy($oql);
         $groups = [];
+        $photos = [];
 
-        $users = array_map(function ($a) use ($converter, &$groups) {
-            $groups = array_unique(array_merge($groups, $a->fk_user_group));
+        $users = array_map(function ($a) use ($converter, &$groups, &$photos) {
+            $groups   = array_merge($groups, $a->fk_user_group);
+            $photos[] = $a->avatar_img_id;
 
-            $a->eraseCredentials();
+            $data = $converter->responsify($a->getData());
+            unset($data['password']);
 
-            return $converter->responsify($a->getData());
+            return $data;
         }, $users);
 
         return new JsonResponse([
             'results' => $users,
             'total'   => $total,
-            'extra'   => $this->getExtraData($groups),
+            'extra'   => $this->getExtraData(array_unique($groups), array_unique($photos))
         ]);
     }
 
@@ -265,9 +268,12 @@ class UserController extends Controller
     /**
      * Returns a list of parameters for the template.
      *
+     * @params array $groups The user group ids.
+     * @params array $photos The avatar ids.
+     *
      * @return array Array of template parameters.
      */
-    private function getExtraData($groups = [])
+    private function getExtraData($groups = [], $photos = [])
     {
         $em = $this->get('orm.manager');
 
@@ -290,9 +296,23 @@ class UserController extends Controller
 
         $extra['user_groups'] = $converter->responsify($userGroups);
         $extra['user_groups'] = array_merge(
-            [[ 'pk_user_group' => null, 'name' => _('All') ]],
+            [
+                [ 'pk_user_group' => null, 'name' => _('All') ],
+                [ 'pk_user_group' => [], 'name' => _('Not assigned') ],
+            ],
             $extra['user_groups']
         );
+
+        if (!empty($photos)) {
+            $photos = $this->get('entity_repository')->findBy([
+                'content_type_name' => [ [ 'value' => 'photo' ] ],
+                'pk_content'        => [ [ 'value' => $photos, 'operator' => 'in' ] ]
+            ]);
+
+            foreach ($photos as $p) {
+                $extra['photos'][$p->pk_photo] = $p;
+            }
+        }
 
         if (!empty($this->get('core.instance')->getClient())) {
             $client = $em->getRepository('Client')

@@ -280,8 +280,7 @@ class FrontpagesController extends Controller
         $this->dispatchEvent('frontpage.save_position', array('category' => $categoryID));
 
         // Save the actual date for fronpage
-        $date = new \Datetime("now");
-        $dateForDB = $date->format(\DateTime::ISO8601);
+        $dateForDB = time();
         $this->get('cache')->save('frontpage_last_saved_'.$category, $dateForDB);
 
         return new JsonResponse([
@@ -356,21 +355,17 @@ class FrontpagesController extends Controller
      */
     public function lastVersionAction(Request $request)
     {
-        $dateRequest = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
-        $category    = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
-
+        $dateRequest         = (int) $request->query->filter('date', '', FILTER_SANITIZE_STRING);
+        $category            = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
         $newVersionAvailable = false;
+
         if (!empty($dateRequest)) {
             if ($category == 'home') {
                 $category = 0;
             }
 
-            $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_'.$category);
-
-            $frontpageVersion = \DateTime::createFromFormat(\DateTime::ISO8601, $lastSaved);
-            $requestVersion = \DateTime::createFromFormat(\DateTime::ISO8601, $dateRequest);
-
-            $newVersionAvailable = $frontpageVersion > $requestVersion;
+            $lastSaved           = $this->get('cache')->fetch('frontpage_last_saved_'.$category);
+            $newVersionAvailable = $lastSaved > $dateRequest;
         }
 
 

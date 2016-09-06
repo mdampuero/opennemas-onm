@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-28 12:08+0000\n"
+"POT-Creation-Date: 2016-08-23 23:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,25 +13,6 @@ msgstr ""
 "X-Generator: Translate Toolkit 1.13.0\n"
 "X-Pootle-Path: /fr/opennemas/fr.po\n"
 "X-Pootle-Revision: 870\n"
-
-#, fuzzy
-msgid ""
-"You have reach the maximum users allowed. If you want to create more users, "
-"please contact us."
-msgstr ""
-"Vous avez atteint le nombre maximal d'utilisateurs autorisés. Si vous voulez "
-"créer plus d'utilisateurs, s'il vous plaît contactez-nous."
-
-#, fuzzy
-msgid "Not assigned"
-msgstr "Non défini"
-
-msgid "All"
-msgstr "Tout"
-
-#, php-format
-msgid "Unable to find the user with the id '%d'"
-msgstr "Impossible de trouver l'utilisateur avec l'id '%d'"
 
 msgid "Frontpage"
 msgstr "Couverture"
@@ -50,39 +31,6 @@ msgstr "Feme"
 
 msgid "Other"
 msgstr "Autre"
-
-msgid "The data send by the user is not valid."
-msgstr "Les données envoyés par l'utilisateur ne sont pas valides"
-
-msgid "User data updated successfully."
-msgstr "Les données de l'utilisateur mis à jour avec succès"
-
-msgid "Unable to update the user with that information"
-msgstr "Impossible de mettre à jour l'utilisateur de cette information"
-
-msgid ""
-"Unable to change user backend access. You have reached the max number of "
-"users."
-msgstr ""
-"Impossible de modifier l'accès utilisateur backend. Vous avez atteint le "
-"nombre maximum d'utilisateurs."
-
-msgid "User created successfully."
-msgstr "Utilisateur créé avec succès."
-
-msgid "Unable to create the user with that information"
-msgstr "Impossible de créer l'utilisateur avec cette information"
-
-#, php-format
-msgid "Successfully deleted user with id \"%d\"."
-msgstr "Supprimé avec succès l'utilisateur avec l'id \"%d\"."
-
-#, php-format
-msgid "You have deleted %d users."
-msgstr "Vous avez supprimé utilisateurs %d"
-
-msgid "You haven't selected any user to delete."
-msgstr "Vous avez sélectionné aucun utilisateur à supprimer"
 
 #, php-format
 msgid "Password reminder for %s"
@@ -109,9 +57,11 @@ msgstr "Mot de passe mis à jour avec succès"
 msgid "Password and confirmation must be equal."
 msgstr "Mot de passe et la confirmation doivent être égaux."
 
-#, php-format
-msgid "Unable to find user group with id '%d'"
-msgstr "Impossible de trouver un groupe d'utilisateurs avec id '%d'"
+msgid "User created successfully."
+msgstr "Utilisateur créé avec succès."
+
+msgid "User data updated successfully."
+msgstr "Les données de l'utilisateur mis à jour avec succès"
 
 msgid "User group created successfully."
 msgstr "Groupe d'utilisateurs créé avec succès"
@@ -126,12 +76,8 @@ msgstr "Groupe d'utilisateurs mis à jour avec succès"
 msgid "Unable to update the user group with id \"%d\""
 msgstr "Impossible de mettre à jour le groupe de l'utilisateur avec Id \"%d\""
 
-msgid "User group deleted successfully."
-msgstr "Groupe de l'utilisateur supprimé."
-
-#, php-format
-msgid "Unable to delete the user group with id \"%d\""
-msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
+msgid "All"
+msgstr "Tout"
 
 msgid "Multimedia"
 msgstr "Multimédia"
@@ -187,11 +133,11 @@ msgstr "Impossible de mettre à jour les données de publicité"
 msgid "Settings saved successfully."
 msgstr "Paramètres sauvegardés avec succès"
 
-msgid "Album created successfully"
-msgstr "Album créé avec succès"
-
 msgid " - Select one author - "
 msgstr "- Sélectionnez un auteur -"
+
+msgid "Album created successfully"
+msgstr "Album créé avec succès"
 
 #, php-format
 msgid "Unable to find an album with the id \"%d\"."
@@ -246,12 +192,6 @@ msgstr "Les données de l'article envoyé pas valable"
 msgid "Article successfully updated."
 msgstr "Article mis à jour avec succès."
 
-msgid "Article deleted successfully."
-msgstr "Article supprimé avec succès."
-
-msgid "You must give an id to delete an article."
-msgstr "Vous devez donner un identifiant à supprimer un article."
-
 msgid "Invalid token"
 msgstr "Jeton invalide"
 
@@ -271,6 +211,9 @@ msgstr "Auteur créé avec succès."
 msgid "Unable to create the author with that information"
 msgstr "Impossible de créer l'auteur avec cette information"
 
+msgid "The data send by the user is not valid."
+msgstr "Les données envoyés par l'utilisateur ne sont pas valides"
+
 msgid "Author updated successfully."
 msgstr "Auteur mis à jour avec succès."
 
@@ -280,6 +223,10 @@ msgstr "Impossible de mettre à jour l'auteur de cette information"
 #, php-format
 msgid "You must put %d books in the HOME widget"
 msgstr "Vous devez mettre %d livres dans le widget HOME"
+
+#, fuzzy
+msgid "Book created successfully."
+msgstr "Livre mis à jour avec succès."
 
 msgid "Unable to create the new book."
 msgstr "Impossible de créer le nouveau livre."
@@ -305,19 +252,6 @@ msgid ""
 msgstr ""
 "Impossible d'enregistrer les nouvelles positions. S'il vous plaît contactez "
 "votre administrateur système."
-
-msgid "Cache configuration saved successfully."
-msgstr "La configuration du cache sauvegardé avec succès."
-
-msgid "Unable to save the cache configuration."
-msgstr "Impossible d'enregistrer la configuration du cache."
-
-#, fuzzy
-msgid "Smarty cache removed for the instance."
-msgstr "Impossible de créer le nouvel article"
-
-msgid "Smarty compiled templates removed for the instance."
-msgstr ""
 
 msgid "Category created successfully."
 msgstr "Catégorie créé avec succès"
@@ -363,41 +297,6 @@ msgstr "Changé avec succès  l'accessibilité à la catégorie avec id \"%d\""
 
 msgid "Settings saved."
 msgstr "Paramètres sauvegardés."
-
-msgid "Base"
-msgstr "Base"
-
-msgid "Professional"
-msgstr "Professionnel"
-
-#, fuzzy
-msgid "Advanced"
-msgstr "Advance"
-
-msgid "Expert"
-msgstr "Pack Expert"
-
-msgid "Unlimited"
-msgstr "Illimité"
-
-msgid ""
-"You had already sent an upgrade request. Your upgrade will be applied as "
-"soon as possible"
-msgstr ""
-"Vous avez déjà envoyé une demande de actualisation. Votre mise à jour sera "
-"appliqué dès que possible"
-
-#, fuzzy, php-format
-msgid "Upgrade instance request for %s"
-msgstr "Demande de actualisation de une instance %s"
-
-msgid "Unable to send your upgrade request. Please try it again."
-msgstr ""
-"Impossible d'envoyer votre demande de actualization. S'il vous plaît essayer "
-"de nouveau."
-
-msgid "Your upgrade request has been sent."
-msgstr "Votre demande de actu a été envoyé."
 
 msgid "Accepted"
 msgstr "Accepté"
@@ -515,6 +414,21 @@ msgstr ""
 
 msgid "You must pick a file before submitting the form"
 msgstr "Vous devez choisir un fichier avant de soumettre le formulaire"
+
+#, fuzzy, php-format
+msgid "You must pick a file smaller than %d Mb"
+msgstr "Vous devez choisir un fichier avant de soumettre le formulaire"
+
+#, php-format
+msgid ""
+"We are sorry, file extension %s is not allowed for upload as it could "
+"contain malicious code. Please contact with our support  or retry using a "
+"different file extension."
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Unable to create the directory to save the file"
+msgstr "Impossible de créer le nouvel article"
 
 msgid "There was an error while uploading the file."
 msgstr "Il y avait une erreur lors du téléchargement du fichier."
@@ -754,10 +668,6 @@ msgstr "%d bulletin envoyé par %s."
 msgid "Content saved successfully"
 msgstr "Contenu enregistré avec succès"
 
-#, php-format
-msgid "Sorry, newsletter \"%d\" was been sent previously"
-msgstr "Désolé, Bulletin \"%d\" a été précédemment été envoyé"
-
 msgid ""
 "Your newsletter configuration is not complete. You must complete the sender "
 "email address."
@@ -790,20 +700,21 @@ msgid "You have reached the maximum of emails allowed to send"
 msgstr "Vous avez atteint le maximum de courriels autorisés à envoyer"
 
 #, fuzzy
-msgid "Unable to create the new subscriptor. This email is already in use"
+msgid "Unable to create the new subscriber. This email is already in use"
 msgstr "Impossible de créer la nouvelle abonné. Cet e-mail est déjà utilisée"
 
 msgid "Subscription successfully created."
 msgstr "Abonnement créé avec succès."
 
-#, php-format
-msgid "Unable to create the new subscriptor: %s"
+#, fuzzy, php-format
+msgid "Unable to create the new subscriber: %s"
 msgstr "Impossible de créer la nouvelle abonné: %s"
 
 msgid "Subscription successfully updated."
 msgstr "Abonnement à jour avec succès."
 
-msgid "Unable to update the subscriptor information"
+#, fuzzy
+msgid "Unable to update the subscriber information"
 msgstr "Impossible de mettre à jour les informations abonné"
 
 #, php-format
@@ -939,27 +850,25 @@ msgstr "Vous devez donner une id pour supprimer un supplément"
 msgid "Unable to save positions for the specials widget."
 msgstr "Impossible d'enregistrer les positions pour le widget de supplément."
 
-#, php-format
-msgid "Unable to find a static page with the id \"%d\"."
-msgstr "Impossible de trouver une page statique avec l'id \"%d\"."
-
-msgid "Static page created successfully."
-msgstr "Page statique créé avec succès."
-
-msgid ""
-"You can't modify this static page because you don't have enough privileges."
-msgstr ""
-"Vous ne pouvez pas modifier cette page statique parce que vous ne disposez "
-"pas de suffisamment de privilèges."
-
-msgid "Static Page data sent not valid."
-msgstr "Les données de la page statique envoyé pas valable."
-
-msgid "Static page updated successfully."
-msgstr "Page statique mis à jour avec succès."
-
 msgid "Can't get static page title. Check the title"
 msgstr "Impossible d'obtenir la page statique titre. Vérifiez le titre"
+
+#, fuzzy
+msgid "There were errors while creating the content"
+msgstr "Il y avait une erreur lors de la mise à jour dans le menu."
+
+#, fuzzy
+msgid "You don't have enough privileges to execute this action"
+msgstr ""
+"Vous ne disposez pas de suffisamment de privilèges pour voir cette catégorie"
+
+#, fuzzy
+msgid "Content updated successfully"
+msgstr "Commentaire mis à jour avec succès."
+
+#, fuzzy
+msgid "There were errors while updating the content"
+msgstr "Il y avait une erreur lors de la mise à jour dans le menu."
 
 msgid "Others"
 msgstr "Autres"
@@ -981,24 +890,15 @@ msgstr ""
 "ajuster votre taille de l'image."
 
 msgid ""
-"There was a problem while uploading the file. Please check if you have "
-"completed all the form fields."
-msgstr ""
-"Il y avait un problème lors du chargement du fichier. S'il vous plaît "
-"vérifier si vous avez rempli tous les champs du formulaire."
-
-msgid ""
 "There was an error while uploading the form, not all the required data was "
 "sent."
 msgstr ""
 "Il y avait une erreur lors de l'envoi du formulaire, pas toutes les données "
 "requises ont été envoyées."
 
-msgid ""
-"There was an error while uploading the form, the video type is not specified."
-msgstr ""
-"Il y avait une erreur lors de l'envoi du formulaire, le type de vidéo est "
-"pas spécifié."
+#, php-format
+msgid "Unable to find the video with the id \"%d\""
+msgstr "Impossible de trouver la vidéo avec l'id \"%d\""
 
 #, fuzzy
 msgid "You can't modify this video because you don't have enought privileges."
@@ -1011,10 +911,6 @@ msgstr "Vidéo mise à jour avec succès."
 
 msgid "You must give an id to delete the video."
 msgstr "Vous devez donner un identifiant à supprimer la vidéo."
-
-#, php-format
-msgid "Unable to find the video with the id \"%d\""
-msgstr "Impossible de trouver la vidéo avec l'id \"%d\""
 
 msgid "Can't get video information. Check the url"
 msgstr "Vous ne pouvez pas obtenir des informations vidéo. Vérifiez l'url"
@@ -1037,6 +933,18 @@ msgstr "Il y avait une erreur lors de la mise à jour du widget."
 
 msgid "Widget updated successfully."
 msgstr "Widget mis à jour avec succès."
+
+#, fuzzy
+msgid "The reCAPTCHA was not entered correctly. Try to authenticate again."
+msgstr ""
+"Le reCAPTCHA n'a pas été entré correctement. Essayez d'authentifier à "
+"nouveau."
+
+#, fuzzy
+msgid "Your user is not allowed to access, please contact your administrator"
+msgstr ""
+"Impossible d'enregistrer les nouvelles positions. S'il vous plaît contactez "
+"votre administrateur système."
 
 msgid "Browse"
 msgstr "Regarder"
@@ -1216,10 +1124,6 @@ msgstr "élément supprimé avec succès"
 msgid "Item updated successfully"
 msgstr "Élément mis à jour avec succès"
 
-#, php-format
-msgid "Access denied (%s)"
-msgstr "Accès refusé (%s)"
-
 msgid "Item restored successfully"
 msgstr "Élément restauré avec succès"
 
@@ -1295,6 +1199,14 @@ msgstr "Impossible d'enregistrer la position de l'élément avec id \"%d\""
 msgid "Positions saved successfully"
 msgstr "Positions enregistré avec succès"
 
+#, php-format
+msgid "Access denied (%s)"
+msgstr "Accès refusé (%s)"
+
+#, fuzzy, php-format
+msgid "%d items updated successfully"
+msgstr "%d élément(s) mis à jour avec succès"
+
 #, fuzzy, php-format
 msgid "The domain %s is not valid"
 msgstr "Widget %s non disponible"
@@ -1322,16 +1234,6 @@ msgstr "élément supprimé avec succès"
 msgid "Unable to delete the domain %s"
 msgstr "Impossible de supprimer le élément \"%s\""
 
-msgid "Domain + redirection: "
-msgstr ""
-
-#, fuzzy
-msgid "Redirection: "
-msgstr "Date d'inscription"
-
-msgid "Pay with credit card"
-msgstr ""
-
 #, fuzzy
 msgid "Domain added successfully"
 msgstr "Positions enregistré avec succès"
@@ -1350,6 +1252,14 @@ msgstr "Texte"
 msgid "Photo"
 msgstr "Photo"
 
+#, fuzzy
+msgid "Unable to connect to the server"
+msgstr "Impossible de créer le menu"
+
+#, fuzzy
+msgid "Server connection success!"
+msgstr "Couverture mis à jour avec succès."
+
 #, php-format
 msgid "Source identifier \"%d\" not valid"
 msgstr "Source identifiant \"%d\" pas valable"
@@ -1365,39 +1275,6 @@ msgstr "Couverture mis à jour avec succès."
 msgid "News agency server deleted."
 msgstr "Serveur agence de nouvelles supprimé."
 
-#, php-format
-msgid "Subscritor with id \"%d\" deleted sucessfully"
-msgstr "Abonné avec id \"%d\" supprimé avec succès"
-
-msgid "You must provide an id to delete a newsletter subscriptor."
-msgstr "Vous devez fournir un identifiant à supprimer un abonné newsletter."
-
-#, php-format
-msgid "Unable to delete the subscriptor with the id %d."
-msgstr "Impossible de supprimer un abonné avec l'id %d."
-
-#, php-format
-msgid "Successfully deleted %d subscriptors."
-msgstr "Succès supprimé %d abonnés"
-
-msgid "Please specify a subscriptor id for delete it."
-msgstr "S'il vous plaît spécifier un id d'abonné pour le supprimer."
-
-msgid "Please specify a subscriptor id for change its subscribed state it."
-msgstr ""
-"S'il vous plaît spécifier un id d'abonné pour changer son état, il souscrit."
-
-#, php-format
-msgid "Successfully changed subscribed state for %d subscriptors."
-msgstr "Avec succès changé d'état souscrit pour %d abonnés"
-
-msgid "Please specify a subscriptor id to change the activated state."
-msgstr "S'il vous plaît spécifier un numéro d'abonné de changer l'état activé."
-
-#, fuzzy, php-format
-msgid "Successfully changed activated state for %d subscriptors."
-msgstr "Avec succès changé d'état activé pour ½d abonnés"
-
 msgid "Newsletter deleted successfully."
 msgstr "Bulletin supprimé avec succès."
 
@@ -1409,6 +1286,43 @@ msgid "You must provide an id for delete a newsletter."
 msgstr ""
 "Vous devez fournir un identifiant pour supprimer un bulletin d'information."
 
+#, php-format
+msgid "Subscritor with id \"%d\" deleted sucessfully"
+msgstr "Abonné avec id \"%d\" supprimé avec succès"
+
+#, fuzzy
+msgid "You must provide an id to delete a newsletter subscriber."
+msgstr "Vous devez fournir un identifiant à supprimer un abonné newsletter."
+
+#, fuzzy, php-format
+msgid "Unable to delete the subscriber with the id %d."
+msgstr "Impossible de supprimer un abonné avec l'id %d."
+
+#, fuzzy, php-format
+msgid "Successfully deleted %d subscribers."
+msgstr "Succès supprimé %d abonnés"
+
+#, fuzzy
+msgid "Please specify a subscriber id for delete it."
+msgstr "S'il vous plaît spécifier un id d'abonné pour le supprimer."
+
+#, fuzzy
+msgid "Please specify a subscriber id for change its subscribed state it."
+msgstr ""
+"S'il vous plaît spécifier un id d'abonné pour changer son état, il souscrit."
+
+#, fuzzy, php-format
+msgid "Successfully changed subscribed state for %d subscribers."
+msgstr "Avec succès changé d'état souscrit pour %d abonnés"
+
+#, fuzzy
+msgid "Please specify a subscriber id to change the activated state."
+msgstr "S'il vous plaît spécifier un numéro d'abonné de changer l'état activé."
+
+#, fuzzy, php-format
+msgid "Successfully changed activated state for %d subscribers."
+msgstr "Avec succès changé d'état activé pour ½d abonnés"
+
 #, fuzzy
 msgid "Notification marked as read successfully"
 msgstr "Configuration enregistrée avec succès"
@@ -1418,7 +1332,7 @@ msgid "Invalid notifications"
 msgstr "Jeton invalide"
 
 #, fuzzy, php-format
-msgid "%d notifications marked as read successfully"
+msgid "%d notifications marked successfully"
 msgstr "%d élément(s) restaurés avec succès"
 
 msgid "Yesterday"
@@ -1451,6 +1365,9 @@ msgstr "Créé"
 msgid "Description"
 msgstr "Description"
 
+msgid "From"
+msgstr ""
+
 msgid "Pick the item to insert"
 msgstr "Choisissez l'élément à insérer"
 
@@ -1475,6 +1392,9 @@ msgstr "Recherche par nom"
 msgid "Title"
 msgstr "Titre"
 
+msgid "To"
+msgstr ""
+
 msgid "Thumbnail details"
 msgstr "détails de miniature"
 
@@ -1498,6 +1418,9 @@ msgstr ""
 msgid "Unable to find the purchase"
 msgstr "Impossible de trouver l'élément avec id \"%s\""
 
+msgid "Pay with credit card"
+msgstr ""
+
 msgid "Your request could not been registered"
 msgstr "Votre demande n'a pas pu être enregistrée"
 
@@ -1505,41 +1428,16 @@ msgid "Your request has been registered"
 msgstr "Votre demande a bien été enregistrée"
 
 #, fuzzy
-msgid "Billing information saved successfully"
-msgstr "Configuration enregistrée avec succès"
+msgid "User deleted successfully"
+msgstr "élément supprimé avec succès"
 
 #, fuzzy
-msgid "Invalid theme"
-msgstr "Jeton invalide"
+msgid "Bad request"
+msgstr "Modules demandé"
 
-#, php-format
-msgid "Unable to delete the item with the id \"%s\""
-msgstr "Impossible de supprimer l'élément avec l'id \"%s\""
-
-#, php-format
-msgid "Unable to find the item with the id \"%s\""
-msgstr "Impossible de trouver l'élément avec l'id \"%s\""
-
-#, php-format
-msgid "%s item(s) deleted successfully"
+#, fuzzy, php-format
+msgid "%s users deleted successfully"
 msgstr "%s élément(s) supprimés avec succès"
-
-msgid "Selected items deleted successfully"
-msgstr "Les éléments sélectionnés supprimés avec succès"
-
-msgid ""
-"Unable to change user backend access. You have reach the maximum allowed"
-msgstr ""
-"Impossible de modifier l'accès utilisateur backend. Vous avez atteint le "
-"maximum autorisé"
-
-#, php-format
-msgid "Unable to delete the item with the id \"%d\""
-msgstr "Impossible de supprimer l'élément avec l'id \"%d\""
-
-#, php-format
-msgid "Unable to find the item with the id \"%d\""
-msgstr "Impossible de trouver l'élément avec l'id \"%d\""
 
 msgid "Name"
 msgstr "Nom"
@@ -1567,6 +1465,22 @@ msgstr "Date d'inscription"
 
 msgid "Not defined"
 msgstr "Non défini"
+
+#, fuzzy
+msgid "User saved successfully"
+msgstr "Utilisateur créé avec succès."
+
+#, fuzzy, php-format
+msgid "%s users saved successfully"
+msgstr "Utilisateur créé avec succès."
+
+#, fuzzy
+msgid "User group deleted successfully"
+msgstr "Groupe de l'utilisateur supprimé."
+
+#, fuzzy, php-format
+msgid "%s user groups deleted successfully"
+msgstr "Groupe d'utilisateurs créé avec succès"
 
 msgid "Application upgraded"
 msgstr "Mise à niveau de l'application"
@@ -1744,6 +1658,9 @@ msgstr "Liste attendant articles"
 msgid "Latest Albums"
 msgstr "Liste attendant articles"
 
+msgid "Check the form and try again"
+msgstr ""
+
 msgid "You have been subscribed to the newsletter."
 msgstr "Vous avez été inscrit à la newsletter."
 
@@ -1793,11 +1710,11 @@ msgstr ""
 msgid "Data updated successfully"
 msgstr "Données mises à jour avec succès"
 
-msgid "Unable to update the user."
-msgstr "Impossible de mettre à jour l'utilisateur."
-
 msgid "The user does not exists."
 msgstr "L'utilisateur n'a pas existe."
+
+msgid "Unable to update the user."
+msgstr "Impossible de mettre à jour l'utilisateur."
 
 msgid "Log in succesful."
 msgstr "Connexion réussie."
@@ -1842,19 +1759,11 @@ msgid "Reinventing Gutenberg machine..."
 msgstr "Réinventer la machine Gutenberg ..."
 
 #, fuzzy
-msgid "Client removed successfully"
-msgstr "Contenu enregistré avec succès"
-
-#, fuzzy
-msgid "Unable to find the instances for the given criteria"
-msgstr "Impossible de trouver une catégorie pour l'ID donné."
+msgid "Client deleted successfully"
+msgstr "%d élément(s) supprimé avec succès"
 
 #, fuzzy, php-format
-msgid "Unable to find the client with id \"%s\""
-msgstr "Impossible de trouver l'élément avec id \"%s\""
-
-#, fuzzy, php-format
-msgid "%d clients deleted successfully."
+msgid "%s clients deleted successfully"
 msgstr "%d élément(s) supprimé avec succès"
 
 #, fuzzy
@@ -1862,7 +1771,23 @@ msgid "Client saved successfully"
 msgstr "Contenu enregistré avec succès"
 
 #, fuzzy
+msgid "Instance deleted successfully"
+msgstr "élément supprimé avec succès"
+
+#, fuzzy, php-format
+msgid "Error while deleting instance with id \"%s\""
+msgstr "Impossible de supprimer l'élément avec id \"%d\""
+
+#, fuzzy, php-format
+msgid "%s instances deleted successfully"
+msgstr "%s élément(s) supprimés avec succès"
+
+#, fuzzy
 msgid "Instance saved successfully"
+msgstr "Contenu enregistré avec succès"
+
+#, fuzzy, php-format
+msgid "%s instances saved successfully"
 msgstr "Contenu enregistré avec succès"
 
 msgid "The instance already exists"
@@ -1872,37 +1797,9 @@ msgstr "L'instance existe déjà"
 msgid "Unable to create the database for the instance"
 msgstr "Impossible de créer le nouvel article"
 
-#, fuzzy
-msgid "Instance deleted successfully."
-msgstr "élément supprimé avec succès"
-
-#, fuzzy, php-format
-msgid "Unable to find the instance with id \"%s\""
-msgstr "Impossible de trouver l'élément avec id \"%s\""
-
-#, fuzzy, php-format
-msgid "Error while deleting instance with id \"%s\""
-msgstr "Impossible de supprimer l'élément avec id \"%d\""
-
-#, fuzzy, php-format
-msgid "%s instances deleted successfully."
-msgstr "%s élément(s) supprimés avec succès"
-
-#, fuzzy, php-format
-msgid "%s instances updated successfully."
-msgstr "%d élément(s) mis à jour avec succès"
-
 #, php-format
-msgid "A module with the uuid %d already exists"
+msgid "A module with the uuid '%s' already exists"
 msgstr ""
-
-#, php-format
-msgid "A module with uuid '%s' already exists"
-msgstr ""
-
-#, fuzzy
-msgid "Module saved successfully"
-msgstr "Utilisateur créé avec succès."
 
 #, fuzzy
 msgid "Module deleted successfully."
@@ -1913,44 +1810,28 @@ msgid "%s modules deleted successfully."
 msgstr "%s élément(s) supprimés avec succès"
 
 #, fuzzy
-msgid "Manager"
-msgstr "Manager Couverture"
+msgid "Module saved successfully"
+msgstr "Utilisateur créé avec succès."
 
 #, fuzzy, php-format
-msgid "Unable to find the module with id \"%s\""
-msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
-
-#, fuzzy
-msgid "Unable to find the modules for the given criteria"
-msgstr "Impossible de trouver une catégorie pour l'ID donné."
-
-#, fuzzy, php-format
-msgid "%s modules updated successfully."
-msgstr "Couverture mis à jour avec succès."
-
-#, fuzzy, php-format
-msgid "Unable to find the entity with id \"%s\""
-msgstr "Impossible de trouver l'élément avec id \"%s\""
-
-#, fuzzy
-msgid "Notification saved successfully"
-msgstr "Configuration enregistrée avec succès"
+msgid "%s modules saved successfully"
+msgstr "Utilisateur créé avec succès."
 
 #, fuzzy
 msgid "Notification deleted successfully."
 msgstr "Configuration du site supprimé avec succès"
 
 #, fuzzy, php-format
-msgid "%s notifications deleted successfully."
+msgid "%s notifications deleted successfully"
 msgstr "%s élément(s) supprimés avec succès"
 
 #, fuzzy
-msgid "Unable to find the notifications for the given criteria"
-msgstr "Impossible de trouver une catégorie pour l'ID donné."
+msgid "Notification saved successfully"
+msgstr "Configuration enregistrée avec succès"
 
 #, fuzzy, php-format
-msgid "%s notifications updated successfully."
-msgstr "%s élément(s) supprimés avec succès"
+msgid "%s notifications saved successfully"
+msgstr "Configuration enregistrée avec succès"
 
 msgid "Help"
 msgstr "Aidez-moi"
@@ -1959,16 +1840,27 @@ msgid "Information"
 msgstr "Informations"
 
 #, fuzzy
-msgid "Purchased removed successfully"
-msgstr "Utilisateur créé avec succès."
-
-#, fuzzy, php-format
-msgid "Unable to find the purchase with id \"%s\""
-msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
-
-#, fuzzy, php-format
-msgid "%d purchases deleted successfully."
+msgid "Purchase deleted successfully"
 msgstr "%s élément(s) supprimés avec succès"
+
+#, fuzzy, php-format
+msgid "%s purchases deleted successfully"
+msgstr "%s élément(s) supprimés avec succès"
+
+msgid "Cart"
+msgstr "Panier"
+
+msgid "Billing"
+msgstr ""
+
+msgid "Payment"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Done"
+msgstr ""
 
 #, fuzzy
 msgid "Instances not used in last month"
@@ -2029,74 +1921,8 @@ msgid "Show/hide sidebar"
 msgstr "Afficher/Masquer la barre latérale"
 
 #, fuzzy
-msgid "User saved successfully"
-msgstr "Utilisateur créé avec succès."
-
-#, fuzzy
-msgid "User deleted successfully"
-msgstr "élément supprimé avec succès"
-
-#, fuzzy, php-format
-msgid "Unable to delete the user with the id \"%d\""
-msgstr "Impossible de supprimer l'élément avec l'id \"%d\""
-
-#, fuzzy
-msgid "Unable to find users for the given criteria"
-msgstr "Impossible de trouver une catégorie pour l'ID donné."
-
-#, fuzzy, php-format
-msgid "%s users deleted successfully."
-msgstr "%s élément(s) supprimés avec succès"
-
-#, fuzzy
-msgid "User updated successfully."
-msgstr "Les données de l'utilisateur mis à jour avec succès"
-
-#, fuzzy, php-format
-msgid "Error while updating user with id \"%s\""
-msgstr "Impossible de mettre à jour l'élément avec id \"%d\""
-
-#, fuzzy, php-format
-msgid "Unable to find the user with id \"%s\""
-msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
-
-#, fuzzy
-msgid "Unable to find the users for the given criteria"
-msgstr "Impossible de trouver une catégorie pour l'ID donné."
-
-#, fuzzy, php-format
-msgid "%s users updated successfully."
-msgstr "Couverture mis à jour avec succès."
-
-#, fuzzy
-msgid "Unable to find the current user"
-msgstr "Impossible de trouver l'élément avec id \"%s\""
-
-msgid "User group name cannot be empty"
-msgstr "Nom de groupe de l'utilisateur ne peut pas être vide"
-
-#, fuzzy
-msgid "Unable to create a new usergroup"
-msgstr "Impossible de créer le nouveau groupe d'utilisateurs"
-
-#, fuzzy
 msgid "User group saved successfully"
 msgstr "Groupe d'utilisateurs créé avec succès"
-
-#, fuzzy
-msgid "Unable to find user groups for the given criteria"
-msgstr "Impossible de trouver une catégorie pour l'ID donné."
-
-#, fuzzy, php-format
-msgid "%s user groups deleted successfully."
-msgstr "Groupe d'utilisateurs créé avec succès"
-
-#, fuzzy
-msgid "User group updated successfully"
-msgstr "Groupe d'utilisateurs mis à jour avec succès"
-
-msgid "Error when creating a new instance"
-msgstr "Erreur lors de la création d'une nouvelle instance"
 
 msgid "A new opennemas instance has been created"
 msgstr "Une nouvelle instance de opennemas a été créé"
@@ -2104,6 +1930,9 @@ msgstr "Une nouvelle instance de opennemas a été créé"
 #, php-format
 msgid "Your newspaper is now live"
 msgstr "Votre journal est vivent maintenant"
+
+msgid "Error when creating a new instance"
+msgstr "Erreur lors de la création d'une nouvelle instance"
 
 msgid "First"
 msgstr ""
@@ -2118,33 +1947,9 @@ msgstr "Suivant"
 msgid "Previous"
 msgstr "Précédent"
 
-#, php-format
-msgid "The client with id '%d' was not found in %s"
-msgstr ""
-
-#, fuzzy, php-format
-msgid "The criteria (%s) is not valid in %s"
-msgstr "Cela ne veut pas une ville valide"
-
-#, fuzzy, php-format
-msgid "The persister '%s' does not exist in %s"
-msgstr "L'utilisateur n'a pas existe."
-
-#, fuzzy, php-format
-msgid "The repository '%s' does not exist in %s"
-msgstr "L'utilisateur n'a pas existe."
-
-#, php-format
-msgid "The invoice with id '%d' was not found in %s"
-msgstr ""
-
-#, php-format
-msgid "The payment with id '%d' was not found in %s"
-msgstr ""
-
 #, fuzzy
-msgid "Unable to load plugins. No folder specified."
-msgstr "Impossible d'enregistrer les positions pour le widget de supplément."
+msgid "Content already imported"
+msgstr "Contenu archivé"
 
 msgid "Advertisement"
 msgstr "Publicité"
@@ -2173,39 +1978,9 @@ msgstr "Non valable commentaire id."
 msgid "Status not valid."
 msgstr "Statut pas valable"
 
-#, php-format
-msgid "Field '%s' not valid"
-msgstr "Le champ '%s' est non valable"
-
-msgid "Database error."
-msgstr "Base de données erreur"
-
 #, fuzzy
-msgid "trashed"
-msgstr "Poubell"
-
-#, fuzzy
-msgid "pending"
-msgstr "En attendant"
-
-#, fuzzy
-msgid "available"
-msgstr "Fichier non disponible"
-
-msgid "not scheduled"
-msgstr "non prévu"
-
-msgid "scheduled"
-msgstr "planifié"
-
-msgid "dued"
-msgstr "échéance"
-
-msgid "in time"
-msgstr "à l'heure"
-
-msgid "postponed"
-msgstr "reporté"
+msgid "Unable to delete the comment."
+msgstr "Impossible de supprimer le élément \"%s\""
 
 msgid "Event"
 msgstr "évènement"
@@ -2240,11 +2015,35 @@ msgstr ""
 "Certains éléments ont été retirés parce que ce couverture avait trop de "
 "contenu"
 
+#, fuzzy
+msgid "trashed"
+msgstr "Poubell"
+
+#, fuzzy
+msgid "pending"
+msgstr "En attendant"
+
+#, fuzzy
+msgid "available"
+msgstr "Fichier non disponible"
+
+msgid "not scheduled"
+msgstr "non prévu"
+
+msgid "scheduled"
+msgstr "planifié"
+
+msgid "dued"
+msgstr "échéance"
+
+msgid "in time"
+msgstr "à l'heure"
+
+msgid "postponed"
+msgstr "reporté"
+
 msgid "Cover"
 msgstr "Couverture"
-
-msgid "Unable to save the cover data."
-msgstr "Impossible d'enregistrer les données de couverture"
 
 msgid "Letter"
 msgstr "Courrier"
@@ -2261,7 +2060,6 @@ msgstr "Internal recherche"
 msgid "Image data not valid"
 msgstr "Les données d'image ne sont pas valables"
 
-#, php-format
 msgid "Unable to save your image file in the Opennemas storage target"
 msgstr ""
 "Impossible d'enregistrer votre fichier image dans la cible de stockage "
@@ -2482,39 +2280,6 @@ msgstr "Opinion intérieure"
 msgid "RSS"
 msgstr "RSS"
 
-msgid "Name of the newspaper must be longer than 5 characters"
-msgstr "Nom du journal doit être supérieure à 5 caractères"
-
-msgid ""
-"Url must be longer than 4 characters and only must content characters and "
-"numbers"
-msgstr ""
-"Url doit être supérieure à 4 caractères et ne doit contenter caractères et "
-"chiffres"
-
-msgid "The url that you entered is already in use"
-msgstr "L'url que vous avez entré est déjà utilisé"
-
-#, fuzzy
-msgid "Please enter a valid url"
-msgstr "S'il vous plaît sélectionnez une réponse valable à une sondage."
-
-msgid "Your newspaper name cointains disallowed words."
-msgstr "Votre nom d'un journal contient des mots non autorisées."
-
-msgid "Your desired address contains disallowed words."
-msgstr "Votre adresse souhaitée contient des mots non autorisées."
-
-msgid "Your user name contains disallowed words."
-msgstr "Votre nom d'utilisateur contient des mots non autorisées."
-
-#, fuzzy
-msgid "There was an error while validating your data against disallowed words."
-msgstr "Il y avait une erreur lors de la mise à jour du widget."
-
-msgid "The email that you entered is already in use"
-msgstr "L'e-mail que vous avez entré est déjà utilisé"
-
 msgid "Accelerated Mobile Pages integration"
 msgstr ""
 
@@ -2542,6 +2307,9 @@ msgstr "Formulaire d'abonnement"
 
 msgid "Cronicas customizations"
 msgstr "Personnalisations Crónicas"
+
+msgid "Facebook Instant Articles integration"
+msgstr ""
 
 #, fuzzy
 msgid "Contact"
@@ -3159,13 +2927,13 @@ msgstr "%s"
 
 #, php-format
 msgid ""
-"We use cookies to offer you a better experience. By using this site you "
-"agree to our use of cookies. <a target=\"_blank\" href=\"%s\"> Learn more "
-"&gt; </a>"
+"We use cookies to personalise content and ads, to provide social media "
+"features and to analyse our traffic. We also share information about your "
+"use of our site with our social media, advertising and analytics partners "
+"who may combine it with other information you’ve provided to them or they’ve "
+"collected from your use of their services. <a target=\"_blank\" href=\"%s\"> "
+"See details &gt; </a>"
 msgstr ""
-"Nous utilisons les cookies pour vous offrir une meilleure expérience. En "
-"utilisant ce site, vous acceptez notre utilisation des cookies. <a target="
-"\"_blank\" href=\"%s\"> savoir plus & gt; </a>"
 
 #, fuzzy
 msgid "Y-m-d H:i:s"
@@ -3249,8 +3017,9 @@ msgstr ""
 msgid "Send to trash"
 msgstr "Envoyer à la corbeille"
 
+#, fuzzy
 msgid ""
-"Are you sure that do you want delete the subscriptor with the mail \"[% "
+"Are you sure that do you want delete the subscriber with the mail \"[% "
 "template.content.email %]\"?"
 msgstr ""
 "Etes-vous sûr que vous voulez supprimer le subscriptor avec l'e-mail \"[% "
@@ -3280,9 +3049,10 @@ msgstr "Oui, supprimer tous"
 msgid "Delete videos"
 msgstr "Supprimer"
 
+#, fuzzy
 msgid ""
 "Are you sure you want to toggle subscription status for those <span>%num%</"
-"span> subscriptors?"
+"span> subscribers?"
 msgstr ""
 "Etes-vous sûr que vous voulez basculer état de l'abonnement pour ceux <span>"
 "% num% </span> abonnements?"
@@ -3291,10 +3061,12 @@ msgstr ""
 msgid "You must select some elements."
 msgstr "Vous avez sélectionné aucun utilisateur à supprimer"
 
-msgid "Creating subscriptor"
+#, fuzzy
+msgid "Creating subscriber"
 msgstr "Abonné Création"
 
-msgid "Editing subscriptor"
+#, fuzzy
+msgid "Editing subscriber"
 msgstr "édition abonnés"
 
 msgid "Go back to list"
@@ -3373,7 +3145,8 @@ msgstr "Vue"
 msgid "Loading"
 msgstr "Chargement..."
 
-msgid "No available subscriptors."
+#, fuzzy
+msgid "No available subscribers."
 msgstr "Aucun abonnés disponibles"
 
 #, fuzzy
@@ -3626,8 +3399,12 @@ msgid "Config newsletter module"
 msgstr "Config module bulletin"
 
 #, fuzzy
-msgid "Subscriptors"
-msgstr "Formulaire d'abonnement"
+msgid "Subscribers"
+msgstr "S'abonner"
+
+#, fuzzy
+msgid "Subscriber"
+msgstr "S'abonner"
 
 #, fuzzy
 msgid "Search by subject"
@@ -3676,6 +3453,15 @@ msgstr "Vous n'êtes pas autorisé à effectuer cette action."
 
 msgid "Yes, remove them all"
 msgstr "Oui, retirez-les tous"
+
+msgid "Unit price"
+msgstr "Prix unitaire"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "VAT"
+msgstr "TVA"
 
 msgid "Delete newsstands"
 msgstr "supprimer un kiosque à journaux"
@@ -3879,9 +3665,6 @@ msgstr "Paramètres valuer"
 msgid "Add parameter"
 msgstr "Aajouter un paramètre"
 
-msgid "Tags"
-msgstr "Étiquettes"
-
 #, fuzzy
 msgid "Edit '%1'"
 msgstr "éditer"
@@ -4026,6 +3809,9 @@ msgstr "Surnom"
 msgid "Created at"
 msgstr "Créé"
 
+msgid "Tags"
+msgstr "Étiquettes"
+
 #, fuzzy
 msgid "List of words separated by words."
 msgstr "Fournir une liste d'e-mails valides séparées par des virgules."
@@ -4094,6 +3880,14 @@ msgstr ""
 msgid "Connection"
 msgstr "Connexion"
 
+#, fuzzy
+msgid "External agency"
+msgstr "Envoyer externe"
+
+#, fuzzy
+msgid "Opennemas News Agency"
+msgstr "Agence d'information"
+
 msgid "Url"
 msgstr "Url"
 
@@ -4103,8 +3897,8 @@ msgstr "L'URL du serveur pour cette source. Exemple: ftp://server.com/path"
 msgid "Password"
 msgstr "Mot de passe"
 
-msgid "Show password"
-msgstr "Montrer le mot de passe"
+msgid "Test"
+msgstr ""
 
 msgid "Sync parameters"
 msgstr "Paramètres de synchronisation"
@@ -4116,15 +3910,6 @@ msgstr "Agence d'information"
 msgid "When importing elements this will be the signature"
 msgstr "Lors de l'importation des éléments, ce sera la signature"
 
-msgid "Import authors"
-msgstr "importer les auteurs"
-
-msgid ""
-"Activate this if you want to import the author of the elements if available"
-msgstr ""
-"Activez cette option si vous voulez importer l'auteur des éléments si "
-"disponible"
-
 msgid "Sync elements newer than"
 msgstr "Synchroniser plusieurs récents éléments"
 
@@ -4135,8 +3920,58 @@ msgstr ""
 "Réglez-le sur vous préférences pour aller chercher des éléments depuis une "
 "date fixe. <br> Signifie moins de temps synchronisations plus rapides."
 
-msgid "Hide password"
-msgstr "Masquer le mot de passe"
+msgid "Import authors"
+msgstr "importer les auteurs"
+
+msgid ""
+"Activate this if you want to import the author of the elements if available"
+msgstr ""
+"Activez cette option si vous voulez importer l'auteur des éléments si "
+"disponible"
+
+#, fuzzy
+msgid "Link to source"
+msgstr "La synchronisation de sources"
+
+#, fuzzy
+msgid ""
+"Activate this if you want to add the link to the source at the end of the "
+"body"
+msgstr ""
+"Activez cette option si vous voulez importer l'auteur des éléments si "
+"disponible"
+
+#, fuzzy
+msgid "Automatic import"
+msgstr "Catégories"
+
+msgid "Enabled"
+msgstr ""
+
+#, fuzzy
+msgid "Category to import"
+msgstr "Catégories"
+
+#, fuzzy
+msgid "Author to import to"
+msgstr "Information sur l'auteur"
+
+#, fuzzy
+msgid "Import related contents"
+msgstr "Tous les types de contenu"
+
+msgid "If possible, import all related contents for each content"
+msgstr ""
+
+#, fuzzy
+msgid "Filtering"
+msgstr "Recherche par nom"
+
+msgid "Filter contents that matches one or more list of words"
+msgstr ""
+
+msgid "Comma-separated list of words to match"
+msgstr ""
 
 msgid "Add server"
 msgstr "Ajouter un serveur"
@@ -4374,12 +4209,15 @@ msgstr "Modifier l'utilisateur propre profil"
 msgid "Creating file"
 msgstr "Créer"
 
-#, fuzzy
-msgid "File path"
-msgstr "Fichier"
-
 msgid "Download"
 msgstr "Télécharger"
+
+msgid "Max allowed file size: %1 Mb"
+msgstr ""
+
+#, fuzzy
+msgid "File types allowed"
+msgstr "Fichier non disponible"
 
 #, fuzzy
 msgid "Files (#)"
@@ -4514,6 +4352,16 @@ msgid "Yes, restore them all"
 msgstr "Oui, retirez-les tous"
 
 #, fuzzy
+msgid "Are you sure you want to delete [% template.selected %] item(s)?"
+msgstr ""
+"Etes-vous sûr de vouloir supprimer [% template.selected.contents.length%] "
+"item(s)?"
+
+#, fuzzy
+msgid "Deleting"
+msgstr "Supprimer"
+
+#, fuzzy
 msgid "Permanently remove item"
 msgstr "Élément supprimé définitivement avec succès"
 
@@ -4530,9 +4378,10 @@ msgstr "Vous ne serez pas en mesure de le restaurer."
 msgid "Yes, remove"
 msgstr "Oui, supprimer"
 
+#, fuzzy
 msgid ""
-"Are you sure that do you want send to the trash \"[% template.content.title "
-"%]\"?"
+"Are you sure that do you want send to the trash \"[% template.content."
+"title ? template.content.title : template.content.name %]\"?"
 msgstr ""
 "Etes-vous sûr que vous voulez envoyer à la poubelle \"[% template.content."
 "title %]\"?"
@@ -4805,6 +4654,12 @@ msgstr "groupe d'utilisateurs"
 msgid "Privileges"
 msgstr "Privilèges"
 
+msgid "Toggle all privileges"
+msgstr ""
+
+msgid "[% section.title %]"
+msgstr ""
+
 #, fuzzy
 msgid "Unable to find any user group that matches your search."
 msgstr "Impossible de trouver un utilisateur avec cet e-mail"
@@ -4846,63 +4701,6 @@ msgid ""
 "activated users at the end of the month."
 msgstr ""
 
-msgid "This field is required"
-msgstr "Ce champ est requis"
-
-msgid "Contact name"
-msgstr "Nom du contact"
-
-#, fuzzy
-msgid "Company name"
-msgstr "Remplissez votre nom"
-
-msgid "This is not a valid email"
-msgstr "Cela ne veut pas une adresse email valide"
-
-msgid "This is not a valid phone"
-msgstr "Cela ne veut pas un téléphone valide"
-
-msgid "Phone number"
-msgstr "Numéro de téléphone"
-
-msgid "This is not a valid vat"
-msgstr "Ceci est valable non un TVA"
-
-msgid "VAT Number"
-msgstr "Numéro TVA"
-
-msgid "Address"
-msgstr "Adresse"
-
-msgid "This is not a valid address"
-msgstr "Cela ne veut pas une adresse valide"
-
-msgid "This is not a valid postal_code"
-msgstr "Cela ne veut pas une code postal valide"
-
-#, fuzzy
-msgid "Postal code"
-msgstr "Code postal"
-
-msgid "This is not a valid city"
-msgstr "Cela ne veut pas une ville valide"
-
-msgid "City"
-msgstr "Ville"
-
-msgid "This is not a valid state"
-msgstr "Cela ne veut pas un état valide"
-
-#, fuzzy
-msgid "State"
-msgstr "Statique page"
-
-msgid "Country"
-msgstr "Pays"
-
-msgid "Select a country"
-msgstr "Sélectionnez un pays"
-
 msgid "Are you sure you want to create a new user?"
 msgstr "Etes-vous sûr que vous voulez créer un nouvel utilisateur?"
 
@@ -4910,16 +4708,17 @@ msgstr "Etes-vous sûr que vous voulez créer un nouvel utilisateur?"
 msgid "Are you sure you want to update the user?"
 msgstr "Etes-vous sûr que vous voulez créer un nouvel utilisateur?"
 
+#, fuzzy
 msgid ""
-"Are you sure you want to disable [% template.selected.contents.length %] "
+"Are you sure you want to disable [% template.selected.items.length %] "
 "user(s)?"
 msgstr ""
 "Etes-vous sûr que vous voulez désactiver [% template.selected.contents."
 "length %] utilisateur(s)?"
 
+#, fuzzy
 msgid ""
-"Are you sure you want to enable [% template.selected.contents.length %] "
-"user(s)?"
+"Are you sure you want to enable [% template.selected.items.length %] user(s)?"
 msgstr ""
 "Etes-vous sûr que vous voulez activer [% template.selected.contents.length "
 "%] utilisateur(s)?"
@@ -5001,7 +4800,7 @@ msgstr ""
 "contrôle."
 
 #, fuzzy
-msgid "User group:"
+msgid "User group"
 msgstr "Groupes d'utilisateurs"
 
 msgid "Select"
@@ -5010,6 +4809,11 @@ msgstr "Sélectionner"
 #, fuzzy
 msgid "selected"
 msgstr "Rejecté"
+
+msgid ""
+"Categories that this user will have access to. Leave empty to give access to "
+"all categories"
+msgstr ""
 
 msgid "Social Networks"
 msgstr "Réseaux sociaux"
@@ -5070,6 +4874,10 @@ msgstr "Email"
 msgid "Backend access"
 msgstr "Backend Gestionnaire"
 
+#, fuzzy
+msgid "Not assigned"
+msgstr "Non défini"
+
 msgid "Your account is connected to %1."
 msgstr "Votre compte est connecté à 1%."
 
@@ -5123,9 +4931,6 @@ msgstr "Captures d'écran et vidéos"
 
 msgid "Last updated"
 msgstr "Dernière mise à jour"
-
-msgid "Payment"
-msgstr ""
 
 msgid "First payment"
 msgstr ""
@@ -5238,9 +5043,6 @@ msgstr "Ma sélection"
 msgid "My selection "
 msgstr "Ma sélection"
 
-msgid "Cart"
-msgstr "Panier"
-
 msgid "Your shopping cart is empty"
 msgstr "Votre panier est vide"
 
@@ -5276,51 +5078,12 @@ msgstr "Téléphone"
 msgid "Return to <a href=\"%1\">store</a> and try again"
 msgstr "Retour à <a href=\"%1\">stocker</a> et réessayer"
 
-msgid ""
-"You are about to order next items. In the next 24hours our sales team will "
-"send you payment and activation information. "
-msgstr ""
-"Vous êtes sur le point de commander des articles à venir. Dans les "
-"prochaines 24 heures, notre équipe commerciale vous envoyer le paiement et "
-"activation informations"
-
-msgid "Total"
-msgstr "Total"
-
-msgid ""
-"If you need to update this information please <a href=\"mailto:"
-"sales@openhost.es\">contact us</a>."
-msgstr ""
-"Si vous avez besoin de mettre à jour ces informations s'il vous plaît Si "
-"vous avez besoin de mettre à jour ces informations s'il vous plaît contactez-"
-"nouscontactez-nous</a>"
-
 #, fuzzy
-msgid "Contact information"
-msgstr "Contactez le support"
-
-#, fuzzy
-msgid "This is not a valid VAT identification number"
-msgstr "Cela ne veut pas un état valide"
-
-msgid "VAT identification number"
-msgstr ""
-
-msgid "What is a VAT identification number?"
-msgstr ""
+msgid "Check"
+msgstr "Caisse"
 
 msgid "Purchase summary"
 msgstr "Résumé commande"
-
-msgid "You have to complete your billing information to complete the purchase."
-msgstr ""
-"Vous devez remplir vos informations de facturation pour compléter l'achat."
-
-msgid "Unit price"
-msgstr "Prix unitaire"
-
-msgid "VAT"
-msgstr "TVA"
 
 msgid ""
 "I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
@@ -5528,6 +5291,14 @@ msgstr "Couleur du site"
 msgid "Color used for links, menus and some widgets."
 msgstr "Couleur utilisée pour les liens, les menus et certains widgets."
 
+#, fuzzy
+msgid "Site secondary color"
+msgstr "Couleur du site"
+
+#, fuzzy
+msgid "Color used for custom elements."
+msgstr "Couleur utilisée pour les liens, les menus et certains widgets."
+
 msgid "Use custom logo"
 msgstr "Utilisez logo personnalisé"
 
@@ -5717,10 +5488,6 @@ msgstr ""
 "Utilisé lorsque l'on veut tester si l'utilisateur est un robot humain et non."
 
 #, fuzzy
-msgid "Opennemas News Agency"
-msgstr "Agence d'information"
-
-#, fuzzy
 msgid "User"
 msgstr "Utilisateurs"
 
@@ -5826,6 +5593,9 @@ msgstr ""
 
 msgid "Secret key"
 msgstr "Clé secrète"
+
+msgid "Instant Articles (fb:pages meta tag)"
+msgstr ""
 
 #, fuzzy
 msgid "Twitter Page"
@@ -5943,14 +5713,6 @@ msgid "Cache Manager"
 msgstr "Gestionnaire de Cache"
 
 #, fuzzy
-msgid "Remove cache"
-msgstr "Supprimer"
-
-#, fuzzy
-msgid "Remove compiled templates"
-msgstr "Sondage Couverture"
-
-#, fuzzy
 msgid "Cache group"
 msgstr "Gestionnaire de Cache"
 
@@ -5966,6 +5728,18 @@ msgstr "Créer"
 
 msgid "Editing video"
 msgstr "Montage vidéo"
+
+msgid "Schedule"
+msgstr ""
+
+msgid "Publication start date"
+msgstr ""
+
+msgid "Server hour:"
+msgstr ""
+
+msgid "Publication end date"
+msgstr ""
 
 msgid "Pick type"
 msgstr "Type d'objet"
@@ -6294,9 +6068,6 @@ msgstr "Date de naissance"
 msgid "Show this ad if satisfy one condition"
 msgstr ""
 
-msgid "From"
-msgstr ""
-
 msgid "Until"
 msgstr ""
 
@@ -6353,10 +6124,29 @@ msgid "AMP pages"
 msgstr "Ajouter des fichiers..."
 
 #, fuzzy
+msgid "Instant Articles pages"
+msgstr "Statique page"
+
+#, fuzzy
 msgid "and inside the position"
 msgstr "Impossible d'enregistrer les positions."
 
 msgid "AMP inner article - Button 1"
+msgstr ""
+
+msgid "AMP inner article - Button 2"
+msgstr ""
+
+msgid "AMP inner article - Button 3"
+msgstr ""
+
+msgid "Instant Articles inner article - Button 1"
+msgstr ""
+
+msgid "Instant Articles inner article - Button 2"
+msgstr ""
+
+msgid "Instant Articles inner article - Button 3"
 msgstr ""
 
 #, fuzzy
@@ -6410,6 +6200,17 @@ msgid "Ad server base url"
 msgstr ""
 
 msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
+msgstr ""
+
+msgid "DFP category targeting"
+msgstr ""
+
+msgid "Key for setTargeting function"
+msgstr ""
+
+msgid ""
+"Set a key for targeting your ads by category. Note that the value for "
+"targeting will always be the current category internal name"
 msgstr ""
 
 msgid "Tradedoubler integration"
@@ -6536,6 +6337,19 @@ msgstr ""
 msgid "Where are you from?"
 msgstr ""
 
+msgid "Country"
+msgstr "Pays"
+
+msgid "Select a country"
+msgstr "Sélectionnez un pays"
+
+#, fuzzy
+msgid "Contact information"
+msgstr "Contactez le support"
+
+msgid "This field is required"
+msgstr "Ce champ est requis"
+
 #, fuzzy
 msgid "First name"
 msgstr "Recherche par nom"
@@ -6545,6 +6359,16 @@ msgid "Last name"
 msgstr "Nom"
 
 #, fuzzy
+msgid "Company name"
+msgstr "Remplissez votre nom"
+
+msgid "This is not a valid email"
+msgstr "Cela ne veut pas une adresse email valide"
+
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+#, fuzzy
 msgid "This is not a valid vat_number identification number"
 msgstr "Cela ne veut pas un état valide"
 
@@ -6552,99 +6376,32 @@ msgstr "Cela ne veut pas un état valide"
 msgid "Vat identification number"
 msgstr "Jeton invalide"
 
-msgid "My account"
+msgid "What is a VAT identification number?"
 msgstr ""
 
-msgid "This is the email used to create your newspaper"
-msgstr ""
+msgid "Address"
+msgstr "Adresse"
 
-msgid "Your newspaper was created on %1"
-msgstr ""
+msgid "This is not a valid address"
+msgstr "Cela ne veut pas une adresse valide"
 
-msgid "Plan"
-msgstr ""
-
-msgid "Base + Modules"
-msgstr ""
-
-msgid "Support plan"
-msgstr ""
-
-msgid "Support by tickets"
-msgstr ""
-
-msgid "Storage size"
-msgstr ""
-
-msgid "Page views this month"
-msgstr ""
-
-msgid "coming soon... work in progress..."
-msgstr ""
-
-msgid ""
-"Note: this number has not being used for billing purpose. Billing pageviews "
-"count goes from 26th to 25th of each month."
-msgstr ""
+msgid "This is not a valid postal_code"
+msgstr "Cela ne veut pas une code postal valide"
 
 #, fuzzy
-msgid "Available"
-msgstr "Album non disponible"
+msgid "Postal code"
+msgstr "Code postal"
 
-msgid "Max"
-msgstr ""
+msgid "This is not a valid city"
+msgstr "Cela ne veut pas une ville valide"
 
-msgid "Opennemas offers many more modules and solutions"
-msgstr ""
+msgid "City"
+msgstr "Ville"
 
-msgid "Check out our modules"
-msgstr ""
+msgid "This is not a valid state"
+msgstr "Cela ne veut pas un état valide"
 
-msgid ""
-"If you need a custom plan or you want to purchase a plan or module please "
-"click in the next link:"
-msgstr ""
-
-#, fuzzy
-msgid "Contact Us"
-msgstr "Contactez le support"
-
-msgid ""
-"Something wrong? Contact our <a href=\"javascript:UserVoice."
-"showPopupWidget();\">support team</a>."
-msgstr ""
-
-#, fuzzy
-msgid "You have no billing information"
-msgstr "Impossible d'enregistrer les informations de votre image"
-
-msgid "You will be asked to add it during the checkout in our store"
-msgstr ""
-
-msgid "Activated plans & modules"
-msgstr ""
-
-msgid "Upgrade"
-msgstr ""
-
-#, fuzzy
-msgid "Waiting for upgrade"
-msgstr "Mise à niveau de l'application"
-
-#, fuzzy
-msgid "Upgrade instance"
-msgstr "Demande de actualisation de une instance %s"
-
-msgid "Are you sure you want to proceed with this upgrade ?"
-msgstr ""
-
-msgid "Request upgrade"
-msgstr ""
-
-msgid "List of modules to hire"
-msgstr ""
-
-msgid "List of modules to unsubscribe"
+msgid "State/Province"
 msgstr ""
 
 msgid "Domain Mapping"
@@ -6656,13 +6413,10 @@ msgstr ""
 msgid "Technical information"
 msgstr ""
 
-#, fuzzy
-msgid "Check"
-msgstr "Caisse"
+msgid "Domain registration + mapping"
+msgstr ""
 
-msgid ""
-"I do not have my own domain and I want to create one and redirect it to my "
-"Opennemas digital newspaper"
+msgid "Domain mapping"
 msgstr ""
 
 msgid "Enter a domain"
@@ -6672,12 +6426,6 @@ msgid "Map it"
 msgstr ""
 
 msgid "Requested domains"
-msgstr ""
-
-msgid "Domain registration + mapping"
-msgstr ""
-
-msgid "Domain mapping"
 msgstr ""
 
 msgid "Select the payment method."
@@ -6706,6 +6454,19 @@ msgstr "Nous vous remercions de votre demande d'achat!"
 msgid ""
 "Check your email, we have sent you an email with the invoice and purchase "
 "details. We will review your purchase and activate your domain."
+msgstr ""
+
+msgid "Something unexpected has happened!"
+msgstr ""
+
+#, fuzzy
+msgid "There were some errors while trying to purchase."
+msgstr "Il y avait une erreur lors de la mise à jour dans le menu."
+
+msgid ""
+"To prevent non-desired charges in your account, please, do not retry the "
+"checkout process and contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
 msgstr ""
 
 msgid "How can I change 'opennemas.com' domain on my newspaper?"
@@ -6872,6 +6633,10 @@ msgid ""
 "          </ul>\n"
 "        "
 msgstr ""
+
+#, fuzzy
+msgid "Available"
+msgstr "Album non disponible"
 
 msgid "Exclusive"
 msgstr ""
@@ -7070,26 +6835,11 @@ msgstr ""
 msgid "Pretitle"
 msgstr "Titre"
 
-msgid "Summary"
-msgstr ""
-
 #, fuzzy
 msgid "Suggested for frontpage"
 msgstr "Gestionnaire drapeau frontpage"
 
 msgid "Slug"
-msgstr ""
-
-msgid "Schedule"
-msgstr ""
-
-msgid "Publication start date"
-msgstr ""
-
-msgid "Server hour:"
-msgstr ""
-
-msgid "Publication end date"
 msgstr ""
 
 msgid "Only available for subscribers"
@@ -8205,6 +7955,61 @@ msgid ""
 "address on file for this account"
 msgstr ""
 
+msgid "My account"
+msgstr ""
+
+msgid "This is the email used to create your newspaper"
+msgstr ""
+
+msgid "Your newspaper was created on %1"
+msgstr ""
+
+msgid "Support plan"
+msgstr ""
+
+msgid "Support by tickets"
+msgstr ""
+
+msgid "Storage size"
+msgstr ""
+
+msgid "Page views this month"
+msgstr ""
+
+msgid "coming soon... work in progress..."
+msgstr ""
+
+msgid "Opennemas offers many more modules and solutions"
+msgstr ""
+
+msgid "Check out our modules"
+msgstr ""
+
+msgid ""
+"If you need a custom plan or you want to purchase a plan or module please "
+"click in the next link:"
+msgstr ""
+
+#, fuzzy
+msgid "Contact Us"
+msgstr "Contactez le support"
+
+#, fuzzy
+msgid "State"
+msgstr "Statique page"
+
+msgid ""
+"Something wrong? Contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+
+#, fuzzy
+msgid "You have no billing information"
+msgstr "Impossible d'enregistrer les informations de votre image"
+
+msgid "You will be asked to add it during the checkout in our store"
+msgstr ""
+
 #, fuzzy
 msgid "Delete books"
 msgstr "Supprimer"
@@ -8246,6 +8051,208 @@ msgid "Action"
 msgstr ""
 
 #, fuzzy
+msgid "New instance"
+msgstr "Instances Sync"
+
+msgid "Edit instance"
+msgstr ""
+
+#, fuzzy
+msgid "Created from"
+msgstr "Créé"
+
+#, fuzzy
+msgid "Media size"
+msgstr "Média"
+
+msgid "(Human readable name)"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid "Contact mail"
+msgstr ""
+
+msgid "No main domain"
+msgstr ""
+
+msgid "Instance domains cannot be empty."
+msgstr ""
+
+msgid "Domain expire date:"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+#, fuzzy
+msgid "Support"
+msgstr "Aidez-moi et Support"
+
+msgid "Alphanumeric, without spaces"
+msgstr ""
+
+#, fuzzy
+msgid "Database"
+msgstr "Base de données erreur"
+
+msgid "Minimum password level"
+msgstr ""
+
+msgid "Weak"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Strong"
+msgstr ""
+
+msgid "Maximun number of emails sent by month"
+msgstr ""
+
+#, fuzzy
+msgid "Piwik Statistics"
+msgstr "Statistiques"
+
+msgid "Page ID:"
+msgstr ""
+
+msgid ""
+"You can get your Piwik Site information from <a href=\"https://piwik."
+"openhost.es/admin\">our Piwik server</a>."
+msgstr ""
+
+msgid "Server url"
+msgstr ""
+
+#, fuzzy
+msgid "Do you want to delete the instance?"
+msgstr "Vous devez donner un identifiant à supprimer le couverture."
+
+#, fuzzy
+msgid "Do you want to delete the selected instances?"
+msgstr "Vous devez donner un identifiant à supprimer le couverture."
+
+#, fuzzy
+msgid "Search"
+msgstr "Recherche Globale"
+
+#, fuzzy
+msgid "Reset filters"
+msgstr "Bulletins"
+
+msgid "Columns"
+msgstr ""
+
+msgid "Domain expire"
+msgstr ""
+
+msgid "Last activity"
+msgstr ""
+
+#, fuzzy
+msgid "Emails"
+msgstr "Email"
+
+msgid "Alexa"
+msgstr ""
+
+msgid "Page views"
+msgstr ""
+
+#, fuzzy
+msgid "#"
+msgstr "#"
+
+msgid "No rank"
+msgstr ""
+
+msgid ""
+"Welcome to Opennemas! Learn how to publish your news in just few seconds!"
+msgstr ""
+
+msgid "Hi"
+msgstr ""
+
+#, fuzzy
+msgid "Your newspaper is already live:"
+msgstr "Votre paiement a été déjà enregistré"
+
+#, fuzzy
+msgid "Webpage:"
+msgstr "Page d'accueil"
+
+msgid "Admin panel:"
+msgstr ""
+
+msgid ""
+"For security reasons we advise you to change your password after first login "
+"to Admin Panel."
+msgstr ""
+
+msgid ""
+"If you have doubts about frontpage management or need a quick walk through "
+"we have <strong>video demo</strong> 3 minutes long"
+msgstr ""
+
+msgid ""
+"How to create/edit <strong>articles</strong> and place them in a frontpage"
+msgstr ""
+
+msgid ""
+"How to upload and add&nbsp;<strong>images</strong>&nbsp;to your "
+"articles&nbsp;"
+msgstr ""
+
+msgid "How to compose a&nbsp;<strong>frontpage</strong>"
+msgstr ""
+
+msgid "We also have help page \"First Steps in Opennemas\" that should help"
+msgstr ""
+
+#, fuzzy
+msgid "A new instance has been created"
+msgstr "Votre demande a bien été enregistrée"
+
+#, fuzzy
+msgid "You can access your newspaper with the information bellow"
+msgstr "Existe déjà un utilisateur avec cette information"
+
+msgid "Newspaper URL"
+msgstr ""
+
+msgid "Plan"
+msgstr ""
+
+msgid "Sincerely"
+msgstr ""
+
+#, fuzzy
+msgid "There was an error while creating an instance with the following data:"
+msgstr "Il y avait une erreur lors de la mise à jour du widget."
+
+#, fuzzy
+msgid "Instance name"
+msgstr "Instance pas activée"
+
+#, fuzzy
+msgid "Instance internal_name"
+msgstr "Instance pas activée"
+
+#, fuzzy
+msgid "Instance contact_mail"
+msgstr "Instance pas activée"
+
+#, fuzzy
+msgid "Instance domains"
+msgstr "Instance non trouvée"
+
+msgid "Error"
+msgstr "Erreur"
+
+#, fuzzy
 msgid "New purchase"
 msgstr "Achats paywall"
 
@@ -8256,11 +8263,10 @@ msgstr "éditer"
 msgid "Client"
 msgstr ""
 
-#, fuzzy
-msgid "View on"
-msgstr "Contenu"
-
 msgid "Invoice"
+msgstr ""
+
+msgid "Step"
 msgstr ""
 
 msgid "Quantity"
@@ -8282,44 +8288,40 @@ msgid "Do you want to delete the selected purchases?"
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
 
 #, fuzzy
+msgid "Completed purchases"
+msgstr "Remplissez votre nom"
+
+#, fuzzy
+msgid "Uncompleted purchases"
+msgstr "Modules d'achat"
+
+#, fuzzy
 msgid "Search by client"
 msgstr "Recherche par nom"
 
-msgid "To"
-msgstr ""
-
-#, fuzzy
-msgid "Reset filters"
-msgstr "Bulletins"
-
-msgid "Columns"
+msgid "Method"
 msgstr ""
 
 msgid "Client ID"
 msgstr ""
 
-msgid "Invoice ID"
-msgstr ""
-
 msgid "Payment ID"
 msgstr ""
 
+msgid "Invoice ID"
+msgstr ""
+
 #, fuzzy
-msgid "#"
-msgstr "#"
+msgid "Instance"
+msgstr "Instances Sync"
+
+#, fuzzy
+msgid "No information"
+msgstr "Obtenir des information"
 
 #, fuzzy
 msgid "New user group"
 msgstr "Groupes d'utilisateurs"
-
-msgid "Selected privileges"
-msgstr ""
-
-msgid "Toggle all privileges"
-msgstr ""
-
-msgid "[% section.title %]"
-msgstr ""
 
 #, fuzzy
 msgid "Do you want to delete the user group?"
@@ -8335,6 +8337,13 @@ msgstr ""
 msgid "Initializing"
 msgstr ""
 
+#, fuzzy
+msgid "Welcome, Master"
+msgstr "Bienvenue à %s"
+
+msgid "Login"
+msgstr ""
+
 msgid ""
 "Your browser was unable to load all of Opennemas's resources. They may have "
 "been blocked by your firewall, proxy or browser configuration."
@@ -8343,21 +8352,7 @@ msgstr ""
 msgid "Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again."
 msgstr ""
 
-#, fuzzy
-msgid "Instance"
-msgstr "Instances Sync"
-
 msgid "Notification"
-msgstr ""
-
-#, fuzzy
-msgid "Opennemas manager"
-msgstr "Backend Gestionnaire"
-
-msgid "Use manager account to sign in."
-msgstr ""
-
-msgid "Login"
 msgstr ""
 
 #, fuzzy
@@ -8378,6 +8373,10 @@ msgstr "Ceci est valable non un TVA"
 #, fuzzy
 msgid "Select a type..."
 msgstr "Sélectionnez un pays"
+
+#, fuzzy
+msgid "Domain"
+msgstr "Domaines"
 
 #, fuzzy
 msgid "Theme"
@@ -8429,9 +8428,6 @@ msgid "Search by UUID"
 msgstr "Recherche par nom"
 
 msgid "Translations"
-msgstr ""
-
-msgid "Enabled"
 msgstr ""
 
 msgid "Translations completed"
@@ -8644,6 +8640,9 @@ msgstr ""
 msgid "Show only for admins"
 msgstr ""
 
+msgid "Target"
+msgstr ""
+
 #, fuzzy
 msgid "Do you want to delete the notification?"
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
@@ -8664,6 +8663,21 @@ msgid "End"
 msgstr ""
 
 #, fuzzy
+msgid "Read"
+msgstr "Prêt!"
+
+msgid "Clicked"
+msgstr ""
+
+#, fuzzy
+msgid "Opened"
+msgstr "OpenX"
+
+#, fuzzy
+msgid "Download report"
+msgstr "Télécharger"
+
+#, fuzzy
 msgid "New client"
 msgstr "Nouveau fichier"
 
@@ -8675,16 +8689,16 @@ msgid "VAT No."
 msgstr ""
 
 #, fuzzy
+msgid "View on"
+msgstr "Contenu"
+
+#, fuzzy
 msgid "Do you want to delete the client?"
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
 
 #, fuzzy
 msgid "Do you want to delete the selected clients?"
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
-
-#, fuzzy
-msgid "Search"
-msgstr "Recherche Globale"
 
 #, fuzzy
 msgid "Vat number"
@@ -8731,202 +8745,6 @@ msgid ""
 "<span style=\"color:#000000\">Team</span>"
 msgstr ""
 
-#, fuzzy
-msgid "New instance"
-msgstr "Instances Sync"
-
-msgid "Edit instance"
-msgstr ""
-
-#, fuzzy
-msgid "Created from"
-msgstr "Créé"
-
-#, fuzzy
-msgid "Media size"
-msgstr "Média"
-
-msgid "(Human readable name)"
-msgstr ""
-
-msgid "Template"
-msgstr ""
-
-msgid "Contact mail"
-msgstr ""
-
-msgid "No main domain"
-msgstr ""
-
-msgid "Instance domains cannot be empty."
-msgstr ""
-
-msgid "Domain expire date:"
-msgstr ""
-
-msgid "Billing"
-msgstr ""
-
-msgid "Select all"
-msgstr ""
-
-#, fuzzy
-msgid "Support"
-msgstr "Aidez-moi et Support"
-
-msgid "Alphanumeric, without spaces"
-msgstr ""
-
-#, fuzzy
-msgid "Database"
-msgstr "Base de données erreur"
-
-msgid "Maximun activated users"
-msgstr ""
-
-msgid "0 for unlimited users"
-msgstr ""
-
-msgid "Minimum password level"
-msgstr ""
-
-msgid "Weak"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Strong"
-msgstr ""
-
-msgid "Maximun number of emails sent by month"
-msgstr ""
-
-#, fuzzy
-msgid "Piwik Statistics"
-msgstr "Statistiques"
-
-msgid "Page ID:"
-msgstr ""
-
-msgid ""
-"You can get your Piwik Site information from <a href=\"https://piwik."
-"openhost.es/admin\">our Piwik server</a>."
-msgstr ""
-
-msgid "Server url"
-msgstr ""
-
-#, fuzzy
-msgid "Do you want to delete the instance?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
-
-#, fuzzy
-msgid "Do you want to delete the selected instances?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
-
-msgid "Select modules"
-msgstr ""
-
-msgid "Domain expire"
-msgstr ""
-
-msgid "Last activity"
-msgstr ""
-
-#, fuzzy
-msgid "Emails"
-msgstr "Email"
-
-msgid "Alexa"
-msgstr ""
-
-msgid "Page views"
-msgstr ""
-
-msgid "No rank"
-msgstr ""
-
-msgid ""
-"Welcome to Opennemas! Learn how to publish your news in just few seconds!"
-msgstr ""
-
-msgid "Hi"
-msgstr ""
-
-#, fuzzy
-msgid "Your newspaper is already live:"
-msgstr "Votre paiement a été déjà enregistré"
-
-#, fuzzy
-msgid "Webpage:"
-msgstr "Page d'accueil"
-
-msgid "Admin panel:"
-msgstr ""
-
-msgid ""
-"For security reasons we advise you to change your password after first login "
-"to Admin Panel."
-msgstr ""
-
-msgid ""
-"If you have doubts about frontpage management or need a quick walk through "
-"we have <strong>video demo</strong> 3 minutes long"
-msgstr ""
-
-msgid ""
-"How to create/edit <strong>articles</strong> and place them in a frontpage"
-msgstr ""
-
-msgid ""
-"How to upload and add&nbsp;<strong>images</strong>&nbsp;to your "
-"articles&nbsp;"
-msgstr ""
-
-msgid "How to compose a&nbsp;<strong>frontpage</strong>"
-msgstr ""
-
-msgid "We also have help page \"First Steps in Opennemas\" that should help"
-msgstr ""
-
-#, fuzzy
-msgid "A new instance has been created"
-msgstr "Votre demande a bien été enregistrée"
-
-#, fuzzy
-msgid "You can access your newspaper with the information bellow"
-msgstr "Existe déjà un utilisateur avec cette information"
-
-msgid "Newspaper URL"
-msgstr ""
-
-msgid "Sincerely"
-msgstr ""
-
-#, fuzzy
-msgid "There was an error while creating an instance with the following data:"
-msgstr "Il y avait une erreur lors de la mise à jour du widget."
-
-#, fuzzy
-msgid "Instance name"
-msgstr "Instance pas activée"
-
-#, fuzzy
-msgid "Instance internal_name"
-msgstr "Instance pas activée"
-
-#, fuzzy
-msgid "Instance contact_mail"
-msgstr "Instance pas activée"
-
-#, fuzzy
-msgid "Instance domains"
-msgstr "Instance non trouvée"
-
-msgid "Error"
-msgstr "Erreur"
-
 msgid "We seem to have lost you in the clouds."
 msgstr ""
 
@@ -8937,8 +8755,11 @@ msgid "New user"
 msgstr ""
 
 #, fuzzy
-msgid "User group"
-msgstr "Groupes d'utilisateurs"
+msgid "This field is invalid"
+msgstr "Ceci est valable non un TVA"
+
+msgid "The passwords don't match"
+msgstr ""
 
 #, fuzzy
 msgid "User type"
@@ -8955,6 +8776,423 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #, fuzzy
 msgid "Search by name or username"
 msgstr "Recherche par nom"
+
+#, fuzzy
+msgid "Do you want to log out?"
+msgstr "Vous devez donner un identifiant à supprimer le couverture."
+
+#~ msgid "Cache configuration saved successfully."
+#~ msgstr "La configuration du cache sauvegardé avec succès."
+
+#~ msgid "Unable to save the cache configuration."
+#~ msgstr "Impossible d'enregistrer la configuration du cache."
+
+#, fuzzy
+#~ msgid "Smarty cache removed for the instance."
+#~ msgstr "Impossible de créer le nouvel article"
+
+#, fuzzy
+#~ msgid "Redis cache cleared for current instance."
+#~ msgstr "Impossible de créer le nouvel article"
+
+#, fuzzy
+#~ msgid ""
+#~ "You have reach the maximum users allowed. If you want to create more "
+#~ "users, please contact us."
+#~ msgstr ""
+#~ "Vous avez atteint le nombre maximal d'utilisateurs autorisés. Si vous "
+#~ "voulez créer plus d'utilisateurs, s'il vous plaît contactez-nous."
+
+#~ msgid "Unable to find the user with the id '%d'"
+#~ msgstr "Impossible de trouver l'utilisateur avec l'id '%d'"
+
+#~ msgid "Unable to update the user with that information"
+#~ msgstr "Impossible de mettre à jour l'utilisateur de cette information"
+
+#~ msgid ""
+#~ "Unable to change user backend access. You have reached the max number of "
+#~ "users."
+#~ msgstr ""
+#~ "Impossible de modifier l'accès utilisateur backend. Vous avez atteint le "
+#~ "nombre maximum d'utilisateurs."
+
+#~ msgid "Unable to create the user with that information"
+#~ msgstr "Impossible de créer l'utilisateur avec cette information"
+
+#~ msgid "Successfully deleted user with id \"%d\"."
+#~ msgstr "Supprimé avec succès l'utilisateur avec l'id \"%d\"."
+
+#~ msgid "You have deleted %d users."
+#~ msgstr "Vous avez supprimé utilisateurs %d"
+
+#~ msgid "You haven't selected any user to delete."
+#~ msgstr "Vous avez sélectionné aucun utilisateur à supprimer"
+
+#~ msgid "Unable to find user group with id '%d'"
+#~ msgstr "Impossible de trouver un groupe d'utilisateurs avec id '%d'"
+
+#~ msgid "Unable to delete the user group with id \"%d\""
+#~ msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
+
+#~ msgid "Article deleted successfully."
+#~ msgstr "Article supprimé avec succès."
+
+#~ msgid "You must give an id to delete an article."
+#~ msgstr "Vous devez donner un identifiant à supprimer un article."
+
+#~ msgid "Base"
+#~ msgstr "Base"
+
+#~ msgid "Professional"
+#~ msgstr "Professionnel"
+
+#, fuzzy
+#~ msgid "Advanced"
+#~ msgstr "Advance"
+
+#~ msgid "Expert"
+#~ msgstr "Pack Expert"
+
+#~ msgid "Unlimited"
+#~ msgstr "Illimité"
+
+#~ msgid ""
+#~ "You had already sent an upgrade request. Your upgrade will be applied as "
+#~ "soon as possible"
+#~ msgstr ""
+#~ "Vous avez déjà envoyé une demande de actualisation. Votre mise à jour "
+#~ "sera appliqué dès que possible"
+
+#, fuzzy
+#~ msgid "Upgrade instance request for %s"
+#~ msgstr "Demande de actualisation de une instance %s"
+
+#~ msgid "Unable to send your upgrade request. Please try it again."
+#~ msgstr ""
+#~ "Impossible d'envoyer votre demande de actualization. S'il vous plaît "
+#~ "essayer de nouveau."
+
+#~ msgid "Your upgrade request has been sent."
+#~ msgstr "Votre demande de actu a été envoyé."
+
+#~ msgid "Sorry, newsletter \"%d\" was been sent previously"
+#~ msgstr "Désolé, Bulletin \"%d\" a été précédemment été envoyé"
+
+#~ msgid "Unable to find a static page with the id \"%d\"."
+#~ msgstr "Impossible de trouver une page statique avec l'id \"%d\"."
+
+#~ msgid "Static page created successfully."
+#~ msgstr "Page statique créé avec succès."
+
+#~ msgid ""
+#~ "You can't modify this static page because you don't have enough "
+#~ "privileges."
+#~ msgstr ""
+#~ "Vous ne pouvez pas modifier cette page statique parce que vous ne "
+#~ "disposez pas de suffisamment de privilèges."
+
+#~ msgid "Static Page data sent not valid."
+#~ msgstr "Les données de la page statique envoyé pas valable."
+
+#~ msgid "Static page updated successfully."
+#~ msgstr "Page statique mis à jour avec succès."
+
+#~ msgid ""
+#~ "There was a problem while uploading the file. Please check if you have "
+#~ "completed all the form fields."
+#~ msgstr ""
+#~ "Il y avait un problème lors du chargement du fichier. S'il vous plaît "
+#~ "vérifier si vous avez rempli tous les champs du formulaire."
+
+#~ msgid ""
+#~ "There was an error while uploading the form, the video type is not "
+#~ "specified."
+#~ msgstr ""
+#~ "Il y avait une erreur lors de l'envoi du formulaire, le type de vidéo est "
+#~ "pas spécifié."
+
+#, fuzzy
+#~ msgid "Redirection: "
+#~ msgstr "Date d'inscription"
+
+#, fuzzy
+#~ msgid "Billing information saved successfully"
+#~ msgstr "Configuration enregistrée avec succès"
+
+#, fuzzy
+#~ msgid "Invalid theme"
+#~ msgstr "Jeton invalide"
+
+#~ msgid "Unable to delete the item with the id \"%s\""
+#~ msgstr "Impossible de supprimer l'élément avec l'id \"%s\""
+
+#~ msgid "Unable to find the item with the id \"%s\""
+#~ msgstr "Impossible de trouver l'élément avec l'id \"%s\""
+
+#~ msgid "%s item(s) deleted successfully"
+#~ msgstr "%s élément(s) supprimés avec succès"
+
+#~ msgid "Selected items deleted successfully"
+#~ msgstr "Les éléments sélectionnés supprimés avec succès"
+
+#~ msgid ""
+#~ "Unable to change user backend access. You have reach the maximum allowed"
+#~ msgstr ""
+#~ "Impossible de modifier l'accès utilisateur backend. Vous avez atteint le "
+#~ "maximum autorisé"
+
+#~ msgid "Unable to delete the item with the id \"%d\""
+#~ msgstr "Impossible de supprimer l'élément avec l'id \"%d\""
+
+#~ msgid "Unable to find the item with the id \"%d\""
+#~ msgstr "Impossible de trouver l'élément avec l'id \"%d\""
+
+#, fuzzy
+#~ msgid "Client removed successfully"
+#~ msgstr "Contenu enregistré avec succès"
+
+#, fuzzy
+#~ msgid "Unable to find the instances for the given criteria"
+#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+
+#, fuzzy
+#~ msgid "Unable to find the client with id \"%s\""
+#~ msgstr "Impossible de trouver l'élément avec id \"%s\""
+
+#, fuzzy
+#~ msgid "Unable to find the instance with id \"%s\""
+#~ msgstr "Impossible de trouver l'élément avec id \"%s\""
+
+#, fuzzy
+#~ msgid "%s instances updated successfully."
+#~ msgstr "%d élément(s) mis à jour avec succès"
+
+#, fuzzy
+#~ msgid "Manager"
+#~ msgstr "Manager Couverture"
+
+#, fuzzy
+#~ msgid "Unable to find the module with id \"%s\""
+#~ msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
+
+#, fuzzy
+#~ msgid "Unable to find the modules for the given criteria"
+#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+
+#, fuzzy
+#~ msgid "%s modules updated successfully."
+#~ msgstr "Couverture mis à jour avec succès."
+
+#, fuzzy
+#~ msgid "Unable to find the entity with id \"%s\""
+#~ msgstr "Impossible de trouver l'élément avec id \"%s\""
+
+#, fuzzy
+#~ msgid "Unable to find the notifications for the given criteria"
+#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+
+#, fuzzy
+#~ msgid "%s notifications updated successfully."
+#~ msgstr "%s élément(s) supprimés avec succès"
+
+#, fuzzy
+#~ msgid "Purchased removed successfully"
+#~ msgstr "Utilisateur créé avec succès."
+
+#, fuzzy
+#~ msgid "Unable to find the purchase with id \"%s\""
+#~ msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
+
+#, fuzzy
+#~ msgid "Unable to delete the user with the id \"%d\""
+#~ msgstr "Impossible de supprimer l'élément avec l'id \"%d\""
+
+#, fuzzy
+#~ msgid "Unable to find users for the given criteria"
+#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+
+#, fuzzy
+#~ msgid "User updated successfully."
+#~ msgstr "Les données de l'utilisateur mis à jour avec succès"
+
+#, fuzzy
+#~ msgid "Error while updating user with id \"%s\""
+#~ msgstr "Impossible de mettre à jour l'élément avec id \"%d\""
+
+#, fuzzy
+#~ msgid "Unable to find the user with id \"%s\""
+#~ msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
+
+#, fuzzy
+#~ msgid "Unable to find the users for the given criteria"
+#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+
+#, fuzzy
+#~ msgid "%s users updated successfully."
+#~ msgstr "Couverture mis à jour avec succès."
+
+#, fuzzy
+#~ msgid "Unable to find the current user"
+#~ msgstr "Impossible de trouver l'élément avec id \"%s\""
+
+#~ msgid "User group name cannot be empty"
+#~ msgstr "Nom de groupe de l'utilisateur ne peut pas être vide"
+
+#, fuzzy
+#~ msgid "Unable to create a new usergroup"
+#~ msgstr "Impossible de créer le nouveau groupe d'utilisateurs"
+
+#, fuzzy
+#~ msgid "Unable to find user groups for the given criteria"
+#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+
+#, fuzzy
+#~ msgid "User group updated successfully"
+#~ msgstr "Groupe d'utilisateurs mis à jour avec succès"
+
+#, fuzzy
+#~ msgid "The criteria (%s) is not valid in %s"
+#~ msgstr "Cela ne veut pas une ville valide"
+
+#, fuzzy
+#~ msgid "The persister '%s' does not exist in %s"
+#~ msgstr "L'utilisateur n'a pas existe."
+
+#, fuzzy
+#~ msgid "The repository '%s' does not exist in %s"
+#~ msgstr "L'utilisateur n'a pas existe."
+
+#, fuzzy
+#~ msgid "Unable to load plugins. No folder specified."
+#~ msgstr ""
+#~ "Impossible d'enregistrer les positions pour le widget de supplément."
+
+#~ msgid "Field '%s' not valid"
+#~ msgstr "Le champ '%s' est non valable"
+
+#~ msgid "Database error."
+#~ msgstr "Base de données erreur"
+
+#~ msgid "Unable to save the cover data."
+#~ msgstr "Impossible d'enregistrer les données de couverture"
+
+#~ msgid "Name of the newspaper must be longer than 5 characters"
+#~ msgstr "Nom du journal doit être supérieure à 5 caractères"
+
+#~ msgid ""
+#~ "Url must be longer than 4 characters and only must content characters and "
+#~ "numbers"
+#~ msgstr ""
+#~ "Url doit être supérieure à 4 caractères et ne doit contenter caractères "
+#~ "et chiffres"
+
+#~ msgid "The url that you entered is already in use"
+#~ msgstr "L'url que vous avez entré est déjà utilisé"
+
+#, fuzzy
+#~ msgid "Please enter a valid url"
+#~ msgstr "S'il vous plaît sélectionnez une réponse valable à une sondage."
+
+#~ msgid "Your newspaper name cointains disallowed words."
+#~ msgstr "Votre nom d'un journal contient des mots non autorisées."
+
+#~ msgid "Your desired address contains disallowed words."
+#~ msgstr "Votre adresse souhaitée contient des mots non autorisées."
+
+#~ msgid "Your user name contains disallowed words."
+#~ msgstr "Votre nom d'utilisateur contient des mots non autorisées."
+
+#, fuzzy
+#~ msgid ""
+#~ "There was an error while validating your data against disallowed words."
+#~ msgstr "Il y avait une erreur lors de la mise à jour du widget."
+
+#~ msgid "The email that you entered is already in use"
+#~ msgstr "L'e-mail que vous avez entré est déjà utilisé"
+
+#~ msgid ""
+#~ "We use cookies to offer you a better experience. By using this site you "
+#~ "agree to our use of cookies. <a target=\"_blank\" href=\"%s\"> Learn more "
+#~ "&gt; </a>"
+#~ msgstr ""
+#~ "Nous utilisons les cookies pour vous offrir une meilleure expérience. En "
+#~ "utilisant ce site, vous acceptez notre utilisation des cookies. <a target="
+#~ "\"_blank\" href=\"%s\"> savoir plus & gt; </a>"
+
+#, fuzzy
+#~ msgid "Subscriptors"
+#~ msgstr "Formulaire d'abonnement"
+
+#~ msgid "Show password"
+#~ msgstr "Montrer le mot de passe"
+
+#~ msgid "Hide password"
+#~ msgstr "Masquer le mot de passe"
+
+#, fuzzy
+#~ msgid "File path"
+#~ msgstr "Fichier"
+
+#~ msgid "Contact name"
+#~ msgstr "Nom du contact"
+
+#~ msgid "This is not a valid phone"
+#~ msgstr "Cela ne veut pas un téléphone valide"
+
+#~ msgid "This is not a valid vat"
+#~ msgstr "Ceci est valable non un TVA"
+
+#~ msgid "VAT Number"
+#~ msgstr "Numéro TVA"
+
+#, fuzzy
+#~ msgid "User group:"
+#~ msgstr "Groupes d'utilisateurs"
+
+#~ msgid ""
+#~ "You are about to order next items. In the next 24hours our sales team "
+#~ "will send you payment and activation information. "
+#~ msgstr ""
+#~ "Vous êtes sur le point de commander des articles à venir. Dans les "
+#~ "prochaines 24 heures, notre équipe commerciale vous envoyer le paiement "
+#~ "et activation informations"
+
+#~ msgid ""
+#~ "If you need to update this information please <a href=\"mailto:"
+#~ "sales@openhost.es\">contact us</a>."
+#~ msgstr ""
+#~ "Si vous avez besoin de mettre à jour ces informations s'il vous plaît Si "
+#~ "vous avez besoin de mettre à jour ces informations s'il vous plaît "
+#~ "contactez-nouscontactez-nous</a>"
+
+#, fuzzy
+#~ msgid "This is not a valid VAT identification number"
+#~ msgstr "Cela ne veut pas un état valide"
+
+#~ msgid ""
+#~ "You have to complete your billing information to complete the purchase."
+#~ msgstr ""
+#~ "Vous devez remplir vos informations de facturation pour compléter l'achat."
+
+#, fuzzy
+#~ msgid "Remove cache"
+#~ msgstr "Supprimer"
+
+#, fuzzy
+#~ msgid "Remove compiled templates"
+#~ msgstr "Sondage Couverture"
+
+#, fuzzy
+#~ msgid "Waiting for upgrade"
+#~ msgstr "Mise à niveau de l'application"
+
+#, fuzzy
+#~ msgid "Upgrade instance"
+#~ msgstr "Demande de actualisation de une instance %s"
+
+#, fuzzy
+#~ msgid "Opennemas manager"
+#~ msgstr "Backend Gestionnaire"
 
 #~ msgid "Article - inner"
 #~ msgstr "Article - intérieur"
@@ -9961,10 +10199,6 @@ msgstr "Recherche par nom"
 #, fuzzy
 #~ msgid "User notes"
 #~ msgstr "Groupes d'utilisateurs"
-
-#, fuzzy
-#~ msgid "Filetype not allowed"
-#~ msgstr "Fichier non disponible"
 
 #, fuzzy
 #~ msgid "Users groups"

@@ -65,29 +65,28 @@ class WebServiceController extends Controller
 
         $params    = $this->container->getParameter("instance_creator");
         $subdomain = $request->request->filter('subdomain', '', FILTER_SANITIZE_STRING);
+        $pack      = $this->get('orm.manager')->getRepository('Extension')
+            ->findOneBy('uuid = "BASIC_PACK"');
 
         $instance = new Instance([
             'internal_name' => $subdomain,
             'name'          => $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING),
             'contact_mail'  => $request->request->filter('user_email', '', FILTER_SANITIZE_STRING),
-            'domains'           => [ $subdomain . '.' . $params['base_domain'] ],
+            'domains'           => [ strtolower($subdomain) . '.' . $params['base_domain'] ],
             'main_domain'       => 1,
             'activated'         => true,
             'plan'              => $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING),
             'price'             => 0,
-            'activated_modules' => [
-                'ADVANCED_SEARCH', 'ARTICLE_MANAGER', 'CATEGORY_MANAGER',
-                'COMMENT_MANAGER', 'FILE_MANAGER', 'FRONTPAGE_MANAGER',
-                'IMAGE_MANAGER', 'KEYWORD_MANAGER', 'LIBRARY_MANAGER',
-                'MENU_MANAGER', 'OPINION_MANAGER', 'SETTINGS_MANAGER',
-                'STATIC_PAGES_MANAGER', 'TRASH_MANAGER', 'USERVOICE_SUPPORT',
-                'WIDGET_MANAGER', 'es.openhost.theme.basic',
-            ],
+            'activated_modules' => [ 'es.openhost.theme.basic' ],
             'purchased'    => [ 'es.openhost.theme.basic' ],
             'created'      => new \DateTime(),
             'settings'     => [ 'TEMPLATE_USER' => $params['template'] ],
             'support_plan' => 'SUPPORT_NONE'
         ]);
+
+
+        $instance->activated_modules =
+            array_merge($instance->activated_modules, $pack->modules_included);
 
         $validator = $this->get('core.instance.validator');
         $validator->validate($instance);
@@ -127,11 +126,15 @@ class WebServiceController extends Controller
             'email'         => $instance->contact_mail,
             'fk_user_group' => [ 5 ],
             'name'          => $instance->contact_mail,
-            'password'      => $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
             'token'         => md5(uniqid(mt_rand(), true)),
             'type'          => 0,
             'username'      => $instance->contact_mail
         ]));
+
+        $user->password = $this->get('onm_password_encoder')->encodePassword(
+            $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
+            null
+        );
 
         try {
             $errors = [];
@@ -261,7 +264,8 @@ class WebServiceController extends Controller
                         'companyMail'       => $companyMail['company_mail'],
                         'instance_base_url' => $instanceBaseURL,
                     )
-                )
+                ),
+                'text/html'
             );
 
         // Send message
@@ -284,7 +288,8 @@ class WebServiceController extends Controller
                         'instance'  => $instance,
                         'exception' => $exception
                     )
-                )
+                ),
+                'text/html'
             );
 
         // Send message

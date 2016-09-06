@@ -17,8 +17,8 @@ entity:
             arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
     repositories:
         freshbooks:
-            class:     Common\ORM\Freshbooks\Repository\BaseRepository
-            arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
+            class:     Common\ORM\FreshBooks\Repository\InvoiceRepository
+            arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
     persisters:
         freshbooks:
             class:     Common\ORM\FreshBooks\Persister\InvoicePersister

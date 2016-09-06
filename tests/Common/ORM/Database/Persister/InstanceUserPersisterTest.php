@@ -11,9 +11,9 @@ namespace tests\Common\ORM\Database\Persister;
 
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\User;
-use Common\ORM\Database\Persister\UserPersister;
+use Common\ORM\Database\Persister\InstanceUserPersister;
 
-class UserPersisterTest extends \PHPUnit_Framework_TestCase
+class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the test environment.
@@ -60,7 +60,7 @@ class UserPersisterTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'delete' ])
             ->getMock();
 
-        $this->persister = new UserPersister($this->conn, $this->metadata, $this->cache);
+        $this->persister = new InstanceUserPersister($this->conn, $this->metadata, $this->cache);
     }
 
     /**
@@ -119,8 +119,36 @@ class UserPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
-        $this->cache->expects($this->once())->method('delete');
+        $this->cache->expects($this->exactly(2))->method('delete');
         $this->persister->update($entity);
+    }
+
+    /**
+     * Tests remove for an user group with categories.
+     */
+    public function testRemove()
+    {
+        $entity = new User([
+            'id'         => 1,
+            'name'       => 'garply',
+            'categories' => [ 1 ],
+        ]);
+
+        $entity->refresh();
+
+        $this->conn->expects($this->once())->method('delete')->with(
+            'users',
+            [ 'id' => 1 ]
+        );
+
+        $this->conn->expects($this->once())->method('executeQuery')->with(
+            'delete from users_content_categories where pk_fk_user = ?',
+            [ 1 ]
+        );
+
+        $this->cache->expects($this->exactly(2))->method('delete');
+
+        $this->persister->remove($entity);
     }
 
     /**

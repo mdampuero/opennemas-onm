@@ -12,9 +12,9 @@ namespace Common\ORM\Database\Persister;
 use Common\ORM\Core\Entity;
 
 /**
- * The BasePersister class defines actions to persist User.
+ * The InstanceUserPersister class defines actions to persist Users.
  */
-class UserPersister extends BasePersister
+class InstanceUserPersister extends BasePersister
 {
     /**
      * {@inheritdoc}
@@ -33,6 +33,7 @@ class UserPersister extends BasePersister
         $id = $this->metadata->getId($entity);
 
         $this->persistCategories($id, $categories);
+        $entity->categories = $categories;
     }
 
     /**
@@ -56,9 +57,29 @@ class UserPersister extends BasePersister
 
         $id = $this->metadata->getId($entity);
 
-        try {
+        if (array_key_exists('categories', $changes)) {
             $this->persistCategories($id, $categories);
-        } catch (\Exception $e) {
+            $entity->categories = $categories;
+
+            if ($this->hasCache()) {
+                $this->cache->delete($this->metadata->getPrefixedId($entity));
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Entity $entity)
+    {
+        parent::remove($entity);
+
+        $id = $this->metadata->getId($entity);
+
+        $this->removeCategories($id);
+
+        if ($this->hasCache()) {
+            $this->cache->delete($this->metadata->getPrefixedId($entity));
         }
     }
 
@@ -90,7 +111,7 @@ class UserPersister extends BasePersister
      * @param array $id         The entity id.
      * @param array $categories The categories keys to keep.
      */
-    protected function removeCategories($id, $keep)
+    protected function removeCategories($id, $keep = [])
     {
         $sql      = "delete from users_content_categories where pk_fk_user = ?";
         $params[] = $id['id'];

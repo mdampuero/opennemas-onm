@@ -42,6 +42,10 @@ class ErrorController extends Controller
         // Fetch error information
         $error = $request->attributes->get('exception');
         $name = join('', array_slice(explode('\\', $error->getClass()), -1));
+        if (!defined('INSTANCE_UNIQUE_NAME')) {
+           define('INSTANCE_UNIQUE_NAME', 'unknown-instance');
+        }
+
         $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
 
         switch ($name) {

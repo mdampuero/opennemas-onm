@@ -198,6 +198,10 @@ class AclUserController extends Controller
                     $mailer = $this->get('mailer');
                     $mailer->send($message);
 
+                    $this->get('application.log')->notice(
+                        "Email sent. Backend restore user password (to: ".$user->email.")"
+                    );
+
                     $this->view->assign(
                         array(
                             'mailSent' => true,
@@ -308,7 +312,8 @@ class AclUserController extends Controller
             }
 
             if (!empty($data['password'])) {
-                $data['password'] = md5($data['password']);
+                $data['password'] = $this->get('onm_password_encoder')
+                    ->encodePassword($data['password'], null);
             }
         }
 
@@ -325,7 +330,7 @@ class AclUserController extends Controller
             // Upload user avatar if exists
             if (!empty($file)) {
                 $user->avatar_img_id =
-                    $user->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
+                    $this->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
             }
 
             $em->persist($user);
@@ -543,7 +548,10 @@ class AclUserController extends Controller
             }
 
             if (!empty($data['password'])) {
-                $data['password'] = md5($data['password']);
+                if (!empty($data['password'])) {
+                    $data['password'] = $this->get('onm_password_encoder')
+                        ->encodePassword($data['password'], null);
+                }
             }
         }
 

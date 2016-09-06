@@ -156,26 +156,6 @@ class ContentsController extends Controller
                 );
             }
 
-            $valid = false;
-            $errors = [];
-
-            if (!empty($request->get('g-recaptcha-response'))) {
-                $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
-                $resp = $recaptcha->verify(
-                    $request->get('g-recaptcha-response'),
-                    $request->getClientIp()
-                );
-
-                $valid = $resp->isSuccess();
-            }
-
-            if (!$valid) {
-                $errors []= _(
-                    'The reCAPTCHA was not entered correctly.'.
-                    ' Try to authenticate again.'
-                );
-            }
-
             // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
             $ext       = $request->request->getDigits('ext', 0);
@@ -266,6 +246,10 @@ class ContentsController extends Controller
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
+
+                $this->get('application.log')->notice(
+                    "Email sent. Share-by-email (sender:".$senderEmail.", to: ".$recipients[0].", content_id:".$contentID.")"
+                );
 
                 $content = _('Article sent successfully');
                 $httpCode = 200;

@@ -18,10 +18,9 @@ parameters:
             - piwik
     core.template.admin.filters:
         output:
-            - backend_analytics
-            - canonical_url
             - css_includes
             - js_includes
+            - backend_analytics
             - trimwhitespace
         ignore_cli:
             - backend_analytics

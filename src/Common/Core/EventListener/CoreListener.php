@@ -163,7 +163,7 @@ class CoreListener implements EventSubscriberInterface
             }
         }
 
-        return $scheme . $host . $port . $uri;
+        return strtolower($scheme . $host . $port . $uri);
     }
 
     /**
@@ -187,6 +187,6 @@ class CoreListener implements EventSubscriberInterface
             $scheme = $request->headers->get('x-forwarded-proto');
         }
 
-        return str_replace($request->getScheme(), $scheme, $uri);
+        return preg_replace('@^' . $request->getScheme() . '@', $scheme, $uri);
     }
 }

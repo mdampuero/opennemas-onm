@@ -40,6 +40,13 @@ class Template extends \Smarty
     public $image_dir = null;
 
     /**
+     * The active instance.
+     *
+     * @var Instance
+     */
+    protected $instance = null;
+
+    /**
      * The active theme.
      *
      * @var Theme
@@ -104,6 +111,7 @@ class Template extends \Smarty
      */
     public function addInstance($instance)
     {
+        $this->instance = $instance;
         $this->setupCache($instance);
     }
 
@@ -124,6 +132,14 @@ class Template extends \Smarty
             . '/tpl/widgets';
 
         $wm->addPath($path);
+
+        if (!empty($theme->text_domain)) {
+            $path = $this->container->getParameter('core.paths.public')
+                . $theme->path . 'locale';
+
+            $this->container->get('core.locale')
+                ->addTextDomain($theme->text_domain, $path);
+        }
     }
 
     /**
@@ -174,6 +190,16 @@ class Template extends \Smarty
 
         return $this->container->get('request_stack')->getCurrentRequest()
             ->getSchemeAndHttpHost() . $this->theme->path . 'images/';
+    }
+
+    /**
+     * Returns the current instance.
+     *
+     * @return Instance The current instance.
+     */
+    public function getInstance()
+    {
+        return $this->instance;
     }
 
     /**
@@ -255,8 +281,10 @@ class Template extends \Smarty
         // Keep this to ignore notice
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
-        $this->image_dir = preg_replace('/https?:/', '', SITE_URL)
-            . $this->theme->path . 'images/';
+        if (!empty($this->theme)) {
+            $this->image_dir = preg_replace('/https?:/', '', SITE_URL)
+                . $this->theme->path . 'images/';
+        }
 
         $this->assign([
             '_template' => $this,

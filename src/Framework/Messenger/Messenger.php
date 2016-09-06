@@ -38,7 +38,7 @@ class Messenger
      */
     public function add($str, $type = 'info', $code = 200)
     {
-        $this->codes[]    = $code;
+        $this->codes[]    = $code === 0 ? 500 : $code;
         $this->messages[] = [ 'type' => $type, 'message' => $str ];
     }
 

@@ -11,14 +11,13 @@ entity:
         bio:                string
         bio_description:    string
         categories:         array
-        deposit:            float
         email:              string
+        extensions:         array
         fk_user_group:      array
         id:                 integer
         name:               string
         password:           string
         paywall_time_limit: datetime
-        sessionexpire:      integer
         terms_accepted:     datetime
         token:              string
         type:               integer
@@ -38,10 +37,10 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     persisters:
         instance:
-            class:     Common\ORM\Database\Persister\UserPersister
+            class:     Common\ORM\Database\Persister\InstanceUserPersister
             arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
         manager:
-            class:     Common\ORM\Database\Persister\BasePersister
+            class:     Common\ORM\Database\Persister\ManagerUserPersister
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     mapping:
         database:
@@ -87,12 +86,6 @@ entity:
                 fk_user_group:
                     type: simple_array
                     options: { default: null, length: 65532, notnull: false }
-                deposit:
-                    type:    float
-                    options: { default: 0, length: 10, notnull: false }
-                sessionexpire:
-                    type:    integer
-                    options: { default: 0, length: 2, notnull: false }
             index:
                 -
                     name: PRIMARY

@@ -425,6 +425,10 @@ class NewsletterController extends Controller
                         // Send it
                         $properlySent = $this->get('mailer')->send($message);
 
+                        $this->get('application.log')->notice(
+                            "Email sent. Backend newsletter sent (to: ".$mailbox->email.")"
+                        );
+
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
                         $sent++;

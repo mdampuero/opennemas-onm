@@ -710,9 +710,9 @@ class ArticlesController extends Controller
         $article    = new \Article();
         $articleContents = $request->request->filter('contents');
 
+
         // Load config
         $this->view = $this->get('core.template');
-        $this->view->setConfig('articles');
         $this->view->setCaching(0);
 
         // Fetch all article properties and generate a new object

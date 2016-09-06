@@ -36,6 +36,9 @@ instances:
         contact_mail:
             type: string
             options: { default: null, length: 255 }
+        owner_id:
+            type: integer
+            options: { default: null, unsigned: true, notnull: false }
         contents:
             type: integer
             options: { default: 0, unsigned: true }

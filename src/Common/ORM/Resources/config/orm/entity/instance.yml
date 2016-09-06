@@ -1,46 +1,47 @@
 entity:
     name: Instance
     properties:
-        id:                 integer
-        internal_name:      string
-        name:               string
-        domains:            array
-        domain_expire:      datetime
-        main_domain:        integer
-        created:            datetime
-        last_login:         datetime
-        settings:           array
-        activated_modules:  array
-        changes_in_modules: array
         activated:          boolean
-        contact_mail:       string
-        contents:           integer
-        attachments:        integer
-        articles:           integer
-        opinions:           integer
+        activated_modules:  array
         advertisements:     integer
         albums:             integer
+        alexa:              integer
+        articles:           integer
+        attachments:        integer
+        changes_in_modules: array
+        client:             integer
+        contact_mail:       string
+        contents:           integer
+        created:            datetime
+        domain_expire:      datetime
+        domains:            array
+        emails:             integer
+        id:                 integer
+        internal_name:      string
+        last_login:         datetime
         letters:            integer
-        polls:              integer
+        main_domain:        integer
+        media_size:         float
+        name:               string
+        opinions:           integer
+        owner_id:           integer
+        page_views:         integer
         photos:             integer
+        polls:              integer
         purchased:          array
+        settings:           array
+        static_pages:       integer
+        support_plan:       string
+        users:              integer
         videos:             integer
         widgets:            integer
-        static_pages:       integer
-        media_size:         float
-        alexa:              integer
-        page_views:         integer
-        emails:             integer
-        users:              integer
-        support_plan:       string
-        client:             integer
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
             arguments: [ '@orm.metadata.instance' ]
     repositories:
         database:
-            class:     Common\ORM\Database\Repository\BaseRepository
+            class:     Common\ORM\Database\Repository\InstanceRepository
             arguments: [ '@orm.connection.manager', '@orm.metadata.instance', '@cache.connection.manager' ]
     persisters:
         database:
@@ -90,6 +91,9 @@ entity:
                 contact_mail:
                     type:    string
                     options: { default: null, length: 255, notnull: true }
+                owner_id:
+                    type: integer
+                    options: { default: null, unsigned: true, notnull: false }
                 contents:
                     type:    integer
                     options: { default: 0, unsigned: true, notnull: false }

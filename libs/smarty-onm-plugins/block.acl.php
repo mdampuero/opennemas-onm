@@ -4,7 +4,7 @@
  * Check if this block is allow display your content
  *
  * {acl isAllowed="PRIVILEGE" hasCategoryAccess="10"}
- *    {* If $_SESSION['userid'] has access then show this content *}
+ *    {* If user from session has access to the category then show this content *}
  *    ...smarty content...
  * {/acl}
  *

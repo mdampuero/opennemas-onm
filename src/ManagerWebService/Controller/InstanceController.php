@@ -2,18 +2,20 @@
 
 namespace ManagerWebService\Controller;
 
-use Onm\Framework\Controller\Controller;
-use Onm\Exception\InstanceAlreadyExistsException;
-use Onm\Exception\InstanceNotFoundException;
+use Common\Core\Annotation\Security;
+use Common\ORM\Entity\Instance;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;
 use Onm\Exception\DatabaseNotRestoredException;
+use Onm\Exception\InstanceAlreadyExistsException;
+use Onm\Exception\InstanceNotFoundException;
+use Onm\Framework\Controller\Controller;
 use Onm\Instance\InstanceCreator;
-use Common\ORM\Entity\Instance;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class InstanceController extends Controller
 {
@@ -23,6 +25,8 @@ class InstanceController extends Controller
      * @param integer $id The instance id.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -32,6 +36,10 @@ class InstanceController extends Controller
 
         try {
             $instance = $em->getRepository('Instance')->find($id);
+
+            if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+                throw new AccessDeniedException();
+            }
 
             $assetFolder = realpath(
                 SITE_PATH . DS . 'media' . DS . $instance->internal_name
@@ -82,6 +90,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -102,6 +112,10 @@ class InstanceController extends Controller
         $deleted = 0;
         foreach ($instances as $instance) {
             try {
+                if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+                    throw new AccessDeniedException();
+                }
+
                 $assetFolder = realpath(
                     SITE_PATH . DS . 'media' . DS . $instance->internal_name
                 );
@@ -160,10 +174,23 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('INSTANCE_REPORT')")
      */
     public function exportAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
+
+        if (!$this->get('core.security')->hasPermission('MASTER')
+            && $this->get('core.security')->hasPermission('PARTNER')
+        ) {
+            if (!empty($oql) && !preg_match('/^(order|limit)/', $oql)) {
+                $oql = ' and ' . $oql;
+            }
+
+            $oql = sprintf('owner_id = "%s"', $this->get('core.user')->id)
+                .  $oql;
+        }
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
         $instances  = $repository->findBy($oql);
@@ -197,10 +224,23 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_LIST')")
      */
     public function listAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
+
+        if (!$this->get('core.security')->hasPermission('MASTER')
+            && $this->get('core.security')->hasPermission('PARTNER')
+        ) {
+            if (!empty($oql) && !preg_match('/^(order|limit)/', $oql)) {
+                $oql = ' and ' . $oql;
+            }
+
+            $oql = sprintf('owner_id = %s ', $this->get('core.user')->id)
+                . $oql;
+        }
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
         $converter  = $this->get('orm.manager')->getConverter('Instance');
@@ -222,13 +262,15 @@ class InstanceController extends Controller
      * Returns the data to create a new instance.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_CREATE')")
      */
     public function newAction()
     {
         return new JsonResponse(
             [
                 'data'     => null,
-                'template' => $this->templateParams()
+                'template' => $this->getTemplateParams()
             ]
         );
     }
@@ -239,6 +281,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -248,6 +292,10 @@ class InstanceController extends Controller
             ->objectify($request->request->all());
 
         $instance = $em->getRepository('Instance')->find($id);
+
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
 
         $old = $instance->activated;
         $instance->merge($data);
@@ -270,6 +318,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -293,8 +343,13 @@ class InstanceController extends Controller
         $updated = 0;
         foreach ($instances as $instance) {
             try {
+                if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+                    throw new AccessDeniedException();
+                }
+
                 $old = $instance->activated;
                 $instance->merge($data);
+                $em->persist($instance);
                 $updated++;
 
                 if ($old !== $instance->activated) {
@@ -302,7 +357,7 @@ class InstanceController extends Controller
                         ->dispatch('instance.update', [ 'instance' => $instance ]);
                 }
             } catch (\Exception $e) {
-                $msg->add($e->getMessage(), 'error', 409);
+                $msg->add($e->getMessage(), 'error', $e->getCode());
             }
         }
 
@@ -322,6 +377,8 @@ class InstanceController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('INSTANCE_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -348,6 +405,8 @@ class InstanceController extends Controller
 
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
+
+            $this->get('core.loader')->configureInstance($instance);
 
             $em->getConnection('instance')
                 ->selectDatabase($instance->getDatabaseName());
@@ -398,16 +457,25 @@ class InstanceController extends Controller
      * @param integer  $id The instance id.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function showAction($id)
     {
         $em        = $this->get('orm.manager');
         $instance  = $em->getRepository('Instance')->find($id);
+
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
+
         $converter = $em->getConverter('Instance');
         $ds        = $em->getDataSet('Settings', 'instance');
 
         $instance->settings['TEMPLATE_USER'] = 'es.openhost.theme.'
             . str_replace('es.openhost.theme.', '', $instance->settings['TEMPLATE_USER']);
+
+        $this->get('core.loader')->configureInstance($instance);
 
         $em->getConnection('instance')
             ->selectDatabase($instance->getDatabaseName());
@@ -440,6 +508,8 @@ class InstanceController extends Controller
      * @param  Request  $request The request object.
      * @param  integer  $id      The instance id.
      * @return Response          The response object.
+     *
+     * @Security("hasPermission('INSTANCE_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {
@@ -449,10 +519,20 @@ class InstanceController extends Controller
         $data     = $em->getConverter('Instance')
             ->objectify($request->request->get('instance'));
 
-        $instance   = $em->getRepository('Instance')->find($id);
+        $instance = $em->getRepository('Instance')->find($id);
+
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
+
+        $owners     = [ 'user-' . $instance->owner_id ];
         $oldDomains = $instance->domains;
 
         $instance->setData($data);
+        $owners[] = 'user-' . $instance->owner_id;
+        $owners = array_unique(array_filter($owners, function ($a) {
+            return !empty($a);
+        }));
 
         $deletedDomains = array_diff($oldDomains, $instance->domains);
 
@@ -461,12 +541,21 @@ class InstanceController extends Controller
             $cache->delete($deletedDomains);
         }
 
+        if (!empty($owners)) {
+            $cache->delete($owners);
+        }
+
         $em->persist($instance);
 
         // Update settings for instance
-        $em->getConnection('instance')
-            ->selectDatabase($instance->getDatabaseName());
+        $this->get('core.loader')->configureInstance($instance);
         $em->getDataSet('Settings', 'instance')->set($settings);
+
+        // TODO: Fix clean caches
+        foreach ($settings as $key => $setting) {
+            $this->get('setting_repository')
+                ->invalidate($key, $instance->internal_name);
+        }
 
         $this->get('core.dispatcher')
             ->dispatch('instance.update', [ 'instance' => $instance ]);
@@ -487,7 +576,16 @@ class InstanceController extends Controller
         $modules = $this->get('orm.manager')->getRepository('extension')
             ->findBy('type = "module" or type = "theme-addon"');
         $themes = $this->get('orm.manager')->getRepository('theme')
-            ->findBy();
+            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"]');
+
+        $users = $this->get('orm.manager')->getRepository('User', 'manager')
+            ->findBy('order by name asc');
+
+        $users = array_map(function ($a) {
+            return [ 'id' => $a->id, 'name' => $a->name ];
+        }, $users);
+
+        array_unshift($users, [ 'id' => null, 'name' => _('Select an user...') ]);
 
         $modules = array_map(function (&$a) {
             foreach ([ 'about', 'description', 'name' ] as $key) {
@@ -541,6 +639,7 @@ class InstanceController extends Controller
             'themes'    => $themes,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'modules'   => $modules,
+            'users'     => $users
         ];
     }
 }

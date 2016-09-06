@@ -4,6 +4,7 @@
       <div class="radio">
         <input id="newsletter-big-banner-top-728x90" name="type_advertisement" type="radio" value="1001" {if isset($advertisement) && $advertisement->type_advertisement == 1001}checked="checked" {/if}/>
         <label for="newsletter-big-banner-top-728x90">
+          {$ads_positions->getAdvertisementName(1001)} /
           Big Banner Top (728x90)
         </label>
       </div>
@@ -15,6 +16,7 @@
       <div class="radio">
         <input id="newsletter-big-banner-bottom-728x90" name="type_advertisement" type="radio" value="1009" {if isset($advertisement) && $advertisement->type_advertisement == 1009}checked="checked" {/if}/>
         <label for="newsletter-big-banner-bottom-728x90">
+          {$ads_positions->getAdvertisementName(1009)} /
           Big Banner Bottom (728x90)
         </label>
       </div>

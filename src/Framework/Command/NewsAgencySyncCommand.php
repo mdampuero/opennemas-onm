@@ -50,30 +50,35 @@ EOF
             json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
         );
 
+        $loader       = $this->getContainer()->get('core.loader');
         $logger       = $this->getContainer()->get('logger');
         $instanceName = $input->getArgument('instance');
 
-        $instance = $this->getContainer()->get('core.loader')
-            ->loadInstanceFromInternalName($instanceName);
+        $instance = $loader->loadInstanceFromInternalName($instanceName);
+        $loader->init();
 
         if ($instance->activated != '1') {
             $message = _('Instance not activated');
-            throw new \Onm\Instance\NotActivatedException($message);
+            throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
         }
 
-        $im->current_instance = $instance;
-        $im->cache_prefix     = $instance->internal_name;
-
+        // TODO: Remove this when using new ORM for contents
         $cache = $this->getContainer()->get('cache');
         $cache->setNamespace($instance->internal_name);
+        $this->getContainer()->get('dbal_connection')
+            ->selectDatabase($instance->getDatabaseName());
 
-        $database = $instance->settings['BD_DATABASE'];
+        $connection = $this->getContainer()->get('db_conn')
+            ->selectDatabase($instance->getDatabaseName());
+
+        \Application::load();
+        \Application::initDatabase($connection);
 
         $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
         $logger->info("Start synchronizing {$instance->internal_name} instance", array('cron'));
 
-        $servers = $this->getContainer()->get('orm.manager')
-            ->getDataSet('Settings', 'instance')->get('news_agency_config');
+        $servers = $this->getContainer()->get('setting_repository')
+            ->get('news_agency_config');
 
         $tpl  = $this->getContainer()->get('view')->getBackendTemplate();
         $path = $this->getContainer()->getParameter('core.paths.cache')

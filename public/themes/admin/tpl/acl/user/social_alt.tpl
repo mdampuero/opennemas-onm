@@ -5,7 +5,7 @@
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   {block name="header-css"}
     {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
-        @AdminTheme/less/_social.less" filters="cssrewrite,less"}
+        @AdminTheme/less/_social.less" filters="cssrewrite,less" output="social"}
       <style>
         html, body {
           background: none;

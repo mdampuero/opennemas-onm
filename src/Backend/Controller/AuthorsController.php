@@ -224,6 +224,10 @@ class AuthorsController extends Controller
                     $user->setMeta(array($key => $value));
                 }
 
+                // TODO: Use remove when merging ONM-1655
+                $this->get('cache.manager')->getConnection('instance')
+                    ->delete('user-' . $user->id);
+
                 // Clear caches
                 dispatchEventWithParams('author.update', array('id' => $userId));
 
