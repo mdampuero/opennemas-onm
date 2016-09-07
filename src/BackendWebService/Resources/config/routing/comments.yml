@@ -10,9 +10,10 @@ backend_ws_comment_delete:
     options:
         expose: true
 
-backend_ws_comment_toggle_status:
-    path:     /comments/{id}/toggle-status
-    defaults: { _controller: BackendWebServiceBundle:Comments:toggleStatus }
+backend_ws_comment_patch:
+    path:     /comments/{id}
+    defaults: { _controller: BackendWebServiceBundle:Comments:patch }
+    methods:  [ PATCH ]
     options:
         expose: true
 
@@ -28,9 +29,10 @@ backend_ws_comments_batch_delete:
     options:
         expose: true
 
-backend_ws_comments_batch_toggle_status:
-    path:     /comments/toggle-status
-    defaults: { _controller: BackendWebServiceBundle:Comments:batchToggleStatus }
+backend_ws_comments_patch:
+    path:     /comments
+    defaults: { _controller: BackendWebServiceBundle:Comments:patchSelected }
+    methods:  [ PATCH ]
     options:
         expose: true
 

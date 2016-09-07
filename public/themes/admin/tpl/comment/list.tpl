@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -46,12 +46,12 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="COMMENT_AVAILABLE"}
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'rejected', 'loading')" uib-tooltip="{t}Reject{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="patchSelected('status', 'rejected')" uib-tooltip="{t}Reject{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
               </button>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'accepted', 'loading')" uib-tooltip="{t}Accept{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="patchSelected('status', 'accepted')" uib-tooltip="{t}Accept{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
               </button>
             </li>
@@ -169,8 +169,8 @@
                   </td>
                   <td class="right">
                     {acl isAllowed="COMMENT_AVAILABLE"}
-                    <button class="btn btn-white" ng-class="{ loading: content.loading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="updateItem($index, content.id, 'backend_ws_comment_toggle_status', 'status', content.status != 'accepted' ? 'accepted' : 'rejected', 'loading')" type="button">
-                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.status == 'accepted', 'fa-times text-error': !content.loading && (content.status == 'pending' || content.status == 'rejected') }"></i>
+                    <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
                     </button>
                     {/acl}
                   </td>
