@@ -74,16 +74,14 @@
          *   Adds a new price to the list.
          */
         $scope.autocomplete = function(query) {
-          var tags = [];
+          var route = {
+              name: 'manager_ws_module_autocomplete',
+              params: { uuid: query }
+          };
 
-          for (var i = 0; i < $scope.extra.uuids.length;  i++) {
-            var uuid = $scope.extra.uuids[i].toLowerCase();
-            if (uuid.indexOf(query.toLowerCase()) !== -1) {
-              tags.push($scope.extra.uuids[i]);
-            }
-          }
-
-          return tags;
+          return http.get(route).then(function(response) {
+            return response.data.extensions;
+          });
         };
 
         $scope.uuidValid = true;
