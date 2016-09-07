@@ -158,7 +158,7 @@
                 <label class="form-label" for="uuid">{t}Modules included{/t}</label>
               </div>
               <div class="controls">
-                <tags-input ng-model="module.modules_included">
+                <tags-input add-from-autocomplete-only="true" ng-model="module.modules_included">
                   <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>
@@ -168,7 +168,7 @@
                 <label class="form-label" for="uuid">{t}Modules in conflict{/t}</label>
               </div>
               <div class="controls">
-                <tags-input ng-model="module.modules_in_conflict">
+                <tags-input add-from-autocomplete-only="true" ng-model="module.modules_in_conflict">
                   <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
                 </tags-input>
               </div>
