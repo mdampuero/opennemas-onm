@@ -23,6 +23,37 @@ use Symfony\Component\HttpFoundation\Request;
 class ModuleController extends Controller
 {
     /**
+     * Returns a list of suggestions basing on the query.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function autocompleteAction(Request $request)
+    {
+        $uuid = $request->query->get('uuid');
+        $oql  = 'limit 10';
+
+        if (!empty($uuid)) {
+            $oql  = sprintf('uuid ~ "%s" ', $uuid) . $oql;
+        }
+
+        $modules = $this->get('orm.manager')->getRepository('Extension')
+            ->findBy($oql);
+
+        $modules = array_map(function ($a) {
+            return $a->uuid;
+            return [
+                'id'   => $a->uuid,
+                'name' => $a->uuid
+            ];
+        }, $modules);
+
+        return new JsonResponse([ 'extensions' => $modules ]);
+    }
+
+
+    /**
      * Checks if the given UUID is available.
      *
      * @param Request $request The request object.

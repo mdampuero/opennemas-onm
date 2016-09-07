@@ -75,14 +75,8 @@
           };
 
           return http.get(route).then(function(response) {
-              var tags = [];
-
-              for (var i = 0; i < response.data.target.length; i++) {
-                tags.push(response.data.target[i]);
-              }
-
-              return tags;
-            });
+            return response.data.target;
+          });
         };
 
         /**
