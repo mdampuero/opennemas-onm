@@ -19,7 +19,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     $scope.checkDraft = function() {
       var key = 'article-draft';
 
-      if ($scope.article.pk_article) {
+      if ($scope.article && $scope.article.pk_article) {
         key = 'article-' + $scope.article.pk_article + '-draft';
       }
 
