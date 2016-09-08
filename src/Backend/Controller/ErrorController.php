@@ -48,14 +48,14 @@ class ErrorController extends Controller
             $errorID = strtoupper('ONM_FRAMEWORK_'.uniqid());
         }
 
-        $preview = self::highlightSource($error->getFile(), $error->getLine(), 7);
-
         $this->view = $this->get('onm_templating')->getBackendTemplate();
-        $this->view->assign('preview', $preview);
 
+        $requestAddress = $request->getSchemeAndHttpHost().$request->getRequestUri();
         switch ($exceptionName) {
             case 'Common\Core\Component\Exception\InstanceNotRegisteredException':
                 $trace = $error->getTrace();
+
+                error_log('Backend instance not registered error at '.$requestAddress.' '.$error->getMessage().' '.json_encode($error->getTrace()));
 
                 $errorMessage = _('Instance not found');
                 if ($this->request->isXmlHttpRequest()) {
@@ -79,6 +79,8 @@ class ErrorController extends Controller
 
             case 'Common\Core\Component\Exception\InstanceNotActivatedException':
                 $trace = $error->getTrace();
+
+                error_log('Backend instance not activated error at '.$requestAddress.' '.$error->getMessage().' '.json_encode($error->getTrace()));
 
                 $errorMessage = _('Instance not activated');
                 if ($this->request->isXmlHttpRequest()) {
@@ -105,8 +107,8 @@ class ErrorController extends Controller
                 $trace = $error->getTrace();
                 $path = $request->getRequestUri();
 
+                error_log('Backend page not found at: '.$requestAddress);
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
                 if ($this->request->isXmlHttpRequest()) {
                     $content = $errorMesage;
                 } else {

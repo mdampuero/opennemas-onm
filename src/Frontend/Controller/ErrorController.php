@@ -48,12 +48,15 @@ class ErrorController extends Controller
 
         $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
 
+        $requestAddress = $request->getSchemeAndHttpHost().$request->getRequestUri();
         switch ($name) {
             case 'ResourceNotFoundException':
             case 'NotFoundHttpException':
                 $path = $request->getRequestUri();
 
                 $page = new \stdClass();
+
+                error_log('Frontend page not found error at: '.$requestAddress);
 
                 // Dummy content while testing this feature
                 $page->title   = _('Unable to find the page you are looking for.');
@@ -87,7 +90,7 @@ class ErrorController extends Controller
                     $errorMessage = $error->getMessage();
                 }
 
-                error_log('ERROR_ID: '.$errorID.' - '.$error->getMessage()." ".json_encode($error->getTrace()));
+                error_log('Frontend unknown error at '.$requestAddress.' '.$error->getMessage().' '.json_encode($error->getTrace()));
 
                 // Dummy content while testing this feature
                 $page = new \stdClass();
