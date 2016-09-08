@@ -2,12 +2,22 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ArticleCtrl', [
-  '$controller', '$uibModal', '$rootScope', '$scope', '$window', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
-  function($controller, $uibModal, $rootScope, $scope, $window, Editor, http, messenger, routing, webStorage) {
+  '$controller', '$uibModal', '$rootScope', '$scope', '$timeout', '$window', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
+  function($controller, $uibModal, $rootScope, $scope, $timeout, $window, Editor, http, messenger, routing, webStorage) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
+    /**
+     * @memberOf ArticleCtrl
+     *
+     * @description
+     *  Flag to enabled or disable drafts.
+     *
+     * @type {Boolean}
+     */
+    $scope.draftEnabled = false;
 
     /**
      * @function checkDraft
@@ -332,7 +342,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     $scope.$watch('article', function(nv, ov) {
       var key = 'article-draft';
 
-      if (ov && nv !== ov) {
+      if (ov && nv !== ov && $scope.draftEnabled) {
         if (nv.pk_article) {
           key = 'article-' + nv.pk_article + '-draft';
         }
@@ -350,5 +360,10 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
 
       webStorage.local.remove(key);
     });
+
+    // Enabled drafts after 10s
+    $timeout(function() {
+      $scope.draftEnabled = true;
+    }, 10000);
   }
 ]);
