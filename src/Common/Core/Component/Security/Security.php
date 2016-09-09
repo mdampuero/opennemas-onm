@@ -165,7 +165,12 @@ class Security
             return false;
         }
 
-        if (in_array('MASTER', $this->permissions)) {
+        // TODO: Remove the check of isAdmin when the we migrate to the
+        // Role based permission schema not dependent from user id
+        // If user is master or admin grant it
+        if (in_array('MASTER', $this->permissions)
+            || $this->user->isAdmin()
+        ) {
             return true;
         }
 
