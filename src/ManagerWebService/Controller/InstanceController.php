@@ -267,6 +267,17 @@ class InstanceController extends Controller
      */
     public function newAction()
     {
+        $security = $this->get('core.security');
+
+        if (!$security->hasPermission('MASTER')
+            && count($security->getInstances())
+                <= $security->getUser()->max_instances
+        ) {
+            throw new AccessDeniedException(
+                _('You have reached the maximum number of instances.')
+            );
+        }
+
         return new JsonResponse(
             [
                 'data'     => null,
@@ -382,6 +393,17 @@ class InstanceController extends Controller
      */
     public function saveAction(Request $request)
     {
+        $security = $this->get('core.security');
+
+        if (!$security->hasPermission('MASTER')
+            && count($security->getInstances())
+                <= $security->getUser()->max_instances
+        ) {
+            throw new AccessDeniedException(
+                _('You have reached the maximum number of instances.')
+            );
+        }
+
         $em       = $this->get('orm.manager');
         $msg      = $this->get('core.messenger');
         $settings = $request->request->get('settings');
