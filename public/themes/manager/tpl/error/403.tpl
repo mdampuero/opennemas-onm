@@ -1,4 +1,5 @@
 <h1 class="bold m-b-15 m-t-50 text-center text-uppercase">{t}You shall not pass!{/t}</h1>
+<h3 class="text-center">{t}You are not allowed to access this resource.{/t}</h2>
 <div class="text-center">
   <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="380" height="380" viewBox="0 0 380 380">
     <path style="fill:#505458;fill-opacity:1;fill-rule:evenodd;stroke:#505458;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -72,4 +73,4 @@
     />
   </svg>
 </div>
-<h3 class="text-center">{t}You are not allowed to access this resource.{/t}</h2>
+<h3 class="text-center text-danger semi-bold" ng-show="error" ng-repeat="error in errors">[% error.message %]</h3>
