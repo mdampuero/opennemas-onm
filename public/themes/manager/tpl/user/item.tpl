@@ -150,6 +150,15 @@
                 </tags-input>
               </div>
             </div>
+            <div class="form-group" ng-if="security.hasPermission('MASTER')">
+              <label class="form-label" for="max-instances">
+                {t}Instances{/t}
+                <span class="help">{t}The maximum number of instances the user can create{/t}</span>
+              </label>
+              <div class="controls">
+                <input class="form-control" id="max-instances" ng-model="user.max_instances" type="number">
+              </div>
+            </div>
             <div class="form-group">
               <label class="form-label">
                 {t}User type{/t}

@@ -15,6 +15,7 @@ entity:
         extensions:         array
         fk_user_group:      array
         id:                 integer
+        max_instances:      integer
         name:               string
         password:           string
         paywall_time_limit: datetime
