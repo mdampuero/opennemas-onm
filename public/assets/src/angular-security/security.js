@@ -172,6 +172,22 @@
 
           return this.permissions.indexOf(permission) !== -1;
         };
+
+        /**
+         * @function reset
+         * @memberOf security
+         *
+         * @description
+         *   Resets all values for security.
+         */
+        this.reset = function () {
+          this.categories  = [];
+          this.extensions  = [];
+          this.instances   = [];
+          this.permissions = [];
+          this.token       = null;
+          this.user        = null;
+        };
       }
     ]);
 })();

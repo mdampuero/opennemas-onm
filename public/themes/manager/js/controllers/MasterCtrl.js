@@ -112,8 +112,7 @@
                     inprogress: true
                   };
 
-                  $scope.user = {};
-
+                  $scope.security.reset();
                   webStorage.local.remove('security');
 
                   modalWindow.close({ success: true });
