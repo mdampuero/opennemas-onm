@@ -81,7 +81,7 @@
             '</ul>' +
           '</div>' +
         '</div>' +
-        '<div class="sidebar-border ng-cloak" ng-click="ngModel.pin()" ng-if="ngModel.pinnable"></div>' +
+        '<div class="sidebar-border ng-cloak" ng-click="ngModel.pin()" ng-if="ngModel.security.user && ngModel.pinnable"></div>' +
         itemTpl;
 
         /**
@@ -120,6 +120,9 @@
          */
         this.init = function(options) {
           var sidebar = angular.extend({}, this.defaults, options);
+
+          // Add security service to sidebar
+          sidebar.security = security;
 
           /**
            * Checks the sidebar status basing on the current window width.
