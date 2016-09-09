@@ -69,6 +69,7 @@ class AuthenticationListener implements EventSubscriberInterface
 
         $data['instance']    = $this->container->get('core.instance')->getData();
         $data['permissions'] = $this->getPermissions($user);
+        $data['instances']   = $this->getInstances($user);
 
         $response->setContent(json_encode($data));
 
@@ -85,6 +86,26 @@ class AuthenticationListener implements EventSubscriberInterface
         return [
             KernelEvents::REQUEST => [ ['onKernelRequest', 100] ],
         ];
+    }
+
+    /**
+     * Returns the list of instances the user owns.
+     *
+     * @param UserInterface $user The current user.
+     *
+     * @return array The list of instances.
+     */
+    protected function getInstances(UserInterface $user)
+    {
+        $oql = sprintf('owner_id = "%s"', $user->id);
+
+        $instances = $this->container->get('orm.manager')
+            ->getRepository('Instance')
+            ->findBy($oql);
+
+        return array_map(function ($a) {
+            return $a->internal_name;
+        }, $instances);
     }
 
     /**

@@ -208,7 +208,7 @@
           $scope.auth.status     = true;
 
           security.instance    = args.instance;
-          security.instance    = args.instances;
+          security.instances   = args.instances;
           security.permissions = args.permissions;
           security.token       = args.token;
           security.user        = jwtHelper.decodeToken(args.token).user;
@@ -275,6 +275,7 @@
 
         // Redirects to /403
         $scope.$on('error-403', function (event, args) {
+          $scope.errors = args.data;
           $location.url('/403');
 
           http.get('manager_ws_auth_refresh').then(function(response) {
@@ -310,6 +311,8 @@
           security.user        = s.user;
           security.token       = s.token;
           security.permissions = s.permissions;
+          security.instance    = s.instance;
+          security.instances   = s.instances;
 
           $http.defaults.headers.common.Authorization =
             'Bearer ' + security.token;
