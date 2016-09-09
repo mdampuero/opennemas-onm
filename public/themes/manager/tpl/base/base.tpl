@@ -149,7 +149,7 @@
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="pull-left">
           <ul class="nav quick-section">
-            <li class="quicklinks quick-items create-items dropdown">
+            <li class="quicklinks quick-items create-items dropdown" ng-if="security.hasPermission('MASTER')">
               <a href="#" data-toggle="dropdown">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
