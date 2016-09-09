@@ -138,6 +138,7 @@ class CategoryController extends Controller
                 [
                     'articles'              => $articles,
                     'category'              => $category,
+                    'time'                  => time(),
                     'pagination'            => $pagination,
                     'actual_category_title' => $category->title
                 ]
@@ -149,6 +150,7 @@ class CategoryController extends Controller
             [
                 'cache_id'        => $cacheId,
                 'actual_category' => $categoryName,
+                'category_name'   => $categoryName,
                 'advertisements'  => $this->getInnerAds($category->id),
                 'x-tags'          => 'category-frontpage,'.$categoryName.','.$page,
                 'x-cache-for'     => $expires,
