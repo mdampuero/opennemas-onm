@@ -3,6 +3,8 @@
 {block name="footer-js" append}
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script>
+      var draftSavedMsg = '{t}A draft was saved at {/t}';
+
       jQuery(document).ready(function($){
         $('#title_input, #category').on('change', function() {
           var title = $('#title_input');
@@ -23,25 +25,13 @@
             fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
           }
         });
-
-        $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false
-        });
-
-        $("#starttime").on("dp.change",function (e) {
-          $('#endtime').data("DateTimePicker").minDate(e.date);
-        });
-        $("#endtime").on("dp.change",function (e) {
-          $('#starttime').data("DateTimePicker").maxDate(e.date);
-        });
       });
     </script>
   {/javascripts}
 {/block}
 
 {block name="content"}
-<form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario" ng-controller="ArticleCtrl" ng-init="{if isset($article->id)}article = {json_encode($article)|clear_json}; {/if}checkDraft()">
+  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($article->id)}article = {json_encode($article)|clear_json}; {/if}checkDraft()" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -68,6 +58,13 @@
                 {if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
             </li>
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+              <h5>
+                <small class="p-l-10">
+                  [% draftSaved %]
+                </small>
+              </h5>
+            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -91,8 +88,8 @@
               {if isset($article->id)}
               {acl isAllowed="ARTICLE_UPDATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
-                  <i class="fa fa-save"></i>
+                <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving || articleForm.$invalid" type="button" id="update-button">
+                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                   <span class="text">{t}Update{/t}</span>
                 </button>
               </li>
@@ -100,8 +97,8 @@
               {else}
               {acl isAllowed="ARTICLE_CREATE"}
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
-                  <i class="fa fa-save"></i>
+                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="saving || articleForm.$invalid" type="button" id="save-button">
+                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
@@ -362,7 +359,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="starttime" name="starttime" ng-model="article.starttime" type="datetime" value="{if $article->starttime neq '0000-00-00 00:00:00'}{$article->starttime}{/if}">
+                            <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $article->starttime neq '0000-00-00 00:00:00'}{$article->starttime}{/if}">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -378,7 +375,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="endtime" name="endtime" ng-model="article.endtime" type="datetime" value="{if $article->endtime neq '0000-00-00 00:00:00'}{$article->endtime}{/if}">
+                            <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $article->endtime neq '0000-00-00 00:00:00'}{$article->endtime}{/if}">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -436,10 +433,6 @@
 
       <div id="related-contents">
         {include file ="article/related/_related_list.tpl"}
-        <input type="hidden" name="relatedFront" ng-value="relatedFront"/>
-        <input type="hidden" name="relatedInner" ng-value="relatedInner"/>
-        <input type="hidden" name="relatedHome" ng-value="relatedHome"/>
-
         <input type="hidden" name="params[withGallery]" ng-model="article.params.withGallery" ng-value="withGallery"/>
         <input type="hidden" name="params[withGalleryInt]" ng-model="article.params.withGalleryInt" ng-value="withGalleryInt"/>
         <input type="hidden" name="params[withGalleryHome]" ng-model="article.params.withGalleryHome" ng-value="withGalleryHome"/>
