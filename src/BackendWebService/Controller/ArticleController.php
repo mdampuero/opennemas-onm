@@ -31,8 +31,12 @@ class ArticleController extends Controller
         $article = new \Article();
 
         $postReq = $request->request;
+        $params  = $postReq->get('params', []);
 
-        $params        = $postReq->get('params', []);
+        if (empty($params)) {
+            $params = [];
+        }
+
         $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
         $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
         $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
@@ -148,8 +152,12 @@ class ArticleController extends Controller
 
         $article = new \Article();
         $postReq = $request->request;
+        $params  = $postReq->get('params', []);
 
-        $params        = $postReq->get('params', []);
+        if (empty($params)) {
+            $params = [];
+        }
+
         $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
         $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
         $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
