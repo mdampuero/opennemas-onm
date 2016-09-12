@@ -92,7 +92,7 @@
             return true;
           }
 
-          if (!this.user.extensions) {
+          if (!this.user || !this.user.extensions) {
             return false;
           }
 
