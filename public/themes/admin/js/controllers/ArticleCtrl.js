@@ -310,8 +310,6 @@
          */
         $scope.$watch('relatedInFrontpage', function(nv, ov) {
           // Set inner related if empty or equal to front
-          console.log('change')
-          console.log($scope.relatedInInner, $scope.article.relatedInner, $scope.article.relatedFront, nv, ov);
           if ((!$scope.relatedInInner ||
               $scope.article.relatedInner === $scope.article.relatedFront) &&
               nv !== ov) {
