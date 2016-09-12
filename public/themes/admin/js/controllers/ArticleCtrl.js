@@ -107,7 +107,11 @@
         };
 
         /**
-         * Opens a modal with the preview of the article.
+         * @function preview
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Opens a modal with the preview of the article.
          *
          * @param {String} previewUrl    The URL to generate the preview.
          * @param {String} getPreviewUrl The URL to get the preview.
@@ -146,9 +150,12 @@
         };
 
         /**
+         * @function removeAlbum
+         * @memberOf ArticleCtrl
+         *
          * Removes an album.
          *
-         * @param string from The album name in the current scope.
+         * @param {String} from The album name in the current scope.
          */
         $scope.removeAlbum = function(from) {
           delete $scope[from];
@@ -203,12 +210,7 @@
             });
         };
 
-        /**
-         * Updates scope when photo1 changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates scope when photo1 changes.
         $scope.$watch('photo1', function(nv, ov) {
           $scope.article.img1 = null;
 
@@ -227,12 +229,7 @@
           }
         }, true);
 
-        /**
-         * Updates scope when photo2 changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates scope when photo2 changes.
         $scope.$watch('photo2', function(nv, ov) {
           $scope.article.img2 = null;
 
@@ -246,12 +243,7 @@
           }
         }, true);
 
-        /**
-         * Updates scope when photo3 changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        //Updates scope when photo3 changes.
         $scope.$watch('photo3', function(nv, ov) {
           $scope.article.imageHome = null;
 
@@ -265,12 +257,7 @@
           }
         }, true);
 
-        /**
-         * Updates scope when video1 changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates scope when video1 changes.
         $scope.$watch('video1', function(nv, ov) {
           $scope.article.fk_video     = null;
           $scope.article.footer_video = null;
@@ -286,12 +273,7 @@
           }
         }, true);
 
-        /**
-         * Updates scope when video2 changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates scope when video2 changes.
         $scope.$watch('video2', function() {
           $scope.article.fk_video2     = null;
           $scope.article.footer_video2 = null;
@@ -302,12 +284,7 @@
           }
         }, true);
 
-        /**
-         * Updates scope when relatedInFrontpage changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates scope when relatedInFrontpage changes.
         $scope.$watch('relatedInFrontpage', function(nv, ov) {
           // Set inner related if empty or equal to front
           if ((!$scope.relatedInInner ||
@@ -328,12 +305,7 @@
           $scope.article.relatedFront = angular.toJson(items);
         }, true);
 
-        /**
-         * Updates scope when relatedInInner changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates scope when relatedInInner changes.
         $scope.$watch('relatedInInner', function(nv) {
           var items                   = [];
           $scope.article.relatedInner = [];
@@ -347,12 +319,7 @@
           $scope.article.relatedInner = angular.toJson(items);
         }, true);
 
-        /**
-         * Updates scope when relatedInHome changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates scope when relatedInHome changes.
         $scope.$watch('relatedInHome', function(nv) {
           var items                  = [];
           $scope.article.relatedHome = [];
@@ -367,12 +334,7 @@
         }, true);
 
 
-        /**
-         * Updates the model when galleryForFrontpage changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates the model when galleryForFrontpage changes.
         $scope.$watch('galleryForFrontpage', function(nv) {
           delete $scope.article.withGallery;
 
@@ -381,12 +343,7 @@
           }
         }, true);
 
-        /**
-         * Updates the model when galleryForInner changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates the model when galleryForInner changes.
         $scope.$watch('galleryForInner', function(nv) {
           delete $scope.article.params.withGalleryInt;
 
@@ -395,12 +352,7 @@
           }
         }, true);
 
-        /**
-         * Updates the model when galleryForHome changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
+        // Updates the model when galleryForHome changes.
         $scope.$watch('galleryForHome', function(nv) {
           delete $scope.article.params.withGalleryHome;
 
@@ -410,9 +362,10 @@
         }, true);
 
 
-        $scope.dtm = null;
-        $scope.dmtm = null
+        $scope.dtm  = null;
+        $scope.dmtm = null;
 
+        // Saves a draft 1s after the last change
         $scope.$watch('article', function(nv, ov) {
           var key = 'article-draft';
 
@@ -428,7 +381,8 @@
 
             $scope.dtm = $timeout(function() {
               webStorage.local.set(key, nv);
-              $scope.draftSaved = draftSavedMsg + moment().format('HH:mm');
+              $scope.draftSaved = $window.draftSavedMsg +
+                $window.moment().format('HH:mm');
 
               // Cancel draft save message
               if ($scope.dmtm) {
@@ -452,20 +406,21 @@
           useCurrent: false
         });
 
-        $("#starttime").on("dp.change",function (e) {
-          $('#endtime').data("DateTimePicker").minDate(e.date);
+        $('#starttime').on('dp.change',function (e) {
+          $('#endtime').data('DateTimePicker').minDate(e.date);
 
           $scope.$apply(function () {
             $scope.article.starttime =
-              moment(e.date).format('YYYY-MM-DD HH:mm:ss');
+              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
           });
         });
-        $("#endtime").on("dp.change",function (e) {
-          $('#starttime').data("DateTimePicker").maxDate(e.date);
+
+        $('#endtime').on('dp.change',function (e) {
+          $('#starttime').data('DateTimePicker').maxDate(e.date);
 
           $scope.$apply(function() {
             $scope.article.endtime =
-              moment(e.date).format('YYYY-MM-DD HH:mm:ss');
+              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
           });
         });
       }
