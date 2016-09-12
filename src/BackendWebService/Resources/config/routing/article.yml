@@ -1,0 +1,14 @@
+# TODO: Remove /save when using GET for lists
+backend_ws_article_save:
+    path:     /articles/save
+    defaults: { _controller: BackendWebServiceBundle:Article:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+backend_ws_article_update:
+    path:     /articles/{id}
+    defaults: { _controller: BackendWebServiceBundle:Article:update }
+    methods:  [ PUT ]
+    options:
+        expose: true

@@ -90,119 +90,33 @@ class ArticlesController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' !== $request->getMethod()) {
-            $this->loadCategories($request);
+        $this->loadCategories($request);
 
-            $authorsComplete = \User::getAllUsersAuthors();
-            $authors = array('0' => _(' - Select one author - '));
-            foreach ($authorsComplete as $author) {
-                $authors[$author->id] = $author->name;
-            }
-
-            return $this->render(
-                'article/new.tpl',
-                array(
-                    'availableSizes' => array(
-                        16 => '16',
-                        18 => '18',
-                        20 => '20',
-                        22 => '22',
-                        24 => '24',
-                        26 => '26',
-                        28 => '28',
-                        30 => '30',
-                        32 => '32',
-                        34 => '34'
-                    ),
-                    'authors'        => $authors,
-                    'commentsConfig' => s::get('comments_config')
-                )
-            );
+        $authorsComplete = \User::getAllUsersAuthors();
+        $authors = array('0' => _(' - Select one author - '));
+        foreach ($authorsComplete as $author) {
+            $authors[$author->id] = $author->name;
         }
 
-        $article = new \Article();
-
-        $postReq = $request->request;
-
-        $params        = $postReq->get('params');
-        $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
-        $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        $data = array(
-            'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'body'           => $postReq->filter('body', ''),
-            'category'       => $postReq->getDigits('category'),
-            'content_status' => (empty($contentStatus)) ? 0 : 1,
-            'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING),
-            'fk_video'       => $postReq->getDigits('fk_video', ''),
-            'fk_video2'      => $postReq->getDigits('fk_video2', ''),
-            'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'frontpage'      => (empty($frontpage)) ? 0 : 1,
-            'img1'           => $postReq->getDigits('img1', ''),
-            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'           => $postReq->getDigits('img2', ''),
-            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'slug'           => $postReq->filter('slug', '', FILTER_SANITIZE_STRING),
-            'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'subtitle'       => $postReq->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'summary'        => $postReq->filter('summary', ''),
-            'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'with_comment'   => (empty($withComment)) ? 0 : 1,
-            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
-            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
-            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
-            'fk_author'      => $postReq->getDigits('fk_author', 0),
-            'params' =>  array(
-                'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
-                'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
-                'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
-                'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
-                'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
-                'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
-                'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
-                'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
-                'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
-                'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
-                'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
-                'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
-                'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
-            ),
+        return $this->render(
+            'article/new.tpl',
+            [
+                'availableSizes' => array(
+                    16 => '16',
+                    18 => '18',
+                    20 => '20',
+                    22 => '22',
+                    24 => '24',
+                    26 => '26',
+                    28 => '28',
+                    30 => '30',
+                    32 => '32',
+                    34 => '34'
+                ),
+                'authors'        => $authors,
+                'commentsConfig' => s::get('comments_config')
+            ]
         );
-
-        if ($article->create($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Article successfully created.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to create the new article.')
-            );
-        }
-
-        // Return user to list if has no update acl
-        if (!empty($article->pk_content)
-            && $this->get('core.security')->hasPermission('ARTICLE_UPDATE')
-        ) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_article_show',
-                    array('id' => $article->id)
-                )
-            );
-        } else {
-            return $this->redirect(
-                $this->generateUrl('admin_articles')
-            );
-        }
     }
 
     /**
@@ -341,139 +255,6 @@ class ArticlesController extends Controller
                     24 => '24', 26 => '26', 28 => '28',30 => '30',
                     32 => '32', 34 => '34'
                 ),
-            )
-        );
-    }
-
-    /**
-     * Updates the article information sent by POST
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('ARTICLE_MANAGER')
-     *     and hasPermission('ARTICLE_UPDATE')")
-     */
-    public function updateAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $article = new \Article($id);
-
-        if ($article->id == null) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Unable to update the article.")
-            );
-
-            return $this->redirect(
-                $this->generateUrl('admin_articles')
-            );
-        }
-
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$article->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this article because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('admin_articles'));
-        }
-
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Article data sent not valid.")
-            );
-
-            return $this->redirect($this->generateUrl('admin_article_show', array('id' => $id)));
-        }
-
-        $article = new \Article();
-
-        $postReq = $request->request;
-
-        $params        = $postReq->get('params');
-        $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
-        $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        $data = array(
-            'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'body'           => $postReq->filter('body', ''),
-            'category'       => $postReq->getDigits('category'),
-            'content_status' => (empty($contentStatus)) ? 0 : 1,
-            'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'fk_author'      => $postReq->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            'fk_video'       => $postReq->getDigits('fk_video', ''),
-            'fk_video2'      => $postReq->getDigits('fk_video2', ''),
-            'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'frontpage'      => (empty($frontpage)) ? 0 : 1,
-            'id'             => $id,
-            'img1'           => $postReq->getDigits('img1', ''),
-            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'           => $postReq->getDigits('img2', ''),
-            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
-            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
-            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
-            'slug'           => $postReq->filter('slug', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'subtitle'       => $postReq->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'summary'        => $postReq->filter('summary', ''),
-            'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'with_comment'   => (empty($withComment)) ? 0 : 1,
-            'params'         => array(
-                'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
-                'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
-                'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
-                'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
-                'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
-                'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
-                'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
-                'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
-                'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
-                'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
-                'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
-                'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
-                'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
-            ),
-        );
-
-        if ($article->update($data)) {
-            if ($data['content_status'] == 0) {
-                $article->dropFromAllHomePages();
-            }
-
-            // Clear caches
-            dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
-            dispatchEventWithParams('frontpage.save_position', array('category' => 0));
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Article successfully updated.")
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Unable to update the article.")
-            );
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_article_show',
-                array('id' => $article->id)
             )
         );
     }
