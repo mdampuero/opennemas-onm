@@ -368,11 +368,14 @@
         // Saves a draft 1s after the last change
         $scope.$watch('article', function(nv, ov) {
           var key = 'article-draft';
+          $scope.draftSaved = null;
 
           if (ov && nv !== ov && $scope.draftEnabled) {
             if (nv.pk_article) {
               key = 'article-' + nv.pk_article + '-draft';
             }
+
+            webStorage.local.set(key, nv);
 
             // Cancel draft save
             if ($scope.dtm) {
@@ -380,7 +383,6 @@
             }
 
             $scope.dtm = $timeout(function() {
-              webStorage.local.set(key, nv);
               $scope.draftSaved = $window.draftSavedMsg +
                 $window.moment().format('HH:mm');
 
@@ -391,8 +393,8 @@
 
               $scope.dmtm = $timeout(function() {
                 $scope.draftSaved = null;
-              }, 5000);
-            }, 1000);
+              }, 10000);
+            }, 5000);
           }
         }, true);
 
