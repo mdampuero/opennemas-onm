@@ -78,14 +78,11 @@ abstract class Cache extends DataBuffer
             $values = array_intersect_key($this->mru, array_flip($id));
 
             if (!empty($values)) {
-                $this->buffer[] = [
-                    'method' => 'get',
-                    'params' => [
-                        'ids'    => array_keys($values),
-                        'values' => array_values($values)
-                    ],
+                $this->addToBuffer('get', [
+                    'ids'    => array_keys($values),
+                    'values' => array_values($values),
                     'mru'    => true
-                ];
+                ]);
             }
 
             // Missed ids in MRU data
