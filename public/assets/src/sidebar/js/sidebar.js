@@ -63,7 +63,7 @@
          *
          * @type {String}
          */
-        var sidebarTpl = '<div class="sidebar [% ngModel.class %]" ng-class="{ \'sidebar-right\': ngModel.position === \'right\'\, \'inverted\': ngModel.inverted }" [id][ngAttrs][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
+        var sidebarTpl = '<div class="sidebar [% ngModel.class %]" ng-class="{ \'sidebar-right\': ngModel.position === \'right\'\, \'inverted\': ngModel.inverted }" ng-show="ngModel.security.user" [id][ngAttrs][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
           '<div class="overlay" ng-click="ngModel.open()" ng-mouseenter="ngModel.mouseEnter()"></div>' +
           '<div class="sidebar-wrapper">' +
             '<scrollable>' +
@@ -440,7 +440,8 @@
             // Get angular attributes (ng-class, ng-show, ...)
             var angularAttrs = {};
             for (var key in attrs) {
-              if (key !== 'ngModel' && /ng([A-Z][a-x]*)+/.test(key)) {
+              if (key !== 'ngModel' && key !== 'ng-show' &&
+                  /ng([A-Z][a-x]*)+/.test(key)) {
                 angularAttrs[key] = attrs[key];
               }
             }
