@@ -73,7 +73,7 @@ services:
     collector.database:
         class: Framework\DataCollector\DatabaseCollector
         public: false
-        arguments: [ '@orm.connection.instance' ]
+        arguments: [ '@service_container' ]
         tags:
             -
                 name:     data_collector
@@ -84,7 +84,7 @@ services:
     collector.cache:
         class: Framework\DataCollector\CacheCollector
         public: false
-        arguments: [ '@cache' ]
+        arguments: [ '@service_container' ]
         tags:
             -
                 name:     data_collector

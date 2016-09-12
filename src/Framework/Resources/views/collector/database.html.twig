@@ -7,7 +7,7 @@
       <svg style="width:24px;height:24px" viewBox="0 0 24 24">
         <path fill="#aaaaaa" d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
       </svg>
-      <span class="sf-toolbar-value sf-toolbar-status {% if collector.count > 50 %} sf-toolbar-status-yellow{% elseif collector.count > 100 %} sf-toolbar-status-red{% endif %}">{{ collector.count }}</span>
+      <span class="sf-toolbar-value sf-toolbar-status {% if collector.data|length > 50 %} sf-toolbar-status-yellow{% elseif collector.data|length > 100 %} sf-toolbar-status-red{% endif %}">{{ collector.data | length }}</span>
     </span>
   {% endset %}
 
@@ -17,7 +17,7 @@
 
 {% block menu %}
   {# This left-hand menu appears when using the full-screen profiler. #}
-  <span class="label{% if collector.count > 50 %} label-status-warning{% elseif collector.count > 100 %} label-status-error{% endif %}">
+  <span class="label{% if collector.data | length > 50 %} label-status-warning{% elseif collector.data | length > 100 %} label-status-error{% endif %}">
     <span class="icon">
       <svg style="width:24px;height:24px" viewBox="0 0 24 24">
         <path fill="#aaaaaa" d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
@@ -25,38 +25,75 @@
     </span>
     <strong>Database</strong>
     <span class="count">
-      <span>{{ collector.count }}</span>
+      <span>{{ collector.data | length }}</span>
     </span>
   </span>
 {% endblock %}
 
 {% block panel %}
   <h2>Database Metrics</h2>
-  <div class="metrics">
-    <div class="metric">
-      <span class="value">{{ collector.queries | length }}</span>
-      <span class="label">Queries</span>
+  <div class="sf-tabs">
+    <div class="tab">
+      <h3 class="tab-title">
+        TOTAL
+        <span class="badge">{{ collector.data | length }}</span>
+      </h3>
+      <div class="tab-content">
+        <table class="calls">
+          <thead>
+            <tr>
+              <th width="130">Time</th>
+              <th width="200">Connection</th>
+              <th width="100">Actions</th>
+              <th>Params</th>
+            </tr>
+          </thead>
+          {% for call in collector.data %}
+            <tr>
+              <td>{{ call.time }}</td>
+              <td>{{ call.name }}</td>
+              <td>{{ call.method }}</td>
+              <td>
+                <div>{{ call.params.sql | join }}</div>
+                {% if call.params.values is defined and call.params.values is not null %}
+                <div>{{ dump(call.params.values) }}</div>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
     </div>
-  </div>
-  <h2>Queries</h2>
-  <table class="queries">
-    <thead>
-      <tr>
-        <th width="100">Actions</th>
-        <th width="500">SQL</th>
-        <th>Params</th>
-      </tr>
-    </thead>
-    {% for query in collector.queries %}
-    <tr>
-      <td>{{ query.method }}</td>
-      <td>{{ query.params.sql | join}}</td>
-      <td>
-        {% if query.params.values is defined and query.params.values is not null %}
-          {{ dump(query.params.values) }}
-        {% endif %}
-      </td>
-    </tr>
+    {% for key, group in collector.grouped %}
+      <div class="tab">
+        <h3 class="tab-title">
+          {{ key }}
+          <span class="badge">{{ group | length }}</span>
+        </h3>
+        <div class="tab-content">
+          <table class="calls">
+            <thead>
+              <tr>
+                <th width="130">Time</th>
+                <th width="100">Actions</th>
+                <th>Params</th>
+              </tr>
+            </thead>
+            {% for call in group %}
+              <tr>
+                <td>{{ call.time }}</td>
+                <td>{{ call.method }}</td>
+                <td>
+                  <div>{{ call.params.sql | join}}</div>
+                  {% if call.params.values is defined and call.params.values is not null %}
+                  <div>{{ dump(call.params.values) }}</div>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
     {% endfor %}
-  </table>
+  </div>
 {% endblock %}

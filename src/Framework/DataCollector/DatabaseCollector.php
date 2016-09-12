@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,11 +18,11 @@ class DatabaseCollector extends DataCollector
     /**
      * Initializes the DatabaseCollector
      *
-     * @param DbalWrapper $conn The database connection.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct($conn)
+    public function __construct($container)
     {
-        $this->conn = $conn;
+        $this->container = $container;
     }
 
     /**
@@ -30,29 +30,70 @@ class DatabaseCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $this->data = $this->conn->getBuffer();
+        $connections['orm.connection.manager'] =
+            $this->container->get('orm.manager')->getConnection('manager');
+        $connections['orm.connection.instance']  =
+            $this->container->get('orm.manager')->getConnection('instance');
+        $connections['dbal_connection'] =
+            $this->container->get('dbal_connection');
+        $connections['dbal_connection_manager'] =
+            $this->container->get('dbal_connection_manager');
 
-        foreach ($this->data as &$query) {
-            $sql    = array_shift($query['params']);
-            $values = array_shift($query['params']);
-            $query  = [
-                'method' => $query['method'],
-                'params' => [
-                    'sql'    => $sql,
-                    'values' => $values
-                ]
-            ];
+        foreach ($connections as $key => $connection) {
+            $data = $connection->getBuffer();
+
+            foreach ($data as &$call) {
+                $sql    = array_shift($call['params']);
+                $values = array_shift($call['params']);
+                $c      = [
+                    'name'   => $key,
+                    'method' => $call['method'],
+                    'time'   => $call['time'],
+                    'params' => [
+                        'sql'    => $sql,
+                        'values' => $values
+                    ]
+                ];
+
+                $this->data[] = $c;
+            }
         }
     }
 
     /**
-     * Returns the amount of executed queries.
+     * Returns the list of executed queries.
      *
-     * @return integer The amount of executed queries.
+     * @return array The list of executed queries.
      */
-    public function getCount()
+    public function getData()
     {
-        return count($this->data);
+        usort($this->data, function ($a, $b) {
+            return $a['time'] > $b['time'];
+        });
+
+        return $this->data;
+    }
+
+    /**
+     * Returns the list of executed queries grouped by connection name.
+     *
+     * @return array The list of executed queries grouped by connection name.
+     */
+    public function getGrouped()
+    {
+        $grouped = [];
+
+        foreach ($this->data as $value) {
+            $grouped[$value['name']][] = $value;
+        }
+
+        foreach ($grouped as $value) {
+            usort($value, function ($a, $b) {
+                return $a['time'] > $b['time'];
+            });
+        }
+
+        return $grouped;
     }
 
     /**
@@ -61,15 +102,5 @@ class DatabaseCollector extends DataCollector
     public function getName()
     {
         return 'database_collector';
-    }
-
-    /**
-     * Returns the list of executed queries.
-     *
-     * @return array The list of executed queries.
-     */
-    public function getQueries()
-    {
-        return $this->data;
     }
 }

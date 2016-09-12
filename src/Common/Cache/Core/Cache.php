@@ -30,7 +30,7 @@ abstract class Cache extends DataBuffer
      */
     public function exists($id)
     {
-        $this->addToBuffer('exists', $id);
+        $this->addToBuffer('exists',  [ 'ids' => $id ]);
 
         $cacheId = $this->getNamespacedId($id);
 
@@ -48,7 +48,7 @@ abstract class Cache extends DataBuffer
      */
     public function delete($id)
     {
-        $this->addToBuffer('delete', $id);
+        $this->addToBuffer('delete', [ 'ids' => $id ]);
 
         $cacheId = $this->getNamespacedId($id);
 
@@ -73,11 +73,20 @@ abstract class Cache extends DataBuffer
      */
     public function get($id)
     {
-        $this->addToBuffer('get', $id);
-
         if (is_array($id)) {
             // Get values from MRU data
             $values = array_intersect_key($this->mru, array_flip($id));
+
+            if (!empty($values)) {
+                $this->buffer[] = [
+                    'method' => 'get',
+                    'params' => [
+                        'ids'    => array_keys($values),
+                        'values' => array_values($values)
+                    ],
+                    'mru'    => true
+                ];
+            }
 
             // Missed ids in MRU data
             $id = array_values(array_diff($id, array_keys($values)));
@@ -88,6 +97,11 @@ abstract class Cache extends DataBuffer
 
                 // Save values in MRU data
                 if (!empty($values)) {
+                    $this->addToBuffer('get', [
+                        'ids'    => array_keys($values),
+                        'values' => array_values($values)
+                    ]);
+
                     $this->mru = array_merge($this->mru, $values);
                 }
             }
@@ -96,6 +110,12 @@ abstract class Cache extends DataBuffer
         }
 
         if (array_key_exists($id, $this->mru)) {
+            $this->addToBuffer('get', [
+                'ids'    => [ $id ],
+                'values' => [ $this->mru[$id] ],
+                'mru'    => true
+            ]);
+
             return $this->mru[$id];
         }
 
@@ -103,6 +123,11 @@ abstract class Cache extends DataBuffer
         $value   = $this->fetch($cacheId);
 
         if (!empty($value)) {
+            $this->addToBuffer('get', [
+                'ids'    => [ $id ],
+                'values' => [ $value ]
+            ]);
+
             $this->mru[$id] = $value;
         }
 
