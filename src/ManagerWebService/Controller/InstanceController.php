@@ -397,7 +397,7 @@ class InstanceController extends Controller
 
         if (!$security->hasPermission('MASTER')
             && count($security->getInstances())
-                <= $security->getUser()->max_instances
+                >= $security->getUser()->max_instances
         ) {
             throw new AccessDeniedException(
                 _('You have reached the maximum number of instances.')
