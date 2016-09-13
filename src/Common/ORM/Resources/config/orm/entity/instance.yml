@@ -87,7 +87,7 @@ entity:
                     options: { default: null, length: 65532, notnull: false }
                 activated:
                     type:    integer
-                    options: { default: null, notnull: true }
+                    options: { default: 0, notnull: true }
                 contact_mail:
                     type:    string
                     options: { default: null, length: 255, notnull: true }
