@@ -18,10 +18,10 @@
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>
-          <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_CREATE') && security.hasPermission('INSTANCE_REPORT') && security.instances.length < security.user.max_instances">
+          <li class="quicklinks" ng-if="security.hasPermission('MASTER') || (security.hasPermission('INSTANCE_CREATE') && security.hasPermission('INSTANCE_REPORT') && security.instances.length < security.user.max_instances)">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_CREATE') && security.instances.length < security.user.max_instances">
+          <li class="quicklinks" ng-if="security.hasPermission('MASTER') || (security.hasPermission('INSTANCE_CREATE') && security.instances.length < security.user.max_instances)">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_instance_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
