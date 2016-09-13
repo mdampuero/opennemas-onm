@@ -82,14 +82,8 @@ class Loader
 
         $template->addActiveTheme($this->theme);
 
-        foreach ($parents as $uuid) {
-            $t = $this->container->get('orm.manager')
-                ->getRepository('theme', 'file')
-                ->findOneBy(sprintf('uuid = "%s"', $uuid));
-
-            if (!empty($t)) {
-                $template->addTheme($t);
-            }
+        foreach ($parents as $t) {
+            $template->addTheme($t);
         }
 
         if (empty($theme->parameters)) {
@@ -231,7 +225,6 @@ class Loader
      */
     protected function getParents($theme)
     {
-        $uuids   = [];
         $parents = [];
 
         if (empty($theme)
@@ -241,20 +234,20 @@ class Loader
             return $parents;
         }
 
-        foreach ($theme->parameters['parent'] as $parent) {
-            $uuids[]   = $parent;
-            $parents[] = $parent;
+        $oql = sprintf(
+            'uuid in ["%s"]',
+            implode('", "', $theme->parameters['parent'])
+        );
+
+        $parents = $this->container->get('orm.manager')
+            ->getRepository('theme', 'file')
+            ->findBy($oql);
+
+        foreach ($parents as $parent) {
+            $parents = array_merge($parents, $this->getParents($parent));
         }
 
-        foreach ($parents as $uuid) {
-            $parent = $this->container->get('orm.manager')
-                ->getRepository('theme', 'file')
-                ->findOneBy(sprintf('uuid = "%s"', $uuid));
-
-            $uuids = array_merge($uuids, $this->getParents($parent));
-        }
-
-        return array_unique($uuids);
+        return $parents;
     }
 
     /**
