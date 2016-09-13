@@ -394,10 +394,10 @@ class InstanceController extends Controller
     public function saveAction(Request $request)
     {
         $security = $this->get('core.security');
+        $user     = $security->getUser();
 
         if (!$security->hasPermission('MASTER')
-            && count($security->getInstances())
-                >= $security->getUser()->max_instances
+            && count($security->getInstances()) >= $user->max_instances
         ) {
             throw new AccessDeniedException(
                 _('You have reached the maximum number of instances.')
@@ -414,6 +414,10 @@ class InstanceController extends Controller
         $creator  = new InstanceCreator($em->getConnection('manager'));
 
         $instance->created = new \DateTime('now');
+
+        if (!$security->hasPermission('MASTER')) {
+            $instance->owner_id = $user->id;
+        }
 
         try {
             $this->get('core.instance.checker')->check($instance);
