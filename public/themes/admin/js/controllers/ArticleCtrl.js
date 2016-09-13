@@ -176,6 +176,7 @@
               $scope.saving = false;
               webStorage.local.remove('article-draft');
 
+              $scope.unsaved = false;
               $window.location.href = response.headers().location;
             }, function(response) {
               $scope.saving = false;
@@ -203,6 +204,7 @@
               $scope.saving = false;
               webStorage.local.remove('article-' +
                   $scope.article.pk_article + '-draft');
+              $scope.unsaved = false;
               messenger.post(response.data);
             }, function(response) {
               $scope.saving = false;
@@ -367,6 +369,19 @@
 
         // Saves a draft 1s after the last change
         $scope.$watch('article', function(nv, ov) {
+          if (!nv || ov === nv) {
+            return;
+          }
+
+          // Show a message when leaving before saving
+          $($window).bind('beforeunload', function() {
+            var nv = $('#formulario').serialize();
+
+            if (ov && nv !== ov && $scope.unsaved){
+              return $window.leaveMessage;
+            }
+          });
+
           var key = 'article-draft';
           $scope.draftSaved = null;
 
@@ -395,6 +410,17 @@
                 $scope.draftSaved = null;
               }, 10000);
             }, 5000);
+          }
+
+          $scope.unsaved = true;
+        }, true);
+
+        // Update title_int when title changes
+        $scope.$watch('article.title', function(nv) {
+          if (nv && (!$scope.article.title_int ||
+              nv.substr(0, $scope.article.title_int.length) ===
+              $scope.article.title_int)) {
+            $scope.article.title_int = nv;
           }
         }, true);
 

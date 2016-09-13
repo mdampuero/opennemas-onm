@@ -10,10 +10,6 @@
           var title = $('#title_input');
           var category = $('#category option:selected');
           var metaTags = $('#metadata');
-          var title_int_element = $('#title_int_input');
-          if (title_int_element.val().length == 0) {
-            title_int_element.val(title.val());
-          };
 
           // Fill tags from title and category
           if (!metaTags.val()) {
