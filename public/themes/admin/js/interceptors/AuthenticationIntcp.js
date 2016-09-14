@@ -7,9 +7,8 @@
 
         this.responseError = function(response) {
           if (response.status === 401) {
-            var deferred = $q.defer();
             $window.location.href = routing.generate('admin_logout');
-            return deferred.promise;
+            return;
           }
 
           return $q.reject(response);
