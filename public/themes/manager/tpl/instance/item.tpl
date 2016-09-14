@@ -191,7 +191,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xs-12">
+      <div class="col-sm-6 col-xs-12" ng-if="security.hasPermission('CLIENT_LIST')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Billing{/t}</h4>
