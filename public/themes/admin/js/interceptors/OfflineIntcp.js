@@ -6,7 +6,6 @@
       function($q, $window, messenger) {
 
         this.responseError = function(response) {
-          console.log(response.status);
           if (response.status <= 0) {
             messenger.post({ message: $window.offlineMsg, type: 'error' });
           }
