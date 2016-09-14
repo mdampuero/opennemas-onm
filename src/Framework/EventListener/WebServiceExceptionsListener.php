@@ -25,6 +25,22 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class WebServiceExceptionsListener implements EventSubscriberInterface
 {
     /**
+     * List of exceptions that can't return the error message.
+     *
+     * @var array
+     */
+    protected $exceptions = [
+        'Doctrine\DBAL\DBALException',
+    ];
+
+    /**
+     * The list of messages.
+     *
+     * @var array
+     */
+    protected $messages = [];
+
+    /**
      * The messenger service.
      *
      * @var Messenger
@@ -39,6 +55,12 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
     public function __construct(Messenger $msg)
     {
         $this->msg = $msg;
+
+        $this->messages = [
+            400 => _('You are doing it wrong! Do it better.'),
+            403 => _('You can\'t do that!') . ' ' . _('Ask an administrator.'),
+            500 => _('Something is wrong!') . ' ' . _('Ask an administrator.'),
+        ];
     }
 
     /**
@@ -48,32 +70,28 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        static $handling;
-
-        if (true === $handling) {
-            return false;
-        }
-
-        $handling  = true;
         $exception = $event->getException();
+        $uri       = $event->getRequest()->getRequestUri();
 
-        $uri = $event->getRequest()->getRequestUri();
-
-        if (!($exception instanceof AuthenticationException)
-            && (strpos($uri, '/managerws') !== false
-            || strpos($uri, '/entityws') !== false)
+        if ($exception instanceof AuthenticationException
+            || (strpos($uri, '/managerws') === false
+            && strpos($uri, '/entityws') === false)
         ) {
-            error_log($exception->getMessage());
-
-            $this->msg->add($exception->getMessage(), 'error', $exception->getCode());
-
-            $event->setResponse(new JsonResponse(
-                $this->msg->getMessages(),
-                $this->msg->getCode()
-            ));
-
-            $handling = false;
+            return;
         }
+
+        error_log($exception->getMessage());
+
+        $this->msg->add(
+            $this->getMessage($exception),
+            'error',
+            $exception->getCode()
+        );
+
+        $event->setResponse(new JsonResponse(
+            $this->msg->getMessages(),
+            $this->msg->getCode()
+        ));
     }
 
     /**
@@ -83,8 +101,34 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::EXCEPTION => array('onKernelException', 0),
-        );
+        return [
+            KernelEvents::EXCEPTION => [ 'onKernelException', 0 ],
+        ];
+    }
+
+    /**
+     * Returns an error message basing on the exception.
+     *
+     * @return Exception The exception.
+     */
+    protected function getMessage($exception)
+    {
+        $override = false;
+        foreach ($this->exceptions as $class) {
+            if ($exception instanceof $class) {
+                $override = true;
+            }
+        }
+
+        if (!$override) {
+            return $exception->getMessage();
+        }
+
+        if (array_key_exists($exception->getCode(), $this->messages)) {
+            return $this->messages[$exception->getCode()];
+        }
+
+        return _('Something unexpected happened!')
+            . ' ' . _('Ask an administrator.');
     }
 }
