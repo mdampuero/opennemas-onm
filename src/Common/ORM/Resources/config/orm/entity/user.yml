@@ -94,3 +94,9 @@ entity:
                     primary: true
                     unique: true
                     flags: {  }
+                -
+                    name: email
+                    columns: [ email ]
+                    primary: false
+                    unique: true
+                    flags: {  }
