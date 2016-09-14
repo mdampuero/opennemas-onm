@@ -73,14 +73,18 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         $exception = $event->getException();
         $uri       = $event->getRequest()->getRequestUri();
 
-        if ($exception instanceof AuthenticationException
-            || (strpos($uri, '/managerws') === false
-            && strpos($uri, '/entityws') === false)
+        if (strpos($uri, '/managerws') === false
+            && strpos($uri, '/entityws') === false
         ) {
             return;
         }
 
         error_log($exception->getMessage());
+
+        if ($exception instanceof AuthenticationException) {
+            $event->setResponse(new JsonResponse('', 401));
+            return;
+        }
 
         $this->msg->add(
             $this->getMessage($exception),
