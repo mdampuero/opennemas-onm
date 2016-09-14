@@ -207,10 +207,12 @@
           http.post('backend_ws_article_save', $scope.article)
             .then(function(response) {
               $scope.saving = false;
-              webStorage.local.remove('article-draft');
 
-              $scope.unsaved = false;
-              $window.location.href = response.headers().location;
+              if (response.status === 201) {
+                webStorage.local.remove('article-draft');
+                $scope.unsaved = false;
+                $window.location.href = response.headers().location;
+              }
             }, function(response) {
               $scope.saving = false;
               messenger.post(response.data);
