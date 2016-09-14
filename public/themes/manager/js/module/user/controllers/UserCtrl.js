@@ -120,6 +120,7 @@
           }
 
           http.post('manager_ws_user_save', data).then(function (response) {
+            $scope.saving = 0;
             messenger.post(response.data);
 
             if (response.status === 201) {
@@ -127,7 +128,6 @@
               $location.path(url);
             }
           }, function(response) {
-            messenger.post(response.data);
             $scope.saving = 0;
           });
         };
@@ -159,10 +159,9 @@
           }
 
           http.put(route, data).then(function (response) {
-            messenger.post(response.data);
             $scope.saving = 0;
-          }, function(response) {
             messenger.post(response.data);
+          }, function(response) {
             $scope.saving = 0;
           });
         };
