@@ -24,6 +24,16 @@
          * @memberOf InstanceCtrl
          *
          * @description
+         *  Criteria to search clients.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = { epp: 10 };
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
          *   The instance object.
          *
          * @type {Object}
