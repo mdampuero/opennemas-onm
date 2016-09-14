@@ -46,10 +46,12 @@ class UserController extends Controller
             ];
         }
 
-        if (!empty($query)) {
-            $oql = 'uuid ~ "%s" ' . $oql;
-            $oql  = sprintf($oql, $query);
+        if (!preg_match_all('/^(order|limit)/', $oql)) {
+            $oql = ' and ' . $oql;
         }
+
+        $oql = 'uuid !in ["es.openhost.theme.admin",'
+                . ' "es.openhost.theme.manager"]' . $oql;
 
         if ($security->hasPermission('MASTER')) {
             $themes = $this->get('orm.manager')->getRepository('Theme')
