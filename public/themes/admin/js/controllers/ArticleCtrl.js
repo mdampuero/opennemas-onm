@@ -126,6 +126,10 @@
               $scope[key] = response.data[key];
             }
 
+            // Force Editor update
+            Editor.get('summary').setData($scope.article.summary);
+            Editor.get('body').setData($scope.article.body);
+
             if ($scope.article.metadata) {
               var tags = $scope.article.metadata.split(',');
               for (var i = 0; i < tags.length; i++) {

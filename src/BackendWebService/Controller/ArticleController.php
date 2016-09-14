@@ -129,7 +129,7 @@ class ArticleController extends Controller
     public function showAction ($id)
     {
         $article = new \Article($id);
-        $params  = [ 'article' => $article ];
+        $params  = [ 'article' => \Onm\StringUtils::convertToUtf8($article) ];
 
         if (is_null($article->id)) {
             return new JsonResponse(
