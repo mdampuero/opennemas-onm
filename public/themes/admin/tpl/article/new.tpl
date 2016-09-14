@@ -27,7 +27,7 @@
 {/block}
 
 {block name="content"}
-  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($article->id)}article = {json_encode($article)|clear_json}; {/if}checkDraft()" novalidate>
+  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if}" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -81,7 +81,7 @@
               <li class="quicklinks hidden-xs">
                 <span class="h-seperate"></span>
               </li>
-              {if isset($article->id)}
+              {if isset($id)}
               {acl isAllowed="ARTICLE_UPDATE"}
               <li class="quicklinks">
                 <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving || articleForm.$invalid" type="button" id="update-button">
@@ -269,13 +269,7 @@
                           </div>
                         </div>
                       {aclelse}
-                        {if !isset($article->fk_author) || empty($article->fk_author)}
-                          {$smarty.session._sf2_attributes.user->name}
-                          <input type="hidden" name="fk_author" ng-model="article.fk_author" value="{$smarty.session._sf2_attributes.user->id}">
-                        {else}
-                          {$authors[$article->fk_author]}
-                          <input type="hidden" name="fk_author" ng-model="article.fk_author" value="{$article->fk_author}">
-                        {/if}
+                          <input type="hidden" name="fk_author" ng-model="article.fk_author" value="[% article.fk_author ? article.fk_author: {$smarty.session._sf2_attributes.user->id} %]">
                       {/acl}
                     </div>
                   </div>

@@ -117,6 +117,108 @@ class ArticleController extends Controller
     }
 
     /**
+     * Displays the article information given the article id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_UPDATE')")
+     */
+    public function showAction ($id)
+    {
+        $article = new \Article($id);
+        $params  = [ 'article' => $article ];
+
+        if (is_null($article->id)) {
+            return new JsonResponse(
+                sprintf(_('Unable to find the article with the id "%d"'), $id),
+                400
+            );
+        }
+
+        if (is_string($article->params)) {
+            $article->params = unserialize($article->params);
+        }
+
+        if (!empty($article->img1)) {
+            $params['photo1'] = new \Photo($article->img1);
+        }
+
+        if (!empty($article->img2)) {
+            $params['photo2'] = new \Photo($article->img2);
+        }
+
+        if (is_array($article->params)
+            && (array_key_exists('imageHome', $article->params))
+            && !empty($article->params['imageHome'])
+        ) {
+            $params['photo3'] = new \Photo($article->params['imageHome']);
+        }
+
+        if (!empty($article->fk_video)) {
+            $params['video1'] = new \Video($article->fk_video);
+        }
+
+        if (!empty($article->fk_video2)) {
+            $params['video2'] = new \Video($article->fk_video2);
+        }
+
+        if ($article->isInFrontpageOfCategory((int) $article->category)) {
+            $article->promoted_to_category_frontpage = true;
+        }
+
+        $rm        = $this->get('related_contents');
+        $galleries = [];
+
+        $relations = $rm->getRelations($id);
+        foreach ($relations as $aret) {
+            $params['relatedInFrontpage'][] =
+                \Onm\StringUtils::convertToUtf8(new \Content($aret));
+        }
+
+        $relations = $rm->getRelationsForInner($id);
+        foreach ($relations as $aret) {
+            $params['relatedInInner'][] =
+                \Onm\StringUtils::convertToUtf8(new \Content($aret));
+        }
+
+        if ($this->get('core.security')->hasExtension('CRONICAS_MODULES')
+            && is_array($article->params)
+        ) {
+            if (array_key_exists('withGalleryHome', $article->params)
+                && !empty($article->params['withGalleryHome'])
+            ) {
+                $params['galleryForHome'] = new \Album($article->params['withGalleryHome']);
+            }
+
+            if (array_key_exists('withGallery', $article->params)
+                && !empty($article->params['withGallery'])
+            ) {
+                $params['galleryForFrontpage'] = new \Album($article->params['withGallery']);
+            }
+
+            if (array_key_exists('withGalleryInt', $article->params)
+                && !empty($article->params['withGalleryInt'])
+            ) {
+                $params['galleryForInner'] = new \Album($article->params['withGalleryInt']);
+            }
+
+            \Onm\StringUtils::convertToUtf8($galleries);
+            $this->view->assign('galleries', $galleries);
+
+            $relations = $rm->getHomeRelations($id);
+            foreach ($relations as $aret) {
+                $params['relatedInHome'][] =
+                    \Onm\StringUtils::convertToUtf8(new \Content($aret));
+            }
+        }
+
+        return new JsonResponse($params);
+    }
+
+    /**
      * Updates the article information sent by POST
      *
      * @param Request $request the request object

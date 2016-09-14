@@ -114,149 +114,34 @@ class ArticlesController extends Controller
                     34 => '34'
                 ),
                 'authors'        => $authors,
-                'commentsConfig' => s::get('comments_config')
+                'commentsConfig' => $this->get('setting_repository')
+                    ->get('comments_config'),
             ]
         );
     }
 
-    /**
-     * Displays the article information given the article id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('ARTICLE_MANAGER')
-     *     and hasPermission('ARTICLE_UPDATE')")
-     */
-    public function showAction(Request $request)
+    public function showAction(Request $request, $id)
     {
-        $id = (int) $request->query->getDigits('id', null);
-
-        $article = new \Article($id);
-
-        if (is_null($article->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the article with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_articles'));
-        }
-
         $this->loadCategories($request);
 
-        if (is_string($article->params)) {
-            $article->params = unserialize($article->params);
-        }
+        $allAuthors = \User::getAllUsersAuthors();
 
-        // Photos de noticia
-        if (!empty($article->img1)) {
-            $photo1 = new \Photo($article->img1);
-            $this->view->assign('photo1', $photo1);
-        }
-
-        $img2 = $article->img2;
-        if (!empty($img2)) {
-            $photo2 = new \Photo($img2);
-            $this->view->assign('photo2', $photo2);
-        }
-
-        if (is_array($article->params)
-            && (array_key_exists('imageHome', $article->params))
-            && !empty($article->params['imageHome'])
-        ) {
-            $photoHome = new \Photo($article->params['imageHome']);
-            $this->view->assign('photo3', $photoHome);
-        }
-
-        $video = $article->fk_video;
-        if (!empty($video)) {
-            $video1 = new \Video($video);
-            $this->view->assign('video1', $video1);
-        }
-
-        $video = $article->fk_video2;
-        if (!empty($video)) {
-            $video2 = new \Video($video);
-            $this->view->assign('video2', $video2);
-        }
-
-        if ($article->isInFrontpageOfCategory((int) $article->category)) {
-            $article->promoted_to_category_frontpage = true;
-        }
-
-        // Get related contents service
-        $relationsHandler = getService('related_contents');
-
-        // Get frontpage related
-        $orderFront = [];
-        $relations = $relationsHandler->getRelations($id);
-        foreach ($relations as $aret) {
-            $orderFront[] =  new \Content($aret);
-        }
-        $this->view->assign('orderFront', \Onm\StringUtils::convertToUtf8($orderFront));
-
-        // Get inner related
-        $orderInner = [];
-        $relations = $relationsHandler->getRelationsForInner($id);
-        foreach ($relations as $aret) {
-            $orderInner[] = new \Content($aret);
-        }
-        $this->view->assign('orderInner', \Onm\StringUtils::convertToUtf8($orderInner));
-
-        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
-            $galleries = [];
-            if (array_key_exists('withGalleryHome', $article->params)) {
-                $galleries['home'] = new \Album($article->params['withGalleryHome']);
-            } else {
-                $galleries['home'] = null;
-            }
-
-            if (array_key_exists('withGallery', $article->params)) {
-                $galleries['front'] = new \Album($article->params['withGallery']);
-            } else {
-                $galleries['front'] = null;
-            }
-
-            if (array_key_exists('withGalleryInt', $article->params)) {
-                $galleries['inner'] = new \Album($article->params['withGalleryInt']);
-            } else {
-                $galleries['inner'] = null;
-            }
-
-            \Onm\StringUtils::convertToUtf8($galleries);
-            $this->view->assign('galleries', $galleries);
-
-            $orderHome = [];
-            $relations = $relationsHandler->getHomeRelations($id);//de portada
-            if (!empty($relations)) {
-                foreach ($relations as $aret) {
-                    $orderHome[] = new \Content($aret);
-                }
-                $this->view->assign('orderHome', \Onm\StringUtils::convertToUtf8($orderHome));
-            }
-        }
-
-        $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array('0' => _(' - Select one author - '));
-        foreach ($authorsComplete as $author) {
+        $authors = [ '0' => _(' - Select one author - ') ];
+        foreach ($allAuthors as $author) {
             $authors[$author->id] = $author->name;
         }
 
-        return $this->render(
-            'article/new.tpl',
-            array(
-                'article'      => $article,
-                'authors'      => $authors,
-                'commentsConfig' => s::get('comments_config'),
-                'availableSizes' => array(
-                    16 => '16', 18 => '18', 20 => '20', 22 => '22',
-                    24 => '24', 26 => '26', 28 => '28',30 => '30',
-                    32 => '32', 34 => '34'
-                ),
-            )
-        );
+        return $this->render('article/new.tpl', [
+            'authors' => $authors,
+            'availableSizes' => [
+                16 => '16', 18 => '18', 20 => '20', 22 => '22',
+                24 => '24', 26 => '26', 28 => '28',30 => '30',
+                32 => '32', 34 => '34'
+            ],
+            'commentsConfig' => $this->get('setting_repository')
+                ->get('comments_config'),
+            'id'      => $id,
+        ]);
     }
 
     /**

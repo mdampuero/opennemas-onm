@@ -107,6 +107,39 @@
         };
 
         /**
+         * @function getArticle
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Gets the article to show.
+         *
+         * @param {Integer} id The article id.
+         */
+        $scope.getArticle = function(id) {
+          var route = {
+            name:   'backend_ws_article_show',
+            params: { id: id }
+          };
+
+          http.get(route).then(function(response) {
+            for (var key in response.data) {
+              $scope[key] = response.data[key];
+            }
+
+            if ($scope.article.metadata) {
+              var tags = $scope.article.metadata.split(',');
+              for (var i = 0; i < tags.length; i++) {
+                $('#metadata').tagsinput('add', tags[i]);
+              }
+            }
+
+            $scope.checkDraft();
+          }, function(response) {
+            messenger.post(response.data);
+          });
+        };
+
+        /**
          * @function preview
          * @memberOf ArticleCtrl
          *
@@ -369,7 +402,7 @@
 
         // Saves a draft 1s after the last change
         $scope.$watch('article', function(nv, ov) {
-          if (!nv || ov === nv) {
+          if (!nv || ov === nv || (!ov.pk_article && nv.pk_article)) {
             return;
           }
 
