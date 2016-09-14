@@ -17,8 +17,8 @@
      *   Handles all actions in users listing.
      */
     .controller('UserCtrl', [
-      '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
-      function ($location, $routeParams, $scope, http, routing, messenger) {
+      '$location', '$routeParams', '$scope', '$timeout', 'http', 'routing', 'messenger',
+      function ($location, $routeParams, $scope, $timeout, http, routing, messenger) {
         /**
          * @memberOf UserCtrl
          *
@@ -44,6 +44,7 @@
          *
          * @param {String} query The query to match.
          */
+        var getm = null;
         $scope.getExtensions = function(query) {
           var tags = [];
           var oql  = 'order by uuid asc limit 10';
@@ -52,18 +53,26 @@
             oql = 'uuid ~ "' + query + '" ' + oql;
           }
 
+          if (getm) {
+            $timeout.cancel(getm);
+          }
+
           var route = {
             name:   'manager_ws_user_autocomplete',
             params: { oql: oql }
           };
 
-          return http.get(route).then(function(response) {
-            for (var i = 0; i < response.data.extensions.length;  i++) {
-              tags.push(response.data.extensions[i]);
-            }
+          getm = $timeout(function() {
+            return http.get(route).then(function(response) {
+              for (var i = 0; i < response.data.extensions.length;  i++) {
+                tags.push(response.data.extensions[i]);
+              }
 
-            return tags;
-          });
+              return tags;
+            });
+          }, 250);
+
+          return getm;
         };
 
         /**
