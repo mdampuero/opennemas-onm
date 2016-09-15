@@ -28,12 +28,25 @@ class StoreController extends Controller
 
         $countries = Intl::getRegionBundle()->getCountryNames();
         $taxes     = $this->get('vat')->getTaxes();
+        $provinces = [
+            'Álava', 'Albacete', 'Alicante/Alacant', 'Almería', 'Asturias',
+            'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
+            'Cantabria', 'Castellón/Castelló', 'Ceuta', 'Ciudad Real',
+            'Córdoba', 'Cuenca', 'Girona', 'Las Palmas', 'Granada',
+            'Guadalajara', 'Guipúzcoa', 'Huelva', 'Huesca', 'Illes Balears',
+            'Jaén', 'A Coruña', 'La Rioja', 'León', 'Lleida', 'Lugo', 'Madrid',
+            'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Ourense', 'Palencia',
+            'Pontevedra', 'Salamanca', 'Segovia', 'Sevilla', 'Soria',
+            'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo',
+            'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
+        ];
 
         return $this->render(
             'store/checkout.tpl',
             [
                 'client'    => $client,
                 'countries' => $countries,
+                'provinces' => $provinces,
                 'taxes'     => $taxes
             ]
         );

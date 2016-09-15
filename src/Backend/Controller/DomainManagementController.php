@@ -77,17 +77,27 @@ class DomainManagementController extends Controller
         $taxes        = $this->get('vat')->getTaxes();
         $tokenFactory = $this->get('onm.braintree.factory')->get('ClientToken');
         $token        = $tokenFactory::generate($params);
+        $provinces    = [
+            'Álava', 'Albacete', 'Alicante/Alacant', 'Almería', 'Asturias',
+            'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
+            'Cantabria', 'Castellón/Castelló', 'Ceuta', 'Ciudad Real',
+            'Córdoba', 'Cuenca', 'Girona', 'Las Palmas', 'Granada',
+            'Guadalajara', 'Guipúzcoa', 'Huelva', 'Huesca', 'Illes Balears',
+            'Jaén', 'A Coruña', 'La Rioja', 'León', 'Lleida', 'Lugo', 'Madrid',
+            'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Ourense', 'Palencia',
+            'Pontevedra', 'Salamanca', 'Segovia', 'Sevilla', 'Soria',
+            'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo',
+            'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
+        ];
 
-        return $this->render(
-            'domain_management/add.tpl',
-            [
-                'client'    => $client,
-                'extension' => $extension,
-                'countries' => $countries,
-                'taxes'     => $taxes,
-                'token'     => $token
-            ]
-        );
+        return $this->render('domain_management/add.tpl', [
+            'client'    => $client,
+            'extension' => $extension,
+            'countries' => $countries,
+            'provinces' => $provinces,
+            'taxes'     => $taxes,
+            'token'     => $token
+        ]);
     }
 
     /**

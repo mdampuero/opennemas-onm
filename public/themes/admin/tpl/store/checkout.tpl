@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-<div ng-controller="StoreCheckoutCtrl" ng-init="{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
+<div ng-controller="StoreCheckoutCtrl" ng-init="{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}countries = {json_encode($countries)|clear_json};provinces = {json_encode($provinces)|clear_json};taxes = {json_encode($taxes)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
