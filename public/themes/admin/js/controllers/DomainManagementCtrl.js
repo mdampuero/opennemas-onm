@@ -421,16 +421,5 @@
             });
           }
         });
-
-        if (webStorage.local.has('purchase')) {
-          $scope.purchase = webStorage.local.get('purchase');
-        }
-
-        if (!$scope.purchase) {
-          http.post('backend_ws_purchase_save').then(function(response) {
-            $scope.purchase = response.data;
-            webStorage.local.set('purchase', $scope.purchase);
-          });
-        }
     }]);
 })();
