@@ -399,7 +399,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             $rank = $matches[1];
         }
 
-        return $rank;
+        return (int) $rank;
     }
 
     /**
