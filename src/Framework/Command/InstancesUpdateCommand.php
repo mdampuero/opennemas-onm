@@ -193,7 +193,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 $this->output->write("\t- Getting page num views ");
             }
             $sql = 'SELECT value FROM settings WHERE name=\'piwik\'';
-            $conn->fetchAll($sql);
+            $rs = $conn->fetchAll($sql);
 
             if ($rs !== false && !empty($rs)) {
                 $piwik = unserialize($rs[0]['value']);
