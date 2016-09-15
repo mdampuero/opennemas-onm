@@ -27,17 +27,17 @@
          *
          * @return {Float} The item price.
          */
-        $scope.getPrice = function (index, type) {
+        $scope.getPrice = function (item, type) {
           if (!type) {
             type = 'monthly';
           }
 
-          if (!$scope.cart[index].price ||
-              $scope.cart[index].price.length === 0) {
+          if (!item.price ||
+              item.price.length === 0) {
             return { value: 0 };
           }
 
-          var prices = $scope.cart[index].price.filter(function(a) {
+          var prices = item.price.filter(function(a) {
             return a.type === type;
           });
 
@@ -45,7 +45,7 @@
             return prices[0];
           }
 
-          return $scope.cart[index].price[0];
+          return item.price[0];
         };
 
         /**
@@ -65,7 +65,8 @@
           var subtotal = 0;
 
           for (var i = 0; i < $scope.cart.length; i++) {
-            subtotal += $scope.getPrice(i).value;
+            subtotal +=
+              $scope.getPrice($scope.cart[i], $scope.cart[i].priceType).value;
           }
 
           return subtotal;

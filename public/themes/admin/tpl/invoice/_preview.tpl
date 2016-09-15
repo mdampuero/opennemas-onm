@@ -29,8 +29,8 @@
     <tbody>
       <tr ng-repeat="item in cart" ng-controller="CartCtrl">
         <td>[% item.name %]</td>
-        <td class="text-right">[% getPrice($index).value %] €</td>
-        <td class="text-right">[% getPrice($index).value %] €</td>
+        <td class="text-right">[% getPrice(item, item.priceType).value %] €</td>
+        <td class="text-right">[% getPrice(item, item.priceType).value %] €</td>
       </tr>
       <tr>
         <td rowspan="[% payment.type === 'CreditCard' && payment.nonce ? 4 : 3 %]">

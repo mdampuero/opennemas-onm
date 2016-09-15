@@ -83,8 +83,8 @@
         $scope.getData = function() {
           var ids = {};
           for (var i = 0; i < $scope.cart.length; i++) {
-            ids[$scope.cart[i].uuid] = $scope.cart[i].paymentType ?
-              $scope.cart[i].paymentType : 'monthly';
+            ids[$scope.cart[i].uuid] = $scope.cart[i].priceType ?
+              $scope.cart[i].priceType : 'monthly';
           }
 
           return {
