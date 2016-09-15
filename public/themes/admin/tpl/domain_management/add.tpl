@@ -54,23 +54,23 @@
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
           <ul class="form-wizard wizard-steps wizard-steps-5">
-            <li class="text-center" ng-class="{ 'active': step == 1 }">
+            <li class="text-center" ng-class="{ 'active': step == 0 }">
               <span class="step">1</span>
               <h5 class="m-t-15">{t}Domains{/t}</h5>
             </li>
-            <li class="text-center" ng-class="{ 'active': step == 2 }">
+            <li class="text-center" ng-class="{ 'active': step == 1 }">
               <span class="step">2</span>
               <h5 class="m-t-15">{t}Billing information{/t}</h5>
             </li>
-            <li class="text-center" ng-class="{ 'active': step == 3 }">
+            <li class="text-center" ng-class="{ 'active': step == 2 }">
               <span class="step">[% client ? '2' : '3' %]</span>
               <h5 class="m-t-15">{t}Payment{/t}</h5>
             </li>
-            <li class="text-center" ng-class="{ 'active': step == 4 }">
+            <li class="text-center" ng-class="{ 'active': step == 3 }">
               <span class="step">[% client ? '3' : '4' %]</span>
               <h5 class="m-t-15">{t}Check{/t}</h5>
             </li>
-            <li class="text-center" ng-class="{ 'active': step == 5 }">
+            <li class="text-center" ng-class="{ 'active': step == 4 }">
               <span class="step">[% client ? '4' : '5' %]</span>
               <h5 class="m-t-15">{t}Finish{/t}</h5>
             </li>
@@ -83,7 +83,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 1 && !error">
+        <div class="grid simple ng-hide" ng-show="step == 0 && !error">
           <div class="grid-body clearfix">
             <div>
               <h4 class="semi-bold" ng-bind-html="extension.description"></h4>
@@ -132,7 +132,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 2 && !error">
+        <div class="grid simple ng-hide" ng-show="step == 1 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
@@ -168,7 +168,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 3 && !error">
+        <div class="grid simple ng-hide" ng-show="step == 2 && !error">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Payment{/t}</h4>
             <p class="m-t-15">
@@ -203,7 +203,7 @@
             </form>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 4 && !error">
+        <div class="grid simple ng-hide" ng-show="step == 3 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="semi-bold">{t}Purchase summary{/t}</h4>
@@ -242,7 +242,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 5 && !error">
+        <div class="grid simple ng-hide" ng-show="step == 4 && !error">
           <div class="grid-body">
             <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center">
               <i class="fa fa-heart fa-3x"></i>

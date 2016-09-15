@@ -58,7 +58,7 @@
          *
          * @type {Boolean}
          */
-        $scope.step = 1;
+        $scope.step = 0;
 
         /**
          * @memberOf CheckoutCtrl
