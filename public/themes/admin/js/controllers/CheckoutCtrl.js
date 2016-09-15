@@ -13,8 +13,8 @@
      *   Controller to handle checkout-related actions.
      */
     .controller('CheckoutCtrl', [
-      '$rootScope', '$scope', 'http', 'webStorage',
-      function($rootScope, $scope, http, webStorage) {
+      '$rootScope', '$scope', '$window', 'http', 'webStorage',
+      function($rootScope, $scope, $window, http, webStorage) {
         // List of territories excluded from VAT taxes
         var excluded = [
           'Ceuta', 'Melilla', 'Las Palmas', 'Santa Cruz de Tenerife'
@@ -99,6 +99,20 @@
          * @type {Boolean}
          */
         $scope.vatTax = 0;
+
+        /**
+         * @function cancelCreditCard
+         * @memberOf DomainManagementCtrl
+         *
+         * @description
+         *   Cancels credit card payment.
+         */
+        $scope.cancelCreditCard = function() {
+          $scope.nonce    = null;
+          $scope.payment  = null;
+          $scope.total   -= $scope.fee;
+          $scope.fee      = 0;
+        };
 
         /**
          * @function getPrice
@@ -217,6 +231,48 @@
             webStorage.local.set('purchase', $scope.purchase);
           });
         }
+
+        // Configure braintree
+        $scope.$watch('clientToken', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          if ($scope.clientToken && typeof braintree !== 'undefined') {
+            $window.braintree.setup($scope.clientToken, 'dropin', {
+              container: 'braintree-container',
+              paypal: {
+                container: 'braintree-container'
+              },
+              onError: function() {
+                $scope.$apply(function() {
+                  $scope.payment = null;
+                  $scope.paymentLoading = false;
+                });
+              },
+              onPaymentMethodReceived: function(obj) {
+                $scope.$apply(function() {
+                  $scope.payment        = obj;
+                  $scope.paymentLoading = false;
+
+                  $scope.next();
+                });
+
+                return false;
+              }
+            });
+
+            $('#braintree-form').submit(function(e) {
+              e.preventDefault();
+
+              $scope.$apply(function() {
+                $scope.paymentLoading = true;
+              });
+
+              return false;
+            });
+          }
+        });
       }
     ]);
 })();

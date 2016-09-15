@@ -94,20 +94,6 @@
         $scope.suggests = [];
 
         /**
-         * @function cancelCreditCard
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Cancels credit card payment.
-         */
-        $scope.cancelCreditCard = function() {
-          $scope.nonce    = null;
-          $scope.payment  = null;
-          $scope.total   -= $scope.fee;
-          $scope.fee      = 0;
-        };
-
-        /**
          * @function confirm
          * @memberOf DomainManagementCtrl
          *
@@ -353,17 +339,6 @@
           }
         };
 
-        /**
-         * @function toggleCardLoading
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Toggles cardLoading flag.
-         */
-        $scope.toggleCardLoading = function() {
-          $scope.cardLoading = !$scope.cardLoading;
-        };
-
         // Updates domain price when create flag changes
         $scope.$watch('create', function(nv) {
           if (nv === 1) {
@@ -379,47 +354,5 @@
             $scope.fee = ($scope.subtotal + $scope.tax) * 0.029 + 0.30;
           }
         }, true);
-
-        // Configure braintree
-        $scope.$watch('clientToken', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          if ($scope.clientToken && typeof braintree !== 'undefined') {
-            $window.braintree.setup($scope.clientToken, 'dropin', {
-              container: 'braintree-container',
-              paypal: {
-                container: 'braintree-container'
-              },
-              onError: function() {
-                $scope.$apply(function() {
-                  $scope.payment = null;
-                  $scope.paymentLoading = false;
-                });
-              },
-              onPaymentMethodReceived: function(obj) {
-                $scope.$apply(function() {
-                  $scope.payment        = obj;
-                  $scope.paymentLoading = false;
-
-                  $scope.next();
-                });
-
-                return false;
-              }
-            });
-
-            $('#braintree-form').submit(function(e) {
-              e.preventDefault();
-
-              $scope.$apply(function() {
-                $scope.paymentLoading = true;
-              });
-
-              return false;
-            });
-          }
-        });
     }]);
 })();
