@@ -126,7 +126,7 @@ class ArticleController extends Controller
      * @Security("hasExtension('ARTICLE_MANAGER')
      *     and hasPermission('ARTICLE_UPDATE')")
      */
-    public function showAction ($id)
+    public function showAction($id)
     {
         $article = new \Article($id);
         $params  = [ 'article' => \Onm\StringUtils::convertToUtf8($article) ];
