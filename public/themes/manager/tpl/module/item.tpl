@@ -136,8 +136,11 @@
                     <div class="col-xs-7">
                       <select class="form-control" id="price-type-[% $index %]" name="price-type-[% $index %]" ng-model="price.type">
                         <option value="monthly">{t}Monthly{/t} (€/{t}month{/t})</option>
+                        <option value="monthly_custom">{t}Monthly{/t} {t}w/customization{/t} (€/{t}month{/t})</option>
                         <option value="yearly">{t}Yearly{/t} (€/{t}year{/t})</option>
+                        <option value="yearly_custom">{t}Yearly{/t} {t}w/customization{/t} (€/{t}year{/t})</option>
                         <option value="single">{t}Single{/t} (€)</option>
+                        <option value="single_custom">{t}Single{/t} {t}w/customization{/t} (€)</option>
                         <option value="item">{t}Item{/t} (€/{t}item{/t})</option>
                       </select>
                     </div>
