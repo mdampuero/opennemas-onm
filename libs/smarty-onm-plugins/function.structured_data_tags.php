@@ -75,14 +75,21 @@ function smarty_function_structured_data_tags($params, &$smarty)
             if (strpos($content->thumb, 'http')  === false) {
                 $imageUrl = SITE_URL.$content->thumb;
             }
-            $imageSize = @getimagesize($imageUrl);
-            if (is_array($imageSize) &&
-                array_key_exists(0, $imageSize)
-                && array_key_exists(1, $imageSize)
-            ) {
-                $imageWidth = $imageSize[0];
-                $imageHeight = $imageSize[1];
-            }
+
+            // Don't get thumbnail size with external request
+            // Default is 700x450
+            $imageWidth = 700;
+            $imageHeight = 450;
+
+            // $imageSize = @getimagesize($imageUrl);
+            // if (is_array($imageSize) &&
+            //     array_key_exists(0, $imageSize)
+            //     && array_key_exists(1, $imageSize)
+            // ) {
+            //     $imageWidth = $imageSize[0];
+            //     $imageHeight = $imageSize[1];
+            // }
+
         }
 
         // Get primary logo
