@@ -95,8 +95,10 @@ class PurchaseController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em       = $this->get('orm.manager');
+        $lang     = $this->get('core.locale')->getLocaleShort();
         $purchase = $em->getRepository('Purchase')->find($id);
-        $vatTax   = null;
+        $subtotal = 0;
+        $vatTax   = 0;
 
         if (!empty($this->get('core.instance')->getClient())) {
             $client = $this->get('core.instance')->getClient();
@@ -114,76 +116,74 @@ class PurchaseController extends Controller
 
         $purchase->updated = new \DateTime();
         $purchase->method  = $request->request->get('method', null);
-        $subtotal          = 0;
         $purchase->step    = $request->request->get('step', 'cart');
         $purchase->fee     = 0;
 
-        $ids = $request->request->get('ids', []);
+        $ids     = $request->request->get('ids', []);
+        $domains = $request->get('domains', []);
 
-        if (!empty($ids)) {
-            $items = $em->getRepository('Extension')->findBy(
-                sprintf('uuid in ["%s"]', implode('","', array_keys($ids)))
-            );
-
-            $themes = $em->getRepository('Theme')->findBy(
-                sprintf('uuid in ["%s"]', implode('","', array_keys($ids)))
-            );
-
-            $items = array_merge($items, $themes);
-
-            $purchase->details = [];
-            $i = 0;
-
-            foreach ($items as $item) {
-                $subtotal    += $item->getPrice();
-                $description  = is_array($item->name) ?
-                    $item->name[CURRENT_LANGUAGE_SHORT] : $item->name;
-
-                if (!empty($request->request->get('domains'))) {
-                    $description .= ': ' . $request->request->get('domains')[$i];
-                }
-
-                $price = $item->getPrice();
-
-                // Fix price for custom themes
-                if ($ids[$item->uuid]) {
-                    $description .= ' (Custom)';
-                    if ($price === 35) {
-                        // monthly
-                        $price = 350;
-                    } else {
-                        // yearly
-                        $price = 1450;
-                    }
-                }
-
-                $purchase->details[] = [
-                    'description'  => $description,
-                    'unit_cost'    => $price,
-                    'quantity'     => 1,
-                    'tax1_name'    => 'IVA',
-                    'tax1_percent' => $vatTax
-                ];
-
-                $i++;
-            }
-
-            $vat = ($vatTax/100) * $subtotal;
-
-            if ($purchase->method === 'CreditCard') {
-                $purchase->fee = $subtotal * 0.029 + 0.30;
-
-                $purchase->details[] = [
-                    'description'  => _('Pay with credit card'),
-                    'unit_cost'    => str_replace(',', '.', (string) round($purchase->fee, 2)),
-                    'quantity'     => 1,
-                    'tax1_name'    => 'IVA',
-                    'tax1_percent' => 0
-                ];
-            }
-
-            $purchase->total = $subtotal + $vat + $purchase->fee;
+        if (empty($ids)) {
+            $em->persist($purchase);
+            return new JsonResponse();
         }
+
+        $oql = sprintf('uuid in ["%s"]', implode('","', array_keys($ids)));
+
+        $items  = $em->getRepository('Extension')->findBy($oql);
+        $themes = $em->getRepository('Theme')->findBy($oql);
+        $items  = array_merge($items, $themes);
+
+        $purchase->details = [];
+
+        foreach ($items as $item) {
+            $uuid         = $item->uuid;
+            $description  = $item->getName($lang);
+            $price        = $item->getPrice($ids[$item->uuid]);
+            $subtotal    += $price;
+
+            if (strpos($ids[$item->uuid], '_custom') !== false) {
+                $uuid        .= '.custom';
+                $description .= ' (Custom)';
+            }
+
+            $line = [
+                'uuid'         => $uuid,
+                'description'  => $description,
+                'unit_cost'    => $price,
+                'quantity'     => 1,
+                'tax1_name'    => 'IVA',
+                'tax1_percent' => $vatTax
+            ];
+
+            $purchase->details[] = $line;
+
+            if (!empty($domains)) {
+                // Fix descriptions and subtotal
+                array_pop($purchase->details);
+                $subtotal += $price * (count($domains) - 1);
+
+                for ($i = 0; $i < count($domains); $i++) {
+                    $purchase->details[$i] = $line;
+                    $purchase->details[$i]['description'] .= ': ' . $domains[$i];
+                }
+            }
+        }
+
+        $vat = ($vatTax/100) * $subtotal;
+
+        if ($purchase->method === 'CreditCard') {
+            $purchase->fee = $subtotal * 0.029 + 0.30;
+
+            $purchase->details[] = [
+                'description'  => _('Pay with credit card'),
+                'unit_cost'    => str_replace(',', '.', (string) round($purchase->fee, 2)),
+                'quantity'     => 1,
+                'tax1_name'    => 'IVA',
+                'tax1_percent' => 0
+            ];
+        }
+
+        $purchase->total = $subtotal + $vat + $purchase->fee;
 
         $em->persist($purchase);
 
