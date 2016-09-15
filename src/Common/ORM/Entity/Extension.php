@@ -71,7 +71,7 @@ class Extension extends Entity
         });
 
         if (count($prices)) {
-            return (float) $prices[0]['value'];
+            return (float) $prices[array_keys($prices)[0]]['value'];
         }
 
         return (float) $this->price[0]['value'];
@@ -89,6 +89,10 @@ class Extension extends Entity
     {
         if (empty($this->{$property})) {
             return '';
+        }
+
+        if (!is_array($this->{$property})) {
+            return $this->{$property};
         }
 
         if (array_key_exists($lang, $this->{$property})) {
