@@ -129,7 +129,6 @@ class ArticleController extends Controller
     public function showAction($id)
     {
         $article = new \Article($id);
-        $params  = [ 'article' => \Onm\StringUtils::convertToUtf8($article) ];
 
         if (is_null($article->id)) {
             return new JsonResponse(
@@ -219,7 +218,12 @@ class ArticleController extends Controller
             }
         }
 
-        return new JsonResponse($params);
+        // Force URI generation
+        $article->uri = $article->uri;
+
+        return new JsonResponse([
+            'article' => \Onm\StringUtils::convertToUtf8($article) ]
+        );
     }
 
     /**
