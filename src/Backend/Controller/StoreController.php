@@ -17,6 +17,7 @@ class StoreController extends Controller
     {
         $id     = $this->get('core.instance')->getClient();
         $client = [];
+        $params = [];
 
         if (!empty($id)) {
             try {
@@ -24,14 +25,18 @@ class StoreController extends Controller
                     ->getRepository('Client', 'manager')
                     ->find($id);
 
-                $client = $client->getData();
+                $params = [ 'customerId' => $client->id ];
+                $client = $this->get('orm.manager')->getConverter('Client')
+                    ->responsify($client);
             } catch (\Exception $e) {
             }
         }
 
-        $countries = Intl::getRegionBundle()->getCountryNames();
-        $taxes     = $this->get('vat')->getTaxes();
-        $provinces = [
+        $countries    = Intl::getRegionBundle()->getCountryNames();
+        $taxes        = $this->get('vat')->getTaxes();
+        $tokenFactory = $this->get('onm.braintree.factory')->get('ClientToken');
+        $token        = $tokenFactory::generate($params);
+        $provinces    = [
             'Álava', 'Albacete', 'Alicante/Alacant', 'Almería', 'Asturias',
             'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
             'Cantabria', 'Castellón/Castelló', 'Ceuta', 'Ciudad Real',
@@ -50,7 +55,8 @@ class StoreController extends Controller
                 'client'    => $client,
                 'countries' => $countries,
                 'provinces' => $provinces,
-                'taxes'     => $taxes
+                'taxes'     => $taxes,
+                'token'     => $token
             ]
         );
     }
