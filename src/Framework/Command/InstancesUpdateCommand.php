@@ -316,7 +316,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         if ($rs !== false && !empty($rs)) {
             $value = unserialize($rs[0]['value']);
             if (!empty($value)) {
-                $i->last_login = new \DateTime(unserialize($rs[0]['value']));
+                $i->last_login = new \DateTime($value);
             }
         }
 
@@ -326,7 +326,13 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         if ($rs !== false && !empty($rs)
             && !empty($rs[0]['created'])
-            && $rs[0]['created'] > $i->last_login->format('Y-m-d H:i:s')
+            && (
+                is_null($i->last_login)
+                || (
+                    !is_null($i->last_login)
+                    && $rs[0]['created'] > $i->last_login->format('Y-m-d H:i:s')
+                )
+            )
         ) {
             $i->last_login = new \DateTime($rs[0]['created']);
         }
