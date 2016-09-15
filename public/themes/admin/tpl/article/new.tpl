@@ -51,7 +51,7 @@
             </li>
             <li class="quicklinks hidden-xs">
               <h5>
-                {if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
+                {if !isset($id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
@@ -116,7 +116,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
+                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required="required" type="text">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 80, 'text-danger': title.length >= 80 }">
                         [% title.length %]
@@ -131,7 +131,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title_int">
-                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
+                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required="required">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': title_int.length >= 50 && title_int.length < 100, 'text-danger': title_int.length >= 100 }">
                         [% title_int.length %]
@@ -146,12 +146,7 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" type="text"
-                    {if is_object($article)}
-                    value="{$article->agency|clearslash|escape:"html"}"
-                    {else}
-                    value="{setting name=site_agency}"
-                    {/if} />
+                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-value="[% article.agency ? article.agency : '{setting name=site_agency}' %]" type="text">
                   </div>
                 </div>
                 {is_module_activated name="ADVANCED_ARTICLE_MANAGER"}
@@ -160,12 +155,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" type="text"
-                    {if is_object($article)}
-                    value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
-                    {else}
-                    value="{setting name=site_agency}"
-                    {/if} />
+                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-value="[% article.params.agencyBulletin ? article.params.agencyBulletin : '{setting name=site_agency}' %]" type="text">
                   </div>
                 </div>
                 {/is_module_activated}
@@ -176,7 +166,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="subtitle">
-                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" type="text" value="{$article->subtitle|clearslash|escape:"html"}"/>
+                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" type="text"/>
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': subtitle.length >= 50 && subtitle.length < 100, 'text-danger': subtitle.length >= 100 }">
                         [% subtitle.length %]
@@ -199,7 +189,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" ng-model="article.summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                  <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" ng-model="article.summary" rows="5"></textarea>
                 </div>
               </div>
               <div class="form-group">
@@ -214,7 +204,7 @@
                 </div>
                 {/acl}
                 <div class="controls">
-                  <textarea name="body" id="body" ng-model="article.body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
+                  <textarea name="body" id="body" ng-model="article.body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15"></textarea>
                 </div>
               </div>
             </div>
@@ -228,7 +218,7 @@
                   {acl isAllowed="ARTICLE_AVAILABLE"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="content_status" name="content_status" ng-model="article.content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                        <input id="content_status" name="content_status" ng-model="article.content_status" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
                         <label for="content_status">
                           {t}Published{/t}
                         </label>
@@ -238,7 +228,7 @@
                   {is_module_activated name="COMMENT_MANAGER"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} id="with_comment" name="with_comment" ng-model="article.with_comments" type="checkbox" value="1"/>
+                        <input id="with_comment" name="with_comment" ng-model="article.with_comments" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
                         <label class="form-label" for="with_comment">
                           {t}Allow comments{/t}
                         </label>
@@ -248,7 +238,7 @@
                   {acl isAllowed="ARTICLE_HOME"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input {if (isset($article) && $article->frontpage eq '1')} checked {/if}  id="frontpage" name="frontpage" type="checkbox" value="1"/>
+                        <input id="frontpage" name="frontpage" ng-model="article.frontpage" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
                         <label class="form-label" for="frontpage">
                           {t}Suggested for frontpage{/t}
                         </label>
@@ -264,7 +254,7 @@
                         <div class="form-group">
                           <div class="controls">
                             <select id="fk_author" name="fk_author" ng-model="article.fk_author">
-                              {html_options options=$authors selected=$article->fk_author}
+                              {html_options options=$authors}
                             </select>
                           </div>
                         </div>
@@ -283,16 +273,14 @@
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                          {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled{/if}
-                          {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
+                          {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled{/if} >
                           {$allcategorys[as]->title}</option>
                           {/acl}
                           {section name=su loop=$subcat[as]}
                           {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
                           {if $subcat[as][su]->internal_category eq 1}
                           <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled{/if}
-                            {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
+                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled{/if} >
                             &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                           {/if}
                           {/acl}
@@ -307,7 +295,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" ng-model="article.metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$article->metadata|clearslash|escape:"html"}"/>
+                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" ng-model="article.metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text">
                     </div>
                   </div>
                   <div class="form-group">
@@ -315,15 +303,12 @@
                       {t}Slug{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="slug" name="slug" ng-model="article.slug" type="text" value="{$article->slug|clearslash}" {if isset($article->id) && $article->content_status != 0}disabled{/if}>
-                      {if $article && $article->content_status eq 1}
-                      {assign var=uri value="\" "|explode:$article->uri}
+                      <input class="form-control" id="slug" name="slug" ng-model="article.slug" type="text" ng-disabled="article.content_status == '0'">
                       <span class="help-block">
-                        <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$uri.0|clearslash}" target="_blank">
+                        <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% article.uri %]" target="_blank">
                           <i class="fa fa-external-link"></i> {t}Link{/t}
                         </a>
                       </span>
-                      {/if}
                     </div>
                   </div>
                   <div class="form-group">
@@ -331,7 +316,7 @@
                       {t}External link{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="bodyLink" name="params[bodyLink]" ng-model="article.params.bodyLink" type="text" value="{$article->params['bodyLink']}">
+                      <input class="form-control" id="bodyLink" name="params[bodyLink]" ng-model="article.params.bodyLink" type="text">
                     </div>
                   </div>
                 </div>
@@ -349,7 +334,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $article->starttime neq '0000-00-00 00:00:00'}{$article->starttime}{/if}">
+                            <input class="form-control" id="starttime" name="starttime" ng-model="article.starttime" type="datetime">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -365,7 +350,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $article->endtime neq '0000-00-00 00:00:00'}{$article->endtime}{/if}">
+                            <input class="form-control" id="endtime" name="endtime" ng-model="article.endtime" type="datetime">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>

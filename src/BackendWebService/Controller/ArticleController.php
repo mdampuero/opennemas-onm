@@ -138,6 +138,10 @@ class ArticleController extends Controller
             );
         }
 
+        if (!$article->params) {
+            $article->params = [];
+        }
+
         if (is_string($article->params)) {
             $article->params = unserialize($article->params);
         }
