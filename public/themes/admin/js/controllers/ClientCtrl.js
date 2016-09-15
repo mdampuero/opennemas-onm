@@ -183,8 +183,11 @@
             $timeout.cancel($scope.searchTimeout);
           }
 
-          var url = routing.generate('backend_ws_store_check_vat',
-              { country: $scope.client.country, vat: $scope.client.vat_number });
+          var url = routing.generate('backend_ws_store_check_vat', {
+            country: $scope.client.country,
+            region:  $scope.client.state,
+            vat:     $scope.client.vat_number
+          });
 
           $scope.searchTimeout = $timeout(function() {
             $http.get(url).then(function() {
