@@ -7,18 +7,19 @@
      * @name  DomainManagementCtrl
      *
      * @requires $controller
-     * @requires $http
      * @requires $rootScope
      * @requires $scope
-     * @requires routing
+     * @requires http
      * @requires messenger
+     * @requires routing
+     * @requires webStorage
      *
      * @description
      *   Controller to handle actions in domains.
      */
     .controller('DomainManagementCtrl', [
-      '$controller', '$http', '$rootScope', '$scope', '$window', 'http', 'messenger', 'routing', 'webStorage',
-      function($controller, $http, $rootScope, $scope, $window, http, messenger, routing, webStorage) {
+      '$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', 'webStorage',
+      function($controller, $rootScope, $scope, http, messenger, routing, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('CheckoutCtrl',
             { $rootScope: $rootScope, $scope: $scope }));
@@ -102,19 +103,18 @@
          */
         $scope.confirm = function() {
           $scope.loading = true;
-          var url = routing.generate('backend_ws_domain_save');
           var data = {
-            domains:  $scope.cart.map(function(e) { return e.description }),
+            domains:  $scope.cart.map(function(e) { return e.description; } ),
             method:   $scope.payment.type,
             nonce:    $scope.payment.nonce,
             purchase: $scope.purchase,
           };
 
-          $http.post(url, data).then(function() {
+          http.post('backend_ws_domain_save', data).then(function() {
             $scope.next();
             $scope.loading = false;
             $scope.cart = [];
-          }, function(response) {
+          }, function() {
             $scope.error   = true;
             $scope.loading = false;
             webStorage.local.remove('purchase');
@@ -151,12 +151,17 @@
             return e.description;
           });
 
-          return {
+          var data = {
             ids:     ids,
             domains: domains,
-            method:  $scope.payment.type,
             step:    $scope.steps[$scope.step],
           };
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
+          }
+
+          return data;
         };
 
         /**
@@ -263,8 +268,7 @@
          */
         $scope.list = function() {
           $scope.loading = true;
-          var url = routing.generate('backend_ws_domains_list');
-          $http.get(url).then(function(response) {
+          http.get('backend_ws_domains_list').then(function(response) {
             $scope.loading = false;
 
             $scope.domains = response.data.domains;
@@ -297,19 +301,20 @@
           }
 
           var domain = 'www.' + $scope.domain;
-          var create = $scope.extension.uuid === 'es.openhost.domain.create'
-            ? 1 : 0;
+          var create = $scope.extension.uuid === 'es.openhost.domain.create' ?
+            1 : 0;
 
-          var url = routing.generate('backend_ws_domain_check_available',
-              { create: create, domain: domain });
+          var route = {
+            name: 'backend_ws_domain_check_available',
+            params: { create: create, domain: domain }
+          };
 
           if (!create) {
-            var url = routing.generate('backend_ws_domain_check_valid',
-                { create: create, domain: domain });
+            route.name = 'backend_ws_domain_check_valid';
           }
 
           $scope.loading = true;
-          $http.get(url).then(function() {
+          http.get(route).then(function() {
             $scope.cart.push({
               id:          $scope.extension.id,
               uuid:        $scope.extension.uuid,
