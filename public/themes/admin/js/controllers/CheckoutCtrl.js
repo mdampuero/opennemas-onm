@@ -15,6 +15,11 @@
     .controller('CheckoutCtrl', [
       '$rootScope', '$scope', 'http', 'webStorage',
       function($rootScope, $scope, http, webStorage) {
+        // List of territories excluded from VAT taxes
+        var excluded = [
+          'Ceuta', 'Melilla', 'Las Palmas', 'Santa Cruz de Tenerife'
+        ];
+
         /**
          * @memberOf CheckoutCtrl
          *
@@ -178,6 +183,11 @@
         // Updates tax when client changes
         $scope.$watch('client', function(nv) {
           if (!nv) {
+            return;
+          }
+
+          if (nv.country === 'ES' && excluded.indexOf(nv.state) !== -1) {
+            $scope.vatTax = 0;
             return;
           }
 

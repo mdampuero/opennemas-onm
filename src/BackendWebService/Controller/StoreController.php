@@ -115,6 +115,7 @@ class StoreController extends Controller
         $vat   = $this->get('vat');
 
         $country   = $request->query->get('country');
+        $region    = $request->query->get('region');
         $vatNumber = $request->query->get('vat');
 
         try {
@@ -127,7 +128,7 @@ class StoreController extends Controller
             $code = 400;
         }
 
-        $vatValue = $vat->getVatFromCode($country);
+        $vatValue = $vat->getVatFromCode($country, $region);
 
         return new JsonResponse($vatValue, $code);
     }
