@@ -64,7 +64,11 @@ class PurchaseController extends Controller
         $date     = new \DateTime();
 
         if (!empty($client)) {
-            $client = $em->getRepository('client')->find($client);
+            try {
+                $client = $em->getRepository('client')->find($client);
+            } catch (\Exception $e) {
+                $client = null;
+            }
         }
 
         $purchase = new Purchase();
@@ -96,14 +100,16 @@ class PurchaseController extends Controller
 
         if (!empty($this->get('core.instance')->getClient())) {
             $client = $this->get('core.instance')->getClient();
-            $client = $em->getRepository('Client')->find($client);
+            try {
+                $client = $em->getRepository('Client')->find($client);
 
-            if (!empty($client)) {
                 $purchase->client_id = $client->id;
                 $purchase->client    = $client;
-            }
 
-            $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
+                $vatTax = $this->get('vat')
+                    ->getVatFromCode($client->country, $client->state);
+            } catch (\Exception $e) {
+            }
         }
 
         $purchase->updated = new \DateTime();

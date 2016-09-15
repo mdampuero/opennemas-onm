@@ -19,11 +19,14 @@ class StoreController extends Controller
         $client = [];
 
         if (!empty($id)) {
-            $client = $this->get('orm.manager')
-                ->getRepository('Client', 'manager')
-                ->find($id);
+            try {
+                $client = $this->get('orm.manager')
+                    ->getRepository('Client', 'manager')
+                    ->find($id);
 
-            $client = $client->getData();
+                $client = $client->getData();
+            } catch (\Exception $e) {
+            }
         }
 
         $countries = Intl::getRegionBundle()->getCountryNames();
