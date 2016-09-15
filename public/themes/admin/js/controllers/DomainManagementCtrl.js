@@ -144,7 +144,7 @@
         $scope.getData = function() {
           var ids = {};
           for (var i = 0; i < $scope.cart.length; i++) {
-            ids[$scope.cart[i].uuid] = $scope.cart[i].customize ? 1 : 0;
+            ids[$scope.cart[i].uuid] = 'yearly';
           }
 
           var domains = $scope.cart.map(function(e) {

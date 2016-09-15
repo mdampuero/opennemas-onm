@@ -31,7 +31,7 @@
          *
          * @type {Array}
          */
-        $scope.steps = [ 'cart', 'billing', 'summary', 'done' ];
+        $scope.steps = [ 'cart', 'billing', 'payment', 'summary', 'done' ];
 
         /**
          * @function confirm
@@ -50,7 +50,13 @@
             return id;
           });
 
-          var data = { client: $scope.client, modules: modules };
+          var data = {
+            client:   $scope.client,
+            method:   $scope.payment.type,
+            modules:  modules,
+            nonce:    $scope.payment.nonce,
+            purchase: $scope.purchase,
+          };
 
           http.post('backend_ws_store_checkout', data).then(function() {
             $scope.next().then(function() {
@@ -77,12 +83,14 @@
         $scope.getData = function() {
           var ids = {};
           for (var i = 0; i < $scope.cart.length; i++) {
-            ids[$scope.cart[i].uuid] = $scope.cart[i].customize ? 1 : 0;
+            ids[$scope.cart[i].uuid] = $scope.cart[i].paymentType ?
+              $scope.cart[i].paymentType : 'monthly';
           }
 
           return {
-            ids:   ids,
-            step:  $scope.steps[$scope.step],
+            ids:    ids,
+            step:   $scope.steps[$scope.step],
+            method: $scope.payment.type,
           };
         };
 
