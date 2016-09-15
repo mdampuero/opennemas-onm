@@ -104,26 +104,30 @@
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-4">
+              <label class="form-label" for="country">{t}Country{/t}</label>
+              <div class="controls">
+                <select class="form-control" id="country" name="country" ng-model="client.country"placeholder="{t}Country{/t}">
+                  <option value="">{t}Select a country{/t}...</option>
+                  <option ng-repeat="(key,value) in extra.countries" ng-selected="[% client.country === value %]" value="[% key %]">[% value %]</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-4">
               <label class="form-label" for="city">{t}City{/t}</label>
               <div class="controls">
                 <input class="form-control" id="city" name="city" ng-model="client.city" placeholder="{t}City{/t}" type="text">
               </div>
             </div>
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-4">
               <label class="form-label" for="state">{t}State{/t}</label>
               <div class="controls">
-                <input class="form-control" id="state" name="state" ng-model="client.state" placeholder="{t}State{/t}" type="text">
+                <input class="form-control no-animate" id="state" name="state" ng-if="client.country !== 'ES'" ng-model="client.state" placeholder="{t}State{/t}" type="text">
+                <select class="form-control no-animate" id="state" name="state" ng-if="client.country === 'ES'" ng-model="client.state">
+                  <option value="">{t}Select a province{/t}...</option>
+                  <option ng-repeat="province in extra.provinces" value="[% province %]">[% province %]</option>
+                </select>
               </div>
-            </div>
-            <div class="form-group col-sm-6">
-              <labelclass="form-label" for="country">{t}Country{/t}</label>
-            <div class="controls">
-              <select class="form-control" id="country" name="country" ng-model="client.country"placeholder="{t}Country{/t}">
-                <option value="">{t}Select a country{/t}...</option>
-                <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% billing.country === value %]">[% value %]</option>
-              </select>
-            </div>
             </div>
           </div>
         </div>
