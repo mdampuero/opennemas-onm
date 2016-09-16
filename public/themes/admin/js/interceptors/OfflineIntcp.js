@@ -2,12 +2,20 @@
   'use strict';
 
   angular.module('BackendApp.interceptors')
-    .factory('OfflineIntcp', [ '$q', '$rootScope', '$window',
-      function($q, $rootScope, $window) {
+    .factory('OfflineIntcp', [ '$q', '$rootScope',
+      function($q, $rootScope) {
+
+        this.response = function(response) {
+          if (response.config.url.indexOf('/admin') !== -1) {
+            $rootScope.offline = false;
+          }
+
+          return response;
+        };
 
         this.responseError = function(response) {
           if (response.status <= 0) {
-            $rootScope.offline = $window.offlineMsg;
+            $rootScope.offline = true;
           }
 
           return $q.reject(response);

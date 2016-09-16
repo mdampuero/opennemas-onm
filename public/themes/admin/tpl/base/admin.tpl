@@ -277,6 +277,14 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
+                <li class="quicklinks ng-cloak" ng-if="offline">
+                  <a href="#" uib-tooltip="{t}You are offline{/t}" tooltip-placement="bottom">
+                    <i class="animated flash fa fa-bolt" style="color: #ff0000 !important; animation-duration: .5s"></i>
+                  </a>
+                </li>
+                <li class="quicklinks" ng-if="offline">
+                  <span class="h-seperate"></span>
+                </li>
                 {if is_object($smarty.session._sf2_attributes.user)}
                   <li class="quicklinks dropdown dropdown-notifications" ng-click="markAllAsView()">
                     <a href="#" data-toggle="dropdown">

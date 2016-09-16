@@ -54,23 +54,17 @@
                 {if !isset($id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="offline">
-              <h5>
-                <strong class="p-l-15">
-                  [% offline %]
-                </strong>
-              </h5>
-            </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
-              <h5>
-                <strong class="p-l-15">
-                  [% draftSaved %]
-                </strong>
-              </h5>
-            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
+              <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+                <h5>
+                  <i class="p-r-15">
+                    <i class="fa fa-check"></i>
+                    [% draftSaved %]
+                  </i>
+                </h5>
+              </li>
               <li class="quicklinks">
                 <a class="btn btn-link" href="{url name=admin_articles}" title="{t}Go back{/t}">
                   <i class="fa fa-reply"></i>
