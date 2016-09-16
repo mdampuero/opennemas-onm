@@ -1839,6 +1839,18 @@ class MigrationSaver
                     list($type, $field) =
                         \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
                     break;
+                case 'replace_body_images':
+                    preg_match_all($params['pattern'], $field, $matches);
+                    foreach ($matches[0] as $value) {
+                        $filename = pathinfo($value)['basename'];
+                        list($type, $id) =
+                            \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
+
+                        $photo = new \Photo($id);
+                        $photoUri = $params['media_path']. $photo->path_img;
+                        $field = str_replace($value, $photoUri, $field);
+                    }
+                    break;
                 case 'username':
                     $field = \Onm\StringUtils::getTitle(
                         $field,
