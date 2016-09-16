@@ -42,7 +42,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="ArticleCtrl">
+<form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="OpinionCtrl">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
