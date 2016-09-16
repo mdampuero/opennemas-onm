@@ -277,6 +277,10 @@
            * @param {String} route The section route name.
            */
           sidebar.itemClick = function(item) {
+            if (!item.route) {
+              return;
+            }
+
             this.collapsed = !this.pinned;
 
             // Collapse this for small screens
