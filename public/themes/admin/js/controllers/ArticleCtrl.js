@@ -404,7 +404,6 @@
 
 
         $scope.dtm  = null;
-        $scope.dmtm = null;
 
         // Saves a draft 1s after the last change
         $scope.$watch('article', function(nv, ov) {
@@ -440,15 +439,7 @@
               $scope.draftSaved = $window.draftSavedMsg +
                 $window.moment().format('HH:mm');
 
-              // Cancel draft save message
-              if ($scope.dmtm) {
-                $timeout.cancel($scope.dmtm);
-              }
-
-              $scope.dmtm = $timeout(function() {
-                $scope.draftSaved = null;
-              }, 10000);
-            }, 5000);
+            }, 2500);
           }
 
           $scope.unsaved = true;

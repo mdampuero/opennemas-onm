@@ -2,12 +2,12 @@
   'use strict';
 
   angular.module('BackendApp.interceptors')
-    .factory('OfflineIntcp', [ '$q', '$window', 'messenger',
-      function($q, $window, messenger) {
+    .factory('OfflineIntcp', [ '$q', '$rootScope', '$window',
+      function($q, $rootScope, $window) {
 
         this.responseError = function(response) {
           if (response.status <= 0) {
-            messenger.post({ message: $window.offlineMsg, type: 'error' });
+            $rootScope.offline = $window.offlineMsg;
           }
 
           return $q.reject(response);

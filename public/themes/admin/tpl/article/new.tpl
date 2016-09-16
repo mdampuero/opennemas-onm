@@ -3,7 +3,7 @@
 {block name="footer-js" append}
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script>
-      var draftSavedMsg = '{t}A draft was saved at {/t}';
+      var draftSavedMsg = '{t}Draft saved at {/t}';
 
       jQuery(document).ready(function($){
         $('#title_input, #category').on('change', function() {
@@ -54,11 +54,18 @@
                 {if !isset($id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
             </li>
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="offline">
+              <h5>
+                <strong class="p-l-15">
+                  [% offline %]
+                </strong>
+              </h5>
+            </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
               <h5>
-                <small class="p-l-10">
+                <strong class="p-l-15">
                   [% draftSaved %]
-                </small>
+                </strong>
               </h5>
             </li>
           </ul>
