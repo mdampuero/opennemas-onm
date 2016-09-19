@@ -79,7 +79,7 @@
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
-      var offlineMsg = '{t}You are offline.{/t}';
+      var offlineMsg = '{t}There is not Internet at the moment, please try to save in a few minutes.{/t}';
     </script>
   {/block}
 </head>
