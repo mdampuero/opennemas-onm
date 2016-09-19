@@ -182,7 +182,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-if="security.hasPermission('MASTER')">
               <label class="form-label">{t}Domain expire date:{/t}</label>
               <div class="controls">
                 <input class="form-control" datetime-picker="domainPicker" ng-model="instance.domain_expire" type="text">
