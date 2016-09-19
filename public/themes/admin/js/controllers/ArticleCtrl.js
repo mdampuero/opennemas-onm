@@ -160,10 +160,9 @@
           Editor.get('body').updateElement();
           Editor.get('summary').updateElement();
 
-          var data = {'contents': $('#formulario').serializeArray()};
-          var url  = routing.generate(previewUrl);
+          var data = { 'article': $scope.article };
 
-          http.post(url, data).success(function() {
+          http.post(previewUrl, data).success(function() {
             $uibModal.open({
               templateUrl: 'modal-preview',
               windowClass: 'modal-fullscreen',
