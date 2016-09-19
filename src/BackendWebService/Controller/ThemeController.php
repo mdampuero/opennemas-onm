@@ -47,54 +47,29 @@ class ThemeController extends Controller
      */
     public function listAction()
     {
-        $themes = $this->get('orm.manager')->getRepository('theme', 'file')
-            ->findBy();
+        $em         = $this->get('orm.manager');
+        $repository = $em->getRepository('extension', 'database');
+        $converter  = $em->getConverter('Extension');
 
-        foreach ($themes as &$theme) {
-            $theme = $theme->getData();
-            $theme['description'] = null;
-        }
+        $themes = $em->getRepository('theme', 'file')->findBy();
+        $themes = $converter->responsify($themes, true);
 
-        $addons = $this->get('orm.manager')
-            ->getRepository('extension', 'database')
-            ->findBy('enabled = 1 and type = "theme-addon"');
+        $addons = $repository->findBy('enabled=1 and type="theme-addon"');
+        $addons = $converter->responsify($addons, true);
 
-        foreach ($addons as &$addon) {
-            $addon->about       = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->about)
-                ? $addon->about[CURRENT_LANGUAGE_SHORT]
-                : $addon->about['en'];
-            $addon->description = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->description)
-                ? $addon->description[CURRENT_LANGUAGE_SHORT]
-                : $addon->description['en'];
-            $addon->name        = array_key_exists(CURRENT_LANGUAGE_SHORT, $addon->name)
-                ? $addon->name[CURRENT_LANGUAGE_SHORT]
-                : $addon->name['en'];
-
-            if ($addon->metas && array_key_exists('price', $addon->metas)) {
-                $addon->price = $addon->metas['price'];
-            }
-
-            $addon = $addon->getData();
-        }
+        $custom = $repository->findOneBy('uuid="es.openhost.theme.customization"');
+        $custom = $converter->responsify($custom, true);
 
         $exclusive = \Onm\Module\ModuleManager::getAvailableThemes();
         array_shift($exclusive);
 
-        $instance = $this->get('core.instance');
-        $active   = 'es.openhost.theme.' . str_replace(
-            'es.openhost.theme.',
-            '',
-            $instance->settings['TEMPLATE_USER']
-        );
-
-        return new JsonResponse(
-            [
-                'active'    => $active,
-                'addons'    => $addons,
-                'exclusive' => $exclusive,
-                'purchased' => empty($instance->purchased) ? [] : $instance->purchased,
-                'themes'    => $themes
-            ]
-        );
+        return new JsonResponse([
+            'active'        => $this->get('core.theme')->uuid,
+            'addons'        => $addons,
+            'customization' => $custom,
+            'exclusive'     => $exclusive,
+            'purchased'     => $this->get('core.instance')->purchased,
+            'themes'        => $themes
+        ]);
     }
 }
