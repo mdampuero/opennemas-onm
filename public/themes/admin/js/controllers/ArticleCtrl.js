@@ -73,7 +73,12 @@
               },
               yes: function() {
                 return function(modalWindow) {
-                  $scope.article = webStorage.get(key);
+                  var draft =  webStorage.get(key);
+
+                  for (var name in draft) {
+                    $scope[name] = draft[name];
+                  }
+
                   modalWindow.close({ response: true, success: true });
 
                   // Force Editor update
@@ -405,44 +410,59 @@
         $scope.dtm  = null;
 
         // Saves a draft 1s after the last change
-        $scope.$watch('article', function(nv, ov) {
-          if (!nv || ov === nv || (!ov.pk_article && nv.pk_article)) {
-            return;
-          }
-
-          // Show a message when leaving before saving
-          $($window).bind('beforeunload', function() {
-            var nv = $('#formulario').serialize();
-
-            if (ov && nv !== ov && $scope.unsaved){
-              return $window.leaveMessage;
-            }
-          });
-
-          var key = 'article-draft';
-          $scope.draftSaved = null;
-
-          if (ov && nv !== ov && $scope.draftEnabled) {
-            if (nv.pk_article) {
-              key = 'article-' + nv.pk_article + '-draft';
+        $scope.$watch('[article, photo1, photo2, photo3, video1, video2,' +
+          'galleryForFrontpage, galleryForInner, galleryForHome]',
+          function(nv, ov) {
+            if (!nv || ov === nv || (!ov.pk_article && nv.pk_article)) {
+              return;
             }
 
-            webStorage.local.set(key, nv);
+            // Show a message when leaving before saving
+            $($window).bind('beforeunload', function() {
+              var nv = $('#formulario').serialize();
 
-            // Cancel draft save
-            if ($scope.dtm) {
-              $timeout.cancel($scope.dtm);
+              if (ov && nv !== ov && $scope.unsaved){
+                return $window.leaveMessage;
+              }
+            });
+
+            var key = 'article-draft';
+            $scope.draftSaved = null;
+
+            if (ov && nv !== ov && $scope.draftEnabled) {
+              if (nv.pk_article) {
+                key = 'article-' + nv.pk_article + '-draft';
+              }
+
+              webStorage.local.set(key, {
+                article:             $scope.article,
+                photo1:              $scope.photo1,
+                photo2:              $scope.photo2,
+                photo3:              $scope.photo3,
+                video1:              $scope.video1,
+                video2:              $scope.video2,
+                relatedInHome:       $scope.relatedInHome,
+                relatedInInner:      $scope.relatedInInner,
+                relatedInFrontpage:  $scope.relatedInFrontpage,
+                galleryForFrontpage: $scope.galleryForFrontpage,
+                galleryForInner:     $scope.galleryForInner,
+                galleryForHome:      $scope.galleryForHome,
+              });
+
+              // Cancel draft save
+              if ($scope.dtm) {
+                $timeout.cancel($scope.dtm);
+              }
+
+              $scope.dtm = $timeout(function() {
+                $scope.draftSaved = $window.draftSavedMsg +
+                  $window.moment().format('HH:mm');
+
+              }, 2500);
             }
 
-            $scope.dtm = $timeout(function() {
-              $scope.draftSaved = $window.draftSavedMsg +
-                $window.moment().format('HH:mm');
-
-            }, 2500);
-          }
-
-          $scope.unsaved = true;
-        }, true);
+            $scope.unsaved = true;
+          }, true);
 
         // Update title_int when title changes
         $scope.$watch('article.title', function(nv) {
