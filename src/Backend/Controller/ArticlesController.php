@@ -419,10 +419,12 @@ class ArticlesController extends Controller
         }
 
         // Fetch related contents to the inner article
-        $relations = array();
+        $relations = [];
         $innerRelations = json_decode($article->relatedInner, true);
-        foreach ($innerRelations as $key => $value) {
-            $relations[$key] = $value['id'];
+        if (!empty($innerRelations)) {
+            foreach ($innerRelations as $key => $value) {
+                $relations[$key] = $value['id'];
+            }
         }
 
         $cm  = new \ContentManager();
