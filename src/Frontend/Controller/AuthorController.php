@@ -40,8 +40,7 @@ class AuthorController extends Controller
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
             try {
-                $ur   = $this->get('orm.manager')->getRepository('User');
-                $user = $ur->findOneBy("username = '{$slug}'");
+                $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
 
                 $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
 
