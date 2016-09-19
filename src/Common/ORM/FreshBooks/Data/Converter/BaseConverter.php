@@ -131,6 +131,7 @@ class BaseConverter extends Converter
     {
         if (array_key_exists('lines', $data)) {
             foreach ($data['lines'] as &$line) {
+                unset($line['uuid']);
                 unset($line['order']);
             }
 
