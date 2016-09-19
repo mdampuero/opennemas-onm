@@ -86,7 +86,7 @@
                   Editor.get('body').setData($scope.article.body);
 
                   // Force metadata
-                  for (var tag of $scope.article.metadata.split(',')) {
+                  for (var tag in $scope.article.metadata.split(',')) {
                     $('#metadata').tagsinput('add', tag);
                   }
 
