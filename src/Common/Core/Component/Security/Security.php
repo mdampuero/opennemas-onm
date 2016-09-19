@@ -161,10 +161,6 @@ class Security
      */
     public function hasPermission($permission)
     {
-        if (empty($this->permissions)) {
-            return false;
-        }
-
         // TODO: Remove the check of isAdmin when the we migrate to the
         // Role based permission schema not dependent from user id
         // If user is master or admin grant it
@@ -172,6 +168,10 @@ class Security
             || $this->user->isAdmin()
         ) {
             return true;
+        }
+
+        if (empty($this->permissions)) {
+            return false;
         }
 
         // ADMIN and PARTER have all permissions for their instances
