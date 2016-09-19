@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 11:12+0200\n"
-"PO-Revision-Date: 2016-09-19 13:21+0200\n"
+"POT-Creation-Date: 2016-09-19 23:17+0200\n"
+"PO-Revision-Date: 2016-09-19 23:23+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1741,6 +1741,14 @@ msgstr "%s instancias eliminadas correctamente"
 msgid "You have reached the maximum number of instances."
 msgstr "Alcanzou o numero máximo de instancias."
 
+#, php-format
+msgid ""
+"If you need to create more instances, please <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contact us</a>."
+msgstr ""
+"Se precisas crear máis instancias, por favor  <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contáctenos</a>."
+
 msgid "Instance saved successfully"
 msgstr "Instancia gardada correctamente"
 
@@ -2175,13 +2183,13 @@ msgid "Edit user own profile"
 msgstr "Edición de propio perfíl de usuario"
 
 msgid "Authenticate as a MASTER"
-msgstr ""
+msgstr "Autenticar como MASTER"
 
 msgid "Authenticate as a PARTNER"
-msgstr ""
+msgstr "Autenticar como Partner"
 
 msgid "Authenticate as an ADMINISTRATOR"
-msgstr ""
+msgstr "Autenticar como Administrador"
 
 msgid "Report"
 msgstr "Informe"
@@ -3641,9 +3649,6 @@ msgstr "Administración de OpenNemas"
 msgid "You are leaving the current page."
 msgstr "Está saíndo da páxina."
 
-msgid "You are offline."
-msgstr ""
-
 msgid "Instance information"
 msgstr "Información da instancia"
 
@@ -3656,8 +3661,9 @@ msgstr "Autor"
 msgid "Sysops"
 msgstr "Sysops"
 
-msgid "You are offline"
-msgstr ""
+msgid ""
+"There is not Internet at the moment, please try to save in a few minutes."
+msgstr "Non hai conexión a Internet neste momento, tenta gardar nuns minutos."
 
 msgid "There are no notifications for now."
 msgstr "Non hai notificacións por agora."
@@ -5862,9 +5868,8 @@ msgstr ""
 msgid "Where to show this ad"
 msgstr "Onde mostrar esta publicidade"
 
-#, fuzzy
 msgid "Pages of type"
-msgstr "e tipos de páxina"
+msgstr "Páxinas do tipo"
 
 msgid "Inner article"
 msgstr "Artigo interior"
@@ -6650,24 +6655,20 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Si, eliminalos todos"
 
-#, fuzzy
 msgid "There is a previous draft"
-msgstr "Non hai ningún vídeo aínda."
+msgstr "Hai un borrador anterior"
 
-#, fuzzy
 msgid "Do you want to edit the existing draft?"
-msgstr "Desexas eliminar a instancia?"
+msgstr "Desexas editar o borrador existente?"
 
 msgid "No, discard"
-msgstr ""
+msgstr "Non, descartaolo"
 
-#, fuzzy
 msgid "Yes, edit"
-msgstr "Si, gardar"
+msgstr "Si, editar"
 
-#, fuzzy
 msgid "Draft saved at "
-msgstr "Creado en"
+msgstr "Borrador gardado ás"
 
 msgid "Creating article"
 msgstr "Creando artigo"
@@ -7202,10 +7203,10 @@ msgid "Config opinion module"
 msgstr "Configuración do módulo de opinión"
 
 msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
-msgstr ""
+msgstr "<a href=\"http://www.opennemas.com\">%1</a> non existe."
 
 msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
-msgstr ""
+msgstr "Desexas rexistrar <a href=\"http://www.opennemas.com\">%1?</a>"
 
 msgid "'%1' not activated - Opennemas"
 msgstr "«%1» non activada - Opennemas"
@@ -7907,9 +7908,8 @@ msgstr "Plantilla"
 msgid "Contact mail"
 msgstr "Correo-e de contacto"
 
-#, fuzzy
 msgid "Owner"
-msgstr "Nome do propietario"
+msgstr "Propietario"
 
 msgid "No main domain"
 msgstr "Sen dominio principal"
@@ -8534,11 +8534,10 @@ msgid "The page your looking for is not here"
 msgstr "A páxina que estás buscando non está aquí"
 
 msgid "You shall not pass!"
-msgstr ""
+msgstr "Non podes pasar!"
 
-#, fuzzy
 msgid "You are not allowed to access this resource."
-msgstr "Non tes permiso para realizar esta acción."
+msgstr "Non tes permiso para acceder a este recurso."
 
 msgid "New user"
 msgstr "Novo usuario"
@@ -8550,10 +8549,10 @@ msgid "The passwords don't match"
 msgstr "Os contrasinais non coinciden"
 
 msgid "Extensions the user can activate in instance edition"
-msgstr ""
+msgstr "Extensións que o usuario pode activar na edición de instancia"
 
 msgid "The maximum number of instances the user can create"
-msgstr ""
+msgstr "O número máximo de instancias que o usuario pode crear"
 
 msgid "User type"
 msgstr "Tipo de usuario"
@@ -8991,13 +8990,6 @@ msgstr "¿Quere cerrar a sesión?"
 #~ "Estás a piques de solicitar os seguintes elementos. Nas vindeiras 24 "
 #~ "horas o noso equipo de vendas enviarache a túa información de pago e "
 #~ "activación."
-
-#~ msgid ""
-#~ "If you need to update this information please <a href=\"mailto:"
-#~ "sales@openhost.es\">contact us</a>."
-#~ msgstr ""
-#~ "Se desexa actualizar esta información, <a href=\"mailto:sales@openhost.es"
-#~ "\">contacte connosco</a>."
 
 #~ msgid "This is not a valid VAT identification number"
 #~ msgstr "Este non é un número de identificación fiscal válido"
