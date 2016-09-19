@@ -79,7 +79,6 @@
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
-      var offlineMsg = '{t}There is not Internet at the moment, please try to save in a few minutes.{/t}';
     </script>
   {/block}
 </head>
@@ -278,7 +277,7 @@
             <div class="pull-right ">
               <ul class="nav quick-section">
                 <li class="quicklinks ng-cloak" ng-if="offline">
-                  <a href="#" uib-tooltip="{t}You are offline{/t}" tooltip-placement="bottom">
+                  <a href="#" uib-tooltip="{t}There is not Internet at the moment, please try to save in a few minutes.{/t}" tooltip-placement="bottom">
                     <i class="animated flash fa fa-bolt" style="color: #ff0000 !important; animation-duration: .5s"></i>
                   </a>
                 </li>
