@@ -433,7 +433,7 @@
           <tbody>
             <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
-                <div class="checkbox check-default" ng-if="security.hasInstance(item.name)">
+                <div class="checkbox check-default" ng-if="security.hasInstance(item.internal_name)">
                   <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                   <label for="checkbox[%$index%]"></label>
                 </div>
