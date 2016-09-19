@@ -64,11 +64,11 @@ class BooleanDataMapper
      */
     public function fromString($value)
     {
-        if (empty($value) || $value === '0') {
+        if (empty($value) || $value === '0' || $value === 'false') {
             return false;
         }
 
-        return $value === '1';
+        return $value === '1' || $value === 'true';
     }
 
     /**

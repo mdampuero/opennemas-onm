@@ -1,4 +1,10 @@
 services:
+    manager_ws.listener.authentication:
+        class:     ManagerWebService\EventListener\AuthenticationListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 99 }
+
     manager_ws.security.user_provider:
         class:     ManagerWebService\Security\UserProvider
         arguments: [ '@orm.manager' ]

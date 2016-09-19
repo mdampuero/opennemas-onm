@@ -2,7 +2,7 @@ instances:
     columns:
         id:
             type: bigint
-            options: { default: null, autoincrement: true }
+            options: { default: null, autoincrement: true, unsigned: true }
         internal_name:
             type: string
             options: { default: null, length: 100 }
@@ -36,6 +36,9 @@ instances:
         contact_mail:
             type: string
             options: { default: null, length: 255 }
+        owner_id:
+            type: integer
+            options: { default: null, unsigned: true, notnull: false }
         contents:
             type: integer
             options: { default: 0, unsigned: true }
@@ -107,7 +110,7 @@ instance_meta:
     columns:
         instance_id:
             type:    bigint
-            options: { default: null, notnull: true }
+            options: { default: null, notnull: true, unsigned: true }
         meta_key:
             type: string
             options: { length: 255, notnull: false }
@@ -323,7 +326,7 @@ usermeta:
     columns:
         user_id:
             type: bigint
-            options: { default: '0', unsigned: true }
+            options: { default: null, unsigned: true }
         meta_key:
             type: string
             options: { default: '', length: 255 }

@@ -28,7 +28,8 @@ class ImagesController extends Controller
     public function init()
     {
         $this->ccm         = \ContentCategoryManager::get_instance();
-        $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
+        $this->category    = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
         $this->contentType = \ContentManager::getContentTypeIdFromName('album');
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);

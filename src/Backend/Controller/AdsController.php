@@ -30,7 +30,8 @@ class AdsController extends Controller
         $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
 
         // Sometimes category is array. When create & update advertisement
-        $this->category = $this->get('request')->query->getDigits('category', 0);
+        $this->category = $this->get('request_stack')->getCurrentRequest()
+            ->query->getDigits('category', 0);
 
         // Fetch categories to all internal categories
         $contentTypes = [$contentType, 7, 9, 11, 14];
@@ -132,6 +133,8 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
 
         if ('POST' !== $request->getMethod()) {
+            $adsPositions = $this->container->get('core.manager.advertisement');
+
             $serverUrl = '';
             if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
                 $serverUrl = $openXsettings['url'];
@@ -142,10 +145,11 @@ class AdsController extends Controller
             return $this->render(
                 'advertisement/new.tpl',
                 [
-                    'themeAds'   => $ads,
-                    'filter'     => $filter,
-                    'page'       => $page,
-                    'server_url' => $serverUrl,
+                    'ads_positions' => $adsPositions,
+                    'themeAds'      => $ads,
+                    'filter'        => $filter,
+                    'page'          => $page,
+                    'server_url'    => $serverUrl,
                 ]
             );
         }
@@ -222,6 +226,7 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
 
+        $adsPositions = $this->container->get('core.manager.advertisement');
         $serverUrl = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
@@ -261,6 +266,7 @@ class AdsController extends Controller
         return $this->render(
             'advertisement/new.tpl',
             array(
+                'ads_positions' => $adsPositions,
                 'advertisement' => $ad,
                 'themeAds'      => $positionManager->getPositionsForTheme(),
                 'filter'        => $filter,

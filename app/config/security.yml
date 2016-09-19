@@ -5,11 +5,13 @@ security:
             id: onm_password_encoder
         Common\ORM\Entity\User:
             id: onm_password_encoder
+
     role_hierarchy:
         ROLE_MASTER:   [ ROLE_MANAGER, ROLE_ALLOWED_TO_SWITCH ]
         ROLE_MANAGER:  [ ROLE_BACKEND ]
         ROLE_BACKEND:  [ ROLE_FRONTEND ]
         ROLE_FRONTEND: []
+
     providers:
         chain_provider:
             chain:
@@ -20,9 +22,14 @@ security:
             id: backend.security.user_provider
         users.manager:
             id: manager_ws.security.user_provider
+
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
+            pattern: ^/(_(profiler|wdt|error))/
+            security: false
+
+        assets:
+            pattern:  ^/(css|images|js|dynamic|asset)/
             security: false
 
         backend_login:

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.15, for Linux (x86_64)
 --
--- Host: localhost    Database: onm-instances
+-- Host: 172.17.0.7    Database: onm-instances
 -- ------------------------------------------------------
--- Server version	5.7.12
+-- Server version	5.6.26
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -117,7 +117,7 @@ DROP TABLE IF EXISTS `instance_meta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `instance_meta` (
-  `instance_id` bigint(20) NOT NULL,
+  `instance_id` bigint(20) unsigned NOT NULL,
   `meta_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `meta_value` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`instance_id`,`meta_key`),
@@ -143,7 +143,7 @@ DROP TABLE IF EXISTS `instances`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `instances` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `internal_name` varchar(100) NOT NULL,
   `name` varchar(255) NOT NULL,
   `domains` varchar(500) NOT NULL,
@@ -173,6 +173,7 @@ CREATE TABLE `instances` (
   `users` int(10) unsigned NOT NULL DEFAULT '0',
   `activated_modules` text,
   `support_plan` varchar(255) NOT NULL,
+  `owner_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `domain_name` (`domains`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -184,7 +185,7 @@ CREATE TABLE `instances` (
 
 LOCK TABLES `instances` WRITE;
 /*!40000 ALTER TABLE `instances` DISABLE KEYS */;
-INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.onm','','a:7:{s:13:\"TEMPLATE_USER\";s:5:\"admin\";s:9:\"MEDIA_URL\";s:0:\"\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'0000-00-00 00:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,NULL,'');
+INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.opennemas.localhost,opennemas.test.opennemas.com,opennemas.staging.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:5:\"basic\";s:9:\"MEDIA_URL\";s:0:\"\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'0000-00-00 00:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'',NULL);
 /*!40000 ALTER TABLE `instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,6 +325,7 @@ CREATE TABLE `user_groups_privileges` (
 
 LOCK TABLES `user_groups_privileges` WRITE;
 /*!40000 ALTER TABLE `user_groups_privileges` DISABLE KEYS */;
+INSERT INTO `user_groups_privileges` VALUES (4,190);
 /*!40000 ALTER TABLE `user_groups_privileges` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -364,7 +366,7 @@ DROP TABLE IF EXISTS `usermeta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usermeta` (
-  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `user_id` bigint(20) unsigned NOT NULL,
   `meta_key` varchar(255) NOT NULL DEFAULT '',
   `meta_value` text,
   PRIMARY KEY (`user_id`,`meta_key`),
@@ -404,7 +406,8 @@ CREATE TABLE `users` (
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
   `fk_user_group` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -427,4 +430,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-18 17:05:42
+-- Dump completed on 2016-09-15 11:50:31

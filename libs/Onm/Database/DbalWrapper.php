@@ -160,7 +160,11 @@ class DbalWrapper
         if ($this->env !== 'prod'
             && !in_array($method, ['setFetchMode', 'SetFetchMode'])
         ) {
-            $this->buffer[] = [ 'method' => $method, 'params' => $params ];
+            $this->buffer[] = [
+                'method' => $method,
+                'params' => $params,
+                'time'   => microtime(true)
+            ];
         }
     }
 

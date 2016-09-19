@@ -9,6 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Notification;
 use League\Csv\Writer;
 use Onm\Framework\Controller\Controller;
@@ -27,28 +28,46 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_LIST')")
      */
     public function autocompleteAction(Request $request)
     {
-        $target = [];
-        $query  = strtolower($request->query->get('query'));
+        $target   = [];
+        $query    = strtolower($request->query->get('query'));
+        $security = $this->get('core.security');
 
-        if (empty($query)
-            || strpos(strtolower(_('All')), strtolower($query)) !== false
+        if ($security->hasPermission('MASTER')
+            && (empty($query)
+                || strpos(strtolower(_('All')), strtolower($query)) !== false)
         ) {
             $target[] = [ 'id' => 'all', 'name' => _('All') ];
         }
 
-        if (empty($query) || strpos('manager', strtolower($query)) !== false) {
+        if ($security->hasPermission('MASTER')
+            && (empty($query)
+                || strpos('manager', strtolower($query)) !== false)
+        ) {
             $target[] = [ 'id' => 'manager', 'name' => 'manager' ];
         }
 
-        $oql = 'order by internal_name asc limit 10';
+        $oql = '';
+        if (!$security->hasPermission('MASTER')
+            && $security->hasPermission('PARTNER')
+        ) {
+            $oql = sprintf('owner_id = "%s" ', $this->get('core.user')->id);
+        }
 
         if (!empty($query)) {
-            $oql = 'internal_name ~ "%s" ' . $oql;
+            if (!empty($oql)) {
+                $oql .= 'and ';
+            }
+
+            $oql .= 'internal_name ~ "%s" ';
             $oql  = sprintf($oql, $query);
         }
+
+        $oql .= 'order by internal_name asc limit 10';
 
         $instances = $this->get('orm.manager')->getRepository('instance')
             ->findBy($oql);
@@ -67,14 +86,16 @@ class NotificationController extends Controller
             $oql  = sprintf($oql, $query);
         }
 
-        $themes = $this->get('orm.manager')->getRepository('theme')
-            ->findBy($oql);
+        if ($security->hasPermission('MASTER')) {
+            $themes = $this->get('orm.manager')->getRepository('Theme')
+                ->findBy($oql);
 
-        foreach ($themes as $theme) {
-            $target[] = [
-                'id'   => $theme->uuid,
-                'name' => $theme->uuid
-            ];
+            foreach ($themes as $theme) {
+                $target[] = [
+                    'id'   => $theme->uuid,
+                    'name' => $theme->uuid
+                ];
+            }
         }
 
         return new JsonResponse([ 'target' => $target ]);
@@ -86,6 +107,8 @@ class NotificationController extends Controller
      * @param integer $id The notification id.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -106,6 +129,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -149,6 +174,8 @@ class NotificationController extends Controller
      * @param integer $id The notification id.
      *
      * @return Response The response object
+     *
+     * @Security("hasPermission('NOTIFICATION_REPORT')")
      */
     public function exportAction($id)
     {
@@ -197,6 +224,8 @@ class NotificationController extends Controller
      * has been read, view, clicked and opened.
      *
      * @return Response The response object
+     *
+     * @Security("hasPermission('NOTIFICATION_REPORT')")
      */
     public function exportAllAction()
     {
@@ -243,6 +272,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_LIST')")
      */
     public function listAction(Request $request)
     {
@@ -274,6 +305,8 @@ class NotificationController extends Controller
      * Returns the data to create a new notification.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_CREATE')")
      */
     public function newAction()
     {
@@ -288,6 +321,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -312,6 +347,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -359,6 +396,8 @@ class NotificationController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -395,6 +434,8 @@ class NotificationController extends Controller
      * @param integer  $id The instance id.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function showAction($id)
     {
@@ -416,7 +457,10 @@ class NotificationController extends Controller
      *
      * @param  Request  $request The request object.
      * @param  integer  $id      The instance id.
+     *
      * @return Response          The response object.
+     *
+     * @Security("hasPermission('NOTIFICATION_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {

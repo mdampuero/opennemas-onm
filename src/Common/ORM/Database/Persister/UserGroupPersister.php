@@ -43,6 +43,7 @@ class UserGroupPersister extends BasePersister
         $id = $this->metadata->getId($entity);
 
         $this->persistPrivileges($id, $privileges);
+        $entity->privileges = $privileges;
     }
 
     /**
@@ -72,6 +73,8 @@ class UserGroupPersister extends BasePersister
                 $this->cache->delete($this->metadata->getPrefixedId($entity));
             }
         }
+
+        $entity->privileges = $privileges;
     }
 
     /**

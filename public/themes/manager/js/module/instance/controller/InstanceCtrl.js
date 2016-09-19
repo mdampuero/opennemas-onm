@@ -24,6 +24,16 @@
          * @memberOf InstanceCtrl
          *
          * @description
+         *  Criteria to search clients.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = { epp: 10 };
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
          *   The instance object.
          *
          * @type {Object}
@@ -284,8 +294,10 @@
         $scope.toggleAll = function() {
           if ($scope.selected.all) {
             for (var i in $scope.selected.plan) {
-              $scope.selected.plan[i] = true;
-              $scope.togglePlan(i);
+              if ($scope.security.canEnable(i)) {
+                $scope.selected.plan[i] = true;
+                $scope.togglePlan(i);
+              }
             }
           } else {
             $scope.selected.plan = {};

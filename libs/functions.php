@@ -82,8 +82,12 @@ function logUserEvent($action = null, $id = null, $data = null)
 
     $activatedUsers = \User::getTotalActivatedUsersRemaining(1, 1);
 
-    if (!is_null(getService('security.token_storage')->getToken())) {
-        $currentUser = getService('security.token_storage')->getToken()->getUser();
+    $security = getService('security.token_storage');
+    if (!is_null($security->getToken())
+        && !empty($security->getToken()->getUser())
+        && $security->getToken()->getUser() !== 'anon.'
+    ) {
+        $currentUser = $security->getToken()->getUser();
 
         $message =  'User '.$currentUser->username.'(ID:'.$currentUser->id.') '.
                     'exectuted action '.$action.': user ID '.$id;

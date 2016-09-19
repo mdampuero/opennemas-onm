@@ -42,14 +42,17 @@
                 <td class="text-right" colspan="2">
                   <div class="form-group">
                     <div class="control">
-                      <select name="params[instance]" ng-model="theme">
+                      <select name="params[instance]" ng-if="security.hasPermission('COMMAND_EXECUTE')" ng-model="theme">
                         <option value="">{t}All{/t}</option>
                         <option value="{$instance}" ng-repeat="instance in template.instances">[% instance %]</option>
                       </select>
                     </div>
                   </div>
                   <input type="hidden" name="command" value="clean:smarty-cache">
-                  <a ng-href="[% routing.ngGenerate('manager_command_output', { command: 'clean:smarty-cache', data: [theme] }) %]" type="submit" class="btn btn-success"><i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Execute{/t}</a>
+                  <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_command_output', { command: 'clean:smarty-cache', data: [theme] }) %]" ng-if="security.hasPermission('COMMAND_EXECUTE')" type="submit">
+                    <i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
+                    {t}Execute{/t}
+                  </a>
                 </td>
               </tr>
             </form>
@@ -58,7 +61,7 @@
               <td>[% item.description %]</td>
               <td></td>
               <td class="right">
-                <div class="btn-group">
+                <div class="btn-group" ng-if="security.hasPermission('COMMAND_EXECUTE')">
                   <a class="btn btn-success" ng-href="[% routing.ngGenerate('manager_command_output', { command: item.name, data: [] }) %]">
                     <i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                     {t}Execute{/t}

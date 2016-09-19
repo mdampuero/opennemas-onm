@@ -30,7 +30,7 @@ manager_opcache:
 
 manager_purchase:
     prefix:   /manager/
-    resource: @ManagerBundle/Resources/config/routing/purchase.yml
+    resource: '@ManagerBundle/Resources/config/routing/purchase.yml'
 
 manager_report:
     prefix:   /manager

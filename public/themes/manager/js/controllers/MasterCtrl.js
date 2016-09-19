@@ -13,17 +13,27 @@
      */
     .controller('MasterCtrl', [ '$http', '$location', '$uibModal', '$rootScope',
       '$scope', '$translate', '$timeout', '$window', 'vcRecaptchaService',
-      'jwtHelper', 'httpInterceptor', 'authService', 'routing', 'history',
-      'webStorage', 'messenger', 'cfpLoadingBar',
+      'jwtHelper', 'httpInterceptor', 'authService', 'routing', 'history', 'http',
+      'webStorage', 'messenger', 'cfpLoadingBar', 'security',
       function ($http, $location, $uibModal, $rootScope, $scope, $translate,
           $timeout, $window, vcRecaptchaService, jwtHelper, httpInterceptor,
-          authService, routing, history, webStorage, messenger, cfpLoadingBar) {
+          authService, routing, history, http, webStorage, messenger, cfpLoadingBar, security) {
         /**
          * The routing service.
          *
          * @type Object
          */
         $scope.routing = routing;
+
+        /**
+         * @memberOf MasterCtrl
+         *
+         * @description
+         *  The security service.
+         *
+         * @type {Object}
+         */
+        $scope.security = security;
 
         /**
          * Flag to show modal window for login only once.
@@ -85,7 +95,7 @@
          * Logs the user out.
          */
         $scope.logout = function() {
-          var modal = $uibModal.open({
+          $uibModal.open({
             templateUrl: 'modal-logout',
             controller:  'modalCtrl',
             resolve: {
@@ -96,18 +106,10 @@
               },
               success: function() {
                 return function(modalWindow) {
-                  $scope.auth = {
-                    status:     false,
-                    modal:      false,
-                    inprogress: true
-                  };
-
-                  $scope.user = {};
-
-                  webStorage.local.remove('token');
-                  webStorage.local.remove('user');
+                  webStorage.local.remove('security');
 
                   modalWindow.close({ success: true });
+                  $window.location.reload();
                 };
               }
             }
@@ -139,12 +141,10 @@
             messenger.post(args.data);
           }
 
-          $scope.auth.status = false;
-          $scope.loaded      = true;
-          $scope.loading     = false;
-
-          webStorage.local.remove('token');
-          webStorage.local.remove('user');
+          $scope.auth.status  = false;
+          $scope.loaded       = true;
+          $scope.loading      = false;
+          $scope.loginLoading = false;
 
           cfpLoadingBar.complete();
 
@@ -196,13 +196,23 @@
          */
         $scope.$on('auth-login-confirmed', function (event, args) {
           $http.defaults.headers.common.Authorization = 'Bearer ' + args.token;
-          $scope.user            = jwtHelper.decodeToken(args.token).user;
           $scope.auth.inprogress = false;
           $scope.auth.modal      = false;
           $scope.auth.status     = true;
 
-          webStorage.local.set('token', args.token);
-          webStorage.local.set('user', $scope.user);
+          security.instance    = args.instance;
+          security.instances   = args.instances;
+          security.permissions = args.permissions;
+          security.token       = args.token;
+          security.user        = jwtHelper.decodeToken(args.token).user;
+
+          webStorage.local.set('security', {
+            instance:    security.instance,
+            instances:   security.instances,
+            permissions: security.permissions,
+            token:       security.token,
+            user:        security.user
+          });
         });
 
         /**
@@ -256,23 +266,51 @@
           });
         });
 
+        // Redirects to /403
+        $scope.$on('error-403', function (event, args) {
+          $scope.errors = args.data;
+          $location.url('/403');
+
+          http.get('manager_ws_auth_refresh').then(function(response) {
+            security.instance    = response.data.instance;
+            security.instances   = response.data.instances;
+            security.permissions = response.data.permissions;
+            security.user        = response.data.user;
+
+            webStorage.local.set('security', {
+              instance:    security.instance,
+              instances:   security.instances,
+              permissions: security.permissions,
+              token:       security.token,
+              user:        security.user
+            });
+          });
+        });
+
         /**
          * Shows a message when an error while sending an Ajax request occurs.
          *
          * @param Object event The event object.
          * @param array  args  The list of arguments.
          */
-        $scope.$on('http-error', function (event, args) {
+        $scope.$on('error-404', function (event, args) {
           messenger.post(args.data);
         });
 
         webStorage.prefix('ONM-');
-        if (webStorage.local.get('token') && webStorage.local.get('user')) {
-          $scope.token  = webStorage.local.get('token');
-          $scope.user   = webStorage.local.get('user');
-          $scope.loaded = true;
+        if (webStorage.local.has('security')) {
+          var s = webStorage.local.get('security');
 
-          $http.defaults.headers.common.Authorization = 'Bearer ' + $scope.token;
+          security.user        = s.user;
+          security.token       = s.token;
+          security.permissions = s.permissions;
+          security.instance    = s.instance;
+          security.instances   = s.instances;
+
+          $http.defaults.headers.common.Authorization =
+            'Bearer ' + security.token;
+
+          $scope.loaded = true;
         }
 
         // Prevent empty links to change angular route

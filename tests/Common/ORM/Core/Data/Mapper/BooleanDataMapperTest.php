@@ -30,8 +30,10 @@ class BooleanDataMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testFromString()
     {
+        $this->assertTrue($this->mapper->fromString('true'));
         $this->assertTrue($this->mapper->fromString('1'));
         $this->assertFalse($this->mapper->fromString('0'));
+        $this->assertFalse($this->mapper->fromString('false'));
     }
 
     public function testToBoolean()

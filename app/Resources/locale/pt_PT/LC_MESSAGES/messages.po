@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 23:25+0200\n"
+"POT-Creation-Date: 2016-09-19 23:17+0200\n"
 "PO-Revision-Date: 2016-03-17 16:23+0100\n"
 "Last-Translator: Alex <alex@openhost.es>\n"
 "Language-Team: Portuguese <devs@opennemas.com>\n"
@@ -170,30 +170,6 @@ msgstr "Não foi possível guardar as novas posições."
 
 msgid "You don't have enough privileges to see this category."
 msgstr "Você não tem privilégios suficientes para ver esta categoria."
-
-msgid "Article successfully created."
-msgstr "Artigo criado com êxito."
-
-msgid "Unable to create the new article."
-msgstr "Não foi possível criar o novo artigo."
-
-#, php-format
-msgid "Unable to find the article with the id \"%d\""
-msgstr "Não foi possível encontrar o artigo com o ID \"%d\""
-
-msgid "Unable to update the article."
-msgstr "Não foi possível atualizar o artigo."
-
-msgid ""
-"You can't modify this article because you don't have enought privileges."
-msgstr ""
-"Você não pode modificar este artigo porque não tem privilégios suficientes."
-
-msgid "Article data sent not valid."
-msgstr "Os dados enviados do artigo não são válidos."
-
-msgid "Article successfully updated."
-msgstr "Artigo atualizado com êxito."
 
 msgid "Invalid token"
 msgstr "Token inválido"
@@ -1088,6 +1064,30 @@ msgstr ""
 "que primeiro você tem que associá-lo a partir de sua conta de usuário "
 "Opennemas."
 
+msgid "Unable to create the new article."
+msgstr "Não foi possível criar o novo artigo."
+
+msgid "Article successfully created."
+msgstr "Artigo criado com êxito."
+
+#, php-format
+msgid "Unable to find the article with the id \"%d\""
+msgstr "Não foi possível encontrar o artigo com o ID \"%d\""
+
+msgid "Unable to update the article."
+msgstr "Não foi possível atualizar o artigo."
+
+msgid ""
+"You can't modify this article because you don't have enought privileges."
+msgstr ""
+"Você não pode modificar este artigo porque não tem privilégios suficientes."
+
+msgid "Article data sent not valid."
+msgstr "Os dados enviados do artigo não são válidos."
+
+msgid "Article successfully updated."
+msgstr "Artigo atualizado com êxito."
+
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "Não foi possível excluir o item com id \"%d\""
@@ -1100,6 +1100,9 @@ msgstr "Não foi possível encontrar o item com id \"%d\""
 msgid "%d item(s) deleted successfully"
 msgstr "%d item(s) excluído(s) com êxito"
 
+msgid "Item deleted successfully"
+msgstr "Item excluído com êxito"
+
 #, php-format
 msgid "Unable to update item with id \"%d\""
 msgstr "Não foi possível actualizar o item com id \"%d\""
@@ -1107,9 +1110,6 @@ msgstr "Não foi possível actualizar o item com id \"%d\""
 #, php-format
 msgid "%d item(s) updated successfully"
 msgstr "%d item(s) atualizado(s) com êxito"
-
-msgid "Item deleted successfully"
-msgstr "Item excluído com êxito"
 
 msgid "Item updated successfully"
 msgstr "Item atualizado com êxito"
@@ -1455,6 +1455,9 @@ msgstr "Usuário guardado com êxito"
 msgid "%s users saved successfully"
 msgstr "Usuário guardado com êxito"
 
+msgid "Not assigned"
+msgstr "Não asignado"
+
 #, fuzzy
 msgid "User group deleted successfully"
 msgstr "Grupo de usuários excluído com êxito."
@@ -1465,6 +1468,22 @@ msgstr "%s grupos de usuários excluídos com êxito."
 
 msgid "Application upgraded"
 msgstr "Aplicativo atualizado"
+
+msgid "You are doing it wrong! Do it better."
+msgstr ""
+
+msgid "You can't do that!"
+msgstr ""
+
+#, fuzzy
+msgid "Ask an administrator."
+msgstr "Aceito pelo administrador"
+
+msgid "Something is wrong!"
+msgstr ""
+
+msgid "Something unexpected happened!"
+msgstr ""
 
 msgid "The XML could not be parsed"
 msgstr "O XML não pôde ser analisado"
@@ -1747,6 +1766,18 @@ msgstr "Erro ao excluir a instância com id \"%s\""
 msgid "%s instances deleted successfully"
 msgstr "%s instâncias excluídas com êxito."
 
+#, fuzzy
+msgid "You have reached the maximum number of instances."
+msgstr "Você alcançou o máximo de e-mails permitidos a enviar"
+
+#, fuzzy, php-format
+msgid ""
+"If you need to create more instances, please <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contact us</a>."
+msgstr ""
+"Se você precisar atualizar esta informação <a href=\"mailto:sales@openhost.es"
+"\">contate-nos</a>."
+
 msgid "Instance saved successfully"
 msgstr "Instância guardada com êxito"
 
@@ -1759,6 +1790,10 @@ msgstr "A instância já existe"
 
 msgid "Unable to create the database for the instance"
 msgstr "Não é possível criar o banco de dados para a instância"
+
+#, fuzzy
+msgid "Select an user..."
+msgstr "Selecione um país"
 
 #, fuzzy, php-format
 msgid "A module with the uuid '%s' already exists"
@@ -1904,6 +1939,17 @@ msgstr "Conteúdo arquivado"
 
 msgid "Advertisement"
 msgstr "Anúncio"
+
+#, fuzzy
+msgid "Top Left LeaderBoard"
+msgstr "Imagem acima à desquerda"
+
+#, fuzzy
+msgid "Top Right LeaderBoard"
+msgstr "Imagem acima à direita"
+
+msgid "[OI] Right Skyscraper"
+msgstr ""
 
 msgid "Album not available"
 msgstr "Álbum não disponível"
@@ -2174,6 +2220,24 @@ msgstr "Administrar paywall"
 
 msgid "Edit user own profile"
 msgstr "Editar perfil de usuário "
+
+msgid "Authenticate as a MASTER"
+msgstr ""
+
+msgid "Authenticate as a PARTNER"
+msgstr ""
+
+msgid "Authenticate as an ADMINISTRATOR"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Execute"
+msgstr "Executar"
 
 msgid "Static Page"
 msgstr "Página estática"
@@ -3417,6 +3481,13 @@ msgstr "Autor"
 msgid "Sysops"
 msgstr "Sysops"
 
+#, fuzzy
+msgid ""
+"There is not Internet at the moment, please try to save in a few minutes."
+msgstr ""
+"Estamos fazendo algumas operações de manutenção na plataforma Opennemas, por "
+"favor, espere alguns minutos."
+
 msgid "There are no notifications for now."
 msgstr "Não existem notificações nesse momento."
 
@@ -3861,9 +3932,6 @@ msgid "Editing file"
 msgstr ""
 
 msgid "Creating file"
-msgstr ""
-
-msgid "Download"
 msgstr ""
 
 msgid "Max allowed file size: %1 Mb"
@@ -4443,9 +4511,6 @@ msgstr "E-mail"
 
 msgid "Backend access"
 msgstr "Acesso ao backend"
-
-msgid "Not assigned"
-msgstr "Não asignado"
 
 msgid "Your account is connected to %1."
 msgstr ""
@@ -5563,13 +5628,13 @@ msgstr ""
 msgid "Restrictions"
 msgstr ""
 
+msgid "Show this ad if satisfy one condition"
+msgstr ""
+
 msgid "Without limits"
 msgstr ""
 
 msgid "Date range"
-msgstr ""
-
-msgid "Show this ad if satisfy one condition"
 msgstr ""
 
 msgid "Until"
@@ -5587,10 +5652,7 @@ msgstr ""
 msgid "Where to show this ad"
 msgstr ""
 
-msgid "In categories"
-msgstr ""
-
-msgid "and pages of type"
+msgid "Pages of type"
 msgstr ""
 
 msgid "Inner article"
@@ -5624,6 +5686,9 @@ msgstr "Adicionar imagens"
 #, fuzzy
 msgid "Instant Articles pages"
 msgstr "Páginas estáticas"
+
+msgid "In categories"
+msgstr ""
 
 msgid "and inside the position"
 msgstr ""
@@ -6295,6 +6360,25 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Sim, remover todos"
 
+#, fuzzy
+msgid "There is a previous draft"
+msgstr "Não há opiniões ainda."
+
+#, fuzzy
+msgid "Do you want to edit the existing draft?"
+msgstr "Você realmente quer excluir os módulos selecionados?"
+
+msgid "No, discard"
+msgstr ""
+
+#, fuzzy
+msgid "Yes, edit"
+msgstr "Sim, eliminar"
+
+#, fuzzy
+msgid "Draft saved at "
+msgstr "Criado em"
+
 msgid "Creating article"
 msgstr "Criando artigo"
 
@@ -6822,11 +6906,11 @@ msgstr "Blogger"
 msgid "Config opinion module"
 msgstr "Configuração do módulo de opinião"
 
-msgid "%1 doesn’t exist."
-msgstr "%1 não existe."
+msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
+msgstr ""
 
-msgid "Do you want to register %1?"
-msgstr "Você deseja registrar %1?"
+msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
+msgstr ""
 
 msgid "'%1' not activated - Opennemas"
 msgstr "'%1' não activado - Opennemas"
@@ -7485,9 +7569,6 @@ msgstr "Nuevo livro"
 msgid "There is nothing to see here, kid."
 msgstr "Não há opiniões ainda."
 
-msgid "Report"
-msgstr ""
-
 msgid "Action"
 msgstr ""
 
@@ -7510,6 +7591,9 @@ msgid "Template"
 msgstr ""
 
 msgid "Contact mail"
+msgstr ""
+
+msgid "Owner"
 msgstr ""
 
 msgid "No main domain"
@@ -7569,6 +7653,9 @@ msgstr "Você realmente quer excluir os módulos selecionados?"
 #, fuzzy
 msgid "Do you want to delete the selected instances?"
 msgstr "Você realmente quer excluir os módulos selecionados?"
+
+msgid "Download CSV of selected"
+msgstr ""
 
 #, fuzzy
 msgid "Search"
@@ -7839,6 +7926,10 @@ msgstr "Você realmente quer excluir os módulos selecionados?"
 msgid "Do you want to delete the selected modules?"
 msgstr "Você realmente quer excluir os módulos selecionados?"
 
+#, fuzzy
+msgid "Disabled"
+msgstr "Desabilitar"
+
 msgid "Search by UUID"
 msgstr "Buscar por UUID"
 
@@ -7850,27 +7941,6 @@ msgstr ""
 
 msgid "translations left"
 msgstr ""
-
-msgid "Download CSV of selected"
-msgstr ""
-
-#, fuzzy
-msgid "Unfixed"
-msgstr "Corregido"
-
-msgid "Fixed"
-msgstr "Corregido"
-
-#, fuzzy
-msgid "Unforced"
-msgstr "Forçado"
-
-msgid "Forced"
-msgstr "Forçado"
-
-#, fuzzy
-msgid "Disabled"
-msgstr "Desabilitar"
 
 msgid "Delete instance"
 msgstr ""
@@ -8000,9 +8070,6 @@ msgstr ""
 "                  <br>Selecione 'Todos' para limpar todo cache/arquivos "
 "compilados."
 
-msgid "Execute"
-msgstr "Executar"
-
 msgid ""
 "Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
 "                        from one specific instance."
@@ -8029,8 +8096,14 @@ msgstr "Fundo"
 msgid "Font color"
 msgstr "Cor da fonte"
 
+msgid "Fixed"
+msgstr "Corregido"
+
 msgid "Notification always visible in dropdown"
 msgstr "Notificação sempre visível no dropdown"
+
+msgid "Forced"
+msgstr "Forçado"
 
 msgid "Notification always visible before content"
 msgstr "Notificação sempre visível antes do conteúdo"
@@ -8057,6 +8130,14 @@ msgstr "Você realmente quer excluir os módulos selecionados?"
 #, fuzzy
 msgid "Do you want to delete the selected notifications?"
 msgstr "Você realmente quer excluir os módulos selecionados?"
+
+#, fuzzy
+msgid "Unfixed"
+msgstr "Corregido"
+
+#, fuzzy
+msgid "Unforced"
+msgstr "Forçado"
 
 msgid "L10n"
 msgstr ""
@@ -8154,6 +8235,13 @@ msgstr ""
 msgid "The page your looking for is not here"
 msgstr ""
 
+msgid "You shall not pass!"
+msgstr ""
+
+#, fuzzy
+msgid "You are not allowed to access this resource."
+msgstr "Você não tem permissão para executar esta ação."
+
 msgid "New user"
 msgstr ""
 
@@ -8162,6 +8250,12 @@ msgid "This field is invalid"
 msgstr "Este campo é obrigatório"
 
 msgid "The passwords don't match"
+msgstr ""
+
+msgid "Extensions the user can activate in instance edition"
+msgstr ""
+
+msgid "The maximum number of instances the user can create"
 msgstr ""
 
 msgid "User type"
@@ -8181,6 +8275,12 @@ msgstr "Buscar por nome ou nome de usuário"
 #, fuzzy
 msgid "Do you want to log out?"
 msgstr "Você deseja registrar %1?"
+
+#~ msgid "%1 doesn’t exist."
+#~ msgstr "%1 não existe."
+
+#~ msgid "Do you want to register %1?"
+#~ msgstr "Você deseja registrar %1?"
 
 #~ msgid "Cache configuration saved successfully."
 #~ msgstr "Configuração de cache guardada com êxito."
@@ -8530,13 +8630,6 @@ msgstr "Você deseja registrar %1?"
 #~ msgstr ""
 #~ "Você está prestes a pedir os seguintes itens. Nas próximas 24 horas nossa "
 #~ "equipe de vendas irá enviar-lhe informações de pagamento e ativação."
-
-#~ msgid ""
-#~ "If you need to update this information please <a href=\"mailto:"
-#~ "sales@openhost.es\">contact us</a>."
-#~ msgstr ""
-#~ "Se você precisar atualizar esta informação <a href=\"mailto:"
-#~ "sales@openhost.es\">contate-nos</a>."
 
 #~ msgid "Contact name"
 #~ msgstr "Nome do Contacto"

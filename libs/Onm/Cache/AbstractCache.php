@@ -89,19 +89,27 @@ abstract class AbstractCache implements CacheInterface
             if (!empty($values)) {
                 $this->buffer[] = [
                     'method' => 'fetchMulti',
-                    'params' => [ 'ids' => array_keys($values) ],
-                    'mru'    => true
+                    'params' => [
+                        'ids' => array_keys($values),
+                        'values' => array_values($values)
+                    ],
+                    'mru'    => true,
+                    'time'   => microtime(true)
                 ];
             }
 
             if (!empty($id)) {
-                $this->buffer[] = [
-                    'method' => 'fetchMulti',
-                    'params' => [ 'ids' => $id ]
-                ];
-
                 $rawValues = $this->doFetch($id);
                 $values    = array_merge($values, $rawValues);
+
+                $this->buffer[] = [
+                    'method' => 'fetchMulti',
+                    'params' => [
+                        'ids' => $id,
+                        'values' => array_values($values)
+                    ],
+                    'time'   => microtime(true)
+                ];
             }
 
             $this->mru = array_merge($this->mru, $values);
@@ -115,15 +123,20 @@ abstract class AbstractCache implements CacheInterface
         if (array_key_exists($id, $this->mru)) {
             $this->buffer[] = [
                 'method' => 'fetch',
-                'params' => [ 'ids' => $id ],
-                'mru'    => true
+                'params' => [ 'ids' => $id, 'values' => $this->mru[$id] ],
+                'mru'    => true,
+                'time'   => microtime(true)
             ];
 
             return $this->mru[$id];
         }
 
-        $this->buffer[] = [ 'method' => 'fetch', 'params' => [ 'ids' => $id ] ];
         $this->mru[$id] = $this->doFetch($id);
+        $this->buffer[] = [
+            'method' => 'fetch',
+            'params' => [ 'ids' => $id, 'values' => $this->mru[$id] ],
+            'time'   => microtime(true)
+        ];
 
         return $this->mru[$id];
     }
@@ -161,14 +174,22 @@ abstract class AbstractCache implements CacheInterface
 
             $this->mru = array_merge($this->mru, $values);
 
-            $this->buffer[] = [ 'method' => 'saveMulti', 'params' => [ 'ids' => $id, 'values' => $data ] ];
+            $this->buffer[] = [
+                'method' => 'saveMulti',
+                'params' => [ 'ids' => $id, 'values' => $data ],
+                'time'   => microtime(true)
+            ];
 
             return $this->doSave($values, $data, $lifeTime);
         }
 
         $this->mru[$this->getNamespacedId($id)] = $data;
 
-        $this->buffer[] = [ 'method' => 'save', 'params' => [ 'ids' => $id, 'values' => $data ] ];
+        $this->buffer[] = [
+            'method' => 'save',
+            'params' => [ 'ids' => $id, 'values' => $data ],
+            'time'   => microtime(true)
+        ];
 
         return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }

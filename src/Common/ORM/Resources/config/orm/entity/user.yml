@@ -12,8 +12,10 @@ entity:
         bio_description:    string
         categories:         array
         email:              string
+        extensions:         array
         fk_user_group:      array
         id:                 integer
+        max_instances:      integer
         name:               string
         password:           string
         paywall_time_limit: datetime
@@ -36,10 +38,10 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     persisters:
         instance:
-            class:     Common\ORM\Database\Persister\UserPersister
+            class:     Common\ORM\Database\Persister\InstanceUserPersister
             arguments: [ '@orm.connection.instance', '@orm.metadata.user', '@cache.connection.instance' ]
         manager:
-            class:     Common\ORM\Database\Persister\BasePersister
+            class:     Common\ORM\Database\Persister\ManagerUserPersister
             arguments: [ '@orm.connection.manager', '@orm.metadata.user', '@cache.connection.manager' ]
     mapping:
         database:
@@ -90,5 +92,11 @@ entity:
                     name: PRIMARY
                     columns: [ id ]
                     primary: true
+                    unique: true
+                    flags: {  }
+                -
+                    name: email
+                    columns: [ email ]
+                    primary: false
                     unique: true
                     flags: {  }

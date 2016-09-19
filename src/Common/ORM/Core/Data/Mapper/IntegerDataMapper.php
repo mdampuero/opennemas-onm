@@ -17,7 +17,7 @@ class IntegerDataMapper
      */
     public function __call($method, $params)
     {
-        if (empty($params) || is_null($params[0])) {
+        if (empty($params) || is_null($params[0]) || $params[0] === '') {
             return null;
         }
 

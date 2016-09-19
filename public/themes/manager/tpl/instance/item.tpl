@@ -102,7 +102,9 @@
                 <div class="form-group">
                   <label class="form-label" for="template">{t}Template{/t}</label>
                   <div class="controls">
-                    <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="value.uuid as value.name for (key,value) in template.themes | orderBy: 'name'"></select>
+                    <select id="template" ng-model="instance.settings.TEMPLATE_USER">
+                      <option ng-if="security.canEnable(theme.uuid)" ng-repeat="theme in template.themes | orderBy: 'name'" value="[% theme.uuid %]">[% theme.name %]</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">
@@ -111,6 +113,14 @@
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.contact_mail.$invalid }">
                     <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="text">
+                  </div>
+                </div>
+                <div class="form-group" ng-if="security.hasPermission('MASTER')">
+                  <label class="form-label" for="owner_id">
+                    {t}Owner{/t}
+                  </label>
+                  <div class="controls">
+                    <select id="owner_id" name="owner_id" ng-model="instance.owner_id" ng-options="value.id as value.name for value in template.users"></select>
                   </div>
                 </div>
                 <div class="form-group">
@@ -172,7 +182,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-if="security.hasPermission('MASTER')">
               <label class="form-label">{t}Domain expire date:{/t}</label>
               <div class="controls">
                 <input class="form-control" datetime-picker="domainPicker" ng-model="instance.domain_expire" type="text">
@@ -181,7 +191,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xs-12">
+      <div class="col-sm-6 col-xs-12" ng-if="security.hasPermission('CLIENT_LIST')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Billing{/t}</h4>
@@ -263,21 +273,21 @@
           <div class="grid-body no-padding">
             <div class="table-wrapper p-b-15 p-l-15 p-r-15 p-t-15">
               <div class="checkbox check-default check-title">
-                <input id="checkbox-all" ng-model="selected.all" ng-change="toggleAll()" type="checkbox">
+                <input id="checkbox-all" ng-model="selected.all" ng-change="toggleAll()" ng-disabled="!security.canEnable('BASIC_PACK') || !security.canEnable('PROFESSIONAL_PACK') || !security.canEnable('ADVANCED_PACK') || !security.canEnable('EXPERT_PACK')" type="checkbox">
                 <label for="checkbox-all">
                   <h5>{t}Select all{/t}</h5>
                 </label>
               </div>
               <div class="instance-plan" ng-repeat="puuid in packs">
                 <div class="checkbox check-default check-title">
-                  <input id="checkbox-[% puuid %]" ng-model="selected.plan[puuid]" ng-change="togglePlan(puuid)" type="checkbox">
+                  <input id="checkbox-[% puuid %]" ng-model="selected.plan[puuid]" ng-change="togglePlan(puuid)" ng-disabled="!security.canEnable(puuid)" type="checkbox">
                   <label for="checkbox-[% puuid %]">
                     <h5>[% template.modules[map[puuid]] ? template.modules[map[puuid]].name : '{t}Other{/t}' %]</h5>
                   </label>
                 </div>
                 <div class="m-b-5" ng-repeat="muuid in modulesByPack[puuid]">
                   <div class="checkbox check-default">
-                    <input id="checkbox-[% muuid %]" checklist-model="instance.activated_modules" checklist-value="muuid" type="checkbox">
+                    <input id="checkbox-[% muuid %]" checklist-model="instance.activated_modules" checklist-value="muuid" ng-disabled="!security.canEnable(puuid) && !security.canEnable(muuid)" type="checkbox">
                     <label for="checkbox-[% muuid %]">
                       [% template.modules[map[muuid]].name %]
                     </label>
@@ -297,7 +307,7 @@
             <div class="row">
               <div class="col-md-2 col-sm-3 col-xs-2 m-b-5" ng-repeat="theme in template.themes | orderBy: 'name'">
                 <div class="checkbox check-default">
-                  <input id="checkbox-[% theme.uuid %]" ng-click="toggleChanges(theme)" checklist-model="instance.purchased" checklist-value="theme.uuid" type="checkbox">
+                  <input id="checkbox-[% theme.uuid %]" checklist-model="instance.purchased" checklist-value="theme.uuid" ng-click="toggleChanges(theme)" ng-disabled="!security.canEnable(theme.uuid)" type="checkbox">
                   <label for="checkbox-[% theme.uuid %]">
                     [% theme.name %]
                   </label>
@@ -330,7 +340,7 @@
             </div>
             <div class="form-group" ng-repeat="uuid in supportModules">
               <div class="radio" ng-init="initializeSupportPlan()">
-                <input id="[% uuid %]" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
+                <input id="[% uuid %]" ng-disabled="!security.canEnable(uuid)" ng-model="instance.support_plan" type="radio" value="[% uuid %]">
                 <label for="[% uuid %]">
                   [% template.modules[map[uuid]].name %]
                 </label>
@@ -339,7 +349,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-7 col-sm-7 col-xs-12">
+      <div class="col-lg-6 col-md-7 col-sm-7 col-xs-12" ng-show="security.hasPermission('MASTER')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Internal settings{/t}</h4>
@@ -384,7 +394,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" ng-if="security.hasPermission('MASTER')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>External services</h4>

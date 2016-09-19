@@ -36,7 +36,8 @@ class SpecialsController extends Controller
     {
         $this->contentType = \ContentManager::getContentTypeIdFromName('special');
 
-        $this->category = $this->get('request')->query->getDigits('category', null);
+        $this->category = $this->get('request_stack')->getCurrentRequest()
+            ->query->getDigits('category', null);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =

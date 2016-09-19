@@ -1240,6 +1240,208 @@ class Privilege
                 'description'  => _('Manage module settings'),
                 'module'       => 'ADVERTISEMENT',
             ),
+            // All existing privileges
+            190 => [
+                'pk_privilege' => '190',
+                'name'         => 'MASTER',
+                'description'  => _('Authenticate as a MASTER'),
+                'module'       => 'SECURITY',
+            ],
+            // All existing privileges for owned instances and some edition
+            // privileges in manager
+            191 => [
+                'pk_privilege' => '191',
+                'name'         => 'PARTNER',
+                'description'  => _('Authenticate as a PARTNER'),
+                'module'       => 'SECURITY',
+            ],
+            // All privileges for active extensions in instance
+            192 => [
+                'pk_privilege' => '192',
+                'name'         => 'ADMIN',
+                'description'  => _('Authenticate as an ADMINISTRATOR'),
+                'module'       => 'SECURITY',
+            ],
+            193 => [
+                'pk_privilege' => '193',
+                'name'         => 'INSTANCE_LIST',
+                'description'  => _('List'),
+                'module'       => 'INSTANCE',
+            ],
+            194 => [
+                'pk_privilege' => '194',
+                'name'         => 'INSTANCE_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'INSTANCE',
+            ],
+            195 => [
+                'pk_privilege' => '195',
+                'name'         => 'INSTANCE_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'INSTANCE',
+            ],
+            196 => [
+                'pk_privilege' => '196',
+                'name'         => 'INSTANCE_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'INSTANCE',
+            ],
+            197 => [
+                'pk_privilege' => '197',
+                'name'         => 'INSTANCE_REPORT',
+                'description'  => _('Report'),
+                'module'       => 'INSTANCE',
+            ],
+            198 => [
+                'pk_privilege' => '198',
+                'name'         => 'EXTENSION_LIST',
+                'description'  => _('List'),
+                'module'       => 'EXTENSION',
+            ],
+            199 => [
+                'pk_privilege' => '199',
+                'name'         => 'EXTENSION_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'EXTENSION',
+            ],
+            200 => [
+                'pk_privilege' => '200',
+                'name'         => 'EXTENSION_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'EXTENSION',
+            ],
+            201 => [
+                'pk_privilege' => '201',
+                'name'         => 'EXTENSION_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'EXTENSION',
+            ],
+            202 => [
+                'pk_privilege' => '202',
+                'name'         => 'EXTENSION_REPORT',
+                'description'  => _('Report'),
+                'module'       => 'EXTENSION',
+            ],
+            203 => [
+                'pk_privilege' => '203',
+                'name'         => 'NOTIFICATION_LIST',
+                'description'  => _('List'),
+                'module'       => 'NOTIFICATION',
+            ],
+            204 => [
+                'pk_privilege' => '204',
+                'name'         => 'NOTIFICATION_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'NOTIFICATION',
+            ],
+            205 => [
+                'pk_privilege' => '205',
+                'name'         => 'NOTIFICATION_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'NOTIFICATION',
+            ],
+            206 => [
+                'pk_privilege' => '206',
+                'name'         => 'NOTIFICATION_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'NOTIFICATION',
+            ],
+            207 => [
+                'pk_privilege' => '207',
+                'name'         => 'NOTIFICATION_REPORT',
+                'description'  => _('Report'),
+                'module'       => 'NOTIFICATION',
+            ],
+            208 => [
+                'pk_privilege' => '208',
+                'name'         => 'CLIENT_LIST',
+                'description'  => _('List'),
+                'module'       => 'CLIENT',
+            ],
+            209 => [
+                'pk_privilege' => '209',
+                'name'         => 'CLIENT_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'CLIENT',
+            ],
+            210 => [
+                'pk_privilege' => '210',
+                'name'         => 'CLIENT_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'CLIENT',
+            ],
+            211 => [
+                'pk_privilege' => '211',
+                'name'         => 'CLIENT_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'CLIENT',
+            ],
+            212 => [
+                'pk_privilege' => '212',
+                'name'         => 'CLIENT_REPORT',
+                'description'  => _('Report'),
+                'module'       => 'CLIENT',
+            ],
+            213 => [
+                'pk_privilege' => '213',
+                'name'         => 'PURCHASE_LIST',
+                'description'  => _('List'),
+                'module'       => 'PURCHASE',
+            ],
+            214 => [
+                'pk_privilege' => '214',
+                'name'         => 'PURCHASE_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'PURCHASE',
+            ],
+            215 => [
+                'pk_privilege' => '215',
+                'name'         => 'PURCHASE_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'PURCHASE',
+            ],
+            216 => [
+                'pk_privilege' => '216',
+                'name'         => 'PURCHASE_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'PURCHASE',
+            ],
+            217 => [
+                'pk_privilege' => '217',
+                'name'         => 'PURCHASE_REPORT',
+                'description'  => _('Report'),
+                'module'       => 'PURCHASE',
+            ],
+            218 => [
+                'pk_privilege' => '218',
+                'name'         => 'REPORT_LIST',
+                'description'  => _('List'),
+                'module'       => 'REPORT',
+            ],
+            219 => [
+                'pk_privilege' => '219',
+                'name'         => 'REPORT_DOWNLOAD',
+                'description'  => _('Download'),
+                'module'       => 'REPORT',
+            ],
+            220 => [
+                'pk_privilege' => '220',
+                'name'         => 'COMMAND_LIST',
+                'description'  => _('List'),
+                'module'       => 'COMMAND',
+            ],
+            221 => [
+                'pk_privilege' => '221',
+                'name'         => 'COMMAND_EXECUTE',
+                'description'  => _('Execute'),
+                'module'       => 'COMMAND',
+            ],
+            222 => [
+                'pk_privilege' => '222',
+                'name'         => 'OPCACHE_LIST',
+                'description'  => _('List'),
+                'module'       => 'OPCACHE',
+            ],
         );
 
         return self::$privileges;

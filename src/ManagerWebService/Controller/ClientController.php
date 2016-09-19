@@ -9,6 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,8 @@ class ClientController extends Controller
      * @apiParam {Integer} id The client's id.
      *
      * @apiSuccess {String} message The success message.
+     *
+     * @Security("hasPermission('CLIENT_UPDATE')")
      */
     public function deleteAction($id)
     {
@@ -53,6 +56,8 @@ class ClientController extends Controller
      * @apiParam {Integer} selected The clients ids.
      *
      * @apiSuccess {String} message The success message.
+     *
+     * @Security("hasPermission('CLIENT_UPDATE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -107,6 +112,8 @@ class ClientController extends Controller
      * @apiSuccess {Integer} page    The current page.
      * @apiSuccess {Integer} total   The total number of elements.
      * @apiSuccess {Array}   results The list of clients.
+     *
+     * @Security("hasPermission('CLIENT_LIST')")
      */
     public function listAction(Request $request)
     {
@@ -136,6 +143,8 @@ class ClientController extends Controller
      * @apiGroup Client
      *
      * @apiSuccess {Array} client The client's data.
+     *
+     * @Security("hasPermission('CLIENT_CREATE')")
      */
     public function newAction()
     {
@@ -162,6 +171,8 @@ class ClientController extends Controller
      * @apiParam {String} country     The client's country.
      *
      * @apiSuccess {String} message The success message.
+     *
+     * @Security("hasPermission('CLIENT_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -200,6 +211,8 @@ class ClientController extends Controller
      * @apiParam {Integer} id The client's id.
      *
      * @apiSuccess {Array} client The client's data.
+     *
+     * @Security("hasPermission('CLIENT_UPDATE')")
      */
     public function showAction($id)
     {
@@ -232,6 +245,8 @@ class ClientController extends Controller
      * @apiParam {String}  country     The client's country.
      *
      * @apiSuccess {String} message The success message.
+     *
+     * @Security("hasPermission('CLIENT_UPDATE')")
      */
     public function updateAction($id, Request $request)
     {

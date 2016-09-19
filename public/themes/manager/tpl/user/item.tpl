@@ -129,18 +129,36 @@
             <h4>{t}Settings{/t}</h4>
           </div>
           <div class="grid-body">
-            {acl isAllowed="GROUP_CHANGE"}
-              <div class="form-group">
-                <label class="form-label">
-                  {t}User groups{/t}
-                </label>
-                <div class="controls">
-                  <tags-input add-from-autocomplete-only="true" display-property="name" ng-model="user.fk_user_group">
-                    <auto-complete source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
-                  </tags-input>
-                </div>
+            <div class="form-group" ng-if="security.hasPermission('MASTER') || security.hasPermission('GROUP_CHANGE')">
+              <label class="form-label">
+                {t}User groups{/t}
+              </label>
+              <div class="controls">
+                <tags-input add-from-autocomplete-only="true" display-property="name" ng-model="user.fk_user_group">
+                  <auto-complete source="getGroups($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
+                </tags-input>
               </div>
-            {/acl}
+            </div>
+            <div class="form-group" ng-if="security.hasPermission('MASTER')">
+              <label class="form-label">
+                {t}Extensions{/t}
+                <span class="help">{t}Extensions the user can activate in instance edition{/t}</span>
+              </label>
+              <div class="controls">
+                <tags-input display-property="name" ng-model="user.extensions">
+                  <auto-complete source="getExtensions($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
+                </tags-input>
+              </div>
+            </div>
+            <div class="form-group" ng-if="security.hasPermission('MASTER')">
+              <label class="form-label" for="max-instances">
+                {t}Instances{/t}
+                <span class="help">{t}The maximum number of instances the user can create{/t}</span>
+              </label>
+              <div class="controls">
+                <input class="form-control" id="max-instances" ng-model="user.max_instances" type="number">
+              </div>
+            </div>
             <div class="form-group">
               <label class="form-label">
                 {t}User type{/t}

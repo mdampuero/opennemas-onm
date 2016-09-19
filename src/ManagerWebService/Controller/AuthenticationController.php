@@ -24,25 +24,6 @@ use Onm\Framework\Controller\Controller;
 class AuthenticationController extends Controller
 {
     /**
-     * Checks if the current user is authenticated.
-     *
-     * @return JsonResponse The response object
-     */
-    public function checkUserAction()
-    {
-        if ($this->getUser()) {
-            return new JsonResponse(
-                array(
-                    'success' => true,
-                    'user'    => $this->getUser()
-                )
-            );
-        } else {
-            return new JsonResponse(array('success' => false));
-        }
-    }
-
-    /**
      * Returns an empty response on fake login.
      *
      * @return JsonResponse The response object.
@@ -128,5 +109,20 @@ class AuthenticationController extends Controller
                 'message'          => $message,
             )
         );
+    }
+
+    /**
+     * Returns the security data.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function refreshAction()
+    {
+        return new JsonResponse([
+            'instance'    => $this->get('core.instance')->getData(),
+            'instances'   => $this->get('core.security')->getInstances(),
+            'permissions' => array_values($this->get('core.security')->getPermissions()),
+            'user'        => $this->get('core.user')->getData(),
+        ]);
     }
 }
