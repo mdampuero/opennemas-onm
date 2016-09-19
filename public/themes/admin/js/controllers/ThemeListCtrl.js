@@ -55,6 +55,10 @@
             }
 
             $scope.cart.push(item);
+
+            if (item.customize) {
+              $scope.cart.push($scope.customization);
+            }
           }, 1500);
         };
 
@@ -109,7 +113,6 @@
          * @return {Float} The item price.
          */
         $scope.getPrice = function (item, type) {
-          console.log(type);
           if (!type) {
             type = 'monthly';
           }
@@ -199,9 +202,10 @@
           var url = routing.generate('backend_ws_theme_list');
 
           $http.get(url).success(function(response) {
-            $scope.active     = response.active;
-            $scope.exclusive  = response.exclusive;
-            $scope.addons     = response.addons;
+            $scope.active        = response.active;
+            $scope.customization = response.customization;
+            $scope.exclusive     = response.exclusive;
+            $scope.addons        = response.addons;
 
             $scope.purchased = [];
             for (var i = 0; i < response.themes.length; i++) {
