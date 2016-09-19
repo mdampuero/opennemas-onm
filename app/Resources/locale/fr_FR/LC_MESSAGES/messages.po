@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 23:25+0200\n"
+"POT-Creation-Date: 2016-09-19 11:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,32 +165,6 @@ msgstr "Impossible d'enregistrer les nouvelles positions"
 msgid "You don't have enough privileges to see this category."
 msgstr ""
 "Vous ne disposez pas de suffisamment de privilèges pour voir cette catégorie"
-
-msgid "Article successfully created."
-msgstr "Article créé avec succès."
-
-msgid "Unable to create the new article."
-msgstr "Impossible de créer le nouvel article"
-
-#, php-format
-msgid "Unable to find the article with the id \"%d\""
-msgstr "Impossible de trouver l'article avec l'id \"%d\""
-
-msgid "Unable to update the article."
-msgstr "Impossible de mettre à jour l'article."
-
-#, fuzzy
-msgid ""
-"You can't modify this article because you don't have enought privileges."
-msgstr ""
-"Vous ne pouvez pas modifier cet article parce que vous ne disposez pas de "
-"suffisamment de privilèges."
-
-msgid "Article data sent not valid."
-msgstr "Les données de l'article envoyé pas valable"
-
-msgid "Article successfully updated."
-msgstr "Article mis à jour avec succès."
 
 msgid "Invalid token"
 msgstr "Jeton invalide"
@@ -1098,6 +1072,32 @@ msgstr ""
 "vous devez d'abord il associé à partir de votre compte d'utilisateur "
 "Opennemas."
 
+msgid "Unable to create the new article."
+msgstr "Impossible de créer le nouvel article"
+
+msgid "Article successfully created."
+msgstr "Article créé avec succès."
+
+#, php-format
+msgid "Unable to find the article with the id \"%d\""
+msgstr "Impossible de trouver l'article avec l'id \"%d\""
+
+msgid "Unable to update the article."
+msgstr "Impossible de mettre à jour l'article."
+
+#, fuzzy
+msgid ""
+"You can't modify this article because you don't have enought privileges."
+msgstr ""
+"Vous ne pouvez pas modifier cet article parce que vous ne disposez pas de "
+"suffisamment de privilèges."
+
+msgid "Article data sent not valid."
+msgstr "Les données de l'article envoyé pas valable"
+
+msgid "Article successfully updated."
+msgstr "Article mis à jour avec succès."
+
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "Impossible de supprimer l'élément avec id \"%d\""
@@ -1110,6 +1110,9 @@ msgstr "Impossible de trouver l'élément avec id \"%d\""
 msgid "%d item(s) deleted successfully"
 msgstr "%d élément(s) supprimé avec succès"
 
+msgid "Item deleted successfully"
+msgstr "élément supprimé avec succès"
+
 #, php-format
 msgid "Unable to update item with id \"%d\""
 msgstr "Impossible de mettre à jour l'élément avec id \"%d\""
@@ -1117,9 +1120,6 @@ msgstr "Impossible de mettre à jour l'élément avec id \"%d\""
 #, php-format
 msgid "%d item(s) updated successfully"
 msgstr "%d élément(s) mis à jour avec succès"
-
-msgid "Item deleted successfully"
-msgstr "élément supprimé avec succès"
 
 msgid "Item updated successfully"
 msgstr "Élément mis à jour avec succès"
@@ -1475,6 +1475,10 @@ msgid "%s users saved successfully"
 msgstr "Utilisateur créé avec succès."
 
 #, fuzzy
+msgid "Not assigned"
+msgstr "Non défini"
+
+#, fuzzy
 msgid "User group deleted successfully"
 msgstr "Groupe de l'utilisateur supprimé."
 
@@ -1484,6 +1488,22 @@ msgstr "Groupe d'utilisateurs créé avec succès"
 
 msgid "Application upgraded"
 msgstr "Mise à niveau de l'application"
+
+msgid "You are doing it wrong! Do it better."
+msgstr ""
+
+msgid "You can't do that!"
+msgstr ""
+
+#, fuzzy
+msgid "Ask an administrator."
+msgstr "Accepté par l'administrateur"
+
+msgid "Something is wrong!"
+msgstr ""
+
+msgid "Something unexpected happened!"
+msgstr ""
 
 msgid "The XML could not be parsed"
 msgstr "Le XML ne peuvent être analysés"
@@ -1783,6 +1803,10 @@ msgid "%s instances deleted successfully"
 msgstr "%s élément(s) supprimés avec succès"
 
 #, fuzzy
+msgid "You have reached the maximum number of instances."
+msgstr "Vous avez atteint le maximum de courriels autorisés à envoyer"
+
+#, fuzzy
 msgid "Instance saved successfully"
 msgstr "Contenu enregistré avec succès"
 
@@ -1796,6 +1820,10 @@ msgstr "L'instance existe déjà"
 #, fuzzy
 msgid "Unable to create the database for the instance"
 msgstr "Impossible de créer le nouvel article"
+
+#, fuzzy
+msgid "Select an user..."
+msgstr "Sélectionnez un pays"
 
 #, php-format
 msgid "A module with the uuid '%s' already exists"
@@ -1953,6 +1981,15 @@ msgstr "Contenu archivé"
 
 msgid "Advertisement"
 msgstr "Publicité"
+
+msgid "Top Left LeaderBoard"
+msgstr ""
+
+msgid "Top Right LeaderBoard"
+msgstr ""
+
+msgid "[OI] Right Skyscraper"
+msgstr ""
 
 msgid "Album not available"
 msgstr "Album non disponible"
@@ -2232,6 +2269,24 @@ msgstr "Administrer paywall"
 
 msgid "Edit user own profile"
 msgstr "Modifier l'utilisateur propre profil"
+
+msgid "Authenticate as a MASTER"
+msgstr ""
+
+msgid "Authenticate as a PARTNER"
+msgstr ""
+
+msgid "Authenticate as an ADMINISTRATOR"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Download"
+msgstr "Télécharger"
+
+msgid "Execute"
+msgstr ""
 
 msgid "Static Page"
 msgstr "Page statique"
@@ -3706,6 +3761,9 @@ msgstr "OpenNeMaS administration"
 msgid "You are leaving the current page."
 msgstr ""
 
+msgid "You are offline."
+msgstr ""
+
 #, fuzzy
 msgid "Instance information"
 msgstr "Instance non trouvée"
@@ -3718,6 +3776,9 @@ msgid "Author"
 msgstr "Auteurs"
 
 msgid "Sysops"
+msgstr ""
+
+msgid "You are offline"
 msgstr ""
 
 msgid "There are no notifications for now."
@@ -4208,9 +4269,6 @@ msgstr "Modifier l'utilisateur propre profil"
 #, fuzzy
 msgid "Creating file"
 msgstr "Créer"
-
-msgid "Download"
-msgstr "Télécharger"
 
 msgid "Max allowed file size: %1 Mb"
 msgstr ""
@@ -4873,10 +4931,6 @@ msgstr "Email"
 #, fuzzy
 msgid "Backend access"
 msgstr "Backend Gestionnaire"
-
-#, fuzzy
-msgid "Not assigned"
-msgstr "Non défini"
 
 msgid "Your account is connected to %1."
 msgstr "Votre compte est connecté à 1%."
@@ -6057,6 +6111,9 @@ msgstr ""
 msgid "Restrictions"
 msgstr "Date d'inscription"
 
+msgid "Show this ad if satisfy one condition"
+msgstr ""
+
 #, fuzzy
 msgid "Without limits"
 msgstr "Sans la position"
@@ -6064,9 +6121,6 @@ msgstr "Sans la position"
 #, fuzzy
 msgid "Date range"
 msgstr "Date de naissance"
-
-msgid "Show this ad if satisfy one condition"
-msgstr ""
 
 msgid "Until"
 msgstr ""
@@ -6084,11 +6138,7 @@ msgid "Where to show this ad"
 msgstr ""
 
 #, fuzzy
-msgid "In categories"
-msgstr "Toutes les catégories"
-
-#, fuzzy
-msgid "and pages of type"
+msgid "Pages of type"
 msgstr "Manager Couverture"
 
 #, fuzzy
@@ -6126,6 +6176,10 @@ msgstr "Ajouter des fichiers..."
 #, fuzzy
 msgid "Instant Articles pages"
 msgstr "Statique page"
+
+#, fuzzy
+msgid "In categories"
+msgstr "Toutes les catégories"
 
 #, fuzzy
 msgid "and inside the position"
@@ -6817,6 +6871,24 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Oui, supprimer tous"
 
+msgid "There is a previous draft"
+msgstr ""
+
+#, fuzzy
+msgid "Do you want to edit the existing draft?"
+msgstr "Vous devez donner un identifiant à supprimer le couverture."
+
+msgid "No, discard"
+msgstr ""
+
+#, fuzzy
+msgid "Yes, edit"
+msgstr "Oui, l'enregistrer"
+
+#, fuzzy
+msgid "Draft saved at "
+msgstr "Créé"
+
 #, fuzzy
 msgid "Creating article"
 msgstr "Liste attendant articles"
@@ -7373,10 +7445,10 @@ msgstr "Les blogueurs"
 msgid "Config opinion module"
 msgstr ""
 
-msgid "%1 doesn’t exist."
+msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
 msgstr ""
 
-msgid "Do you want to register %1?"
+msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr ""
 
 msgid "'%1' not activated - Opennemas"
@@ -8044,9 +8116,6 @@ msgstr ""
 msgid "There is nothing to see here, kid."
 msgstr ""
 
-msgid "Report"
-msgstr ""
-
 msgid "Action"
 msgstr ""
 
@@ -8072,6 +8141,9 @@ msgid "Template"
 msgstr ""
 
 msgid "Contact mail"
+msgstr ""
+
+msgid "Owner"
 msgstr ""
 
 msgid "No main domain"
@@ -8134,6 +8206,9 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #, fuzzy
 msgid "Do you want to delete the selected instances?"
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
+
+msgid "Download CSV of selected"
+msgstr ""
 
 #, fuzzy
 msgid "Search"
@@ -8424,6 +8499,10 @@ msgid "Do you want to delete the selected modules?"
 msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
 
 #, fuzzy
+msgid "Disabled"
+msgstr "Désactiver"
+
+#, fuzzy
 msgid "Search by UUID"
 msgstr "Recherche par nom"
 
@@ -8435,25 +8514,6 @@ msgstr ""
 
 msgid "translations left"
 msgstr ""
-
-msgid "Download CSV of selected"
-msgstr ""
-
-msgid "Unfixed"
-msgstr ""
-
-msgid "Fixed"
-msgstr ""
-
-msgid "Unforced"
-msgstr ""
-
-msgid "Forced"
-msgstr ""
-
-#, fuzzy
-msgid "Disabled"
-msgstr "Désactiver"
 
 msgid "Delete instance"
 msgstr ""
@@ -8590,9 +8650,6 @@ msgid ""
 "files."
 msgstr ""
 
-msgid "Execute"
-msgstr ""
-
 msgid ""
 "Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
 "                        from one specific instance."
@@ -8622,7 +8679,13 @@ msgstr "Backend Gestionnaire"
 msgid "Font color"
 msgstr "Couleur du site"
 
+msgid "Fixed"
+msgstr ""
+
 msgid "Notification always visible in dropdown"
+msgstr ""
+
+msgid "Forced"
 msgstr ""
 
 msgid "Notification always visible before content"
@@ -8652,6 +8715,12 @@ msgid "Do you want to delete the selected notifications?"
 msgstr ""
 "Etes-vous sûr que vous voulez supprimer la configuration du serveur "
 "sélectionné?"
+
+msgid "Unfixed"
+msgstr ""
+
+msgid "Unforced"
+msgstr ""
 
 msgid "L10n"
 msgstr ""
@@ -8751,6 +8820,13 @@ msgstr ""
 msgid "The page your looking for is not here"
 msgstr ""
 
+msgid "You shall not pass!"
+msgstr ""
+
+#, fuzzy
+msgid "You are not allowed to access this resource."
+msgstr "Vous n'êtes pas autorisé à effectuer cette action."
+
 msgid "New user"
 msgstr ""
 
@@ -8759,6 +8835,12 @@ msgid "This field is invalid"
 msgstr "Ceci est valable non un TVA"
 
 msgid "The passwords don't match"
+msgstr ""
+
+msgid "Extensions the user can activate in instance edition"
+msgstr ""
+
+msgid "The maximum number of instances the user can create"
 msgstr ""
 
 #, fuzzy

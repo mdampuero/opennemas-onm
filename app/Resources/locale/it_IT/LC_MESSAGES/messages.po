@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 23:25+0200\n"
+"POT-Creation-Date: 2016-09-19 11:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,31 +167,6 @@ msgid "You don't have enough privileges to see this category."
 msgstr ""
 "Non è possibile vedere questa categoria perché non si dispone di privilegi "
 "sufficienti."
-
-msgid "Article successfully created."
-msgstr "Articolo creato correttamente."
-
-msgid "Unable to create the new article."
-msgstr "Ci è stato impossibile creare il nuovo articolo."
-
-#, php-format
-msgid "Unable to find the article with the id \"%d\""
-msgstr "Ci è stato impossibile trovare un articolo con id \"%d\""
-
-msgid "Unable to update the article."
-msgstr "Ci è stato impossibile attualizare l'articolo."
-
-msgid ""
-"You can't modify this article because you don't have enought privileges."
-msgstr ""
-"Non è possibile modificare l'articolo perché non si dispone di privilegi "
-"sufficienti."
-
-msgid "Article data sent not valid."
-msgstr "I dati inviati dell'articolo non sono validi."
-
-msgid "Article successfully updated."
-msgstr "L'articolo è stato correttamente attualizzato."
 
 msgid "Invalid token"
 msgstr "Token non valido"
@@ -1163,6 +1138,31 @@ msgstr ""
 "Non ci è stato possibile associare un utente al profilo di rete sociale "
 "fornito. Per favore associare il profile dal gestore dell'utente Opennemas."
 
+msgid "Unable to create the new article."
+msgstr "Ci è stato impossibile creare il nuovo articolo."
+
+msgid "Article successfully created."
+msgstr "Articolo creato correttamente."
+
+#, php-format
+msgid "Unable to find the article with the id \"%d\""
+msgstr "Ci è stato impossibile trovare un articolo con id \"%d\""
+
+msgid "Unable to update the article."
+msgstr "Ci è stato impossibile attualizare l'articolo."
+
+msgid ""
+"You can't modify this article because you don't have enought privileges."
+msgstr ""
+"Non è possibile modificare l'articolo perché non si dispone di privilegi "
+"sufficienti."
+
+msgid "Article data sent not valid."
+msgstr "I dati inviati dell'articolo non sono validi."
+
+msgid "Article successfully updated."
+msgstr "L'articolo è stato correttamente attualizzato."
+
 #, fuzzy, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "Ci è stato impossibile eliminare il Gruppo Utenti id \"%d\""
@@ -1175,6 +1175,10 @@ msgstr "Impossibile trovare la lettera con id \"%d\""
 msgid "%d item(s) deleted successfully"
 msgstr "L'articolo è stato eliminato correttamente."
 
+#, fuzzy
+msgid "Item deleted successfully"
+msgstr "L'articolo è stato eliminato correttamente."
+
 #, fuzzy, php-format
 msgid "Unable to update item with id \"%d\""
 msgstr "Ci è stato impossibile attualizzare il Gruppo Utenti id\"%d\""
@@ -1182,10 +1186,6 @@ msgstr "Ci è stato impossibile attualizzare il Gruppo Utenti id\"%d\""
 #, fuzzy, php-format
 msgid "%d item(s) updated successfully"
 msgstr "Album attualizzato correttamente."
-
-#, fuzzy
-msgid "Item deleted successfully"
-msgstr "L'articolo è stato eliminato correttamente."
 
 #, fuzzy
 msgid "Item updated successfully"
@@ -1563,6 +1563,9 @@ msgstr "Creazione di utente completata."
 msgid "%s users saved successfully"
 msgstr "Creazione di utente completata."
 
+msgid "Not assigned"
+msgstr ""
+
 #, fuzzy
 msgid "User group deleted successfully"
 msgstr "Gruppo Utenti eliminato correttamente."
@@ -1573,6 +1576,21 @@ msgstr "Gruppo Utenti eliminato correttamente."
 
 msgid "Application upgraded"
 msgstr "Applicazione attualizzata"
+
+msgid "You are doing it wrong! Do it better."
+msgstr ""
+
+msgid "You can't do that!"
+msgstr ""
+
+msgid "Ask an administrator."
+msgstr ""
+
+msgid "Something is wrong!"
+msgstr ""
+
+msgid "Something unexpected happened!"
+msgstr ""
 
 msgid "The XML could not be parsed"
 msgstr "Non è stato possibile processare il file XML"
@@ -1884,6 +1902,10 @@ msgid "%s instances deleted successfully"
 msgstr "L'articolo è stato eliminato correttamente."
 
 #, fuzzy
+msgid "You have reached the maximum number of instances."
+msgstr "Si è raggiunto il massimo di email consentite per l'invio."
+
+#, fuzzy
 msgid "Instance saved successfully"
 msgstr "Posizioni salvate correttamente."
 
@@ -1897,6 +1919,10 @@ msgstr "Questo giornale già esiste"
 #, fuzzy
 msgid "Unable to create the database for the instance"
 msgstr "Ci è stato impossibile creare il nuovo articolo."
+
+#, fuzzy
+msgid "Select an user..."
+msgstr " - Selezionare 1 autore - "
 
 #, php-format
 msgid "A module with the uuid '%s' already exists"
@@ -2048,6 +2074,15 @@ msgstr "Contenuti archiviati"
 
 msgid "Advertisement"
 msgstr "Pubblicità"
+
+msgid "Top Left LeaderBoard"
+msgstr ""
+
+msgid "Top Right LeaderBoard"
+msgstr ""
+
+msgid "[OI] Right Skyscraper"
+msgstr ""
 
 msgid "Album not available"
 msgstr "Album non disponibile"
@@ -2328,6 +2363,24 @@ msgstr "Gestisci Paywall"
 #, fuzzy
 msgid "Edit user own profile"
 msgstr "Modifica il profilo"
+
+msgid "Authenticate as a MASTER"
+msgstr ""
+
+msgid "Authenticate as a PARTNER"
+msgstr ""
+
+msgid "Authenticate as an ADMINISTRATOR"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Execute"
+msgstr ""
 
 msgid "Static Page"
 msgstr "Pagina Statica"
@@ -3803,6 +3856,9 @@ msgstr ""
 msgid "You are leaving the current page."
 msgstr ""
 
+msgid "You are offline."
+msgstr ""
+
 #, fuzzy
 msgid "Instance information"
 msgstr "Giornale non trovato"
@@ -3814,6 +3870,9 @@ msgid "Author"
 msgstr ""
 
 msgid "Sysops"
+msgstr ""
+
+msgid "You are offline"
 msgstr ""
 
 msgid "There are no notifications for now."
@@ -4262,9 +4321,6 @@ msgstr "Modifica il profilo"
 #, fuzzy
 msgid "Creating file"
 msgstr "Crea"
-
-msgid "Download"
-msgstr ""
 
 msgid "Max allowed file size: %1 Mb"
 msgstr ""
@@ -4831,9 +4887,6 @@ msgstr "Email"
 #, fuzzy
 msgid "Backend access"
 msgstr "Gestore del Backend"
-
-msgid "Not assigned"
-msgstr ""
 
 msgid "Your account is connected to %1."
 msgstr ""
@@ -5906,13 +5959,13 @@ msgstr ""
 msgid "Restrictions"
 msgstr ""
 
+msgid "Show this ad if satisfy one condition"
+msgstr ""
+
 msgid "Without limits"
 msgstr ""
 
 msgid "Date range"
-msgstr ""
-
-msgid "Show this ad if satisfy one condition"
 msgstr ""
 
 msgid "Until"
@@ -5931,11 +5984,7 @@ msgid "Where to show this ad"
 msgstr ""
 
 #, fuzzy
-msgid "In categories"
-msgstr "Categorie"
-
-#, fuzzy
-msgid "and pages of type"
+msgid "Pages of type"
 msgstr "Gestisci la prima pagina"
 
 #, fuzzy
@@ -5974,6 +6023,10 @@ msgstr ""
 #, fuzzy
 msgid "Instant Articles pages"
 msgstr "Pagina Statica"
+
+#, fuzzy
+msgid "In categories"
+msgstr "Categorie"
 
 #, fuzzy
 msgid "and inside the position"
@@ -6651,6 +6704,24 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr ""
 
+msgid "There is a previous draft"
+msgstr ""
+
+#, fuzzy
+msgid "Do you want to edit the existing draft?"
+msgstr "Per favore fornire un id per eliminare una copertina."
+
+msgid "No, discard"
+msgstr ""
+
+#, fuzzy
+msgid "Yes, edit"
+msgstr "Lettera all'editore"
+
+#, fuzzy
+msgid "Draft saved at "
+msgstr "Crea"
+
 #, fuzzy
 msgid "Creating article"
 msgstr "Lista di articoli in sospeso"
@@ -7191,10 +7262,10 @@ msgstr ""
 msgid "Config opinion module"
 msgstr ""
 
-msgid "%1 doesn’t exist."
+msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
 msgstr ""
 
-msgid "Do you want to register %1?"
+msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr ""
 
 msgid "'%1' not activated - Opennemas"
@@ -7846,9 +7917,6 @@ msgstr ""
 msgid "There is nothing to see here, kid."
 msgstr ""
 
-msgid "Report"
-msgstr ""
-
 msgid "Action"
 msgstr ""
 
@@ -7874,6 +7942,9 @@ msgid "Template"
 msgstr ""
 
 msgid "Contact mail"
+msgstr ""
+
+msgid "Owner"
 msgstr ""
 
 msgid "No main domain"
@@ -7934,6 +8005,9 @@ msgstr "Per favore fornire un id per eliminare una copertina."
 #, fuzzy
 msgid "Do you want to delete the selected instances?"
 msgstr "Per favore fornire un id per eliminare una copertina."
+
+msgid "Download CSV of selected"
+msgstr ""
 
 #, fuzzy
 msgid "Search"
@@ -8215,6 +8289,9 @@ msgstr "Per favore fornire un id per eliminare una copertina."
 msgid "Do you want to delete the selected modules?"
 msgstr "Ci è stato impossibile eliminare il Gruppo Utenti id \"%d\""
 
+msgid "Disabled"
+msgstr ""
+
 #, fuzzy
 msgid "Search by UUID"
 msgstr "Ricerca per nome"
@@ -8226,24 +8303,6 @@ msgid "Translations completed"
 msgstr ""
 
 msgid "translations left"
-msgstr ""
-
-msgid "Download CSV of selected"
-msgstr ""
-
-msgid "Unfixed"
-msgstr ""
-
-msgid "Fixed"
-msgstr ""
-
-msgid "Unforced"
-msgstr ""
-
-msgid "Forced"
-msgstr ""
-
-msgid "Disabled"
 msgstr ""
 
 #, fuzzy
@@ -8380,9 +8439,6 @@ msgid ""
 "files."
 msgstr ""
 
-msgid "Execute"
-msgstr ""
-
 msgid ""
 "Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
 "                        from one specific instance."
@@ -8410,7 +8466,13 @@ msgstr "Gestore del Backend"
 msgid "Font color"
 msgstr ""
 
+msgid "Fixed"
+msgstr ""
+
 msgid "Notification always visible in dropdown"
+msgstr ""
+
+msgid "Forced"
 msgstr ""
 
 msgid "Notification always visible before content"
@@ -8438,6 +8500,12 @@ msgstr "Per favore fornire un id per eliminare una copertina."
 #, fuzzy
 msgid "Do you want to delete the selected notifications?"
 msgstr "Per favore fornire un id per eliminare una copertina."
+
+msgid "Unfixed"
+msgstr ""
+
+msgid "Unforced"
+msgstr ""
 
 msgid "L10n"
 msgstr ""
@@ -8534,6 +8602,13 @@ msgstr ""
 msgid "The page your looking for is not here"
 msgstr ""
 
+msgid "You shall not pass!"
+msgstr ""
+
+#, fuzzy
+msgid "You are not allowed to access this resource."
+msgstr "L'utente non è autorizzati ad eseguire questa azione."
+
 msgid "New user"
 msgstr ""
 
@@ -8542,6 +8617,12 @@ msgid "This field is invalid"
 msgstr "Campo '%s' non valido"
 
 msgid "The passwords don't match"
+msgstr ""
+
+msgid "Extensions the user can activate in instance edition"
+msgstr ""
+
+msgid "The maximum number of instances the user can create"
 msgstr ""
 
 msgid "User type"
