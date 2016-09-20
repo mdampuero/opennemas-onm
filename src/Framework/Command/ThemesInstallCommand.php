@@ -95,7 +95,8 @@ EOF
      **/
     public function installAllThemes()
     {
-        $themes = 'anemoi base basic bastet bragi cplandora cronicas dryads estrelladigital flashnews forseti galatea gerion hathor horus idealgallego khepri kalliope laregion lavozdelanzarote lrinternacional marruecosnegocios mihos nemty odin olympus prontoar retrincos selket sercoruna simplo slido stilo sobek tecnofisis televisionlr verbeia vidar zisa';
+        $themes = 'anemoi base basic bastet bragi cplandora cronicas dryads estrelladigital fivex flashnews forseti galatea gerion hathor horus idealgallego juno kalliope khepri kratos laregion lavozdelanzarote layin lrinternacional marruecosnegocios mihos moura nemty notus odin olympus orfeo prontoar retrincos selket sercoruna simplo slido sobek stilo tecnofisis televisionlr verbeia vidar zisa';
+
 
         $themes = explode(' ', $themes);
 
