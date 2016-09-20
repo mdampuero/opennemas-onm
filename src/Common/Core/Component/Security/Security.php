@@ -106,7 +106,10 @@ class Security
             return true;
         }
 
-        if (!empty($this->user) && $this->user->getOrigin() === 'manager') {
+        if ($this->hasPermission('MASTER')
+            || (!empty($this->user)
+                && $this->user->isAdmin())
+        ) {
             return true;
         }
 
