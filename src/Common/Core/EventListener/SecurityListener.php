@@ -64,7 +64,8 @@ class SecurityListener implements EventSubscriberInterface
         $instance    = $this->container->get('core.instance');
         $user        = $this->context->getToken()->getUser();
         $instances   = $this->getInstances($user);
-        $categories  = $this->getCategories($user);
+        // TODO: Uncomment when checking by category name
+        //$categories  = $this->getCategories($user);
         $permissions = $this->getPermissions($user);
 
         $user = $this->container->get('orm.manager')
@@ -74,7 +75,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->security->setInstance($instance);
         $this->security->setInstances($instances);
         $this->security->setUser($user);
-        $this->security->setCategories($categories);
+        $this->security->setCategories($user->categories);
         $this->security->setPermissions($permissions);
 
         if ($user->isEnabled()
@@ -135,7 +136,10 @@ class SecurityListener implements EventSubscriberInterface
             return [];
         }
 
-        $oql = sprintf('pk_content_category in [%s]', implode($user->categories));
+        $oql = sprintf(
+            'pk_content_category in ["%s"]',
+            implode('", "', $user->categories)
+        );
 
         $categories = $this->container->get('orm.manager')
             ->getRepository('Category')
