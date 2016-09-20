@@ -197,7 +197,7 @@
                     <option value="15"
                     {if isset($category) && ($category->internal_category eq 15)} selected="selected"{/if}>{t}Book{/t}</option>
                     {/is_module_activated}
-                    {acl isAllowed="ONLY_MASTERS"}
+                    {acl isAllowed="MASTER"}
                     <option value="0"
                     {if isset($category) && ($category->internal_category eq 0)} selected="selected"{/if}>{t}Internal{/t}</option>
                     {/acl}

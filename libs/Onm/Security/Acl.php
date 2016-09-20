@@ -106,7 +106,7 @@ class Acl
                 return true;
             }
 
-            if (self::isAdmin() && ($privilege !='ONLY_MASTERS')) {
+            if (self::isAdmin() && ($privilege != 'MASTER')) {
                 return true;
             }
 
