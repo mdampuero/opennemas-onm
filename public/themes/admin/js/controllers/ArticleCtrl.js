@@ -241,12 +241,12 @@
          *   Updates an article.
          */
         $scope.update = function() {
-          $scope.saving = true;
-
           if ($scope.articleForm.$invalid) {
             $scope.showRequired = true;
             return;
           }
+
+          $scope.saving = true;
 
           var route = {
             name: 'backend_ws_article_update',
