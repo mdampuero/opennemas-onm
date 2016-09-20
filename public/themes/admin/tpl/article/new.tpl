@@ -119,8 +119,8 @@
                   <div class="input-group" id="title">
                     <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required="required" type="text">
                     <span class="input-group-addon">
-                      <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 80, 'text-danger': title.length >= 80 }">
-                        [% title.length %]
+                      <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
+                        [% article.title ? article.title.length : 0 %]
                       </span>
                     </span>
                   </div>
@@ -134,8 +134,8 @@
                   <div class="input-group" id="title_int">
                     <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required="required">
                     <span class="input-group-addon">
-                      <span class="ng-cloak" ng-class="{ 'text-warning': title_int.length >= 50 && title_int.length < 100, 'text-danger': title_int.length >= 100 }">
-                        [% title_int.length %]
+                      <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
+                        [% article.title_int ? article.title_int.length : 0 %]
                       </span>
                     </span>
                   </div>
@@ -169,8 +169,8 @@
                   <div class="input-group" id="subtitle">
                     <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" type="text"/>
                     <span class="input-group-addon">
-                      <span class="ng-cloak" ng-class="{ 'text-warning': subtitle.length >= 50 && subtitle.length < 100, 'text-danger': subtitle.length >= 100 }">
-                        [% subtitle.length %]
+                      <span class="ng-cloak" ng-class="{ 'text-warning': article.subtitle.length >= 50 && article.subtitle.length < 100, 'text-danger': article.subtitle.length >= 100 }">
+                        [% article.subtitle ? article.subtitle.length : 0 %]
                       </span>
                     </span>
                   </div>
