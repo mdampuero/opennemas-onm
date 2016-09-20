@@ -147,7 +147,7 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-value="[% article.agency ? article.agency : '{setting name=site_agency}' %]" type="text">
+                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="article.agency = '{setting name=site_agency}'" type="text">
                   </div>
                 </div>
                 {is_module_activated name="ADVANCED_ARTICLE_MANAGER"}
@@ -156,7 +156,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-value="[% article.params.agencyBulletin ? article.params.agencyBulletin : '{setting name=site_agency}' %]" type="text">
+                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="article.params.agencyBulletin = '{setting name=site_agency}'" type="text">
                   </div>
                 </div>
                 {/is_module_activated}
@@ -409,9 +409,6 @@
 
       <div id="related-contents">
         {include file ="article/related/_related_list.tpl"}
-        <input type="hidden" name="params[withGallery]" ng-model="article.params.withGallery" ng-value="withGallery"/>
-        <input type="hidden" name="params[withGalleryInt]" ng-model="article.params.withGalleryInt" ng-value="withGalleryInt"/>
-        <input type="hidden" name="params[withGalleryHome]" ng-model="article.params.withGalleryHome" ng-value="withGalleryHome"/>
       </div>
 
       {is_module_activated name="CRONICAS_MODULES"}
