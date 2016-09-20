@@ -419,9 +419,7 @@
 
             // Show a message when leaving before saving
             $($window).bind('beforeunload', function() {
-              var nv = $('#formulario').serialize();
-
-              if (ov && nv !== ov && $scope.unsaved){
+              if ($scope.unsaved){
                 return $window.leaveMessage;
               }
             });
@@ -430,8 +428,8 @@
             $scope.draftSaved = null;
 
             if (ov && nv !== ov && $scope.draftEnabled) {
-              if (nv.pk_article) {
-                key = 'article-' + nv.pk_article + '-draft';
+              if ($scope.article.pk_article) {
+                key = 'article-' + $scope.article.pk_article + '-draft';
               }
 
               webStorage.local.set(key, {
