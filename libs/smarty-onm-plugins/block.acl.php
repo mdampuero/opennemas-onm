@@ -40,7 +40,6 @@ function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $
         }
         $else = $smarty->left_delimiter . 'aclelse' . $smarty->right_delimiter;
 
-
         // $check = false;
         $true_false = explode($else, $content, 2);
         $true = (isset($true_false[0]) ? $true_false[0] : null);
