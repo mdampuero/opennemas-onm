@@ -80,21 +80,9 @@ class Loader
         $template = $this->container->get('core.template');
         $parents  = $this->getParents($theme);
 
-        if (array_key_exists('parent', $theme->parameters)) {
-            foreach ($theme->parameters['parent'] as $name) {
-                $theme = array_pop(array_filter($parents, function($item) use ($name) {
-                    return $item->uuid === $name;
-                }));
-
-                if (is_object($theme)) {
-                    $parentsSorted []= $theme;
-                }
-            }
-        }
-
         $template->addActiveTheme($this->theme);
 
-        foreach ($parentsSorted as $t) {
+        foreach ($parents as $t) {
             $template->addTheme($t);
         }
 
@@ -246,16 +234,21 @@ class Loader
             return $parents;
         }
 
-        $oql = sprintf(
-            'uuid in ["%s"]',
-            implode('", "', $theme->parameters['parent'])
-        );
+        $uuids = $theme->parameters['parent'];
+        $oql   = sprintf('uuid in ["%s"]', implode('", "', $uuids));
 
-        $parents = $this->container->get('orm.manager')
+        $themes = $this->container->get('orm.manager')
             ->getRepository('theme', 'file')
             ->findBy($oql);
 
-        return $parents;
+        foreach ($themes as $t) {
+            $parents[$t->uuid] = $t;
+        }
+
+        // Keep original order
+        $parents = array_merge(array_flip($uuids), $parents);
+
+        return array_values($parents);
     }
 
     /**
