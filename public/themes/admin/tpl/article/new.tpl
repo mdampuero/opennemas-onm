@@ -229,7 +229,7 @@
                   {is_module_activated name="COMMENT_MANAGER"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="with_comment" name="with_comment" ng-model="article.with_comments" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="with_comment" name="with_comment" ng-model="article.with_comment" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
                         <label class="form-label" for="with_comment">
                           {t}Allow comments{/t}
                         </label>
@@ -373,7 +373,7 @@
                 </div>
                 <div class="grid-body">
                   <div class="checkbox">
-                    <input {if $article->params["only_registered"] == "1"}checked=checked{/if} id="only_registered" name="params[only_registered]" type="checkbox" value="1">
+                    <input id="only_registered" name="params[only_registered]" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
                     <label for="only_registered">
                       {t}Only available for registered users{/t}
                     </label>
@@ -392,7 +392,7 @@
                 </div>
                 <div class="grid-body">
                   <div class="checkbox">
-                    <input {if $article->params["only_subscribers"] == "1"}checked=checked{/if} id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" type="checkbox" value="1">
+                    <input id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
                     <label for="only_subscribers">
                       {t}Only available for subscribers{/t}
                     </label>
@@ -419,7 +419,6 @@
       {/is_module_activated}
 
       <input type="hidden" id="action" name="action" value="{$action}" />
-      <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
     </div><!-- /wrapper-content contentform -->
 
     <script type="text/ng-template" id="modal-preview">
