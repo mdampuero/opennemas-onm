@@ -85,7 +85,7 @@
               {if isset($id)}
               {acl isAllowed="ARTICLE_UPDATE"}
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving || articleForm.$invalid" type="button" id="update-button">
+                <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving" type="button" id="update-button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                   <span class="text">{t}Update{/t}</span>
                 </button>
@@ -94,7 +94,7 @@
               {else}
               {acl isAllowed="ARTICLE_CREATE"}
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="saving || articleForm.$invalid" type="button" id="save-button">
+                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="saving" type="button" id="save-button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -111,7 +111,7 @@
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
-              <div class="form-group">
+              <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title.$invalid }">
                 <label class="form-label" for="title">
                   {t}Title{/t}
                 </label>
@@ -126,7 +126,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title_int.$invalid }">
                 <label class="form-label" for="title_int_input">
                   {t}Inner title{/t}
                 </label>
@@ -264,12 +264,12 @@
                       {/acl}
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.category.$invalid }">
                     <label class="form-label" for="category">
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select id="category" name="category" ng-model="article.category" required="required">
+                      <select class="form-control" id="category" name="category" ng-model="article.category" required="required">
                         <option value="" >{t}- Select a category -{/t}</option>
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}

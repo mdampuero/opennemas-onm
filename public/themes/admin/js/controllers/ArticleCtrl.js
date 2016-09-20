@@ -86,8 +86,9 @@
                   Editor.get('body').setData($scope.article.body);
 
                   // Force metadata
-                  for (var tag in $scope.article.metadata.split(',')) {
-                    $('#metadata').tagsinput('add', tag);
+                  var tags = $scope.article.metadata.split(',');
+                  for (var i in tags) {
+                    $('#metadata').tagsinput('add', tags[i]);
                   }
 
                   if ($scope.article.starttime) {
@@ -210,6 +211,11 @@
          *   Saves a new article.
          */
         $scope.save = function() {
+          if ($scope.articleForm.$invalid) {
+            $scope.showRequired = true;
+            return;
+          }
+
           $scope.saving = true;
 
           http.post('backend_ws_article_save', $scope.article)
@@ -235,6 +241,11 @@
          *   Updates an article.
          */
         $scope.update = function() {
+          if ($scope.articleForm.$invalid) {
+            $scope.showRequired = true;
+            return;
+          }
+
           $scope.saving = true;
 
           var route = {
