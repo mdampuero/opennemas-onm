@@ -70,7 +70,7 @@
                       <i class="fa fa-pencil"></i>
                       {t}Edit{/t}
                     </a>
-                    {acl isAllowed="ONLY_MASTERS"}
+                    {acl isAllowed="MASTER"}
                       <button class="btn btn-link"  ng-click="clean($index, item.id)">
                         <i class="fa" ng-class="{ 'fa-fire': !item.cleaning, 'fa-circle-o-notch fa-spin': item.cleaning }"></i>
                         {t}Remove local files{/t}

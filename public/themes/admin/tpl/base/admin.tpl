@@ -240,7 +240,7 @@
                   </li>
                 {/block}
                 {block name="master_actions_block"}
-                {acl isAllowed="ONLY_MASTERS"}
+                {acl isAllowed="MASTER"}
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
                   </li>
