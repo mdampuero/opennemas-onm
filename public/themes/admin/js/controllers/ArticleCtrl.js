@@ -263,7 +263,7 @@
             $scope.article.img1 = $scope.photo1.id;
 
             if (angular.isUndefined($scope.article.img1_footer) ||
-                angular.isUndefined(ov) || nv.id !== ov.id) {
+                (!angular.isUndefined(ov) && nv.id !== ov.id)) {
               $scope.article.img1_footer = $scope.photo1.description;
             }
 
@@ -282,7 +282,7 @@
             $scope.article.img2 = $scope.photo2.id;
 
             if (angular.isUndefined($scope.article.img2_footer) ||
-                angular.isUndefined(ov) || nv.id !== ov.id) {
+                (!angular.isUndefined(ov) && nv.id !== ov.id)) {
               $scope.article.img2_footer = $scope.photo2.description;
             }
           }
@@ -295,8 +295,8 @@
           if ($scope.photo3) {
             $scope.article.params.imageHome = $scope.photo3.id;
 
-            if (angular.isUndefined($scope.article.imageHomeFooter) ||
-                angular.isUndefined(ov) || nv.id !== ov.id) {
+            if (angular.isUndefined($scope.article.params.imageHomeFooter) ||
+                (!angular.isUndefined(ov) && nv.id !== ov.id)) {
               $scope.article.params.imageHomeFooter = $scope.photo3.description;
             }
           }
