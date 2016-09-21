@@ -283,7 +283,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                {include  file="article/partials/_images.tpl" article=$opinion withoutVideo='true'}
+                {include  file="opinion/partials/_images.tpl" article=$opinion withoutVideo='true'}
             </div>
         </div>
     </div>
