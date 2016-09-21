@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 23:17+0200\n"
-"PO-Revision-Date: 2016-09-20 00:15+0200\n"
+"POT-Creation-Date: 2016-09-21 16:55+0200\n"
+"PO-Revision-Date: 2016-09-21 16:57+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Generator: Virtaal 0.7.1\n"
 
 msgid "Frontpage"
-msgstr "Portada"
+msgstr "fPortada"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado del sistema"
@@ -6713,17 +6713,14 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Si, eliminarlos todos"
 
-msgid "There is a previous draft"
-msgstr "Hay un borrador anterior"
+msgid "There is a new version of this content that was saved as a draft."
+msgstr "Hay una nueva versión de este contenido que fue guardado como borrador."
 
-msgid "Do you want to edit the existing draft?"
-msgstr "¿Desea editar el borrador existente?"
+msgid "Discard it"
+msgstr "Descartar"
 
-msgid "No, discard"
-msgstr "No, rechazarlo"
-
-msgid "Yes, edit"
-msgstr "Si, editar"
+msgid "Resume editing"
+msgstr "Continuar edición"
 
 msgid "Draft saved at "
 msgstr "Borrador guardado a las "
@@ -7876,7 +7873,7 @@ msgid "This is the email used to create your newspaper"
 msgstr "Este es el correo-e usado para crear el periódico"
 
 msgid "Your newspaper was created on %1"
-msgstr "Tu periódico fué creado el %1"
+msgstr "Tu periódico fue creado el %1"
 
 msgid "Support plan"
 msgstr "Plan de soporte"
@@ -8650,6 +8647,15 @@ msgstr "Buscar por nombre o correo"
 
 msgid "Do you want to log out?"
 msgstr "¿Quieres cerrar la sesión?"
+
+#~ msgid "There is a previous draft"
+#~ msgstr "Hay un borrador anterior"
+
+#~ msgid "Do you want to edit the existing draft?"
+#~ msgstr "¿Desea editar el borrador existente?"
+
+#~ msgid "No, discard"
+#~ msgstr "No, rechazarlo"
 
 #~ msgid "You are offline."
 #~ msgstr "Está sin conexión."

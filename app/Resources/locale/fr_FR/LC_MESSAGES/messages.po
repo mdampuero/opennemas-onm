@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 23:24+0200\n"
+"POT-Creation-Date: 2016-09-21 16:55+0200\n"
 "PO-Revision-Date: 2016-09-14 23:45+0200\n"
 "Last-Translator: Sandra Pereira <sandra@openhost.es>\n"
 "Language-Team: Openhost\n"
@@ -6852,18 +6852,14 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Oui, supprimer tous"
 
-msgid "There is a previous draft"
+msgid "There is a new version of this content that was saved as a draft."
+msgstr ""
+
+msgid "Discard it"
 msgstr ""
 
 #, fuzzy
-msgid "Do you want to edit the existing draft?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
-
-msgid "No, discard"
-msgstr ""
-
-#, fuzzy
-msgid "Yes, edit"
+msgid "Resume editing"
 msgstr "Oui, l'enregistrer"
 
 #, fuzzy
@@ -8843,6 +8839,10 @@ msgstr "Recherche par nom"
 #, fuzzy
 msgid "Do you want to log out?"
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
+
+#, fuzzy
+#~ msgid "Do you want to edit the existing draft?"
+#~ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 
 #~ msgid ""
 #~ "You have reach the maximum users allowed. If you want to create more "
