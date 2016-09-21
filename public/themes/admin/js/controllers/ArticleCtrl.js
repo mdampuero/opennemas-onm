@@ -60,7 +60,7 @@
             key = 'article-' + $scope.article.pk_article + '-draft';
           }
 
-          if (!webStorage.has(key)) {
+          if (!webStorage.session.has(key)) {
             return;
           }
 
