@@ -65,8 +65,11 @@
           }
 
           $uibModal.open({
+            backdrop:    true,
+            backdropClass: 'modal-backdrop-transparent',
+            controller:  'YesNoModalCtrl',
             templateUrl: 'modal-draft',
-            controller: 'YesNoModalCtrl',
+            windowClass: 'modal-right modal-small modal-top',
             resolve: {
               template: function() {
                 return {};
