@@ -90,6 +90,7 @@
 
                   // Force metadata
                   var tags = $scope.article.metadata.split(',');
+                  $('#metadata').tagsinput('removeAll');
                   for (var i in tags) {
                     $('#metadata').tagsinput('add', tags[i]);
                   }
