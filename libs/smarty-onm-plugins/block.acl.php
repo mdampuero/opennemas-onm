@@ -24,9 +24,9 @@ function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $
         if (isset($params['isNotAllowed'])) {
             $isAllowed = $params['isNotAllowed'];
 
-            $check = !($check
-                && ($security->hasPermission($isAllowed)
-                || $security->hasRole($isAllowed)));
+            $check = $check
+                && !($security->hasPermission($isAllowed)
+                || $security->hasRole($isAllowed));
         }
 
         if (isset($params['hasCategoryAccess'])) {
