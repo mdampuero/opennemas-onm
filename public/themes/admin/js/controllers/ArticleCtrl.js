@@ -107,7 +107,7 @@
               },
               no: function() {
                 return function(modalWindow) {
-                  webStorage.local.remove(key);
+                  webStorage.session.remove(key);
                   modalWindow.close({ response: false, success: true });
                 };
               }
@@ -226,7 +226,7 @@
               $scope.saving = false;
 
               if (response.status === 201) {
-                webStorage.local.remove('article-draft');
+                webStorage.session.remove('article-draft');
                 $scope.unsaved = false;
                 $window.location.href = response.headers().location;
               }
@@ -259,7 +259,7 @@
           http.put(route, $scope.article)
             .then(function(response) {
               $scope.saving = false;
-              webStorage.local.remove('article-' +
+              webStorage.session.remove('article-' +
                   $scope.article.pk_article + '-draft');
               $scope.unsaved = false;
               messenger.post(response.data);
@@ -446,7 +446,7 @@
                 key = 'article-' + $scope.article.pk_article + '-draft';
               }
 
-              webStorage.local.set(key, {
+              webStorage.session.set(key, {
                 article:             $scope.article,
                 photo1:              $scope.photo1,
                 photo2:              $scope.photo2,
