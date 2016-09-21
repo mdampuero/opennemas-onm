@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 23:24+0200\n"
+"POT-Creation-Date: 2016-09-21 16:55+0200\n"
 "PO-Revision-Date: 2016-08-29 17:37+0200\n"
 "Last-Translator: Fabrizia Alonzo <fabrizia.alonzo@openhost.es>\n"
 "Language-Team: Opennemas\n"
@@ -6612,18 +6612,14 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr ""
 
-msgid "There is a previous draft"
+msgid "There is a new version of this content that was saved as a draft."
+msgstr ""
+
+msgid "Discard it"
 msgstr ""
 
 #, fuzzy
-msgid "Do you want to edit the existing draft?"
-msgstr "Per favore fornire un id per eliminare una copertina."
-
-msgid "No, discard"
-msgstr ""
-
-#, fuzzy
-msgid "Yes, edit"
+msgid "Resume editing"
 msgstr "Si, salvare"
 
 #, fuzzy
@@ -8548,6 +8544,10 @@ msgstr "Ricerca per nome"
 #, fuzzy
 msgid "Do you want to log out?"
 msgstr "Per favore fornire un id per eliminare una copertina."
+
+#, fuzzy
+#~ msgid "Do you want to edit the existing draft?"
+#~ msgstr "Per favore fornire un id per eliminare una copertina."
 
 #~ msgid "Cache configuration saved successfully."
 #~ msgstr "Configurazione di cache salvata correttamente."
