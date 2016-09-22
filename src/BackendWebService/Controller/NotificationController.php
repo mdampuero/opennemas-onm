@@ -92,7 +92,7 @@ class NotificationController extends Controller
         $date  = date('Y-m-d H:i:s');
 
         $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
-            .  ' or enabled = 1 and start <= "%s"'
+            .  ' and enabled = 1 and start <= "%s"'
             .  ' and (end is null or end > "%s")';
 
         if (!$this->getUser()->isAdmin()) {
