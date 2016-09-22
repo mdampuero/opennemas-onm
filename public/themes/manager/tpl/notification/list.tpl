@@ -258,7 +258,7 @@
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
-              <th ng-show="isColumnEnabled('title')">
+              <th ng-show="isColumnEnabled('title')" style="max-width: 30%;">
                 {t}Title{/t}
               </th>
               <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="130">
@@ -316,7 +316,7 @@
               <td>
                 [% item.id %]
               </td>
-              <td ng-show="isColumnEnabled('title')">
+              <td ng-show="isColumnEnabled('title')" style="white-space: normal;">
                 <div ng-bind-html="item.title['en']"></div>
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" ng-if="security.hasPermission('NOTIFICATION_DELETE')" title="{t}Edit{/t}">

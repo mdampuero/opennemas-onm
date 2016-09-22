@@ -274,7 +274,7 @@ class NotificationController extends Controller
      *
      * @param Notification $notification The notification to covert.
      */
-    private function convertNotification(&$notification, $view)
+    private function convertNotification(&$notification, $view = null)
     {
         $notification = $notification->getData();
 
@@ -301,7 +301,7 @@ class NotificationController extends Controller
         $notification['read'] = 0;
         $notification['view'] = 0;
 
-        if (in_array($notification['id'], array_keys($view))) {
+        if (!empty($view) && in_array($notification['id'], array_keys($view))) {
             $notification['view']= 1;
         }
 
