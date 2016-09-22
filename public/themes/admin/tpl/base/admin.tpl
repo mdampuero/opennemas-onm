@@ -288,8 +288,8 @@
                   <li class="quicklinks dropdown dropdown-notifications" ng-click="markAllAsView()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
-                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
-                        [% unread.length %]
+                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="notViewed.length > 0">
+                        [% notViewed.length %]
                       </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-notifications dropdown-menu-with-footer dropdown-menu-with-title ng-cloak">
