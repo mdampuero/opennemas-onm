@@ -197,7 +197,11 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
         view_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
       };
 
-      $http.patch(url, data);
+      $http.patch(url, data).then(function() {
+        for (var i = 0; i < $scope.notifications.length; i++) {
+          $scope.notifications[i].view = 1;
+        }
+      });
     };
 
     /**
@@ -247,7 +251,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
       var date = new Date();
       var data = {
         click_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
-        read_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
+        read_date:  $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
       };
 
       // Find notification to remove from list
