@@ -45,6 +45,9 @@ class NotificationSubscriber implements EventSubscriberInterface
             ],
             'notifications.getRead' => [
                 [ 'getReadNotifications', 5 ],
+            ],
+            'notifications.getView' => [
+                [ 'getViewNotifications', 5 ],
             ]
         ];
     }
@@ -121,6 +124,27 @@ class NotificationSubscriber implements EventSubscriberInterface
      * @param Event $event The event object.
      */
     public function getReadNotifications(Event $event)
+    {
+        $repository = $this->container->get('orm.manager')
+            ->getRepository('user_notification');
+
+        $notifications = $repository->findBy($event->getArgument('oql'));
+
+        $response = [];
+        foreach ($notifications as $notification) {
+            $response[$notification->notification_id] =
+                $notification->read_date;
+        }
+
+        $event->setResponse($response);
+    }
+
+    /**
+     * Returns the list of view notifications.
+     *
+     * @param Event $event The event object.
+     */
+    public function getViewNotifications(Event $event)
     {
         $repository = $this->container->get('orm.manager')
             ->getRepository('user_notification');
