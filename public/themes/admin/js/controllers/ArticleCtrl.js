@@ -276,11 +276,7 @@
 
           if ($scope.photo1) {
             $scope.article.img1 = $scope.photo1.id;
-
-            if (angular.isUndefined($scope.article.img1_footer) ||
-                (!angular.isUndefined(ov) && nv.id !== ov.id)) {
-              $scope.article.img1_footer = $scope.photo1.description;
-            }
+            $scope.article.img1_footer = $scope.photo1.description;
 
             // Set inner image if empty
             if (angular.isUndefined($scope.photo2) && nv !== ov) {
@@ -295,11 +291,7 @@
 
           if ($scope.photo2) {
             $scope.article.img2 = $scope.photo2.id;
-
-            if (angular.isUndefined($scope.article.img2_footer) ||
-                (!angular.isUndefined(ov) && nv.id !== ov.id)) {
-              $scope.article.img2_footer = $scope.photo2.description;
-            }
+            $scope.article.img2_footer = $scope.photo2.description;
           }
         }, true);
 
