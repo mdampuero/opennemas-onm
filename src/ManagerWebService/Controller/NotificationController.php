@@ -494,11 +494,11 @@ class NotificationController extends Controller
      */
     protected function getNotificationCounters()
     {
-        $sql = 'SELECT notification_id, title, count(read_date) as "read",'
+        $sql = 'SELECT notification.id as notification_id, title, count(read_date) as "read",'
             . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
             . ' COUNT(open_date) as "opened"'
-            . ' FROM user_notification, notification'
-            . ' WHERE notification_id = id group by notification_id';
+            .' FROM notification LEFT JOIN user_notification ON notification.id = notification_id'
+            .' GROUP BY notification_id ORDER BY id DESC';
 
         return $this->get('dbal_connection_manager')->fetchAll($sql);
     }
