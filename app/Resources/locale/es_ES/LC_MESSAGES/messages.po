@@ -22,7 +22,7 @@ msgstr ""
 "X-Generator: Virtaal 0.7.1\n"
 
 msgid "Frontpage"
-msgstr "fPortada"
+msgstr "Portada"
 
 msgid "Default system language"
 msgstr "Idioma predeterminado del sistema"
