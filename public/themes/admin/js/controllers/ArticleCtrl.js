@@ -76,7 +76,7 @@
               },
               yes: function() {
                 return function(modalWindow) {
-                  var draft =  webStorage.get(key);
+                  var draft =  webStorage.session.get(key);
 
                   for (var name in draft) {
                     $scope[name] = draft[name];
@@ -84,15 +84,13 @@
 
                   modalWindow.close({ response: true, success: true });
 
-                  // Force Editor update
-                  Editor.get('summary').setData($scope.article.summary);
-                  Editor.get('body').setData($scope.article.body);
-
                   // Force metadata
-                  var tags = $scope.article.metadata.split(',');
-                  $('#metadata').tagsinput('removeAll');
-                  for (var i in tags) {
-                    $('#metadata').tagsinput('add', tags[i]);
+                  if ($scope.article.metadata) {
+                    var tags = $scope.article.metadata.split(',');
+                    $('#metadata').tagsinput('removeAll');
+                    for (var i in tags) {
+                      $('#metadata').tagsinput('add', tags[i]);
+                    }
                   }
 
                   if ($scope.article.starttime) {
@@ -135,10 +133,6 @@
             for (var key in response.data) {
               $scope[key] = response.data[key];
             }
-
-            // Force Editor update
-            Editor.get('summary').setData($scope.article.summary);
-            Editor.get('body').setData($scope.article.body);
 
             if ($scope.article.metadata) {
               var tags = $scope.article.metadata.split(',');
