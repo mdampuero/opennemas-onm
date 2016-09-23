@@ -320,6 +320,7 @@
             var isReady = false;
             var ngModel = ctrls[0];
             var stop    = false;
+            var form    = ctrls[1] || null;
 
             var onLoad = function () {
               var options  = Editor.configure(attrs.onmEditorPreset);
@@ -362,8 +363,14 @@
                 }
 
                 scope.$apply(function () {
+                  stop    = true;
                   isReady = false;
+
                   instance.setData(data);
+
+                  if (form) {
+                    form.$setPristine(true);
+                  }
                 });
 
                 scope.$broadcast('ckeditor.ready.' + instance.name);
