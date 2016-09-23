@@ -240,7 +240,7 @@
                   </li>
                 {/block}
                 {block name="master_actions_block"}
-                {acl isAllowed="ONLY_MASTERS"}
+                {acl isAllowed="MASTER"}
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
                   </li>
@@ -288,8 +288,8 @@
                   <li class="quicklinks dropdown dropdown-notifications" ng-click="markAllAsView()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
-                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
-                        [% unread.length %]
+                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="notViewed.length > 0">
+                        [% notViewed.length %]
                       </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-notifications dropdown-menu-with-footer dropdown-menu-with-title ng-cloak">
@@ -466,6 +466,27 @@
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/ckeditor/ckeditor.js,
+      @Common/components/ckeditor/config.js,
+      @Common/components/ckeditor/lang/en.js,
+      @Common/components/ckeditor/styles.js,
+      @Common/components/ckeditor/plugins/autogrow/plugin.js,
+      @Common/components/ckeditor/plugins/autolink/plugin.js,
+      @Common/components/ckeditor/plugins/notification/plugin.js,
+      @Common/components/ckeditor/plugins/notification/lang/en.js,
+      @Common/components/ckeditor/plugins/justify/plugin.js,
+      @Common/components/ckeditor/plugins/justify/lang/en.js,
+      @Common/components/ckeditor/plugins/justify/lang/es.js,
+      @Common/components/ckeditor/plugins/font/plugin.js,
+      @Common/components/ckeditor/plugins/font/lang/en.js,
+      @Common/components/ckeditor/plugins/font/lang/es.js,
+      @Common/components/imageresize/plugin.js,
+      @Common/src/ckeditor-autokeywords/plugin.js,
+      @Common/src/ckeditor-autokeywords/lang/en.js,
+      @Common/src/ckeditor-autokeywords/lang/es.js,
+      @Common/src/ckeditor-wordcount/wordcount/plugin.js,
+      @Common/src/ckeditor-wordcount/wordcount/lang/en.js,
+      @Common/src/ckeditor-wordcount/wordcount/lang/es.js,
+      @Common/src/ckeditor-pastespecial/plugin.js,
       @Common/components/fastclick/lib/fastclick.js,
       @Common/components/lodash/dist/lodash.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,

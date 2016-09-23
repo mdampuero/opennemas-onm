@@ -221,9 +221,9 @@ class ArticleController extends Controller
         // Force URI generation
         $article->uri = $article->uri;
 
-        return new JsonResponse([
-            'article' => \Onm\StringUtils::convertToUtf8($article) ]
-        );
+        $params['article'] = \Onm\StringUtils::convertToUtf8($article);
+
+        return new JsonResponse($params);
     }
 
     /**

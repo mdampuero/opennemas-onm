@@ -234,20 +234,21 @@ class Loader
             return $parents;
         }
 
-        $oql = sprintf(
-            'uuid in ["%s"]',
-            implode('", "', $theme->parameters['parent'])
-        );
+        $uuids = $theme->parameters['parent'];
+        $oql   = sprintf('uuid in ["%s"]', implode('", "', $uuids));
 
-        $parents = $this->container->get('orm.manager')
+        $themes = $this->container->get('orm.manager')
             ->getRepository('theme', 'file')
             ->findBy($oql);
 
-        foreach ($parents as $parent) {
-            $parents = array_merge($parents, $this->getParents($parent));
+        foreach ($themes as $t) {
+            $parents[$t->uuid] = $t;
         }
 
-        return $parents;
+        // Keep original order
+        $parents = array_merge(array_flip($uuids), $parents);
+
+        return array_values($parents);
     }
 
     /**

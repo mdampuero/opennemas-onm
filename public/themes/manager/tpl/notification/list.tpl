@@ -254,52 +254,52 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="pointer" ng-click="sort('id')" width="50">
+              <th class="pointer" ng-click="sort('id')" width="10">
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
               <th ng-show="isColumnEnabled('title')">
                 {t}Title{/t}
               </th>
-              <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="130">
+              <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="10">
                 {t}Target{/t}
               </th>
-              <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')">
+              <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')" width="10">
                 l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="250">
+              <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="50">
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" ng-show="isColumnEnabled('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" ng-show="isColumnEnabled('end')" width="50">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('view')" ng-show="isColumnEnabled('view')" width="100">
+              <th class="text-center" ng-click="sort('view')" ng-show="isColumnEnabled('view')" width="10">
                 {t}View{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('view') == 'asc', 'fa fa-caret-down': isOrderedBy('view') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="100">
+              <th class="text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="10">
                 {t}Read{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('read') == 'asc', 'fa fa-caret-down': isOrderedBy('read') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('clicked')" ng-show="isColumnEnabled('clicked')" width="100">
+              <th class="text-center" ng-click="sort('clicked')" ng-show="isColumnEnabled('clicked')" width="10">
                 {t}Clicked{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('clicked') == 'asc', 'fa fa-caret-down': isOrderedBy('clicked') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('opened')" ng-show="isColumnEnabled('opened')" width="100">
+              <th class="text-center" ng-click="sort('opened')" ng-show="isColumnEnabled('opened')" width="10">
                 {t}Opened{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opened') == 'asc', 'fa fa-caret-down': isOrderedBy('opened') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="85">
+              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="10">
                 {t}Fixed{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="85">
+              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="10">
                 {t}Forced{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="85">
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="10">
                 {t}Enabled{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
@@ -316,7 +316,7 @@
               <td>
                 [% item.id %]
               </td>
-              <td ng-show="isColumnEnabled('title')">
+              <td ng-show="isColumnEnabled('title')" style="white-space: normal;">
                 <div ng-bind-html="item.title['en']"></div>
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" ng-if="security.hasPermission('NOTIFICATION_DELETE')" title="{t}Edit{/t}">

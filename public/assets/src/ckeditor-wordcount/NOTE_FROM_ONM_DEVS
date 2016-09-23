@@ -1,0 +1,8 @@
+This plugin was copied into our js code because we had to change the CSS file path in the plugin.js from
+
+	CKEDITOR.document.appendStyleSheet(this.path + "css/wordcount.css");
+
+to
+	CKEDITOR.document.appendStyleSheet("/assets/src/ckeditor-wordcount/wordcount/css/wordcount.css");
+
+So if we minify the js code we don't have errors due to automatic path resolution of ckeditor plugin SDK.

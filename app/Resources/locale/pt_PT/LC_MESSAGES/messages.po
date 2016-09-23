@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 11:12+0200\n"
+"POT-Creation-Date: 2016-09-21 16:55+0200\n"
 "PO-Revision-Date: 2016-03-17 16:23+0100\n"
 "Last-Translator: Alex <alex@openhost.es>\n"
 "Language-Team: Portuguese <devs@opennemas.com>\n"
@@ -1770,6 +1770,14 @@ msgstr "%s instâncias excluídas com êxito."
 msgid "You have reached the maximum number of instances."
 msgstr "Você alcançou o máximo de e-mails permitidos a enviar"
 
+#, fuzzy, php-format
+msgid ""
+"If you need to create more instances, please <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contact us</a>."
+msgstr ""
+"Se você precisar atualizar esta informação <a href=\"mailto:sales@openhost.es"
+"\">contate-nos</a>."
+
 msgid "Instance saved successfully"
 msgstr "Instância guardada com êxito"
 
@@ -3461,9 +3469,6 @@ msgstr "Administração OpenNeMaS"
 msgid "You are leaving the current page."
 msgstr "Está a sair da página atual."
 
-msgid "You are offline."
-msgstr ""
-
 msgid "Instance information"
 msgstr "Informações da instância"
 
@@ -3476,8 +3481,12 @@ msgstr "Autor"
 msgid "Sysops"
 msgstr "Sysops"
 
-msgid "You are offline"
+#, fuzzy
+msgid ""
+"There is not Internet at the moment, please try to save in a few minutes."
 msgstr ""
+"Estamos fazendo algumas operações de manutenção na plataforma Opennemas, por "
+"favor, espere alguns minutos."
 
 msgid "There are no notifications for now."
 msgstr "Não existem notificações nesse momento."
@@ -6351,19 +6360,14 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Sim, remover todos"
 
-#, fuzzy
-msgid "There is a previous draft"
-msgstr "Não há opiniões ainda."
+msgid "There is a new version of this content that was saved as a draft."
+msgstr ""
 
-#, fuzzy
-msgid "Do you want to edit the existing draft?"
-msgstr "Você realmente quer excluir os módulos selecionados?"
-
-msgid "No, discard"
+msgid "Discard it"
 msgstr ""
 
 #, fuzzy
-msgid "Yes, edit"
+msgid "Resume editing"
 msgstr "Sim, eliminar"
 
 #, fuzzy
@@ -8267,6 +8271,14 @@ msgstr "Buscar por nome ou nome de usuário"
 msgid "Do you want to log out?"
 msgstr "Você deseja registrar %1?"
 
+#, fuzzy
+#~ msgid "There is a previous draft"
+#~ msgstr "Não há opiniões ainda."
+
+#, fuzzy
+#~ msgid "Do you want to edit the existing draft?"
+#~ msgstr "Você realmente quer excluir os módulos selecionados?"
+
 #~ msgid "%1 doesn’t exist."
 #~ msgstr "%1 não existe."
 
@@ -8621,13 +8633,6 @@ msgstr "Você deseja registrar %1?"
 #~ msgstr ""
 #~ "Você está prestes a pedir os seguintes itens. Nas próximas 24 horas nossa "
 #~ "equipe de vendas irá enviar-lhe informações de pagamento e ativação."
-
-#~ msgid ""
-#~ "If you need to update this information please <a href=\"mailto:"
-#~ "sales@openhost.es\">contact us</a>."
-#~ msgstr ""
-#~ "Se você precisar atualizar esta informação <a href=\"mailto:"
-#~ "sales@openhost.es\">contate-nos</a>."
 
 #~ msgid "Contact name"
 #~ msgstr "Nome do Contacto"

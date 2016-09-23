@@ -56,7 +56,7 @@
           {is_module_activated name="BOOK_MANAGER"}
             <li role="presentation"><a href="#book" aria-controls="tab7" role="tab" data-toggle="tab">{t}For books{/t}</a></li>
           {/is_module_activated}
-          {acl isAllowed="ONLY_MASTERS"}
+          {acl isAllowed="MASTER"}
             <li role="presentation"><a href="#master" aria-controls="master" role="tab" data-toggle="tab">{t}Internal{/t}</a></li>
           {/acl}
         </ul>

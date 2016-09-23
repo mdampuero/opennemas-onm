@@ -60,12 +60,12 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
-          <button class="btn btn-link" ng-click="setEnabledSelected(0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-times fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
-          <button class="btn btn-link" ng-click="setEnabledSelected(1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-check fa-lg"></i>
           </button>
         </li>
@@ -433,7 +433,7 @@
           <tbody>
             <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
-                <div class="checkbox check-default" ng-if="security.hasInstance(item.name)">
+                <div class="checkbox check-default" ng-if="security.hasInstance(item.internal_name)">
                   <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                   <label for="checkbox[%$index%]"></label>
                 </div>
@@ -541,7 +541,7 @@
               </td>
               <td class="text-center" ng-show="isColumnEnabled('activated')">
                 <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.activated == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading &&item.activated == '1', 'fa-times text-error': !item.loading && item.activated == '0' }"></i>
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading &&item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                 </button>
                 <span ng-if="!security.hasInstance(item.internal_name) || !security.hasPermission('INSTANCE_UPDATE')">
                 <i class="fa m-t-5" ng-class="{ 'fa-check text-success' : item.activated == '1', 'fa-times text-error': item.activated == '0' }"></i>

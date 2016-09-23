@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 11:12+0200\n"
-"PO-Revision-Date: 2016-09-19 11:17+0200\n"
+"POT-Creation-Date: 2016-09-21 16:55+0200\n"
+"PO-Revision-Date: 2016-09-21 16:57+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1754,6 +1754,14 @@ msgstr "%s instancias eliminadas correctamente"
 
 msgid "You have reached the maximum number of instances."
 msgstr "Has alcanzado el número máximo de instancias."
+
+#, php-format
+msgid ""
+"If you need to create more instances, please <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contact us</a>."
+msgstr ""
+"Si necesitas crear mas instancias, por favor <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contáctanos</a>."
 
 msgid "Instance saved successfully"
 msgstr "Instancia guardada correctamente"
@@ -3676,9 +3684,6 @@ msgstr "Administración de OpenNemas"
 msgid "You are leaving the current page."
 msgstr "Está saliendo de la página."
 
-msgid "You are offline."
-msgstr "Está sin conexión."
-
 msgid "Instance information"
 msgstr "Información de la instancia"
 
@@ -3691,8 +3696,11 @@ msgstr "Autor"
 msgid "Sysops"
 msgstr "Sysops"
 
-msgid "You are offline"
-msgstr "Está sin conexión."
+msgid ""
+"There is not Internet at the moment, please try to save in a few minutes."
+msgstr ""
+"No hay conexión a Internet en este momento, por favor intenta guardar en "
+"unos minutos."
 
 msgid "There are no notifications for now."
 msgstr "No hay notificaciones por ahora."
@@ -6705,20 +6713,17 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Si, eliminarlos todos"
 
-msgid "There is a previous draft"
-msgstr "Hay un borrador anterior"
+msgid "There is a new version of this content that was saved as a draft."
+msgstr "Hay una nueva versión de este contenido que fue guardado como borrador."
 
-msgid "Do you want to edit the existing draft?"
-msgstr "¿Desea editar el borrador existente?"
+msgid "Discard it"
+msgstr "Descartar"
 
-msgid "No, discard"
-msgstr "No, rechazarlo"
-
-msgid "Yes, edit"
-msgstr "Si, editar"
+msgid "Resume editing"
+msgstr "Continuar edición"
 
 msgid "Draft saved at "
-msgstr "Borrador guardado el"
+msgstr "Borrador guardado a las "
 
 msgid "Creating article"
 msgstr "Creando artículo"
@@ -7868,7 +7873,7 @@ msgid "This is the email used to create your newspaper"
 msgstr "Este es el correo-e usado para crear el periódico"
 
 msgid "Your newspaper was created on %1"
-msgstr "Tu periódico fué creado el %1"
+msgstr "Tu periódico fue creado el %1"
 
 msgid "Support plan"
 msgstr "Plan de soporte"
@@ -8643,6 +8648,21 @@ msgstr "Buscar por nombre o correo"
 msgid "Do you want to log out?"
 msgstr "¿Quieres cerrar la sesión?"
 
+#~ msgid "There is a previous draft"
+#~ msgstr "Hay un borrador anterior"
+
+#~ msgid "Do you want to edit the existing draft?"
+#~ msgstr "¿Desea editar el borrador existente?"
+
+#~ msgid "No, discard"
+#~ msgstr "No, rechazarlo"
+
+#~ msgid "You are offline."
+#~ msgstr "Está sin conexión."
+
+#~ msgid "You are offline"
+#~ msgstr "Está sin conexión."
+
 #~ msgid "%1 doesn’t exist."
 #~ msgstr "%1 no existe."
 
@@ -9071,13 +9091,6 @@ msgstr "¿Quieres cerrar la sesión?"
 #~ "Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
 #~ "horas nuestro departamento de ventas te enviará la información de pago y "
 #~ "activación."
-
-#~ msgid ""
-#~ "If you need to update this information please <a href=\"mailto:"
-#~ "sales@openhost.es\">contact us</a>."
-#~ msgstr ""
-#~ "Si necesitas actualizar esta información, por favor <a href=\"mailto:"
-#~ "sales@openhost.es\">contactanos</a>."
 
 #~ msgid "This is not a valid VAT identification number"
 #~ msgstr "No es un número de identificación fiscal válido"

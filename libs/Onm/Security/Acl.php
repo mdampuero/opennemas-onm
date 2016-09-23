@@ -41,31 +41,7 @@ class Acl
      */
     public static function checkCategoryAccess($categoryID)
     {
-        try {
-            if (!isset($categoryID) || is_null($categoryID)) {
-                return true;
-            }
-
-            $user = getService('core.user');
-
-            if (is_null($user) || $user == 'anon.') {
-                return false;
-            }
-
-            if ($user->isMaster() || $user->isAdmin()) {
-                return true;
-            }
-
-            if (empty($user->categories)
-                || !in_array($categoryID, $user->categories)
-            ) {
-                return false;
-            }
-        } catch (Exception $e) {
-            return false;
-        }
-
-        return true;
+        return getService('core.security')->hasCategory($categoryID);
     }
 
     /**
@@ -106,7 +82,7 @@ class Acl
                 return true;
             }
 
-            if (self::isAdmin() && ($privilege !='ONLY_MASTERS')) {
+            if (self::isAdmin() && ($privilege != 'MASTER')) {
                 return true;
             }
 

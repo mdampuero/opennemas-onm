@@ -85,7 +85,7 @@
               {if isset($id)}
               {acl isAllowed="ARTICLE_UPDATE"}
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving || articleForm.$invalid" type="button" id="update-button">
+                <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving" type="button" id="update-button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                   <span class="text">{t}Update{/t}</span>
                 </button>
@@ -94,7 +94,7 @@
               {else}
               {acl isAllowed="ARTICLE_CREATE"}
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="saving || articleForm.$invalid" type="button" id="save-button">
+                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="saving" type="button" id="save-button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -111,7 +111,7 @@
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
-              <div class="form-group">
+              <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title.$invalid }">
                 <label class="form-label" for="title">
                   {t}Title{/t}
                 </label>
@@ -119,14 +119,14 @@
                   <div class="input-group" id="title">
                     <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required="required" type="text">
                     <span class="input-group-addon">
-                      <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 80, 'text-danger': title.length >= 80 }">
-                        [% title.length %]
+                      <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
+                        [% article.title ? article.title.length : 0 %]
                       </span>
                     </span>
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title_int.$invalid }">
                 <label class="form-label" for="title_int_input">
                   {t}Inner title{/t}
                 </label>
@@ -134,8 +134,8 @@
                   <div class="input-group" id="title_int">
                     <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required="required">
                     <span class="input-group-addon">
-                      <span class="ng-cloak" ng-class="{ 'text-warning': title_int.length >= 50 && title_int.length < 100, 'text-danger': title_int.length >= 100 }">
-                        [% title_int.length %]
+                      <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
+                        [% article.title_int ? article.title_int.length : 0 %]
                       </span>
                     </span>
                   </div>
@@ -147,7 +147,7 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-value="[% article.agency ? article.agency : '{setting name=site_agency}' %]" type="text">
+                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="article.agency = '{setting name=site_agency}'" type="text">
                   </div>
                 </div>
                 {is_module_activated name="ADVANCED_ARTICLE_MANAGER"}
@@ -156,7 +156,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-value="[% article.params.agencyBulletin ? article.params.agencyBulletin : '{setting name=site_agency}' %]" type="text">
+                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="article.params.agencyBulletin = '{setting name=site_agency}'" type="text">
                   </div>
                 </div>
                 {/is_module_activated}
@@ -169,8 +169,8 @@
                   <div class="input-group" id="subtitle">
                     <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" type="text"/>
                     <span class="input-group-addon">
-                      <span class="ng-cloak" ng-class="{ 'text-warning': subtitle.length >= 50 && subtitle.length < 100, 'text-danger': subtitle.length >= 100 }">
-                        [% subtitle.length %]
+                      <span class="ng-cloak" ng-class="{ 'text-warning': article.subtitle.length >= 50 && article.subtitle.length < 100, 'text-danger': article.subtitle.length >= 100 }">
+                        [% article.subtitle ? article.subtitle.length : 0 %]
                       </span>
                     </span>
                   </div>
@@ -229,7 +229,7 @@
                   {is_module_activated name="COMMENT_MANAGER"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="with_comment" name="with_comment" ng-model="article.with_comments" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="with_comment" name="with_comment" ng-model="article.with_comment" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
                         <label class="form-label" for="with_comment">
                           {t}Allow comments{/t}
                         </label>
@@ -264,12 +264,12 @@
                       {/acl}
                     </div>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.category.$invalid }">
                     <label class="form-label" for="category">
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select id="category" name="category" ng-model="article.category" required="required">
+                      <select class="form-control" id="category" name="category" ng-model="article.category" required="required">
                         <option value="" >{t}- Select a category -{/t}</option>
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
@@ -373,7 +373,7 @@
                 </div>
                 <div class="grid-body">
                   <div class="checkbox">
-                    <input {if $article->params["only_registered"] == "1"}checked=checked{/if} id="only_registered" name="params[only_registered]" type="checkbox" value="1">
+                    <input id="only_registered" name="params[only_registered]" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
                     <label for="only_registered">
                       {t}Only available for registered users{/t}
                     </label>
@@ -392,7 +392,7 @@
                 </div>
                 <div class="grid-body">
                   <div class="checkbox">
-                    <input {if $article->params["only_subscribers"] == "1"}checked=checked{/if} id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" type="checkbox" value="1">
+                    <input id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
                     <label for="only_subscribers">
                       {t}Only available for subscribers{/t}
                     </label>
@@ -409,9 +409,6 @@
 
       <div id="related-contents">
         {include file ="article/related/_related_list.tpl"}
-        <input type="hidden" name="params[withGallery]" ng-model="article.params.withGallery" ng-value="withGallery"/>
-        <input type="hidden" name="params[withGalleryInt]" ng-model="article.params.withGalleryInt" ng-value="withGalleryInt"/>
-        <input type="hidden" name="params[withGalleryHome]" ng-model="article.params.withGalleryHome" ng-value="withGalleryHome"/>
       </div>
 
       {is_module_activated name="CRONICAS_MODULES"}
@@ -419,7 +416,6 @@
       {/is_module_activated}
 
       <input type="hidden" id="action" name="action" value="{$action}" />
-      <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
     </div><!-- /wrapper-content contentform -->
 
     <script type="text/ng-template" id="modal-preview">

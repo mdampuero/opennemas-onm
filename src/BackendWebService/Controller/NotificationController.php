@@ -46,6 +46,17 @@ class NotificationController extends Controller
             ]
         );
 
+        $view = $this->get('core.dispatcher')->dispatch(
+            'notifications.getView',
+            [
+                'oql' => sprintf(
+                    'instance_id = %s and user_id = %s and view_date !is null',
+                    $instance->id,
+                    $this->getUser()->id
+                )
+            ]
+        );
+
         $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
             . ' and enabled = 1 and start <= "%s" and (end is null or end > "%s")';
 
@@ -68,7 +79,7 @@ class NotificationController extends Controller
 
         if (is_array($notifications)) {
             foreach ($notifications as &$notification) {
-                $this->convertNotification($notification);
+                $this->convertNotification($notification, $view);
             }
         }
 
@@ -92,7 +103,7 @@ class NotificationController extends Controller
         $date  = date('Y-m-d H:i:s');
 
         $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
-            .  ' or enabled = 1 and start <= "%s"'
+            .  ' and enabled = 1 and start <= "%s"'
             .  ' and (end is null or end > "%s")';
 
         if (!$this->getUser()->isAdmin()) {
@@ -263,7 +274,7 @@ class NotificationController extends Controller
      *
      * @param Notification $notification The notification to covert.
      */
-    private function convertNotification(&$notification)
+    private function convertNotification(&$notification, $view = null)
     {
         $notification = $notification->getData();
 
@@ -287,7 +298,12 @@ class NotificationController extends Controller
             $notification['body']  = $notification['body']['en'];
         }
 
-        $notification['read']  = 0;
+        $notification['read'] = 0;
+        $notification['view'] = 0;
+
+        if (!empty($view) && in_array($notification['id'], array_keys($view))) {
+            $notification['view']= 1;
+        }
 
         $time = $notification['start']->getTimeStamp();
 

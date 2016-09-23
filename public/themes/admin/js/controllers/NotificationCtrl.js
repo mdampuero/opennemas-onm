@@ -61,6 +61,7 @@
           var data = {
             ids: ids,
             'open_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
+            'read_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
             'view_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
           };
 
@@ -83,8 +84,8 @@
             return;
           }
 
-          $scope.unread = nv.filter(function(a) {
-            return parseInt(a.read) === 0;
+          $scope.notViewed = nv.filter(function(a) {
+            return parseInt(a.view) === 0;
           });
 
           $scope.fixed = nv.filter(function(a) {

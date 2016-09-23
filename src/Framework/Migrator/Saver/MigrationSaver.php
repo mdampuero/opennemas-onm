@@ -1840,7 +1840,7 @@ class MigrationSaver
                         \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
                     break;
                 case 'replace_body_images':
-                    preg_match_all($params['pattern'], $field, $matches);
+                    preg_match_all($params['img_pattern'], $field, $matches);
                     foreach ($matches[0] as $value) {
                         $filename = pathinfo($value)['basename'];
                         list($type, $id) =
