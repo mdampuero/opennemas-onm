@@ -52,14 +52,18 @@ function smarty_function_dynamic_image($params, &$smarty)
     unset($params['transform']);
     unset($params['site_url']);
     unset($params['data-src']);
+
+    if ($lazyload) {
+        $params['class'] = "lazy ".(array_key_exists('class', $params)? $params['class']: '');
+    }
+
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
-
     if ($lazyload) {
-        $output = "<img class=\"lazy\" src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
+        $output = "<img src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
     } else {
         $output = "<img src=\"{$resource}\" {$properties}>";
     }
