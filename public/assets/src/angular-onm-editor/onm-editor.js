@@ -104,7 +104,7 @@
                 groups: ['mode', 'document', 'doctools']
               }, {
                 name: 'editing',
-                groups: ['find', 'selection', 'spellchecker']
+                groups: ['find', 'selection']
               }, {
                 name: 'forms'
               },
@@ -140,7 +140,7 @@
               // { name: 'clipboard',   groups: [ 'clipboard' ] },
               {
                 name: 'editing',
-                groups: ['find', 'selection', 'spellchecker']
+                groups: ['find', 'selection']
               }, {
                 name: 'forms'
               }, {

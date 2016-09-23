@@ -1,0 +1,13 @@
+{
+  "name": "wordcount",
+  "homepage": "https://github.com/w8tcha/CKEditor-WordCount-Plugin",
+  "_release": "73fbef7e9c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "73fbef7e9c69163ce79a5b385f65635e155b12ff"
+  },
+  "_source": "https://github.com/w8tcha/CKEditor-WordCount-Plugin.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/w8tcha/CKEditor-WordCount-Plugin.git"
+}
