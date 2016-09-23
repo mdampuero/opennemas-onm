@@ -21,7 +21,7 @@ CKEDITOR.plugins.add( 'autokeywords', {
             label: editor.lang.autokeywords.toolbar,
             command: 'replaceKeywords',
             toolbar: 'links',
-            icon: this.path + 'icons/autokeywords.png'
+            icon: '/assets/src/ckeditor-autokeywords/icons/autokeywords.png'
         });
     }
 });
