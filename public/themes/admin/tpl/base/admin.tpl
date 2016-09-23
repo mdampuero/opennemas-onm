@@ -458,7 +458,6 @@
   <![endif]-->
   {block name="global-js"}
       <!-- @Common/components/modernizr/modernizr.js, -->
-    <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
     {javascripts src="
       @Common/components/jquery/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
