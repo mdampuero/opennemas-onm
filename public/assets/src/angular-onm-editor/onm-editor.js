@@ -355,7 +355,7 @@
               // Initializes the CKEditor with data
               instance.on('instanceReady', function () {
                 // Data from HTML value
-                var data = element[0].value;
+                var data = element[0].innerHTML;
 
                 // If model, data from model
                 if (scope && scope.ngModel) {
