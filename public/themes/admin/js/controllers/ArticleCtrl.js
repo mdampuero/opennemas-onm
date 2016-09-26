@@ -229,7 +229,7 @@
 
               if (response.status === 201) {
                 webStorage.session.remove('article-draft');
-                $scope.unsaved = false;
+                $scope.articleForm.$setDirt(false);
                 $window.location.href = response.headers().location;
               }
             }, function(response) {
@@ -268,7 +268,7 @@
               $scope.saving = false;
               webStorage.session.remove('article-' +
                   $scope.article.pk_article + '-draft');
-              $scope.unsaved = false;
+              $scope.articleForm.$setDirty(false);
               messenger.post(response.data);
             }, function(response) {
               $scope.saving = false;
@@ -458,7 +458,7 @@
 
             // Show a message when leaving before saving
             $($window).bind('beforeunload', function() {
-              if ($scope.unsaved){
+              if ($scope.articleForm.$dirty){
                 return $window.leaveMessage;
               }
             });
@@ -498,7 +498,7 @@
               }, 2500);
             }
 
-            $scope.unsaved = true;
+            $scope.articleForm.$setDirty(true);
           }, true);
 
         // Update title_int when title changes
