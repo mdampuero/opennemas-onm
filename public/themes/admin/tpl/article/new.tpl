@@ -301,7 +301,7 @@
                     </label>
                     <div class="controls">
                       <input class="form-control" id="slug" name="slug" ng-model="article.slug" type="text" ng-disabled="article.content_status == '0'">
-                      <span class="help-block">
+                      <span class="help-block" ng-if="article.pk_article">
                         <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% article.uri %]" target="_blank">
                           <i class="fa fa-external-link"></i> {t}Link{/t}
                         </a>
