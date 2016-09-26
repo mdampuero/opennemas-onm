@@ -317,15 +317,40 @@
           },
           require: ['ngModel', '^?form'],
           link: function (scope, element, attrs, ctrls) {
-            var isReady = false;
             var ngModel = ctrls[0];
-            var stop    = false;
             var form    = ctrls[1] || null;
 
+            // Flag to prevent infinite updates between CKEditor and model.
+            var stop = false;
+
+            /**
+             * Initializes the current CKEditor instance.
+             */
             var onLoad = function () {
               var options  = Editor.configure(attrs.onmEditorPreset);
               var instance = Editor.init(element[0], options);
 
+              // Updates CKEditor when model changes
+              scope.$watch('ngModel', function(nv, ov) {
+                if (stop) {
+                  stop = !stop;
+                  return;
+                }
+
+                if (instance.getData() !== nv) {
+                  instance.setData(nv, { internal: false });
+                }
+
+                if (nv === ov) {
+                  return;
+                }
+              }, true);
+
+              /**
+               * Updates model when CKEditor changes and model is not equals.
+               *
+               * @param {Object} e The event object.
+               */
               var setModelData = function(e) {
                 if (stop) {
                   stop = !stop;
@@ -363,8 +388,7 @@
                 }
 
                 scope.$apply(function () {
-                  stop    = true;
-                  isReady = false;
+                  stop = true;
 
                   instance.setData(data);
 
@@ -380,21 +404,6 @@
               element.bind('$destroy', function () {
                 Editor.destroy(instance.name);
               });
-
-              scope.$watch('ngModel', function(nv, ov) {
-                if (stop) {
-                  stop = !stop;
-                  return;
-                }
-
-                if (instance.getData() !== nv) {
-                  instance.setData(nv, { internal: false });
-                }
-
-                if (nv === ov) {
-                  return;
-                }
-              }, true);
             };
 
             if ($window.CKEDITOR.status === 'loaded') {
@@ -411,7 +420,17 @@
       }
     ])
 
-    // Initialize and check CKEditor on application run.
+    /**
+     * @ngdoc run
+     * @name  onm.editor:run
+     *
+     * @requires $q
+     * @requires $timeout
+     * @requires $window
+     *
+     * @description
+     *   Initialize and check CKEditor on application run.
+     */
     .run(['$q', '$timeout', '$window', function ($q, $timeout, $window) {
       $defer = $q.defer();
 
@@ -431,6 +450,6 @@
       }
 
       $window.CKEDITOR.on('loaded', checkLoaded);
-      $timeout(checkLoaded, 100);
+      $timeout(checkLoaded, 0);
     }]);
 })();
