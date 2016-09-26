@@ -150,6 +150,25 @@
         };
 
         /**
+         * @function getCategoryName
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Returns the category name given a category id.
+         *
+         * @param {Integer} id The category id.
+         *
+         * @return {String} The category name.
+         */
+        $scope.getCategoryName = function(id) {
+          return $scope.categories.filter(function(e) {
+            return parseInt(e.id) === parseInt(id);
+          }).map(function (e) {
+            return e.name;
+          }).join('');
+        };
+
+        /**
          * @function preview
          * @memberOf ArticleCtrl
          *
@@ -521,11 +540,7 @@
           var category = '';
 
           if ($scope.article.category) {
-            category = $scope.categories.filter(function(e) {
-              return parseInt(e.id) === parseInt($scope.article.category);
-            }).map(function (e) {
-              return e.name;
-            }).join(' ');
+            category = $scope.getCategoryName($scope.article.category);
           }
 
           var data  = title + ' ' + category;
