@@ -171,13 +171,14 @@
          * @param {String} getPreviewUrl The URL to get the preview.
          */
         $scope.preview = function(previewUrl, getPreviewUrl) {
-          $scope.loading = true;
+          $scope.previewLoading = true;
 
-          // Force Editor update
-          Editor.get('body').updateElement();
-          Editor.get('summary').updateElement();
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text;
+          }).join(',');
 
-          var data = { 'article': $scope.article };
+          var data = { 'article': data };
 
           http.post(previewUrl, data).success(function() {
             $uibModal.open({
@@ -196,9 +197,9 @@
               }
             });
 
-            $scope.loading = false;
+            $scope.previewLoading = false;
           }).error(function() {
-            $scope.loading = false;
+            $scope.previewLoading = false;
           });
         };
 
