@@ -4,30 +4,12 @@
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script>
       var draftSavedMsg = '{t}Draft saved at {/t}';
-
-      jQuery(document).ready(function($){
-        $('#title_input, #category').on('change', function() {
-          var title = $('#title_input');
-          var category = $('#category option:selected');
-          var metaTags = $('#metadata');
-
-          // Fill tags from title and category
-          if (!metaTags.val()) {
-            var tags = title.val();
-
-            if (category.data('name')) {
-              tags += " " + category.data('name');
-            }
-            fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
-          }
-        });
-      });
     </script>
   {/javascripts}
 {/block}
 
 {block name="content"}
-  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if}" novalidate>
+  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if};categories = {json_encode($allcategorys)|clear_json}" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -302,7 +284,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" ng-model="article.metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text">
+                      <tags-input ng-model="article.metadata"></tags-input>
                     </div>
                   </div>
                   <div class="form-group">

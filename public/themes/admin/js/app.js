@@ -10,6 +10,7 @@ angular.module(
     'ngAnimate',
     'ngSanitize',
     'ngTouch',
+    'ngTagsInput',
     'onm.gravatar',
     'onm.editor',
     'onm.dynamicImage',
