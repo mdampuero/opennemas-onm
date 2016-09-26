@@ -5,6 +5,14 @@
     <script>
       var draftSavedMsg = '{t}Draft saved at {/t}';
     </script>
+<style>
+tags-input .tags .tag-item  {
+    background-color: #376092 !important;
+    font-size: 11px  !important;
+    font-family: 'Open Sans' !important;
+    font-weight: 600 !important;
+}
+</style>
   {/javascripts}
 {/block}
 
