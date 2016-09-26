@@ -84,15 +84,6 @@
 
                   modalWindow.close({ response: true, success: true });
 
-                  // Force metadata
-                  if ($scope.article.metadata) {
-                    var tags = $scope.article.metadata.split(',');
-                    $('#metadata').tagsinput('removeAll');
-                    for (var i in tags) {
-                      $('#metadata').tagsinput('add', tags[i]);
-                    }
-                  }
-
                   if ($scope.article.starttime) {
                     $scope.article.starttime = $window.moment($scope.article.starttime)
                       .format('YYYY-MM-DD HH:mm:ss');
@@ -237,7 +228,7 @@
 
           var data = angular.copy($scope.article);
           data.metadata = data.metadata.map(function(e) {
-            return e.text
+            return e.text;
           }).join(',');
 
           $scope.saving = true;
@@ -274,7 +265,7 @@
 
           var data = angular.copy($scope.article);
           data.metadata = data.metadata.map(function(e) {
-            return e.text
+            return e.text;
           }).join(',');
 
           var route = {
@@ -309,12 +300,14 @@
             if ((angular.isUndefined($scope.article.img1_footer) &&
                   angular.isUndefined(ov)) ||
                 (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description == $scope.article.img1_footer)) {
+                  ov.description === $scope.article.img1_footer)) {
               $scope.article.img1_footer = $scope.photo1.description;
             }
 
-            // Set inner image if empty
-            if (angular.isUndefined($scope.photo2) && nv !== ov) {
+            // Set inner image if empty only on create
+            if (angular.isUndefined($scope.photo2) &&
+                angular.isUndefined($scope.article.id) &&
+                nv !== ov) {
               $scope.photo2 = $scope.photo1;
             }
           }
@@ -334,7 +327,7 @@
             if ((angular.isUndefined($scope.article.img2_footer) &&
                   angular.isUndefined(ov)) ||
                 (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description == $scope.article.img2_footer)) {
+                  ov.description === $scope.article.img2_footer)) {
               $scope.article.img2_footer = $scope.photo2.description;
             }
           }
@@ -354,7 +347,7 @@
             if ((angular.isUndefined($scope.article.params.imageHomeFooter) &&
                   angular.isUndefined(ov)) ||
                 (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description == $scope.article.imageHomeFooter)) {
+                  ov.description === $scope.article.imageHomeFooter)) {
               $scope.article.params.imageHomeFooter = $scope.photo3.description;
             }
           }
@@ -556,9 +549,9 @@
           $scope.mtm = $timeout(function() {
             http.get(route).then(function(response) {
               $scope.article.metadata = response.data.split(',');
-            })
+            });
           }, 500);
-        })
+        });
 
         // Enable drafts after 5s to grant CKEditor initialization
         $timeout(function() {
