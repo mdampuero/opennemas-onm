@@ -68,8 +68,9 @@
             backdrop:    true,
             backdropClass: 'modal-backdrop-transparent',
             controller:  'YesNoModalCtrl',
+            openedClass: 'modal-relative-open',
             templateUrl: 'modal-draft',
-            windowClass: 'modal-right modal-small modal-top modal-relative-open',
+            windowClass: 'modal-right modal-small modal-top',
             resolve: {
               template: function() {
                 return {};
