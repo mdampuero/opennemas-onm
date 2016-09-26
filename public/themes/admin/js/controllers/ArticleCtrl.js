@@ -238,10 +238,10 @@
           http.post('backend_ws_article_save', data)
             .then(function(response) {
               $scope.saving = false;
+              $scope.articleForm.$setPristine(true);
 
               if (response.status === 201) {
                 webStorage.session.remove('article-draft');
-                $scope.articleForm.$setDirty(false);
                 $window.location.href = response.headers().location;
               }
             }, function(response) {
@@ -280,7 +280,7 @@
               $scope.saving = false;
               webStorage.session.remove('article-' +
                   $scope.article.pk_article + '-draft');
-              $scope.articleForm.$setDirty(false);
+              $scope.articleForm.$setPristine(true);
               messenger.post(response.data);
             }, function(response) {
               $scope.saving = false;
