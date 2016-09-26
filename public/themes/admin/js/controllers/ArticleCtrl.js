@@ -229,7 +229,7 @@
 
               if (response.status === 201) {
                 webStorage.session.remove('article-draft');
-                $scope.articleForm.$setDirt(false);
+                $scope.articleForm.$setDirty(false);
                 $window.location.href = response.headers().location;
               }
             }, function(response) {
@@ -549,29 +549,6 @@
         $timeout(function() {
           $scope.draftEnabled = true;
         }, 5000);
-
-        $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false
-        });
-
-        $('#starttime').on('dp.change',function (e) {
-          $('#endtime').data('DateTimePicker').minDate(e.date);
-
-          $scope.$apply(function () {
-            $scope.article.starttime =
-              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
-          });
-        });
-
-        $('#endtime').on('dp.change',function (e) {
-          $('#starttime').data('DateTimePicker').maxDate(e.date);
-
-          $scope.$apply(function() {
-            $scope.article.endtime =
-              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
-          });
-        });
       }
     ]);
 })();

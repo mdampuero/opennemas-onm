@@ -13,6 +13,7 @@ angular.module(
     'ngTagsInput',
     'onm.gravatar',
     'onm.editor',
+    'onm.datetimepicker',
     'onm.dynamicImage',
     'onm.flyToCart',
     'onm.http',
