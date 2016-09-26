@@ -30,6 +30,12 @@ class ApplicationListener implements EventSubscriberInterface
     {
         $appVersion = $event->getRequest()->headers->get('x-app-version');
 
+        $uri = $event->getRequest()->getUri();
+
+        if (strpos($uri, 'manager') === false) {
+            return;
+        }
+
         if ($appVersion && $appVersion < DEPLOYED_AT) {
             $event->setResponse(new Response(_('Application upgraded'), 426));
         }
