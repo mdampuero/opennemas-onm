@@ -65,7 +65,7 @@
               </li>
               <li class="quicklinks hidden-xs">
                 <button class="btn btn-white" id="button_preview" ng-click="preview('admin_article_preview', 'admin_article_get_preview')" type="button">
-                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
+                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': previewLoading }" ></i>
                   <span class="hidden-xs">{t}Preview{/t}</span>
                 </button>
               </li>
