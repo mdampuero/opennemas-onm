@@ -280,15 +280,20 @@ class NotificationController extends Controller
         $extra      = $this->getTemplateParams();
         $repository = $this->get('orm.manager')->getRepository('Notification');
         $converter  = $this->get('orm.manager')->getConverter('Notification');
-        $counters   = $this->getNotificationCounters();
+
+        $total         = $repository->countBy($oql);
+        $notifications = $repository->findBy($oql);
+
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $notifications);
+
+        $counters = $this->getNotificationCounters($ids);
 
         $extra['stats'] = [];
         foreach ($counters as $counter) {
             $extra['stats'][$counter['notification_id']] = $counter;
         }
-
-        $total         = $repository->countBy($oql);
-        $notifications = $repository->findBy($oql);
 
         $ids = [];
         foreach ($notifications as &$notification) {
@@ -492,13 +497,18 @@ class NotificationController extends Controller
      *
      * @return array The list of notification counters.
      */
-    protected function getNotificationCounters()
+    protected function getNotificationCounters($ids = [])
     {
         $sql = 'SELECT notification.id as notification_id, title, count(read_date) as "read",'
             . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
             . ' COUNT(open_date) as "opened"'
-            .' FROM notification LEFT JOIN user_notification ON notification.id = notification_id'
-            .' GROUP BY notification_id ORDER BY id DESC';
+            . ' FROM notification LEFT JOIN user_notification ON notification.id = notification_id';
+
+        if (!empty($ids)) {
+            $sql .= sprintf(' WHERE notification_id in (%s)', implode(',', $ids));
+        }
+
+        $sql .= ' GROUP BY notification.id ORDER BY id DESC';
 
         return $this->get('dbal_connection_manager')->fetchAll($sql);
     }
