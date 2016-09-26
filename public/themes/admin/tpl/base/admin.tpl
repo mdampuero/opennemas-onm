@@ -35,6 +35,7 @@
       @Common/src/webarch/css/magic_space.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/style.css,
+      @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/messenger/build/css/messenger.css" filters="cssrewrite" output="core"}
     {/stylesheets}
@@ -57,7 +58,6 @@
       @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/spinkit/css/spinkit.css" filters="cssrewrite" output="vendor"}
     {/stylesheets}

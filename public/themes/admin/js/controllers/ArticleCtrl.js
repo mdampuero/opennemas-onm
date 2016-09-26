@@ -137,10 +137,7 @@
             }
 
             if ($scope.article.metadata) {
-              var tags = $scope.article.metadata.split(',');
-              for (var i = 0; i < tags.length; i++) {
-                $('#metadata').tagsinput('add', tags[i]);
-              }
+              $scope.article.metadata = $scope.article.metadata.split(',');
             }
 
             $scope.checkDraft();
@@ -219,9 +216,14 @@
             return;
           }
 
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text
+          }).join(',');
+
           $scope.saving = true;
 
-          http.post('backend_ws_article_save', $scope.article)
+          http.post('backend_ws_article_save', data)
             .then(function(response) {
               $scope.saving = false;
 
@@ -251,12 +253,17 @@
 
           $scope.saving = true;
 
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text
+          }).join(',');
+
           var route = {
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
           };
 
-          http.put(route, $scope.article)
+          http.put(route, data)
             .then(function(response) {
               $scope.saving = false;
               webStorage.session.remove('article-' +
@@ -502,6 +509,41 @@
             $scope.article.title_int = nv;
           }
         }, true);
+
+        // Update metadata when title or category change
+        $scope.$watch('[ article.title, article.category ]', function(nv, ov) {
+          if (($scope.article.metadata && $scope.article.metadata.length > 0) ||
+              !nv || nv === ov) {
+            return;
+          }
+
+          var title    = $scope.article.title ? $scope.article.title : '';
+          var category = '';
+
+          if ($scope.article.category) {
+            category = $scope.categories.filter(function(e) {
+              return parseInt(e.id) === parseInt($scope.article.category);
+            }).map(function (e) {
+              return e.name;
+            }).join(' ');
+          }
+
+          var data  = title + ' ' + category;
+          var route = {
+            name:   'admin_utils_calculate_tags',
+            params: { data: data }
+          };
+
+          if ($scope.mtm) {
+            $timeout.cancel($scope.mtm);
+          }
+
+          $scope.mtm = $timeout(function() {
+            http.get(route).then(function(response) {
+              $scope.article.metadata = response.data.split(',');
+            })
+          }, 500);
+        })
 
         // Enable drafts after 5s to grant CKEditor initialization
         $timeout(function() {
