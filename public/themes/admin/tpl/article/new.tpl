@@ -106,7 +106,13 @@
         </div>
       </div>
     </div>
-    <div class="content">
+    <div class="content ng-cloak no-animate" ng-if="loading">
+      <div class="spinner-wrapper">
+        <div class="loading-spinner"></div>
+        <div class="spinner-text">{t}Loading{/t}...</div>
+      </div>
+    </div>
+    <div class="content ng-cloak" ng-if="!error && !loading && article">
      <div class="row">
         <div class="col-md-8">
           <div class="grid simple">

@@ -124,6 +124,8 @@
          * @param {Integer} id The article id.
          */
         $scope.getArticle = function(id) {
+          $scope.loading = true;
+
           var route = {
             name:   'backend_ws_article_show',
             params: { id: id }
@@ -142,7 +144,10 @@
             }
 
             $scope.checkDraft();
+            $scope.loading = false;
           }, function(response) {
+            $scope.loading = false;
+            $scope.error   = true;
             messenger.post(response.data);
           });
         };
