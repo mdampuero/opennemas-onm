@@ -9,7 +9,7 @@
  */
 namespace Common\Cache\Core;
 
-use Common\ORM\Core\Exception\InvalidCacheException;
+use Common\Cache\Core\Exception\InvalidConnectionException;
 
 /**
  * The CacheManager class manages the cache configuration and creates
@@ -53,14 +53,14 @@ class CacheManager
      *
      * @return Cache The cache connection.
      *
-     * @throws InvalidCacheException  If the cache connection does not exist.
+     * @throws InvalidConnectionException If the cache connection does not exist.
      */
     public function getConnection($name)
     {
         $name = preg_replace('/@?cache.connection/', '', $name);
 
         if (!array_key_exists($name, $this->caches)) {
-            throw new InvalidCacheException($name);
+            throw new InvalidConnectionException($name);
         }
 
         return $this->caches[$name];
