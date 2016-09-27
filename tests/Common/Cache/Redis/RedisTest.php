@@ -40,6 +40,21 @@ class RedisTest extends KernelTestCase
     }
 
     /**
+     * Tests getPrefix with default and custom values.
+     */
+    public function testGetPrefix()
+    {
+        $method = new \ReflectionMethod($this->redis, 'getPrefix');
+        $method->setAccessible(true);
+
+        $this->assertEquals('', $method->invokeArgs($this->redis, []));
+
+        $this->redis->prefix = 'quux';
+
+        $this->assertEquals('quux_', $method->invokeArgs($this->redis, []));
+    }
+
+    /**
      * Tests constructor with invalid redis parameters.
      *
      * @expectedException \InvalidArgumentException
