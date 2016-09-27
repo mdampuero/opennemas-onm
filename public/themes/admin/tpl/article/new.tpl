@@ -143,7 +143,7 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input ng-if='!article.id' class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="article.agency = '{setting name=site_agency}'" type="text">
+                    <input ng-if='!article.id' class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="!article.id ? article.agency = '{setting name=site_agency}' : ''" type="text">
                     <input ng-if='article.id' class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="article.agency = '{setting name=site_agency}'" type="text">
                   </div>
                 </div>
@@ -153,9 +153,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="article.params.agencyBulletin = '{setting name=site_agency}'" type="text">
-                    <input ng-if='!article.id' class="form-control" id="agency_bulletin" name="agency" ng-model="article.params.agencyBulletin" ng-init="article.agency = '{setting name=site_agency}'" type="text">
-                    <input ng-if='article.id' class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="article.params.agencyBulletin = '{setting name=site_agency}'" type="text">
+                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="!article.id ? article.params.agencyBulletin = '{setting name=site_agency}' : ''" type="text">
                   </div>
                 </div>
                 {/is_module_activated}
