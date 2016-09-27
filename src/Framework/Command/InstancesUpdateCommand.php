@@ -119,7 +119,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         }
 
         if ($offset) {
-            $oql .= ' offset ' . $offset;
+            $oql .= ' offset ' . $offset * 30;
         }
 
         $instances = $this->em->getRepository('Instance')->findBy($oql);
