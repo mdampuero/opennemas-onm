@@ -58,7 +58,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
                 'Whether to check manager schema or an instance schema (default: instance)'
             )
             ->addOption(
-                'foreign-keys',
+                'disable-foreign-keys',
                 false,
                 InputOption::VALUE_NONE,
                 'Whether to Use foreign keys in tables'
@@ -83,7 +83,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
         // $this->dumpSchema('onm-instances');
 
         $master = Yaml::parse(file_get_contents(APPLICATION_PATH.'/'.$this->path));
-        $master = $this->createSchema($master, $input->getoption('foreign-keys'));
+        $master = $this->createSchema($master, $input->getoption('disable-foreign-keys'));
 
         $schema = $this->getSchema($database);
         $conn = getService('dbal_connection');
@@ -155,7 +155,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
      * @param  array  $input Master schema as array.
      * @return Schema        Master schema.
      */
-    private function createSchema($input, $useForeignKeys)
+    private function createSchema($input, $dontUseForeignKeys)
     {
         $schema = new Schema();
 
@@ -190,7 +190,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
             }
         }
 
-        if ($useForeignKeys) {
+        if (!$dontUseForeignKeys) {
             foreach ($input as $table => $definition) {
                 if (array_key_exists('foreign_keys', $definition)) {
                     $tableObject = $schema->getTable($table);
