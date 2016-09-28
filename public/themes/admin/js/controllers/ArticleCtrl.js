@@ -34,7 +34,7 @@
          *
          * @type {Object}
          */
-        $scope.article = { params: {} };
+        $scope.article = { body: '', params: {}, summary: '' };
 
         /**
          * @memberOf ArticleCtrl
@@ -468,7 +468,8 @@
         $scope.$watch('[article, photo1, photo2, photo3, video1, video2,' +
           'galleryForFrontpage, galleryForInner, galleryForHome]',
           function(nv, ov) {
-            if (!nv || ov === nv || (!ov.pk_article && nv.pk_article)) {
+            if (!nv || ov === nv || (ov[0] && !ov[0].pk_article &&
+                  nv[0].pk_article)) {
               return;
             }
 
