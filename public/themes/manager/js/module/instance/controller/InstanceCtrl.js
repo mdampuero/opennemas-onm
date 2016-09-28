@@ -247,14 +247,6 @@
         $scope.save = function() {
           $scope.saving = 1;
 
-          //if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
-            //$scope.instance.domain_expire = $scope.instance.domain_expire.toString();
-          //}
-
-          //if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
-            //$scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
-          //}
-
           http.post('manager_ws_instance_save', { instance: $scope.instance,
             settings: $scope.settings }).then(function (response) {
               messenger.post(response.data);
@@ -301,10 +293,8 @@
             }
           } else {
             $scope.selected.plan = {};
-            $scope.instance.activated_modules = [];
+            $scope.instance.activated_modules = [ $scope.instance.support_plan ];
           }
-
-          //$scope.updateSupport($scope.instance.support_plan);
         };
 
         /**
@@ -336,14 +326,6 @@
         $scope.update = function() {
           $scope.saving = 1;
 
-          //if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
-            //$scope.instance.domain_expire = $scope.instance.domain_expire.toString();
-          //}
-
-          //if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
-            //$scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
-          //}
-
           var data  = { instance: $scope.instance, settings: $scope.settings };
           var route = {
             name:   'manager_ws_instance_update',
@@ -357,32 +339,6 @@
             messenger.post(response.data);
             $scope.saving = 0;
           });
-        };
-
-        /**
-         * @function updateSupport
-         * @memberOf InstanceCtrl
-         *
-         * @description
-         *   Updates activated modules when support plan changes.
-         *
-         * @param {String} id The support plan id.
-         *
-         */
-        $scope.updateSupport = function(id) {
-          for (var i = 0; i < data.template.modules.length; i++) {
-            var module = data.template.modules[i];
-
-            if (module.plan === 'Support') {
-              var index = $scope.instance.activated_modules.indexOf(module.id);
-
-              if (index !== -1) {
-                $scope.instance.activated_modules.splice(index, 1);
-              }
-            }
-          }
-
-          $scope.instance.activated_modules.push(id);
         };
 
         $scope.$watch('instance.support_plan', function(nv, ov) {
