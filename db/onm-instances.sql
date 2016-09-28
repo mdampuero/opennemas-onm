@@ -285,7 +285,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES ('log_db_enabled','s:2:\"on\";'),('log_enabled','s:2:\"on\";'),('log_level','s:6:\"normal\";'),('site_language','s:5:\"es_ES\";'),('time_zone','s:3:\"334\";');
+INSERT INTO `settings` VALUES ('log_db_enabled','s:2:\"on\";'),('log_enabled','s:2:\"on\";'),('log_level','s:6:\"normal\";'),('site_language','s:5:\"es_ES\";'),('time_zone','s:3:\"421\";');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,4 +443,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-28 10:03:00
+-- Dump completed on 2016-09-28 10:20:49
