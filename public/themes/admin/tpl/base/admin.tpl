@@ -535,6 +535,7 @@
       @Common/src/angular-history/history.js,
       @Common/src/angular-item-service/itemService.js,
       @Common/src/angular-messenger/messenger.js,
+      @Common/src/angular-cleaner/cleaner.js,
       @Common/src/angular-onm-editor/onm-editor.js,
       @Common/src/angular-onm-pagination/js/onm-pagination.js,
       @Common/src/angular-oql-encoder/oql-encoder.js,

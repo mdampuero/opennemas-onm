@@ -6,7 +6,8 @@
    * @name  onm.cleaner
    *
    * @description
-   *   description
+   *   The `onm.cleaner` module provides a service to clean properties added to
+   *   objects by some components.
    */
   angular.module('onm.cleaner', [])
     /**
@@ -14,10 +15,20 @@
      * @name  Cleaner
      *
      * @description
-     *   description
+     *   Service to remove $$hasKey properties from objects used inside
+     *   ng-repeat.
      */
     .service('Cleaner', [
       function() {
+        /**
+         * @function cleanObject
+         * @memberOf Cleaner
+         *
+         * @description
+         *   Removes $$hashKey properties from object.
+         *
+         * @param {Object} obj The object to clean.
+         */
         this.cleanObject = function(obj) {
           if (!obj) {
             return;
@@ -30,15 +41,23 @@
           }
         };
 
+        /**
+         * @function clean
+         * @memberOf Cleaner
+         *
+         * @description
+         *   Cleans an item.
+         *
+         * @param {Mixed} e The item to clean
+         *
+         * @return {Mixed} The cleaned item.
+         */
         this.clean = function(e) {
-          if (!e) {
-            return;
-          }
-
           if (typeof e === 'object') {
             this.cleanObject(e);
-            return;
           }
+
+          return e;
         };
       }
     ]);
