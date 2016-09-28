@@ -12,6 +12,7 @@ angular.module(
     'ngTouch',
     'ngTagsInput',
     'onm.gravatar',
+    'onm.cleaner',
     'onm.editor',
     'onm.datetimepicker',
     'onm.dynamicImage',

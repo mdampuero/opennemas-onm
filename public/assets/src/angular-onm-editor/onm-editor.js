@@ -9,7 +9,7 @@
    *
    * @description
    *   The `onm.editor` module provides a service and a directive to create and
-   *   initialize CKEDitor components.
+   *   initialize CKEditor components.
    */
   angular.module('onm.editor', [])
     /**

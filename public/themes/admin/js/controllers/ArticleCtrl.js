@@ -21,8 +21,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('ArticleCtrl', [
-      '$controller', '$interval', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
-      function($controller, $interval, $scope, $timeout, $uibModal, $window, Editor, http, messenger, routing, webStorage) {
+      '$controller', '$interval', '$scope', '$timeout', '$uibModal', '$window', 'Cleaner', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
+      function($controller, $interval, $scope, $timeout, $uibModal, $window, Cleaner, Editor, http, messenger, routing, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -384,10 +384,11 @@
 
         // Updates scope when relatedInFrontpage changes.
         $scope.$watch('relatedInFrontpage', function(nv, ov) {
-          // Set inner related if empty or equal to front
-          if ((!$scope.relatedInInner ||
-              $scope.article.relatedInner === $scope.article.relatedFront) &&
-              nv !== ov) {
+          // Set inner if creating and empty or when old value in front is
+          // equals to current value in inner
+          if ((!$scope.article.pk_article && !$scope.relatedInInner) || (ov &&
+                angular.equals(Cleaner.clean($scope.relatedInInner),
+                  Cleaner.clean(ov)))) {
             $scope.relatedInInner = angular.copy(nv);
           }
 
