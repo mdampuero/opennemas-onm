@@ -306,10 +306,12 @@
               $scope.article.img1_footer = $scope.photo1.description;
             }
 
-            // Set inner image if empty only on create
+            // Set inner image if empty
             if (angular.isUndefined($scope.photo2) &&
-                angular.isUndefined($scope.article.id) &&
-                nv !== ov) {
+                (!angular.isUndefined(ov) &&
+                  nv !== ov ||
+                  angular.isUndefined($scope.article.id))) {
+              delete $scope.article.img2_footer;
               $scope.photo2 = $scope.photo1;
             }
           }
