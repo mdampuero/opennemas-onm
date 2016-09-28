@@ -19,7 +19,8 @@ ALTER TABLE `user_groups` ENGINE = INNODB;
 ALTER TABLE `user_groups_privileges` ENGINE = INNODB;
 ALTER TABLE `user_notification` ENGINE = INNODB;
 
-SELECT * FROM instance_meta WHERE instance_id NOT IN (SELECT id from instances)
+SELECT * FROM instance_meta WHERE instance_id NOT IN (SELECT id from instances);
+ALTER TABLE `instances` CHANGE `owner_id` `owner_id` BIGINT UNSIGNED NULL DEFAULT NULL;
 
 
 # ####################################

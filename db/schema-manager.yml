@@ -37,7 +37,7 @@ instances:
             type: string
             options: { default: null, length: 255 }
         owner_id:
-            type: integer
+            type: bigint
             options: { default: null, unsigned: true, notnull: false }
         contents:
             type: integer
@@ -118,7 +118,7 @@ instances:
             source_field: [ owner_id ]
             target_table: users
             target_field: [ id ]
-            restrictions: { onUpdate: CASCADE, onDelete: SET DEFAULT }
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 instance_meta:
     columns:
         instance_id:
