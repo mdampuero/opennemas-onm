@@ -290,50 +290,55 @@
 
         // Updates scope when photo1 changes.
         $scope.$watch('photo1', function(nv, ov) {
-          // Reset image if is not set
-          if (ov && !nv) {
+          // No image
+          if (!nv && angular.equals($scope.photo2, ov)) {
             $scope.article.img1 = null;
+            $scope.photo2       = null;
+
             delete $scope.article.img1_footer;
+
             return;
           }
 
-          if ($scope.photo1) {
-            $scope.article.img1 = $scope.photo1.id;
-            if ((angular.isUndefined($scope.article.img1_footer) &&
-                  angular.isUndefined(ov)) ||
-                (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description === $scope.article.img1_footer)) {
-              $scope.article.img1_footer = $scope.photo1.description;
+          $scope.article.img1 = nv.id;
+
+          // Update img1_footer if empty or equals to old description
+          if (angular.isUndefined($scope.article.img1_footer) ||
+              $scope.article.img1_footer === '' ||
+              (ov && $scope.article.img1_footer === ov.description)) {
+            $scope.article.img1_footer = nv.description;
+          }
+
+          // Set inner image if empty or equals to old photo1
+          if ($scope.articleForm.$dirty &&
+              (angular.isUndefined($scope.photo2) ||
+              angular.equals($scope.photo2, ov))) {
+
+            if ($scope.photo2 && $scope.photo2.description &&
+                $scope.article.img2_footer === $scope.photo2.description) {
+              delete $scope.article.img2_footer;
             }
 
-            // Set inner image if empty
-            if (angular.isUndefined($scope.photo2) &&
-                (!angular.isUndefined(ov) &&
-                  nv !== ov ||
-                  angular.isUndefined($scope.article.id))) {
-              delete $scope.article.img2_footer;
-              $scope.photo2 = $scope.photo1;
-            }
+            $scope.photo2 = nv;
           }
         }, true);
 
         // Updates scope when photo2 changes.
         $scope.$watch('photo2', function(nv, ov) {
-          // Reset image if is not set
-          if (ov && !nv) {
+          // No image
+          if (!nv) {
             $scope.article.img2 = null;
             delete $scope.article.img2_footer;
+
             return;
           }
 
-          if ($scope.photo2) {
-            $scope.article.img2 = $scope.photo2.id;
-            if ((angular.isUndefined($scope.article.img2_footer) &&
-                  angular.isUndefined(ov)) ||
-                (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description === $scope.article.img2_footer)) {
-              $scope.article.img2_footer = $scope.photo2.description;
-            }
+          $scope.article.img2 = $scope.photo2.id;
+
+          if (angular.isUndefined($scope.article.img2_footer) ||
+              $scope.article.img2_footer === '' ||
+              (ov && $scope.article.img2_footer === ov.description)) {
+            $scope.article.img2_footer = $scope.photo2.description;
           }
         }, true);
 
