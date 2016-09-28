@@ -4,30 +4,20 @@
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script>
       var draftSavedMsg = '{t}Draft saved at {/t}';
-
-      jQuery(document).ready(function($){
-        $('#title_input, #category').on('change', function() {
-          var title = $('#title_input');
-          var category = $('#category option:selected');
-          var metaTags = $('#metadata');
-
-          // Fill tags from title and category
-          if (!metaTags.val()) {
-            var tags = title.val();
-
-            if (category.data('name')) {
-              tags += " " + category.data('name');
-            }
-            fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
-          }
-        });
-      });
     </script>
   {/javascripts}
+  <style>
+  tags-input .tags .tag-item  {
+      background-color: #376092 !important;
+      font-size: 11px  !important;
+      font-family: 'Open Sans' !important;
+      font-weight: 600 !important;
+  }
+  </style>
 {/block}
 
 {block name="content"}
-  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if}" novalidate>
+  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if};categories = {json_encode($allcategorys)|clear_json}" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -75,7 +65,7 @@
               </li>
               <li class="quicklinks hidden-xs">
                 <button class="btn btn-white" id="button_preview" ng-click="preview('admin_article_preview', 'admin_article_get_preview')" type="button">
-                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
+                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': previewLoading }" ></i>
                   <span class="hidden-xs">{t}Preview{/t}</span>
                 </button>
               </li>
@@ -106,7 +96,13 @@
         </div>
       </div>
     </div>
-    <div class="content">
+    <div class="content ng-cloak no-animate" ng-if="loading">
+      <div class="spinner-wrapper">
+        <div class="loading-spinner"></div>
+        <div class="spinner-text">{t}Loading{/t}...</div>
+      </div>
+    </div>
+    <div class="content ng-cloak" ng-if="!error && !loading && article">
      <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
@@ -147,7 +143,7 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="article.agency = '{setting name=site_agency}'" type="text">
+                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="!article.id ? article.agency = '{setting name=site_agency}' : ''" type="text">
                   </div>
                 </div>
                 {is_module_activated name="ADVANCED_ARTICLE_MANAGER"}
@@ -156,7 +152,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="article.params.agencyBulletin = '{setting name=site_agency}'" type="text">
+                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="!article.id ? article.params.agencyBulletin = '{setting name=site_agency}' : ''" type="text">
                   </div>
                 </div>
                 {/is_module_activated}
@@ -296,7 +292,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" ng-model="article.metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text">
+                      <tags-input ng-model="article.metadata" placeholder="{t}Write a tag and press Enter...{/t}"></tags-input>
                     </div>
                   </div>
                   <div class="form-group">
@@ -305,7 +301,7 @@
                     </label>
                     <div class="controls">
                       <input class="form-control" id="slug" name="slug" ng-model="article.slug" type="text" ng-disabled="article.content_status == '0'">
-                      <span class="help-block">
+                      <span class="help-block" ng-if="article.pk_article">
                         <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% article.uri %]" target="_blank">
                           <i class="fa fa-external-link"></i> {t}Link{/t}
                         </a>
@@ -335,7 +331,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="starttime" name="starttime" ng-model="article.starttime" type="datetime">
+                            <input class="form-control" datetime-picker id="starttime" name="starttime" ng-model="article.starttime" type="datetime">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -351,7 +347,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" id="endtime" name="endtime" ng-model="article.endtime" type="datetime">
+                            <input class="form-control" datetime-picker id="endtime" name="endtime" ng-model="article.endtime" type="datetime">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>

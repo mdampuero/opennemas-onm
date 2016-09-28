@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\Exception;
+namespace Common\Cache\Core\Exception;
 
 class InvalidConnectionException extends \Exception
 {
@@ -18,7 +18,7 @@ class InvalidConnectionException extends \Exception
      */
     public function __construct($class)
     {
-        $message = _('The data source connection for \'%s\' does not exist');
+        $message = _('The cache connection for \'%s\' does not exist');
 
         parent::__construct(sprintf($message, $class));
     }

@@ -68,32 +68,22 @@
             backdrop:    true,
             backdropClass: 'modal-backdrop-transparent',
             controller:  'YesNoModalCtrl',
+            openedClass: 'modal-relative-open',
             templateUrl: 'modal-draft',
-            windowClass: 'modal-right modal-small modal-top modal-relative-open',
+            windowClass: 'modal-right modal-small modal-top',
             resolve: {
               template: function() {
                 return {};
               },
               yes: function() {
                 return function(modalWindow) {
-                  var draft =  webStorage.get(key);
+                  var draft =  webStorage.session.get(key);
 
                   for (var name in draft) {
                     $scope[name] = draft[name];
                   }
 
                   modalWindow.close({ response: true, success: true });
-
-                  // Force Editor update
-                  Editor.get('summary').setData($scope.article.summary);
-                  Editor.get('body').setData($scope.article.body);
-
-                  // Force metadata
-                  var tags = $scope.article.metadata.split(',');
-                  $('#metadata').tagsinput('removeAll');
-                  for (var i in tags) {
-                    $('#metadata').tagsinput('add', tags[i]);
-                  }
 
                   if ($scope.article.starttime) {
                     $scope.article.starttime = $window.moment($scope.article.starttime)
@@ -126,6 +116,8 @@
          * @param {Integer} id The article id.
          */
         $scope.getArticle = function(id) {
+          $scope.loading = true;
+
           var route = {
             name:   'backend_ws_article_show',
             params: { id: id }
@@ -136,21 +128,36 @@
               $scope[key] = response.data[key];
             }
 
-            // Force Editor update
-            Editor.get('summary').setData($scope.article.summary);
-            Editor.get('body').setData($scope.article.body);
-
             if ($scope.article.metadata) {
-              var tags = $scope.article.metadata.split(',');
-              for (var i = 0; i < tags.length; i++) {
-                $('#metadata').tagsinput('add', tags[i]);
-              }
+              $scope.article.metadata = $scope.article.metadata.split(',');
             }
 
             $scope.checkDraft();
+            $scope.loading = false;
           }, function(response) {
+            $scope.loading = false;
+            $scope.error   = true;
             messenger.post(response.data);
           });
+        };
+
+        /**
+         * @function getCategoryName
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Returns the category name given a category id.
+         *
+         * @param {Integer} id The category id.
+         *
+         * @return {String} The category name.
+         */
+        $scope.getCategoryName = function(id) {
+          return $scope.categories.filter(function(e) {
+            return parseInt(e.id) === parseInt(id);
+          }).map(function (e) {
+            return e.name;
+          }).join('');
         };
 
         /**
@@ -164,13 +171,14 @@
          * @param {String} getPreviewUrl The URL to get the preview.
          */
         $scope.preview = function(previewUrl, getPreviewUrl) {
-          $scope.loading = true;
+          $scope.previewLoading = true;
 
-          // Force Editor update
-          Editor.get('body').updateElement();
-          Editor.get('summary').updateElement();
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text;
+          }).join(',');
 
-          var data = { 'article': $scope.article };
+          var data = { 'article': data };
 
           http.post(previewUrl, data).success(function() {
             $uibModal.open({
@@ -189,9 +197,9 @@
               }
             });
 
-            $scope.loading = false;
+            $scope.previewLoading = false;
           }).error(function() {
-            $scope.loading = false;
+            $scope.previewLoading = false;
           });
         };
 
@@ -220,15 +228,20 @@
             return;
           }
 
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text;
+          }).join(',');
+
           $scope.saving = true;
 
-          http.post('backend_ws_article_save', $scope.article)
+          http.post('backend_ws_article_save', data)
             .then(function(response) {
               $scope.saving = false;
+              $scope.articleForm.$setPristine(true);
 
               if (response.status === 201) {
                 webStorage.session.remove('article-draft');
-                $scope.unsaved = false;
                 $window.location.href = response.headers().location;
               }
             }, function(response) {
@@ -252,17 +265,22 @@
 
           $scope.saving = true;
 
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text;
+          }).join(',');
+
           var route = {
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
           };
 
-          http.put(route, $scope.article)
+          http.put(route, data)
             .then(function(response) {
               $scope.saving = false;
               webStorage.session.remove('article-' +
                   $scope.article.pk_article + '-draft');
-              $scope.unsaved = false;
+              $scope.articleForm.$setPristine(true);
               messenger.post(response.data);
             }, function(response) {
               $scope.saving = false;
@@ -284,12 +302,14 @@
             if ((angular.isUndefined($scope.article.img1_footer) &&
                   angular.isUndefined(ov)) ||
                 (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description == $scope.article.img1_footer)) {
+                  ov.description === $scope.article.img1_footer)) {
               $scope.article.img1_footer = $scope.photo1.description;
             }
 
-            // Set inner image if empty
-            if (angular.isUndefined($scope.photo2) && nv !== ov) {
+            // Set inner image if empty only on create
+            if (angular.isUndefined($scope.photo2) &&
+                angular.isUndefined($scope.article.id) &&
+                nv !== ov) {
               $scope.photo2 = $scope.photo1;
             }
           }
@@ -309,7 +329,7 @@
             if ((angular.isUndefined($scope.article.img2_footer) &&
                   angular.isUndefined(ov)) ||
                 (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description == $scope.article.img2_footer)) {
+                  ov.description === $scope.article.img2_footer)) {
               $scope.article.img2_footer = $scope.photo2.description;
             }
           }
@@ -329,7 +349,7 @@
             if ((angular.isUndefined($scope.article.params.imageHomeFooter) &&
                   angular.isUndefined(ov)) ||
                 (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description == $scope.article.imageHomeFooter)) {
+                  ov.description === $scope.article.imageHomeFooter)) {
               $scope.article.params.imageHomeFooter = $scope.photo3.description;
             }
           }
@@ -452,7 +472,7 @@
 
             // Show a message when leaving before saving
             $($window).bind('beforeunload', function() {
-              if ($scope.unsaved){
+              if ($scope.articleForm.$dirty){
                 return $window.leaveMessage;
               }
             });
@@ -492,7 +512,7 @@
               }, 2500);
             }
 
-            $scope.unsaved = true;
+            $scope.articleForm.$setDirty(true);
           }, true);
 
         // Update title_int when title changes
@@ -504,33 +524,41 @@
           }
         }, true);
 
+        // Update metadata when title or category change
+        $scope.$watch('[ article.title, article.category ]', function(nv, ov) {
+          if (($scope.article.metadata && $scope.article.metadata.length > 0) ||
+              !nv || nv === ov) {
+            return;
+          }
+
+          var title    = $scope.article.title ? $scope.article.title : '';
+          var category = '';
+
+          if ($scope.article.category) {
+            category = $scope.getCategoryName($scope.article.category);
+          }
+
+          var data  = title + ' ' + category;
+          var route = {
+            name:   'admin_utils_calculate_tags',
+            params: { data: data }
+          };
+
+          if ($scope.mtm) {
+            $timeout.cancel($scope.mtm);
+          }
+
+          $scope.mtm = $timeout(function() {
+            http.get(route).then(function(response) {
+              $scope.article.metadata = response.data.split(',');
+            });
+          }, 500);
+        });
+
         // Enable drafts after 5s to grant CKEditor initialization
         $timeout(function() {
           $scope.draftEnabled = true;
         }, 5000);
-
-        $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false
-        });
-
-        $('#starttime').on('dp.change',function (e) {
-          $('#endtime').data('DateTimePicker').minDate(e.date);
-
-          $scope.$apply(function () {
-            $scope.article.starttime =
-              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
-          });
-        });
-
-        $('#endtime').on('dp.change',function (e) {
-          $('#starttime').data('DateTimePicker').maxDate(e.date);
-
-          $scope.$apply(function() {
-            $scope.article.endtime =
-              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
-          });
-        });
       }
     ]);
 })();

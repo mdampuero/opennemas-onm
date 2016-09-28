@@ -19,8 +19,8 @@
      * @description
      *   Provider to handle CKEditor instances.
      */
-    .provider('Editor', [
-      function() {
+    .provider('Editor', [ '$windowProvider',
+      function($windowProvider) {
         /**
          * @memberOf Editor
          *
@@ -182,7 +182,7 @@
         this.configure = function(preset) {
           var presets = Object.keys(this.presets);
 
-          if (presets.indexOf(preset) == -1) {
+          if (presets.indexOf(preset) === -1) {
             preset = this.defaults.preset;
           }
 
@@ -201,7 +201,25 @@
          * @param {String} filename The resource file name.
          */
         this.addExternal = function(names, path, filename) {
-          CKEDITOR.plugins.addExternal(names, path, filename);
+          $windowProvider.$get().CKEDITOR.plugins
+            .addExternal(names, path, filename);
+        };
+
+        /**
+         * @function destroy
+         * @memberOf Editor
+         *
+         * @description
+         *   Destroys a CKEditor instance.
+         *
+         * @param {String} name The CKEditor instance name.
+         */
+        this.destroy = function(name) {
+          var instance = this.get(name);
+
+          if (instance) {
+            instance.destroy();
+          }
         };
 
         /**
@@ -216,8 +234,8 @@
          * @return {Object} The CKEditor instance.
          */
         this.get = function(name) {
-          if (CKEDITOR.instances[name]) {
-            return CKEDITOR.instances[name];
+          if ($windowProvider.$get().CKEDITOR.instances[name]) {
+            return $windowProvider.$get().CKEDITOR.instances[name];
           }
 
           return false;
@@ -230,18 +248,17 @@
          * @description
          *   Initializes a CKEditor.
          *
-         * @param boolean replace Whether to replace the given element.
-         * @param Object  element The element for the CKEditor.
-         * @param Object  options The options for the CKEditor.
+         * @param {Object} element The element for the CKEditor.
+         * @param {Object} options The options for the CKEditor.
          *
          * @return {Object} The CKEditor instance.
          */
-        this.init = function(replace, element, options) {
-          if (replace) {
-            return CKEDITOR.replace(element, options);
+        this.init = function(element, options) {
+          if (element.tagName.toLowerCase() === 'textarea') {
+            return $windowProvider.$get().CKEDITOR.replace(element, options);
           }
 
-          return CKEDITOR.inline(element, options);
+          return $windowProvider.$get().CKEDITOR.inline(element, options);
         };
 
         /**
@@ -254,7 +271,7 @@
          * @param {Boolean} compatible Compatible value.
          */
         this.setCompatible = function(compatible) {
-          CKEDITOR.env.isCompatible = compatible;
+          $windowProvider.$get().CKEDITOR.env.isCompatible = compatible;
         };
 
         /**
@@ -291,91 +308,105 @@
      * <textarea onm-editor onm-editor-preset="simple" ng-model="description">
      * </textarea>
      */
-    .directive('onmEditor', ['Editor', '$q', '$timeout',
-      function (Editor, $q, $timeout) {
+    .directive('onmEditor', ['Editor', '$q', '$timeout', '$window',
+      function (Editor, $q, $timeout, $window) {
         return {
           restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
-          scope: false,
+          scope: {
+            'ngModel': '=',
+          },
           require: ['ngModel', '^?form'],
           link: function (scope, element, attrs, ctrls) {
-            var ngModel    = ctrls[0];
-            var form       = ctrls[1] || null;
-            var EMPTY_HTML = '<p></p>';
-            var isTextarea = element[0].tagName.toLowerCase() === 'textarea';
-            var data       = [];
-            var isReady    = false;
+            var ngModel = ctrls[0];
+            var form    = ctrls[1] || null;
 
-            if (!isTextarea) {
-              element.attr('contenteditable', true);
-            }
+            // Flag to prevent infinite updates between CKEditor and model.
+            var stop = false;
 
+            /**
+             * Initializes the current CKEditor instance.
+             */
             var onLoad = function () {
-              var options = Editor.configure(attrs.onmEditorPreset);
-              var instance = (isTextarea) ? CKEDITOR.replace(element[0], options) : CKEDITOR.inline(element[0], options),
-              configLoaderDef = $q.defer();
+              var options  = Editor.configure(attrs.onmEditorPreset);
+              var instance = Editor.init(element[0], options);
 
-              element.bind('$destroy', function () {
-                if (instance && CKEDITOR.instances[instance.name]) {
-                  CKEDITOR.instances[instance.name].destroy();
-                }
-              });
-
-              var setModelData = function (setPristine) {
-                var data = instance.getData();
-                if (data === '') {
-                  data = null;
-                }
-                $timeout(function () { // for key up event
-                  if (setPristine !== true || data !== ngModel.$viewValue) {
-                    ngModel.$setViewValue(data);
-                  }
-
-                  if (setPristine === true && form) {
-                    form.$setPristine();
-                  }
-                }, 0);
-              };
-
-              var onUpdateModelData = function (setPristine) {
-                if (!data.length || typeof data[0] === 'undefined') {
+              // Updates CKEditor when model changes
+              scope.$watch('ngModel', function(nv, ov) {
+                if (stop) {
+                  stop = !stop;
                   return;
                 }
 
-                var item = data.pop() || EMPTY_HTML;
-                isReady = false;
-                instance.setData(item, function () {
-                  setModelData(setPristine);
-                  isReady = true;
-                });
-              };
+                if (instance.getData() !== nv) {
+                  instance.setData(nv, { internal: false });
+                }
 
-              instance.on('pasteState', setModelData);
-              instance.on('change', setModelData);
-              instance.on('blur', setModelData);
-              //instance.on('key', setModelData); // for source view
+                if (nv === ov) {
+                  return;
+                }
+              }, true);
 
-              instance.on('instanceReady', function () {
-                scope.$broadcast('ckeditor.ready');
-                scope.$apply(function () {
-                  onUpdateModelData(true);
-                });
+              /**
+               * Updates model when CKEditor changes and model is not equals.
+               *
+               * @param {Object} e The event object.
+               */
+              var setModelData = function(e) {
+                if (stop) {
+                  stop = !stop;
+                  return;
+                }
 
-                instance.document.on('keyup', setModelData);
-              });
+                // Use 'key' event only when in source mode
+                if (e.name === 'key' && instance.mode !== 'source') {
+                  return;
+                }
 
-              instance.on('customConfigLoaded', function () {
-                configLoaderDef.resolve();
-              });
+                var data = instance.getData();
 
-              ngModel.$render = function () {
-                data.push(ngModel.$viewValue);
-                if (isReady) {
-                  onUpdateModelData();
+                if (data !== ngModel.$viewValue) {
+                  $timeout(function () {
+                    stop = true;
+                    scope.ngModel = data;
+                  }, 0);
                 }
               };
+
+              instance.on('change', setModelData);
+
+              // For source view
+              instance.on('key', setModelData);
+
+              // Initializes the CKEditor with data
+              instance.on('instanceReady', function () {
+                // Data from HTML value
+                var data = element[0].innerHTML;
+
+                // If model, data from model
+                if (scope && scope.ngModel) {
+                  data = scope.ngModel;
+                }
+
+                scope.$apply(function () {
+                  stop = true;
+
+                  instance.setData(data);
+
+                  if (form) {
+                    form.$setPristine(true);
+                  }
+                });
+
+                scope.$broadcast('ckeditor.ready.' + instance.name);
+              });
+
+              // Destroy CKEditor when element is destroyed
+              element.bind('$destroy', function () {
+                Editor.destroy(instance.name);
+              });
             };
 
-            if (CKEDITOR.status === 'loaded') {
+            if ($window.CKEDITOR.status === 'loaded') {
               loaded = true;
             }
 
@@ -389,18 +420,28 @@
       }
     ])
 
-    // Initialize and check CKEditor on application run.
-    .run(['$q', '$timeout', function ($q, $timeout) {
+    /**
+     * @ngdoc run
+     * @name  onm.editor:run
+     *
+     * @requires $q
+     * @requires $timeout
+     * @requires $window
+     *
+     * @description
+     *   Initialize and check CKEditor on application run.
+     */
+    .run(['$q', '$timeout', '$window', function ($q, $timeout, $window) {
       $defer = $q.defer();
 
-      if (angular.isUndefined(CKEDITOR)) {
+      if (angular.isUndefined($window.CKEDITOR)) {
         throw new Error('CKEDITOR not found');
       }
 
-      CKEDITOR.disableAutoInline = true;
+      $window.CKEDITOR.disableAutoInline = true;
 
       function checkLoaded() {
-        if (CKEDITOR.status === 'loaded') {
+        if ($window.CKEDITOR.status === 'loaded') {
           loaded = true;
           $defer.resolve();
         } else {
@@ -408,7 +449,7 @@
         }
       }
 
-      CKEDITOR.on('loaded', checkLoaded);
-      $timeout(checkLoaded, 100);
+      $window.CKEDITOR.on('loaded', checkLoaded);
+      $timeout(checkLoaded, 0);
     }]);
 })();

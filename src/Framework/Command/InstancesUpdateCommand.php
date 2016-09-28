@@ -108,7 +108,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             return 1;
         }
 
-        $amount = ($offset) ? 30: null;
+        $amount = !is_null($offset) ? 30 : null;
 
         $this->getContainer()->get('cache_manager')->setNamespace('manager');
         $this->em = $this->getContainer()->get('orm.manager');
@@ -119,7 +119,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         }
 
         if ($offset) {
-            $oql .= ' offset ' . $offset;
+            $oql .= ' offset ' . ($offset - 1) * 30;
         }
 
         $instances = $this->em->getRepository('Instance')->findBy($oql);
