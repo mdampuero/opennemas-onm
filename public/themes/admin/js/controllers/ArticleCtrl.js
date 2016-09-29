@@ -357,7 +357,7 @@
           $scope.article.params.imageHome = $scope.photo3.id;
 
           if (angular.isUndefined($scope.article.params.imageHomeFooter) ||
-              $scope.article.params.imageHomeFooter === '' ||
+              $scope.article.params.imageHomeFooter === null ||
               (ov && ov.description === $scope.article.params.imageHomeFooter)) {
             $scope.article.params.imageHomeFooter = $scope.photo3.description;
           }

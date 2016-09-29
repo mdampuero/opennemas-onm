@@ -71,8 +71,8 @@ class ArticleController extends Controller
             'params' =>  array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : null,
+                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : null,
                 'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
                 'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
                 'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
@@ -303,8 +303,8 @@ class ArticleController extends Controller
             'params'         => array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : null,
+                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : null,
                 'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
                 'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
                 'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
