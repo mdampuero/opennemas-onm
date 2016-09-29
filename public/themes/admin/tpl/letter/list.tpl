@@ -141,7 +141,7 @@
                 <th style="width: 100px;" class="text-center hidden-xs">{t}Image{/t}</th>
                 <th>{t}Title{/t}</th>
                 {acl isAllowed="LETTER_AVAILABLE"}
-                <th class="center" style="width:10px;">{t}Published{/t}</th>
+                  <th class="text-center" width="100">{t}Published{/t}</th>
                 {/acl}
               </tr>
             </thead>
@@ -171,32 +171,27 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="LETTER_UPDATE"}
-                    <a class="link" href="[% edit(content.id, 'admin_letter_show') %]">
-                      <i class="fa fa-pencil"></i>
-                      {t}Edit{/t}
-                    </a>
+                      <a class="link" href="[% edit(content.id, 'admin_letter_show') %]">
+                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                      </a>
                     {/acl}
-
                     {acl isAllowed="LETTER_AVAILABLE"}
-                    <a class="link pointer" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', 2, 'loading')" ng-if="content.content_status != 2" type="button" title="{t}Reject{/t}">
-                      <i class="fa fa-ban"></i>
-                      {t}Reject{/t}
-                    </a>
+                      <a class="link pointer" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', 2, 'loading')" ng-if="content.content_status != 2" type="button" title="{t}Reject{/t}">
+                        <i class="fa fa-ban m-r-5"></i>{t}Reject{/t}
+                      </a>
                     {/acl}
-
                     {acl isAllowed="LETTER_DELETE"}
-                    <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o"></i>
-                      {t}Delete{/t}
-                    </button>
+                      <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
+                        <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                      </button>
                     {/acl}
                   </div>
                 </td>
-                <td class="right">
+                <td class="text-center">
                   {acl isAllowed="LETTER_AVAILABLE"}
-                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" title="{t}Publish/Unpublish{/t}" type="button">
-                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status != 1 }"></i>
-                  </button>
+                    <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" title="{t}Publish/Unpublish{/t}" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status != 1 }"></i>
+                    </button>
                   {/acl}
                 </td>
               </tr>

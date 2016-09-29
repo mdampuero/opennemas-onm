@@ -55,7 +55,7 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             <li>
               <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')"  title="{t}Save positions{/t}">
-                <span class="fa fa-save"></span> {t}Save positions{/t}
+                <span class="fa fa-save m-r-5"></span>{t}Save positions{/t}
               </a>
             </li>
             {/if}
@@ -64,7 +64,7 @@
             {acl isAllowed="KIOSKO_CREATE"}
             <li>
               <a class="btn btn-primary" href="{url name=admin_kiosko_create}" title="{t}New cover{/t}" id="create-button">
-                {t}Create{/t}
+                <i class="fa fa-plus m-r-5"></i>{t}Create{/t}
               </a>
             </li>
             {/acl}

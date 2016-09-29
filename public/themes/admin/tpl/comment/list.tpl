@@ -134,7 +134,7 @@
                   </th>
                   <th>{t}Comment{/t}</th>
                   <th class="wrap hidden-xs">{t}In response to{/t}</th>
-                  <th style='width:10px;' class="center">{t}Published{/t}</th>
+                  <th class="text-center" width="100">{t}Published{/t}</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,12 +154,12 @@
                     <div class="listing-inline-actions">
                       {acl isAllowed="COMMENT_UPDATE"}
                       <a class="link" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                       {/acl}
                       {acl isAllowed="COMMENT_DELETE"}
                       <button class="link link-danger" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
-                      <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                      <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                       </button>
                       {/acl}
                     </div>
@@ -167,11 +167,11 @@
                   <td class="hidden-xs">
                     [% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 250">...</span>
                   </td>
-                  <td class="right">
+                  <td class="text-center">
                     {acl isAllowed="COMMENT_AVAILABLE"}
-                    <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button">
-                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
-                    </button>
+                      <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button">
+                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
+                      </button>
                     {/acl}
                   </td>
                 </tr>
