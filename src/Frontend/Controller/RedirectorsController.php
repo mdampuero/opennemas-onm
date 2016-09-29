@@ -60,6 +60,14 @@ class RedirectorsController extends Controller
             $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
         } elseif ($type === 'photo-inline') {
             $content = new \Photo($newContentID);
+        } elseif ($type === 'category') {
+            $content = $this->get('category_repository')->find($newContentID);
+            $content->content_type_name = 'category';
+            $content->uri = $this->generateUrl(
+                'category_frontpage',
+                [ 'category_name' => $content->name ],
+                true
+            );
         } elseif ($type === 'attachment') {
             $content = new \Attachment($newContentID);
         } else {
@@ -74,6 +82,8 @@ class RedirectorsController extends Controller
         if ($content->content_type_name === 'photo') {
             $url = SITE_URL . '/media/' . $this->get('core.instance')->internal_name
                 . '/images' . $content->path_img;
+        } elseif ($content->content_type_name == 'category') {
+            $url = $content->uri;
         }
 
         return new RedirectResponse($url, 301);
