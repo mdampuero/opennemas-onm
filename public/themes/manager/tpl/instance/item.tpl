@@ -112,7 +112,7 @@
                     {t}Contact mail{/t}
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.contact_mail.$invalid }">
-                    <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="text">
+                    <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="email">
                   </div>
                 </div>
                 <div class="form-group" ng-if="security.hasPermission('MASTER')">
