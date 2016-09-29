@@ -308,7 +308,7 @@
 
           // Update img1_footer if empty or equals to old description
           if (angular.isUndefined($scope.article.img1_footer) ||
-              $scope.article.img1_footer === '' ||
+              $scope.article.img1_footer === null ||
               (ov && $scope.article.img1_footer === ov.description)) {
             $scope.article.img1_footer = nv.description;
           }
@@ -336,7 +336,7 @@
           $scope.article.img2 = $scope.photo2.id;
 
           if (angular.isUndefined($scope.article.img2_footer) ||
-              $scope.article.img2_footer === '' ||
+              $scope.article.img2_footer === null ||
               (ov && $scope.article.img2_footer === ov.description)) {
             $scope.article.img2_footer = $scope.photo2.description;
           }

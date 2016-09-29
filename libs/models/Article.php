@@ -258,11 +258,11 @@ class Article extends Content
                 'summary'       => $data['summary'],
                 'title_int'     => $data['title_int'],
                 'img1'          => (int) $data['img1'],
-                'img1_footer'   => (!isset($data['img1_footer']) || empty($data['img1_footer']))
-                    ? '' : $data['img1_footer'],
+                'img1_footer'   => (!isset($data['img1_footer']) || is_null($data['img1_footer']))
+                    ? null : $data['img1_footer'],
                 'img2'          => (int) $data['img2'],
-                'img2_footer'   => (!isset($data['img2_footer']) || empty($data['img2_footer']))
-                    ? '' : $data['img2_footer'],
+                'img2_footer'   => (!isset($data['img2_footer']) || is_null($data['img2_footer']))
+                    ? null : $data['img2_footer'],
                 'fk_video'      => (int) $data['fk_video'],
                 'fk_video2'     => (int) $data['fk_video2'],
                 'footer_video2' => $data['footer_video2'],
@@ -309,12 +309,12 @@ class Article extends Content
             'agency'        => $data['agency'],
             'summary'       => $data['summary'],
             'title_int'     => $data['title_int'],
-            'img1'          => (int) $data['img1'],
-            'img1_footer'   => (!isset($data['img1_footer']) || empty($data['img1_footer']))
-                ? '': $data['img1_footer'],
-            'img2'          => (int) $data['img2'],
-            'img2_footer'   => (!isset($data['img2_footer']) || empty($data['img2_footer']))
-                ? '': $data['img2_footer'],
+            'img1'          => empty($data['img1']) ? null: (int) $data['img1'],
+            'img1_footer'   => (!isset($data['img1_footer']) || is_null($data['img1_footer']))
+                ? null: $data['img1_footer'],
+            'img2'          => empty($data['img2']) ? null: (int) $data['img2'],
+            'img2_footer'   => (!isset($data['img2_footer']) || is_null($data['img2_footer']))
+                ? null: $data['img2_footer'],
             'fk_video'      => (int) $data['fk_video'],
             'fk_video2'     => (int) $data['fk_video2'],
             'footer_video2' => $data['footer_video2'],
