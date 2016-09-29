@@ -311,7 +311,7 @@
 
           // Set inner image if empty or equals to old photo1
           if ($scope.articleForm.$dirty &&
-              (angular.isUndefined($scope.photo2) ||
+              (angular.isUndefined($scope.photo2) || !$scope.photo2 ||
               angular.equals($scope.photo2, ov))) {
 
             if ($scope.photo2 && $scope.photo2.description &&
