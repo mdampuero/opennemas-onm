@@ -91,6 +91,7 @@ backend_ws_content_toggle_favorite:
 backend_ws_contents_list:
     path:     /{contentType}s
     defaults: { _controller: BackendWebServiceBundle:Content:list }
+    methods:  [ GET ]
     options:
         expose: true
 
