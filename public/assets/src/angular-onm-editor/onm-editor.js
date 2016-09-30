@@ -373,6 +373,7 @@
               };
 
               instance.on('change', setModelData);
+              instance.on('dialogHide', setModelData);
 
               // For source view
               instance.on('key', setModelData);
