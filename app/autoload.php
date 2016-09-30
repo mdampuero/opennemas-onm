@@ -42,7 +42,11 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
 }
 
 define('SS', '/');
-define('DS', DIRECTORY_SEPARATOR);
+
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+
 define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'../tmp/logs'));
 
 $serverName = array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : 'console';
