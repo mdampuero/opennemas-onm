@@ -13,6 +13,7 @@ entity:
         nonce:      string
         notes:      string
         type:       string
+        options:    array
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -35,6 +36,9 @@ entity:
             nonce:
                 name: paymentMethodNonce
                 type: string
+            options:
+                name: options
+                type: array
         freshbooks:
             client_id:
                 name: client_id
