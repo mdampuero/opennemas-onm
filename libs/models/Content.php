@@ -322,12 +322,14 @@ class Content
     {
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
-                if (!is_numeric($propertyName)) {
+                if (!is_numeric($propertyName) && !empty($propertyValue)) {
                     $this->{$propertyName} = @iconv(
                         mb_detect_encoding($propertyValue),
                         'utf-8',
                         $propertyValue
                     );
+                } elseif (empty($propertyValue)) {
+                    $this->{$propertyName} = $propertyValue;
                 } else {
                     $this->{$propertyName} = (int) $propertyValue;
                 }
