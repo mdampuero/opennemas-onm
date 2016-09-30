@@ -518,7 +518,7 @@ class InstanceController extends Controller
         $em->getConnection('instance')
             ->selectDatabase($instance->getDatabaseName());
 
-        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik' ]);
+        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik', 'time_zone' ]);
         $template = $this->getTemplateParams();
 
         if (!empty($instance->getClient())) {
