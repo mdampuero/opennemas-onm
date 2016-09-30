@@ -92,7 +92,7 @@ class PurchaseController extends Controller
     {
         $em       = $this->get('orm.manager');
         $purchase = $em->getRepository('Purchase')->find($id);
-        $vatTax   = null;
+        $vatTax   = 0;
 
         if (!empty($this->get('core.instance')->getClient())) {
             $client = $this->get('core.instance')->getClient();
