@@ -58,31 +58,9 @@ class PurchaseController extends Controller
      */
     public function saveAction()
     {
-        $instance = $this->get('core.instance');
-        $em       = $this->get('orm.manager');
-        $client   = $instance->getClient();
-        $date     = new \DateTime();
+        $purchase = $this->get('core.helper.checkout')->getPurchase();
 
-        if (!empty($client)) {
-            try {
-                $client = $em->getRepository('client')->find($client);
-            } catch (\Exception $e) {
-                $client = null;
-            }
-        }
-
-        $purchase = new Purchase();
-        $purchase->instance_id = $instance->id;
-        $purchase->step        = 'cart';
-        $purchase->created     = $date;
-        $purchase->updated     = $date;
-
-        if (!empty($client)) {
-            $purchase->client_id = $client->id;
-            $purchase->client    = $client;
-        }
-
-        $em->persist($purchase);
+        $this->get('orm.manager')->persist($purchase);
 
         return new JsonResponse($purchase->id);
     }
@@ -94,98 +72,14 @@ class PurchaseController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em       = $this->get('orm.manager');
-        $lang     = $this->get('core.locale')->getLocaleShort();
-        $purchase = $em->getRepository('Purchase')->find($id);
-        $subtotal = 0;
-        $vatTax   = 0;
+        $step   = $request->request->get('step', 'cart');
+        $ids    = $request->request->get('ids', []);
+        $params = $request->request->get('params', []);
+        $method = $request->request->get('method', null);
 
-        if (!empty($this->get('core.instance')->getClient())) {
-            $client = $this->get('core.instance')->getClient();
-            try {
-                $client = $em->getRepository('Client')->find($client);
-
-                $purchase->client_id = $client->id;
-                $purchase->client    = $client;
-
-                $vatTax = $this->get('vat')
-                    ->getVatFromCode($client->country, $client->state);
-            } catch (\Exception $e) {
-            }
-        }
-
-        $purchase->updated = new \DateTime();
-        $purchase->method  = $request->request->get('method', null);
-        $purchase->step    = $request->request->get('step', 'cart');
-        $purchase->fee     = 0;
-
-        $ids     = $request->request->get('ids', []);
-        $domains = $request->get('domains', []);
-
-        if (empty($ids)) {
-            $em->persist($purchase);
-            return new JsonResponse();
-        }
-
-        $oql = sprintf('uuid in ["%s"]', implode('","', array_keys($ids)));
-
-        $items  = $em->getRepository('Extension')->findBy($oql);
-        $themes = $em->getRepository('Theme')->findBy($oql);
-        $items  = array_merge($items, $themes);
-
-        $purchase->details = [];
-
-        foreach ($items as $item) {
-            $uuid         = $item->uuid;
-            $description  = $item->getName($lang);
-            $price        = $item->getPrice($ids[$item->uuid]);
-            $subtotal    += $price;
-
-            if (strpos($ids[$item->uuid], '_custom') !== false) {
-                $uuid        .= '.custom';
-                $description .= ' (Custom)';
-            }
-
-            $line = [
-                'uuid'         => $uuid,
-                'description'  => $description,
-                'unit_cost'    => $price,
-                'quantity'     => 1,
-                'tax1_name'    => 'IVA',
-                'tax1_percent' => $vatTax
-            ];
-
-            $purchase->details[] = $line;
-
-            if (!empty($domains)) {
-                // Fix descriptions and subtotal
-                array_pop($purchase->details);
-                $subtotal += $price * (count($domains) - 1);
-
-                for ($i = 0; $i < count($domains); $i++) {
-                    $purchase->details[$i] = $line;
-                    $purchase->details[$i]['description'] .= ': ' . $domains[$i];
-                }
-            }
-        }
-
-        $vat = ($vatTax/100) * $subtotal;
-
-        if ($purchase->method === 'CreditCard') {
-            $purchase->fee = $subtotal * 0.029 + 0.30;
-
-            $purchase->details[] = [
-                'description'  => _('Pay with credit card'),
-                'unit_cost'    => str_replace(',', '.', (string) round($purchase->fee, 2)),
-                'quantity'     => 1,
-                'tax1_name'    => 'IVA',
-                'tax1_percent' => 0
-            ];
-        }
-
-        $purchase->total = $subtotal + $vat + $purchase->fee;
-
-        $em->persist($purchase);
+        $ph = $this->get('core.helper.checkout');
+        $ph->getPurchase($id);
+        $ph->next($step, $ids, $params, $method);
 
         return new JsonResponse();
     }
