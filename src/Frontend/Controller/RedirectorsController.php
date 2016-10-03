@@ -47,7 +47,11 @@ class RedirectorsController extends Controller
                 list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromID($contentId);
             }
         } else {
-            list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
+            if (!empty($type)) {
+                $newContentID  = \ContentManager::getOriginalIdFromSlugAndType($slug, $type);
+            } else {
+                list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
+            }
         }
 
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
