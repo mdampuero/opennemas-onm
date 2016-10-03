@@ -371,7 +371,7 @@ class RelatedContent
      *
      * @return array The list of related contents grouped by content id.
      */
-    public function getRelatedContents($ids, $category = 'home')
+    public function getRelatedContents($ids, $category = 0)
     {
         $verPortada = 1;
 
@@ -384,7 +384,7 @@ class RelatedContent
         }
 
         if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
-            && $category === 'home'
+            && $category === 0
         ) {
             $verPortada = 2;
         }

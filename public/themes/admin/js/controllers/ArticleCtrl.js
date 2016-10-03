@@ -21,8 +21,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('ArticleCtrl', [
-      '$controller', '$interval', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
-      function($controller, $interval, $scope, $timeout, $uibModal, $window, Editor, http, messenger, routing, webStorage) {
+      '$controller', '$interval', '$scope', '$timeout', '$uibModal', '$window', 'Cleaner', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
+      function($controller, $interval, $scope, $timeout, $uibModal, $window, Cleaner, Editor, http, messenger, routing, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -34,7 +34,7 @@
          *
          * @type {Object}
          */
-        $scope.article = { params: {} };
+        $scope.article = { body: '', params: {}, summary: '' };
 
         /**
          * @memberOf ArticleCtrl
@@ -60,30 +60,30 @@
             key = 'article-' + $scope.article.pk_article + '-draft';
           }
 
-          if (!webStorage.has(key)) {
+          if (!webStorage.session.has(key)) {
             return;
           }
 
           $uibModal.open({
+            backdrop:    true,
+            backdropClass: 'modal-backdrop-transparent',
+            controller:  'YesNoModalCtrl',
+            openedClass: 'modal-relative-open',
             templateUrl: 'modal-draft',
-            controller: 'YesNoModalCtrl',
+            windowClass: 'modal-right modal-small modal-top',
             resolve: {
               template: function() {
                 return {};
               },
               yes: function() {
                 return function(modalWindow) {
-                  $scope.article = webStorage.get(key);
-                  modalWindow.close({ response: true, success: true });
+                  var draft =  webStorage.session.get(key);
 
-                  // Force Editor update
-                  Editor.get('summary').setData($scope.article.summary);
-                  Editor.get('body').setData($scope.article.body);
-
-                  // Force metadata
-                  for (var tag of $scope.article.metadata.split(',')) {
-                    $('#metadata').tagsinput('add', tag);
+                  for (var name in draft) {
+                    $scope[name] = draft[name];
                   }
+
+                  modalWindow.close({ response: true, success: true });
 
                   if ($scope.article.starttime) {
                     $scope.article.starttime = $window.moment($scope.article.starttime)
@@ -98,7 +98,7 @@
               },
               no: function() {
                 return function(modalWindow) {
-                  webStorage.local.remove(key);
+                  webStorage.session.remove(key);
                   modalWindow.close({ response: false, success: true });
                 };
               }
@@ -116,6 +116,8 @@
          * @param {Integer} id The article id.
          */
         $scope.getArticle = function(id) {
+          $scope.loading = true;
+
           var route = {
             name:   'backend_ws_article_show',
             params: { id: id }
@@ -126,21 +128,36 @@
               $scope[key] = response.data[key];
             }
 
-            // Force Editor update
-            Editor.get('summary').setData($scope.article.summary);
-            Editor.get('body').setData($scope.article.body);
-
             if ($scope.article.metadata) {
-              var tags = $scope.article.metadata.split(',');
-              for (var i = 0; i < tags.length; i++) {
-                $('#metadata').tagsinput('add', tags[i]);
-              }
+              $scope.article.metadata = $scope.article.metadata.split(',');
             }
 
             $scope.checkDraft();
+            $scope.loading = false;
           }, function(response) {
+            $scope.loading = false;
+            $scope.error   = true;
             messenger.post(response.data);
           });
+        };
+
+        /**
+         * @function getCategoryName
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Returns the category name given a category id.
+         *
+         * @param {Integer} id The category id.
+         *
+         * @return {String} The category name.
+         */
+        $scope.getCategoryName = function(id) {
+          return $scope.categories.filter(function(e) {
+            return parseInt(e.id) === parseInt(id);
+          }).map(function (e) {
+            return e.name;
+          }).join('');
         };
 
         /**
@@ -154,16 +171,16 @@
          * @param {String} getPreviewUrl The URL to get the preview.
          */
         $scope.preview = function(previewUrl, getPreviewUrl) {
-          $scope.loading = true;
+          $scope.previewLoading = true;
 
-          // Force Editor update
-          Editor.get('body').updateElement();
-          Editor.get('summary').updateElement();
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text;
+          }).join(',');
 
-          var data = {'contents': $('#formulario').serializeArray()};
-          var url  = routing.generate(previewUrl);
+          var data = { 'article': data };
 
-          http.post(url, data).success(function() {
+          http.post(previewUrl, data).success(function() {
             $uibModal.open({
               templateUrl: 'modal-preview',
               windowClass: 'modal-fullscreen',
@@ -180,9 +197,9 @@
               }
             });
 
-            $scope.loading = false;
+            $scope.previewLoading = false;
           }).error(function() {
-            $scope.loading = false;
+            $scope.previewLoading = false;
           });
         };
 
@@ -206,15 +223,25 @@
          *   Saves a new article.
          */
         $scope.save = function() {
+          if ($scope.articleForm.$invalid) {
+            $scope.showRequired = true;
+            return;
+          }
+
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text;
+          }).join(',');
+
           $scope.saving = true;
 
-          http.post('backend_ws_article_save', $scope.article)
+          http.post('backend_ws_article_save', data)
             .then(function(response) {
               $scope.saving = false;
+              $scope.articleForm.$setPristine(true);
 
               if (response.status === 201) {
-                webStorage.local.remove('article-draft');
-                $scope.unsaved = false;
+                webStorage.session.remove('article-draft');
                 $window.location.href = response.headers().location;
               }
             }, function(response) {
@@ -231,19 +258,29 @@
          *   Updates an article.
          */
         $scope.update = function() {
+          if ($scope.articleForm.$invalid) {
+            $scope.showRequired = true;
+            return;
+          }
+
           $scope.saving = true;
+
+          var data = angular.copy($scope.article);
+          data.metadata = data.metadata.map(function(e) {
+            return e.text;
+          }).join(',');
 
           var route = {
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
           };
 
-          http.put(route, $scope.article)
+          http.put(route, data)
             .then(function(response) {
               $scope.saving = false;
-              webStorage.local.remove('article-' +
+              webStorage.session.remove('article-' +
                   $scope.article.pk_article + '-draft');
-              $scope.unsaved = false;
+              $scope.articleForm.$setPristine(true);
               messenger.post(response.data);
             }, function(response) {
               $scope.saving = false;
@@ -253,48 +290,76 @@
 
         // Updates scope when photo1 changes.
         $scope.$watch('photo1', function(nv, ov) {
-          $scope.article.img1 = null;
+          // Remove image
+          if (!nv) {
+            $scope.article.img1 = null;
 
-          if ($scope.photo1) {
-            $scope.article.img1 = $scope.photo1.id;
-
-            if (angular.isUndefined($scope.article.img1_footer) ||
-                angular.isUndefined(ov) || nv.id !== ov.id) {
-              $scope.article.img1_footer = $scope.photo1.description;
+            // If photo 2  = photo1, remove photo2 too
+            if (angular.equals($scope.photo2, ov)) {
+              $scope.photo2 = null;
             }
 
-            // Set inner image if empty
-            if (angular.isUndefined($scope.photo2) && nv !== ov) {
-              $scope.photo2 = $scope.photo1;
-            }
+            delete $scope.article.img1_footer;
+
+            return;
+          }
+
+          $scope.article.img1 = nv.id;
+
+          // Update img1_footer if empty or equals to old description
+          if (angular.isUndefined($scope.article.img1_footer) ||
+              $scope.article.img1_footer === null ||
+              (ov && $scope.article.img1_footer === ov.description)) {
+            $scope.article.img1_footer = nv.description;
+          }
+
+          // Set inner image if empty or equals to old photo1
+          if ($scope.articleForm.$dirty &&
+              (!ov && (angular.isUndefined($scope.photo2) || !$scope.photo2)) ||
+              (ov &&angular.equals($scope.photo2, ov))) {
+
+            $scope.photo2 = nv;
           }
         }, true);
 
         // Updates scope when photo2 changes.
         $scope.$watch('photo2', function(nv, ov) {
-          $scope.article.img2 = null;
+          // Remove image
+          if (!nv) {
+            $scope.article.img2 = null;
 
-          if ($scope.photo2) {
-            $scope.article.img2 = $scope.photo2.id;
+            delete $scope.article.img2_footer;
 
-            if (angular.isUndefined($scope.article.img2_footer) ||
-                angular.isUndefined(ov) || nv.id !== ov.id) {
-              $scope.article.img2_footer = $scope.photo2.description;
-            }
+            return;
+          }
+
+          $scope.article.img2 = $scope.photo2.id;
+
+          if (angular.isUndefined($scope.article.img2_footer) ||
+              $scope.article.img2_footer === null ||
+              (ov && $scope.article.img2_footer === ov.description)) {
+            $scope.article.img2_footer = $scope.photo2.description;
           }
         }, true);
 
         //Updates scope when photo3 changes.
         $scope.$watch('photo3', function(nv, ov) {
-          $scope.article.imageHome = null;
+          // Remove image
+          if (!nv) {
 
-          if ($scope.photo3) {
-            $scope.article.params.imageHome = $scope.photo3.id;
+            $scope.article.params.imageHome = null;
 
-            if (angular.isUndefined($scope.article.imageHomeFooter) ||
-                angular.isUndefined(ov) || nv.id !== ov.id) {
-              $scope.article.params.imageHomeFooter = $scope.photo3.description;
-            }
+            delete $scope.article.params.imageHomeFooter;
+
+            return;
+          }
+
+          $scope.article.params.imageHome = $scope.photo3.id;
+
+          if (angular.isUndefined($scope.article.params.imageHomeFooter) ||
+              $scope.article.params.imageHomeFooter === null ||
+              (ov && ov.description === $scope.article.params.imageHomeFooter)) {
+            $scope.article.params.imageHomeFooter = $scope.photo3.description;
           }
         }, true);
 
@@ -327,10 +392,11 @@
 
         // Updates scope when relatedInFrontpage changes.
         $scope.$watch('relatedInFrontpage', function(nv, ov) {
-          // Set inner related if empty or equal to front
-          if ((!$scope.relatedInInner ||
-              $scope.article.relatedInner === $scope.article.relatedFront) &&
-              nv !== ov) {
+          // Set inner if creating and empty or when old value in front is
+          // equals to current value in inner
+          if ((!$scope.article.pk_article && !$scope.relatedInInner) || (ov &&
+                angular.equals(Cleaner.clean($scope.relatedInInner),
+                  Cleaner.clean(ov)))) {
             $scope.relatedInInner = angular.copy(nv);
           }
 
@@ -404,55 +470,60 @@
 
 
         $scope.dtm  = null;
-        $scope.dmtm = null;
 
         // Saves a draft 1s after the last change
-        $scope.$watch('article', function(nv, ov) {
-          if (!nv || ov === nv || (!ov.pk_article && nv.pk_article)) {
-            return;
-          }
-
-          // Show a message when leaving before saving
-          $($window).bind('beforeunload', function() {
-            var nv = $('#formulario').serialize();
-
-            if (ov && nv !== ov && $scope.unsaved){
-              return $window.leaveMessage;
-            }
-          });
-
-          var key = 'article-draft';
-          $scope.draftSaved = null;
-
-          if (ov && nv !== ov && $scope.draftEnabled) {
-            if (nv.pk_article) {
-              key = 'article-' + nv.pk_article + '-draft';
+        $scope.$watch('[article, photo1, photo2, photo3, video1, video2,' +
+          'galleryForFrontpage, galleryForInner, galleryForHome]',
+          function(nv, ov) {
+            if (!nv || ov === nv || (ov[0] && !ov[0].pk_article &&
+                  nv[0].pk_article)) {
+              return;
             }
 
-            webStorage.local.set(key, nv);
+            // Show a message when leaving before saving
+            $($window).bind('beforeunload', function() {
+              if ($scope.articleForm.$dirty){
+                return $window.leaveMessage;
+              }
+            });
 
-            // Cancel draft save
-            if ($scope.dtm) {
-              $timeout.cancel($scope.dtm);
-            }
+            var key = 'article-draft';
+            $scope.draftSaved = null;
 
-            $scope.dtm = $timeout(function() {
-              $scope.draftSaved = $window.draftSavedMsg +
-                $window.moment().format('HH:mm');
-
-              // Cancel draft save message
-              if ($scope.dmtm) {
-                $timeout.cancel($scope.dmtm);
+            if (ov && nv !== ov && $scope.draftEnabled) {
+              if ($scope.article.pk_article) {
+                key = 'article-' + $scope.article.pk_article + '-draft';
               }
 
-              $scope.dmtm = $timeout(function() {
-                $scope.draftSaved = null;
-              }, 10000);
-            }, 5000);
-          }
+              webStorage.session.set(key, {
+                article:             $scope.article,
+                photo1:              $scope.photo1,
+                photo2:              $scope.photo2,
+                photo3:              $scope.photo3,
+                video1:              $scope.video1,
+                video2:              $scope.video2,
+                relatedInHome:       $scope.relatedInHome,
+                relatedInInner:      $scope.relatedInInner,
+                relatedInFrontpage:  $scope.relatedInFrontpage,
+                galleryForFrontpage: $scope.galleryForFrontpage,
+                galleryForInner:     $scope.galleryForInner,
+                galleryForHome:      $scope.galleryForHome,
+              });
 
-          $scope.unsaved = true;
-        }, true);
+              // Cancel draft save
+              if ($scope.dtm) {
+                $timeout.cancel($scope.dtm);
+              }
+
+              $scope.dtm = $timeout(function() {
+                $scope.draftSaved = $window.draftSavedMsg +
+                  $window.moment().format('HH:mm');
+
+              }, 2500);
+            }
+
+            $scope.articleForm.$setDirty(true);
+          }, true);
 
         // Update title_int when title changes
         $scope.$watch('article.title', function(nv) {
@@ -463,33 +534,41 @@
           }
         }, true);
 
+        // Update metadata when title or category change
+        $scope.$watch('[ article.title, article.category ]', function(nv, ov) {
+          if (($scope.article.metadata && $scope.article.metadata.length > 0) ||
+              !nv || nv === ov) {
+            return;
+          }
+
+          var title    = $scope.article.title ? $scope.article.title : '';
+          var category = '';
+
+          if ($scope.article.category) {
+            category = $scope.getCategoryName($scope.article.category);
+          }
+
+          var data  = title + ' ' + category;
+          var route = {
+            name:   'admin_utils_calculate_tags',
+            params: { data: data }
+          };
+
+          if ($scope.mtm) {
+            $timeout.cancel($scope.mtm);
+          }
+
+          $scope.mtm = $timeout(function() {
+            http.get(route).then(function(response) {
+              $scope.article.metadata = response.data.split(',');
+            });
+          }, 500);
+        });
+
         // Enable drafts after 5s to grant CKEditor initialization
         $timeout(function() {
           $scope.draftEnabled = true;
         }, 5000);
-
-        $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false
-        });
-
-        $('#starttime').on('dp.change',function (e) {
-          $('#endtime').data('DateTimePicker').minDate(e.date);
-
-          $scope.$apply(function () {
-            $scope.article.starttime =
-              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
-          });
-        });
-
-        $('#endtime').on('dp.change',function (e) {
-          $('#starttime').data('DateTimePicker').maxDate(e.date);
-
-          $scope.$apply(function() {
-            $scope.article.endtime =
-              $window.moment(e.date).format('YYYY-MM-DD HH:mm:ss');
-          });
-        });
       }
     ]);
 })();

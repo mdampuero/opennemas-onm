@@ -8,7 +8,7 @@
           </div>
           <div class="grid-body">
             <div class="row">
-              <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
+              <div class="col-md-4">
                 <h5>{t}Image to show in frontpages{/t}</h5>
                 <div class="thumbnail-wrapper">
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
@@ -28,7 +28,7 @@
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!photo1">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" ng-click="articleForm.$setDirty(true)">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -39,11 +39,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" ng-click="articleForm.$setDirty(true)">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -53,13 +53,13 @@
                       {t}Footer text{/t}
                     </label>
                     <div class="controls">
-                      <textarea class="form-control" name="img1_footer" ng-model="article.img1_footer">{if isset($article->img1_footer)}{$article->img1_footer|clearslash|escape:'html'}{/if}</textarea>
+                      <textarea class="form-control" name="img1_footer" ng-model="article.img1_footer"></textarea>
                       <input type="hidden" name="img1" ng-model="article.img1" ng-value="img1"/>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4" {if isset($photo2) && $photo2->name}ng-init="photo2 = {json_encode($photo2)|clear_json}"{/if}>
+              <div class="col-md-4">
                 <h5>{t}Image to show in inner{/t}</h5>
                 <div class="thumbnail-wrapper">
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo2 }"></div>
@@ -79,7 +79,7 @@
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!photo2">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" ng-click="articleForm.$setDirty(true)">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -90,11 +90,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo2')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" ng-click="articleForm.$setDirty(true)">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo"></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -104,7 +104,7 @@
                       {t}Footer text{/t}
                     </label>
                     <div class="controls">
-                      <textarea class="form-control" name="img2_footer" ng-model="img2_footer">{if isset($article->img2_footer)}{$article->img2_footer|clearslash|escape:'html'}{/if}</textarea>
+                      <textarea class="form-control" name="img2_footer" ng-model="article.img2_footer"></textarea>
                       <input type="hidden" name="img2" ng-value="img2"/>
                     </div>
                   </div>
@@ -112,7 +112,7 @@
               </div>
               {is_module_activated name="CRONICAS_MODULES"}
                 {if strpos($smarty.server.REQUEST_URI, 'articles') !== false}
-                <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo3 = {json_encode($photo3)|clear_json}"{/if}>
+                <div class="col-md-4">
                   <h5>{t}Home image{/t}</h5>
                   <div class="thumbnail-wrapper">
                     <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo3 }"></div>
@@ -157,9 +157,7 @@
                         {t}Footer text{/t}
                       </label>
                       <div class="controls">
-                        <textarea class="form-control" name="params[imageHomeFooter]" ng-model="imageHomeFooter">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
-                        <input type="hidden" name="params[imageHome]" ng-value="imageHome"/>
-                        <input type="hidden" name="params[imageHomeFooter]" ng-value="imageHomeFooter"/>
+                        <textarea class="form-control" name="params[imageHomeFooter]" ng-model="article.params.imageHomeFooter"></textarea>
                       </div>
                     </div>
                   </div>
@@ -182,7 +180,7 @@
               </div>
               <div class="grid-body">
                 <div class="row">
-                  <div class="col-md-4" {if isset($video1) && $video1->title}ng-init="video1 = {json_encode($video1)|clear_json}"{/if}>
+                  <div class="col-md-4">
                     <h5>{t}Video for frontpage{/t}</h5>
                     <div class="thumbnail-wrapper">
                       <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.video1 }"></div>
@@ -245,12 +243,11 @@
                         <label class="form-label" for="title">
                           {t}Footer text for inner video:{/t}
                         </label>
-                        <textarea  class="form-control" name="footer_video" ng-model="footer_video" ng-value="footer_video">{$article->footer_video1|clearslash|escape:'html'}</textarea>
-                        <input type="hidden" name="fk_video" ng-value="fk_video" class="related-element-id"/>
+                        <textarea  class="form-control" name="footer_video" ng-model="article.footer_video"></textarea>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4" {if isset($video2) && $video2->title}ng-init="video2 = {json_encode($video2)|clear_json}"{/if}>
+                  <div class="col-md-4">
                     <h5>{t}Video for inner article page{/t}</h5>
                     <div class="thumbnail-wrapper">
                       <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.video2 }"></div>
@@ -313,8 +310,7 @@
                         <label class="form-label" for="title">
                           {t}Footer text for inner video:{/t}
                         </label>
-                        <textarea  class="form-control" name="footer_video2" ng-model="footer_video2" ng-value="footer_video2">{$article->footer_video2|clearslash|escape:'html'}</textarea>
-                        <input type="hidden" name="fk_video2" ng-value="fk_video2" class="related-element-id"/>
+                        <textarea  class="form-control" name="footer_video2" ng-model="article.footer_video2"></textarea>
                       </div>
                     </div>
                   </div>

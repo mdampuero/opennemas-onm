@@ -33,7 +33,7 @@
                 </a>
               </li>
             {/acl}
-            {acl isAllowed="ONLY_MASTERS"}
+            {acl isAllowed="MASTER"}
               <li class="quicklinks">
                 <span class="h-seperate"></span>
               </li>
@@ -146,7 +146,7 @@
           <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
             <div class="center">
               <h4>{t}There is no elements to import{/t}</h4>
-              {acl isAllowed="ONLY_MASTERS"}
+              {acl isAllowed="MASTER"}
               <h6>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</h6>
               {/acl}
             </div>

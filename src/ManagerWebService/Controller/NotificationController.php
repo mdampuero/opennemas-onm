@@ -195,6 +195,8 @@ class NotificationController extends Controller
                 $a['title'] = array_shift($title);
             }
 
+            $a['title'] = str_replace("\n", '', $a['title']);
+
             return $a;
         }, $data);
 
@@ -229,19 +231,15 @@ class NotificationController extends Controller
      */
     public function exportAllAction()
     {
-        $sql = 'SELECT notification_id, title, count(read_date) as "read",'
-            . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
-            . ' COUNT(open_date) as "opened"'
-            . ' FROM user_notification, notification'
-            . ' WHERE notification_id = id group by notification_id';
-
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = $this->getNotificationCounters();
         $data = array_map(function ($a) {
             $title = unserialize($a['title']);
 
             if (!empty($title) && is_array($title)) {
                 $a['title'] = array_shift($title);
             }
+
+            $a['title'] = str_replace("\n", '', $a['title']);
 
             return $a;
         }, $data);
@@ -279,11 +277,23 @@ class NotificationController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
+        $extra      = $this->getTemplateParams();
         $repository = $this->get('orm.manager')->getRepository('Notification');
-        $converter = $this->get('orm.manager')->getConverter('Notification');
+        $converter  = $this->get('orm.manager')->getConverter('Notification');
 
         $total         = $repository->countBy($oql);
         $notifications = $repository->findBy($oql);
+
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $notifications);
+
+        $counters = $this->getNotificationCounters($ids);
+
+        $extra['stats'] = [];
+        foreach ($counters as $counter) {
+            $extra['stats'][$counter['notification_id']] = $counter;
+        }
 
         $ids = [];
         foreach ($notifications as &$notification) {
@@ -295,7 +305,7 @@ class NotificationController extends Controller
         }
 
         return new JsonResponse([
-            'extra'   => $this->getTemplateParams(),
+            'extra'   => $extra,
             'results' => $notifications,
             'total'   => $total,
         ]);
@@ -480,6 +490,27 @@ class NotificationController extends Controller
         $msg->add(_('Notification saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Returns counters for all notifications.
+     *
+     * @return array The list of notification counters.
+     */
+    protected function getNotificationCounters($ids = [])
+    {
+        $sql = 'SELECT notification.id as notification_id, title, count(read_date) as "read",'
+            . ' COUNT(view_date) as "view", COUNT(click_date) as "clicked",'
+            . ' COUNT(open_date) as "opened"'
+            . ' FROM notification LEFT JOIN user_notification ON notification.id = notification_id';
+
+        if (!empty($ids)) {
+            $sql .= sprintf(' WHERE notification_id in (%s)', implode(',', $ids));
+        }
+
+        $sql .= ' GROUP BY notification.id ORDER BY id DESC';
+
+        return $this->get('dbal_connection_manager')->fetchAll($sql);
     }
 
     /**

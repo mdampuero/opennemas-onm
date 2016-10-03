@@ -106,16 +106,10 @@
               },
               success: function() {
                 return function(modalWindow) {
-                  $scope.auth = {
-                    status:     false,
-                    modal:      false,
-                    inprogress: true
-                  };
-
-                  $scope.security.reset();
                   webStorage.local.remove('security');
 
                   modalWindow.close({ success: true });
+                  $window.location.reload();
                 };
               }
             }

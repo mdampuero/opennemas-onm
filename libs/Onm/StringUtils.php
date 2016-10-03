@@ -499,6 +499,9 @@ class StringUtils
                 $url = str_replace('//', '/', $url);
             }
         }
+        if (empty($url)) {
+            $url = '/';
+        }
 
         return $url.$urlParams;
     }

@@ -60,7 +60,7 @@ class DomainManagementController extends Controller
         }
 
         $converter = $em->getConverter('Extension');
-        $extension = $em->getRepository('extension')
+        $extension = $em->getRepository('Extension')
             ->findOneBy(sprintf('uuid = "%s"', $uuid));
         $extension = $converter->responsify($extension->getData());
 

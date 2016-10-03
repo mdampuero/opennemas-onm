@@ -1369,8 +1369,8 @@ translation_ids:
             type: string
             options: { default: null }
         pk_content:
-            type: string
-            options: { default: null, length: 255 }
+            type: bigint
+            options: { default: null, unsigned: true, length: 20 }
         type:
             type: string
             options: { default: null, length: 100 }

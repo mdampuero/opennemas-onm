@@ -1839,6 +1839,18 @@ class MigrationSaver
                     list($type, $field) =
                         \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
                     break;
+                case 'replace_body_images':
+                    preg_match_all($params['img_pattern'], $field, $matches);
+                    foreach ($matches[0] as $value) {
+                        $filename = pathinfo($value)['basename'];
+                        list($type, $id) =
+                            \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
+
+                        $photo = new \Photo($id);
+                        $photoUri = $params['media_path']. $photo->path_img;
+                        $field = str_replace($value, $photoUri, $field);
+                    }
+                    break;
                 case 'username':
                     $field = \Onm\StringUtils::getTitle(
                         $field,
@@ -2155,7 +2167,7 @@ class MigrationSaver
     private function reloadCategoryArray()
     {
         $cache = getService('cache');
-        $cache->delete(CACHE_PREFIX.'_content_categories');
+        $cache->delete('content_categories');
 
         $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -2176,7 +2188,7 @@ class MigrationSaver
             }
         }
 
-        $cache->save(CACHE_PREFIX.'_content_categories', $categories, 300);
+        $cache->save('content_categories', $categories, 300);
         $ccm = \ContentCategoryManager::get_instance();
         $ccm->findAll();
     }

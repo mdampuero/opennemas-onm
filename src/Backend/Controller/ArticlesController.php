@@ -374,8 +374,7 @@ class ArticlesController extends Controller
         $er  = $this->get('entity_repository');
 
         $article    = new \Article();
-        $articleContents = $request->request->filter('contents');
-
+        $articleContents = $request->request->filter('article');
 
         // Load config
         $this->view = $this->get('core.template');
@@ -383,8 +382,8 @@ class ArticlesController extends Controller
 
         // Fetch all article properties and generate a new object
         foreach ($articleContents as $key => $value) {
-            if (isset($value['name']) && !empty($value['name'])) {
-                $article->{$value['name']} = $value['value'];
+            if (!empty($value)) {
+                $article->{$key} = $value;
             }
         }
 
@@ -420,14 +419,16 @@ class ArticlesController extends Controller
         }
 
         // Fetch related contents to the inner article
-        $relationes = array();
+        $relations = [];
         $innerRelations = json_decode($article->relatedInner, true);
-        foreach ($innerRelations as $key => $value) {
-            $relationes[$key] = $value['id'];
+        if (!empty($innerRelations)) {
+            foreach ($innerRelations as $key => $value) {
+                $relations[$key] = $value['id'];
+            }
         }
 
         $cm  = new \ContentManager();
-        $relat = $cm->getContents($relationes);
+        $relat = $cm->getContents($relations);
         $relat = $cm->getInTime($relat);
         $relat = $cm->getAvailable($relat);
 

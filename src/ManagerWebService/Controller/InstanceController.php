@@ -151,7 +151,7 @@ class InstanceController extends Controller
                 $creator->deleteBackup($backupPath);
 
                 $msg->add(
-                    sprintf(_('Error while deleting instance with id "%s"'), $id),
+                    sprintf(_('Error while deleting instance with id "%s"'), $instance->id),
                     'error',
                     400
                 );
@@ -274,7 +274,13 @@ class InstanceController extends Controller
                 >= $security->getUser()->max_instances
         ) {
             throw new AccessDeniedException(
-                _('You have reached the maximum number of instances.')
+                '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
+                .sprintf(
+                    _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
+                    $this->getParameter('manager_webservice')['company_mail'],
+                    $this->getParameter('manager_webservice')['company_mail']
+                )
+                . '</p>'
             );
         }
 
@@ -400,7 +406,13 @@ class InstanceController extends Controller
             && count($security->getInstances()) >= $user->max_instances
         ) {
             throw new AccessDeniedException(
-                _('You have reached the maximum number of instances.')
+                '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
+                .sprintf(
+                    _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
+                    $this->getParameter('manager_webservice')['company_mail'],
+                    $this->getParameter('manager_webservice')['company_mail']
+                )
+                . '</p>'
             );
         }
 
@@ -506,7 +518,7 @@ class InstanceController extends Controller
         $em->getConnection('instance')
             ->selectDatabase($instance->getDatabaseName());
 
-        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik' ]);
+        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik', 'time_zone' ]);
         $template = $this->getTemplateParams();
 
         if (!empty($instance->getClient())) {

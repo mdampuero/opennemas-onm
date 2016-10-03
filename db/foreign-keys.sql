@@ -2,6 +2,31 @@
 # Foreign keys definitions
 #
 
+##################################
+# Foreign keys for onm-instances #
+##################################
+ALTER TABLE `client` ENGINE = INNODB;
+ALTER TABLE `extension` ENGINE = INNODB;
+ALTER TABLE `extension_meta` ENGINE = INNODB;
+ALTER TABLE `instances` ENGINE = INNODB;
+ALTER TABLE `instance_meta` ENGINE = INNODB;
+ALTER TABLE `notification` ENGINE = INNODB;
+ALTER TABLE `purchase` ENGINE = INNODB;
+ALTER TABLE `settings` ENGINE = INNODB;
+ALTER TABLE `usermeta` ENGINE = INNODB;
+ALTER TABLE `users` ENGINE = INNODB;
+ALTER TABLE `user_groups` ENGINE = INNODB;
+ALTER TABLE `user_groups_privileges` ENGINE = INNODB;
+ALTER TABLE `user_notification` ENGINE = INNODB;
+
+DELETE FROM instance_meta WHERE instance_id NOT IN (SELECT id from instances);
+ALTER TABLE `instances` CHANGE `owner_id` `owner_id` BIGINT UNSIGNED NULL DEFAULT NULL;
+
+
+# ####################################
+# Foreign keys for instance database #
+######################################
+
 # Use proper values for invalid dates
 UPDATE `contents` SET `endtime`= NULL WHERE `endtime`< "1970-01-01 00:00:00";
 UPDATE `contents` SET `starttime`= NULL WHERE `starttime`< "1970-01-01 00:00:00";

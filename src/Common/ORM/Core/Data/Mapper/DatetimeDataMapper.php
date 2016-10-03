@@ -24,7 +24,9 @@ class DatetimeDataMapper
             return null;
         }
 
-        return \DateTime::createFromFormat('Y-m-d', $value);
+        $value = \DateTime::createFromFormat('Y-m-d', $value);
+
+        return empty($value) ? null : $value;
     }
 
     /**
@@ -41,11 +43,13 @@ class DatetimeDataMapper
             return null;
         }
 
-        if ($value instanceOf \DateTime) {
+        if ($value instanceof \DateTime) {
             return $value;
         }
 
-        return \DateTime::createFromFormat('Y-m-d H:i:s', $value);
+        $value = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
+
+        return empty($value) ? null : $value;
     }
 
     /**
@@ -67,6 +71,10 @@ class DatetimeDataMapper
             $value,
             new \DateTimeZone('UTC')
         );
+
+        if (empty($value)) {
+            return null;
+        }
 
         $value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
@@ -99,7 +107,9 @@ class DatetimeDataMapper
             return null;
         }
 
-        return \DateTime::createFromFormat('H:i:s', $value);
+        $value = \DateTime::createFromFormat('H:i:s', $value);
+
+        return empty($value) ? null : $value;
     }
 
     /**

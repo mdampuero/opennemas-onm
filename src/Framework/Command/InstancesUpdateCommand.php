@@ -108,7 +108,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             return 1;
         }
 
-        $amount = ($offset) ? 30: null;
+        $amount = !is_null($offset) ? 30 : null;
 
         $this->getContainer()->get('cache_manager')->setNamespace('manager');
         $this->em = $this->getContainer()->get('orm.manager');
@@ -119,7 +119,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         }
 
         if ($offset) {
-            $oql .= ' offset ' . $offset;
+            $oql .= ' offset ' . ($offset - 1) * 30;
         }
 
         $instances = $this->em->getRepository('Instance')->findBy($oql);
@@ -193,7 +193,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 $this->output->write("\t- Getting page num views ");
             }
             $sql = 'SELECT value FROM settings WHERE name=\'piwik\'';
-            $conn->fetchAll($sql);
+            $rs = $conn->fetchAll($sql);
 
             if ($rs !== false && !empty($rs)) {
                 $piwik = unserialize($rs[0]['value']);
@@ -316,7 +316,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         if ($rs !== false && !empty($rs)) {
             $value = unserialize($rs[0]['value']);
             if (!empty($value)) {
-                $i->last_login = new \DateTime(unserialize($rs[0]['value']));
+                $i->last_login = new \DateTime($value);
             }
         }
 
@@ -326,7 +326,13 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         if ($rs !== false && !empty($rs)
             && !empty($rs[0]['created'])
-            && $rs[0]['created'] > $i->last_login->format('Y-m-d H:i:s')
+            && (
+                is_null($i->last_login)
+                || (
+                    !is_null($i->last_login)
+                    && $rs[0]['created'] > $i->last_login->format('Y-m-d H:i:s')
+                )
+            )
         ) {
             $i->last_login = new \DateTime($rs[0]['created']);
         }
@@ -393,7 +399,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             $rank = $matches[1];
         }
 
-        return $rank;
+        return (int) $rank;
     }
 
     /**

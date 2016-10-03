@@ -58,7 +58,7 @@ class ArticlesController extends Controller
         // Load config
         $this->view->setConfig('articles');
 
-        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->get('core.user'));
         $cacheable = $subscriptionFilter->subscriptionHook($article);
 
         // Advertisements for single article NO CACHE

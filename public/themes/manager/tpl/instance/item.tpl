@@ -112,7 +112,7 @@
                     {t}Contact mail{/t}
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.contact_mail.$invalid }">
-                    <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="text">
+                    <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="email">
                   </div>
                 </div>
                 <div class="form-group" ng-if="security.hasPermission('MASTER')">
@@ -182,7 +182,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-if="security.hasPermission('MASTER')">
               <label class="form-label">{t}Domain expire date:{/t}</label>
               <div class="controls">
                 <input class="form-control" datetime-picker="domainPicker" ng-model="instance.domain_expire" type="text">

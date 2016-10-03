@@ -132,7 +132,7 @@ class ErrorController extends Controller
                 $errorMessage = _('You are not allowed to perform this action.');
 
                 if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMesage;
+                    $content = $errorMessage;
                 } else {
                     $content = $this->renderView(
                         'error/404.tpl',

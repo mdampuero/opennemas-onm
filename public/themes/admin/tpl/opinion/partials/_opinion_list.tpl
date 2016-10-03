@@ -173,13 +173,13 @@
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="OPINION_UPDATE"}
-                  <a class="link" href="[% edit(content.id, 'admin_opinion_show') %]" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl}>
+                  <a class="link" href="[% edit(content.id, 'admin_opinion_show') %]" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="{$smarty.session._sf2_attributes.user->isAdmin()} || content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl}>
                     <i class="fa fa-pencil"></i>
                     {t}Edit{/t}
                   </a>
                   {/acl}
                   {acl isAllowed="OPINION_DELETE"}
-                  <button class="link link-danger" {acl isNotAllowed="CONTENT_OTHER_DELETE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="sendToTrash(content)" type="button">
+                  <button class="link link-danger" {acl isNotAllowed="CONTENT_OTHER_DELETE"} ng-if="{$smarty.session._sf2_attributes.user->isAdmin()} || content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="sendToTrash(content)" type="button">
                     <i class="fa fa-trash-o"></i>
                     {t}Delete{/t}
                   </button>

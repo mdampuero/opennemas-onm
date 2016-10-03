@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="!client.id ? save() : update()" ng-disabled="saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="!client.id ? save() : update()" ng-disabled="clientForm.$invalid || saving">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -104,30 +104,26 @@
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-sm-4">
-              <label class="form-label" for="country">{t}Country{/t}</label>
-              <div class="controls">
-                <select class="form-control" id="country" name="country" ng-model="client.country"placeholder="{t}Country{/t}">
-                  <option value="">{t}Select a country{/t}...</option>
-                  <option ng-repeat="(key,value) in extra.countries" ng-selected="[% client.country === value %]" value="[% key %]">[% value %]</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-6">
               <label class="form-label" for="city">{t}City{/t}</label>
               <div class="controls">
                 <input class="form-control" id="city" name="city" ng-model="client.city" placeholder="{t}City{/t}" type="text">
               </div>
             </div>
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-6">
               <label class="form-label" for="state">{t}State{/t}</label>
               <div class="controls">
-                <input class="form-control no-animate" id="state" name="state" ng-if="client.country !== 'ES'" ng-model="client.state" placeholder="{t}State{/t}" type="text">
-                <select class="form-control no-animate" id="state" name="state" ng-if="client.country === 'ES'" ng-model="client.state">
-                  <option value="">{t}Select a province{/t}...</option>
-                  <option ng-repeat="province in extra.provinces" value="[% province %]">[% province %]</option>
-                </select>
+                <input class="form-control" id="state" name="state" ng-model="client.state" placeholder="{t}State{/t}" type="text">
               </div>
+            </div>
+            <div class="form-group col-sm-6">
+              <labelclass="form-label" for="country">{t}Country{/t}</label>
+            <div class="controls">
+              <select class="form-control" id="country" name="country" ng-model="client.country"placeholder="{t}Country{/t}">
+                <option value="">{t}Select a country{/t}...</option>
+                <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% billing.country === value %]">[% value %]</option>
+              </select>
+            </div>
             </div>
           </div>
         </div>

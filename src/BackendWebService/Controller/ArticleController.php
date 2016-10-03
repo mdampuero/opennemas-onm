@@ -52,10 +52,10 @@ class ArticleController extends Controller
             'fk_video2'      => $postReq->getDigits('fk_video2', ''),
             'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'frontpage'      => (empty($frontpage)) ? 0 : 1,
-            'img1'           => $postReq->getDigits('img1', ''),
-            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'           => $postReq->getDigits('img2', ''),
-            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img1'           => $postReq->getDigits('img1', null),
+            'img1_footer'    => $postReq->get('img1_footer', null),
+            'img2'           => $postReq->getDigits('img2', null),
+            'img2_footer'    => $postReq->get('img2_footer', null),
             'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING),
             'slug'           => $postReq->filter('slug', '', FILTER_SANITIZE_STRING),
             'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING),
@@ -71,8 +71,8 @@ class ArticleController extends Controller
             'params' =>  array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : null,
+                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : null,
                 'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
                 'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
                 'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
@@ -126,16 +126,19 @@ class ArticleController extends Controller
      * @Security("hasExtension('ARTICLE_MANAGER')
      *     and hasPermission('ARTICLE_UPDATE')")
      */
-    public function showAction ($id)
+    public function showAction($id)
     {
         $article = new \Article($id);
-        $params  = [ 'article' => \Onm\StringUtils::convertToUtf8($article) ];
 
         if (is_null($article->id)) {
             return new JsonResponse(
                 sprintf(_('Unable to find the article with the id "%d"'), $id),
                 400
             );
+        }
+
+        if (!$article->params) {
+            $article->params = [];
         }
 
         if (is_string($article->params)) {
@@ -215,6 +218,11 @@ class ArticleController extends Controller
             }
         }
 
+        // Force URI generation
+        $article->uri = $article->uri;
+
+        $params['article'] = \Onm\StringUtils::convertToUtf8($article);
+
         return new JsonResponse($params);
     }
 
@@ -277,10 +285,10 @@ class ArticleController extends Controller
             'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'frontpage'      => (empty($frontpage)) ? 0 : 1,
             'id'             => $id,
-            'img1'           => $postReq->getDigits('img1', ''),
-            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'           => $postReq->getDigits('img2', ''),
-            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img1'           => $postReq->getDigits('img1', null),
+            'img1_footer'    => $postReq->get('img1_footer', null),
+            'img2'           => $postReq->getDigits('img2', null),
+            'img2_footer'    => $postReq->get('img2_footer', null),
             'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
             'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
@@ -295,8 +303,8 @@ class ArticleController extends Controller
             'params'         => array(
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
                 'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : null,
+                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : null,
                 'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
                 'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
                 'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',

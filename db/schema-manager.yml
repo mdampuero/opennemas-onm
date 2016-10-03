@@ -2,7 +2,7 @@ instances:
     columns:
         id:
             type: bigint
-            options: { default: null, autoincrement: true }
+            options: { default: null, autoincrement: true, unsigned: true }
         internal_name:
             type: string
             options: { default: null, length: 100 }
@@ -37,7 +37,7 @@ instances:
             type: string
             options: { default: null, length: 255 }
         owner_id:
-            type: integer
+            type: bigint
             options: { default: null, unsigned: true, notnull: false }
         contents:
             type: integer
@@ -106,11 +106,24 @@ instances:
             primary: false
             unique: false
             flags: { fulltext: true }
+        -
+            name: owner_id
+            columns: [ owner_id ]
+            primary: false
+            unique: false
+            flags: { }
+    foreign_keys:
+        -
+            name: instances_ownerid_users_id
+            source_field: [ owner_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 instance_meta:
     columns:
         instance_id:
             type:    bigint
-            options: { default: null, notnull: true }
+            options: { default: null, autoincrement: true, notnull: true, unsigned: true }
         meta_key:
             type: string
             options: { length: 255, notnull: false }
@@ -194,6 +207,12 @@ extension:
             primary: false
             unique: false
             flags: { }
+        -
+            name: uuid
+            columns: [ uuid ]
+            primary: false
+            unique: true
+            flags: { }
 extension_meta:
     columns:
         extension_id:
@@ -257,7 +276,7 @@ notification:
             options: { default: null, notnull: false }
         creator:
             type: string
-            options: { default: '', length: 255 }
+            options: { default: '', length: 255, notnull: false }
         style:
             type: text
             options: { default: null, length: 65532, notnull: false }
@@ -322,11 +341,24 @@ user_groups_privileges:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: pk_fk_user_group
+            columns: [ pk_fk_user_group ]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: usergroupsprivilesges_usergroupid_usergroups_id
+            source_field: [ pk_fk_user_group ]
+            target_table: user_groups
+            target_field: [ pk_user_group ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 usermeta:
     columns:
         user_id:
             type: bigint
-            options: { default: '0', unsigned: true }
+            options: { default: null, unsigned: true }
         meta_key:
             type: string
             options: { default: '', length: 255 }
@@ -362,7 +394,7 @@ usermeta:
 users:
     columns:
         id:
-            type: integer
+            type: bigint
             options: { default: null, unsigned: true, autoincrement: true }
         username:
             type: string
@@ -550,3 +582,16 @@ user_notification:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: notification_id
+            columns: [notification_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: usernotification_id_notification_id
+            source_field: [ notification_id ]
+            target_table: notification
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
