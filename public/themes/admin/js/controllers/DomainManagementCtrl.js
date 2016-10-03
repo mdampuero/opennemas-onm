@@ -152,10 +152,12 @@
           });
 
           var data = {
-            ids:     ids,
-            domains: domains,
-            step:    $scope.steps[$scope.step],
+            ids:    ids,
+            params: {},
+            step:   $scope.steps[$scope.step]
           };
+
+          data.params[$scope.extension.uuid] = domains;
 
           if ($scope.payment.type) {
             data.method = $scope.payment.type;
