@@ -162,71 +162,41 @@ class DomainManagementController extends Controller
     {
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
-        $instance  = $this->get('core.instance');
-        $date      = new \DateTime();
 
         $em = $this->get('orm.manager');
 
         try {
-            $client   = $em->getRepository('Client')->find($instance->getClient());
-            $purchase = $em->getRepository('Purchase')->find($purchase);
+            $ph = $this->get('core.helper.checkout');
 
-            $payment = new Payment([
-                'client_id' => $client->id,
-                'amount'    => round($purchase->total, 2),
-                'date'      => $date,
-                'type'      => 'Check'
-            ]);
+            $ph->getPurchase($purchase);
 
-            if (!empty($nonce)) {
-                $payment->nonce = $nonce;
+            if (empty($nonce)) {
+                return;
             }
 
-            $em->persist($payment, 'braintree');
+            $ph->pay($nonce);
 
-            $purchase->payment_id = $payment->payment_id;
+            $purchase = $ph->getPurchase();
+            $items    = $purchase->details;
 
-            $em->persist($purchase);
+            $ph->sendEmailToCustomer($items);
+            $ph->sendEmailToSales($items);
 
-            $invoice = new Invoice([
-                'client_id' => $client->id,
-                'date'      => new \DateTime(),
-                'status'    => 'sent',
-                'lines'     => $purchase->details
-            ]);
-
-            $em->persist($invoice, 'freshbooks');
-
-            $payment->invoice_id = $invoice->invoice_id;
-            $payment->notes      = 'Braintree Transaction Id: '
-                . $payment->payment_id;
-
-            $em->persist($payment, 'freshbooks');
-
-            $purchase->invoice_id = $invoice->invoice_id;
-            $purchase->updated    = $date;
-
-            // Remove payment method line from details
-            if ($purchase->method === 'CreditCard') {
-                array_pop($domains);
-            }
-
-            $em->persist($purchase);
-
-            $domains = $purchase->details;
-
-            $this->sendEmailToCustomer($client, $domains, $purchase->id);
-            $this->sendEmailToSales($client, $domains);
-
-            return new JsonResponse(_('Domain added successfully'));
+            $this->get('application.log')->info(
+                'The user ' . $this->getUser()->username
+                . '(' . $this->getUser()->id  .') has purchased '
+                . implode(', ', $purchase->details)
+            );
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
             return new JsonResponse([
                 'message' => $e->getMessage(),
                 'type' => 'error'
-            ], 404);
+            ], 400);
         }
+
+        return new JsonResponse(_('Purchase completed!'));
     }
 
     /**
