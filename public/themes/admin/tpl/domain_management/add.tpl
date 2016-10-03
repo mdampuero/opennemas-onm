@@ -77,7 +77,7 @@
           </ul>
         </div>
         <div class="fake-form-wizard-steps ng-cloak">
-          <div class="fake-wizard-steps fake-wizard-steps-5 fake-wizard-steps-active-[% step %] text-center">
+          <div class="fake-wizard-steps fake-wizard-steps-5 fake-wizard-steps-active-[% step + 1 %] text-center">
             <div class="step">
               <i class="fa fa-truck fa-flip-horizontal fa-lg"></i>
             </div>

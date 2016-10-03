@@ -41,7 +41,7 @@
          *  Requests the purchase and shows a confirmation modal window.
          */
         $scope.confirm = function() {
-          $scope.saving = true;
+          $scope.loading = true;
           var modules = $scope.cart.map(function(e) {
             var id = e.uuid;
             if (!id) {

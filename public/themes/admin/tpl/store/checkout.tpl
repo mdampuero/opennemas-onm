@@ -226,7 +226,7 @@
                 </div>
                 <div class="col-sm-4 col-sm-offset-4 m-t-15">
                   <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="cart.length === 0 || !terms || !client || loading">
-                    <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="loading"></i>
+                    <i class="fa fa-circle-o-notch fa-spin fa-absolute m-l-15 m-t-15" ng-if="loading"></i>
                     <h4 class="text-uppercase text-white">
                       {t}Confirm{/t}
                     </h4>
