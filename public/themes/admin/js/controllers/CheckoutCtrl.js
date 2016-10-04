@@ -102,7 +102,7 @@
 
         /**
          * @function cancelCreditCard
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCtrl
          *
          * @description
          *   Cancels credit card payment.

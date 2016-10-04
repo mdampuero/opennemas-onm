@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
 use Onm\Framework\Controller\Controller;
 
-class DomainManagementController extends Controller
+class DomainController extends Controller
 {
     /**
      * Lists all the available ads.
@@ -98,15 +98,5 @@ class DomainManagementController extends Controller
             'taxes'     => $taxes,
             'token'     => $token
         ]);
-    }
-
-    /**
-     * Lists all the available ads.
-     *
-     * @return Response The response object.
-     */
-    public function showAction()
-    {
-        return $this->render('domain_management/show.tpl');
     }
 }

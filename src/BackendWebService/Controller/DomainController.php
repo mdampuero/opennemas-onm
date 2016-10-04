@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
 
-class DomainManagementController extends Controller
+class DomainController extends Controller
 {
     /**
      * Checks if the domain is not in use.
