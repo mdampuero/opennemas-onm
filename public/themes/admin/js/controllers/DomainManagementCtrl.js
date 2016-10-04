@@ -167,23 +167,6 @@
         };
 
         /**
-         * @function getPrice
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Returns the price the domain price.
-         *
-         * @return {Float} The domain price.
-         */
-        $scope.getPrice = function() {
-          for (var i = 0; i < $scope.extension.price.length; i++) {
-            if ($scope.extension.price[i].type === 'yearly') {
-              return $scope.extension.price[i].value;
-            }
-          }
-        };
-
-        /**
          * @function expand
          * @memberOf DomainManagementCtrl
          *
