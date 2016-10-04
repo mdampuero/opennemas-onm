@@ -143,7 +143,7 @@ class StoreController extends Controller
         $modules = $converter->responsify($modules);
 
         $modules = array_map(function (&$a) {
-            foreach ([ 'about', 'description', 'name' ] as $key) {
+            foreach ([ 'about', 'description', 'name', 'terms', 'notes' ] as $key) {
                 if (!empty($a[$key])) {
                     $lang = $a[$key]['en'];
 
