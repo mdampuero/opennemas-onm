@@ -178,7 +178,7 @@
          *   Goes to the previous step.
          */
         $scope.previous = function() {
-          if ($scope.step > 1) {
+          if ($scope.step > 0) {
             $scope.step--;
           }
         };
@@ -225,13 +225,6 @@
           $scope.purchase = webStorage.local.get('purchase');
         }
 
-        if (!$scope.purchase) {
-          http.post('backend_ws_purchase_save').then(function(response) {
-            $scope.purchase = response.data;
-            webStorage.local.set('purchase', $scope.purchase);
-          });
-        }
-
         // Configure braintree
         $scope.$watch('clientToken', function(nv) {
           if (!nv) {
@@ -273,6 +266,13 @@
             });
           }
         });
+
+        if (!$scope.purchase) {
+          http.post('backend_ws_purchase_save').then(function(response) {
+            $scope.purchase = response.data;
+            webStorage.local.set('purchase', $scope.purchase);
+          });
+        }
       }
     ]);
 })();
