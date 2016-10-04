@@ -31,6 +31,27 @@
          */
         $scope.token = webStorage.local.get('token');
 
+        /**
+         * @function getNotes
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Returns the invoice notes.
+         */
+        $scope.getNotes = function () {
+          return $scope.purchase.notes.split('\n').join('<br>');
+        }
+        /**
+         * @function getTerms
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Returns the invoice terms.
+         */
+        $scope.getTerms = function () {
+          return $scope.purchase.terms.split('\n').join('<br>');
+        }
+
         $scope.$on('$destroy', function() {
           $scope.purchase = null;
         });

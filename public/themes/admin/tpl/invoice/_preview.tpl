@@ -52,4 +52,8 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="semi-bold">{t}Terms{/t}</h5>
+  <div class="m-b-30" ng-bind-html="getTerms()"></div>
+  <h5 class="semi-bold">{t}Notes{/t}</h5>
+  <div class="m-b-30" ng-bind-html="getNotes()"></div>
 </div>

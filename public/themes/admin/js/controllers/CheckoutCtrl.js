@@ -171,6 +171,22 @@
         };
 
         /**
+         * @function getNotes
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Returns the invoice notes.
+         */
+        $scope.getNotes = function () {
+          var notes = '';
+          for (var i = 0; i < $scope.cart.length; i++) {
+            notes += $scope.cart[i].notes.split('\n').join('<br>') + '<hr>';
+          }
+
+          return notes.replace(/<hr>$/, '');
+        }
+
+        /**
          * @function previous
          * @memberOf CheckoutCtrl
          *
@@ -198,6 +214,22 @@
 
           return http.put(route, { step: 'cart' });
         };
+
+        /**
+         * @function getTerms
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Returns the invoice terms.
+         */
+        $scope.getTerms = function () {
+          var terms = '';
+          for (var i = 0; i < $scope.cart.length; i++) {
+            terms += $scope.cart[i].terms.split('\n').join('<br>') + '<hr>';
+          }
+
+          return terms.replace(/<hr>$/, '');
+        }
 
         // Get client after saving
         $rootScope.$on('client-saved', function (event, args) {
