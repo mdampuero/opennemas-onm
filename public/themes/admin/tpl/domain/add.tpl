@@ -63,15 +63,15 @@
               <h5 class="m-t-15">{t}Billing information{/t}</h5>
             </li>
             <li class="text-center" ng-class="{ 'active': step == 2 }">
-              <span class="step">[% client ? '2' : '3' %]</span>
+              <span class="step">3</span>
               <h5 class="m-t-15">{t}Payment{/t}</h5>
             </li>
             <li class="text-center" ng-class="{ 'active': step == 3 }">
-              <span class="step">[% client ? '3' : '4' %]</span>
+              <span class="step">4</span>
               <h5 class="m-t-15">{t}Check{/t}</h5>
             </li>
             <li class="text-center" ng-class="{ 'active': step == 4 }">
-              <span class="step">[% client ? '4' : '5' %]</span>
+              <span class="step">5</span>
               <h5 class="m-t-15">{t}Finish{/t}</h5>
             </li>
           </ul>
@@ -169,36 +169,57 @@
         <div class="grid simple ng-hide" ng-show="step == 2 && !error">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Payment{/t}</h4>
-            <p class="m-t-15">
+            <div ng-show="total === 0">
+              <div class="text-center p-b-30 p-t-30">
+                <h3>{t}The selected items are free{/t}</h3>
+                <i class="fa fa-check fa-4x m-b-15 m-t-15 text-success"></i>
+                <h3>{t}Please, continue to the next step{/t}</h3>
+              </div>
+              <div class="row m-t-40 ng-cloak">
+                <div class="col-sm-4">
+                  <button class="btn btn-block btn-loading btn-white" ng-click="previous()" type="button">
+                    <h4 class="text-uppercase">{t}Previous{/t}</h4>
+                  </button>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4">
+                  <button class="btn btn-block btn-loading btn-success" ng-click="next()" type="button">
+                    <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div ng-show="total > 0">
+              <p class="m-t-15">
               {t}Select the payment method.{/t}
               {t}You'll have a chance to review your order before it's placed.{/t}
-            </p>
-            <p class="m-b-15 m-t-50 text-center">
+              </p>
+              <p class="m-b-15 m-t-50 text-center">
               <strong>
                 {t}Any problem with payment?{/t}
                 <a href="#" ng-click="open('payment-help')">
                   {t}Click here for a quick tips.{/t}
                 </a>
               </strong>
-            </p>
-            <form id="braintree-form">
-              <div class="braintree">
-                <div id="braintree-container"></div>
-                <div class="row m-t-40 ng-cloak">
-                  <div class="col-sm-4 m-t-15">
-                    <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="paymentLoading" type="button">
-                      <h4 class="text-uppercase">{t}Previous{/t}</h4>
-                    </button>
-                  </div>
-                  <div class="col-sm-4 col-sm-offset-4 m-t-15">
-                    <button class="btn btn-block btn-loading btn-success" ng-disabled="paymentLoading" type="submit">
-                      <i class="fa fa-circle-o-notch fa-spin fa-absolute m-l-15 m-t-15" ng-if="paymentLoading"></i>
-                      <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
-                    </button>
+              </p>
+              <form id="braintree-form">
+                <div class="braintree">
+                  <div id="braintree-container"></div>
+                  <div class="row m-t-40 ng-cloak">
+                    <div class="col-sm-4 m-t-15">
+                      <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="paymentLoading" type="button">
+                        <h4 class="text-uppercase">{t}Previous{/t}</h4>
+                      </button>
+                    </div>
+                    <div class="col-sm-4 col-sm-offset-4 m-t-15">
+                      <button class="btn btn-block btn-loading btn-success" ng-disabled="paymentLoading" type="submit">
+                        <i class="fa fa-circle-o-notch fa-spin fa-absolute m-l-15 m-t-15" ng-if="paymentLoading"></i>
+                        <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
         <div class="grid simple ng-hide" ng-show="step == 3 && !error">
