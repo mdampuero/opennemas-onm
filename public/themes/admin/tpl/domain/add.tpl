@@ -1,4 +1,4 @@
-{extends file="domain_management/list.tpl"}
+{extends file="domain/list.tpl"}
 
 {block name="header-css" append}
   {stylesheets src="@AdminTheme/less/_store.less,

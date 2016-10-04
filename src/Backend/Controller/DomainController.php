@@ -23,7 +23,7 @@ class DomainController extends Controller
      */
     public function listAction()
     {
-        return $this->render('domain_management/list.tpl');
+        return $this->render('domain/list.tpl');
     }
 
     /**
@@ -90,7 +90,7 @@ class DomainController extends Controller
             'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
         ];
 
-        return $this->render('domain_management/add.tpl', [
+        return $this->render('domain/add.tpl', [
             'client'    => $client,
             'extension' => $extension,
             'countries' => $countries,
