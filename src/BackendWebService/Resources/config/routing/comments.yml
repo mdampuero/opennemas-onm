@@ -39,5 +39,6 @@ backend_ws_comments_patch:
 backend_ws_comments_list:
     path:     /comments
     defaults: { _controller: BackendWebServiceBundle:Comments:list }
+    methods:  [ GET ]
     options:
         expose: true

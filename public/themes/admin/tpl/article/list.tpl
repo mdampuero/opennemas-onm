@@ -166,12 +166,12 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="left" >{t}Title{/t}</th>
-              <th class="left hidden-xs">{t}Author{/t}</th>
+              <th>{t}Title{/t}</th>
+              <th class="hidden-xs">{t}Author{/t}</th>
               {if $category eq 'all' || $category == 0}
-                <th class="left hidden-xs">{t}Section{/t}</th>
+                <th class="hidden-xs">{t}Section{/t}</th>
               {/if}
-              <th class="center" style="width:10px;">{t}Published{/t}</th>
+              <th class="text-center" width="100">{t}Published{/t}</th>
             </thead>
             <tbody>
               <tr ng-if="contents.length == 0">
@@ -184,7 +184,7 @@
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
-                <td class="left">
+                <td>
                   <span uib-tooltip="{t}Last editor{/t} [% extra.authors[content.fk_user_last_editor].name %]">[% content.title %]</span>
                   <div class="small-text">
                     <strong>{t}Created{/t}: </strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
@@ -201,14 +201,12 @@
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_article_show') %]">
-                      <i class="fa fa-pencil"></i>
-                      {t}Edit{/t}
+                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
                     <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o"></i>
-                      {t}Delete{/t}
+                      <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>
                     {/acl}
                   </div>
@@ -222,7 +220,7 @@
                   </span>
                 </td>
                 {if $category eq 'all' || $category == 0}
-                  <td class="left hidden-xs">
+                  <td class="hidden-xs">
                     <span ng-if="content.category_name == 'unknown'">
                       {t}Unasigned{/t}
                     </span>
@@ -231,7 +229,7 @@
                     </span>
                   </td>
                 {/if}
-                <td class="right">
+                <td class="text-center">
                   <span ng-if="content.category != 20">
                     {acl isAllowed="ARTICLE_AVAILABLE"}
                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">

@@ -68,10 +68,10 @@
                 <tr>
                   <th>{t}Title{/t}</th>
                   <th>{t}Internal name{/t}</th>
-                  <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                  <th class="hidden-xs text-center" width="150">{t}Articles{/t}</th>
                   {acl isAllowed="CATEGORY_AVAILABLE"}
-                  <th style="width:15px;">{t}Published{/t}</th>
-                  <th style="width:15px;" class="nowrap hidden-xs">{t}Show in rss{/t}</th>
+                  <th class="text-center" width="150">{t}Published{/t}</th>
+                  <th class="hidden-xs text-center" width="150">{t}Show in rss{/t}</th>
                   {/acl}
                 </tr>
               </thead>
@@ -97,9 +97,9 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                    <th class="hidden-xs text-center" width="100">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Published{/t}</th>
+                      <th class="text-center" width="100">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -126,9 +126,9 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                    <th class="hidden-xs text-center" width="100">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Published{/t}</th>
+                    <th class="text-center" width="100">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -155,9 +155,9 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;" class="hidden-xs">{t}Advertisements{/t}</th>
+                    <th class="hidden-xs text-center" width="100">{t}Advertisements{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Published{/t}</th>
+                    <th class="text-center" width="100">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -184,9 +184,9 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                    <th class="hidden-xs text-center" width="100">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Published{/t}</th>
+                    <th class="text-center" width="100">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -213,9 +213,9 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                    <th class="hidden-xs text-center" width="100">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Published{/t}</th>
+                    <th class="text-center" width="100">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -242,9 +242,9 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                    <th class="hidden-xs text-center" width="100">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Published{/t}</th>
+                    <th class="text-center" width="100">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -271,9 +271,9 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
+                    <th class="hidden-xs text-center" width="100">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Published{/t}</th>
+                    <th class="text-center" width="100">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>

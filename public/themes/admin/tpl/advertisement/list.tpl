@@ -173,10 +173,10 @@
                 </th>
                 <th>{t}Title{/t}</th>
                 <th class="hidden-xs hidden-sm" style="width:250px">{t}Type{/t}</th>
-                <th class="center hidden-xs" style="width:30px">{t}Permanence{/t}</th>
-                <th class="center hidden-xs" style="width:40px"><i class="fa fa-mouse-pointer"></i></th>
+                <th class="hidden-xs text-center" width="100">{t}Permanence{/t}</th>
+                <th class="hidden-xs text-center" width="100"><i class="fa fa-mouse-pointer"></i></th>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
-                <th class="center" style="width:40px;">{t}Published{/t}</th>
+                <th class="text-center" width="100">{t}Published{/t}</th>
                 {/acl}
               </tr>
             </thead>
@@ -199,12 +199,12 @@
                   <div class="listing-inline-actions">
                     {acl isAllowed="ADVERTISEMENT_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
-                      <i class="fa fa-pencil"></i>{t}Edit{/t}
+                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}
                     {acl isAllowed="ADVERTISEMENT_DELETE"}
                     <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                      <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>
                     {/acl}
                   </div>
@@ -215,17 +215,17 @@
                   <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script != 1 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
                   [% map[content.type_advertisement].name %]
                 </td>
-                <td class="center hidden-xs">
+                <td class="hidden-xs text-center">
                   <span ng-if="content.type_medida == 'NULL'">{t}Not defined{/t}</span>
                   <span ng-if="content.type_medida == 'CLICK'">{t}Clicks:{/t} [% content.num_clic %]</span>
                   <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% content.num_view %]</span>
                   <span ng-if="content.type_medida == 'DATE'">{t}Date:{/t} [% content.startime %]-[% content.endtime %]</span>
                 </td>
-                <td class="center hidden-xs">
+                <td class="hidden-xs text-center">
                   [% content.num_clic_count %]
                 </td>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
-                <td class="right" style="width:40px;">
+                <td class="text-centerk">
                   <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.content_status == '1', 'fa-times text-error': !content.loading && content.content_status == '0' }"></i>
                   </button>

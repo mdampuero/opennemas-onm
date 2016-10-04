@@ -127,7 +127,7 @@
                 </th>
                 <th class="pointer">{t}Name{/t}</th>
                 {if count($menu_positions) > 1}
-                <th class="pointer nowrap center" style="width:100px;">{t}Position assigned{/t}</th>
+                <th class="pointer nowrap text-center" width="100">{t}Position assigned{/t}</th>
                 {/if}
               </tr>
             </thead>
@@ -143,15 +143,15 @@
                   [% content.name %]
                   <div class="listing-inline-actions">
                     <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">
-                      <i class="fa fa-pencil"></i>{t}Edit{/t}
+                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     <button class="link link-danger" ng-click="removeMenu(content)" type="button">
-                      <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                      <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>
                   </div>
                 </td>
                 {if count($menu_positions) > 1}
-                <td class="left">
+                <td class="text-center">
                   <span ng-if="content.position">
                     [% content.position %]
                   </span>

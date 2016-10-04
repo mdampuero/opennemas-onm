@@ -140,15 +140,15 @@
                 </div>
               </th>
               <th class="center hidden-xs hidden-sm" style="width:10px"></th>
-              <th class="left">{t}Title{/t}</th>
+              <th>{t}Title{/t}</th>
               {if $category=='widget' || $category == 'all'}
-              <th class="center hidden-xs">{t}Section{/t}</th>
+              <th class="center hidden-xs" width="200">{t}Section{/t}</th>
               {/if}
-              <th class="center hidden-xs">{t}Date{/t}</th>
-              <th class="center hidden-xs">{t}Price{/t}</th>
-              <th class="center hidden-xs" style="width:10px">{t}Favorite{/t}</th>
-              <th class="center hidden-xs" style="width:10px">{t}Home{/t}</th>
-              <th class="center" style="width:10px">{t}Published{/t}</th>
+              <th class="hidden-xs text-center" width="200">{t}Date{/t}</th>
+              <th class="hidden-xs text-center" width="200">{t}Price{/t}</th>
+              <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
+              <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
+              <th class="text-center" width="100">{t}Published{/t}</th>
             </tr>
           </thead>
           <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
@@ -163,44 +163,36 @@
                 <img ng-src="{$KIOSKO_IMG_URL}[% content.path%][% content.thumb_url %]"
                 title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px" class="thumbnail" />
               </td>
-              <td class="left">
+              <td>
                 <img ng-src="{$KIOSKO_IMG_URL}[% content.path%][% content.thumb_url %]"
                 title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px" class="thumbnail visible-xs visible-sm" />
                 <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
                 <div class="listing-inline-actions">
                   {acl isAllowed="VIDEO_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_kiosko_show') %]">
-                      <i class="fa fa-pencil"></i> {t}Edit{/t}
+                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                   {/acl}
                   {acl isAllowed="VIDEO_DELETE"}
                     <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                      <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                     </button>
                   {/acl}
                 </div>
               </td>
               {if $category == 'widget' || $category == 'all'}
-                <td class="center hidden-xs">
-                  [% content.category_name%]
+                <td class="hidden-xs text-center">
+                  [% content.category_name %]
                 </td>
               {/if}
-              <td class="center hidden-xs">
+              <td class="hidden-xs text-center">
                 [% content.date %]
               </td>
-              <td class="center hidden-xs">
+              <td class="hidden-xs text-center">
                 [% content.price | number : 2 %] €
               </td>
-              {acl isAllowed="KIOSKO_AVAILABLE"}
-                <td class="center hidden-xs">
-                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
-                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
-                    <i class="fa fa-times fa-sub text-danger" ng-if="!content.favorite_loading && content.favorite != 1"></i>
-                  </button>
-                </td>
-              {/acl}
               {acl isAllowed="KIOSKO_HOME"}
-                <td class="right hidden-xs">
+                <td class="hidden-xs text-center">
                   <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': ! content.home_loading && content.in_home == 1, 'fa-home': ! content.home_loading &&content.in_home == 0 }"></i>
                     <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading && content.in_home != 1"></i>
@@ -208,7 +200,15 @@
                 </td>
               {/acl}
               {acl isAllowed="KIOSKO_AVAILABLE"}
-                <td class="center">
+                <td class="text-center hidden-xs">
+                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
+                    <i class="fa fa-times fa-sub text-danger" ng-if="!content.favorite_loading && content.favorite != 1"></i>
+                  </button>
+                </td>
+              {/acl}
+              {acl isAllowed="KIOSKO_AVAILABLE"}
+                <td class="text-center">
                   <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
                   </button>

@@ -145,8 +145,8 @@
                   </div>
                 </th>
                 <th>{t}Title{/t}</th>
-                <th class="hidden-xs hidden-sm">{t}URL{/t}</th>
-                <th class="center" style="width:20px;">{t}Published{/t}</th>
+                <th class="hidden-sm hidden-xs">{t}URL{/t}</th>
+                <th class="text-center" width="100">{t}Published{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -166,23 +166,23 @@
                </span>
                <div class="listing-inline-actions">
                 {acl isAllowed="STATIC_PAGE_UPDATE"}
-                <a class="link" href="[% edit(content.pk_content, 'backend_static_page_show') %]">
-                  <i class="fa fa-pencil"></i> {t}Edit{/t}
-                </a>
+                  <a class="link" href="[% edit(content.pk_content, 'backend_static_page_show') %]">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                  </a>
                 {/acl}
                 {acl isAllowed="STATIC_PAGE_DELETE"}
-                <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                  <i class="fa fa-trash-o"></i> {t}Delete{/t}
-                </button>
+                  <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                  </button>
                 {/acl}
               </div>
             </td>
-            <td class="hidden-xs hidden-sm">
+            <td class="hidden-sm hidden-xs">
               <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
                 {$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]
               </a>
             </td>
-            <td class="right">
+            <td class="text-center">
               {acl isAllowed="STATIC_PAGE_AVAILABLE"}
               <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                 <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }" ></i>
