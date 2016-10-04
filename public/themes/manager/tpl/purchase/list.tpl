@@ -270,7 +270,7 @@
               <th class="text-center" ng-show="isColumnEnabled('email')" width="250">
                 {t}Email{/t}
               </th>
-              <th class="pointer" ng-click="sort('total')" ng-show="isColumnEnabled('total')" width="80">
+              <th class="pointer text-right" ng-click="sort('total')" ng-show="isColumnEnabled('total')" width="80">
                 {t}Total{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('total') == 'asc', 'fa fa-caret-down': isOrderedBy('total') == 'desc'}"></i>
               </th>
@@ -337,7 +337,7 @@
               <td class="text-right" ng-show="isColumnEnabled('total')">
                 [% item.total | number : 2 %] €
               </td>
-              <td class="text-right" ng-show="isColumnEnabled('method')">
+              <td class="text-center" ng-show="isColumnEnabled('method')">
                 <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }"></i>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
