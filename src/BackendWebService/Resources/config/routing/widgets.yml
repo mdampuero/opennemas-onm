@@ -1,6 +1,7 @@
 backend_ws_widgets_list:
     path:     /widgets
     defaults: { _controller: BackendWebServiceBundle:Widgets:list }
+    methods:  [ GET ]
     options:
         expose: true
 
