@@ -187,6 +187,10 @@ class DomainController extends Controller
 
             $ph->enable();
 
+            $this->get('core.dispatcher')->dispatch('instance.update', [
+                'instance' => $this->get('core.instance')
+            ]);
+
             $this->get('application.log')->info(
                 'The user ' . $this->getUser()->username
                 . '(' . $this->getUser()->id  .') has purchased '
