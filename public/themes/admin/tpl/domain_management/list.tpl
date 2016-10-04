@@ -20,7 +20,7 @@
     </div>
   </div>
 </div>
-<div class="content" ng-controller="DomainManagementCtrl" ng-init="list()">
+<div class="content" ng-controller="DomainListCtrl" ng-init="list()">
   <div class="row">
     <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
       <div class="m-b-30 m-t-15">
