@@ -41,7 +41,7 @@ class StoreController extends Controller
             $this->get('application.log')->info(
                 'The user ' . $this->getUser()->username
                 . '(' . $this->getUser()->id  .') has purchased '
-                . implode(', ', $purchase->details)
+                . json_encode($purchase->details)
             );
         } catch (\Exception $e) {
             error_log($e->getMessage());
