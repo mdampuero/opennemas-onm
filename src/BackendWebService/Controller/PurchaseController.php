@@ -30,18 +30,16 @@ class PurchaseController extends Controller
      */
     public function getPdfAction($id)
     {
-        $em = $this->get('orm.manager');
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id = %s', $id);
 
-        $purchase = $em->getRepository('Purchase')->findOneBy([
-            'id'          => [ [ 'value' => $id ] ],
-            'instance_id' => [ [ 'value' => $this->get('core.instance')->id ] ]
-        ]);
+        $purchase = $em->getRepository('Purchase')->findOneBy($oql);
 
         if (!$purchase) {
             throw new \Exception(_('Unable to find the purchase'));
         }
 
-        $pdf = $em->getRepository('invoice', 'FreshBooks')
+        $pdf = $em->getRepository('invoice', 'freshbooks')
             ->getPDF($purchase->invoice_id);
 
         $response = new Response($pdf);
