@@ -115,7 +115,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 0">
+        <div class="grid simple ng-hide" ng-show="step == 0 && !error">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Cart{/t}</h4>
             {include file="store/_cart.tpl"}
@@ -130,7 +130,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 1">
+        <div class="grid simple ng-hide" ng-show="step == 1 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
@@ -201,7 +201,7 @@
             </form>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 3">
+        <div class="grid simple ng-hide" ng-show="step == 3 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="semi-bold">{t}Purchase summary{/t}</h4>
@@ -236,17 +236,13 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 4">
+        <div class="grid simple ng-hide" ng-show="step == 4 && !error">
           <div class="grid-body text-center">
             <div class="p-b-30 p-l-30 p-r-30 p-t-30 text-center">
               <i class="fa fa-heart fa-3x"></i>
-              <h3 class="p-b-30 ">{t}Thank you for your purchase request!{/t}</h3>
+              <h3 class="p-b-30">{t}Thank you for your purchase!{/t}</h3>
               <p class="p-b-15">
-              {t}In the next 24 hours you will receive an email with payment instructions and invoice.{/t}
-              </p>
-              <p class="p-b-15">
-              {capture name="client_info_url"}{url name=admin_client_info_page}{/capture}
-              {t escape=off 1=$smarty.capture.client_info_url}Meanwhile, you can go to your <a href="%1">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
+                {t}Check your email, we have sent you an email with the invoice and purchase details.{/t}
               </p>
               <p class="p-b-10">
               {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
@@ -268,6 +264,20 @@
               <h4 class="m-t-30">
                 {t}Have a wonderful day!{/t}
               </h4>
+            </div>
+          </div>
+        </div>
+        <div class="grid simple ng-hide" ng-show="error">
+          <div class="grid-body text-center">
+            <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center">
+              <i class="fa fa-thumbs-o-down fa-3x"></i>
+              <h3 class="p-b-30">{t}Something unexpected has happened!{/t}</h3>
+              <p class="p-b-15">
+              {t}There were some errors while trying to purchase.{/t}
+              </p>
+              <p class="p-b-15">
+              {t escape=off}To prevent non-desired charges in your account, please, do not retry the checkout process and contact our <a href="javascript:UserVoice.showPopupWidget();">support team</a>.{/t}
+              </p>
             </div>
           </div>
         </div>
