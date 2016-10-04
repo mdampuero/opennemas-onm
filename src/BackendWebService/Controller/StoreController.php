@@ -43,6 +43,8 @@ class StoreController extends Controller
             $ph->sendEmailToCustomer($items);
             $ph->sendEmailToSales($items);
 
+            $ph->enable();
+
             $this->get('application.log')->info(
                 'The user ' . $this->getUser()->username
                 . '(' . $this->getUser()->id  .') has purchased '
