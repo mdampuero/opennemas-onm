@@ -153,7 +153,12 @@ class CheckoutHelper
                 ->getVatFromCode($this->client->country, $this->client->state);
         }
 
+        $terms  = '';
+        $notes  = '';
+
         foreach ($items as $item) {
+            $terms       .= $item->getTerms($lang) . "\n";
+            $notes       .= $item->getNotes($lang) . "\n";
             $uuid         = $item->uuid;
             $description  = $item->getName($lang);
             $price        = $item->getPrice($ids[$item->uuid]);
@@ -182,6 +187,9 @@ class CheckoutHelper
                 }
             }
         }
+
+        $this->purchase->notes = trim("\n", $notes);
+        $this->purchase->terms = trim("\n", $terms);
 
         $vat = ($vatTax/100) * $subtotal;
 
@@ -242,7 +250,9 @@ class CheckoutHelper
             'client_id' => $this->client->id,
             'date'      => $date,
             'status'    => 'sent',
-            'lines'     => $this->purchase->details
+            'lines'     => $this->purchase->details,
+            'notes'     => $this->purchase->notes,
+            'terms'     => $this->purchase->terms
         ]);
 
         // Save invoice in FreshBooks
