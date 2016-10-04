@@ -270,7 +270,7 @@
                     {t}Terms{/t}
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.terms[language].$invalid }">
-                    <textarea class="form-control" onm-editor onm-editor-preset="simple" id="terms" name="terms" ng-model="module.terms[language]" rows="5"></textarea>
+                    <textarea class="form-control" id="terms" name="terms" ng-model="module.terms[language]" rows="5"></textarea>
                   </div>
                 </div>
                 <div class="form-group">
@@ -278,7 +278,7 @@
                     {t}Notes{/t}
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.notes[language].$invalid }">
-                    <textarea class="form-control" onm-editor onm-editor-preset="simple" id="notes" name="notes" ng-model="module.notes[language]" rows="5"></textarea>
+                    <textarea class="form-control" id="notes" name="notes" ng-model="module.notes[language]" rows="5"></textarea>
                   </div>
                 </div>
               </div>
