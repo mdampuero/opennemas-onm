@@ -183,6 +183,22 @@
           }
         };
 
+        /**
+         * @function start
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Starts the purchase.
+         */
+        $scope.start = function() {
+          var route = {
+            name: 'backend_ws_purchase_update',
+            params: { id: $scope.purchase }
+          };
+
+          return http.put(route, { step: 'cart' });
+        };
+
         // Get client after saving
         $rootScope.$on('client-saved', function (event, args) {
           $scope.client = args;
@@ -272,6 +288,8 @@
             $scope.purchase = response.data;
             webStorage.local.set('purchase', $scope.purchase);
           });
+        } else {
+          $scope.start();
         }
       }
     ]);
