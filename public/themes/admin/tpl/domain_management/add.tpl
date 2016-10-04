@@ -85,49 +85,47 @@
         </div>
         <div class="grid simple ng-hide" ng-show="step == 0 && !error">
           <div class="grid-body clearfix">
-            <div>
-              <h4 class="semi-bold" ng-bind-html="extension.description"></h4>
-              <div class="m-t-15" ng-bind-html="extension.about"></div>
-              <div class="row">
-                <div class="col-sm-9">
-                  <div class="input-group">
-                    <span class="input-group-addon">www.</span>
-                    <input autofocus class="form-control uib-typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" uib-typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue" type="text">
-                    <span class="input-group-btn">
-                      <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid() || !domain">
-                        <span ng-if="!loading">
-                          {t}Map it{/t}
-                        </span>
-                        <div class="sk-three-bounce sk-inline sk-small ng-cloak" ng-if="loading">
-                          <div class="sk-child sk-bounce1"></div>
-                          <div class="sk-child sk-bounce2"></div>
-                          <div class="sk-child sk-bounce3"></div>
-                        </div>
-                      </button>
-                    </span>
-                  </div>
+            <h4 class="semi-bold" ng-bind-html="extension.description"></h4>
+            <div class="m-t-15" ng-bind-html="extension.about"></div>
+            <div class="row">
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-addon">www.</span>
+                  <input autofocus class="form-control uib-typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" uib-typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue" type="text">
+                  <span class="input-group-btn">
+                    <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid() || !domain">
+                      <span ng-if="!loading">
+                        {t}Map it{/t}
+                      </span>
+                      <div class="sk-three-bounce sk-inline sk-small ng-cloak" ng-if="loading">
+                        <div class="sk-child sk-bounce1"></div>
+                        <div class="sk-child sk-bounce2"></div>
+                        <div class="sk-child sk-bounce3"></div>
+                      </div>
+                    </button>
+                  </span>
                 </div>
-                <div class="col-sm-3">
-                  <h4 class="text-right">
-                    [% getPrice() | number : 2 %]
-                    <small class="muted">€/{t}year{/t}</small>
+              </div>
+              <div class="col-sm-3">
+                <h4 class="text-right">
+                  [% getPrice(extension, 'yearly').value | number : 2 %]
+                  <small class="muted">€/{t}year{/t}</small>
+                </h4>
+              </div>
+            </div>
+            <div ng-if="cart.length > 0">
+              <h5 class="m-t-30 ng-cloak semi-bold uppercase">
+                {t}Requested domains{/t}
+              </h5>
+              {include file="store/_cart.tpl"}
+            </div>
+            <div class="row m-t-50 ng-cloak" ng-if="cart.length > 0">
+              <div class="col-sm-4 col-sm-offset-4">
+                <button class="btn btn-block btn-success" ng-click="next()">
+                  <h4 class="text-uppercase text-white">
+                    {t}Next{/t}
                   </h4>
-                </div>
-              </div>
-              <div ng-if="cart.length > 0">
-                <h5 class="m-t-30 ng-cloak semi-bold uppercase">
-                  {t}Requested domains{/t}
-                </h5>
-                {include file="store/_cart.tpl"}
-              </div>
-              <div class="row m-t-50 ng-cloak" ng-if="cart.length > 0">
-                <div class="col-sm-4 col-sm-offset-4">
-                  <button class="btn btn-block btn-success" ng-click="next()">
-                    <h4 class="text-uppercase text-white">
-                      {t}Next{/t}
-                    </h4>
-                  </button>
-                </div>
+                </button>
               </div>
             </div>
           </div>
