@@ -89,7 +89,7 @@
 
           return {
             ids:    ids,
-            step:   $scope.steps[$scope.step],
+            step:   $scope.steps[$scope.step + 1],
             method: $scope.payment.type,
           };
         };
