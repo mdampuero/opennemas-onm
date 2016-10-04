@@ -163,8 +163,6 @@ class DomainController extends Controller
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
 
-        $em = $this->get('orm.manager');
-
         try {
             $ph = $this->get('core.helper.checkout');
 
@@ -267,81 +265,5 @@ class DomainController extends Controller
         }
 
         return $output[0]['target'];
-    }
-
-    /**
-     * Sends an email to the customer.
-     *
-     * @param array   $client   The client information.
-     * @param array   $domains  The requested domains.
-     * @param integer $purchase The purchase id.
-     */
-    private function sendEmailToCustomer($client, $domains, $purchase)
-    {
-        $instance  = $this->get('core.instance');
-        $params    = $this->getParameter('manager_webservice');
-        $countries = Intl::getRegionBundle()
-            ->getCountryNames(CURRENT_LANGUAGE_LONG);
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain request')
-            ->setFrom($params['no_reply_from'])
-            ->setSender($params['no_reply_sender'])
-            ->setTo($client->email)
-            ->setBody(
-                $this->renderView(
-                    'domain_management/email/_purchaseToCustomer.tpl',
-                    [
-                        'client'    => $client,
-                        'countries' => $countries,
-                        'domains'   => $domains,
-                        'url'       => $this->get('router')->generate(
-                            'backend_ws_purchase_get_pdf',
-                            [ 'id' => $purchase ],
-                            true
-                        )
-                    ]
-                ),
-                'text/html'
-            );
-
-        if ($instance->contact_mail !== $client->email) {
-            $message->setBcc($instance->contact_mail);
-        }
-
-        $this->get('mailer')->send($message);
-    }
-
-    /**
-     * Sends an email to sales department.
-     *
-     * @param array $client  The client information.
-     * @param array $domains The requested domains.
-     */
-    private function sendEmailToSales($client, $domains)
-    {
-        $countries = Intl::getRegionBundle()->getCountryNames();
-        $instance  = $this->get('core.instance');
-        $params    = $this->getParameter("manager_webservice");
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain request')
-            ->setFrom($params['no_reply_from'])
-            ->setSender($params['no_reply_sender'])
-            ->setTo($this->container->getParameter('sales_email'))
-            ->setBody(
-                $this->renderView(
-                    'domain_management/email/_purchaseToSales.tpl',
-                    [
-                        'client'    => $client,
-                        'countries' => $countries,
-                        'domains'   => $domains,
-                        'instance'  => $instance
-                    ]
-                ),
-                'text/html'
-            );
-
-        $this->get('mailer')->send($message);
     }
 }
