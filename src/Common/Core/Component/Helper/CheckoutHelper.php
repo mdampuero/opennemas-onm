@@ -42,6 +42,43 @@ class CheckoutHelper
     }
 
     /**
+     * Updates the instance basing on the purchased items.
+     */
+    public function enable()
+    {
+        if (empty($this->instance->purchased)) {
+            $this->instance->purchased = [];
+        }
+
+        $domains = array_filter($this->purchase->details, function ($a) {
+            return strpos($a['uuid'], 'es.openhost.domain') !== false;
+        });
+
+        $domains = array_map(function ($a) {
+            return substr($a['description'], strrpos($a['description'], ' '));
+        }, $domains);
+
+        $uuids = array_map(function ($a) {
+            return $a['uuid'];
+        }, $this->purchase->details);
+
+        $themes = array_filter($uuids, function ($a) {
+            return strpos($a, 'es.openhost.theme') !== false;
+        });
+
+        $modules = array_diff($uuids, $themes);
+
+        $this->instance->domains =
+            array_merge($this->instance->domains, $domains);
+        $this->instance->activated_modules =
+            array_merge($this->instance->activated_modules, $modules);
+        $this->instance->purchased =
+            array_merge($this->instance->purchased, $themes);
+
+        $this->container->get('orm.manager')->persist($this->instance);
+    }
+
+    /**
      * Returns a new purchase or the last incompleted purchase.
      *
      * @param integer $id The purchase id.
@@ -183,7 +220,7 @@ class CheckoutHelper
             throw new \Exception(_('There is no billing information.'));
         }
 
-        $this->purchase->step    = 'done';
+        $this->purchase->step    = 'apply';
         $this->purchase->updated = $date;
 
         $payment = new Payment([
@@ -222,7 +259,7 @@ class CheckoutHelper
 
         $em->persist($payment, 'freshbooks');
 
-        $this->container->get('orm.manager')->persist($this->purchase);
+        $em->persist($this->purchase);
     }
 
     /**
