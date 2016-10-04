@@ -179,6 +179,11 @@ class DomainManagementController extends Controller
             $purchase = $ph->getPurchase();
             $items    = $purchase->details;
 
+            // Remove CreditCard entry from purchase details
+            if ($purchase->method === 'CreditCard') {
+                array_pop($items);
+            }
+
             $ph->sendEmailToCustomer($items);
             $ph->sendEmailToSales($items);
 
