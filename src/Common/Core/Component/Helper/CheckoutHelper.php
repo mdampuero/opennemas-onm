@@ -58,8 +58,10 @@ class CheckoutHelper
 
         $this->purchase = new Purchase();
 
-        $this->purchase->created = $date;
-        $this->purchase->updated = $date;
+        $this->purchase->created     = $date;
+        $this->purchase->instance_id = $this->instance->id;
+        $this->purchase->step        = 'start';
+        $this->purchase->updated     = $date;
 
         if (!empty($id)) {
             $this->purchase = $this->container->get('orm.manager')
@@ -97,8 +99,9 @@ class CheckoutHelper
         $this->purchase->step    = $step;
         $this->purchase->updated = new \DateTime();
 
-        if (empty($items)) {
+        if (empty($ids)) {
             $em->persist($this->purchase);
+            return;
         }
 
         $oql = sprintf('uuid in ["%s"]', implode('","', array_keys($ids)));
