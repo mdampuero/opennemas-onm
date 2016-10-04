@@ -50,6 +50,11 @@ class ThemeController extends Controller
         $em         = $this->get('orm.manager');
         $repository = $em->getRepository('extension', 'database');
         $converter  = $em->getConverter('Extension');
+        $purchased  = [];
+
+        if (!empty($this->get('core.instance')->purchased)) {
+            $purchased = $this->get('core.instance')->purchased;
+        }
 
         $themes = $em->getRepository('theme', 'file')->findBy();
         $themes = $converter->responsify($themes, true);
@@ -68,7 +73,7 @@ class ThemeController extends Controller
             'addons'        => $addons,
             'customization' => $custom,
             'exclusive'     => $exclusive,
-            'purchased'     => $this->get('core.instance')->purchased,
+            'purchased'     => $purchased,
             'themes'        => $themes
         ]);
     }
