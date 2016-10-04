@@ -68,11 +68,11 @@ class CheckoutHelper
                 ->getRepository('Purchase')->find($id);
         }
 
-        if (empty($this->purchase->client)) {
+        if (!empty($this->client) && empty($this->purchase->client)) {
             $this->purchase->client = $this->client;
         }
 
-        if (!empty($this->purchase->client)) {
+        if (!empty($this->client) && empty($this->purchase->client_id)) {
             $this->purchase->client_id = $this->client->id;
         }
 
@@ -183,6 +183,7 @@ class CheckoutHelper
             throw new \Exception(_('There is no billing information.'));
         }
 
+        $this->purchase->step    = 'done';
         $this->purchase->updated = $date;
 
         $payment = new Payment([
