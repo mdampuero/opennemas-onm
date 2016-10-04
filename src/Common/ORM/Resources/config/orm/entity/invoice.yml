@@ -11,6 +11,8 @@ entity:
         id:        integer
         lines:     array
         status:    string
+        notes:     string
+        terms:     string
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -36,4 +38,10 @@ entity:
                 type: array
             status:
                 name: status
+                type: string
+            notes:
+                name: notes
+                type: string
+            terms:
+                name: terms
                 type: string

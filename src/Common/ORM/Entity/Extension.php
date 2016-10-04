@@ -54,6 +54,18 @@ class Extension extends Entity
     }
 
     /**
+     * Returns the extension notes.
+     *
+     * @param string $lang The language notes in short format.
+     *
+     * @return string The extension notes.
+     */
+    public function getNotes($lang = 'en')
+    {
+        return $this->getPropertyByLanguage('notes', $lang);
+    }
+
+    /**
      * Returns the extension price.
      *
      * @param string $type The price type.
@@ -75,6 +87,18 @@ class Extension extends Entity
         }
 
         return (float) $this->price[0]['value'];
+    }
+
+    /**
+     * Returns the extension terms.
+     *
+     * @param string $lang The language terms in short format.
+     *
+     * @return string The extension terms.
+     */
+    public function getTerms($lang = 'en')
+    {
+        return $this->getPropertyByLanguage('terms', $lang);
     }
 
     /**
