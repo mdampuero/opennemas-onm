@@ -257,7 +257,8 @@ class CheckoutHelper
                     'store/email/_purchaseToCustomer.tpl',
                     [
                         'instance' => $this->instance,
-                        'items'    => $items
+                        'items'    => $items,
+                        'purchase' => $this->purchase,
                     ]
                 ),
                 'text/html'
