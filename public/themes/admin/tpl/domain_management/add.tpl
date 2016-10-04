@@ -40,7 +40,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_domain_management}">
+              <a class="btn btn-link" href="{url name=backend_domains_list}">
                 <span class="fa fa-reply"></span>
               </a>
             </li>

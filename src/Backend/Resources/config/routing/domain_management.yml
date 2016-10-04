@@ -1,10 +1,10 @@
-admin_domain_management:
+backend_domains_list:
     path: /domains
     defaults: { _controller  : BackendBundle:Domain:list }
     options:
         expose: true
 
-admin_domain_management_add:
+backend_domain_add:
     path: /domains/add
     defaults: { _controller  : BackendBundle:Domain:add }
     options:
