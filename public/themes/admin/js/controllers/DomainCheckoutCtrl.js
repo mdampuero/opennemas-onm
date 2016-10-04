@@ -4,7 +4,7 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  DomainManagementCtrl
+     * @name  DomainCheckoutCtrl
      *
      * @requires $controller
      * @requires $rootScope
@@ -17,7 +17,7 @@
      * @description
      *   Controller to handle actions in domains.
      */
-    .controller('DomainManagementCtrl', [
+    .controller('DomainCheckoutCtrl', [
       '$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', 'webStorage',
       function($controller, $rootScope, $scope, http, messenger, routing, webStorage) {
         // Initialize the super class and extend it.
@@ -25,27 +25,7 @@
             { $rootScope: $rootScope, $scope: $scope }));
 
         /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *  Flag for card request loading.
-         *
-         * @type {boolean}
-         */
-        $scope.cardLoading = false;
-
-        /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *  Flag for valid client.
-         *
-         * @type {boolean}
-         */
-        $scope.clientValid = false;
-
-        /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Flag to know if it is a purchase or redirection.
@@ -55,7 +35,7 @@
         $scope.create = 0;
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   The domain to add.
@@ -65,7 +45,7 @@
         $scope.domain = '';
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Array of expanded cart.
@@ -75,7 +55,7 @@
         $scope.expanded = {};
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   The name for steps.
@@ -85,7 +65,7 @@
         $scope.steps = [ 'cart', 'billing', 'payment', 'summary', 'done' ];
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   The suggestions list.
@@ -96,7 +76,7 @@
 
         /**
          * @function confirm
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *  Requests the purchase and shows a confirmation message.
@@ -123,7 +103,7 @@
 
         /**
          * @function expand
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Shows/hides the information for a domain.
@@ -134,7 +114,7 @@
 
         /**
          * @function getData
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Returns the data to send basing on the current purchase status.
@@ -154,7 +134,7 @@
           var data = {
             ids:    ids,
             params: {},
-            step:   $scope.steps[$scope.step]
+            step:   $scope.steps[$scope.step + 1]
           };
 
           data.params[$scope.extension.uuid] = domains;
@@ -168,7 +148,7 @@
 
         /**
          * @function expand
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Creates a suggestion list basing on a domain without TLD.
@@ -207,7 +187,7 @@
 
         /**
          * @function isRight
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Checks if the domain is valid.
@@ -222,7 +202,7 @@
 
         /**
          * @function isValid
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Checks if the domain is valid.
@@ -246,7 +226,7 @@
 
         /**
          * @function list
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Requests the list of domains.
@@ -264,7 +244,7 @@
 
         /**
          * @function selectedCreditCard
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Selects credit card payment.
@@ -275,7 +255,7 @@
 
         /**
          * @function map
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Maps the domain.
@@ -318,7 +298,7 @@
 
         /**
          * @function map
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Listens for the enter key to add a domain to map
