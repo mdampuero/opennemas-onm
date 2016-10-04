@@ -95,28 +95,20 @@ class SubscriptionFilter
      */
     public function paywallHook(&$content)
     {
-        $restrictedContent = $this->template->fetch(
-            'paywall/partials/content_only_for_subscribers.tpl',
-            array('id' => $content->id)
-        );
-
-        if (empty($this->user) || empty($user->getMeta('paywall_time_limit'))) {
-            if ($limit < $now) {
-                $this->replaceContent($content, $restrictedContent);
-            }
-            return;
-        }
-
-        $limit = \DateTime::createFromFormat(
-            'Y-m-d H:i:s',
-            $this->user->getMeta('paywall_time_limit'),
-            new \DateTimeZone('UTC')
-        );
-
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
-        if ($limit < $now) {
+        if (empty($this->user)
+            || (empty($this->user->paywall_time_limit))
+            || ($this->user->paywall_time_limit < $now)
+        ) {
+            $restrictedContent = $this->template->fetch(
+                'paywall/partials/content_only_for_subscribers.tpl',
+                array('id' => $content->id)
+            );
+
             $this->replaceContent($content, $restrictedContent);
+
+            return;
         }
     }
 

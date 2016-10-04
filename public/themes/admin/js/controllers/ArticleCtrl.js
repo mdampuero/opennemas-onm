@@ -34,7 +34,7 @@
          *
          * @type {Object}
          */
-        $scope.article = { params: {} };
+        $scope.article = { body: '', params: {}, summary: '' };
 
         /**
          * @memberOf ArticleCtrl
@@ -290,68 +290,76 @@
 
         // Updates scope when photo1 changes.
         $scope.$watch('photo1', function(nv, ov) {
-          // Reset image if is not set
-          if (ov && !nv) {
+          // Remove image
+          if (!nv) {
             $scope.article.img1 = null;
+
+            // If photo 2  = photo1, remove photo2 too
+            if (angular.equals($scope.photo2, ov)) {
+              $scope.photo2 = null;
+            }
+
             delete $scope.article.img1_footer;
+
             return;
           }
 
-          if ($scope.photo1) {
-            $scope.article.img1 = $scope.photo1.id;
-            if ((angular.isUndefined($scope.article.img1_footer) &&
-                  angular.isUndefined(ov)) ||
-                (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description === $scope.article.img1_footer)) {
-              $scope.article.img1_footer = $scope.photo1.description;
-            }
+          $scope.article.img1 = nv.id;
 
-            // Set inner image if empty only on create
-            if (angular.isUndefined($scope.photo2) &&
-                angular.isUndefined($scope.article.id) &&
-                nv !== ov) {
-              $scope.photo2 = $scope.photo1;
-            }
+          // Update img1_footer if empty or equals to old description
+          if (angular.isUndefined($scope.article.img1_footer) ||
+              $scope.article.img1_footer === null ||
+              (ov && $scope.article.img1_footer === ov.description)) {
+            $scope.article.img1_footer = nv.description;
+          }
+
+          // Set inner image if empty or equals to old photo1
+          if ($scope.articleForm.$dirty &&
+              (!ov && (angular.isUndefined($scope.photo2) || !$scope.photo2)) ||
+              (ov &&angular.equals($scope.photo2, ov))) {
+
+            $scope.photo2 = nv;
           }
         }, true);
 
         // Updates scope when photo2 changes.
         $scope.$watch('photo2', function(nv, ov) {
-          // Reset image if is not set
-          if (ov && !nv) {
+          // Remove image
+          if (!nv) {
             $scope.article.img2 = null;
+
             delete $scope.article.img2_footer;
+
             return;
           }
 
-          if ($scope.photo2) {
-            $scope.article.img2 = $scope.photo2.id;
-            if ((angular.isUndefined($scope.article.img2_footer) &&
-                  angular.isUndefined(ov)) ||
-                (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description === $scope.article.img2_footer)) {
-              $scope.article.img2_footer = $scope.photo2.description;
-            }
+          $scope.article.img2 = $scope.photo2.id;
+
+          if (angular.isUndefined($scope.article.img2_footer) ||
+              $scope.article.img2_footer === null ||
+              (ov && $scope.article.img2_footer === ov.description)) {
+            $scope.article.img2_footer = $scope.photo2.description;
           }
         }, true);
 
         //Updates scope when photo3 changes.
         $scope.$watch('photo3', function(nv, ov) {
-          // Reset image if is not set
-          if (ov && !nv) {
-            $scope.article.imageHome = null;
+          // Remove image
+          if (!nv) {
+
+            $scope.article.params.imageHome = null;
+
             delete $scope.article.params.imageHomeFooter;
+
             return;
           }
 
-          if ($scope.photo3) {
-            $scope.article.params.imageHome = $scope.photo3.id;
-            if ((angular.isUndefined($scope.article.params.imageHomeFooter) &&
-                  angular.isUndefined(ov)) ||
-                (!angular.isUndefined(ov) && nv.id !== ov.id &&
-                  ov.description === $scope.article.imageHomeFooter)) {
-              $scope.article.params.imageHomeFooter = $scope.photo3.description;
-            }
+          $scope.article.params.imageHome = $scope.photo3.id;
+
+          if (angular.isUndefined($scope.article.params.imageHomeFooter) ||
+              $scope.article.params.imageHomeFooter === null ||
+              (ov && ov.description === $scope.article.params.imageHomeFooter)) {
+            $scope.article.params.imageHomeFooter = $scope.photo3.description;
           }
         }, true);
 
@@ -467,7 +475,8 @@
         $scope.$watch('[article, photo1, photo2, photo3, video1, video2,' +
           'galleryForFrontpage, galleryForInner, galleryForHome]',
           function(nv, ov) {
-            if (!nv || ov === nv || (!ov.pk_article && nv.pk_article)) {
+            if (!nv || ov === nv || (ov[0] && !ov[0].pk_article &&
+                  nv[0].pk_article)) {
               return;
             }
 

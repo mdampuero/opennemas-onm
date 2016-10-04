@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="!client.id ? save() : update()" ng-disabled="saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="!client.id ? save() : update()" ng-disabled="clientForm.$invalid || saving">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -49,14 +49,24 @@
           <div class="row">
             <div class="form-group col-lg-4 col-sm-6">
               <label class="form-label" for="first-name">{t}First name{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="first-name" name="first-name" ng-model="client.first_name" placeholder="{t}First name{/t}" required="required" type="text">
+              <div class="controls input-with-icon right">
+                <input class="form-control" id="first-name" name="first_name" ng-model="client.first_name" placeholder="{t}First name{/t}" required type="text">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="clientForm.first_name.$dirty && clientForm.first_name.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!clientForm.first_name.$dirty && clientForm.first_name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="clientForm.first_name.$dirty && clientForm.first_name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
               </div>
             </div>
             <div class="form-group col-lg-4 col-sm-6">
               <label class="form-label" for="last-name">{t}Last name{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="last-name" name="last-name" ng-model="client.last_name" placeholder="{t}Last name{/t}" type="text">
+              <div class="controls input-with-icon right">
+                <input class="form-control" id="last-name" name="last_name" ng-model="client.last_name" placeholder="{t}Last name{/t}" required type="text">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="clientForm.last_name.$dirty && clientForm.last_name.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!clientForm.last_name.$dirty && clientForm.last_name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="clientForm.last_name.$dirty && clientForm.last_name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
               </div>
             </div>
             <div class="form-group col-lg-4 col-sm-6">
@@ -77,14 +87,19 @@
           <div class="row">
             <div class="form-group col-lg-4">
               <label class="form-label" for="email">{t}Email{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="email" name="email" ng-model="client.email" placeholder="{t}Email{/t}" type="text">
+              <div class="controls input-with-icon right">
+                <input class="form-control" id="email" name="email" ng-model="client.email" placeholder="{t}Email{/t}" required type="email">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="clientForm.email.$dirty && clientForm.email.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!clientForm.email.$dirty && clientForm.email.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="clientForm.email.$dirty && clientForm.email.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
               </div>
             </div>
             <div class="form-group col-lg-4 col-sm-6">
               <label class="form-label" for="phone">{t}Phone{/t}</label>
               <div class="controls">
-                <input class="form-control" id="phone" name="phone" ng-model="client.phone" placeholder="{t}Phone{/t}" type="text">
+                <input class="form-control" id="phone" name="phone" ng-model="client.phone" placeholder="{t}Phone{/t}" type="tel">
               </div>
             </div>
           </div>
@@ -92,34 +107,54 @@
           <div class="row">
             <div class="form-group col-sm-9">
               <label class="form-label" for="address">{t}Address{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="address" name="address" ng-model="client.address" placeholder="{t}Address{/t}" type="text">
+              <div class="controls input-with-icon right">
+                <input class="form-control" id="address" name="address" ng-model="client.address" placeholder="{t}Address{/t}" required type="text">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="clientForm.address.$dirty && clientForm.address.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!clientForm.address.$dirty && clientForm.address.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="clientForm.address.$dirty && clientForm.address.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
               </div>
             </div>
             <div class="form-group col-sm-3">
               <label class="form-label" for="postal-code">{t}Postal code{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="postal-code" name="postal-code" ng-model="client.postal_code" placeholder="{t}Postal code{/t}" type="text">
+              <div class="controls input-with-icon right">
+                <input class="form-control" id="postal-code" name="postal_code" ng-model="client.postal_code" placeholder="{t}Postal code{/t}" required type="text">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="clientForm.postal_code.$dirty && clientForm.postal_code.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!clientForm.postal_code.$dirty && clientForm.postal_code.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="clientForm.postal_code.$dirty && clientForm.postal_code.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-sm-6">
-              <label class="form-label" for="city">{t}City{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="city" name="city" ng-model="client.city" placeholder="{t}City{/t}" type="text">
+              <label class="form-label" for="city">{t}City{/t}*</label>
+              <div class="controls input-with-icon right">
+                <input class="form-control" id="city" name="city" ng-model="client.city" placeholder="{t}City{/t}" required type="text">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="clientForm.city.$dirty && clientForm.city.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!clientForm.city.$dirty && clientForm.city.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="clientForm.city.$dirty && clientForm.city.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
               </div>
             </div>
             <div class="form-group col-sm-6">
               <label class="form-label" for="state">{t}State{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="state" name="state" ng-model="client.state" placeholder="{t}State{/t}" type="text">
+              <div class="controls input-with-icon">
+                <input class="form-control" id="state" name="state" ng-model="client.state" placeholder="{t}State{/t}" required type="text">
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="clientForm.state.$dirty && clientForm.state.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!clientForm.state.$dirty && clientForm.state.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="clientForm.state.$dirty && clientForm.state.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
               </div>
             </div>
             <div class="form-group col-sm-6">
               <labelclass="form-label" for="country">{t}Country{/t}</label>
             <div class="controls">
-              <select class="form-control" id="country" name="country" ng-model="client.country"placeholder="{t}Country{/t}">
+              <select class="form-control" id="country" name="country" ng-model="client.country" placeholder="{t}Country{/t}" required>
                 <option value="">{t}Select a country{/t}...</option>
                 <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% billing.country === value %]">[% value %]</option>
               </select>

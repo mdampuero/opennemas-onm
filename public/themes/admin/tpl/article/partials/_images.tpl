@@ -28,7 +28,7 @@
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!photo1">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" ng-click="articleForm.$setDirty(true)">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -39,11 +39,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" ng-click="articleForm.$setDirty(true)">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -79,7 +79,7 @@
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!photo2">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" ng-click="articleForm.$setDirty(true)">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -90,11 +90,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo2')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" ng-click="articleForm.$setDirty(true)">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo"></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
                         </dynamic-image>
                       </div>
                     </div>

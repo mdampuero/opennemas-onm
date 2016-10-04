@@ -373,6 +373,7 @@
               };
 
               instance.on('change', setModelData);
+              instance.on('dialogHide', setModelData);
 
               // For source view
               instance.on('key', setModelData);
@@ -380,7 +381,7 @@
               // Initializes the CKEditor with data
               instance.on('instanceReady', function () {
                 // Data from HTML value
-                var data = element[0].innerHTML;
+                var data = element[0].innerText;
 
                 // If model, data from model
                 if (scope && scope.ngModel) {

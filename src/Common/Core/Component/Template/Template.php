@@ -64,6 +64,7 @@ class Template extends \Smarty
     public function __construct($container, $filters)
     {
         parent::__construct();
+        $this->setTemplateDir([]);
 
         // Make compile and cache files writable by group
         $this->_file_perms = 0664;
