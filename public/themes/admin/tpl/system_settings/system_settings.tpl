@@ -940,6 +940,71 @@
                 </div>
               </div>
             </uib-tab>
+
+            {if $smarty.session._sf2_attributes.user->isMaster()}
+            <uib-tab heading="{t}Only masters{/t}">
+              <div class="tab-wrapper">
+                <div class="row">
+                  <div class="col-md-8">
+
+                    <h4>Robots.txt</h4>
+                    <div class="form-group">
+                      <label class="form-label" for="robots_txt_rules">
+                        {t}Robots.txt rules{/t}
+                      </label>
+                      <span class="help">
+                        {t escape=off}Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">documentation</a>.{/t}
+                      </span>
+                      <div class="controls">
+                        <textarea class="form-control" id="robots_txt_rules" name="robots_txt_rules" type="text" class="input-xlarge">{$configs['robots_txt_rules']|default:""}</textarea>
+                      </div>
+                    </div>
+
+                    <h4>Scripts</h4>
+                    <div class="form-group">
+                      <label class="form-label" for="header-script">
+                        {t}Scripts in header{/t}
+                        <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                      </label>
+                      <div class="controls">
+                        <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|escape:'html'|stripslashes|default:""}</textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="body-start-script">
+                        {t}Scripts at body start{/t}
+                        <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                      </label>
+                      <div class="controls">
+                        <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|escape:'html'|stripslashes|default:""}</textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="body-end-script">
+                        {t}Scripts at body end{/t}
+                        <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                      </label>
+                      <div class="controls">
+                        <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|escape:'html'|stripslashes|default:""}</textarea>
+                      </div>
+                    </div>
+
+                    <h4>CSS</h4>
+                    <div class="form-group">
+                      <label class="form-label" for="custom-css">
+                        {t}Custom CSS{/t}
+                        <span class="help">{t}This sripts will be included in the global.css file.{/t}</span>
+                        <span class="text-danger">Not functional for now</span>
+                      </label>
+                      <div class="controls">
+                        <textarea class="form-control" id="custom-css" name="custom_css" disabled="disabled" readonly="readonly">{$configs['custom_css']|stripslashes|default:""}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </uib-tab>
+            {/if}
           </uib-tabset>
         </div>
       </div>

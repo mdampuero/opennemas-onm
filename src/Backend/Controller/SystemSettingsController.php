@@ -51,6 +51,8 @@ class SystemSettingsController extends Controller
             'site_language', 'site_logo', 'site_name', 'site_title',
             'time_zone', 'twitter_page', 'vimeo_page', 'webmastertools_bing',
             'webmastertools_google', 'youtube_page',
+            'robots_txt_rules',
+            'body_end_script', 'body_start_script','header_script',
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);
@@ -168,6 +170,13 @@ class SystemSettingsController extends Controller
                 $key == 'site_keywords'
             ) {
                 $value = trim(strip_tags($value));
+            }
+
+            if (in_array($key, ['header_script', 'body_end_script', 'body_start_script'])) {
+                if (!$this->getUser()->isMaster()) {
+                    continue;
+                }
+                $value = $request->request->filter($key, '', FILTER_SANITIZE_MAGIC_QUOTES);
             }
 
             // Save settings
