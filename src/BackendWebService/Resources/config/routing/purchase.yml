@@ -5,6 +5,13 @@ backend_ws_purchase_get_pdf:
     options:
         expose: true
 
+backend_ws_purchases_list:
+    path: /purchases
+    defaults: { _controller: BackendWebServiceBundle:Purchase:list }
+    methods: [ GET ]
+    options:
+        expose: true
+
 backend_ws_purchase_save:
     path: /purchases
     defaults: { _controller: BackendWebServiceBundle:Purchase:save }

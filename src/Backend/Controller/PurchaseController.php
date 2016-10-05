@@ -16,6 +16,16 @@ use Symfony\Component\Intl\Intl;
 class PurchaseController extends Controller
 {
     /**
+     * Displays the list of purchases.
+     *
+     * @return Response The response object.
+     */
+    public function listAction()
+    {
+        return $this->render('purchase/list.tpl');
+    }
+
+    /**
      * Displays a purchase.
      *
      * @param integer $id The purchase id.

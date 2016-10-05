@@ -50,6 +50,41 @@ class PurchaseController extends Controller
     }
 
     /**
+     * @api {get} /purchases List of purchases
+     * @apiName GetPurchases
+     * @apiGroup Purchase
+     *
+     * @apiParam {String} oql The OQL query.
+     *
+     * @apiSuccess {Integer} total   The total number of elements.
+     * @apiSuccess {Array}   results The list of purchases.
+     */
+    public function listAction(Request $request)
+    {
+        $oql = $request->query->get('oql', '');
+
+        if (!empty($oql) && !preg_match('/^(order|limit)/', $oql)) {
+            $oql = ' and ' . $oql;
+        }
+
+        $oql = sprintf('instance_id = "%s"', $this->get('core.instance')->id)
+            .  $oql;
+
+        $repository = $this->get('orm.manager')->getRepository('Purchase');
+        $converter  = $this->get('orm.manager')->getConverter('Purchase');
+
+        $total     = $repository->countBy($oql);
+        $purchases = $repository->findBy($oql);
+
+        $purchases = $converter->responsify($purchases);
+
+        return new JsonResponse([
+            'results' => $purchases,
+            'total'   => $total,
+        ]);
+    }
+
+    /**
      * @api {post} /purchases Creates a new purchase
      * @apiName CreatePurchase
      * @apiGroup Purchase
