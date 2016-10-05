@@ -147,7 +147,7 @@ class SettingManager extends BaseManager
 
             $rs = $this->dbConn->fetchAll($sql);
             foreach ($rs as $setting) {
-                $value = unserialize($setting['value']);
+                $value = @unserialize($setting['value']);
                 $results[$setting['name']] = $value;
 
                 $this->cache->save($setting['name'], $value);
