@@ -238,9 +238,9 @@ class SitemapController extends Controller
         $instanceName = getService('core.instance')->internal_name;
 
         $headers = array_merge($headers, [
-            'x-cache-for'  => '+1 day'
+            'x-cache-for'  => '+1 day',
             'x-cacheable'  => true,
-            'x-instance'   => $instanceName
+            'x-instance'   => $instanceName,
             'x-tags'       => 'instance-'.$instanceName.',sitemap',
             'x-tags'       => 'sitemap',
         ]);
