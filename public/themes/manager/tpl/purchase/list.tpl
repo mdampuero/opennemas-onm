@@ -338,7 +338,8 @@
                 [% item.total | number : 2 %] €
               </td>
               <td class="text-center" ng-show="isColumnEnabled('method')">
-                <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }"></i>
+                <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }" ng-if="item.total !== 0"></i>
+                <span ng-if="item.total === 0">-</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
                 <a ng-href="[% routing.ngGenerate('manager_client_show', { id : item.client.id }) %]" target="_blank">
@@ -346,14 +347,16 @@
                 </a>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('payment_id')">
-                <a ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/transactions/[% item.payment_id %]" target="_blank">
+                <a ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/transactions/[% item.payment_id %]" ng-if="item.total !== 0" target="_blank">
                   [% item.payment_id %]
                 </a>
+                <span ng-if="item.total === 0">-</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('invoice_id')">
-                <a ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% item.invoice_id %]" target="_blank">
+                <a ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% item.invoice_id %]" ng-if="item.total !== 0" target="_blank">
                   [% item.invoice_id %]
                 </a>
+                <span ng-if="item.total === 0">-</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('instance')">
                 <a ng-href="[% routing.ngGenerate('manager_instance_show', { id: item.instance_id }) %]" target="_blank">
