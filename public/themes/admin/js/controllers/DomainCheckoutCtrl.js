@@ -83,12 +83,13 @@
          */
         $scope.confirm = function() {
           $scope.loading = true;
-          var data = {
-            domains:  $scope.cart.map(function(e) { return e.description; } ),
-            method:   $scope.payment.type,
-            nonce:    $scope.payment.nonce,
-            purchase: $scope.purchase,
-          };
+
+          var data = { purchase: $scope.purchase };
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
+            data.nonce  = $scope.payment.nonce;
+          }
 
           http.post('backend_ws_domain_save', data).then(function() {
             $scope.next();

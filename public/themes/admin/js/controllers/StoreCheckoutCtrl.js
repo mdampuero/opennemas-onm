@@ -42,21 +42,13 @@
          */
         $scope.confirm = function() {
           $scope.loading = true;
-          var modules = $scope.cart.map(function(e) {
-            var id = e.uuid;
-            if (!id) {
-              id = e.id;
-            }
-            return id;
-          });
 
-          var data = {
-            client:   $scope.client,
-            method:   $scope.payment.type,
-            modules:  modules,
-            nonce:    $scope.payment.nonce,
-            purchase: $scope.purchase,
-          };
+          var data = { purchase: $scope.purchase };
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
+            data.nonce  = $scope.payment.nonce;
+          }
 
           http.post('backend_ws_store_checkout', data).then(function() {
             $scope.next().then(function() {
@@ -87,11 +79,16 @@
               $scope.cart[i].priceType : 'monthly';
           }
 
-          return {
+          var data = {
             ids:    ids,
             step:   $scope.steps[$scope.step + 1],
-            method: $scope.payment.type,
           };
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
+          }
+
+          return data;
         };
 
         // Initialize the shopping cart from the webStorage
