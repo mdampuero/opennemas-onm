@@ -138,7 +138,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
-        $bc->shouldReceive('void')->once()->andReturn($response);
+        $bc->shouldReceive('void')->once()->with(1)->andReturn($response);
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
@@ -149,7 +149,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $factory->expects($this->once())->method('get')->with('transaction');
 
         $persister = new PaymentPersister($factory, $this->metadata);
-        $persister->remove($this->unexistingPayment);
+        $persister->remove($this->existingPayment);
     }
 
     /**

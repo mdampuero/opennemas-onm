@@ -243,7 +243,7 @@ class CheckoutHelper
         $em->persist($payment, 'braintree');
 
         // Save Braintree payment id
-        $this->purchase->payment_id = $payment->payment_id;
+        $this->purchase->payment_id = $payment->id;
         $this->container->get('orm.manager')->persist($this->purchase);
 
         $invoice = new Invoice([
@@ -259,11 +259,11 @@ class CheckoutHelper
         $em->persist($invoice, 'freshbooks');
 
         // Save FreshBooks invoice id
-        $this->purchase->invoice_id = $invoice->invoice_id;
+        $this->purchase->invoice_id = $invoice->id;
         $this->container->get('orm.manager')->persist($this->purchase);
 
         // Pay invoice in FreshBooks
-        $payment->invoice_id = $invoice->invoice_id;
+        $payment->invoice_id = $invoice->id;
         $payment->notes      = 'Braintree Transaction Id: '
             . $payment->payment_id;
 

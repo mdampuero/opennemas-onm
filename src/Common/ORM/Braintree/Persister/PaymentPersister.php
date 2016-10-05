@@ -54,7 +54,7 @@ class PaymentPersister extends BasePersister
     public function remove(Entity $entity)
     {
         $cr       = $this->factory->get('transaction');
-        $response = $cr::void($entity->payment_id);
+        $response = $cr::void($entity->id);
 
         if (!$response->success) {
             throw new \RuntimeException(
