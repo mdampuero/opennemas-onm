@@ -64,6 +64,30 @@ class PurchaseController extends Controller
     }
 
     /**
+    ** @api {post} /purchases/:id Shows a purchase
+     * @apiName ShowPurchase
+     * @apiGroup Purchase
+     */
+    public function showAction($id)
+    {
+        $em  = $this->get('orm.manager');
+        $oql = sprintf(
+            'id = %s and instance_id = %s',
+            $id,
+            $this->get('core.instance')->id
+        );
+
+        $converter = $em->getConverter('Purchase');
+        $purchase  = $em->getRepository('purchase')
+            ->findOneBy($oql);
+
+        return new JsonResponse([
+            'purchase' => $converter->responsify($purchase),
+            'extra'    => $this->getExtraData()
+        ]);
+    }
+
+    /**
      * @api {put} /purchases/:id Updates a purchase
      * @apiName UpdatePurchase
      * @apiGroup Purchase
@@ -80,5 +104,20 @@ class PurchaseController extends Controller
         $ph->next($step, $ids, $params, $method);
 
         return new JsonResponse();
+    }
+
+    /**
+     * Returns an array with extra parameters for template.
+     *
+     * @return array Array of extra parameters for template.
+     */
+    protected function getExtraData()
+    {
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames($this->get('core.locale')->getLocaleShort());
+
+        asort($countries);
+
+        return [ 'countries'  => $countries ];
     }
 }

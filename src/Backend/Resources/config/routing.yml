@@ -1046,6 +1046,10 @@ backend_notification:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
 
+backend_purchase:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/purchase.yml'
+
 backend_static_pages:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/static_page.yml'

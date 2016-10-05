@@ -12,6 +12,13 @@ backend_ws_purchase_save:
     options:
         expose: true
 
+backend_ws_purchase_show:
+    path: /purchases/{id}
+    defaults: { _controller: BackendWebServiceBundle:Purchase:show }
+    methods: [ GET ]
+    options:
+        expose: true
+
 backend_ws_purchase_update:
     path: /purchases/{id}
     defaults: { _controller: BackendWebServiceBundle:Purchase:update }
