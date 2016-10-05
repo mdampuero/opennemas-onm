@@ -235,7 +235,15 @@ class SitemapController extends Controller
             $headers = array('Content-Type' => 'application/xml charset=utf-8');
         }
 
-        $headers['x-tags'] = 'sitemap';
+        $instanceName = getService('core.instance')->internal_name;
+
+        $headers = array_merge($headers, [
+            'x-cache-for'  => '+1 day'
+            'x-cacheable'  => true,
+            'x-instance'   => $instanceName
+            'x-tags'       => 'instance-'.$instanceName.',sitemap',
+            'x-tags'       => 'sitemap',
+        ]);
 
         return new Response($contents, 200, $headers);
     }
