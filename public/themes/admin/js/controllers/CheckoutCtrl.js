@@ -180,7 +180,9 @@
         $scope.getNotes = function () {
           var notes = '';
           for (var i = 0; i < $scope.cart.length; i++) {
-            notes += $scope.cart[i].notes.split('\n').join('<br>') + '<hr>';
+            if ($scope.cart[i].notes) {
+              notes += $scope.cart[i].notes.split('\n').join('<br>') + '<hr>';
+            }
           }
 
           return notes.replace(/<hr>$/, '');
@@ -225,7 +227,9 @@
         $scope.getTerms = function () {
           var terms = '';
           for (var i = 0; i < $scope.cart.length; i++) {
-            terms += $scope.cart[i].terms.split('\n').join('<br>') + '<hr>';
+            if ($scope.cart[i].terms) {
+              terms += $scope.cart[i].terms.split('\n').join('<br>') + '<hr>';
+            }
           }
 
           return terms.replace(/<hr>$/, '');
