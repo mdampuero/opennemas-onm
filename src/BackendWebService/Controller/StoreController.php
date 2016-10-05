@@ -26,11 +26,9 @@ class StoreController extends Controller
 
             $ph->getPurchase($purchase);
 
-            if (empty($nonce)) {
-                return;
+            if (!empty($nonce) && $ph->getPurchase()->total > 0) {
+                $ph->pay($nonce);
             }
-
-            $ph->pay($nonce);
 
             $purchase = $ph->getPurchase();
             $items    = $purchase->details;
