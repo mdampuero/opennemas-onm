@@ -62,12 +62,17 @@ Sitemap: ".SITE_URL."sitemapimage.xml.gz
 ";
         }
 
+        $instanceName = getService('core.instance')->internal_name;
+
         return new Response(
             $content,
             200,
             array(
                 'Content-Type' => 'text/plain',
-                'x-tags'       => 'robots'
+                'x-cacheable'  => true,
+                'x-cache-for'  => '+100 day',
+                'x-tags'       =>  'instance-'.$instanceName.',robots',
+                'x-instance'   => $instanceName,
             )
         );
     }
