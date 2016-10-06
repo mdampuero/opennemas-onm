@@ -50,28 +50,40 @@ class CheckoutHelper
             $this->instance->purchased = [];
         }
 
-        $domains = array_filter($this->purchase->details, function ($a) {
+        // Filter items (remove payment line)
+        $items = array_filter($this->purchase->details, function ($a) {
+            return array_key_exists('uuid', $a);
+        });
+
+        // Get domains
+        $domains = array_filter($items, function ($a) {
             return strpos($a['uuid'], 'es.openhost.domain') !== false;
         });
 
+        // Remove domains
+        $items = array_diff($items, $domains);
+        $items = array_map(function ($a) {
+            return $a['uuid'];
+        }, $items);
+
+        // Get activable themes
+        $themes = array_filter($items, function ($a) {
+            return strpos($a, 'es.openhost.theme') !== false;
+        });
+
+        // Get activable extensions
+        $extensions = array_diff($items, $themes);
+
+        // Get domain URLs
         $domains = array_map(function ($a) {
             return substr($a['description'], strrpos($a['description'], ' '));
         }, $domains);
 
-        $uuids = array_map(function ($a) {
-            return $a['uuid'];
-        }, $this->purchase->details);
-
-        $themes = array_filter($uuids, function ($a) {
-            return strpos($a, 'es.openhost.theme') !== false;
-        });
-
-        $modules = array_diff($uuids, $themes);
 
         $this->instance->domains =
             array_merge($this->instance->domains, $domains);
         $this->instance->activated_modules =
-            array_merge($this->instance->activated_modules, $modules);
+            array_merge($this->instance->activated_modules, $extensions);
         $this->instance->purchased =
             array_merge($this->instance->purchased, $themes);
 
