@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="PurchaseListCtrl">
+<div ng-app="BackendApp" ng-controller="PurchaseListCtrl" ng-init="list()">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">

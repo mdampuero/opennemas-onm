@@ -72,8 +72,6 @@
             $scope.list();
           }, 500);
         }, true);
-
-        $scope.list();
       }
     ]);
 })();
