@@ -12,6 +12,7 @@ namespace Common\Core\Component\Helper;
 use Common\ORM\Entity\Invoice;
 use Common\ORM\Entity\Payment;
 use Common\ORM\Entity\Purchase;
+use Symfony\Component\Intl\Intl;
 
 class CheckoutHelper
 {
@@ -301,12 +302,14 @@ class CheckoutHelper
 
     /**
      * Sends an email to the customer.
-     *
-     * @param array $items The purchased items.
      */
-    public function sendEmailToCustomer($items)
+    public function sendEmailToClient()
     {
-        $params  = $this->container->getParameter('manager_webservice');
+        $params = $this->container->getParameter('manager_webservice');
+        $items  = array_filter($this->purchase->details, function ($a) {
+            return array_key_exists('uuid', $a);
+        });
+
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Store purchase request')
             ->setFrom($params['no_reply_from'])
@@ -333,12 +336,16 @@ class CheckoutHelper
 
     /**
      * Sends an email to sales department.
-     *
-     * @param array $items The purchased items.
      */
-    public function sendEmailToSales($items)
+    public function sendEmailToSales()
     {
-        $params  = $this->container->getParameter('manager_webservice');
+        $lang      = $this->container->get('core.locale')->getLocaleShort();
+        $params    = $this->container->getParameter('manager_webservice');
+        $countries = Intl::getRegionBundle() ->getCountryNames($lang);
+        $items     = array_filter($this->purchase->details, function ($a) {
+            return array_key_exists('uuid', $a);
+        });
+
         $message = \Swift_Message::newInstance()
             ->setSubject('Opennemas Store purchase request')
             ->setFrom($params['no_reply_from'])
@@ -348,10 +355,11 @@ class CheckoutHelper
                 $this->container->get('view')->fetch(
                     'store/email/_purchaseToSales.tpl',
                     [
-                        'client'   => $this->client,
-                        'instance' => $this->instance,
-                        'items'    => $items,
-                        'user'     => $this->container->get('core.user')
+                        'countries' => $countries,
+                        'client'    => $this->client,
+                        'instance'  => $this->instance,
+                        'items'     => $items,
+                        'user'      => $this->container->get('core.user')
                     ]
                 ),
                 'text/html'

@@ -5,7 +5,6 @@ namespace BackendWebService\Controller;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Framework\ORM\Entity\Extension;
 
 class StoreController extends Controller
 {
@@ -31,15 +30,9 @@ class StoreController extends Controller
             }
 
             $purchase = $ph->getPurchase();
-            $items    = $purchase->details;
 
-            // Remove CreditCard entry from purchase details
-            if ($purchase->method === 'CreditCard') {
-                array_pop($items);
-            }
-
-            $ph->sendEmailToCustomer($items);
-            $ph->sendEmailToSales($items);
+            $ph->sendEmailToClient();
+            $ph->sendEmailToSales();
 
             $ph->enable();
 
