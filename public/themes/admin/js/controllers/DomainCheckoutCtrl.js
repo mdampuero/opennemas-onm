@@ -316,14 +316,5 @@
             $scope.price = 18;
           }
         });
-
-        // Update free when payment changes
-        $scope.$watch('payment', function(nv) {
-          $scope.fee = 0;
-
-          if (nv && nv.type === 'CreditCard') {
-            $scope.fee = ($scope.subtotal + $scope.tax) * 0.029 + 0.30;
-          }
-        }, true);
     }]);
 })();
