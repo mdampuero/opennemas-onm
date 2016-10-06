@@ -141,7 +141,7 @@ class NewsletterManager extends BaseManager
                         if (isset($content->summary)) {
                             $item->summary  = $content->summary;
                         } else {
-                            $item->summary = substr($content->body, 0, 250).'...';
+                            $item->summary = substr(strip_tags($content->body), 0, 250).'...';
                         }
                         if (isset($content->description)) {
                             $item->description  = $content->description;
