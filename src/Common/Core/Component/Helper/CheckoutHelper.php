@@ -194,7 +194,7 @@ class CheckoutHelper
         $vat = ($vatTax/100) * $subtotal;
 
         if ($this->purchase->method === 'CreditCard') {
-            $this->purchase->fee = $subtotal * 0.029 + 0.30;
+            $this->purchase->fee = round($subtotal * 0.029 + 0.30, 2);
 
             $this->purchase->details[] = [
                 'description'  => _('Pay with credit card'),
@@ -209,7 +209,8 @@ class CheckoutHelper
             ];
         }
 
-        $this->purchase->total = $subtotal + $vat + $this->purchase->fee;
+        $this->purchase->total =
+            round($subtotal + $vat + $this->purchase->fee, 2);
 
         $em->persist($this->purchase);
     }
@@ -233,9 +234,9 @@ class CheckoutHelper
 
         $payment = new Payment([
             'client_id' => $this->client->id,
-            'amount'    => round($this->purchase->total, 2),
+            'amount'    => $this->purchase->total,
             'date'      => $date,
-            'type'      => 'Check'
+            'type'      => $this->purchase->method
         ]);
 
         // Save in Braintree
