@@ -265,8 +265,7 @@ class CheckoutHelper
 
         // Pay invoice in FreshBooks
         $payment->invoice_id = $invoice->id;
-        $payment->notes      = 'Braintree Transaction Id: '
-            . $payment->payment_id;
+        $payment->notes      = 'Braintree Transaction Id: ' . $payment->id;
 
         $em->persist($payment, 'freshbooks');
 
