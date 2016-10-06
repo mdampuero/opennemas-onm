@@ -96,6 +96,7 @@ class BaseConverter extends Converter
     {
         $data = $this->normalizeCountry($data);
         $data = $this->normalizeLines($data);
+        $data = $this->normalizeType($data);
 
         return $data;
     }
@@ -109,11 +110,11 @@ class BaseConverter extends Converter
      */
     protected function normalizeCountry($data)
     {
-        if (array_key_exists('country', $data) && !empty($data['country'])) {
+        if (array_key_exists('p_country', $data) && !empty($data['p_country'])) {
             $countries = Intl::getRegionBundle()->getCountryNames('en');
 
-            if (array_key_exists($data['country'], $countries)) {
-                $data['country'] = $countries[$data['country']];
+            if (array_key_exists($data['p_country'], $countries)) {
+                $data['p_country'] = $countries[$data['p_country']];
             }
         }
 
@@ -142,6 +143,25 @@ class BaseConverter extends Converter
     }
 
     /**
+     * Normalizes the payment method for Freshbooks.
+     *
+     * @param array $data The entity data.
+     *
+     * @return array The normalized data.
+     */
+    protected function normalizeType($data)
+    {
+        if (!array_key_exists('type', $data) || empty($data['type'])) {
+            return $data;
+        }
+
+        $data['type'] = $data['type'] === 'CreditCard' ?
+            'Credit Card' : 'PayPal';
+
+        return $data;
+    }
+
+    /**
      * Unnormalizes the data for Freshbooks.
      *
      * @param array $data The entity data.
@@ -152,6 +172,7 @@ class BaseConverter extends Converter
     {
         $data = $this->unNormalizeCountry($data);
         $data = $this->unNormalizeLines($data);
+        $data = $this->unNormalizeType($data);
 
         return $data;
     }
@@ -204,4 +225,25 @@ class BaseConverter extends Converter
 
         return $data;
     }
+
+    /**
+     * Unnormalizes the payment method for Freshbooks.
+     *
+     * @param array $data The entity data.
+     *
+     * @return array The normalized data.
+     */
+    protected function unNormalizeType($data)
+    {
+        if (!array_key_exists('type', $data) || empty($data['type'])) {
+            return $data;
+        }
+
+        $data['type'] = $data['type'] === 'Credit Card' ?
+            'CreditCard' : 'PayPalAccount';
+
+        return $data;
+    }
+
+
 }

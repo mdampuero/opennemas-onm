@@ -81,6 +81,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'email'        => 'johndoe@example.org',
                 'organization' => 'John Doe, Inc.',
                 'work_phone'   => '555-555-555',
+                'p_country'    => 'Spain'
             ],
             $this->converter->freshbooksfy([
                 'id'        => 1,
@@ -89,6 +90,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'email'     => 'johndoe@example.org',
                 'company'   => 'John Doe, Inc.',
                 'phone'     => '555-555-555',
+                'country'   => 'ES'
             ])
         );
     }
@@ -158,8 +160,8 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            [ 'country' => 'Spain' ],
-            $method->invokeArgs($this->converter, [ [ 'country' => 'ES' ] ])
+            [ 'p_country' => 'Spain' ],
+            $method->invokeArgs($this->converter, [ [ 'p_country' => 'ES' ] ])
         );
     }
 
@@ -178,6 +180,24 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests normalizeType.
+     */
+    public function testNormalizeType()
+    {
+        $method = new \ReflectionMethod($this->converter, 'normalizeType');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            [ 'type' => 'PayPal' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPalAccount' ] ])
+        );
+        $this->assertEquals(
+            [ 'type' => 'Credit Card' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'CreditCard' ] ])
+        );
+    }
+
+    /**
      * Tests unNormalizeCountry.
      */
     public function testUnNormalizeCountry()
@@ -192,7 +212,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests unnormalizeLines.
+     * Tests unNormalizeLines.
      */
     public function testUnNormalizeLines()
     {
@@ -202,6 +222,24 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [ 'lines' => [] ],
             $method->invokeArgs($this->converter, [ [ 'lines' => [ 'line' => [] ] ] ])
+        );
+    }
+
+    /**
+     * Tests unNormalizeType.
+     */
+    public function testUnNormalizeType()
+    {
+        $method = new \ReflectionMethod($this->converter, 'unNormalizeType');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            [ 'type' => 'PayPalAccount' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPal' ] ])
+        );
+        $this->assertEquals(
+            [ 'type' => 'CreditCard' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'Credit Card' ] ])
         );
     }
 }
