@@ -47,7 +47,11 @@ class RedirectorsController extends Controller
                 list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromID($contentId);
             }
         } else {
-            list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
+            if (!empty($type)) {
+                $newContentID  = \ContentManager::getOriginalIdFromSlugAndType($slug, $type);
+            } else {
+                list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
+            }
         }
 
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
@@ -58,8 +62,8 @@ class RedirectorsController extends Controller
             }
         } elseif ($type == 'opinion') {
             $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
-        } elseif ($type === 'photo-inline') {
-            $content = new \Photo($newContentID);
+        } elseif ($type === 'photo-inline' || $type === 'photo') {
+            $content = $this->get('entity_repository')->find('Photo', $newContentID);
         } elseif ($type === 'category') {
             $content = $this->get('category_repository')->find($newContentID);
             $content->content_type_name = 'category';

@@ -28,11 +28,11 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, $contentType);
 
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search');
+        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
         $em = $this->get('entity_repository');
 
@@ -905,8 +905,8 @@ class ContentController extends Controller
         }
 
         // Fetch all content views at once
-        $vm = $this->get('content_views_repository');
-        $extra['views'] = $vm->getViews($contentIds);
+        //$vm = $this->get('content_views_repository');
+        //$extra['views'] = $vm->getViews($contentIds);
 
         $ids = array_unique($ids);
 

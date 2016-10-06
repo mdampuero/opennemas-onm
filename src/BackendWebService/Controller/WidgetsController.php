@@ -27,11 +27,11 @@ class WidgetsController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search');
+        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
         $em = $this->get('widget_repository');
 

@@ -1827,6 +1827,33 @@ class ContentManager
     }
 
     /**
+     * Returns the original ID for a given content slug with type
+     *
+     * @param string $slug the slug of the content
+     * @param string $type the type of the content
+     *
+     * @return int  id $content_id
+     */
+    public static function getOriginalIdFromSlugAndType($slug, $type)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM `translation_ids` WHERE `slug`=? AND `type`=? LIMIT 1',
+                [ $slug, $type ]
+            );
+
+            if (is_null($rs)) {
+                return false;
+            }
+
+            return $rs['pk_content'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Check if content id exists
      *
      * @param string $oldID the content id to check

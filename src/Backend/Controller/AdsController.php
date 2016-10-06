@@ -447,12 +447,6 @@ class AdsController extends Controller
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             ];
 
-            if ($this->getUser()->isMaster()) {
-                $settings['header_script']     = $formValues->filter('header_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
-                $settings['body_end_script']   = $formValues->filter('body_end_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
-                $settings['body_start_script'] = $formValues->filter('body_start_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
-            }
-
             foreach ($settings as $key => $value) {
                 $sm->set($key, $value);
             }
@@ -468,8 +462,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
             $keys = [
-                'ads_settings', 'body_end_script', 'body_start_script',
-                'dfp_options', 'header_script', 'iadbox_id', 'revive_ad_server',
+                'ads_settings', 'dfp_options',  'iadbox_id', 'revive_ad_server',
                 'tradedoubler_id',
             ];
 
