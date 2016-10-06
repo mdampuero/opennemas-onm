@@ -45,7 +45,7 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.instance', '@cache.connection.manager' ]
     persisters:
         database:
-            class:     Common\ORM\Database\Persister\BasePersister
+            class:     Common\ORM\Database\Persister\InstancePersister
             arguments: [ '@orm.connection.manager', '@orm.metadata.instance', '@cache.connection.manager' ]
     mapping:
         database:
