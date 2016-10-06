@@ -67,8 +67,10 @@ class PurchaseController extends Controller
             $oql = ' and ' . $oql;
         }
 
-        $oql = sprintf('instance_id = "%s"', $this->get('core.instance')->id)
-            .  $oql;
+        $oql = sprintf(
+            'instance_id = "%s" and step = "done"',
+            $this->get('core.instance')->id
+        ) .  $oql;
 
         $repository = $this->get('orm.manager')->getRepository('Purchase');
         $converter  = $this->get('orm.manager')->getConverter('Purchase');
