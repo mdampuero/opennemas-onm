@@ -57,9 +57,9 @@
               webStorage.local.remove('purchase');
               $analytics.pageTrack('/store/checkout/done');
             });
-          }, function(response) {
+          }, function() {
+            $scope.error   = true;
             $scope.loading = false;
-            messenger.post({ message: response.data, type: 'error' });
           });
         };
 
