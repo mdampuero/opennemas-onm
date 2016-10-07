@@ -121,7 +121,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <ui-select name="step" theme="select2" ng-model="criteria.step[0].value">
+          <ui-select name="step" theme="select2" ng-model="criteria.step">
             <ui-select-match>
               <strong>{t}Step{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
