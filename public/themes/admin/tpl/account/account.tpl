@@ -212,7 +212,7 @@
                 <div class="spinner-text">{t}Loading{/t}...</div>
               </div>
             </div>
-            <div class="ng-cloak" ng-if="!loading && !items">
+            <div class="ng-cloak" ng-if="!loading && (!items || items.length === 0)">
               <div class="p-t-50 p-b-50 text-center">
                 <h4>{t}There are no purchases for now.{/t}</h4>
                 <i class="fa fa-stack fa-3x">
@@ -222,7 +222,7 @@
                 <h4>{t escape=off}Check our <a class="bold" href="#">store</a> and improve your newspaper.{/t}</h4>
               </div>
             </div>
-            <div class="table-wrapper ng-cloak" ng-if="items">
+            <div class="table-wrapper ng-cloak" ng-if="items && items.length > 0">
               <table class="table">
                 <thead>
                   <th>{t}Client{/t}</th>
