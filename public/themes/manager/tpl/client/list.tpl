@@ -301,8 +301,8 @@
                 [% extra.countries[item.country] %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('instances')">
-                <a class="block" ng-href="[% routing.ngGenerate('manager_instance_show', { id: id }) %]" ng-repeat="id in item.instances" target="_blank">
-                  [% extra.instances[id] %] ([% id %])
+                <a class="block" ng-href="[% routing.ngGenerate('manager_instance_show', { id: id }) %]" ng-repeat="instance in extra.instances[item.id]" target="_blank">
+                  [% instance.name %] ([% instance.id %])
                 </a>
               </td>
             </tr>
