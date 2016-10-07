@@ -24,47 +24,51 @@ function smarty_function_renderTags($params, &$smarty)
     // Get url generator
     $generator = getService('router');
 
-    // Get Google Search Key
-    $googleSearchKey = \Onm\Settings::get('google_custom_search_api_key');
-
     // Check for search method
     if (array_key_exists('internal', $params)) {
         $method = ($params['internal'] === true)? 'tags': $params['internal'];
     } else {
+        // Get Google Search Key
+        $googleSearchKey = \Onm\Settings::get('google_custom_search_api_key');
         $method = (!empty($googleSearchKey))? 'google': 'tags';
     }
 
     // Generate tags links
-    foreach ($params['metas'] as $key => $tag) {
+    $i = 0;
+    foreach ($params['metas'] as $tag) {
         $tag = trim($tag);
         if (!empty($tag)) {
-            $result = preg_match('/^#(.*)/', $tag, $matches);
             $url = $target = '';
             switch ($method) {
                 case 'hashtag':
-                    if (!empty($matches[1])) {
+                    if (strpos($tag, '#') === 0) {
                         $baseUrl = 'https://twitter.com/hashtag/';
-                        $url = htmlentities($baseUrl . $matches[1], ENT_QUOTES);
+                        $url = htmlentities($baseUrl . substr($tag, 1), ENT_QUOTES);
                         $target = 'target="_blank"';
                     }
                     break;
 
                 case 'google':
-                    $baseUrl = $generator->generate('frontend_search_google');
-                    $url = $baseUrl.'?q='.$tag.'&ie=UTF-8&cx='.$googleSearchKey;
+                    if (strpos($tag, '#') !== 0) {
+                        $baseUrl = $generator->generate('frontend_search_google');
+                        $url = $baseUrl.'?q='.$tag.'&ie=UTF-8&cx='.$googleSearchKey;
+                    }
                     break;
 
                 case 'tags':
-                    $url = $generator->generate('tag_frontpage', ['tag_name' => $tag]);
+                    if (strpos($tag, '#') !== 0) {
+                        $url = $generator->generate('tag_frontpage', ['tag_name' => $tag]);
+                    }
                     break;
             }
             if (!empty($url)) {
                 $output .= '<a '.$class.' '.$target.' href="'.$url.
                     '" title="'.$tag.'">'.$tag.'</a>'.$separator;
+                $i++;
             }
         }
-        if (!is_null($limit) && $key == ($limit - 1)) {
-                return $output;
+        if (!is_null($limit) && $i === $limit) {
+            return $output;
         }
     }
 
