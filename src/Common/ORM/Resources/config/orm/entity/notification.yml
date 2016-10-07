@@ -12,7 +12,7 @@ entity:
         start:   datetime
         style:   array
         title:   array
-        users:   array
+        users:   boolean
     converters:
         default:
             class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -42,8 +42,8 @@ entity:
                     type: text
                     options: { default: null, length: 65532, notnull: false }
                 users:
-                    type: text
-                    options: { default: null, length: 65532, notnull: false }
+                    type: boolean
+                    options: { default: 0 }
                 start:
                     type: datetimetz
                     options: { default: null, notnull: false }
