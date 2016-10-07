@@ -89,6 +89,21 @@
         </div>
         <div class="row">
           <div class="col-md-6">
+            <div class="tiles blue m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}Users{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last">
+                    <span class="item-title">{t}Activated{/t}</span>
+                    <span class="item-count">{$instance->users}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
             <div class="tiles yellow m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
@@ -99,21 +114,6 @@
                     <span class="item-count">
                       {t}coming soon... work in progress...{/t}
                     </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="tiles blue m-b-15">
-              <div class="tiles-body">
-                <div class="tiles-title text-uppercase text-black">
-                  {t}Users{/t}
-                </div>
-                <div class="widget-stats">
-                  <div class="wrapper last">
-                    <span class="item-title">{t}Activated{/t}</span>
-                    <span class="item-count">{$instance->users}</span>
                   </div>
                 </div>
               </div>
@@ -214,28 +214,59 @@
             </div>
             <div class="ng-cloak" ng-if="!loading && (!items || items.length === 0)">
               <div class="p-t-50 p-b-50 text-center">
-                <h4>{t}There are no purchases for now.{/t}</h4>
                 <i class="fa fa-stack fa-3x">
                   <i class="fa fa-shopping-cart fa-stack-1x"></i>
                   <i class="fa fa-ban fa-stack-2x"></i>
                 </i>
-                <h4>{t escape=off}Check our <a class="bold" href="#">store</a> and improve your newspaper.{/t}</h4>
+                <h4>{t}There are no purchases for now.{/t}</h4>
+                <h5>{t escape=off}Check our <a class="bold" href="#">store</a> and improve your newspaper.{/t}</h4>
               </div>
             </div>
             <div class="table-wrapper ng-cloak" ng-if="items && items.length > 0">
               <table class="table">
                 <thead>
-                  <th>{t}Client{/t}</th>
-                  <th class="text-center" width="120">{t}Date{/t}</th>
-                  <th class="text-right" width="100">{t}Total{/t}</th>
-                  <th width="100"></th>
+                  <tr>
+                    <th class="pointer" ng-click="sort('updated')">
+                      {t}Date{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
+                    </th>
+                    <th  width="150">
+                      {t}Method{/t}
+                    </th>
+                    <th class="pointer text-right" ng-click="sort('total')" width="150">
+                      {t}Total{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('total') == 'asc', 'fa fa-caret-down': isOrderedBy('total') == 'desc'}"></i>
+                    </th>
+                    <th class="text-center pointer" width="150">
+                      {t}Status{/t}
+                    </th>
+                    <th width="150">
+                    </th>
+                  </tr>
                 </thead>
-                <tr ng-repeat="item in items">
-                  <td>[% item.client.last_name %], [% item.client.first_name %]</td>
-                  <td class="text-center">[% item.date | moment : 'YYYY-MM-DD' %]</td>
-                  <td class="text-right">[% item.total | number : 2%] €</td>
-                  <td class="text-right"><a ng-href="[% routing.generate('backend_purchase_show', { id: item.id }) %]">{t}Show{/t}</a></td>
-                </tr>
+                <tbody>
+                  <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+                    <td>
+                      [% item.updated | moment : 'LL' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
+                    <td>
+                      <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }" ng-if="item.total !== 0"></i>
+                      <span ng-if="item.total !== 0">[% item.method === 'PayPalAccount' ? '{t}PayPal{/t}' : '{t}Credit Card{/t}' %]</span>
+                      <span ng-if="item.total === 0">-</span>
+                    </td>
+                    <td class="text-right">
+                      [% item.total | number : 2 %] €
+                    </td>
+                    <td class="text-center">
+                      {t}Paid{/t}
+                    </td>
+                    <td>
+                      <a ng-href="[% routing.generate('backend_purchase_show', { id: item.id }) %]" title="{t}Show{/t}">
+                        {t}View invoice{/t}
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
               <div class="text-center" ng-if="items.length > 0">
                 <a class="bold text-uppercase" href="{url name=backend_purchases_list}">{t}More{/t}</a>
