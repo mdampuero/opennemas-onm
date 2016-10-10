@@ -158,14 +158,15 @@ class AclUserController extends Controller
             $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
             $token = '';
             // Get user by email
-            $user = new \User();
-            $user->findByEmail($email);
+            $em   = $this->get('orm.manager');
+            $user = $em->getRepository('User')->findOneBy("email = '$email'");
 
             // If e-mail exists in DB
             if (!is_null($user->id)) {
                 // Generate and update user with new token
                 $token = md5(uniqid(mt_rand(), true));
-                $user->updateUserToken($user->id, $token);
+                $user->merge([ 'token' => $token ]);
+                $em->persist($user);
 
                 $url = $this->generateUrl('admin_acl_user_reset_pass', array('token' => $token), true);
 
@@ -202,12 +203,10 @@ class AclUserController extends Controller
                         "Email sent. Backend restore user password (to: ".$user->email.")"
                     );
 
-                    $this->view->assign(
-                        array(
-                            'mailSent' => true,
-                            'user' => $user
-                        )
-                    );
+                    $this->view->assign([
+                        'mailSent' => true,
+                        'user' => $user
+                    ]);
                 } catch (\Exception $e) {
                     // Log this error
                     $this->get('application.log')->notice(
@@ -248,17 +247,20 @@ class AclUserController extends Controller
 
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
 
-        $user = new \User();
-        $user = $user->findByToken($token);
+        try {
+            $em   = $this->get('orm.manager');
+            $user = $em->getRepository('User')->findOneBy("token = '$token'");
+        } catch (\Exception $e) {
+            $user = null;
+        }
 
         if ('POST' !== $request->getMethod()) {
-            if (empty($user->id)) {
+            if (!is_object($user) || empty($user->id)) {
                 $request->getSession()->getFlashBag()->add(
                     'error',
                     _('Unable to find the password reset request.  Please check the url we sent you in the email.')
                 );
 
-                $this->view->assign('userNotValid', true);
                 return $this->redirect($this->generateUrl('admin_login'));
             }
 
@@ -268,8 +270,11 @@ class AclUserController extends Controller
             $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
 
             if ($password == $passwordVerify && !empty($password) && !is_null($user)) {
-                $user->updateUserPassword($user->id, $password);
-                $user->updateUserToken($user->id, null);
+                $user->merge([
+                    'password' => md5($password),
+                    'token'    => null
+                ]);
+                $em->persist($user);
 
                 $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
 
