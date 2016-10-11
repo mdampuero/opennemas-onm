@@ -26,7 +26,7 @@ function smarty_function_renderTags($params, &$smarty)
 
     // Check for search method
     if (array_key_exists('internal', $params)) {
-        $method = ($params['internal'] === true)? 'tags': $params['internal'];
+        $method = ($params['internal'] == true)? 'tags': $params['internal'];
     } else {
         // Get Google Search Key
         $googleSearchKey = \Onm\Settings::get('google_custom_search_api_key');
