@@ -20,9 +20,14 @@ function smarty_modifier_ads_in_body($body)
         return $body;
     }
 
+    // Clean empty paragraphs
+    $paragraphs = array_merge(
+        array_diff($matches[0], ['<p>&nbsp;</p>', '<p></p>'])
+    );
+
     // Insert defined ads on it's positions
     $bodyWithAds = '';
-    foreach ($matches[0] as $key => $paragraph) {
+    foreach ($paragraphs as $key => $paragraph) {
         $bodyWithAds .= $paragraph;
         switch ($key) {
             case '0': // After 1st paragraph
