@@ -38,7 +38,7 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [ 'name', 'client_id', 'payment_id', 'invoice_id', 'created', 'step' ]
+          selected: [ 'name', 'client_id', 'payment_id', 'invoice_id', 'updated', 'step' ]
         };
 
         /**
@@ -49,7 +49,7 @@
          *
          * @type {Object}
          */
-        $scope.criteria = { epp: 25, page: 1 };
+        $scope.criteria = { epp: 25, orderBy: { updated: 'desc' }, page: 1 };
 
         /**
          * @function delete
