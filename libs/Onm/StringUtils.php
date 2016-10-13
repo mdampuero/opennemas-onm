@@ -451,7 +451,7 @@ class StringUtils
         $items = explode(',', $metadata);
 
         foreach ($items as $k => $item) {
-            $items[$k] = trim($item);
+            $items[$k] = self::normalize(trim($item));
         }
 
         $items = array_flip($items);
