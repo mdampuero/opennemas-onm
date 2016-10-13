@@ -301,8 +301,9 @@
                 {t}Updated{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-show="isColumnEnabled('step')" width="100">
+              <th class="pointer text-center" ng-click="sort('step')" ng-show="isColumnEnabled('step')" width="100">
                 {t}Step{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('step') == 'asc', 'fa fa-caret-down': isOrderedBy('step') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
