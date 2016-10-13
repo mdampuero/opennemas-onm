@@ -33,7 +33,7 @@ class StaticPageController extends Controller
         $data = array(
             'title'    => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
             'slug'     => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
-            'metadata' => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'metadata' => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'id'       => $request->request->filter('id', 0, FILTER_SANITIZE_STRING),
         );
 
