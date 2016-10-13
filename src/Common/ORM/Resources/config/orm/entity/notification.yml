@@ -23,7 +23,7 @@ entity:
             arguments: [ '@orm.connection.manager', '@orm.metadata.notification', '@cache.connection.manager' ]
     persisters:
         manager:
-            class:     Common\ORM\Database\Persister\BasePersister
+            class:     Common\ORM\Database\Persister\NotificationPersister
             arguments: [ '@orm.connection.manager', '@orm.metadata.notification',  '@cache.connection.manager' ]
     mapping:
         database:
