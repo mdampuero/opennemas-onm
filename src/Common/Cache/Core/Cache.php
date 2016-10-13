@@ -21,6 +21,19 @@ abstract class Cache extends DataBuffer
     public $mru = [];
 
     /**
+     * Executes a script.
+     *
+     * @param string $script The script to execute.
+     * @param array  $args   The script arguments.
+     *
+     * @return mixed The script output.
+     */
+    public function execute($script, $args)
+    {
+        return $this->executeScript($script, $args);
+    }
+
+    /**
      * Checks if there is data in cache for the given id.
      *
      * @param string $id The cache id.
@@ -62,6 +75,16 @@ abstract class Cache extends DataBuffer
         unset($this->mru[$id]);
 
         $this->remove($cacheId);
+    }
+
+    /**
+     * Deletes all entries that match a pattern.
+     *
+     * @param strign $pattern The pattern to match.
+     */
+    public function deleteByPattern($pattern)
+    {
+        $this->removeByPattern($pattern);
     }
 
     /**
@@ -239,6 +262,16 @@ abstract class Cache extends DataBuffer
     abstract protected function contains($id);
 
     /**
+     * Executes a script.
+     *
+     * @param string $script The script to execute.
+     * @param array  $args   The script arguments.
+     *
+     * @return mixed The script output.
+     */
+    abstract protected function executeScript($script, $args);
+
+    /**
      * Returns data from cache given an id.
      *
      * @param string $id The cache id.
@@ -262,6 +295,13 @@ abstract class Cache extends DataBuffer
      * @param mixed $id A cache id.
      */
     abstract protected function remove($id);
+
+    /**
+     * Removes all entries from cache that match a pattern.
+     *
+     * @param string $pattern The pattern to match.
+     */
+    abstract protected function removeByPattern($pattern);
 
     /**
      * Removes data from cache given an array of ids.

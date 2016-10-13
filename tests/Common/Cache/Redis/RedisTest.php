@@ -21,7 +21,7 @@ class RedisTest extends KernelTestCase
     public function setUp()
     {
         $this->baseRedis = $this->getMockBuilder('Redis')
-            ->setMethods([ 'auth', 'delete', 'exists', 'expire', 'get', 'mGet', 'mSet', 'pconnect', 'set' ])
+            ->setMethods([ 'auth', 'delete', 'exists', 'eval', 'expire', 'get', 'mGet', 'mSet', 'pconnect', 'set' ])
             ->getMock();
 
         $this->redis = $this->getMockBuilder('Common\Cache\Redis\Redis')
@@ -37,6 +37,27 @@ class RedisTest extends KernelTestCase
 
         $this->redis->expects($this->any())->method('getRedis')
             ->willReturn($this->baseRedis);
+    }
+
+    public function testDeleteByPattern()
+    {
+        $this->baseRedis->expects($this->once())->method('eval')->with(
+            'redis.call("del", unpack(redis.call("keys", ARGV[1])))',
+            ['foo*']
+        );
+
+        $this->redis->deleteByPattern('foo*');
+    }
+
+    /**
+     * Tests execute.
+     */
+    public function testExecute()
+    {
+        $this->baseRedis->expects($this->once())->method('eval')
+            ->with('foo' , [ 'bar' ]);
+
+        $this->redis->execute('foo', [ 'bar' ]);
     }
 
     /**

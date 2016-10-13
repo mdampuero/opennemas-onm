@@ -39,6 +39,14 @@ class Redis extends Cache
     /**
      * {@inheritdoc}
      */
+    protected function executeScript($script, $args)
+    {
+        return $this->getRedis()->eval($script, $args);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function contains($id)
     {
         return $this->getRedis()->exists($id);
@@ -94,6 +102,17 @@ class Redis extends Cache
     protected function remove($id)
     {
         $this->getRedis()->delete($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function removeByPattern($pattern)
+    {
+        $this->execute(
+            'redis.call("del", unpack(redis.call("keys", ARGV[1])))',
+            [ $pattern ]
+        );
     }
 
     /**
