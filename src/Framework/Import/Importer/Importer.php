@@ -363,7 +363,7 @@ class Importer
             'fk_publisher'        => $this->getAuthor($resource, $author),
             'fk_user_last_editor' => $this->getAuthor($resource, $author),
             'in_home'             => 0,
-            'metadata'            => \Onm\StringUtils::getTags($resource->title),
+            'metadata'            => \Onm\StringUtils::normalizeMetadata(\Onm\StringUtils::getTags($resource->title)),
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'with_comment'        => $this->getComments(),
