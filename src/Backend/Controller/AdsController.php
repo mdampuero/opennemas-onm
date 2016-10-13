@@ -161,7 +161,7 @@ class AdsController extends Controller
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => $firstCategory,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -318,7 +318,7 @@ class AdsController extends Controller
         $data = array(
             'id'                 => $ad->id,
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => $firstCategory,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
