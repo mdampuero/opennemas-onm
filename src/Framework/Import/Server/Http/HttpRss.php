@@ -50,7 +50,7 @@ class HttpRss extends Http
             $localFile = $this->params['path'] . DS . $file['filename'];
 
             if (!file_exists($localFile)) {
-                $this->buildContentAndSave($localFile, $file['content']);
+                $this->buildContentAndSave($localFile, $file['content'], $file['isAtom']);
 
                 $this->localFiles[] = $localFile;
                 $this->downloaded++;
@@ -82,11 +82,20 @@ class HttpRss extends Http
         $xml   = simplexml_load_string($content);
         $files = $xml->xpath('//channel/item');
 
+        $isAtom = false;
+        if (empty($files) && strpos($content, 'http://www.w3.org/2005/Atom')) {
+            $xml->registerXPathNamespace('f', 'http://www.w3.org/2005/Atom');
+            $files = $xml->xpath('/f:feed/f:entry');
+            $isAtom = true;
+        }
+
         foreach ($files as $value) {
+            $link = ($isAtom) ? $value->link['href'] : $value->link[0];
             $this->remoteFiles[] = [
                 'content'  => $value,
-                'filename' => md5(urlencode((string) $value->link[0])) . '.xml',
-                'url'      => (string) $value->link[0]
+                'filename' => md5(urlencode((string) $link)) . '.xml',
+                'url'      => (string) $link,
+                'isAtom'   => $isAtom
             ];
         }
 
@@ -99,19 +108,26 @@ class HttpRss extends Http
      * @param string $path    The path to the NewsML file.
      * @param string $content The NewsML file content.
      */
-    protected function buildContentAndSave($path, $content)
+    protected function buildContentAndSave($path, $content, $isAtom = false)
     {
         $article = new \Article();
 
-        $fullBody = (string) htmlentities($content->description) . '<br>'
-            . htmlentities($content->children('content', true));
+        $article->id    = md5($path);
+        $article->title = (string) $content->title;
 
-        $article->id               = md5($path);
-        $article->title            = (string) $content->title;
-        $article->body             = $fullBody;
-        $article->created_datetime = new \DateTime($content->pubDate);
-        $article->updated_datetime = new \DateTime($content->pubDate);
-        $article->category_name    = (string) $content->category;
+        if ($isAtom) {
+            $article->body = (string) $content->content;
+            $article->summary = (string) $content->summary;
+            $article->created_datetime = new \DateTime($content->published);
+            $article->updated_datetime = new \DateTime($content->updated);
+        } else {
+            $article->body = (string) htmlentities($content->description) . '<br>'
+                . htmlentities($content->children('content', true));
+            $article->created_datetime = new \DateTime($content->pubDate);
+            $article->updated_datetime = new \DateTime($content->pubDate);
+            $article->category_name    = (string) $content->category;
+        }
+
 
         $newsMLString = $this->tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
