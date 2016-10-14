@@ -17,8 +17,8 @@
      *   Handles all actions in notifications listing.
      */
     .controller('NotificationListCtrl', [
-      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage',
-      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder, webStorage) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlEncoder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -172,13 +172,13 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          oqlBuilder.configure({
+          oqlEncoder.configure({
             placeholder: {
               title: 'title regexp \'"[^"]*[value][^"]*";\' or body regexp \'"[^"]*[value][^"]*";\''
             }
           });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_notifications_list',
             params: { oql: oql }

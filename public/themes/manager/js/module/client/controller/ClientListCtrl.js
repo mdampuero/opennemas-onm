@@ -13,15 +13,15 @@
      * @requires $uibModal
      * @requires http
      * @requires messenger
-     * @requires oqlBuilder
+     * @requires oqlEncoder
      * @requires webStorage
      *
      * @description
      *   Handles all actions in clients listing.
      */
     .controller('ClientListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -146,7 +146,7 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          oqlBuilder.configure({
+          oqlEncoder.configure({
             placeholder: {
               name: 'first_name ~ "[value]" or last_name ~ "[value]"' +
                 ' or email ~ "[value]" or address ~ "[value]"' +
@@ -155,7 +155,7 @@
             }
           });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_clients_list',
             params: { oql: oql }

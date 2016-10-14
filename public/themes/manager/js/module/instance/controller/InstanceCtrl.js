@@ -18,8 +18,8 @@
      *   Handles actions for instance edition form
      */
     .controller('InstanceCtrl', [
-      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'http', 'messenger', 'oqlBuilder',
-      function ($filter, $location, $routeParams, $scope, $uibModal, http, messenger, oqlBuilder) {
+      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder',
+      function ($filter, $location, $routeParams, $scope, $uibModal, http, messenger, oqlEncoder) {
         /**
          * @memberOf InstanceCtrl
          *
@@ -142,14 +142,14 @@
         $scope.getClients = function(search) {
           $scope.loading = 1;
 
-          oqlBuilder.configure({
+          oqlEncoder.configure({
             placeholder: {
               name: 'first_name ~ "[value]" or last_name ~ "[value]" or' +
                 ' address ~ "[value]" or city ~ "[value]" or state ~ "[value]"'
             }
           });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_clients_list',
             params: { oql:  oql }

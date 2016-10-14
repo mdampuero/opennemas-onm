@@ -13,8 +13,8 @@
      *   Handles all actions in purchases listing.
      */
     .controller('PurchaseListCtrl', [
-      '$scope', '$timeout', 'http', 'oqlBuilder',
-      function($scope, $timeout, http, oqlBuilder) {
+      '$scope', '$timeout', 'http', 'oqlEncoder',
+      function($scope, $timeout, http, oqlEncoder) {
           /**
          * @memberOf PurchaseListCtrl
          *
@@ -35,7 +35,7 @@
         $scope.list = function () {
           $scope.loading = true;
 
-          oqlBuilder.configure({
+          oqlEncoder.configure({
             placeholder: {
               client: 'client ~ "[value]"',
               from: 'created > "[value]"',
@@ -43,7 +43,7 @@
             }
           });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'backend_ws_purchases_list',
             params: { oql: oql }
