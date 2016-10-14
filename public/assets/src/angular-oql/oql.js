@@ -241,6 +241,7 @@
        */
       this.config = {
         ignore: [],
+        map:    {},
         defaults: {
           epp:     25,
           orderBy: {},
@@ -325,6 +326,10 @@
 
           if (this.config.ignore.indexOf(field) === -1) {
             criteria[field] = value;
+          }
+
+          if (this.config.map[field]) {
+            criteria[this.config.map[field]] = value;
           }
         }
 
