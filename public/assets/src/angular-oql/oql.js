@@ -242,6 +242,7 @@
       this.config = {
         ignore: [],
         map:    {},
+        match:  {},
         defaults: {
           epp:     25,
           orderBy: {},
@@ -257,7 +258,7 @@
        *
        * @type {Regex}
        */
-      this.operators = />=|<=|!=|!in|!~|!regexp|=|>|in|is|!is|<|~|regexp/;
+      this.operators = />=|<=|!=| !in |!~| !regexp |=|>| in | is | !is |<|~| regexp /;
 
       /**
        * @function configure
@@ -329,11 +330,16 @@
           var value  = tokens[1].replace(/^\s+|\s+$/g, '').replace(/"/g, '');
 
           if (this.config.ignore.indexOf(field) === -1) {
-            criteria[field] = value;
-          }
+            if (this.config.map[field]) {
+              field = this.config.map[field];
+            }
 
-          if (this.config.map[field]) {
-            criteria[this.config.map[field]] = value;
+            if (this.config.match[field] &&
+                value.match(this.config.match[field])) {
+              value = value.match(this.config.match[field])[1];
+            }
+
+            criteria[field] = value;
           }
         }
 
