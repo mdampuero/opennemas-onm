@@ -42,9 +42,9 @@
        * @memberOf oqlEncoder
        *
        * @description
-       *   Configures the builder.
+       *   Configures the encoder.
        *
-       * @param {Object} config The builder configuration.
+       * @param {Object} config The encoder configuration.
        */
       this.configure = function(config) {
         this.config = angular.merge({}, this.config, config);
@@ -240,6 +240,7 @@
        * @type {Object}
        */
       this.config = {
+        ignore: [],
         defaults: {
           epp:     25,
           orderBy: {},
@@ -256,6 +257,19 @@
        * @type {Regex}
        */
       this.operators = />=|<=|!=|!in|!~|!regexp|=|>|in|is|!is|<|~|regexp/;
+
+      /**
+       * @function configure
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *   Configures the decoder.
+       *
+       * @param {Object} config The decoder configuration.
+       */
+      this.configure = function(config) {
+        this.config = angular.merge({}, this.config, config);
+      };
 
       /**
        * @function getCriteria
@@ -305,10 +319,12 @@
 
         for (var i = 0; i < conditions.length; i++) {
           var tokens = conditions[i].split(this.operators);
-          var field  = tokens[0].replace(/^\s+|\s+$/, '');
-          var value  = tokens[1].replace(/^\s+|\s+$/, '').replace(/"/g, '');
+          var field  = tokens[0].replace(/^\s+|\s+$/g, '');
+          var value  = tokens[1].replace(/^\s+|\s+$/g, '').replace(/"/g, '');
 
-          criteria[field] = value;
+          if (this.config.ignore.indexOf(field) === -1) {
+            criteria[field] = value;
+          }
         }
 
         return criteria;
