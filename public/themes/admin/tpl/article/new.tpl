@@ -256,7 +256,7 @@
                           </div>
                         </div>
                       {aclelse}
-                          <input type="hidden" name="fk_author" ng-model="article.fk_author" value="[% article.fk_author ? article.fk_author: {$smarty.session._sf2_attributes.user->id} %]">
+                          <input type="hidden" name="fk_author" ng-model="article.fk_author" ng-init="article.fk_author ? article.fk_author: article.fk_author = {$smarty.session._sf2_attributes.user->id}">
                       {/acl}
                     </div>
                   </div>
