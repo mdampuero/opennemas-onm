@@ -232,6 +232,10 @@
 
         // Update criteria when route changes
         $scope.$on('$routeUpdate', function() {
+          if (!$location.search().oql) {
+            return;
+          }
+
           var criteria = oqlDecoder.decode($location.search().oql);
 
           if (criteria !== $scope.criteria) {
