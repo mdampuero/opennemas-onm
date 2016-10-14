@@ -36,6 +36,19 @@
         $scope.tm = null;
 
         /**
+         * @function clear
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Deletes a value from criteria.
+         *
+         * @param {String} property The property name.
+         */
+        $scope.clear = function(property) {
+          delete $scope.criteria[property];
+        };
+
+        /**
          * @function closeColumns
          * @memberOf ClientListCtrl
          *
