@@ -82,7 +82,7 @@
               <span class="fa fa-search fa-lg"></span>
             </span>
             <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.client }" ng-keyup="searchByKeypress($event)" ng-model="criteria.client" placeholder="{t}Search by client{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.client = null" ng-show="criteria.client">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('client')" ng-show="criteria.client">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -97,7 +97,7 @@
               {t}From{/t}
             </span>
             <input class="input-100" datetime-picker="pickerFrom" datetime-picker-format="YYYY-MM-DD" name="from" ng-class="{ 'dirty': criteria.from }" ng-model="criteria.from" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.from = null" ng-show="criteria.from">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('from')" ng-show="criteria.from">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -112,7 +112,7 @@
               {t}To{/t}
             </span>
             <input class="input-100" datetime-picker="pickerTo" datetime-picker-format="YYYY-MM-DD" name="to" ng-class="{ 'dirty': criteria.to }" ng-model="criteria.to" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.to = null" ng-show="criteria.to">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('to')" ng-show="criteria.to">
               <i class="fa fa-times"></i>
             </span>
           </div>
