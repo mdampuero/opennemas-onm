@@ -17,8 +17,8 @@
      *   Handles all actions in notifications listing.
      */
     .controller('NotificationListCtrl', [
-      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlEncoder, webStorage) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -289,6 +289,15 @@
 
         if (webStorage.local.get('token')) {
           $scope.token = webStorage.local.get('token');
+        }
+
+        oqlDecoder.configure({
+          ignore: [ 'body' ],
+          match:  { title: /'\[\^\]\*(.+)\[\^\]\*;'/ }
+        });
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
         }
 
         $scope.list();

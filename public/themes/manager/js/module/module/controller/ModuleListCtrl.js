@@ -20,8 +20,8 @@
      *   Handles all actions in modules listing.
      */
     .controller('ModuleListCtrl', [
-      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlEncoder, webStorage) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -290,6 +290,12 @@
         if (webStorage.local.get('modules-columns')) {
           $scope.columns = webStorage.local.get('modules-columns');
         }
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
+        }
+
+        oqlDecoder.configure({ ignore: [ 'name' ] });
 
         $scope.list();
       }

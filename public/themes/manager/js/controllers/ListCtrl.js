@@ -238,6 +238,7 @@
 
           var criteria = oqlDecoder.decode($location.search().oql);
 
+          console.log(criteria);
           if (criteria !== $scope.criteria) {
             $scope.criteria = criteria;
           }

@@ -196,6 +196,10 @@
           $scope.columns = webStorage.local.get('purchases-columns');
         }
 
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
+        }
+
         $scope.list();
       }
     ]);

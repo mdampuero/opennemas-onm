@@ -20,8 +20,8 @@
      *   Handles all actions in clients listing.
      */
     .controller('ClientListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -195,6 +195,15 @@
         // Get enabled columns from localStorage
         if (webStorage.local.get('clients-columns')) {
           $scope.columns = webStorage.local.get('clients-columns');
+        }
+
+        oqlDecoder.configure({
+          ignore: [ 'address', 'city', 'email' ,'first_name' ,'last_name', 'state' ],
+          map:    { first_name: 'name' }
+        });
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
         }
 
         $scope.list();
