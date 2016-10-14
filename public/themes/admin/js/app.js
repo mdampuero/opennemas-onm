@@ -23,6 +23,7 @@ angular.module(
     'onm.oql',
     'onm.oqlEncoder',
     'onm.queryManager',
+    'onm.moment',
     'onm.picker',
     'onm.renderer',
     'onm.repeat-finish',
