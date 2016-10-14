@@ -291,11 +291,12 @@
 
         this.oql = oql;
 
-        criteria.epp     = this.decodeLimit();
-        criteria.page    = this.decodeOffset(criteria.epp);
-        criteria.orderBy = this.decodeOrderBy();
+        criteria.epp  = this.decodeLimit();
+        criteria.page = this.decodeOffset(criteria.epp);
+        criteria      = angular.extend(criteria, this.decodeOrderBy());
+        criteria      = angular.extend(criteria, this.decodeCriteria());
 
-        return angular.extend({}, criteria, this.decodeCriteria());
+        return criteria;
       };
 
       /**
@@ -390,7 +391,7 @@
         var pattern = /order by (\w+\s+(asc|desc)(,\s*)?)+/;
 
         if (!pattern.test(this.oql)) {
-          return this.config.defaults.orderBy;
+          return null;
         }
 
         var conditions = this.oql.match(pattern)[0];
