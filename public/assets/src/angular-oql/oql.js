@@ -11,23 +11,25 @@
   angular.module('onm.oql', [])
     /**
      * @ngdoc service
-     * @name  oqlBuilder
+     * @name  oqlEncoder
      *
      * @description
-     *   The `oqlBuilder` module creates OQL queries basing on objects.
+     *   The `oqlEncoder` service creates OQL queries basing on criteria
+     *   objects.
      */
-    .service('oqlBuilder', function() {
+    .service('oqlEncoder', function() {
       /**
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
-       *  The builder configuration.
+       *  The encoder configuration.
        *
        * @type {Object}
        */
       this.config = {
         defaults: {
-          epp: 25
+          epp:  25,
+          page: 1
         },
         placeholder: {
           oql:       '[filter] [orderBy] [limit] [offset]',
@@ -37,7 +39,7 @@
 
       /**
        * @function configure
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Configures the builder.
@@ -50,7 +52,7 @@
 
       /**
        * @function getCondition
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Returns a condition basing on the key and value.
@@ -77,7 +79,7 @@
 
       /**
        * @function getConditions
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Returns the list of conditions basing on the criteria.
@@ -101,7 +103,7 @@
 
       /**
        * @function getFilter
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Returns the filter query basing on the criteria.
@@ -132,7 +134,7 @@
 
       /**
        * @function getLimit
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Returns the limit query basing on the criteria.
@@ -151,7 +153,7 @@
 
       /**
        * @function getOffset
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Returns the offset query basing on the criteria.
@@ -172,7 +174,7 @@
 
       /**
        * @function getOql
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Returns the OQL query basing on the criteria.
@@ -196,7 +198,7 @@
 
       /**
        * @function getOrder
-       * @memberOf oqlBuilder
+       * @memberOf oqlEncoder
        *
        * @description
        *   Returns the order query basing on the criteria.
@@ -217,6 +219,176 @@
         }
 
         return order.replace(/, $/, '');
+      };
+    })
+
+    /**
+     * @ngdoc service
+     * @name  oqlDecoder
+     *
+     * @description
+     *   The `oqlDecoder` service creates criteria objects basing on OQL
+     *   queries.
+     */
+    .service('oqlDecoder', function() {
+      /**
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *  The decoder configuration.
+       *
+       * @type {Object}
+       */
+      this.config = {
+        defaults: {
+          epp:     25,
+          orderBy: {},
+          page:    1,
+        },
+      };
+
+      /**
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *  The list of supported operators.
+       *
+       * @type {Regex}
+       */
+      this.operators = />=|<=|!=|!in|!~|!regexp|=|>|in|is|!is|<|~|regexp/;
+
+      /**
+       * @function getCriteria
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *   description
+       *
+       * @param {type} name description
+       *
+       * @return {type} description
+       */
+      this.decode = function(oql) {
+        var criteria = {};
+
+        if (!oql || oql === '') {
+          return criteria;
+        }
+
+        this.oql = oql;
+
+        criteria.epp     = this.decodeLimit();
+        criteria.page    = this.decodeOffset(criteria.epp);
+        criteria.orderBy = this.decodeOrderBy();
+
+        return angular.extend({}, criteria, this.decodeCriteria());
+      };
+
+      /**
+       * @function decodeCriteria
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *   Decodes all filtering conditions from an OQL query.
+       *
+       * @return {Object} The filtering conditions.
+       */
+      this.decodeCriteria = function() {
+        this.oql = this.oql.replace(/^\s+/, '').replace(/\s+$/, '');
+
+        if (this.oql === '') {
+          return {};
+        }
+
+        var conditions = this.oql.split(/and|or/);
+        var criteria   = {};
+
+        for (var i = 0; i < conditions.length; i++) {
+          var tokens = conditions[i].split(this.operators);
+          var field  = tokens[0].replace(/^\s+/, '').replace(/\s+$/, '');
+          var value  = tokens[1].replace(/^\s+/, '').replace(/\s+$/, '');
+
+          criteria[field] = value;
+        }
+
+        return criteria;
+      };
+
+      /**
+       * @function decodeLimit
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *   Decodes the limit condition from the OQL query.
+       *
+       * @return {Integer} The number of items per page.
+       */
+      this.decodeLimit = function() {
+        var pattern = /limit\s+\d+/;
+
+        if (!pattern.test(this.oql)) {
+          return this.config.defaults.epp;
+        }
+
+        var epp  = this.oql.match(pattern)[0];
+        this.oql = this.oql.replace(pattern, '');
+
+        return parseInt(epp.replace(/limit\s+/, ''));
+      };
+
+      /**
+       * @function decodeOffset
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *   Decodes the offset condition from the OQL query.
+       *
+       * @param {Integer} epp The number of items per page.
+       *
+       * @return {Integer} The page number.
+       */
+      this.decodeOffset = function(epp) {
+        var pattern = /offset\s+\d+/;
+
+        if (!pattern.test(this.oql)) {
+          return this.config.defaults.page;
+        }
+
+        var page = this.oql.match(pattern)[0];
+        this.oql = this.oql.replace(pattern, '');
+
+        return parseInt(page.replace(/offset\s+/, ''))/epp;
+      };
+
+      /**
+       * @function decodeOrderBy
+       * @memberOf oqlDecoder
+       *
+       * @description
+       *   Decodes the order by condition from an OQL query.
+       *
+       * @return {Object} The object with order by conditions as
+       *                  { field: 'asc'|'desc' }.
+       */
+      this.decodeOrderBy = function() {
+        var pattern = /order by (\w+\s+(asc|desc)(,\s*)?)+/;
+
+        if (!pattern.test(this.oql)) {
+          return this.config.defaults.orderBy;
+        }
+
+        var conditions = this.oql.match(pattern)[0];
+        conditions     = conditions.replace(/order by\s+/, '').split(/\s*,\s*/);
+        var orderBy    = {};
+
+        for (var i = 0; i < conditions.length; i++) {
+          var condition = conditions[i].split(/\s+/);
+          orderBy[condition[0]] = condition[1];
+        }
+
+        this.oql = this.oql.replace(pattern, '');
+
+        return orderBy;
       };
     });
 })();
