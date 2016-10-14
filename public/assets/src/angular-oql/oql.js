@@ -191,7 +191,7 @@
         oql = oql.replace('[limit]', this.getLimit(criteria));
         oql = oql.replace('[offset]', this.getOffset(criteria));
 
-        oql = oql.replace(/\s+/g, ' ').trim();
+        oql = oql.replace(/\s+/g, ' ').replace(/^\s*|\s*$/g, '');
 
         return oql;
       };
@@ -294,10 +294,14 @@
 
         criteria.epp  = this.decodeLimit();
         criteria.page = this.decodeOffset(criteria.epp);
-        criteria      = angular.extend(criteria, this.decodeOrderBy());
-        criteria      = angular.extend(criteria, this.decodeCriteria());
 
-        return criteria;
+        var orderBy = this.decodeOrderBy();
+
+        if (orderBy) {
+          criteria.orderBy = orderBy;
+        }
+
+        return angular.extend(criteria, this.decodeCriteria());
       };
 
       /**
@@ -393,7 +397,7 @@
        *                  { field: 'asc'|'desc' }.
        */
       this.decodeOrderBy = function() {
-        var pattern = /order by (\w+\s+(asc|desc)(,\s*)?)+/;
+        var pattern = /order by\s+(\w+\s+(asc|desc)(\s*,\s*)?)+/;
 
         if (!pattern.test(this.oql)) {
           return null;
