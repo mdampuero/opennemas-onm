@@ -294,7 +294,7 @@
        * @return {Object} The filtering conditions.
        */
       this.decodeCriteria = function() {
-        this.oql = this.oql.replace(/^\s+/, '').replace(/\s+$/, '');
+        this.oql = this.oql.replace(/^\s+|\s+$/, '');
 
         if (this.oql === '') {
           return {};
@@ -305,8 +305,8 @@
 
         for (var i = 0; i < conditions.length; i++) {
           var tokens = conditions[i].split(this.operators);
-          var field  = tokens[0].replace(/^\s+/, '').replace(/\s+$/, '');
-          var value  = tokens[1].replace(/^\s+/, '').replace(/\s+$/, '');
+          var field  = tokens[0].replace(/^\s+|\s+$/, '');
+          var value  = tokens[1].replace(/^\s+|\s+$/, '').replace(/"/g, '');
 
           criteria[field] = value;
         }
