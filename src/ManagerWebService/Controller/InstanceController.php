@@ -519,7 +519,7 @@ class InstanceController extends Controller
             ->selectDatabase($instance->getDatabaseName());
 
         $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik', 'time_zone' ]);
-        $template = $this->getTemplateParams();
+        $template = $this->getTemplateParams($instance->id);
 
         if (!empty($instance->getClient())) {
             try {
@@ -606,9 +606,11 @@ class InstanceController extends Controller
     /**
      * Returns a list of parameters for the template.
      *
+     * @param integer $id The instance id.
+     *
      * @return array Array of template parameters.
      */
-    private function getTemplateParams()
+    private function getTemplateParams($id = null)
     {
         $lang    = $this->get('core.locale')->getLocaleShort();
         $modules = $this->get('orm.manager')->getRepository('extension')
@@ -661,6 +663,15 @@ class InstanceController extends Controller
             return $a->getData();
         }, $themes);
 
+        $purchases = [];
+        if (!empty($id)) {
+            $purchases = $this->get('orm.manager')->getRepository('Purchase')
+                ->findBy(sprintf('instance_id = %s order by updated desc limit 5', $id));
+
+            $purchases = $this->get('orm.manager')->getConverter('Purchase')
+                ->responsify($purchases);
+        }
+
         return [
             'languages' => [
                 'en_US' => _("English"),
@@ -674,6 +685,7 @@ class InstanceController extends Controller
                 'EXPERT',
                 'OTHER',
             ],
+            'purchases' => $purchases,
             'themes'    => $themes,
             'timezones' => \DateTimeZone::listIdentifiers(),
             'modules'   => $modules,
