@@ -16,7 +16,9 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $factory = $this->getMock('Framework\Import\ParserFactory');
+        $factory = $this->getMockBuilder('Framework\Import\ParserFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->parser = new EuropaPress($factory);
 
