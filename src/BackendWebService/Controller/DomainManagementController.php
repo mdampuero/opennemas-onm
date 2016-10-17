@@ -175,7 +175,7 @@ class DomainManagementController extends Controller
                 'client_id' => $client->id,
                 'amount'    => round($purchase->total, 2),
                 'date'      => $date,
-                'type'      => 'Check'
+                'type'      => $purchase->method
             ]);
 
             if (!empty($nonce)) {
@@ -206,14 +206,14 @@ class DomainManagementController extends Controller
             $purchase->invoice_id = $invoice->invoice_id;
             $purchase->updated    = $date;
 
+            $em->persist($purchase);
+
             // Remove payment method line from details
+            $domains = $purchase->details;
             if ($purchase->method === 'CreditCard') {
                 array_pop($domains);
             }
 
-            $em->persist($purchase);
-
-            $domains = $purchase->details;
 
             $this->sendEmailToCustomer($client, $domains, $purchase->id);
             $this->sendEmailToSales($client, $domains);
