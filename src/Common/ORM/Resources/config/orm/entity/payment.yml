@@ -40,9 +40,9 @@ entity:
                 name: options
                 type: array
         freshbooks:
-            client_id:
-                name: client_id
-                type: string
+            amount:
+                name: amount
+                type: float
             invoice_id:
                 name: invoice_id
                 type: integer
