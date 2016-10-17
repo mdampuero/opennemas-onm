@@ -282,7 +282,6 @@
         oqlDecoder.configure({ ignore: [ 'username' ] });
 
         if ($location.search().oql) {
-          console.log("asdf");
           $scope.criteria = oqlDecoder.decode($location.search().oql);
         }
 
