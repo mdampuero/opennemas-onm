@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-21 16:55+0200\n"
+"POT-Creation-Date: 2016-10-17 10:13+0000\n"
 "PO-Revision-Date: 2016-09-21 16:57+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
@@ -1241,16 +1241,6 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de axencia de novas eliminado."
 
-msgid "Newsletter deleted successfully."
-msgstr "Boletin de novas eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Non se puido eliminar o boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debe fornecer un identificador para eliminar un boletín."
-
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Subscrición co identificador «%d» eliminada correctamente"
@@ -1287,6 +1277,16 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscribers."
 msgstr "Estado de activación cambiado correctamente para %d subscritores."
+
+msgid "Newsletter deleted successfully."
+msgstr "Boletin de novas eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Non se puido eliminar o boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debe fornecer un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como lida correctamente"
@@ -1942,6 +1942,30 @@ msgstr "Estado non válido."
 msgid "Unable to delete the comment."
 msgstr "Non foi posible eliminar o comentario."
 
+msgid "trashed"
+msgstr "en lixo"
+
+msgid "pending"
+msgstr "pendente"
+
+msgid "available"
+msgstr "dispoñibel"
+
+msgid "not scheduled"
+msgstr "non planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tempo"
+
+msgid "postponed"
+msgstr "adiado"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -1973,30 +1997,6 @@ msgid ""
 "Some elements were removed because this frontpage had too many contents."
 msgstr ""
 "Eliminaronse algúns elementos da portada xa que esta contiña demasiados."
-
-msgid "trashed"
-msgstr "en lixo"
-
-msgid "pending"
-msgstr "pendente"
-
-msgid "available"
-msgstr "dispoñibel"
-
-msgid "not scheduled"
-msgstr "non planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tempo"
-
-msgid "postponed"
-msgstr "adiado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -3458,12 +3458,6 @@ msgstr "Edición de ePapel"
 
 msgid "Go Back"
 msgstr "Atrás"
-
-msgid "Updating"
-msgstr "Actualizando"
-
-msgid "Update"
-msgstr "Actualizar"
 
 msgid "Date"
 msgstr "Data"
@@ -5454,6 +5448,44 @@ msgstr ""
 "Se tes unha <strong>páxina en Twitter</strong>, engade o teu nome de perfil "
 "no formulario. Por omisión usarase o de OpenNeMas."
 
+#, fuzzy
+msgid "Only masters"
+msgstr "Rexistrarse"
+
+msgid "Robots.txt rules"
+msgstr ""
+
+msgid ""
+"Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
+"\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\">documentation</"
+"a>."
+msgstr ""
+
+msgid "Scripts in header"
+msgstr "Scripts na cabeceira"
+
+msgid "This scripts will be included before the </head> tag"
+msgstr "Estos scripts incluiranse antes da etiqueta </head>"
+
+msgid "Scripts at body start"
+msgstr "Scripts ao inicio do body"
+
+msgid "This scripts will be included before the <body> tag"
+msgstr "Estos scripts incluiranse antes da etiqueta <body>"
+
+msgid "Scripts at body end"
+msgstr "Scripts al final del body"
+
+msgid "This scripts will be included before the </body> tag"
+msgstr "Estos scripts incluiranse antes da etiqueta </body>"
+
+msgid "Custom CSS"
+msgstr "CSS personalizado"
+
+#, fuzzy
+msgid "This sripts will be included in the global.css file."
+msgstr "Estos scripts incluiranse antes da etiqueta <body>"
+
 msgid "Editing author"
 msgstr "Editando autor"
 
@@ -5510,6 +5542,12 @@ msgstr "Creando vídeo"
 
 msgid "Editing video"
 msgstr "Editando vídeo"
+
+msgid "Updating"
+msgstr "Actualizando"
+
+msgid "Update"
+msgstr "Actualizar"
 
 msgid "Schedule"
 msgstr "Planificación"
@@ -6014,27 +6052,6 @@ msgstr "ID de iadbox"
 
 msgid "Iadbox affiliate ID"
 msgstr "ID de afiliado de Iadbox"
-
-msgid "Scripts"
-msgstr "Scripts"
-
-msgid "Scripts in header"
-msgstr "Scripts na cabeceira"
-
-msgid "This scripts will be included before the </head> tag"
-msgstr "Estos scripts incluiranse antes da etiqueta </head>"
-
-msgid "Scripts at body start"
-msgstr "Scripts ao inicio do body"
-
-msgid "This scripts will be included before the <body> tag"
-msgstr "Estos scripts incluiranse antes da etiqueta <body>"
-
-msgid "Scripts at body end"
-msgstr "Scripts al final del body"
-
-msgid "This scripts will be included before the </body> tag"
-msgstr "Estos scripts incluiranse antes da etiqueta </body>"
 
 msgid "Unable to find any advertisement that matches your search."
 msgstr "Non se puideron atopar publicidades que coincidan coa súa busca."
@@ -8336,6 +8353,9 @@ msgstr "Resumo de Opcache"
 msgid "Detailed statistics"
 msgstr "Estatícas detalladas"
 
+msgid "Scripts"
+msgstr "Scripts"
+
 msgid "Path"
 msgstr "Ruta"
 
@@ -8462,6 +8482,9 @@ msgstr "Novo cliente"
 msgid "Edit client"
 msgstr "Editar cliente"
 
+msgid "This field is invalid"
+msgstr "Este campo é inválido"
+
 msgid "VAT No."
 msgstr "Nº fiscal"
 
@@ -8538,9 +8561,6 @@ msgstr "Non tes permiso para acceder a este recurso."
 
 msgid "New user"
 msgstr "Novo usuario"
-
-msgid "This field is invalid"
-msgstr "Este campo é inválido"
 
 msgid "The passwords don't match"
 msgstr "Os contrasinais non coinciden"
@@ -10062,9 +10082,6 @@ msgstr "¿Quere cerrar a sesión?"
 
 #~ msgid "Poll frontpage"
 #~ msgstr "Portada de enquisas"
-
-#~ msgid "Custom CSS"
-#~ msgstr "CSS personalizado"
 
 #~ msgid "Sitemap: "
 #~ msgstr "Mapa do sitio:"
@@ -13090,10 +13107,6 @@ msgstr "¿Quere cerrar a sesión?"
 
 #~ msgid "Premium"
 #~ msgstr "Premium"
-
-#, fuzzy
-#~ msgid "Only Register"
-#~ msgstr "Rexistrarse"
 
 #~ msgid "Your account is now set up. Check your email to activate."
 #~ msgstr ""
