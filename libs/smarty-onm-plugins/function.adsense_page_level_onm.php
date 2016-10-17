@@ -10,13 +10,13 @@ function smarty_function_adsense_page_level_onm($params, &$smarty)
 {
     $output = '';
     if (!\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
-        $output =   "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>\n".
-                    "<script>\n".
-                    " (adsbygoogle = window.adsbygoogle || []).push({\n".
-                    "   google_ad_client: 'ca-pub-7694073983816204',\n".
-                    "   enable_page_level_ads: true\n".
-                    " });\n".
-                    "</script>\n";
+        $output =   "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>\n"
+                    . "<script>\n"
+                    . " (adsbygoogle = window.adsbygoogle || []).push({\n"
+                    . "   google_ad_client: 'ca-pub-7694073983816204',\n"
+                    . "   enable_page_level_ads: true\n"
+                    . " });\n"
+                    . "</script>\n";
     }
 
     return $output;
