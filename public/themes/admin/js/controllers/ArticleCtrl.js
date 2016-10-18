@@ -562,7 +562,7 @@
             http.get(route).then(function(response) {
               $scope.article.metadata = response.data.split(',');
             });
-          }, 500);
+          }, 5000);
         });
 
         // Enable drafts after 5s to grant CKEditor initialization
