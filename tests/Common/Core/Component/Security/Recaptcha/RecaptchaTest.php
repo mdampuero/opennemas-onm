@@ -46,17 +46,17 @@ class RecaptchaTest extends KernelTestCase
         $this->container->expects($this->at(1))->method('getParameter')
             ->with('api.recaptcha.secret_key')->willReturn('fred');
 
-        $this->recaptcha->configureForBackend();
+        $this->recaptcha->configureFromParameters();
     }
 
     /**
-     * Tests configureForBackend when no key provided.
+     * Tests configureFromParameters when no key provided.
      *
      * @expectedException \RuntimeException
      */
     public function testConfigureForBackendWithNoKey()
     {
-        $this->recaptcha->configureForBackend();
+        $this->recaptcha->configureFromParameters();
     }
 
     /**
@@ -77,11 +77,11 @@ class RecaptchaTest extends KernelTestCase
             ->method('get')
             ->willReturn([ 'private_key' => 'wobble', 'public_key' => 'baz' ]);
 
-        $this->recaptcha->configureForFrontend();
+        $this->recaptcha->configureFromSettings();
     }
 
     /**
-     * Tests configureForFrontend when no key provided.
+     * Tests configureFromSettings when no key provided.
      *
      * @expectedException \RuntimeException
      */
@@ -99,7 +99,7 @@ class RecaptchaTest extends KernelTestCase
             ->method('get')
             ->willReturn([]);
 
-        $this->recaptcha->configureForFrontend();
+        $this->recaptcha->configureFromSettings();
     }
 
     /**

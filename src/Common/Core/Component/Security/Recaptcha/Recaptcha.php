@@ -58,7 +58,7 @@ class Recaptcha
     /**
      * Configures the recaptcha service with keys for backend.
      */
-    public function configureForBackend()
+    public function configureFromParameters()
     {
         $this->siteKey =
             $this->container->getParameter('api.recaptcha.site_key');
@@ -73,7 +73,7 @@ class Recaptcha
     /**
      * Configures the recaptcha service with keys for frontend.
      */
-    public function configureForFrontend()
+    public function configureFromSettings()
     {
         $keys = $this->container->get('orm.manager')
             ->getRepository('Settings', 'instance')

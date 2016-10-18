@@ -101,7 +101,7 @@ class AuthenticationController extends Controller
         $recaptcha = '';
         if ($session->get('failed_login_attempts') >= 3) {
             $recaptcha = $this->get('core.recaptcha')
-                ->configureForBackend()
+                ->configureFromParameters()
                 ->getHtml();
         }
 
