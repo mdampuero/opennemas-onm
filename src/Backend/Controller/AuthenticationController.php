@@ -98,14 +98,21 @@ class AuthenticationController extends Controller
 
         $session->set('intention', $intention);
 
+        $recaptcha = '';
+        if ($session->get('failed_login_attempts') >= 3) {
+            $recaptcha = $this->get('core.recaptcha')
+                ->configureForBackend()
+                ->getHtml();
+        }
+
         return $this->render(
             'login/login.tpl',
             [
-                'failed_login_attempts' => $session->get('failed_login_attempts'),
-                'current_language'      => \Application::$language,
-                'token'                 => $token,
-                'referer'               => $referer,
-                'languages'             => $this->get('core.locale')->getLocales()
+                'recaptcha'        => $recaptcha,
+                'current_language' => \Application::$language,
+                'token'            => $token,
+                'referer'          => $referer,
+                'languages'        => $this->get('core.locale')->getLocales()
             ]
         );
     }
