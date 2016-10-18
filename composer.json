@@ -54,7 +54,7 @@
         "frandieguez/panorama-php": "1.0.*",
         "friendsofsymfony/jsrouting-bundle": "1.6.*",
         "giggsey/libphonenumber-for-php": "^7.2",
-        "google/recaptcha": "1.1",
+        "google/recaptcha": "1.1.2",
         "hwi/oauth-bundle": "0.4.*",
         "imagine/imagine": "0.6.*",
         "jagandecapri/symfony-parallel-process": "*",
