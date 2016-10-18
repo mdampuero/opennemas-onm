@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "65bd40e3973245be0a43da52baf3c64e",
-    "content-hash": "273beb0f2dd5e776593f07b0b1ae1643",
+    "hash": "bda8ee11f1fbb755db33e91c769d5e6f",
+    "content-hash": "81eba2d448f11aa10e6913c4ead2bf54",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1251,16 +1251,16 @@
         },
         {
             "name": "google/recaptcha",
-            "version": "1.1.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/recaptcha.git",
-                "reference": "c800b38d17fdd932978e6c8a788d493810c01a76"
+                "reference": "2b7e00566afca82a38a1d3adb8e42c118006296e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/recaptcha/zipball/c800b38d17fdd932978e6c8a788d493810c01a76",
-                "reference": "c800b38d17fdd932978e6c8a788d493810c01a76",
+                "url": "https://api.github.com/repos/google/recaptcha/zipball/2b7e00566afca82a38a1d3adb8e42c118006296e",
+                "reference": "2b7e00566afca82a38a1d3adb8e42c118006296e",
                 "shasum": ""
             },
             "require": {
@@ -1270,6 +1270,11 @@
                 "phpunit/phpunit": "4.5.*"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "ReCaptcha\\": "src/ReCaptcha"
@@ -1287,7 +1292,7 @@
                 "recaptcha",
                 "spam"
             ],
-            "time": "2015-03-12 10:56:37"
+            "time": "2015-09-02 17:23:59"
         },
         {
             "name": "hwi/oauth-bundle",
