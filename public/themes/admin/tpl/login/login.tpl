@@ -75,9 +75,7 @@
                           <input class="form-control" id="_password" name="_password" placeholder="{t}Password{/t}" tabindex="2" type="password" value="{$smarty.cookies.login_password|default:""}">
                         </div>
                       </div>
-                      {if $failed_login_attempts >= 3}
-                        {getRecaptchaHtml onm=1}
-                      {/if}
+                      {$recaptcha}
                       <div class="form-group text-right">
                         <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
                         <button class="btn btn-primary" id="login-button" tabindex="4" type="submit">{t}Log in{/t}</button>
