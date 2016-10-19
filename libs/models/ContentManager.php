@@ -1893,7 +1893,7 @@ class ContentManager
             return $content->content_type_name !== 'advertisement';
         });
 
-        $elementsToRemove = count($contentsNotAdvertisements) - 10;//self::$frontpage_limit;
+        $elementsToRemove = count($contentsNotAdvertisements) - self::$frontpage_limit;
 
         // Remove first from placeholder_0_0
         if ($elementsToRemove > 0) {
