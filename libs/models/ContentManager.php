@@ -1911,9 +1911,6 @@ class ContentManager
                 if ($content->content_type_name === 'article'
                     || $content->content_type_name === 'opinion'
                 ) {
-                    var_dump($content);
-                    die();
-
                     unset($contents[$key]);
                     $elementsToRemove--;
                 }
