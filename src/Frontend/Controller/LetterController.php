@@ -1,17 +1,12 @@
 <?php
 /**
- * Defines the frontend controller for the letter content type
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,23 +18,22 @@ use Onm\Settings as s;
 
 /**
  * Handles the actions for letters
- *
- * @package Frontend_Controllers
- **/
+ */
 class LetterController extends Controller
 {
     /**
-     * Renders letters frontpage.
+     * Displays a list of letters.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
     public function frontpageAction(Request $request)
     {
-
-        if (!\Onm\Module\ModuleManager::isActivated('LETTER_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('LETTER_MANAGER')) {
             throw new ResourceNotFoundException();
         }
+
         $page = $request->query->getDigits('page', 1);
 
         $this->view->setConfig('letter-frontpage');
@@ -81,39 +75,30 @@ class LetterController extends Controller
                 ]
             ]);
 
-            $this->view->assign(
-                array(
-                    'otherLetters' => $letters,
-                    'pagination'   => $pagination,
-                )
-            );
+            $this->view->assign([
+                'otherLetters' => $letters,
+                'pagination'   => $pagination,
+            ]);
         }
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
-        return $this->render(
-            'letter/letter_frontpage.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
-        );
+        return $this->render('letter/letter_frontpage.tpl', [
+            'advertisements' => $this->getAds(),
+            'cache_id'       => $cacheID,
+        ]);
     }
 
     /**
-     * Shows a letter
+     * Shows a letter.
      *
-     * @param Request $request the request object
+     * @param string $slug   The letter slug.
+     * @param string $id     The letter id.
      *
-     * @return Response the response object
-     **/
-    public function showAction(Request $request)
+     * @return Response The response object.
+     */
+    public function showAction($slug, $id)
     {
-        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-
         $letter = $this->get('content_url_matcher')
-            ->matchContentUrl('letter', $dirtyID, $urlSlug);
+            ->matchContentUrl('letter', $id, $slug);
 
         if (empty($letter)) {
             throw new ResourceNotFoundException();
@@ -135,154 +120,137 @@ class LetterController extends Controller
                 'ORDER BY created DESC LIMIT 5'
             );
 
-            $this->view->assign(
-                array(
-                    'letter'       => $letter,
-                    'content'      => $letter,
-                    'otherLetters' => $otherLetters,
-                    'contentId'    => $letter->id, // Used on module_comments.tpl
-                )
-            );
+            $this->view->assign([
+                'letter'       => $letter,
+                'content'      => $letter,
+                'otherLetters' => $otherLetters,
+                'contentId'    => $letter->id, // Used on module_comments.tpl
+            ]);
         }
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
-        return $this->render(
-            'letter/letter.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
-        );
+        return $this->render('letter/letter.tpl', [
+            'advertisements' => $this->getAds(),
+            'cache_id'       => $cacheID,
+        ]);
     }
 
     /**
-     * Description of the action
+     * Displays a form to send letters to the newspaper.
      *
-     * @return void
-     **/
+     * @return Response The response object.
+     */
     public function showFormAction()
     {
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
-        return $this->render('letter/letter_form.tpl');
+        return $this->render('letter/letter_form.tpl', [
+            'advertisements' => $this->getAds(),
+            'recaptcha'      => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml()
+        ]);
     }
 
     /**
-     * Saves a letter into database
+     * Saves a letter into database.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function saveAction(Request $request)
     {
-        $recaptcha_challenge_field =
-            $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
-        $recaptcha_response_field =
-            $request->request->filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
-
-        //Get config vars
-        $configRecaptcha = s::get('recaptcha');
-
-        // New captcha instance
-        $captcha = getService('recaptcha')
-            ->setPrivateKey($configRecaptcha['private_key'])
-            ->setRemoteIp($request->getClientIp());
-
-        // Get reCaptcha validate response
-        $resp = $captcha->check($recaptcha_challenge_field, $recaptcha_response_field);
+        $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
+        $isValid  = $this->get('core.recaptcha')
+            ->configureFromSettings()
+            ->isValid($response, $request->getClientIp());
 
         // What happens when the CAPTCHA was entered incorrectly
-        if (!$resp->isValid()) {
+        if (!$isValid) {
             $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
             $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
 
             return $response;
-        } else {
-            $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
-            $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
+        }
 
-            if (empty($security_code)) {
-                $params  = array();
-                $data    = array();
-                $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
-                $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
-                $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
-                $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
-                $items   = $request->request->get('items');
+        $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
+        $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
+        $msg           = _('Unable to save the letter.');
 
-                $moreData = _("Name")." {$name} \n "._("Email"). "{$mail} \n ";
-                if (!empty($items)) {
-                    foreach ($items as $key => $value) {
-                        if (!empty($key) && !empty($value)) {
-                            $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
-                            $moreData .= " {$key}: {$value}\n ";
-                        }
+        if (empty($security_code)) {
+            $params  = array();
+            $data    = array();
+            $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+            $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
+            $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
+            $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
+            $items   = $request->request->get('items');
+
+            $moreData = _("Name")." {$name} \n "._("Email"). "{$mail} \n ";
+            if (!empty($items)) {
+                foreach ($items as $key => $value) {
+                    if (!empty($key) && !empty($value)) {
+                        $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
+                        $moreData .= " {$key}: {$value}\n ";
                     }
                 }
+            }
 
-                $data['url']            = $url;
-                $data['body']           = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
-                $data['author']         = $name;
-                $data['title']          = $subject;
-                $data['email']          = $mail;
-                $data['content_status'] = 0; //pendding
-                $data['image']          = $this->saveImage($data);
+            $data['url']            = $url;
+            $data['body']           = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
+            $data['author']         = $name;
+            $data['title']          = $subject;
+            $data['email']          = $mail;
+            $data['content_status'] = 0; //pendding
+            $data['image']          = $this->saveImage($data);
 
-                $letter = new \Letter();
+            $letter = new \Letter();
 
-                $request->getSession()->set(
-                    'user',
-                    json_decode(json_encode([ 'id' => 'user', 'username' => $data['author'] ]))
-                );
+            $request->getSession()->set(
+                'user',
+                json_decode(json_encode([ 'id' => 'user', 'username' => $data['author'] ]))
+            );
 
-                // Prevent XSS attack
-                $data = array_map('strip_tags', $data);
-                $data['body'] = nl2br($moreData.$data['body']);
+            // Prevent XSS attack
+            $data = array_map('strip_tags', $data);
+            $data['body'] = nl2br($moreData.$data['body']);
 
-                if ($letter->hasBadWords($data)) {
-                    $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
-                } else {
-                    $ip = getUserRealIP();
-                    $params['ip']   = $ip;
-                    $data["params"] = $params;
-
-                    if ($letter->create($data)) {
-                        $msg = "Su carta ha sido guardada y está pendiente de publicación.";
-
-                        $recipient = s::get('contact_email');
-                        if (!empty($recipient)) {
-                            $mailSender = s::get('mail_sender');
-                            if (empty($mailSender)) {
-                                $mailSender = "no-reply@postman.opennemas.com";
-                            }
-                            //  Build the message
-                            $text = \Swift_Message::newInstance();
-                            $text
-                                ->setSubject($subject)
-                                ->setBody($data['body'], 'text/html')
-                                ->setTo(array($recipient => $recipient))
-                                ->setFrom(array($mail => $name))
-                                ->setSender(array($mailSender => s::get('site_name')));
-                            try {
-                                $mailer = $this->get('mailer');
-                                $mailer->send($text);
-
-                                $this->get('application.log')->notice(
-                                    "Email sent. Frontend letter (sender:".$mail.", to: ".$recipient.")"
-                                );
-                            } catch (\Swift_SwiftException $e) {
-                            }
-                        }
-                    } else {
-                        $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
-                            ."correctamente todos los campos.";
-                    }
-                }
+            if ($letter->hasBadWords($data)) {
+                $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
             } else {
-                $msg = _('Unable to save the letter.');
+                $ip = getUserRealIP();
+                $params['ip']   = $ip;
+                $data["params"] = $params;
+
+                if ($letter->create($data)) {
+                    $msg = "Su carta ha sido guardada y está pendiente de publicación.";
+
+                    $recipient = s::get('contact_email');
+                    if (!empty($recipient)) {
+                        $mailSender = s::get('mail_sender');
+                        if (empty($mailSender)) {
+                            $mailSender = "no-reply@postman.opennemas.com";
+                        }
+                        //  Build the message
+                        $text = \Swift_Message::newInstance();
+                        $text
+                            ->setSubject($subject)
+                            ->setBody($data['body'], 'text/html')
+                            ->setTo(array($recipient => $recipient))
+                            ->setFrom(array($mail => $name))
+                            ->setSender(array($mailSender => s::get('site_name')));
+                        try {
+                            $mailer = $this->get('mailer');
+                            $mailer->send($text);
+
+                            $this->get('application.log')->notice(
+                                "Email sent. Frontend letter (sender:".$mail.", to: ".$recipient.")"
+                            );
+                        } catch (\Swift_SwiftException $e) {
+                        }
+                    }
+                } else {
+                    $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
+                        ."correctamente todos los campos.";
+                }
             }
         }
 
@@ -291,15 +259,13 @@ class LetterController extends Controller
         return $response;
     }
 
-
-
     /**
-     * Uploads and creates
+     * Uploads and creates an image.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function saveImage($data)
     {
         // check if category, and file sizes are properly set and category_name is valid
@@ -336,20 +302,16 @@ class LetterController extends Controller
         return null;
     }
 
-
     /**
-     * Returns the advertisements for the letters frontpage
+     * Returns the advertisements for the letters frontpage.
      *
-     * @return void
-     **/
+     * @return array The list of advertisements.
+     */
     public function getAds()
     {
-        $category = 0;
+        $positions = $this->get('core.manager.advertisement')
+            ->getPositionsForGroup('article_inner', [ 7, 9 ]);
 
-        // Get letter positions
-        $positionManager = $this->get('core.manager.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
     }
 }
