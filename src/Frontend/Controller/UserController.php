@@ -67,17 +67,15 @@ class UserController extends Controller
         $errors = [];
         if ('POST' == $request->getMethod()) {
             // Check reCAPTCHA
-            $valid = false;
+            $valid    = false;
             $response = $request->get('g-recaptcha-response');
-            if (!is_null($response)) {
-                $rs = getService('google_recaptcha');
-                $recaptcha = $rs->getPublicRecaptcha();
-                $resp = $recaptcha->verify(
-                    $request->get('g-recaptcha-response'),
-                    $request->getClientIp()
-                );
+            $ip       = $request->getClientIp();
 
-                $valid = $resp->isSuccess();
+            if (!is_null($response)) {
+                $valid = $this->get('core.recaptcha')
+                    ->configureFromSettings()
+                    ->isValid($response, $ip);
+
                 if (!$valid) {
                     $errors []= _(
                         'The reCAPTCHA wasn\'t entered correctly.'.
@@ -181,12 +179,12 @@ class UserController extends Controller
             }
         }
 
-        return $this->render(
-            'authentication/register.tpl',
-            array(
-                'errors' => $errors,
-            )
-        );
+        return $this->render('authentication/register.tpl', [
+            'errors'    => $errors,
+            'recaptcha' => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml()
+        ]);
     }
 
     /**
