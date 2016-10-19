@@ -75,7 +75,7 @@ class Recaptcha
      */
     public function configureFromSettings()
     {
-        $keys = $this->container->get('setting_repository')->find('recaptcha');
+        $keys = $this->container->get('setting_repository')->get('recaptcha');
 
         if (empty($keys)
             || !is_array($keys)

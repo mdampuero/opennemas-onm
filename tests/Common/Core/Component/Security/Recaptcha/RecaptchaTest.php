@@ -22,7 +22,7 @@ class RecaptchaTest extends KernelTestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('SettingManager')
-            ->setMethods([ 'find' ])
+            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('ServiceContainer')
@@ -66,7 +66,7 @@ class RecaptchaTest extends KernelTestCase
             ->willReturn($this->repository);
 
         $this->repository->expects($this->once())
-            ->method('find')
+            ->method('get')
             ->with('recaptcha')
             ->willReturn([ 'private_key' => 'wobble', 'public_key' => 'baz' ]);
 
@@ -86,7 +86,7 @@ class RecaptchaTest extends KernelTestCase
             ->willReturn($this->repository);
 
         $this->repository->expects($this->once())
-            ->method('find')
+            ->method('get')
             ->with('recaptcha')
             ->willReturn([]);
 
