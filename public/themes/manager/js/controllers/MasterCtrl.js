@@ -124,6 +124,30 @@
         };
 
         /**
+         * @function refreshSecurity
+         * @memberOf MasterCtrl
+         *
+         * @description
+         *   Refreshes security credentials.
+         */
+        $scope.refreshSecurity = function() {
+          return http.get('manager_ws_auth_refresh').then(function(response) {
+            $scope.security.instance    = response.data.instance;
+            $scope.security.instances   = response.data.instances;
+            $scope.security.permissions = response.data.permissions;
+            $scope.security.user        = response.data.user;
+
+            webStorage.local.set('security', {
+              instance:    security.instance,
+              instances:   security.instances,
+              permissions: security.permissions,
+              token:       security.token,
+              user:        security.user
+            });
+          });
+        };
+
+        /**
          * Scrolls the page to top.
          */
         $scope.scrollTop = function() {
@@ -271,20 +295,7 @@
           $scope.errors = args.data;
           $location.url('/403');
 
-          http.get('manager_ws_auth_refresh').then(function(response) {
-            security.instance    = response.data.instance;
-            security.instances   = response.data.instances;
-            security.permissions = response.data.permissions;
-            security.user        = response.data.user;
-
-            webStorage.local.set('security', {
-              instance:    security.instance,
-              instances:   security.instances,
-              permissions: security.permissions,
-              token:       security.token,
-              user:        security.user
-            });
-          });
+          $scope.refreshSecurity();
         });
 
         /**
