@@ -328,7 +328,7 @@
                 </tbody>
               </table>
               <div class="text-center" ng-if="template.purchases.length > 0">
-                <a class="bold text-uppercase" ng-href="[% routing.ngGenerate('manager_purchases_list') %]">{t}More{/t}</a>
+                <a class="bold text-uppercase" ng-href="[% routing.ngGenerate('manager_purchases_list', { oql: 'instance_id=' + instance.id + ' limit 25' }) %]">{t}More{/t}</a>
               </div>
             </div>
           </div>
