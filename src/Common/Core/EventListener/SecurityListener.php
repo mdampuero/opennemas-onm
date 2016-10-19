@@ -53,6 +53,10 @@ class SecurityListener implements EventSubscriberInterface
     {
         $uri = $event->getRequest()->getRequestUri();
 
+        $instance = $this->container->get('core.instance');
+
+        $this->security->setInstance($instance);
+
         if (preg_match('@^/_.*@', $uri)
             || empty($this->context->getToken())
             || empty($this->context->getToken()->getUser())
@@ -61,7 +65,6 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        $instance    = $this->container->get('core.instance');
         $user        = $this->context->getToken()->getUser();
         $instances   = $this->getInstances($user);
         // TODO: Uncomment when checking by category name
@@ -72,7 +75,6 @@ class SecurityListener implements EventSubscriberInterface
             ->getRepository('User', $user->getOrigin())
             ->find($user->id);
 
-        $this->security->setInstance($instance);
         $this->security->setInstances($instances);
         $this->security->setUser($user);
         $this->security->setCategories($user->categories);
