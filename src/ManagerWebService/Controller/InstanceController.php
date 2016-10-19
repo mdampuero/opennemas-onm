@@ -231,15 +231,12 @@ class InstanceController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
-        if (!$this->get('core.security')->hasPermission('MASTER')
-            && $this->get('core.security')->hasPermission('PARTNER')
-        ) {
-            if (!empty($oql) && !preg_match('/^(order|limit)/', $oql)) {
-                $oql = ' and ' . $oql;
-            }
+        // Fix OQL for Non-MASTER users
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
 
-            $oql = sprintf('owner_id = %s ', $this->get('core.user')->id)
-                . $oql;
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition($condition)->getOql();
         }
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
@@ -601,6 +598,27 @@ class InstanceController extends Controller
         $msg->add(_('Instance saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Ads additional filters when the current user is not a MASTER.
+     *
+     * @param string $oql The OQL to modify.
+     *
+     * @return string The OQL with additional filters.
+     */
+    private function fixOqlForPartners($oql)
+    {
+        if ($this->get('core.security')->hasPermission('MASTER')) {
+            return $oql;
+        }
+
+        // Surround current OQL by parenthesis
+        if (!empty($oql) && !preg_match('/^\s*(order|limit)/', $oql)) {
+            $filters = trim(preg_split('/order|limit|offset/', $oql)[0]);
+            $oql = ' and' . str_replace($filters, " ($filters) ", $oql );
+        }
+
     }
 
     /**
