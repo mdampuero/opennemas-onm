@@ -21,12 +21,8 @@ class RecaptchaTest extends KernelTestCase
             ->setMethods([ 'isSuccess', 'verify' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('SettingDataSet')
-            ->setmethods([ 'get' ])
-            ->getMock();
-
-        $this->ormManager = $this->getMockBuilder('EntityManager')
-            ->setMethods([ 'getRepository' ])
+        $this->repository = $this->getMockBuilder('SettingManager')
+            ->setMethods([ 'find' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('ServiceContainer')
@@ -66,15 +62,12 @@ class RecaptchaTest extends KernelTestCase
     {
         $this->container->expects($this->any())
             ->method('get')
-            ->with('orm.manager')
-            ->willReturn($this->ormManager);
-
-        $this->ormManager->expects($this->any())
-            ->method('getRepository')
+            ->with('setting_repository')
             ->willReturn($this->repository);
 
         $this->repository->expects($this->once())
-            ->method('get')
+            ->method('find')
+            ->with('recaptcha')
             ->willReturn([ 'private_key' => 'wobble', 'public_key' => 'baz' ]);
 
         $this->recaptcha->configureFromSettings();
@@ -89,14 +82,12 @@ class RecaptchaTest extends KernelTestCase
     {
         $this->container->expects($this->any())
             ->method('get')
-            ->willReturn($this->ormManager);
-
-        $this->ormManager->expects($this->any())
-            ->method('getRepository')
+            ->with('setting_repository')
             ->willReturn($this->repository);
 
         $this->repository->expects($this->once())
-            ->method('get')
+            ->method('find')
+            ->with('recaptcha')
             ->willReturn([]);
 
         $this->recaptcha->configureFromSettings();

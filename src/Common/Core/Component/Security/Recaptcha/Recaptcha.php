@@ -75,9 +75,7 @@ class Recaptcha
      */
     public function configureFromSettings()
     {
-        $keys = $this->container->get('orm.manager')
-            ->getRepository('Settings', 'instance')
-            ->get('recaptcha');
+        $keys = $this->container->get('setting_repository')->find('recaptcha');
 
         if (empty($keys)
             || !is_array($keys)
