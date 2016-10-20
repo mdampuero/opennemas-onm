@@ -6,7 +6,10 @@ function smarty_modifier_ads_in_body($body)
 {
     // Get inBody ads
     $ads = \Advertisement::findForPositionIdsAndCategory(
-        [2201,2202,2203,2204,2205,2206,2207],
+        [
+            2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211,
+            3201,3202,3203,3204,3205,3206,3207,3208,3209,3210,3211
+        ],
         0
     );
 
