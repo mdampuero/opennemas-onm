@@ -252,6 +252,7 @@ class InstanceController extends Controller
         return new JsonResponse([
             'total'   => $total,
             'results' => $instances,
+            'extra'   => [ 'users' => $this->getUsers() ]
         ]);
     }
 
@@ -628,24 +629,42 @@ class InstanceController extends Controller
      */
     private function getTemplateParams()
     {
-        $lang    = $this->get('core.locale')->getLocaleShort();
-        $modules = $this->get('orm.manager')->getRepository('extension')
+        return [
+            'languages' => [
+                'en_US' => _("English"),
+                'es_ES' => _("Spanish"),
+                'gl_ES' => _("Galician")
+            ],
+            'plans'     => [
+                'BASIC',
+                'PROFESSIONAL',
+                'ADVANCED',
+                'EXPERT',
+                'OTHER',
+            ],
+            'themes'    => $this->getThemes(),
+            'timezones' => \DateTimeZone::listIdentifiers(),
+            'modules'   => $this->getExtensions(),
+            'users'     => $this->getUsers()
+        ];
+    }
+
+    /**
+     * Returns the list of extensions for UI selectors.
+     *
+     * @return array The list of extensions.
+     */
+    protected function getExtensions()
+    {
+        $lang       = $this->get('core.locale')->getLocaleShort();
+        $extensions = $this->get('orm.manager')->getRepository('Extension')
             ->findBy('type = "module" or type = "theme-addon"');
-        $themes = $this->get('orm.manager')->getRepository('theme')
-            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"]');
 
-        $users = $this->get('orm.manager')->getRepository('User', 'manager')
-            ->findBy('order by name asc');
-
-        $users = array_map(function ($a) {
-            return [ 'id' => $a->id, 'name' => $a->name ];
-        }, $users);
-
-        array_unshift($users, [ 'id' => null, 'name' => _('Select an user...') ]);
-
-        $modules = array_map(function (&$a) {
+        // TODO: Replace with translation support in converters when merging
+        //       feature/ONM-1661
+        $extensions = array_map(function (&$a) {
             foreach ([ 'about', 'description', 'name' ] as $key) {
-                if (!empty($a->{$key})) {
+                if (is_array($a->{$key}) && !empty($a->{$key})) {
                     $lang = $a->{$key}['en'];
 
                     if (array_key_exists($lang, $a->{$key})
@@ -659,8 +678,24 @@ class InstanceController extends Controller
             }
 
             return $a->getData();
-        }, $modules);
+        }, $extensions);
 
+        return $extensions;
+    }
+
+    /**
+     * Returns the list of themes for UI selectors.
+     *
+     * @return array The list of themes.
+     */
+    protected function getThemes()
+    {
+        $lang   = $this->get('core.locale')->getLocaleShort();
+        $themes = $this->get('orm.manager')->getRepository('theme')
+            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"]');
+
+        // TODO: Replace with translation support in converters when merging
+        //       feature/ONM-1661
         $themes = array_map(function (&$a) {
             foreach ([ 'about', 'description', 'name' ] as $key) {
                 if (is_array($a->{$key}) && !empty($a->{$key})) {
@@ -679,23 +714,26 @@ class InstanceController extends Controller
             return $a->getData();
         }, $themes);
 
-        return [
-            'languages' => [
-                'en_US' => _("English"),
-                'es_ES' => _("Spanish"),
-                'gl_ES' => _("Galician")
-            ],
-            'plans'     => [
-                'BASIC',
-                'PROFESSIONAL',
-                'ADVANCED',
-                'EXPERT',
-                'OTHER',
-            ],
-            'themes'    => $themes,
-            'timezones' => \DateTimeZone::listIdentifiers(),
-            'modules'   => $modules,
-            'users'     => $users
-        ];
+        return $themes;
+    }
+
+    /**
+     * Returns the list of users for UI selectors.
+     *
+     * @return array The list of users.
+     */
+    protected function getUsers()
+    {
+        $users = $this->get('orm.manager')
+            ->getRepository('User', 'manager')
+            ->findBy('order by name asc');
+
+        $users = array_map(function ($a) {
+            return [ 'id' => $a->id, 'name' => $a->name ];
+        }, $users);
+
+        array_unshift($users, [ 'id' => null, 'name' => _('All') ]);
+
+        return $users;
     }
 }
