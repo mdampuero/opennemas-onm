@@ -35,47 +35,47 @@ function smarty_modifier_ads_in_body($body)
         switch ($key) {
             case '0': // After 1st paragraph
                 $ad = (array_key_exists(2201, $ads)) ? $ads[2201]: null;
-                $ad = (array_key_exists(3201, $ads)) ? $ads[3201]: null;
+                // $ad = (array_key_exists(3201, $ads)) ? $ads[3201]: null;
                 break;
             case '1': // After 2st paragraph
                 $ad = (array_key_exists(2202, $ads)) ? $ads[2202]: null;
-                $ad = (array_key_exists(3202, $ads)) ? $ads[3202]: null;
+                // $ad = (array_key_exists(3202, $ads)) ? $ads[3202]: null;
                 break;
             case '2': // After 3rd paragraph
                 $ad = (array_key_exists(2203, $ads)) ? $ads[2203]: null;
-                $ad = (array_key_exists(3203, $ads)) ? $ads[3203]: null;
+                // $ad = (array_key_exists(3203, $ads)) ? $ads[3203]: null;
                 break;
             case '3': // After 4th paragraph
                 $ad = (array_key_exists(2204, $ads)) ? $ads[2204]: null;
-                $ad = (array_key_exists(3204, $ads)) ? $ads[3204]: null;
+                // $ad = (array_key_exists(3204, $ads)) ? $ads[3204]: null;
                 break;
             case '4': // After 5th paragraph
                 $ad = (array_key_exists(2205, $ads)) ? $ads[2205]: null;
-                $ad = (array_key_exists(3205, $ads)) ? $ads[3205]: null;
+                // $ad = (array_key_exists(3205, $ads)) ? $ads[3205]: null;
                 break;
             case '5': // After 6th paragraph
                 $ad = (array_key_exists(2206, $ads)) ? $ads[2206]: null;
-                $ad = (array_key_exists(3206, $ads)) ? $ads[3206]: null;
+                // $ad = (array_key_exists(3206, $ads)) ? $ads[3206]: null;
                 break;
             case '6': // After 7th paragraph
                 $ad = (array_key_exists(2207, $ads)) ? $ads[2207]: null;
-                $ad = (array_key_exists(3207, $ads)) ? $ads[3207]: null;
+                // $ad = (array_key_exists(3207, $ads)) ? $ads[3207]: null;
                 break;
             case '7': // After 8th paragraph
                 $ad = (array_key_exists(2208, $ads)) ? $ads[2208]: null;
-                $ad = (array_key_exists(3208, $ads)) ? $ads[3208]: null;
+                // $ad = (array_key_exists(3208, $ads)) ? $ads[3208]: null;
                 break;
             case '8': // After 9th paragraph
                 $ad = (array_key_exists(2209, $ads)) ? $ads[2209]: null;
-                $ad = (array_key_exists(3209, $ads)) ? $ads[3209]: null;
+                // $ad = (array_key_exists(3209, $ads)) ? $ads[3209]: null;
                 break;
             case '9': // After 10th paragraph
                 $ad = (array_key_exists(2210, $ads)) ? $ads[2210]: null;
-                $ad = (array_key_exists(3210, $ads)) ? $ads[3210]: null;
+                // $ad = (array_key_exists(3210, $ads)) ? $ads[3210]: null;
                 break;
             case '10': // After 11th paragraph
                 $ad = (array_key_exists(2211, $ads)) ? $ads[2211]: null;
-                $ad = (array_key_exists(3211, $ads)) ? $ads[3211]: null;
+                // $ad = (array_key_exists(3211, $ads)) ? $ads[3211]: null;
                 break;
             default:
                 $ad = null;
