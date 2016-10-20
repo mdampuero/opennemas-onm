@@ -264,13 +264,10 @@ class ContentManager
                     continue;
                 }
 
-                $content = null;
-                foreach ($contentsRaw as $contentRaw) {
-                    if ($element['content_id'] == $contentRaw->id) {
-                        $content = $contentRaw;
-                        break;
-                    }
-                }
+                $content = array_filter($contentsRaw, function($contentRaw) use($element) {
+                    return $contentRaw->id == $element['content_id'];
+                });
+                $content = clone array_pop($content);
 
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
