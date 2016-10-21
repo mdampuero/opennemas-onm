@@ -130,7 +130,7 @@ class Nitf extends Parser
             $date = \DateTime::createFromFormat('Ymd\THis', $value);
         }
 
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date;
     }

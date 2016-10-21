@@ -44,14 +44,6 @@ class WidgetsController extends ContentController
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
-        foreach ($results as &$result) {
-            $createdTime = new \DateTime($result->created);
-            $result->created = $createdTime->format(\DateTime::ISO8601);
-
-            $updatedTime = new \DateTime($result->changed);
-            $result->changed = $updatedTime->format(\DateTime::ISO8601);
-        }
-
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,

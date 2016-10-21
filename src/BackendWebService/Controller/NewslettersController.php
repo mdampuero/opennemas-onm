@@ -45,7 +45,7 @@ class NewslettersController extends Controller
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search', '');
 
-        if (array_key_exists('title', $search)) {
+        if (is_array($search) && array_key_exists('title', $search)) {
             $titleFilter = 'title LIKE \''.(string) $search['title'][0]['value'].'\'';
         } else {
             $titleFilter = '1 = 1';
