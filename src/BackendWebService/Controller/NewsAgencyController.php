@@ -187,8 +187,14 @@ class NewsAgencyController extends Controller
             }
         }
 
+        $timezone  = $this->container->get('core.locale')->getTimeZone();
+
         $extra = array_merge(
-            [ 'imported' => $imported, 'related' => $related ],
+            [
+                'imported' => $imported,
+                'related' => $related,
+                'timezone' => $timezone
+            ],
             $this->getTemplateParams()
         );
 
