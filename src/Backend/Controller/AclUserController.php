@@ -148,7 +148,6 @@ class AclUserController extends Controller
     public function recoverPasswordAction(Request $request)
     {
         // Setup view
-        $this->view->assign('version', \Onm\Common\Version::VERSION);
         $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
         $this->view->assign('current_language', \Application::$language);
 
@@ -241,7 +240,6 @@ class AclUserController extends Controller
     public function regeneratePasswordAction(Request $request)
     {
         // Setup view
-        $this->view->assign('version', \Onm\Common\Version::VERSION);
         $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
         $this->view->assign('current_language', \Application::$language);
 

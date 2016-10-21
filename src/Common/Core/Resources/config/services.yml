@@ -30,6 +30,17 @@ parameters:
             - css_includes
             - js_includes
 services:
+    core.collector.brand:
+        class: Common\Core\Component\Collector\BrandCollector
+        public: false
+        arguments: [ '%kernel.root_dir%' ]
+        tags:
+            -
+                name:     data_collector
+                id:       'core.collector.brand'
+                template: '@Core/collector/brand.html.twig'
+                priority: 2000
+
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]

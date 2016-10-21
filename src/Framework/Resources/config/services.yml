@@ -60,16 +60,6 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
-    collector.onmbrand:
-        class: Framework\DataCollector\OpennemasBrandCollector
-        public: false
-        tags:
-            -
-                name:     data_collector
-                id:       'brand_collector'
-                template: '@OnmFramework/collector/onmbrand.html.twig'
-                priority: 2000
-
     collector.database:
         class: Framework\DataCollector\DatabaseCollector
         public: false
