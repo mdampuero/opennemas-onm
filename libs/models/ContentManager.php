@@ -1884,7 +1884,7 @@ class ContentManager
      *
      * @return array The array of cleaned contents.
      */
-    public function checkAndCleanFrontpageSize($contentIds)
+    public function checkAndCleanFrontpageSize($contents)
     {
         $contentsNotAdvertisements = array_filter($contents, function($content) {
             return $content->content_type_name !== 'advertisement';
