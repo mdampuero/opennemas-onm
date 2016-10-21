@@ -94,7 +94,7 @@ class NitfTest extends \PHPUnit_Framework_TestCase
 
 
         $date = \DateTime::createFromFormat('Ymd\THisP', '20150921T080200+0000');
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         $this->assertEquals($date, $this->parser->getCreatedTime($this->valid));
     }
@@ -141,7 +141,7 @@ class NitfTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertEquals(
-            'urn:nitf:foobar_agency:20150921100200:text:21155709',
+            'urn:nitf:foobar_agency:20150921080200:text:21155709',
             $this->parser->getUrn($this->valid)
         );
     }
@@ -162,7 +162,7 @@ class NitfTest extends \PHPUnit_Framework_TestCase
 
         $resource->created_time =
             \DateTime::createFromFormat('Ymd\THisP', '20150921T080200+0000');
-        $resource->created_time->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $resource->created_time->setTimezone(new \DateTimeZone('UTC'));
 
         $resource->created_time = $resource->created_time->format('Y-m-d H:i:s');
 
@@ -171,7 +171,7 @@ class NitfTest extends \PHPUnit_Framework_TestCase
         $resource->summary  = '<p>Sample summary</p>';
         $resource->title    = 'Sample title';
         $resource->type     = 'text';
-        $resource->urn      = 'urn:nitf:foobar_agency:20150921100200:text:21155709';
+        $resource->urn      = 'urn:nitf:foobar_agency:20150921080200:text:21155709';
 
         $this->assertEquals($resource, $this->parser->parse($this->valid));
     }
