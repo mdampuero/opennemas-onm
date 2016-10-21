@@ -166,7 +166,7 @@
                     <span ng-if="content.metadata == ''"><i class="fa fa-tags"></i> {t}No tags{/t}</span>
                   </div>
                   <div class="small-text">
-                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="small-text">
                     <strong>{t}Resolution{/t}:</strong>
