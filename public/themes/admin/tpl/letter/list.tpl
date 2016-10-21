@@ -164,7 +164,7 @@
                   </span>
                   <span uib-tooltip="[% content.body | striptags | limitTo: 140 %]...">[% content.title %]</span>
                   <div class="small-text">
-                    <strong>{t}Date{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <strong>{t}Date{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="small-text">
                     <strong>{t}Author{/t}:</strong> [% content.author %] ([% content.email %])
