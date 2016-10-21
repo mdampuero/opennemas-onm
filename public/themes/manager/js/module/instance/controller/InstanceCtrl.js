@@ -161,6 +161,8 @@
               $scope.loading = 0;
 
               return response.data.results;
+            }, function() {
+              $scope.loading = 0;
             });
         };
 
