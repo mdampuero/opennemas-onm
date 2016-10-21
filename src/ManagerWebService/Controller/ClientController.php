@@ -119,6 +119,15 @@ class ClientController extends Controller
     {
         $oql   = $request->query->get('oql', '');
 
+        // Fix OQL for Non-MASTER users
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
+
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition($condition)->getOql();
+        }
+
+
         $repository = $this->get('orm.manager')->getRepository('Client');
         $converter  = $this->get('orm.manager')->getConverter('Client');
 
@@ -307,6 +316,17 @@ class ClientController extends Controller
             'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo',
             'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
         ];
+
+        $users = $this->get('orm.manager')->getRepository('User', 'manager')
+            ->findBy();
+
+        $extra['users'] = [
+            [ 'id' => null, 'name' => _('Select an user...') ]
+        ];
+
+        foreach ($users as $user) {
+            $extra['users'][] = [ 'id' => $user->id, 'name' => $user->name ];
+        }
 
         if (empty($ids)) {
             return $extra;
