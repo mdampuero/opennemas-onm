@@ -1,5 +1,7 @@
 {
   "name": "opennemas",
+  "description": "The best CMS for online jornalism",
+  "homepage": "http://www.opennemas.com",
   "version": "0.1.0",
   "apidoc": {
     "title": "Opennemas REST API",
