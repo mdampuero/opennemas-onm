@@ -168,13 +168,6 @@ class Security
             return true;
         }
 
-        if ($permission !== 'MASTER'
-            && !empty($this->user)
-            && $this->user->isAdmin()
-        ) {
-            return true;
-        }
-
         // ADMIN and PARTER have all permissions for their instances
         // TODO: Remove isAdmin when using ADMIN permission for administrators
         if ($this->instance->internal_name !== 'manager'
