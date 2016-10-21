@@ -148,8 +148,8 @@ class AclUserController extends Controller
     public function recoverPasswordAction(Request $request)
     {
         // Setup view
-        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
-        $this->view->assign('current_language', \Application::$language);
+        $this->view->assign('locales', $this->get('core.locale')->getLocales());
+        $this->view->assign('locale', $this->get('core.locale')->getLocale());
 
         if ('POST' != $request->getMethod()) {
             return $this->render('login/recover_pass.tpl');
@@ -240,8 +240,8 @@ class AclUserController extends Controller
     public function regeneratePasswordAction(Request $request)
     {
         // Setup view
-        $this->view->assign('languages', $this->container->getParameter('core.locale.available'));
-        $this->view->assign('current_language', \Application::$language);
+        $this->view->assign('locales', $this->get('core.locale')->getLocales());
+        $this->view->assign('locale', $this->get('core.locale')->getLocale());
 
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
 

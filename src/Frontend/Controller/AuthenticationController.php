@@ -62,14 +62,10 @@ class AuthenticationController extends Controller
 
         $session->set('intention', $intention);
 
-        return $this->render(
-            'authentication/login.tpl',
-            [
-                'failed_login_attempts' => $session->get('failed_login_attempts'),
-                'current_language'      => \Application::$language,
-                'token'                 => $token,
-                'referer'               => $referer
-            ]
-        );
+        return $this->render('authentication/login.tpl', [
+            'failed_login_attempts' => $session->get('failed_login_attempts'),
+            'token'                 => $token,
+            'referer'               => $referer
+        ]);
     }
 }

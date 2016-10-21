@@ -83,8 +83,8 @@
           <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas" target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
           <li>
             <select name="language" id="language" class="language-selector">
-              {foreach from=$languages key=key item=language}
-              <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
+              {foreach from=$locales key=key item=value}
+              <option value="{$key}" {if $key == $locale}selected{/if}>{$value}</option>
               {/foreach}
             </select>
           </li>

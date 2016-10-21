@@ -95,20 +95,16 @@ class AuthenticationController extends Controller
 
         $request->getSession()->set('intention', $intention);
 
-        $currentLanguage = \Application::$language;
-
         $failedLoginAttempts = $request->getSession()->get('failed_login_attempts') ? : 0;
 
-        return new JsonResponse(
-            array(
-                'attempts'         => $failedLoginAttempts,
-                'current_language' => $currentLanguage,
-                'token'            => $token,
-                'referer'          => $referer,
-                'languages'        => $this->container->getParameter('core.locale.available'),
-                'message'          => $message,
-            )
-        );
+        return new JsonResponse([
+            'attempts' => $failedLoginAttempts,
+            'locale'   => $this->get('core.locale')->getLocale(),
+            'token'    => $token,
+            'referer'  => $referer,
+            'locales'  => $this->get('core.locale')->getLocales(),
+            'message'  => $message,
+        ]);
     }
 
     /**
