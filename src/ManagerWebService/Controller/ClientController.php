@@ -127,7 +127,6 @@ class ClientController extends Controller
                 ->addCondition($condition)->getOql();
         }
 
-
         $repository = $this->get('orm.manager')->getRepository('Client');
         $converter  = $this->get('orm.manager')->getConverter('Client');
 
@@ -193,6 +192,11 @@ class ClientController extends Controller
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Client')
             ->objectify($request->request->all());
+
+        // Add current user as owner if current user is a PARTNER
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $data['owner_id'] = $this->get('core.user')->id;
+        }
 
         $client = new Client($data);
 
@@ -267,6 +271,11 @@ class ClientController extends Controller
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Client')
             ->objectify($request->request->all());
+
+        // Add current user as owner if current user is a PARTNER
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $data['owner_id'] = $this->get('core.user')->id;
+        }
 
         $client = $em->getRepository('client')->find($id);
         $client->setData($data);
