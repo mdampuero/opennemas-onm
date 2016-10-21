@@ -246,7 +246,7 @@
            * @return {Boolean} True if the item is enabled. False otherwise.
            */
           sidebar.isEnabled = function(constraints) {
-            var enabled = true;
+            var enabled = false;
 
             if (!constraints) {
               return enabled;
@@ -254,7 +254,7 @@
 
             if (constraints.permission) {
               for (var i = 0; i < constraints.permission.length; i++) {
-                enabled = enabled &&
+                enabled = enabled ||
                   security.hasPermission(constraints.permission[i]);
               }
             }
