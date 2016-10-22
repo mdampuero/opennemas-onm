@@ -119,8 +119,6 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
                 ->findOneBy(sprintf('%s_id = "%s"', $resource, $userId));
 
         } catch (\Exception $e) {
-            error_log($e->getMessage());
-
             throw new UsernameNotFoundException(_(
                 'Unable to find an associated user to that social account.'
                 .' Notice that first you have to associated it from your Opennemas user account.'

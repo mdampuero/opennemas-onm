@@ -102,7 +102,9 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindWithoutError()
     {
-        $response = $this->getMock('\Braintree_Customer_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->id        = '1';
         $response->firstName = 'John';
         $response->lastName  = 'Doe';
@@ -156,10 +158,16 @@ class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindByWithoutError()
     {
-        $fbresponse = $this->getMock('\Braintree_ResourceCollection_' . uniqid());
+        $fbresponse = $this->getMockBuilder('\Braintree_ResourceCollection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $fbresponse->_ids = [ '1' ];
 
-        $fresponse = $this->getMock('\Braintree_Customer_' . uniqid());
+        $fresponse = $this->getMockBuilder('\Braintree_Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $fresponse->id        = '1';
         $fresponse->firstName = 'John';
         $fresponse->lastName  = 'Doe';

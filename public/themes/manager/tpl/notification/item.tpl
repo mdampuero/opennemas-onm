@@ -185,7 +185,7 @@
                 <div class="form-group">
                   <div class="controls">
                     <div class="checkbox">
-                      <input id="users" name="users" ng-model="notification.users" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                      <input id="users" name="users" ng-model="notification.users" ng-false-value="0" ng-true-value="1" type="checkbox">
                       <label for="users">{t}Show only for admins{/t}</label>
                     </div>
                   </div>

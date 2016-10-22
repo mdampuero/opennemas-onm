@@ -131,8 +131,8 @@
                 </th>
                 <th style="width:80px">&nbsp;</th>
                 <th class="hidden-xs">{t}Information{/t}</th>
-                <th class="hidden-xs">{t}Resolution{/t}</th>
-                <th class="hidden-xs">{t}Size{/t}</th>
+                <th class="hidden-xs text-center" width="150">{t}Resolution{/t}</th>
+                <th class="hidden-xs text-center" width="150">{t}Size{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -166,7 +166,7 @@
                     <span ng-if="content.metadata == ''"><i class="fa fa-tags"></i> {t}No tags{/t}</span>
                   </div>
                   <div class="small-text">
-                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="small-text">
                     <strong>{t}Resolution{/t}:</strong>
@@ -180,22 +180,22 @@
                     <div class="listing-inline-actions">
                       {acl isAllowed="PHOTO_UPDATE"}
                       <a class="link" href="[% edit(content.id, 'admin_photo_show') %]">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                       {/acl}
                       {acl isAllowed="PHOTO_DELETE"}
                       <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                        <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                        <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                       </button>
                       {/acl}
                       <a class="link" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]">
-                        <i class="fa fa-external-link"></i> {t}Link{/t}
+                        <i class="fa fa-external-link m-r-5"></i>{t}Link{/t}
                       </a>
                     </div>
                   </div>
                 </td>
-                <td class="hidden-xs">[% content.width %]x[% content.height %]</td>
-                <td class="hidden-xs">[% content.size %] KB</td>
+                <td class="hidden-xs text-center">[% content.width %]x[% content.height %]</td>
+                <td class="hidden-xs text-center">[% content.size %] KB</td>
               </tr>
             </tbody>
           </table>

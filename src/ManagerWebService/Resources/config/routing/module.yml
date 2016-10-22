@@ -1,3 +1,10 @@
+manager_ws_module_autocomplete:
+    path:     /modules/autocomplete
+    defaults: { _controller: ManagerWebServiceBundle:Module:autocomplete }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_module_check:
     path:     /modules/check/{uuid}
     defaults: { _controller: ManagerWebServiceBundle:Module:check }

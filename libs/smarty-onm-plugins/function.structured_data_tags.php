@@ -69,20 +69,32 @@ function smarty_function_structured_data_tags($params, &$smarty)
             $imageWidth = $content->cover_image->width;
             $imageHeight = $content->cover_image->height;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
+        } elseif (isset($content->img1) && ($content->img1 > 0)) {
+            $photoFront = getService('entity_repository')->find('Photo', $content->img1);
+            $imageWidth = $photoFront->width;
+            $imageHeight = $photoFront->height;
+            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
         } elseif (isset($content->thumb) && !empty($content->thumb)) {
             // Video
             $imageUrl = $content->thumb;
             if (strpos($content->thumb, 'http')  === false) {
                 $imageUrl = SITE_URL.$content->thumb;
             }
-            $imageSize = @getimagesize($imageUrl);
-            if (is_array($imageSize) &&
-                array_key_exists(0, $imageSize)
-                && array_key_exists(1, $imageSize)
-            ) {
-                $imageWidth = $imageSize[0];
-                $imageHeight = $imageSize[1];
-            }
+
+            // Don't get thumbnail size with external request
+            // Default is 700x450
+            $imageWidth = 700;
+            $imageHeight = 450;
+
+            // $imageSize = @getimagesize($imageUrl);
+            // if (is_array($imageSize) &&
+            //     array_key_exists(0, $imageSize)
+            //     && array_key_exists(1, $imageSize)
+            // ) {
+            //     $imageWidth = $imageSize[0];
+            //     $imageHeight = $imageSize[1];
+            // }
+
         }
 
         // Get primary logo

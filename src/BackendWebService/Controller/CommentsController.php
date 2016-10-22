@@ -72,63 +72,6 @@ class CommentsController extends ContentController
     }
 
     /**
-     * Updates contents status property.
-     *
-     * @param  Request      $request     The request object.
-     * @return JsonResponse              The response object.
-     */
-    public function batchToggleStatusAction(Request $request)
-    {
-        $em      = $this->get('comment_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
-
-        $status = $request->request->get('value');
-        $ids    = $request->request->get('ids');
-
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find($id);
-
-                if (!is_null($content->id)) {
-                    try {
-                        $content->setStatus($status);
-                        $em->delete($id);
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to update item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
-                        'id'   => $id,
-                        'text' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                        'type' => 'error'
-                    );
-                }
-            }
-        }
-
-        if (count($updated)) {
-            $success[] = array(
-                'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
-                'type'    => 'success'
-            );
-        }
-
-        return new JsonResponse(
-            array(
-                'messages'  => array_merge($success, $errors)
-            )
-        );
-    }
-
-    /**
      * Deletes a comment.
      *
      * @param  Request      $request     The request object.
@@ -181,11 +124,11 @@ class CommentsController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search');
+        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
         $order = null;
         if ($sortBy) {
@@ -199,10 +142,6 @@ class CommentsController extends ContentController
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
-        foreach ($results as &$result) {
-            $result->date = $result->date->format(\DateTime::ISO8601);
-        }
-
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
@@ -214,19 +153,78 @@ class CommentsController extends ContentController
         );
     }
 
+    /**
+     * Updates contents status property.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $em      = $this->get('comment_repository');
+        $errors  = array();
+        $success = array();
+        $updated = array();
+
+        $status = $request->request->get('status');
+        $ids    = $request->request->get('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $content = $em->find($id);
+
+                if (!is_null($content->id)) {
+                    try {
+                        $content->setStatus($status);
+                        $em->delete($id);
+                        $updated[] = $id;
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'      => $id,
+                            'message' => sprintf(_('Unable to update item with id "%d"'), $id),
+                            'type'    => 'error'
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'   => $id,
+                        'text' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type' => 'error'
+                    );
+                }
+            }
+        }
+
+        if (count($updated)) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
+                'type'    => 'success'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'messages'  => array_merge($success, $errors)
+            )
+        );
+    }
+
 
     /**
-     * Toggle status in comment given its id
+     * Toggle status in comment given its id.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
-    public function toggleStatusAction(Request $request, $id)
+    public function patchAction(Request $request, $id)
     {
 
-        $em       = $this->get('comment_repository');
+        $em      = $this->get('comment_repository');
         $comment = $em->find($id);
-        $status = $request->request->get('value');
+        $status  = $request->request->get('status');
 
         $messages = array();
         if (!is_null($comment->id)) {

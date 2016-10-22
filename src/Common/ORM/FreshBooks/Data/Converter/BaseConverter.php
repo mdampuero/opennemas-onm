@@ -38,8 +38,10 @@ class BaseConverter extends Converter
             $source = $source->getData();
         }
 
+        $source  = $this->normalize($source);
         $mapping = $this->metadata->mapping['freshbooks'];
         $data    = [];
+
         foreach ($mapping as $key => $map) {
             $from      = $this->metadata->properties[$key];
             $targetKey = $mapping[$key]['name'];
@@ -51,7 +53,7 @@ class BaseConverter extends Converter
             }
         }
 
-        return $this->normalize($data);
+        return $data;
     }
 
     /**
@@ -96,6 +98,7 @@ class BaseConverter extends Converter
     {
         $data = $this->normalizeCountry($data);
         $data = $this->normalizeLines($data);
+        $data = $this->normalizeType($data);
 
         return $data;
     }
@@ -131,11 +134,31 @@ class BaseConverter extends Converter
     {
         if (array_key_exists('lines', $data)) {
             foreach ($data['lines'] as &$line) {
+                unset($line['uuid']);
                 unset($line['order']);
             }
 
             $data['lines'] = [ 'line' => [ $data['lines'] ] ];
         }
+
+        return $data;
+    }
+
+    /**
+     * Normalizes the payment method for Freshbooks.
+     *
+     * @param array $data The entity data.
+     *
+     * @return array The normalized data.
+     */
+    protected function normalizeType($data)
+    {
+        if (!array_key_exists('type', $data) || empty($data['type'])) {
+            return $data;
+        }
+
+        $data['type'] = ($data['type'] === 'CreditCard' ?
+            'Credit Card' : 'PayPal');
 
         return $data;
     }
@@ -151,6 +174,7 @@ class BaseConverter extends Converter
     {
         $data = $this->unNormalizeCountry($data);
         $data = $this->unNormalizeLines($data);
+        $data = $this->unNormalizeType($data);
 
         return $data;
     }
@@ -203,4 +227,25 @@ class BaseConverter extends Converter
 
         return $data;
     }
+
+    /**
+     * Unnormalizes the payment method for Freshbooks.
+     *
+     * @param array $data The entity data.
+     *
+     * @return array The normalized data.
+     */
+    protected function unNormalizeType($data)
+    {
+        if (!array_key_exists('type', $data) || empty($data['type'])) {
+            return $data;
+        }
+
+        $data['type'] = $data['type'] === 'Credit Card' ?
+            'CreditCard' : 'PayPalAccount';
+
+        return $data;
+    }
+
+
 }

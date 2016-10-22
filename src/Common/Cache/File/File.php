@@ -146,6 +146,14 @@ class File extends Cache
     /**
      * {@inheritdoc}
      */
+    protected function executeScript($script, $args)
+    {
+        throw new \Exception();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function save($id, $data, $ttl = null)
     {
         $path = $this->path . DS . $id;

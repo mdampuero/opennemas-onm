@@ -69,10 +69,11 @@ $(document).ready(function() {
       $('.btn.btn-primary .text').html(btn.data('text'));
     });
 
+    var unsaved = false;
     if ($('#formulario').length > 0) {
+      unsaved = true;
       // Get form values and set unsaved
       var ov = $('#formulario').serialize();
-      var unsaved = true;
       // Check for CKEditor changes
       for (var i in CKEDITOR.instances) {
         CKEDITOR.instances[i].on('key', function() {

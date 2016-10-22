@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -62,7 +63,9 @@ class SecurityListener implements EventSubscriberInterface
 
         $instance    = $this->container->get('core.instance');
         $user        = $this->context->getToken()->getUser();
-        $categories  = $this->getCategories($user);
+        $instances   = $this->getInstances($user);
+        // TODO: Uncomment when checking by category name
+        //$categories  = $this->getCategories($user);
         $permissions = $this->getPermissions($user);
 
         $user = $this->container->get('orm.manager')
@@ -70,11 +73,19 @@ class SecurityListener implements EventSubscriberInterface
             ->find($user->id);
 
         $this->security->setInstance($instance);
+        $this->security->setInstances($instances);
         $this->security->setUser($user);
-        $this->security->setCategories($categories);
+        $this->security->setCategories($user->categories);
         $this->security->setPermissions($permissions);
 
-        if ($this->security->hasRole('ROLE_MANAGER') || $user->isEnabled()) {
+        if ($user->isEnabled()
+            && (
+                $this->security->hasPermission('MASTER')
+                || ($this->security->hasPermission('PARTNER')
+                    && $this->security->hasInstance($instance->internal_name))
+                || $user->type === 0
+            )
+        ) {
             return;
         }
 
@@ -88,8 +99,16 @@ class SecurityListener implements EventSubscriberInterface
 
         // Logout for backend
         if (preg_match('@^/admin.*@', $uri)) {
+            $this->context->setToken(null);
+
+            $event->getRequest()->getSession()->set(
+                \Symfony\Component\Security\Core\Security::AUTHENTICATION_ERROR,
+                new BadCredentialsException()
+            );
+
+            // Redirect to login and keep the session to show the error properly
             $event->setResponse(new RedirectResponse(
-                $this->router->generate('admin_logout')
+                $this->router->generate('admin_login')
             ));
         }
     }
@@ -117,7 +136,10 @@ class SecurityListener implements EventSubscriberInterface
             return [];
         }
 
-        $oql = sprintf('pk_content_category in [%s]', implode($user->categories));
+        $oql = sprintf(
+            'pk_content_category in ["%s"]',
+            implode('", "', $user->categories)
+        );
 
         $categories = $this->container->get('orm.manager')
             ->getRepository('Category')
@@ -126,6 +148,26 @@ class SecurityListener implements EventSubscriberInterface
         return array_map(function ($a) {
             return $a->name;
         }, $categories);
+    }
+
+    /**
+     * Returns the list of instances this user owns.
+     *
+     * @param UserInterface $user The current user.
+     *
+     * @return array The list of instances.
+     */
+    protected function getInstances(UserInterface $user)
+    {
+        $oql = sprintf('owner_id ="%s"', $user->id);
+
+        $instances = $this->container->get('orm.manager')
+            ->getRepository('Instance')
+            ->findBy($oql);
+
+        return array_map(function ($a) {
+            return $a->internal_name;
+        }, $instances);
     }
 
     /**
@@ -144,7 +186,7 @@ class SecurityListener implements EventSubscriberInterface
         $oql = sprintf('pk_user_group in [%s]', implode(',', $user->fk_user_group));
 
         $userGroups = $this->container->get('orm.manager')
-            ->getRepository('UserGroup')
+            ->getRepository('UserGroup', $user->getOrigin())
             ->findBy($oql);
 
         $permissions = [];

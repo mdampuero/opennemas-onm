@@ -24,6 +24,16 @@
          * @memberOf InstanceCtrl
          *
          * @description
+         *  Criteria to search clients.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = { epp: 10 };
+
+        /**
+         * @memberOf InstanceCtrl
+         *
+         * @description
          *   The instance object.
          *
          * @type {Object}
@@ -151,6 +161,8 @@
               $scope.loading = 0;
 
               return response.data.results;
+            }, function() {
+              $scope.loading = 0;
             });
         };
 
@@ -237,19 +249,17 @@
         $scope.save = function() {
           $scope.saving = 1;
 
-          //if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
-            //$scope.instance.domain_expire = $scope.instance.domain_expire.toString();
-          //}
-
-          //if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
-            //$scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
-          //}
-
           http.post('manager_ws_instance_save', { instance: $scope.instance,
             settings: $scope.settings }).then(function (response) {
               messenger.post(response.data);
 
               if (response.status === 201) {
+                // Add instance to owned instances
+                if (!$scope.security.hasPermission('MASTER') &&
+                    $scope.security.hasPermission('PARTNER')) {
+                  $scope.refreshSecurity();
+                }
+
                 var url = response.headers().location.replace('/managerws', '');
                 $location.path(url);
               }
@@ -284,15 +294,15 @@
         $scope.toggleAll = function() {
           if ($scope.selected.all) {
             for (var i in $scope.selected.plan) {
-              $scope.selected.plan[i] = true;
-              $scope.togglePlan(i);
+              if ($scope.security.canEnable(i)) {
+                $scope.selected.plan[i] = true;
+                $scope.togglePlan(i);
+              }
             }
           } else {
             $scope.selected.plan = {};
-            $scope.instance.activated_modules = [];
+            $scope.instance.activated_modules = [ $scope.instance.support_plan ];
           }
-
-          //$scope.updateSupport($scope.instance.support_plan);
         };
 
         /**
@@ -324,14 +334,6 @@
         $scope.update = function() {
           $scope.saving = 1;
 
-          //if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
-            //$scope.instance.domain_expire = $scope.instance.domain_expire.toString();
-          //}
-
-          //if ($scope.instance.external.last_invoice && angular.isObject($scope.instance.external.last_invoice)) {
-            //$scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
-          //}
-
           var data  = { instance: $scope.instance, settings: $scope.settings };
           var route = {
             name:   'manager_ws_instance_update',
@@ -345,32 +347,6 @@
             messenger.post(response.data);
             $scope.saving = 0;
           });
-        };
-
-        /**
-         * @function updateSupport
-         * @memberOf InstanceCtrl
-         *
-         * @description
-         *   Updates activated modules when support plan changes.
-         *
-         * @param {String} id The support plan id.
-         *
-         */
-        $scope.updateSupport = function(id) {
-          for (var i = 0; i < data.template.modules.length; i++) {
-            var module = data.template.modules[i];
-
-            if (module.plan === 'Support') {
-              var index = $scope.instance.activated_modules.indexOf(module.id);
-
-              if (index !== -1) {
-                $scope.instance.activated_modules.splice(index, 1);
-              }
-            }
-          }
-
-          $scope.instance.activated_modules.push(id);
         };
 
         $scope.$watch('instance.support_plan', function(nv, ov) {

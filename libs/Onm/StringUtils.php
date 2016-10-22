@@ -18,6 +18,22 @@ namespace Onm;
  **/
 class StringUtils
 {
+    static protected $trade = [
+        'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
+        'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
+        'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E', 'Ë'=>'E', 'Ê'=>'E',
+        'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',
+        'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o',
+        'ô'=>'o', 'Ó'=>'O', 'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O',
+        'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u', 'Ú'=>'U', 'Ù'=>'U',
+        'Ü'=>'U', 'Û'=>'U', '$'=>'',  '@'=>'',  '!'=>'',  '#'=>'',
+        '%'=>'',  '^'=>'',  '&'=>'',  '*'=>'',  '('=>'',  ')'=>'',
+        '-'=>'-', '+'=>'',  '='=>'',  '\\'=>'-', '|'=>'-', '`'=>'',
+        '~'=>'',  '/'=>'-', '\"'=>'', '\''=>'', '<'=>'',  '>'=>'',
+        '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C',  '·'=>'', 'ª'=>'',
+        'º'=>'', ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'nh', 'Ñ'=>'nh'
+    ];
+
     /**
      * Clean the special chars into a file name
      *
@@ -416,21 +432,27 @@ class StringUtils
     public static function normalize($name)
     {
         $newname = mb_strtolower($name, 'UTF-8');
-        $trade = array(
-            'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
-            'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
-            'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E', 'Ë'=>'E', 'Ê'=>'E',
-            'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',
-            'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o',
-            'ô'=>'o', 'Ó'=>'O', 'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O',
-            'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u', 'Ú'=>'U', 'Ù'=>'U',
-            'Ü'=>'U', 'Û'=>'U', '$'=>'',  '@'=>'',  '!'=>'',  '#'=>'',
-            '%'=>'',  '^'=>'',  '&'=>'',  '*'=>'',  '('=>'',  ')'=>'',
-            '-'=>'-', '+'=>'',  '='=>'',  '\\'=>'-', '|'=>'-', '`'=>'',
-            '~'=>'',  '/'=>'-', '\"'=>'', '\''=>'', '<'=>'',  '>'=>'',
-            '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C',  '·'=>'', 'ª'=>'',
-            'º'=>'', ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'nh', 'Ñ'=>'nh'
-        );
+        $newname = strtr($newname, self::$trade);
+        $newname = rtrim($newname);
+
+        return $newname;
+    }
+
+    /**
+     * Delete disallowed chars from a sentence and transform it to a url friendly name
+     *
+     * @param  string  $name the string to clean
+     *
+     * @return string the string cleaned
+     **/
+    public static function normalizeTag($name)
+    {
+        $newname = mb_strtolower($name, 'UTF-8');
+
+        // Keep # for estrelladigital and renderTags = hashtag
+        $trade = self::$trade;
+        unset($trade['#']);
+
         $newname = strtr($newname, $trade);
         $newname = rtrim($newname);
 
@@ -451,7 +473,7 @@ class StringUtils
         $items = explode(',', $metadata);
 
         foreach ($items as $k => $item) {
-            $items[$k] = trim($item);
+            $items[$k] = self::normalizeTag(trim($item));
         }
 
         $items = array_flip($items);
@@ -498,6 +520,9 @@ class StringUtils
             while (strpos($url, '//') != false) {
                 $url = str_replace('//', '/', $url);
             }
+        }
+        if (empty($url)) {
+            $url = '/';
         }
 
         return $url.$urlParams;

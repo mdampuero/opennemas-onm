@@ -79,7 +79,7 @@ class NewsMLEuropaPress extends NewsML
             new \DateTimeZone('UTC')
         );
 
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date;
     }

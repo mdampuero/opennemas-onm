@@ -1,12 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
-  {javascripts src="@Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
+  {javascripts}
     <script>
       $(document).ready(function($) {
         var btn   = $('.onm-button');
@@ -202,7 +197,7 @@
                     <option value="15"
                     {if isset($category) && ($category->internal_category eq 15)} selected="selected"{/if}>{t}Book{/t}</option>
                     {/is_module_activated}
-                    {acl isAllowed="ONLY_MASTERS"}
+                    {acl isAllowed="MASTER"}
                     <option value="0"
                     {if isset($category) && ($category->internal_category eq 0)} selected="selected"{/if}>{t}Internal{/t}</option>
                     {/acl}

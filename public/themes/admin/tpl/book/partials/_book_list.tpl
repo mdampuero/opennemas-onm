@@ -119,13 +119,13 @@
                 </div>
               </th>
               <th class="title">{t}Title{/t}</th>
-              <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
-              <th style="width:20px;" class="center hidden-xs">{t}Position{/t}</th>
+              <th class="hidden-xs" width="200">{t}Section{/t}</th>
+              <th class="hidden-xs text-center" width="100">{t}Position{/t}</th>
               {acl isAllowed="BOOK_AVAILABLE"}
-              <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
+              <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
               {/acl}
               {acl isAllowed="BOOK_AVAILABLE"}
-              <th class="center" style="width:35px;">{t}Published{/t}</th>
+              <th class="text-center" width="100">{t}Published{/t}</th>
               {/acl}
             </tr>
           </thead>
@@ -140,24 +140,22 @@
               <td>
                 [% content.title %]
                 <div class="small-text">
-                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </div>
                 <div class="listing-inline-actions">
                  {acl isAllowed="BOOK_UPDATE"}
                  <a class="link" href="[% edit(content.id, 'admin_book_show') %]">
-                  <i class="fa fa-pencil"></i>
-                  {t}Edit{/t}
+                  <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                 </a>
                 {/acl}
                 {acl isAllowed="BOOK_DELETE"}
                 <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                  <i class="fa fa-trash-o"></i>
-                  {t}Delete{/t}
+                  <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                 </button>
                 {/acl}
               </div>
             </td>
-            <td class="center hidden-xs">
+            <td class="hidden-xs">
               <span ng-if="content.category_name">
                 [% extra.categories[content.category_name] %]
               </span>
@@ -165,11 +163,11 @@
                 {t}Unassigned{/t}
               </span>
             </td>
-            <td class="center hidden-xs">
+            <td class="hidden-xs text-center">
               [% content.position %]
             </td>
             {acl isAllowed="BOOK_HOME"}
-            <td class="center hidden-xs">
+            <td class="hidden-xs text-center">
               <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                 <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading && content.in_home == 1, 'fa-home': !content.home_loading && content.in_home != 1 }"></i>
                 <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading && content.in_home != 1"></i>
@@ -177,7 +175,7 @@
             </td>
             {/acl}
             {acl isAllowed="BOOK_AVAILABLE"}
-            <td class="right">
+            <td class="text-center">
               <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                 <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
               </button>

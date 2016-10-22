@@ -95,43 +95,6 @@
         </div>
         {/is_module_activated}
       </uib-tab>
-      {if $smarty.session._sf2_attributes.user->isMaster()}
-      <uib-tab heading="{t}Scripts{/t}">
-        <div class="tab-wrapper">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="form-group">
-                <label class="form-label" for="header-script">
-                  {t}Scripts in header{/t}
-                  <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
-                </label>
-                <div class="controls">
-                  <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|escape:'html'|stripslashes|default:""}</textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="body-start-script">
-                  {t}Scripts at body start{/t}
-                  <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
-                </label>
-                <div class="controls">
-                  <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|escape:'html'|stripslashes|default:""}</textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="body-end-script">
-                  {t}Scripts at body end{/t}
-                  <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
-                </label>
-                <div class="controls">
-                  <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|escape:'html'|stripslashes|default:""}</textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </uib-tab>
-      {/if}
     </uib-tabset>
   </div>
 </form>

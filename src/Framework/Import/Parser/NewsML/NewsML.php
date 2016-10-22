@@ -88,7 +88,7 @@ class NewsML extends Parser
 
         if (is_array($date) && !empty($date)) {
             $date = \DateTime::createFromFormat('Ymd\THisP', $date[0]);
-            $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+            $date->setTimezone(new \DateTimeZone('UTC'));
 
             return $date;
         }

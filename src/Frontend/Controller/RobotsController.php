@@ -35,6 +35,11 @@ class RobotsController extends Controller
     {
         $disableRobots = $this->container->getParameter('disable_robots');
 
+        $sm = $this->get('setting_repository');
+        $rules = $sm->get(['robots_txt_rules']);
+        $customRules = (!is_array($rules) || !in_array('robots_txt_rules', $rules))
+            ? $rules['robots_txt_rules'] : '';
+
         if ($disableRobots) {
             $content = "User-Agent: *
 Disallow: /
@@ -48,8 +53,7 @@ Disallow: /harming/humans
 Disallow: /ignoring/human/orders
 Disallow: /harm/to/self
 
-Disallow: /tag
-Disallow: /archive
+{$customRules}
 
 Sitemap: ".SITE_URL."sitemapnews.xml.gz
 Sitemap: ".SITE_URL."sitemapweb.xml.gz
@@ -58,12 +62,17 @@ Sitemap: ".SITE_URL."sitemapimage.xml.gz
 ";
         }
 
+        $instanceName = getService('core.instance')->internal_name;
+
         return new Response(
             $content,
             200,
             array(
                 'Content-Type' => 'text/plain',
-                'x-tags'       => 'robots'
+                'x-cacheable'  => true,
+                'x-cache-for'  => '+100 day',
+                'x-tags'       =>  'instance-'.$instanceName.',robots',
+                'x-instance'   => $instanceName,
             )
         );
     }

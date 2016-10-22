@@ -25,11 +25,11 @@ class AdvertisementsController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search');
+        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
         $positionManager = $this->container->get('core.manager.advertisement');
         $map = $positionManager->getPositions();
@@ -43,14 +43,6 @@ class AdvertisementsController extends ContentController
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
-
-        foreach ($results as &$result) {
-            $createdTime = new \DateTime($result->created);
-            $result->created = $createdTime->format(\DateTime::ISO8601);
-
-            $updatedTime = new \DateTime($result->changed);
-            $result->changed = $updatedTime->format(\DateTime::ISO8601);
-        }
 
         return new JsonResponse(
             array(

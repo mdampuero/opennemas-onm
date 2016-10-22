@@ -969,6 +969,8 @@ admin_system_settings_save:
 admin_utils_calculate_tags:
     path:     /utils/calculate-tags
     defaults: { _controller  : BackendBundle:Utils:calculateTags }
+    options:
+        expose: true
 
 # Auth system routes
 admin_login:

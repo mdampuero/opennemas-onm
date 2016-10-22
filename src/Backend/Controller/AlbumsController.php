@@ -33,7 +33,7 @@ class AlbumsController extends Controller
      */
     public function init()
     {
-        $request = $this->get('request');
+        $request = $this->get('request_stack')->getCurrentRequest();
 
         $contentType = \ContentManager::getContentTypeIdFromName('album');
 
@@ -137,7 +137,7 @@ class AlbumsController extends Controller
             'category'       => $request->request->getDigits('category'),
             'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
-            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $request->request->get('album_photos_id'),
@@ -327,7 +327,7 @@ class AlbumsController extends Controller
             'category'       => $requestPost->getDigits('category'),
             'agency'         => $requestPost->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $requestPost->get('description', ''),
-            'metadata'       => $requestPost->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'with_comment'   => $requestPost->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $requestPost->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $requestPost->get('album_photos_id'),

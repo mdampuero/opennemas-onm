@@ -1,13 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"}
+  {javascripts}
     <script type="text/javascript">
       jQuery(document).ready(function($) {
         $('#date').datetimepicker({
@@ -53,9 +47,9 @@
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
             <li class="quicklinks">
-              <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
+              <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="update-button">
                 <span class="fa fa-save"></span>
-                <span class="text">{t}Update{/t}</span>
+                <span class="text">{t}Save{/t}</span>
               </button>
             </li>
           </ul>

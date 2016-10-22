@@ -21,6 +21,19 @@ abstract class Cache extends DataBuffer
     public $mru = [];
 
     /**
+     * Executes a script.
+     *
+     * @param string $script The script to execute.
+     * @param array  $args   The script arguments.
+     *
+     * @return mixed The script output.
+     */
+    public function execute($script, $args)
+    {
+        return $this->executeScript($script, $args);
+    }
+
+    /**
      * Checks if there is data in cache for the given id.
      *
      * @param string $id The cache id.
@@ -30,7 +43,7 @@ abstract class Cache extends DataBuffer
      */
     public function exists($id)
     {
-        $this->addToBuffer('exists', $id);
+        $this->addToBuffer('exists',  [ 'ids' => $id ]);
 
         $cacheId = $this->getNamespacedId($id);
 
@@ -48,7 +61,7 @@ abstract class Cache extends DataBuffer
      */
     public function remove($id)
     {
-        $this->addToBuffer('delete', $id);
+        $this->addToBuffer('delete', [ 'ids' => $id ]);
 
         $cacheId = $this->getNamespacedId($id);
 
@@ -65,6 +78,16 @@ abstract class Cache extends DataBuffer
     }
 
     /**
+     * Deletes all entries that match a pattern.
+     *
+     * @param strign $pattern The pattern to match.
+     */
+    public function deleteByPattern($pattern)
+    {
+        $this->removeByPattern($pattern);
+    }
+
+    /**
      * Gets the data from cache for the given id.
      *
      * @param mixed $id The cache id (or array of cache ids).
@@ -73,11 +96,17 @@ abstract class Cache extends DataBuffer
      */
     public function get($id)
     {
-        $this->addToBuffer('get', $id);
-
         if (is_array($id)) {
             // Get values from MRU data
             $values = array_intersect_key($this->mru, array_flip($id));
+
+            if (!empty($values)) {
+                $this->addToBuffer('get', [
+                    'ids'    => array_keys($values),
+                    'values' => array_values($values),
+                    'mru'    => true
+                ]);
+            }
 
             // Missed ids in MRU data
             $id = array_values(array_diff($id, array_keys($values)));
@@ -88,6 +117,11 @@ abstract class Cache extends DataBuffer
 
                 // Save values in MRU data
                 if (!empty($values)) {
+                    $this->addToBuffer('get', [
+                        'ids'    => array_keys($values),
+                        'values' => array_values($values)
+                    ]);
+
                     $this->mru = array_merge($this->mru, $values);
                 }
             }
@@ -96,6 +130,12 @@ abstract class Cache extends DataBuffer
         }
 
         if (array_key_exists($id, $this->mru)) {
+            $this->addToBuffer('get', [
+                'ids'    => [ $id ],
+                'values' => [ $this->mru[$id] ],
+                'mru'    => true
+            ]);
+
             return $this->mru[$id];
         }
 
@@ -103,6 +143,11 @@ abstract class Cache extends DataBuffer
         $value   = $this->fetch($cacheId);
 
         if (!empty($value)) {
+            $this->addToBuffer('get', [
+                'ids'    => [ $id ],
+                'values' => [ $value ]
+            ]);
+
             $this->mru[$id] = $value;
         }
 
@@ -229,6 +274,16 @@ abstract class Cache extends DataBuffer
      * @param mixed $id An array of cache ids.
      */
     abstract protected function deleteMulti($ids);
+ 
+   /**
+     * Executes a script.
+     *
+     * @param string $script The script to execute.
+     * @param array  $args   The script arguments.
+     *
+     * @return mixed The script output.
+     */
+    abstract protected function executeScript($script, $args);
 
     /**
      * Returns data from cache given an id.

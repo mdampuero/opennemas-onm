@@ -17,8 +17,8 @@
      *   Handles all actions in users listing.
      */
     .controller('UserCtrl', [
-      '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
-      function ($location, $routeParams, $scope, http, routing, messenger) {
+      '$location', '$routeParams', '$scope', '$timeout', 'http', 'routing', 'messenger',
+      function ($location, $routeParams, $scope, $timeout, http, routing, messenger) {
         /**
          * @memberOf UserCtrl
          *
@@ -36,13 +36,55 @@
         };
 
         /**
-         * @function autocomplete
+         * @function getExtensions
          * @memberOf UserCtrl
          *
          * @description
-         *   Adds a new price to the list.
+         *   Search user groups that macht the query.
+         *
+         * @param {String} query The query to match.
          */
-        $scope.autocomplete = function(query) {
+        var getm = null;
+        $scope.getExtensions = function(query) {
+          var tags = [];
+          var oql  = 'order by uuid asc limit 10';
+
+          if (query) {
+            oql = 'uuid ~ "' + query + '" ' + oql;
+          }
+
+          if (getm) {
+            $timeout.cancel(getm);
+          }
+
+          var route = {
+            name:   'manager_ws_user_autocomplete',
+            params: { oql: oql }
+          };
+
+          getm = $timeout(function() {
+            return http.get(route).then(function(response) {
+              for (var i = 0; i < response.data.extensions.length;  i++) {
+                tags.push(response.data.extensions[i]);
+              }
+
+              return tags;
+            });
+          }, 250);
+
+          return getm;
+        };
+
+        /**
+         * @function getGroups
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Search user groups that macht the query.
+         *
+         * @param {String} query The query to match.
+         */
+        $scope.getGroups = function(query) {
           var tags = [];
 
           for (var i = 0; i < $scope.extra.user_groups.length;  i++) {
@@ -54,7 +96,6 @@
 
           return tags;
         };
-
 
         /**
          * @function save
@@ -73,7 +114,13 @@
               .map(function(e) { return e.pk_user_group; });
           }
 
+          if (data.extensions) {
+            data.extensions = data.extensions
+              .map(function(e) { return e.name; });
+          }
+
           http.post('manager_ws_user_save', data).then(function (response) {
+            $scope.saving = 0;
             messenger.post(response.data);
 
             if (response.status === 201) {
@@ -81,7 +128,6 @@
               $location.path(url);
             }
           }, function(response) {
-            messenger.post(response.data);
             $scope.saving = 0;
           });
         };
@@ -107,11 +153,15 @@
               .map(function(e) { return e.pk_user_group; });
           }
 
+          if (data.extensions) {
+            data.extensions = data.extensions
+              .map(function(e) { return e.name; });
+          }
+
           http.put(route, data).then(function (response) {
-            messenger.post(response.data);
             $scope.saving = 0;
-          }, function(response) {
             messenger.post(response.data);
+          }, function(response) {
             $scope.saving = 0;
           });
         };

@@ -135,7 +135,7 @@
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
       <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
-        <div class="center">
+        <div class="text-center">
           <h4>{t}Unable to find any opinion that matches your search.{/t}</h4>
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
@@ -152,10 +152,9 @@
               </th>
               <th>{t}Title{/t}</th>
               <th class="hidden-xs">{t}Author{/t}</th>
-              <th class="center hidden-xs" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
-              <th class="center hidden-xs" style="width:80px;">{t}In home{/t}</th>
-              <th class="center" style="width:20px;">{t}Published{/t}</th>
-              <th class="center hidden-xs" style="width:20px;">{t}Favorite{/t}</th>
+              <th class="text-center hidden-xs" width="100">{t}Home{/t}</th>
+              <th class="text-center hidden-xs" width="100">{t}Favorite{/t}</th>
+              <th class="text-center" width="100">{t}Published{/t}</th>
             </tr>
           </thead>
           <tbody>
@@ -169,19 +168,17 @@
               <td>
                 [% content.title %]
                 <div class="small-text">
-                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="OPINION_UPDATE"}
-                  <a class="link" href="[% edit(content.id, 'admin_opinion_show') %]" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl}>
-                    <i class="fa fa-pencil"></i>
-                    {t}Edit{/t}
+                  <a class="link" href="[% edit(content.id, 'admin_opinion_show') %]" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="{$smarty.session._sf2_attributes.user->isAdmin()} || content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl}>
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                   {/acl}
                   {acl isAllowed="OPINION_DELETE"}
-                  <button class="link link-danger" {acl isNotAllowed="CONTENT_OTHER_DELETE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="sendToTrash(content)" type="button">
-                    <i class="fa fa-trash-o"></i>
-                    {t}Delete{/t}
+                  <button class="link link-danger" {acl isNotAllowed="CONTENT_OTHER_DELETE"} ng-if="{$smarty.session._sf2_attributes.user->isAdmin()} || content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="sendToTrash(content)" type="button">
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                   {/acl}
                 </div>
@@ -194,10 +191,7 @@
                   [% content.author %]
                 </span>
               </td>
-              <td class="center hidden-xs">
-                [% shvs.extra.views[content.id] %]
-              </td>
-              <td class="center hidden-xs">
+              <td class="text-center hidden-xs">
                 {acl isAllowed="OPINION_HOME"}
                 <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': content.in_home == 1, 'fa-home': content.in_home == 0 }" ng-if="content.author.meta.is_blog != 1" ></i>
@@ -208,14 +202,14 @@
                 </span>
                 {/acl}
               </td>
-              <td class="center">
+              <td class="text-center">
                 {acl isAllowed="OPINION_AVAILABLE"}
                 <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
                 </button>
                 {/acl}
               </td>
-              <td class="right hidden-xs">
+              <td class="text-center hidden-xs">
                 {acl isAllowed="OPINION_FAVORITE"}
                 <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" ng-if="content.type_opinion == 0" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>

@@ -162,9 +162,9 @@
                 </div>
               </th>
               <th>{t}Name{/t}</th>
-              <th style="width:300px" class="hidden-xs">{t}Content{/t}</th>
-              <th style="width:70px" class="hidden-xs">{t}Type{/t}</th>
-              <th class="center" style="width:20px">{t}Published{/t}</th>
+              <th class="hidden-xs" width="300">{t}Content{/t}</th>
+              <th class="hidden-xs" width="200">{t}Type{/t}</th>
+              <th class="text-center" width="100">{t}Published{/t}</th>
             </thead>
             <tbody>
               <tr ng-if="contents.length == 0">
@@ -184,12 +184,12 @@
                   <div class="listing-inline-actions">
                     {acl isAllowed="WIDGET_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_widget_show') %]" title="{t}Edit widget '[% content.title %]'{/t}">
-                      <i class="fa fa-pencil"></i> {t}Edit{/t}
+                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}
                     {acl isAllowed="WIDGET_DELETE"}
                     <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o"></i> {t}Delete{/t}
+                      <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>
                     {/acl}
                   </div>
@@ -203,7 +203,7 @@
                 <td class="hidden-xs">
                   [% content.renderlet %]
                 </td>
-                <td class="right">
+                <td class="text-center">
                   {acl isAllowed="WIDGET_AVAILABLE"}
                   <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.content_status == '1', 'fa-times text-error': !content.loading && content.content_status == '0' }"></i>

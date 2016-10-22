@@ -70,7 +70,7 @@
                       <i class="fa fa-pencil"></i>
                       {t}Edit{/t}
                     </a>
-                    {acl isAllowed="ONLY_MASTERS"}
+                    {acl isAllowed="MASTER"}
                       <button class="btn btn-link"  ng-click="clean($index, item.id)">
                         <i class="fa" ng-class="{ 'fa-fire': !item.cleaning, 'fa-circle-o-notch fa-spin': item.cleaning }"></i>
                         {t}Remove local files{/t}
@@ -86,8 +86,8 @@
                   [% extra.sync_from[item.sync_from] %]
                 </td>
                 <td class="server_name center">
-                  <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_news_agency_server_toggle', 'activated', item.activated != 1 ? 1 : 0, 'loading')" type="button">
-                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading && item.activated == '1', 'fa-times text-error': !item.loading && item.activated == '0' }"></i>
+                  <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated != 1 ? 1 : 0)" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                   </button>
                 </td>
               </tr>

@@ -205,10 +205,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.selected = { all: false, contents: [] };
       }
 
-      var url = routing.generate(route, {
-        contentType: $scope.criteria.content_type_name
-      });
-
       var processedFilters = oqlEncoder.encode($scope.criteria);
       var filtersToEncode = angular.copy($scope.criteria);
 
@@ -219,17 +215,18 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
             $scope.pagination.epp, $scope.pagination.page);
       }
 
-      var postData = {
+      var data = {
+        contentType:       $scope.criteria.content_type_name,
         elements_per_page: $scope.pagination.epp,
-        page: $scope.pagination.page,
-        sort_by: $scope.orderBy.name,
-        sort_order: $scope.orderBy.value,
-        search: processedFilters
+        page:              $scope.pagination.page,
+        sort_by:           $scope.orderBy.name,
+        sort_order:        $scope.orderBy.value,
+        search:            processedFilters
       };
 
-      $scope.postData = postData;
+      var url = routing.generate(route, data);
 
-      $http.post(url, postData).then(function(response) {
+      $http.get(url).then(function(response) {
         $scope.pagination.total = parseInt(response.data.total);
         if ($scope.mode === 'grid' && !reset) {
           $scope.contents = $scope.contents.concat(response.data.results);

@@ -13,15 +13,15 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: token })%]" target="_blank">
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_REPORT')">
+            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: security.token })%]" target="_blank">
               <i class="fa fa-download fa-lg"></i>
             </a>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_CREATE') && security.hasPermission('NOTIFICATION_REPORT')">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_CREATE')">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -32,7 +32,73 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="notification"}
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section pull-left">
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <i class="fa fa-arrow-left fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <h4>
+            [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+          </h4>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('fixed', 0)" uib-tooltip="{t}Unfixed{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-unlock fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('fixed', 1)" uib-tooltip="{t}Fixed{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-lock fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('forced', 0)" uib-tooltip="{t}Unforced{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-eye-slash fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('forced', 1)" uib-tooltip="{t}Forced{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-eye fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-times fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-check fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE') && security.hasPermission('NOTIFICATION_DELETE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_DELETE')">
+          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -188,52 +254,52 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="pointer" ng-click="sort('id')" width="50">
+              <th class="pointer" ng-click="sort('id')" width="10">
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
               <th ng-show="isColumnEnabled('title')">
                 {t}Title{/t}
               </th>
-              <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="130">
+              <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="10">
                 {t}Target{/t}
               </th>
-              <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')">
+              <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')" width="10">
                 l10n
               </th>
-              <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="250">
+              <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="50">
                 {t}Start{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('end')" ng-show="isColumnEnabled('end')" width="250">
+              <th class="pointer text-center" ng-click="sort('end')" ng-show="isColumnEnabled('end')" width="50">
                 {t}End{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('view')" ng-show="isColumnEnabled('view')" width="100">
+              <th class="text-center" ng-click="sort('view')" ng-show="isColumnEnabled('view')" width="10">
                 {t}View{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('view') == 'asc', 'fa fa-caret-down': isOrderedBy('view') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="100">
+              <th class="text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="10">
                 {t}Read{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('read') == 'asc', 'fa fa-caret-down': isOrderedBy('read') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('clicked')" ng-show="isColumnEnabled('clicked')" width="100">
+              <th class="text-center" ng-click="sort('clicked')" ng-show="isColumnEnabled('clicked')" width="10">
                 {t}Clicked{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('clicked') == 'asc', 'fa fa-caret-down': isOrderedBy('clicked') == 'desc'}"></i>
               </th>
-              <th class="text-center" ng-click="sort('opened')" ng-show="isColumnEnabled('opened')" width="100">
+              <th class="text-center" ng-click="sort('opened')" ng-show="isColumnEnabled('opened')" width="10">
                 {t}Opened{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opened') == 'asc', 'fa fa-caret-down': isOrderedBy('opened') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="85">
+              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="10">
                 {t}Fixed{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="85">
+              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="10">
                 {t}Forced{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="85">
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="10">
                 {t}Enabled{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
               </th>
@@ -250,16 +316,16 @@
               <td>
                 [% item.id %]
               </td>
-              <td ng-show="isColumnEnabled('title')">
+              <td ng-show="isColumnEnabled('title')" style="white-space: normal;">
                 <div ng-bind-html="item.title['en']"></div>
                 <div class="listing-inline-actions">
-                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" ng-if="security.hasPermission('NOTIFICATION_DELETE')" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" type="button">
+                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" ng-if="security.hasPermission('NOTIFICATION_DELETE')" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
-                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_csv', { id: item.id, token: token }) %]" target="_blank" title="{t}Download report{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_csv', { id: item.id, token: security.token }) %]" ng-if="security.hasPermission('NOTIFICATION_REPORT')" target="_blank" title="{t}Download report{/t}">
                     <i class="fa fa-download m-r-5"></i>{t}Report{/t}
                   </button>
                 </div>
@@ -304,19 +370,28 @@
                 </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('fixed')">
-                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" type="button">
+                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
                   <i class="fa" ng-class="{ 'fa-lock text-success' : !item.fixedLoading && item.fixed == 1, 'fa-unlock text-error': !item.fixedLoading && item.fixed == 0, 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-lock text-success' : item.fixed == 1, 'fa-unlock text-error': item.fixed == 0 }"></i>
+                </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('forced')">
-                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" type="button">
+                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
                   <i class="fa" ng-class="{ 'fa-eye text-success' : !item.forcedLoading && item.forced == 1, 'fa-eye-slash text-error': !item.forcedLoading && item.forced == 0, 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-eye text-success' : item.forced == 1, 'fa-eye-slash text-error': item.forced == 0 }"></i>
+                </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('enabled')">
-                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" type="button">
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
                   <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0, 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : item.enabled == 1, 'fa-times text-error': item.enabled == 0 }"></i>
+                </span>
               </td>
             </tr>
           </tbody>

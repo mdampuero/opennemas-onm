@@ -13,7 +13,7 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('USER_CREATE')">
             <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_user_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -24,7 +24,47 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="user"}
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section pull-left">
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <i class="fa fa-arrow-left fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <h4>
+            [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+          </h4>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('USER_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-times fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('USER_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-check fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('USER_UPDATE') && security.hasPermission('USER_DELETE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('USER_DELETE')">
+          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -163,14 +203,12 @@
                 [% item.id %]
               </td>
               <td ng-if="isColumnEnabled('name')">
-                <a ng-href="[% routing.ngGenerate('manager_user_show', { id: item.id }); %]">
-                  [% item.name %]
-                </a>
+                [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_show', { id: item.id }); %]">
+                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_show', { id: item.id }); %]" ng-if="security.hasPermission('USER_UPDATE')">
                     <i class="fa fa-pencil"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item.id)" type="button">
+                  <button class="link link-danger" ng-click="delete(item.id)" ng-if="security.hasPermission('USER_DELETE')" type="button">
                     <i class="fa fa-trash"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -186,9 +224,12 @@
                 </ul>
               </td>
               <td class="text-center" ng-if="isColumnEnabled('enabled')">
-                <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')">
+                <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')" ng-if="security.hasPermission('USER_UPDATE')">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated== '1', 'fa-times text-error': !item.activatedLoading && item.activated== '0' }"></i>
                 </button>
+                <span ng-if="!security.hasPermission('USER_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : item.activated== '1', 'fa-times text-error': item.activated== '0' }"></i>
+                </span>
               </td>
             </tr>
           </tbody>

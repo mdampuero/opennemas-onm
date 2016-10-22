@@ -6,21 +6,20 @@
 # sandra <sandra@openhost.es>, 2012, 2013.
 # Fran Dieguez <frandieguez@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Diego Blanco <diego@openhost.es>, 2014, 2015, 2016.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 23:25+0200\n"
-"PO-Revision-Date: 2016-08-22 12:46+0200\n"
-"Last-Translator: Diego Blanco <diego@openhost.es>\n"
-"Language-Team: Openhost S.L.\n"
+"POT-Creation-Date: 2016-10-17 10:13+0000\n"
+"PO-Revision-Date: 2016-09-21 16:57+0200\n"
+"Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
+"Language-Team: Galician\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 msgid "Frontpage"
 msgstr "Portada"
@@ -169,29 +168,6 @@ msgstr "No se pudieron guardar las nuevas posiciones."
 
 msgid "You don't have enough privileges to see this category."
 msgstr "No tienes permisos suficientes para ver esta categoría."
-
-msgid "Article successfully created."
-msgstr "Actículo creado correctamente."
-
-msgid "Unable to create the new article."
-msgstr "No se pudo crear el nuevo artículo."
-
-#, php-format
-msgid "Unable to find the article with the id \"%d\""
-msgstr "No se pudo encontrar un artículo con el identificador «%d»"
-
-msgid "Unable to update the article."
-msgstr "No se pudo actualizar el artículo."
-
-msgid ""
-"You can't modify this article because you don't have enought privileges."
-msgstr "No tienes suficientes permisos para modificar este artículo."
-
-msgid "Article data sent not valid."
-msgstr "Los datos del artículo enviados no son válidos."
-
-msgid "Article successfully updated."
-msgstr "Artículo actualizado correctamente."
 
 msgid "Invalid token"
 msgstr "Token no válido"
@@ -1082,6 +1058,29 @@ msgstr ""
 "en cuenta que primero debes asociarla desde tu cuenta de usuario en "
 "Opennemas."
 
+msgid "Unable to create the new article."
+msgstr "No se pudo crear el nuevo artículo."
+
+msgid "Article successfully created."
+msgstr "Actículo creado correctamente."
+
+#, php-format
+msgid "Unable to find the article with the id \"%d\""
+msgstr "No se pudo encontrar un artículo con el identificador «%d»"
+
+msgid "Unable to update the article."
+msgstr "No se pudo actualizar el artículo."
+
+msgid ""
+"You can't modify this article because you don't have enought privileges."
+msgstr "No tienes suficientes permisos para modificar este artículo."
+
+msgid "Article data sent not valid."
+msgstr "Los datos del artículo enviados no son válidos."
+
+msgid "Article successfully updated."
+msgstr "Artículo actualizado correctamente."
+
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "No se pudo eliminar el elemento con el identificador «%d»"
@@ -1094,6 +1093,9 @@ msgstr "No se pudo encontrar el elemento con el identificador «%d»"
 msgid "%d item(s) deleted successfully"
 msgstr "%d elemento(s) eliminado(s) correctamente"
 
+msgid "Item deleted successfully"
+msgstr "Elemento eliminado correctamente"
+
 #, php-format
 msgid "Unable to update item with id \"%d\""
 msgstr "No se pudo actualizar el elemento con el identificador «%d»"
@@ -1101,9 +1103,6 @@ msgstr "No se pudo actualizar el elemento con el identificador «%d»"
 #, php-format
 msgid "%d item(s) updated successfully"
 msgstr "%d elemento(s) actualizado(s) correctamente"
-
-msgid "Item deleted successfully"
-msgstr "Elemento eliminado correctamente"
 
 msgid "Item updated successfully"
 msgstr "Elemento actualizado correctamente"
@@ -1254,16 +1253,6 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de agencia de noticias eliminado."
 
-msgid "Newsletter deleted successfully."
-msgstr "Boletín de noticias eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "No se pudo eliminar el boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debes proporcionar un identificador para eliminar un boletín."
-
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Suscripción con identificador «%d» eliminada correctamente"
@@ -1300,6 +1289,16 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscribers."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
+
+msgid "Newsletter deleted successfully."
+msgstr "Boletín de noticias eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "No se pudo eliminar el boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debes proporcionar un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como leída correctamente"
@@ -1446,6 +1445,9 @@ msgstr "Usuario guardado correctamente."
 msgid "%s users saved successfully"
 msgstr "%s usuarios guardados correctamente"
 
+msgid "Not assigned"
+msgstr "No asignado"
+
 msgid "User group deleted successfully"
 msgstr "Grupo de usuarios eliminado correctamente"
 
@@ -1455,6 +1457,21 @@ msgstr "%s grupos de usuario eliminados correctamente"
 
 msgid "Application upgraded"
 msgstr "Aplicación actualizada"
+
+msgid "You are doing it wrong! Do it better."
+msgstr "¡Lo estas haciendo mal! Házlo mejor."
+
+msgid "You can't do that!"
+msgstr "¡No puedes hacer eso!"
+
+msgid "Ask an administrator."
+msgstr "Pregúntale al administrador"
+
+msgid "Something is wrong!"
+msgstr "¡Algo está mal!"
+
+msgid "Something unexpected happened!"
+msgstr "¡Ha pasado algo inesperado!"
 
 msgid "The XML could not be parsed"
 msgstr "No se puede procesar el archivo XML"
@@ -1735,6 +1752,17 @@ msgstr "No se pudo eliminar la instancia con el identificador «%s»"
 msgid "%s instances deleted successfully"
 msgstr "%s instancias eliminadas correctamente"
 
+msgid "You have reached the maximum number of instances."
+msgstr "Has alcanzado el número máximo de instancias."
+
+#, php-format
+msgid ""
+"If you need to create more instances, please <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contact us</a>."
+msgstr ""
+"Si necesitas crear mas instancias, por favor <a class=\"bold text-danger\" "
+"href=\"mailto:%s\">contáctanos</a>."
+
 msgid "Instance saved successfully"
 msgstr "Instancia guardada correctamente"
 
@@ -1747,6 +1775,9 @@ msgstr "La instancia ya existe"
 
 msgid "Unable to create the database for the instance"
 msgstr "No se pudo crear la base de datos de la instancia"
+
+msgid "Select an user..."
+msgstr "Seleccione un grupo…"
 
 #, php-format
 msgid "A module with the uuid '%s' already exists"
@@ -1890,6 +1921,15 @@ msgstr "Contenido ya importado"
 msgid "Advertisement"
 msgstr "Publicidad"
 
+msgid "Top Left LeaderBoard"
+msgstr ""
+
+msgid "Top Right LeaderBoard"
+msgstr ""
+
+msgid "[OI] Right Skyscraper"
+msgstr ""
+
 msgid "Album not available"
 msgstr "Álbum no disponible"
 
@@ -1916,6 +1956,30 @@ msgstr "Estado no válido."
 
 msgid "Unable to delete the comment."
 msgstr "No se pudo eliminar el comentario."
+
+msgid "trashed"
+msgstr "en papelera"
+
+msgid "pending"
+msgstr "pendiente"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "not scheduled"
+msgstr "no planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tiempo"
+
+msgid "postponed"
+msgstr "aplazado"
 
 msgid "Event"
 msgstr "Evento"
@@ -1949,30 +2013,6 @@ msgid ""
 msgstr ""
 "Se han eliminado algunos elementos porque la portada tenía demasiados "
 "contenidos."
-
-msgid "trashed"
-msgstr "en papelera"
-
-msgid "pending"
-msgstr "pendiente"
-
-msgid "available"
-msgstr "disponible"
-
-msgid "not scheduled"
-msgstr "no planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tiempo"
-
-msgid "postponed"
-msgstr "aplazado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -2158,6 +2198,24 @@ msgstr "Administrar paywall"
 
 msgid "Edit user own profile"
 msgstr "Editar perfil de usuario propio"
+
+msgid "Authenticate as a MASTER"
+msgstr "Autenticar como MASTER"
+
+msgid "Authenticate as a PARTNER"
+msgstr "Autenticar como PARTNER"
+
+msgid "Authenticate as an ADMINISTRATOR"
+msgstr "Autenticar como ADMINISTRADOR"
+
+msgid "Report"
+msgstr "Informe"
+
+msgid "Download"
+msgstr "Descargar"
+
+msgid "Execute"
+msgstr "Ejecutar"
 
 msgid "Static Page"
 msgstr "Página estática"
@@ -3436,12 +3494,6 @@ msgstr "Editando ePapel"
 msgid "Go Back"
 msgstr "Atrás"
 
-msgid "Updating"
-msgstr "Actualizando"
-
-msgid "Update"
-msgstr "Actualizar"
-
 msgid "Date"
 msgstr "Fecha"
 
@@ -3637,6 +3689,12 @@ msgstr "Autor"
 
 msgid "Sysops"
 msgstr "Sysops"
+
+msgid ""
+"There is not Internet at the moment, please try to save in a few minutes."
+msgstr ""
+"No hay conexión a Internet en este momento, por favor intenta guardar en "
+"unos minutos."
 
 msgid "There are no notifications for now."
 msgstr "No hay notificaciones por ahora."
@@ -4082,9 +4140,6 @@ msgstr "Editando archivo"
 
 msgid "Creating file"
 msgstr "Creando archivo"
-
-msgid "Download"
-msgstr "Descargar"
 
 msgid "Max allowed file size: %1 Mb"
 msgstr "Tamaño máximo de fichero permitido: %1 Mb"
@@ -4699,9 +4754,6 @@ msgstr "Correo electrónico"
 
 msgid "Backend access"
 msgstr "Acceso al panel"
-
-msgid "Not assigned"
-msgstr "No asignado"
 
 msgid "Your account is connected to %1."
 msgstr "Tu cuenta está conectada a %1."
@@ -5453,6 +5505,43 @@ msgstr ""
 "Si tienes una <strong>página en LinkedIn</strong>, añade el nombre de perfíl "
 "en el formulario. Por omisión se usará el de OpenNemas"
 
+msgid "Only masters"
+msgstr ""
+
+msgid "Robots.txt rules"
+msgstr ""
+
+msgid ""
+"Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
+"\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\">documentation</"
+"a>."
+msgstr ""
+
+msgid "Scripts in header"
+msgstr "Scripts en la cabecera"
+
+msgid "This scripts will be included before the </head> tag"
+msgstr "Estes scripts se incluirán antes de la etiqueta </head>"
+
+msgid "Scripts at body start"
+msgstr "Scripts al inicio del body"
+
+msgid "This scripts will be included before the <body> tag"
+msgstr "Estes scripts se incluirán después de la etiqueta <body>"
+
+msgid "Scripts at body end"
+msgstr "Scripts al final del body"
+
+msgid "This scripts will be included before the </body> tag"
+msgstr "Estes scripts se incluirán antes de la etiqueta </body>"
+
+msgid "Custom CSS"
+msgstr "CSS personalizado"
+
+#, fuzzy
+msgid "This sripts will be included in the global.css file."
+msgstr "Estes scripts se incluirán después de la etiqueta <body>"
+
 msgid "Editing author"
 msgstr "Editando autor"
 
@@ -5510,6 +5599,12 @@ msgstr "Creando vídeo"
 
 msgid "Editing video"
 msgstr "Editando vídeo"
+
+msgid "Updating"
+msgstr "Actualizando"
+
+msgid "Update"
+msgstr "Actualizar"
 
 msgid "Schedule"
 msgstr "Planificación"
@@ -5844,14 +5939,14 @@ msgstr "Cuando mostrar este anuncio"
 msgid "Restrictions"
 msgstr "Restricciones"
 
+msgid "Show this ad if satisfy one condition"
+msgstr "Muestra esta publicidad si satisface una condición"
+
 msgid "Without limits"
 msgstr "Sin límites"
 
 msgid "Date range"
 msgstr "Rango de fechas"
-
-msgid "Show this ad if satisfy one condition"
-msgstr "Muestra esta publicidad si satisface una condición"
 
 msgid "Until"
 msgstr "Hasta"
@@ -5868,11 +5963,8 @@ msgstr "Segundos durante los que este banner bloqueará toda la página."
 msgid "Where to show this ad"
 msgstr "Donde mostrar esta publicidad"
 
-msgid "In categories"
-msgstr "En las categorías"
-
-msgid "and pages of type"
-msgstr "y tipos de página"
+msgid "Pages of type"
+msgstr "Páginas del tipo"
 
 msgid "Inner article"
 msgstr "Noticia interior"
@@ -5903,6 +5995,9 @@ msgstr "Páginas AMP"
 
 msgid "Instant Articles pages"
 msgstr "Páginas de Instant Articles"
+
+msgid "In categories"
+msgstr "En las categorías"
 
 msgid "and inside the position"
 msgstr "y en la posición"
@@ -6014,27 +6109,6 @@ msgstr "ID de iadbox"
 
 msgid "Iadbox affiliate ID"
 msgstr "ID de afiliado de Iadbox"
-
-msgid "Scripts"
-msgstr "Scripts"
-
-msgid "Scripts in header"
-msgstr "Scripts en la cabecera"
-
-msgid "This scripts will be included before the </head> tag"
-msgstr "Estes scripts se incluirán antes de la etiqueta </head>"
-
-msgid "Scripts at body start"
-msgstr "Scripts al inicio del body"
-
-msgid "This scripts will be included before the <body> tag"
-msgstr "Estes scripts se incluirán después de la etiqueta <body>"
-
-msgid "Scripts at body end"
-msgstr "Scripts al final del body"
-
-msgid "This scripts will be included before the </body> tag"
-msgstr "Estes scripts se incluirán antes de la etiqueta </body>"
 
 msgid "Unable to find any advertisement that matches your search."
 msgstr "No se pudieron encontrar publicidades que coincidan con tu búsqueda."
@@ -6655,6 +6729,19 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Si, eliminarlos todos"
 
+msgid "There is a new version of this content that was saved as a draft."
+msgstr ""
+"Hay una nueva versión de este contenido que fue guardado como borrador."
+
+msgid "Discard it"
+msgstr "Descartar"
+
+msgid "Resume editing"
+msgstr "Continuar edición"
+
+msgid "Draft saved at "
+msgstr "Borrador guardado a las "
+
 msgid "Creating article"
 msgstr "Creando artículo"
 
@@ -7193,11 +7280,11 @@ msgstr "Autor del blog"
 msgid "Config opinion module"
 msgstr "Configuración del módulo «Opinión»"
 
-msgid "%1 doesn’t exist."
-msgstr "%1 no existe."
+msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
+msgstr "<a href=\"http://www.opennemas.com\">%1</a> no existe."
 
-msgid "Do you want to register %1?"
-msgstr "¿Quieres registrar %1?"
+msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
+msgstr "Desea registrar <a href=\"http://www.opennemas.com\">%1</a>?"
 
 msgid "'%1' not activated - Opennemas"
 msgstr "«%1» no activado - Opennemas"
@@ -7803,7 +7890,7 @@ msgid "This is the email used to create your newspaper"
 msgstr "Este es el correo-e usado para crear el periódico"
 
 msgid "Your newspaper was created on %1"
-msgstr "Tu periódico fué creado el %1"
+msgstr "Tu periódico fue creado el %1"
 
 msgid "Support plan"
 msgstr "Plan de soporte"
@@ -7883,9 +7970,6 @@ msgstr "Nuevo libro"
 msgid "There is nothing to see here, kid."
 msgstr "Nada que ver aquí, chaval."
 
-msgid "Report"
-msgstr "Informe"
-
 msgid "Action"
 msgstr "Acción"
 
@@ -7909,6 +7993,9 @@ msgstr "Plantilla"
 
 msgid "Contact mail"
 msgstr "Email de contacto"
+
+msgid "Owner"
+msgstr "Propietario"
 
 msgid "No main domain"
 msgstr "Sin dominio principal"
@@ -7967,6 +8054,9 @@ msgstr "¿Estás seguro de que quieres eliminar la instancia?"
 
 msgid "Do you want to delete the selected instances?"
 msgstr "¿Estás seguro de que quieres eliminar las instancias seleccionadas?"
+
+msgid "Download CSV of selected"
+msgstr "Descargar CSV con los seleccionados"
 
 msgid "Search"
 msgstr "Buscar"
@@ -8232,6 +8322,9 @@ msgstr "¿Estás seguro de que quieres eliminar el módulo?"
 msgid "Do you want to delete the selected modules?"
 msgstr "¿Estás seguro de que quieres eliminar los módulos seleccionados?"
 
+msgid "Disabled"
+msgstr "Desactivada"
+
 msgid "Search by UUID"
 msgstr "Buscar por UUID"
 
@@ -8243,24 +8336,6 @@ msgstr "Traducciones completadas"
 
 msgid "translations left"
 msgstr "traducciones que faltan"
-
-msgid "Download CSV of selected"
-msgstr "Descargar CSV con los seleccionados"
-
-msgid "Unfixed"
-msgstr "No fija"
-
-msgid "Fixed"
-msgstr "Fija"
-
-msgid "Unforced"
-msgstr "No forzada"
-
-msgid "Forced"
-msgstr "Forzado"
-
-msgid "Disabled"
-msgstr "Desactivada"
 
 msgid "Delete instance"
 msgstr "Eliminar instancia"
@@ -8359,6 +8434,9 @@ msgstr "Resumen de Opcache"
 msgid "Detailed statistics"
 msgstr "Estadísticas detalladas"
 
+msgid "Scripts"
+msgstr "Scripts"
+
 msgid "Path"
 msgstr "Ruta"
 
@@ -8392,9 +8470,6 @@ msgstr ""
 "compile.\n"
 "<br>Si selecciona «Todas» se limpiaran todos los ficheros compile y de cache."
 
-msgid "Execute"
-msgstr "Ejecutar"
-
 msgid ""
 "Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
 "                        from one specific instance."
@@ -8423,8 +8498,14 @@ msgstr "Fondo"
 msgid "Font color"
 msgstr "Color de la fuente"
 
+msgid "Fixed"
+msgstr "Fija"
+
 msgid "Notification always visible in dropdown"
 msgstr "Notificación siempre visible en el desplegable"
+
+msgid "Forced"
+msgstr "Forzado"
 
 msgid "Notification always visible before content"
 msgstr "Notificación siempre visible antes del contenido"
@@ -8450,6 +8531,12 @@ msgstr "¿Estás seguro de que quieres eliminar la notificación?"
 msgid "Do you want to delete the selected notifications?"
 msgstr ""
 "¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
+
+msgid "Unfixed"
+msgstr "No fija"
+
+msgid "Unforced"
+msgstr "No forzada"
 
 msgid "L10n"
 msgstr "L10n"
@@ -8477,6 +8564,9 @@ msgstr "Nuevo cliente"
 
 msgid "Edit client"
 msgstr "Editar cliente"
+
+msgid "This field is invalid"
+msgstr "Este campo es inválido"
 
 msgid "VAT No."
 msgstr "Nº fiscal"
@@ -8545,14 +8635,23 @@ msgstr "Parece que te perdimos en las nubes."
 msgid "The page your looking for is not here"
 msgstr "La página que estas buscando no está aquí"
 
+msgid "You shall not pass!"
+msgstr "No puedes pasar!"
+
+msgid "You are not allowed to access this resource."
+msgstr "No tiene permiso para acceder a este recurso."
+
 msgid "New user"
 msgstr "Nuevo usuario"
 
-msgid "This field is invalid"
-msgstr "Este campo es inválido"
-
 msgid "The passwords don't match"
 msgstr "Las contraseñas no coinciden"
+
+msgid "Extensions the user can activate in instance edition"
+msgstr "Extensiones que el usuario puede actiar en la edición de instancia"
+
+msgid "The maximum number of instances the user can create"
+msgstr "El número máximo de instancias que el usuario puede crear"
 
 msgid "User type"
 msgstr "Tipo de usuario"
@@ -8568,6 +8667,27 @@ msgstr "Buscar por nombre o correo"
 
 msgid "Do you want to log out?"
 msgstr "¿Quieres cerrar la sesión?"
+
+#~ msgid "There is a previous draft"
+#~ msgstr "Hay un borrador anterior"
+
+#~ msgid "Do you want to edit the existing draft?"
+#~ msgstr "¿Desea editar el borrador existente?"
+
+#~ msgid "No, discard"
+#~ msgstr "No, rechazarlo"
+
+#~ msgid "You are offline."
+#~ msgstr "Está sin conexión."
+
+#~ msgid "You are offline"
+#~ msgstr "Está sin conexión."
+
+#~ msgid "%1 doesn’t exist."
+#~ msgstr "%1 no existe."
+
+#~ msgid "Do you want to register %1?"
+#~ msgstr "¿Quieres registrar %1?"
 
 #~ msgid "Cache configuration saved successfully."
 #~ msgstr "Configuración de caché guardada correctamente."
@@ -8991,13 +9111,6 @@ msgstr "¿Quieres cerrar la sesión?"
 #~ "Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
 #~ "horas nuestro departamento de ventas te enviará la información de pago y "
 #~ "activación."
-
-#~ msgid ""
-#~ "If you need to update this information please <a href=\"mailto:"
-#~ "sales@openhost.es\">contact us</a>."
-#~ msgstr ""
-#~ "Si necesitas actualizar esta información, por favor <a href=\"mailto:"
-#~ "sales@openhost.es\">contactanos</a>."
 
 #~ msgid "This is not a valid VAT identification number"
 #~ msgstr "No es un número de identificación fiscal válido"
@@ -9857,9 +9970,6 @@ msgstr "¿Quieres cerrar la sesión?"
 #~ "Marca esta casilla si quieres mostrarle un mensaje a tus usuarios que les "
 #~ "informe que tu sitio web está usando cookies."
 
-#~ msgid "Owner email"
-#~ msgstr "Correo del propietario"
-
 #~ msgid "Add billing information"
 #~ msgstr "Añadir información de facturación"
 
@@ -10078,9 +10188,6 @@ msgstr "¿Quieres cerrar la sesión?"
 
 #~ msgid "Poll frontpage"
 #~ msgstr "Encuestas: portadas"
-
-#~ msgid "Custom CSS"
-#~ msgstr "CSS personalizado"
 
 #~ msgid "Sitemap: "
 #~ msgstr "Mapa do sitio: "

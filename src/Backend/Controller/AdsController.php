@@ -30,7 +30,8 @@ class AdsController extends Controller
         $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
 
         // Sometimes category is array. When create & update advertisement
-        $this->category = $this->get('request')->query->getDigits('category', 0);
+        $this->category = $this->get('request_stack')->getCurrentRequest()
+            ->query->getDigits('category', 0);
 
         // Fetch categories to all internal categories
         $contentTypes = [$contentType, 7, 9, 11, 14];
@@ -132,6 +133,8 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
 
         if ('POST' !== $request->getMethod()) {
+            $adsPositions = $this->container->get('core.manager.advertisement');
+
             $serverUrl = '';
             if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
                 $serverUrl = $openXsettings['url'];
@@ -142,10 +145,11 @@ class AdsController extends Controller
             return $this->render(
                 'advertisement/new.tpl',
                 [
-                    'themeAds'   => $ads,
-                    'filter'     => $filter,
-                    'page'       => $page,
-                    'server_url' => $serverUrl,
+                    'ads_positions' => $adsPositions,
+                    'themeAds'      => $ads,
+                    'filter'        => $filter,
+                    'page'          => $page,
+                    'server_url'    => $serverUrl,
                 ]
             );
         }
@@ -157,7 +161,7 @@ class AdsController extends Controller
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => $firstCategory,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -222,6 +226,7 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
 
+        $adsPositions = $this->container->get('core.manager.advertisement');
         $serverUrl = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
@@ -261,6 +266,7 @@ class AdsController extends Controller
         return $this->render(
             'advertisement/new.tpl',
             array(
+                'ads_positions' => $adsPositions,
                 'advertisement' => $ad,
                 'themeAds'      => $positionManager->getPositionsForTheme(),
                 'filter'        => $filter,
@@ -312,7 +318,7 @@ class AdsController extends Controller
         $data = array(
             'id'                 => $ad->id,
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => $firstCategory,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -441,12 +447,6 @@ class AdsController extends Controller
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             ];
 
-            if ($this->getUser()->isMaster()) {
-                $settings['header_script']     = $formValues->filter('header_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
-                $settings['body_end_script']   = $formValues->filter('body_end_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
-                $settings['body_start_script'] = $formValues->filter('body_start_script', '', FILTER_SANITIZE_MAGIC_QUOTES);
-            }
-
             foreach ($settings as $key => $value) {
                 $sm->set($key, $value);
             }
@@ -462,8 +462,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
             $keys = [
-                'ads_settings', 'body_end_script', 'body_start_script',
-                'dfp_options', 'header_script', 'iadbox_id', 'revive_ad_server',
+                'ads_settings', 'dfp_options',  'iadbox_id', 'revive_ad_server',
                 'tradedoubler_id',
             ];
 

@@ -33,9 +33,6 @@
         $scope.list = function() {
           $scope.loading = true;
 
-          var processedFilters = oqlEncoder.encode($scope.criteria);
-          var filtersToEncode = angular.copy($scope.criteria);
-
           var url = routing.generate('backend_ws_notifications_list');
 
           $http.get(url).success(function(response) {
@@ -58,11 +55,32 @@
           var url  = routing.generate('backend_ws_notifications_patch');
           var date = new Date();
           var ids  = $scope.notifications.map(function(e) { return e.id; });
+
+          if (ids.length === 0) {
+            return;
+          }
+
           var data = {
             ids: ids,
             'open_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
             'view_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
           };
+
+          $http.patch(url, data);
+
+          // Mark non-fixed as read
+          ids = $scope.notifications
+            .filter(function(e) { return !e.fixed; })
+            .map(function(e) { return e.id; });
+
+          if (ids.length === 0) {
+            return;
+          }
+
+          data = {
+            ids: ids,
+            'read_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
+          }
 
           $http.patch(url, data);
         };
@@ -83,8 +101,8 @@
             return;
           }
 
-          $scope.unread = nv.filter(function(a) {
-            return parseInt(a.read) === 0;
+          $scope.notViewed = nv.filter(function(a) {
+            return parseInt(a.view) === 0;
           });
 
           $scope.fixed = nv.filter(function(a) {

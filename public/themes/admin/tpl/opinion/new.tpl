@@ -42,7 +42,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="ArticleCtrl">
+<form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="OpinionCtrl">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -283,7 +283,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                {include  file="article/partials/_images.tpl" article=$opinion withoutVideo='true'}
+                {include  file="opinion/partials/_images.tpl" article=$opinion withoutVideo='true'}
             </div>
         </div>
     </div>

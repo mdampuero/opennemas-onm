@@ -107,7 +107,11 @@ EOF
         }
 
         $output->writeln("Exporting contents from instance $instance");
-        $this->getContainer()->get('core.loader')->loadInstanceFromInternalName($instance);
+        $instanceObject = $this->getContainer()->get('core.loader')->loadInstanceFromInternalName($instance);
+
+        $this->getContainer()->get('dbal_connection')->selectDatabase(
+            $instanceObject->getDatabaseName()
+        );
 
         // Initialize internal constants for logger
         define('INSTANCE_UNIQUE_NAME', $instance);
@@ -235,26 +239,27 @@ EOF
         $this->videosCounter = 0;
 
         // Set contents type array
-        $types = array(
+        $types = [
             'video',
             'album',
             'opinion',
             'article',
-        );
+        ];
 
         // Fetch contents
         foreach ($types as $type) {
-            $filters = array(
-                'content_type_name' => array(array('value' => $type)),
-            );
+            $filters = [
+                'content_type_name' => [[ 'value' => $type ]],
+            ];
             if ($this->limit != '*') {
                 $contents = $this->er->findBy($filters, $order, $this->limit, 1);
+
                 $this->processContents($contents);
             } else {
                 // Count contents
                 $countContents = $this->er->countBy($filters);
                 $this->total = $countContents;
-                $iterations = (int)($countContents/$perPage)+1;
+                $iterations = (int) ($countContents/$perPage)+1;
                 // Fetch contents paginated
                 $i = 1;
                 while ($i <= $iterations) {
@@ -269,11 +274,11 @@ EOF
 
         $this->output->writeln(
             "\n\nSaved contents with <info>$this->imagesCounter</info> images".
-            " into '$this->targetDir'".
-            "\nArticles -> <info>$this->articlesCounter</info>".
-            "\nOpinions -> <info>$this->opinionsCounter</info>".
-            "\nAlbums -> <info>$this->albumsCounter</info>".
-            "\nVideos -> <info>$this->videosCounter</info>"
+            " into '$this->targetDir'\n".
+            "\tArticles -> <info>$this->articlesCounter</info>\n".
+            "\tOpinions -> <info>$this->opinionsCounter</info>\n".
+            "\tAlbums -> <info>$this->albumsCounter</info>\n".
+            "\tVideos -> <info>$this->videosCounter</info>\n"
         );
     }
 

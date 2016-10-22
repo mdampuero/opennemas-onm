@@ -62,6 +62,15 @@ class Redis extends Cache
     {
         $this->getRedis()->delete($id);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function executeScript($script, $args)
+    {
+        return $this->getRedis()->eval($script, $args);
+    }
+
     /**
      * {@inheritdoc}
      */

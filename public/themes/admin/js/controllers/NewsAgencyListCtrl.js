@@ -37,7 +37,7 @@
         $scope.mode = 'list';
 
         // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', {$scope: $scope}));
+        $.extend(this, $controller('OpinionListCtrl', { $scope: $scope }));
 
         /**
          * @function _import
@@ -149,6 +149,7 @@
               template: function() {
                 return {
                   content:  content,
+                  timezone: $scope.extra.timezone,
                   imported: $scope.imported.indexOf(content.urn) !== -1,
                   related:  related,
                   routing:  routing

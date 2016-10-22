@@ -4,7 +4,7 @@
       <div class="radio">
         <input id="frontpage-intersticial-800x600" type="radio" name="type_advertisement" value="50" {if isset($advertisement) && $advertisement->type_advertisement == 50}checked="checked" {/if}/>
         <label for="frontpage-intersticial-800x600">
-          Frontpage Intersticial (800X600)
+          {$ads_positions->getAdvertisementName(50)} / Frontpage Intersticial (800X600)
         </label>
       </div>
     </div>
@@ -15,7 +15,7 @@
       <div class="radio">
         <input id="left-skyscraper-160x600" name="type_advertisement" type="radio" value="91" {if isset($advertisement) && $advertisement->type_advertisement == 91}checked="checked" {/if}/>
         <label for="left-skyscraper-160x600">
-          Left Skyscraper (160 x 600)
+          {$ads_positions->getAdvertisementName(91)} / Left Skyscraper (160 x 600)
         </label>
       </div>
     </div>
@@ -23,7 +23,7 @@
       <div class="radio">
         <input id="right-skyscraper-160x600" name="type_advertisement" type="radio" value="92" {if isset($advertisement) && $advertisement->type_advertisement == 92}checked="checked" {/if}/>
         <label for="right-skyscraper-160x600">
-          Right Skyscraper (160 x 600)
+          {$ads_positions->getAdvertisementName(92)} / Right Skyscraper (160 x 600)
         </label>
       </div>
     </div>

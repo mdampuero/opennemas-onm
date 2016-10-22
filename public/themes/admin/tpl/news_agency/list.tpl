@@ -33,7 +33,7 @@
                 </a>
               </li>
             {/acl}
-            {acl isAllowed="ONLY_MASTERS"}
+            {acl isAllowed="MASTER"}
               <li class="quicklinks">
                 <span class="h-seperate"></span>
               </li>
@@ -146,7 +146,7 @@
           <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
             <div class="center">
               <h4>{t}There is no elements to import{/t}</h4>
-              {acl isAllowed="ONLY_MASTERS"}
+              {acl isAllowed="MASTER"}
               <h6>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</h6>
               {/acl}
             </div>
@@ -186,7 +186,7 @@
                   </p>
                   <p class="visible-xs-block visible-sm-block">
                     <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                      [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                      [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.timezone %]
                     </span>
                   </p>
                   <div ng-show="!expanded[$index]" >
@@ -233,7 +233,7 @@
                 </td>
                 <td class="nowrap center hidden-xs hidden-sm">
                   <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                    [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.timezone %]
                   </span>
                 </td>
                 <td class="nowrap">

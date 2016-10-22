@@ -102,7 +102,7 @@
               <strong>Braintree</strong>
             </a>
             <h4 class="p-t-30">{t}Invoice{/t}</h4>
-            <a class="btn btn-white text-uppercase" ng-href="[% routing.generate('manager_ws_purchase_get_pdf', { id: purchase.id, token: token }) %]" target="_blank">
+            <a class="btn btn-white text-uppercase" ng-href="[% routing.generate('manager_ws_purchase_get_pdf', { id: purchase.id, token: security.token }) %]" target="_blank">
               <strong>PDF</strong>
             </a>
             <a class="btn btn-white text-uppercase text-success" ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% purchase.invoice_id %]" target="_blank">

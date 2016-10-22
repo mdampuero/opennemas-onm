@@ -110,6 +110,16 @@ class Locale
     }
 
     /**
+     * Get the timezone.
+     *
+     * @return string The current timezone.
+     */
+    public function getTimeZone()
+    {
+        return $this->timezone;
+    }
+
+    /**
      * Changes the system locale.
      *
      * @param string $locale The locale.

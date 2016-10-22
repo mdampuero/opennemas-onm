@@ -163,7 +163,7 @@ class CoreListener implements EventSubscriberInterface
             }
         }
 
-        return $scheme . $host . $port . $uri;
+        return $scheme . strtolower($host) . $port . $uri;
     }
 
     /**

@@ -9,6 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
+use Common\Core\Annotation\Security;
 use Common\ORM\Entity\UserGroup;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,6 +26,8 @@ class UserGroupController extends Controller
      * @param integer $id The user group id.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -33,7 +36,7 @@ class UserGroupController extends Controller
 
         $userGroup = $em->getRepository('UserGroup', 'manager')->find($id);
 
-        $em->remove($userGroup);
+        $em->remove($userGroup, $userGroup->getOrigin());
         $msg->add(_('User group deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -45,6 +48,8 @@ class UserGroupController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -64,7 +69,7 @@ class UserGroupController extends Controller
         $deleted = 0;
         foreach ($userGroups as $userGroup) {
             try {
-                $em->remove($userGroup);
+                $em->remove($userGroup, $userGroup->getOrigin());
                 $deleted++;
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error');
@@ -87,6 +92,8 @@ class UserGroupController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -112,6 +119,8 @@ class UserGroupController extends Controller
      * Returns the data to create a new user group.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_CREATE')")
      */
     public function newAction()
     {
@@ -124,6 +133,8 @@ class UserGroupController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_CREATE')")
      */
     public function saveAction(Request $request)
     {
@@ -134,7 +145,7 @@ class UserGroupController extends Controller
 
         $userGroup = new UserGroup($data);
 
-        $em->persist($userGroup);
+        $em->persist($userGroup, $userGroup->getOrigin());
         $msg->add(_('User group saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -155,6 +166,8 @@ class UserGroupController extends Controller
      * @param integer $id The group id.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_UPDATE')")
      */
     public function showAction($id)
     {
@@ -174,6 +187,8 @@ class UserGroupController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {
@@ -185,7 +200,7 @@ class UserGroupController extends Controller
         $userGroup = $em->getRepository('UserGroup', 'manager')->find($id);
         $userGroup->setData($data);
 
-        $em->persist($userGroup);
+        $em->persist($userGroup, $userGroup->getOrigin());
 
         $msg->add(_('User group saved successfully'), 'success');
 

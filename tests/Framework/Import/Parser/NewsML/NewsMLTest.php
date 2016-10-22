@@ -114,7 +114,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
 
         $date = \DateTime::createFromFormat('Ymd\THisP', '20040729T054956Z');
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         $this->assertEquals($date, $this->parser->getCreatedTime($this->valid));
     }
@@ -177,7 +177,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertEquals(
-            'urn:newsml:foobar_agency:20040729074956:text:040729054956.xm61wen7',
+            'urn:newsml:foobar_agency:20040729054956:text:040729054956.xm61wen7',
             $this->parser->getUrn($this->valid)
         );
     }
@@ -185,7 +185,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         $date = \DateTime::createFromFormat('Ymd\THisP', '20040729T054956Z');
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         $this->parser->parse($this->invalid);
         $bag = $this->parser->getBag();

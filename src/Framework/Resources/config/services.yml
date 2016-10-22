@@ -17,7 +17,7 @@ services:
         class: Framework\EventListener\VarnishCleanerListener
         arguments: [ %varnish%, '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
         tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100 }
+            - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 100 }
 
     kernel.listener.instance_exceptions:
         class: Framework\EventListener\InstanceExceptionsListener
@@ -73,7 +73,7 @@ services:
     collector.database:
         class: Framework\DataCollector\DatabaseCollector
         public: false
-        arguments: [ '@orm.connection.instance' ]
+        arguments: [ '@service_container' ]
         tags:
             -
                 name:     data_collector
@@ -84,7 +84,7 @@ services:
     collector.cache:
         class: Framework\DataCollector\CacheCollector
         public: false
-        arguments: [ '@cache' ]
+        arguments: [ '@service_container' ]
         tags:
             -
                 name:     data_collector
@@ -158,7 +158,7 @@ services:
 
     newsletter_manager:
         class: Repository\NewsletterManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, @core.template ]
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, '@core.template' ]
 
     automatic_contents:
         class: Onm\MachineSearcher
@@ -221,7 +221,7 @@ services:
 
     onm.braintree.factory:
         class: Framework\Braintree\BraintreeFactory
-        arguments: [ @comet_cult_braintree.factory ]
+        arguments: [ '@comet_cult_braintree.factory' ]
 
     paginator:
         class: Framework\Component\Paginator\Paginator

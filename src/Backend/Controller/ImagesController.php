@@ -28,7 +28,8 @@ class ImagesController extends Controller
     public function init()
     {
         $this->ccm         = \ContentCategoryManager::get_instance();
-        $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
+        $this->category    = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
         $this->contentType = \ContentManager::getContentTypeIdFromName('album');
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
@@ -152,7 +153,7 @@ class ImagesController extends Controller
                 'id'             => filter_var($id, FILTER_SANITIZE_STRING),
                 'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
                 'description'    => filter_var($_POST['description'][$id], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING)),
                 'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
                 'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
@@ -285,7 +286,7 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => \Onm\StringUtils::getTags($tempName),
+                        'metadata'          => \Onm\StringUtils::normalizeMetadata(\Onm\StringUtils::getTags($tempName)),
                     );
 
                     try {

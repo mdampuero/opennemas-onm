@@ -178,6 +178,26 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests normalizeType.
+     */
+    public function testNormalizeType()
+    {
+        $method = new \ReflectionMethod($this->converter, 'normalizeType');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            [ 'type' => 'Credit Card' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'CreditCard' ] ])
+        );
+
+        $this->assertEquals(
+            [ 'type' => 'PayPal' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPalAccount' ] ])
+        );
+
+    }
+
+    /**
      * Tests unNormalizeCountry.
      */
     public function testUnNormalizeCountry()
@@ -204,4 +224,26 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
             $method->invokeArgs($this->converter, [ [ 'lines' => [ 'line' => [] ] ] ])
         );
     }
+
+    /**
+     * Tests unNormalizeType.
+     */
+    public function testUnNormalizeType()
+    {
+        $method = new \ReflectionMethod($this->converter, 'unNormalizeType');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            [ 'type' => 'CreditCard' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'Credit Card' ] ])
+        );
+
+        $this->assertEquals(
+            [ 'type' => 'PayPalAccount' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPal' ] ])
+        );
+
+    }
+
+
 }

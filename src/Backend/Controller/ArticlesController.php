@@ -90,237 +90,7 @@ class ArticlesController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' !== $request->getMethod()) {
-            $this->loadCategories($request);
-
-            $authorsComplete = \User::getAllUsersAuthors();
-            $authors = array('0' => _(' - Select one author - '));
-            foreach ($authorsComplete as $author) {
-                $authors[$author->id] = $author->name;
-            }
-
-            return $this->render(
-                'article/new.tpl',
-                array(
-                    'availableSizes' => array(
-                        16 => '16',
-                        18 => '18',
-                        20 => '20',
-                        22 => '22',
-                        24 => '24',
-                        26 => '26',
-                        28 => '28',
-                        30 => '30',
-                        32 => '32',
-                        34 => '34'
-                    ),
-                    'authors'        => $authors,
-                    'commentsConfig' => s::get('comments_config')
-                )
-            );
-        }
-
-        $article = new \Article();
-
-        $postReq = $request->request;
-
-        $params        = $postReq->get('params');
-        $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
-        $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        $data = array(
-            'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'body'           => $postReq->filter('body', ''),
-            'category'       => $postReq->getDigits('category'),
-            'content_status' => (empty($contentStatus)) ? 0 : 1,
-            'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING),
-            'fk_video'       => $postReq->getDigits('fk_video', ''),
-            'fk_video2'      => $postReq->getDigits('fk_video2', ''),
-            'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'frontpage'      => (empty($frontpage)) ? 0 : 1,
-            'img1'           => $postReq->getDigits('img1', ''),
-            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'           => $postReq->getDigits('img2', ''),
-            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'slug'           => $postReq->filter('slug', '', FILTER_SANITIZE_STRING),
-            'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'subtitle'       => $postReq->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'summary'        => $postReq->filter('summary', ''),
-            'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'with_comment'   => (empty($withComment)) ? 0 : 1,
-            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
-            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
-            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
-            'fk_author'      => $postReq->getDigits('fk_author', 0),
-            'params' =>  array(
-                'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
-                'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
-                'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
-                'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
-                'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
-                'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
-                'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
-                'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
-                'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
-                'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
-                'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
-                'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
-                'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
-            ),
-        );
-
-        if ($article->create($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Article successfully created.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to create the new article.')
-            );
-        }
-
-        // Return user to list if has no update acl
-        if (Acl::check('ARTICLE_UPDATE')) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_article_show',
-                    array('id' => $article->id)
-                )
-            );
-        } else {
-            return $this->redirect(
-                $this->generateUrl('admin_articles')
-            );
-        }
-    }
-
-    /**
-     * Displays the article information given the article id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('ARTICLE_MANAGER')
-     *     and hasPermission('ARTICLE_UPDATE')")
-     */
-    public function showAction(Request $request)
-    {
-        $id = (int) $request->query->getDigits('id', null);
-
-        $article = new \Article($id);
-
-        if (is_null($article->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the article with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_articles'));
-        }
-
         $this->loadCategories($request);
-
-        if (is_string($article->params)) {
-            $article->params = unserialize($article->params);
-        }
-
-        // Photos de noticia
-        if (!empty($article->img1)) {
-            $photo1 = new \Photo($article->img1);
-            $this->view->assign('photo1', $photo1);
-        }
-
-        $img2 = $article->img2;
-        if (!empty($img2)) {
-            $photo2 = new \Photo($img2);
-            $this->view->assign('photo2', $photo2);
-        }
-
-        if (is_array($article->params)
-            && (array_key_exists('imageHome', $article->params))
-            && !empty($article->params['imageHome'])
-        ) {
-            $photoHome = new \Photo($article->params['imageHome']);
-            $this->view->assign('photo3', $photoHome);
-        }
-
-        $video = $article->fk_video;
-        if (!empty($video)) {
-            $video1 = new \Video($video);
-            $this->view->assign('video1', $video1);
-        }
-
-        $video = $article->fk_video2;
-        if (!empty($video)) {
-            $video2 = new \Video($video);
-            $this->view->assign('video2', $video2);
-        }
-
-        if ($article->isInFrontpageOfCategory((int) $article->category)) {
-            $article->promoted_to_category_frontpage = true;
-        }
-
-        // Get related contents service
-        $relationsHandler = getService('related_contents');
-
-        // Get frontpage related
-        $orderFront = [];
-        $relations = $relationsHandler->getRelations($id);
-        foreach ($relations as $aret) {
-            $orderFront[] =  new \Content($aret);
-        }
-        $this->view->assign('orderFront', \Onm\StringUtils::convertToUtf8($orderFront));
-
-        // Get inner related
-        $orderInner = [];
-        $relations = $relationsHandler->getRelationsForInner($id);
-        foreach ($relations as $aret) {
-            $orderInner[] = new \Content($aret);
-        }
-        $this->view->assign('orderInner', \Onm\StringUtils::convertToUtf8($orderInner));
-
-        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
-            $galleries = [];
-            if (array_key_exists('withGalleryHome', $article->params)) {
-                $galleries['home'] = new \Album($article->params['withGalleryHome']);
-            } else {
-                $galleries['home'] = null;
-            }
-
-            if (array_key_exists('withGallery', $article->params)) {
-                $galleries['front'] = new \Album($article->params['withGallery']);
-            } else {
-                $galleries['front'] = null;
-            }
-
-            if (array_key_exists('withGalleryInt', $article->params)) {
-                $galleries['inner'] = new \Album($article->params['withGalleryInt']);
-            } else {
-                $galleries['inner'] = null;
-            }
-
-            \Onm\StringUtils::convertToUtf8($galleries);
-            $this->view->assign('galleries', $galleries);
-
-            $orderHome = [];
-            $relations = $relationsHandler->getHomeRelations($id);//de portada
-            if (!empty($relations)) {
-                foreach ($relations as $aret) {
-                    $orderHome[] = new \Content($aret);
-                }
-                $this->view->assign('orderHome', \Onm\StringUtils::convertToUtf8($orderHome));
-            }
-        }
 
         $authorsComplete = \User::getAllUsersAuthors();
         $authors = array('0' => _(' - Select one author - '));
@@ -330,150 +100,48 @@ class ArticlesController extends Controller
 
         return $this->render(
             'article/new.tpl',
-            array(
-                'article'      => $article,
-                'authors'      => $authors,
-                'commentsConfig' => s::get('comments_config'),
+            [
                 'availableSizes' => array(
-                    16 => '16', 18 => '18', 20 => '20', 22 => '22',
-                    24 => '24', 26 => '26', 28 => '28',30 => '30',
-                    32 => '32', 34 => '34'
+                    16 => '16',
+                    18 => '18',
+                    20 => '20',
+                    22 => '22',
+                    24 => '24',
+                    26 => '26',
+                    28 => '28',
+                    30 => '30',
+                    32 => '32',
+                    34 => '34'
                 ),
-            )
+                'authors'        => $authors,
+                'commentsConfig' => $this->get('setting_repository')
+                    ->get('comments_config'),
+            ]
         );
     }
 
-    /**
-     * Updates the article information sent by POST
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('ARTICLE_MANAGER')
-     *     and hasPermission('ARTICLE_UPDATE')")
-     */
-    public function updateAction(Request $request)
+    public function showAction(Request $request, $id)
     {
-        $id = $request->query->getDigits('id');
+        $this->loadCategories($request);
 
-        $article = new \Article($id);
+        $allAuthors = \User::getAllUsersAuthors();
 
-        if ($article->id == null) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Unable to update the article.")
-            );
-
-            return $this->redirect(
-                $this->generateUrl('admin_articles')
-            );
+        $authors = [ '0' => _(' - Select one author - ') ];
+        foreach ($allAuthors as $author) {
+            $authors[$author->id] = $author->name;
         }
 
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
-            && !$article->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this article because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('admin_articles'));
-        }
-
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Article data sent not valid.")
-            );
-
-            return $this->redirect($this->generateUrl('admin_article_show', array('id' => $id)));
-        }
-
-        $article = new \Article();
-
-        $postReq = $request->request;
-
-        $params        = $postReq->get('params');
-        $contentStatus = $postReq->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $frontpage     = $postReq->filter('frontpage', '', FILTER_SANITIZE_STRING);
-        $withComment   = $postReq->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        $data = array(
-            'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'body'           => $postReq->filter('body', ''),
-            'category'       => $postReq->getDigits('category'),
-            'content_status' => (empty($contentStatus)) ? 0 : 1,
-            'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'fk_author'      => $postReq->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            'fk_video'       => $postReq->getDigits('fk_video', ''),
-            'fk_video2'      => $postReq->getDigits('fk_video2', ''),
-            'footer_video2'  => $postReq->filter('footer_video2', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'frontpage'      => (empty($frontpage)) ? 0 : 1,
-            'id'             => $id,
-            'img1'           => $postReq->getDigits('img1', ''),
-            'img1_footer'    => $postReq->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'           => $postReq->getDigits('img2', ''),
-            'img2_footer'    => $postReq->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
-            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
-            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
-            'slug'           => $postReq->filter('slug', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'subtitle'       => $postReq->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'summary'        => $postReq->filter('summary', ''),
-            'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'title_int'      => $postReq->filter('title_int', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'with_comment'   => (empty($withComment)) ? 0 : 1,
-            'params'         => array(
-                'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
-                'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
-                'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
-                'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
-                'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
-                'only_registered'   => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-                'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
-                'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
-                'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
-                'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
-                'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
-                'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
-                'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
-                'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
-                'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
-            ),
-        );
-
-        if ($article->update($data)) {
-            if ($data['content_status'] == 0) {
-                $article->dropFromAllHomePages();
-            }
-
-            // Clear caches
-            dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
-            dispatchEventWithParams('frontpage.save_position', array('category' => 0));
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Article successfully updated.")
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Unable to update the article.")
-            );
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_article_show',
-                array('id' => $article->id)
-            )
-        );
+        return $this->render('article/new.tpl', [
+            'authors' => $authors,
+            'availableSizes' => [
+                16 => '16', 18 => '18', 20 => '20', 22 => '22',
+                24 => '24', 26 => '26', 28 => '28',30 => '30',
+                32 => '32', 34 => '34'
+            ],
+            'commentsConfig' => $this->get('setting_repository')
+                ->get('comments_config'),
+            'id'      => $id,
+        ]);
     }
 
     /**
@@ -706,8 +374,7 @@ class ArticlesController extends Controller
         $er  = $this->get('entity_repository');
 
         $article    = new \Article();
-        $articleContents = $request->request->filter('contents');
-
+        $articleContents = $request->request->filter('article');
 
         // Load config
         $this->view = $this->get('core.template');
@@ -715,8 +382,8 @@ class ArticlesController extends Controller
 
         // Fetch all article properties and generate a new object
         foreach ($articleContents as $key => $value) {
-            if (isset($value['name']) && !empty($value['name'])) {
-                $article->{$value['name']} = $value['value'];
+            if (!empty($value)) {
+                $article->{$key} = $value;
             }
         }
 
@@ -752,14 +419,16 @@ class ArticlesController extends Controller
         }
 
         // Fetch related contents to the inner article
-        $relationes = array();
+        $relations = [];
         $innerRelations = json_decode($article->relatedInner, true);
-        foreach ($innerRelations as $key => $value) {
-            $relationes[$key] = $value['id'];
+        if (!empty($innerRelations)) {
+            foreach ($innerRelations as $key => $value) {
+                $relations[$key] = $value['id'];
+            }
         }
 
         $cm  = new \ContentManager();
-        $relat = $cm->getContents($relationes);
+        $relat = $cm->getContents($relations);
         $relat = $cm->getInTime($relat);
         $relat = $cm->getAvailable($relat);
 

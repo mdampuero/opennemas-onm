@@ -18,11 +18,11 @@ class CacheCollector extends DataCollector
     /**
      * Initializes the CacheCollector
      *
-     * @param CacheInterface $cache The cache service.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct($cache)
+    public function __construct($container)
     {
-        $this->cache = $cache;
+        $this->container= $container;
     }
 
     /**
@@ -30,27 +30,35 @@ class CacheCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $this->data = $this->cache->getBuffer();
+        $caches['cache.connection.manager'] =
+            $this->container->get('cache.manager')->getConnection('manager');
+        $caches['cache.connection.instance']  =
+            $this->container->get('cache.manager')->getConnection('instance');
+        $caches['cache_manager'] = $this->container->get('cache_manager');
+        $caches['cache']         = $this->container->get('cache');
+
+        foreach ($caches as $key => $cache) {
+            $data = $cache->getBuffer();
+
+            foreach ($data as $call) {
+                $this->data[] = [
+                    'name'   => $key,
+                    'method' => $call['method'],
+                    'time'   => $call['time'],
+                    'params' => $call['params']
+                ];
+            }
+        }
     }
 
     /**
-     * Returns the amount of executed queries.
+     * Returns the amount of non-MRU queries.
      *
-     * @return integer The amount of executed queries.
+     * @return integer The amount of non-MRU queries.
      */
-    public function getCount()
+    public function countNonMru()
     {
-        return count($this->data);
-    }
-
-    /**
-     * Returns the amount of cache queries.
-     *
-     * @return integer The amount of cache queries.
-     */
-    public function getCountCache()
-    {
-        return count($this->getCacheQueries());
+        return $this->getNonMruQueries($this->data);
     }
 
     /**
@@ -58,9 +66,44 @@ class CacheCollector extends DataCollector
      *
      * @return integer The amount of MRU queries.
      */
-    public function getCountMru()
+    public function countMru()
     {
-        return count($this->getMruQueries());
+        return $this->getMruQueries($this->data);
+    }
+
+    /**
+     * Returns the list of cache connections.
+     *
+     * @return array The list of executed queries.
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Returns the list of executed calls grouped by cache name.
+     *
+     * @return array The list of executed queries grouped by connection name.
+     */
+    public function getGrouped()
+    {
+        $grouped = [];
+
+        foreach ($this->data as $value) {
+            $grouped[$value['name']]['data'][] = $value;
+        }
+
+        foreach ($grouped as $key => $value) {
+            $grouped[$key]['normal'] = $this->getNonMruQueries($value['data']);
+            $grouped[$key]['mru']    = $this->getMruQueries($value['data']);
+
+            usort($value['data'], function ($a, $b) {
+                return $a['time'] > $b['time'];
+            });
+        }
+
+        return $grouped;
     }
 
     /**
@@ -72,36 +115,31 @@ class CacheCollector extends DataCollector
     }
 
     /**
-     * Returns the list of cache queries.
-     *
-     * @return array The list of cache queries.
-     */
-    public function getCacheQueries()
-    {
-        return array_filter($this->data, function ($a) {
-            return !array_key_exists('mru', $a) || !$a['mru'];
-        });
-    }
-
-    /**
      * Returns the list of MRU queries.
+     *
+     * @param array $calls The list of function calls.
      *
      * @return array The list of MRU queries.
      */
-    public function getMruQueries()
+    protected function getMruQueries($calls)
     {
-        return array_filter($this->data, function ($a) {
-            return array_key_exists('mru', $a) && $a['mru'];
-        });
+        return count(array_filter($calls, function ($a) {
+            return array_key_exists('mru', $a['params']) && $a['params']['mru'];
+        }));
     }
 
     /**
-     * Returns the list of executed queries.
+     * Returns the list of non-MRU queries.
      *
-     * @return array The list of executed queries.
+     * @param array $calls The list of function calls.
+     *
+     * @return array The list of cache queries.
      */
-    public function getQueries()
+    protected function getNonMruQueries($calls)
     {
-        return $this->data;
+        return count(array_filter($calls, function ($a) {
+            return !array_key_exists('mru', $a['params'])
+                || !$a['params']['mru'];
+        }));
     }
 }

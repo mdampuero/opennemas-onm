@@ -244,8 +244,6 @@ class ContentManager
             }
         );
 
-        $contentIds = $this->checkAndCleanFrontpageSize($contentIds);
-
         if (is_array($contentIds) && count($contentIds) > 0) {
             $er = getService('entity_repository');
 
@@ -257,6 +255,8 @@ class ContentManager
             $contentsRaw = $er->findMulti($contentsMap);
             $er->populateContentMetasInContents($contentsRaw);
 
+            $contentsRaw = $this->checkAndCleanFrontpageSize($contentsRaw);
+
             // iterate over all found contents to hydrate them
             foreach ($contentIds as $element) {
                 // Only add elements for the requested category id
@@ -264,13 +264,10 @@ class ContentManager
                     continue;
                 }
 
-                $content = null;
-                foreach ($contentsRaw as $contentRaw) {
-                    if ($element['content_id'] == $contentRaw->id) {
-                        $content = $contentRaw;
-                        break;
-                    }
-                }
+                $content = array_filter($contentsRaw, function($contentRaw) use($element) {
+                    return $contentRaw->id == $element['content_id'];
+                });
+                $content = clone array_pop($content);
 
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
@@ -1827,6 +1824,33 @@ class ContentManager
     }
 
     /**
+     * Returns the original ID for a given content slug with type
+     *
+     * @param string $slug the slug of the content
+     * @param string $type the type of the content
+     *
+     * @return int  id $content_id
+     */
+    public static function getOriginalIdFromSlugAndType($slug, $type)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM `translation_ids` WHERE `slug`=? AND `type`=? LIMIT 1',
+                [ $slug, $type ]
+            );
+
+            if (is_null($rs)) {
+                return false;
+            }
+
+            return $rs['pk_content'];
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Check if content id exists
      *
      * @param string $oldID the content id to check
@@ -1860,41 +1884,42 @@ class ContentManager
      *
      * @return array The array of cleaned contents.
      */
-    public function checkAndCleanFrontpageSize($contentIds)
+    public function checkAndCleanFrontpageSize($contents)
     {
-        $elementsToRemove = count($contentIds) - self::$frontpage_limit;
+        $contentsNotAdvertisements = array_filter($contents, function($content) {
+            return $content->content_type_name !== 'advertisement';
+        });
+
+        $elementsToRemove = count($contentsNotAdvertisements) - self::$frontpage_limit;
 
         // Remove first from placeholder_0_0
         if ($elementsToRemove > 0) {
+
+            // Sort by content_id
+            usort($contents, function ($a, $b) {
+                if ($a->id == $b->id) {
+                    return 0;
+                }
+
+                return ($a->starttime < $b->starttime) ? -1 : 1;
+            });
+
+            foreach ($contents as $key => $content) {
+                if ($content->content_type_name === 'article'
+                    || $content->content_type_name === 'opinion'
+                ) {
+                    unset($contents[$key]);
+                    $elementsToRemove--;
+                }
+            }
+
             getService('session')->getFlashBag()->add(
                 'error',
                 _('Some elements were removed because this frontpage had too many contents.')
             );
-
-            // Sort by content_id
-            usort($contentIds, function ($a, $b) {
-                if ($a['content_id'] == $b['content_id']) {
-                    return 0;
-                }
-
-                return ($a['content_id'] > $b['content_id']) ? -1 : 1;
-            });
-
-            $i = count($contentIds) - 1;
-
-            while ($i > 0 && $elementsToRemove > 0) {
-                if ($contentIds[$i]['content_type'] === 'Article'
-                    || $contentIds[$i]['content_type'] === 'Opinion'
-                ) {
-                    unset($contentIds[$i]);
-                    $elementsToRemove--;
-                }
-
-                $i--;
-            }
         }
 
-        return $contentIds;
+        return $contents;
     }
 
     /**

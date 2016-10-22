@@ -20,6 +20,7 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->fromDate(null));
         $this->assertEmpty($this->mapper->fromDate(''));
+        $this->assertEmpty($this->mapper->fromDate('bar'));
     }
 
     public function testFromDatetime()
@@ -36,6 +37,7 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->fromDatetime(null));
         $this->assertEmpty($this->mapper->fromDatetime(''));
+        $this->assertEmpty($this->mapper->fromDatetime('bar'));
     }
 
     public function testFromDatetimetz()
@@ -47,6 +49,7 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->fromDatetimetz(null));
         $this->assertEmpty($this->mapper->fromDatetimetz(''));
+        $this->assertEmpty($this->mapper->fromDatetimetz('bar'));
     }
 
     public function testFromString()
@@ -55,6 +58,10 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
         $expected->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
         $this->assertEquals($expected, $this->mapper->fromString('2000-01-01 10:00:10'));
+
+        $this->assertEmpty($this->mapper->fromString(null));
+        $this->assertEmpty($this->mapper->fromString(''));
+        $this->assertEmpty($this->mapper->fromString('bar'));
     }
 
     public function testFromTime()
@@ -66,6 +73,7 @@ class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->mapper->fromTime(null));
         $this->assertEmpty($this->mapper->fromTime(''));
+        $this->assertEmpty($this->mapper->fromTime('bar'));
     }
 
     public function testToDate()

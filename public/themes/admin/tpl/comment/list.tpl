@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -46,12 +46,12 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="COMMENT_AVAILABLE"}
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'rejected', 'loading')" uib-tooltip="{t}Reject{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="patchSelected('status', 'rejected')" uib-tooltip="{t}Reject{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
               </button>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'accepted', 'loading')" uib-tooltip="{t}Accept{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="patchSelected('status', 'accepted')" uib-tooltip="{t}Accept{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
               </button>
             </li>
@@ -134,7 +134,7 @@
                   </th>
                   <th>{t}Comment{/t}</th>
                   <th class="wrap hidden-xs">{t}In response to{/t}</th>
-                  <th style='width:10px;' class="center">{t}Published{/t}</th>
+                  <th class="text-center" width="100">{t}Published{/t}</th>
                 </tr>
               </thead>
               <tbody>
@@ -147,19 +147,19 @@
                   </td>
                   <td>
                     <div class="submitted-on">{t}Author:{/t} <strong>[% content.author %]</strong> (<span ng-if="content.author_email">[% content.author_email %]</span>) - <span class="hidden-xs">[% content.author_ip %]</span></div>
-                    <div class="submitted-on">{t}Submitted on:{/t} [% content.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
+                    <div class="submitted-on">{t}Submitted on:{/t} [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
                     <p>
                       [% content.body.split('&lt;p&gt;').join(' ').split('&lt;/p&gt;').join(' ') | limitTo : 150  %]<span ng-if="content.body.length > 150">...</span>
                     </p>
                     <div class="listing-inline-actions">
                       {acl isAllowed="COMMENT_UPDATE"}
                       <a class="link" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                       {/acl}
                       {acl isAllowed="COMMENT_DELETE"}
                       <button class="link link-danger" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
-                      <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                      <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                       </button>
                       {/acl}
                     </div>
@@ -167,11 +167,11 @@
                   <td class="hidden-xs">
                     [% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 250">...</span>
                   </td>
-                  <td class="right">
+                  <td class="text-center">
                     {acl isAllowed="COMMENT_AVAILABLE"}
-                    <button class="btn btn-white" ng-class="{ loading: content.loading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="updateItem($index, content.id, 'backend_ws_comment_toggle_status', 'status', content.status != 'accepted' ? 'accepted' : 'rejected', 'loading')" type="button">
-                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.status == 'accepted', 'fa-times text-error': !content.loading && (content.status == 'pending' || content.status == 'rejected') }"></i>
-                    </button>
+                      <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button">
+                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
+                      </button>
                     {/acl}
                   </td>
                 </tr>

@@ -28,11 +28,11 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, $contentType);
 
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search');
+        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
         $em = $this->get('entity_repository');
 
@@ -44,14 +44,6 @@ class ContentController extends Controller
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
-
-        foreach ($results as &$result) {
-            $createdTime = new \DateTime($result->created);
-            $result->created = $createdTime->format(\DateTime::ISO8601);
-
-            $updatedTime = new \DateTime($result->changed);
-            $result->changed = $updatedTime->format(\DateTime::ISO8601);
-        }
 
         return new JsonResponse(
             array(
@@ -86,14 +78,6 @@ class ContentController extends Controller
         $results = $em->findBy($search, $order);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
-
-        foreach ($results as &$result) {
-            $createdTime = new \DateTime($result->created);
-            $result->created = $createdTime->format(\DateTime::ISO8601);
-
-            $updatedTime = new \DateTime($result->changed);
-            $result->changed = $updatedTime->format(\DateTime::ISO8601);
-        }
 
         return new JsonResponse(
             array(
@@ -905,8 +889,8 @@ class ContentController extends Controller
         }
 
         // Fetch all content views at once
-        $vm = $this->get('content_views_repository');
-        $extra['views'] = $vm->getViews($contentIds);
+        //$vm = $this->get('content_views_repository');
+        //$extra['views'] = $vm->getViews($contentIds);
 
         $ids = array_unique($ids);
 
@@ -918,15 +902,17 @@ class ContentController extends Controller
             unset($ids[$key]);
         }
 
-        $converter = $this->get('orm.manager')->getConverter('User');
-        $users     = $this->get('orm.manager')->getRepository('User')
-            ->findBy(sprintf('id in [%s]', implode(',', $ids)));
+        $extra['authors'] = [];
+        if (!empty($ids)) {
+            $converter = $this->get('orm.manager')->getConverter('User');
+            $users     = $this->get('orm.manager')->getRepository('User')
+                ->findBy(sprintf('id in [%s]', implode(',', $ids)));
 
-        $extra['authors'] = array();
-        foreach ($users as $user) {
-            $user->eraseCredentials();
+            foreach ($users as $user) {
+                $user->eraseCredentials();
 
-            $extra['authors'][$user->id] = $converter->responsify($user->getData());
+                $extra['authors'][$user->id] = $converter->responsify($user->getData());
+            }
         }
 
         $ccm = \ContentCategoryManager::get_instance();

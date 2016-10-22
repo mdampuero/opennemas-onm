@@ -1,10 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{stylesheets src="
-    @AdminTheme/less/_domain.less"
-  filters="cssrewrite,less"}
-    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {stylesheets src="@AdminTheme/less/_domain.less" filters="cssrewrite,less" output="domain"}
   {/stylesheets}
 {/block}
 

@@ -21,22 +21,22 @@ class Uri
      * @var array
      **/
     private static $urlConfigurations = array(
-       'article'   =>  array( 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'opinion'   =>  array( 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'blog'      =>  array( 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'opinion_author_frontpage'  =>  array( 'opinion/autor/_ID_/_SLUG_'),
-       'blog_author_frontpage'   =>  array( 'blog/author/_SLUG_'),
-       'section'   =>  array( 'seccion/_ID_'),
-       'video'     =>  array( 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'album'     =>  array( 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'poll'      =>  array( 'encuesta/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'static_page'=> array( 'estaticas/_SLUG_.html'),
-       'ad'        =>  array( 'publicidad/_ID_.html'),
-       'articleNewsletter' => array( 'seccion/_CATEGORY_/#_ID_'),
-       'kiosko'  =>  array( 'portadas-papel/_CATEGORY_/_DATE__ID_.html'),
-       'letter'  =>  array( 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'special' =>  array( 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
-       'book'    =>  array( 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
+       'article'                  => [ 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'opinion'                  => [ 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'blog'                     => [ 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'opinion_author_frontpage' => [ 'opinion/autor/_ID_/_SLUG_' ],
+       'blog_author_frontpage'    => [ 'blog/author/_SLUG_' ],
+       'section'                  => [ 'seccion/_ID_' ],
+       'video'                    => [ 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'album'                    => [ 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'poll'                     => [ 'encuesta/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'static_page'              => [ 'estaticas/_SLUG_.html' ],
+       'ad'                       => [ 'publicidad/_ID_.html' ],
+       'articleNewsletter'        => [ 'seccion/_CATEGORY_/#_ID_' ],
+       'kiosko'                   => [ 'portadas-papel/_CATEGORY_/_DATE__ID_.html' ],
+       'letter'                   => [ 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'special'                  => [ 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
+       'book'                     => [ 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
     );
 
     /**
@@ -55,19 +55,9 @@ class Uri
      *
      * @return array the array of configurations
      **/
-    public static function getConfig($params = array())
+    public static function getConfig($params = [])
     {
-        if (isset($GLOBALS['url_configurations'])) {
-            $config = array_merge(
-                self::$urlConfigurations,
-                $GLOBALS['url_configurations'],
-                $params
-            );
-        } else {
-            $config = self::$urlConfigurations;
-        }
-
-        return $config;
+        return self::$urlConfigurations;
     }
 
     /**
@@ -78,7 +68,7 @@ class Uri
      *
      * @return string the uri generated
      **/
-    public static function generate($contentType, $params = array())
+    public static function generate($contentType, $params = [])
     {
 
         $config = Uri::getConfig();
@@ -89,14 +79,13 @@ class Uri
         }
 
         if (!isset($contentType)) {
-            $GLOBALS['application']->logger->debug('Error: Uri::generate should get $contentType and parameters');
-            $GLOBALS['application']->errors[] = 'Error: Uri::generate should get $contentType and parameters';
+            error_log('Error: Uri::generate should get $contentType and parameters');
 
             return;
         }
 
         $finaluri = '';
-        $replacements = array();
+        $replacements = [ ];
         foreach ($params as $tokenKey => $tokenValue) {
             $replacements["@_" . strtoupper($tokenKey) . "_@"] = $tokenValue;
         }

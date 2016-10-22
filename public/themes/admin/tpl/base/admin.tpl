@@ -29,46 +29,48 @@
   {block name="header-css"}
     {stylesheets src="
       @Common/components/bootstrap/dist/css/bootstrap.min.css,
+      @Common/components/select2/select2.css,
+      @Common/components/angular-ui-select/dist/select.min.css,
+      @Common/src/webarch/css/custom-icon-set.css,
+      @Common/src/webarch/css/magic_space.css,
+      @Common/src/webarch/css/responsive.css,
+      @Common/src/webarch/css/style.css,
+      @Common/components/ng-tags-input/ng-tags-input.min.css,
+      @Common/components/messenger/build/css/messenger-theme-flat.css,
+      @Common/components/messenger/build/css/messenger.css" filters="cssrewrite" output="core"}
+    {/stylesheets}
+    {stylesheets src="
+      @Common/src/sidebar/less/main.less,
+      @Common/src/opennemas-webarch/css/layout/*,
+      @Common/src/opennemas-webarch/less/main.less,
+      @Common/src/sidebar/less/main.less" filters="cssrewrite,less" output="core"}
+    {/stylesheets}
+
+    {stylesheets src="
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
-      @Common/components/angular-loading-bar/build/loading-bar.min.css,
-      @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
       @Common/components/animate.css/animate.min.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
+      @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
-      @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/messenger/build/css/messenger.css,
-      @Common/components/messenger/build/css/messenger.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
-      @Common/components/nanoscroller/bin/css/nanoscroller.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
-      @Common/components/select2/select2.css,
-      @Common/components/spinkit/css/spinkit.css" filters="cssrewrite"}
+      @Common/components/spinkit/css/spinkit.css" filters="cssrewrite" output="vendor"}
     {/stylesheets}
     {stylesheets src="
-      @Common/src/webarch/css/custom-icon-set.css,
-      @Common/src/webarch/css/magic_space.css,
-      @Common/src/webarch/css/responsive.css,
-      @Common/src/webarch/css/style.css,
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
-      @Common/src/sidebar/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
-      @Common/src/opennemas-webarch/css/layout/*,
-      @Common/src/opennemas-webarch/less/main.less,
       @AdminTheme/less/_album.less,
       @AdminTheme/less/_article.less,
       @AdminTheme/less/_comment.less,
       @AdminTheme/less/_image.less,
-      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less"}
+      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less" output="vendor"}
     {/stylesheets}
   {/block}
   {block name="header-js"}
@@ -238,7 +240,7 @@
                   </li>
                 {/block}
                 {block name="master_actions_block"}
-                {acl isAllowed="ONLY_MASTERS"}
+                {acl isAllowed="MASTER"}
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
                   </li>
@@ -274,12 +276,20 @@
             </div>
             <div class="pull-right ">
               <ul class="nav quick-section">
+                <li class="quicklinks ng-cloak" ng-if="offline">
+                  <a href="#" uib-tooltip="{t}There is not Internet at the moment, please try to save in a few minutes.{/t}" tooltip-placement="bottom">
+                    <i class="animated flash fa fa-bolt" style="color: #ff0000 !important; animation-duration: .5s"></i>
+                  </a>
+                </li>
+                <li class="quicklinks" ng-if="offline">
+                  <span class="h-seperate"></span>
+                </li>
                 {if is_object($smarty.session._sf2_attributes.user)}
                   <li class="quicklinks dropdown dropdown-notifications" ng-click="markAllAsView()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
-                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="unread.length > 0">
-                        [% unread.length %]
+                      <span class="ng-cloak notifications-orb animated bounceIn" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="notViewed.length > 0">
+                        [% notViewed.length %]
                       </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-notifications dropdown-menu-with-footer dropdown-menu-with-title ng-cloak">
@@ -448,7 +458,6 @@
   <![endif]-->
   {block name="global-js"}
       <!-- @Common/components/modernizr/modernizr.js, -->
-    <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
     {javascripts src="
       @Common/components/jquery/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
@@ -456,6 +465,27 @@
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/ckeditor/ckeditor.js,
+      @Common/components/ckeditor/config.js,
+      @Common/components/ckeditor/lang/en.js,
+      @Common/components/ckeditor/styles.js,
+      @Common/components/ckeditor/plugins/autogrow/plugin.js,
+      @Common/components/ckeditor/plugins/autolink/plugin.js,
+      @Common/components/ckeditor/plugins/notification/plugin.js,
+      @Common/components/ckeditor/plugins/notification/lang/en.js,
+      @Common/components/ckeditor/plugins/justify/plugin.js,
+      @Common/components/ckeditor/plugins/justify/lang/en.js,
+      @Common/components/ckeditor/plugins/justify/lang/es.js,
+      @Common/components/ckeditor/plugins/font/plugin.js,
+      @Common/components/ckeditor/plugins/font/lang/en.js,
+      @Common/components/ckeditor/plugins/font/lang/es.js,
+      @Common/components/imageresize/plugin.js,
+      @Common/src/ckeditor-autokeywords/plugin.js,
+      @Common/src/ckeditor-autokeywords/lang/en.js,
+      @Common/src/ckeditor-autokeywords/lang/es.js,
+      @Common/src/ckeditor-wordcount/wordcount/plugin.js,
+      @Common/src/ckeditor-wordcount/wordcount/lang/en.js,
+      @Common/src/ckeditor-wordcount/wordcount/lang/es.js,
+      @Common/src/ckeditor-pastespecial/plugin.js,
       @Common/components/fastclick/lib/fastclick.js,
       @Common/components/lodash/dist/lodash.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,
@@ -463,6 +493,7 @@
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/messenger/build/js/messenger.min.js,
       @Common/components/messenger/build/js/messenger-theme-flat.js,
+      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
@@ -504,9 +535,11 @@
       @Common/src/angular-history/history.js,
       @Common/src/angular-item-service/itemService.js,
       @Common/src/angular-messenger/messenger.js,
+      @Common/src/angular-cleaner/cleaner.js,
       @Common/src/angular-onm-editor/onm-editor.js,
       @Common/src/angular-onm-pagination/js/onm-pagination.js,
       @Common/src/angular-oql-encoder/oql-encoder.js,
+      @Common/src/angular-security/security.js,
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,

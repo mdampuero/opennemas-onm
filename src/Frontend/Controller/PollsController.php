@@ -38,8 +38,9 @@ class PollsController extends Controller
     {
         $this->cm   = new \ContentManager();
 
-        $this->categoryName = $this->get('request')->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $this->page         = $this->get('request')->query->getDigits('page', 1);
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $this->categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->page         = $request->query->getDigits('page', 1);
 
         if (!empty($this->categoryName)) {
             $this->ccm = new \ContentCategoryManager();

@@ -199,13 +199,15 @@
               </div>
               <h5>{t}When to show this ad{/t}</h5>
               <div class="form-group">
-                <label for="type_medida" class="form-label">{t}Restrictions{/t}</label>
+                <label for="type_medida" class="form-label">
+                  {t}Restrictions{/t}
+                  <span data-container="body" tooltip-placement="top" uib-tooltip="{t}Show this ad if satisfy one condition{/t}."><i class="fa fa-info-circle text-info""></i></span>
+                </label>
                 <div class="controls">
                   <select name="type_medida" id="type_medida" ng-model="type_medida">
                     <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
                     <option value="DATE" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}selected="selected"{/if}>{t}Date range{/t}</option>
                   </select>
-                  <div class="help-block">{t}Show this ad if satisfy one condition{/t}.</div>
                 </div>
               </div>
               <div class="form-group ng-cloak" id="porfecha" ng-show="type_medida == 'DATE'">
@@ -232,17 +234,20 @@
                   <div class="help-block">{t}Show this ad within a range of dates.{/t}.</div>
                 </div>
               </div>
-              <div class="form-group" ng-show="((type_advertisement + 50) % 100) != 0">
-                <label for="timeout" class="form-label">{t}Display banner while{/t}</label>
-                <div class="controls">
-                  <input type="number" id="timeout" name="timeout" value="{$advertisement->timeout|default:"4"}" min="0" max="100"/>
-                  <div class="help-block">{t}Amount of seconds that this banner will block all the page.{/t}</div>
-                </div>
-              </div>
               <div class="form-group" id="div_url1" ng-show="with_script == 0">
                 <label for="url" class="form-label">{t}Url{/t}</label>
                 <div class="controls">
                   <input type="url" id="url" name="url" class="form-control" value="{$advertisement->url}" placeholder="http://" ng-required="with_script == 0" />
+                </div>
+              </div>
+              <div class="form-group" ng-show="((type_advertisement + 50)  % 100) == 0">
+                <label for="timeout" class="form-label">{t}Display banner while{/t}</label>
+                <span data-container="body" tooltip-placement="top" uib-tooltip="{t}Amount of seconds that this banner will block all the page.{/t}"><i class="fa fa-info-circle text-info""></i></span>
+                <div class="controls">
+                 <div class="input-group">
+                    <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0" max="100" />
+                    <div class="input-group-addon">{t}seconds{/t}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -256,103 +261,79 @@
               <h4>{t}Where to show this ad{/t}</h4>
             </div>
             <div class="grid-body">
-              <div class="form-group">
-                <label for="category" class="form-label">{t}In categories{/t}</label>
-                <div class="controls">
-                  {*<select class="select2-multi" name="category[]" id="category" required="required" multiple="multiple">*}
-                  <select name="category[]" id="category" required="required" multiple="multiple" size=7>
-                    {if isset($advertisement->id)}
-                    <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
-                    <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
-                    <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>
-                    <option value="6" {if isset($advertisement) && in_array(6,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Video{/t}</option>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" for="position">
+                      {t}Pages of type{/t}
+                    </label>
+                    <div class="controls">
+                      <select name="position" id="position" ng-model="position">
+                        <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
+                        <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Inner article{/t}</option>
+                        {is_module_activated name="VIDEO_MANAGER"}
+                        <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video frontpage{/t}</option>
+                        <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Inner video{/t}</option>
+                        {/is_module_activated}
+                        {is_module_activated name="OPINION_MANAGER"}
+                        <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion frontpage{/t}</option>
+                        <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Inner opinion{/t}</option>
+                        {/is_module_activated}
+                        {is_module_activated name="ALBUM_MANAGER"}
+                        <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Galleries{/t}</option>
+                        <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery Inner{/t}</option>
+                        {/is_module_activated}
+                        {is_module_activated name="POLL_MANAGER"}
+                        <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll{/t}</option>
+                        <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
+                        {/is_module_activated}
+                        {is_module_activated name="NEWSLETTER_MANAGER"}
+                        <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
+                        {/is_module_activated}
+                        {is_module_activated name="AMP_MODULE"}
+                        <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
+                        {/is_module_activated}
+                        {is_module_activated name="FIA_MODULE"}
+                        <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
+                        {/is_module_activated}
+                        <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="category" class="form-label">{t}In categories{/t}</label>
+                    <div class="controls">
+                      <select name="category[]" id="category" required="required" multiple="multiple" size=6>
+                        <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
+                        <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
+                        <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>
+                        <option value="6" {if isset($advertisement) && in_array(6,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Video{/t}</option>
 
-                    {section name=as loop=$allcategorys}
-                    {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                    <option value="{$allcategorys[as]->pk_content_category}"
-                      {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                      {$allcategorys[as]->title}
-                    </option>
-                    {/acl}
-                    {section name=su loop=$subcat[as]}
-                    {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                    <option value="{$subcat[as][su]->pk_content_category}"
-                      {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                      &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
-                    </option>
-                    {/acl}
-                    {/section}
-                    {/section}
-                    {else}
-                    <option value="0" {if $category == 0}selected="selected"{/if}>{t}Frontpage{/t}</option>
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <option value="3" {if $category == 3}selected="selected"{/if}>{t}Album{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <option value="6" {if $category == 6}selected="selected"{/if}>{t}Video{/t}</option>
-                    {/is_module_activated}
-
-                    {section name=as loop=$allcategorys}
-                    {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                    <option value="{$allcategorys[as]->pk_content_category}"
-                      {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
-                      {$allcategorys[as]->title}
-                    </option>
-                    {/acl}
-                    {section name=su loop=$subcat[as]}
-                    {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                    <option value="{$subcat[as][su]->pk_content_category}"
-                      {if $category eq $subcat[as][su]->pk_content_category}selected="selected"{/if}>
-                      &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
-                    </option>
-                    {/acl}
-                    {/section}
-                    {/section}
-                    {/if}
-                  </select>
+                        <option value="0">{t}Home{/t}</option>
+                        {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                        <option value="{$allcategorys[as]->pk_content_category}"
+                          {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                          {$allcategorys[as]->title}
+                        </option>
+                        {/acl}
+                          {section name=su loop=$subcat[as]}
+                          {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                          <option value="{$subcat[as][su]->pk_content_category}"
+                            {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
+                          </option>
+                          {/acl}
+                          {/section}
+                        {/section}
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="form-group">
-                <label class="form-label" for="position">
-                  {t}and pages of type{/t}
-                </label>
-                <div class="controls">
-                  <select name="position" id="position" ng-model="position">
-                    <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
-                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Inner article{/t}</option>
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video frontpage{/t}</option>
-                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Inner video{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion frontpage{/t}</option>
-                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Inner opinion{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Galleries{/t}</option>
-                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery Inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll{/t}</option>
-                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="AMP_MODULE"}
-                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="FIA_MODULE"}
-                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
-                    {/is_module_activated}
-                    <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
+              <div class="form-group" style="position:relative; top:-20px">
                 <label class="form-label" for="position">
                   {t}and inside the position{/t}
                 </label>

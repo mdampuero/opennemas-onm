@@ -86,7 +86,7 @@
                 <td style="padding:10px;">
                   <strong>[% content.content_type_l10n_name %]</strong>  - [% content.title %]
                   <div class="small-text">
-                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                 </td>
                 <td class="right">

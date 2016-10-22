@@ -38,7 +38,8 @@ class BooksController extends Controller
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
-        $this->category = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
@@ -159,7 +160,7 @@ class BooksController extends Controller
             'cover_id'       => $request->request->getInt('book_cover_id'),
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->filter('description', ''),
-            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
@@ -271,7 +272,7 @@ class BooksController extends Controller
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', ''),
-            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),

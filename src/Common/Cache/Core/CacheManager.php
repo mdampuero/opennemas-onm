@@ -56,7 +56,6 @@ class CacheManager
         foreach ($this->caches as $cache) {
             $this->container->set('cache.connection.' . $cache->name, $cache);
         }
-
     }
 
     /**
@@ -66,7 +65,7 @@ class CacheManager
      *
      * @return Cache The cache connection.
      *
-     * @throws InvalidCacheException  If the cache connection does not exist.
+     * @throws InvalidCacheException If the cache connection does not exist.
      */
     public function getConnection($name)
     {

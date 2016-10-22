@@ -13,7 +13,7 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
+          <li class="quicklinks" ng-if="security.hasPermission('CLIENT_CREATE')">
             <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_client_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
@@ -24,7 +24,34 @@
     </div>
   </div>
 </div>
-{include file='common/selected_navbar.tpl' list="purchase"}
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section pull-left">
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <i class="fa fa-arrow-left fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <h4>
+            [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+          </h4>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('CLIENT_DELETE')">
+          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="page-navbar filters-navbar">
   <form name="filterForm">
   <div class="navbar navbar-inverse">
@@ -238,10 +265,10 @@
               <td ng-show="isColumnEnabled('name')">
                 [% item.last_name %], [% item.first_name %]
                 <div class="listing-inline-actions">
-                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_client_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_client_show', { id: item.id }) %]" ng-if="security.hasPermission('CLIENT_UPDATE')" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="btn btn-link text-danger" ng-click="delete(item)" type="button">
+                  <button class="btn btn-link text-danger" ng-click="delete(item)" ng-if="security.hasPermission('CLIENT_DELETE')" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
@@ -274,8 +301,8 @@
                 [% extra.countries[item.country] %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('instances')">
-                <a class="block" ng-href="[% routing.ngGenerate('manager_instance_show', { id: id }) %]" ng-repeat="id in item.instances" target="_blank">
-                  [% extra.instances[id] %] ([% id %])
+                <a class="block" ng-href="[% routing.ngGenerate('manager_instance_show', { id: id }) %]" ng-repeat="instance in extra.instances[item.id]" target="_blank">
+                  [% instance.name %] ([% instance.id %])
                 </a>
               </td>
             </tr>

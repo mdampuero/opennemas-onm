@@ -41,7 +41,8 @@ class CoversController extends Controller
 
         $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
 
-        $category = $this->get('request')->query->getDigits('category', 'all');
+        $category = $this->get('request_stack')->getCurrentRequest()
+            ->query->getDigits('category', 'all');
 
         $ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
@@ -171,7 +172,7 @@ class CoversController extends Controller
 
         $coverData = array(
             'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata($postInfo->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'type'           => (int) $postInfo->getDigits('type', 0),
             'category'       => (int) $postInfo->getDigits('category'),
             'content_status' => (int) $postInfo->getDigits('content_status', 1),
@@ -278,7 +279,7 @@ class CoversController extends Controller
                 'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata($postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)),
                 'price'          => (float) $postReq->filter('price', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'content_status' => $postReq->getDigits('content_status', 0),
                 'type'           => $postReq->getDigits('type', 0),

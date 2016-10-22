@@ -83,10 +83,10 @@
                 </div>
               </th>
               <th class="title">{t}Title{/t}</th>
-              <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
-              {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>{/if}{/acl}
-              {acl isAllowed="SPECIAL_HOME"}<th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>{/acl}
-              {acl isAllowed="SPECIAL_AVAILABLE"}<th class="center" style="width:35px;">{t}Published{/t}</th>{/acl}
+              <th class="hidden-xs" width="200">{t}Section{/t}</th>
+              {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>{/if}{/acl}
+              {acl isAllowed="SPECIAL_HOME"}<th class="hidden-xs text-center" width="100">{t}Home{/t}</th>{/acl}
+              {acl isAllowed="SPECIAL_AVAILABLE"}<th class="text-center" width="100">{t}Published{/t}</th>{/acl}
             </tr>
           </thead>
           <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
@@ -100,47 +100,47 @@
               <td>
                 [% content.title %]
                 <div class="small-text">
-                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="SPECIAL_UPDATE"}
                   <a class="link" href="[% edit(content.id, 'admin_special_show') %]">
-                    <i class="fa fa-pencil"></i> {t}Edit{/t}
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                   {/acl}
                   {acl isAllowed="SPECIAL_DELETE"}
                   <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                    <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                   </button>
                   {/acl}
                 </div>
               </td>
-              <td class="center hidden-xs">
+              <td class="hidden-xs">
                 [% extra.categories[content.category_name] %]
               </td>
               {if $category!='widget'}
+              {acl isAllowed="SPECIAL_HOME"}
+                <td class="hidden-xs text-center">
+                  <button class="btn btn-white" ng-if="content.author.meta.is_blog != 1" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading && content.in_home == 1, 'fa-home': !content.home_loading && content.in_home == 0 }"></i>
+                  <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading && content.in_home == 0"></i>
+                  </button>
+                </td>
+              {/acl}
               {acl isAllowed="SPECIAL_FAVORITE"}
-              <td class="center hidden-xs">
-                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite == 0 }"></i>
-                </button>
-              </td>
+                <td class="hidden-xs text-center">
+                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite == 0 }"></i>
+                  </button>
+                </td>
               {/acl}
               {/if}
-              {acl isAllowed="SPECIAL_HOME"}
-              <td class="right hidden-xs">
-                <button class="btn btn-white" ng-if="content.author.meta.is_blog != 1" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading && content.in_home == 1, 'fa-home': !content.home_loading && content.in_home == 0 }"></i>
-                <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading && content.in_home == 0"></i>
-                </button>
-              </td>
-              {/acl}
               {acl isAllowed="SPECIAL_AVAILABLE"}
-              <td class="center">
-                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
-                </button>
-              </td>
+                <td class="text-center">
+                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
+                  </button>
+                </td>
               {/acl}
             </tr>
           </tbody>

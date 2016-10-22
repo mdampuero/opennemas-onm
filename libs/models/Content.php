@@ -322,12 +322,14 @@ class Content
     {
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
-                if (!is_numeric($propertyName)) {
+                if (!is_numeric($propertyName) && !empty($propertyValue)) {
                     $this->{$propertyName} = @iconv(
                         mb_detect_encoding($propertyValue),
                         'utf-8',
                         $propertyValue
                     );
+                } elseif (empty($propertyValue)) {
+                    $this->{$propertyName} = $propertyValue;
                 } else {
                     $this->{$propertyName} = (int) $propertyValue;
                 }
@@ -624,13 +626,17 @@ class Content
             );
 
             if ($data['category'] != $this->category) {
-                $conn->update(
+                $conn->delete(
                     'contents_categories',
-                    [
-                        'pk_fk_content_category' => $data['category'],
-                        'catName' => $catName,
-                    ],
                     [ 'pk_fk_content' => $data['id'] ]
+                );
+                $conn->executeUpdate(
+                    'INSERT INTO contents_categories SET pk_fk_content_category=:cat_id, pk_fk_content=:content_id, catName=:cat_name',
+                    [
+                        'content_id' => $data['id'],
+                        'cat_id'     => $data['category'],
+                        'cat_name'   => $catName,
+                    ]
                 );
             } else {
                 $catName = $this->category_name;
@@ -1658,7 +1664,7 @@ class Content
             );
 
             // Remove the content from all frontpages
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 'content_positions',
                 [ 'pk_fk_content' => $this->id ]
             );
