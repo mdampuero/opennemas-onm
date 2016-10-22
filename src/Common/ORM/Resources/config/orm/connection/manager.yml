@@ -1,3 +1,5 @@
-connection:
-    name:   manager
-    dbname: onm-instances
+orm:
+    connection:
+        -
+            name:   manager
+            dbname: onm-instances

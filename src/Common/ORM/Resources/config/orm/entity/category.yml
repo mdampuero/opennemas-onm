@@ -1,68 +1,70 @@
-entity:
-    name: Category
-    enum:
-        content_type_name: [ static_page ]
-    properties:
-        pk_content_category: integer
-        title:               string
-        name:                string
-        inmenu:              boolean
-        posmenu:             integer
-        internal_category:   boolean
-        fk_content_category: integer
-        params:              array
-        logo_path:           string
-        color:               string
-    converters:
-        default:
-            class:     Common\ORM\Database\Data\Converter\BaseConverter
-            arguments: [ '@orm.metadata.content' ]
-    repositories:
-        database:
-            class:     Common\ORM\Database\Repository\BaseRepository
-            arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
-    persisters:
-        database:
-            class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
-    mapping:
-        database:
-            table: content_categories
-            columns:
-                pk_content_category:
-                    type: integer
-                    options: { default: null, unsigned: true, autoincrement: true }
-                title:
-                    type: string
-                    options: { default: null, length: 255 }
-                name:
-                    type: string
-                    options: { default: null, notnull: false, length: 255 }
-                inmenu:
-                    type: integer
-                    options: { default: '0', notnull: false }
-                posmenu:
-                    type: integer
-                    options: { default: '10', notnull: false }
-                internal_category:
-                    type: smallint
-                    options: { default: '0', comment: 'equal content_type & global=0 ' }
-                fk_content_category:
-                    type: integer
-                    options: { default: '0', notnull: false }
-                params:
-                    type: text
-                    options: { default: null, length: 65532, notnull: false }
-                logo_path:
-                    type: string
-                    options: { default: null, notnull: false, length: 200 }
-                color:
-                    type: string
-                    options: { default: null, notnull: false, length: 10 }
-            index:
-                -
-                    name: PRIMARY
-                    columns: [ pk_content_category ]
-                    primary: true
-                    unique: true
-                    flags: {}
+orm:
+    metadata:
+        -
+            name: Category
+            enum:
+                content_type_name: [ static_page ]
+            properties:
+                pk_content_category: integer
+                title:               string
+                name:                string
+                inmenu:              boolean
+                posmenu:             integer
+                internal_category:   boolean
+                fk_content_category: integer
+                params:              array
+                logo_path:           string
+                color:               string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.content' ]
+            repositories:
+                database:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
+            persisters:
+                database:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: content_categories
+                    columns:
+                        pk_content_category:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        title:
+                            type: string
+                            options: { default: null, length: 255 }
+                        name:
+                            type: string
+                            options: { default: null, notnull: false, length: 255 }
+                        inmenu:
+                            type: integer
+                            options: { default: '0', notnull: false }
+                        posmenu:
+                            type: integer
+                            options: { default: '10', notnull: false }
+                        internal_category:
+                            type: smallint
+                            options: { default: '0', comment: 'equal content_type & global=0 ' }
+                        fk_content_category:
+                            type: integer
+                            options: { default: '0', notnull: false }
+                        params:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        logo_path:
+                            type: string
+                            options: { default: null, notnull: false, length: 200 }
+                        color:
+                            type: string
+                            options: { default: null, notnull: false, length: 10 }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ pk_content_category ]
+                            primary: true
+                            unique: true
+                            flags: {}

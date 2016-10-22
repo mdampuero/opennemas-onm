@@ -1,73 +1,75 @@
-entity:
-    name: Theme
-    enum:
-        type: [ domain, module, theme, theme-addon, widget ]
+orm:
+    metadata:
+        -
+            name: Theme
+            enum:
+                type: [ domain, module, theme, theme-addon, widget ]
 
-    required:
-        - uuid
-        - author
-        - created
-        - enabled
-        - name
-        - type
-        - updated
+            required:
+                - uuid
+                - author
+                - created
+                - enabled
+                - name
+                - type
+                - updated
 
-    properties:
-        about:               array
-        author:              string
-        category:            string
-        created:             datetime
-        description:         array
-        enabled:             boolean
-        id:                  integer
-        images:              array
-        name:                string
-        parameters:          array
-        price:               array
-        type:                enum
-        updated:             datetime
-        uuid:                string
-        url:                 string
-    converters:
-        default:
-            class:     Common\ORM\Database\Data\Converter\BaseConverter
-            arguments: [ '@orm.metadata.theme' ]
-    repositories:
-        file:
-            class:     Common\ORM\File\Repository\BaseRepository
-            arguments: [ '@service_container', ['public/themes'], '@orm.metadata.theme', '@cache.connection.internal' ]
-    persisters:
-        database:
-            class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.manager', '@orm.metadata.theme', '@cache.connection.manager' ]
-    mapping:
-        database:
-            table: theme
-            columns:
-                id:
-                    type: bigint
-                    options: { default: null, autoincrement: true }
-                uuid:
-                    type:    string
-                    options: { default: null, length: 100, notnull: true }
-                name:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
-                type:
-                    type:    string
-                    options: { default: null, length: 40 }
-                author:
-                    type: string
-                    options: { default: null, length: 140, notnull: false }
-                url:
-                    type: string
-                    options: { default: null, length: 140, notnull: false }
-                description:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
-                about:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
-                images:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
+            properties:
+                about:               array
+                author:              string
+                category:            string
+                created:             datetime
+                description:         array
+                enabled:             boolean
+                id:                  integer
+                images:              array
+                name:                string
+                parameters:          array
+                price:               array
+                type:                enum
+                updated:             datetime
+                uuid:                string
+                url:                 string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.theme' ]
+            repositories:
+                file:
+                    class:     Common\ORM\File\Repository\BaseRepository
+                    arguments: [ '@service_container', ['public/themes'], '@orm.metadata.theme', '@cache.connection.internal' ]
+            persisters:
+                database:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.theme', '@cache.connection.manager' ]
+            mapping:
+                database:
+                    table: theme
+                    columns:
+                        id:
+                            type: bigint
+                            options: { default: null, autoincrement: true }
+                        uuid:
+                            type:    string
+                            options: { default: null, length: 100, notnull: true }
+                        name:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
+                        type:
+                            type:    string
+                            options: { default: null, length: 40 }
+                        author:
+                            type: string
+                            options: { default: null, length: 140, notnull: false }
+                        url:
+                            type: string
+                            options: { default: null, length: 140, notnull: false }
+                        description:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
+                        about:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
+                        images:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }

@@ -62,7 +62,7 @@ class InstanceUserPersister extends BasePersister
             $entity->categories = $categories;
 
             if ($this->hasCache()) {
-                $this->cache->delete($this->metadata->getPrefixedId($entity));
+                $this->cache->remove($this->metadata->getPrefixedId($entity));
             }
         }
     }
@@ -79,7 +79,7 @@ class InstanceUserPersister extends BasePersister
         $this->removeCategories($id);
 
         if ($this->hasCache()) {
-            $this->cache->delete($this->metadata->getPrefixedId($entity));
+            $this->cache->remove($this->metadata->getPrefixedId($entity));
         }
     }
 

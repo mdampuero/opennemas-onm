@@ -1,89 +1,91 @@
-entity:
-    name: Purchase
-    required:
-        - created
-        - instance_id
-        - step
-        - updated
-    properties:
-        client:      entity::client
-        client_id:   integer
-        created:     datetime
-        updated:     datetime
-        details:     array
-        fee:         float
-        id:          integer
-        instance_id: integer
-        invoice_id:  integer
-        method:      string
-        payment_id:  string
-        total:       float
-        step:        string
-    converters:
-        default:
-            class:     Common\ORM\Database\Data\Converter\BaseConverter
-            arguments: [ '@orm.metadata.purchase' ]
-    repositories:
-        manager:
-            class:     Common\ORM\Database\Repository\BaseRepository
-            arguments: [ '@orm.connection.manager', '@orm.metadata.purchase', '@cache.connection.manager' ]
-    persisters:
-        manager:
-            class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.manager', '@orm.metadata.purchase', '@cache.connection.manager' ]
-    mapping:
-        database:
-            table: purchase
-            columns:
-                id:
-                    type: bigint
-                    options: { default: null, autoincrement: true }
-                client:
-                    type: text
-                    options: { default: null, length: 65532, notnull: false }
-                details:
-                    type: text
-                    options: { default: null, length: 65532, notnull: false }
-                method:
-                    type: string
-                    options: { default: null, length: 15, notnull: false }
-                fee:
-                    type: float
-                    options: { default: 0, notnull: false }
-                total:
-                    type: float
-                    options: { default: 0, notnull: false }
-                instance_id:
-                    type: bigint
-                    options: { notnull: true }
-                client_id:
-                    type: string
-                    options: { default: null, length: 60, notnull: false }
-                payment_id:
-                    type: string
-                    options: { default: null, length: 60, notnull: false }
-                invoice_id:
-                    type: string
-                    options: { default: null, length: 60, notnull: false }
-                created:
-                    type: datetimetz
-                    options: { notnull: true }
-                updated:
-                    type: datetimetz
-                    options: { notnull: true }
-                step:
-                    type: string
-                    options: { default: null, length: 10, notnull: true }
-            index:
-                -
-                    name: PRIMARY
-                    columns: [ id ]
-                    primary: true
-                    unique: true
-                    flags: {  }
-                -
-                    name: client_id
-                    columns: [ client_id ]
-                    primary: false
-                    unique: false
-                    flags: { fulltext: true }
+orm:
+    metadata:
+        -
+            name: Purchase
+            required:
+                - created
+                - instance_id
+                - step
+                - updated
+            properties:
+                client:      entity::client
+                client_id:   integer
+                created:     datetime
+                updated:     datetime
+                details:     array
+                fee:         float
+                id:          integer
+                instance_id: integer
+                invoice_id:  integer
+                method:      string
+                payment_id:  string
+                total:       float
+                step:        string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.purchase' ]
+            repositories:
+                manager:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.purchase', '@cache.connection.manager' ]
+            persisters:
+                manager:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.purchase', '@cache.connection.manager' ]
+            mapping:
+                database:
+                    table: purchase
+                    columns:
+                        id:
+                            type: bigint
+                            options: { default: null, autoincrement: true }
+                        client:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        details:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        method:
+                            type: string
+                            options: { default: null, length: 15, notnull: false }
+                        fee:
+                            type: float
+                            options: { default: 0, notnull: false }
+                        total:
+                            type: float
+                            options: { default: 0, notnull: false }
+                        instance_id:
+                            type: bigint
+                            options: { notnull: true }
+                        client_id:
+                            type: string
+                            options: { default: null, length: 60, notnull: false }
+                        payment_id:
+                            type: string
+                            options: { default: null, length: 60, notnull: false }
+                        invoice_id:
+                            type: string
+                            options: { default: null, length: 60, notnull: false }
+                        created:
+                            type: datetimetz
+                            options: { notnull: true }
+                        updated:
+                            type: datetimetz
+                            options: { notnull: true }
+                        step:
+                            type: string
+                            options: { default: null, length: 10, notnull: true }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: client_id
+                            columns: [ client_id ]
+                            primary: false
+                            unique: false
+                            flags: { fulltext: true }

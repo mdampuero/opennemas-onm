@@ -57,7 +57,7 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete' ])
+            ->setMethods([ 'remove' ])
             ->getMock();
 
         $this->persister = new InstanceUserPersister($this->conn, $this->metadata, $this->cache);
@@ -119,7 +119,7 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
-        $this->cache->expects($this->exactly(2))->method('delete');
+        $this->cache->expects($this->exactly(2))->method('remove');
         $this->persister->update($entity);
     }
 
@@ -146,7 +146,7 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
             [ 1 ]
         );
 
-        $this->cache->expects($this->exactly(2))->method('delete');
+        $this->cache->expects($this->exactly(2))->method('remove');
 
         $this->persister->remove($entity);
     }
