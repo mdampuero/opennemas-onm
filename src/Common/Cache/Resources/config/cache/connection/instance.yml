@@ -1,0 +1,4 @@
+cache:
+    -
+        name:      instance
+        namespace: instance

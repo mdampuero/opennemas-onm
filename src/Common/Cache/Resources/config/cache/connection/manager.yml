@@ -1,0 +1,4 @@
+cache:
+    -
+        name:      manager
+        namespace: manager

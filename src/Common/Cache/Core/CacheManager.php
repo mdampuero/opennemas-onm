@@ -39,8 +39,11 @@ class CacheManager
      */
     public function __construct($container)
     {
-        $this->caches    = $container->get('cache.loader')->load();
+        $this->config    = $container->getParameter('cache');
         $this->container = $container;
+        $this->defaults  = $container->getParameter('cache.default');
+
+        $this->caches = $this->init();
 
         foreach ($this->caches as $cache) {
             $this->container->set('cache.connection.' . $cache->name, $cache);
@@ -65,5 +68,36 @@ class CacheManager
         }
 
         return $this->caches[$name];
+    }
+
+    /**
+     * Initializes connections basing on configuration.
+     *
+     * @return array The list of connections.
+     */
+    protected function init()
+    {
+        $items = [];
+
+        if (empty($this->config)) {
+            return $items;
+        }
+
+        foreach ($this->config as $key => $config) {
+            if (!array_key_exists('type', $config)) {
+                $config['type'] = $this->defaults['type'];
+            }
+
+            if (array_key_exists($config['type'], $this->defaults)) {
+                $config = array_merge($this->defaults[$config['type']], $config);
+            }
+
+            $class = \classify($config['type']);
+            $class = sprintf('Common\\Cache\\%s\\%s', $class, $class);
+
+            $items[$config['name']] = new $class($config);
+        }
+
+        return $items;
     }
 }

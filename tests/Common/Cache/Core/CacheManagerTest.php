@@ -28,24 +28,23 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get', 'getParameter', 'set' ])
             ->getMock();
 
-        $this->loader = $this->getMockBuilder('Loader')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'load' ])
-            ->getMock();
-
+        $defaults = [ 'type' => 'redis' ];
         $config = [
-            'foo' => new Redis([
+            'foo' => [
                 'name'      => 'foo',
                 'namespace' => 'foo',
                 'server'    => 'localhost',
+                'type'      => 'redis',
                 'port'      => '1234'
-            ])
+            ]
         ];
 
-        $this->loader->expects($this->any())->method('load')->willReturn($config);
-
-        $this->container->expects($this->any())->method('get')
-            ->willReturn($this->loader);
+        $this->container->expects($this->at(0))->method('getParameter')
+            ->with('cache')
+            ->willReturn($config);
+        $this->container->expects($this->at(1))->method('getParameter')
+            ->with('cache.default')
+            ->willReturn($defaults);
 
         $this->cm = new CacheManager($this->container);
     }
