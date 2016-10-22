@@ -25,7 +25,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->disableOriginalConstructor()
-            ->setMethods([ 'get', 'set' ])
+            ->setMethods([ 'get', 'getParameter', 'set' ])
             ->getMock();
 
         $this->loader = $this->getMockBuilder('Loader')

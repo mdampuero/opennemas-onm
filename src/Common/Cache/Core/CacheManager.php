@@ -10,7 +10,7 @@
 namespace Common\Cache\Core;
 
 use Common\Cache\File\File;
-use Common\ORM\Core\Exception\InvalidCacheException;
+use Common\Cache\Core\Exception\InvalidConnectionException;
 
 /**
  * The CacheManager class manages the cache configuration and creates
@@ -39,19 +39,8 @@ class CacheManager
      */
     public function __construct($container)
     {
+        $this->caches    = $container->get('cache.loader')->load();
         $this->container = $container;
-
-        $internal = $this->getInternalConnection();
-        $caches   = $internal->get('cache_' . DEPLOYED_AT);
-
-        if (empty($caches)) {
-            $caches = $container->get('cache.loader')->load();
-        }
-
-        if (!empty($caches)) {
-            $internal->set('cache_' . DEPLOYED_AT, $caches);
-            $this->caches = array_merge($this->caches, $caches);
-        }
 
         foreach ($this->caches as $cache) {
             $this->container->set('cache.connection.' . $cache->name, $cache);
@@ -65,29 +54,16 @@ class CacheManager
      *
      * @return Cache The cache connection.
      *
-     * @throws InvalidCacheException If the cache connection does not exist.
+     * @throws InvalidConnectionException If the cache connection does not exist.
      */
     public function getConnection($name)
     {
         $name = preg_replace('/@?cache.connection/', '', $name);
 
         if (!array_key_exists($name, $this->caches)) {
-            throw new InvalidCacheException($name);
+            throw new InvalidConnectionException($name);
         }
 
         return $this->caches[$name];
-    }
-
-    /**
-     * Returns an internal filesystem cache.
-     *
-     * @return File The filesystem cache instance.
-     */
-    public function getInternalConnection()
-    {
-        $this->caches['internal'] =
-            new File($this->container->getParameter('cache.default')['file']);
-
-        return $this->caches['internal'];
     }
 }

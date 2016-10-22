@@ -27,12 +27,12 @@ class File extends Cache
     {
         parent::__construct($data);
 
-        // Force cache directory creation
-        $this->getFileSystem();
-
         if (empty($this->path) || empty($this->name)) {
             throw new \InvalidArgumentException();
         }
+
+        // Force cache directory creation
+        $this->getFileSystem();
     }
 
     /**
