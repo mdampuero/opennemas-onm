@@ -10,6 +10,7 @@
 
 # app
 app/config/parameters.yml
+app/config/connections.yml
 app/Resources/**/*.mo
 
 # bin
