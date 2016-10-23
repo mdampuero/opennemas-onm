@@ -75,7 +75,9 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
                     'mapping'    => []
                 ]
             ],
-            'schema' => []
+            'schema' => [
+                'flob' => [ 'name' => 'flob', 'entities' => [ 'Entity' ] ],
+            ]
         ];
 
         $this->converter = $this->getMockBuilder('MockConverter')
