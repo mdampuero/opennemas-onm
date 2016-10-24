@@ -29,29 +29,6 @@ class NitfEfe extends Nitf
     }
 
     /**
-     * Returns the created time from the parsed data.
-     *
-     * @param SimpleXMLObject The parsed data.
-     *
-     * @return \DateTime The created time.
-     */
-    public function getCreatedTime($data)
-    {
-        $date = $data->xpath('//body/body.head/dateline/story.date');
-
-        if (empty($date)) {
-            return new \DateTime();
-        }
-
-        $date = str_replace('+0000', '', $date[0]->attributes()->norm[0]);
-        $date = \DateTime::createFromFormat('Ymd\THis', $date);
-
-        $date->setTimezone(new \DateTimeZone('UTC'));
-
-        return $date;
-    }
-
-    /**
      * Returns the priority from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
