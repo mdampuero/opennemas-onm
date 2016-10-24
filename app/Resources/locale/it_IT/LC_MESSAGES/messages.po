@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-21 16:55+0200\n"
-"PO-Revision-Date: 2016-08-29 17:37+0200\n"
+"POT-Creation-Date: 2016-10-17 10:13+0000\n"
+"PO-Revision-Date: 2016-10-14 17:46+0200\n"
 "Last-Translator: Fabrizia Alonzo <fabrizia.alonzo@openhost.es>\n"
 "Language-Team: Opennemas\n"
 "Language: it\n"
@@ -1270,16 +1270,6 @@ msgstr "Server attualizzato correttamente"
 msgid "News agency server deleted."
 msgstr "Il server dell'agenzia stampa è stato eliminato."
 
-msgid "Newsletter deleted successfully."
-msgstr "Newsletter eliminata correttamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Impossibile eliminare la newsletter \"%s\""
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Per favore inserire un id per eliminare la newsletter."
-
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Si è eliminato l'abbonato con id \"%d\""
@@ -1316,6 +1306,16 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscribers."
 msgstr "Stato attivato correttamente cambiato per %d abbonati."
+
+msgid "Newsletter deleted successfully."
+msgstr "Newsletter eliminata correttamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Impossibile eliminare la newsletter \"%s\""
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Per favore inserire un id per eliminare la newsletter."
 
 msgid "Notification marked as read successfully"
 msgstr "Notifica contrassegnata come letta"
@@ -1488,8 +1488,9 @@ msgstr "Accettato dall'amministratore"
 msgid "Something is wrong!"
 msgstr ""
 
+#, fuzzy
 msgid "Something unexpected happened!"
-msgstr ""
+msgstr "Qualcosa di inaspettato è accaduto!"
 
 msgid "The XML could not be parsed"
 msgstr "Non è stato possibile processare il file XML"
@@ -1613,7 +1614,7 @@ msgstr ""
 "Per favore controllare il formulario e riprovare."
 
 msgid "Email is required but it will not be published"
-msgstr "L'indirizzo email è richiesto anche se non verrá pubblicato."
+msgstr "L'indirizzo email è richiesto anche se non verrà pubblicato."
 
 msgid "The information has been sent"
 msgstr "L'informazione è stata inviata"
@@ -1981,6 +1982,30 @@ msgstr "Stato non valido."
 msgid "Unable to delete the comment."
 msgstr "Impossibile eliminare il commento."
 
+msgid "trashed"
+msgstr "nel cestino"
+
+msgid "pending"
+msgstr "In attesa"
+
+msgid "available"
+msgstr "disponibile"
+
+msgid "not scheduled"
+msgstr "non programmato"
+
+msgid "scheduled"
+msgstr "programmato"
+
+msgid "dued"
+msgstr "scaduto"
+
+msgid "in time"
+msgstr "in tempo"
+
+msgid "postponed"
+msgstr "posticipato"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -2013,30 +2038,6 @@ msgid ""
 msgstr ""
 "Alcuni elementi sono stati rimossi perché la prima pagina eccedeva in "
 "contenuti."
-
-msgid "trashed"
-msgstr "nel cestino"
-
-msgid "pending"
-msgstr "In attesa"
-
-msgid "available"
-msgstr "disponibile"
-
-msgid "not scheduled"
-msgstr "non programmato"
-
-msgid "scheduled"
-msgstr "programmato"
-
-msgid "dued"
-msgstr "scaduto"
-
-msgid "in time"
-msgstr "in tempo"
-
-msgid "postponed"
-msgstr "posticipato"
 
 msgid "Cover"
 msgstr "Copertina"
@@ -3490,12 +3491,6 @@ msgstr "Modificando ePaper"
 msgid "Go Back"
 msgstr "Indietro"
 
-msgid "Updating"
-msgstr "Attualizzando"
-
-msgid "Update"
-msgstr "Attualizzato"
-
 msgid "Date"
 msgstr "Data"
 
@@ -4550,7 +4545,7 @@ msgid "Privileges"
 msgstr "Diritti"
 
 msgid "Toggle all privileges"
-msgstr ""
+msgstr "Selezionare tutto"
 
 msgid "[% section.title %]"
 msgstr "[% section.title %]"
@@ -5486,6 +5481,43 @@ msgstr ""
 "Per collegare la <strong>pagina LinkedIn</strong>, aggiungere la URL nel "
 "campo. La predefinita è quella di Opennemas."
 
+msgid "Only masters"
+msgstr ""
+
+msgid "Robots.txt rules"
+msgstr ""
+
+msgid ""
+"Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
+"\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\">documentation</"
+"a>."
+msgstr ""
+
+msgid "Scripts in header"
+msgstr "Scripts nell'header"
+
+msgid "This scripts will be included before the </head> tag"
+msgstr "Questo script verrà incluso prima del tag </head>"
+
+msgid "Scripts at body start"
+msgstr "Scripts all'inizio del corpo di testo"
+
+msgid "This scripts will be included before the <body> tag"
+msgstr "Questo script verrà incluso prima del tag <body>"
+
+msgid "Scripts at body end"
+msgstr "Scripts alla fine del corpo di testo"
+
+msgid "This scripts will be included before the </body> tag"
+msgstr "Questo script verrà incluso prima del tag </body>"
+
+msgid "Custom CSS"
+msgstr "CSS personalizzato"
+
+#, fuzzy
+msgid "This sripts will be included in the global.css file."
+msgstr "Questo script verrà incluso prima del tag <body>"
+
 msgid "Editing author"
 msgstr "Modificando autore"
 
@@ -5542,6 +5574,12 @@ msgstr "Creando video"
 
 msgid "Editing video"
 msgstr "Modificando video"
+
+msgid "Updating"
+msgstr "Attualizzando"
+
+msgid "Update"
+msgstr "Attualizzato"
 
 msgid "Schedule"
 msgstr "Programmazione"
@@ -6022,7 +6060,7 @@ msgid ""
 "targeting will always be the current category internal name"
 msgstr ""
 "Introdurre una chiave per targetizzare gli annunci per categoria. Il valore "
-"del target sará sempre il nome interno della categoria"
+"del target sarà sempre il nome interno della categoria"
 
 msgid "Tradedoubler integration"
 msgstr "Integrazione Tradesoubler"
@@ -6031,7 +6069,7 @@ msgid "Tradedoubler ID"
 msgstr "Tradedoubler ID"
 
 msgid "Only the ID from Tradedoubler validation tag"
-msgstr ""
+msgstr "Solo per l'ID di Tradedoubler "
 
 msgid "Iadbox integration"
 msgstr "Integrazione Iadbox"
@@ -6042,322 +6080,307 @@ msgstr "Iadbox ID"
 msgid "Iadbox affiliate ID"
 msgstr "Iadbox ID affiliazione"
 
-msgid "Scripts"
-msgstr "Scripts"
-
-msgid "Scripts in header"
-msgstr ""
-
-msgid "This scripts will be included before the </head> tag"
-msgstr ""
-
-msgid "Scripts at body start"
-msgstr ""
-
-msgid "This scripts will be included before the <body> tag"
-msgstr ""
-
-msgid "Scripts at body end"
-msgstr ""
-
-msgid "This scripts will be included before the </body> tag"
-msgstr ""
-
-#, fuzzy
 msgid "Unable to find any advertisement that matches your search."
-msgstr "Ci è stato impossibile trovare l'annuncio con id \"%d\""
+msgstr "Non è stato trovato un annuncio corrispondente alla ricerca."
 
 msgid "Permanence"
-msgstr ""
+msgstr "Permanenza"
 
 msgid "Media element (jpg, png, gif)"
-msgstr ""
+msgstr "Elemento immagine (jpg, png, gif)"
 
-#, fuzzy
 msgid "Media flash element (swf)"
-msgstr "Elementi Speciali"
+msgstr "Elemento flash (swf)"
 
 msgid "Clicks:"
-msgstr ""
+msgstr "Clics:"
 
 msgid "Viewed:"
-msgstr ""
+msgstr "Visti:"
 
-#, fuzzy
 msgid "Instance Synchronization"
-msgstr "Giornale non trovato"
+msgstr "Sincronizzazione di istanza"
 
 msgid "Ins. Sync."
-msgstr ""
+msgstr "Ins. Sync."
 
 msgid "Adding site"
-msgstr ""
+msgstr "Aggiungere sito"
 
 msgid "Site URL"
-msgstr ""
+msgstr "URL del sito"
 
 msgid "http://example.com"
-msgstr ""
+msgstr "http://example.com"
 
-#, fuzzy
 msgid "Username or password are incorrect"
-msgstr "Nome d'utente o password incorretti."
+msgstr "Nome d'utente o password incorretti"
 
 msgid "Please, check if the credentials are correct and try again."
-msgstr ""
+msgstr "Per favore controllare che le credenziali siano corrette e riprovare."
 
 msgid "Available categories for sync"
-msgstr ""
+msgstr "Categorie disponibili per la sincronizzazione"
 
 msgid "No elements to sync in this server"
-msgstr ""
+msgstr "Non ci sono elementi da sincronizzare in questo server"
 
 msgid "The given url has no elements to sync or it is not an Opennemas server."
 msgstr ""
+"La URL inserita non ha elementi da sincronizzare o non si trova in un server "
+"Opennemas."
 
 msgid "Also check if the credentials are correct."
-msgstr ""
+msgstr "Controllare anche se le cerdenziali sono corrette."
 
 msgid "Add site to sync"
-msgstr ""
+msgstr "Aggiungere il sito da sincronizzare"
 
 msgid "Add site"
-msgstr ""
+msgstr "Aggiungere sito"
 
 msgid "Site Url"
-msgstr ""
+msgstr "Url del sito"
 
-#, fuzzy
 msgid "Categories to Sync"
-msgstr "Categorie"
+msgstr "Categorie da sincronizzare"
 
-#, fuzzy
 msgid "Categories to sync"
-msgstr "Categorie"
+msgstr "Categorie da sincronizzare"
 
 msgid "There are no synchronize settings available"
-msgstr ""
+msgstr "Non sono disponibili configurazioni da sincronizzare"
 
 msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
+"Aggiungere un sito da sincronizzare nel campo di configurazione qui sopra."
 
 msgid "Where are you from?"
-msgstr ""
+msgstr "Da dove vieni?"
 
 msgid "Country"
-msgstr ""
+msgstr "Paese"
 
 msgid "Select a country"
-msgstr ""
+msgstr "Selezionare un Paese"
 
 msgid "Contact information"
-msgstr ""
+msgstr "Informazioni di contatto"
 
 msgid "This field is required"
-msgstr ""
+msgstr "Questo campo è obbligatorio"
 
-#, fuzzy
 msgid "First name"
-msgstr "File"
+msgstr "Nome"
 
-#, fuzzy
 msgid "Last name"
-msgstr "Giornale non attivato"
+msgstr "Cognome"
 
 msgid "Company name"
-msgstr ""
+msgstr "Nome della societá"
 
 msgid "This is not a valid email"
-msgstr ""
+msgstr "Questa email non è valida"
 
 msgid "Phone number"
-msgstr ""
+msgstr "Numero di telefono"
 
-#, fuzzy
 msgid "This is not a valid vat_number identification number"
-msgstr "Campo '%s' non valido"
+msgstr "L'identificatore dell'IVA vat_number non è valido"
 
-#, fuzzy
 msgid "Vat identification number"
-msgstr "Token non valido"
+msgstr "Identificatore dell'IVA"
 
 msgid "What is a VAT identification number?"
-msgstr ""
+msgstr "Che cosa è l'identificatore dell'IVA?"
 
 msgid "Address"
-msgstr ""
+msgstr "Indirizzo"
 
 msgid "This is not a valid address"
-msgstr ""
+msgstr "Questo non è un indirizzo valido"
 
 msgid "This is not a valid postal_code"
-msgstr ""
+msgstr "Questo non è un Codice Postale valido"
 
 msgid "Postal code"
-msgstr ""
+msgstr "Codice Postale"
 
 msgid "This is not a valid city"
-msgstr ""
+msgstr "Questa non è una città valida"
 
 msgid "City"
-msgstr ""
+msgstr "Città"
 
 msgid "This is not a valid state"
-msgstr ""
+msgstr "Questo non è uno Stato valido"
 
 msgid "State/Province"
-msgstr ""
+msgstr "Stato/Provincia"
 
 msgid "Domain Mapping"
-msgstr ""
+msgstr "Mappatura del dominio"
 
 msgid "Primary Domain"
-msgstr ""
+msgstr "Dominio Primario"
 
 msgid "Technical information"
-msgstr ""
+msgstr "Informazioni tecniche"
 
 msgid "Domain registration + mapping"
-msgstr ""
+msgstr "Registrazione + mappatura di Dominio"
 
 msgid "Domain mapping"
-msgstr ""
+msgstr "Mappatura del dominio"
 
 msgid "Enter a domain"
-msgstr ""
+msgstr "Inserire un Dominio"
 
 msgid "Map it"
-msgstr ""
+msgstr "Mappare"
 
 msgid "Requested domains"
-msgstr ""
+msgstr "Richiedere un Dominio"
 
 msgid "Select the payment method."
-msgstr ""
+msgstr "Selezionare una metodologia di pagamento."
 
 msgid "You'll have a chance to review your order before it's placed."
-msgstr ""
+msgstr "L'ordine si potrà ricontrollare prima dell'invio."
 
 msgid "Any problem with payment?"
-msgstr ""
+msgstr "Problemi con il pagamento?"
 
 msgid "Click here for a quick tips."
-msgstr ""
+msgstr "Selezionare qui per consigli rapidi."
 
 msgid "I have read and accept the Terms of creating a new domain"
 msgstr ""
+"Ho letto ed accetto i Termini e le Condizioni per la creazione di un Dominio"
 
 msgid "I have read and accept the Terms of redirection"
 msgstr ""
+"Ho letto ed accetto i Termini e le Condizioni per la mappatura di un Dominio"
 
 msgid "Thank you for your purchase!"
-msgstr ""
+msgstr "Grazie! L'acquisto è avvenuto con successo!"
 
 msgid ""
 "Check your email, we have sent you an email with the invoice and purchase "
 "details. We will review your purchase and activate your domain."
 msgstr ""
+"Controllare nell'email, abbiamo inviato la fattura e i dettagli di acquisto. "
+"Stiamo controllando il suo acquisto ed attivaremo il Dominio."
 
 msgid "Something unexpected has happened!"
-msgstr ""
+msgstr "Qualcosa di inaspettato è accaduto!"
 
-#, fuzzy
 msgid "There were some errors while trying to purchase."
-msgstr "Si è verificato un errore mentre caricavamo il menu."
+msgstr "Si è verificato un errore mentre si effettuave l'acquisto."
 
 msgid ""
 "To prevent non-desired charges in your account, please, do not retry the "
 "checkout process and contact our <a href=\"javascript:UserVoice."
 "showPopupWidget();\">support team</a>."
 msgstr ""
+"Per evitare inconvenienti con l'addebito, per favore, non riprovare ad "
+"acquistare e contattare il nostro <a href=\"javascript:UserVoice."
+"showPopupWidget();\">supporto tecnico</a>."
 
 msgid "How can I change 'opennemas.com' domain on my newspaper?"
-msgstr ""
+msgstr "Come posso cambiare il Dominoio 'opennemas.com' del mio giornale?"
 
 msgid "Redirect your own domain"
-msgstr ""
+msgstr "Redirezionare il Dominio"
 
 msgid "Your domains"
-msgstr ""
+msgstr "I tuoi Domini"
 
 msgid "Main"
-msgstr ""
+msgstr "Principale"
 
 msgid "Points to"
-msgstr ""
+msgstr "Puntare a"
 
 msgid "Your domain is properly configured"
-msgstr ""
+msgstr "Il Dominio è stato configurato correttamente"
 
 msgid "Your domain is not properly configured, check the instructions below."
 msgstr ""
+"Il Dominio non è stato correttamente configurato, controllare le istruzioni."
 
 msgid "Expires"
-msgstr ""
+msgstr "Scadenza"
 
 msgid "This is your opennemas address"
-msgstr ""
+msgstr "Questo è l'indirizzo Opennemas"
 
 msgid "Update your DNS records"
-msgstr ""
+msgstr "Attualizzare il campo DNS"
 
 msgid "Point the www entrace in your domain to the Opennemas service."
-msgstr ""
+msgstr "Puntare l'entrata www nel tuo Dominio al servizio Opennemas."
 
 msgid ""
 "Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
 "domain.name.replace('www.', '') %]"
 msgstr ""
+"Redirezionare il traffico da [% domain.name.replace('www.', '') %] a  www.[% "
+"domain.name.replace('www.', '') %]"
 
 msgid ""
 "Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
 "by the hosting provider for your domain)"
 msgstr ""
+"Traffico Web -> dominio.com -> redirezione -> www.domain.com (questo "
+"dovrebbe essere fatto dal fornitore di hosting del suo Dominio)"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOTA"
 
 msgid "This change is NOT done in the DNS section"
-msgstr ""
+msgstr "Questo cambio NON si effettua nella sezione DNS"
 
 msgid "If you need more help configuring your domains contact our support team"
 msgstr ""
+"Per maggiori informazioni sulla configurazione del Dominio per favore "
+"contatta il nostro supporto tecnico"
 
 msgid "Thank you for choosing Opennemas!"
-msgstr ""
+msgstr "Grazie per aver scelto Opennemas!"
 
 msgid "You have just purchased the following items:"
-msgstr ""
+msgstr "Si sono appena acquistate le opzioni seguenti:"
 
 msgid "Required Domains:"
-msgstr ""
+msgstr "Domini richiesti:"
 
 msgid "You can find your invoice on the following page:"
-msgstr ""
+msgstr "La fattura è scaricabile dalla seguente pagina:"
 
 msgid "Domains to create"
-msgstr ""
+msgstr "Domini da creare"
 
 msgid "Domains to redirect"
-msgstr ""
+msgstr "Domini da redirezionare"
 
 msgid "Add"
-msgstr ""
+msgstr "Aggiungere"
 
 msgid "In cart"
-msgstr ""
+msgstr "Nella cesta della compra"
 
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 msgid "Enabling"
-msgstr ""
+msgstr "Abilitando"
 
 msgid "Live demo"
-msgstr ""
+msgstr "Dimostrazione video"
 
 msgid "Custom"
-msgstr ""
+msgstr "Personalizzato"
 
 msgid ""
 "\n"
@@ -6382,6 +6405,26 @@ msgid ""
 "            </ul>\n"
 "          "
 msgstr ""
+"\n"
+"            <h4>Pagina Web del Giornale con standard widgets sviluppato da "
+"Opennemas. La personalizzazione non è disponibile.</h4>\n"
+"            <p>La piattaforma consente le seguenti personalizzazioni: colore "
+"del menu e logo.</p>\n"
+"            <p><strong>Widgets:</strong> I widgets standard sono inclusi. "
+"Per aggiungere widgets si prega di contattare <a href=\"mailto:"
+"sales@openhost.es\">sales@openhost.es</a></p>\n"
+"            <p><strong>Esclusivitá:</strong> Questo tema non è esclusivo/p>\n"
+"            <p><strong>Tempo di consegna:</strong> 24 ore dopo l'acquisto</"
+"p>\n"
+"            <p>Modifiche PRIMA del lancio: Non sono disponibili cambi. Per "
+"modifiche si prega di consultare la sezione Personalizzazione di Temi.</p>\n"
+"            <p>Modifiche DOPO il lancio: Non sono disponibili cambi. Per "
+"modifiche si prega di consultare la sezione Personalizzazione di Temi.</p>\n"
+"            <p>Costo:</p>\n"
+"            <ul class=\"alternate\" type=\"square\">\n"
+"              <li>350€* (pagamento unico)</li>\n"
+"              <li>35€* (12 mesi)</li>\n"
+"            </ul>"
 
 msgid ""
 "\n"
@@ -6431,186 +6474,227 @@ msgid ""
 "          </ul>\n"
 "        "
 msgstr ""
+"\n"
+"            <h4>Disegno della sito web del giornale che può essere "
+"personalizzato per rispecchiare meglio la marca/h4>\n"
+"            <p><strong>Widgets:</strong> Standard widgets sono inclusi. Per "
+"aggiungerne altri per favore scrivici a <a href=\"mailto:sales@openhost.es"
+"\">sales@openhost.es</a></p>\n"
+"            <p><strong>Esclusivitá:</strong> Questo tema non è esclusivo</"
+"p>\n"
+"            <p><strong>Tempo di consegna:</strong> Da 2 settimane fino ad 1 "
+"mese dipendendo dai requisiti di personalizzazione.</p>\n"
+"            <p>Modifiche PRIMA del lancio:\n"
+"            <ul class=\"alternate\" type=\"square\">\n"
+"              <li>Tipografia, stile e colori del giornale.</li>\n"
+"              <li>Modifiche NON incluse: Widgets, Menu, Titoli, Articolo "
+"Interiore, Dimensioni Immagini, Testata e pie di pagina.</li>\n"
+"              <li>1 scambio di feedback e modifiche è incluso prima del "
+"lancio.</li>\n"
+"            </ul>\n"
+"            </li>\n"
+"            <p>Modifiche DOPO il lancio: Monitoraggio e riparazione Bug (se "
+"ci dovessero essre) sono inclusi durante 30 giorni dopo il lancio.</li>\n"
+"          <p>Passi per attivare il tema:\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li>Ordinalo</li>\n"
+"            <li>Ci metteremo in contatto con te per raccogliere i requisiti "
+"e i dettagli di acquisto.</li>\n"
+"            <li>Il tema sará pronto in da 2 a 4 settimane successive al "
+"primo pagamento</li>\n"
+"            <li>Se qualsiasi bug si dovesse presentare ce ne prenderemo "
+"cura, perché nei primi 30 giorni dall'attivazione staremo monitorando il tuo "
+"giornale</li>\n"
+"            <li>Add On:\n"
+"              <ul class=\"alternate\" type=\"square\">\n"
+"                <li>Nuovi widgets: 120€* l'uno</li>\n"
+"                <li>Anticipa il lancio di una settimana: 500€*</li>\n"
+"                <li>Costo del supporto dopo il lancio</li>\n"
+"              </ul>\n"
+"            </li>\n"
+"          </ul>\n"
+"          </li>\n"
+"          <p>Cost:</p>\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li>1450€ (pagamento unico)*</li>\n"
+"            <li>135€ (12 mesi)*<br>\n"
+"              *IVA non inclusa nel prezzo</li>\n"
+"          </ul>\n"
+"        "
 
-#, fuzzy
 msgid "Available"
-msgstr "Album non disponibile"
+msgstr "Disponibile"
 
 msgid "Exclusive"
-msgstr ""
+msgstr "Esclusivo"
 
 msgid "My themes"
-msgstr ""
+msgstr "I miei Temi"
 
 msgid "Addons"
-msgstr ""
+msgstr "Add on"
 
-#, fuzzy
 msgid "No themes available"
-msgstr "Sondaggio non disponibile"
+msgstr "Temi non disponibili"
 
 msgid "Change the look of your newspaper in just few clicks!"
-msgstr ""
+msgstr "Cambia l'aspetto del tuo giornale in 1 solo clic!"
 
 msgid ""
 "All our Themes have been designed by media professionals and they are all "
 "Mobile Responsive!"
 msgstr ""
+"Tutti i nostri Temi sono stati disegnati da professionisti e sono tutti "
+"Mobile Responsive!"
 
 msgid ""
 "Add customizations and design to create your own theme based on one of out "
 "grids or ask us to develop an exclusive and completely new theme"
 msgstr ""
+"Aggiungi personalizzazione e disegno per creare il tuo Tema basado su uno "
+"dei nostri schemi o richiedi uno sviluppo esclusivo solo per te"
 
 msgid "We are open to any solution you prefer!"
-msgstr ""
+msgstr "Siamo aperti a la souzione che preferisci!"
 
 msgid "Find here your purchased themes and decide which one to use today!"
-msgstr ""
+msgstr "Trova qui i tuoi Temi acquistati e decidi qualse usare oggi!"
 
 msgid "All purchased Themes are ready for activation"
-msgstr ""
+msgstr "Tutti i Temi acquistati sono pronti per l'attivazione"
 
 msgid "Open live demo in a new tab"
-msgstr ""
+msgstr "Apri il video dimostrativo in una nuova pagina"
 
 msgid "Delivery time"
-msgstr ""
+msgstr "Tempo di consegna"
 
 msgid "weeks"
-msgstr ""
+msgstr "settimane"
 
 msgid "months"
-msgstr ""
+msgstr "mesi"
 
 msgid "standard"
-msgstr ""
+msgstr "standard"
 
-#, fuzzy
 msgid "widget"
 msgstr "Widget"
 
 msgid "Delete multiple images"
-msgstr ""
+msgstr "Eliminare selezione di immagini"
 
-#, fuzzy
 msgid "Delete image"
-msgstr "Elimina"
+msgstr "Eliminare immagine"
 
 msgid "Are you sure you want to delete <span>%num%</span> images?"
-msgstr ""
+msgstr "Sicuro di voler eliminare <span>%num%</span> immagini?"
 
-#, fuzzy
 msgid "Files uploaded successfully"
-msgstr "File creato correttamente."
+msgstr "File caricato correttamente"
 
 msgid ""
 "The dropped files are uploaded but you should complete their information."
 msgstr ""
+"I files trascinati sono stati caricati e bisogna completarne le informazioni."
 
 msgid "Edit images"
-msgstr ""
+msgstr "Modifica immagini"
 
 msgid "Editing image"
-msgstr ""
+msgstr "Modificando immagine"
 
 msgid "Pick a location for the image"
-msgstr ""
+msgstr "Scegliere una destinazione per l'immagine"
 
 msgid "Geolocate photo with my position"
-msgstr ""
+msgstr "Localizzare la foto con la mia posizione"
 
 msgid "Assign location"
-msgstr ""
+msgstr "Assegnare posizione"
 
 msgid "View original"
-msgstr ""
+msgstr "Vedere l'originale"
 
 msgid "Original filename:"
-msgstr ""
+msgstr "Nome del file originale:"
 
 msgid "Resolution:"
-msgstr ""
+msgstr "Risoluzione:"
 
 msgid "Used for searches and automated suggestions."
-msgstr ""
+msgstr "Usato per ricerche e suggerimenti automatici."
 
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 msgid "Location"
-msgstr ""
+msgstr "Posizione"
 
 msgid "View advanced data"
-msgstr ""
+msgstr "Accedere ad informazioni avanzate"
 
 msgid "EXIF Data"
-msgstr ""
+msgstr "EXIF Informazioni"
 
-#, fuzzy
 msgid "No available EXIF data."
-msgstr "Dato EXIF non disponibile"
+msgstr "Informazioni EXIF non disponibili."
 
 msgid "IPTC Data"
-msgstr ""
+msgstr "IPTC Informazioni"
 
-#, fuzzy
 msgid "No available IPTC data."
-msgstr "Dato IPTC non disponibile"
+msgstr "Informazioni IPTC non disponibili."
 
 msgid "Search by description"
-msgstr ""
+msgstr "Ricerca per descrizione"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Risoluzione"
 
 msgid "Size"
-msgstr ""
+msgstr "Dimensione"
 
 msgid "No available images for this search"
-msgstr ""
+msgstr "Non ci sono immagini disponibili con questa ricerca"
 
-#, fuzzy
 msgid "No available description"
-msgstr "Dato EXIF non disponibile"
+msgstr "Descrizione non disponibile"
 
 msgid "No tags"
-msgstr ""
+msgstr "Non ci sono tags"
 
 msgid "Sidebars"
 msgstr "Barre laterali"
 
-#, fuzzy
 msgid "Remove all"
-msgstr "Cancella"
+msgstr "Cancellare tutto"
 
 msgid "Restore"
-msgstr ""
+msgstr "Ripristinare"
 
-#, fuzzy
 msgid "Content Type"
-msgstr "Contenuti archiviati"
+msgstr "Tipo di contenuto"
 
 msgid "-- All --"
-msgstr ""
+msgstr "-- Tutti --"
 
 msgid "No contents in the trash that matches your search."
-msgstr ""
+msgstr "Non è stato trovato contenuto corrispondente alla ricerca."
 
 msgid "Remove permanently"
-msgstr ""
+msgstr "Eliminare permanentemente"
 
-#, fuzzy
 msgid "Delete all trashed contents"
-msgstr "Elimina il contenuto di altri utenti"
+msgstr "Eliminare tutto il contenuto del cestino"
 
 msgid ""
 "Are you sure you want to remove permanently all the contents inside the "
 "trash?"
-msgstr ""
+msgstr "Sicuro di voler eleiminare tutto il contenuto del cestino?"
 
 msgid "Yes, remove all"
-msgstr ""
+msgstr "Si, eliminare tutto"
 
 msgid "There is a new version of this content that was saved as a draft."
 msgstr ""
@@ -6618,402 +6702,390 @@ msgstr ""
 msgid "Discard it"
 msgstr ""
 
-#, fuzzy
 msgid "Resume editing"
-msgstr "Si, salvare"
+msgstr ""
 
 #, fuzzy
 msgid "Draft saved at "
 msgstr "Creato al"
 
-#, fuzzy
 msgid "Creating article"
-msgstr "Lista di articoli in sospeso"
+msgstr "Creando articolo"
 
-#, fuzzy
 msgid "Editing article"
-msgstr "Lista di articoli in sospeso"
+msgstr "Modificando l'articolo"
 
 msgid "Inner title"
-msgstr ""
+msgstr "Titolo interiore"
 
 msgid "Signature"
-msgstr ""
+msgstr "Firma"
 
 msgid "Pretitle"
-msgstr ""
+msgstr "Occhiello"
 
-#, fuzzy
 msgid "Suggested for frontpage"
-msgstr "Gestisci la Prima Pagina Homepage "
+msgstr "Seggerito per la Prima Pagina"
 
 msgid "Slug"
-msgstr ""
+msgstr "Slug"
 
 msgid "Only available for subscribers"
-msgstr ""
+msgstr "Solo disponibile per utenti registrati"
 
 msgid "Suggest this element to home"
-msgstr ""
+msgstr "Suggerire questo elemento nella Homep"
 
 msgid "Suggest to home"
-msgstr ""
+msgstr "Suggerire nella Homepage"
 
 msgid "Unsuggest this element to home"
-msgstr ""
+msgstr "Non suggerire questo elemento nella Homepage"
 
 msgid "Unsuggest to home"
-msgstr ""
+msgstr "Non suggerire nella Homepage"
 
 msgid "Customize"
-msgstr ""
+msgstr "Personalizzare"
 
-#, fuzzy
 msgid "Settings for frontpage"
-msgstr "Gestisci la Prima Pagina Homepage "
+msgstr "Configurazione Prima Pagina"
 
 msgid "Text size for title"
-msgstr ""
+msgstr "Dimensione del testo del titolo"
 
 msgid "Image position"
-msgstr ""
+msgstr "Posizione dell'immagine"
 
-#, fuzzy
 msgid "Settings home frontpage"
-msgstr "Gestisci la Prima Pagina Homepage "
+msgstr "Configurazione Prima Pagina Homepage"
 
-#, fuzzy
 msgid "Title for home frontpage"
-msgstr "Gestisci la Prima Pagina Homepage "
+msgstr "Titoli per la Prima Pagina Homepage "
 
 msgid "Images assigned"
-msgstr ""
+msgstr "Immagini assegnate"
 
-#, fuzzy
 msgid "Image to show in frontpages"
-msgstr "Gestisci la Prima Pagina Homepage "
+msgstr "Immagine da mostrare nella Prima Pagina Homepage "
 
 msgid "Image to show in inner"
-msgstr ""
+msgstr "Immagine da mostrare nella notizia interiore"
 
 msgid "Home image"
-msgstr ""
+msgstr "Immagine Homepage"
 
-#, fuzzy
 msgid "Video for frontpage"
-msgstr "Video - Prima Pagina"
+msgstr "Video per la Prima Pagina"
 
 msgid "Pick a video"
-msgstr ""
+msgstr "Selezionare un video"
 
-#, fuzzy
 msgid "File name"
-msgstr "File"
+msgstr "Nome del file"
 
-#, fuzzy
 msgid "Creation date"
-msgstr "Crea"
+msgstr "Data di creazione"
 
 msgid "Footer text for inner video:"
-msgstr ""
+msgstr "Testo del pie di pagina video:"
 
-#, fuzzy
 msgid "Video for inner article page"
-msgstr "Video - Prima Pagina"
+msgstr "Video pagina articolo interiore"
 
-#, fuzzy
 msgid "Unable to find any article that matches your search."
-msgstr "Ci è stato impossibile trovare un articolo con id \"%d\""
+msgstr "Ci è stato impossibile trovare articoloi corrispondenti alla ricerca"
 
-#, fuzzy
 msgid "No available articles."
-msgstr "Dato EXIF non disponibile"
+msgstr "Articoli non disponibili."
 
 msgid "Available from"
-msgstr ""
+msgstr "Disponibile da"
 
 msgid "to"
-msgstr ""
+msgstr "a"
 
 msgid "Related contents"
-msgstr ""
+msgstr "Contenuti relazionati"
 
-#, fuzzy
 msgid "Related in frontpage"
-msgstr "Gestisci la prima pagina"
+msgstr "Relazionati in prima pagina"
 
 msgid "Related in inner"
-msgstr ""
+msgstr "Relazionati nell'articolo interiore"
 
 msgid "Related in home"
-msgstr ""
+msgstr "Relazionati in prima pagina homepage"
 
-#, fuzzy
 msgid "Gallery for frontpage"
-msgstr "Sondaggio - Prima Pagina"
+msgstr "Album per la prima pagina"
 
 msgid "Only one album"
-msgstr ""
+msgstr "Solo un album"
 
 msgid "Add gallery"
-msgstr ""
+msgstr "Aggiungere album"
 
-#, fuzzy
 msgid "Gallery for inner"
-msgstr "Sondaggio - Interiore"
+msgstr "Album per articolo interiore"
 
 msgid "Gallery for Home"
-msgstr ""
+msgstr "Album per prima pagina homepage"
 
 msgid "Creating special"
-msgstr ""
+msgstr "Creando speaciale"
 
 msgid "Editing special"
-msgstr ""
+msgstr "Modificando speciale"
 
 msgid "List of words separated by commas."
-msgstr ""
+msgstr "Lista di parole separate da virgola."
 
 msgid "Image for Special"
-msgstr ""
+msgstr "immagine per lo Speciale"
 
-#, fuzzy
 msgid "Special contents"
-msgstr "Elementi Speciali"
+msgstr "Contenuti Speciale"
 
 msgid "Articles in left column"
-msgstr ""
+msgstr "Articoli nella colonna sinistra"
 
 msgid "Click here to add contents"
-msgstr ""
+msgstr "Fai clic qui per aggiungere contenuti"
 
 msgid "Articles in right column"
-msgstr ""
+msgstr "Articoli nella colonna destra"
 
-#, fuzzy
 msgid "You must put %1 specials in the HOME"
-msgstr "Per favore introdurre %d libri nel widget HOME"
+msgstr "Per favore introdurre %1 speciali nella HOME"
 
-#, fuzzy
 msgid "Unable to find any special that matches your search."
-msgstr "Non è stato possibile trovare un utente con l'email fornita."
+msgstr "Impossibile trovare uno speciale corrispondente alla ricerca."
 
 msgid "Number of elements in widget home"
-msgstr ""
+msgstr "Numero di elemento nel widget home"
 
 msgid ""
 "Use  total in widget special for define how many videos can see in widgets "
 "in newspaper frontpage"
 msgstr ""
+"Specificare nel campo totale nel widget speciale quanti video si possono "
+"vedere nel widget nella prima pagina"
 
 msgid "Time of the last special most viewed (days):"
-msgstr ""
+msgstr "Tempo dell'ultimo speciale piú visto (giorni):"
 
+#, fuzzy
 msgid ""
 "Used to define the frontpage specials, the time range of the latest specials "
 "are the most viewed"
-msgstr ""
+msgstr "Usato per definire la prima pagina degli speciali, "
 
 msgid "Config special module"
-msgstr ""
+msgstr "Configurazione modulo speciale"
 
 msgid "Delete category"
-msgstr ""
+msgstr "Eliminare categoria"
 
-#, fuzzy
 msgid "Delete all the contents in category"
-msgstr ""
-"Ci è stato impossibile eliminare tutto il contenuto nella categoria '%s'"
+msgstr "Eliminare tutto il contenuto della categoria"
 
-#, fuzzy
 msgid ""
 "Are you sure that do you want delete all the contents in the category "
 "\"<span>%title%</span>\"?"
 msgstr ""
-"Ci è stato impossibile eliminare tutto il contenuto nella categoria '%s'"
+"Sicuro di voler eliminare tutto il contenuto nella categoria \"<span>%title"
+"%</span>\"?"
 
 msgid "Editing category"
-msgstr ""
+msgstr "Modificando categoria"
 
 msgid "Creating category"
-msgstr ""
+msgstr "Creando categoria"
 
 msgid "Config categories module"
-msgstr ""
+msgstr "Configurazione modulo categorie"
 
 msgid "Subsection of"
-msgstr ""
+msgstr "Sottosezione di"
 
 msgid "Subsections"
-msgstr ""
+msgstr "Sottosezioni"
 
-#, fuzzy
 msgid "Internal name"
-msgstr "Ricerca interna"
+msgstr "Nome interno"
 
 msgid "In menu"
-msgstr ""
+msgstr "Nel menu"
 
 msgid "Actions"
-msgstr ""
+msgstr "Azioni"
 
-#, fuzzy
 msgid "Category available for"
-msgstr "Contenuto non disponibile"
+msgstr "Categoria disponibile per"
 
 msgid "All contents"
-msgstr ""
+msgstr "Tutti i contenuti"
 
 msgid "ePaper"
-msgstr ""
+msgstr "ePaper"
 
-#, fuzzy
 msgid "Category logo"
-msgstr "Categorie"
+msgstr "Logo di categoria"
 
 msgid "Change image headers and colors in frontpages"
-msgstr ""
+msgstr "Cambiare immagine della testata e i colori delle prime pagine"
 
 msgid ""
 "Enable this if you want to use a custom image and color in your category "
 "frontpages"
 msgstr ""
+"Attivate questa funzionalità per usare una immagine e un colore "
+"personalizzati nella categoria prime pagine"
 
 msgid "Empty"
-msgstr ""
+msgstr "Vuoto"
 
-#, fuzzy
 msgid "Delete all the contents in this category"
-msgstr ""
-"Ci è stato impossibile eliminare tutto il contenuto nella categoria '%s'"
+msgstr "Eliminare tutto il contenuto di questa categoria"
 
-#, fuzzy
 msgid "For articles"
-msgstr "Articolo"
+msgstr "Per articoli"
 
 msgid "For albums"
-msgstr ""
+msgstr "Per album"
 
 msgid "For videos"
-msgstr ""
+msgstr "Per video"
 
 msgid "For ePapers"
-msgstr ""
+msgstr "Per ePapers"
 
 msgid "For polls"
-msgstr ""
+msgstr "Per sondaggi"
 
-#, fuzzy
 msgid "For Specials"
-msgstr "Speciale"
+msgstr "Per speciali"
 
 msgid "For books"
-msgstr ""
+msgstr "Per libri"
 
 msgid "Show in rss"
-msgstr ""
+msgstr "Mostrare nelle rss"
 
 msgid "No available categories for listing"
-msgstr ""
+msgstr "Categorie non disponibili per le liste"
 
-#, fuzzy
 msgid "Change comment manager"
-msgstr "Gestore del Backend"
+msgstr "Modificare il gestore di commenti"
 
 msgid ""
 "Opennemas supports multiple managers for comments. You can change to your "
 "desired manager whenever you want."
 msgstr ""
+"Opennemas include diversi gestori d commenti. Si può selezionare quello che "
+"si preferisce in qualsiasi momento."
 
 msgid "Pick the method to manage comments:"
-msgstr ""
+msgstr "Selezionare il metodo per gestire commenti:"
 
 msgid "Built-in system"
-msgstr ""
+msgstr "Sistema integrato"
 
 msgid ""
 "Opennemas has simple but effective comment system that requires zero "
 "configuration."
 msgstr ""
+"Opennemas possiede un semplice sistema di gestione commenti che NON richiede "
+"configurazione."
 
 msgid ""
 "Integrate Opennemas with the <a href=\"http://www.disqus.com/\">Disqus "
 "comment system</a> and use their powerful system to manage your website "
 "comments."
 msgstr ""
+"Integrare Opennemas con <a href=\"http://www.disqus.com/\">Disqus sistema "
+"per commenti</a> e usare questo potente gestore di commenti sul tuo sito."
 
 msgid ""
 "Integrate Opennemas with the <a href=\"https://developers.facebook.com/docs/"
 "plugins/comments/\">Facebook comment system</a> and use their online tools "
 "to manage your website comments."
 msgstr ""
+"Integrare Opennemas con <a href=\"https://developers.facebook.com/docs/"
+"plugins/comments/\">il sistema di commenti Facebook</a> e usare la loro "
+"applicazione online per gestire i commenti."
 
 msgid ""
 "Are you sure that do you want send to the trash this comment from \"[% "
 "template.content.author %]\"?"
 msgstr ""
+"Sicuro di voler inviare al cestino questo commento di \"[% template.content."
+"author %]\"?"
 
 msgid "Editing comment"
-msgstr ""
+msgstr "Modificando commento"
 
 msgid "Submitted on"
-msgstr ""
+msgstr "Inviato il"
 
 msgid "Sent from IP address"
-msgstr ""
+msgstr "Inviato dall'indirizzo IP"
 
-#, fuzzy
 msgid "Commented on"
-msgstr "Commento"
+msgstr "Commentato il"
 
 msgid "Disqus"
-msgstr ""
+msgstr "Disqus"
 
-#, fuzzy
 msgid "Change comments module"
-msgstr "Gestisci i commenti del sondaggio"
+msgstr "Modificare il modulo di commenti"
 
 msgid "Set your Disqus configuration"
-msgstr ""
+msgstr "Inserire la configurazione Disqus"
 
 msgid ""
 "A shortname is the unique identifier assigned to a Disqus site. All the "
 "comments posted to a site are referenced with the shortname"
 msgstr ""
+"Un \"shortname\" è un identifcatore unico assegnato a un sito Disqus. Tutti "
+"i commenti pubblicati saranno identificati con questo \"shortname\""
 
 msgid ""
 "You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
 "applications/\" target=\"_blank\">here</a>"
 msgstr ""
+"Puoi ottenere la tua chiave segreta di Disqus <a href=\"http://disqus.com/"
+"api/applications/\" target=\"_blank\">qui</a>"
 
-#, fuzzy
 msgid "Disqus module configuration"
-msgstr ""
-"Si è verificato un errore durante la memorizzazione della configurazione di "
-"Disqus"
+msgstr "Configurazione del modulo Disqus"
 
 msgid "To moderate your Disqus comments, click here"
-msgstr ""
+msgstr "Per moderare i tuoi commenti Disqus, fai clic qui"
 
 msgid "Disqus not configured"
-msgstr ""
+msgstr "Disques non configurato"
 
 msgid ""
 "To be able to moderate comments of your site in Facebook you must create and "
 "set here your <strong>Facebook App Id</strong>."
 msgstr ""
+"Per riuscire a moderare i commenti sul sito Facebook è necessario creare ed "
+"inserire qui il <strong>Facebook App Id</strong>."
 
 msgid ""
 "You can get your Facebook App Keys from <a href=\"https://developers."
 "facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
 msgstr ""
+"Puoi ottenere il Facebook App Id dal sito <a href=\"https://developers."
+"facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
 
 msgid "Config facebook module"
-msgstr ""
+msgstr "Configurazione del modulo Facebook"
 
-#, fuzzy
 msgid "You are now using Facebook comments"
-msgstr "Ora è in uso il sistema di commenti Facebook."
+msgstr "Ora è in uso il sistema di commenti Facebook"
 
 msgid ""
 "If you want to moderate comments, you first need to create a Facebook "
@@ -7021,150 +7093,152 @@ msgid ""
 "\">here</a> to get an application Id and then click on settings to configure "
 "it"
 msgstr ""
+"Per poter moderare i commenti, è necessario prima ottenere un Id di "
+"Applicazione Fecebook da <a href=\"https://developers.facebook.com/\" target="
+"\"_blank\">qui</a> e poi inserirla nella sezione di configurazione"
 
 msgid ""
 "To moderate your comments go to <a href=\"https://developers.facebook.com/"
 "tools/comments\" target=\"_blank\">Facebook moderation tool page</a>"
 msgstr ""
+"Per moderare i commenti bisogna andare alla pagina <a href=\"https://"
+"developers.facebook.com/tools/comments\" target=\"_blank\">Facebook "
+"moderation tool</a>"
 
 msgid "Display"
-msgstr ""
+msgstr "Mostrare"
 
 msgid "Number of comments to show by page"
-msgstr ""
+msgstr "Numero di commenti da mostrare per pagina"
 
 msgid "Allow comments in contents by default"
-msgstr ""
+msgstr "Consentire commenti nei contenuti come impostazione predefinita"
 
 msgid ""
 "Whether to allow users to comment in comments by default for all contents "
 "(you can change this setting for specific contents)"
 msgstr ""
+"Consentire agli utenti di commentare qualsiasi contenuto (questa opzione si "
+"può cambiare per contenuti specifici)"
 
 msgid "Before a comment appears"
-msgstr ""
+msgstr "Prima che un commento sia visibile"
 
 msgid "An administrator must always approve the comment "
-msgstr ""
+msgstr "Un amministratore deve sempre approvare il commento"
 
 msgid "Config comments module"
-msgstr ""
+msgstr "Configurazione del modulo Commenti"
 
 msgid "Search by body"
-msgstr ""
+msgstr "Ricerca per corpo del testo"
 
-#, fuzzy
 msgid "Unable to find any comment that matches your search."
-msgstr "Non è stato possibile trovare un utente con l'email fornita."
+msgstr "Non è stato trovato un commento corrispondente alla ricerca."
 
 msgid "Maybe changing any filter could help."
-msgstr ""
+msgstr "Forse cambiare qualche filtro potrebbe aiutare."
 
 msgid "In response to"
-msgstr ""
+msgstr "In risposta a"
 
 msgid "Author:"
-msgstr ""
+msgstr "Autore:"
 
 msgid "Submitted on:"
-msgstr ""
+msgstr "Inviato il:"
 
 msgid "Editing opinion"
-msgstr ""
+msgstr "Modificando opinione"
 
 msgid "Creating opinion"
-msgstr ""
+msgstr "Creando opinione"
 
-#, fuzzy
 msgid "In homepage"
-msgstr "Gestisci la Prima Pagina Homepage "
+msgstr "Nella Prima Pagina Homepage"
 
-#, fuzzy
 msgid "-- Select opinion type --"
-msgstr " - Selezionare 1 autore - "
+msgstr "-- Selezionare tipo di opinione --"
 
-#, fuzzy
 msgid "Opinion from author"
-msgstr "Opinione - Autori"
+msgstr "Opinione dell'Autore"
 
-#, fuzzy
 msgid "Opinion from editorial"
-msgstr "Opinione - Autori"
+msgstr "Opinione Editoriale"
 
 msgid "Director's letter"
-msgstr ""
+msgstr "Lettera al Direttore"
 
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 msgid "Director Articles"
-msgstr ""
+msgstr "Articoli del Direttore"
 
 msgid "Editorial Articles"
-msgstr ""
+msgstr "Articoli Editoriali"
 
-#, fuzzy
 msgid "Other Articles"
-msgstr "Articolo"
+msgstr "Altri Articoli"
 
-#, fuzzy
 msgid "Editorial"
-msgstr "Modifica"
+msgstr "Editoriale"
 
 msgid "Director"
-msgstr ""
+msgstr "Direttore"
 
 msgid "Views"
-msgstr ""
+msgstr "Visite"
 
-#, fuzzy
 msgid "Unable to find any opinion that matches your search."
-msgstr "Impossibile trovare immagine con l'id fornito"
+msgstr "Non è stata trovata un'opinione corrispondente alla ricerca."
 
 msgid "There is no opinions yet."
-msgstr ""
+msgstr "Non ci sono ancora opinioni."
 
 msgid "Director opinions in Opinion frontpage"
-msgstr ""
+msgstr "Opinioni del Direttore nella prima pagina di Opinioni"
 
 msgid "How many director opinions will be shown in the opinion frontpage."
 msgstr ""
+"Quante opinioni del Direttore verranno mostrate nella prima pagina di "
+"Opinioni."
 
 msgid "Editorial opinions in Opinion frontpage"
-msgstr ""
+msgstr "Opinioni Editoriali nella prima pagina di Opinioni"
 
 msgid "How many editorial opinions will be shown in the opinion frontpage."
 msgstr ""
+"Quante opinioni Editoriali verranno mostrate nella prima pagina di Opinioni."
 
 msgid "Opinions in Opinion frontpage"
-msgstr ""
+msgstr "Opinioni nella prima pagina di Opinioni"
 
 msgid "How many opinions opinions will be shown in the opinion frontpage."
-msgstr ""
+msgstr "Quante opinioni verranno mostrate nella prima pagina di Opinioni."
 
-#, fuzzy
 msgid "Author opinions in frontpage opinion widget"
-msgstr "Gestisci il widget di opinione"
+msgstr "Opinioni per Autore nel widget di Opinioni"
 
 msgid "How many author opinions will be shown in the widget."
-msgstr ""
+msgstr "Quante opinioni di un Autore verranno mostrare nel widget."
 
-#, fuzzy
 msgid "Order blog's frontpage by"
-msgstr "Video - Prima Pagina"
+msgstr "Ordinare la prima pagina del blog per"
 
 msgid "Select if order blogs's frontpages by created date or bloggers name."
 msgstr ""
+"Selezionare se ordinare la prima pagina del blog per data di creazione o "
+"nome del blogger."
 
-#, fuzzy
 msgid "Created Date"
-msgstr "Crea"
+msgstr "Data di creazione"
 
 msgid "Blogger"
-msgstr ""
+msgstr "Blogger"
 
 msgid "Config opinion module"
-msgstr ""
+msgstr "Configurazione del modulo Opinioni"
 
 msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
 msgstr ""
@@ -7173,140 +7247,136 @@ msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr ""
 
 msgid "'%1' not activated - Opennemas"
-msgstr ""
+msgstr "'%1' non attivato - Opennemas"
 
 msgid "%1 temporary deactivated."
-msgstr ""
+msgstr "%1 temporaneamente disattivato."
 
 msgid "Editing keyword"
-msgstr ""
+msgstr "Modificando parola chiave"
 
 msgid "Creating keyword"
-msgstr ""
+msgstr "Creando parola chiave"
 
 msgid "Value"
-msgstr ""
+msgstr "Valore"
 
 msgid "Filter by name"
-msgstr ""
+msgstr "Filtrare per nome"
 
-#, fuzzy
 msgid "Unable to find any keyword that matches your search."
-msgstr "Non è stato possibile trovare un utente con l'email fornita."
+msgstr ""
+"Non è stato possibile trovare una parola chiave corrispondente alla ricerca "
+"effettuata."
 
 msgid "Keyword"
-msgstr ""
+msgstr "Parola Chiave"
 
 msgid "External link to "
-msgstr ""
+msgstr "Collegamento esterno a"
 
-#, fuzzy
 msgid "Internal search to keyword"
-msgstr "Ricerca interna"
+msgstr "Ricerca interna della parola chiave"
 
 msgid "Link to send email to"
-msgstr ""
+msgstr "Collegamento per inviare una email a"
 
-#, fuzzy
 msgid "Edit this content"
-msgstr "Modifica il contenuto di altri utenti"
+msgstr "Modificare il contenuto"
 
 msgid "Are you sure that do you want remove \"[% template.content.title %]\"?"
-msgstr ""
+msgstr "Sicuro che si vuole eliminare \"[% template.content.title %]\"?"
 
-#, fuzzy
 msgid "Delete albums"
-msgstr "Elimina"
+msgstr "Eliminare album"
 
-#, fuzzy
 msgid "Delete album"
-msgstr "Elimina"
+msgstr "Eliminare album"
 
 msgid "Are you sure that do you want delete \"[% content.name %]\"?"
-msgstr ""
+msgstr "Sicuro che si vuole eliminare \"[% content.name %]\"?"
 
 msgid "Are you sure you want to delete <span>%num%</span> albums?"
-msgstr ""
+msgstr "Sicuro di voler eliminare <span>%num%</span> album?"
 
 msgid "Complete all the required album information before save it"
-msgstr ""
+msgstr "Completare tutte le informazioni dell'album prima di salvare"
 
 msgid "Check that you have included more than one image in this album"
-msgstr ""
+msgstr "Controllare di aver inserito più di una immagine in questo album"
 
 msgid "Assign an image as a cover image"
-msgstr ""
+msgstr "Assegnare un'immagine come immagine di copertina"
 
 msgid "Editing album"
-msgstr ""
+msgstr "Modificando l'album"
 
 msgid "Creating Album"
-msgstr ""
+msgstr "Creando l'album"
 
-#, fuzzy
 msgid "Album images"
-msgstr "Album - Interiore"
+msgstr "Album immagini"
 
 msgid "Add images"
-msgstr ""
+msgstr "Aggiungere immagini"
 
-#, fuzzy
 msgid "Cover image"
-msgstr "Copertina"
+msgstr "Immagine di copertina"
 
-#, fuzzy
 msgid "Unable to find any album that matches your search."
-msgstr "Ci è stato impossibile trovare un album con id \"%d\"."
+msgstr "Non è stato possibile trovare un album con la ricerca effettuata."
 
-#, fuzzy
 msgid "Album details"
-msgstr "Album non disponibile"
+msgstr "Dettagli dell'album"
 
-#, fuzzy
 msgid "You must put %1 albums in the HOME"
-msgstr "Per favore introdurre %d libri nel widget HOME"
+msgstr "Per favore introdurre %1 album in HOME"
 
 msgid ""
 "Use  total in widget album for define how many albums can see in widgets in "
 "frontpage"
 msgstr ""
+"Usare Totale nel widget album per definire quanti album inserire nel widget "
+"della prima pagina"
 
 msgid "Cover size in widget album (width x height)"
-msgstr ""
+msgstr "Dimensione della copertina del widget album (larghezza x altezza)"
 
-#, fuzzy
 msgid "Order album's frontpage by"
-msgstr "Album - Prima Pagina"
+msgstr "Ordinare la prima pagina di Album per"
 
 msgid ""
 "Select if order album's frontpage by most views or albums checked as "
 "favorites."
 msgstr ""
+"Selezionare se ordinare la prima pagina di album per piú visto o per "
+"selezionato come preferito."
 
 msgid "Most views"
-msgstr ""
+msgstr "Piú visto"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Preferito"
 
 msgid "Time of the last album most viewed (days)"
-msgstr ""
+msgstr "Tempo dall'ultimo album piú visto (in giorni)"
 
-#, fuzzy
 msgid "Total in album frontpage"
-msgstr "Album - Prima Pagina"
+msgstr "Totale nella prima pagina di Album"
 
 msgid "Use this to define how many albums can see in the album frontpage."
 msgstr ""
+"Usare questo per definire quanti album si potranno vedere nella prima pagina "
+"di Album."
 
 msgid "Total in album frontpage/widget more albums"
-msgstr ""
+msgstr "Totale nella prima pagina/widget di più album"
 
 msgid "Total number of album on more albums section in album home frontpage"
-msgstr ""
+msgstr "Numero totale di album e sezione più album nella prima pagina Album"
 
 msgid "New album"
-msgstr ""
+msgstr "Nuovo album"
 
 #, fuzzy
 msgid "New version available"
@@ -8308,6 +8378,9 @@ msgstr ""
 msgid "Detailed statistics"
 msgstr ""
 
+msgid "Scripts"
+msgstr "Scripts"
+
 msgid "Path"
 msgstr ""
 
@@ -8438,6 +8511,10 @@ msgstr "Articolo"
 msgid "Edit client"
 msgstr "Gestisci Istanze"
 
+#, fuzzy
+msgid "This field is invalid"
+msgstr "Campo '%s' non valido"
+
 msgid "VAT No."
 msgstr ""
 
@@ -8513,10 +8590,6 @@ msgstr "L'utente non è autorizzati ad eseguire questa azione."
 msgid "New user"
 msgstr "Nuovo utente"
 
-#, fuzzy
-msgid "This field is invalid"
-msgstr "Campo '%s' non valido"
-
 msgid "The passwords don't match"
 msgstr ""
 
@@ -8545,10 +8618,6 @@ msgstr "Ricerca per nome"
 msgid "Do you want to log out?"
 msgstr "Per favore fornire un id per eliminare una copertina."
 
-#, fuzzy
-#~ msgid "Do you want to edit the existing draft?"
-#~ msgstr "Per favore fornire un id per eliminare una copertina."
-
 #~ msgid "Cache configuration saved successfully."
 #~ msgstr "Configurazione di cache salvata correttamente."
 
@@ -8573,6 +8642,12 @@ msgstr "Per favore fornire un id per eliminare una copertina."
 
 #~ msgid "Redis cache cleared for current instance."
 #~ msgstr "Redis cache eliminate per l'istanza corrente."
+
+#~ msgid "%1 doesn’t exist."
+#~ msgstr "%1 non esiste."
+
+#~ msgid "Do you want to register %1?"
+#~ msgstr "Si vuole registare %1?"
 
 #~ msgid ""
 #~ "You have reach the maximum users allowed. If you want to create more "
@@ -9015,9 +9090,6 @@ msgstr "Per favore fornire un id per eliminare una copertina."
 #, fuzzy
 #~ msgid "Poll frontpage"
 #~ msgstr "Sondaggio - Prima Pagina"
-
-#~ msgid "Custom CSS"
-#~ msgstr "CSS personalizzato"
 
 #~ msgid "Add Video and Image Galleries to your content. "
 #~ msgstr "È possibile aggiungere Gallerie di Video ed Immagini al contenuto."

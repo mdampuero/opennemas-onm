@@ -10,6 +10,9 @@ services:
         class: Common\ORM\Core\EntityManager
         arguments: [ '@service_container' ]
 
+    orm.oql.fixer:
+        class: Common\ORM\Core\Oql\Fixer
+
     # TODO: Remove when models use new ORM
     orm.connection.instance:
         class:     Common\ORM\Core\Connection

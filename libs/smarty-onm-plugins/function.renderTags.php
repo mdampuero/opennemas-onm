@@ -1,88 +1,74 @@
 <?php
 /**
- * -------------------------------------------------------------
- * File:        function.Breadcrumb.php
- * Check type of menu element and prepare link
- *
+ * Used to generate links for tags depending on the selected method
+ * twitter hashtag, onm internal tags, google search
  **/
 
 function smarty_function_renderTags($params, &$smarty)
 {
     $output = '';
+    // If no metadata return empty output
     if (!array_key_exists('metas', $params)) {
         return $output;
     }
 
-    if (!array_key_exists('separator', $params)) {
-        $separator = ', ';
+    // Check for separator
+    $separator = (!array_key_exists('separator', $params)) ? ', ' : $params['separator'];
+
+    // Check for class
+    $class = (!array_key_exists('class', $params)) ? ' class="tags" ': $params['class'];
+
+    // Check for limit
+    $limit = (array_key_exists('limit', $params)) ? $params['limit'] : null;
+
+    // Get url generator
+    $generator = getService('router');
+
+    // Check for search method
+    if (array_key_exists('internal', $params)) {
+        $method = ($params['internal'] == true)? 'tags': $params['internal'];
     } else {
-        $separator = $params['separator'];
+        // Get Google Search Key
+        $googleSearchKey = \Onm\Settings::get('google_custom_search_api_key');
+        $method = (!empty($googleSearchKey))? 'google': 'tags';
     }
 
-    global $generator;
-    $method = '';
-    if (array_key_exists('internal', $params) && ($params['internal'] === 'hashtag')) {
-            $url = 'https://twitter.com/hashtag/';
-            $method = 'hashtag';
-    } elseif (array_key_exists('internal', $params) && ($params['internal'] == true)) {
-        if (is_object($generator)) {
-            $name ='tag_frontpage';
-            $url = $generator->generate($name);
-        } else {
-            $url = '/tag';
-        }
-        $method = 'tags';
-    } else {
-        $method = 'google';
-
-        $params['internal'] = false;
-        if (!array_key_exists('url', $params)) {
-            $url ='';
-            $googleKey = \Onm\Settings::get('google_custom_search_api_key');
-
-            if (is_object($generator)) {
-                $name = 'frontend_search_google';
-                $url = $generator->generate($name);
-                $url = "{$url}?cx=&ie=UTF-8&key={$googleKey}";
-            } else {
-                $url = "/search/google?cx=&ie=UTF-8&key={$googleKey}";
-            }
-        } else {
-            //
-            $url = $params['url'];
-        }
-    }
-
-    if (!array_key_exists('class', $params)) {
-        $class = ' class="tags" ';
-    } else {
-        //
-        $class = $params['class'];
-    }
-
-    $i = 1;
+    // Generate tags links
+    $i = 0;
     foreach ($params['metas'] as $tag) {
         $tag = trim($tag);
         if (!empty($tag)) {
-            $result = preg_match('/^#(.*)/', $tag, $matchs);
-            if ($method == 'hashtag' && !empty($matchs[1])) {
-                $fullUrl = htmlentities($url.$matchs[1], ENT_QUOTES);
-                $output .= '<a '.$class.' target="_blank" href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+            $url = $target = '';
+            switch ($method) {
+                case 'hashtag':
+                    if (strpos($tag, '#') === 0) {
+                        $baseUrl = 'https://twitter.com/hashtag/';
+                        $url = htmlentities($baseUrl . substr($tag, 1), ENT_QUOTES);
+                        $target = 'target="_blank"';
+                    }
+                    break;
 
-            } elseif (($method != 'hashtag') && empty($result)) {
-                if ($method == 'tags') {
-                    $tag2 = \Onm\StringUtils::generateSlug($tag);
-                    $fullUrl = htmlentities($url.'/'.$tag2, ENT_QUOTES);
-                } else {
-                    $fullUrl = htmlentities($url.'&q='.$tag, ENT_QUOTES);
-                }
-                $output .= ' <a '.$class.' href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+                case 'google':
+                    if (strpos($tag, '#') !== 0) {
+                        $baseUrl = $generator->generate('frontend_search_google');
+                        $url = $baseUrl.'?q='.$tag.'&ie=UTF-8&cx='.$googleSearchKey;
+                    }
+                    break;
 
-                if (array_key_exists('limit', $params) && $params['limit'] <= $i) {
-                    return $output;
-                }
+                case 'tags':
+                    if (strpos($tag, '#') !== 0) {
+                        $url = $generator->generate('tag_frontpage', ['tag_name' => $tag]);
+                    }
+                    break;
+            }
+            if (!empty($url)) {
+                $output .= '<a '.$class.' '.$target.' href="'.$url.
+                    '" title="'.$tag.'">'.$tag.'</a>'.$separator;
                 $i++;
             }
+        }
+        if (!is_null($limit) && $i === $limit) {
+            return $output;
         }
     }
 

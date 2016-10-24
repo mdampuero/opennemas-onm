@@ -63,8 +63,8 @@ class NotificationController extends Controller
                 $oql .= 'and ';
             }
 
-            $oql .= 'internal_name ~ "%s" ';
-            $oql  = sprintf($oql, $query);
+            $oql .= '(internal_name ~ "%s" or name ~ "%s") ';
+            $oql  = sprintf($oql, $query, $query);
         }
 
         $oql .= 'order by internal_name asc limit 10';

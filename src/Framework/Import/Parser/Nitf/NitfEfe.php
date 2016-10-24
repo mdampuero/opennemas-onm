@@ -46,7 +46,7 @@ class NitfEfe extends Nitf
         $date = str_replace('+0000', '', $date[0]->attributes()->norm[0]);
         $date = \DateTime::createFromFormat('Ymd\THis', $date);
 
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date;
     }

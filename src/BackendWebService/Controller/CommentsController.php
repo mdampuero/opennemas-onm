@@ -142,10 +142,6 @@ class CommentsController extends ContentController
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
-        foreach ($results as &$result) {
-            $result->date = $result->date->format(\DateTime::ISO8601);
-        }
-
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,

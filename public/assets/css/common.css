@@ -41,7 +41,7 @@
 body > #intesticial-ad {position: fixed;display: block;top: 0;left: 0;}
 
 #intesticial-ad .wrapper {position:relative;display:block;max-width: 800px;width: 100%;height:auto;margin:0 auto;margin-top:20px;}
-#intesticial-ad .header {position:relative;height:25px;font-size:.9em;color:#999;height:30px;border-bottom:1px solid #ccc;}
+#intesticial-ad .header {position:relative;font-size:.9em;color:#999;height:30px;border-bottom:1px solid #ccc;}
 #intesticial-ad .logo-and-phrase {text-align:left;width:400px;padding-top:10px;}
 #intesticial-ad .closeButton {position:absolute;top:1px;right:0;}
 #intesticial-ad .closeButton a {font-size: 1em;color:White;background:url(../../images/close.png) top right no-repeat;width:128px;height:28px;font-weight:bold;display:block;text-align:left;padding:6px 0 0 6px;}
@@ -49,6 +49,14 @@ body > #intesticial-ad {position: fixed;display: block;top: 0;left: 0;}
 #intesticial-ad .content {margin: 0 auto;padding: 1em;height: 100%;cursor: pointer;}
 #intesticial-ad .content img {height: auto;}
 
+@media (max-width: 479px) {
+  #intesticial-ad .wrapper {margin-top:0;}
+  #intesticial-ad .header {height:30px;border-bottom:none;}
+  #intesticial-ad .logo-and-phrase {text-align:left;width:400px;padding-top:10px;}
+  #intesticial-ad .closeButton a {width:40px;height:35px;}
+  #intesticial-ad .wrapper_intersticial {padding-top: 0;}
+  #intesticial-ad .content {padding: .5em;}
+}
 .ads iframe,
 #intesticial-ad iframe {overflow: hidden;}
 

@@ -118,17 +118,29 @@ class ClientController extends Controller
     public function listAction(Request $request)
     {
         $oql   = $request->query->get('oql', '');
-        $extra = $this->getExtraData();
+
+        // Fix OQL for Non-MASTER users
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
+
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition($condition)->getOql();
+        }
 
         $repository = $this->get('orm.manager')->getRepository('Client');
         $converter  = $this->get('orm.manager')->getConverter('Client');
 
+        $ids     = [];
         $total   = $repository->countBy($oql);
         $clients = $repository->findBy($oql);
 
-        $clients = array_map(function ($a) use ($converter) {
-            return $converter->responsify($a->getData());
+        $clients = array_map(function ($a) use ($converter, &$ids) {
+            $ids[] = $a->id;
+
+            return $converter->responsify($a);
         }, $clients);
+
+        $extra = $this->getExtraData($ids);
 
         return new JsonResponse([
             'extra'   => $extra,
@@ -180,6 +192,11 @@ class ClientController extends Controller
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Client')
             ->objectify($request->request->all());
+
+        // Add current user as owner if current user is a PARTNER
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $data['owner_id'] = $this->get('core.user')->id;
+        }
 
         $client = new Client($data);
 
@@ -255,6 +272,11 @@ class ClientController extends Controller
         $data = $em->getConverter('Client')
             ->objectify($request->request->all());
 
+        // Add current user as owner if current user is a PARTNER
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $data['owner_id'] = $this->get('core.user')->id;
+        }
+
         $client = $em->getRepository('client')->find($id);
         $client->setData($data);
 
@@ -270,16 +292,28 @@ class ClientController extends Controller
     /**
      * Returns an array with extra parameters for template.
      *
+     * @param array $ids The list of client ids.
+     *
      * @return array Array of extra parameters for template.
      */
-    protected function getExtraData()
+    protected function getExtraData($ids = [])
     {
-        $countries = Intl::getRegionBundle()
+        $extra = [
+            'braintree'  => [
+                'url'         => $this->getparameter('braintree.url'),
+                'merchant_id' => $this->getparameter('braintree.merchant_id')
+            ],
+            'freshbooks' => [
+                'url' => $this->getparameter('freshbooks.url')
+            ],
+        ];
+
+        $extra['countries']= Intl::getRegionBundle()
             ->getCountryNames($this->get('core.locale')->getLocaleShort());
 
-        asort($countries);
+        asort($extra['countries']);
 
-        $provinces = [
+        $extra['provinces']= [
             'Álava', 'Albacete', 'Alicante/Alacant', 'Almería', 'Asturias',
             'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
             'Cantabria', 'Castellón/Castelló', 'Ceuta', 'Ciudad Real',
@@ -292,16 +326,30 @@ class ClientController extends Controller
             'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
         ];
 
-        return [
-            'braintree'  => [
-                'url'         => $this->getparameter('braintree.url'),
-                'merchant_id' => $this->getparameter('braintree.merchant_id')
-            ],
-            'countries'  => $countries,
-            'freshbooks' => [
-                'url' => $this->getparameter('freshbooks.url')
-            ],
-            'provinces' => $provinces
+        $users = $this->get('orm.manager')->getRepository('User', 'manager')
+            ->findBy();
+
+        $extra['users'] = [
+            [ 'id' => null, 'name' => _('Select an user...') ]
         ];
+
+        foreach ($users as $user) {
+            $extra['users'][] = [ 'id' => $user->id, 'name' => $user->name ];
+        }
+
+        if (empty($ids)) {
+            return $extra;
+        }
+
+        $instances = $this->get('orm.manager')->getRepository('Instance')
+            ->findBy(sprintf('client in ["%s"]', implode('", "', $ids)));
+
+        $extra['instances'] = [];
+        foreach ($instances as $instance) {
+            $extra['instances'][$instance->getClient()][] =
+                [ 'id' => $instance->id, 'name' => $instance->internal_name ];
+        }
+
+        return $extra;
     }
 }

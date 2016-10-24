@@ -69,6 +69,11 @@ function smarty_function_structured_data_tags($params, &$smarty)
             $imageWidth = $content->cover_image->width;
             $imageHeight = $content->cover_image->height;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
+        } elseif (isset($content->img1) && ($content->img1 > 0)) {
+            $photoFront = getService('entity_repository')->find('Photo', $content->img1);
+            $imageWidth = $photoFront->width;
+            $imageHeight = $photoFront->height;
+            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
         } elseif (isset($content->thumb) && !empty($content->thumb)) {
             // Video
             $imageUrl = $content->thumb;

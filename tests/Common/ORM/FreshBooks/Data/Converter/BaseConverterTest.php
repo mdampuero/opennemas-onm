@@ -160,8 +160,8 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            [ 'p_country' => 'Spain' ],
-            $method->invokeArgs($this->converter, [ [ 'p_country' => 'ES' ] ])
+            [ 'country' => 'Spain' ],
+            $method->invokeArgs($this->converter, [ [ 'country' => 'ES' ] ])
         );
     }
 
@@ -188,13 +188,15 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            [ 'type' => 'PayPal' ],
-            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPalAccount' ] ])
-        );
-        $this->assertEquals(
             [ 'type' => 'Credit Card' ],
             $method->invokeArgs($this->converter, [ [ 'type' => 'CreditCard' ] ])
         );
+
+        $this->assertEquals(
+            [ 'type' => 'PayPal' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPalAccount' ] ])
+        );
+
     }
 
     /**
@@ -234,12 +236,14 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            [ 'type' => 'PayPalAccount' ],
-            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPal' ] ])
-        );
-        $this->assertEquals(
             [ 'type' => 'CreditCard' ],
             $method->invokeArgs($this->converter, [ [ 'type' => 'Credit Card' ] ])
         );
+
+        $this->assertEquals(
+            [ 'type' => 'PayPalAccount' ],
+            $method->invokeArgs($this->converter, [ [ 'type' => 'PayPal' ] ])
+        );
+
     }
 }

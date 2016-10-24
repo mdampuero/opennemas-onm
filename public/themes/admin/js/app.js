@@ -21,7 +21,6 @@ angular.module(
     'onm.item',
     'onm.messenger',
     'onm.oql',
-    'onm.oqlEncoder',
     'onm.queryManager',
     'onm.moment',
     'onm.picker',

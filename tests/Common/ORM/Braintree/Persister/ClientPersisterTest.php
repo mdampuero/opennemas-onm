@@ -61,9 +61,13 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = true;
-        $response->customer = $this->getMock('\Braintree_Customer_' . uniqid());
+        $response->customer = $this->getMockBuilder('\Braintree_Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->customer->id = '1';
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -90,9 +94,11 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \RuntimeException
      */
-    public function testCreateWithErrors()
+    public function testCreateWithRuntimeError()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = false;
         $response->message = 'Unable to create';
 
@@ -136,7 +142,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemove()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -161,7 +169,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveWhenEntityNotFound()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = false;
         $response->message = 'UnableToRemove';
 
@@ -205,7 +215,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdate()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -230,7 +242,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateWithErrors()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = false;
         $response->message = 'Unable to update';
 

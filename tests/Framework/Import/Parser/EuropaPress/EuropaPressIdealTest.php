@@ -16,7 +16,9 @@ class EuropaPressIdealTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $factory = $this->getMock('Framework\Import\ParserFactory');
+        $factory = $this->getMockBuilder('Framework\Import\ParserFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->parser = new EuropaPressIdeal($factory);
 
@@ -57,7 +59,7 @@ class EuropaPressIdealTest extends \PHPUnit_Framework_TestCase
         $this->photop = new Resource();
 
         $this->photo->created_time =
-            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
+            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('UTC'));
 
         $this->photo->created_time =
             $this->photo->created_time->format('Y-m-d H:i:s');
@@ -76,7 +78,7 @@ class EuropaPressIdealTest extends \PHPUnit_Framework_TestCase
             'urn:europapressideal:europapress:20150921181604:photo:20150921181604';
 
         $this->photop->created_time =
-            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
+            \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('UTC'));
 
         $this->photop->created_time =
             $this->photop->created_time->format('Y-m-d H:i:s');
@@ -102,7 +104,7 @@ class EuropaPressIdealTest extends \PHPUnit_Framework_TestCase
         $this->text->created_time = \DateTime::createFromFormat(
             'd/m/Y H:i:s',
             '21/09/2015 18:16:04',
-            new \DateTimeZone('Europe/Madrid')
+            new \DateTimeZone('UTC')
         );
 
         $this->text->created_time =
@@ -142,7 +144,7 @@ class EuropaPressIdealTest extends \PHPUnit_Framework_TestCase
 
     public function testParse()
     {
-        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('Europe/Madrid'));
+        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('UTC'));
 
         $resource = new Resource();
 

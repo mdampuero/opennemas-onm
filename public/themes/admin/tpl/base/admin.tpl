@@ -538,7 +538,7 @@
       @Common/src/angular-cleaner/cleaner.js,
       @Common/src/angular-onm-editor/onm-editor.js,
       @Common/src/angular-onm-pagination/js/onm-pagination.js,
-      @Common/src/angular-oql-encoder/oql-encoder.js,
+      @Common/src/angular-oql/oql.js,
       @Common/src/angular-security/security.js,
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,

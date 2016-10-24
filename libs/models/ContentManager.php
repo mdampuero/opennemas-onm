@@ -244,8 +244,6 @@ class ContentManager
             }
         );
 
-        $contentIds = $this->checkAndCleanFrontpageSize($contentIds);
-
         if (is_array($contentIds) && count($contentIds) > 0) {
             $er = getService('entity_repository');
 
@@ -257,6 +255,8 @@ class ContentManager
             $contentsRaw = $er->findMulti($contentsMap);
             $er->populateContentMetasInContents($contentsRaw);
 
+            $contentsRaw = $this->checkAndCleanFrontpageSize($contentsRaw);
+
             // iterate over all found contents to hydrate them
             foreach ($contentIds as $element) {
                 // Only add elements for the requested category id
@@ -264,35 +264,37 @@ class ContentManager
                     continue;
                 }
 
-                $content = null;
-                foreach ($contentsRaw as $contentRaw) {
-                    if ($element['content_id'] == $contentRaw->id) {
-                        $content = $contentRaw;
-                        break;
-                    }
-                }
+                $content = array_filter($contentsRaw, function($contentRaw) use($element) {
+                    return $contentRaw->id == $element['content_id'];
+                });
+
+                $content = array_pop($content);
 
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
-                    $content->load([
+                    // We have to clone the content as this is a reference to object,
+                    // not a copy of itself.
+                    $contentToUse = clone $content;
+
+                    $contentToUse->load([
                         'placeholder' => $element['placeholder'],
                         'position'    => $element['position'],
                     ]);
 
                     if (!empty($element['params'])) {
                         if (is_array($content->params) && $content->params > 0) {
-                            $content->params = array_merge(
+                            $contentToUse->params = array_merge(
                                 $content->params,
                                 (array) $element['params']
                             );
                         } else {
-                            $content->params = $element['params'];
+                            $contentToUse->params = $element['params'];
                         }
                     }
 
-                    $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
+                    $contentToUse->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
 
-                    $contents[] = $content;
+                    $contents[] = $contentToUse;
                 }
             }
         }
@@ -1887,41 +1889,42 @@ class ContentManager
      *
      * @return array The array of cleaned contents.
      */
-    public function checkAndCleanFrontpageSize($contentIds)
+    public function checkAndCleanFrontpageSize($contents)
     {
-        $elementsToRemove = count($contentIds) - self::$frontpage_limit;
+        $contentsNotAdvertisements = array_filter($contents, function($content) {
+            return $content->content_type_name !== 'advertisement';
+        });
+
+        $elementsToRemove = count($contentsNotAdvertisements) - self::$frontpage_limit;
 
         // Remove first from placeholder_0_0
         if ($elementsToRemove > 0) {
+
+            // Sort by content_id
+            usort($contents, function ($a, $b) {
+                if ($a->id == $b->id) {
+                    return 0;
+                }
+
+                return ($a->starttime < $b->starttime) ? -1 : 1;
+            });
+
+            foreach ($contents as $key => $content) {
+                if ($content->content_type_name === 'article'
+                    || $content->content_type_name === 'opinion'
+                ) {
+                    unset($contents[$key]);
+                    $elementsToRemove--;
+                }
+            }
+
             getService('session')->getFlashBag()->add(
                 'error',
                 _('Some elements were removed because this frontpage had too many contents.')
             );
-
-            // Sort by content_id
-            usort($contentIds, function ($a, $b) {
-                if ($a['content_id'] == $b['content_id']) {
-                    return 0;
-                }
-
-                return ($a['content_id'] > $b['content_id']) ? -1 : 1;
-            });
-
-            $i = count($contentIds) - 1;
-
-            while ($i > 0 && $elementsToRemove > 0) {
-                if ($contentIds[$i]['content_type'] === 'Article'
-                    || $contentIds[$i]['content_type'] === 'Opinion'
-                ) {
-                    unset($contentIds[$i]);
-                    $elementsToRemove--;
-                }
-
-                $i--;
-            }
         }
 
-        return $contentIds;
+        return $contents;
     }
 
     /**

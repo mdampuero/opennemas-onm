@@ -161,6 +161,8 @@
               $scope.loading = 0;
 
               return response.data.results;
+            }, function() {
+              $scope.loading = 0;
             });
         };
 
@@ -252,6 +254,12 @@
               messenger.post(response.data);
 
               if (response.status === 201) {
+                // Add instance to owned instances
+                if (!$scope.security.hasPermission('MASTER') &&
+                    $scope.security.hasPermission('PARTNER')) {
+                  $scope.refreshSecurity();
+                }
+
                 var url = response.headers().location.replace('/managerws', '');
                 $location.path(url);
               }

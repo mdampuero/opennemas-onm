@@ -98,7 +98,11 @@ class Nitf extends Parser
         }
 
         if (empty($body) && !empty((string) $bodies[0])) {
-            $body = html_entity_decode((string) $bodies[0]);
+            $body = str_replace(
+                "\n",
+                '<br>',
+                html_entity_decode((string) $bodies[0])
+            );
         }
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
@@ -126,7 +130,7 @@ class Nitf extends Parser
             $date = \DateTime::createFromFormat('Ymd\THis', $value);
         }
 
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date;
     }
@@ -146,7 +150,13 @@ class Nitf extends Parser
             return '';
         }
 
-        return (string) $id[0]->attributes()->{'id-string'}[0];
+        $value = (string) $id[0]->attributes()->{'id-string'}[0];
+
+        if (empty($value)) {
+            $value = (string) $id[0];
+        }
+
+        return $value;
     }
 
     /**

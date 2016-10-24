@@ -186,7 +186,7 @@
                   </p>
                   <p class="visible-xs-block visible-sm-block">
                     <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                      [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                      [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.timezone %]
                     </span>
                   </p>
                   <div ng-show="!expanded[$index]" >
@@ -233,7 +233,7 @@
                 </td>
                 <td class="nowrap center hidden-xs hidden-sm">
                   <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                    [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.timezone %]
                   </span>
                 </td>
                 <td class="nowrap">

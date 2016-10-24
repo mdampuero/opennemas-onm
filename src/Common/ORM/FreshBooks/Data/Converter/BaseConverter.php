@@ -38,8 +38,10 @@ class BaseConverter extends Converter
             $source = $source->getData();
         }
 
+        $source  = $this->normalize($source);
         $mapping = $this->metadata->mapping['freshbooks'];
         $data    = [];
+
         foreach ($mapping as $key => $map) {
             $from      = $this->metadata->properties[$key];
             $targetKey = $mapping[$key]['name'];
@@ -51,7 +53,7 @@ class BaseConverter extends Converter
             }
         }
 
-        return $this->normalize($data);
+        return $data;
     }
 
     /**
@@ -110,11 +112,11 @@ class BaseConverter extends Converter
      */
     protected function normalizeCountry($data)
     {
-        if (array_key_exists('p_country', $data) && !empty($data['p_country'])) {
+        if (array_key_exists('country', $data) && !empty($data['country'])) {
             $countries = Intl::getRegionBundle()->getCountryNames('en');
 
-            if (array_key_exists($data['p_country'], $countries)) {
-                $data['p_country'] = $countries[$data['p_country']];
+            if (array_key_exists($data['country'], $countries)) {
+                $data['country'] = $countries[$data['country']];
             }
         }
 
@@ -244,6 +246,4 @@ class BaseConverter extends Converter
 
         return $data;
     }
-
-
 }

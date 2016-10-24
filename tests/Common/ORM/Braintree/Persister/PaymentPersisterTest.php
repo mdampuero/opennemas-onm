@@ -59,9 +59,14 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
-        $response->success         = true;
-        $response->transaction     = $this->getMock('\Braintree_Transaction_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->success = true;
+
+        $response->transaction = $this->getMockBuilder('\Braintree_Transaction')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->transaction->id = '1';
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
@@ -90,7 +95,9 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateWithRuntimeError()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = false;
         $response->message = 'Unable to save';
 
@@ -134,7 +141,9 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemove()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
@@ -159,7 +168,9 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveWithErrors()
     {
-        $response = $this->getMock('\Braintree_Response_' . uniqid());
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->success = false;
         $response->message = 'Unable to remove';
 
