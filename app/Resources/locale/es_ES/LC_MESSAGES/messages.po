@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-19 09:20+0000\n"
-"PO-Revision-Date: 2016-10-19 11:21+0200\n"
+"POT-Creation-Date: 2016-10-17 10:13+0000\n"
+"PO-Revision-Date: 2016-09-21 16:57+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1922,13 +1922,13 @@ msgid "Advertisement"
 msgstr "Publicidad"
 
 msgid "Top Left LeaderBoard"
-msgstr "Top Left LeaderBoard"
+msgstr ""
 
 msgid "Top Right LeaderBoard"
-msgstr "Top Right LeaderBoard"
+msgstr ""
 
 msgid "[OI] Right Skyscraper"
-msgstr "[OI] Skyscraper derecho"
+msgstr ""
 
 msgid "Album not available"
 msgstr "Álbum no disponible"
@@ -3493,12 +3493,6 @@ msgstr "Editando ePapel"
 
 msgid "Go Back"
 msgstr "Atrás"
-
-msgid "Updating"
-msgstr "Actualizando"
-
-msgid "Update"
-msgstr "Actualizar"
 
 msgid "Date"
 msgstr "Fecha"
@@ -5512,19 +5506,16 @@ msgstr ""
 "en el formulario. Por omisión se usará el de OpenNemas"
 
 msgid "Only masters"
-msgstr "Solo masters"
+msgstr ""
 
 msgid "Robots.txt rules"
-msgstr "Reglas de Robots.txt"
+msgstr ""
 
 msgid ""
 "Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
 "\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\">documentation</"
 "a>."
 msgstr ""
-"Añada reglas de robots.txt personalizadas como «Disallow: /tag». Revise la "
-"<a href=\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank"
-"\">documentación</a>."
 
 msgid "Scripts in header"
 msgstr "Scripts en la cabecera"
@@ -5547,8 +5538,9 @@ msgstr "Estes scripts se incluirán antes de la etiqueta </body>"
 msgid "Custom CSS"
 msgstr "CSS personalizado"
 
+#, fuzzy
 msgid "This sripts will be included in the global.css file."
-msgstr ""
+msgstr "Estes scripts se incluirán después de la etiqueta <body>"
 
 msgid "Editing author"
 msgstr "Editando autor"
@@ -5607,6 +5599,12 @@ msgstr "Creando vídeo"
 
 msgid "Editing video"
 msgstr "Editando vídeo"
+
+msgid "Updating"
+msgstr "Actualizando"
+
+msgid "Update"
+msgstr "Actualizar"
 
 msgid "Schedule"
 msgstr "Planificación"
@@ -7517,11 +7515,11 @@ msgstr ""
 "No se pudo cargar esta pestaña. Intentaremos solucionarlo cuanto antes."
 
 msgid ""
-"You have reached the maximum number of elements (%number%). To add new "
-"contents remove the older."
+"You have reached the maximum number of elements (100). To add new contents "
+"remove the older."
 msgstr ""
-"Has alcanzado el número máximo de elementos en la portada (%number%). Para "
-"añadir nuevos contenidos elimina los mas antiguos."
+"Has alcanzado el número máximo de elementos en la portada. Para añadir "
+"nuevos contenidos elimina los mas antiguos."
 
 msgid "Preview frontpage with actual content positions"
 msgstr "Hacer una vista previa con las posiciones actuales de los contenidos"

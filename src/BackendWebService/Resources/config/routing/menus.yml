@@ -31,5 +31,6 @@ backend_ws_menus_batch_delete:
 backend_ws_menus_list:
     path:     /menus
     defaults: { _controller: BackendWebServiceBundle:Menus:list }
+    methods:  [ GET ]
     options:
         expose: true

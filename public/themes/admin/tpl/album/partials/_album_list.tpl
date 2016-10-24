@@ -147,11 +147,10 @@
               </th>
               <th class="hidden-xs hidden-sm" style="width: 150px;"></th>
               <th class="title">{t}Information{/t}</th>
-              {if $category=='widget' || $category=='all'}<th class="left hidden-xs">{t}Section{/t}</th>{/if}
-              <th class="center hidden-xs" style="width:40px">{t}Views{/t}</th>
-              <th class="center" style="width:35px;">{t}Published{/t}</th>
-              <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>
-              <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
+              {if $category=='widget' || $category=='all'}<th class="hidden-xs" width="200">{t}Section{/t}</th>{/if}
+              <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
+              <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
+              <th class="text-center" width="100">{t}Published{/t}</th>
             </tr>
           </thead>
           <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
@@ -181,43 +180,42 @@
                 <div class="listing-inline-actions">
                   {acl isAllowed="ALBUM_UPDATE"}
                   <a class="link" href="[% edit(content.id, 'admin_album_show') %]">
-                    <i class="fa fa-pencil"></i> {t}Edit{/t}
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                   {/acl}
                   {acl isAllowed="ALBUM_DELETE"}
                   <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                    <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                   </button>
                   {/acl}
                 </div>
               </td>
               {if $category=='widget' || $category=='all'}
-              <td class="left hidden-xs">
-               [% extra.categories[content.category_name] %]
-              </td>
+                <td class="left hidden-xs">
+                 [% extra.categories[content.category_name] %]
+                </td>
               {/if}
-              <td class="center hidden-xs">[% extra.views[content.id] %]</td>
-              {acl isAllowed="ALBUM_AVAILABLE"}
-              <td class="center">
-                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading == 1 && content.content_status == 1, 'fa-times text-danger': !content.loading == 1 && content.content_status == 0 }"></i>
-                </button>
-              </td>
+              {acl isAllowed="ALBUM_HOME"}
+                <td class="hidden-xs text-center">
+                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
+                    <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
+                  </button>
+                </td>
               {/acl}
               {acl isAllowed="ALBUM_FAVORITE"}
-              <td class="center hidden-xs">
-                <button class="btn btn-white"  ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
-                </button>
-              </td>
+                <td class="hidden-xs text-center">
+                  <button class="btn btn-white"  ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
+                  </button>
+                </td>
               {/acl}
-              {acl isAllowed="ALBUM_HOME"}
-              <td class="right hidden-xs">
-                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
-                  <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
-                </button>
-              </td>
+              {acl isAllowed="ALBUM_AVAILABLE"}
+                <td class="text-center">
+                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading == 1 && content.content_status == 1, 'fa-times text-danger': !content.loading == 1 && content.content_status == 0 }"></i>
+                  </button>
+                </td>
               {/acl}
             </tr>
           </tbody>

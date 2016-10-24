@@ -102,7 +102,7 @@
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
     </div>
-    <div class="content ng-cloak" ng-if="!loading && article">
+    <div class="content ng-cloak" ng-if="!error && !loading && article">
       <div class="row">
         <div class="col-md-8">
           <div class="grid simple">

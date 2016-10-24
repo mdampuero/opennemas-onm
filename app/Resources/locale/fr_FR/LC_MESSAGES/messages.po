@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-21 16:55+0200\n"
-"PO-Revision-Date: 2016-09-14 23:45+0200\n"
+"POT-Creation-Date: 2016-10-17 10:13+0000\n"
+"PO-Revision-Date: 2016-10-16 22:59+0200\n"
 "Last-Translator: Sandra Pereira <sandra@openhost.es>\n"
 "Language-Team: Openhost\n"
 "Language: fr\n"
@@ -619,10 +619,10 @@ msgid "Please assign the category where import this article"
 msgstr "S'il vous plaît assigner la catégorie où l'importation de cet article"
 
 msgid "News agency server added."
-msgstr "Serveur agence de nouvelles ajouté."
+msgstr "Serveur de l'agence de presse ajouté."
 
 msgid "News agency server updated."
-msgstr "Serveur agence de nouvelles mise à jour."
+msgstr "Serveur de l'agence de presse mise à jour."
 
 msgid "Y-m-d"
 msgstr "a-m-j"
@@ -698,7 +698,7 @@ msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
 
 #, php-format
 msgid "You must put %d opinions %s in the frontpage "
-msgstr "Vous devez mettre %d avis %s dans le Couverture "
+msgstr "Vous devez mettre %d opiniones %s dans le Couverture "
 
 #, php-format
 msgid "Unable to find the opinion with the id \"%d\""
@@ -731,7 +731,7 @@ msgstr "Impossible de trouver un avis avec l'id \"%d\""
 
 #, php-format
 msgid "Successfully changed in home state for the opinion \"%s\""
-msgstr "Avec succès changé dans l'état de la maison pour l'opinion \"%s\""
+msgstr "Avec succès changé dans l'état de l'accueil pour l'opinion \"%s\""
 
 msgid "Day"
 msgstr "Jour"
@@ -1020,7 +1020,7 @@ msgid "Sync Instances"
 msgstr "Instances Sync"
 
 msgid "News Agency"
-msgstr "Agence d'information"
+msgstr "Agence de presse"
 
 msgid "System"
 msgstr "Système"
@@ -1178,14 +1178,14 @@ msgid "Item removed from favorites successfully"
 msgstr "Éléments retirés de favoris avec succès"
 
 msgid "Item added to home successfully"
-msgstr "Élément ajouté à la maison avec succès"
+msgstr "Élément ajouté à l'accueil avec succès"
 
 msgid "Item removed from home successfully"
 msgstr "Élément retiré de son foyer avec succès"
 
 #, php-format
 msgid "%d item(s) added to home successfully"
-msgstr "%d élément(s) ajouté à la maison avec succès"
+msgstr "%d élément(s) ajouté à l'accueil avec succès"
 
 #, php-format
 msgid "%d item(s) removed from home successfully"
@@ -1268,18 +1268,7 @@ msgid "Server updated successfully"
 msgstr "Serveur mis à jour avec succès"
 
 msgid "News agency server deleted."
-msgstr "Serveur agence de nouvelles supprimé."
-
-msgid "Newsletter deleted successfully."
-msgstr "Bulletin supprimé avec succès."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Impossible de supprimer le bulletin \"%s\""
-
-msgid "You must provide an id for delete a newsletter."
-msgstr ""
-"Vous devez fournir un identifiant pour supprimer un bulletin d'information."
+msgstr "Serveur d l'agence de presse supprimé."
 
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
@@ -1317,6 +1306,17 @@ msgstr "S'il vous plaît spécifier un numéro d'abonné de changer l'état acti
 #, fuzzy, php-format
 msgid "Successfully changed activated state for %d subscribers."
 msgstr "Avec succès changé d'état activé pour %d abonnés."
+
+msgid "Newsletter deleted successfully."
+msgstr "Bulletin supprimé avec succès."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Impossible de supprimer le bulletin \"%s\""
+
+msgid "You must provide an id for delete a newsletter."
+msgstr ""
+"Vous devez fournir un identifiant pour supprimer un bulletin d'information."
 
 msgid "Notification marked as read successfully"
 msgstr "Notification marqués comme lus avec succès"
@@ -1359,7 +1359,7 @@ msgid "Description"
 msgstr "Description"
 
 msgid "From"
-msgstr ""
+msgstr "De"
 
 msgid "Pick the item to insert"
 msgstr "Choisissez l'élément à insérer"
@@ -1386,7 +1386,7 @@ msgid "Title"
 msgstr "Titre"
 
 msgid "To"
-msgstr ""
+msgstr "à"
 
 msgid "Thumbnail details"
 msgstr "détails de miniature"
@@ -1419,9 +1419,8 @@ msgstr "Votre demande n'a pas pu être enregistrée"
 msgid "Your request has been registered"
 msgstr "Votre demande a bien été enregistrée"
 
-#, fuzzy
 msgid "User deleted successfully"
-msgstr "élément supprimé avec succès"
+msgstr "Utilisateur supprimé avec succès"
 
 #, fuzzy
 msgid "Bad request"
@@ -1429,7 +1428,7 @@ msgstr "Modules demandé"
 
 #, fuzzy, php-format
 msgid "%s users deleted successfully"
-msgstr "%s élément(s) supprimés avec succès"
+msgstr "%s utilisateurs supprimés avec succès"
 
 msgid "Name"
 msgstr "Nom"
@@ -1458,7 +1457,6 @@ msgstr "Date d'inscription"
 msgid "Not defined"
 msgstr "Non défini"
 
-#, fuzzy
 msgid "User saved successfully"
 msgstr "Utilisateur créé avec succès."
 
@@ -1475,7 +1473,7 @@ msgstr "Groupe de l'utilisateur supprimé."
 
 #, fuzzy, php-format
 msgid "%s user groups deleted successfully"
-msgstr "Groupe d'utilisateurs créé avec succès"
+msgstr "%s groupe d'utilisateurs créé avec succès"
 
 msgid "Application upgraded"
 msgstr "Mise à niveau de l'application"
@@ -1513,30 +1511,29 @@ msgstr ""
 msgid "Your are using %d Mb of storage."
 msgstr "Vous utilisez %d Mb de stockage."
 
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
 "\"Learn more\">the cost %s € Mb/month</a>."
 msgstr ""
-"Notez que  <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
+"Notez que <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
 "\"Découvrez Plus\">le coût est € s% Mb / mois </a>."
 
-#, fuzzy, php-format
+#, php-format
 msgid "You have %d activated users."
-msgstr "Vous avez supprimé utilisateurs %d"
+msgstr "Vous avez %d utilisateurs activés."
 
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
 "pricing-opennemas-user-licenses\" target=\"_blank\" title=\"Learn more\">the "
 "cost is %s € user/month</a>."
 msgstr ""
-"Vous avez %d utilisateurs activés. <a Target=\"_blank\" noter que title="
-"\"Learn href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
-"pricing-opennemas-user-licenses\" more\"> le coût est de € l'utilisateur de"
-"% / mois </ a>"
+"Notez que  <a href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
+"pricing-opennemas-user-licenses\" target=\"_blank\" title=\"Découvrez Plus"
+"\">le coût est € s% utilisateur/ mois </a>."
 
 #, php-format
 msgid "This month you're recording %d page views. "
@@ -1811,7 +1808,7 @@ msgstr "Impossible de créer la base de données pour l'instance"
 
 #, fuzzy
 msgid "Select an user..."
-msgstr "Sélectionnez un pays"
+msgstr "Sélectionnez un type..."
 
 #, fuzzy, php-format
 msgid "A module with the uuid '%s' already exists"
@@ -1866,10 +1863,10 @@ msgid "Billing"
 msgstr ""
 
 msgid "Payment"
-msgstr ""
+msgstr "Paiement"
 
 msgid "Summary"
-msgstr ""
+msgstr "Résumé"
 
 msgid "Done"
 msgstr ""
@@ -1904,7 +1901,6 @@ msgstr "Notifications"
 msgid "Clients"
 msgstr "Clientes"
 
-#, fuzzy
 msgid "Purchases"
 msgstr "Achats"
 
@@ -1914,21 +1910,18 @@ msgstr "Rapports"
 msgid "Framework"
 msgstr "Cadre"
 
-#, fuzzy
 msgid "Commands"
-msgstr "Commentaires"
+msgstr "Commandes"
 
 msgid "OpCache Status"
 msgstr "Statut OpCache"
 
-#, fuzzy
 msgid "User groups"
 msgstr "Groupes d'utilisateurs"
 
 msgid "Show/hide sidebar"
 msgstr "Afficher/Masquer la barre latérale"
 
-#, fuzzy
 msgid "User group saved successfully"
 msgstr "Groupe d'utilisateurs créé avec succès"
 
@@ -1943,11 +1936,10 @@ msgid "Error when creating a new instance"
 msgstr "Erreur lors de la création d'une nouvelle instance"
 
 msgid "First"
-msgstr ""
+msgstr "Premier"
 
-#, fuzzy
 msgid "Last"
-msgstr "Nom"
+msgstr "Dernier"
 
 msgid "Next"
 msgstr "Suivant"
@@ -1999,6 +1991,30 @@ msgstr "Statut pas valable"
 msgid "Unable to delete the comment."
 msgstr "Impossible de supprimer le doma \"%s\""
 
+msgid "trashed"
+msgstr "saccagé"
+
+msgid "pending"
+msgstr "En attendant"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "not scheduled"
+msgstr "non prévu"
+
+msgid "scheduled"
+msgstr "planifié"
+
+msgid "dued"
+msgstr "échéance"
+
+msgid "in time"
+msgstr "à l'heure"
+
+msgid "postponed"
+msgstr "reporté"
+
 msgid "Event"
 msgstr "évènement"
 
@@ -2012,7 +2028,7 @@ msgid "Special"
 msgstr "supplément"
 
 msgid "Widget"
-msgstr "gadget"
+msgstr "Widget"
 
 msgid "Static page"
 msgstr "Statique page"
@@ -2031,33 +2047,6 @@ msgid ""
 msgstr ""
 "Certains éléments ont été retirés parce que ce couverture avait trop de "
 "contenu"
-
-#, fuzzy
-msgid "trashed"
-msgstr "Poubell"
-
-#, fuzzy
-msgid "pending"
-msgstr "En attendant"
-
-#, fuzzy
-msgid "available"
-msgstr "Fichier non disponible"
-
-msgid "not scheduled"
-msgstr "non prévu"
-
-msgid "scheduled"
-msgstr "planifié"
-
-msgid "dued"
-msgstr "échéance"
-
-msgid "in time"
-msgstr "à l'heure"
-
-msgid "postponed"
-msgstr "reporté"
 
 msgid "Cover"
 msgstr "Couverture"
@@ -2131,9 +2120,8 @@ msgstr "Publier/dépublier"
 msgid "Delete"
 msgstr "Supprimer"
 
-#, fuzzy
 msgid "Arquive/unarquive"
-msgstr "Arquive/unarquive"
+msgstr "Archiver/unarchiver"
 
 msgid "Manager favorite flag"
 msgstr "Manager favorite préféré"
@@ -2150,9 +2138,8 @@ msgstr "Liste des articles dans les archives"
 msgid "Manage advertisements for homepage"
 msgstr "Gérer des publicités pour le couverture"
 
-#, fuzzy
 msgid "Manage favorite flag"
-msgstr "Gestionnaire drapeau préféré"
+msgstr "Gérer drapeau préféré"
 
 msgid "Manage frontpage"
 msgstr "Manager Couverture"
@@ -2169,14 +2156,12 @@ msgstr "Approuver / Rejeter"
 msgid "Create/upload"
 msgstr "Créer/uploader"
 
-#, fuzzy
 msgid "File Fronts"
 msgstr "Fichier Fronts"
 
 msgid "Manage Newsletter"
 msgstr "Gérer Bulletin"
 
-#, fuzzy
 msgid "Backend manager"
 msgstr "Backend Gestionnaire"
 
@@ -2190,7 +2175,7 @@ msgid "List trashed elementes"
 msgstr "Liste saccagé éléments"
 
 msgid "Import news from agency"
-msgstr "Importer nouvelles de l'agence"
+msgstr "Importer nouvelles de l'agence de presse"
 
 msgid "Import XML files"
 msgstr "Importer fichiers XML"
@@ -2198,9 +2183,8 @@ msgstr "Importer fichiers XML"
 msgid "Manage global settings"
 msgstr "Gérer les paramètres globaux"
 
-#, fuzzy
 msgid "Access instance manager"
-msgstr "Accédez au gestionnaire instance"
+msgstr "L'accès à l'instance gestionnaire"
 
 msgid "Modify other users's content"
 msgstr "Modifier le contenu d'autres auteurs"
@@ -2215,7 +2199,7 @@ msgid "Change the user group from one user"
 msgstr "Modifier le groupe d'utilisateur d'un utilisateur"
 
 msgid "Manage widget"
-msgstr "Gérer gadget"
+msgstr "Gérer widget"
 
 msgid "Administrate settings"
 msgstr "Administrer les paramètres"
@@ -2236,7 +2220,7 @@ msgid "Manage favourite flag"
 msgstr "Gérer drapeau favori"
 
 msgid "Config News Agency importer"
-msgstr "Config Nouvelles Agence importateur"
+msgstr "Configuration de Agence de presse importateur"
 
 msgid "Administer synchronization between Opennemas"
 msgstr "Administrer la synchronisation entre Opennemas"
@@ -2260,7 +2244,7 @@ msgid "Authenticate as an ADMINISTRATOR"
 msgstr ""
 
 msgid "Report"
-msgstr ""
+msgstr "Rapport"
 
 msgid "Download"
 msgstr "Télécharger"
@@ -2302,9 +2286,8 @@ msgstr "Widget %s non disponible"
 msgid "Frontpage mobile version"
 msgstr "Couverture: Version mobile "
 
-#, fuzzy
 msgid "Inner Article"
-msgstr "Article"
+msgstr "Article intérieur"
 
 msgid "Inner Article mobile version"
 msgstr "Article intérieure: version mobile"
@@ -2316,27 +2299,23 @@ msgid "RSS"
 msgstr "RSS"
 
 msgid "Accelerated Mobile Pages integration"
-msgstr ""
+msgstr "Accélération de l'mobile Pages intégration"
 
-#, fuzzy
 msgid "Advanced search"
-msgstr "Advance"
+msgstr "Recherche Avancée"
 
 msgid "Advanced article options"
 msgstr "Options de l'article"
 
-#, fuzzy
 msgid "Frontpage Customization"
-msgstr "Couvertures"
+msgstr "Avant de personnalisation de la page"
 
-#, fuzzy
 msgid "Authors Blog"
-msgstr "Auteurs"
+msgstr "Auteurs du blog"
 
 msgid "Cache manager"
 msgstr "Gestionnaire de Cache"
 
-#, fuzzy
 msgid "Subscription"
 msgstr "Formulaire d'abonnement"
 
@@ -2346,35 +2325,29 @@ msgstr "Personnalisations Crónicas"
 msgid "Facebook Instant Articles integration"
 msgstr ""
 
-#, fuzzy
 msgid "Contact"
-msgstr "Contenu"
+msgstr "Contact"
 
-#, fuzzy
 msgid "Frontpages Manager"
-msgstr "Couverture Gestionnaire"
+msgstr "Gestionnaire Couverture"
 
 msgid "iadbox"
 msgstr "iadbox"
 
-#, fuzzy
 msgid "Import XMLs"
 msgstr "Importer fichiers XML"
 
-#, fuzzy
 msgid "NewsStand"
 msgstr "Le kiosque"
 
-#, fuzzy
 msgid "Letters"
 msgstr "Courrier"
 
 msgid "Library"
 msgstr "Catalogue"
 
-#, fuzzy
 msgid "News Agency importer"
-msgstr "Config Nouvelles Agence importateur"
+msgstr "Configuration de agence de presse importateur"
 
 msgid "Articles Synchronization"
 msgstr "Articles synchronisation"
@@ -2385,51 +2358,41 @@ msgstr "Bar promotionnel"
 msgid "Schedules"
 msgstr "Des horaires"
 
-#, fuzzy
 msgid "System wide settings"
-msgstr "Configurer les paramètres de le large du système"
+msgstr "Paramètres larges système"
 
-#, fuzzy
 msgid "Static library"
-msgstr "Statique page"
+msgstr "Statique hémérothèque"
 
-#, fuzzy
 msgid "Static pages"
 msgstr "Statique page"
 
-#, fuzzy
 msgid "Basic support"
-msgstr "Contactez le support"
+msgstr "Basique supporter"
 
 msgid "Training and Advisory Services"
 msgstr "Formation et services consultatifs"
 
-#, fuzzy
 msgid "Profesional support"
-msgstr "Professionnel"
+msgstr "Professionnel supporter"
 
-#, fuzzy
 msgid "Support 2"
-msgstr "Aidez-moi et Support"
+msgstr "Support 2"
 
-#, fuzzy
 msgid "Support 3"
-msgstr "Aidez-moi et Support"
+msgstr "Support 3"
 
-#, fuzzy
 msgid "Support 4"
-msgstr "Aidez-moi et Support"
+msgstr "Support 4"
 
-#, fuzzy
 msgid "Support 8"
-msgstr "Aidez-moi et Support"
+msgstr "Support 8"
 
 msgid "Support 8+"
-msgstr "Soutien 8+"
+msgstr "Supporter 8+"
 
-#, fuzzy
 msgid "Instance synchronization"
-msgstr "Instance non trouvée"
+msgstr "Synchronisation Instance"
 
 msgid "UserVoice integration"
 msgstr "l'intégration UserVoice"
@@ -2465,7 +2428,7 @@ msgstr ""
 "téléchargement de fichiers </ li> \\ n<li> Utilitaires: Trash, Recherche "
 "avancée ... </ li> "
 
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "<ul>\n"
 "                            <li>%d x  User (1)</li>\n"
@@ -2476,10 +2439,12 @@ msgid ""
 "                            <li>Online Support (Tickets SLA %d business "
 "days)</li></ul>"
 msgstr ""
-" <ul> \\ n<li>%d x utilisateur (1) </ li> \\ n<li> %s Stockage (2) </ li> \\ "
-"n% s<li>%s (articles, opinions, commentaires) (2) </ li> \\ n<li>% de pages "
-"vues/mois  (2) </ li> \\ n<li> Support en ligne (billets SLA% d jours "
-"ouvrables) </ li> </ ul>"
+" <ul>\n"
+"<li>%d x utilisateur (1)</li> \n"
+"<li>%s Stockage (2)</li> \n"
+"<li>%s (articles, opinions, commentaires) (2) </li> \n"
+"<li>\\%s pages vues/mois (2)</li>\n"
+"<li> Support en ligne (ticket SLA %d jours ouvrables) </li> </ul>"
 
 msgid ""
 "<p><small>1. To add more users refer to <a href=\"http://help.opennemas.com/"
@@ -2501,9 +2466,8 @@ msgstr ""
 "stockage </a>. </ small> </ p> <p> <small> Tous les prix ci-dessus ne "
 "comprennent pas la TVA (21%). </ small> </ p>"
 
-#, fuzzy
 msgid "Professional pack"
-msgstr "Professionnel"
+msgstr "Pack Professionnel"
 
 msgid ""
 "Our best selling solution, it allows to manage a professional newspaper and "
@@ -2535,9 +2499,8 @@ msgstr ""
 "<li> gestionnaire Publicité </ li> \\ n<li> gestionnaire Sondages </ li> \\ "
 "n<li> gestionnaire Galeries </ li> \\ n<li> gestionnaire de la vidéo </ li>"
 
-#, fuzzy
 msgid "Advanced pack"
-msgstr "Advance"
+msgstr "Pack avancée"
 
 msgid ""
 "Personalize your frontpages and start sending newsletters to your readers "
@@ -2600,7 +2563,7 @@ msgid ""
 "                        <li>News Agency</li>\n"
 "                        <li>Opennemas Connect</li>"
 msgstr ""
-"<li> Gestion Couverture multiple </ li> \\ n<li> Nouvelles Agence </ li> \\ "
+"<li> Gestion Couverture multiple </ li> \\ n<li> Agence de presse </ li> \\ "
 "n<li> Opennemas Connect </ li>"
 
 msgid "Free Basic Template"
@@ -2923,23 +2886,20 @@ msgid "Engage your readers with your own personalised newsletter."
 msgstr ""
 "Engagez vos lecteurs avec votre propre bulletin d'information personnalisé."
 
-#, fuzzy
 msgid "Polls Manager"
-msgstr "Sondage intérieure"
+msgstr "Gestionnaire Sondage"
 
 msgid "Frontpage Synchronization"
 msgstr "Frontpage synchronisation"
 
-#, fuzzy
 msgid "Add description..."
-msgstr "Ajouter des fichiers..."
+msgstr "Ajouter une description..."
 
 msgid "Missed long description..."
 msgstr "Omission description longue ..."
 
-#, fuzzy
 msgid "No support"
-msgstr "Contactez le support"
+msgstr "Pass le supporte"
 
 msgid "Support Pro"
 msgstr "Support Pro"
@@ -2947,10 +2907,8 @@ msgstr "Support Pro"
 msgid "Support 8 Plus"
 msgstr "Support 8 Plus"
 
-#, fuzzy
 msgid "Sorry, you don't have enough privileges"
-msgstr ""
-"Vous ne disposez pas de suffisamment de privilèges pour voir cette catégorie"
+msgstr "Désolé, vous n'avez pas assez de privilèges"
 
 #, php-format
 msgid "Go to %s"
@@ -2970,9 +2928,8 @@ msgid ""
 "See details &gt; </a>"
 msgstr ""
 
-#, fuzzy
 msgid "Y-m-d H:i:s"
-msgstr "a-m-j"
+msgstr "Y-m-d H:i:s"
 
 msgid "reCaptcha public key is not set"
 msgstr "reCaptcha clé publique est pas réglé"
@@ -3000,47 +2957,45 @@ msgid "%d seconds ago"
 msgstr "Il y a %d secondes"
 
 msgid "1 minute ago"
-msgstr "il y a 1 minute"
+msgstr "Il y a 1 minute"
 
-#, fuzzy, php-format
+#, php-format
 msgid "%d minutes ago"
-msgstr "Dernière synchronisation était il ya %d minutes."
+msgstr "Il y a %d minutes"
 
 msgid "1 hour ago"
-msgstr "Il ya 1 heure"
+msgstr "Il y a 1 heure"
 
-#, fuzzy, php-format
+#, php-format
 msgid "%d hours ago"
-msgstr "%d heures"
+msgstr "Il y a %d heures"
 
-#, fuzzy
 msgid "1 day ago"
-msgstr "1 jour"
+msgstr "Il y a 1 jour"
 
-#, fuzzy, php-format
+#, php-format
 msgid "%d days ago"
-msgstr "%d jours"
+msgstr "Il y a %d jours"
 
 msgid "1 week ago"
-msgstr "Il ya 1 semaine"
+msgstr "Il y a 1 semaine"
 
-#, fuzzy, php-format
+#, php-format
 msgid "%d weeks ago"
-msgstr "%d semaines"
+msgstr "Il y a %d semaines"
 
 msgid "1 month ago"
-msgstr "Il ya 1 mois"
+msgstr "Il y a 1 mois"
 
-#, fuzzy, php-format
+#, php-format
 msgid "%d months ago"
-msgstr "Tous les mois"
+msgstr "Il y a %d mois"
 
-#, fuzzy
 msgid "Instance not activated - Opennemas"
-msgstr "Instance pas activée"
+msgstr "Instance pas activée - Opennemas"
 
 msgid "We are improving our platform."
-msgstr ""
+msgstr "Nous améliorons notre plate-forme."
 
 msgid ""
 "We are doing some maintenance in the Opennemas platform, please wait a few "
@@ -3066,9 +3021,8 @@ msgstr "Oui, supprimer"
 msgid "No"
 msgstr "Non"
 
-#, fuzzy
 msgid "Delete selected items"
-msgstr "Élément sélectionné"
+msgstr "Supprimer les éléments sélectionnés"
 
 msgid ""
 "Are you sure you want to delete [% template.selected.contents.length %] "
@@ -3080,9 +3034,8 @@ msgstr ""
 msgid "Yes, delete all"
 msgstr "Oui, supprimer tous"
 
-#, fuzzy
 msgid "Delete videos"
-msgstr "Supprimer"
+msgstr "Supprimer les vidéos"
 
 #, fuzzy
 msgid ""
@@ -3092,9 +3045,8 @@ msgstr ""
 "Etes-vous sûr que vous voulez basculer état de l'abonnement pour ceux <span>"
 "% num% </span> abonnements?"
 
-#, fuzzy
 msgid "You must select some elements."
-msgstr "Vous avez sélectionné aucun utilisateur à supprimer"
+msgstr "Vous devez sélectionner certains éléments."
 
 #, fuzzy
 msgid "Creating subscriber"
@@ -3108,16 +3060,14 @@ msgid "Go back to list"
 msgstr "Retour à la liste"
 
 msgid "Saving"
-msgstr ""
+msgstr "Garder"
 
 msgid "Save"
 msgstr "Enregistrer"
 
-#, fuzzy
 msgid "Surname"
-msgstr "Nom d'utilisateur"
+msgstr "Prénom"
 
-#, fuzzy
 msgid "LastName"
 msgstr "Nom"
 
@@ -3138,7 +3088,6 @@ msgid "If is activated means that the user is ready to receive newsletters"
 msgstr ""
 "Si est activé signifie que l'utilisateur est prêt à recevoir les bulletins"
 
-#, fuzzy
 msgid "Subscriptions"
 msgstr "Formulaire d'abonnement"
 
@@ -3148,13 +3097,11 @@ msgstr "Retour à gestionnaire de bulletin"
 msgid "Clear selection"
 msgstr "Effacer la sélection"
 
-#, fuzzy
 msgid "Activate"
-msgstr "Activé"
+msgstr "Activer"
 
-#, fuzzy
 msgid "Deactivate"
-msgstr "Activé"
+msgstr "Désactiver"
 
 msgid "Subscribe"
 msgstr "S'abonner"
@@ -3162,21 +3109,18 @@ msgstr "S'abonner"
 msgid "Unsubscribe"
 msgstr "Se désabonner"
 
-#, fuzzy
 msgid "Search by name or email"
-msgstr "Recherche par nom"
+msgstr "Recherche par nom ou par email"
 
 msgid "No subscribed"
 msgstr "Aucune souscrit"
 
-#, fuzzy
 msgid "Status"
-msgstr "Statistiques"
+msgstr "Statut"
 
 msgid "View"
 msgstr "Vue"
 
-#, fuzzy
 msgid "Loading"
 msgstr "Chargement..."
 
@@ -3184,20 +3128,17 @@ msgstr "Chargement..."
 msgid "No available subscribers."
 msgstr "Aucun abonnés disponibles"
 
-#, fuzzy
 msgid "Edit user"
-msgstr "éditer"
+msgstr "éditer l'utilisateur"
 
-#, fuzzy
 msgid "Delete user"
-msgstr "Supprimer"
+msgstr "Supprimer l'utilisateur"
 
 msgid "Mail sent.Waiting for user"
 msgstr "Email envoyé. En attente de l'utilisateur"
 
-#, fuzzy
 msgid "Accepted by user"
-msgstr "Accepté"
+msgstr "Accepté par l'utilisateur"
 
 msgid "Accepted by administrator"
 msgstr "Accepté par l'administrateur"
@@ -3220,13 +3161,11 @@ msgstr "Il n'y a pas de conteneur actif"
 msgid "You must select a container"
 msgstr "Vous devez sélectionner un conteneur"
 
-#, fuzzy
 msgid "Accept"
-msgstr "Accepté"
+msgstr "Accepter"
 
-#, fuzzy
 msgid "Are you sure to send the newsletter."
-msgstr "Impossible de créer la nouvelle lettre à l'éditeur."
+msgstr "Etes-vous sûr d'envoyer le bulletin d'information."
 
 msgid "This newsletter is going to send. Are you sure?"
 msgstr "Ce bulletin va envoyer. Êtes-vous sûr?"
@@ -3258,9 +3197,8 @@ msgstr "Sauvegarder les modifications"
 msgid "You must save a changes or back to list"
 msgstr "Vous devez enregistrer un modifiés ou retour à la liste"
 
-#, fuzzy
 msgid "Pick contents"
-msgstr "Contenu"
+msgstr "Choisissez le contenu"
 
 msgid "Email subject"
 msgstr "Sujet du courriel"
@@ -3276,13 +3214,11 @@ msgstr "Ajouter Container"
 msgid "Clean containers"
 msgstr "Récipients propres"
 
-#, fuzzy
 msgid "Clean contents"
-msgstr "Contenu"
+msgstr "Effacer le contenu"
 
-#, fuzzy
 msgid "Add contents"
-msgstr "Contenu"
+msgstr "Ajouter le contenu"
 
 msgid ""
 "Click in \"Add contents\" button above or drop contents from other containers"
@@ -3296,9 +3232,8 @@ msgstr "Accusé de réception"
 msgid "Back to list"
 msgstr "Retour à la liste"
 
-#, fuzzy
 msgid "Newsletter sending report"
-msgstr "Aucun bulletin d'information envoyé par %s."
+msgstr "Bulletin rapport d'envoi"
 
 msgid ""
 "Your newsletter was sent to the list of mails. Please find below the "
@@ -3345,9 +3280,8 @@ msgstr "Rédigez une liste d'adresse e-mail écrit une ligne par"
 msgid "Parse list & add"
 msgstr "Liste analyser et ajouter"
 
-#, fuzzy
 msgid "Preview"
-msgstr "Précédent"
+msgstr "Avant-première"
 
 msgid ""
 "Before using newsletter you have to fill the <a href=\"%1#external\"  target="
@@ -3356,27 +3290,23 @@ msgstr ""
 "Avant d'utiliser newsletter, vous devez remplir les <a href=\"%1#external\" "
 "target=\"_blank\"> touches reCAPTCHA sur les paramètres du système </a>"
 
-#, fuzzy
 msgid "Newsletter subject"
-msgstr "Bulletins"
+msgstr "Bulletin sujet"
 
 msgid "The subject of the emails in this newsletter"
 msgstr "Le sujet des e-mails dans ce bulletin"
 
-#, fuzzy
 msgid "Your newsletter subject"
-msgstr "Aucun bulletin d'information envoyé par %s."
+msgstr "Votre bulletin sujet"
 
-#, fuzzy
 msgid "Email from"
-msgstr "Email"
+msgstr "Email de"
 
 msgid "Email sender"
-msgstr "email sender"
+msgstr "Email envoyeur"
 
-#, fuzzy
 msgid "Newsletter links points to"
-msgstr "Aucun bulletin d'information envoyé par %s."
+msgstr "Bulletin relie les points à"
 
 msgid ""
 "You can choose if you prefer that the links of the contents of the "
@@ -3385,17 +3315,14 @@ msgstr ""
 "Vous pouvez choisir si vous préférez que les liens du contenu du point de "
 "bulletin d'information dans le contenu ou le contenu de la première page"
 
-#, fuzzy
 msgid "Point to inner"
-msgstr "Sondage - intérieur"
+msgstr "Point à intérieure"
 
-#, fuzzy
 msgid "Point to frontpage"
-msgstr "Sondage - Couverture"
+msgstr "Point à Couverture"
 
-#, fuzzy
 msgid "Newsletter type"
-msgstr "Bulletin"
+msgstr "Bulletin type"
 
 msgid ""
 "Whether to manage new subscriptions by an external maillist or using the <a "
@@ -3408,9 +3335,8 @@ msgstr ""
 msgid "External Send"
 msgstr "Envoyer externe"
 
-#, fuzzy
 msgid "Internal Send"
-msgstr "Internal recherche"
+msgstr "Expédition intérieur"
 
 msgid "Mailing list address"
 msgstr "Adresse postale de la liste"
@@ -3422,16 +3348,14 @@ msgstr ""
 "Si vous avez un service de liste de diffusion pour fournir des bulletins "
 "ajouter l'adresse ici"
 
-#, fuzzy
 msgid "Mail address to receive new subscriptions"
-msgstr "Impossible de créer la nouvelle abonné: %s"
+msgstr "Adresse mail pour recevoir les nouvelles souscriptions"
 
-#, fuzzy
 msgid "Articles in Frontpage"
-msgstr "Contenus dans couverture"
+msgstr "Articles dans couverture"
 
 msgid "Config newsletter module"
-msgstr "Config module bulletin"
+msgstr "Module bulletin configuration"
 
 #, fuzzy
 msgid "Subscribers"
@@ -3441,13 +3365,13 @@ msgstr "S'abonner"
 msgid "Subscriber"
 msgstr "S'abonner"
 
-#, fuzzy
 msgid "Search by subject"
-msgstr "Recherche par nom"
+msgstr "Recherche par sujet"
 
-#, fuzzy
 msgid "Unable to find any newsletter that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr ""
+"Impossible de trouver un bulletin d'information qui correspond à votre "
+"recherche."
 
 msgid ""
 "Maybe changing any filter could help or add one using the \"Create\" button "
@@ -3459,21 +3383,17 @@ msgstr ""
 msgid "Updated"
 msgstr "Actualisé"
 
-#, fuzzy
 msgid "Sendings"
-msgstr "En attendant"
+msgstr "Envois"
 
-#, fuzzy
 msgid "Created:"
-msgstr "Créé"
+msgstr "Créé:"
 
-#, fuzzy
 msgid "Show contents"
-msgstr "Contenu"
+msgstr "Montrer Contenu"
 
-#, fuzzy
 msgid "Remove permanently selected items"
-msgstr "Impossible de supprimer définitivement l'élément avec id \"%d\""
+msgstr "Supprimer les éléments sélectionnés de façon permanente"
 
 msgid ""
 "Are you sure you want to remove permanently [% template.selected.contents."
@@ -3482,9 +3402,8 @@ msgstr ""
 "Êtes-vous sûr de vouloir supprimer définitivement [% template.selected."
 "contents.length%] item(s)?"
 
-#, fuzzy
 msgid " You will not be able to restore them back."
-msgstr "Vous n'êtes pas autorisé à effectuer cette action."
+msgstr "Vous ne serez pas en mesure de les restaurer."
 
 msgid "Yes, remove them all"
 msgstr "Oui, retirez-les tous"
@@ -3501,38 +3420,29 @@ msgstr "TVA"
 msgid "Delete newsstands"
 msgstr "supprimer un kiosque à journaux"
 
-#, fuzzy
 msgid "Delete kiosko"
-msgstr "Supprimer"
+msgstr "Supprimer kiosque"
 
 msgid "Are you sure that do you want to delete the selected cover?"
 msgstr "Etes-vous sûr que vous voulez supprimer la couverture choisie?"
 
-#, fuzzy
 msgid "Delete kioskos"
-msgstr "Supprimer"
+msgstr "Supprimer les kiosques"
 
 msgid "Are you sure you want to delete <span>%num%</span> kioskos?"
-msgstr "Etes-vous sûr de vouloir supprimer <span>% num% </span> kioskos?"
+msgstr "Êtes-vous sûr de vouloir supprimer <span>%num%</span> kiosques?"
 
-#, fuzzy
 msgid "Covers"
-msgstr "Couverture"
+msgstr "Couvertures"
 
 msgid "Creating ePaper"
-msgstr "kiosque création"
+msgstr "Créer kiosque"
 
 msgid "Editing ePaper"
-msgstr "édition kiosque"
+msgstr "Révision kiosque"
 
 msgid "Go Back"
 msgstr "Retourner"
-
-msgid "Updating"
-msgstr ""
-
-msgid "Update"
-msgstr ""
 
 msgid "Date"
 msgstr "Date"
@@ -3567,9 +3477,8 @@ msgstr "Préféré"
 msgid "%1"
 msgstr "%1"
 
-#, fuzzy
 msgid "List of words separated by commas"
-msgstr "Fournir une liste d'e-mails valides séparées par des virgules."
+msgstr "Liste des mots séparés par des virgules"
 
 msgid "Write a tag and press Enter..."
 msgstr "Écrire un tag et appuyez sur Entrée ..."
@@ -3577,9 +3486,8 @@ msgstr "Écrire un tag et appuyez sur Entrée ..."
 msgid "Publish"
 msgstr "Publier"
 
-#, fuzzy
 msgid "Unpublish"
-msgstr "Anglais"
+msgstr "Dépublier"
 
 msgid "In home"
 msgstr "En couvert"
@@ -3587,39 +3495,32 @@ msgstr "En couvert"
 msgid "Drop from home"
 msgstr "se mettre à couvert"
 
-#, fuzzy
 msgid "Search by title"
-msgstr "Recherche par nom"
+msgstr "Recherche par titre"
 
 msgid "No published"
 msgstr "pas publié"
 
-#, fuzzy
 msgid "Unable to find any cover that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr "Impossible de trouver un correspondant à votre recherche qui couvrent."
 
 msgid "Section"
 msgstr "Section"
 
-#, fuzzy
 msgid "Home"
 msgstr "Page d'accueil"
 
-#, fuzzy
 msgid "Last editor"
-msgstr "Courrier des lecteurs"
+msgstr "Dernier éditeur"
 
-#, fuzzy
 msgid "Sort elements"
-msgstr "Spécial éléments"
+msgstr "Trier les éléments"
 
-#, fuzzy
 msgid "You must put %1 covers in the HOME"
-msgstr "Vous devez mettre %d livres dans le widget HOME"
+msgstr "Vous devez mettre %1 couvertures dans l'accueil"
 
-#, fuzzy
 msgid "Settings"
-msgstr "Paramètres sauvegardés."
+msgstr "Paramètres"
 
 msgid "Order newsstand frontpage by"
 msgstr "Afin kiosque frontpage par"
@@ -3639,39 +3540,32 @@ msgstr "Dates"
 msgid "Grouped by date"
 msgstr "Groupées par date"
 
-#, fuzzy
 msgid "Widget Home"
-msgstr "gadget"
+msgstr "Accueil widget"
 
-#, fuzzy
 msgid "Listing"
-msgstr "Liste"
+msgstr "Listage"
 
 msgid "Config covers module"
 msgstr "Config couverture module"
 
-#, fuzzy
 msgid "Save positions"
-msgstr "Impossible d'enregistrer les positions."
+msgstr "Sauver positions"
 
 msgid "New cover"
 msgstr "Nouvelle couverture"
 
-#, fuzzy
 msgid "Creating widget"
-msgstr "Gérer gadget"
+msgstr "Créer widget"
 
-#, fuzzy
 msgid "Editing widget"
-msgstr "Gérer gadget"
+msgstr "Révision widget"
 
-#, fuzzy
 msgid "Widget name"
-msgstr "gadget"
+msgstr "Widget nom"
 
-#, fuzzy
 msgid "Widget type"
-msgstr "gadget"
+msgstr "Widget type"
 
 msgid "Intelligent Widget"
 msgstr "Widget intelligent"
@@ -3679,38 +3573,32 @@ msgstr "Widget intelligent"
 msgid "HTML"
 msgstr "HTML"
 
-#, fuzzy
 msgid "Content"
 msgstr "Contenu"
 
-#, fuzzy
 msgid "Insert image"
-msgstr "Insérer"
+msgstr "Insérer une image"
 
 msgid "Parameters"
 msgstr "Paramètres"
 
-#, fuzzy
 msgid "Parameter name"
-msgstr "Remplissez votre nom"
+msgstr "Nom du paramètre"
 
 msgid "Parameter value"
-msgstr "Paramètres valuer"
+msgstr "La valeur du paramètre"
 
 msgid "Add parameter"
 msgstr "Aajouter un paramètre"
 
-#, fuzzy
 msgid "Edit '%1'"
-msgstr "éditer"
+msgstr "éditer '%1'"
 
-#, fuzzy
 msgid "Remove from this frontpage"
-msgstr "Vidéo - Couverture"
+msgstr "Supprimer de cette Couverture"
 
-#, fuzzy
 msgid "Remove from all frontpages"
-msgstr "Sondage Couverture"
+msgstr "Retirer de toutes les couvertures"
 
 msgid "Arquive"
 msgstr "Archiver"
@@ -3724,13 +3612,11 @@ msgstr "Activer"
 msgid "IntelligentWidget"
 msgstr "Widget intelligent"
 
-#, fuzzy
 msgid "Unable to find any widget that matches your search."
-msgstr "Impossible de trouver un widget avec l'id \"%d\""
+msgstr "Impossible de trouver un widget qui correspond à votre recherche."
 
-#, fuzzy
 msgid "There is no available widgets"
-msgstr "Widget %s non disponible"
+msgstr "Il n'y a pas de widgets disponibles"
 
 msgid "Edit widget '[% content.title %]'"
 msgstr "Modifier widget  '[% content.title %]'"
@@ -3739,21 +3625,19 @@ msgid "OpenNeMaS administration"
 msgstr "OpenNeMaS administration"
 
 msgid "You are leaving the current page."
-msgstr ""
+msgstr "Vous quittez la page en cours."
 
-#, fuzzy
 msgid "Instance information"
-msgstr "Instance non trouvée"
+msgstr "Informations sur l'instance"
 
 msgid "Page"
 msgstr "Page"
 
-#, fuzzy
 msgid "Author"
-msgstr "Auteurs"
+msgstr "Auteur"
 
 msgid "Sysops"
-msgstr ""
+msgstr "Sysops"
 
 #, fuzzy
 msgid ""
@@ -3774,9 +3658,8 @@ msgstr "Voir plus"
 msgid "Help center"
 msgstr "Centre d'aide"
 
-#, fuzzy
 msgid "Contact us"
-msgstr "Contactez le support"
+msgstr "Contactez nous"
 
 msgid "Ask for help using email"
 msgstr "Demandez de l'aide en utilisant l'email"
@@ -3787,26 +3670,23 @@ msgstr "F.A.Q."
 msgid "Read what user ask more"
 msgstr "Lisez ce que l'utilisateur demande plus"
 
-#, fuzzy
 msgid "Videotutorials"
-msgstr "Vidéos"
+msgstr "Tutoriels vidéos"
 
 msgid "Use videos to get walkthrough guides"
 msgstr "Utiliser les vidéos pour un guide étape par étape"
 
 msgid "You are a master"
-msgstr ""
+msgstr "Vous êtes un maître"
 
 msgid "Go to newspaper"
 msgstr "Accédez au journal"
 
-#, fuzzy
 msgid "Profile"
-msgstr "Professionnel"
+msgstr "Profil"
 
-#, fuzzy
 msgid "Getting started"
-msgstr "Paramètres sauvegardés."
+msgstr "Commencer"
 
 msgid "Log out"
 msgstr "Se déconnecter"
@@ -3814,13 +3694,11 @@ msgstr "Se déconnecter"
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#, fuzzy
 msgid "Delete letters"
-msgstr "Bulletins"
+msgstr "Supprimer les lett"
 
-#, fuzzy
 msgid "Delete letter"
-msgstr "Supprimer"
+msgstr "Supprimer lettre"
 
 msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
 msgstr "Etes-vous sûr que vous voulez supprimer \"<span>%title%</span>\"?"
@@ -3831,9 +3709,8 @@ msgstr "Êtes-vous sûr de vouloir supprimer <span>%num%</span> lettres?"
 msgid "Editing letter"
 msgstr "Lettre d'édition"
 
-#, fuzzy
 msgid "Creating letter"
-msgstr "Gérer Bulletin"
+msgstr "Créer lettre"
 
 msgid "Go back"
 msgstr "Retourner"
@@ -3847,23 +3724,20 @@ msgstr "Information sur l'auteur"
 msgid "Nickname"
 msgstr "Surnom"
 
-#, fuzzy
 msgid "Created at"
-msgstr "Créé"
+msgstr "Créé à"
 
 msgid "Tags"
 msgstr "Étiquettes"
 
-#, fuzzy
 msgid "List of words separated by words."
-msgstr "Fournir une liste d'e-mails valides séparées par des virgules."
+msgstr "Liste des mots séparés par des mots."
 
 msgid "Related url"
 msgstr "URL connexes"
 
-#, fuzzy
 msgid "Image assigned"
-msgstr "Pictures"
+msgstr "Image assignée"
 
 msgid "Are you sure?"
 msgstr "Êtes-vous sûr?"
@@ -3877,38 +3751,32 @@ msgstr "Texte"
 msgid "Remove element from this frontpage"
 msgstr "Retirer l'élément de cette couverture"
 
-#, fuzzy
 msgid "Customize in frontpage"
-msgstr "Contenus dans couverture"
+msgstr "Personnaliser dans couverture"
 
 msgid "Customize content"
 msgstr "Personnaliser le contenu"
 
-#, fuzzy
 msgid "Unable to find any letter that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr "Impossible de trouver toute lettre qui correspond à votre recherche."
 
-#, fuzzy
 msgid "Reject"
-msgstr "Rejecté"
+msgstr "Rejecter"
 
-#, fuzzy
 msgid "Publish/Unpublish"
 msgstr "Publier/dépublier"
 
-#, fuzzy
 msgid "News agency"
-msgstr "Agence d'information"
+msgstr "Agence de presse"
 
 msgid "Update source"
-msgstr "source de mise à jour"
+msgstr "Source de mise à jour"
 
 msgid "Add source"
 msgstr "Ajouter une source"
 
-#, fuzzy
 msgid "Source name"
-msgstr "Recherche par nom"
+msgstr "Nom de la source"
 
 msgid "Color"
 msgstr "Couleur "
@@ -3917,7 +3785,7 @@ msgid "Color to distinguish between other agencies"
 msgstr "Couleur faire la distinction entre d'autres organismes"
 
 msgid "Reset"
-msgstr ""
+msgstr "Remettre"
 
 msgid "Connection"
 msgstr "Connexion"
@@ -3926,9 +3794,8 @@ msgstr "Connexion"
 msgid "External agency"
 msgstr "Envoyer externe"
 
-#, fuzzy
 msgid "Opennemas News Agency"
-msgstr "Agence d'information"
+msgstr "Opennemas agence de presse"
 
 msgid "Url"
 msgstr "Url"
@@ -3945,9 +3812,8 @@ msgstr ""
 msgid "Sync parameters"
 msgstr "Paramètres de synchronisation"
 
-#, fuzzy
 msgid "Agency"
-msgstr "Agence d'information"
+msgstr "Agence de presse"
 
 msgid "When importing elements this will be the signature"
 msgstr "Lors de l'importation des éléments, ce sera la signature"
@@ -3985,14 +3851,14 @@ msgstr ""
 
 #, fuzzy
 msgid "Automatic import"
-msgstr "Catégories"
+msgstr "Automatique Catégories"
 
 msgid "Enabled"
-msgstr ""
+msgstr "Activée"
 
 #, fuzzy
 msgid "Category to import"
-msgstr "Catégories"
+msgstr "logo catégorie"
 
 #, fuzzy
 msgid "Author to import to"
@@ -4000,7 +3866,7 @@ msgstr "Information sur l'auteur"
 
 #, fuzzy
 msgid "Import related contents"
-msgstr "Tous les types de contenu"
+msgstr "Contenus liés"
 
 msgid "If possible, import all related contents for each content"
 msgstr ""
@@ -4018,9 +3884,8 @@ msgstr ""
 msgid "Add server"
 msgstr "Ajouter un serveur"
 
-#, fuzzy
 msgid "No servers available"
-msgstr "Sondage non disponible"
+msgstr "Aucun serveur disponible"
 
 msgid "Sync from"
 msgstr "synchroniser à partir"
@@ -4070,16 +3935,14 @@ msgstr ""
 msgid "Photos"
 msgstr "Photos"
 
-#, fuzzy
 msgid "Files:"
-msgstr "Dossiers"
+msgstr "Dossiers:"
 
 msgid "Documentary modules:"
 msgstr "modules documentaires:"
 
-#, fuzzy
 msgid "Remove the server configuration"
-msgstr "Impossible d'enregistrer la configuration du cache."
+msgstr "Supprimer la configuration du serveur"
 
 msgid "Are you sure that you want to delete the selected server configuration?"
 msgstr ""
@@ -4089,9 +3952,8 @@ msgstr ""
 msgid "Yes, delete it"
 msgstr "Oui, supprimer"
 
-#, fuzzy
 msgid "Import items"
-msgstr "Importer fichiers XML"
+msgstr "Importer des éléments"
 
 msgid ""
 "Are you sure you want to import [% template.contents.length %] elements?"
@@ -4160,9 +4022,8 @@ msgstr ""
 msgid "Stop sync"
 msgstr "arrêter la synchronisation"
 
-#, fuzzy
 msgid "Content preview"
-msgstr "Contenu archivé"
+msgstr "Avant-première contenu"
 
 msgid "Sync"
 msgstr "Sync"
@@ -4170,9 +4031,8 @@ msgstr "Sync"
 msgid "Source"
 msgstr "Source"
 
-#, fuzzy
 msgid "Reload"
-msgstr "Télécharger"
+msgstr "Recharger"
 
 msgid "There is no elements to import"
 msgstr "Il n'y a pas d'éléments à importer"
@@ -4189,13 +4049,11 @@ msgstr "Origine"
 msgid "Imported"
 msgstr "Importé"
 
-#, fuzzy
 msgid "View content"
-msgstr "Contenu"
+msgstr "Vue contenu"
 
-#, fuzzy
 msgid "Unable to find any image that matches your search."
-msgstr "Impossible de trouver un menu avec l'id \"% s\""
+msgstr "Impossible de trouver une image qui correspond à votre recherche."
 
 msgid ""
 "Maybe changing any filter could help or add one using the \"Upload\" button "
@@ -4204,16 +4062,14 @@ msgstr ""
 "Peut-être changer un filtre pourrait aider ou ajouter un en utilisant le "
 "bouton \"Télécharger\" ci-dessus."
 
-#, fuzzy
 msgid "No item selected"
-msgstr "Aucun élément sélectionnés"
+msgstr "Aucun élément sélectionné"
 
 msgid "Click in one item to show information about it"
 msgstr "Cliquez sur un élément pour afficher des informations à ce sujet"
 
-#, fuzzy
 msgid "Image details"
-msgstr "Détails de l'élément"
+msgstr "Détails de l'image"
 
 msgid "Size:"
 msgstr "Taille:"
@@ -4221,9 +4077,8 @@ msgstr "Taille:"
 msgid "Image preview"
 msgstr "prévisualisation de l'image"
 
-#, fuzzy
 msgid "Importing element"
-msgstr "Spécial éléments"
+msgstr "Élément importation"
 
 msgid ""
 "You are about to import one article, please select a category where you want "
@@ -4232,24 +4087,20 @@ msgstr ""
 "Vous êtes sur le point d'importer un article, s'il vous plaît choisir une "
 "catégorie dans laquelle vous souhaitez importer ce contenu."
 
-#, fuzzy
 msgid "In which category you want to import this element?"
-msgstr "L'article que vous souhaitez importer ne existe."
+msgstr "Dans quelle catégorie vous souhaitez importer cet élément?"
 
-#, fuzzy
 msgid "- Select a category -"
-msgstr "- Sélectionnez un auteur -"
+msgstr "- Choisir une catégorie -"
 
 msgid "Unknown"
 msgstr "Inconnu"
 
-#, fuzzy
 msgid "Editing file"
-msgstr "Modifier l'utilisateur propre profil"
+msgstr "Fichier d'édition"
 
-#, fuzzy
 msgid "Creating file"
-msgstr "Créer"
+msgstr "Créer fichier"
 
 msgid "Max allowed file size: %1 Mb"
 msgstr ""
@@ -4258,9 +4109,8 @@ msgstr ""
 msgid "File types allowed"
 msgstr "Fichier non disponible"
 
-#, fuzzy
 msgid "Files (#)"
-msgstr "Dossiers"
+msgstr "Dossiers (#)"
 
 msgid "Size (MB)"
 msgstr "Taille (MB)"
@@ -4268,13 +4118,11 @@ msgstr "Taille (MB)"
 msgid "TOTAL"
 msgstr "TOTAL"
 
-#, fuzzy
 msgid "Unable to find any file that matches your search."
-msgstr "Impossible de trouver le fichier avec l'id \"%s\""
+msgstr "Impossible de trouver un fichier qui correspond à votre recherche."
 
-#, fuzzy
 msgid "You must put %1 polls in the HOME"
-msgstr "Vous devez mettre %d livres dans le widget HOME"
+msgstr "Vous devez mettre 1% des sondages dans le HOME"
 
 msgid "Unassigned"
 msgstr "non affectée"
@@ -4288,9 +4136,8 @@ msgstr "montage sondage"
 msgid "Creating a poll"
 msgstr "Créer un sondage"
 
-#, fuzzy
 msgid "Subtitle"
-msgstr "Titre"
+msgstr "Sous-titre"
 
 msgid "Visualization format"
 msgstr "le format de visualisation"
@@ -4319,9 +4166,8 @@ msgstr "Ajouter nouvelle réponse"
 msgid "Attributes"
 msgstr "Les attributs"
 
-#, fuzzy
 msgid "Allow comments"
-msgstr "Gérer commentaires sondage"
+msgstr "Autoriser les commentaires"
 
 msgid "Publication closed date"
 msgstr "Date de publication fermée"
@@ -4329,9 +4175,8 @@ msgstr "Date de publication fermée"
 msgid "Only available for registered users"
 msgstr "Uniquement disponible pour les utilisateurs enregistrés"
 
-#, fuzzy
 msgid "Unable to find any poll that matches your search."
-msgstr "Impossible de trouver un sondage avec l'id \"%s\"."
+msgstr "Impossible de trouver un sondage qui correspond à votre recherche."
 
 msgid "Poll section preferences"
 msgstr "préférences de la section de sondage"
@@ -4354,9 +4199,8 @@ msgstr "largeur graphiques"
 msgid "Poll home widget preferences"
 msgstr "Sondage préférences de widget à couverture"
 
-#, fuzzy
 msgid "Elements in frontpage widget"
-msgstr "Contenus dans couverture"
+msgstr "Éléments dans un widget frontpage"
 
 msgid "Chart width"
 msgstr "largeur Graphiques"
@@ -4370,25 +4214,21 @@ msgstr "Config module album"
 msgid "New poll"
 msgstr "Nouveau sondage"
 
-#, fuzzy
 msgid "Delete advertisements"
-msgstr "publicité"
+msgstr "Supprimer annonces"
 
-#, fuzzy
 msgid "Restore selected items"
-msgstr "Élément sélectionné"
+msgstr "Restaurer les éléments sélectionnés"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to restore [% template.selected.contents.length %] "
 "item(s)?"
 msgstr ""
-"Êtes-vous sûr de vouloir rejeter [% template.selected.contents.length %] "
-"item(s)?"
+"Etes-vous sûr que vous voulez restaurer [% template.selected.contents.length "
+"%] éléments?"
 
-#, fuzzy
 msgid "Yes, restore them all"
-msgstr "Oui, retirez-les tous"
+msgstr "Oui, restaurer tous"
 
 #, fuzzy
 msgid "Are you sure you want to delete [% template.selected %] item(s)?"
@@ -4400,9 +4240,8 @@ msgstr ""
 msgid "Deleting"
 msgstr "Supprimer"
 
-#, fuzzy
 msgid "Permanently remove item"
-msgstr "Élément supprimé définitivement avec succès"
+msgstr "Supprimer définitivement l'élément"
 
 msgid ""
 "Are you sure that do you want remove permanently from trash \"[% template."
@@ -4425,9 +4264,8 @@ msgstr ""
 "Etes-vous sûr que vous voulez envoyer à la poubelle \"[% template.content."
 "title %]\"?"
 
-#, fuzzy
 msgid "Update selected items"
-msgstr "Élément sélectionné"
+msgstr "Mettez à jour les éléments sélectionnés"
 
 msgid ""
 "Are you sure you want to unpublish [% template.selected.contents.length %] "
@@ -4482,15 +4320,14 @@ msgid ""
 "Are you sure you want to add to home [% template.selected.contents.length %] "
 "item(s)?"
 msgstr ""
-"Etes-vous sûr que vous voulez ajouter à la maison item(s)[% template."
+"Etes-vous sûr que vous voulez ajouter à l'accueil item(s)[% template."
 "selected.contents.length %] ?"
 
 msgid "Yes, update all"
 msgstr "Oui, mettre à jour tous"
 
-#, fuzzy
 msgid "Drop these elements"
-msgstr "Liste saccagé éléments"
+msgstr "Déposez ces éléments"
 
 msgid ""
 "Are you sure that do you want to delete the selected elements from this "
@@ -4525,9 +4362,8 @@ msgstr ""
 msgid "Yes, restore"
 msgstr "Oui, restaurer"
 
-#, fuzzy
 msgid "Arquive these elements"
-msgstr "Liste saccagé éléments"
+msgstr "Archivez ces éléments"
 
 msgid ""
 "Are you sure that do you want to arquive the selected elements from this "
@@ -4543,13 +4379,11 @@ msgstr ""
 "Cela permettra d'éliminer des éléments de <strong> TOUT A L'COUVERTURES </ "
 "strong> sélectionné, mais ils resteront disponibles pour la lecture."
 
-#, fuzzy
 msgid "-- All categories --"
-msgstr "Toutes les catégories"
+msgstr "-- Toutes catégories --"
 
-#, fuzzy
 msgid "No available contents"
-msgstr "Pas de données EXIF disponibles"
+msgstr "Aucun contenu disponible"
 
 msgid "(inactive)"
 msgstr "(inactif)"
@@ -4576,9 +4410,8 @@ msgid "In order to use Opennemas you must accept the terms of use"
 msgstr ""
 "Pour utiliser Opennemas vous devez accepter les conditions d'utilisation"
 
-#, fuzzy
 msgid "Accept the terms of use"
-msgstr "Choisissez l'élément à insérer"
+msgstr "Acceptez les conditions d'utilisation"
 
 msgid "Do you need some help?"
 msgstr "Avez-vous besoin d'aide?"
@@ -4665,9 +4498,8 @@ msgstr "Maintenant, vous pouvez commencer à utiliser votre journal."
 msgid "Hope you will enjoy opennemas!"
 msgstr "Espérons que vous apprécierez Opennemas!"
 
-#, fuzzy
 msgid "Finish"
-msgstr "Espagnol"
+msgstr "finir"
 
 msgid "Welcome!"
 msgstr "Bienvenue!"
@@ -4694,22 +4526,21 @@ msgid "Privileges"
 msgstr "Privilèges"
 
 msgid "Toggle all privileges"
-msgstr ""
+msgstr "Basculer tous les privilèges"
 
 msgid "[% section.title %]"
-msgstr ""
+msgstr "[% section.title %]"
 
-#, fuzzy
 msgid "Unable to find any user group that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr ""
+"Impossible de trouver un groupe d'utilisateurs qui correspond à votre "
+"recherche."
 
-#, fuzzy
 msgid "Edit user group"
-msgstr "Modifier l'utilisateur propre profil"
+msgstr "Modifier groupe d'utilisateurs"
 
-#, fuzzy
 msgid "Delete this user group"
-msgstr "Supprimer le contenu d'autres auteurs"
+msgstr "Supprimer ce groupe d'utilisateurs"
 
 msgid ""
 "Are you sure that you want to delete the user \"[% template.content.name "
@@ -4725,27 +4556,30 @@ msgid ""
 "Activate the access to Backend means to add a User to your platform and has "
 "a cost of 12€/month."
 msgstr ""
+"Activer l'accès au Backend des moyens pour ajouter un utilisateur à votre "
+"plate-forme et a un coût de 12 € / mois."
 
-#, fuzzy
 msgid ""
 "If you have questions please have a look to our help article and/or contact "
 "us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
 msgstr ""
-"Si vous avez besoin de mettre à jour ces informations s'il vous plaît Si "
-"vous avez besoin de mettre à jour ces informations s'il vous plaît contactez-"
-"nouscontactez-nous</a>"
+"Si vous avez des questions s'il vous plaît jeter un oeil à notre article "
+"d'aide et/ou nous contacter à l'adresse <a href=\"mailto:sales@openhost.es"
+"\"> sales@openhost.es </a>"
 
 msgid ""
 "Please, fill billing information below, we will send you an invoice for all "
 "activated users at the end of the month."
 msgstr ""
+"S'il vous plaît, remplissez les informations de facturation ci-dessous, nous "
+"vous ferons parvenir une facture pour tous les utilisateurs activés à la fin "
+"du mois."
 
 msgid "Are you sure you want to create a new user?"
 msgstr "Etes-vous sûr que vous voulez créer un nouvel utilisateur?"
 
-#, fuzzy
 msgid "Are you sure you want to update the user?"
-msgstr "Etes-vous sûr que vous voulez créer un nouvel utilisateur?"
+msgstr "Etes-vous sûr que vous voulez mettre à jour l'utilisateur?"
 
 #, fuzzy
 msgid ""
@@ -4768,21 +4602,18 @@ msgstr "Je comprends et accepte les charges."
 msgid "Yes, save it"
 msgstr "Oui, l'enregistrer"
 
-#, fuzzy
 msgid "Yes, update it"
 msgstr "Oui, mettre à jour tous"
 
 msgid "Editing user"
 msgstr "Édition utilisateur"
 
-#, fuzzy
 msgid "Creating user"
-msgstr "Créer"
+msgstr "Création d'utilisateur"
 
 msgid "Display name"
 msgstr "Afficher un nom"
 
-#, fuzzy
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
@@ -4798,9 +4629,8 @@ msgstr ""
 "gravatar.com'> gravatar.com </a> avec la même adresse e-mail que vous avez "
 "ici, à OpenNemas"
 
-#, fuzzy
 msgid "Blog Url"
-msgstr "Blog intérieure"
+msgstr "Blog Url"
 
 msgid "Short Biography"
 msgstr "Biographie courte"
@@ -4814,40 +4644,34 @@ msgstr "Confirmez le mot de passe"
 msgid "Additional data"
 msgstr "Donnée supplémentaire"
 
-#, fuzzy
 msgid "Registered date:"
-msgstr "Date d'inscription"
+msgstr "Date d'inscription:"
 
-#, fuzzy
 msgid "Postal Code:"
-msgstr "Code postal"
+msgstr "Code postal:"
 
 msgid "Birth Date:"
 msgstr "Date de naissance:"
 
-#, fuzzy
 msgid "Gender:"
-msgstr "Sexe"
+msgstr "Le genre:"
 
-#, fuzzy
 msgid "Has backend access"
-msgstr "Backend Gestionnaire"
+msgstr "A accès backend"
 
 msgid "Used to enable or disable user access to control panel."
 msgstr ""
 "Permet d'activer ou désactiver l'accès des utilisateurs au panneau de "
 "contrôle."
 
-#, fuzzy
 msgid "User group"
 msgstr "Groupes d'utilisateurs"
 
 msgid "Select"
 msgstr "Sélectionner"
 
-#, fuzzy
 msgid "selected"
-msgstr "Rejecté"
+msgstr "choisi"
 
 msgid ""
 "Categories that this user will have access to. Leave empty to give access to "
@@ -4860,16 +4684,14 @@ msgstr "Réseaux sociaux"
 msgid "Facebook"
 msgstr "Facebook"
 
-#, fuzzy
 msgid "Twitter"
-msgstr "Courrier"
+msgstr "Twitter"
 
 msgid "Options"
 msgstr "Options"
 
-#, fuzzy
 msgid "User language"
-msgstr "Nom d'utilisateur"
+msgstr "La langue de l'utilisateur"
 
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr ""
@@ -4879,25 +4701,20 @@ msgstr ""
 msgid "Paywall time limit:"
 msgstr "Délai Paywall"
 
-#, fuzzy
 msgid "Backend"
-msgstr "Backend Gestionnaire"
+msgstr "Backend"
 
-#, fuzzy
 msgid "Frontend"
-msgstr "Couverture"
+msgstr "Frontend"
 
-#, fuzzy
 msgid "Group"
-msgstr "Groupes d'utilisateurs"
+msgstr "Groupe"
 
-#, fuzzy
 msgid "Deactivated"
-msgstr "Activé"
+msgstr "Désactivé"
 
-#, fuzzy
 msgid "Unable to find any user that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr "Impossible de trouver un utilisateur qui correspond à votre recherche."
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -4905,13 +4722,11 @@ msgstr "Avatar"
 msgid "Full name"
 msgstr "Nom complet"
 
-#, fuzzy
 msgid "E-mail"
-msgstr "Email"
+msgstr "E-mail"
 
-#, fuzzy
 msgid "Backend access"
-msgstr "Backend Gestionnaire"
+msgstr "Accès backend"
 
 msgid "Your account is connected to %1."
 msgstr "Votre compte est connecté à 1%."
@@ -4931,32 +4746,27 @@ msgstr "Ecrivez ici le texte de la recherche..."
 msgid "No results"
 msgstr "Aucun résultat"
 
-#, fuzzy
 msgid ""
 "There was an error while performing the search please reload this tab by "
 "changing to another one."
 msgstr ""
-"Il y avait une erreur lors de l'envoi du formulaire, le type de vidéo est "
-"pas spécifié."
+"Il y avait une erreur lors de la recherche s'il vous plaît recharger cet "
+"onglet en changeant un à l'autre."
 
-#, fuzzy
 msgid "Global search"
 msgstr "Recherche Globale"
 
 msgid "Filter by title"
 msgstr "Filtrer par titre"
 
-#, fuzzy
 msgid "Unable to find any content that matches your search."
-msgstr "Impossible de trouver un menu avec l'id \"% s\""
+msgstr "Impossible de trouver un contenu qui correspond à votre recherche."
 
-#, fuzzy
 msgid "month"
 msgstr "Mois"
 
-#, fuzzy
 msgid "Purchased"
-msgstr "Achats paywall"
+msgstr "Acheté"
 
 msgid "Add to cart"
 msgstr "Ajouter au panier"
@@ -4968,91 +4778,106 @@ msgid "Last updated"
 msgstr "Dernière mise à jour"
 
 msgid "First payment"
-msgstr ""
+msgstr "Premier paiement"
 
 msgid ""
 "When you want to pay you can use your paypal account or your credit card."
 msgstr ""
+"Lorsque vous voulez payer, vous pouvez utiliser votre compte paypal ou votre "
+"carte de crédit."
 
 msgid "Pay with Paypal"
-msgstr ""
+msgstr "Payer avec PayPal"
 
 msgid "To pay with your paypal account click on the Paypal button."
-msgstr ""
+msgstr "Pour payer avec votre compte paypal, cliquez sur le bouton Paypal."
 
 msgid ""
 "A popup window will be opened in order to log in with your paypal account."
 msgstr ""
+"Une fenêtre sera ouverte afin de vous connecter avec votre compte paypal."
 
 msgid ""
 "After logging in with your paypal account the popup window will "
 "automatically close and your account will appear as your selected payment "
 "method."
 msgstr ""
+"Une fois connecté à votre compte paypal la fenêtre contextuelle se ferme "
+"automatiquement et votre compte apparaîtra en tant que votre mode de "
+"paiement choisi."
 
 msgid "Click 'Next' button to continue with your purchase."
-msgstr ""
+msgstr "Cliquez sur le bouton «Suivant» pour poursuivre votre achat."
 
 msgid "Pay with Credit Card"
-msgstr ""
+msgstr "Payer par Carte de Crédit"
 
 msgid ""
 "To pay with your credit card fill the form with your credit card information."
 msgstr ""
+"Pour payer avec votre carte de crédit à remplir le formulaire avec vos "
+"informations de carte de crédit."
 
 msgid ""
 "While typing your credit card information will be automatically validated."
 msgstr ""
+"Tout en tapant vos informations de carte de crédit sera automatiquement "
+"validé."
 
 msgid ""
 "If one or more fields are incorrect you will not be able to continue with "
 "the purchase."
 msgstr ""
+"Si un ou plusieurs champs sont incorrects, vous ne serez pas en mesure de "
+"continuer à l'achat."
 
 msgid ""
 "Click 'Next' button to select the credit card as your payment method and "
 "continue with the purchase."
 msgstr ""
+"Cliquez sur le bouton «Suivant» pour sélectionner la carte de crédit comme "
+"mode de paiement et de continuer à l'achat."
 
 msgid "Not your first payment"
-msgstr ""
+msgstr "Pas votre premier paiement"
 
 msgid ""
 "If this is not your first purchase, the last used payment method will be "
 "automatically selected."
 msgstr ""
+"Si cela est votre premier achat, le dernier mode de paiement utilisé sera "
+"automatiquement sélectionné."
 
 msgid "You can change your payment method following the steps below."
 msgstr ""
+"Vous pouvez modifier votre mode de paiement en suivant les étapes ci-dessous."
 
-#, fuzzy
 msgid ""
 "If you want to delete a payment method, please <a href=\"mailto:"
 "sales@openhost.es\">contact us</a>."
 msgstr ""
-"Si vous avez besoin de mettre à jour ces informations s'il vous plaît Si "
-"vous avez besoin de mettre à jour ces informations s'il vous plaît contactez-"
-"nouscontactez-nous</a>"
+"Si vous voulez supprimer un mode de paiement, s'il vous plaît <a href="
+"\"mailto:sales@openhost.es\">contactez nous</a>."
 
-#, fuzzy
 msgid "Change your payment method"
-msgstr "Gérer commentaires sondage"
+msgstr "Changez votre méthode de paiement"
 
 msgid "Click on 'Change payment method'."
-msgstr ""
+msgstr "Cliquez sur \"Changer le mode de paiement\"."
 
 msgid "A list with all payment method used will appear."
-msgstr ""
+msgstr "Une liste avec tous les mode de paiement utilisé apparaît."
 
 msgid "Select one of the listed payment methods or add a new payment method."
 msgstr ""
+"Sélectionnez l'une des méthodes de paiement énumérés ou ajouter un nouveau "
+"mode de paiement."
 
 msgid "year"
-msgstr ""
+msgstr "an"
 
-#, fuzzy
 msgid "item"
-msgstr "Ajouter des fichiers..."
+msgstr "élément"
 
 msgid "Free"
 msgstr "Gratuit"
@@ -5113,9 +4938,8 @@ msgstr "Téléphone"
 msgid "Return to <a href=\"%1\">store</a> and try again"
 msgstr "Retour à <a href=\"%1\">stocker</a> et réessayer"
 
-#, fuzzy
 msgid "Check"
-msgstr "Caisse"
+msgstr "Vérifier"
 
 msgid "Purchase summary"
 msgstr "Résumé commande"
@@ -5170,25 +4994,20 @@ msgstr "Ajouter un nouvel élément"
 msgid "External link"
 msgstr "Lien externe"
 
-#, fuzzy
 msgid "Album Categories"
-msgstr "Toutes les catégories"
+msgstr "Catégories d'album"
 
-#, fuzzy
 msgid "Video Categories"
-msgstr "Catégories"
+msgstr "Catégories d'vidéo"
 
-#, fuzzy
 msgid "Poll Categories"
-msgstr "Toutes les catégories"
+msgstr "Catégories d'sondage"
 
-#, fuzzy
 msgid "Sync Categories"
-msgstr "Catégories"
+msgstr "Sync Catégories"
 
-#, fuzzy
 msgid "Automatic Categories"
-msgstr "Catégories"
+msgstr "Automatique Catégories"
 
 msgid "Sync Automatic Categories"
 msgstr "Synchronisation automatique des catégories"
@@ -5200,16 +5019,14 @@ msgstr ""
 "Remplissez le formulaire ci-dessous avec le titre et l'URL externe que vous "
 "souhaitez ajouter au menu."
 
-#, fuzzy
 msgid "Add item"
-msgstr "Ajouter des fichiers..."
+msgstr "Ajouter l'élément"
 
 msgid "Editing menu"
 msgstr "menu d'édition"
 
-#, fuzzy
 msgid "Creating menu"
-msgstr "Créer"
+msgstr "Menu Création"
 
 msgid "Position"
 msgstr "Position"
@@ -5221,35 +5038,29 @@ msgstr ""
 "(Si votre thème a défini des positions pour les menus, vous pouvez attribuer "
 "un menu à chacun d'entre eux)"
 
-#, fuzzy
 msgid "Menu contents"
-msgstr "Contenu"
+msgstr "Contenu menu"
 
 msgid "Use drag and drop to sort and nest elements"
 msgstr "Utilisez le glisser-déposer pour trier et imbriquer des éléments"
 
-#, fuzzy
 msgid "Add items"
-msgstr "Ajouter des fichiers..."
+msgstr "Ajouter les éléments"
 
 msgid "Module"
 msgstr "Module"
 
-#, fuzzy
 msgid "Category blog"
-msgstr "Catégories"
+msgstr "Catégories blog"
 
-#, fuzzy
 msgid "Album category"
-msgstr "Toutes les catégories"
+msgstr "Catégorie d'album"
 
-#, fuzzy
 msgid "Poll category"
-msgstr "Toutes les catégories"
+msgstr "Catégorie d'sondage"
 
-#, fuzzy
 msgid "Video Category"
-msgstr "Catégories"
+msgstr "Catégorie d'vidéo"
 
 msgid "Synched category"
 msgstr "Catégorie synchronisé"
@@ -5257,9 +5068,8 @@ msgstr "Catégorie synchronisé"
 msgid "Synched blog category"
 msgstr "Catégorie de blog synchronisé"
 
-#, fuzzy
 msgid "Unable to find any menu that matches your search."
-msgstr "Impossible de trouver un menu avec l'id \"% s\""
+msgstr "Impossible de trouver un menu qui correspond à votre recherche."
 
 msgid "Position assigned"
 msgstr "Position assignée"
@@ -5267,13 +5077,11 @@ msgstr "Position assignée"
 msgid "Unasigned"
 msgstr "Non affecté"
 
-#, fuzzy
 msgid "Creating static page"
-msgstr "Statique page"
+msgstr "Création de la page"
 
-#, fuzzy
 msgid "Editing page"
-msgstr "Statique page"
+msgstr "Edition de la page"
 
 msgid "The slug component in the url"
 msgstr "La composante des limaces dans l'url"
@@ -5281,9 +5089,8 @@ msgstr "La composante des limaces dans l'url"
 msgid "Create new page"
 msgstr "Créer une page"
 
-#, fuzzy
 msgid "Unable to find any page that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr "Impossible de trouver une page qui correspond à votre recherche."
 
 msgid "Open in a new window"
 msgstr "Ouvrir dans une nouvelle fenêtre"
@@ -5294,16 +5101,14 @@ msgstr "Lien"
 msgid "General"
 msgstr "Général"
 
-#, fuzzy
 msgid "Site name"
-msgstr "Recherche par nom"
+msgstr "Nom du site"
 
 msgid "This will be displayed as your site name."
 msgstr "Ce sera affiché comme nom de votre site."
 
-#, fuzzy
 msgid "Site agency"
-msgstr "Agence d'information"
+msgstr "Agence de presse site"
 
 msgid "This will be displayed as the default article signature."
 msgstr "Ce sera affiché comme la signature de l'article par défaut."
@@ -5361,13 +5166,11 @@ msgstr "options de SEO"
 msgid "Site title"
 msgstr "Titre du site"
 
-#, fuzzy
 msgid "Site description"
-msgstr "Formulaire d'abonnement"
+msgstr "Description du site"
 
-#, fuzzy
 msgid "Site keywords"
-msgstr "Mot-clé"
+msgstr "Mots clés du site"
 
 msgid "Web Master Tools"
 msgstr "Web Master Tools"
@@ -5378,9 +5181,8 @@ msgstr "Google Web Master Tools"
 msgid "Bing Web Master Tools"
 msgstr "Bing Web Master Tools"
 
-#, fuzzy
 msgid "Internal"
-msgstr "Internal recherche"
+msgstr "Internal"
 
 msgid "Cookies agreement"
 msgstr "Accord de cookies"
@@ -5401,9 +5203,8 @@ msgstr "Cookie page d'accord URL"
 msgid "Language & Time"
 msgstr "Langue & Heure"
 
-#, fuzzy
 msgid "Default language"
-msgstr "La langue par défaut du système"
+msgstr "Langue par défaut"
 
 msgid "Time Zone"
 msgstr "Fuseau horaire"
@@ -5436,9 +5237,8 @@ msgstr "Module de formulaire"
 msgid "Contact email"
 msgstr "Email du contact"
 
-#, fuzzy
 msgid "External services"
-msgstr "Internal recherche"
+msgstr "Services extérieurs"
 
 msgid "Analytic system integration"
 msgstr "L'intégration du système analytique"
@@ -5471,9 +5271,8 @@ msgstr ""
 "Nous ne sommes pas responsables des statistiques ou de tous les services de "
 "tiers"
 
-#, fuzzy
 msgid "ComScore Statistics"
-msgstr "Statistiques"
+msgstr "Statistiques ComScore"
 
 msgid "comScore Page ID"
 msgstr "Page ID comScore"
@@ -5485,9 +5284,8 @@ msgstr ""
 "Si vous avez également une <strong> comScore statistiques de service </"
 "strong>, ajouter votre page id"
 
-#, fuzzy
 msgid "OJD Statistics"
-msgstr "Statistiques"
+msgstr "Statistiques OJD"
 
 msgid "OJD Page ID"
 msgstr "OJD Page ID"
@@ -5498,9 +5296,8 @@ msgstr ""
 "Si vous avez également des <strong> statistiques OJD services</strong>, "
 "ajouter votre page id"
 
-#, fuzzy
 msgid "Internal settings"
-msgstr "Internal recherche"
+msgstr "Paramètres internes"
 
 msgid "Recaptcha"
 msgstr "Recaptcha"
@@ -5522,13 +5319,11 @@ msgid "Used when we want to test if the user is an human and not a robot."
 msgstr ""
 "Utilisé lorsque l'on veut tester si l'utilisateur est un robot humain et non."
 
-#, fuzzy
 msgid "User"
-msgstr "Utilisateurs"
+msgstr "Utilisateur"
 
-#, fuzzy
 msgid "Paypal Settings"
-msgstr "Paywall paramètres sauvegardés."
+msgstr "Paramètres Paypal"
 
 msgid "Account email:"
 msgstr "Compte email:"
@@ -5580,9 +5375,8 @@ msgstr "Intégration des réseaux sociaux"
 msgid "Google+ and YouTube"
 msgstr "Google+ et YouTube"
 
-#, fuzzy
 msgid "Google+ Page Url"
-msgstr "Google DFP"
+msgstr "URL de la page Google+"
 
 msgid ""
 "If you have a <strong>Google+ page</strong>, please complete this input."
@@ -5590,9 +5384,8 @@ msgstr ""
 "Si vous avez un <strong>page Google+</strong>, s'il vous plaît compléter "
 "cette entrée."
 
-#, fuzzy
 msgid "YouTube Page Url"
-msgstr "Chaîne Youtube"
+msgstr "URL de la page Youtube"
 
 msgid ""
 "If you have a <strong>Youtube page</strong>, please complete the form with "
@@ -5632,9 +5425,8 @@ msgstr "Clé secrète"
 msgid "Instant Articles (fb:pages meta tag)"
 msgstr ""
 
-#, fuzzy
 msgid "Twitter Page"
-msgstr "Page statique"
+msgstr "Page de Twitter"
 
 msgid ""
 "If you also have a <strong>Twitter page</strong>, add your page url on the "
@@ -5643,35 +5435,31 @@ msgstr ""
 "Si vous avez également une <strong> Twitter la page </strong>, ajoutez votre "
 "URL de la page sur le formulaire. Défaut sera réglée avec Opennemas."
 
-#, fuzzy
 msgid "Instagram"
-msgstr "Instance pas activée"
+msgstr "Instagram"
 
 msgid "Instagram Page"
-msgstr ""
+msgstr "Page de Instagram"
 
-#, fuzzy
 msgid ""
 "If you also have a <strong>Instagram page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Si vous avez également une <strong> Vimeo </strong>, ajoutez votre URL de la "
-"page sur le formulaire."
+"Si vous avez également un <strong> Instagram </ strong>, ajoutez votre page "
+"url sur le formulaire."
 
 msgid "Pinterest"
-msgstr ""
+msgstr "Pinterest"
 
-#, fuzzy
 msgid "Pinterest Page"
-msgstr "Page statique"
+msgstr "Page de Pinterest"
 
-#, fuzzy
 msgid ""
 "If you also have a <strong>Pinterest page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Si vous avez également une <strong> Vimeo </strong>, ajoutez votre URL de la "
-"page sur le formulaire."
+"Si vous avez également une <strong>page de Pinterest</ strong>, ajoutez "
+"votre URL de la page sur le formulaire."
 
 msgid "Vimeo"
 msgstr "Vimeo"
@@ -5699,22 +5487,57 @@ msgstr ""
 "Si vous avez également une <strong> LinkedIn </strong>, ajoutez votre URL de "
 "la page sur le formulaire. Défaut sera réglée avec Opennemas."
 
+msgid "Only masters"
+msgstr ""
+
+msgid "Robots.txt rules"
+msgstr ""
+
+msgid ""
+"Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
+"\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\">documentation</"
+"a>."
+msgstr ""
+
+msgid "Scripts in header"
+msgstr "Scriptes en-tête"
+
+msgid "This scripts will be included before the </head> tag"
+msgstr "Ce script seront inclus avant la étiquette </head>"
+
+msgid "Scripts at body start"
+msgstr "Scripts au début dans le corps"
+
+msgid "This scripts will be included before the <body> tag"
+msgstr "Ce script seront inclus avant la étiquette <body>"
+
+msgid "Scripts at body end"
+msgstr "Scripts à la fin du corps"
+
+msgid "This scripts will be included before the </body> tag"
+msgstr "Ce script seront inclus avant la étiquette </body>"
+
+msgid "Custom CSS"
+msgstr "Personnalisé CSS"
+
+#, fuzzy
+msgid "This sripts will be included in the global.css file."
+msgstr "Ce script seront inclus avant la étiquette <body>"
+
 msgid "Editing author"
 msgstr "Montage auteur"
 
 msgid "Creating author"
 msgstr "Création d'auteur"
 
-#, fuzzy
 msgid "User info"
-msgstr "Groupes d'utilisateurs"
+msgstr "Infos d'utilisateurs"
 
 msgid "Twitter user"
 msgstr "Utilisateur de Twitter"
 
-#, fuzzy
 msgid "Facebook user"
-msgstr "Facebook"
+msgstr "Utilisanteur de Facebook"
 
 msgid "View as Blog"
 msgstr "Voir comme Blog"
@@ -5732,24 +5555,20 @@ msgstr "Afficher en RSS"
 msgid "If this option is activated this author will be showed in rss"
 msgstr "Si cette option est activée cet auteur sera affiché dans rss"
 
-#, fuzzy
 msgid "Create new author"
-msgstr "- Sélectionnez un auteur -"
+msgstr "Créer un nouveau auteur"
 
-#, fuzzy
 msgid "Unable to find any author that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr "Impossible de trouver un auteur qui correspond à votre recherche."
 
 msgid "No biography set"
 msgstr "Aucun jeu de biographie"
 
-#, fuzzy
 msgid "Cache Manager"
-msgstr "Gestionnaire de Cache"
+msgstr "Gestionnaire de cache"
 
-#, fuzzy
 msgid "Cache group"
-msgstr "Gestionnaire de Cache"
+msgstr "Groupe Cache"
 
 msgid "Expire time"
 msgstr "Heure d'expiration"
@@ -5757,24 +5576,29 @@ msgstr "Heure d'expiration"
 msgid "seconds"
 msgstr "secondes"
 
-#, fuzzy
 msgid "Creating video"
-msgstr "Créer"
+msgstr "Créer vidéo"
 
 msgid "Editing video"
 msgstr "Montage vidéo"
 
+msgid "Updating"
+msgstr "Mise à jour"
+
+msgid "Update"
+msgstr "Mise à jour"
+
 msgid "Schedule"
-msgstr ""
+msgstr "Programme"
 
 msgid "Publication start date"
-msgstr ""
+msgstr "Publication date de début"
 
 msgid "Server hour:"
-msgstr ""
+msgstr "Heure du serveur:"
 
 msgid "Publication end date"
-msgstr ""
+msgstr "Date d'achèvement de la publication"
 
 msgid "Pick type"
 msgstr "Type d'objet"
@@ -5791,9 +5615,8 @@ msgstr "Utilisez le code HTML"
 msgid "Use file video URLs (External HTML5/FLV)"
 msgstr "Utiliser le URL de fichier vidéo (HTML5 externe / FLV)"
 
-#, fuzzy
 msgid "Video URL"
-msgstr "Vidéo"
+msgstr "URL du vidéo"
 
 msgid "Get information"
 msgstr "Obtenir des information"
@@ -5801,441 +5624,450 @@ msgstr "Obtenir des information"
 msgid "Allowed video sources:"
 msgstr "sources vidéo autorisés"
 
-#, fuzzy
 msgid "Other information"
-msgstr "L'information a été envoyé"
+msgstr "Autre information"
 
 msgid "Original Title"
-msgstr ""
+msgstr "Titre original"
 
 msgid "Service"
-msgstr ""
+msgstr "Un service"
 
 msgid "Duration"
-msgstr ""
+msgstr "Durée"
 
 msgid "Embed Url"
-msgstr ""
+msgstr "Intégrer Url"
 
-#, fuzzy
 msgid "Thumbnail URL"
-msgstr "détails de miniature"
+msgstr "Url de la miniature"
 
-#, fuzzy
 msgid "Thumbnail image"
-msgstr "détails de miniature"
+msgstr "image de miniature"
 
-#, fuzzy
 msgid "Unable to find any video that matches your search."
-msgstr ""
-"<div><p>Impossible de trouver toute la vidéo correspondant à vos critères de "
-"recherche.</p></div>"
+msgstr "Impossible de trouver la vidéo qui correspond à votre recherche."
 
-#, fuzzy
 msgid "You must put %1 videos in the HOME"
-msgstr "Vous devez mettre %d livres dans le widget HOME"
+msgstr "Vous devez mettre %1 vidéos dans le HOME"
 
 msgid "Mosaic"
-msgstr ""
+msgstr "Mosaïque"
 
-#, fuzzy
 msgid "Video details"
-msgstr "Détails de l'élément"
+msgstr "Détails de l'vidéo"
 
 msgid "Write HTML code"
-msgstr ""
+msgstr "Ecrire du code HTML"
 
-#, fuzzy
 msgid "Video Cover"
-msgstr "Vidéo intérieure"
+msgstr "Couverture du vidéo"
 
-#, fuzzy
 msgid "Image not set"
-msgstr "Type de l'image: %s"
+msgstr "Image non réglée"
 
 msgid "Set image"
-msgstr ""
+msgstr "Jeu image"
 
 msgid "Video type and file URLs"
-msgstr ""
+msgstr "Type de vidéo et de fichiers URL"
 
 msgid "HTML5 video"
-msgstr ""
+msgstr "Vidéo HTML5"
 
 msgid "Flash video"
-msgstr ""
+msgstr "Vidéo Flash"
 
 msgid "MP4 format"
-msgstr ""
+msgstr "Format MP4"
 
 msgid "http://www.example.com/path/to/file.mp4"
-msgstr ""
+msgstr "http://www.example.com/path/to/file.mp4"
 
 msgid "Ogg format"
-msgstr ""
+msgstr "Format Ogg"
 
 msgid "http://www.example.com/path/to/file.ogg"
-msgstr ""
+msgstr "http://www.example.com/path/to/file.ogg"
 
 msgid "WebM format"
-msgstr ""
+msgstr "Format WebM"
 
 msgid "http://www.example.com/path/to/file.webm"
-msgstr ""
+msgstr "http://www.example.com/path/to/file.webm"
 
 msgid "FLV format"
-msgstr ""
+msgstr "Format FLV"
 
 msgid "http://www.example.com/path/to/file.flv"
-msgstr ""
+msgstr "http://www.example.com/path/to/file.flv"
 
-#, fuzzy
 msgid "Video cover"
-msgstr "Vidéo intérieure"
+msgstr "Couverture Vidéo"
 
 msgid "Total in widget home"
-msgstr ""
+msgstr "Total en widget de la page d'accueil"
 
 msgid ""
 "Use  total in widget home for define how many videos can see in widgets in "
 "newspaper frontpage"
 msgstr ""
+"Utilisez total widget de la \tpage d'accueil pour définir le nombre de "
+"vidéos peut voir dans les widgets dans le journal frontpage"
 
-#, fuzzy
 msgid "Total in video frontpage column"
-msgstr "opinion couverture à mobile"
+msgstr "Total en colonne frontpage vidéo"
 
 msgid ""
 "Use  total in video frontpage column for define how many videos can see in "
 "the column left in video frontpage categories"
 msgstr ""
+"Utilisez totale dans la colonne de frontpage vidéo pour définir le nombre de "
+"vidéos peut voir dans la colonne de gauche en vidéo catégories frontpage"
 
 msgid "Total in video frontpage more videos"
-msgstr ""
+msgstr "Total en vidéo frontpage plus de vidéos"
 
 msgid "Total number of videos on more videos section in video home frontpage"
 msgstr ""
+"Nombre total de vidéos sur plus de section vidéos dans la vidéo accueil "
+"frontpage"
 
 msgid "Total offset in video frontpage more videos"
-msgstr ""
+msgstr "Décalage total en vidéo frontpage plus de vidéos"
 
 msgid "Total number of videos that are placed on top home video frontpage"
 msgstr ""
+"Nombre total de vidéos qui sont placées sur le dessus home video frontpage"
 
 msgid "Total in video gallery"
-msgstr ""
+msgstr "Totale dans la galerie vidéo"
 
 msgid ""
 "Use  Total in video gallery for define how many videos can see in the "
 "gallery when you edit or create one article"
 msgstr ""
+"Utilisez totale dans la galerie vidéo pour définir le nombre de vidéos peut "
+"voir dans la galerie lorsque vous modifiez ou créez un article"
 
-#, fuzzy
 msgid "Widget home"
-msgstr "gadget"
+msgstr "Widget home"
 
 msgid "Config video module"
-msgstr ""
+msgstr "module vidéo Config"
 
 msgid "Logged in users"
-msgstr ""
+msgstr "Les utilisateurs connectés"
 
 msgid "Redirect your domain"
-msgstr ""
+msgstr "Rediriger votre domaine"
 
 msgid ""
 "I have an existing domain and I want to redirect it to my Opennemas digital "
 "newspaper."
 msgstr ""
+"J'ai un domaine existant et je veux rediriger vers mon journal numérique "
+"Opennemas."
 
 msgid "Add new domain"
-msgstr ""
+msgstr "Ajouter un nouveau domaine"
 
 msgid ""
 "I DO NOT have my own domain and I want to create one and redirect it to my "
 "Opennemas digital newspaper"
 msgstr ""
+"Je n'ai pas mon propre domaine et je veux créer un et rediriger vers mon "
+"journal numérique Opennemas"
 
-#, fuzzy
 msgid "Add contents to your site"
-msgstr "Tous les types de contenu"
+msgstr "Ajouter le contenu à votre site"
 
-#, fuzzy
 msgid "New article"
-msgstr "Article"
+msgstr "Nouvel article"
 
 msgid "New opinion"
-msgstr ""
+msgstr "Nouvel opinion"
 
-#, fuzzy
 msgid "Media manager"
-msgstr "Backend Gestionnaire"
+msgstr "Média manager"
 
-#, fuzzy
 msgid "Upload images"
-msgstr "Télécharger"
+msgstr "Importer des images"
 
-#, fuzzy
 msgid "New Album"
-msgstr "Album"
+msgstr "Nouvelle galerie"
 
-#, fuzzy
 msgid "Upload video"
-msgstr "Télécharger"
+msgstr "Télécharger une video"
 
 msgid "Want more features?"
-msgstr ""
+msgstr "Vous voulez plus de fonctionnalités?"
 
 msgid ""
 "We have two ways to add functionality to you site. Check our Opennemas Store:"
 msgstr ""
+"Nous avons deux façons d'ajouter des fonctionnalités à votre site. Vérifiez "
+"notre Opennemas stockage:"
 
 msgid "Plans"
-msgstr ""
+msgstr "Des plans"
 
 msgid "Bundles multiple functionality in a reduced price"
-msgstr ""
+msgstr "Paquet de multiples fonctionnalités à un prix réduit"
 
 msgid "Adds an specific feature in your site"
-msgstr ""
+msgstr "Ajoute une caractéristique spécifique de votre site"
 
 msgid "If you have special needs or want some advice extending your site"
 msgstr ""
+"Si vous avez des besoins spéciaux ou si vous voulez des conseils étendant "
+"votre site"
 
 msgid "<strong>Are you new in Opennemas?</strong>"
-msgstr ""
+msgstr "<strong>Vous êtes nouveau dans Opennemas?</strong>"
 
 msgid ""
 "If you need some help getting started to create awesome content, check out "
 "our online user documentation."
 msgstr ""
+"Si vous avez besoin d'aide pour commencer à créer un contenu impressionnant, "
+"consultez notre documentation utilisateur en ligne."
 
 msgid "First steps in opennemas"
-msgstr ""
+msgstr "Premiers pas dans Opennemas"
 
 msgid "Detailed documentation"
-msgstr ""
+msgstr "Une documentation détaillée"
 
-#, fuzzy
 msgid "Contact us for help"
-msgstr "Contactez le support"
+msgstr "Nous contacter pour l'assistance"
 
 msgid ""
 "Get more help from our videotutorials in <a href=\"%1\" class=\"text-white "
 "bold\">our YouTube channel</a> and subscribe to it."
 msgstr ""
+"Obtenir plus d'aide de nos didacticiels vidéo en <a href=\"%1\" class=\"text-"
+"white bold\"> notre chaîne YouTube </a> et y souscrire."
 
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
 "advertisement but Opennemas already supports this type of advertisements."
 msgstr ""
+"Un Google DFP annonce n'a été détecté dans votre code HTML/javascript "
+"publicité mais Opennemas soutient déjà ce type d'annonces."
 
 msgid ""
 "Would you like to auto-correct this advertisement to use our Google DFP "
 "integration?"
 msgstr ""
+"Voulez-vous auto-corriger cette annonce à utiliser notre intégration de "
+"Google DFP?"
 
-#, fuzzy
 msgid "Google DFP unit"
-msgstr "Google DFP"
+msgstr "Google DFP unité"
 
 msgid "Width"
-msgstr ""
+msgstr "Largeur"
 
 msgid "Height"
-msgstr ""
+msgstr "Hauteur"
 
 msgid "Ads"
-msgstr ""
+msgstr "Publicités"
 
 msgid "Creating banner"
-msgstr ""
+msgstr "Création bannière"
 
 msgid "Editing banner"
-msgstr ""
+msgstr "Montage bannière"
 
 msgid "Image or Flash object"
-msgstr ""
+msgstr "Image ou objet Flash"
 
-#, fuzzy
 msgid "HTML or Javascript code"
-msgstr "Javascript"
+msgstr "Code HTML ou Javascript"
 
-#, fuzzy
 msgid "Open X zone"
-msgstr "OpenX"
+msgstr "zone OpenX"
 
 msgid "Open X zone id"
-msgstr ""
+msgstr "zone OpenX id"
 
 msgid ""
 "OpenX/Revive Ad server uses an id to identify an advertisement. Please fill "
 "the zone id from your OpenX/Revive server %1"
 msgstr ""
+"OpenX/Revive serveur Ad utilise un identifiant pour identifier une "
+"publicité. S'il vous plaît remplir la zone id de votre OpenX/Revive serveur% "
+"1"
 
-#, fuzzy
 msgid "Google DFP unit id"
-msgstr "Google DFP"
+msgstr "Google DFP unité id"
 
 msgid ""
 "Google DFP uses an unit ID to identify an advertisement. Please fill the "
 "zone id from your Google DFP panel"
 msgstr ""
+"Google DFP utilise un ID d'unité pour identifier une publicité. S'il vous "
+"plaît remplir la zone id de votre panneau Google DFP"
 
 msgid "Add another size"
-msgstr ""
+msgstr "Ajouter une autre taille"
 
 msgid "When to show this ad"
-msgstr ""
+msgstr "Lorsque pour montrer cette annonce"
 
-#, fuzzy
 msgid "Restrictions"
-msgstr "Date d'inscription"
+msgstr "Restrictions"
 
 msgid "Show this ad if satisfy one condition"
-msgstr ""
+msgstr "Voir cette annonce si satisfaire une condition"
 
-#, fuzzy
 msgid "Without limits"
-msgstr "Sans la position"
+msgstr "Sans limites"
 
-#, fuzzy
 msgid "Date range"
-msgstr "Date de naissance"
+msgstr "Période"
 
 msgid "Until"
-msgstr ""
+msgstr "Jusqu'à"
 
 msgid "Show this ad within a range of dates."
-msgstr ""
+msgstr "Voir cette annonce dans une fourchette de dates."
 
 msgid "Display banner while"
-msgstr ""
+msgstr "Afficher la bannière tout en"
 
 msgid "Amount of seconds that this banner will block all the page."
-msgstr ""
+msgstr "Nombre de secondes que cette bannière de bloquer toute la page."
 
 msgid "Where to show this ad"
-msgstr ""
+msgstr "Où montrer cette annonce"
 
 #, fuzzy
 msgid "Pages of type"
-msgstr "Manager Couverture"
+msgstr "et les pages de type"
 
-#, fuzzy
 msgid "Inner article"
-msgstr "Article"
+msgstr "Intérieur Article"
 
 msgid "Video frontpage"
 msgstr "Vidéo Couverture"
 
 msgid "Inner video"
-msgstr ""
+msgstr "Vidéo Inner"
 
 msgid "Opinion frontpage"
 msgstr "Opinion Couverture"
 
 msgid "Inner opinion"
-msgstr ""
+msgstr "Opinion intérieure"
 
-#, fuzzy
 msgid "Galleries"
-msgstr "Catégories"
+msgstr "Galeries"
 
-#, fuzzy
 msgid "Gallery Inner"
-msgstr "Sondage intérieure"
+msgstr "Galerie intérieure"
 
-#, fuzzy
 msgid "Poll Inner"
 msgstr "Sondage intérieure"
 
-#, fuzzy
 msgid "AMP pages"
-msgstr "Ajouter des fichiers..."
+msgstr "Pages AMP"
 
 #, fuzzy
 msgid "Instant Articles pages"
 msgstr "Statique page"
 
-#, fuzzy
 msgid "In categories"
-msgstr "Toutes les catégories"
+msgstr "Dans les catégories"
 
-#, fuzzy
 msgid "and inside the position"
-msgstr "Impossible d'enregistrer les positions."
+msgstr "et à l'intérieur de la position"
 
 msgid "AMP inner article - Button 1"
-msgstr ""
-
-msgid "AMP inner article - Button 2"
-msgstr ""
-
-msgid "AMP inner article - Button 3"
-msgstr ""
-
-msgid "Instant Articles inner article - Button 1"
-msgstr ""
-
-msgid "Instant Articles inner article - Button 2"
-msgstr ""
-
-msgid "Instant Articles inner article - Button 3"
-msgstr ""
+msgstr "AMP intérieure article - Bouton 1"
 
 #, fuzzy
+msgid "AMP inner article - Button 2"
+msgstr "AMP intérieure article - Bouton 1"
+
+#, fuzzy
+msgid "AMP inner article - Button 3"
+msgstr "AMP intérieure article - Bouton 1"
+
+#, fuzzy
+msgid "Instant Articles inner article - Button 1"
+msgstr "AMP intérieure article - Bouton 1"
+
+#, fuzzy
+msgid "Instant Articles inner article - Button 2"
+msgstr "AMP intérieure article - Bouton 1"
+
+#, fuzzy
+msgid "Instant Articles inner article - Button 3"
+msgstr "AMP intérieure article - Bouton 1"
+
 msgid "Advertisment"
 msgstr "Publicité"
 
 msgid "Flash based"
-msgstr ""
+msgstr "Basé sur Flash"
 
 msgid "Override default click handler"
-msgstr ""
+msgstr "Override défaut gestionnaire de clic"
 
 msgid ""
 "When you click in some Flash-based advertisements they redirect you to "
 "another web site. If you want to overlap that address with that specified by "
 "you above you should mark this."
 msgstr ""
+"Override défaut cliquez sur handlerWhen vous cliquez dans quelques "
+"publicités en Flash, ils vous redirigent vers un autre site web. Si vous "
+"voulez chevaucher cette adresse avec celle spécifiée par vous ci-dessus, "
+"vous devriez marquer this.When vous cliquez dans certaines publicités en "
+"Flash, ils vous redirigent vers un autre site web. Si vous voulez chevaucher "
+"cette adresse avec celle spécifiée par vous ci-dessus, vous devriez marquer "
+"cela."
 
 msgid "Floating ads (for drop them into columns)"
-msgstr ""
+msgstr "Annonces flottant (pour les déposer dans des colonnes)"
 
-#, fuzzy
 msgid "Test for Javascript ad"
-msgstr "Javascript"
+msgstr "Test de Javascript ad"
 
 msgid "Close window"
-msgstr ""
+msgstr "Fermer la fenêtre"
 
 msgid "Cookie lifetime for intersticials"
-msgstr ""
+msgstr "Cookie vie pour interstitiels"
 
 msgid ""
 "This setting indicates how long will take to re-display the interstitial in "
 "frontpage."
 msgstr ""
+"Ce paramètre indique comment sera longue prendre pour ré-afficher "
+"l'interstitiel dans frontpage."
 
 msgid "(in minutes)"
-msgstr ""
+msgstr "(Minutes)"
 
-#, fuzzy
 msgid "Allow generic advertisement"
-msgstr "Publicité"
+msgstr "Autoriser publicité générique"
 
 msgid "This settings allow printing home ads when ads in category are empty."
 msgstr ""
+"Ce paramètre permet l'impression des annonces à domicile lorsque les "
+"annonces dans la catégorie sont vides."
 
 msgid "OpenX/Revive Ad server integration"
-msgstr ""
+msgstr "OpenX/Revive l'intégration du serveur d'annonce"
 
 msgid "Ad server base url"
-msgstr ""
+msgstr "Url base du serveur de publicité"
 
 msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
-msgstr ""
+msgstr "Le URL du serveur de publicité (p. ex. http://ad.serverexample.net/)"
 
 msgid "DFP category targeting"
 msgstr ""
@@ -6249,128 +6081,104 @@ msgid ""
 msgstr ""
 
 msgid "Tradedoubler integration"
-msgstr ""
+msgstr "Intégration tradedoubler"
 
 msgid "Tradedoubler ID"
-msgstr ""
+msgstr "Tradedoubler ID"
 
 msgid "Only the ID from Tradedoubler validation tag"
-msgstr ""
+msgstr "Seul l'ID de Tradedoubler validation tag"
 
-#, fuzzy
 msgid "Iadbox integration"
-msgstr "l'intégration UserVoice"
+msgstr "l'intégration Iadbox"
 
-#, fuzzy
 msgid "Iadbox ID"
-msgstr "iadbox"
+msgstr "ID Iadbox"
 
 msgid "Iadbox affiliate ID"
-msgstr ""
+msgstr "ID d'affilié Iadbox"
 
-msgid "Scripts"
-msgstr ""
-
-msgid "Scripts in header"
-msgstr ""
-
-msgid "This scripts will be included before the </head> tag"
-msgstr ""
-
-msgid "Scripts at body start"
-msgstr ""
-
-msgid "This scripts will be included before the <body> tag"
-msgstr ""
-
-msgid "Scripts at body end"
-msgstr ""
-
-msgid "This scripts will be included before the </body> tag"
-msgstr ""
-
-#, fuzzy
 msgid "Unable to find any advertisement that matches your search."
-msgstr "Impossible de trouver la publicité avec l'id \"%d\""
+msgstr "Impossible de trouver une annonce qui correspond à votre recherche."
 
 msgid "Permanence"
-msgstr ""
+msgstr "Permanence"
 
 msgid "Media element (jpg, png, gif)"
-msgstr ""
+msgstr "élément multimédia (jpg, png, gif)"
 
-#, fuzzy
 msgid "Media flash element (swf)"
-msgstr "Spécial éléments"
+msgstr "Élément flash multimédia (swf)"
 
 msgid "Clicks:"
-msgstr ""
+msgstr "Clics:"
 
 msgid "Viewed:"
-msgstr ""
+msgstr "Visionné:"
 
-#, fuzzy
 msgid "Instance Synchronization"
-msgstr "Instance non trouvée"
+msgstr "Synchronisation de instance"
 
 msgid "Ins. Sync."
-msgstr ""
+msgstr "Sync. Ins."
 
 msgid "Adding site"
-msgstr ""
+msgstr "Ajouter un site"
 
 msgid "Site URL"
-msgstr ""
+msgstr "Site URL"
 
 msgid "http://example.com"
-msgstr ""
+msgstr "http://example.com"
 
-#, fuzzy
 msgid "Username or password are incorrect"
-msgstr "Nom d'utilisateur ou mot de passe incorrect."
+msgstr "Nom d'utilisateur ou mot de passe sont incorrects"
 
 msgid "Please, check if the credentials are correct and try again."
 msgstr ""
+"S'il vous plaît, vérifier si les informations d'identification sont corrects "
+"et essayez à nouveau."
 
-#, fuzzy
 msgid "Available categories for sync"
-msgstr "Toutes les catégories"
+msgstr "Catégories disponibles pour la synchronisation"
 
 msgid "No elements to sync in this server"
-msgstr ""
+msgstr "Aucun élément à synchroniser sur ce serveur"
 
 msgid "The given url has no elements to sync or it is not an Opennemas server."
 msgstr ""
+"L'URL donnée n'a pas d'éléments à synchroniser ou il est pas un serveur "
+"Opennemas."
 
 msgid "Also check if the credentials are correct."
 msgstr ""
+"Vérifiez également si les informations d'identification sont correctes."
 
 msgid "Add site to sync"
-msgstr ""
+msgstr "Ajouter un site pour synchroniser"
 
-#, fuzzy
 msgid "Add site"
-msgstr "Ajouter des fichiers..."
+msgstr "Ajouter un site"
 
 msgid "Site Url"
-msgstr ""
+msgstr "Site Url"
 
-#, fuzzy
 msgid "Categories to Sync"
-msgstr "Catégories"
+msgstr "Catégories pour Synchronisation"
 
-#, fuzzy
 msgid "Categories to sync"
-msgstr "Catégories"
+msgstr "Catégories pour sync"
 
 msgid "There are no synchronize settings available"
-msgstr ""
+msgstr "Il n'y a pas de paramètres synchroniser disponibles"
 
 msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
+"Essayez d'ajouter un site à synchroniser sur le bouton de configuration ci-"
+"dessus."
 
 msgid "Where are you from?"
-msgstr ""
+msgstr "D'où êtes-vous?"
 
 msgid "Country"
 msgstr "Pays"
@@ -6378,24 +6186,20 @@ msgstr "Pays"
 msgid "Select a country"
 msgstr "Sélectionnez un pays"
 
-#, fuzzy
 msgid "Contact information"
-msgstr "Contactez le support"
+msgstr "coordonnées"
 
 msgid "This field is required"
 msgstr "Ce champ est requis"
 
-#, fuzzy
 msgid "First name"
-msgstr "Recherche par nom"
+msgstr "Prénom"
 
-#, fuzzy
 msgid "Last name"
-msgstr "Nom"
+msgstr "Nom de famille"
 
-#, fuzzy
 msgid "Company name"
-msgstr "Remplissez votre nom"
+msgstr "Nom de la compagnie"
 
 msgid "This is not a valid email"
 msgstr "Cela ne veut pas une adresse email valide"
@@ -6403,16 +6207,14 @@ msgstr "Cela ne veut pas une adresse email valide"
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#, fuzzy
 msgid "This is not a valid vat_number identification number"
-msgstr "Cela ne veut pas un état valide"
+msgstr "Ce n'est pas un numéro d'identification du numéro de TVA valide"
 
-#, fuzzy
 msgid "Vat identification number"
-msgstr "Jeton invalide"
+msgstr "Numéro d'identification TVA"
 
 msgid "What is a VAT identification number?"
-msgstr ""
+msgstr "Qu'est-ce qu'un numéro d'identification de TVA?"
 
 msgid "Address"
 msgstr "Adresse"
@@ -6423,7 +6225,6 @@ msgstr "Cela ne veut pas une adresse valide"
 msgid "This is not a valid postal_code"
 msgstr "Cela ne veut pas une code postal valide"
 
-#, fuzzy
 msgid "Postal code"
 msgstr "Code postal"
 
@@ -6440,56 +6241,58 @@ msgid "State/Province"
 msgstr ""
 
 msgid "Domain Mapping"
-msgstr ""
+msgstr "Mapping de domaine"
 
 msgid "Primary Domain"
-msgstr ""
+msgstr "domaine principal"
 
 msgid "Technical information"
-msgstr ""
+msgstr "Informations techniques"
 
 msgid "Domain registration + mapping"
-msgstr ""
+msgstr "Enregistrement de domaine + mapping"
 
 msgid "Domain mapping"
-msgstr ""
+msgstr "Mapping de domaine"
 
 msgid "Enter a domain"
-msgstr ""
+msgstr "Entrez un nom de domaine"
 
 msgid "Map it"
-msgstr ""
+msgstr "Carte il"
 
 msgid "Requested domains"
-msgstr ""
+msgstr "Domaines demandés"
 
 msgid "Select the payment method."
-msgstr ""
+msgstr "Sélectionnez la méthode de paiement."
 
 msgid "You'll have a chance to review your order before it's placed."
 msgstr ""
+"Vous aurez la chance de revoir votre commande avant qu'il ne soit placé."
 
 msgid "Any problem with payment?"
-msgstr ""
+msgstr "Tout problème avec le paiement?"
 
-#, fuzzy
 msgid "Click here for a quick tips."
-msgstr "Cliquez ici pour choisir une date"
+msgstr "Cliquez ici pour accéder conseils rapides."
 
 msgid "I have read and accept the Terms of creating a new domain"
 msgstr ""
+"Je l'ai lu et accepté les Conditions de la création d'un nouveau domaine"
 
 msgid "I have read and accept the Terms of redirection"
-msgstr ""
+msgstr "Je l'ai lu et accepté les Conditions de redirection"
 
-#, fuzzy
 msgid "Thank you for your purchase!"
-msgstr "Nous vous remercions de votre demande d'achat!"
+msgstr "Merci pour votre achat!"
 
 msgid ""
 "Check your email, we have sent you an email with the invoice and purchase "
 "details. We will review your purchase and activate your domain."
 msgstr ""
+"Vérifiez votre e-mail, nous vous avons envoyé un e-mail avec la facture et "
+"d'achat de détails. Nous examinerons votre achat et activer votre domaine."
 
 msgid "Something unexpected has happened!"
 msgstr ""
@@ -6498,103 +6301,110 @@ msgstr ""
 msgid "There were some errors while trying to purchase."
 msgstr "Il y avait une erreur lors de la mise à jour dans le menu."
 
+#, fuzzy
 msgid ""
 "To prevent non-desired charges in your account, please, do not retry the "
 "checkout process and contact our <a href=\"javascript:UserVoice."
 "showPopupWidget();\">support team</a>."
 msgstr ""
+"Quelque chose ne va pas? Contactez notre <a  href=\"javascript:UserVoice."
+"showPopupWidget();\"> équipe de support </a>."
 
 msgid "How can I change 'opennemas.com' domain on my newspaper?"
-msgstr ""
+msgstr "Comment puis-je changer 'opennemas.com' domaine sur mon journal?"
 
 msgid "Redirect your own domain"
-msgstr ""
+msgstr "Rediriger votre propre domaine"
 
 msgid "Your domains"
-msgstr ""
+msgstr "Vos domaines"
 
 msgid "Main"
-msgstr ""
+msgstr "Principal"
 
 msgid "Points to"
-msgstr ""
+msgstr "Pointe vers"
 
 msgid "Your domain is properly configured"
-msgstr ""
+msgstr "Votre domaine est correctement configuré"
 
 msgid "Your domain is not properly configured, check the instructions below."
 msgstr ""
+"Votre domaine est pas correctement configuré, consultez les instructions ci-"
+"dessous."
 
 msgid "Expires"
-msgstr ""
+msgstr "expires"
 
-#, fuzzy
 msgid "This is your opennemas address"
-msgstr "Remplissez votre adresse e-mail"
+msgstr "Ceci est votre adresse Opennemas"
 
 msgid "Update your DNS records"
-msgstr ""
+msgstr "Mettez à jour vos enregistrements DNS"
 
 msgid "Point the www entrace in your domain to the Opennemas service."
-msgstr ""
+msgstr "Pointez l'entrée www dans votre domaine au service Opennemas."
 
 msgid ""
 "Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
 "domain.name.replace('www.', '') %]"
 msgstr ""
+"Rediriger le trafic de [% domain.name.replace('www.', '') %] À www.[%domain."
+"name.replace('www.', '')%]"
 
 msgid ""
 "Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
 "by the hosting provider for your domain)"
 msgstr ""
+"Trafic Web -> domain.com -> redirect -> www.domain.com (cela devrait être "
+"fait par le fournisseur d'hébergement pour votre domaine)"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOTE"
 
 msgid "This change is NOT done in the DNS section"
-msgstr ""
+msgstr "Ce changement est PAS fait dans la section DNS"
 
 msgid "If you need more help configuring your domains contact our support team"
 msgstr ""
+"Si vous avez besoin de plus d'aide de la configuration de vos domaines "
+"contacter notre équipe d'assistance"
 
-#, fuzzy
 msgid "Thank you for choosing Opennemas!"
-msgstr "Nous vous remercions de votre demande d'achat!"
+msgstr "Merci d'avoir choisi Opennemas!"
 
 msgid "You have just purchased the following items:"
-msgstr ""
+msgstr "Vous venez d'acquérir les éléments suivants:"
 
 msgid "Required Domains:"
-msgstr ""
+msgstr "Domaines requis:"
 
 msgid "You can find your invoice on the following page:"
-msgstr ""
+msgstr "Vous pouvez trouver votre facture sur la page suivante:"
 
 msgid "Domains to create"
-msgstr ""
+msgstr "Domaines de créer"
 
 msgid "Domains to redirect"
-msgstr ""
+msgstr "Domaines de rediriger"
 
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 msgid "In cart"
-msgstr ""
+msgstr "Dans le panier"
 
-#, fuzzy
 msgid "Active"
-msgstr "Activé"
+msgstr "Actif"
 
 msgid "Enabling"
-msgstr ""
+msgstr "Activation"
 
 msgid "Live demo"
-msgstr ""
+msgstr "Démonstration en direct"
 
-#, fuzzy
 msgid "Custom"
-msgstr "Personnalisé CSS"
+msgstr "Personnalisé"
 
 msgid ""
 "\n"
@@ -6669,185 +6479,181 @@ msgid ""
 "        "
 msgstr ""
 
-#, fuzzy
 msgid "Available"
-msgstr "Album non disponible"
+msgstr "Disponible"
 
 msgid "Exclusive"
-msgstr ""
+msgstr "Exclusif"
 
 msgid "My themes"
-msgstr ""
+msgstr "Mes thèmes"
 
 msgid "Addons"
-msgstr ""
+msgstr "Addons"
 
-#, fuzzy
 msgid "No themes available"
-msgstr "Sondage non disponible"
+msgstr "Aucun thèmes disponibles"
 
 msgid "Change the look of your newspaper in just few clicks!"
-msgstr ""
+msgstr "Changer le look de votre journal en quelques clics!"
 
 msgid ""
 "All our Themes have been designed by media professionals and they are all "
 "Mobile Responsive!"
 msgstr ""
+"Tous nos thèmes ont été conçus par les professionnels des médias et ils sont "
+"tous mobiles Responsive!"
 
 msgid ""
 "Add customizations and design to create your own theme based on one of out "
 "grids or ask us to develop an exclusive and completely new theme"
 msgstr ""
+"Ajouter des personnalisations et de conception pour créer votre propre thème "
+"basé sur l'une des grilles sur ou nous demander pour développer un thème "
+"exclusif et entièrement nouveau"
 
 msgid "We are open to any solution you prefer!"
-msgstr ""
+msgstr "Nous sommes ouverts à toute solution que vous préférez!"
 
 msgid "Find here your purchased themes and decide which one to use today!"
 msgstr ""
+"Trouvez où acheté vos thèmes et décide Lequel d'utiliser dès aujourd'hui!"
 
 msgid "All purchased Themes are ready for activation"
-msgstr ""
+msgstr "Tous les thèmes achetés sont prêts pour l'activation"
 
 msgid "Open live demo in a new tab"
-msgstr ""
+msgstr "Ouvrir démo live dans un nouvel onglet"
 
 msgid "Delivery time"
-msgstr ""
+msgstr "Délai de livraison"
 
-#, fuzzy
 msgid "weeks"
-msgstr "%d semaines"
+msgstr "semaines"
 
-#, fuzzy
 msgid "months"
-msgstr "Tous les mois"
+msgstr "mois"
 
 msgid "standard"
-msgstr ""
+msgstr "standard"
 
-#, fuzzy
 msgid "widget"
-msgstr "gadget"
+msgstr "widget"
 
 msgid "Delete multiple images"
-msgstr ""
+msgstr "Supprimer plusieurs images"
 
-#, fuzzy
 msgid "Delete image"
-msgstr "Supprimer"
+msgstr "Supprimer l'image"
 
 msgid "Are you sure you want to delete <span>%num%</span> images?"
-msgstr ""
+msgstr "Etes-vous sûr de vouloir supprimer <span>%num%</span> images?"
 
-#, fuzzy
 msgid "Files uploaded successfully"
-msgstr "Vidéo mise à jour avec succès."
+msgstr "Fichiers téléchargés avec succès"
 
 msgid ""
 "The dropped files are uploaded but you should complete their information."
 msgstr ""
+"Les fichiers déposés sont téléchargés, mais vous devez compléter leur "
+"information."
 
 msgid "Edit images"
-msgstr ""
+msgstr "Modifier l'image"
 
 msgid "Editing image"
-msgstr ""
+msgstr "Image edition"
 
 msgid "Pick a location for the image"
-msgstr ""
+msgstr "Choisissez un emplacement pour l'image"
 
 msgid "Geolocate photo with my position"
-msgstr ""
+msgstr "Géolocaliser photo avec ma position"
 
 msgid "Assign location"
-msgstr ""
+msgstr "Attribuer emplacement"
 
 msgid "View original"
-msgstr ""
+msgstr "Voir l'original"
 
 msgid "Original filename:"
-msgstr ""
+msgstr "Nom du fichier original:"
 
 msgid "Resolution:"
-msgstr ""
+msgstr "Résolution:"
 
 msgid "Used for searches and automated suggestions."
-msgstr ""
+msgstr "Utilisé pour les recherches et les suggestions automatiques."
 
 msgid "Copyright"
-msgstr ""
+msgstr "Droit d'auteur"
 
 msgid "Location"
-msgstr ""
+msgstr "Emplacement"
 
 msgid "View advanced data"
-msgstr ""
+msgstr "Voir les données avancées"
 
 msgid "EXIF Data"
-msgstr ""
+msgstr "Donnée EXIF"
 
-#, fuzzy
 msgid "No available EXIF data."
-msgstr "Pas de données EXIF disponibles"
+msgstr "Aucune donnée EXIF disponible."
 
 msgid "IPTC Data"
-msgstr ""
+msgstr "Donnée IPTC"
 
-#, fuzzy
 msgid "No available IPTC data."
-msgstr "Pas de données IPTC disponibles"
+msgstr "Aucune donnée IPTC disponible."
 
-#, fuzzy
 msgid "Search by description"
-msgstr "Recherche par nom"
+msgstr "Recherche par description"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Résolution"
 
 msgid "Size"
 msgstr "Taille"
 
 msgid "No available images for this search"
-msgstr ""
+msgstr "Aucune image disponible pour cette recherche"
 
-#, fuzzy
 msgid "No available description"
-msgstr "Pas de données EXIF disponibles"
+msgstr "Aucune description disponible"
 
 msgid "No tags"
-msgstr ""
+msgstr "Pas de tags"
 
 msgid "Sidebars"
 msgstr "Encadrés"
 
-#, fuzzy
 msgid "Remove all"
-msgstr "Supprimer"
+msgstr "Enlever tout"
 
 msgid "Restore"
-msgstr ""
+msgstr "Restaurer"
 
-#, fuzzy
 msgid "Content Type"
-msgstr "Contenu"
+msgstr "Type de contenu"
 
 msgid "-- All --"
-msgstr ""
+msgstr "-- Tout --"
 
 msgid "No contents in the trash that matches your search."
-msgstr ""
+msgstr "Aucun contenu dans la poubelle qui correspond à votre recherche."
 
 msgid "Remove permanently"
-msgstr ""
+msgstr "Supprimer définitivement"
 
-#, fuzzy
 msgid "Delete all trashed contents"
-msgstr "Supprimer le contenu d'autres auteurs"
+msgstr "Supprimer tout le contenu saccagé"
 
 msgid ""
 "Are you sure you want to remove permanently all the contents inside the "
 "trash?"
 msgstr ""
+"Êtes-vous sûr de vouloir supprimer définitivement tous les contenus à "
+"l'intérieur de la poubelle?"
 
 msgid "Yes, remove all"
 msgstr "Oui, supprimer tous"
@@ -6858,411 +6664,393 @@ msgstr ""
 msgid "Discard it"
 msgstr ""
 
-#, fuzzy
 msgid "Resume editing"
-msgstr "Oui, l'enregistrer"
+msgstr ""
 
 #, fuzzy
 msgid "Draft saved at "
-msgstr "Créé"
+msgstr "Créé à"
 
-#, fuzzy
 msgid "Creating article"
-msgstr "Liste attendant articles"
+msgstr "Article création"
 
-#, fuzzy
 msgid "Editing article"
-msgstr "Liste attendant articles"
+msgstr "Article d'édition"
 
 msgid "Inner title"
-msgstr ""
+msgstr "Titre intérieur"
 
 msgid "Signature"
-msgstr ""
+msgstr "Signature"
 
-#, fuzzy
 msgid "Pretitle"
-msgstr "Titre"
+msgstr "Pretitre:"
 
-#, fuzzy
 msgid "Suggested for frontpage"
-msgstr "Gestionnaire drapeau frontpage"
+msgstr "Suggérée pour le couverture"
 
 msgid "Slug"
-msgstr ""
+msgstr "Chemin"
 
 msgid "Only available for subscribers"
-msgstr ""
+msgstr "Uniquement disponible pour les abonnés"
 
 msgid "Suggest this element to home"
-msgstr ""
+msgstr "Proposer cet élément pour la accueil"
 
 msgid "Suggest to home"
-msgstr ""
+msgstr "Proposer à l'accueil"
 
 msgid "Unsuggest this element to home"
-msgstr ""
+msgstr "Ne pas suggérer cet article à l'accueil"
 
 msgid "Unsuggest to home"
-msgstr ""
+msgstr "Ne pas suggérer à l'accueil"
 
-#, fuzzy
 msgid "Customize"
-msgstr "Personnalisé CSS"
+msgstr "Personnalisé"
 
-#, fuzzy
 msgid "Settings for frontpage"
-msgstr "Opinion Couverture"
+msgstr "Réglages pour couverture"
 
 msgid "Text size for title"
-msgstr ""
+msgstr "Taille du texte pour le titre"
 
-#, fuzzy
 msgid "Image position"
-msgstr "Sans la position"
+msgstr "Position de l'image"
 
-#, fuzzy
 msgid "Settings home frontpage"
-msgstr "Gestionnaire drapeau frontpage"
+msgstr "Paramètres de l'accueil couverture"
 
-#, fuzzy
 msgid "Title for home frontpage"
-msgstr "Gestionnaire drapeau frontpage"
+msgstr "Titre pour l'accueil couverture"
 
 msgid "Images assigned"
-msgstr ""
+msgstr "Images attribuer"
 
-#, fuzzy
 msgid "Image to show in frontpages"
-msgstr "Contenus dans couverture"
+msgstr "Image pour afficher dans les couvertures"
 
 msgid "Image to show in inner"
-msgstr ""
+msgstr "Image à afficher dans la page intérieure"
 
-#, fuzzy
 msgid "Home image"
-msgstr "Page d'accueil"
+msgstr "Accueil image"
 
-#, fuzzy
 msgid "Video for frontpage"
-msgstr "Vidéo - Couverture"
+msgstr "Vidéo pour le couverture"
 
 msgid "Pick a video"
-msgstr ""
+msgstr "Choisissez une vidéo"
 
-#, fuzzy
 msgid "File name"
-msgstr "Fichier"
+msgstr "Nom de fichier"
 
-#, fuzzy
 msgid "Creation date"
-msgstr "Date d'inscription"
+msgstr "Date de création"
 
 msgid "Footer text for inner video:"
-msgstr ""
+msgstr "Texte de pied de image pour la vidéo intérieure"
 
-#, fuzzy
 msgid "Video for inner article page"
-msgstr "Vidéo Couverture"
+msgstr "Vidéo à la page de l'article intérieure"
 
-#, fuzzy
 msgid "Unable to find any article that matches your search."
-msgstr "Impossible de trouver l'article avec l'id \"%d\""
+msgstr "Impossible de trouver un article qui correspond à votre recherche."
 
-#, fuzzy
 msgid "No available articles."
-msgstr "Pas de données EXIF disponibles"
+msgstr "Pas d'articles disponibles."
 
 msgid "Available from"
-msgstr ""
+msgstr "Disponible depuis"
 
 msgid "to"
-msgstr ""
+msgstr "à"
 
-#, fuzzy
 msgid "Related contents"
-msgstr "Tous les types de contenu"
+msgstr "Contenus liés"
 
-#, fuzzy
 msgid "Related in frontpage"
-msgstr "Contenus dans couverture"
+msgstr "Contenu associée dans couverture"
 
-#, fuzzy
 msgid "Related in inner"
-msgstr "opinion intérieure à mobile"
+msgstr "Contenu associée dans la page intérieure"
 
 msgid "Related in home"
-msgstr ""
+msgstr "Contenu associée dans l'accueil"
 
-#, fuzzy
 msgid "Gallery for frontpage"
-msgstr "Sondage - Couverture"
+msgstr "Galerie pour le couverture"
 
 msgid "Only one album"
-msgstr ""
+msgstr "Une seule galerie"
 
 msgid "Add gallery"
-msgstr ""
+msgstr "Ajouter la galerie"
 
-#, fuzzy
 msgid "Gallery for inner"
-msgstr "Sondage - intérieur"
+msgstr "Galerie pour l'intérieur"
 
 msgid "Gallery for Home"
-msgstr ""
+msgstr "Gallerie pour l'accueil"
 
 msgid "Creating special"
-msgstr ""
+msgstr "Création d'une spéciale"
 
 msgid "Editing special"
-msgstr ""
+msgstr "Modification d'une spéciale"
 
-#, fuzzy
 msgid "List of words separated by commas."
-msgstr "Fournir une liste d'e-mails valides séparées par des virgules."
+msgstr "Liste des mots séparés par des virgules."
 
 msgid "Image for Special"
-msgstr ""
+msgstr "Image pour une spéciale"
 
-#, fuzzy
 msgid "Special contents"
-msgstr "Spécial éléments"
+msgstr "contenu spéciaux"
 
-#, fuzzy
 msgid "Articles in left column"
-msgstr "Article intérieure"
+msgstr "Articles dans la colonne de gauche"
 
 msgid "Click here to add contents"
-msgstr ""
+msgstr "Cliquez ici pour ajouter le contenu"
 
 msgid "Articles in right column"
-msgstr ""
+msgstr "Articles dans la colonne de droite"
 
-#, fuzzy
 msgid "You must put %1 specials in the HOME"
-msgstr "Vous devez mettre %d livres dans le widget HOME"
+msgstr "Vous devez mettre %1 spéciaux dans l'accueil"
 
-#, fuzzy
 msgid "Unable to find any special that matches your search."
-msgstr "Impossible de trouver le supplément avec l'id \"%d\""
+msgstr "Impossible de trouver toute spéciale qui correspond à votre recherche."
 
 msgid "Number of elements in widget home"
-msgstr ""
+msgstr "Nombre d'éléments dans un widget accueil"
 
 msgid ""
 "Use  total in widget special for define how many videos can see in widgets "
 "in newspaper frontpage"
 msgstr ""
+"Utilisez totale dans un widget spécial pour définir le nombre de vidéos peut "
+"voir dans les widgets dans le journal couverture"
 
 msgid "Time of the last special most viewed (days):"
-msgstr ""
+msgstr "Le temps des dernières spéciales les plus regardées (jours):"
 
 msgid ""
 "Used to define the frontpage specials, the time range of the latest specials "
 "are the most viewed"
 msgstr ""
+"Permet de définir les spéciaux couverture, l'intervalle de temps des "
+"dernières offres spéciales sont les plus vus"
 
 msgid "Config special module"
-msgstr ""
+msgstr "configuration du module de spéciaux"
 
-#, fuzzy
 msgid "Delete category"
-msgstr "Toutes les catégories"
+msgstr "Supprimer la catégorie"
 
-#, fuzzy
 msgid "Delete all the contents in category"
-msgstr "Impossible de supprimer tous les contenus dans la catégorie '%s'"
+msgstr "Supprimer tout le contenu dans la catégorie"
 
-#, fuzzy
 msgid ""
 "Are you sure that do you want delete all the contents in the category "
 "\"<span>%title%</span>\"?"
-msgstr "Impossible de supprimer tous les contenus dans la catégorie '%s'"
+msgstr ""
+"Etes-vous sûr que vous voulez supprimer tous les continents dans la "
+"catégorie \"<span>%title%</span>\"?"
 
 msgid "Editing category"
-msgstr ""
+msgstr "Modification de la catégorie"
 
-#, fuzzy
 msgid "Creating category"
-msgstr "Catégories"
+msgstr "Création de la catégorie"
 
 msgid "Config categories module"
-msgstr ""
+msgstr "Configuration du module de catégories"
 
-#, fuzzy
 msgid "Subsection of"
-msgstr "Formulaire d'abonnement"
+msgstr "Sous-secteur de la"
 
-#, fuzzy
 msgid "Subsections"
-msgstr "Formulaire d'abonnement"
+msgstr "Sous-secteur"
 
-#, fuzzy
 msgid "Internal name"
-msgstr "Internal recherche"
+msgstr "Nom interne"
 
 msgid "In menu"
-msgstr ""
+msgstr "Dans le menu"
 
 msgid "Actions"
-msgstr ""
+msgstr "Actes"
 
-#, fuzzy
 msgid "Category available for"
-msgstr "Catégorie Gestionnaire"
+msgstr "Catégorie disponibles pour"
 
-#, fuzzy
 msgid "All contents"
-msgstr "Tous les types de contenu"
+msgstr "Tous les contenus"
 
 msgid "ePaper"
-msgstr ""
+msgstr "e-papier"
 
-#, fuzzy
 msgid "Category logo"
-msgstr "Catégories"
+msgstr "logo catégorie"
 
 msgid "Change image headers and colors in frontpages"
-msgstr ""
+msgstr "Changer l'image des en-têtes et des couleurs dans les covertures"
 
 msgid ""
 "Enable this if you want to use a custom image and color in your category "
 "frontpages"
 msgstr ""
+"Activez cette option si vous souhaitez utiliser une image personnalisée et "
+"la couleur dans vos couvertures de catégorie"
 
 msgid "Empty"
-msgstr ""
+msgstr "Vide"
 
-#, fuzzy
 msgid "Delete all the contents in this category"
-msgstr "Impossible de supprimer tous les contenus dans la catégorie '%s'"
+msgstr "Supprimer tout le contenu dans cette catégorie"
 
-#, fuzzy
 msgid "For articles"
-msgstr "Article"
+msgstr "Pour les articles"
 
 msgid "For albums"
-msgstr ""
+msgstr "Pour des galeries"
 
-#, fuzzy
 msgid "For videos"
-msgstr "Vidéos"
+msgstr "Pour les vidéos"
 
 msgid "For ePapers"
-msgstr ""
+msgstr "Pour les e-papiers"
 
 msgid "For polls"
-msgstr ""
+msgstr "Pour les sondages"
 
-#, fuzzy
 msgid "For Specials"
-msgstr "Supplément"
+msgstr "Pour les spéciaux"
 
 msgid "For books"
-msgstr ""
+msgstr "Pour les livres"
 
 msgid "Show in rss"
-msgstr ""
+msgstr "Afficher en RSS"
 
 msgid "No available categories for listing"
-msgstr ""
+msgstr "Aucune catégorie disponible pour l'inscription"
 
-#, fuzzy
 msgid "Change comment manager"
-msgstr "Gestionnaire de Cache"
+msgstr "Changement commentaire gestionnaire"
 
 msgid ""
 "Opennemas supports multiple managers for comments. You can change to your "
 "desired manager whenever you want."
 msgstr ""
+"Opennemas supporter plusieurs gestionnaires pour commentaires. Vous pouvez "
+"modifier à votre gestionnaire désiré chaque fois que vous voulez."
 
 msgid "Pick the method to manage comments:"
-msgstr ""
+msgstr "Choisissez la méthode pour gérer les commentaires:"
 
 msgid "Built-in system"
-msgstr ""
+msgstr "Système intégré"
 
 msgid ""
 "Opennemas has simple but effective comment system that requires zero "
 "configuration."
 msgstr ""
+"Opennemas dispose d'un système de commentaire simple mais efficace qui "
+"nécessite une configuration zéro."
 
 msgid ""
 "Integrate Opennemas with the <a href=\"http://www.disqus.com/\">Disqus "
 "comment system</a> and use their powerful system to manage your website "
 "comments."
 msgstr ""
+"Intégrer Opennemas avec le <a href=\"http://www.disqus.com/\"> Disqus "
+"commentaire système</a> et d'utiliser leur système puissant pour gérer vos "
+"commentaires du site."
 
 msgid ""
 "Integrate Opennemas with the <a href=\"https://developers.facebook.com/docs/"
 "plugins/comments/\">Facebook comment system</a> and use their online tools "
 "to manage your website comments."
 msgstr ""
+"Intégrer Opennemas avec le <a href=\"https://developers.facebook.com/docs/"
+"plugins/comments/\">Facebook commentaire système</a> et utiliser leurs "
+"outils en ligne pour gérer vos commentaires du site."
 
 msgid ""
 "Are you sure that do you want send to the trash this comment from \"[% "
 "template.content.author %]\"?"
 msgstr ""
+"Etes-vous sûr que vous voulez envoyer à la poubelle ce commentaire de \"[% "
+"template.content.author%]»?"
 
 msgid "Editing comment"
-msgstr ""
+msgstr "Modification du commentaire"
 
 msgid "Submitted on"
-msgstr ""
+msgstr "Soumis le"
 
 msgid "Sent from IP address"
-msgstr ""
+msgstr "Envoyé de l'adresse IP"
 
-#, fuzzy
 msgid "Commented on"
-msgstr "Commentaire"
+msgstr "Commenté sur"
 
 msgid "Disqus"
-msgstr ""
+msgstr "Disqus"
 
-#, fuzzy
 msgid "Change comments module"
-msgstr "Gérer commentaires sondage"
+msgstr "Modifier commentaires module"
 
 msgid "Set your Disqus configuration"
-msgstr ""
+msgstr "Définissez votre configuration Disqus"
 
 msgid ""
 "A shortname is the unique identifier assigned to a Disqus site. All the "
 "comments posted to a site are referenced with the shortname"
 msgstr ""
+"Un shortname est l'identifiant unique attribué à un site Disqus. Tous les "
+"commentaires postés sur un site sont référencés avec le shortname"
 
 msgid ""
 "You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
 "applications/\" target=\"_blank\">here</a>"
 msgstr ""
+"Vous pouvez obtenir votre clé secrète Disqus <a href=\"http://disqus.com/api/"
+"applications/\" target=\"_blank\">ici</a>"
 
-#, fuzzy
 msgid "Disqus module configuration"
-msgstr "Il y avait une erreur pour sauver configuration du module Disqus"
+msgstr "Configuration du module Disqus"
 
 msgid "To moderate your Disqus comments, click here"
-msgstr ""
+msgstr "Pour modérer vos commentaires Disqus, cliquez ici"
 
 msgid "Disqus not configured"
-msgstr ""
+msgstr "Disqus pas configuré"
 
 msgid ""
 "To be able to moderate comments of your site in Facebook you must create and "
 "set here your <strong>Facebook App Id</strong>."
 msgstr ""
+"Pour être en mesure de modérer les commentaires sur votre site dans "
+"Facebook, vous devez créer et définir ici votre <strong> Facebook App Id </"
+"strong>."
 
 msgid ""
 "You can get your Facebook App Keys from <a href=\"https://developers."
 "facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
 msgstr ""
+"Vous pouvez obtenir vos clés Facebook App de <a href=\"https://developers."
+"facebook.com/apps\" target=\"_blank\"> site Facebook Développeurs </a>."
 
 msgid "Config facebook module"
-msgstr ""
+msgstr "configuration du module facebook"
 
-#, fuzzy
 msgid "You are now using Facebook comments"
-msgstr "Maintenant, vous utilisez le système de commentaire Facebook"
+msgstr "Vous utilisez Facebook comments"
 
 msgid ""
 "If you want to moderate comments, you first need to create a Facebook "
@@ -7270,84 +7058,88 @@ msgid ""
 "\">here</a> to get an application Id and then click on settings to configure "
 "it"
 msgstr ""
+"Si vous voulez modérer les commentaires, vous devez d'abord créer une "
+"application Facebook dans la cible <a href=\"https://developers.facebook.com/"
+"\" target=\"_blank\"> ici</a> pour obtenir un ID d'application, puis un "
+"cliquez sur les paramètres pour le configurer"
 
 msgid ""
 "To moderate your comments go to <a href=\"https://developers.facebook.com/"
 "tools/comments\" target=\"_blank\">Facebook moderation tool page</a>"
 msgstr ""
+"Pour modérer vos commentaires vont <a href=\"https://developers.facebook.com/"
+"tools/comments\" target=\"_blank\"> Facebook outil de modération </a>"
 
 msgid "Display"
-msgstr ""
+msgstr "Afficher"
 
 msgid "Number of comments to show by page"
-msgstr ""
+msgstr "Nombre de commentaires pour afficher la page par"
 
 msgid "Allow comments in contents by default"
-msgstr ""
+msgstr "Autoriser les commentaires dans le contenu par défaut"
 
 msgid ""
 "Whether to allow users to comment in comments by default for all contents "
 "(you can change this setting for specific contents)"
 msgstr ""
+"Que ce soit pour permettre aux utilisateurs de faire des commentaires dans "
+"les commentaires par défaut pour tous les contenus (vous pouvez modifier ce "
+"paramètre pour des contenus spécifiques)"
 
 msgid "Before a comment appears"
-msgstr ""
+msgstr "Avant un commentaire apparaît"
 
 msgid "An administrator must always approve the comment "
-msgstr ""
+msgstr "Un administrateur doit toujours approuver le commentaire"
 
 msgid "Config comments module"
-msgstr ""
+msgstr "Configuration de module commentaires"
 
-#, fuzzy
 msgid "Search by body"
-msgstr "Recherche par nom"
+msgstr "Recherche par texte"
 
-#, fuzzy
 msgid "Unable to find any comment that matches your search."
-msgstr "Impossible de trouver un menu avec l'id \"% s\""
+msgstr ""
+"Impossible de trouver tout correspond à votre recherche ce commentaire."
 
 msgid "Maybe changing any filter could help."
-msgstr ""
+msgstr "Peut-être changer un filtre pourrait aider."
 
 msgid "In response to"
-msgstr ""
+msgstr "En réponse à"
 
-#, fuzzy
 msgid "Author:"
-msgstr "Auteurs"
+msgstr "Auteur:"
 
 msgid "Submitted on:"
-msgstr ""
+msgstr "Soumis le:"
 
 msgid "Editing opinion"
-msgstr ""
+msgstr "- Sélectionnez le type d'opinion -"
 
 msgid "Creating opinion"
-msgstr ""
+msgstr "Création d'opinion"
 
 #, fuzzy
 msgid "In homepage"
-msgstr "Page d'accueil"
+msgstr "En Page d'accueil"
 
 #, fuzzy
 msgid "-- Select opinion type --"
-msgstr "- Sélectionnez un auteur -"
+msgstr "- Sélectionnez le type d'opinion -"
 
-#, fuzzy
 msgid "Opinion from author"
-msgstr "Opinion - Auteurs"
+msgstr "Opinion de l'auteur"
 
-#, fuzzy
 msgid "Opinion from editorial"
-msgstr "Opinion Couverture"
+msgstr "Opinion de l'édition"
 
 msgid "Director's letter"
-msgstr ""
+msgstr "Lettre du Directeur"
 
-#, fuzzy
 msgid "Blog"
-msgstr "Les blogueurs"
+msgstr "Blogueur"
 
 msgid "Director Articles"
 msgstr ""
@@ -7612,9 +7404,8 @@ msgstr ""
 msgid "Top Wide Image"
 msgstr ""
 
-#, fuzzy
 msgid "Image wide"
-msgstr "Gérer gadget"
+msgstr "image large"
 
 msgid "Top right Image"
 msgstr ""
@@ -8005,96 +7796,93 @@ msgid ""
 msgstr ""
 
 msgid "My account"
-msgstr ""
+msgstr "Mon compte"
 
 msgid "This is the email used to create your newspaper"
-msgstr ""
+msgstr "Ceci est l'e-mail utilisée pour créer votre journal"
 
 msgid "Your newspaper was created on %1"
-msgstr ""
+msgstr "Votre journal a été créé le 1%"
 
 msgid "Support plan"
-msgstr ""
+msgstr "Support plan"
 
 msgid "Support by tickets"
-msgstr ""
+msgstr "Support via ticket"
 
 msgid "Storage size"
-msgstr ""
+msgstr "La taille de stockage"
 
 msgid "Page views this month"
-msgstr ""
+msgstr "Pages vues ce mois-ci"
 
 msgid "coming soon... work in progress..."
-msgstr ""
+msgstr "à venir ... les travaux en cours ..."
 
 msgid "Opennemas offers many more modules and solutions"
-msgstr ""
+msgstr "Opennemas offre beaucoup d'autres modules et des solutions"
 
 msgid "Check out our modules"
-msgstr ""
+msgstr "Consultez nos modules"
 
 msgid ""
 "If you need a custom plan or you want to purchase a plan or module please "
 "click in the next link:"
 msgstr ""
+"Si vous avez besoin d'un plan personnalisé ou si vous voulez acheter un plan "
+"ou d'un module s'il vous plaît cliquer sur le lien suivant:"
 
-#, fuzzy
 msgid "Contact Us"
 msgstr "Contactez le support"
 
-#, fuzzy
 msgid "State"
-msgstr "Statique page"
+msgstr "État"
 
 msgid ""
 "Something wrong? Contact our <a href=\"javascript:UserVoice."
 "showPopupWidget();\">support team</a>."
 msgstr ""
+"Quelque chose ne va pas? Contactez notre <a  href=\"javascript:UserVoice."
+"showPopupWidget();\"> équipe de support </a>."
 
-#, fuzzy
 msgid "You have no billing information"
-msgstr "Impossible d'enregistrer les informations de votre image"
+msgstr "Vous avez pas d'informations de facturation"
 
 msgid "You will be asked to add it during the checkout in our store"
-msgstr ""
+msgstr "Vous serez invité à ajouter lors de l'achat dans notre magasin"
 
-#, fuzzy
 msgid "Delete books"
-msgstr "Supprimer"
+msgstr "Supprimer les livres"
 
-#, fuzzy
 msgid "Delete book"
-msgstr "Supprimer"
+msgstr "Supprimer livre"
 
 msgid "Are you sure you want to delete <span>%num%</span> books?"
-msgstr ""
+msgstr "Etes-vous sûr de vouloir supprimer <span>%num%</span> livres?"
 
 msgid "Creating Book"
-msgstr ""
+msgstr "Création du livre"
 
 msgid "Editing Book"
-msgstr ""
+msgstr "Édition du livre"
 
 msgid "Separated by comas"
-msgstr ""
+msgstr "Séparé par des virgules"
 
-#, fuzzy
 msgid "Unable to find any book that matches your search."
-msgstr "Impossible de trouver un sondage avec l'id \"%s\"."
+msgstr "Impossible de trouver un livre qui correspond à votre recherche."
 
-#, fuzzy
 msgid "You must put %1 books in the HOME"
-msgstr "Vous devez mettre %d livres dans le widget HOME"
+msgstr "Vous devez mettre 1% des livres dans le HOME"
 
 msgid "New book"
-msgstr ""
+msgstr "Nouveau livre"
 
 msgid "There is nothing to see here, kid."
-msgstr ""
+msgstr "Il n'y a rien à voir ici, gamin."
 
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #, fuzzy
 msgid "New instance"
@@ -8185,18 +7973,17 @@ msgid "Do you want to delete the selected instances?"
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
 
 msgid "Download CSV of selected"
-msgstr ""
+msgstr "Télécharger CSV sélectionné"
 
 #, fuzzy
 msgid "Search"
 msgstr "Recherche Globale"
 
-#, fuzzy
 msgid "Reset filters"
-msgstr "Bulletins"
+msgstr "Réinitialiser les filtres"
 
 msgid "Columns"
-msgstr ""
+msgstr "Colonnes"
 
 msgid "Domain expire"
 msgstr ""
@@ -8264,80 +8051,70 @@ msgstr ""
 msgid "We also have help page \"First Steps in Opennemas\" that should help"
 msgstr ""
 
-#, fuzzy
 msgid "A new instance has been created"
-msgstr "Votre demande a bien été enregistrée"
+msgstr "Une nouvelle instance a été créée"
 
-#, fuzzy
 msgid "You can access your newspaper with the information bellow"
-msgstr "Existe déjà un utilisateur avec cette information"
+msgstr "Vous pouvez accéder à votre journal avec les informations ci-dessous"
 
 msgid "Newspaper URL"
-msgstr ""
+msgstr "Journal URL"
 
 msgid "Plan"
-msgstr ""
+msgstr "Plan"
 
 msgid "Sincerely"
-msgstr ""
+msgstr "Cordialement"
 
-#, fuzzy
 msgid "There was an error while creating an instance with the following data:"
-msgstr "Il y avait une erreur lors de la mise à jour du widget."
+msgstr ""
+"Il y avait une erreur lors de la création d'une instance avec les données "
+"suivantes:"
 
-#, fuzzy
 msgid "Instance name"
-msgstr "Instance pas activée"
+msgstr "Nom de l'instance"
 
-#, fuzzy
 msgid "Instance internal_name"
-msgstr "Instance pas activée"
+msgstr "internal_name de l'instance"
 
-#, fuzzy
 msgid "Instance contact_mail"
-msgstr "Instance pas activée"
+msgstr "contact_mail de l'instance"
 
-#, fuzzy
 msgid "Instance domains"
-msgstr "Instance non trouvée"
+msgstr "Domaines instantanée"
 
 msgid "Error"
 msgstr "Erreur"
 
-#, fuzzy
 msgid "New purchase"
-msgstr "Achats paywall"
+msgstr "Nouveau achat"
 
-#, fuzzy
 msgid "Edit purchase"
-msgstr "éditer"
+msgstr "Modifier achat"
 
 msgid "Client"
-msgstr ""
+msgstr "Client"
 
 msgid "Invoice"
-msgstr ""
+msgstr "Facture"
 
 msgid "Step"
 msgstr ""
 
 msgid "Quantity"
-msgstr ""
+msgstr "Quantité"
 
 msgid "Cost"
-msgstr ""
+msgstr "Coût"
 
-#, fuzzy
 msgid "Subtotal"
-msgstr "Titre"
+msgstr "Sous-Total"
 
-#, fuzzy
 msgid "Do you want to delete the purchase?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer l'achat?"
 
-#, fuzzy
 msgid "Do you want to delete the selected purchases?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer les achats sélectionnés?"
 
 #, fuzzy
 msgid "Completed purchases"
@@ -8347,150 +8124,136 @@ msgstr "Remplissez votre nom"
 msgid "Uncompleted purchases"
 msgstr "Modules d'achat"
 
-#, fuzzy
 msgid "Search by client"
-msgstr "Recherche par nom"
+msgstr "Recherche par client"
 
 msgid "Method"
 msgstr ""
 
 msgid "Client ID"
-msgstr ""
+msgstr "ID du Client"
 
 msgid "Payment ID"
-msgstr ""
+msgstr "ID Paiement"
 
 msgid "Invoice ID"
-msgstr ""
+msgstr "ID facture"
 
-#, fuzzy
 msgid "Instance"
-msgstr "Instances Sync"
+msgstr "Instance"
 
 #, fuzzy
 msgid "No information"
 msgstr "Obtenir des information"
 
-#, fuzzy
 msgid "New user group"
-msgstr "Groupes d'utilisateurs"
+msgstr "Nouveau groupe d'utilisateur"
 
-#, fuzzy
 msgid "Do you want to delete the user group?"
-msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
+msgstr "Voulez-vous supprimer le groupe d'utilisateurs?"
 
-#, fuzzy
 msgid "Do you want to delete the selected user groups?"
-msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
+msgstr "Voulez-vous supprimer les groupes d'utilisateurs sélectionnés?"
 
 msgid "Edit group"
-msgstr ""
+msgstr "Modifier groupe"
 
 msgid "Initializing"
-msgstr ""
+msgstr "Initialisation"
 
 #, fuzzy
 msgid "Welcome, Master"
 msgstr "Bienvenue à %s"
 
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 msgid ""
 "Your browser was unable to load all of Opennemas's resources. They may have "
 "been blocked by your firewall, proxy or browser configuration."
 msgstr ""
+"Votre navigateur n'a pas pu charger toutes les ressources de Opennemas. Ils "
+"peuvent avoir été bloqués par votre pare-feu, proxy ou la configuration du "
+"navigateur."
 
 msgid "Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again."
 msgstr ""
+"Appuyez sur Ctrl+ F5 ou Ctrl+Maj+R pour que votre navigateur essayer à "
+"nouveau."
 
 msgid "Notification"
-msgstr ""
+msgstr "Notification"
 
-#, fuzzy
 msgid "New module"
-msgstr "Nouveau fichier"
+msgstr "Nouveau module"
 
-#, fuzzy
 msgid "Edit module"
-msgstr "éditer"
+msgstr "Modifier le module"
 
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
-#, fuzzy
 msgid "This UUID is invalid"
-msgstr "Ceci est valable non un TVA"
+msgstr "Ce UUID est invalide"
 
-#, fuzzy
 msgid "Select a type..."
-msgstr "Sélectionnez un pays"
+msgstr "Sélectionnez un type..."
 
 #, fuzzy
 msgid "Domain"
 msgstr "Domaines"
 
-#, fuzzy
 msgid "Theme"
 msgstr "Thème"
 
 msgid "Theme addon"
-msgstr ""
+msgstr "Thème complément"
 
-#, fuzzy
 msgid "Select a category..."
-msgstr "- Sélectionnez un auteur -"
+msgstr "Choisir une catégorie..."
 
 #, fuzzy
 msgid "Pack"
-msgstr "Packs"
+msgstr "Pack"
 
-#, fuzzy
 msgid "Partner"
-msgstr "Partenaire"
+msgstr "Associé"
 
-#, fuzzy
 msgid "Monthly"
-msgstr "Mois"
+msgstr "Mensuel"
 
-#, fuzzy
 msgid "Yearly"
-msgstr "Anneé"
+msgstr "Annuel"
 
 msgid "Single"
-msgstr ""
+msgstr "Seul"
 
-#, fuzzy
 msgid "Modules included"
-msgstr "Modules demandé"
+msgstr "Les modules inclus"
 
 msgid "Modules in conflict"
-msgstr ""
+msgstr "Modules en conflit"
 
-#, fuzzy
 msgid "Do you want to delete the module?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer le module?"
 
-#, fuzzy
 msgid "Do you want to delete the selected modules?"
-msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
+msgstr "Voulez-vous supprimer les modules sélectionnés?"
 
-#, fuzzy
 msgid "Disabled"
-msgstr "Désactiver"
+msgstr "Désactivé"
 
-#, fuzzy
 msgid "Search by UUID"
-msgstr "Recherche par nom"
+msgstr "Recherche par UUID"
 
 msgid "Translations"
-msgstr ""
+msgstr "Traductions"
 
 msgid "Translations completed"
-msgstr ""
+msgstr "Traductions terminée"
 
 msgid "translations left"
-msgstr ""
+msgstr "traductions gauche"
 
 msgid "Delete instance"
 msgstr ""
@@ -8597,6 +8360,9 @@ msgstr ""
 msgid "Detailed statistics"
 msgstr "Statistiques"
 
+msgid "Scripts"
+msgstr "Scriptes"
+
 msgid "Path"
 msgstr ""
 
@@ -8657,13 +8423,13 @@ msgid "Font color"
 msgstr "Couleur du site"
 
 msgid "Fixed"
-msgstr ""
+msgstr "Fixé"
 
 msgid "Notification always visible in dropdown"
 msgstr ""
 
 msgid "Forced"
-msgstr ""
+msgstr "Forcé"
 
 msgid "Notification always visible before content"
 msgstr ""
@@ -8694,10 +8460,10 @@ msgstr ""
 "sélectionné?"
 
 msgid "Unfixed"
-msgstr ""
+msgstr "Non fixé"
 
 msgid "Unforced"
-msgstr ""
+msgstr "Non forcé"
 
 msgid "L10n"
 msgstr ""
@@ -8712,8 +8478,9 @@ msgstr ""
 msgid "Read"
 msgstr "Prêt!"
 
+#, fuzzy
 msgid "Clicked"
-msgstr ""
+msgstr "Clics:"
 
 #, fuzzy
 msgid "Opened"
@@ -8731,12 +8498,15 @@ msgstr "Nouveau fichier"
 msgid "Edit client"
 msgstr "Modifier le contenu d'autres auteurs"
 
+#, fuzzy
+msgid "This field is invalid"
+msgstr "Ce UUID est invalide"
+
 msgid "VAT No."
 msgstr ""
 
-#, fuzzy
 msgid "View on"
-msgstr "Contenu"
+msgstr "Vue sur"
 
 #, fuzzy
 msgid "Do you want to delete the client?"
@@ -8792,10 +8562,10 @@ msgid ""
 msgstr ""
 
 msgid "We seem to have lost you in the clouds."
-msgstr ""
+msgstr "Il semble que vous avez perdu dans les nuages."
 
 msgid "The page your looking for is not here"
-msgstr ""
+msgstr "La page que vous cherchez est pas ici"
 
 msgid "You shall not pass!"
 msgstr ""
@@ -8807,10 +8577,6 @@ msgstr "Vous n'êtes pas autorisé à effectuer cette action."
 msgid "New user"
 msgstr "Nouvel utilisateur"
 
-#, fuzzy
-msgid "This field is invalid"
-msgstr "Ceci est valable non un TVA"
-
 msgid "The passwords don't match"
 msgstr ""
 
@@ -8820,29 +8586,21 @@ msgstr ""
 msgid "The maximum number of instances the user can create"
 msgstr ""
 
-#, fuzzy
 msgid "User type"
-msgstr "Groupes d'utilisateurs"
+msgstr "type d'utilisateur"
 
-#, fuzzy
 msgid "Do you want to delete the user?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer l'utilisateur?"
 
-#, fuzzy
 msgid "Do you want to delete the selected users?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer les utilisateurs sélectionnés?"
 
-#, fuzzy
 msgid "Search by name or username"
-msgstr "Recherche par nom"
+msgstr "Recherche par nom ou nom d'utilisateur"
 
 #, fuzzy
 msgid "Do you want to log out?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
-
-#, fuzzy
-#~ msgid "Do you want to edit the existing draft?"
-#~ msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer le module?"
 
 #~ msgid ""
 #~ "You have reach the maximum users allowed. If you want to create more "
@@ -9050,69 +8808,63 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #~ msgid "Unable to find the purchase with id \"%s\""
 #~ msgstr "Impossible de trouver l'achat avec id \"%s\""
 
-#, fuzzy
 #~ msgid "Unable to delete the user with the id \"%d\""
-#~ msgstr "Impossible de supprimer l'élément avec l'id \"%d\""
+#~ msgstr "Impossible de supprimer l'utilisateur avec l'id \"%d\""
 
-#, fuzzy
 #~ msgid "Unable to find users for the given criteria"
-#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+#~ msgstr "Impossible de trouver des utilisateurs pour les critères donnés"
 
-#, fuzzy
 #~ msgid "User updated successfully."
 #~ msgstr "Les données de l'utilisateur mis à jour avec succès"
 
-#, fuzzy
 #~ msgid "Error while updating user with id \"%s\""
-#~ msgstr "Impossible de mettre à jour l'élément avec id \"%d\""
+#~ msgstr "Erreur lors de la mise à jour utilisateur avec id \"s\""
 
-#, fuzzy
 #~ msgid "Unable to find the user with id \"%s\""
-#~ msgstr "Impossible de trouver l'utilisateur avec l'id \"%d\""
+#~ msgstr "Impossible de trouver l'utilisateur avec l'id \"%s\""
 
-#, fuzzy
 #~ msgid "Unable to find the users for the given criteria"
 #~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
 
-#, fuzzy
 #~ msgid "%s users updated successfully."
-#~ msgstr "Couverture mis à jour avec succès."
+#~ msgstr "%s utilisateurs mis à jour avec succès."
 
-#, fuzzy
 #~ msgid "Unable to find the current user"
-#~ msgstr "Impossible de trouver l'élément avec id \"%s\""
+#~ msgstr "Impossible de trouver l'utilisateur avec id \"%s\""
 
 #~ msgid "User group name cannot be empty"
 #~ msgstr "Nom de groupe de l'utilisateur ne peut pas être vide"
 
-#, fuzzy
 #~ msgid "Unable to create a new usergroup"
 #~ msgstr "Impossible de créer le nouveau groupe d'utilisateurs"
 
-#, fuzzy
 #~ msgid "Unable to find user groups for the given criteria"
-#~ msgstr "Impossible de trouver une catégorie pour l'ID donné."
+#~ msgstr ""
+#~ "Impossible de trouver des groupes d'utilisateurs pour les critères donnés"
 
-#, fuzzy
 #~ msgid "User group updated successfully"
 #~ msgstr "Groupe d'utilisateurs mis à jour avec succès"
 
-#, fuzzy
+#~ msgid "The client with id '%d' was not found in %s"
+#~ msgstr "Le client avec id '%d' n'a pas été trouvé dans %s"
+
 #~ msgid "The criteria (%s) is not valid in %s"
-#~ msgstr "Cela ne veut pas une ville valide"
+#~ msgstr "Les critères (%s) est pas valable dans %s"
 
-#, fuzzy
 #~ msgid "The persister '%s' does not exist in %s"
-#~ msgstr "L'utilisateur n'a pas existe."
+#~ msgstr "Le persister '%s' n'existe pas dans %s"
 
-#, fuzzy
 #~ msgid "The repository '%s' does not exist in %s"
-#~ msgstr "L'utilisateur n'a pas existe."
+#~ msgstr "Le dépôt '%s' n'existe pas dans %s"
 
-#, fuzzy
+#~ msgid "The invoice with id '%d' was not found in %s"
+#~ msgstr "La facture avec id '%d' n'a pas été trouvé dans %s"
+
+#~ msgid "The payment with id '%d' was not found in %s"
+#~ msgstr "Le paiement avec id '%d' n'a pas été trouvé dans %s"
+
 #~ msgid "Unable to load plugins. No folder specified."
-#~ msgstr ""
-#~ "Impossible d'enregistrer les positions pour le widget de supplément."
+#~ msgstr "Impossible de charger des plugins. Aucun dossier spécifié."
 
 #~ msgid "Field '%s' not valid"
 #~ msgstr "Le champ '%s' est non valable"
@@ -9136,9 +8888,8 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #~ msgid "The url that you entered is already in use"
 #~ msgstr "L'url que vous avez entré est déjà utilisé"
 
-#, fuzzy
 #~ msgid "Please enter a valid url"
-#~ msgstr "S'il vous plaît sélectionnez une réponse valable à une sondage."
+#~ msgstr "S'il vous plaît entrer une URL valide"
 
 #~ msgid "Your newspaper name cointains disallowed words."
 #~ msgstr "Votre nom d'un journal contient des mots non autorisées."
@@ -9149,10 +8900,11 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #~ msgid "Your user name contains disallowed words."
 #~ msgstr "Votre nom d'utilisateur contient des mots non autorisées."
 
-#, fuzzy
 #~ msgid ""
 #~ "There was an error while validating your data against disallowed words."
-#~ msgstr "Il y avait une erreur lors de la mise à jour du widget."
+#~ msgstr ""
+#~ "Il y avait une erreur lors de la validation de vos données contre les "
+#~ "mots non autorisés."
 
 #~ msgid "The email that you entered is already in use"
 #~ msgstr "L'e-mail que vous avez entré est déjà utilisé"
@@ -9166,9 +8918,8 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #~ "utilisant ce site, vous acceptez notre utilisation des cookies. <a target="
 #~ "\"_blank\" href=\"%s\"> savoir plus & gt; </a>"
 
-#, fuzzy
 #~ msgid "Subscriptors"
-#~ msgstr "Formulaire d'abonnement"
+#~ msgstr "Abonnée"
 
 #~ msgid "Show password"
 #~ msgstr "Montrer le mot de passe"
@@ -9176,9 +8927,8 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #~ msgid "Hide password"
 #~ msgstr "Masquer le mot de passe"
 
-#, fuzzy
 #~ msgid "File path"
-#~ msgstr "Fichier"
+#~ msgstr "Chemin du fichier"
 
 #~ msgid "Contact name"
 #~ msgstr "Nom du contact"
@@ -9192,9 +8942,8 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #~ msgid "VAT Number"
 #~ msgstr "Numéro TVA"
 
-#, fuzzy
 #~ msgid "User group:"
-#~ msgstr "Groupes d'utilisateurs"
+#~ msgstr "Groupe d'utilisateurs:"
 
 #~ msgid ""
 #~ "You are about to order next items. In the next 24hours our sales team "
@@ -9204,34 +8953,75 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 #~ "prochaines 24 heures, notre équipe commerciale vous envoyer le paiement "
 #~ "et activation informations"
 
-#, fuzzy
 #~ msgid "This is not a valid VAT identification number"
-#~ msgstr "Cela ne veut pas un état valide"
+#~ msgstr "Ce n'est pas un numéro d'identification de TVA valide"
+
+#~ msgid "VAT identification number"
+#~ msgstr "Numéro d'identification TVA"
 
 #~ msgid ""
 #~ "You have to complete your billing information to complete the purchase."
 #~ msgstr ""
 #~ "Vous devez remplir vos informations de facturation pour compléter l'achat."
 
-#, fuzzy
 #~ msgid "Remove cache"
-#~ msgstr "Supprimer"
+#~ msgstr "Supprimer le cache"
 
-#, fuzzy
 #~ msgid "Remove compiled templates"
-#~ msgstr "Sondage Couverture"
+#~ msgstr "Supprimer les modèles compilés"
 
-#, fuzzy
+#~ msgid "Base + Modules"
+#~ msgstr "Base + Modules"
+
+#~ msgid ""
+#~ "Note: this number has not being used for billing purpose. Billing "
+#~ "pageviews count goes from 26th to 25th of each month."
+#~ msgstr ""
+#~ "Remarque: ce nombre n'a pas été utilisé à des fins de facturation. "
+#~ "Facturation nombre de pages vues va du 26 au 25 de chaque mois."
+
+#~ msgid "Max"
+#~ msgstr "Max"
+
+#~ msgid "Activated plans & modules"
+#~ msgstr "Plans et modules activés"
+
+#~ msgid "Upgrade"
+#~ msgstr "Dernière version"
+
 #~ msgid "Waiting for upgrade"
 #~ msgstr "Mise à niveau de l'application"
 
-#, fuzzy
 #~ msgid "Upgrade instance"
-#~ msgstr "Demande de actualisation de une instance %s"
+#~ msgstr "La mise à niveau de la instance "
 
-#, fuzzy
+#~ msgid "Are you sure you want to proceed with this upgrade ?"
+#~ msgstr "Êtes-vous sûr de vouloir procéder à cette mise à jour?"
+
+#~ msgid "Request upgrade"
+#~ msgstr "Demande de mise à niveau"
+
+#~ msgid "List of modules to hire"
+#~ msgstr "Liste des modules pour embaucher"
+
+#~ msgid "List of modules to unsubscribe"
+#~ msgstr "Liste des modules pour vous désabonner"
+
+#~ msgid ""
+#~ "I do not have my own domain and I want to create one and redirect it to "
+#~ "my Opennemas digital newspaper"
+#~ msgstr ""
+#~ "Je n'ai pas mon propre domaine et je veux créer un et rediriger vers mon "
+#~ "journal numérique Opennemas"
+
+#~ msgid "Selected privileges"
+#~ msgstr "Privilèges sélectionnés"
+
 #~ msgid "Opennemas manager"
-#~ msgstr "Backend Gestionnaire"
+#~ msgstr "Gestionnaire Opennemas"
+
+#~ msgid "Use manager account to sign in."
+#~ msgstr "Utilisez le compte de gestionnaire pour vous connecter."
 
 #~ msgid "Article - inner"
 #~ msgstr "Article - intérieur"
@@ -9329,9 +9119,6 @@ msgstr "Vous devez donner un identifiant à supprimer le couverture."
 
 #~ msgid "Poll frontpage"
 #~ msgstr "Sondage Couverture"
-
-#~ msgid "Custom CSS"
-#~ msgstr "Personnalisé CSS"
 
 #~ msgid "Sitemap: "
 #~ msgstr "Plan du site:"

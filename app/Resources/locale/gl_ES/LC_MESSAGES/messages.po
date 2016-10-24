@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-19 09:20+0000\n"
-"PO-Revision-Date: 2016-10-19 11:22+0200\n"
+"POT-Creation-Date: 2016-10-17 10:13+0000\n"
+"PO-Revision-Date: 2016-09-21 16:57+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1907,13 +1907,13 @@ msgid "Advertisement"
 msgstr "Publicidade"
 
 msgid "Top Left LeaderBoard"
-msgstr "Top Left LeaderBoard"
+msgstr ""
 
 msgid "Top Right LeaderBoard"
-msgstr "Top Right LeaderBoard"
+msgstr ""
 
 msgid "[OI] Right Skyscraper"
-msgstr "[OI] Skyscraper derecho"
+msgstr ""
 
 msgid "Album not available"
 msgstr "Álbum non dispoñíbel"
@@ -3458,12 +3458,6 @@ msgstr "Edición de ePapel"
 
 msgid "Go Back"
 msgstr "Atrás"
-
-msgid "Updating"
-msgstr "Actualizando"
-
-msgid "Update"
-msgstr "Actualizar"
 
 msgid "Date"
 msgstr "Data"
@@ -5454,20 +5448,18 @@ msgstr ""
 "Se tes unha <strong>páxina en Twitter</strong>, engade o teu nome de perfil "
 "no formulario. Por omisión usarase o de OpenNeMas."
 
+#, fuzzy
 msgid "Only masters"
-msgstr "Só masters"
+msgstr "Rexistrarse"
 
 msgid "Robots.txt rules"
-msgstr "Regras de Robots.txt"
+msgstr ""
 
 msgid ""
 "Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
 "\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\">documentation</"
 "a>."
 msgstr ""
-"Engada regras de robots.txt personalizadas como «Disallow: /tag». Revise a <"
-"a href=\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\""
-">documentación</a>."
 
 msgid "Scripts in header"
 msgstr "Scripts na cabeceira"
@@ -5490,8 +5482,9 @@ msgstr "Estos scripts incluiranse antes da etiqueta </body>"
 msgid "Custom CSS"
 msgstr "CSS personalizado"
 
+#, fuzzy
 msgid "This sripts will be included in the global.css file."
-msgstr "Estos scripts incluiranse no ficheiro global.css"
+msgstr "Estos scripts incluiranse antes da etiqueta <body>"
 
 msgid "Editing author"
 msgstr "Editando autor"
@@ -5549,6 +5542,12 @@ msgstr "Creando vídeo"
 
 msgid "Editing video"
 msgstr "Editando vídeo"
+
+msgid "Updating"
+msgstr "Actualizando"
+
+msgid "Update"
+msgstr "Actualizar"
 
 msgid "Schedule"
 msgstr "Planificación"
@@ -7448,8 +7447,8 @@ msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
 msgstr "Non se puido cargar esta lapela. Tentaremos arranxalo canto antes."
 
 msgid ""
-"You have reached the maximum number of elements (%number%). To add new "
-"contents remove the older."
+"You have reached the maximum number of elements (100). To add new contents "
+"remove the older."
 msgstr ""
 "Alcanzouse o numero máximo de elementos na portada (100). Para engadir novos "
 "contidos elimine os mais antigos. "
