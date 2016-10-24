@@ -28,54 +28,6 @@ class ModuleManager
     {
         return [
             [
-                'id'               => 'FREE_TEMPLATE',
-                'type'             => 'theme',
-                'thumbnail'        => 'theme-basic.jpg',
-                'name'             => _('Free Basic Template'),
-                'description'      => _('Change your site design with our free available templates.'),
-                'long_description' => _(
-                    '<ul>
-                        <li>
-                            Widgets: No widgets included. To add a widget please contact us at
-                            <a href="mailto:sales@openhost.es">sales@openhost.es</a>
-                        </li>
-                        <li>Exclusivity: This template is not exclusive</li>
-                        <li>Delivery time: Inmediate</li>
-                    </ul>'
-                ),
-                'price' => []
-            ],
-            // [
-            //     'id'               => 'STANDARD_TEMPLATE',
-            //     'type'             => 'theme',
-            //     'thumbnail'        => 'theme-standard.jpg',
-            //     'name'             => _('Standard Template'),
-            //     'description'      => _(
-            //         'Standard newspaper web site design with prebuild widgets '
-            //         .'developed by Opennemas team. No customization available'
-            //     ),
-            //     'long_description' => _(
-            //         '<ul>
-            //             <li>
-            //                 Widgets: Standard widgets included. To add a widget please contact us at
-            //                 <a href="mailto:sales@openhost.es">sales@openhost.es</a>
-            //             </li>
-            //             <li>Exclusivity: This template is not exclusive</li>
-            //             <li>Delivery time: 1 week</li>
-            //             <li>Change request BEFORE launch: No change included</li>
-            //             <li>Change request AFTER launch: No change included</li>
-            //             <li>Add on:
-            //                 <ul>
-            //                     <li>New widgets: 120€ each</li>
-            //                 </ul>
-            //             </li>
-            //         </ul>'
-            //     ),
-            //     'price' => [
-            //         'single' => 350
-            //     ]
-            // ],
-            [
                 'id'               => 'CUSTOM_TEMPLATE',
                 'type'             => 'theme',
                 'thumbnail'        => 'theme-custom.jpg',
