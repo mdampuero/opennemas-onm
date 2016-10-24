@@ -126,8 +126,6 @@ class ErrorController extends Controller
                 return new Response($content, 404);
                 break;
 
-            case 'Onm\Security\Exception\AccessDeniedException':
-            case 'Onm\Security\Exception\ModuleNotActivatedException':
             case 'Symfony\Component\Security\Core\Exception\AccessDeniedException':
                 $errorMessage = _('You are not allowed to perform this action.');
 

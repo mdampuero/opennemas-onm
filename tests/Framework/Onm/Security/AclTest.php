@@ -18,7 +18,7 @@ class AclTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Onm\Security\Acl::deny
-     * @expectedException \Onm\Security\Exception\AccessDeniedException
+     * @expectedException Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function testIsBot()
     {

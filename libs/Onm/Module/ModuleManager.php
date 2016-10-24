@@ -13,7 +13,6 @@
 namespace Onm\Module;
 
 use Onm\Security\Acl;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class for handling activated and available modules.

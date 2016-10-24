@@ -46,9 +46,7 @@ class AccessDeniedExceptionsListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // only handle not valid instance exceptions
-        if ($exception instanceof \Onm\Security\Exception\AccessDeniedExceptions
-            || $exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException
-        ) {
+        if ($exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException) {
             $attributes = array(
                 '_controller' => 'BackendBundle:Error:default', //$this->controller,
                 'exception'   => FlattenException::create($exception),

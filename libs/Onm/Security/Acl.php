@@ -10,6 +10,8 @@
  */
 namespace Onm\Security;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 /**
  * Class for handling user access to modules, actions and categories in backend
  */
@@ -59,7 +61,7 @@ class Acl
         }
 
         if (!self::checkPrivileges($rule)) {
-            throw new \Onm\Security\Exception\AccessDeniedException(
+            throw new AccessDeniedException(
                 _("Sorry, you don't have enough privileges")
             );
         }
@@ -104,7 +106,7 @@ class Acl
      */
     public static function deny($message = 'Acceso no permitido')
     {
-        throw new \Onm\Security\Exception\AccessDeniedException($message);
+        throw new AccessDeniedException($message);
     }
 
     /**
@@ -141,7 +143,7 @@ class Acl
         }
 
         if (!self::checkPrivileges($rule)) {
-            throw new \Onm\Security\Exception\AccessDeniedException();
+            throw new AccessDeniedException();
         }
     }
 
