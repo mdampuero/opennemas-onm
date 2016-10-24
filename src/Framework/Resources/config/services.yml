@@ -217,10 +217,6 @@ services:
         class: Framework\Component\Paginator\Paginator
         arguments: [ '@router' ]
 
-    onm.framework_status:
-        class: Onm\Framework\Status
-        arguments: [ '@service_container' ]
-
     related_contents:
         class: RelatedContent
         arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', %cache_prefix% ]
