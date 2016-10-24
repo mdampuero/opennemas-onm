@@ -38,8 +38,8 @@
         <div class="input-with-icon right">
           <i class="fa fa-check text-success" ng-if="clientForm.email.$dirty && clientForm.email.$valid"></i>
           <i class="fa fa-times text-danger" ng-if="clientForm.email.$dirty && clientForm.email.$invalid && clientForm.email.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
-          <i class="fa fa-times text-danger" ng-if="clientForm.email.$dirty && clientForm.email.$invalid && clientForm.email.$error.email" uib-tooltip="{t}This is not a valid email{/t}"></i>
-          <input class="form-control" id="email" name="email" ng-model="client.email" placeholder="{t}Email{/t}" required="required" type="email">
+          <i class="fa fa-times text-danger" ng-if="clientForm.email.$dirty && clientForm.email.$invalid && !clientForm.email.$error.required" uib-tooltip="{t}This is not a valid email{/t}"></i>
+          <input class="form-control" id="email" name="email" ng-model="client.email" ng-pattern="emailPattern" placeholder="{t}Email{/t}" required="required" type="email">
         </div>
       </div>
       <div class="form-group col-sm-6">
