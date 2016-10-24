@@ -108,12 +108,21 @@ class ContentController extends Controller
 
         if (!is_null($content->id)) {
             try {
-                $content->delete($id);
-                $success[] = array(
-                    'id'      => $id,
-                    'message' => _('Item deleted successfully'),
-                    'type'    => 'success'
-                );
+                if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+                    && !$content->isOwner($this->getUser()->id)
+                ) {
+                    $errors[] = [
+                        'error',
+                        _("You don't have enough privileges for modify this content.")
+                    ];
+                } else {
+                    $content->delete($id);
+                    $success[] = array(
+                        'id'      => $id,
+                        'message' => _('Item deleted successfully'),
+                        'type'    => 'success'
+                    );
+                }
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
@@ -160,8 +169,20 @@ class ContentController extends Controller
 
                 if (!is_null($content->id)) {
                     try {
-                        $content->delete($id);
-                        $updated[] = $id;
+                        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+                            && !$content->isOwner($this->getUser()->id)
+                        ) {
+                            $errors[] = [
+                                'error',
+                                sprintf(
+                                    _("You don't have enough privileges to delete the content with id %s."),
+                                    $content->id
+                                )
+                            ];
+                        } else {
+                            $content->delete($id);
+                            $updated[] = $id;
+                        }
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,

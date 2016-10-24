@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class AclUserController extends Controller
+class UserController extends Controller
 {
     /**
      * Shows the form to create a new user.

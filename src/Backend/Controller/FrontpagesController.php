@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -45,7 +44,7 @@ class FrontpagesController extends Controller
         $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
 
         // Check if the user can access a frontpage from other category
-        if ((int) $categoryId !== 0 && !Acl::checkCategoryAccess($categoryId)) {
+        if ((int) $categoryId !== 0 && !$this->get('core.security')->hasCategory($categoryId)) {
             throw new AccessDeniedException();
         }
 

@@ -26,7 +26,7 @@ use Onm\Settings as s;
  *
  * @package Backend_Controllers
  **/
-class AclUserGroupsController extends Controller
+class UserGroupsController extends Controller
 {
     /**
      * List all the user groups

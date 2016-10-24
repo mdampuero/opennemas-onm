@@ -12,7 +12,6 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -33,18 +32,6 @@ class ArticlesController extends Controller
     public function listAction(Request $request)
     {
         $this->loadCategories($request);
-
-        // Check if the user has access to this category
-        if ($this->category != 'all' && $this->category != '0') {
-            if (!Acl::checkCategoryAccess($this->category)) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("You don't have enough privileges to see this category.")
-                );
-
-                return $this->redirect($this->generateUrl('admin_welcome'));
-            }
-        }
 
         // Build the list of authors to render filters
         $allAuthors = \User::getAllUsersAuthors();

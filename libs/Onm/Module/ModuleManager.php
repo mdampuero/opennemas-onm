@@ -12,8 +12,6 @@
  */
 namespace Onm\Module;
 
-use Onm\Security\Acl;
-
 /**
  * Class for handling activated and available modules.
  *
@@ -1036,26 +1034,7 @@ class ModuleManager
      */
     public static function isActivated($module = '')
     {
-        if (Acl::isMaster()) {
-            return true;
-        }
-
-        if (!isset($module) || empty($module)) {
-            // Check if module name is properly setted
-
-            return true;
-        } elseif (self::checkAllModulesActivated()) {
-            // Check if all modules are activated
-
-            return true;
-        } elseif (!self::moduleExists($module)) {
-            // Check if module exists
-
-            return false; // Hack to avoid crashes
-        } else {
-            // Finally return if that module is activated
-            return in_array($module, self::getActivatedModules());
-        }
+        return getService('core.security')->hasExtension($module);
     }
 
     /**

@@ -17,7 +17,6 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -175,7 +174,7 @@ class VideosController extends Controller
 
         if ($type == 'web-source' && empty($videoData['information'])) {
             $this->get('session')->getFlashBag()->add(
-                'notice',
+                'error',
                 _('There was an error while uploading the form, not all the required data was sent.')
             );
 
@@ -190,7 +189,7 @@ class VideosController extends Controller
                 $this->generateUrl('admin_video_show', ['id' => $videoId])
             );
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('notice', $e->getMessage());
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
             return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
         }
@@ -222,12 +221,11 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$video->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
-                'notice',
+                'error',
                 _("You can't modify this video because you don't have enought privileges.")
             );
 
@@ -331,7 +329,18 @@ class VideosController extends Controller
         $id = $request->query->getDigits('id', null);
 
         $video = $this->get('entity_repository')->find('Video', $id);
-        // $video = new \Video($id);
+
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+            && !$video->isOwner($this->getUser()->id)
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this video because you don't have enought privileges.")
+            );
+
+            return $this->redirect($this->generateUrl('admin_videos'));
+        }
+
         if (is_object($video->information)) {
             $video->information = get_object_vars($video->information);
         }
