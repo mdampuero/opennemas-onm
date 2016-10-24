@@ -268,29 +268,33 @@ class ContentManager
                     return $contentRaw->id == $element['content_id'];
                 });
 
+                $content = array_pop($content);
+
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
-                    $content = clone array_pop($content);
+                    // We have to clone the content as this is a reference to object,
+                    // not a copy of itself.
+                    $contentToUse = clone $content;
 
-                    $content->load([
+                    $contentToUse->load([
                         'placeholder' => $element['placeholder'],
                         'position'    => $element['position'],
                     ]);
 
                     if (!empty($element['params'])) {
                         if (is_array($content->params) && $content->params > 0) {
-                            $content->params = array_merge(
+                            $contentToUse->params = array_merge(
                                 $content->params,
                                 (array) $element['params']
                             );
                         } else {
-                            $content->params = $element['params'];
+                            $contentToUse->params = $element['params'];
                         }
                     }
 
-                    $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
+                    $contentToUse->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
 
-                    $contents[] = $content;
+                    $contents[] = $contentToUse;
                 }
             }
         }
