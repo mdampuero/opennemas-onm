@@ -26,50 +26,43 @@ class StoreController extends Controller
         }
 
         // Fetch user data
-        $modulesRequested = $request->request->get('modules');
+        $uuids = $request->request->get('modules');
+        $oql   = sprintf('uuid in ["%s"]', implode('", "', $uuids));
 
-        // Fetch information about modules
-        $availableItems = [];
-
-        $oql     = 'enabled = 1 and (type = "module" or type = "theme-addon")';
         $modules = $this->get('orm.manager')
-            ->getRepository('Extension')
+            ->getRepository('Extension', 'database')
             ->findBy($oql);
-        $packs     = \Onm\Module\ModuleManager::getAvailablePacks();
-        $themes    = $this->get('orm.manager')->getRepository('Theme')
-            ->findBy();
 
-        foreach ($modules as $module) {
-            $availableItems[$module->uuid] =
-                array_key_exists(CURRENT_LANGUAGE_SHORT, $module->name) ?
-                $module->name[CURRENT_LANGUAGE_SHORT] :
-                $module->name['en'];
+        $themes = $this->get('orm.manager')->getRepository('Theme')
+            ->findBy($oql);
+
+        $items = array_merge($modules, $themes);
+        $lang  = $this->get('core.locale')->getLocale();
+        $names = [];
+        foreach ($items as $item) {
+            $names[$item->uuid] = $item->name;
+
+            if (is_array($item->name)) {
+                $names[$item->uuid] = $item->name['en'];
+
+                if (array_key_exists($lang, $item->name)) {
+                    $names[$item->uuid] = $item->name[$lang];
+                }
+            }
         }
 
-        foreach ($packs as $pack) {
-            $availableItems[$pack['id']] = $pack['name'];
-        }
-
-        foreach ($themes as $theme) {
-            $availableItems[$theme->uuid] = $theme->name;
-        }
-
-        $instance = $this->get('core.instance');
         $client = $this->get('orm.manager')
             ->getRepository('Client', 'manager')
-            ->find($instance->getClient());
-
-        // Get names for filtered modules to use in template
-        $modulesRequested = array_intersect_key($availableItems, array_flip($modulesRequested));
+            ->find($this->get('core.instance')->getClient());
 
         // Send emails
-        $this->sendEmailToSales($client, $modulesRequested);
-        $this->sendEmailToCustomer($client, $modulesRequested);
+        $this->sendEmailToSales($client, $names);
+        $this->sendEmailToCustomer($client, $names);
 
         $this->get('application.log')->info(
             'The user ' . $this->getUser()->username
             . '(' . $this->getUser()->id  .') has purchased '
-            . implode(', ', $modulesRequested)
+            . implode(', ', $names)
         );
 
         return new JsonResponse(_('Your request has been registered'));

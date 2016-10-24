@@ -31,7 +31,7 @@ class AmpController extends Controller
      **/
     public function init()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('AMP_MODULE')) {
+        if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
             throw new ResourceNotFoundException();
         }
 

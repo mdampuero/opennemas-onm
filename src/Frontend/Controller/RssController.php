@@ -244,7 +244,7 @@ class RssController extends Controller
      **/
     public function facebookInstantArticlesRSSAction(Request $request)
     {
-        if (!\Onm\Module\ModuleManager::isActivated('FIA_MODULE')) {
+        if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
             throw new ResourceNotFoundException();
         }
 

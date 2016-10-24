@@ -14,7 +14,7 @@
 {/block}
 
 {block name="content"}
-  <div ng-controller="StoreListCtrl" ng-init="plans = {json_encode($plans)|clear_json}">
+  <div ng-controller="StoreListCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

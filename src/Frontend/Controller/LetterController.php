@@ -36,8 +36,7 @@ class LetterController extends Controller
      */
     public function frontpageAction(Request $request)
     {
-
-        if (!\Onm\Module\ModuleManager::isActivated('LETTER_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('LETTER_MANAGER')) {
             throw new ResourceNotFoundException();
         }
         $page = $request->query->getDigits('page', 1);

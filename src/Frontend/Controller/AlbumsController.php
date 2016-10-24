@@ -35,7 +35,7 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 

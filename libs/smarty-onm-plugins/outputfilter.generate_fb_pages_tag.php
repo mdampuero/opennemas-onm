@@ -2,7 +2,7 @@
 
 function smarty_outputfilter_generate_fb_pages_tag($output, $smarty)
 {
-    if (\Onm\Module\ModuleManager::isActivated('FIA_MODULE')) {
+    if (getService('core.security')->hasExtension('FIA_MODULE')) {
         // Get facebook settings
         $facebookSettings = getService('setting_repository')->get('facebook');
 

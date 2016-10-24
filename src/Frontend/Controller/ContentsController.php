@@ -347,7 +347,7 @@ class ContentsController extends Controller
      **/
     public function paywallHook(&$content)
     {
-        $paywallActivated = ModuleManager::isActivated('PAYWALL');
+        $paywallActivated = $this->get('core.security')->hasExtension('PAYWALL');
         $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
 
         if ($paywallActivated && $onlyAvailableSubscribers) {

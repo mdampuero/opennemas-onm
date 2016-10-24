@@ -196,9 +196,7 @@ class PickerController extends Controller
             }
             $moduleName = strtoupper($moduleName.'_MANAGER');
 
-            if (\Onm\Module\ModuleManager::moduleExists($moduleName) &&
-                \Onm\Module\ModuleManager::isActivated($moduleName)
-            ) {
+            if ($this->get('core.security')->hasExtension($moduleName)) {
                 $contentTypesFiltered[$contentType['name']] = $contentType['title'];
             }
         }

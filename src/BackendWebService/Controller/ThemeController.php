@@ -10,7 +10,6 @@
 namespace BackendWebService\Controller;
 
 use Onm\Framework\Controller\Controller;
-use Onm\Instance\InstanceManager as im;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -76,7 +76,7 @@ class PollsController extends Controller
      **/
     public function frontpageAction()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('POLL_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 

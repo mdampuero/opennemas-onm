@@ -383,7 +383,7 @@ class RelatedContent
             $ids = [ $ids ];
         }
 
-        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
+        if (getService('core.security')->hasExtension('CRONICAS_MODULES')
             && $category === 0
         ) {
             $verPortada = 2;

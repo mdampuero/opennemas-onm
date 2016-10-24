@@ -6,7 +6,7 @@ function smarty_function_promotional_bar($params, &$smarty)
     $html = '';
     $htm  = '';
 
-    $enabled = \Onm\Module\ModuleManager::isActivated('PROMOTIONAL_BAR');
+    $enabled = getService('core.security')->hasExtension('PROMOTIONAL_BAR');
 
     if ($enabled) {
         $createNew = _('Create free newspaper');

@@ -122,7 +122,7 @@ class SimpleMenu
             $moduleAllowed = false;
 
             foreach ($modules as $module) {
-                $moduleAllowed = $moduleAllowed || \Onm\Module\ModuleManager::isActivated($module);
+                $moduleAllowed = $moduleAllowed || getService('core.security')->hasExtension($module);
             }
         }
 

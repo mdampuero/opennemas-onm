@@ -1793,7 +1793,7 @@ class Content
         $relationsHandler  = getService('related_contents');
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
-        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
+        if (getService('core.security')->hasExtension('CRONICAS_MODULES')
             && ($categoryName == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {

@@ -46,12 +46,6 @@ class StoreController extends Controller
      */
     public function listAction()
     {
-        $plans = \Onm\Module\ModuleManager::getAvailablePacks();
-        $plans[] = [
-            'id'   => 'OTHER',
-            'name' => _('Others')
-        ];
-
-        return $this->render('store/list.tpl', [ 'plans' => $plans ]);
+        return $this->render('store/list.tpl');
     }
 }

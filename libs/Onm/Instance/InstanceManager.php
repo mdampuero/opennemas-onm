@@ -524,8 +524,6 @@ class InstanceManager extends BaseManager
         }
 
         $instance->_metas = $instance->metas;
-
-        $this->checkPacksActivated($instance);
     }
 
     /**
@@ -683,31 +681,5 @@ class InstanceManager extends BaseManager
         }
 
         $this->cache->setNamespace($namespace);
-    }
-
-    /**
-     * Adds the activated packs basing on the activated modules.
-     *
-     * @param Instance $instance The instance.
-     */
-    private function checkPacksActivated(&$instance)
-    {
-        $packs = [ 'BASIC', 'PROFESSIONAL', 'ADVANCED', 'EXPERT' ];
-
-        $instance->activated_modules =
-            array_diff($instance->activated_modules, $packs);
-
-        foreach ($packs as $pack) {
-            $modules = ModuleManager::getModuleIdsByPack($pack);
-
-            if (empty(array_diff($modules, $instance->activated_modules))
-                && !in_array($pack, $instance->activated_modules)
-            ) {
-                $instance->activated_modules[] = $pack;
-            }
-        }
-
-        $instance->activated_modules =
-            array_values($instance->activated_modules);
     }
 }

@@ -35,7 +35,7 @@ class FormController extends Controller
      **/
     public function frontpageAction()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('FORM_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 

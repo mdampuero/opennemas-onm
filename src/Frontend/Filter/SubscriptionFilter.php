@@ -33,6 +33,7 @@ class SubscriptionFilter
     {
         $this->template = $template;
         $this->user     = $user;
+        $this->security = getService('core.security');
     }
 
     /**
@@ -48,14 +49,14 @@ class SubscriptionFilter
         $cacheable = true;
 
 
-        if (ModuleManager::isActivated('CONTENT_SUBSCRIPTIONS')
+        if ($this->security->hasExtension('CONTENT_SUBSCRIPTIONS')
             && $content->isOnlyAvailableForRegistered()) {
             $cacheable = false;
 
             $this->registeredHook($content);
         }
 
-        if (ModuleManager::isActivated('PAYWALL')
+        if ($this->security->hasExtension('PAYWALL')
             && $content->isOnlyAvailableForSubscribers()
         ) {
             $cacheable = false;
