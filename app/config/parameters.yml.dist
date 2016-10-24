@@ -37,6 +37,7 @@ parameters:
             password: root
             charset: UTF-8
     cache.default:
+        type: redis
         file:
             name: internal
             namespace: internal
