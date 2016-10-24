@@ -267,10 +267,11 @@ class ContentManager
                 $content = array_filter($contentsRaw, function($contentRaw) use($element) {
                     return $contentRaw->id == $element['content_id'];
                 });
-                $content = clone array_pop($content);
 
                 // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
+                    $content = clone array_pop($content);
+
                     $content->load([
                         'placeholder' => $element['placeholder'],
                         'position'    => $element['position'],
