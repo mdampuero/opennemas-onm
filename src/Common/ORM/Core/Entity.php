@@ -101,6 +101,16 @@ class Entity extends DataObject implements Validable
     }
 
     /**
+     * Returns the stored data.
+     *
+     * @return string The stored data.
+     */
+    public function getStored()
+    {
+        return $this->stored;
+    }
+
+    /**
      * Merge the current entity data with the given data.
      */
     public function merge($data)

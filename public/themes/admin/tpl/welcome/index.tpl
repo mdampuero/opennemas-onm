@@ -24,7 +24,7 @@
 <div class="content welcome-page">
   <div class="row">
     <div class="col-sm-6">
-      <a href="{url name=admin_domain_management_add}">
+      <a href="{url name=backend_domain_add}">
         <div class="grid simple">
           <div class="grid-body text-center">
             <i class="block fa fa-retweet fa-2x m-b-15"></i>
@@ -37,7 +37,7 @@
       </a>
     </div>
     <div class="col-sm-6">
-      <a href="{url name=admin_domain_management_add create=1}">
+      <a href="{url name=backend_domain_add create=1}">
         <div class="grid simple">
           <div class="grid-body green text-center">
             <i class="block fa fa-plus fa-2x m-b-15 text-white"></i>

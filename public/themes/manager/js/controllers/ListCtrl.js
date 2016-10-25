@@ -13,8 +13,8 @@
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout',
-      function($scope, $timeout) {
+      '$location', '$scope', '$timeout', 'oqlDecoder',
+      function($location, $scope, $timeout, oqlDecoder) {
         /**
          * @memberOf ListCtrl
          *
@@ -34,6 +34,19 @@
          * @type {type}
          */
         $scope.tm = null;
+
+        /**
+         * @function clear
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Deletes a value from criteria.
+         *
+         * @param {String} property The property name.
+         */
+        $scope.clear = function(property) {
+          delete $scope.criteria[property];
+        };
 
         /**
          * @function closeColumns
@@ -215,6 +228,20 @@
           $scope.items      = null;
           $scope.selected   = null;
           $scope.orderBy    = null;
+        });
+
+        // Update criteria when route changes
+        $scope.$on('$routeUpdate', function() {
+          if (!$location.search().oql) {
+            return;
+          }
+
+          var criteria = oqlDecoder.decode($location.search().oql);
+
+          console.log(criteria);
+          if (criteria !== $scope.criteria) {
+            $scope.criteria = criteria;
+          }
         });
 
         // Reloads the list when filters change.

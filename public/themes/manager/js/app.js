@@ -24,6 +24,7 @@ angular.module('ManagerApp', [
   'onm.imagePreview',
   'onm.item',
   'onm.messenger',
+  'onm.moment',
   'onm.oql',
   'onm.pagination',
   'onm.resizable',

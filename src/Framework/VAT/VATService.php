@@ -12,6 +12,15 @@ namespace Framework\VAT;
 class VATService
 {
     /**
+     * The list of excluded regions.
+     *
+     * @var type
+     */
+    protected $excluded = [
+        'Ceuta', 'Melilla', 'Las Palmas', 'Santa Cruz de Tenerife'
+    ];
+
+    /**
      * The list of countries and taxes.
      *
      * @var array
@@ -58,15 +67,18 @@ class VATService
     }
 
     /**
-     * Returns the VAT value from the coutry code.
+     * Returns the VAT value basing on the country code and the region name.
      *
-     * @param string $code The coutry code.
+     * @param string $code   The country code.
+     * @param string $region The region name.
      *
      * @return integer The VAT value.
      */
-    public function getVatFromCode($code)
+    public function getVatFromCode($code, $region = null)
     {
-        if (!array_key_exists($code, $this->taxes)) {
+        if ((!empty($region) && in_array($region, $this->excluded))
+            || !array_key_exists($code, $this->taxes)
+        ) {
             return 0;
         }
 
@@ -74,14 +86,19 @@ class VATService
     }
 
     /**
-     * Returns the VAT value from the coutry code.
+     * Returns the VAT value basing on the country name and the region name.
      *
-     * @param string $code The country code.
+     * @param string $code   The country name.
+     * @param string $region The region name.
      *
      * @return integer The VAT value.
      */
-    public function getVatFromCountry($country)
+    public function getVatFromCountry($country, $region = null)
     {
+        if (!empty($region) && in_array($region, $this->excluded)) {
+            return 0;
+        }
+
         foreach ($this->taxes as $tax) {
             if ($tax['name'] === $country) {
                 return $tax['value'];
@@ -103,7 +120,7 @@ class VATService
     public function validate($country, $vatNumber)
     {
         if ($country === 'ES') {
-            return  \IsoCodes\Cif::validate($vatNumber)
+            return \IsoCodes\Cif::validate($vatNumber)
                 || \IsoCodes\Nif::validate($vatNumber)
                 || \IsoCodes\Vat::validate($vatNumber);
         }

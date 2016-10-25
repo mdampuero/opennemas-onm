@@ -157,8 +157,8 @@ class BaseConverter extends Converter
             return $data;
         }
 
-        $data['type'] = ($data['type'] === 'CreditCard' ?
-            'Credit Card' : 'PayPal');
+        $data['type'] = $data['type'] === 'CreditCard' ?
+            'Credit Card' : 'PayPal';
 
         return $data;
     }
@@ -246,6 +246,4 @@ class BaseConverter extends Converter
 
         return $data;
     }
-
-
 }

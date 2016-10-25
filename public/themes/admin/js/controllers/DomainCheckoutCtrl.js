@@ -4,47 +4,28 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  DomainManagementCtrl
+     * @name  DomainCheckoutCtrl
      *
      * @requires $controller
-     * @requires $http
      * @requires $rootScope
      * @requires $scope
-     * @requires routing
+     * @requires http
      * @requires messenger
+     * @requires routing
+     * @requires webStorage
      *
      * @description
      *   Controller to handle actions in domains.
      */
-    .controller('DomainManagementCtrl', [
-      '$controller', '$http', '$rootScope', '$scope', '$window', 'http', 'messenger', 'routing', 'webStorage',
-      function($controller, $http, $rootScope, $scope, $window, http, messenger, routing, webStorage) {
+    .controller('DomainCheckoutCtrl', [
+      '$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', 'webStorage',
+      function($controller, $rootScope, $scope, http, messenger, routing, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('CheckoutCtrl',
             { $rootScope: $rootScope, $scope: $scope }));
 
         /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *  Flag for card request loading.
-         *
-         * @type {boolean}
-         */
-        $scope.cardLoading = false;
-
-        /**
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *  Flag for valid client.
-         *
-         * @type {boolean}
-         */
-        $scope.clientValid = false;
-
-        /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Flag to know if it is a purchase or redirection.
@@ -54,7 +35,7 @@
         $scope.create = 0;
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   The domain to add.
@@ -64,7 +45,7 @@
         $scope.domain = '';
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Array of expanded cart.
@@ -74,7 +55,7 @@
         $scope.expanded = {};
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   The name for steps.
@@ -84,7 +65,7 @@
         $scope.steps = [ 'cart', 'billing', 'payment', 'summary', 'done' ];
 
         /**
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   The suggestions list.
@@ -94,41 +75,27 @@
         $scope.suggests = [];
 
         /**
-         * @function cancelCreditCard
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Cancels credit card payment.
-         */
-        $scope.cancelCreditCard = function() {
-          $scope.nonce    = null;
-          $scope.payment  = null;
-          $scope.total   -= $scope.fee;
-          $scope.fee      = 0;
-        };
-
-        /**
          * @function confirm
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *  Requests the purchase and shows a confirmation message.
          */
         $scope.confirm = function() {
           $scope.loading = true;
-          var url = routing.generate('backend_ws_domain_save');
-          var data = {
-            domains:  $scope.cart.map(function(e) { return e.description }),
-            method:   $scope.payment.type,
-            nonce:    $scope.payment.nonce,
-            purchase: $scope.purchase,
-          };
 
-          $http.post(url, data).then(function() {
+          var data = { purchase: $scope.purchase };
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
+            data.nonce  = $scope.payment.nonce;
+          }
+
+          http.post('backend_ws_domain_save', data).then(function() {
             $scope.next();
             $scope.loading = false;
             $scope.cart = [];
-          }, function(response) {
+          }, function() {
             $scope.error   = true;
             $scope.loading = false;
             webStorage.local.remove('purchase');
@@ -137,7 +104,7 @@
 
         /**
          * @function expand
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Shows/hides the information for a domain.
@@ -148,7 +115,7 @@
 
         /**
          * @function getData
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Returns the data to send basing on the current purchase status.
@@ -158,41 +125,31 @@
         $scope.getData = function() {
           var ids = {};
           for (var i = 0; i < $scope.cart.length; i++) {
-            ids[$scope.cart[i].uuid] = $scope.cart[i].customize ? 1 : 0;
+            ids[$scope.cart[i].uuid] = 'yearly';
           }
 
           var domains = $scope.cart.map(function(e) {
             return e.description;
           });
 
-          return {
-            ids:     ids,
-            domains: domains,
-            method:  $scope.payment.type,
-            step:    $scope.steps[$scope.step],
+          var data = {
+            ids:    ids,
+            params: {},
+            step:   $scope.steps[$scope.step + 1]
           };
-        };
 
-        /**
-         * @function getPrice
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Returns the price the domain price.
-         *
-         * @return {Float} The domain price.
-         */
-        $scope.getPrice = function() {
-          for (var i = 0; i < $scope.extension.price.length; i++) {
-            if ($scope.extension.price[i].type === 'yearly') {
-              return $scope.extension.price[i].value;
-            }
+          data.params[$scope.extension.uuid] = domains;
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
           }
+
+          return data;
         };
 
         /**
          * @function expand
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Creates a suggestion list basing on a domain without TLD.
@@ -231,7 +188,7 @@
 
         /**
          * @function isRight
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Checks if the domain is valid.
@@ -246,7 +203,7 @@
 
         /**
          * @function isValid
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Checks if the domain is valid.
@@ -270,15 +227,14 @@
 
         /**
          * @function list
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Requests the list of domains.
          */
         $scope.list = function() {
           $scope.loading = true;
-          var url = routing.generate('backend_ws_domains_list');
-          $http.get(url).then(function(response) {
+          http.get('backend_ws_domains_list').then(function(response) {
             $scope.loading = false;
 
             $scope.domains = response.data.domains;
@@ -289,7 +245,7 @@
 
         /**
          * @function selectedCreditCard
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Selects credit card payment.
@@ -300,7 +256,7 @@
 
         /**
          * @function map
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Maps the domain.
@@ -311,19 +267,20 @@
           }
 
           var domain = 'www.' + $scope.domain;
-          var create = $scope.extension.uuid === 'es.openhost.domain.create'
-            ? 1 : 0;
+          var create = $scope.extension.uuid === 'es.openhost.domain.create' ?
+            1 : 0;
 
-          var url = routing.generate('backend_ws_domain_check_available',
-              { create: create, domain: domain });
+          var route = {
+            name: 'backend_ws_domain_check_available',
+            params: { create: create, domain: domain }
+          };
 
           if (!create) {
-            var url = routing.generate('backend_ws_domain_check_valid',
-                { create: create, domain: domain });
+            route.name = 'backend_ws_domain_check_valid';
           }
 
           $scope.loading = true;
-          $http.get(url).then(function() {
+          http.get(route).then(function() {
             $scope.cart.push({
               id:          $scope.extension.id,
               uuid:        $scope.extension.uuid,
@@ -342,7 +299,7 @@
 
         /**
          * @function map
-         * @memberOf DomainManagementCtrl
+         * @memberOf DomainCheckoutCtrl
          *
          * @description
          *   Listens for the enter key to add a domain to map
@@ -353,84 +310,11 @@
           }
         };
 
-        /**
-         * @function toggleCardLoading
-         * @memberOf DomainManagementCtrl
-         *
-         * @description
-         *   Toggles cardLoading flag.
-         */
-        $scope.toggleCardLoading = function() {
-          $scope.cardLoading = !$scope.cardLoading;
-        };
-
         // Updates domain price when create flag changes
         $scope.$watch('create', function(nv) {
           if (nv === 1) {
             $scope.price = 18;
           }
         });
-
-        // Update free when payment changes
-        $scope.$watch('payment', function(nv) {
-          $scope.fee = 0;
-
-          if (nv && nv.type === 'CreditCard') {
-            $scope.fee = ($scope.subtotal + $scope.tax) * 0.029 + 0.30;
-          }
-        }, true);
-
-        // Configure braintree
-        $scope.$watch('clientToken', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          if ($scope.clientToken && typeof braintree !== 'undefined') {
-            $window.braintree.setup($scope.clientToken, 'dropin', {
-              container: 'braintree-container',
-              paypal: {
-                container: 'braintree-container'
-              },
-              onError: function() {
-                $scope.$apply(function() {
-                  $scope.payment = null;
-                  $scope.paymentLoading = false;
-                });
-              },
-              onPaymentMethodReceived: function(obj) {
-                $scope.$apply(function() {
-                  $scope.payment        = obj;
-                  $scope.paymentLoading = false;
-
-                  $scope.next();
-                });
-
-                return false;
-              }
-            });
-
-            $('#braintree-form').submit(function(e) {
-              e.preventDefault();
-
-              $scope.$apply(function() {
-                $scope.paymentLoading = true;
-              });
-
-              return false;
-            });
-          }
-        });
-
-        if (webStorage.local.has('purchase')) {
-          $scope.purchase = webStorage.local.get('purchase');
-        }
-
-        if (!$scope.purchase) {
-          http.post('backend_ws_purchase_save').then(function(response) {
-            $scope.purchase = response.data;
-            webStorage.local.set('purchase', $scope.purchase);
-          });
-        }
     }]);
 })();

@@ -12,6 +12,10 @@ namespace Common\ORM\Braintree\Persister;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
+/**
+ * The PaymentPersister class defines actions to create and remove Payments
+ * to Braintree.
+ */
 class PaymentPersister extends BasePersister
 {
     /**
@@ -32,7 +36,9 @@ class PaymentPersister extends BasePersister
         $response = $cr::sale($data);
 
         if (!$response->success) {
-            throw new \RuntimeException();
+            throw new \RuntimeException(
+                sprintf(_('Unable to create a %s'), $this->metadata->name)
+            );
         }
 
         $entity->id = $response->transaction->id;
@@ -43,15 +49,17 @@ class PaymentPersister extends BasePersister
      *
      * @param Entity $entity The payment to void.
      *
-     * @throws EntityNotFoundException If the payment does not exist.
+     * @throws RuntimeException If the payment does not exist.
      */
     public function remove(Entity $entity)
     {
         $cr       = $this->factory->get('transaction');
-        $response = $cr::void($entity->payment_id);
+        $response = $cr::void($entity->id);
 
         if (!$response->success) {
-            throw new EntityNotFoundException($this->metadata->name, $entity->id);
+            throw new \RuntimeException(
+                sprintf(_('Unable to remove the %s'), $this->metadata->name)
+            );
         }
     }
 }
