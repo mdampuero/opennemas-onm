@@ -13,8 +13,8 @@
      *   Manages actions for cart.
      */
     .controller('CartCtrl', [
-      '$rootScope', '$scope',
-      function ($rootScope, $scope) {
+      '$rootScope', '$scope', 'webStorage',
+      function ($rootScope, $scope, webStorage) {
         /**
          * @function getPrice
          * @memberOf CartCtrl
@@ -74,9 +74,13 @@
 
         // Force float type for prices
         $scope.$watch('cart', function(nv) {
+          webStorage.local.remove('cart');
+
           if (!nv || nv.length === 0) {
             return;
           }
+
+          webStorage.local.set('cart', nv);
 
           for (var i = 0; i < nv.length; i++) {
             for (var j = 0; j < nv[i].price.length; j++) {
