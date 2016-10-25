@@ -2,25 +2,26 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Utils;
+namespace Common\Core\Component\Http;
 
 /**
-* Detects a boot by its user agent string
-*/
+ * The BotDetector class detects bots basing on user-agent values.
+ */
 class BotDetector
 {
     /**
      * List of string matchers for bots.
      *
      * @var array
-     **/
-    // TODO: improve this implementation using this resource http://www.iplists.com/
-    public static $spiders = [
+     *
+     *TODO: Improve this implementation using this resource http://www.iplists.com/
+     */
+    public $bots = [
         "abot",
         "dbot",
         "ebot",
@@ -407,41 +408,25 @@ class BotDetector
     ];
 
     /**
-     * Returns true if the userAgentString is a bot
+     * Check if the request was done by a bot.
      *
-     * @param string $userAgentString the user agent string
+     * @param Request $request The request object.
      *
-     * @return boolean
-     **/
-    public static function isBot($userAgentString)
+     * @return boolean True if a bot has been detected. False otherwise.
+     */
+    public function isBot($request, $bot = null)
     {
-        $spiders = self::$spiders;
+        $bots   = $this->bots;
+        $header = $request->headers->get('User-Agent');
 
-        foreach ($spiders as $spider) {
-            //If the spider text is found in the current user agent, then return true
-            if (stripos($userAgentString, $spider) !== false) {
-                return true;
-            }
+        if (!empty($bot)) {
+            $bots = [ $bot ];
         }
 
-        //If it gets this far then no bot was found!
-        return false;
-    }
-
-    /**
-     * Checks if a provided user agent string matches a specific bot string
-     *
-     * @param string $userAgentString the user agent that we will search in
-     * @param string $spider the substring of the spider name that we will search for
-     *
-     * @return boolean true if the spider string matches
-     **/
-    public static function isSpecificBot($userAgentString, $spider)
-    {
-        // If the spider string is inside the user agent string then
-        // the user agent is a bot
-        if (stripos($userAgentString, $spider) !== false) {
-            return true;
+        foreach ($bots as $bot) {
+            if (stripos($header, $bot) !== false) {
+                return true;
+            }
         }
 
         return false;
