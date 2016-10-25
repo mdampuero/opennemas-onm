@@ -62,7 +62,10 @@ class CheckoutHelper
         });
 
         // Remove domains
-        $items = array_diff($items, $domains);
+        $items = array_filter($items, function ($a) {
+            return strpos($a['uuid'], 'es.openhost.domain') === false;
+        });
+
         $items = array_map(function ($a) {
             return $a['uuid'];
         }, $items);
@@ -79,7 +82,6 @@ class CheckoutHelper
         $domains = array_map(function ($a) {
             return substr($a['description'], strrpos($a['description'], ' '));
         }, $domains);
-
 
         $this->instance->domains =
             array_merge($this->instance->domains, $domains);
