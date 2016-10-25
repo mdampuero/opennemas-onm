@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Common\Core\Annotation\BotDetector;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -30,14 +31,11 @@ class TagsController extends Controller
      * Shows a paginated list of contents for a given tag name
      *
      * @return Response the response object
-     **/
+     *
+     * @BotDetector(bot="bingbot", route="frontend_frontpage")
+     */
     public function tagsAction(Request $request)
     {
-        $isBingBot = \Onm\Utils\BotDetector::isSpecificBot($request->headers->get('user-agent'), 'bingbot');
-        if ($isBingBot) {
-            return new RedirectResponse('/');
-        }
-
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $tagName = \Onm\StringUtils::normalize($tagName);
         $page    =  $request->query->getDigits('page', 1);

@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Common\Core\Annotation\BotDetector;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -311,7 +312,9 @@ class ContentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     *
+     * @BotDetector
+     */
     public function statsAction(Request $request)
     {
         $contentId = $request->query->getDigits('content_id', 0);
@@ -321,14 +324,8 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $userAgent = $request->headers->get('User-Agent');
-        $isBot     = \Onm\Utils\BotDetector::isBot($userAgent);
-
         // Increment view only if the request is performed with an AJAX request
-        if ($isBot) {
-            $httpCode = 400;
-            $content = "Bot detected";
-        } elseif ($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {
             $this->get('content_views_repository')->setViews($contentId);
             $httpCode = 200;
             $content = "Ok";
