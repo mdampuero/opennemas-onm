@@ -87,6 +87,18 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
 
+    core.listener.bot_detector.annotation:
+        class:     Common\Core\EventListener\BotDetectorAnnotationListener
+        arguments: [ '@annotation_reader', '@router' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+
+    kernel.listener.bot_detector.exception:
+        class: Common\Core\EventListener\BotDetectorExceptionListener
+        arguments: [ '@router' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
     core.listener.template.annotation:
         class:     Common\Core\EventListener\TemplateAnnotationListener
         arguments: [ '@service_container' ]
