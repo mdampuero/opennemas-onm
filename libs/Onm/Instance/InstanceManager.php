@@ -23,7 +23,6 @@ use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\InstanceNotDeletedException;
 use Onm\Exception\InstanceNotFoundException;
 use Onm\Exception\InstanceNotRestoredException;
-use Onm\Module\ModuleManager;
 use Repository\SettingManager;
 
 /**

@@ -12,7 +12,6 @@ namespace ManagerWebService\Controller;
 use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Extension;
 use Onm\Framework\Controller\Controller;
-use Onm\Module\ModuleManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

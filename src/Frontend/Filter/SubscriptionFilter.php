@@ -14,8 +14,6 @@
  **/
 namespace Frontend\Filter;
 
-use Onm\Module\ModuleManager;
-
 /**
  * Defines the subscription filter class
  **/
