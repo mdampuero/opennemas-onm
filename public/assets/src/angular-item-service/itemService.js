@@ -11,10 +11,10 @@
    *
    * @return Object The item service.
    */
-  angular.module('onm.item', [/*'onm.oqlEncoder'*/])
+  angular.module('onm.item', [])
     .factory('itemService', [
-      '$http', '$location', 'routing', /*'oqlEncoder',*/
-      function($http, $location, routing/*, oqlEncoder*/) {
+      '$http', '$location', 'routing',
+      function($http, $location, routing) {
         /**
          * The item service.
          *
