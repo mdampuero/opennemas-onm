@@ -246,7 +246,7 @@
            * @return {Boolean} True if the item is enabled. False otherwise.
            */
           sidebar.isEnabled = function(constraints) {
-            var enabled = false;
+            var enabled = true;
 
             if (!constraints) {
               return enabled;
