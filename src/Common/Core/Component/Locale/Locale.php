@@ -96,7 +96,7 @@ class Locale
      */
     public function getLocaleName()
     {
-        return \Locale::getDisplayLanguage($this->locale);
+        return ucfirst(\Locale::getDisplayLanguage($this->locale));
     }
 
     /**
