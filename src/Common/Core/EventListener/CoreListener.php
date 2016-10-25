@@ -115,9 +115,6 @@ class CoreListener implements EventSubscriberInterface
         // TODO: Remove when everyone use new cache.manager service
         $this->container->get('cache')->setNamespace($namespace);
 
-        // Initialize the instance database connection
-        $connection = $this->container->get('db_conn_manager');
-
         if ($namespace != 'manager') {
             // TODO: Remove when using new ORM for all models
             $this->container->get('dbal_connection')->selectDatabase($database);
@@ -125,11 +122,9 @@ class CoreListener implements EventSubscriberInterface
             // TODO: Remove when AdoDB removed from models
             $connection = $this->container->get('db_conn');
             $connection->selectDatabase($database);
+            \Application::load();
+            \Application::initDatabase($connection);
         }
-
-        // TODO: Remove when AdoDB removed from models
-        \Application::load();
-        \Application::initDatabase($connection);
     }
 
     /**

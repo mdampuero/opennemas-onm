@@ -187,7 +187,8 @@ class NotificationController extends Controller
                 . ' AND notification_id = ? AND instance_id = instances.id'
             . ' GROUP BY notification_id, instance_id';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql, [ $id ]);
+        $data = $this->get('orm.manager')->getConnection('manager')
+            ->fetchAll($sql, [ $id ]);
         $data = array_map(function ($a) {
             $title = unserialize($a['title']);
 
@@ -510,7 +511,7 @@ class NotificationController extends Controller
 
         $sql .= ' GROUP BY notification.id ORDER BY id DESC';
 
-        return $this->get('dbal_connection_manager')->fetchAll($sql);
+        return $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
     }
 
     /**
