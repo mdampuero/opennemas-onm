@@ -550,7 +550,7 @@
                 [% item.page_views %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('activated')">
-                <button class="btn btn-white" type="button" ng-click="setEnabled(item, item.activated == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
+                <button class="btn btn-white" type="button" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading &&item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                 </button>
                 <span ng-if="!security.hasInstance(item.internal_name) || !security.hasPermission('INSTANCE_UPDATE')">
