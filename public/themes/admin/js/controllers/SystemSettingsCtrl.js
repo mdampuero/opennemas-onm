@@ -47,7 +47,8 @@
         $scope.addGanalytics = function() {
           $scope.gaCodes.push({
             apiKey:'',
-            baseDomain:''
+            baseDomain:'',
+            customVar:''
           });
         };
 
