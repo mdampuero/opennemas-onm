@@ -51,7 +51,7 @@ class PaypalNotificationsController extends Controller
             // Get ipn data
             $ipnData = $ipnMessage->getRawData();
 
-            $this->dispatchEvent('paywall.recurring', array('ipnData' => $ipnData));
+            $this->get('core.dispatcher')->dispatch('paywall.recurring', array('ipnData' => $ipnData));
         } else {
             // Write in log
             $logger = getService('logger');

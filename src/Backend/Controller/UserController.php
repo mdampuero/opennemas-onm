@@ -110,7 +110,7 @@ class UserController extends Controller
 
         $this->get('orm.manager')->persist($user);
 
-        $this->dispatchEvent('social.disconnect', array('user' => $user));
+        $this->get('core.dispatcher')->dispatch('social.disconnect', array('user' => $user));
 
         return $this->redirect(
             $this->generateUrl(
@@ -508,7 +508,7 @@ class UserController extends Controller
             $template = 'acl/user/social_alt.tpl';
         }
 
-        $this->dispatchEvent('social.connect', array('user' => $user));
+        $this->get('core.dispatcher')->dispatch('social.connect', array('user' => $user));
 
         return $this->render($template, [
             'current_user_id' => $user->id,
@@ -580,11 +580,11 @@ class UserController extends Controller
             $em->persist($user);
 
             // Clear caches
-            $this->dispatchEvent('user.update', array('user' => $user));
+            $this->get('core.dispatcher')->dispatch('user.update', array('user' => $user));
 
             // Check if is an author and delete caches
             if (in_array('3', $user->fk_user_group)) {
-                $this->dispatchEvent('author.update', array('id' => $user->id));
+                $this->get('core.dispatcher')->dispatch('author.update', array('id' => $user->id));
             }
 
             $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));

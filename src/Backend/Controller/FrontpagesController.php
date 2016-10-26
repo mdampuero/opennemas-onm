@@ -276,7 +276,7 @@ class FrontpagesController extends Controller
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
         );
 
-        $this->dispatchEvent('frontpage.save_position', array('category' => $categoryID));
+        $this->get('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $categoryID));
 
         // Save the actual date for fronpage
         $dateForDB = time();
@@ -318,7 +318,7 @@ class FrontpagesController extends Controller
         ) {
             $this->get('setting_repository')->set('frontpage_layout_'.$category, $layout);
 
-            $this->dispatchEvent('frontpage.pick_layout', array('category' => $category));
+            $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', array('category' => $category));
 
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -337,7 +337,7 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        $this->dispatchEvent('frontpage.save_position', array('category' => $category));
+        $this->get('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $category));
 
         return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));
     }

@@ -456,7 +456,7 @@ class AdsController extends Controller
             );
 
             // Delete caches for frontpages
-            $this->dispatchEvent('setting.update');
+            $this->get('core.dispatcher')->dispatch('setting.update');
 
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
