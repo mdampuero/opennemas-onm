@@ -9,9 +9,10 @@
           <div class="text-right p-r-15 p-b-15">
             <div class="price">
               <h4 class="no-margin">
-                <strong>[% getPrice($index).value | number : 2 %]</strong>
-                <small ng-show="getPrice($index).type === 'yearly'">€/{t}year{/t}</small>
-                <small ng-show="getPrice($index).type === 'monthly'">€/{t}month{/t}</small>
+                <strong>[% getPrice(item, item.priceType).value %]</strong>
+                <small ng-if="['monthly', 'monthly_custom'].indexOf(getPrice(item, item.priceType).type) !== -1">€/{t}month{/t}</small>
+                <small ng-if="['yearly', 'yearly_custom'].indexOf(getPrice(item, item.priceType).type) !== -1">€/{t}year{/t}</small>
+                <small ng-if="['single', 'single_custom'].indexOf(getPrice(item, item.priceType).type) !== -1">€</small>
               </h4>
             </div>
           </div>
@@ -24,7 +25,7 @@
     <div class="p-r-30 p-t-10">
       <h4>
         <span class="m-r-30 uppercase">{t}Total{/t}:</span>
-        <strong>[% getSubTotal() | number : 2 %]</strong>
+        <strong>[% getSubTotal() %]</strong>
         <small>€</small>
       </h4>
     </div>

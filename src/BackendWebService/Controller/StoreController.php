@@ -5,7 +5,6 @@ namespace BackendWebService\Controller;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Framework\ORM\Entity\Extension;
 
 class StoreController extends Controller
 {
@@ -18,54 +17,40 @@ class StoreController extends Controller
      */
     public function checkoutAction(Request $request)
     {
-        if (!$request->request->get('modules')) {
-            return new JsonResponse(
-                _('Your request could not been registered'),
-                400
-            );
-        }
+        $purchase  = $request->request->get('purchase');
+        $nonce     = $request->request->get('nonce');
 
-        // Fetch user data
-        $uuids = $request->request->get('modules');
-        $oql   = sprintf('uuid in ["%s"]', implode('", "', $uuids));
+        try {
+            $ph = $this->get('core.helper.checkout');
 
-        $modules = $this->get('orm.manager')
-            ->getRepository('Extension', 'database')
-            ->findBy($oql);
+            $ph->getPurchase($purchase);
 
-        $themes = $this->get('orm.manager')->getRepository('Theme')
-            ->findBy($oql);
-
-        $items = array_merge($modules, $themes);
-        $lang  = $this->get('core.locale')->getLocale();
-        $names = [];
-        foreach ($items as $item) {
-            $names[$item->uuid] = $item->name;
-
-            if (is_array($item->name)) {
-                $names[$item->uuid] = $item->name['en'];
-
-                if (array_key_exists($lang, $item->name)) {
-                    $names[$item->uuid] = $item->name[$lang];
-                }
+            if (!empty($nonce) && $ph->getPurchase()->total > 0) {
+                $ph->pay($nonce);
             }
+
+            $purchase = $ph->getPurchase();
+
+            $ph->sendEmailToClient();
+            $ph->sendEmailToSales();
+
+            $ph->enable();
+
+            $this->get('application.log')->info(
+                'The user ' . $this->getUser()->username
+                . '(' . $this->getUser()->id  .') has purchased '
+                . json_encode($purchase->details)
+            );
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+                'type' => 'error'
+            ], 400);
         }
 
-        $client = $this->get('orm.manager')
-            ->getRepository('Client', 'manager')
-            ->find($this->get('core.instance')->getClient());
-
-        // Send emails
-        $this->sendEmailToSales($client, $names);
-        $this->sendEmailToCustomer($client, $names);
-
-        $this->get('application.log')->info(
-            'The user ' . $this->getUser()->username
-            . '(' . $this->getUser()->id  .') has purchased '
-            . implode(', ', $names)
-        );
-
-        return new JsonResponse(_('Your request has been registered'));
+        return new JsonResponse(_('Purchase completed!'));
     }
 
     /**
@@ -108,6 +93,7 @@ class StoreController extends Controller
         $vat   = $this->get('vat');
 
         $country   = $request->query->get('country');
+        $region    = $request->query->get('region');
         $vatNumber = $request->query->get('vat');
 
         try {
@@ -120,7 +106,7 @@ class StoreController extends Controller
             $code = 400;
         }
 
-        $vatValue = $vat->getVatFromCode($country);
+        $vatValue = $vat->getVatFromCode($country, $region);
 
         return new JsonResponse($vatValue, $code);
     }
@@ -148,7 +134,7 @@ class StoreController extends Controller
         $modules = $converter->responsify($modules);
 
         $modules = array_map(function (&$a) {
-            foreach ([ 'about', 'description', 'name' ] as $key) {
+            foreach ([ 'about', 'description', 'name', 'terms', 'notes' ] as $key) {
                 if (!empty($a[$key])) {
                     $lang = $a[$key]['en'];
 
@@ -168,71 +154,5 @@ class StoreController extends Controller
         return new JsonResponse(
             [ 'results' => $modules, 'activated' => $activated ]
         );
-    }
-
-    /**
-     * Sends an email to the customer.
-     *
-     * @param Client $client  The client.
-     * @param array  $modules The requested modules.
-     */
-    private function sendEmailToCustomer($client, $modules)
-    {
-        $instance = $this->get('core.instance');
-        $params   = $this->getParameter('manager_webservice');
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Store purchase request')
-            ->setFrom($params['no_reply_from'])
-            ->setSender($params['no_reply_sender'])
-            ->setTo($client->email)
-            ->setBody(
-                $this->renderView(
-                    'store/email/_purchaseToCustomer.tpl',
-                    [
-                        'instance' => $instance,
-                        'modules'  => $modules
-                    ]
-                ),
-                'text/html'
-            );
-
-        if ($instance->contact_mail !== $client->email) {
-            $message->setBcc($instance->contact_mail);
-        }
-
-        $this->get('mailer')->send($message);
-    }
-
-    /**
-     * Sends an email to sales department.
-     *
-     * @param Client $client  The client information.
-     * @param array  $modules The requested modules.
-     */
-    private function sendEmailToSales($client, $modules)
-    {
-        $instance = $this->get('core.instance');
-        $params   = $this->getParameter('manager_webservice');
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Store purchase request')
-            ->setFrom($params['no_reply_from'])
-            ->setSender($params['no_reply_sender'])
-            ->setTo($this->container->getParameter('sales_email'))
-            ->setBody(
-                $this->renderView(
-                    'store/email/_purchaseToSales.tpl',
-                    [
-                        'client'   => $client,
-                        'instance' => $instance,
-                        'modules'  => $modules,
-                        'user'     => $this->getUser()
-                    ]
-                ),
-                'text/html'
-            );
-
-        $this->get('mailer')->send($message);
     }
 }

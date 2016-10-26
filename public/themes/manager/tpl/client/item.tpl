@@ -113,7 +113,7 @@
           <div class="form-group col-lg-4">
             <label class="form-label" for="email">{t}Email{/t}</label>
             <div class="controls input-with-icon right">
-              <input class="form-control" id="email" name="email" ng-model="client.email" placeholder="{t}Email{/t}" required type="email">
+              <input class="form-control" id="email" name="email" ng-model="client.email" ng-pattern="emailPattern" placeholder="{t}Email{/t}" required type="email">
               <span class="icon right">
                 <span class="fa fa-check text-success" ng-if="clientForm.email.$dirty && clientForm.email.$valid"></span>
                 <span class="fa fa-asterisk" ng-if="!clientForm.email.$dirty && clientForm.email.$invalid" uib-tooltip="{t}This field is required{/t}"></span>

@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('BackendApp.filters')
+  angular.module('onm.moment', [])
     /**
      * Formats a date.
      */
@@ -32,13 +32,15 @@
           fmt = format;
         }
 
-        if (timezone) {
-          tmz = timezone;
-        }
-
         $window.moment.locale(lang);
 
-        return $window.moment(input).tz(tmz).format(fmt);
+        var date = $window.moment(input);
+        if (timezone) {
+          date = $window.moment.tz(input, 'UTC');
+          tmz  = timezone;
+        }
+
+        return date.tz(tmz).format(fmt);
       };
     }]);
 })();

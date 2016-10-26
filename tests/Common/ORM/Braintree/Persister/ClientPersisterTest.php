@@ -57,6 +57,39 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests create when API call returns a success.
+     */
+    public function testCreate()
+    {
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->success = true;
+        $response->customer = $this->getMockBuilder('\Braintree_Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->customer->id = '1';
+
+        $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
+        $bc->shouldReceive('create')->once()->andReturn($response);
+
+        $factory = $this
+            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $factory->expects($this->once())->method('get')->with('customer')->willReturn($bc);
+
+        $persister = new ClientPersister($factory, $this->metadata);
+        $persister->create($this->unexistingClient);
+
+        $this->assertEquals(
+            $response->customer->id,
+            $this->unexistingClient->id
+        );
+    }
+
+    /**
      * Tests create when API returns a false.
      *
      * @expectedException \RuntimeException
@@ -67,6 +100,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = false;
+        $response->message = 'Unable to create';
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
         $bc->shouldReceive('create')->once()->andReturn($response);
@@ -104,42 +138,34 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests create when API call returns a success.
+     * Tests remove when API call returns a success.
      */
-    public function testCreateWithoutErrors()
+    public function testRemove()
     {
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = true;
-        $response->customer = $this->getMockBuilder('\Braintree_Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->customer->id = '1';
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('create')->once()->andReturn($response);
+        $bc->shouldReceive('delete')->once()->andReturn($response);
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $factory->expects($this->once())->method('get')->with('customer')->willReturn($bc);
+        $factory->method('get')->with('customer')->willReturn($bc);
+        $factory->expects($this->once())->method('get')->with('customer');
 
         $persister = new ClientPersister($factory, $this->metadata);
-        $persister->create($this->unexistingClient);
-
-        $this->assertEquals(
-            $response->customer->id,
-            $this->unexistingClient->id
-        );
+        $persister->remove($this->unexistingClient);
     }
 
     /**
      * Tests remove when API returns a false.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \RuntimeException
      */
     public function testRemoveWhenEntityNotFound()
     {
@@ -147,6 +173,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = false;
+        $response->message = 'UnableToRemove';
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
         $bc->shouldReceive('delete')->once()->andReturn($response);
@@ -184,9 +211,9 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests remove when API call returns a success.
+     * Tests update when API returns a success.
      */
-    public function testRemoveWithoutErrors()
+    public function testUpdate()
     {
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
@@ -194,7 +221,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('delete')->once()->andReturn($response);
+        $bc->shouldReceive('update')->once()->andReturn($response);
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
@@ -205,20 +232,21 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $factory->expects($this->once())->method('get')->with('customer');
 
         $persister = new ClientPersister($factory, $this->metadata);
-        $persister->remove($this->unexistingClient);
+        $persister->update($this->existingClient);
     }
 
     /**
      * Tests update when API returns a false.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \RuntimeException
      */
-    public function testUpdateWhenEntityNotFound()
+    public function testUpdateWithErrors()
     {
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = false;
+        $response->message = 'Unable to update';
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
         $bc->shouldReceive('update')->once()->andReturn($response);
@@ -254,31 +282,6 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
 
         $factory->method('get')->with('customer')->willReturn($bc);
 
-        $factory->expects($this->once())->method('get')->with('customer');
-
-        $persister = new ClientPersister($factory, $this->metadata);
-        $persister->update($this->existingClient);
-    }
-
-    /**
-     * Tests update when API returns a success.
-     */
-    public function testUpdateWithoutErrors()
-    {
-        $response = $this->getMockBuilder('\Braintree_Response')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->success = true;
-
-        $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('update')->once()->andReturn($response);
-
-        $factory = $this
-            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $factory->method('get')->with('customer')->willReturn($bc);
         $factory->expects($this->once())->method('get')->with('customer');
 
         $persister = new ClientPersister($factory, $this->metadata);

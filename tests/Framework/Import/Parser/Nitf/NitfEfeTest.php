@@ -64,17 +64,6 @@ class NitfEfeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->parser->checkFormat($this->valid));
     }
 
-    public function testGetCreatedTime()
-    {
-        $date = new \DateTime('now');
-        $this->assertTrue($date <= $this->parser->getCreatedTime($this->invalid));
-
-        $date = \DateTime::createFromFormat('Ymd\THis', '20150921T080200');
-        $date->setTimezone(new \DateTimeZone('UTC'));
-
-        $this->assertEquals($date, $this->parser->getCreatedTime($this->valid));
-    }
-
     public function testGetPriority()
     {
         $this->assertEquals(5, $this->parser->getPriority($this->invalid));

@@ -39,10 +39,14 @@ class SidebarController extends Controller
                     ],
                     'items' => [
                         [
-                            'name'  => _('Modules'),
-                            'icon'  => 'fa-flip-horizontal fa-plug',
-                            'route' => 'manager_modules_list',
-                            'click' => true
+                            'name'     => _('Modules'),
+                            'icon'     => 'fa-flip-horizontal fa-plug',
+                            'route'    => 'manager_modules_list',
+                            'click'    => true,
+                            'security' => [
+                                'permission' => [ 'EXTENSION_LIST' ],
+                            ],
+
                         ]
                     ]
                 ],

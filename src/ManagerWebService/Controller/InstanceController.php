@@ -517,7 +517,7 @@ class InstanceController extends Controller
             ->selectDatabase($instance->getDatabaseName());
 
         $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik', 'time_zone' ]);
-        $template = $this->getTemplateParams();
+        $template = $this->getTemplateParams($instance->id);
 
         if (!empty($instance->getClient())) {
             try {
@@ -602,32 +602,13 @@ class InstanceController extends Controller
     }
 
     /**
-     * Ads additional filters when the current user is not a MASTER.
-     *
-     * @param string $oql The OQL to modify.
-     *
-     * @return string The OQL with additional filters.
-     */
-    private function fixOqlForPartners($oql)
-    {
-        if ($this->get('core.security')->hasPermission('MASTER')) {
-            return $oql;
-        }
-
-        // Surround current OQL by parenthesis
-        if (!empty($oql) && !preg_match('/^\s*(order|limit)/', $oql)) {
-            $filters = trim(preg_split('/order|limit|offset/', $oql)[0]);
-            $oql = ' and' . str_replace($filters, " ($filters) ", $oql );
-        }
-
-    }
-
-    /**
      * Returns a list of parameters for the template.
+     *
+     * @param integer $id The instance id.
      *
      * @return array Array of template parameters.
      */
-    private function getTemplateParams()
+    private function getTemplateParams($id = null)
     {
         return [
             'languages' => [
@@ -642,6 +623,7 @@ class InstanceController extends Controller
                 'EXPERT',
                 'OTHER',
             ],
+            'purchases' => $this->getPurchases($id),
             'themes'    => $this->getThemes(),
             'timezones' => \DateTimeZone::listIdentifiers(),
             'modules'   => $this->getExtensions(),
@@ -681,6 +663,27 @@ class InstanceController extends Controller
         }, $extensions);
 
         return $extensions;
+    }
+
+    /**
+     * Returns the list of purchases for the current instance.
+     *
+     * @param integer $id The instance id.
+     *
+     * @return array The list of purchases.
+     */
+    protected function getPurchases($id = null)
+    {
+        $purchases = [];
+        if (!empty($id)) {
+            $purchases = $this->get('orm.manager')->getRepository('Purchase')
+                ->findBy(sprintf('instance_id = %s order by updated desc limit 5', $id));
+
+            $purchases = $this->get('orm.manager')->getConverter('Purchase')
+                ->responsify($purchases);
+        }
+
+        return $purchases;
     }
 
     /**

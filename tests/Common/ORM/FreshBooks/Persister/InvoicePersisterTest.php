@@ -55,9 +55,9 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $property->setValue($this->persister, $this->api);
 
         $this->existingInvoice = new Invoice([
-            'invoice_id' => '123',
-            'client_id'  => '1',
-            'lines' => [
+            'id'        => '123',
+            'client_id' => '1',
+            'lines'     => [
                 [
                     'order'    => 1,
                     'name'     => 'test',
@@ -118,7 +118,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister->create($this->unexistingInvoice);
         $this->assertEquals(
             $response['invoice_id'],
-            $this->unexistingInvoice->invoice_id
+            $this->unexistingInvoice->id
         );
     }
 

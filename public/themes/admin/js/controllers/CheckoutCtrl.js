@@ -13,8 +13,13 @@
      *   Controller to handle checkout-related actions.
      */
     .controller('CheckoutCtrl', [
-      '$rootScope', '$scope', 'http', 'webStorage',
-      function($rootScope, $scope, http, webStorage) {
+      '$rootScope', '$scope', '$window', 'http', 'webStorage',
+      function($rootScope, $scope, $window, http, webStorage) {
+        // List of territories excluded from VAT taxes
+        var excluded = [
+          'Ceuta', 'Melilla', 'Las Palmas', 'Santa Cruz de Tenerife'
+        ];
+
         /**
          * @memberOf CheckoutCtrl
          *
@@ -53,7 +58,7 @@
          *
          * @type {Boolean}
          */
-        $scope.step = 1;
+        $scope.step = 0;
 
         /**
          * @memberOf CheckoutCtrl
@@ -94,6 +99,20 @@
          * @type {Boolean}
          */
         $scope.vatTax = 0;
+
+        /**
+         * @function cancelCreditCard
+         * @memberOf DomainCtrl
+         *
+         * @description
+         *   Cancels credit card payment.
+         */
+        $scope.cancelCreditCard = function() {
+          $scope.nonce    = null;
+          $scope.payment  = null;
+          $scope.total   -= $scope.fee;
+          $scope.fee      = 0;
+        };
 
         /**
          * @function getPrice
@@ -152,6 +171,24 @@
         };
 
         /**
+         * @function getNotes
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Returns the invoice notes.
+         */
+        $scope.getNotes = function () {
+          var notes = '';
+          for (var i = 0; i < $scope.cart.length; i++) {
+            if ($scope.cart[i].notes) {
+              notes += $scope.cart[i].notes.split('\n').join('<br>') + '<hr>';
+            }
+          }
+
+          return notes.replace(/<hr>$/, '');
+        }
+
+        /**
          * @function previous
          * @memberOf CheckoutCtrl
          *
@@ -159,10 +196,44 @@
          *   Goes to the previous step.
          */
         $scope.previous = function() {
-          if ($scope.step > 1) {
+          if ($scope.step > 0) {
             $scope.step--;
           }
         };
+
+        /**
+         * @function start
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Starts the purchase.
+         */
+        $scope.start = function() {
+          var route = {
+            name: 'backend_ws_purchase_update',
+            params: { id: $scope.purchase }
+          };
+
+          return http.put(route, { step: 'cart' });
+        };
+
+        /**
+         * @function getTerms
+         * @memberOf CheckoutCtrl
+         *
+         * @description
+         *   Returns the invoice terms.
+         */
+        $scope.getTerms = function () {
+          var terms = '';
+          for (var i = 0; i < $scope.cart.length; i++) {
+            if ($scope.cart[i].terms) {
+              terms += $scope.cart[i].terms.split('\n').join('<br>') + '<hr>';
+            }
+          }
+
+          return terms.replace(/<hr>$/, '');
+        }
 
         // Get client after saving
         $rootScope.$on('client-saved', function (event, args) {
@@ -181,6 +252,11 @@
             return;
           }
 
+          if (nv.country === 'ES' && excluded.indexOf(nv.state) !== -1) {
+            $scope.vatTax = 0;
+            return;
+          }
+
           if ($scope.taxes[nv.country] && (nv.country === 'ES' ||
               (!nv.company && $scope.countries[nv.country]))) {
             $scope.vatTax = $scope.taxes[nv.country].value;
@@ -196,6 +272,71 @@
         $scope.$watch('[fee, subtotal, tax]', function () {
           $scope.total = $scope.subtotal + $scope.tax + $scope.fee;
         }, true);
+
+        // Update fee when payment changes
+        $scope.$watch('payment', function(nv) {
+          $scope.fee = 0;
+
+          if (nv && nv.type === 'CreditCard') {
+            $scope.fee = ($scope.subtotal + $scope.tax) * 0.029 + 0.30;
+          }
+        }, true);
+
+
+        if (webStorage.local.has('purchase')) {
+          $scope.purchase = webStorage.local.get('purchase');
+        }
+
+        // Configure braintree
+        $scope.$watch('clientToken', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          if ($scope.clientToken && typeof braintree !== 'undefined') {
+            $window.braintree.setup($scope.clientToken, 'dropin', {
+              container: 'braintree-container',
+              paypal: {
+                container: 'braintree-container'
+              },
+              onError: function() {
+                $scope.$apply(function() {
+                  $scope.payment = null;
+                  $scope.paymentLoading = false;
+                });
+              },
+              onPaymentMethodReceived: function(obj) {
+                $scope.$apply(function() {
+                  $scope.payment        = obj;
+                  $scope.paymentLoading = false;
+
+                  $scope.next();
+                });
+
+                return false;
+              }
+            });
+
+            $('#braintree-form').submit(function(e) {
+              e.preventDefault();
+
+              $scope.$apply(function() {
+                $scope.paymentLoading = true;
+              });
+
+              return false;
+            });
+          }
+        });
+
+        if (!$scope.purchase) {
+          http.post('backend_ws_purchase_save').then(function(response) {
+            $scope.purchase = response.data;
+            webStorage.local.set('purchase', $scope.purchase);
+          });
+        } else {
+          $scope.start();
+        }
       }
     ]);
 })();

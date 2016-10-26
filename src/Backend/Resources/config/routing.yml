@@ -1034,9 +1034,9 @@ backend_account:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/account.yml'
 
-backend_domain_mapping:
+backend_domain:
     prefix: /
-    resource: '@BackendBundle/Resources/config/routing/domain_management.yml'
+    resource: '@BackendBundle/Resources/config/routing/domain.yml'
 
 backend_news_agency_server:
     prefix: /
@@ -1045,6 +1045,10 @@ backend_news_agency_server:
 backend_notification:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
+
+backend_purchase:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/purchase.yml'
 
 backend_static_pages:
     prefix: /

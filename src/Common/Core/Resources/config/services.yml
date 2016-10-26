@@ -45,6 +45,10 @@ services:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
 
+    core.helper.checkout:
+        class:     Common\Core\Component\Helper\CheckoutHelper
+        arguments: [ '@service_container' ]
+
     core.instance:
         class:     Common\ORM\Entity\Instance
         factory:   [ '@core.loader', 'getInstance' ]

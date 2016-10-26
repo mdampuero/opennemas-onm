@@ -44,6 +44,8 @@ class UserGroupPersister extends BasePersister
 
         $this->persistPrivileges($id, $privileges);
         $entity->privileges = $privileges;
+
+        $entity->refresh();
     }
 
     /**

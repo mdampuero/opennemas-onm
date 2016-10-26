@@ -13,15 +13,15 @@
      * @requires $uibModal
      * @requires http
      * @requires messenger
-     * @requires oqlBuilder
+     * @requires oqlEncoder
      * @requires webStorage
      *
      * @description
      *   Handles all actions in purchases listing.
      */
     .controller('PurchaseListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'oqlDecoder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, oqlDecoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -38,7 +38,7 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [ 'name', 'client_id', 'payment_id', 'invoice_id', 'created', 'step' ]
+          selected: [ 'name', 'client_id', 'payment_id', 'invoice_id', 'updated', 'step' ]
         };
 
         /**
@@ -49,7 +49,7 @@
          *
          * @type {Object}
          */
-        $scope.criteria = { epp: 25, page: 1 };
+        $scope.criteria = { epp: 25, orderBy: { updated: 'desc' }, page: 1 };
 
         /**
          * @function delete
@@ -146,7 +146,7 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          oqlBuilder.configure({
+          oqlEncoder.configure({
             placeholder: {
               client: 'client ~ "[value]"',
               from: 'created > "[value]"',
@@ -154,7 +154,7 @@
             }
           });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_purchases_list',
             params: { oql: oql }
@@ -194,6 +194,10 @@
         // Get enabled columns from localStorage
         if (webStorage.local.get('purchases-columns')) {
           $scope.columns = webStorage.local.get('purchases-columns');
+        }
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
         }
 
         $scope.list();

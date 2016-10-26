@@ -535,6 +535,12 @@ purchase:
         updated:
             type: datetime
             options: { default: null, notnull: false }
+        notes:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        terms:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY

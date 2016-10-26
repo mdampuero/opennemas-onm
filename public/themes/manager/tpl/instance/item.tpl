@@ -46,11 +46,11 @@
 <div class="content ng-hide" ng-show="template">
   <form name="instanceForm" novalidate>
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-md-8">
         <div class="grid simple">
           <div class="grid-body instance-form">
             <div class="row">
-              <div class="col-lg-2 col-md-3 col-sm-4" ng-if="instance.id">
+              <div class="col-xlg-2 col-lg-4 col-md-5 col-sm-4" ng-if="instance.id">
                 <dl ng-if="instance.id">
                   <dt>
                     <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
@@ -85,7 +85,7 @@
                   </dd>
                 </dl>
               </div>
-              <div ng-class="{ 'col-lg-10 col-md-9 col-sm-8': instance.id, 'col-sm-12': !instance.id }">
+              <div ng-class="{ 'col-xlg-10 col-lg-8 col-md-7 col-sm-8': instance.id, 'col-sm-12': !instance.id }">
                 <div class="form-group">
                   <label class="form-label">
                     {t}Site name{/t}
@@ -135,9 +135,7 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-xs-12">
+      <div class="col-md-4 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>
@@ -191,7 +189,9 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xs-12" ng-if="security.hasPermission('CLIENT_LIST')">
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-sm-12" ng-if="security.hasPermission('CLIENT_LIST')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Billing{/t}</h4>
@@ -258,6 +258,77 @@
                     </h4>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Last purchases{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div ng-if="loading">
+              <div class="spinner-wrapper">
+                <div class="loading-spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
+              </div>
+            </div>
+            <div class="ng-cloak" ng-if="!loading && (!template.purchases || template.purchases.length === 0)">
+              <div class="p-t-50 p-b-50 text-center">
+                <i class="fa fa-stack fa-3x">
+                  <i class="fa fa-shopping-cart fa-stack-1x"></i>
+                  <i class="fa fa-ban fa-stack-2x"></i>
+                </i>
+                <h4>{t}There are no purchases for now.{/t}</h4>
+              </div>
+            </div>
+            <div class="table-wrapper ng-cloak" ng-if="template.purchases && template.purchases.length > 0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="pointer">
+                      {t}Date{/t}
+                    </th>
+                    <th class="text-center" width="150">
+                      {t}Method{/t}
+                    </th>
+                    <th class="pointer text-right">
+                      {t}Total{/t}
+                    </th>
+                    <th class="text-center pointer" width="150">
+                      {t}Status{/t}
+                    </th>
+                    <th width="150">
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in template.purchases">
+                    <td>
+                      [% item.updated | moment : 'YYYY-MM-DD' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
+                    <td class="text-center">
+                      <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }" ng-if="item.total !== 0 && item.method"></i>
+                      <span ng-if="item.total === 0">-</span>
+                    </td>
+                    <td class="text-right">
+                      [% item.total | number : 2 %] €
+                    </td>
+                    <td class="text-center">
+                      {t}Paid{/t}
+                    </td>
+                    <td>
+                      <a ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Show{/t}">
+                        {t}View purchase{/t}
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center" ng-if="template.purchases.length > 0">
+                <a class="bold text-uppercase" ng-href="[% routing.ngGenerate('manager_purchases_list', { oql: 'instance_id=' + instance.id + ' limit 25' }) %]">{t}More{/t}</a>
               </div>
             </div>
           </div>
