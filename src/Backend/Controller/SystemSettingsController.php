@@ -57,13 +57,19 @@ class SystemSettingsController extends Controller
 
         $configurations = $this->get('setting_repository')->get($keys);
 
-        // Keep compatibility with old analytics store format
-        if (array_key_exists('google_analytics', $configurations) &&
-            array_key_exists('api_key', $configurations['google_analytics'])
-        ) {
-            $oldConfig = $configurations['google_analytics'];
-            $configurations['google_analytics'] = [];
-            $configurations['google_analytics'][]= $oldConfig;
+        if (array_key_exists('google_analytics', $configurations)) {
+            // Keep compatibility with old analytics store format
+            if (array_key_exists('api_key', $configurations['google_analytics'])) {
+                $oldConfig = $configurations['google_analytics'];
+                $configurations['google_analytics'] = [];
+                $configurations['google_analytics'][]= $oldConfig;
+            }
+
+            foreach ($configurations['google_analytics'] as &$value) {
+                if (array_key_exists('custom_var', $value) && !empty($value['custom_var'])) {
+                    $value['custom_var'] = stripslashes($value['custom_var']);
+                }
+            }
         }
 
         return $this->render(
@@ -176,6 +182,10 @@ class SystemSettingsController extends Controller
                 if (!$this->getUser()->isMaster()) {
                     continue;
                 }
+                $value = $request->request->filter($key, '', FILTER_SANITIZE_MAGIC_QUOTES);
+            }
+
+            if ($key == 'google_analytics') {
                 $value = $request->request->filter($key, '', FILTER_SANITIZE_MAGIC_QUOTES);
             }
 

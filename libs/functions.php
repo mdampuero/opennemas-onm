@@ -441,6 +441,11 @@ function generateGAScriptCode($config)
                 ) {
                     $code .= "_gaq.push(['_setDomainName', '". trim($account['base_domain']) ."']);\n";
                 }
+                if (array_key_exists('custom_var', $account)
+                    && !empty(stripslashes(trim($account['custom_var'])))
+                ) {
+                    $code .= stripslashes(trim($account['custom_var'])) . "\n";
+                }
                 $code .= "_gaq.push(['_trackPageview']);\n";
             } else {
                 $code .= "_gaq.push(['account{$key}._setAccount', '" . trim($account['api_key']) . "']);\n";
@@ -448,6 +453,11 @@ function generateGAScriptCode($config)
                     && !empty(trim($account['base_domain']))
                 ) {
                     $code .= "_gaq.push(['account{$key}._setDomainName', '". trim($account['base_domain']) ."']);\n";
+                }
+                if (array_key_exists('custom_var', $account)
+                    && !empty(stripslashes(trim($account['custom_var'])))
+                ) {
+                    $code .= stripslashes(trim($account['custom_var'])) . "\n";
                 }
                 $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
             }
