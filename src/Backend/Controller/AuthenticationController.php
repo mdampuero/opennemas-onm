@@ -9,7 +9,7 @@
  */
 namespace Backend\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;

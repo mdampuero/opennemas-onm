@@ -1,16 +1,13 @@
 <?php
 /**
- * Defines the Onm\Framework\Controller\Controller class
- *
  * This file is part of the Onm package.
- * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  Onm_Framework_Controller_Controller
- **/
-namespace Onm\Framework\Controller;
+ */
+namespace Common\Core\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,49 +20,43 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller as SymfonyController;
  * Controller is a simple implementation of a Controller.
  *
  * It provides methods to common features needed in controllers.
- *
- * @package  Onm_Framework_Controller_Controller
  */
 class Controller extends SymfonyController
 {
     /**
-     * Fetches unsetted variables from the container
+     * Returns services from the service container.
      *
-     * @param string $name the property name
+     * @param string $name The service name.
      *
-     * @return mixed the property value
-     **/
+     * @return mixed The service.
+     */
     public function __get($name)
     {
         return $this->container->get($name);
     }
 
     /**
-     * Returns a rendered view.
+     * Returns a rendered template.
      *
-     * @param string $view       The view name
-     * @param array  $parameters An array of parameters to pass to the view
+     * @param string $template   The template name.
+     * @param array  $parameters An array of parameters to use in template.
      *
-     * @return string The renderer view
+     * @return string The rendered template.
      */
-    public function renderView($view, array $parameters = array())
+    public function renderView($template, array $parameters = [])
     {
-        // If a cache_id parameter was passed use it to cache view results
-        $cacheID = null;
+        $cacheId = null;
+
         if (array_key_exists('cache_id', $parameters)) {
-            $cacheID = $parameters['cache_id'];
+            $cacheId = $parameters['cache_id'];
             unset($parameters['cache_id']);
         }
 
-        if (count($parameters) > 0) {
+        if (!empty($parameters)) {
             $this->view->assign($parameters);
         }
 
-        // $this->template = $this->view->createTemplate($view, $cacheID);
-        // if (array_key_exists('debug', $_GET) && $_GET['debug']==1) {
-        //     echo var_export($this->view->getTemplateVars(), true); die();
-        // }
-        return $this->view->fetch($view, $cacheID);
+        return $this->view->fetch($template, $cacheId);
     }
 
     /**
@@ -101,23 +92,22 @@ class Controller extends SymfonyController
     }
 
     /**
-     * Renders a view.
+     * Renders a template.
      *
-     * @param string   $view       The view name
-     * @param array    $parameters An array of parameters to pass to the view
-     * @param Response $response   A response instance
+     * @param string   $view       The view name.
+     * @param array    $parameters An array of parameters to use in template.
+     * @param Response $response   A response object.
      *
-     * @return Response A Response instance
+     * @return Response A Response object.
      */
     public function render($view, array $parameters = array(), Response $response = null)
     {
-        $contents = $this->renderView($view, $parameters);
-
-        if (is_null($response)) {
-            $response = new Response($contents);
-        } else {
-            $response->setContent($contents);
+        if (empty($response)) {
+            $response = new Response();
         }
+
+        $content = $this->renderView($view, $parameters);
+        $response->setContent($content);
 
         if (array_key_exists('x-tags', $parameters)
             && (
@@ -126,10 +116,12 @@ class Controller extends SymfonyController
                 && $parameters['x-cacheable'] !== false)
             )
         ) {
-            $instanceName = getService('core.instance')->internal_name;
+            $instance = $this->get('core.instance')->internal_name;
 
-            $response->headers->set('x-tags', 'instance-'.$instanceName.','.$parameters['x-tags']);
-            $response->headers->set('x-instance', $instanceName);
+            $response->headers->set('x-instance', $instance);
+            $response->headers->set(
+                'x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']
+            );
 
             if (array_key_exists('x-cache-for', $parameters)
                 && !empty($parameters['x-cache-for'])
@@ -140,26 +132,5 @@ class Controller extends SymfonyController
         }
 
         return $response;
-    }
-
-    /**
-     * Dispatches an event given its name and attaches a set of parameters to it
-     *
-     * @param string eventName The event to be dispatched
-     * @param array eventParameters The set of parameters to attache to an event
-     *
-     * @return Symfony\Component\EventDispatcher\Event the event dispatched
-     **/
-    public function dispatchEvent($eventName, $eventParameters = array())
-    {
-        $event = new \Symfony\Component\EventDispatcher\GenericEvent();
-
-        if (is_array($eventParameters) && count($eventParameters) > 0) {
-            foreach ($eventParameters as $name => $value) {
-                $event->setArgument($name, $value);
-            }
-        }
-
-        return $this->container->get('event_dispatcher')->dispatch($eventName, $event);
     }
 }

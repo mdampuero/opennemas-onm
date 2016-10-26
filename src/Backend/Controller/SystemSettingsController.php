@@ -17,7 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles all the request for Welcome actions

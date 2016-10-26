@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class AuthenticationController extends Controller
 {

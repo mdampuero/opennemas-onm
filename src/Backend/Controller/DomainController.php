@@ -12,7 +12,7 @@ namespace Backend\Controller;
 use Framework\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class DomainController extends Controller
 {

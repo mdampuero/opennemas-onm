@@ -16,7 +16,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**

@@ -41,7 +41,7 @@ use PayPal\PayPalAPI\SetExpressCheckoutReq;
 use PayPal\PayPalAPI\SetExpressCheckoutRequestType;
 
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**

@@ -17,7 +17,7 @@ namespace Frontend\Controller;
 use Common\Core\Annotation\BotDetector;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**

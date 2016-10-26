@@ -6,7 +6,7 @@ use Common\ORM\Entity\Client;
 use Common\ORM\Entity\Invoice;
 use Common\ORM\Entity\Payment;
 use Common\ORM\Entity\Purchase;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
 use Symfony\Component\HttpFoundation\JsonResponse;

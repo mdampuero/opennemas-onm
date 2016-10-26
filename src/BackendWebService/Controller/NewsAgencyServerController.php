@@ -13,7 +13,7 @@ use Common\Core\Annotation\Security;
 use Framework\Import\Compiler\Compiler;
 use Framework\Import\Repository\LocalRepository;
 use Framework\Import\ServerFactory;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

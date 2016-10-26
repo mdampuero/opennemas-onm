@@ -9,7 +9,7 @@
  */
 namespace Backend\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class ThemeController extends Controller
 {

@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**

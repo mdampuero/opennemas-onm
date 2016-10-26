@@ -11,7 +11,7 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Content;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

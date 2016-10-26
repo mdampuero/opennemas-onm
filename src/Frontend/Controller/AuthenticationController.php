@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the user authentication in frontend.
