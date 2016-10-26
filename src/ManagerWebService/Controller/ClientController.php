@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -308,23 +307,8 @@ class ClientController extends Controller
             ],
         ];
 
-        $extra['countries']= Intl::getRegionBundle()
-            ->getCountryNames($this->get('core.locale')->getLocaleShort());
-
-        asort($extra['countries']);
-
-        $extra['provinces']= [
-            'Álava', 'Albacete', 'Alicante/Alacant', 'Almería', 'Asturias',
-            'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
-            'Cantabria', 'Castellón/Castelló', 'Ceuta', 'Ciudad Real',
-            'Córdoba', 'Cuenca', 'Girona', 'Las Palmas', 'Granada',
-            'Guadalajara', 'Guipúzcoa', 'Huelva', 'Huesca', 'Illes Balears',
-            'Jaén', 'A Coruña', 'La Rioja', 'León', 'Lleida', 'Lugo', 'Madrid',
-            'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Ourense', 'Palencia',
-            'Pontevedra', 'Salamanca', 'Segovia', 'Sevilla', 'Soria',
-            'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo',
-            'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
-        ];
+        $extra['countries'] = $this->get('core.geo')->getCountries();
+        $extra['provinces'] = $this->get('core.geo')->getRegions('ES');
 
         $users = $this->get('orm.manager')->getRepository('User', 'manager')
             ->findBy();
