@@ -27,7 +27,7 @@ class UserProvider implements UserProviderInterface
     protected $em;
 
     /**
-     * The array of reporitories to use.
+     * The list of repositories to use.
      *
      * @var array
      */
