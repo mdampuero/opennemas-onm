@@ -80,11 +80,8 @@
                 name: 'styles'
               }, {
                 name: 'links'
-              }, {
-                name: 'others',
-                groups: ['undo']
-              }, {
-                name: 'insert'
+              },{
+                groups: ['list']
               }, {
                 name: 'document',
                 groups: ['mode', 'document', 'doctools']
