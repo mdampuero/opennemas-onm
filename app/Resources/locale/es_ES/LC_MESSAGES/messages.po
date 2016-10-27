@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-17 10:13+0000\n"
-"PO-Revision-Date: 2016-09-21 16:57+0200\n"
+"POT-Creation-Date: 2016-10-27 16:53+0200\n"
+"PO-Revision-Date: 2016-10-27 16:54+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1253,6 +1253,16 @@ msgstr "Servidor actualizado correctamente."
 msgid "News agency server deleted."
 msgstr "Servidor de agencia de noticias eliminado."
 
+msgid "Newsletter deleted successfully."
+msgstr "Boletín de noticias eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "No se pudo eliminar el boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debes proporcionar un identificador para eliminar un boletín."
+
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
 msgstr "Suscripción con identificador «%d» eliminada correctamente"
@@ -1289,16 +1299,6 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscribers."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
-
-msgid "Newsletter deleted successfully."
-msgstr "Boletín de noticias eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "No se pudo eliminar el boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debes proporcionar un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como leída correctamente"
@@ -1741,6 +1741,9 @@ msgstr "%d clientes eliminados correctamente"
 msgid "Client saved successfully"
 msgstr "Cliente guardado con éxito"
 
+msgid "Select an user..."
+msgstr "Seleccione un grupo…"
+
 msgid "Instance deleted successfully"
 msgstr "Instancia eliminada correctamente"
 
@@ -1775,9 +1778,6 @@ msgstr "La instancia ya existe"
 
 msgid "Unable to create the database for the instance"
 msgstr "No se pudo crear la base de datos de la instancia"
-
-msgid "Select an user..."
-msgstr "Seleccione un grupo…"
 
 #, php-format
 msgid "A module with the uuid '%s' already exists"
@@ -1957,30 +1957,6 @@ msgstr "Estado no válido."
 msgid "Unable to delete the comment."
 msgstr "No se pudo eliminar el comentario."
 
-msgid "trashed"
-msgstr "en papelera"
-
-msgid "pending"
-msgstr "pendiente"
-
-msgid "available"
-msgstr "disponible"
-
-msgid "not scheduled"
-msgstr "no planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tiempo"
-
-msgid "postponed"
-msgstr "aplazado"
-
 msgid "Event"
 msgstr "Evento"
 
@@ -2013,6 +1989,30 @@ msgid ""
 msgstr ""
 "Se han eliminado algunos elementos porque la portada tenía demasiados "
 "contenidos."
+
+msgid "trashed"
+msgstr "en papelera"
+
+msgid "pending"
+msgstr "pendiente"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "not scheduled"
+msgstr "no planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tiempo"
+
+msgid "postponed"
+msgstr "aplazado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -5273,6 +5273,9 @@ msgstr "Llave de la API de Google Analytics"
 msgid "Google Analytics Base domain"
 msgstr "Dominio base para Google Analytics"
 
+msgid "Google Analytics Custom variables"
+msgstr "Variables personalizadas de Google Analytics"
+
 msgid "Add another"
 msgstr "Añadir otro"
 
@@ -5506,10 +5509,10 @@ msgstr ""
 "en el formulario. Por omisión se usará el de OpenNemas"
 
 msgid "Only masters"
-msgstr ""
+msgstr "Solo m asters"
 
 msgid "Robots.txt rules"
-msgstr ""
+msgstr "Reglas de robots.txt"
 
 msgid ""
 "Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
@@ -5538,9 +5541,8 @@ msgstr "Estes scripts se incluirán antes de la etiqueta </body>"
 msgid "Custom CSS"
 msgstr "CSS personalizado"
 
-#, fuzzy
 msgid "This sripts will be included in the global.css file."
-msgstr "Estes scripts se incluirán después de la etiqueta <body>"
+msgstr ""
 
 msgid "Editing author"
 msgstr "Editando autor"
@@ -7515,11 +7517,11 @@ msgstr ""
 "No se pudo cargar esta pestaña. Intentaremos solucionarlo cuanto antes."
 
 msgid ""
-"You have reached the maximum number of elements (100). To add new contents "
-"remove the older."
+"You have reached the maximum number of elements (%number%). To add new "
+"contents remove the older."
 msgstr ""
-"Has alcanzado el número máximo de elementos en la portada. Para añadir "
-"nuevos contenidos elimina los mas antiguos."
+"Has alcanzado el número máximo de elementos en la portada (%number%). Para "
+"añadir nuevos contenidos elimina los mas antiguos."
 
 msgid "Preview frontpage with actual content positions"
 msgstr "Hacer una vista previa con las posiciones actuales de los contenidos"
@@ -8414,16 +8416,11 @@ msgstr "Se ha descargado una nueva versión de Opennemas. Deseas iniciarla?"
 msgid "Launch"
 msgstr "Iniciarla"
 
-msgid "Welcome to OpenNeMas instance manager"
-msgstr "Bienvenido al Gestor de instancias de Opennemas"
+msgid "Welcome to OpenNeMas manager"
+msgstr "Bienvenido al Gestor de Opennemas"
 
-msgid ""
-"Here you will see some statistics about <strong>instances</strong> and other "
-"<br>\n"
-"        awesome things that will blow out your imagination."
-msgstr ""
-"Aquí puede ver algunas estadísticas sobre las <strong>instancias</strong> y "
-"otras cosas que te dejarán con el culo traspuesto."
+msgid "Use the right sidebar to explore the available information."
+msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
 msgid "Zend Opcache status"
 msgstr "Estado de Zend Opcache"
@@ -8565,14 +8562,17 @@ msgstr "Nuevo cliente"
 msgid "Edit client"
 msgstr "Editar cliente"
 
+msgid "Partner who can see this client information"
+msgstr "Partner que puede ver esta información del cliente"
+
+msgid "View on"
+msgstr "Ver en"
+
 msgid "This field is invalid"
 msgstr "Este campo es inválido"
 
 msgid "VAT No."
 msgstr "Nº fiscal"
-
-msgid "View on"
-msgstr "Ver en"
 
 msgid "Do you want to delete the client?"
 msgstr "¿Estás seguro de que quieres eliminar el cliente?"
@@ -8667,6 +8667,14 @@ msgstr "Buscar por nombre o correo"
 
 msgid "Do you want to log out?"
 msgstr "¿Quieres cerrar la sesión?"
+
+#~ msgid ""
+#~ "Here you will see some statistics about <strong>instances</strong> and "
+#~ "other <br>\n"
+#~ "        awesome things that will blow out your imagination."
+#~ msgstr ""
+#~ "Aquí puede ver algunas estadísticas sobre las <strong>instancias</strong> "
+#~ "y otras cosas que te dejarán con el culo traspuesto."
 
 #~ msgid "There is a previous draft"
 #~ msgstr "Hay un borrador anterior"
