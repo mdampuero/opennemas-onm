@@ -106,19 +106,22 @@ class CheckoutHelper
             return $this->purchase;
         }
 
-        $date = new \DateTime();
-
         $this->purchase = new Purchase();
+
+        if (!empty($id)) {
+            try {
+                $this->purchase = $this->container->get('orm.manager')
+                    ->getRepository('Purchase')->find($id);
+            } catch (\Exception $e) {
+            }
+        }
+
+        $date = new \DateTime();
 
         $this->purchase->created     = $date;
         $this->purchase->instance_id = $this->instance->id;
         $this->purchase->step        = 'start';
         $this->purchase->updated     = $date;
-
-        if (!empty($id)) {
-            $this->purchase = $this->container->get('orm.manager')
-                ->getRepository('Purchase')->find($id);
-        }
 
         if (!empty($this->client) && empty($this->purchase->client)) {
             $this->purchase->client = $this->client;
