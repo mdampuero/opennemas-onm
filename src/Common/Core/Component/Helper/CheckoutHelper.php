@@ -206,8 +206,8 @@ class CheckoutHelper
             }
         }
 
-        $this->purchase->notes = trim("\n", $notes);
-        $this->purchase->terms = trim("\n", $terms);
+        $this->purchase->notes = trim($notes, "\n");
+        $this->purchase->terms = trim($terms, "\n");
 
         $vat = ($vatTax/100) * $subtotal;
 
