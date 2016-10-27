@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace ManagerWebService\Security;
+namespace Common\Core\Component\Security\User;
 
 use Common\ORM\Core\EntityManager;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
- * Loads an user by username.
+ * The UserProvider class provides methods to load users by username.
  */
 class UserProvider implements UserProviderInterface
 {
@@ -27,13 +27,21 @@ class UserProvider implements UserProviderInterface
     protected $em;
 
     /**
+     * The array of reporitories to use.
+     *
+     * @var array
+     */
+    protected $repositories;
+
+    /**
      * Initializes the current user provider.
      *
      * @param EntityManager $em The entity manager.
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, $repositories)
     {
-        $this->em = $em;
+        $this->em           = $em;
+        $this->repositories = $repositories;
     }
 
     /**
@@ -41,14 +49,17 @@ class UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $oql  = sprintf('username = "%s" or email = "%s"', $username, $username);
+        $oql = sprintf('username = "%s" or email = "%s"', $username, $username);
 
-        try {
-            $user = $this->em->getRepository('User', 'manager')->findOneBy($oql);
+        foreach ($this->repositories as $repository) {
+            try {
+                $user = $this->em->getRepository('User', $repository)
+                    ->findOneBy($oql);
 
-            // Prevent password deletion after external eraseCredentials call
-            return clone($user);
-        } catch (\Exception $e) {
+                // Prevent password deletion when calling eraseCredentials
+                return clone($user);
+            } catch (\Exception $e) {
+            }
         }
 
         throw new UsernameNotFoundException();
