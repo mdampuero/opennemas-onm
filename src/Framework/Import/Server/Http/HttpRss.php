@@ -22,7 +22,7 @@ class HttpRss extends Http
         if (array_key_exists('url', $params)
             && preg_match('@rss|feed|xml@', $params['url'])
             && strpos(
-                file_get_contents($params['url']),
+                @file_get_contents($params['url']),
                 'http://www.w3.org/2005/Atom'
             ) === false
         ) {
