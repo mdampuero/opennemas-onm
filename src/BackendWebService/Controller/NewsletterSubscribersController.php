@@ -45,8 +45,8 @@ class NewsletterSubscribersController extends Controller
         // Build filters for sql
         list($where, $orderBy) = $this->buildFilter($search);
 
-        $user = new \Subscriber();
-        $subscribers = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
+        $sb = new \Subscriber();
+        $subscribers = $sb->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
         $subscribers = \Onm\StringUtils::convertToUtf8($subscribers);
 
         $total = $user->countUsers($where);

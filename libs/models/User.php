@@ -636,56 +636,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     }
 
     /**
-     * Set internal status of this object. If $data is empty don't do anything
-     *
-     * @param Array $data
-     * @see User::resetValues
-     */
-    public function setValues($data)
-    {
-        if (!empty($data)) {
-            $this->id            = $data['id'];
-            $this->username      = $data['username'];
-            $this->password      = $data['password'];
-            $this->url           = $data['url'];
-            $this->bio           = $data['bio'];
-            $this->avatar_img_id = $data['avatar_img_id'];
-            $this->email         = $data['email'];
-            $this->name          = $data['name'];
-            $this->type          = $data['type'];
-            $this->token         = $data['token'];
-            $this->activated     = $data['activated'];
-            $this->fk_user_group = explode(',', $data['fk_user_group']);
-
-            if (isset($data['ids_category'])) {
-                $this->accesscategories = $this->setAccessCategories($data['ids_category']);
-            }
-        }
-    }
-
-    /**
-     * Set member properties to null
-     *
-     * @see User::setValues
-     */
-    public function resetValues()
-    {
-        $this->id               = null;
-        $this->username         = null;
-        $this->password         = null;
-        $this->url              = null;
-        $this->bio              = null;
-        $this->avatar_img_id    = null;
-        $this->email            = null;
-        $this->name             = null;
-        $this->type             = null;
-        $this->token            = null;
-        $this->activated        = null;
-        $this->fk_user_group    = null;
-        $this->accesscategories = null;
-    }
-
-    /**
      * Sets the access categories to a user
      *
      * @param array $categoryIds the list of category ids
@@ -699,156 +649,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         }
 
         return $contentCategories;
-    }
-
-    /**
-     * Returns the list of category names the current user has
-     *
-     * @return array the list of category names
-     **/
-    public function getAccessCategoriesName()
-    {
-        if (!empty($this->accesscategories)) {
-            foreach ($this->accesscategories as $category) {
-                $names[] = $category->name;
-            }
-
-            return $names;
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns the list of category ids a user has access given the user id
-     *
-     * @param int $id the user id
-     *
-     * @return array the list of category ids
-     **/
-    public function getAccessCategoryIds($id = null)
-    {
-        if (empty($this->accesscategories)) {
-            $this->accesscategories = $this->readAccessCategories($id);
-        }
-
-        if (count($this->accesscategories) < 1) {
-            return array();
-        }
-
-        $categories = $this->accesscategories;
-
-        usort(
-            $categories,
-            function (
-                $a,
-                $b
-            ) {
-                if ($a->posmenu == $b->posmenu) {
-                    return 0;
-                }
-                return ($a->posmenu < $b->posmenu) ? -1 : 1;
-            }
-        );
-
-        $ids = array();
-        foreach ($categories as $category) {
-            $ids[] = $category->pk_content_category;
-        }
-
-        return $ids;
-    }
-
-    /**
-     * Returns a list of users that matches a search criteria
-     *
-     * @param array $filter the list of search criterias to use
-     * @param string $orderBy the ORDER BY clause to use
-     *
-     * @return array list of users
-     **/
-    public function getUsers($filter = null, $orderBy = 'ORDER BY 1')
-    {
-        $items = array();
-        $_where = $this->buildFilter($filter);
-
-        $sql = 'SELECT * FROM `users`';
-        if ($_where) {
-            $sql .= ' WHERE ' . $_where;
-        }
-
-        $sql .= ' ' . $orderBy;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $user = new User($rs->fields['id']);
-                $user->meta = $user->getMeta();
-                $items[] = $user;
-
-                $rs->MoveNext();
-            }
-        }
-
-        return $items;
-    }
-
-    /**
-     * Returns the username for a given user id
-     *
-     * @param int $id the user id
-     *
-     * @return string the user name
-     **/
-    public function findUserName($id)
-    {
-        $sql = 'SELECT username FROM users WHERE id=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            return false;
-        }
-
-        return $rs->fields['username'];
-    }
-
-    /**
-     * Returns the user real name for a given user id
-     *
-     * @param int $id the user id
-     *
-     * @return string the user name
-     **/
-    public function getUserRealName($id)
-    {
-        if (isset($this) && !empty($this->id)) {
-            return $this->name;
-        }
-        $sql = 'SELECT name FROM users WHERE id=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if (!$rs) {
-            return false;
-        }
-
-        return $rs->fields['name'];
-    }
-
-    /**
-     * Returns the photo id associated to an user.
-     *
-     * @param string $id the user id.
-     *
-     * @return int the photo id
-     */
-    public function getUserPhotoId($id)
-    {
-        $sql = 'SELECT `avatar_img_id` FROM users WHERE id = ?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            return false;
-        }
-
-        return $rs->fields['avatar_img_id'];
     }
 
     /**
@@ -1040,52 +840,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId), $metaKey))===false) {
             return false;
         }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
-    }
-
-    /**
-     * Sets an user state to disabled/not activated
-     *
-     * @param  int $id the use id
-     *
-     * @return boolean true if the action was done
-     */
-    public function deactivateUser($id)
-    {
-        $sql = "UPDATE users SET `activated`=0 WHERE id=?";
-
-        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id))) === false) {
-            return false;
-        }
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $id);
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
-    }
-
-    /**
-     * Sets an users state to enabled/authorized/activated
-     *
-     * @param  int $id the use id
-     *
-     * @return boolean true if the action was done
-     */
-    public function activateUser($id)
-    {
-        $sql = "UPDATE users SET `activated`=1 WHERE id=?";
-
-        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id))) === false) {
-            return false;
-        }
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $id);
 
         dispatchEventWithParams('user.update', array('user' => $this));
 
@@ -1310,41 +1064,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     }
 
     /**
-     * Returns the total users that can be activated
-     *
-     * @param  int  $maxUsers
-     *
-     * @return int  total users
-     **/
-    public static function getTotalActivatedUsersRemaining($maxUsers = false, $onlyActivated = false)
-    {
-        // The value isn't set on DB or is set to 0 (no limit)
-        if (!$maxUsers) {
-            return -1;
-        }
-
-        // Get total activated backend users - not masters
-        $sql = "SELECT count(id) as total FROM users
-                WHERE type = 0 and activated = 1 and fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs === false) {
-            return false;
-        }
-
-        if ($onlyActivated) {
-            return $rs->fields['total'];
-        }
-
-        if ($rs->fields['total'] > $maxUsers) {
-            return false;
-        }
-
-        return $maxUsers - $rs->fields['total'];
-    }
-
-    /**
      * Returns a list of User objects where the users has paywall subscription
      *
      * @return void
@@ -1366,34 +1085,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         }
 
         return $rs->fields['count'];
-    }
-
-    /**
-     * Stores the register date for a frontend user
-     *
-     * @return void
-     **/
-    public function addRegisterDate()
-    {
-        $currentTime = new \DateTime();
-        $currentTime->setTimezone(new \DateTimeZone('UTC'));
-        $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-        $this->setMeta(array('register_date' => $currentTime));
-    }
-
-    /**
-     * Set the last login date for a frontend user
-     *
-     * @return void
-     **/
-    public function setLastLoginDate()
-    {
-        $currentTime = new \DateTime();
-        $currentTime->setTimezone(new \DateTimeZone('UTC'));
-        $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-        $this->setMeta(array('last_login' => $currentTime));
     }
 
     /**
@@ -1451,51 +1142,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         return $photoId;
     }
-
-    /**
-     * Returns a valid SQL WHERE clause for the given filter
-     *
-     * @param array $filter the list of filters
-     *
-     * @return string the WHERE clause
-     **/
-    public function buildFilter($filter)
-    {
-        $newFilter = '';
-
-        if (!is_null($filter) && is_string($filter)) {
-            if (preg_match('/^[ ]*where/i', $filter)) {
-                $newFilter .= '  AND ' . $filter;
-            }
-        } elseif (!is_null($filter) && is_array($filter)) {
-            $parts = array();
-
-            if (isset($filter['base']) && !empty($filter['base'])) {
-                $parts[] = $filter['base'];
-            }
-
-            if (isset($filter['type']) && $filter['type'] != '') {
-                $parts[] = '`type` = '.$filter['type'].' AND activated=1';
-            }
-
-            if (isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = '`name` LIKE "%' . $filter['name'] . '%" OR '.
-                           '`username` LIKE "%' . $filter['name'] . '%" OR '.
-                           '`email` LIKE "%' . $filter['name'] . '%"';
-            }
-
-            if (isset($filter['group']) && intval($filter['group'])>0) {
-                $parts[] = '`fk_user_group` LIKE "%' . $filter['group'] . '%"';
-            }
-
-            if (count($parts) > 0) {
-                $newFilter .= implode(' AND ', $parts);
-            }
-        }
-
-        return $newFilter;
-    }
-
 
     /**
      * Returns the roles granted to the user.

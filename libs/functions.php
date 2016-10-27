@@ -80,8 +80,6 @@ function logUserEvent($action = null, $id = null, $data = null)
 {
     $logger = getService('application.log');
 
-    $activatedUsers = \User::getTotalActivatedUsersRemaining(1, 1);
-
     $security = getService('security.token_storage');
     if (!is_null($security->getToken())
         && !empty($security->getToken()->getUser())
@@ -97,8 +95,6 @@ function logUserEvent($action = null, $id = null, $data = null)
                         ' - user group ('.$data['id_user_group'].')'.
                         ' - activated flag ('.$data['activated'].')';
         }
-
-        $message .= ' - total users activated ('.$activatedUsers.')';
 
         $logger->info($message);
     }

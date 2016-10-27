@@ -175,7 +175,12 @@ class UserController extends Controller
                         );
                     }
                     // Set registration date
-                    $user->addRegisterDate();
+                    $currentTime = new \DateTime();
+                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
+                    $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+                    $user->setMeta(array('register_date' => $currentTime));
+
                     $this->view->assign('success', true);
                 }
             }
