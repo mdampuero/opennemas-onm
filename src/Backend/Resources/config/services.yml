@@ -14,6 +14,3 @@ services:
     oauth_login_success_handler:
         class:     Backend\EventListener\OAuthLoginSuccessHandler
         arguments: [ '@security.token_storage', '@router', '@session' ]
-
-    onm_password_encoder:
-        class:     Backend\Security\OnmPasswordEncoder

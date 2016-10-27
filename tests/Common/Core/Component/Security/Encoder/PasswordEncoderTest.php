@@ -1,18 +1,31 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Backend\Tests\Security;
 
-use Backend\Security\OnmPasswordEncoder;
+use Common\Core\Component\Security\Encoder\PasswordEncoder;
 
+/**
+ * Defines test cases for PasswordEncode class.
+ */
 class PasswordEncoderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Configures the testing environment.
+     */
     public function setUp()
     {
-        $this->encoder = new OnmPasswordEncoder();
+        $this->encoder = new PasswordEncoder();
     }
 
     /**
-     * @covers \Backend\Security\OnmPasswordEncoder::encodePassword
+     * Tests encodePassword.
      */
     public function testEncodePasswordWithEncodedPassword()
     {
@@ -20,13 +33,7 @@ class PasswordEncoderTest extends \PHPUnit_Framework_TestCase
         $raw     = 'md5:' . $encoded;
 
         $this->assertEquals($encoded, $this->encoder->encodePassword($raw, null));
-    }
 
-    /**
-     * @covers \Backend\Security\OnmPasswordEncoder::encodePassword
-     */
-    public function testEncodePasswordWithPlainPassword()
-    {
         $raw     = uniqid();
         $encoded = md5($raw);
 
@@ -34,21 +41,15 @@ class PasswordEncoderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Backend\Security\OnmPasswordEncoder::isPasswordValid
+     * Tests isPasswordValid with valid and invalid values.
      */
-    public function testIsPasswordValidWithInvalidPassword()
+    public function testIsPasswordValid()
     {
         $raw     = uniqid();
         $encoded = uniqid();
 
         $this->assertFalse($this->encoder->isPasswordValid($encoded, $raw, null));
-    }
 
-    /**
-     * @covers \Backend\Security\OnmPasswordEncoder::isPasswordValid
-     */
-    public function testIsPasswordValidWithValidPassword()
-    {
         $raw     = uniqid();
         $encoded = $this->encoder->encodePassword($raw, null);
 

@@ -124,6 +124,9 @@ services:
     core.security:
         class:     Common\Core\Component\Security\Security
 
+    core.security.encoder.password:
+        class:     Common\Core\Component\Security\Encoder\PasswordEncoder
+
     core.security.user:
         class:     Common\ORM\Entity\User
         factory:   [ '@core.security', 'getUser' ]
