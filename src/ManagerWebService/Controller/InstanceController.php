@@ -528,6 +528,9 @@ class InstanceController extends Controller
                 $template['client']    = $client->getData();
                 $template['countries'] = Intl::getRegionBundle()->getCountryNames();
             } catch (\Exception $e) {
+                // Update instance when no client found
+                $instance->client = null;
+                $em->persist($instance);
             }
         }
 
