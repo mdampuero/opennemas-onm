@@ -433,7 +433,7 @@
                           <div class="col-md-12">
                             <div class="radio">
                               <input id="fia-inner-button3" name="type_advertisement" type="radio" value="1077" {if isset($advertisement) && $advertisement->type_advertisement == 1077}checked="checked" {/if}/>
-                              <label for="fia-inner-button4">
+                              <label for="fia-inner-button3">
                                 {t}Instant Articles inner article - Button 3{/t}
                               </label>
                             </div>
