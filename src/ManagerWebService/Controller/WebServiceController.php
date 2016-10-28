@@ -131,10 +131,11 @@ class WebServiceController extends Controller
             'username'      => $instance->contact_mail
         ]));
 
-        $user->password = $this->get('onm_password_encoder')->encodePassword(
-            $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
-            null
-        );
+        $user->password = $this->get('core.security.encoder.password')
+            ->encodePassword(
+                $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
+                null
+            );
 
         try {
             $errors = [];
