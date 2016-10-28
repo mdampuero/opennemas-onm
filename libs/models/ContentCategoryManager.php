@@ -636,7 +636,6 @@ class ContentCategoryManager
             );
 
             return $rs['content_count'] == 0 && $rs2['content_count'] == 0;
-
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -662,7 +661,7 @@ class ContentCategoryManager
                 [ $category ]
             );
 
-            return ($rs['number'] + $rs2['number']) == 0;
+            return $rs['number'] == 0;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
