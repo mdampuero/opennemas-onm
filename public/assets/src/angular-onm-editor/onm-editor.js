@@ -82,6 +82,8 @@
                 name: 'links'
               },{
                 groups: ['list']
+              },{
+                name: 'others',
               }, {
                 name: 'document',
                 groups: ['mode', 'document', 'doctools']
