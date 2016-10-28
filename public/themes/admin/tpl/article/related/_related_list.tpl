@@ -15,7 +15,7 @@
         <div class="related-item" ng-repeat="content in relatedInFrontpage">
           <div class="related-item-info">
             <span class="sort-icon"></span>
-            [% content.content_type_name %] - [% content.title %]
+            [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
           </div>
           <button class="btn btn-white" ng-click="removeItem('relatedInFrontpage', $index)">
             <i class="fa fa-trash-o text-danger"></i>
@@ -35,7 +35,7 @@
         <div class="related-item" ng-repeat="content in relatedInInner">
           <div class="related-item-info">
             <span class="sort-icon"></span>
-            [% content.content_type_name %] - [% content.title %]
+            [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
           </div>
           <button class="btn btn-white" ng-click="removeItem('relatedInInner', $index)">
             <i class="fa fa-trash-o text-danger"></i>
@@ -56,7 +56,7 @@
           <div class="related-item" ng-repeat="content in relatedInHome">
             <div class="related-item-info">
               <span class="sort-icon"></span>
-              [% content.content_type_name %] - [% content.title %]
+              [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
             </div>
             <button class="btn btn-white" ng-click="removeItem('relatedInHome', $index)">
               <i class="fa fa-trash-o text-danger"></i>
