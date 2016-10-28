@@ -4,7 +4,6 @@ function smarty_function_dynamic_image($params, &$smarty)
     $output = "";
 
     if (empty($params['src'])) {
-        // trigger_error("[plugin] image_tag parameter 'src' cannot be empty", E_USER_NOTICE);
         return;
     }
 
