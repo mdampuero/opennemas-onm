@@ -57,17 +57,19 @@ class SystemSettingsController extends Controller
 
         $configurations = $this->get('setting_repository')->get($keys);
 
-        if (array_key_exists('google_analytics', $configurations)) {
+        if (array_key_exists('google_analytics', $configurations) &&
+            is_array($configurations['google_analytics'])
+        ) {
             // Keep compatibility with old analytics store format
             if (array_key_exists('api_key', $configurations['google_analytics'])) {
                 $oldConfig = $configurations['google_analytics'];
                 $configurations['google_analytics'] = [];
                 $configurations['google_analytics'][]= $oldConfig;
             }
-
+            // Decode base64 custom code for analytics
             foreach ($configurations['google_analytics'] as &$value) {
                 if (array_key_exists('custom_var', $value) && !empty($value['custom_var'])) {
-                    $value['custom_var'] = stripslashes($value['custom_var']);
+                    $value['custom_var'] = base64_decode($value['custom_var']);
                 }
             }
         }
@@ -182,11 +184,17 @@ class SystemSettingsController extends Controller
                 if (!$this->getUser()->isMaster()) {
                     continue;
                 }
-                $value = $request->request->filter($key, '', FILTER_SANITIZE_MAGIC_QUOTES);
+                $value = base64_encode($value);
             }
 
-            if ($key == 'google_analytics') {
-                $value = $request->request->filter($key, '', FILTER_SANITIZE_MAGIC_QUOTES);
+            if ($key == 'google_analytics' && is_array($value)) {
+                foreach ($value as &$element) {
+                    if (array_key_exists('custom_var', $element) &&
+                        !empty($element['custom_var'])
+                    ) {
+                        $element['custom_var'] = base64_encode($element['custom_var']);
+                    }
+                }
             }
 
             // Save settings
