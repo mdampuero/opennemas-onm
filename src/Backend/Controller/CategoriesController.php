@@ -91,8 +91,12 @@ class CategoriesController extends Controller
             $category = new \ContentCategory();
 
             if ($category->create($data)) {
-                $user = new \User();
-                $user->addCategoryToUser($this->getUser()->id, $category->pk_content_category);
+                $user = $this->get('core.user');
+
+                if ($user->getOrigin() != 'manager') {
+                    $user->categories[] = $category->pk_content_category;
+                    $this->get('orm.manager')->persist($user, 'instance');
+                }
 
                 dispatchEventWithParams('category.create', ['category' => $category]);
 

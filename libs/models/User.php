@@ -472,36 +472,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     }
 
     /**
-     * Adds access to one category to a user
-     *
-     * @param int $idUser the user id
-     * @param int $idCategory the category id
-     *
-     * @return boolean true if the action was done
-     **/
-    public function addCategoryToUser($idUser, $idCategory)
-    {
-        $sql = "INSERT INTO users_content_categories "
-             . "(`pk_fk_user`, `pk_fk_content_category`) "
-             . "VALUES (?,?)";
-
-        $values = array($idUser, $idCategory);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        self::readAccessCategories($idUser);
-
-        $cache = getService('cache');
-        $cache->delete("categories_for_user_".$idUser);
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
-    }
-
-    /**
      * Deletes all the category-user assignments
      *
      * @param int $idUser the user id
