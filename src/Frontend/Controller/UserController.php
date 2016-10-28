@@ -262,7 +262,7 @@ class UserController extends Controller
         try {
             $user = $em->getRepository('User')->findOneBy($oql);
 
-            $user->activated  = 1;
+            $user->activated  = true;
             $user->last_login = new \DateTime('now');
             $user->token      = null;
 
