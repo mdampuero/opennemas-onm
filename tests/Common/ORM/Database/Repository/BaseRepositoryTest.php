@@ -160,15 +160,17 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests findBySQL.
+     * Tests findBySql.
      */
-    public function testFindBySQL()
+    public function testFindBySql()
     {
         $this->cache->expects($this->once())->method('get')->willReturn([]);
         $this->cache->expects($this->any())->method('set');
-        $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
-            [ 'foo' => 1 ],  ['foo' => 2 ]
-        ]);
+        $this->conn->expects($this->at(0))->method('fetchAll')
+            ->with('select foo from corge limit 10')
+            ->willReturn([
+                [ 'foo' => 1 ],  ['foo' => 2 ]
+            ]);
         $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
             [ 'foo' => 1, 'bar' => 'glork' ],
             [ 'foo' => 2, 'bar' => 'thud' ]
@@ -178,7 +180,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
             [ 'foobar_foo' => 2, 'meta_key' => 'wibble', 'meta_value' => 'glork' ]
         ]);
 
-        $entities = $this->repository->findBySQL('foo in [1,2] limit 10');
+        $entities = $this->repository->findBySql('select foo from corge limit 10');
 
         $this->assertEquals([ 'foo' => 1, 'bar' => 'glork', 'wibble' => 'qux' ], $entities[0]->getData());
         $this->assertEquals([ 'foo' => 2, 'bar' => 'thud', 'wibble' => 'glork' ], $entities[1]->getData());
