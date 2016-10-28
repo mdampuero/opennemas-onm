@@ -472,30 +472,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     }
 
     /**
-     * Deletes all the category-user assignments
-     *
-     * @param int $idUser the user id
-     * @param int $idCategory the category id
-     *
-     * @return boolean
-     **/
-    public function delCategoryToUser($idUser, $idCategory)
-    {
-        $sql = 'DELETE FROM users_content_categories '
-             . 'WHERE pk_fk_content_category=?';
-        $values = array(intval($idCategory));
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-        $this->accesscategories = self::readAccessCategories($idUser);
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
-    }
-
-    /**
      * Loads and returns the categories an user has access
      *
      * @param int $id the user id

@@ -262,8 +262,15 @@ class CategoriesController extends Controller
 
         if ($category->pk_content_category != null) {
             if ($category->delete($id)) {
-                $user = new \User();
-                $user->delCategoryToUser($this->getUser()->id, $id);
+                $user = $this->get('core.user');
+
+                if ($user->getOrigin() != 'manager'
+                    && in_array($id, $user->categories)
+                    && ($key = array_search($id, $user->categories)) !== false
+                ) {
+                    unset($user->categories[$key]);
+                    $this->get('orm.manager')->persist($user, 'instance');
+                }
 
                 dispatchEventWithParams('category.delete', ['category' => $category]);
 
