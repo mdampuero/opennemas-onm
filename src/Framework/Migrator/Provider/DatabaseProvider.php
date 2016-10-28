@@ -6,9 +6,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Diego Blanco Estévez <diego@openhost.es>
- *
  */
 namespace Framework\Migrator\Provider;
 
@@ -83,11 +80,8 @@ class DatabaseProvider extends MigrationProvider
         $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
             . $schema['source']['id'];
 
-        $request = $this->originConnection->Prepare($sql);
-        $rs      = $this->originConnection->Execute($request);
-        $ids     = $rs->getArray();
-
-        $total = count($ids);
+        $ids     = $this->originConnection->fetchAll($sql);
+        $total   = count($ids);
         $current = 1;
         foreach ($ids as $id) {
             if ($this->debug) {
@@ -174,10 +168,7 @@ class DatabaseProvider extends MigrationProvider
                         . $this->parseCondition($schema['post-conditions']);
                 }
 
-                // Execute sql and save in array
-                $request = $this->originConnection->Prepare($sql);
-                $rs      = $this->originConnection->Execute($request);
-                $results = $rs->getArray();
+                $results = $this->originConnection->fetchAll($sql);
 
                 if (count($results) > 0) {
                     foreach ($results as $result) {

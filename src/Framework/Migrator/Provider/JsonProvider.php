@@ -6,17 +6,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Diego Blanco Estévez <diego@openhost.es>
- *
  */
 namespace Framework\Migrator\Provider;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
-
-use Onm\DatabaseConnection;
-use Onm\Settings as s;
 
 class JsonProvider extends MigrationProvider
 {
