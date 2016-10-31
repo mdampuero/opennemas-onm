@@ -81,7 +81,7 @@
         <div class="form-group">
           <label for="dfp_custom_code" class="form-label">{t}Custom code at the end of DFP tags{/t}</label>
           <div class="controls">
-            <textarea class="form-control" name="dfp_custom_code">{$configs['dfp_custom_code']|base64_decode}</textarea>
+            <textarea class="form-control" name="dfp_custom_code">{$configs['dfp_custom_code']|base64_decode|escape:'html'}</textarea>
           </div>
         </div>
         {/if}
