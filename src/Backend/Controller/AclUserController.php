@@ -564,6 +564,10 @@ class AclUserController extends Controller
         $user->categories    = [];
         $user->fk_user_group = [];
 
+        // TODO: Hack for activated and type flags
+        $data['type'] = !array_key_exists('type', $data) ? 1 : 0;
+        $data['activated'] = !array_key_exists('activated', $data) ? 0 : 1;
+
         $user->merge($converter->objectify($data));
 
         // TODO: Remove after check and update database schema
