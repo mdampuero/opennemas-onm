@@ -2111,8 +2111,7 @@ class MigrationSaver
     private function reloadCategoryArray()
     {
         $ccm = \ContentCategoryManager::get_instance();
-        $ccm->categories = null;
-        $ccm->findAll();
+        $ccm->reset();
     }
 
     /**
