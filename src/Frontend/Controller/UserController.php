@@ -306,7 +306,7 @@ class UserController extends Controller
                 $mailer->send($message);
 
                 $this->get('application.log')->notice(
-                    "Email sent. Frontend activate user (to: ".$uiser->email.")"
+                    "Email sent. Frontend activate user (to: ".$user->email.")"
                 );
 
                 $this->view->assign('mailSent', true);
