@@ -262,7 +262,7 @@ class UserController extends Controller
         try {
             $user = $em->getRepository('User')->findOneBy($oql);
 
-            $user->activated  = 1;
+            $user->activated  = true;
             $user->last_login = new \DateTime('now');
             $user->token      = null;
 
@@ -306,7 +306,7 @@ class UserController extends Controller
                 $mailer->send($message);
 
                 $this->get('application.log')->notice(
-                    "Email sent. Frontend activate user (to: ".$uiser->email.")"
+                    "Email sent. Frontend activate user (to: ".$user->email.")"
                 );
 
                 $this->view->assign('mailSent', true);
