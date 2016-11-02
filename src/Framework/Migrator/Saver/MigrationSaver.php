@@ -1132,6 +1132,56 @@ class MigrationSaver
     }
 
     /**
+     * Saves the static pages.
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Static pages to save.
+     */
+    public function saveStaticPages($name, $schema, $data)
+    {
+        $em        = getService('orm.manager');
+        $converter = $em->getConverter('Content');
+
+        foreach ($data as $item) {
+            $values = $this->merge([], $item, $schema);
+
+            try {
+                $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
+
+                if ($this->matchTranslation(
+                    $values[$schema['translation']['field']],
+                    $schema['translation']['name']
+                ) === false
+                ) {
+                    $page = new \Common\ORM\Entity\Content($converter->objectify($values));
+                    $page->content_type_name = 'static_page';
+                    $page->fk_content_type = 13;
+                    $page->content_status  = 1;
+
+                    $em->persist($page);
+                    $this->stats[$name]['imported']++;
+
+                    $this->createTranslation(
+                        $values[$schema['translation']['field']],
+                        $page->id,
+                        $schema['translation']['name'],
+                        $slug
+                    );
+                } else {
+                    $this->stats[$name]['already_imported']++;
+                }
+            } catch (\Exception $e) {
+                \Symfony\Component\VarDumper\VarDumper::dump($e->getMessage());die();
+                $this->stats[$name]['error']++;
+            }
+        }
+
+
+    }
+
+    /**
      * Saves the user groups.
      *
      * @param string $name   Schema name.
@@ -1626,7 +1676,12 @@ class MigrationSaver
      */
     protected function createTranslation($old, $new, $type, $slug = null)
     {
-        $values = [ $old, $new, $type, $slug ];
+        $values = [
+            'pk_content_old' => $old,
+            'pk_content'     => $new,
+            'type'           => $type,
+            'slug'           => $slug
+        ];
 
         try {
             $this->targetConnection->insert('translation_ids', $values);
