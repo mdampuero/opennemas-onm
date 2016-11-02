@@ -1147,14 +1147,13 @@ class MigrationSaver
             $values = $this->merge([], $item, $schema);
 
             try {
-                $slug = array_key_exists('slug', $schema['translation']) ?
+                $oldId = $values[$schema['translation']['field']];
+                $slug  = array_key_exists('slug', $schema['translation']) ?
                         $values[$schema['translation']['slug']] : '';
 
-                if ($this->matchTranslation(
-                    $values[$schema['translation']['field']],
-                    $schema['translation']['name']
-                ) === false
-                ) {
+                unset($values[$schema['translation']['field']]);
+
+                if ($this->matchTranslation($oldId, $schema['translation']['name']) === false) {
                     $page = new \Common\ORM\Entity\Content($converter->objectify($values));
                     $page->content_type_name = 'static_page';
                     $page->fk_content_type = 13;
@@ -1164,8 +1163,8 @@ class MigrationSaver
                     $this->stats[$name]['imported']++;
 
                     $this->createTranslation(
-                        $values[$schema['translation']['field']],
-                        $page->id,
+                        $oldId,
+                        $page->pk_content,
                         $schema['translation']['name'],
                         $slug
                     );
@@ -1173,12 +1172,9 @@ class MigrationSaver
                     $this->stats[$name]['already_imported']++;
                 }
             } catch (\Exception $e) {
-                \Symfony\Component\VarDumper\VarDumper::dump($e->getMessage());die();
                 $this->stats[$name]['error']++;
             }
         }
-
-
     }
 
     /**
