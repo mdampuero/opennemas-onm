@@ -2,20 +2,20 @@
 /*
  * Insert custom ads between body paragraphs
  */
-function smarty_modifier_ads_in_body($body, $contentType = 'article')
+function smarty_modifier_ads_in_body($body, $contentType = 'article', $category = 0)
 {
     // Get inBody ads
     switch ($contentType) {
         case 'article':
             $ads = \Advertisement::findForPositionIdsAndCategory(
                 [ 2201,2202,2203,2204,2205,2206,2207,2208,2209,2210,2211 ],
-                0
+                $category
             );
             break;
         case 'opinion':
             $ads = \Advertisement::findForPositionIdsAndCategory(
                 [ 3201,3202,3203,3204,3205,3206,3207,3208,3209,3210,3211 ],
-                0
+                4
             );
             break;
     }
