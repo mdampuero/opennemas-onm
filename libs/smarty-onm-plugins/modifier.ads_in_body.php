@@ -25,7 +25,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     }
 
     // Split body in paragraphs and return if empty
-    preg_match_all('/<p.*?>(.*?)<\/p>/', $body, $matches);
+    preg_match_all('/(.*?)<\/p>/s', $body, $matches);
     if (empty($matches[0])) {
         return $body;
     }
