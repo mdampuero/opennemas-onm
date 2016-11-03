@@ -7,15 +7,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Migration\Component\Translator;
+namespace Tests\Common\Migration\Component\Tracker;
 
-use Common\Migration\Component\Translator\MigrationTranslator;
+use Common\Migration\Component\Tracker\MigrationTracker;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for class class.
  */
-class MigrationTranslatorTest extends KernelTestCase
+class MigrationTrackerTest extends KernelTestCase
 {
     /**
      * Configures the testing environment.
@@ -27,16 +27,16 @@ class MigrationTranslatorTest extends KernelTestCase
             ->setMethods([ 'executeQuery', 'fetchAll' ])
             ->getMock();
 
-        $this->translator = new MigrationTranslator($this->conn);
+        $this->tracker = new MigrationTracker($this->conn);
     }
 
     /**
-     * Tests loadTranslations.
+     * Tests load.
      */
-    public function testLoadTranslations()
+    public function testLoad()
     {
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT * FROM translation_ids')
+            ->with("SELECT * FROM translation_ids WHERE type = 'garply'")
             ->willReturn([
                 [
                     'pk_content_old' => 'frog',
@@ -46,9 +46,9 @@ class MigrationTranslatorTest extends KernelTestCase
                 ]
             ]);
 
-        $this->translator->loadTranslations();
+        $this->tracker->load('garply');
 
-        $this->assertTrue($this->translator->isTranslated('frog', 'wibble'));
+        $this->assertTrue($this->tracker->isParsed('frog', 'wibble'));
     }
 
     /**
@@ -56,10 +56,10 @@ class MigrationTranslatorTest extends KernelTestCase
      */
     public function testPersist()
     {
-        $property = new \ReflectionProperty($this->translator, 'translations');
+        $property = new \ReflectionProperty($this->tracker, 'parsed');
         $property->setAccessible(true);
 
-        $property->setValue($this->translator, [
+        $property->setValue($this->tracker, [
             [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ],
             [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'fubar', 'target_id' => 'thud' ]
         ]);
@@ -70,6 +70,6 @@ class MigrationTranslatorTest extends KernelTestCase
                 [ 'xyzzy', 'corge', 'plugh', 'quux', 'xyzzy', 'thud', 'plugh', 'fubar'  ]
             );
 
-        $this->translator->persist();
+        $this->tracker->persist();
     }
 }

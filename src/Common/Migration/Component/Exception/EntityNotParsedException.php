@@ -9,6 +9,6 @@
  */
 namespace Common\Migration\Component\Exception;
 
-class EntityNotTranslatedException extends \Exception
+class EntityNotParsedException extends \Exception
 {
 }

@@ -7,23 +7,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Migration\Component\Translator;
+namespace Common\Migration\Component\Tracker;
 
 /**
  * The MigrationTranslator provides methods to translate contents when executing
  * a migration from a data source.
  */
-class MigrationTranslator extends Translator
+class MigrationTracker extends Tracker
 {
     /**
      * {@inheritdoc}
      */
-    public function loadTranslations()
+    public function load($type = null)
     {
-        $values = $this->conn->fetchAll('SELECT * FROM translation_ids');
+        $sql    = "SELECT * FROM translation_ids WHERE type = '$type'";
+        $values = $this->conn->fetchAll($sql);
 
         foreach ($values as $value) {
-            $this->addTranslation(
+            $this->add(
                 $value['pk_content_old'],
                 $value['pk_content'],
                 $value['type'],
@@ -33,15 +34,15 @@ class MigrationTranslator extends Translator
     }
 
     /**
-     * Persist all translations to the target data source.
+     * Persist all parsed to the target data source.
      */
     public function persist()
     {
-        if (empty($this->translations)) {
+        if (empty($this->parsed)) {
             return;
         }
 
-        foreach ($this->translations as $translation) {
+        foreach ($this->parsed as $translation) {
             $values[] = $translation['source_id'];
             $values[] = $translation['target_id'];
             $values[] = $translation['type'];
@@ -49,7 +50,7 @@ class MigrationTranslator extends Translator
         }
 
         $sql = 'REPLACE INTO translation_ids VALUES '
-            . trim(str_repeat('(?,?,?,?),', count($this->translations)), ',');
+            . trim(str_repeat('(?,?,?,?),', count($this->parsed)), ',');
 
         $this->conn->executeQuery($sql, $values);
     }

@@ -7,24 +7,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Migration\Component\Translator;
+namespace Common\Migration\Component\Tracker;
 
 /**
- * The ImportTranslator provides methods to translate contents when importing
+ * The ImportTracker provides methods to translate contents when importing
  * contents from a news agency.
  */
-class ImportTranslator extends Translator
+class ImportTracker extends Tracker
 {
     /**
      * {@inheritdoc}
      */
-    public function loadTranslations()
+    public function load($type = null)
     {
         $values = $this->conn
             ->fetchAll('SELECT pk_content, urn_source, slug FROM contents');
 
         foreach ($values as $value) {
-            $this->addTranslation(
+            $this->add(
                 $value['urn_source'],
                 $value['pk_content'],
                 null,

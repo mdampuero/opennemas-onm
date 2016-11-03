@@ -7,15 +7,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Migration\Component\Translator;
+namespace Tests\Common\Migration\Component\Tracker;
 
-use Common\Migration\Component\Translator\ImportTranslator;
+use Common\Migration\Component\Tracker\ImportTracker;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for class class.
  */
-class ImportTranslatorTest extends KernelTestCase
+class ImportTrackerTest extends KernelTestCase
 {
     /**
      * Configures the testing environment.
@@ -27,13 +27,13 @@ class ImportTranslatorTest extends KernelTestCase
             ->setMethods([ 'fetchAll' ])
             ->getMock();
 
-        $this->translator = new ImportTranslator($this->conn);
+        $this->translator = new ImportTracker($this->conn);
     }
 
     /**
-     * Tests loadTranslations.
+     * Tests load.
      */
-    public function testLoadTranslations()
+    public function testLoad()
     {
         $this->conn->expects($this->once())->method('fetchAll')
             ->with('SELECT pk_content, urn_source, slug FROM contents')
@@ -45,8 +45,8 @@ class ImportTranslatorTest extends KernelTestCase
                 ]
             ]);
 
-        $this->translator->loadTranslations();
+        $this->translator->load();
 
-        $this->assertTrue($this->translator->isTranslated('frog'));
+        $this->assertTrue($this->translator->isParsed('frog'));
     }
 }
