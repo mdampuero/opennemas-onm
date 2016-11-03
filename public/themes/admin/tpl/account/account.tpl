@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="row" id="info-page" >
-      <div class="col-xs-12 col-sm-7">
+      <div class="col-xs-12 col-sm-6">
         <div class="row instance-info">
           <div class="col-xs-12 m-b-15">
             <div class="tiles white">
@@ -55,8 +55,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-xs-12 col-sm-5">
         <div class="row">
           <div class="col-md-6">
             <div class="tiles green m-b-15">
@@ -91,6 +89,21 @@
         </div>
         <div class="row">
           <div class="col-md-6">
+            <div class="tiles blue m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}Users{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last">
+                    <span class="item-title">{t}Activated{/t}</span>
+                    <span class="item-count">{$instance->users}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
             <div class="tiles yellow m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
@@ -106,16 +119,23 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="tiles blue m-b-15">
-              <div class="tiles-body">
-                <div class="tiles-title text-uppercase text-black">
-                  {t}Users{/t}
-                </div>
-                <div class="widget-stats">
-                  <div class="wrapper last">
-                    <span class="item-title">{t}Activated{/t}</span>
-                    <span class="item-count">{$instance->users}</span>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="tiles white">
+              <div class="tiles-body clearfix">
+                <div>
+                  <div class="more-plans clearfix">
+                    <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
+                    <a href="{url name=admin_store_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
+                      {t}Check out our modules{/t}
+                    </a>
+                  </div>
+                  <div class="get-help clearfix">
+                    <p class="col-xs-12 col-md-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
+                    <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-12 col-md-4">
+                      {t}Contact Us{/t}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -123,31 +143,7 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-xs-12 m-b-15">
-        <div class="tiles white">
-          <div class="tiles-body clearfix">
-            <div>
-              <div class="more-plans clearfix">
-                <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
-                <a href="{url name=admin_store_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
-                  {t}Check out our modules{/t}
-                </a>
-              </div>
-              <div class="get-help clearfix">
-                <p class="col-xs-12 col-md-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
-                <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-12 col-md-4">
-                  {t}Contact Us{/t}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <input name="hasChanges" ng-value="hasChanges" type="hidden">
-        <input name="modules" ng-value="activatedModules" type="hidden">
-      </div>
-      <div class="col-sm-6 col-xs-12 m-b-15">
+      <div class="col-xs-12 col-sm-6">
         <div class="tiles white clearfix">
           <div class="tiles-body">
             <div class="tiles-title text-uppercase text-black">
@@ -205,6 +201,87 @@
             {/if}
           </div>
         </div>
+        <div class="m-t-15 tiles white clearfix" ng-controller="PurchaseListCtrl" ng-init="criteria = { epp: 5, orderBy: { updated: 'desc' }, page: 1 }; list();">
+          <div class="tiles-body">
+            <div class="m-b-15 tiles-title text-uppercase text-black">
+              {t}Last purchases{/t}
+            </div>
+            <div ng-if="loading">
+              <div class="spinner-wrapper">
+                <div class="loading-spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
+              </div>
+            </div>
+            <div class="ng-cloak" ng-if="!loading && (!items || items.length === 0)">
+              <div class="p-t-50 p-b-50 text-center">
+                <i class="fa fa-stack fa-3x">
+                  <i class="fa fa-shopping-cart fa-stack-1x"></i>
+                  <i class="fa fa-ban fa-stack-2x"></i>
+                </i>
+                <h4>{t}There are no purchases for now.{/t}</h4>
+                <h5>{t escape=off}Check our <a class="bold" href="#">store</a> and improve your newspaper.{/t}</h4>
+              </div>
+            </div>
+            <div class="table-wrapper ng-cloak" ng-if="items && items.length > 0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="pointer" ng-click="sort('updated')">
+                      {t}Date{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
+                    </th>
+                    <th  width="150">
+                      {t}Method{/t}
+                    </th>
+                    <th class="pointer text-right" ng-click="sort('total')" width="150">
+                      {t}Total{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('total') == 'asc', 'fa fa-caret-down': isOrderedBy('total') == 'desc'}"></i>
+                    </th>
+                    <th class="text-center pointer" width="150">
+                      {t}Status{/t}
+                    </th>
+                    <th width="150">
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+                    <td>
+                      [% item.updated | moment : 'LL' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
+                    <td>
+                      <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }" ng-if="item.total !== 0"></i>
+                      <span ng-if="item.total !== 0">[% item.method === 'PayPalAccount' ? '{t}PayPal{/t}' : '{t}Credit Card{/t}' %]</span>
+                      <span ng-if="item.total === 0">-</span>
+                    </td>
+                    <td class="text-right">
+                      [% item.total | number : 2 %] €
+                    </td>
+                    <td class="text-center">
+                      {t}Paid{/t}
+                    </td>
+                    <td>
+                      <a ng-href="[% routing.generate('backend_purchase_show', { id: item.id }) %]" title="{t}Show{/t}">
+                        {t}View invoice{/t}
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center" ng-if="items.length > 0">
+                <a class="bold text-uppercase" href="{url name=backend_purchases_list}">{t}More{/t}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-xs-12 m-b-15">
+        <input name="hasChanges" ng-value="hasChanges" type="hidden">
+        <input name="modules" ng-value="activatedModules" type="hidden">
+      </div>
+      <div class="col-sm-6 col-xs-12 m-b-15">
       </div>
     </div>
   </div>

@@ -46,8 +46,8 @@
       {t}Screenshots and videos{/t}
     </h4>
     <div class="clearfix row">
-      <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
-      <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
+      <div class="col-xs-6"><img class="img-responsive" src="//placehold.it/300x300" alt=""></div>
+      <div class="col-xs-6"><img class="img-responsive" src="//placehold.it/300x300" alt=""></div>
     </div>*}
     <div class="row p-t-15">
       <div class="col-xs-4 text-left hidden">

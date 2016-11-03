@@ -75,7 +75,7 @@
               <span class="fa fa-search fa-lg"></span>
             </span>
             <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search by name or username{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.name = null" ng-show="criteria.name">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('name')" ng-show="criteria.name">
               <i class="fa fa-times"></i>
             </span>
           </div>

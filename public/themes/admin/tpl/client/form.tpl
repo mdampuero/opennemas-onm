@@ -94,7 +94,11 @@
           <i class="fa fa-check text-success" ng-if="clientForm.state.$dirty && clientForm.state.$valid"></i>
           <i class="fa fa-times text-danger" ng-if="clientForm.state.$dirty && clientForm.state.$invalid && clientForm.state.$error.required" uib-tooltip="{t}This field is required{/t}"></i>
           <i class="fa fa-times text-danger" ng-if="clientForm.state.$dirty && clientForm.state.$invalid && clientForm.state.$error.state" uib-tooltip="{t}This is not a valid state{/t}"></i>
-          <input class="form-control" id="state" name="state" ng-model="client.state" placeholder="{t}State/Province{/t}" required="required" type="text">
+          <input class="form-control no-animate" id="state" name="state" ng-if="client.country !== 'ES'" ng-model="client.state" placeholder="{t}State/Province{/t}" required="required" type="text">
+          <select class="form-control no-animate" id="state" name="state" ng-if="client.country === 'ES'" ng-model="client.state">
+            <option value="">{t}Select a province{/t}...</option>
+            <option ng-repeat="province in provinces" value="[% province %]">[% province %]</option>
+          </select>
         </div>
       </div>
       <div class="form-group col-sm-4" ng-class="{ 'has-error': clientForm.country.$invalid, 'has-success': clientForm.country.$dirty && clientForm.country.$valid }">

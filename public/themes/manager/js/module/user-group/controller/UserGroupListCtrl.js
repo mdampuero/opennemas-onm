@@ -13,15 +13,15 @@
      * @requires $uibModal
      * @requires http
      * @requires messenger
-     * @requires oqlBuilder
+     * @requires oqlEncoder
      * @requires webStorage
      *
      * @description
      *   Handles all actions in user groups list.
      */
     .controller('UserGroupListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
-      function ($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function ($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -146,9 +146,9 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          oqlBuilder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
+          oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_user_groups_list',
             params: { oql: oql }
@@ -205,6 +205,10 @@
         // Get enabled columns from localStorage
         if (webStorage.local.get('user-groups-columns')) {
           $scope.columns = webStorage.local.get('user-groups-columns');
+        }
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
         }
 
         $scope.list();

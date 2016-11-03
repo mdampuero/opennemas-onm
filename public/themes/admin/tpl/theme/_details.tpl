@@ -14,7 +14,7 @@
       </uib-carousel>
       <uib-carousel active="1" class="carousel-big" ng-if="!template.item.images">
         <uib-slide index="1">
-          <img class="img-responsive" src="http://placehold.it/1024x768">
+          <img class="img-responsive" src="//placehold.it/1024x768">
         </uib-slide>
       </uib-carousel>
     </div>
@@ -64,11 +64,13 @@
         </div>
         <div class="col-xs-6">
           <h3 class="no-margin text-right" ng-if="!template.isPurchased(template.item)">
-            <span ng-if="template.item.price">
-              <strong>[% (template.item.price | filter: { type: 'monthly' })[0].value %]</strong>
-              <small>€/{t}month{/t}</small>
+            <span ng-if="template.getPrice(template.item)">
+              <strong>[% template.getPrice(template.item, template.item.priceType).value %]</strong>
+              <small ng-if="['monthly', 'monthly_custom'].indexOf(template.getPrice(template.item, template.item.priceType).type) !== -1">€/{t}month{/t}</small>
+              <small ng-if="['yearly', 'yearly_custom'].indexOf(template.getPrice(template.item, template.item.priceType).type) !== -1">€/{t}year{/t}</small>
+              <small ng-if="['single', 'single_custom'].indexOf(template.getPrice(template.item, template.item.priceType).type) !== -1">€</small>
             </span>
-            <span class="semi-bold uppercase" ng-if="!add && (!template.item.price || !template.item.price)">
+            <span class="semi-bold uppercase" ng-if="!add && !template.getPrice(template.item)">
               {t}Free{/t}
             </span>
           </h3>

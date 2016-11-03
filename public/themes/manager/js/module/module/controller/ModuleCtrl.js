@@ -48,6 +48,8 @@
           images:      [],
           price:       [ { 'value': 0, 'type': 'monthly' } ],
           name:        { en: '', es: '', gl: '' },
+          notes:       { en: '', es: '', gl: '' },
+          terms:       { en: '', es: '', gl: '' },
           type:        'module'
         };
 

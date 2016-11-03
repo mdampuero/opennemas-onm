@@ -85,6 +85,8 @@ class BasePersister extends Persister
 
             $this->persistMetas($id, $metas);
         }
+
+        $entity->refresh();
     }
 
     /**

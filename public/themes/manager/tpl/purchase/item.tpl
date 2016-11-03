@@ -133,18 +133,20 @@
             <table class="no-margin table table-invoice">
               <thead>
                 <tr>
+                  <th width="250">UUID</th>
                   <th>{t}Description{/t}</th>
                   <th class="text-right" width="120">{t}Quantity{/t}</th>
                   <th class="text-right" width="120">{t}Cost{/t}</th>
                 </tr>
               </thead>
               <tr ng-repeat="line in purchase.details">
+                <td>[% line.uuid %]</td>
                 <td>[% line.description %]</td>
                 <td class="text-right">[% line.quantity %]</td>
                 <td class="text-right">[% line.unit_cost %] €</td>
               </tr>
               <tr>
-                <td rowspan="[% purchase.method === 'CreditCard' ? 4 : 3 %]"></td>
+                <td colspan="2" rowspan="[% purchase.method === 'CreditCard' ? 4 : 3 %]"></td>
                 <td class="text-right">
                   <strong>{t}Subtotal{/t}</strong>
                 </td>
@@ -175,6 +177,10 @@
                 </td>
               </tr>
             </table>
+            <h5 class="semi-bold">{t}Terms{/t}</h5>
+            <div class="m-b-30" ng-bind-html="getNotes()"></div>
+            <h5 class="semi-bold">{t}Notes{/t}</h5>
+            <div class="m-b-30" ng-bind-html="getTerms()"></div>
           </div>
         </div>
       </div>

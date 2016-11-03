@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
-  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
+  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'Encoder', 'queryManager',
+  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, Encoder, queryManager) {
     'use strict';
 
     /**
@@ -205,7 +205,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.selected = { all: false, contents: [] };
       }
 
-      var processedFilters = oqlEncoder.encode($scope.criteria);
+      var processedFilters = Encoder.encode($scope.criteria);
       var filtersToEncode = angular.copy($scope.criteria);
 
       delete filtersToEncode.content_type_name;

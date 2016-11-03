@@ -11,9 +11,8 @@ use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 
-class DomainManagementController extends Controller
+class DomainController extends Controller
 {
     /**
      * Checks if the domain is not in use.
@@ -162,71 +161,39 @@ class DomainManagementController extends Controller
     {
         $purchase  = $request->request->get('purchase');
         $nonce     = $request->request->get('nonce');
-        $instance  = $this->get('core.instance');
-        $date      = new \DateTime();
-
-        $em = $this->get('orm.manager');
 
         try {
-            $client   = $em->getRepository('Client')->find($instance->getClient());
-            $purchase = $em->getRepository('Purchase')->find($purchase);
+            $ph = $this->get('core.helper.checkout');
 
-            $payment = new Payment([
-                'client_id' => $client->id,
-                'amount'    => round($purchase->total, 2),
-                'date'      => $date,
-                'type'      => $purchase->method
-            ]);
+            $ph->getPurchase($purchase);
 
-            if (!empty($nonce)) {
-                $payment->nonce = $nonce;
+            if (empty($nonce)) {
+                return;
             }
 
-            $em->persist($payment, 'braintree');
+            $ph->pay($nonce);
 
-            $purchase->payment_id = $payment->payment_id;
+            $purchase = $ph->getPurchase();
 
-            $em->persist($purchase);
+            $ph->sendEmailToClient();
+            $ph->sendEmailToSales();
+            $ph->enable();
 
-            $invoice = new Invoice([
-                'client_id' => $client->id,
-                'date'      => new \DateTime(),
-                'status'    => 'sent',
-                'lines'     => $purchase->details
-            ]);
-
-            $em->persist($invoice, 'freshbooks');
-
-            $payment->invoice_id = $invoice->invoice_id;
-            $payment->notes      = 'Braintree Transaction Id: '
-                . $payment->payment_id;
-
-            $em->persist($payment, 'freshbooks');
-
-            $purchase->invoice_id = $invoice->invoice_id;
-            $purchase->updated    = $date;
-
-            $em->persist($purchase);
-
-            // Remove payment method line from details
-            $domains = $purchase->details;
-            if ($purchase->method === 'CreditCard') {
-                array_pop($domains);
-            }
-
-
-            $this->sendEmailToCustomer($client, $domains, $purchase->id);
-            $this->sendEmailToSales($client, $domains);
-
-            return new JsonResponse(_('Domain added successfully'));
+            $this->get('application.log')->info(
+                'The user ' . $this->getUser()->username
+                . '(' . $this->getUser()->id  .') has purchased '
+                . json_encode($purchase->details)
+            );
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
             return new JsonResponse([
                 'message' => $e->getMessage(),
                 'type' => 'error'
-            ], 404);
+            ], 400);
         }
+
+        return new JsonResponse(_('Purchase completed!'));
     }
 
     /**
@@ -290,81 +257,5 @@ class DomainManagementController extends Controller
         }
 
         return $output[0]['target'];
-    }
-
-    /**
-     * Sends an email to the customer.
-     *
-     * @param array   $client   The client information.
-     * @param array   $domains  The requested domains.
-     * @param integer $purchase The purchase id.
-     */
-    private function sendEmailToCustomer($client, $domains, $purchase)
-    {
-        $instance  = $this->get('core.instance');
-        $params    = $this->getParameter('manager_webservice');
-        $countries = Intl::getRegionBundle()
-            ->getCountryNames(CURRENT_LANGUAGE_LONG);
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain request')
-            ->setFrom($params['no_reply_from'])
-            ->setSender($params['no_reply_sender'])
-            ->setTo($client->email)
-            ->setBody(
-                $this->renderView(
-                    'domain_management/email/_purchaseToCustomer.tpl',
-                    [
-                        'client'    => $client,
-                        'countries' => $countries,
-                        'domains'   => $domains,
-                        'url'       => $this->get('router')->generate(
-                            'backend_ws_purchase_get_pdf',
-                            [ 'id' => $purchase ],
-                            true
-                        )
-                    ]
-                ),
-                'text/html'
-            );
-
-        if ($instance->contact_mail !== $client->email) {
-            $message->setBcc($instance->contact_mail);
-        }
-
-        $this->get('mailer')->send($message);
-    }
-
-    /**
-     * Sends an email to sales department.
-     *
-     * @param array $client  The client information.
-     * @param array $domains The requested domains.
-     */
-    private function sendEmailToSales($client, $domains)
-    {
-        $countries = Intl::getRegionBundle()->getCountryNames();
-        $instance  = $this->get('core.instance');
-        $params    = $this->getParameter("manager_webservice");
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Domain request')
-            ->setFrom($params['no_reply_from'])
-            ->setSender($params['no_reply_sender'])
-            ->setTo($this->container->getParameter('sales_email'))
-            ->setBody(
-                $this->renderView(
-                    'domain_management/email/_purchaseToSales.tpl',
-                    [
-                        'client'    => $client,
-                        'countries' => $countries,
-                        'domains'   => $domains,
-                        'instance'  => $instance
-                    ]
-                ),
-                'text/html'
-            );
-
-        $this->get('mailer')->send($message);
     }
 }

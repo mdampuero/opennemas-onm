@@ -1,5 +1,5 @@
 (function () {
-  'use strict';
+ 'use strict';
 
   angular.module('BackendApp.controllers')
     /**
@@ -18,8 +18,8 @@
      *   Controller for opinion list.
      */
     .controller('OpinionListCtrl', [
-      '$controller', '$http', '$scope', 'routing', 'messenger', 'oqlEncoder', 'queryManager',
-      function($controller, $http, $scope, routing, messenger, oqlEncoder, queryManager) {
+      '$controller', '$http', '$scope', 'routing', 'messenger', 'Encoder', 'queryManager',
+      function($controller, $http, $scope, routing, messenger, Encoder, queryManager) {
 
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
@@ -34,7 +34,7 @@
         $scope.selected = { all: false, contents: [] };
 
         var url              = routing.generate(route);
-        var processedFilters = oqlEncoder.encode($scope.criteria);
+        var processedFilters = Encoder.encode($scope.criteria);
         var filtersToEncode  = angular.copy($scope.criteria);
 
         delete filtersToEncode.content_type_name;

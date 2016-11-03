@@ -31,7 +31,7 @@
          *
          * @type {Array}
          */
-        $scope.steps = [ 'cart', 'billing', 'summary', 'done' ];
+        $scope.steps = [ 'cart', 'billing', 'payment', 'summary', 'done' ];
 
         /**
          * @function confirm
@@ -41,16 +41,14 @@
          *  Requests the purchase and shows a confirmation modal window.
          */
         $scope.confirm = function() {
-          $scope.saving = true;
-          var modules = $scope.cart.map(function(e) {
-            var id = e.uuid;
-            if (!id) {
-              id = e.id;
-            }
-            return id;
-          });
+          $scope.loading = true;
 
-          var data = { client: $scope.client, modules: modules };
+          var data = { purchase: $scope.purchase };
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
+            data.nonce  = $scope.payment.nonce;
+          }
 
           http.post('backend_ws_store_checkout', data).then(function() {
             $scope.next().then(function() {
@@ -59,9 +57,9 @@
               webStorage.local.remove('purchase');
               $analytics.pageTrack('/store/checkout/done');
             });
-          }, function(response) {
+          }, function() {
+            $scope.error   = true;
             $scope.loading = false;
-            messenger.post({ message: response.data, type: 'error' });
           });
         };
 
@@ -77,29 +75,25 @@
         $scope.getData = function() {
           var ids = {};
           for (var i = 0; i < $scope.cart.length; i++) {
-            ids[$scope.cart[i].uuid] = $scope.cart[i].customize ? 1 : 0;
+            ids[$scope.cart[i].uuid] = $scope.cart[i].priceType ?
+              $scope.cart[i].priceType : 'monthly';
           }
 
-          return {
-            ids:   ids,
-            step:  $scope.steps[$scope.step],
+          var data = {
+            ids:    ids,
+            step:   $scope.steps[$scope.step + 1],
           };
+
+          if ($scope.payment.type) {
+            data.method = $scope.payment.type;
+          }
+
+          return data;
         };
 
         // Initialize the shopping cart from the webStorage
         if (webStorage.local.has('cart')) {
           $scope.cart = webStorage.local.get('cart');
-        }
-
-        if (webStorage.local.has('purchase')) {
-          $scope.purchase = webStorage.local.get('purchase');
-        }
-
-        if (!$scope.purchase) {
-          http.post('backend_ws_purchase_save').then(function(response) {
-            $scope.purchase = response.data;
-            webStorage.local.set('purchase', $scope.purchase);
-          });
         }
       }
     ]);
