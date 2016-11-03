@@ -10,7 +10,7 @@
 namespace BackendWebService\Controller;
 
 use Common\ORM\Entity\Purchase;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +41,10 @@ class PurchaseController extends Controller
 
         $pdf = $em->getRepository('invoice', 'freshbooks')
             ->getPDF($purchase->invoice_id);
+
+        if (empty($pdf)) {
+            return $this->render('purchase/error.tpl');
+        }
 
         $response = new Response($pdf);
 
