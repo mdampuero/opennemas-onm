@@ -96,6 +96,7 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
                           .$targetingCode
                           .$customCode
                           ."\ngoogletag.pubads().enableSingleRequest();\n"
+                          ."googletag.pubads().collapseEmptyDivs();\n"
                           ."googletag.enableServices();\n"
                           ."});\n</script>";
 
