@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-27 16:53+0200\n"
-"PO-Revision-Date: 2016-10-27 16:54+0200\n"
+"POT-Creation-Date: 2016-11-03 09:32+0000\n"
+"PO-Revision-Date: 2016-11-03 10:35+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1217,8 +1217,8 @@ msgstr "Dominio eliminado con éxito"
 msgid "Unable to delete the domain %s"
 msgstr "No se pudo eliminar el dominio «%s»"
 
-msgid "Domain added successfully"
-msgstr "Dominio añadido correctamente."
+msgid "Purchase completed!"
+msgstr "!Compra completada!"
 
 #, php-format
 msgid "%d contents imported successfully"
@@ -1252,16 +1252,6 @@ msgstr "Servidor actualizado correctamente."
 
 msgid "News agency server deleted."
 msgstr "Servidor de agencia de noticias eliminado."
-
-msgid "Newsletter deleted successfully."
-msgstr "Boletín de noticias eliminado correctamente."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "No se pudo eliminar el boletín «%s»"
-
-msgid "You must provide an id for delete a newsletter."
-msgstr "Debes proporcionar un identificador para eliminar un boletín."
 
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
@@ -1299,6 +1289,16 @@ msgstr ""
 #, php-format
 msgid "Successfully changed activated state for %d subscribers."
 msgstr "Estado de activación cambiado correctamente para %d suscriptores."
+
+msgid "Newsletter deleted successfully."
+msgstr "Boletín de noticias eliminado correctamente."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "No se pudo eliminar el boletín «%s»"
+
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debes proporcionar un identificador para eliminar un boletín."
 
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como leída correctamente"
@@ -1391,15 +1391,6 @@ msgstr ""
 
 msgid "Unable to find the purchase"
 msgstr "No se pudo encontrar la compra"
-
-msgid "Pay with credit card"
-msgstr "Pagar con tarjeta de crédito"
-
-msgid "Your request could not been registered"
-msgstr "Tu solicitud no pudo guardarse"
-
-msgid "Your request has been registered"
-msgstr "Tu solicitud se ha guardado"
 
 msgid "User deleted successfully"
 msgstr "Usuario eliminado correctamente"
@@ -1957,6 +1948,30 @@ msgstr "Estado no válido."
 msgid "Unable to delete the comment."
 msgstr "No se pudo eliminar el comentario."
 
+msgid "trashed"
+msgstr "en papelera"
+
+msgid "pending"
+msgstr "pendiente"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "not scheduled"
+msgstr "no planificado"
+
+msgid "scheduled"
+msgstr "planificado"
+
+msgid "dued"
+msgstr "expirado"
+
+msgid "in time"
+msgstr "en tiempo"
+
+msgid "postponed"
+msgstr "aplazado"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -1989,30 +2004,6 @@ msgid ""
 msgstr ""
 "Se han eliminado algunos elementos porque la portada tenía demasiados "
 "contenidos."
-
-msgid "trashed"
-msgstr "en papelera"
-
-msgid "pending"
-msgstr "pendiente"
-
-msgid "available"
-msgstr "disponible"
-
-msgid "not scheduled"
-msgstr "no planificado"
-
-msgid "scheduled"
-msgstr "planificado"
-
-msgid "dued"
-msgstr "expirado"
-
-msgid "in time"
-msgstr "en tiempo"
-
-msgid "postponed"
-msgstr "aplazado"
 
 msgid "Cover"
 msgstr "Portada"
@@ -3051,6 +3042,60 @@ msgstr "hace 1 mes"
 msgid "%d months ago"
 msgstr "hace %d meses"
 
+msgid "Show"
+msgstr "Mostrar"
+
+msgid "Go back"
+msgstr "Atrás"
+
+msgid "Loading"
+msgstr "Cargando"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Unit price"
+msgstr "Precio unitario"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "VAT"
+msgstr "IVA"
+
+msgid "Pay with credit card"
+msgstr "Pagar con tarjeta de crédito"
+
+msgid "Terms"
+msgstr "Términos"
+
+msgid "Notes"
+msgstr "Notas"
+
+msgid "View"
+msgstr "Vistas"
+
+msgid "There is nothing to see here, kid."
+msgstr "Nada que ver aquí, chaval."
+
+msgid "Method"
+msgstr "Método"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "PayPal"
+msgstr "PayPal"
+
+msgid "Credit Card"
+msgstr "Tarjeta de crédito"
+
+msgid "Paid"
+msgstr "Pagado"
+
+msgid "View invoice"
+msgstr "Ver factura"
+
 msgid "Instance not activated - Opennemas"
 msgstr "Instancia no activada - Opennemas"
 
@@ -3171,15 +3216,6 @@ msgstr "Buscar por nombre o correo"
 
 msgid "No subscribed"
 msgstr "No suscrito"
-
-msgid "Status"
-msgstr "Estado"
-
-msgid "View"
-msgstr "Vistas"
-
-msgid "Loading"
-msgstr "Cargando"
 
 msgid "No available subscribers."
 msgstr "No hay ningún suscriptor."
@@ -3458,15 +3494,6 @@ msgstr "No podrás restaurarlos."
 msgid "Yes, remove them all"
 msgstr "Si, eliminarlos todos"
 
-msgid "Unit price"
-msgstr "Precio unitario"
-
-msgid "Total"
-msgstr "Total"
-
-msgid "VAT"
-msgstr "IVA"
-
 msgid "Delete newsstands"
 msgstr "Eliminar portadas"
 
@@ -3493,9 +3520,6 @@ msgstr "Editando ePapel"
 
 msgid "Go Back"
 msgstr "Atrás"
-
-msgid "Date"
-msgstr "Fecha"
 
 msgid "Click here to pick a date"
 msgstr "Pulsa para seleccionar una fecha"
@@ -3761,9 +3785,6 @@ msgstr "Editando carta"
 
 msgid "Creating letter"
 msgstr "Creando carta"
-
-msgid "Go back"
-msgstr "Atrás"
 
 msgid "Body"
 msgstr "Cuerpo"
@@ -4935,20 +4956,14 @@ msgstr "Comprar"
 msgid "No items available to purchase"
 msgstr "No hay elementos disponibles para comprar"
 
-msgid "You have requested the following purchases for your newspaper \"%1\""
-msgstr ""
-"Acabas de solicitar las siguientes características para tu compra \"%1\""
+msgid "Thank you for choosing Opennemas!"
+msgstr "Gracias por elegir Opennemas"
 
-msgid "Modules requested"
-msgstr "Modulos solicitados"
+msgid "You have just purchased the following items:"
+msgstr "Acabas de comprar los siguientes productos:"
 
-msgid "Our sales department will contact you to get further information"
-msgstr ""
-"Nuestro departamento de ventas se pondrá en contacto contigo para obtener "
-"más información"
-
-msgid "Modules to purchase"
-msgstr "Módulos a comprar"
+msgid "Purchased items"
+msgstr "Elementos comprados"
 
 msgid "Company"
 msgstr "Empresa"
@@ -4965,6 +4980,24 @@ msgstr "Volver a la <a href=\"%1\">tienda</a> e intentarlo de nuevo"
 msgid "Check"
 msgstr "Comprobar"
 
+msgid "The selected items are free"
+msgstr "Los elementos seleccionados son gratuítos"
+
+msgid "Please, continue to the next step"
+msgstr "Por favor, continua al siguiente paso"
+
+msgid "Select the payment method."
+msgstr "Seleccionar un método de pago."
+
+msgid "You'll have a chance to review your order before it's placed."
+msgstr "Poderás revisar tu compra antes de finalizarla."
+
+msgid "Any problem with payment?"
+msgstr "¿Tienes un problema con el pago?"
+
+msgid "Click here for a quick tips."
+msgstr "Pulsa aquí para ver algunos consejos."
+
 msgid "Purchase summary"
 msgstr "Resumen de la compra"
 
@@ -4980,26 +5013,15 @@ msgstr ""
 msgid "Confirm"
 msgstr "Confirmar"
 
-msgid "Thank you for your purchase request!"
-msgstr "¡Gracias por tu solicitud de compra!"
+msgid "Thank you for your purchase!"
+msgstr "Gracias por tu compra"
 
 msgid ""
-"In the next 24 hours you will receive an email with payment instructions and "
-"invoice."
+"Check your email, we have sent you an email with the invoice and purchase "
+"details."
 msgstr ""
-"En las próximas 24 horas recibirás un correo con las instrucciones de pago y "
-"la factura."
-
-msgid ""
-"Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check your "
-"active features, navigate to <a href=\"http://help.opennemas.com\">our help</"
-"a> or check out <a href=\"http://youtube.com/opennemas\">our videos</a> to "
-"see how easy is to manage Opennemas."
-msgstr ""
-"Mientras tanto, puedes ir a <a href=\"%1\">Mi periódico</a> y comprobar tus "
-"características activadas, navegar por <a href=\"http://help.opennemas.com"
-"\">nuestra ayuda</a> o comprobar <a href=\"http://youtube.com/opennemas"
-"\">nuestros vídeos</a> para ver lo fácil que es usar Opennemas."
+"Comprueba tu correo electrónico, acabamos de enviarte un correo con la "
+"factura y los detalles de compra."
 
 msgid ""
 "Oh!, it would be a good time to share with your friends your newspaper's "
@@ -5009,6 +5031,21 @@ msgstr ""
 
 msgid "Have a wonderful day!"
 msgstr "¡Que tengas un buen día!"
+
+msgid "Something unexpected has happened!"
+msgstr "¡Ha pasado algo inesperado!"
+
+msgid "There were some errors while trying to purchase."
+msgstr "Se ha producido un error durante o proceso de compra."
+
+msgid ""
+"To prevent non-desired charges in your account, please, do not retry the "
+"checkout process and contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+"Para evitar cargos indeseados en tu cuenta, por favor, no reintentes el "
+"proceso de compra y contacta con nuestro <a href=\"javascript:UserVoice."
+"showPopupWidget();\">equipo de soporte</a>."
 
 msgid "Add new item"
 msgstr "Añadir nuevo elemento"
@@ -5777,10 +5814,34 @@ msgstr "Widget de portada"
 msgid "Config video module"
 msgstr "Configuración de módulo «Vídeo»"
 
-msgid "Logged in users"
-msgstr "Usuarios conectados"
+msgid "Domain Mapping"
+msgstr "Redirección de dominio"
 
-msgid "Redirect your domain"
+msgid "Domain registration + mapping"
+msgstr "Registro de dominio + redirección"
+
+msgid "Domain mapping"
+msgstr "Redirección de dominio"
+
+msgid "Enter a domain"
+msgstr "Escribe un dominio"
+
+msgid "Map it"
+msgstr "Asignar"
+
+msgid "Requested domains"
+msgstr "Dominios solicitados"
+
+msgid "I have read and accept the Terms of creating a new domain"
+msgstr "Leí y acepto los Terminos de creación de un nuevo dominio"
+
+msgid "I have read and accept the Terms of redirection"
+msgstr "Leí y acepto los Términos de redirección"
+
+msgid "How can I change 'opennemas.com' domain on my newspaper?"
+msgstr "Como puedo cambiar el dominio «opennemas.com» en mi periódico?"
+
+msgid "Redirect your own domain"
 msgstr "Redirige tu dominio"
 
 msgid ""
@@ -5799,6 +5860,66 @@ msgid ""
 msgstr ""
 "NO tengo mi propio dominio y quiero crear uno y redirigirlo a mi periódico "
 "digital Opennemas"
+
+msgid "Your domains"
+msgstr "Tus dominios"
+
+msgid "Main"
+msgstr "Principal"
+
+msgid "Points to"
+msgstr "Apunta a"
+
+msgid "Your domain is properly configured"
+msgstr "Tu dominio está configurado correctamente"
+
+msgid "Your domain is not properly configured, check the instructions below."
+msgstr ""
+"Tu dominio no está configurado correctamente, comprueba las instrucciones "
+"debajo."
+
+msgid "Expires"
+msgstr "Expira"
+
+msgid "This is your opennemas address"
+msgstr "Esta es tu dirección opennemas"
+
+msgid "Update your DNS records"
+msgstr "Actualiza tus registros de DNS"
+
+msgid "Point the www entrace in your domain to the Opennemas service."
+msgstr "Apunta la entrada www de tu dominio al servicio Opennemas."
+
+msgid ""
+"Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
+"domain.name.replace('www.', '') %]"
+msgstr ""
+"Redirigir tráfico desde [% domain.name.replace('www.', '') %] hacia  www.[% "
+"domain.name.replace('www.', '') %]"
+
+msgid ""
+"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
+"by the hosting provider for your domain)"
+msgstr ""
+"Tráfico web -> dominio.com -> redirect -> www.dominio.com (esto debería "
+"hacerlo el proveedor de hosting de tu dominio)"
+
+msgid "NOTE"
+msgstr "NOTA"
+
+msgid "This change is NOT done in the DNS section"
+msgstr "Este cambio NO se realiza en la sección DNS"
+
+msgid "If you need more help configuring your domains contact our support team"
+msgstr ""
+"Si necesitas más información para configurar tus dominios contacta con "
+"nuestro equipo de soporte"
+
+msgid "Logged in users"
+msgstr "Usuarios conectados"
+
+msgid "Redirect your domain"
+msgstr "Redirige tu dominio"
 
 msgid "Add contents to your site"
 msgstr "Añadir contenidos a tu sitio"
@@ -6094,6 +6215,12 @@ msgstr ""
 "Tenga en cuenta que el valor para la segmentación será siempre el nombre "
 "interno de la categoría actual"
 
+msgid "DFP custom code"
+msgstr "Código DFP personalizado"
+
+msgid "Custom code at the end of DFP tags"
+msgstr "Código personalizado al final de los tags de DFP"
+
 msgid "Tradedoubler integration"
 msgstr "Integración con Tradedoubler"
 
@@ -6249,151 +6376,8 @@ msgstr "Este no es un estado válido"
 msgid "State/Province"
 msgstr "Provincia/Estado"
 
-msgid "Domain Mapping"
-msgstr "Redirección de dominio"
-
-msgid "Primary Domain"
-msgstr "Dominio principal"
-
-msgid "Technical information"
-msgstr "Más información"
-
-msgid "Domain registration + mapping"
-msgstr "Registro de dominio + redirección"
-
-msgid "Domain mapping"
-msgstr "Redirección de dominio"
-
-msgid "Enter a domain"
-msgstr "Escribe un dominio"
-
-msgid "Map it"
-msgstr "Asignar"
-
-msgid "Requested domains"
-msgstr "Dominios solicitados"
-
-msgid "Select the payment method."
-msgstr "Seleccionar un método de pago."
-
-msgid "You'll have a chance to review your order before it's placed."
-msgstr "Poderás revisar tu compra antes de finalizarla."
-
-msgid "Any problem with payment?"
-msgstr "¿Tienes un problema con el pago?"
-
-msgid "Click here for a quick tips."
-msgstr "Pulsa aquí para ver algunos consejos."
-
-msgid "I have read and accept the Terms of creating a new domain"
-msgstr "Leí y acepto los Terminos de creación de un nuevo dominio"
-
-msgid "I have read and accept the Terms of redirection"
-msgstr "Leí y acepto los Términos de redirección"
-
-msgid "Thank you for your purchase!"
-msgstr "Gracias por tu compra"
-
-msgid ""
-"Check your email, we have sent you an email with the invoice and purchase "
-"details. We will review your purchase and activate your domain."
-msgstr ""
-"Comprueba tu correo electrónico, acabamos de enviarte un correo con la "
-"factura y los detalles de compra. Revisaremos tu compra y activaremos tu "
-"dominio."
-
-msgid "Something unexpected has happened!"
-msgstr "¡Ha pasado algo inesperado!"
-
-msgid "There were some errors while trying to purchase."
-msgstr "Se ha producido un error durante o proceso de compra."
-
-msgid ""
-"To prevent non-desired charges in your account, please, do not retry the "
-"checkout process and contact our <a href=\"javascript:UserVoice."
-"showPopupWidget();\">support team</a>."
-msgstr ""
-"Para evitar cargos indeseados en tu cuenta, por favor, no reintentes el "
-"proceso de compra y contacta con nuestro <a href=\"javascript:UserVoice."
-"showPopupWidget();\">equipo de soporte</a>."
-
-msgid "How can I change 'opennemas.com' domain on my newspaper?"
-msgstr "Como puedo cambiar el dominio «opennemas.com» en mi periódico?"
-
-msgid "Redirect your own domain"
-msgstr "Redirige tu dominio"
-
-msgid "Your domains"
-msgstr "Tus dominios"
-
-msgid "Main"
-msgstr "Principal"
-
-msgid "Points to"
-msgstr "Apunta a"
-
-msgid "Your domain is properly configured"
-msgstr "Tu dominio está configurado correctamente"
-
-msgid "Your domain is not properly configured, check the instructions below."
-msgstr ""
-"Tu dominio no está configurado correctamente, comprueba las instrucciones "
-"debajo."
-
-msgid "Expires"
-msgstr "Expira"
-
-msgid "This is your opennemas address"
-msgstr "Esta es tu dirección opennemas"
-
-msgid "Update your DNS records"
-msgstr "Actualiza tus registros de DNS"
-
-msgid "Point the www entrace in your domain to the Opennemas service."
-msgstr "Apunta la entrada www de tu dominio al servicio Opennemas."
-
-msgid ""
-"Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
-"domain.name.replace('www.', '') %]"
-msgstr ""
-"Redirigir tráfico desde [% domain.name.replace('www.', '') %] hacia  www.[% "
-"domain.name.replace('www.', '') %]"
-
-msgid ""
-"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
-"by the hosting provider for your domain)"
-msgstr ""
-"Tráfico web -> dominio.com -> redirect -> www.dominio.com (esto debería "
-"hacerlo el proveedor de hosting de tu dominio)"
-
-msgid "NOTE"
-msgstr "NOTA"
-
-msgid "This change is NOT done in the DNS section"
-msgstr "Este cambio NO se realiza en la sección DNS"
-
-msgid "If you need more help configuring your domains contact our support team"
-msgstr ""
-"Si necesitas más información para configurar tus dominios contacta con "
-"nuestro equipo de soporte"
-
-msgid "Thank you for choosing Opennemas!"
-msgstr "Gracias por elegir Opennemas"
-
-msgid "You have just purchased the following items:"
-msgstr "Acabas de comprar los siguientes productos:"
-
-msgid "Required Domains:"
-msgstr "Dominios requeridos:"
-
-msgid "You can find your invoice on the following page:"
-msgstr "Puedes encontrar tu factura en la siguiente página:"
-
-msgid "Domains to create"
-msgstr "Dominios a crear"
-
-msgid "Domains to redirect"
-msgstr "Dominios a redirigir"
+msgid "Select a province"
+msgstr "Seleccione una provincia"
 
 msgid "Add"
 msgstr "Añadir"
@@ -7566,9 +7550,6 @@ msgstr "Fin de la suscripción"
 msgid "--All--"
 msgstr "--Todos--"
 
-msgid "Paid"
-msgstr "Pagado"
-
 msgid "Registered"
 msgstr "Registrado"
 
@@ -7942,6 +7923,20 @@ msgid "You will be asked to add it during the checkout in our store"
 msgstr ""
 "Te solicitaremos añadirla durante el proceso de compra en nuestra tienda"
 
+msgid "Last purchases"
+msgstr "Últimas compras"
+
+msgid "There are no purchases for now."
+msgstr "No hay compras por ahora."
+
+msgid ""
+"Check our <a class=\"bold\" href=\"#\">store</a> and improve your newspaper."
+msgstr ""
+"Visite nuestra <a class=\"bold\" href=\"#\">tienda</a> y mejore su periódico."
+
+msgid "More"
+msgstr "Más"
+
 msgid "Delete books"
 msgstr "Eliminar libros"
 
@@ -7968,9 +7963,6 @@ msgstr "Debe tener %d libros para la portada"
 
 msgid "New book"
 msgstr "Nuevo libro"
-
-msgid "There is nothing to see here, kid."
-msgstr "Nada que ver aquí, chaval."
 
 msgid "Action"
 msgstr "Acción"
@@ -8007,6 +7999,9 @@ msgstr "Los dominios de la instancia no pueden estar vacíos."
 
 msgid "Domain expire date:"
 msgstr "Tiempo de expiración de dominio:"
+
+msgid "View purchase"
+msgstr "Ver compra"
 
 msgid "Select all"
 msgstr "Seleccionar todo"
@@ -8215,9 +8210,6 @@ msgstr "Compras no completadas"
 msgid "Search by client"
 msgstr "Buscar por cliente"
 
-msgid "Method"
-msgstr "Método"
-
 msgid "Client ID"
 msgstr "ID de cliente"
 
@@ -8305,6 +8297,9 @@ msgstr "Socio"
 
 msgid "Monthly"
 msgstr "Mensual"
+
+msgid "w/customization"
+msgstr "w/personalización"
 
 msgid "Yearly"
 msgstr "Anual"
@@ -8667,6 +8662,70 @@ msgstr "Buscar por nombre o correo"
 
 msgid "Do you want to log out?"
 msgstr "¿Quieres cerrar la sesión?"
+
+#~ msgid "Domain added successfully"
+#~ msgstr "Dominio añadido correctamente."
+
+#~ msgid "Your request could not been registered"
+#~ msgstr "Tu solicitud no pudo guardarse"
+
+#~ msgid "Your request has been registered"
+#~ msgstr "Tu solicitud se ha guardado"
+
+#~ msgid "You have requested the following purchases for your newspaper \"%1\""
+#~ msgstr ""
+#~ "Acabas de solicitar las siguientes características para tu compra \"%1\""
+
+#~ msgid "Modules requested"
+#~ msgstr "Modulos solicitados"
+
+#~ msgid "Our sales department will contact you to get further information"
+#~ msgstr ""
+#~ "Nuestro departamento de ventas se pondrá en contacto contigo para obtener "
+#~ "más información"
+
+#~ msgid "Modules to purchase"
+#~ msgstr "Módulos a comprar"
+
+#~ msgid "Thank you for your purchase request!"
+#~ msgstr "¡Gracias por tu solicitud de compra!"
+
+#~ msgid ""
+#~ "In the next 24 hours you will receive an email with payment instructions "
+#~ "and invoice."
+#~ msgstr ""
+#~ "En las próximas 24 horas recibirás un correo con las instrucciones de "
+#~ "pago y la factura."
+
+#~ msgid ""
+#~ "Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check "
+#~ "your active features, navigate to <a href=\"http://help.opennemas.com"
+#~ "\">our help</a> or check out <a href=\"http://youtube.com/opennemas\">our "
+#~ "videos</a> to see how easy is to manage Opennemas."
+#~ msgstr ""
+#~ "Mientras tanto, puedes ir a <a href=\"%1\">Mi periódico</a> y comprobar "
+#~ "tus características activadas, navegar por <a href=\"http://help."
+#~ "opennemas.com\">nuestra ayuda</a> o comprobar <a href=\"http://youtube."
+#~ "com/opennemas\">nuestros vídeos</a> para ver lo fácil que es usar "
+#~ "Opennemas."
+
+#~ msgid "Primary Domain"
+#~ msgstr "Dominio principal"
+
+#~ msgid "Technical information"
+#~ msgstr "Más información"
+
+#~ msgid "Required Domains:"
+#~ msgstr "Dominios requeridos:"
+
+#~ msgid "You can find your invoice on the following page:"
+#~ msgstr "Puedes encontrar tu factura en la siguiente página:"
+
+#~ msgid "Domains to create"
+#~ msgstr "Dominios a crear"
+
+#~ msgid "Domains to redirect"
+#~ msgstr "Dominios a redirigir"
 
 #~ msgid ""
 #~ "Here you will see some statistics about <strong>instances</strong> and "
@@ -9989,9 +10048,6 @@ msgstr "¿Quieres cerrar la sesión?"
 
 #~ msgid "There is no available instances yet"
 #~ msgstr "No hay ninguna instancia todavía"
-
-#~ msgid "Showing"
-#~ msgstr "Mostrando"
 
 #~ msgid "of"
 #~ msgstr "de"
