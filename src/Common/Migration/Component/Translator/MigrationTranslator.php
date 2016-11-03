@@ -37,23 +37,20 @@ class MigrationTranslator extends Translator
      */
     public function persist()
     {
-        $values = [];
-
-        foreach ($this->translations as $type => $translations) {
-            foreach ($translations as $sourceId => $target) {
-                $values[] = [
-                    'pk_content'     => $target['target_id'],
-                    'pk_content_old' => $sourceId,
-                    'slug'           => $target['slug'],
-                    'type'           => $type
-                ];
-            }
-        }
-
-        if (empty($values)) {
+        if (empty($this->translations)) {
             return;
         }
 
-        $this->conn->insert('translation_ids', $values);
+        foreach ($this->translations as $translation) {
+            $values[] = $translation['source_id'];
+            $values[] = $translation['target_id'];
+            $values[] = $translation['type'];
+            $values[] = $translation['slug'];
+        }
+
+        $sql = 'REPLACE INTO translation_ids VALUES '
+            . trim(str_repeat('(?,?,?,?),', count($this->translations)), ',');
+
+        $this->conn->executeQuery($sql, $values);
     }
 }

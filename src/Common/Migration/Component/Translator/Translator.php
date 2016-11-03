@@ -48,23 +48,36 @@ abstract class Translator
             $type = 'default';
         }
 
-        $this->translations[$type][$sourceId] =
-            [ 'target_id' => $targetId, 'slug' => $slug ];
+        $this->translations[] = [
+            'source_id' => $sourceId,
+            'type'      => $type,
+            'target_id' => $targetId,
+            'slug'      => $slug
+        ];
     }
 
     /**
      * Checks if a content is already translated.
      *
      * @param string $sourceId The content id in source data source.
+     * @param string $type     The content type.
+     * @param string $slug     The content slug.
      *
      * @return boolean True if the content is already translated. False
      *                 otherwise.
      */
-    public function isTranslated($sourceId, $type = 'default')
+    public function isTranslated($sourceId, $type = null, $slug = null)
     {
-        if (array_key_exists($type, $this->translations)
-            && array_key_exists($sourceId, $this->translations[$type])
-        ) {
+        $translations = array_filter(
+            $this->translations,
+            function ($a) use ($sourceId, $type, $slug) {
+                return $a['source_id'] === $sourceId
+                    && (empty($type) || $a['type'] === $type)
+                    && (empty($slug) || $a['slug'] === $slug);
+            }
+        );
+
+        if (!empty($translations)) {
             return true;
         }
 
@@ -76,22 +89,28 @@ abstract class Translator
      *
      * @param string $targetId The content id in the target data source.
      * @param string $type     The content type.
+     * @param string $slug     The content slug.
      *
      * @return string The content id in the source data source.
      */
-    public function getSourceId($targetId, $type = 'default')
+    public function getSourceId($targetId, $type = null, $slug = null)
     {
-        if (!array_key_exists($type, $this->translations)) {
+        $translations = array_filter(
+            $this->translations,
+            function ($a) use ($targetId, $type, $slug) {
+                return $a['target_id'] === $targetId
+                    && (empty($type) || $a['type'] === $type)
+                    && (empty($slug) || $a['slug'] === $slug);
+            }
+        );
+
+        if (empty($translations)) {
             throw new EntityNotTranslatedException();
         }
 
-        foreach ($this->translations[$type] as $source => $target) {
-            if ($target['target_id'] === $targetId) {
-                return $source;
-            }
-        }
+        $translation = array_shift($translations);
 
-        throw new EntityNotTranslatedException();
+        return $translation['source_id'];
     }
 
     /**
@@ -99,16 +118,28 @@ abstract class Translator
      *
      * @param string $sourceId The content id in the source data source.
      * @param string $type     The content type.
+     * @param string $slug     The content slug.
      *
      * @return string The content id in the target data source.
      */
-    public function getTargetId($sourceId, $type = 'default')
+    public function getTargetId($sourceId, $type = null, $slug = null)
     {
-        if ($this->isTranslated($sourceId, $type)) {
-            return $this->translations[$type][$sourceId]['target_id'];
+        $translations = array_filter(
+            $this->translations,
+            function ($a) use ($sourceId, $type, $slug) {
+                return $a['source_id'] === $sourceId
+                    && (empty($type) || $a['type'] === $type)
+                    && (empty($slug) || $a['slug'] === $slug);
+            }
+        );
+
+        if (empty($translations)) {
+            throw new EntityNotTranslatedException();
         }
 
-        throw new EntityNotTranslatedException();
+        $translation = array_shift($translations);
+
+        return $translation['target_id'];
     }
 
     /**
