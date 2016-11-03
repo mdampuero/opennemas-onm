@@ -14,5 +14,5 @@
 </ul>
 
 <p>
-{t escape=off}You can find your invoice <a href="{$smarty.capture.purchase_url}">here</a>{/t}
+{t escape=off 1=$smarty.capture.purchase_url}You can find your invoice <a href="%1">here</a>{/t}
 </p>
