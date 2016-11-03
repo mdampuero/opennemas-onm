@@ -75,8 +75,8 @@ class DomainController extends Controller
         $countries    = $this->get('core.geo')->getCountries();
         $provinces    = $this->get('core.geo')->getRegions('ES');
         $taxes        = $this->get('vat')->getTaxes();
-        $token        = $tokenFactory::generate($params);
         $tokenFactory = $this->get('onm.braintree.factory')->get('ClientToken');
+        $token        = $tokenFactory::generate($params);
 
         return $this->render('domain/add.tpl', [
             'client'    => $client,
