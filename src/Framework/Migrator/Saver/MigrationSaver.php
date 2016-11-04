@@ -1367,6 +1367,9 @@ class MigrationSaver
             $values = $this->merge($values, $item, $schema);
 
             try {
+                $slug = array_key_exists('slug', $schema['translation']) ?
+                    $values[$schema['translation']['slug']] : '';
+
                 if ($this->matchTranslation(
                     $values[$schema['translation']['field']],
                     $schema['translation']['name']
@@ -1391,8 +1394,6 @@ class MigrationSaver
 
                     $video = new \Video();
                     $video->create($values);
-                    $slug = array_key_exists('slug', $schema['translation']) ?
-                        $values[$schema['translation']['slug']] : '';
 
                     // Update article img2 and img2_footer
                     if (isset($values['article'])
@@ -1429,7 +1430,7 @@ class MigrationSaver
                     $values[$schema['translation']['field']],
                     $videoId,
                     $schema['translation']['name'],
-                    ''
+                    $slug
                 );
                 $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
