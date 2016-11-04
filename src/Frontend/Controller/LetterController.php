@@ -135,14 +135,7 @@ class LetterController extends Controller
                 'ORDER BY created DESC LIMIT 5'
             );
 
-            $this->view->assign(
-                array(
-                    'letter'       => $letter,
-                    'content'      => $letter,
-                    'otherLetters' => $otherLetters,
-                    'contentId'    => $letter->id, // Used on module_comments.tpl
-                )
-            );
+            $this->view->assign(['otherLetters' => $otherLetters]);
         }
 
         $ads = $this->getAds();
@@ -150,9 +143,12 @@ class LetterController extends Controller
 
         return $this->render(
             'letter/letter.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
+            [
+                'letter'    => $letter,
+                'content'   => $letter,
+                'contentId' => $letter->id, // Used on module_comments.tpl
+                'cache_id'  => $cacheID,
+            ]
         );
     }
 
