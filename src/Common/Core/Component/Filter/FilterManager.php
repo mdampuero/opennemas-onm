@@ -25,15 +25,14 @@ class FilterManager
      *
      * @return mixed The filtered value.
      */
-    public function filter($name, $value, $args)
+    public function filter($name, $value, $args = [])
     {
-        $class = __NAMESPACE__ . '\\' . \classify($name)
-            . 'Filter';
+        $class = __NAMESPACE__ . '\\' . \classify($name) . 'Filter';
 
         if (class_exists($class)) {
-            $filter = new $class();
+            $filter = new $class($args);
 
-            return $filter->filter($value, $args);
+            return $filter->filter($value);
         }
 
         throw new InvalidFilterException($name);

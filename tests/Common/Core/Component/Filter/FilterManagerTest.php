@@ -30,7 +30,7 @@ class FilterManagerTest extends KernelTestCase
      */
     public function testFilter()
     {
-        $this->fm->filter('youtube_id', 'frog', null);
+        $this->fm->filter('youtube_id', 'frog');
     }
 
     /**
@@ -40,6 +40,6 @@ class FilterManagerTest extends KernelTestCase
      */
     public function testFilterWhenInvalidFilter()
     {
-        $this->fm->filter('gorp', 'frog', null);
+        $this->fm->filter('gorp', 'frog');
     }
 }
