@@ -2,14 +2,14 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Migration\Filter;
+namespace Common\Core\Component\Filter;
 
-class HtmlFilter extends MigrationFilter
+class BodyFilter extends Filter
 {
     /**
      * Converts a string to valid HTML paragraphs.
@@ -20,6 +20,15 @@ class HtmlFilter extends MigrationFilter
      */
     public function filter($str)
     {
-        return htmlentities($str, ENT_IGNORE, 'UTF-8');
+        $needle = [
+            "/([\r\n])+/",
+            "/([\n]{1,})/",
+            "/([\n]{2,})/",
+            "/(\n)+/"
+        ];
+
+        $replacement = [ '</p><p>', '</p><p>', '<br>', '<br>' ];
+
+        return '<p>'. preg_replace($needle, $replacement, $str) . '</p>';
     }
 }

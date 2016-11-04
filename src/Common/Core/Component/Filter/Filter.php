@@ -2,14 +2,14 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Migration\Filter;
+namespace Common\Core\Component\Filter;
 
-abstract class MigrationFilter
+abstract class Filter
 {
     /**
      * The filter parameters.
@@ -19,14 +19,14 @@ abstract class MigrationFilter
     protected $params;
 
     /**
-     * Initializes the MigrationFilter.
+     * Initializes the Filter.
      *
      * @param array $params The filter parameters.
      */
     public function __construct($params = [])
     {
         if (!is_array($params)) {
-            $message = 'MigrationFilter expects an argument of type array. '
+            $message = 'Filter expects an argument of type array. '
                 . gettype($params) . ' given.';
 
             throw new \InvalidArgumentException($message);

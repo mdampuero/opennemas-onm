@@ -1,10 +1,21 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Common\Core\Component\Filter;
 
-namespace Tests\Common\Migration;
+use Common\Core\Component\Filter\JoinFilter;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-use Common\Migration\Filter\JoinFilter;
-
-class JoinFilterTest extends \PHPUnit_Framework_TestCase
+/**
+ * Defines tests cases for JoinFilter class.
+ */
+class JoinFilterTest extends KernelTestCase
 {
     public function testFilterWithNoArray()
     {

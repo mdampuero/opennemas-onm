@@ -2,16 +2,20 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Migration;
+namespace Tests\Common\Core\Component\Filter;
 
-use Common\Migration\Filter\BodyFilter;
+use Common\Core\Component\Filter\BodyFilter;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class BodyFilterTest extends \PHPUnit_Framework_TestCase
+/**
+ * Defines test cases for BodyFilter class.
+ */
+class BodyFilterTest extends KernelTestCase
 {
     public function setUp()
     {
