@@ -37,7 +37,7 @@ class AuthorController extends UserController
         $converter  = $this->get('orm.manager')->getConverter('User');
 
         $oql = $this->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('fk_user_group ~ "3"')->getOql();
+            ->addCondition('fk_user_group regexp "^3$|^3,|,3,|,3$"')->getOql();
 
         $total  = $repository->countBy($oql);
         $users  = $repository->findBy($oql);
