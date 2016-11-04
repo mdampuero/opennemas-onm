@@ -184,15 +184,9 @@ class PollsController extends Controller
             );
 
             $this->view->assign([
-                'poll'       => $poll,
-                'content'    => $poll,
-                'contentId'  => $poll->id,
                 'items'      => $items,
                 'otherPolls' => $otherPolls,
             ]);
-
-            // Used on module_comments.tpl
-            $this->view->assign('contentId', $poll->id);
         }
 
         $cookieName = "poll-".$poll->id;
@@ -225,12 +219,14 @@ class PollsController extends Controller
 
         return $this->render(
             'poll/poll.tpl',
-            array(
+            [
+                'poll'          => $poll,
+                'content'       => $poll,
+                'contentId'     => $poll->id,
                 'cache_id'      => $cacheID,
                 'msg'           => $message,
-                'poll'          => $poll,
                 'already_voted' => $alreadyVoted,
-            )
+            ]
         );
     }
 
