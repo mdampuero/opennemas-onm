@@ -108,6 +108,8 @@ EOF
                     $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
 
                     if (array_key_exists('auto_import', $server) && $server['auto_import']) {
+                        $timezone = $this->getContainer()->get('setting_repository')->get('time_zone');
+                        $this->getContainer()->get('core.locale')->setTimeZone($timezone);
                         $importer = $this->getContainer()->get('news_agency.importer');
                         $importer->configure($server);
 

@@ -4,7 +4,7 @@
 * Angular module to convert internal filters to post-able filters.
 */
 angular.module('onm.oqlEncoder', [])
-  .service('oqlEncoder', function() {
+  .service('Encoder', function() {
     return {
       encode: function(criteria) {
         var cleaned = {};

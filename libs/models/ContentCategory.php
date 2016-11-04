@@ -138,7 +138,7 @@ class ContentCategory
         }
 
         if (!empty($this->params) && is_string($this->params)) {
-            $this->params = unserialize($this->params);
+            $this->params = @unserialize($this->params);
         }
     }
 

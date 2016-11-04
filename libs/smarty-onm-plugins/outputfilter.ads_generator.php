@@ -1,6 +1,4 @@
 <?php
-use Onm\Settings as s;
-
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -19,11 +17,13 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         return $output;
     }
 
+    $sm = getService('setting_repository');
+
     if (is_array($smarty->parent->tpl_vars)
         && array_key_exists('advertisements', $smarty->parent->tpl_vars)
         && is_array($smarty->parent->tpl_vars['advertisements']->value)
     ) {
-        $adsReviveConfs = s::get('revive_ad_server');
+        $adsReviveConfs = $sm->get('revive_ad_server');
 
         $advertisements = $smarty->parent->tpl_vars['advertisements']->value;
         $actual_category  = $smarty->parent->tpl_vars['actual_category']->value;
@@ -68,8 +68,8 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
         }
 
         if (count($dfpZonesInformation) > 0) {
-            $dfpOptions = s::get('dfp_options');
             // Check if targeting is set
+            $dfpOptions = $sm->get('dfp_options');
             $targetingCode = '';
             if (is_array($dfpOptions) &&
                 array_key_exists('target', $dfpOptions) &&
@@ -77,14 +77,26 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
             ) {
                 $targetingCode = "\ngoogletag.pubads().setTargeting('".$dfpOptions['target']."', ['".$actual_category."']);";
             }
+            // Check for custom code
+            $dfpCustomCode = $sm->get('dfp_custom_code');
+            $customCode = '';
+            if (!empty($dfpCustomCode)
+            ) {
+                $customCode = "\n".base64_decode($dfpCustomCode);
+            }
 
-
-            $dfpOutput = '<script type="text/javascript">var googletag=googletag||{};googletag.cmd=googletag.cmd||[],function(){var a=document.createElement("script");a.async=!0,a.type="text/javascript";var b="https:"==document.location.protocol;a.src=(b?"https:":"http:")+"//www.googletagservices.com/tag/js/gpt.js";var c=document.getElementsByTagName("script")[0];c.parentNode.insertBefore(a,c)}();</script>';
+            $dfpOutput = "﻿<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>\n"
+                ."<script>\n"
+                ."var googletag = googletag || {};\n"
+                ."googletag.cmd = googletag.cmd || [];\n"
+                ."</script>\n";
             $dfpOutput .= "<script type='text/javascript'>\n"
                           ."googletag.cmd.push(function() {\n"
                           .implode("\n", $dfpZonesInformation)
                           .$targetingCode
+                          .$customCode
                           ."\ngoogletag.pubads().enableSingleRequest();\n"
+                          ."googletag.pubads().collapseEmptyDivs();\n"
                           ."googletag.enableServices();\n"
                           ."});\n</script>";
 

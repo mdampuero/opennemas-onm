@@ -33,7 +33,9 @@ class ClientPersister extends BasePersister
         $response = $cr::create($data);
 
         if (!$response->success) {
-            throw new \RuntimeException();
+            throw new \RuntimeException(
+                sprintf(_('Unable to create a %s'), $this->metadata->name)
+            );
         }
 
         $entity->id = (int) $response->customer->id;
@@ -44,18 +46,18 @@ class ClientPersister extends BasePersister
      *
      * @param Entity $entity The client to remove.
      *
-     * @throws EntityNotFoundException If the client does not exist.
+     * @throws RuntimeException If the client does not exist.
      */
     public function remove(Entity $entity)
     {
         $cr       = $this->factory->get('customer');
         $response = $cr::delete($entity->id);
 
-        if ($response->success) {
-            return;
+        if (!$response->success) {
+            throw new \RuntimeException(
+                sprintf(_('Unable to remove the %s'), $this->metadata->name)
+            );
         }
-
-        throw new EntityNotFoundException($this->metadata->name, $entity->id);
     }
 
     /**
@@ -63,7 +65,7 @@ class ClientPersister extends BasePersister
      *
      * @param Entity $entity The client to update.
      *
-     * @throws ClientNotFoundException If the client does not exist.
+     * @throws RuntimeException If the client does not exist.
      */
     public function update(Entity $entity)
     {
@@ -73,7 +75,9 @@ class ClientPersister extends BasePersister
         $response = $cr::update($entity->id, $data);
 
         if (!$response->success) {
-            throw new EntityNotFoundException($this->metadata->name, $entity->id);
+            throw new \RuntimeException(
+                sprintf(_('Unable to update the %s'), $this->metadata->name)
+            );
         }
     }
 }

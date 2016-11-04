@@ -18,6 +18,54 @@ use Common\ORM\Core\Entity;
 class Extension extends Entity
 {
     /**
+     * Returns information about the extension.
+     *
+     * @param string $lang The language name in short format.
+     *
+     * @return string The information about the extension.
+     */
+    public function getAbout($lang = 'en')
+    {
+        return $this->getPropertyByLanguage('about', $lang);
+    }
+
+    /**
+     * Returns the extension description.
+     *
+     * @param string $lang The language name in short format.
+     *
+     * @return string The extension description.
+     */
+    public function getDescription($lang = 'en')
+    {
+        return $this->getPropertyByLanguage('body', $lang);
+    }
+
+    /**
+     * Returns the extension name.
+     *
+     * @param string $lang The language name in short format.
+     *
+     * @return string The extension name.
+     */
+    public function getName($lang = 'en')
+    {
+        return $this->getPropertyByLanguage('name', $lang);
+    }
+
+    /**
+     * Returns the extension notes.
+     *
+     * @param string $lang The language notes in short format.
+     *
+     * @return string The extension notes.
+     */
+    public function getNotes($lang = 'en')
+    {
+        return $this->getPropertyByLanguage('notes', $lang);
+    }
+
+    /**
      * Returns the extension price.
      *
      * @param string $type The price type.
@@ -35,9 +83,50 @@ class Extension extends Entity
         });
 
         if (count($prices)) {
-            return (float) $prices[0]['value'];
+            return (float) $prices[array_keys($prices)[0]]['value'];
         }
 
         return (float) $this->price[0]['value'];
+    }
+
+    /**
+     * Returns the extension terms.
+     *
+     * @param string $lang The language terms in short format.
+     *
+     * @return string The extension terms.
+     */
+    public function getTerms($lang = 'en')
+    {
+        return $this->getPropertyByLanguage('terms', $lang);
+    }
+
+    /**
+     * Returns the value of the property for a language.
+     *
+     * @param string $property The property name.
+     * @param string $lang     The language name.
+     *
+     * @return string The property value.
+     */
+    protected function getPropertyByLanguage($property, $lang = 'en')
+    {
+        if (empty($this->{$property})) {
+            return '';
+        }
+
+        if (!is_array($this->{$property})) {
+            return $this->{$property};
+        }
+
+        if (array_key_exists($lang, $this->{$property})) {
+            return $this->{$property}[$lang];
+        }
+
+        if (array_key_exists('en', $this->{$property})) {
+            return $this->{$property}[$lang];
+        }
+
+        return array_shift(array_values($this->{$property}));
     }
 }

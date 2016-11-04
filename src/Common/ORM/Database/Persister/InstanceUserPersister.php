@@ -34,6 +34,8 @@ class InstanceUserPersister extends BasePersister
 
         $this->persistCategories($id, $categories);
         $entity->categories = $categories;
+
+        $entity->refresh();
     }
 
     /**

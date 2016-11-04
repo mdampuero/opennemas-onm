@@ -382,7 +382,7 @@ $menuXml = [
         "id"          => "domain_manager",
         "title"       => _("Domains"),
         "icon"        => "fa fa-server",
-        "link"        => url('admin_domain_management'),
+        "link"        => url('backend_domains_list'),
         "privilege"   => "ROLE_ADMIN",
     ],
     [

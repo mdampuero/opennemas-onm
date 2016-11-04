@@ -11,10 +11,9 @@ namespace Backend\Controller;
 
 use Framework\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 use Onm\Framework\Controller\Controller;
 
-class DomainManagementController extends Controller
+class DomainController extends Controller
 {
     /**
      * Lists all the available ads.
@@ -23,7 +22,7 @@ class DomainManagementController extends Controller
      */
     public function listAction()
     {
-        return $this->render('domain_management/list.tpl');
+        return $this->render('domain/list.tpl');
     }
 
     /**
@@ -73,30 +72,19 @@ class DomainManagementController extends Controller
         $extension['description'] = array_key_exists($lang, $extension['description']) ?
             $extension['description'][$lang] : $extension['description']['en'];
 
-        $countries    = Intl::getRegionBundle()->getCountryNames(CURRENT_LANGUAGE_LONG);
+        $countries    = $this->get('core.geo')->getCountries();
+        $provinces    = $this->get('core.geo')->getRegions('ES');
         $taxes        = $this->get('vat')->getTaxes();
         $tokenFactory = $this->get('onm.braintree.factory')->get('ClientToken');
         $token        = $tokenFactory::generate($params);
 
-        return $this->render(
-            'domain_management/add.tpl',
-            [
-                'client'    => $client,
-                'extension' => $extension,
-                'countries' => $countries,
-                'taxes'     => $taxes,
-                'token'     => $token
-            ]
-        );
-    }
-
-    /**
-     * Lists all the available ads.
-     *
-     * @return Response The response object.
-     */
-    public function showAction()
-    {
-        return $this->render('domain_management/show.tpl');
+        return $this->render('domain/add.tpl', [
+            'client'    => $client,
+            'extension' => $extension,
+            'countries' => $countries,
+            'provinces' => $provinces,
+            'taxes'     => $taxes,
+            'token'     => $token
+        ]);
     }
 }

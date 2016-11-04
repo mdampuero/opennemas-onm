@@ -55,6 +55,40 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests create when API call returns a success.
+     */
+    public function testCreate()
+    {
+        $response = $this->getMockBuilder('\Braintree_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->success = true;
+
+        $response->transaction = $this->getMockBuilder('\Braintree_Transaction')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->transaction->id = '1';
+
+        $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
+        $bc->shouldReceive('sale')->once()->andReturn($response);
+
+        $factory = $this
+            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $factory->expects($this->once())->method('get')->with('transaction')->willReturn($bc);
+
+        $persister = new PaymentPersister($factory, $this->metadata);
+        $persister->create($this->unexistingPayment);
+
+        $this->assertEquals(
+            $response->transaction->id,
+            $this->unexistingPayment->id
+        );
+    }
+
+    /**
      * Tests create when API returns a false.
      *
      * @expectedException \RuntimeException
@@ -65,6 +99,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = false;
+        $response->message = 'Unable to save';
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
         $bc->shouldReceive('sale')->once()->andReturn($response);
@@ -102,50 +137,42 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests create when API call returns a success.
+     * Tests remove when API call returns a success.
      */
-    public function testCreateWithoutErrors()
+    public function testRemove()
     {
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = true;
 
-        $response->transaction = $this->getMockBuilder('\Braintree_Transaction')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->transaction->id = '1';
-
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
-        $bc->shouldReceive('sale')->once()->andReturn($response);
+        $bc->shouldReceive('void')->once()->with(1)->andReturn($response);
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $factory->expects($this->once())->method('get')->with('transaction')->willReturn($bc);
+        $factory->method('get')->with('transaction')->willReturn($bc);
+        $factory->expects($this->once())->method('get')->with('transaction');
 
         $persister = new PaymentPersister($factory, $this->metadata);
-        $persister->create($this->unexistingPayment);
-
-        $this->assertEquals(
-            $response->transaction->id,
-            $this->unexistingPayment->id
-        );
+        $persister->remove($this->existingPayment);
     }
 
     /**
      * Tests remove when API returns a false.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \RuntimeException
      */
-    public function testRemoveWhenEntityNotFound()
+    public function testRemoveWithErrors()
     {
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = false;
+        $response->message = 'Unable to remove';
 
         $bc = \Mockery::mock('Braintree_Payment' . uniqid());
         $bc->shouldReceive('void')->once()->andReturn($response);
@@ -180,31 +207,5 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
 
         $persister = new PaymentPersister($factory, $this->metadata);
         $persister->remove($this->existingPayment);
-    }
-
-    /**
-     * Tests remove when API call returns a success.
-     */
-    public function testRemoveWithoutErrors()
-    {
-        $response = $this->getMockBuilder('\Braintree_Response')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $response->success = true;
-
-        $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
-        $bc->shouldReceive('void')->once()->andReturn($response);
-
-        $factory = $this
-            ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $factory->method('get')->with('transaction')->willReturn($bc);
-        $factory->expects($this->once())->method('get')->with('transaction');
-
-        $persister = new PaymentPersister($factory, $this->metadata);
-        $persister->remove($this->unexistingPayment);
     }
 }

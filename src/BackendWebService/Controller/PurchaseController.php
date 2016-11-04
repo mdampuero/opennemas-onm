@@ -10,7 +10,7 @@
 namespace BackendWebService\Controller;
 
 use Common\ORM\Entity\Purchase;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,19 +30,21 @@ class PurchaseController extends Controller
      */
     public function getPdfAction($id)
     {
-        $em = $this->get('orm.manager');
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id = %s', $id);
 
-        $purchase = $em->getRepository('Purchase')->findOneBy([
-            'id'          => [ [ 'value' => $id ] ],
-            'instance_id' => [ [ 'value' => $this->get('core.instance')->id ] ]
-        ]);
+        $purchase = $em->getRepository('Purchase')->findOneBy($oql);
 
         if (!$purchase) {
             throw new \Exception(_('Unable to find the purchase'));
         }
 
-        $pdf = $em->getRepository('invoice', 'FreshBooks')
+        $pdf = $em->getRepository('invoice', 'freshbooks')
             ->getPDF($purchase->invoice_id);
+
+        if (empty($pdf)) {
+            return $this->render('purchase/error.tpl');
+        }
 
         $response = new Response($pdf);
 
@@ -52,35 +54,78 @@ class PurchaseController extends Controller
     }
 
     /**
+     * @api {get} /purchases List of purchases
+     * @apiName GetPurchases
+     * @apiGroup Purchase
+     *
+     * @apiParam {String} oql The OQL query.
+     *
+     * @apiSuccess {Integer} total   The total number of elements.
+     * @apiSuccess {Array}   results The list of purchases.
+     */
+    public function listAction(Request $request)
+    {
+        $oql = $request->query->get('oql', '');
+
+        if (!empty($oql) && !preg_match('/^(order|limit)/', $oql)) {
+            $oql = ' and ' . $oql;
+        }
+
+        $oql = sprintf(
+            'instance_id = "%s" and step = "done"',
+            $this->get('core.instance')->id
+        ) .  $oql;
+
+        $repository = $this->get('orm.manager')->getRepository('Purchase');
+        $converter  = $this->get('orm.manager')->getConverter('Purchase');
+
+        $total     = $repository->countBy($oql);
+        $purchases = $repository->findBy($oql);
+
+        $purchases = $converter->responsify($purchases);
+
+        return new JsonResponse([
+            'results' => $purchases,
+            'total'   => $total,
+        ]);
+    }
+
+    /**
      * @api {post} /purchases Creates a new purchase
      * @apiName CreatePurchase
      * @apiGroup Purchase
      */
     public function saveAction()
     {
-        $instance = $this->get('core.instance');
-        $em       = $this->get('orm.manager');
-        $client   = $instance->getClient();
-        $date     = new \DateTime();
+        $purchase = $this->get('core.helper.checkout')->getPurchase();
 
-        if (!empty($client)) {
-            $client = $em->getRepository('client')->find($client);
-        }
+        $this->get('orm.manager')->persist($purchase);
 
-        $purchase = new Purchase();
-        $purchase->instance_id = $instance->id;
-        $purchase->step        = 'cart';
-        $purchase->created     = $date;
-        $purchase->updated     = $date;
+        return new JsonResponse([ 'id' => $purchase->id ]);
+    }
 
-        if (!empty($client)) {
-            $purchase->client_id = $client->id;
-            $purchase->client    = $client;
-        }
+    /**
+    ** @api {post} /purchases/:id Shows a purchase
+     * @apiName ShowPurchase
+     * @apiGroup Purchase
+     */
+    public function showAction($id)
+    {
+        $em  = $this->get('orm.manager');
+        $oql = sprintf(
+            'id = %s and instance_id = %s',
+            $id,
+            $this->get('core.instance')->id
+        );
 
-        $em->persist($purchase);
+        $converter = $em->getConverter('Purchase');
+        $purchase  = $em->getRepository('purchase')
+            ->findOneBy($oql);
 
-        return new JsonResponse($purchase->id);
+        return new JsonResponse([
+            'purchase' => $converter->responsify($purchase),
+            'extra'    => $this->getExtraData()
+        ]);
     }
 
     /**
@@ -90,97 +135,30 @@ class PurchaseController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em       = $this->get('orm.manager');
-        $purchase = $em->getRepository('Purchase')->find($id);
-        $vatTax   = 0;
+        $step   = $request->request->get('step', 'cart');
+        $ids    = $request->request->get('ids', []);
+        $params = $request->request->get('params', []);
+        $method = $request->request->get('method', null);
 
-        if (!empty($this->get('core.instance')->getClient())) {
-            $client = $this->get('core.instance')->getClient();
-            $client = $em->getRepository('Client')->find($client);
+        $ph       = $this->get('core.helper.checkout');
+        $purchase = $ph->getPurchase($id);
+        $ph->next($step, $ids, $params, $method);
 
-            if (!empty($client)) {
-                $purchase->client_id = $client->id;
-                $purchase->client    = $client;
-            }
+        return new JsonResponse([ 'id' => $purchase->id ]);
+    }
 
-            $vatTax = $this->get('vat')->getVatFromCode($purchase->client->country);
-        }
+    /**
+     * Returns an array with extra parameters for template.
+     *
+     * @return array Array of extra parameters for template.
+     */
+    protected function getExtraData()
+    {
+        $countries = Intl::getRegionBundle()
+            ->getCountryNames($this->get('core.locale')->getLocaleShort());
 
-        $purchase->updated = new \DateTime();
-        $purchase->method  = $request->request->get('method', null);
-        $subtotal          = 0;
-        $purchase->step    = $request->request->get('step', 'cart');
-        $purchase->fee     = 0;
+        asort($countries);
 
-        $ids = $request->request->get('ids', []);
-
-        if (!empty($ids)) {
-            $items = $em->getRepository('Extension')->findBy(
-                sprintf('uuid in ["%s"]', implode('","', array_keys($ids)))
-            );
-
-            $themes = $em->getRepository('Theme')->findBy(
-                sprintf('uuid in ["%s"]', implode('","', array_keys($ids)))
-            );
-
-            $items = array_merge($items, $themes);
-
-            $purchase->details = [];
-            $i = 0;
-
-            foreach ($items as $item) {
-                $subtotal    += $item->getPrice();
-                $description  = is_array($item->name) ?
-                    $item->name[CURRENT_LANGUAGE_SHORT] : $item->name;
-
-                if (!empty($request->request->get('domains'))) {
-                    $description .= ': ' . $request->request->get('domains')[$i];
-                }
-
-                $price = $item->getPrice();
-
-                // Fix price for custom themes
-                if ($ids[$item->uuid]) {
-                    $description .= ' (Custom)';
-                    if ($price === 35) {
-                        // monthly
-                        $price = 350;
-                    } else {
-                        // yearly
-                        $price = 1450;
-                    }
-                }
-
-                $purchase->details[] = [
-                    'description'  => $description,
-                    'unit_cost'    => $price,
-                    'quantity'     => 1,
-                    'tax1_name'    => 'IVA',
-                    'tax1_percent' => $vatTax
-                ];
-
-                $i++;
-            }
-
-            $vat = ($vatTax/100) * $subtotal;
-
-            if ($purchase->method === 'CreditCard') {
-                $purchase->fee = $subtotal * 0.029 + 0.30;
-
-                $purchase->details[] = [
-                    'description'  => _('Pay with credit card'),
-                    'unit_cost'    => str_replace(',', '.', (string) round($purchase->fee, 2)),
-                    'quantity'     => 1,
-                    'tax1_name'    => 'IVA',
-                    'tax1_percent' => 0
-                ];
-            }
-
-            $purchase->total = $subtotal + $vat + $purchase->fee;
-        }
-
-        $em->persist($purchase);
-
-        return new JsonResponse();
+        return [ 'countries'  => $countries ];
     }
 }

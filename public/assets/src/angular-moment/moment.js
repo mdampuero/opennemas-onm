@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('BackendApp.filters')
+  angular.module('onm.moment', [])
     /**
      * Formats a date.
      */

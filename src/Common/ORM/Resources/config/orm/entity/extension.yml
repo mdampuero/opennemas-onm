@@ -4,7 +4,6 @@ orm:
             name: Extension
             enum:
                 type: [ domain, module, theme, theme-addon, widget ]
-
             required:
                 - uuid
                 - author
@@ -13,7 +12,12 @@ orm:
                 - name
                 - type
                 - updated
-
+            translate:
+                - about
+                - description
+                - name
+                - notes
+                - terms
             properties:
                 about:               array
                 author:              string
@@ -26,8 +30,10 @@ orm:
                 modules_in_conflict: array
                 modules_included:    array
                 name:                array
+                notes:               array
                 parameters:          array
                 price:               array
+                terms:               array
                 type:                enum
                 updated:             datetime
                 uuid:                string
@@ -35,7 +41,7 @@ orm:
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
-                    arguments: [ '@orm.metadata.extension' ]
+                    arguments: [ '@orm.metadata.extension', '@core.locale' ]
             repositories:
                 database:
                     class:     Common\ORM\Database\Repository\BaseRepository

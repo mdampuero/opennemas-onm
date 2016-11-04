@@ -21,6 +21,8 @@ orm:
                 payment_id:  string
                 total:       float
                 step:        string
+                notes:       string
+                terms:       string
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -76,6 +78,12 @@ orm:
                         step:
                             type: string
                             options: { default: null, length: 10, notnull: true }
+                        notes:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        terms:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
                     index:
                         -
                             name: PRIMARY

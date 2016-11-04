@@ -136,8 +136,11 @@
                     <div class="col-xs-7">
                       <select class="form-control" id="price-type-[% $index %]" name="price-type-[% $index %]" ng-model="price.type">
                         <option value="monthly">{t}Monthly{/t} (€/{t}month{/t})</option>
+                        <option value="monthly_custom">{t}Monthly{/t} {t}w/customization{/t} (€/{t}month{/t})</option>
                         <option value="yearly">{t}Yearly{/t} (€/{t}year{/t})</option>
+                        <option value="yearly_custom">{t}Yearly{/t} {t}w/customization{/t} (€/{t}year{/t})</option>
                         <option value="single">{t}Single{/t} (€)</option>
+                        <option value="single_custom">{t}Single{/t} {t}w/customization{/t} (€)</option>
                         <option value="item">{t}Item{/t} (€/{t}item{/t})</option>
                       </select>
                     </div>
@@ -260,6 +263,22 @@
                   </label>
                   <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.about[language].$invalid }">
                     <textarea class="form-control" onm-editor onm-editor-preset="simple" id="about" name="about" ng-model="module.about[language]" rows="5"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">
+                    {t}Terms{/t}
+                  </label>
+                  <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.terms[language].$invalid }">
+                    <textarea class="form-control" id="terms" name="terms" ng-model="module.terms[language]" rows="5"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">
+                    {t}Notes{/t}
+                  </label>
+                  <div class="controls" ng-class="{ 'error-control': formValidated && moduleForm.notes[language].$invalid }">
+                    <textarea class="form-control" id="notes" name="notes" ng-model="module.notes[language]" rows="5"></textarea>
                   </div>
                 </div>
               </div>

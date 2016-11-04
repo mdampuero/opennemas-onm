@@ -232,7 +232,12 @@ class BaseRepository extends Repository
         $keys     = [];
         if ($this->hasCache()) {
             $entities = $this->cache->get($prefixedIds);
-            $keys     = array_keys($entities);
+            $miss     = $this->miss;
+            $entities = array_filter($entities, function ($a) use ($miss) {
+                return $miss !== $a;
+            });
+
+            $keys = array_keys($entities);
         }
 
         $missed = array_diff($prefixedIds, $keys);
