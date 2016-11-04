@@ -208,8 +208,6 @@
         if (webStorage.local.get('user-groups-columns')) {
           $scope.columns = webStorage.local.get('user-groups-columns');
         }
-
-        $scope.list();
       }
     ]);
 })();
