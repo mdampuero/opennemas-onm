@@ -743,13 +743,7 @@ class OpinionsController extends Controller
             }
 
             $this->view->assign(
-                array(
-                    'opinion'         => $opinion,
-                    'content'         => $opinion,
-                    'contentId'       => $opinion->id,
-                    'other_opinions'  => $otherOpinions,
-                    'author'          => $author,
-                )
+                [ 'other_opinions' => $otherOpinions, 'author' => $author]
             );
         } // End if isCached
 
@@ -761,6 +755,9 @@ class OpinionsController extends Controller
         return $this->render(
             'opinion/opinion.tpl',
             [
+                'opinion'         => $opinion,
+                'content'         => $opinion,
+                'contentId'       => $opinion->id,
                 'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'opinion,'.$opinion->id,

@@ -128,23 +128,18 @@ class BooksController extends Controller
                     $this->get('entity_repository')->find('Photo', $value->cover_id);
             }
 
-            $this->view->assign(
-                array(
-                    'book'        => $book,
-                    'content'     => $book,
-                    'libros'      => $books,
-                    'contentId'   => $book->id,
-                    'category'    => $book->category,
-                    'cache_id'    => $cacheID,
-                )
-            );
+            $this->view->assign(['libros' => $books]);
         }
 
         return $this->render(
             'books/book_viewer.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
+            [
+                'book'      => $book,
+                'content'   => $book,
+                'contentId' => $book->id,
+                'category'  => $book->category,
+                'cache_id'  => $cacheID,
+            ]
         );
     }
 
