@@ -232,7 +232,7 @@ class SitemapController extends Controller
             );
         } else {
             // Return the output as xml
-            $headers = array('Content-Type' => 'application/xml charset=utf-8');
+            $headers = array('Content-Type' => 'application/xml; charset=utf-8');
         }
 
         $instanceName = getService('core.instance')->internal_name;

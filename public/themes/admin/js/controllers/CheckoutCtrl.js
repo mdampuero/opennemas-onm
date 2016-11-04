@@ -161,7 +161,12 @@
 
           var data = $scope.getData();
 
-          return http.put(route, data).then(function() {
+          return http.put(route, data).then(function(response) {
+            if (response.data.id) {
+              $scope.purchase = response.data.id;
+              webStorage.local.set('purchase', $scope.purchase);
+            }
+
             $scope.step++;
 
             if ($scope.steps[$scope.step] === 'done') {
@@ -214,7 +219,13 @@
             params: { id: $scope.purchase }
           };
 
-          return http.put(route, { step: 'cart' });
+          return http.put(route, { step: 'cart' })
+            .then(function(response) {
+              if (response.data.id) {
+                $scope.purchase = response.data.id;
+                webStorage.local.set('purchase', $scope.purchase);
+              }
+            });
         };
 
         /**
@@ -331,7 +342,7 @@
 
         if (!$scope.purchase) {
           http.post('backend_ws_purchase_save').then(function(response) {
-            $scope.purchase = response.data;
+            $scope.purchase = response.data.id;
             webStorage.local.set('purchase', $scope.purchase);
           });
         } else {

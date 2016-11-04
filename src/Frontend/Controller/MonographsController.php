@@ -199,21 +199,17 @@ class MonographsController extends Controller
                 $special->img      = $photo;
             }
 
-            $this->view->assign(
-                array(
-                    'special'   => $special,
-                    'content'   => $special,
-                    'columns'   => $columns,
-                    'contentId' => $special->id,
-                )
-            );
+            $this->view->assign(['columns' => $columns]);
         }
 
         return $this->render(
             'special/special.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
+            [
+                'special'   => $special,
+                'content'   => $special,
+                'contentId' => $special->id,
+                'cache_id'  => $cacheID,
+            ]
         );
     }
 }

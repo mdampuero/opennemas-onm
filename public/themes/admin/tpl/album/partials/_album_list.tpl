@@ -166,7 +166,7 @@
                   <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="zoomcrop,220,220"></dynamic-image>
                 </span>
                 <div ng-if="content.cover == ''">
-                  <img ng-src="http://placehold.it/80x60" class="thumbnail" />
+                  <img ng-src="//placehold.it/80x60" class="thumbnail" />
                 </span>
               </td>
               <td>

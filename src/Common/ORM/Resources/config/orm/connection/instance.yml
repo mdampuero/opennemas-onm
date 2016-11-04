@@ -1,3 +1,5 @@
-connection:
-    name:   instance
-    dbname: onm-instances
+orm:
+    connection:
+        -
+            name:   instance
+            dbname: onm-instances

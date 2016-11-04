@@ -9,7 +9,6 @@ function smarty_function_image_tag($params, &$smarty)
     $output = "";
 
     if (empty($params['src'])) {
-        // trigger_error("[plugin] image_tag parameter 'src' cannot be empty", E_USER_NOTICE);
         return;
     }
 
@@ -37,13 +36,18 @@ function smarty_function_image_tag($params, &$smarty)
     unset($params['common']);
     unset($params['bundle']);
     unset($params['data-src']);
+
+    if ($lazyload) {
+        $params['class'] = "lazy ".(array_key_exists('class', $params)? $params['class']: '');
+    }
+
     $properties = '';
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
     if ($lazyload) {
-        $output = "<img class=\"lazy\" src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
+        $output = "<img src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
     } else {
         $output = "<img src=\"{$resource}\" {$properties}>";
     }

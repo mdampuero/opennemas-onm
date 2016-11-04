@@ -298,10 +298,6 @@ class Content
                 // return $this->comments = $commentRepository->countCommentsForContentId($this->id);
 
                 break;
-            case 'content_type_l10n_name':
-                return get_class($this);
-
-                break;
             default:
                 if (array_key_exists($name, $this->metas)) {
                     return $this->metas[$name];
@@ -413,6 +409,10 @@ class Content
 
             // Load object properties
             $this->load($rs);
+
+            // Load content_type_l10n_name
+            $this->content_type_l10n_name =
+                \ContentManager::getContentTypeTitleFromId($this->fk_content_type);
 
             return $this;
         } catch (\Exception $e) {

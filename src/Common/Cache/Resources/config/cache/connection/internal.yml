@@ -1,0 +1,5 @@
+cache:
+    -
+        name:      internal
+        namespace: internal
+        type:      file

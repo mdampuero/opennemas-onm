@@ -11,174 +11,164 @@ namespace Tests\Common\Core\Component\Security\User;
 
 use Common\ORM\Entity\User;
 use Common\Core\Component\Security\User\OAuthUserProvider;
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Defines test cases for OAuthUserProvider.
+ * Defines test cases for OAuthUserProvider class.
  */
-class OnmOAuthUserProviderTest extends \PHPUnit_Framework_TestCase
+class OAuthUserProviderTest extends KernelTestCase
 {
     /**
      * Configures the testing environment.
      */
     protected function setUp()
     {
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getRepository', 'persist' ])
+            ->getMock();
+
         $this->repository = $this->getMockBuilder('\Common\ORM\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'find', 'findOneBy' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('\Common\ORM\Core\EntityManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getRepository', 'persist' ])
+        $this->resource = $this->getMockBuilder('ResourceOwner')
+            ->setMethods([ 'getName' ])
+            ->getMock();
+
+        $this->response = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse')
+            ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
             ->getMock();
 
         $this->session = $this->getMockBuilder('Session')
-            ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->em->expects($this->any())->method('getRepository')->willReturn($this->repository);
+        $this->em->expects($this->any())->method('getRepository')
+            ->willReturn($this->repository);
 
-        $this->provider = new OAuthUserProvider($this->em, $this->session, [ 'wobble' ]);
+        $this->provider = new OAuthUserProvider($this->em, $this->session, [ 'foo' ]);
     }
 
     /**
-     * Tests loadUserByOAuthUserResponse when user found.
+     * Test loadUserByOAuthUserResponse when the user has already linked
+     * accounts.
      */
     public function testLoadUserByOAuthUserResponse()
     {
-        $user = new User([ 'id' => 1]);
-
-        $resource = $this->getMockBuilder('Resource')
+        $this->resource = $this->getMockBuilder('ResourceOwner')
             ->setMethods([ 'getName' ])
             ->getMock();
 
-        $response = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
-            ->getMockForAbstractClass();
+        $this->response = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse')
+            ->setMethods([ 'getResourceOwner', 'getUsername' ])
+            ->getMock();
 
-        $resource->expects($this->any())->method('getName')->willReturn('norf');
-        $response->expects($this->any())->method('getResourceOwner')->willReturn($resource);
-        $response->expects($this->any())->method('getUserName')->willReturn('glorp');
+        $user = new User();
+
+        $this->resource->expects($this->once())->method('getName')->willReturn('wibble');
+
+        $this->response->expects($this->once())->method('getUsername')->willReturn('1234');
+        $this->response->expects($this->once())->method('getResourceOwner')
+            ->willReturn($this->resource);
 
         $this->repository->expects($this->once())->method('findOneBy')
-            ->with('norf_id = "glorp"')->willReturn($user);
+            ->with('wibble_id = "1234"')
+            ->willReturn($user);
 
-        $this->assertEquals($user, $this->provider->loadUserByOAuthUserResponse($response));
+        $this->assertEquals($user, $this->provider->loadUserByOAuthUserResponse($this->response));
     }
 
     /**
-     * Tests loadUserByOAuthUserResponse when user not found in database nor
-     * in session.
-     *
-     * @expectedException Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     */
-    public function testLoadUserByOAuthUserResponseWhenNoUserFound()
-    {
-        $user = new User([ 'id' => 1]);
-
-        $resource = $this->getMockBuilder('Resource')
-            ->setMethods([ 'getName' ])
-            ->getMock();
-
-        $response = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
-            ->getMockForAbstractClass();
-
-        $resource->expects($this->any())->method('getName')->willReturn('norf');
-        $response->expects($this->any())->method('getResourceOwner')->willReturn($resource);
-        $response->expects($this->any())->method('getUserName')->willReturn('glorp');
-
-        $this->repository->expects($this->at(0))->method('findOneBy')
-            ->with('norf_id = "glorp"')->will($this->throwException(new \Exception()));
-
-        $this->session->expects($this->once())->method('get')->with('user')->willReturn(null);
-
-        $this->provider->loadUserByOAuthUserResponse($response);
-    }
-
-    /**
-     * Tests loadUserByOAuthUserResponse when user not found but accounts can be
-     * linked.
+     * Test loadUserByOAuthUserResponse when the user is linking his accounts.
      */
     public function testLoadUserByOAuthUserResponseWhenLinking()
     {
-        $user = new User([ 'id' => 1]);
-
-        $resource = $this->getMockBuilder('Resource')
+        $this->resource = $this->getMockBuilder('ResourceOwner')
             ->setMethods([ 'getName' ])
             ->getMock();
 
-        $response = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
-            ->disableOriginalConstructor()
+        $this->response = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse')
             ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        $resource->expects($this->any())->method('getName')->willReturn('norf');
-        $response->expects($this->any())->method('getResourceOwner')->willReturn($resource);
-        $response->expects($this->any())->method('getUserName')->willReturn('glorp');
-        $response->expects($this->any())->method('getRealName')->willReturn('Thud');
-        $response->expects($this->any())->method('getEmail')->willReturn('corge@quux.com');
-        $response->expects($this->any())->method('getAccessToken')->willReturn('1234');
+        $user = new User([ 'id' => 1 ]);
 
-        $this->repository->expects($this->at(0))->method('findOneBy')
-            ->with('norf_id = "glorp"')->will($this->throwException(new \Exception()));
-        $this->repository->expects($this->at(1))->method('find')
-            ->with('1')->willReturn($user);
+        $this->resource->expects($this->once())->method('getName')->willReturn('wibble');
+
+        $this->response->expects($this->once())->method('getUsername')->willReturn('1234');
+        $this->response->expects($this->once())->method('getRealname')->willReturn('Qux Flob');
+        $this->response->expects($this->once())->method('getEmail')->willReturn('garply@glork.com');
+        $this->response->expects($this->once())->method('getResourceOwner')->willReturn($this->resource);
+
+        $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
+        $this->repository->expects($this->any())->method('find')->willReturn($user);
 
         $this->session->expects($this->once())->method('get')->with('user')->willReturn($user);
 
-        $this->assertEquals($user, $this->provider->loadUserByOAuthUserResponse($response));
-        $this->assertEquals('glorp', $user->norf_id);
-        $this->assertEquals('corge@quux.com', $user->norf_email);
+        $this->assertEquals($user, $this->provider->loadUserByOAuthUserResponse($this->response));
+        $this->assertEquals('Qux Flob', $user->wibble_realname);
+        $this->assertEquals('garply@glork.com', $user->wibble_email);
     }
 
     /**
-     * Tests loadUserByOAuthUserResponse when user not found and account linking
-     * fails.
+     * Test loadUserByOAuthUserResponse when the user is linking his accounts.
      *
-     * @expectedException Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
-    public function testLoadUserByOAuthUserResponseWhenLinkingFails()
+    public function testLoadUserByOAuthUserResponseWhenNoUserInDatabase()
     {
-        $user = new User([ 'id' => 1]);
+        $user = new User([ 'id' => 1 ]);
 
-        $resource = $this->getMockBuilder('Resource')
-            ->setMethods([ 'getName' ])
-            ->getMock();
+        $this->resource->expects($this->once())->method('getName')->willReturn('wibble');
 
-        $response = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
-            ->getMockForAbstractClass();
+        $this->response->expects($this->once())->method('getUsername')->willReturn('1234');
+        $this->response->expects($this->once())->method('getResourceOwner')->willReturn($this->resource);
 
-        $resource->expects($this->any())->method('getName')->willReturn('norf');
-        $response->expects($this->any())->method('getResourceOwner')->willReturn($resource);
-        $response->expects($this->any())->method('getUserName')->willReturn('glorp');
-        $response->expects($this->any())->method('getRealName')->willReturn('Thud');
-        $response->expects($this->any())->method('getEmail')->willReturn('corge@quux.com');
-        $response->expects($this->any())->method('getAccessToken')->willReturn('1234');
-
-        $this->repository->expects($this->at(0))->method('findOneBy')
-            ->with('norf_id = "glorp"')->will($this->throwException(new \Exception()));
-        $this->repository->expects($this->at(1))->method('find')
-            ->with('1')->will($this->throwException(new \Exception()));
+        $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
+        $this->repository->expects($this->any())->method('find')->will($this->throwException(new \Exception()));
 
         $this->session->expects($this->once())->method('get')->with('user')->willReturn($user);
 
-        $this->provider->loadUserByOAuthUserResponse($response);
+        $this->assertEquals($user, $this->provider->loadUserByOAuthUserResponse($this->response));
+        $this->assertEquals('Qux Flob', $user->wibble_realname);
+        $this->assertEquals('garply@glork.com', $user->wibble_email);
     }
 
+    /**
+     * Test loadUserByOAuthUserResponse when no user found basing on the
+     * response from resource.
+     *
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     */
+    public function testLoadUserByOAuthUserResponseWhenNoUserInSession()
+    {
+        $this->resource = $this->getMockBuilder('ResourceOwner')
+            ->setMethods([ 'getName' ])
+            ->getMock();
+
+        $this->response = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse')
+            ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
+            ->getMock();
+
+        $user = new User([ 'id' => 1 ]);
+
+        $this->response->expects($this->once())->method('getResourceOwner')->willReturn($this->resource);
+        $this->resource->expects($this->once())->method('getName')->willReturn('wibble');
+        $this->response->expects($this->once())->method('getUsername')->willReturn('1234');
+        $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
+        $this->repository->expects($this->any())->method('find')->willReturn($user);
+
+        $this->session->expects($this->once())->method('get')->with('user')->willReturn(null);
+
+        $this->provider->loadUserByOAuthUserResponse($this->response);
+    }
 
     /**
      * Tests supportClass.
      */
     public function testSupportsClass()
     {
-        $this->assertFalse($this->provider->supportsClass('Bar'));
         $this->assertTrue($this->provider->supportsClass('User'));
     }
 }

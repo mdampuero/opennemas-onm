@@ -446,6 +446,11 @@ class AdsController extends Controller
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             ];
 
+            if ($this->getUser()->isMaster()) {
+                $settings['dfp_custom_code'] =
+                    base64_encode($formValues->get('dfp_custom_code'));
+            }
+
             foreach ($settings as $key => $value) {
                 $sm->set($key, $value);
             }
@@ -462,7 +467,7 @@ class AdsController extends Controller
         } else {
             $keys = [
                 'ads_settings', 'dfp_options',  'iadbox_id', 'revive_ad_server',
-                'tradedoubler_id',
+                'tradedoubler_id', 'dfp_custom_code'
             ];
 
             $configurations = $sm->get($keys);

@@ -354,27 +354,23 @@ class VideosController extends Controller
                 }
             }
 
-            $this->view->assign(
-                array(
-                    'video'         => $video,
-                    'content'       => $video,
-                    'category'      => $video->category,
-                    'category_name' => $video->category_name,
-                    'contentId'     => $video->id,
-                    'action'        => 'inner',
-                    'others_videos' => $otherVideos
-                )
-            );
+            $this->view->assign(['others_videos' => $otherVideos]);
         } //end iscached
 
         return $this->render(
             'video/video_inner.tpl',
-            array(
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'video,'.$video->id,
-                'x-cache-for' => '+1 day',
-                'x-cacheable' => $cacheable
-            )
+            [
+                'video'         => $video,
+                'content'       => $video,
+                'category'      => $video->category,
+                'category_name' => $video->category_name,
+                'contentId'     => $video->id,
+                'cache_id'      => $cacheID,
+                'action'        => 'inner',
+                'x-tags'        => 'video,'.$video->id,
+                'x-cache-for'   => '+1 day',
+                'x-cacheable'   => $cacheable
+            ]
         );
     }
 

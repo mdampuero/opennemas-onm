@@ -11,7 +11,6 @@ namespace Backend\Controller;
 
 use Framework\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 use Common\Core\Controller\Controller;
 
 class DomainController extends Controller
@@ -73,22 +72,11 @@ class DomainController extends Controller
         $extension['description'] = array_key_exists($lang, $extension['description']) ?
             $extension['description'][$lang] : $extension['description']['en'];
 
-        $countries    = Intl::getRegionBundle()->getCountryNames(CURRENT_LANGUAGE_LONG);
+        $countries    = $this->get('core.geo')->getCountries();
+        $provinces    = $this->get('core.geo')->getRegions('ES');
         $taxes        = $this->get('vat')->getTaxes();
         $tokenFactory = $this->get('onm.braintree.factory')->get('ClientToken');
         $token        = $tokenFactory::generate($params);
-        $provinces    = [
-            'Álava', 'Albacete', 'Alicante/Alacant', 'Almería', 'Asturias',
-            'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
-            'Cantabria', 'Castellón/Castelló', 'Ceuta', 'Ciudad Real',
-            'Córdoba', 'Cuenca', 'Girona', 'Las Palmas', 'Granada',
-            'Guadalajara', 'Guipúzcoa', 'Huelva', 'Huesca', 'Illes Balears',
-            'Jaén', 'A Coruña', 'La Rioja', 'León', 'Lleida', 'Lugo', 'Madrid',
-            'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Ourense', 'Palencia',
-            'Pontevedra', 'Salamanca', 'Segovia', 'Sevilla', 'Soria',
-            'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo',
-            'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
-        ];
 
         return $this->render('domain/add.tpl', [
             'client'    => $client,

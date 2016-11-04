@@ -449,6 +449,17 @@
                                   </div>
                                 </div>
                               </div>
+
+                              <div class="col-md-12" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Google Analytics Custom variables{/t}
+                                  </label>
+                                  <div class="controls">
+                                      <textarea class="form-control" name="google_analytics[0][custom_var]" type="text" class="input-xlarge" ng-model="gaCodes[0].custom_var" value="[% gaCodes[0].custom_var %]"></textarea>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                             <div class="form-group other-analytics" ng-if="gaCodes.length > 1" ng-repeat="code in gaCodes track by $index">
                               <div class="row" ng-model="gaCodes[$index]">
@@ -476,6 +487,16 @@
                                             </button>
                                         </span>
                                       </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-12" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Google Analytics Custom variables{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <textarea class="form-control" name="google_analytics[[% $index %]][custom_var]" type="text" class="input-xlarge" ng-model="code.custom_var" value="[% code.custom_var %]"></textarea>
                                     </div>
                                   </div>
                                 </div>
@@ -967,7 +988,7 @@
                         <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
                       </label>
                       <div class="controls">
-                        <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|escape:'html'|stripslashes|default:""}</textarea>
+                        <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|base64_decode|escape:'html'|default:""}</textarea>
                       </div>
                     </div>
                     <div class="form-group">
@@ -976,7 +997,7 @@
                         <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
                       </label>
                       <div class="controls">
-                        <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|escape:'html'|stripslashes|default:""}</textarea>
+                        <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|base64_decode|escape:'html'|default:""}</textarea>
                       </div>
                     </div>
                     <div class="form-group">
@@ -985,7 +1006,7 @@
                         <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
                       </label>
                       <div class="controls">
-                        <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|escape:'html'|stripslashes|default:""}</textarea>
+                        <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|base64_decode|escape:'html'|default:""}</textarea>
                       </div>
                     </div>
 

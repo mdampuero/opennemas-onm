@@ -11,7 +11,6 @@ use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 
 class DomainController extends Controller
 {

@@ -564,6 +564,34 @@ class AdvertisementPositions
                 'name'  => '[B] Big Banner Inferior',
                 'group' => 'newsletter'
             ],
+
+            // AMP Positions
+            1051 => [
+                'name'  => 'AMP inner article - Button 1',
+                'group' => 'amp_inner'
+            ],
+            1052 => [
+                'name'  => 'AMP inner article - Button 2',
+                'group' => 'amp_inner'
+            ],
+            1053 => [
+                'name'  => 'AMP inner article - Button 3',
+                'group' => 'amp_inner'
+            ],
+
+            // FIA Positions
+            1075 => [
+                'name'  => 'Instant Articles inner article - Button 1',
+                'group' => 'fia_inner'
+            ],
+            1076 => [
+                'name'  => 'Instant Articles inner article - Button 2',
+                'group' => 'fia_inner'
+            ],
+            1077 => [
+                'name'  => 'Instant Articles inner article - Button 3',
+                'group' => 'fia_inner'
+            ],
         ];
     }
 

@@ -56,32 +56,9 @@ class CheckoutHelper
             return array_key_exists('uuid', $a);
         });
 
-        // Get domains
-        $domains = array_filter($items, function ($a) {
-            return strpos($a['uuid'], 'es.openhost.domain') !== false;
-        });
-
-        // Remove domains
-        $items = array_filter($items, function ($a) {
-            return strpos($a['uuid'], 'es.openhost.domain') === false;
-        });
-
-        $items = array_map(function ($a) {
-            return $a['uuid'];
-        }, $items);
-
-        // Get activable themes
-        $themes = array_filter($items, function ($a) {
-            return strpos($a, 'es.openhost.theme') !== false;
-        });
-
-        // Get activable extensions
-        $extensions = array_diff($items, $themes);
-
-        // Get domain URLs
-        $domains = array_map(function ($a) {
-            return substr($a['description'], strrpos($a['description'], ' '));
-        }, $domains);
+        $domains    = $this->getDomains($items);
+        $extensions = $this->getExtensions($items);
+        $themes     = $this->getThemes($items);
 
         $this->instance->domains =
             array_merge($this->instance->domains, $domains);
@@ -106,19 +83,22 @@ class CheckoutHelper
             return $this->purchase;
         }
 
-        $date = new \DateTime();
-
         $this->purchase = new Purchase();
+
+        if (!empty($id)) {
+            try {
+                $this->purchase = $this->container->get('orm.manager')
+                    ->getRepository('Purchase')->find($id);
+            } catch (\Exception $e) {
+            }
+        }
+
+        $date = new \DateTime();
 
         $this->purchase->created     = $date;
         $this->purchase->instance_id = $this->instance->id;
         $this->purchase->step        = 'start';
         $this->purchase->updated     = $date;
-
-        if (!empty($id)) {
-            $this->purchase = $this->container->get('orm.manager')
-                ->getRepository('Purchase')->find($id);
-        }
 
         if (!empty($this->client) && empty($this->purchase->client)) {
             $this->purchase->client = $this->client;
@@ -203,8 +183,8 @@ class CheckoutHelper
             }
         }
 
-        $this->purchase->notes = trim("\n", $notes);
-        $this->purchase->terms = trim("\n", $terms);
+        $this->purchase->notes = trim($notes, "\n");
+        $this->purchase->terms = trim($terms, "\n");
 
         $vat = ($vatTax/100) * $subtotal;
 
@@ -368,5 +348,77 @@ class CheckoutHelper
             );
 
         $this->container->get('mailer')->send($message);
+    }
+
+    /**
+     * Returns the list of URLs to add to the instance.
+     *
+     * @param array $items The list of purchased items.
+     *
+     * @return array The list of URLs to add to the instance.
+     */
+    protected function getDomains($items)
+    {
+        $domains = array_filter($items, function ($a) {
+            return strpos($a['uuid'], 'es.openhost.domain') !== false;
+        });
+
+        return array_map(function ($a) {
+            return substr($a['description'], strrpos($a['description'], ' '));
+        }, $domains);
+    }
+
+    /**
+     * Returns the list of extensions to add to the instance.
+     *
+     * @param array $items The list of purchased items.
+     *
+     * @return array The list of extensions to add to the instance.
+     */
+    protected function getExtensions($items)
+    {
+        $extensions = array_filter($items, function ($a) {
+            return strpos($a['uuid'], 'es.openhost.domain') === false
+                && strpos($a['uuid'], 'es.openhost.theme') === false;
+        });
+
+        $extensions = array_map(function ($a) {
+            return $a['uuid'];
+        }, $extensions);
+
+        // Find extensions included in purchased items
+        $oql = sprintf(
+            'uuid in ["%s"] and modules_included !is null',
+            implode('", "', $extensions)
+        );
+
+        $includes = $this->container->get('orm.manager')
+            ->getRepository('Extension')
+            ->findBy($oql);
+
+        foreach ($includes as $extension) {
+            $extensions =
+                array_merge($extensions, $extension->modules_included);
+        }
+
+        return $extensions;
+    }
+
+    /**
+     * Returns the list of themes to add to the instance.
+     *
+     * @param array $items The list of purchased items.
+     *
+     * @return array The list of themes to add to the instance.
+     */
+    protected function getThemes($items)
+    {
+        $themes = array_filter($items, function ($a) {
+            return strpos($a['uuid'], 'es.openhost.theme') !== false;
+        });
+
+        return array_map(function ($a) {
+            return $a['uuid'];
+        }, $themes);
     }
 }

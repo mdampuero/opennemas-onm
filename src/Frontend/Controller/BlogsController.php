@@ -308,17 +308,15 @@ class BlogsController extends Controller
                 $photo = $this->get('entity_repository')->find('Photo', $blog->img2);
                 $this->view->assign('photo', $photo);
             }
-            $this->view->assign([
-                    'blog'     => $blog,
-                    'content'  => $blog,
-                    'author'   => $author,
-            ]);
+            $this->view->assign(['author' => $author]);
         } // End if isCached
 
         // Show in Frontpage
         return $this->render(
             'opinion/blog_inner.tpl',
             [
+                'blog'            => $blog,
+                'content'         => $blog,
                 'cache_id'        => $cacheID,
                 'advertisements'  => $this->getAds('inner'),
                 'actual_category' => 'blog', // Used in renderMenu

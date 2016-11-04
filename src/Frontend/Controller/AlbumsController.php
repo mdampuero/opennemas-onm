@@ -230,11 +230,8 @@ class AlbumsController extends Controller
 
             $this->view->assign(
                 array(
-                    'album'              => $album,
-                    'content'            => $album,
                     'album_photos'       => $_albumArray,
                     'album_photos_paged' => $_albumArrayPaged,
-                    'page'               => $this->page,
                     'items_page'         => $itemsPerPage,
                     'gallerys'           => $otherAlbums,
                 )
@@ -244,6 +241,9 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album.tpl',
             array(
+                'album'          => $album,
+                'content'        => $album,
+                'page'           => $this->page,
                 'cache_id'       => $cacheID,
                 'contentId'      => $album->id,
                 'advertisements' => $this->getAds('inner'),

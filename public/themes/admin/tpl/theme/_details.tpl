@@ -14,7 +14,7 @@
       </uib-carousel>
       <uib-carousel active="1" class="carousel-big" ng-if="!template.item.images">
         <uib-slide index="1">
-          <img class="img-responsive" src="http://placehold.it/1024x768">
+          <img class="img-responsive" src="//placehold.it/1024x768">
         </uib-slide>
       </uib-carousel>
     </div>

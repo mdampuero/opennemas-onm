@@ -7,7 +7,7 @@
           <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + screenshot %]">
         </uib-slide>
       </uib-carousel>
-      <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.images" src="http://placehold.it/1024x768">
+      <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.images" src="//placehold.it/1024x768">
     </div>
     <div class="clearfix p-t-5 p-b-10">
       <h4 class="uppercase pull-left">[% item.name %]</h4>

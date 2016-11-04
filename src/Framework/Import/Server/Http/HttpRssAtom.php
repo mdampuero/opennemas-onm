@@ -22,11 +22,11 @@ class HttpRssAtom extends HttpRss
         if (array_key_exists('url', $params)
             && preg_match('@rss|feed|xml@', $params['url'])
             && strpos(
-                file_get_contents($params['url']),
-                'http://www.w3.org/2005/Atom'
+                @file_get_contents($params['url']),
+                'application/atom+xml'
             ) !== false
         ) {
-                return true;
+            return true;
         }
 
         return false;

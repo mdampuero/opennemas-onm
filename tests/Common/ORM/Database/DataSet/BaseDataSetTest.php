@@ -59,7 +59,7 @@ class BaseDataSetTest extends \PHPUnit_Framework_TestCase
 
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete', 'get', 'set' ])
+            ->setMethods([ 'remove', 'get', 'set' ])
             ->getMock();
     }
 
@@ -68,7 +68,7 @@ class BaseDataSetTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $this->cache->expects($this->exactly(2))->method('delete')->with([ 'foo' ]);
+        $this->cache->expects($this->exactly(2))->method('remove')->with([ 'foo' ]);
         $this->conn->expects($this->exactly(2))->method('executeQuery')->with(
             'delete from foobar where name in (?)',
             [ [ 'foo' ] ],
@@ -139,7 +139,7 @@ class BaseDataSetTest extends \PHPUnit_Framework_TestCase
      */
     public function testSet()
     {
-        $this->cache->expects($this->any())->method('delete')->with('foo');
+        $this->cache->expects($this->any())->method('remove')->with('foo');
         $this->conn->expects($this->any())->method('executeQuery')
             ->with(
                 'insert into foobar (name, value) values (?,?) on duplicate key update value = ?',
