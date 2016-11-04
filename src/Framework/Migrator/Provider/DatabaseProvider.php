@@ -9,7 +9,8 @@
  */
 namespace Framework\Migrator\Provider;
 
-use Onm\DatabaseConnection;
+use Common\Migration\Component\Tracker\MigrationTracker;
+use Common\ORM\Core\Connection;
 
 class DatabaseProvider extends MigrationProvider
 {
@@ -28,12 +29,19 @@ class DatabaseProvider extends MigrationProvider
         parent::configure();
 
         // Initialize origin connection
-        $this->originConnection = new DatabaseConnection(
-            getContainerParameter('database')
+        $this->originConnection = new Connection(
+            getContainerParameter('orm.default')['connection']
         );
+
         $this->originConnection->selectDatabase(
             $this->settings['migration']['source']
         );
+
+        $conn = getService('orm.manager')->getConnection('instance');
+        $conn->selectDatabase($this->settings['migration']['target']);
+
+        $this->tracker = new MigrationTracker($conn);
+        $this->tracker->load();
     }
 
     /**
@@ -46,28 +54,29 @@ class DatabaseProvider extends MigrationProvider
     public function getSource($name, $schema)
     {
         $data = array();
+        $type = $schema['translation']['name'];
         $this->stats[$name]['already_imported'] = 0;
 
-        $translations = '';
-        if (array_key_exists(
-            $schema['translation']['name'],
-            $this->translations
-        )) {
-            foreach (array_keys($this->translations[$schema['translation']['name']]) as $oldId) {
-                $translations .= '\''.$oldId . '\', ';
-            }
-        }
+        $translations = $this->tracker->getParsed($type);
 
-        $sql = 'SELECT ' . $schema['source']['table'] . '.'
-            . $schema['source']['id'] . ' FROM ' . $schema['source']['table']
-            . ' WHERE ' ;
+        $ids = array_map(function ($a) {
+            return $a['source_id'];
+        }, $translations);
 
-        if ($translations != '') {
-            $sql .= $schema['source']['table'] . '.'
-                . $schema['source']['id']
-                . ' NOT IN (' . rtrim($translations, ', ') . ')';
-        } else {
-            $sql .= '1';
+        $sql = sprintf(
+            'SELECT DISTINCT(%s.%s) FROM %s WHERE 1',
+            $schema['source']['table'],
+            $schema['source']['id'],
+            $schema['source']['table']
+        );
+
+        if (!empty($ids)) {
+            $sql .= sprintf(
+                ' AND %s.%s NOT IN (%s)',
+                $schema['source']['table'],
+                $schema['source']['id'],
+                implode(',', $ids)
+            );
         }
 
         // Add logical comparisons to 'WHERE' chunk
@@ -78,7 +87,8 @@ class DatabaseProvider extends MigrationProvider
         }
 
         $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
-            . $schema['source']['id'];
+            . $schema['source']['id'] . ' asc';
+
 
         $ids     = $this->originConnection->fetchAll($sql);
         $total   = count($ids);
@@ -90,104 +100,97 @@ class DatabaseProvider extends MigrationProvider
                 );
             }
 
-            if (!$this->elementIsImported(
-                $id[$schema['source']['id']],
-                $schema['translation']['name']
-            )) {
-                // Build sql statement 'SELECT' chunk
-                $sql = 'SELECT ';
-                foreach ($schema['fields'] as $key => $field) {
-                    if (isset($field['type']) &&
-                            in_array('constant', $field['type'])) {
-                        $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key
-                            . ', ';
-                    } elseif (isset($field['type']) &&
-                            in_array('subselect', $field['type'])) {
-                        $params = $field['params']['subselect'];
+            // Build sql statement 'SELECT' chunk
+            $sql = 'SELECT ';
+            foreach ($schema['fields'] as $key => $field) {
+                if (isset($field['type']) &&
+                    in_array('constant', $field['type'])) {
+                    $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key
+                        . ', ';
+                } elseif (isset($field['type']) &&
+                    in_array('subselect', $field['type'])) {
+                    $params = $field['params']['subselect'];
 
-                        $sql .= '(SELECT group_concat(' . $params['table'] . '.'
-                            . $params['field'] . ') FROM ' . $params['table']
-                            . ' WHERE ' . $params['table'] . '.' . $params['id']
-                            . '=' . $id[$schema['source']['id']];
+                    $sql .= '(SELECT group_concat(' . $params['table'] . '.'
+                        . $params['field'] . ') FROM ' . $params['table']
+                        . ' WHERE ' . $params['table'] . '.' . $params['id']
+                        . '=' . $id[$schema['source']['id']];
 
-                        // Add logical comparisons to 'WHERE' chunk
-                        if (isset($params['conditions'])
-                                && count($params['conditions']) > 0) {
-                            $sql .= ' AND '
-                                . $this->parseCondition($params['conditions']);
-                        }
-
-                        $sql .= ')' . ' AS ' . $key . ', ';
-                    } else {
-                        $sql .= $field['table'] . '.' . $field['field']
-                            . ' AS ' . $key . ', ';
-                    }
-                }
-
-                $sql = rtrim($sql, ', ');
-
-                // Build sql statement 'FROM' chunk
-                $sql .= ' FROM ';
-                foreach ($schema['tables'] as $key => $table) {
-                    $sql .= $table['table'];
-
-                    if (isset($table['alias'])) {
-                        $sql .= ' AS ' . $table['alias'];
+                    // Add logical comparisons to 'WHERE' chunk
+                    if (isset($params['conditions'])
+                        && count($params['conditions']) > 0) {
+                        $sql .= ' AND '
+                            . $this->parseCondition($params['conditions']);
                     }
 
-                    $sql .=  ', ';
+                    $sql .= ')' . ' AS ' . $key . ', ';
+                } else {
+                    $sql .= $field['table'] . '.' . $field['field']
+                        . ' AS ' . $key . ', ';
+                }
+            }
+
+            $sql = rtrim($sql, ', ');
+
+            // Build sql statement 'FROM' chunk
+            $sql .= ' FROM ';
+            foreach ($schema['tables'] as $key => $table) {
+                $sql .= $table['table'];
+
+                if (isset($table['alias'])) {
+                    $sql .= ' AS ' . $table['alias'];
                 }
 
-                $sql = rtrim($sql, ', ');
+                $sql .=  ', ';
+            }
 
-                // Build sql statement 'WHERE' chuck
-                $sql.= ' WHERE ('
-                        . (isset($schema['source']['alias']) ?
-                            $schema['source']['alias'] :
-                            $schema['source']['table']) . '.'
-                        . $schema['source']['id'] . '=\''
-                        . $id[$schema['source']['id']] . '\')';
+            $sql = rtrim($sql, ', ');
 
-                if (isset($schema['relations'])
-                        && count($schema['relations']) > 0) {
-                    foreach ($schema['relations'] as $key => $relation) {
-                        if ($key < count($schema['relations'])) {
-                            $sql .= ' AND (';
-                        }
-                        $sql .= $relation['table1'] . '.' . $relation['id1'] .
-                            '=' . $relation['table2'] . '.' . $relation['id2']
-                            . ')';
+            // Build sql statement 'WHERE' chuck
+            $sql.= ' WHERE ('
+                . (isset($schema['source']['alias']) ?
+                $schema['source']['alias'] :
+                $schema['source']['table']) . '.'
+                . $schema['source']['id'] . '=\''
+                . $id[$schema['source']['id']] . '\')';
+
+            if (isset($schema['relations'])
+                && count($schema['relations']) > 0) {
+                foreach ($schema['relations'] as $key => $relation) {
+                    if ($key < count($schema['relations'])) {
+                        $sql .= ' AND (';
                     }
+                    $sql .= $relation['table1'] . '.' . $relation['id1'] .
+                        '=' . $relation['table2'] . '.' . $relation['id2']
+                        . ')';
                 }
+            }
 
-                // Add logical comparisons to 'WHERE' chunk
-                if (isset($schema['post-conditions'])
-                    && count($schema['post-conditions']) > 0
-                ) {
-                    $sql .= ' AND '
-                        . $this->parseCondition($schema['post-conditions']);
-                }
+            // Add logical comparisons to 'WHERE' chunk
+            if (isset($schema['post-conditions'])
+                && count($schema['post-conditions']) > 0
+            ) {
+                $sql .= ' AND '
+                    . $this->parseCondition($schema['post-conditions']);
+            }
 
-                $results = $this->originConnection->fetchAll($sql);
+            $results = $this->originConnection->fetchAll($sql);
 
-                if (count($results) > 0) {
-                    foreach ($results as $result) {
-                        if (isset($schema['collections'])) {
-                            foreach ($schema['collections'] as $key => $value) {
-                                $result[$key] = array();
+            if (count($results) > 0) {
+                foreach ($results as $result) {
+                    if (isset($schema['collections'])) {
+                        foreach ($schema['collections'] as $key => $value) {
+                            $result[$key] = array();
 
-                                foreach ($value as $field) {
-                                    $result[$key][] = $result[$field];
-                                    unset($result[$field]);
-                                }
+                            foreach ($value as $field) {
+                                $result[$key][] = $result[$field];
+                                unset($result[$field]);
                             }
                         }
-
-                        $data[] = $result;
                     }
+
+                    $data[] = $result;
                 }
-            } else {
-                $this->stats[$name]['already_imported']++;
             }
         }
 

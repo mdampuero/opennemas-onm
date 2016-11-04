@@ -9,6 +9,8 @@
  */
 namespace Framework\Migrator\Saver;
 
+use Common\Migration\Component\Tracker\MigrationTracker;
+use Onm\DatabaseConnection;
 use Onm\Exception\UserAlreadyExistsException;
 use Onm\Settings as s;
 use Onm\StringUtils;
@@ -17,6 +19,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class MigrationSaver
 {
+    /**
+     * Database connection to use while getting data from source.
+     *
+     * @var Onm\DatabaseConnection
+     */
+    protected $connection;
+
     /**
      * If true, debug messages will be shown during importing.
      *
@@ -336,7 +345,11 @@ class MigrationSaver
      */
     public function saveArticles($name, $schema, $data)
     {
+        $type = $schema['translation']['name'];
+
         foreach ($data as $item) {
+            $sourceId = $item[$schema['translation']['field']];
+
             $values = array(
                 'title'          => null,
                 'with_comment'   => 0,
@@ -373,48 +386,28 @@ class MigrationSaver
             $values = $this->merge($values, $item, $schema);
 
             try {
-                if ($this->matchTranslation(
-                    $values[$schema['translation']['field']],
-                    $schema['translation']['name']
-                ) === false
-                ) {
-                    $articleId = $this->findContent($values['title']);
+                $slug = array_key_exists('slug', $schema['translation']) ?
+                    $values[$schema['translation']['slug']] : '';
 
-                    if (!empty($articleId)) {
-                        throw new UserAlreadyExistsException();
-                    }
-
+                if (!$this->tracker->isParsed($sourceId)) {
                     $article = new \Article();
                     $article->create($values);
-                    $slug = array_key_exists('slug', $schema['translation']) ?
-                        $values[$schema['translation']['slug']] : '';
 
-                    $this->createTranslation(
-                        $values[$schema['translation']['field']],
-                        $article->id,
-                        $schema['translation']['name'],
-                        $slug
-                    );
-
+                    $targetId = $article->id;
                     $this->stats[$name]['imported']++;
                 } else {
                     $this->stats[$name]['already_imported']++;
+                    $targetId = $this->tracker->getTargetId($sourceId, $type);
                 }
-            } catch (UserAlreadyExistsException $e) {
-                $articleId = $this->findContent($values['title']);
 
-                $this->createTranslation(
-                    $values[$schema['translation']['field']],
-                    $articleId,
-                    $schema['translation']['name'],
-                    ''
-                );
-
-                $this->stats[$name]['already_imported']++;
+                $this->tracker->add($sourceId, $targetId, $type, $slug);
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
+                $this->tracker->persist();
             }
         }
+
+        $this->tracker->persist();
     }
 
     /**
@@ -1438,7 +1431,6 @@ class MigrationSaver
                     $schema['translation']['name'],
                     ''
                 );
-
                 $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
@@ -1556,17 +1548,27 @@ class MigrationSaver
                 . INSTANCE_UNIQUE_NAME . DIRECTORY_SEPARATOR);
         }
 
-        // TODO: Remove when no AdoDB in models
-        $conn = getService('db_conn');
+        // Initialize target database
+        $this->targetConnection = getService('db_conn');
+        $this->targetConnection->selectDatabase(
+            $this->settings['migration']['target']
+        );
+
+        $conn = getService('orm.manager')->getConnection('instance');
         $conn->selectDatabase($this->settings['migration']['target']);
 
         \Application::load();
-        \Application::initDatabase($conn);
+        \Application::initDatabase($this->targetConnection);
 
-        $this->targetConnection =
-            getService('orm.manager')->getConnection('instance');
-        $this->targetConnection
-            ->selectDatabase($this->settings['migration']['target']);
+        $this->originConnection = new DatabaseConnection(
+            getContainerParameter('database')
+        );
+        $this->originConnection->selectDatabase(
+            $this->settings['migration']['source']
+        );
+
+        $this->tracker = new MigrationTracker($conn);
+        $this->tracker->load();
 
         if (array_key_exists('user', $this->settings['migration'])) {
             // TODO: Remove ASAP
@@ -1672,18 +1674,16 @@ class MigrationSaver
      */
     protected function createTranslation($old, $new, $type, $slug = null)
     {
-        $values = [
-            'pk_content_old' => $old,
-            'pk_content'     => $new,
-            'type'           => $type,
-            'slug'           => $slug
-        ];
+        $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
+            . '`type`, `slug`) VALUES (?,?,?,?)';
+        $values = array($old, $new, $type, $slug);
 
-        try {
-            $this->targetConnection->insert('translation_ids', $values);
-        } catch (\Exception $e) {
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, $values);
+
+        if (!$rss) {
             $this->output->writeln(
-                'createTranslation: ' . $e->getMessage()
+                'createTranslation: ' . $this->targetConnection->ErrorMsg()
             );
         }
 
@@ -1938,11 +1938,12 @@ class MigrationSaver
      */
     protected function updateAlbumCover($album, $photo)
     {
-        $this->targetConnection->update(
-            'albums',
-            [ 'cover_id' => $photo ],
-            [ 'pk_album' => $album ]
-        );
+        $sql = "UPDATE albums  SET `cover_id`=? WHERE pk_album=?";
+
+        $values = array($photo, $album);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1954,11 +1955,13 @@ class MigrationSaver
      */
     protected function updateArticleFrontpagePhoto($id, $photo, $footer)
     {
-        $this->targetConnection->update(
-            'articles',
-            [ 'img1' => $photo, 'img1_footer' => $footer ],
-            [ 'pk_article' => $id ]
-        );
+        $sql = "UPDATE articles  SET `img1`=?, `img1_footer`=?"
+            ."WHERE pk_article=?";
+
+        $values = array($photo, $footer, $id);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1970,11 +1973,13 @@ class MigrationSaver
      */
     protected function updateArticlePhoto($id, $photo, $footer)
     {
-        $this->targetConnection->update(
-            'articles',
-            [ 'img2' => $photo, 'img2_footer' => $footer ],
-            [ 'pk_article' => $id ]
-        );
+        $sql = "UPDATE articles  SET `img2`=?, `img2_footer`=?"
+            ."WHERE pk_article=?";
+
+        $values = array($photo, $footer, $id);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1988,12 +1993,17 @@ class MigrationSaver
     {
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
               ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, 'img1', $photo, $photo);
 
-        $values = [ $id, 'img1', $photo, $photo ];
-        $this->targetConnection->executeQuery($sql, $values);
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
 
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
         $values = array($id, 'img1_footer', $footer, $footer);
-        $this->targetConnection->executeQuery($sql, $values);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -2007,12 +2017,17 @@ class MigrationSaver
     {
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
               ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, 'img2', $photo, $photo);
 
-        $values = [ $id, 'img2', $photo, $photo ];
-        $this->targetConnection->executeQuery($sql, $values);
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
 
-        $values = [ $id, 'img2_footer', $footer, $footer ];
-        $this->targetConnection->executeQuery($sql, $values);
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, 'img2_footer', $footer, $footer);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -2022,31 +2037,43 @@ class MigrationSaver
      */
     protected function updateRelated($values)
     {
-        try {
-            $sql    = "DELETE FROM related_contents WHERE `pk_content1`=? AND `pk_content2`=?";
-            $params = [ $values['pk_content1'], $values['pk_content2'] ];
+        $sql = "DELETE FROM related_contents WHERE `pk_content1`=? AND `pk_content2`=?";
 
-            $this->targetConnection->executeQuery($sql, $params);
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, [$values['pk_content1'],$values['pk_content2']]);
 
-            $sql   = "INSERT INTO related_contents  SET `pk_content1`=?, `pk_content2`=?,"
-                ."`relationship`=?, `text`=?, `position`=?, `posinterior`=?, `verportada`=?,"
-                ."`verinterior`=?";
-            $parms = [
-                $values['pk_content1'],
-                $values['pk_content2'],
-                $values['relationship'],
-                $values['text'],
-                $values['position'],
-                $values['posinterior'],
-                $values['verportada'],
-                $values['verinterior'],
-            ];
-
-            $this->targetConnection->executeQuery($sql, $params);
-        } catch (\Exception $e) {
-            $this->output->writeln('Delete - updateRelated: ' . $e->getMessage());
+        if (!$rss) {
+            $this->output->writeln(
+                'Delete - updateRelated: ' . $this->targetConnection->ErrorMsg()
+            );
         }
+
+        $sql = "INSERT INTO related_contents  SET `pk_content1`=?, `pk_content2`=?,"
+            ."`relationship`=?, `text`=?, `position`=?, `posinterior`=?, `verportada`=?,"
+            ."`verinterior`=?";
+
+        $values = [
+            $values['pk_content1'],
+            $values['pk_content2'],
+            $values['relationship'],
+            $values['text'],
+            $values['position'],
+            $values['posinterior'],
+            $values['verportada'],
+            $values['verinterior'],
+        ];
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, $values);
+
+        if (!$rss) {
+            $this->output->writeln(
+                'Insert - updateRelated: ' . $this->targetConnection->ErrorMsg()
+            );
+        }
+
     }
+
 
     /**
      * Updates fk_video2 and footer_video2 fields from an article.
@@ -2057,11 +2084,13 @@ class MigrationSaver
      */
     protected function updateArticleVideo($id, $video, $footer)
     {
-        $this->targetConnection->update(
-            'articles',
-            [ 'fk_video2' => $video, 'footer_video2' => $footer ],
-            [ 'pk_article' => $id ]
-        );
+        $sql = "UPDATE articles  SET `fk_video2`=?, `footer_video2`=?"
+            ."WHERE pk_article=?";
+
+        $values = array($video, $footer, $id);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -2077,12 +2106,15 @@ class MigrationSaver
             . ' WHERE `pk_content_old`=' . $old . ' AND `type`=\''
             . $type . '\'';
 
-        try {
-            $this->targetConnection->executeQuery($sql);
-            $this->translations[$type][$old] = $new;
-        } catch (\Exception $e) {
-            $this->output->writeln('createTranslation: ' . $e->getMessage());
+        $rs  = $this->targetConnection->Execute($sql);
+
+        if (!$rs) {
+            $this->output->writeln(
+                'createTranslation: ' . $this->targetConnection->ErrorMsg()
+            );
         }
+
+        $this->translations[$type][$old] = $new;
     }
 
     /**
@@ -2119,7 +2151,8 @@ class MigrationSaver
         $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
         $sql = "SELECT pk_content FROM contents WHERE title='$title'";
 
-        $rss = $this->targetConnection->fetchAll($sql);
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
 
         if ($rss && count($rss) == 1
             && array_key_exists('pk_content', $rss[0])
@@ -2142,7 +2175,8 @@ class MigrationSaver
         $sql = "SELECT pk_content_category FROM content_categories"
             . " WHERE name='$name' OR title='$name'";
 
-        $rss = $this->targetConnection->fetchAll($sql);
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
 
         if ($rss && count($rss) == 1
             && array_key_exists('pk_content_category', $rss[0])
@@ -2153,6 +2187,7 @@ class MigrationSaver
         return false;
     }
 
+
     /**
      * Reloads categories array.
      *
@@ -2161,8 +2196,31 @@ class MigrationSaver
      */
     private function reloadCategoryArray()
     {
+        $cache = getService('cache');
+        $cache->delete('content_categories');
+
+        $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            return false;
+        }
+
+        $categories = array();
+        if ($rs != false) {
+            $data = $rs->getArray();
+
+            foreach ($data as $catData) {
+                $category = new \ContentCategory();
+                $category->load($catData);
+                $categories[$category->id] = $category;
+            }
+        }
+
+        $cache->save('content_categories', $categories, 300);
         $ccm = \ContentCategoryManager::get_instance();
-        $ccm->reset();
+        $ccm->findAll();
     }
 
     /**
@@ -2178,7 +2236,8 @@ class MigrationSaver
             $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
             $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
 
-            $rss = $this->targetConnection->fetchAll($sql);
+            $rs = $this->targetConnection->Execute($sql);
+            $rss = $rs->getArray();
 
             if ($rss && count($rss) == 1 && array_key_exists('pk_content', $rss[0])) {
                 return $rss[0]['pk_content'];
@@ -2200,7 +2259,8 @@ class MigrationSaver
         $sql = "SELECT id FROM users WHERE name = '$name' OR username = '$name'"
             . " OR email = '$name'";
 
-        $rss = $this->targetConnection->fetchAll($sql);
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
 
         if ($rss && count($rss) == 1 && array_key_exists('id', $rss[0])) {
             return $rss[0]['id'];
@@ -2220,7 +2280,8 @@ class MigrationSaver
     {
         $sql = "SELECT pk_video FROM videos WHERE video_url = '$url'";
 
-        $rss = $this->targetConnection->fetchAll($sql);
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
 
         if ($rss && count($rss) == 1 && array_key_exists('pk_video', $rss[0])) {
             return $rss[0]['pk_video'];
