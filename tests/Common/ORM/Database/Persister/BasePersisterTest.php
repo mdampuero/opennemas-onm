@@ -60,7 +60,7 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete' ])
+            ->setMethods([ 'remove' ])
             ->getMock();
 
         $this->persister = new BasePersister($this->conn, $this->metadata, $this->cache);
@@ -103,7 +103,7 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->conn->expects($this->once())->method('delete')
             ->with('foobar', [ 'foo' => 1 ]);
-        $this->cache->expects($this->once())->method('delete');
+        $this->cache->expects($this->once())->method('remove');
 
         $this->persister->remove($entity);
     }
@@ -131,7 +131,7 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_STR ]
         );
 
-        $this->cache->expects($this->once())->method('delete');
+        $this->cache->expects($this->once())->method('remove');
         $this->persister->update($entity);
     }
 

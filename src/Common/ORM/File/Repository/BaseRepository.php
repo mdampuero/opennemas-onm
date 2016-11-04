@@ -17,7 +17,7 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Repository;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Parser;
 
 class BaseRepository extends Repository
 {
@@ -60,6 +60,7 @@ class BaseRepository extends Repository
         $this->metadata   = $metadata;
         $this->name       = $name;
         $this->paths      = $paths;
+        $this->parser     = new Parser();
         $this->translator = new PhpTranslator($metadata);
 
         if (!empty($paths)) {
@@ -121,13 +122,12 @@ class BaseRepository extends Repository
         $entities = $this->entities;
 
         if (!empty($filter)) {
-            $entities = [];
-
-            foreach ($this->entities as $entity) {
-                if (eval($filter)) {
-                    $entities[] = $entity;
+            $entities = array_filter(
+                $this->entities,
+                function ($entity) use ($filter) {
+                    return eval($filter);
                 }
-            }
+            );
         }
 
         if (!empty($order)) {
@@ -364,7 +364,7 @@ class BaseRepository extends Repository
      */
     protected function loadEntity($path)
     {
-        $config = Yaml::parse(file_get_contents($path));
+        $config = $this->parser->parse(file_get_contents($path));
         $path   = str_replace(basename($path), '', $path);
 
         if (empty($config)) {

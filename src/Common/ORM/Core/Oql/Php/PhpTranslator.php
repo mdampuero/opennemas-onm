@@ -27,7 +27,7 @@ class PhpTranslator
         'C_OR'           => 'consumeOperator',
         'G_OPARENTHESIS' => 'consumeOperator',
         'G_CPARENTHESIS' => 'consumeOperator',
-        'M_ORDER'        => 'consumeOrder',
+        'M_ORDER_BY'     => 'consumeOrderBy',
         'M_LIMIT'        => 'consumePrefixOperator',
         'O_EQUALS'       => 'consumeInfixOperator',
         'O_GREAT'        => 'consumeInfixOperator',
@@ -57,7 +57,7 @@ class PhpTranslator
      *
      * @var array
      */
-    protected $ignorable = [ 'M_LIMIT',  'M_OFFSET', 'M_ORDER' ];
+    protected $ignorable = [ 'M_LIMIT',  'M_OFFSET', 'M_ORDER_BY' ];
 
     /**
      * List of operators.
@@ -74,8 +74,7 @@ class PhpTranslator
         'G_CPARENTHESIS' => ')',
         'M_ASC'          => 'asc',
         'M_DESC'         => 'desc',
-        'M_ORDER'        => 'order',
-        'M_BY'           => 'by',
+        'M_ORDER_BY'     => 'orderBy',
         'M_LIMIT'        => 'limit',
         'M_OFFSET'       => 'offset',
         'O_EQUALS'       => 'isEquals',
@@ -224,15 +223,11 @@ class PhpTranslator
      *
      * @return array The consumed order by operator and its parameters.
      */
-    protected function consumeOrder()
+    protected function consumeOrderBy()
     {
         // Consume order
         $operator = array_shift($this->operators);
         $key      = $this->translateOperator($operator);
-
-        // Consume by
-        $operator = array_shift($this->operators);
-        $key     .= ' ' . $this->translateOperator($operator);
 
         // Consume field and direction
         $params[] = array_shift($this->params)['value'];
@@ -287,7 +282,7 @@ class PhpTranslator
             }
 
             // Ignore order by, limit and offset
-            if (in_array($key, [ 'limit', 'offset', 'order by' ])) {
+            if (in_array($key, [ 'limit', 'offset', 'orderBy' ])) {
                 $filter = '';
             }
 
@@ -329,8 +324,8 @@ class PhpTranslator
     protected function getOrder($map)
     {
         foreach ($map as $value) {
-            if (array_keys($value)[0] === 'order by') {
-                return $value['order by'];
+            if (array_keys($value)[0] === 'orderBy') {
+                return $value['orderBy'];
             }
         }
 

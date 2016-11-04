@@ -1,61 +1,63 @@
-entity:
-    name: UserNotification
-    required:
-        - user_id
-        - notification_id
-    properties:
-        user_id:         integer
-        notification_id: integer
-        instance_id:     integer
-        read_date:       datetime
-        view_date:       datetime
-        clicked_date:    datetime
-        open_date:       datetime
+orm:
+    metadata:
+        -
+            name: UserNotification
+            required:
+                - user_id
+                - notification_id
+            properties:
+                user_id:         integer
+                notification_id: integer
+                instance_id:     integer
+                read_date:       datetime
+                view_date:       datetime
+                clicked_date:    datetime
+                open_date:       datetime
 
-    converters:
-        default:
-            class:     Common\ORM\Database\Data\Converter\BaseConverter
-            arguments: [ '@orm.metadata.user_notification' ]
-    repositories:
-        instance:
-            class:     Common\ORM\Database\Repository\BaseRepository
-            arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
-    persisters:
-        instance:
-            class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
-    mapping:
-        database:
-            table: user_notification
-            columns:
-                user_id:
-                    type:    integer
-                    options: { default: null, unsigned: true, notnull: true }
-                notification_id:
-                    type:    integer
-                    options: { default: null, unsigned: true, notnull: true }
-                instance_id:
-                    type:    integer
-                    options: { default: null, unsigned: true, notnull: true }
-                user:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: true }
-                view_date:
-                    type:    datetimetz
-                    options: { default: null, notnull: false }
-                read_date:
-                    type:    datetimetz
-                    options: { default: null, notnull: false }
-                click_date:
-                    type:    datetimetz
-                    options: { default: null, notnull: false }
-                open_date:
-                    type:    datetimetz
-                    options: { default: null, notnull: false }
-            index:
-                -
-                    name: PRIMARY
-                    columns: [ notification_id, instance_id, user_id ]
-                    primary: true
-                    unique: true
-                    flags: {}
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.user_notification' ]
+            repositories:
+                instance:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
+            persisters:
+                instance:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
+            mapping:
+                database:
+                    table: user_notification
+                    columns:
+                        user_id:
+                            type:    integer
+                            options: { default: null, unsigned: true, notnull: true }
+                        notification_id:
+                            type:    integer
+                            options: { default: null, unsigned: true, notnull: true }
+                        instance_id:
+                            type:    integer
+                            options: { default: null, unsigned: true, notnull: true }
+                        user:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: true }
+                        view_date:
+                            type:    datetimetz
+                            options: { default: null, notnull: false }
+                        read_date:
+                            type:    datetimetz
+                            options: { default: null, notnull: false }
+                        click_date:
+                            type:    datetimetz
+                            options: { default: null, notnull: false }
+                        open_date:
+                            type:    datetimetz
+                            options: { default: null, notnull: false }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ notification_id, instance_id, user_id ]
+                            primary: true
+                            unique: true
+                            flags: {}

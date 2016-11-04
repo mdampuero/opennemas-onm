@@ -30,7 +30,7 @@ class InstancePersister extends BasePersister
 
             $domains = array_unique(array_merge($old, $entity->domains));
 
-            $this->cache->delete($domains);
+            $this->cache->remove($domains);
         }
     }
 
@@ -48,7 +48,7 @@ class InstancePersister extends BasePersister
 
             $domains = array_unique(array_merge($old, $entity->domains));
 
-            $this->cache->delete($domains);
+            $this->cache->remove($domains);
         }
     }
 }

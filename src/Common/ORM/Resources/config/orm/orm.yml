@@ -1,0 +1,20 @@
+imports:
+    - { resource: connection/instance.yml }
+    - { resource: connection/manager.yml }
+    - { resource: entity/category.yml }
+    - { resource: entity/client.yml }
+    - { resource: entity/content.yml }
+    - { resource: entity/extension.yml }
+    - { resource: entity/instance.yml }
+    - { resource: entity/invoice.yml }
+    - { resource: entity/notification.yml }
+    - { resource: entity/payment.yml }
+    - { resource: entity/purchase.yml }
+    - { resource: entity/settings.yml }
+    - { resource: entity/theme.yml }
+    - { resource: entity/user.yml }
+    - { resource: entity/user_group.yml }
+    - { resource: entity/user_group_privileges.yml }
+    - { resource: entity/user_notification.yml }
+    - { resource: schema/instance.yml }
+    - { resource: schema/manager.yml }
