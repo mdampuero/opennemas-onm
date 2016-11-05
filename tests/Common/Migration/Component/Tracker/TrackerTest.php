@@ -25,6 +25,10 @@ class TrackerTest extends KernelTestCase
         $this->tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\Tracker')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $property = new \ReflectionProperty($this->tracker, 'type');
+        $property->setAccessible(true);
+        $property->setValue($this->tracker, 'plugh');
     }
 
     public function testsAdd()
@@ -46,20 +50,13 @@ class TrackerTest extends KernelTestCase
         $property->setAccessible(true);
 
         $property->setValue($this->tracker, [
-            [ 'source_id' => 'waldo', 'type' => null, 'slug' => null, 'target_id' => 'fred' ],
-            [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ]
+            [ 'source_id' => 'waldo', 'type' => 'plugh', 'slug' => null, 'target_id' => 'fred' ],
         ]);
 
         $this->assertFalse($this->tracker->isParsed('corge'));
-        $this->assertFalse($this->tracker->isParsed('waldo', null, 'gorp'));
+        $this->assertFalse($this->tracker->isParsed('waldo', 'gorp'));
         $this->assertTrue($this->tracker->isParsed('waldo'));
-        $this->assertTrue($this->tracker->isParsed('waldo', null, null));
-        $this->assertFalse($this->tracker->isParsed('xyzzy', 'foobar'));
-        $this->assertFalse($this->tracker->isParsed('xyzzy', 'foobar', 'quux'));
-        $this->assertFalse($this->tracker->isParsed('xyzzy', 'plugh', 'gorp'));
-        $this->assertTrue($this->tracker->isParsed('xyzzy'));
-        $this->assertTrue($this->tracker->isParsed('xyzzy', null, 'quux'));
-        $this->assertTrue($this->tracker->isParsed('xyzzy', 'plugh'));
+        $this->assertTrue($this->tracker->isParsed('waldo', null));
     }
 
     /**
@@ -71,16 +68,12 @@ class TrackerTest extends KernelTestCase
         $property->setAccessible(true);
 
         $property->setValue($this->tracker, [
-            [ 'source_id' => 'waldo', 'type' => null, 'slug' => null, 'target_id' => 'fred' ],
+            [ 'source_id' => 'waldo', 'type' => 'plugh', 'slug' => null, 'target_id' => 'fred' ],
             [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ]
         ]);
 
         $this->assertEquals([
-            [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ]
-        ], $this->tracker->getParsed('plugh'));
-
-        $this->assertEquals([
-            [ 'source_id' => 'waldo', 'type' => null, 'slug' => null, 'target_id' => 'fred' ],
+            [ 'source_id' => 'waldo', 'type' => 'plugh', 'slug' => null, 'target_id' => 'fred' ],
             [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ]
         ], $this->tracker->getParsed());
     }
@@ -100,8 +93,7 @@ class TrackerTest extends KernelTestCase
         ]);
 
         $this->assertEquals('waldo', $this->tracker->getSourceId('fred'));
-        $this->assertEquals('xyzzy', $this->tracker->getSourceId('corge', null, 'quux'));
-        $this->assertEquals('xyzzy', $this->tracker->getSourceId('corge', 'plugh', 'quux'));
+        $this->assertEquals('xyzzy', $this->tracker->getSourceId('corge', 'quux'));
         $this->assertEquals('xyzzy', $this->tracker->getSourceId('thud'));
     }
 
@@ -147,8 +139,7 @@ class TrackerTest extends KernelTestCase
         ]);
 
         $this->assertEquals('corge', $this->tracker->getTargetId('xyzzy'));
-        $this->assertEquals('corge', $this->tracker->getTargetId('xyzzy', 'plugh'));
-        $this->assertEquals('thud', $this->tracker->getTargetId('xyzzy', 'plugh', 'fubar'));
+        $this->assertEquals('thud', $this->tracker->getTargetId('xyzzy', 'fubar'));
     }
 
     /**

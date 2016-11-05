@@ -27,7 +27,7 @@ class MigrationTrackerTest extends KernelTestCase
             ->setMethods([ 'executeQuery', 'fetchAll' ])
             ->getMock();
 
-        $this->tracker = new MigrationTracker($this->conn);
+        $this->tracker = new MigrationTracker($this->conn, 'grault');
     }
 
     /**
@@ -36,19 +36,19 @@ class MigrationTrackerTest extends KernelTestCase
     public function testLoad()
     {
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with("SELECT * FROM translation_ids WHERE type = 'garply'")
+            ->with("SELECT * FROM translation_ids WHERE type = 'grault'")
             ->willReturn([
                 [
                     'pk_content_old' => 'frog',
                     'pk_content'     => 'fubar',
-                    'type'           => 'wibble',
+                    'type'           => 'grault',
                     'slug'           => 'glorp'
                 ]
             ]);
 
-        $this->tracker->load('garply');
+        $this->tracker->load();
 
-        $this->assertTrue($this->tracker->isParsed('frog', 'wibble'));
+        $this->assertTrue($this->tracker->isParsed('frog'));
     }
 
     /**
@@ -60,14 +60,14 @@ class MigrationTrackerTest extends KernelTestCase
         $property->setAccessible(true);
 
         $property->setValue($this->tracker, [
-            [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ],
-            [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'fubar', 'target_id' => 'thud' ]
+            [ 'source_id' => 'xyzzy', 'type' => 'grault', 'slug' => 'quux', 'target_id' => 'corge' ],
+            [ 'source_id' => 'xyzzy', 'type' => 'grault', 'slug' => 'fubar', 'target_id' => 'thud' ]
         ]);
 
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
                 'REPLACE INTO translation_ids VALUES (?,?,?,?),(?,?,?,?)',
-                [ 'xyzzy', 'corge', 'plugh', 'quux', 'xyzzy', 'thud', 'plugh', 'fubar'  ]
+                [ 'xyzzy', 'corge', 'grault', 'quux', 'xyzzy', 'thud', 'grault', 'fubar'  ]
             );
 
         $this->tracker->persist();

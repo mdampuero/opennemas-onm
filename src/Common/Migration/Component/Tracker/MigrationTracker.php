@@ -18,9 +18,9 @@ class MigrationTracker extends Tracker
     /**
      * {@inheritdoc}
      */
-    public function load($type = null)
+    public function load()
     {
-        $sql    = "SELECT * FROM translation_ids WHERE type = '$type'";
+        $sql    = "SELECT * FROM translation_ids WHERE type = '$this->type'";
         $values = $this->conn->fetchAll($sql);
 
         foreach ($values as $value) {

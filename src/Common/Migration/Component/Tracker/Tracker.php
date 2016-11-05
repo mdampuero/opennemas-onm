@@ -25,13 +25,22 @@ abstract class Tracker
     protected $parsed = [];
 
     /**
+     * The type to track.
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
      * Initializes the Tracker.
      *
      * @param Connection $conn The database connection.
+     * @param string     $type The type to track.
      */
-    public function __construct($conn)
+    public function __construct($conn, $type = null)
     {
         $this->conn = $conn;
+        $this->type = $type;
     }
 
     /**
@@ -39,14 +48,13 @@ abstract class Tracker
      *
      * @param string $sourceId The content id in the source data source.
      * @param string $targetId The content id in the target data source.
-     * @param string $type     The content type.
      * @param string $slug     The content slug.
      */
-    public function add($sourceId, $targetId, $type = null, $slug = null)
+    public function add($sourceId, $targetId, $slug = null)
     {
         $this->parsed[] = [
             'source_id' => $sourceId,
-            'type'      => $type,
+            'type'      => $this->type,
             'target_id' => $targetId,
             'slug'      => $slug
         ];
@@ -59,32 +67,38 @@ abstract class Tracker
      *
      * @return array The list of parsed items of the given type.
      */
-    public function getParsed($type = null)
+    public function getParsed()
     {
-        $parsed = array_filter($this->parsed, function ($a) use ($type) {
-            return empty($type) || $a['type'] === $type;
-        });
+        return $this->parsed;
+    }
 
-        return array_values($parsed);
+    /**
+     * Returns the list of parsed items ids by type.
+     *
+     * @return array The list of parsed items of the given type.
+     */
+    public function getParsedSourceIds()
+    {
+        return array_map(function ($a) {
+            return $a['source_id'];
+        }, $this->parsed);
     }
 
     /**
      * Checks if a content is already parsed.
      *
      * @param string $sourceId The content id in source data source.
-     * @param string $type     The content type.
      * @param string $slug     The content slug.
      *
      * @return boolean True if the content is already parsed. False
      *                 otherwise.
      */
-    public function isParsed($sourceId, $type = null, $slug = null)
+    public function isParsed($sourceId, $slug = null)
     {
         $parsed = array_filter(
             $this->parsed,
-            function ($a) use ($sourceId, $type, $slug) {
+            function ($a) use ($sourceId, $slug) {
                 return $a['source_id'] === $sourceId
-                    && (empty($type) || $a['type'] === $type)
                     && (empty($slug) || $a['slug'] === $slug);
             }
         );
@@ -100,18 +114,16 @@ abstract class Tracker
      * Returns the content id in the source data source.
      *
      * @param string $targetId The content id in the target data source.
-     * @param string $type     The content type.
      * @param string $slug     The content slug.
      *
      * @return string The content id in the source data source.
      */
-    public function getSourceId($targetId, $type = null, $slug = null)
+    public function getSourceId($targetId, $slug = null)
     {
         $parsed = array_filter(
             $this->parsed,
-            function ($a) use ($targetId, $type, $slug) {
+            function ($a) use ($targetId, $slug) {
                 return $a['target_id'] === $targetId
-                    && (empty($type) || $a['type'] === $type)
                     && (empty($slug) || $a['slug'] === $slug);
             }
         );
@@ -129,18 +141,16 @@ abstract class Tracker
      * Returns the content id in the target data source.
      *
      * @param string $sourceId The content id in the source data source.
-     * @param string $type     The content type.
      * @param string $slug     The content slug.
      *
      * @return string The content id in the target data source.
      */
-    public function getTargetId($sourceId, $type = null, $slug = null)
+    public function getTargetId($sourceId, $slug = null)
     {
         $parsed = array_filter(
             $this->parsed,
-            function ($a) use ($sourceId, $type, $slug) {
+            function ($a) use ($sourceId, $slug) {
                 return $a['source_id'] === $sourceId
-                    && (empty($type) || $a['type'] === $type)
                     && (empty($slug) || $a['slug'] === $slug);
             }
         );
