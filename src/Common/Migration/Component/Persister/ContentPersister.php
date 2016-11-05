@@ -20,7 +20,7 @@ class ContentPersister extends Persister
     /**
      * {@inheritdoc}
      */
-    public function save($data)
+    public function persist($data)
     {
         $converter = $this->em->getConverter('Content');
         $content   = new Content($converter->objectify($data));

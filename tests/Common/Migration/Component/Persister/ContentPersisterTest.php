@@ -34,19 +34,19 @@ class ContentPersisterTest extends KernelTestCase
 
         $this->em->expects($this->any())->method('getConverter')->willReturn($this->converter);
 
-        $this->saver = new ContentPersister($this->em);
+        $this->persister = new ContentPersister($this->em);
     }
 
     /**
-     * Tests save.
+     * Tests persist.
      */
-    public function testSave()
+    public function testPersist()
     {
         $data = [ 'foo' => 'bar' ];
 
         $this->converter->expects($this->once())->method('objectify')->with($data);
         $this->em->expects($this->once())->method('persist');
 
-        $this->saver->save($data);
+        $this->persister->persist($data);
     }
 }

@@ -37,5 +37,5 @@ abstract class Persister
      *
      * @param array $data The content data.
      */
-    abstract public function save($data);
+    abstract public function persist($data);
 }
