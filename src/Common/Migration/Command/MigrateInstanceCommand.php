@@ -9,10 +9,6 @@
  */
 namespace Common\Migration\Command;
 
-use Common\Core\Component\Filter\FilterManager;
-use Common\Migration\Component\Repository\DatabaseRepository;
-use Common\Migration\Component\Tracker\MigrationTracker;
-use Common\ORM\Core\Connection;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,37 +52,40 @@ class MigrateInstanceCommand extends ContainerAwareCommand
         $this->output    = $output;
         $this->migration = $this->getMigration($path);
 
+        // Load instance and force ORM and Cache initialization
+        $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName($this->migration['target']['instance']);
+
         $this->getConfiguration();
 
         $this->mm = $this->getContainer()->get('migration.manager');
         $this->mm->configure($this->migration);
-        $this->fm = new FilterManager();
 
-        $persister  = $this->mm->getPersister();
-        $tracker    = $this->mm->getMigrationTracker();
-        $repository = $this->mm->getRepository();
+        $this->mm->getMigrationTracker()->load();
 
-        $tracker->load();
-
-        $this->migrated = count($tracker->getParsed());
-        $this->current  = 1;
-        $this->total    = $repository->count();
+        $this->migrated = count($this->mm->getMigrationTracker()->getParsed());
+        $this->current  = 0;
+        $this->left     = $this->mm->getRepository()->count();
+        $this->total    = $this->mm->getRepository()->countAll();
 
         $output->writeln("<options=bold>(3/4) Migrating items...</>");
         $output->writeln("    ==> Total items in source: $this->total");
+        $output->writeln("    ==> Items ready to migrate: $this->left");
         $output->writeln("    ==> Items already migrated: $this->migrated");
 
-        while(($item = $repository->next()) !== false) {
+        while(($item = $this->mm->getRepository()->next()) !== false) {
+            $this->current++;
+
             if ($output->isVerbose()) {
                 $output->writeln(
                     "    ==> Processing item <fg=red;options=bold>"
-                    . "$this->current</> of <fg=green;options=bold>$this->total"
+                    . "{$this->current}</> of <fg=green;options=bold>$this->left"
                     . "</></>"
                 );
             }
 
             // Apply filters
-            $item = $this->filter($item);
+            $item = $this->mm->filter($item);
 
             if ($output->isVeryVerbose()) {
                 $output->writeln("      <fg=red>==></> Item parsed");
@@ -94,7 +93,7 @@ class MigrateInstanceCommand extends ContainerAwareCommand
 
             // Save item
             $sourceId = $item[$this->migration['source']['mapping']['id']];
-            $targetId = $persister->persist($item);
+            $targetId = $this->mm->persist($item);
             $slug     = $item[$this->migration['target']['slug']];
 
             if ($output->isVeryVerbose()) {
@@ -102,13 +101,11 @@ class MigrateInstanceCommand extends ContainerAwareCommand
             }
 
             // Add to translations
-            $tracker->add($sourceId, $targetId, $slug);
+            $this->mm->getMigrationTracker()->add($sourceId, $targetId, $slug);
 
             if ($output->isVeryVerbose()) {
                 $output->writeln("      <fg=green>==></> Translation added");
             }
-
-            $this->current++;
         }
 
         $end  = new \DateTime();
@@ -116,32 +113,6 @@ class MigrateInstanceCommand extends ContainerAwareCommand
         $this->getReport($start, $end);
 
         $output->writeln("<fg=green;options=bold>Migration ended</>");
-    }
-
-    /**
-     * Filtesr
-     *
-     * @param type variable Description
-     *
-     * @return type Description
-     */
-    protected function filter($item)
-    {
-        foreach ($this->migration['target']['mapping'] as $key => $options) {
-            foreach ($options['type'] as $name) {
-                $params = [];
-
-                if (array_key_exists('params', $options)
-                    && array_key_exists($name, $options['params'])
-                ) {
-                    $params = $options['params'][$name];
-                }
-
-                $item[$key] = $this->fm->filter($name, $item[$key], $params);
-            }
-        }
-
-        return $item;
     }
 
     /**
