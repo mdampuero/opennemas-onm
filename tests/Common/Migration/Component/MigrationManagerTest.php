@@ -25,7 +25,17 @@ class MigrationManagerTest extends KernelTestCase
         $this->migration = [
             'type'   => 'bar',
             'source' => [ 'repository' => 'database', 'database' => 'wobble' ],
-            'target' => [ 'persister' => 'content' , 'database' => 'flob']
+            'target' => [
+                'persister' => 'content' ,
+                'database'  => 'flob',
+                'mapping'   => [
+                    'wubble' => [
+                        'type'   => [ 'literal' ],
+                        'params' => [ 'literal' => [ 'value' => 'bar' ] ]
+                    ],
+                    'foobar' => [ 'type' => [ 'html' ] ]
+                ]
+            ]
         ];
 
         $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
@@ -49,11 +59,34 @@ class MigrationManagerTest extends KernelTestCase
     }
 
     /**
+     * Tests filter.
+     */
+    public function testFilter()
+    {
+        $fm = $this->getMockBuilder('Common\Core\Component\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mm->configure($this->migration);
+
+        $property  = new \ReflectionProperty($this->mm, 'fm');
+        $property->setAccessible(true);
+
+        $property->setValue($this->mm, $fm);
+
+        $fm->expects($this->at(0))->method('filter')
+            ->with('literal', null, [ 'value' => 'bar' ]);
+        $fm->expects($this->at(1))->method('filter')
+            ->with('html', 'flob', []);
+
+        $this->mm->filter([ 'foobar' => 'flob' ]);
+    }
+
+    /**
      * Tests getMigrationTracker.
      */
     public function testGetMigrationTracker()
     {
-        $this->mm->configure($this->migration);
         $tracker = $this->mm->getMigrationTracker();
 
         $this->assertInstanceOf(
@@ -105,10 +138,34 @@ class MigrationManagerTest extends KernelTestCase
     }
 
     /**
+     * Tests getPersister when a Persister was previously created.
+     */
+    public function testGetPersisterWhenCreated()
+    {
+        $tracker = $this->getMockBuilder('Common\Migration\Component\Persister\ContentPersister')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $property  = new \ReflectionProperty($this->mm, 'persister');
+        $property->setAccessible(true);
+        $property->setValue($this->mm, $tracker);
+
+        $this->assertEquals($tracker, $this->mm->getPersister());
+    }
+
+    /**
      * Tests getRepository.
      */
     public function testGetRepository()
     {
+        $tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\MigrationTracker')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $property  = new \ReflectionProperty($this->mm, 'tracker');
+        $property->setAccessible(true);
+        $property->setValue($this->mm, $tracker);
+
         $this->mm->configure($this->migration);
         $persister = $this->mm->getRepository();
 
@@ -128,5 +185,41 @@ class MigrationManagerTest extends KernelTestCase
         $this->migration['source']['repository'] = 'garply';
         $this->mm->configure($this->migration);
         $this->mm->getRepository();
+    }
+
+    /**
+     * Tests getRepository when a Repository was previously created.
+     */
+    public function testGetRepositoryWhenCreated()
+    {
+        $repository = $this->getMockBuilder('Common\Migration\Component\Repository\DatabaseRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $property  = new \ReflectionProperty($this->mm, 'repository');
+        $property->setAccessible(true);
+        $property->setValue($this->mm, $repository);
+
+        $this->assertEquals($repository, $this->mm->getRepository());
+    }
+
+    /**
+     * Tests persist.
+     */
+    public function testPersist()
+    {
+        $item      = [ 'wibble' => 'foobar' ];
+        $persister = $this->getMockBuilder('Common\Migration\Component\Persister\Persister')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'persist' ])
+            ->getMock();
+
+        $property  = new \ReflectionProperty($this->mm, 'persister');
+        $property->setAccessible(true);
+        $property->setValue($this->mm, $persister);
+
+        $persister->expects($this->once())->method('persist')->with($item);
+
+        $this->mm->persist($item);
     }
 }

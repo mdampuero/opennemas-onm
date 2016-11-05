@@ -9,6 +9,7 @@
  */
 namespace Common\Migration\Component;
 
+use Common\Core\Component\Filter\FilterManager;
 use Common\Migration\Component\Exception\InvalidPersisterException;
 use Common\Migration\Component\Exception\InvalidRepositoryException;
 use Common\Migration\Component\Tracker\MigrationTracker;
@@ -21,11 +22,32 @@ use Common\ORM\Core\Connection;
 class MigrationManager
 {
     /**
+     * The filter manager.
+     *
+     * @var FilterManager
+     */
+    protected $fm;
+
+    /**
      * The migration cofiguration.
      *
      * @var array
      */
     protected $migration;
+
+    /**
+     * The migration persister.
+     *
+     * @var Persister
+     */
+    protected $persister;
+
+    /**
+     * The migration repository to use.
+     *
+     * @var Repository
+     */
+    protected $repository;
 
     /**
      * The MigrationTracker for the current migration.
@@ -54,6 +76,38 @@ class MigrationManager
     public function configure($migration)
     {
         $this->migration = $migration;
+        $this->fm        = new FilterManager();
+    }
+
+    /**
+     * Applies filters to the item to migrate.
+     *
+     * @param array $item The item to migrate.
+     *
+     * @return array The item after applying filters.
+     */
+    public function filter($item)
+    {
+        foreach ($this->migration['target']['mapping'] as $key => $options) {
+            foreach ($options['type'] as $name) {
+                $params = [];
+                $value  = null;
+
+                if (array_key_exists($key, $item)) {
+                    $value = $item[$key];
+                }
+
+                if (array_key_exists('params', $options)
+                    && array_key_exists($name, $options['params'])
+                ) {
+                    $params = $options['params'][$name];
+                }
+
+                $item[$key] = $this->fm->filter($name, $value, $params);
+            }
+        }
+
+        return $item;
     }
 
     /**
@@ -85,12 +139,18 @@ class MigrationManager
      */
     public function getPersister()
     {
+        if (!empty($this->persister)) {
+            return $this->persister;
+        }
+
         $name  = $this->migration['target']['persister'];
         $class = __NAMESPACE__ . '\\Persister\\' . \classify($name)
             . 'Persister';
 
         if (class_exists($class)) {
-            return new $class($this->em);
+            $this->persister = new $class($this->em);
+
+            return $this->persister;
         }
 
         throw new InvalidPersisterException($name);
@@ -103,19 +163,39 @@ class MigrationManager
      */
     public function getRepository()
     {
+        if (!empty($this->repository)) {
+            return $this->repository;
+        }
+
         $class = __NAMESPACE__ . '\\Repository\\'
             . \classify($this->migration['source']['repository'])
             . 'Repository';
 
         if (class_exists($class)) {
+            // Add connection params for repository
             $params = array_merge(
                 $this->migration['source'],
                 [ 'connection' => $this->params]
             );
 
-            return new $class($params, $this->getMigrationTracker());
+            $this->repository =
+                new $class($params, $this->getMigrationTracker());
+
+            return $this->repository;
         }
 
         throw new InvalidRepositoryException($this->migration['source']['repository']);
+    }
+
+    /**
+     * Returns the item id in the target data source.
+     *
+     * @param array $item The item to persist.
+     *
+     * @return integer The item id in the target data source.
+     */
+    public function persist($item)
+    {
+        return $this->getPersister()->persist($item);
     }
 }
