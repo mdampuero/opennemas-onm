@@ -40,9 +40,10 @@ class AppKernel extends Kernel
             new Manager\ManagerBundle(),
             new ManagerWebService\ManagerWebServiceBundle(),
             new WebService\WebServiceBundle(),
-            new Common\ORM\OrmBundle(),
             new Common\Cache\CacheBundle(),
             new Common\Core\CoreBundle(),
+            new Common\Migration\MigrationBundle(),
+            new Common\ORM\OrmBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
