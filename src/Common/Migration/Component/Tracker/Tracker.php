@@ -79,9 +79,9 @@ abstract class Tracker
      */
     public function getParsedSourceIds()
     {
-        return array_map(function ($a) {
+        return array_unique(array_map(function ($a) {
             return $a['source_id'];
-        }, $this->parsed);
+        }, $this->parsed));
     }
 
     /**

@@ -24,7 +24,7 @@ class MigrationTracker extends Tracker
         $values = $this->conn->fetchAll($sql);
 
         foreach ($values as $value) {
-            $this->add(
+            parent::add(
                 $value['pk_content_old'],
                 $value['pk_content'],
                 $value['type'],
@@ -34,23 +34,14 @@ class MigrationTracker extends Tracker
     }
 
     /**
-     * Persist all parsed to the target data source.
+     * {@inheritdoc}
      */
-    public function persist()
+    public function add($sourceId, $targetId, $slug = null)
     {
-        if (empty($this->parsed)) {
-            return;
-        }
+        parent::add($sourceId, $targetId, $slug);
 
-        foreach ($this->parsed as $translation) {
-            $values[] = $translation['source_id'];
-            $values[] = $translation['target_id'];
-            $values[] = $translation['type'];
-            $values[] = $translation['slug'];
-        }
-
-        $sql = 'REPLACE INTO translation_ids VALUES '
-            . trim(str_repeat('(?,?,?,?),', count($this->parsed)), ',');
+        $values = [ $sourceId, $targetId, $this->type, $slug ];
+        $sql    = 'INSERT INTO translation_ids VALUES (?,?,?,?)';
 
         $this->conn->executeQuery($sql, $values);
     }

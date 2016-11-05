@@ -54,30 +54,14 @@ class MigrationTrackerTest extends KernelTestCase
     /**
      * Tests persist.
      */
-    public function testPersist()
+    public function testAdd()
     {
-        $property = new \ReflectionProperty($this->tracker, 'parsed');
-        $property->setAccessible(true);
-
-        $property->setValue($this->tracker, [
-            [ 'source_id' => 'xyzzy', 'type' => 'grault', 'slug' => 'quux', 'target_id' => 'corge' ],
-            [ 'source_id' => 'xyzzy', 'type' => 'grault', 'slug' => 'fubar', 'target_id' => 'thud' ]
-        ]);
-
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
-                'REPLACE INTO translation_ids VALUES (?,?,?,?),(?,?,?,?)',
-                [ 'xyzzy', 'corge', 'grault', 'quux', 'xyzzy', 'thud', 'grault', 'fubar'  ]
+                'INSERT INTO translation_ids VALUES (?,?,?,?)',
+                [ 'xyzzy', 'flob', 'grault', 'quux' ]
             );
 
-        $this->tracker->persist();
-    }
-
-    /**
-     * Tests persist when no parsed items.
-     */
-    public function testPersistWhenEmpty()
-    {
-        $this->tracker->persist();
+        $this->tracker->add('xyzzy', 'flob', 'quux');
     }
 }
