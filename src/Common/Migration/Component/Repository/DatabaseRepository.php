@@ -50,13 +50,51 @@ class DatabaseRepository implements Repository
      */
     public function count()
     {
+        $ids     = $this->tracker->getParsedSourceIds();
+        $filters = [];
+        $sql     = sprintf(
+            'SELECT COUNT(*) as total FROM %s',
+            $this->config['mapping']['table']
+        );
+
+        if (!empty($ids)) {
+            $filters[] = sprintf(
+                '%s NOT IN (%s)',
+                $this->config['mapping']['id'],
+                implode(',', $ids)
+            );
+        }
+
+        if (!empty($this->config['mapping']['filter'])) {
+            $filters[] = $this->config['mapping']['filter'];
+        }
+
+        if (!empty($filters)) {
+            $sql .= ' WHERE ' . implode(' AND ', $filters);
+        }
+
+        $rs = $this->conn->fetchAll($sql);
+
+        return $rs[0]['total'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countAll()
+    {
+        $ids     = $this->tracker->getParsedSourceIds();
         $sql = sprintf(
             'SELECT COUNT(*) as total FROM %s',
             $this->config['mapping']['table']
         );
 
-        if (!empty($this->config['mapping']['filter'])) {
-            $sql .= ' WHERE ' .$this->config['mapping']['filter'];
+        if (!empty($ids)) {
+            $sql .= sprintf(
+                ' WHERE %s NOT IN (%s)',
+                $this->config['mapping']['id'],
+                implode(',', $ids)
+            );
         }
 
         $rs = $this->conn->fetchAll($sql);
@@ -69,19 +107,24 @@ class DatabaseRepository implements Repository
      */
     public function next()
     {
-        $ids = $this->tracker->getParsedSourceIds();
-        $sql = sprintf('SELECT * FROM %s', $this->config['mapping']['table']);
+        $ids     = $this->tracker->getParsedSourceIds();
+        $filters = [];
+        $sql     = sprintf('SELECT * FROM %s', $this->config['mapping']['table']);
 
         if (!empty($ids)) {
-            $sql .= sprintf(
-                ' WHERE %s NOT IN (%s)',
+            $filters[] = sprintf(
+                '%s NOT IN (%s)',
                 $this->config['mapping']['id'],
                 implode(',', $ids)
             );
         }
 
         if (!empty($this->config['mapping']['filter'])) {
-            $sql .= ' AND ' .$this->config['mapping']['filter'];
+            $filters[] = $this->config['mapping']['filter'];
+        }
+
+        if (!empty($filters)) {
+            $sql .= ' WHERE ' . implode(' AND ', $filters);
         }
 
         $sql .= ' LIMIT 1';

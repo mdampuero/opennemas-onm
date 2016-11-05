@@ -23,6 +23,13 @@ interface Repository
     public function count();
 
     /**
+     * Returns the total number of items in source data source.
+     *
+     * @return integer The total number of items in source data source.
+     */
+    public function countAll();
+
+    /**
      * Returns the next item to migrate.
      *
      * @return array The next item to migrate.

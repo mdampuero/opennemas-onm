@@ -56,11 +56,29 @@ class DatabaseRepositoryTest extends KernelTestCase
      */
     public function testCount()
     {
+        $this->tracker->expects($this->once())->method('getParsedSourceIds')
+            ->willReturn([ 1 ]);
+
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT COUNT(*) as total FROM frog WHERE id > 10')
+            ->with('SELECT COUNT(*) as total FROM frog WHERE id NOT IN (1) AND id > 10')
             ->willReturn([ [ 'total' => 10 ] ]);
 
         $this->assertEquals(10, $this->repository->count());
+    }
+
+    /**
+     * Tests count.
+     */
+    public function testCountAll()
+    {
+        $this->tracker->expects($this->once())->method('getParsedSourceIds')
+            ->willReturn([ 1 ]);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('SELECT COUNT(*) as total FROM frog WHERE id NOT IN (1)')
+            ->willReturn([ [ 'total' => 10 ] ]);
+
+        $this->assertEquals(10, $this->repository->countAll());
     }
 
     /**
