@@ -60,7 +60,7 @@ class TrackerTest extends KernelTestCase
     }
 
     /**
-     * Tests getParsed with and without arguments.
+     * Tests getParsed.
      */
     public function testGetParsed()
     {
@@ -77,6 +77,23 @@ class TrackerTest extends KernelTestCase
             [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ]
         ], $this->tracker->getParsed());
     }
+
+    /**
+     * Tests getParsedSourceIds.
+     */
+    public function testGetParsedSourceIds()
+    {
+        $property = new \ReflectionProperty($this->tracker, 'parsed');
+        $property->setAccessible(true);
+
+        $property->setValue($this->tracker, [
+            [ 'source_id' => 'waldo', 'type' => 'plugh', 'slug' => null, 'target_id' => 'fred' ],
+            [ 'source_id' => 'xyzzy', 'type' => 'plugh', 'slug' => 'quux', 'target_id' => 'corge' ]
+        ]);
+
+        $this->assertEquals([ 'waldo', 'xyzzy' ], $this->tracker->getParsedSourceIds());
+    }
+
 
     /**
      * Tests getSourceId when the content was translated previously.

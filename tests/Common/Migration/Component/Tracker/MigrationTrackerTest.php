@@ -72,4 +72,12 @@ class MigrationTrackerTest extends KernelTestCase
 
         $this->tracker->persist();
     }
+
+    /**
+     * Tests persist when no parsed items.
+     */
+    public function testPersistWhenEmpty()
+    {
+        $this->tracker->persist();
+    }
 }
