@@ -282,7 +282,9 @@ class Photo extends Content
             'fk_publisher'        => getService('session')->get('user')->id,
         );
 
-        if ($filePathInfo['extension'] != 'swf') {
+        if (array_key_exists('extension', $filePathInfo) &&
+            $filePathInfo['extension'] != 'swf'
+        ) {
             $imageCreated = new \Imagine\Imagick\Imagine();
             $image = $imageCreated->open($data['local_file']);
 
