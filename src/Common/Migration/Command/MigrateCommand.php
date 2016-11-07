@@ -30,12 +30,16 @@ class MigrateCommand extends ContainerAwareCommand
                 'config-file',
                 InputArgument::REQUIRED,
                 'The migration configuration file.'
-            )
-            ->addOption(
-                'checkTranslations',
+            )->addOption(
+                'no-pre',
                 false,
                 InputOption::VALUE_NONE,
-                'If set, command will check and configure the translations table'
+                'If set, command will NOT execute the pre-migration actions'
+            )->addOption(
+                'no-post',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, command will NOT execute the post-migration actions'
             );
     }
 
@@ -46,32 +50,22 @@ class MigrateCommand extends ContainerAwareCommand
     {
         $output->writeln("<fg=green;options=bold>Starting migration...</>");
 
-        $start = new \DateTime();
-        $path  = $input->getArgument('config-file');
-
+        $this->start     = new \DateTime();
+        $this->path      = $input->getArgument('config-file');
+        $this->input     = $input;
         $this->output    = $output;
-        $this->migration = $this->getMigration($path);
-
-        // Load instance and force ORM and Cache initialization
-        $this->getContainer()->get('core.loader')
-            ->loadInstanceFromInternalName($this->migration['target']['instance']);
+        $this->migration = $this->getMigration();
 
         $this->getConfiguration();
 
         $this->mm = $this->getContainer()->get('migration.manager');
         $this->mm->configure($this->migration);
 
+        $this->preMigrate();
+
         $this->mm->getMigrationTracker()->load();
 
-        $this->migrated = count($this->mm->getMigrationTracker()->getParsed());
-        $this->current  = 0;
-        $this->left     = $this->mm->getRepository()->count();
-        $this->total    = $this->mm->getRepository()->countAll();
-
-        $output->writeln("<options=bold>(3/4) Migrating items...</>");
-        $output->writeln("    ==> Total items in source: $this->total");
-        $output->writeln("    ==> Items ready to migrate: $this->left");
-        $output->writeln("    ==> Items already migrated: $this->migrated");
+        $this->getCounters();
 
         while (($item = $this->mm->getRepository()->next()) !== false) {
             $this->current++;
@@ -108,9 +102,9 @@ class MigrateCommand extends ContainerAwareCommand
             }
         }
 
-        $end  = new \DateTime();
+        $this->postMigrate();
 
-        $this->getReport($start, $end);
+        $this->getReport();
 
         $output->writeln("<fg=green;options=bold>Migration ended</>");
     }
@@ -120,7 +114,11 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function getConfiguration()
     {
-        $this->output->writeln("<options=bold>(2/4) Configuring the migration...</>");
+        // Load instance and force ORM and Cache initialization
+        $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName($this->migration['target']['instance']);
+
+        $this->output->writeln("<options=bold>(2/6) Configuring the migration...</>");
 
         $this->output->writeln(sprintf(
             "    ==> Tracking <fg=magenta>%s</>",
@@ -142,19 +140,30 @@ class MigrateCommand extends ContainerAwareCommand
         ));
     }
 
+    protected function getCounters()
+    {
+        $this->migrated = count($this->mm->getMigrationTracker()->getParsed());
+        $this->current  = 0;
+        $this->left     = $this->mm->getRepository()->count();
+        $this->total    = $this->mm->getRepository()->countAll();
+
+        $this->output->writeln("<options=bold>(4/6) Migrating items...</>");
+        $this->output->writeln("    ==> Total items in source: $this->total");
+        $this->output->writeln("    ==> Items ready to migrate: $this->left");
+        $this->output->writeln("    ==> Items already migrated: $this->migrated");
+    }
+
     /**
      * Parses the configuration file.
      *
-     * @param string $path The path to configuration file.
-     *
      * @return array The migration configuration.
      */
-    protected function getMigration($path)
+    protected function getMigration()
     {
-        $this->output->writeln("<options=bold>(1/4) Parsing configuration file...</>");
+        $this->output->writeln("<options=bold>(1/6) Parsing configuration file...</>");
 
         $yaml      = new Parser();
-        $migration = $yaml->parse(file_get_contents($path));
+        $migration = $yaml->parse(file_get_contents($this->path));
         $migration = $migration['migration'];
 
         $this->output->writeln(sprintf(
@@ -167,14 +176,13 @@ class MigrateCommand extends ContainerAwareCommand
     }
 
     /**
-     * Returns the migration final report.
-     *
-     * @param DateTime $start The migration starttime.
-     * @param DateTime $end   The migration endtime.
+     * Displays the migration final report.
      */
-    protected function getReport($start, $end)
+    protected function getReport()
     {
-        $diff = date_diff($end, $start);
+        $this->end = new \DateTime();
+
+        $diff = date_diff($this->end, $this->start);
         $time = $secs = $diff->format('%ss');
 
         if ($secs > 60) {
@@ -185,8 +193,44 @@ class MigrateCommand extends ContainerAwareCommand
             $time = $diff->format('%hh %mm %ss');
         }
 
-        $this->output->writeln("<options=bold>(4/4) Ending migration...</>");
+        $this->output->writeln("<options=bold>(6/6) Ending migration...</>");
         $this->output->writeln("    ==> Items migrated: $this->current");
         $this->output->writeln("    ==> Time: $time");
+    }
+
+    /**
+     * Executes actions before migrating items.
+     */
+    protected function preMigrate()
+    {
+        $this->output->writeln("<options=bold>(3/6) Executing pre-migration actions...</>");
+
+        if (!empty($this->input->getOption('no-pre'))
+            || !array_key_exists('pre', $this->migration['source'])
+            || empty($this->migration['source']['pre'])
+        ) {
+            $this->output->writeln("    ==> No actions executed");
+            return;
+        }
+
+        $this->mm->getRepository()->prepare($this->migration['source']['pre']);
+    }
+
+    /**
+     * Executes actions after migrating items.
+     */
+    protected function postMigrate()
+    {
+        $output->writeln("<options=bold>(5/6) Executing post-migration actions...</>");
+
+        if (!empty($this->input->getOption('no-post'))
+            || !array_key_exists('post', $this->migration['source'])
+            || empty($this->migration['source']['post'])
+        ) {
+            $this->output->writeln("    ==> No actions executed");
+            return;
+        }
+
+        $this->mm->getPersister()->prepare($this->migration['source']['post']);
     }
 }
