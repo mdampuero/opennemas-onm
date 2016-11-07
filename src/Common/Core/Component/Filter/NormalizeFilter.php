@@ -29,7 +29,8 @@ class NormalizeFilter extends Filter
         '-'=>'-', '+'=>'',  '='=>'',  '\\'=>'-', '|'=>'-', '`'=>'',
         '~'=>'',  '/'=>'-', '\"'=>'', '\''=>'', '<'=>'',  '>'=>'',
         '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C',  '·'=>'', 'ª'=>'',
-        'º'=>'', ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'nh', 'Ñ'=>'nh'
+        'º'=>'', ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'n', 'Ñ'=>'N',
+        ':'=>'',
     ];
 
 
@@ -42,9 +43,9 @@ class NormalizeFilter extends Filter
      */
     public function filter($str)
     {
-        $str = mb_strtolower($str, 'UTF-8');
         $str = strtr($str, $this->trade);
-        $str = rtrim($str);
+        $str = mb_strtolower($str, 'UTF-8');
+        $str = trim($str);
 
         $str = preg_replace('/[\- ]+/', '-', $str);
 

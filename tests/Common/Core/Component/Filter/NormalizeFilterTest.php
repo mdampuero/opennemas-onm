@@ -32,6 +32,6 @@ class NormalizeFilterTest extends KernelTestCase
     {
         $this->assertEquals('bar', $this->filter->filter('Bar'));
         $this->assertEquals('foo-mumble', $this->filter->filter('foo mumble'));
-        $this->assertEquals('espanha', $this->filter->filter('España'));
+        $this->assertEquals('espana', $this->filter->filter('::: España :::'));
     }
 }
