@@ -88,7 +88,7 @@ class MigrationManager
      */
     public function filter($item)
     {
-        foreach ($this->migration['target']['mapping'] as $key => $options) {
+        foreach ($this->migration['target']['filter'] as $key => $options) {
             foreach ($options['type'] as $name) {
                 $params = [];
                 $value  = null;

@@ -28,7 +28,7 @@ class MigrationManagerTest extends KernelTestCase
             'target' => [
                 'persister' => 'content' ,
                 'database'  => 'flob',
-                'mapping'   => [
+                'filter'    => [
                     'wubble' => [
                         'type'   => [ 'literal' ],
                         'params' => [ 'literal' => [ 'value' => 'bar' ] ]
