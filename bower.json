@@ -8,8 +8,8 @@
   ],
   "license": "Closed source",
   "dependencies": {
-    "angular": "1.5.0",
-    "angular-animate": "1.5.0",
+    "angular": "1.5.8",
+    "angular-animate": "1.5.8",
     "angular-bootstrap": "~1.2.4",
     "angular-bootstrap-multiselect": "0.3.5",
     "angular-checklist-model": "0.9.0",
@@ -22,11 +22,11 @@
     "angular-loading-bar": "0.8.0",
     "angular-nanoscroller": "0.2.*",
     "angular-recaptcha": "2.5.0",
-    "angular-route": "1.5.0",
-    "angular-sanitize": "1.5.0",
+    "angular-route": "1.5.8",
+    "angular-sanitize": "1.5.8",
     "angular-swfobject": "1.2.1",
     "angular-swipe": "0.1.0",
-    "angular-touch": "1.5.0",
+    "angular-touch": "1.5.8",
     "angular-translate": "2.10.0",
     "angular-ui-select": "0.14.9",
     "angular-ui-sortable": "0.13.4",
@@ -81,7 +81,7 @@
     "tinycon-angularjs": "1.1.0"
   },
   "devDependencies": {
-    "angular-mocks": "1.5.0"
+    "angular-mocks": "1.5.8"
   },
   "resolutions": {
     "angular": ">=1.5.*",
