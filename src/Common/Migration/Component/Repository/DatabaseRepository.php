@@ -137,4 +137,14 @@ class DatabaseRepository implements Repository
 
         return $rs[0];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepare($sqls)
+    {
+        foreach ($sqls as $sql) {
+            $this->conn->executeQuery($sql);
+        }
+    }
 }

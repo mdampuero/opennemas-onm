@@ -35,4 +35,11 @@ interface Repository
      * @return array The next item to migrate.
      */
     public function next();
+
+    /**
+     * Prepares the source data source for migration.
+     *
+     * @param array $actions The list of actions to execute.
+     */
+    public function prepare($actions);
 }

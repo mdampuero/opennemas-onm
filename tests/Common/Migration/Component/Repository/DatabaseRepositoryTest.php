@@ -34,7 +34,7 @@ class DatabaseRepositoryTest extends KernelTestCase
 
         $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
             ->disableOriginalConstructor()
-            ->setMethods([ 'fetchAll', 'selectDatabase' ])
+            ->setMethods([ 'executeQuery', 'fetchAll', 'selectDatabase' ])
             ->getMock();
 
         $this->tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\MigrationTracker')
@@ -109,5 +109,23 @@ class DatabaseRepositoryTest extends KernelTestCase
             ->willReturn([]);
 
         $this->assertFalse($this->repository->next());
+    }
+
+    /**
+     * Tests prepare.
+     */
+    public function testPrepare()
+    {
+        $sqls = [
+            'CREATE VIEW `mumble` SELECT * FROM `gorp`',
+            'CREATE VIEW `baz` SELECT * FROM `xyzzy`',
+        ];
+
+        $this->conn->expects($this->at(0))->method('executeQuery')
+            ->with('CREATE VIEW `mumble` SELECT * FROM `gorp`');
+        $this->conn->expects($this->at(1))->method('executeQuery')
+            ->with('CREATE VIEW `baz` SELECT * FROM `xyzzy`');
+
+        $this->repository->prepare($sqls);
     }
 }
