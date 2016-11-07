@@ -18,7 +18,7 @@ orm:
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
-                    arguments: [ '@orm.metadata.content' ]
+                    arguments: [ '@orm.metadata.category' ]
             repositories:
                 database:
                     class:     Common\ORM\Database\Repository\BaseRepository
