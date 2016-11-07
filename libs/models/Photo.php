@@ -321,7 +321,7 @@ class Photo extends Content
                 throw new Exception(_('Unable to copy your image file'));
             }
         } else {
-            $fileCopied = copy(
+            $fileCopied = @copy(
                 $data['local_file'],
                 realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
             );
