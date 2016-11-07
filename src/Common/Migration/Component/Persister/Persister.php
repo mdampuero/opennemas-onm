@@ -33,6 +33,18 @@ abstract class Persister
     }
 
     /**
+     * Prepares the target data source after migration.
+     *
+     * @param array $actions The list of actions to execute.
+     */
+    public function prepare($actions)
+    {
+        foreach ($actions as $sql) {
+            $this->em->getConnection('instance')->executeQuery($sql);
+        }
+    }
+
+    /**
      * Saves a content from an external data source.
      *
      * @param array $data The content data.
