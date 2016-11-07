@@ -202,17 +202,17 @@
                 </span>
                 {/acl}
               </td>
-              <td class="text-center">
-                {acl isAllowed="OPINION_AVAILABLE"}
-                <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
-                </button>
-                {/acl}
-              </td>
               <td class="text-center hidden-xs">
                 {acl isAllowed="OPINION_FAVORITE"}
                 <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" ng-if="content.type_opinion == 0" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
+                </button>
+                {/acl}
+              </td>
+              <td class="text-center">
+                {acl isAllowed="OPINION_AVAILABLE"}
+                <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
                 </button>
                 {/acl}
               </td>
