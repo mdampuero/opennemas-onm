@@ -286,7 +286,9 @@ class Photo extends Content
             'fk_publisher'        => getService('session')->get('user')->id,
         );
 
-        if ($filePathInfo['extension'] != 'swf') {
+        if (array_key_exists('extension', $filePathInfo) &&
+            $filePathInfo['extension'] != 'swf'
+        ) {
             $imageCreated = new \Imagine\Imagick\Imagine();
             $image = $imageCreated->open($data['local_file']);
 
@@ -323,10 +325,12 @@ class Photo extends Content
                 throw new Exception(_('Unable to copy your image file'));
             }
         } else {
-            $fileCopied = copy(
-                $data['local_file'],
-                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
-            );
+            // Check source and target
+            $fileCopied = false;
+            $targetPath = realpath($uploadDir).DS.$finalPhotoFileName;
+            if (is_file($data['local_file']) && is_writable($targetPath)) {
+                $fileCopied = copy($data['local_file'], $targetPath);
+            }
 
             if (!$fileCopied) {
                 $logger = getService('application.log');

@@ -309,8 +309,6 @@
         if (webStorage.local.get('users-columns')) {
           $scope.columns = webStorage.local.get('users-columns');
         }
-
-        $scope.list();
       }
     ]);
 })();
