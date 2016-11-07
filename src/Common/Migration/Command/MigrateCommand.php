@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
-class MigrateInstanceCommand extends ContainerAwareCommand
+class MigrateCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -24,8 +24,8 @@ class MigrateInstanceCommand extends ContainerAwareCommand
     public function configure()
     {
         $this
-            ->setName('migration:instance:migrate')
-            ->setDescription('Migrates an instance from an external CMS to opennemas')
+            ->setName('migration:migrate')
+            ->setDescription('Migrates data from an external data source to opennemas')
             ->addArgument(
                 'config-file',
                 InputArgument::REQUIRED,
@@ -73,7 +73,7 @@ class MigrateInstanceCommand extends ContainerAwareCommand
         $output->writeln("    ==> Items ready to migrate: $this->left");
         $output->writeln("    ==> Items already migrated: $this->migrated");
 
-        while(($item = $this->mm->getRepository()->next()) !== false) {
+        while (($item = $this->mm->getRepository()->next()) !== false) {
             $this->current++;
 
             if ($output->isVerbose()) {
@@ -181,7 +181,7 @@ class MigrateInstanceCommand extends ContainerAwareCommand
             $time = $diff->format('%mm %ss');
         }
 
-        if ($secs > 60) {
+        if ($secs > 3600) {
             $time = $diff->format('%hh %mm %ss');
         }
 
