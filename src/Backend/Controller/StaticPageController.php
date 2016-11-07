@@ -179,6 +179,10 @@ class StaticPageController extends Controller
         // TODO: Remove after fixing database definition
         $entity->category_name = ' ';
 
+        // TODO:Remove when data supports empty values (when using SPA)
+        $status = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
+        $entity->content_status = (empty($status)) ? 0 : 1;
+
         try {
             $em->persist($entity);
 
