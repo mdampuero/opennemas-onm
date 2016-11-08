@@ -39,17 +39,16 @@
         <div class="grid simple">
           <div class="grid-body">
             <h4>{t}Instance{/t}</h4>
-            <div class="col-md-12 m-b-10">
+            <div class="col-md-2 m-b-10">
               <label><strong>{t}ID{/t}</strong></label>
               [% purchase.instance_id %]
             </div>
-            <div class="col-md-6 m-b-10">
-              <label><strong>{t}Name{/t}</strong></label>
+            <div class="col-md-10 m-b-10">
+              <label><strong>{t}Info{/t}</strong></label>
               [% instance.name %]
-            </div>
-            <div class="col-md-6 m-b-10">
-              <label><strong>{t}Identification{/t}</strong></label>
-              <a ng-href="http://[% instance.internal_name %].opennemas.com">[% instance.internal_name %].opennemas.com</a>
+              <span ng-repeat="domain in instance.domains | limitTo:1">
+                <a ng-href="http://[% domain %]" target="_blank">[% domain %]</a>
+              </span>
             </div>
             <h4>{t}Client{/t}</h4>
             <div ng-if="!payment.client">
