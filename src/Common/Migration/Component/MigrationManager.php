@@ -12,7 +12,7 @@ namespace Common\Migration\Component;
 use Common\Core\Component\Filter\FilterManager;
 use Common\Migration\Component\Exception\InvalidPersisterException;
 use Common\Migration\Component\Exception\InvalidRepositoryException;
-use Common\Migration\Component\Tracker\MigrationTracker;
+use Common\Migration\Component\Exception\InvalidTrackerException;
 use Common\ORM\Core\Connection;
 
 /**
@@ -50,9 +50,9 @@ class MigrationManager
     protected $repository;
 
     /**
-     * The MigrationTracker for the current migration.
+     * The Tracker for the current migration.
      *
-     * @var MigrationTracker
+     * @var Tracker
      */
     protected $tracker;
 
@@ -113,9 +113,9 @@ class MigrationManager
     /**
      * Returns a tracker for this migration.
      *
-     * @return MigrationTracker The tracker for migration.
+     * @return Tracker The tracker for migration.
      */
-    public function getMigrationTracker()
+    public function getTracker()
     {
         if (!empty($this->tracker)) {
             return $this->tracker;
@@ -125,11 +125,18 @@ class MigrationManager
         $params   = array_merge($this->params, [ 'dbname' => $database ]);
 
         $conn = new Connection($params);
+        $class = __NAMESPACE__ . '\\Tracker\\'
+            . \classify($this->migration['tracker'])
+            . 'Tracker';
 
-        $this->tracker =
-            new MigrationTracker($conn, $this->migration['type']);
+        if (class_exists($class)) {
 
-        return $this->tracker;
+            $this->tracker = new $class($conn, $this->migration['type']);
+
+            return $this->tracker;
+        }
+
+        throw new InvalidTrackerException($this->migration['tracker']);
     }
 
     /**
@@ -179,7 +186,7 @@ class MigrationManager
             );
 
             $this->repository =
-                new $class($params, $this->getMigrationTracker());
+                new $class($params, $this->getTracker());
 
             return $this->repository;
         }

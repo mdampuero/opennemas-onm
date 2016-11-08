@@ -23,9 +23,10 @@ class MigrationManagerTest extends KernelTestCase
     public function setUp()
     {
         $this->migration = [
-            'type'   => 'bar',
-            'source' => [ 'repository' => 'database', 'database' => 'wobble' ],
-            'target' => [
+            'type'    => 'bar',
+            'tracker' => 'simple_id',
+            'source'  => [ 'repository' => 'database', 'database' => 'wobble' ],
+            'target'  => [
                 'persister' => 'content' ,
                 'database'  => 'flob',
                 'filter'    => [
@@ -83,35 +84,6 @@ class MigrationManagerTest extends KernelTestCase
     }
 
     /**
-     * Tests getMigrationTracker.
-     */
-    public function testGetMigrationTracker()
-    {
-        $tracker = $this->mm->getMigrationTracker();
-
-        $this->assertInstanceOf(
-            'Common\Migration\Component\Tracker\MigrationTracker',
-            $tracker
-        );
-    }
-
-    /**
-     * Tests getMigrationTracker when a MigrationTracker was previously created.
-     */
-    public function testGetMigrationTrackerWhenCreated()
-    {
-        $tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\MigrationTracker')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $property  = new \ReflectionProperty($this->mm, 'tracker');
-        $property->setAccessible(true);
-        $property->setValue($this->mm, $tracker);
-
-        $this->assertEquals($tracker, $this->mm->getMigrationTracker());
-    }
-
-    /**
      * Tests getPersister.
      */
     public function testGetPersister()
@@ -158,7 +130,7 @@ class MigrationManagerTest extends KernelTestCase
      */
     public function testGetRepository()
     {
-        $tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\MigrationTracker')
+        $tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\SimpleIdTracker')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -201,6 +173,47 @@ class MigrationManagerTest extends KernelTestCase
         $property->setValue($this->mm, $repository);
 
         $this->assertEquals($repository, $this->mm->getRepository());
+    }
+
+    /**
+     * Tests getTracker.
+     */
+    public function testGetTracker()
+    {
+        $this->mm->configure($this->migration);
+
+        $this->assertInstanceOf(
+            'Common\Migration\Component\Tracker\SimpleIdTracker',
+            $this->mm->getTracker()
+        );
+    }
+
+    /**
+     * Tests getRepository when the given entity is invalid.
+     *
+     * @expectedException Common\Migration\Component\Exception\InvalidTrackerException
+     */
+    public function testGetRepositoryWhenNoTracker()
+    {
+        $this->migration['tracker'] = 'garply';
+        $this->mm->configure($this->migration);
+        $this->mm->getTracker();
+    }
+
+    /**
+     * Tests getTracker when a Tracker was previously created.
+     */
+    public function testGetTrackerWhenCreated()
+    {
+        $tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\SimpleIdTracker')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $property  = new \ReflectionProperty($this->mm, 'tracker');
+        $property->setAccessible(true);
+        $property->setValue($this->mm, $tracker);
+
+        $this->assertEquals($tracker, $this->mm->getTracker());
     }
 
     /**
