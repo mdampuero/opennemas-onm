@@ -152,6 +152,9 @@ class Video extends Content
         try {
             parent::create($data);
 
+            $this->pk_video   = $this->id;
+            $this->pk_content = $this->id;
+
             $rs = getService('dbal_connection')->insert(
                 "videos",
                 [
