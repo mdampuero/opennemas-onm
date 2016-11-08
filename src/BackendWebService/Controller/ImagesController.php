@@ -21,11 +21,11 @@ class ImagesController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search');
+        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
         $em = $this->get('entity_repository');
 
@@ -34,17 +34,25 @@ class ImagesController extends ContentController
             $order = '`' . $sortBy . '` ' . $sortOrder;
         }
 
-        // Search in title and metadata
-        $criteria = "(in_litter = '0') AND (content_type_name = 'photo')";
-        if (is_array($search) && array_key_exists('title', $search)) {
-            $criteria .= " AND (title LIKE '%".$search['title'][0]['value']."%' OR".
-                         " description LIKE '%".$search['title'][0]['value']."%' OR".
-                         " metadata LIKE '%".$search['title'][0]['value']."%')";
+        if (array_key_exists('month', $search) && !empty($search['month'])) {
+            $filter[] = "(DATE_FORMAT(created, '%Y-%c') = '".$search['month'][0]['value']."')";
         }
+
+        $filter[] = "(content_type_name = 'photo')";
+
+        // Search in title and metadata
+        if (is_array($search) && array_key_exists('title', $search)) {
+            $title = $search['title'][0]['value'];
+            $filter[] = "(title LIKE '%".$title."%' OR".
+                         " description LIKE '%".$title."%' OR".
+                         " metadata LIKE '%".$title."%')";
+        }
+
+        $criteria = implode(' AND ', $filter);
 
         $results = $em->findBy($criteria, $order, $elementsPerPage, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($search);
+        $total   = $em->countBy($criteria);
 
         return new JsonResponse(
             array(

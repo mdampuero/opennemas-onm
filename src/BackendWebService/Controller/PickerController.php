@@ -58,7 +58,7 @@ class PickerController extends Controller
         }
 
         if (!empty($title)) {
-            $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%')";
+            $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%' OR metadata LIKE '%$title%')";
         }
 
         if (!empty($category)) {
