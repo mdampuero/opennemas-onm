@@ -17,8 +17,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
-use Onm\DatabaseConnection;
-
 class AdsOnmCommand extends ContainerAwareCommand
 {
     protected function configure()

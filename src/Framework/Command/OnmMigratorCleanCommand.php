@@ -17,8 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 
-use Onm\DatabaseConnection;
-
 class OnmMigratorCleanCommand extends ContainerAwareCommand
 {
     /**

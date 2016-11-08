@@ -227,6 +227,8 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
     {
         // Initialize multisite database connection
         $db = $this->settings['migration']['source'];
+
+        // TODO: remove this DatabaseConnection usage (AdoDB)
         $this->originConnection = new DatabaseConnection(
             getContainerParameter('database')
         );

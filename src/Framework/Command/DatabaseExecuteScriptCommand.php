@@ -21,8 +21,6 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\DBAL\Schema\Schema;
 
-use Onm\DatabaseConnection;
-
 class DatabaseExecuteScriptCommand extends ContainerAwareCommand
 {
     /**

@@ -17,7 +17,7 @@ class DatabaseProvider extends MigrationProvider
     /**
      * Origin database connection.
      *
-     * @var Onm\DatabaseConnection
+     * @var Common\ORM\Core\Connection
      */
     protected $originConnection;
 

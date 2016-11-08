@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
 use Framework\Migrator\Saver\MigrationSaver;
-use Onm\DatabaseConnection;
 
 class OnmMigratorCommand extends ContainerAwareCommand
 {
