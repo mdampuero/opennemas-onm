@@ -71,6 +71,16 @@ class EntityManager
     }
 
     /**
+     * Returns the service container.
+     *
+     * @return ServiceContainer The service container.
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * Returns a converter configured for the entity.
      *
      * @param string $entity    The entity name.
