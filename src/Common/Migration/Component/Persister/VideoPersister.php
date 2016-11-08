@@ -33,14 +33,13 @@ class VideoPersister extends Persister
                 try {
                     $info = new PanoramaVideo($data['video_url'], $params);
                     $info = $info->getVideoDetails();
+
+                    $data['information'] = $info;
+
+                    $info = array_intersect_key($data, $info);
+                    $data = array_merge($data, $info);
                 } catch (\Exception $e) {
-                    return;
                 }
-
-                $data['information'] = $info;
-
-                $info = array_intersect_key($data, $info);
-                $data = array_merge($data, $info);
             }
 
             $video = new \Video();
