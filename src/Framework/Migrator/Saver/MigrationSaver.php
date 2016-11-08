@@ -1549,18 +1549,10 @@ class MigrationSaver
                 . INSTANCE_UNIQUE_NAME . DIRECTORY_SEPARATOR);
         }
 
-        // Initialize target database
-        $this->targetConnection = getService('db_conn');
-        $this->targetConnection->selectDatabase(
-            $this->settings['migration']['target']
-        );
-
         $conn = getService('orm.manager')->getConnection('instance');
         $conn->selectDatabase($this->settings['migration']['target']);
 
-        \Application::load();
-        \Application::initDatabase($this->targetConnection);
-
+        // TODO: remove this DatabaseConnection usage (AdoDB)
         $this->originConnection = new DatabaseConnection(
             getContainerParameter('database')
         );
@@ -2187,7 +2179,6 @@ class MigrationSaver
 
         return false;
     }
-
 
     /**
      * Reloads categories array.
