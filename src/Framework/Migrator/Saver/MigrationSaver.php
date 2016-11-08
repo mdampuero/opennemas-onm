@@ -2197,30 +2197,8 @@ class MigrationSaver
      */
     private function reloadCategoryArray()
     {
-        $cache = getService('cache');
-        $cache->delete('content_categories');
-
-        $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return false;
-        }
-
-        $categories = array();
-        if ($rs != false) {
-            $data = $rs->getArray();
-
-            foreach ($data as $catData) {
-                $category = new \ContentCategory();
-                $category->load($catData);
-                $categories[$category->id] = $category;
-            }
-        }
-
-        $cache->save('content_categories', $categories, 300);
         $ccm = \ContentCategoryManager::get_instance();
+        $ccm->reset();
         $ccm->findAll();
     }
 
