@@ -28,7 +28,7 @@ class DatabaseRepositoryTest extends KernelTestCase
             'mapping'    => [
                 'table'  => 'frog',
                 'id'     => 'id',
-                'filter' => 'id > 10'
+                'filter' => 'title LIKE "%foo%"'
             ]
         ];
 
@@ -39,7 +39,7 @@ class DatabaseRepositoryTest extends KernelTestCase
 
         $this->tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\MigrationTracker')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getParsedSourceIds' ])
+            ->setMethods([ 'getParsed' ])
             ->getMock();
 
         $this->conn->expects($this->any())->method('selectDatabase')->with('foobar');
@@ -56,29 +56,41 @@ class DatabaseRepositoryTest extends KernelTestCase
      */
     public function testCount()
     {
-        $this->tracker->expects($this->once())->method('getParsedSourceIds')
-            ->willReturn([ 1 ]);
+        $this->tracker->expects($this->once())->method('getParsed')
+            ->willReturn([ 1, 2 ]);
 
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT COUNT(*) as total FROM frog WHERE id NOT IN (1) AND id > 10')
+            ->with('SELECT COUNT(*) as total FROM frog WHERE id NOT IN ("1", "2") AND title LIKE "%foo%"')
             ->willReturn([ [ 'total' => 10 ] ]);
 
         $this->assertEquals(10, $this->repository->count());
     }
 
     /**
-     * Tests count.
+     * Tests countAll.
      */
     public function testCountAll()
     {
-        $this->tracker->expects($this->once())->method('getParsedSourceIds')
-            ->willReturn([ 1 ]);
-
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT COUNT(*) as total FROM frog WHERE id NOT IN (1)')
+            ->with('SELECT COUNT(*) as total FROM frog')
             ->willReturn([ [ 'total' => 10 ] ]);
 
         $this->assertEquals(10, $this->repository->countAll());
+    }
+
+    /**
+     * Tests countMigrated.
+     */
+    public function testCountMigrated()
+    {
+        $this->tracker->expects($this->once())->method('getParsed')
+            ->willReturn([ 1, 2 ]);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('SELECT COUNT(*) as total FROM frog WHERE id IN ("1", "2") AND title LIKE "%foo%" ORDER BY id ASC')
+            ->willReturn([ [ 'total' => 10 ] ]);
+
+        $this->assertEquals(10, $this->repository->countMigrated());
     }
 
     /**
@@ -86,11 +98,11 @@ class DatabaseRepositoryTest extends KernelTestCase
      */
     public function testNext()
     {
-        $this->tracker->expects($this->once())->method('getParsedSourceIds')
-            ->willReturn([ 1 ]);
+        $this->tracker->expects($this->once())->method('getParsed')
+            ->willReturn([ 1, 2 ]);
 
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT * FROM frog WHERE id NOT IN (1) AND id > 10 LIMIT 1')
+            ->with('SELECT * FROM frog WHERE id NOT IN ("1", "2") AND title LIKE "%foo%" ORDER BY id ASC LIMIT 1')
             ->willReturn([ [ 'gorp' => 'grault' ] ]);
 
         $this->assertEquals([ 'gorp' => 'grault' ], $this->repository->next());
@@ -101,11 +113,11 @@ class DatabaseRepositoryTest extends KernelTestCase
      */
     public function testNextWhenNoMoreResults()
     {
-        $this->tracker->expects($this->once())->method('getParsedSourceIds')
-            ->willReturn([ 1 ]);
+        $this->tracker->expects($this->once())->method('getParsed')
+            ->willReturn(1756);
 
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT * FROM frog WHERE id NOT IN (1) AND id > 10 LIMIT 1')
+            ->with('SELECT * FROM frog WHERE id > "1756" AND title LIKE "%foo%" ORDER BY id ASC LIMIT 1')
             ->willReturn([]);
 
         $this->assertFalse($this->repository->next());

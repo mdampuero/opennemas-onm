@@ -50,20 +50,24 @@ class DatabaseRepository implements Repository
      */
     public function count()
     {
-        $ids     = $this->tracker->getParsedSourceIds();
-        $filters = [];
-        $sql     = sprintf(
+        $sql = sprintf(
             'SELECT COUNT(*) as total FROM %s',
             $this->config['mapping']['table']
         );
 
-        if (!empty($ids)) {
-            $filters[] = sprintf(
-                '%s NOT IN (%s)',
-                $this->config['mapping']['id'],
-                implode(',', $ids)
-            );
+        // Support single value and array of values
+        $parsed = $this->tracker->getParsed();
+        $filter = '%s > "%s"';
+        if (is_array($parsed)) {
+            $filter = '%s NOT IN ("%s")';
+            $parsed = implode('", "', $parsed);
         }
+
+        $filters[] = sprintf(
+            $filter,
+            $this->config['mapping']['id'],
+            $parsed
+        );
 
         if (!empty($this->config['mapping']['filter'])) {
             $filters[] = $this->config['mapping']['filter'];
@@ -83,19 +87,52 @@ class DatabaseRepository implements Repository
      */
     public function countAll()
     {
-        $ids     = $this->tracker->getParsedSourceIds();
         $sql = sprintf(
             'SELECT COUNT(*) as total FROM %s',
             $this->config['mapping']['table']
         );
 
-        if (!empty($ids)) {
-            $sql .= sprintf(
-                ' WHERE %s NOT IN (%s)',
-                $this->config['mapping']['id'],
-                implode(',', $ids)
-            );
+        $rs = $this->conn->fetchAll($sql);
+
+        return $rs[0]['total'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countMigrated()
+    {
+        $sql = sprintf(
+            'SELECT COUNT(*) as total FROM %s',
+            $this->config['mapping']['table']
+        );
+
+        // Support single value and array of values
+        $parsed = $this->tracker->getParsed();
+        $filter = '%s <= "%s"';
+        if (is_array($parsed)) {
+            $filter = '%s IN ("%s")';
+            $parsed = implode('", "', $parsed);
         }
+
+        $filters[] = sprintf(
+            $filter,
+            $this->config['mapping']['id'],
+            $parsed
+        );
+
+        if (!empty($this->config['mapping']['filter'])) {
+            $filters[] = $this->config['mapping']['filter'];
+        }
+
+        if (!empty($filters)) {
+            $sql .= ' WHERE ' . implode(' AND ', $filters);
+        }
+
+        $sql .= sprintf(
+            ' ORDER BY %s ASC',
+            $this->config['mapping']['id']
+        );
 
         $rs = $this->conn->fetchAll($sql);
 
@@ -107,17 +144,24 @@ class DatabaseRepository implements Repository
      */
     public function next()
     {
-        $ids     = $this->tracker->getParsedSourceIds();
-        $filters = [];
-        $sql     = sprintf('SELECT * FROM %s', $this->config['mapping']['table']);
+        $sql = sprintf(
+            'SELECT * FROM %s',
+            $this->config['mapping']['table']
+        );
 
-        if (!empty($ids)) {
-            $filters[] = sprintf(
-                '%s NOT IN (%s)',
-                $this->config['mapping']['id'],
-                implode(',', $ids)
-            );
+        // Support single value and array of values
+        $parsed = $this->tracker->getParsed();
+        $filter = '%s > "%s"';
+        if (is_array($parsed)) {
+            $filter = '%s NOT IN ("%s")';
+            $parsed = implode('", "', $parsed);
         }
+
+        $filters[] = sprintf(
+            $filter,
+            $this->config['mapping']['id'],
+            $parsed
+        );
 
         if (!empty($this->config['mapping']['filter'])) {
             $filters[] = $this->config['mapping']['filter'];
@@ -127,7 +171,10 @@ class DatabaseRepository implements Repository
             $sql .= ' WHERE ' . implode(' AND ', $filters);
         }
 
-        $sql .= ' LIMIT 1';
+        $sql .= sprintf(
+            ' ORDER BY %s ASC LIMIT 1',
+            $this->config['mapping']['id']
+        );
 
         $rs = $this->conn->fetchAll($sql);
 
