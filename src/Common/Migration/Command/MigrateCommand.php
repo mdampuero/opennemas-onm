@@ -149,17 +149,24 @@ class MigrateCommand extends ContainerAwareCommand
         ));
     }
 
+    /**
+     * Displays the number of contents that are in the source, were migrated and
+     * are ready to migrate.
+     */
     protected function getCounters()
     {
-        $this->migrated = count($this->mm->getMigrationTracker()->getParsed());
-        $this->current  = 0;
-        $this->left     = $this->mm->getRepository()->count();
-        $this->total    = $this->mm->getRepository()->countAll();
-
         $this->output->writeln("<options=bold>(4/6) Migrating items...</>");
+
+        $this->total = $this->mm->getRepository()->countAll();
         $this->output->writeln("    ==> Total items in source: $this->total");
+
+        $this->left = $this->mm->getRepository()->count();
         $this->output->writeln("    ==> Items ready to migrate: $this->left");
+
+        $this->migrated = $this->mm->getRepository()->countMigrated();
         $this->output->writeln("    ==> Items already migrated: $this->migrated");
+
+        $this->current  = 0;
     }
 
     /**
