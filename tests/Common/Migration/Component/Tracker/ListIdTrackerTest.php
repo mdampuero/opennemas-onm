@@ -9,13 +9,13 @@
  */
 namespace Tests\Common\Migration\Component\Tracker;
 
-use Common\Migration\Component\Tracker\ImportTracker;
+use Common\Migration\Component\Tracker\ListIdTracker;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for class class.
  */
-class ImportTrackerTest extends KernelTestCase
+class ListIdTrackerTest extends KernelTestCase
 {
     /**
      * Configures the testing environment.
@@ -27,7 +27,7 @@ class ImportTrackerTest extends KernelTestCase
             ->setMethods([ 'fetchAll' ])
             ->getMock();
 
-        $this->translator = new ImportTracker($this->conn);
+        $this->tracker = new ListIdTracker($this->conn);
     }
 
     /**
@@ -45,8 +45,8 @@ class ImportTrackerTest extends KernelTestCase
                 ]
             ]);
 
-        $this->translator->load();
+        $this->tracker->load();
 
-        $this->assertTrue($this->translator->isParsed('frog'));
+        $this->assertContains('frog', $this->tracker->getParsed());
     }
 }

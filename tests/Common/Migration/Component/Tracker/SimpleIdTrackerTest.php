@@ -9,13 +9,13 @@
  */
 namespace Tests\Common\Migration\Component\Tracker;
 
-use Common\Migration\Component\Tracker\MigrationTracker;
+use Common\Migration\Component\Tracker\SimpleIdTracker;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for class class.
  */
-class MigrationTrackerTest extends KernelTestCase
+class SimpleIdTrackerTest extends KernelTestCase
 {
     /**
      * Configures the testing environment.
@@ -27,7 +27,7 @@ class MigrationTrackerTest extends KernelTestCase
             ->setMethods([ 'executeQuery', 'fetchAll' ])
             ->getMock();
 
-        $this->tracker = new MigrationTracker($this->conn, 'grault');
+        $this->tracker = new SimpleIdTracker($this->conn, 'grault');
     }
 
     /**
@@ -36,7 +36,7 @@ class MigrationTrackerTest extends KernelTestCase
     public function testLoad()
     {
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with("SELECT * FROM translation_ids WHERE type = 'grault'")
+            ->with("SELECT pk_content_old FROM translation_ids WHERE type = 'grault' ORDER BY pk_content_old DESC LIMIT 1")
             ->willReturn([
                 [
                     'pk_content_old' => 'frog',
@@ -48,7 +48,7 @@ class MigrationTrackerTest extends KernelTestCase
 
         $this->tracker->load();
 
-        $this->assertTrue($this->tracker->isParsed('frog'));
+        $this->assertContains('frog', $this->tracker->getParsed());
     }
 
     /**
@@ -63,5 +63,7 @@ class MigrationTrackerTest extends KernelTestCase
             );
 
         $this->tracker->add('xyzzy', 'flob', 'quux');
+
+        $this->assertEquals('xyzzy', $this->tracker->getParsed());
     }
 }

@@ -251,6 +251,9 @@ class Article extends Content
 
             parent::create($data);
 
+            $this->pk_article = $this->id;
+            $this->pk_content = $this->id;
+
             $conn->insert('articles', [
                 'pk_article'    => $this->id,
                 'agency'   => (!isset($data['agency']) || is_null($data['agency']))

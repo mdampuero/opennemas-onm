@@ -10,11 +10,37 @@
 namespace Common\Migration\Component\Tracker;
 
 /**
- * The ImportTracker provides methods to translate contents when importing
- * contents from a news agency.
+ * The ListIdTracker provides methods to track which contents are already
+ * migrated when executing a migration from a data source.
+ *
+ * This handles the list of last migrated ids so the tracking value has no
+ * special requirements.
  */
-class ImportTracker extends Tracker
+class ListIdTracker extends Tracker
 {
+    /**
+     * The list of parsed items ids.
+     *
+     * @var array
+     */
+    protected $parsed = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add($sourceId, $targetId, $slug = null)
+    {
+        $this->parsed[] = $sourceId;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParsed()
+    {
+        return $this->parsed;
+    }
+
     /**
      * {@inheritdoc}
      */
