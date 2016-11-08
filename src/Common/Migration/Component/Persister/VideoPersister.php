@@ -22,7 +22,7 @@ class VideoPersister extends Persister
      */
     public function persist($data)
     {
-        unset($data['pk_content_video']);
+        unset($data['pk_video']);
 
         try {
             $video = $this->find($data);
