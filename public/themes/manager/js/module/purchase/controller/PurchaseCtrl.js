@@ -79,6 +79,7 @@
           itemService.show('manager_ws_purchase_show', $routeParams.id).then(
             function(response) {
               $scope.purchase = response.data.purchase;
+              $scope.instance = response.data.instance;
               $scope.extra    = response.data.extra;
             }
           );
