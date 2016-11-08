@@ -51,10 +51,10 @@
               </span>
             </div>
             <h4>{t}Client{/t}</h4>
-            <div ng-if="!payment.client">
+            <div ng-if="!purchase.client">
               {t}No client data available{/t}
             </div>
-            <div ng-if="payment.client">
+            <div ng-if="purchase.client">
               <div class="row p-b-15">
                 <div class="col-md-4">
                   <a class="btn btn-block btn-white text-uppercase" ng-href="[% routing.ngGenerate('manager_client_show', { 'id': purchase.client.id }) %]" target="_blank" title="Opennemas" ng-if="purchase.client">
