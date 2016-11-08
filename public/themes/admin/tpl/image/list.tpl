@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, title: '', category_name: -1, in_litter: 0, month: '' }, 'created', 'desc', 'backend_ws_image_list', '{{$smarty.const.CURRENT_LANGUAGE}}');">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, title: '', category_name: -1, in_litter: 0, month: '' }, 'created', 'desc', 'backend_ws_image_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); years = {json_encode($years)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -86,6 +86,16 @@
           </li>
           <li class="quicklinks">
             <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <select name="month" ng-model="criteria.month">
+              <option value="">{t}All months{/t}</option>
+              <optgroup label="[% year.name %]" ng-repeat="year in years">
+                <option value="[% month.value %]" ng-repeat="month in year.months">
+                  [% month.name %] ([% year.name %])
+                </option>
+              </optgroup>
+            </select>
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
             <ui-select name="view" theme="select2" ng-model="pagination.epp">

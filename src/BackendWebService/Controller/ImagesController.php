@@ -34,6 +34,12 @@ class ImagesController extends ContentController
             $order = '`' . $sortBy . '` ' . $sortOrder;
         }
 
+        if (array_key_exists('month', $search) && !empty($search['month'])) {
+            $filter[] = "(DATE_FORMAT(created, '%Y-%c') = '".$search['month'][0]['value']."')";
+        }
+
+        $filter[] = "(content_type_name = 'photo')";
+
         // Search in title and metadata
         if (is_array($search) && array_key_exists('title', $search)) {
             $title = $search['title'][0]['value'];
