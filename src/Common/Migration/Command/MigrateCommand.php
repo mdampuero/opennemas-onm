@@ -95,7 +95,9 @@ class MigrateCommand extends ContainerAwareCommand
             }
 
             // Add to translations
-            $this->mm->getMigrationTracker()->add($sourceId, $targetId, $slug);
+            if (!empty($targetId)) {
+                $this->mm->getMigrationTracker()->add($sourceId, $targetId, $slug);
+            }
 
             if ($output->isVeryVerbose()) {
                 $output->writeln("      <fg=green>==></> Translation added");
@@ -114,9 +116,16 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function getConfiguration()
     {
+        $this->getContainer()->get('session')
+            ->set('user', json_decode(json_encode(['id' => 0, 'username' => 'cli'])));
+
         // Load instance and force ORM and Cache initialization
-        $this->getContainer()->get('core.loader')
-            ->loadInstanceFromInternalName($this->migration['target']['instance']);
+        $loader = $this->getContainer()->get('core.loader');
+        $loader->loadInstanceFromInternalName(
+            $this->migration['target']['instance']
+        );
+
+        $loader->init();
 
         $this->output->writeln("<options=bold>(2/6) Configuring the migration...</>");
 
@@ -221,16 +230,16 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function postMigrate()
     {
-        $output->writeln("<options=bold>(5/6) Executing post-migration actions...</>");
+        $this->output->writeln("<options=bold>(5/6) Executing post-migration actions...</>");
 
         if (!empty($this->input->getOption('no-post'))
-            || !array_key_exists('post', $this->migration['source'])
-            || empty($this->migration['source']['post'])
+            || !array_key_exists('post', $this->migration['target'])
+            || empty($this->migration['target']['post'])
         ) {
             $this->output->writeln("    ==> No actions executed");
             return;
         }
 
-        $this->mm->getPersister()->prepare($this->migration['source']['post']);
+        $this->mm->getPersister()->prepare($this->migration['target']['post']);
     }
 }
