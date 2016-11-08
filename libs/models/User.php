@@ -11,19 +11,14 @@
  * @package    Model
  **/
 
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use Onm\Exception\UserAlreadyExistsException;
-use Lexik\Bundle\JWTAuthenticationBundle\User\JWTUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
 
 /**
  * User
  *
  * @package    Model
  **/
-class User extends OAuthUser implements AdvancedUserInterface, EquatableInterface, JWTUserInterface
+class User
 {
     /**
      * The user id
@@ -162,33 +157,27 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         // Transform groups array to a string separated by comma
         $data['id_user_group'] = implode(',', $data['id_user_group']);
 
-        $sql =
-            "INSERT INTO users "
-            ."(`username`, `password`, `url`, `bio`, `avatar_img_id`, "
-            ."`email`, `name`, `type`, `token`, `activated`, `fk_user_group`) "
-            ."VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        $values = array(
-            $data['username'],
-            md5($data['password']),
-            $data['url'],
-            $data['bio'],
-            (int) $data['avatar_img_id'],
-            $data['email'],
-            $data['name'],
-            (int) $data['type'],
-            $data['token'],
-            (int) $data['activated'],
-            $data['id_user_group']
-        );
+        $values = [
+            'username'      => $data['username'],
+            'password'      => md5($data['password']),
+            'url'           => $data['url'],
+            'bio'           => $data['bio'],
+            'avatar_img_id' => (int) $data['avatar_img_id'],
+            'email'         => $data['email'],
+            'name'          => $data['name'],
+            'type'          => (int) $data['type'],
+            'token'         => $data['token'],
+            'activated'     => (int) $data['activated'],
+            'fk_user_group' => $data['id_user_group']
+        ];
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        try {
+            $conn = getService('orm.manager')->getConnection('instance');
+            $conn->insert('users', $values);
+            $this->id = $conn->lastInsertId();
+        } catch (\Exception $e) {
+            error_log('Unable to create the user with the provided info: '.json_encode($values));
             return false;
-        }
-        $this->id = $GLOBALS['application']->conn->Insert_ID();
-
-        //Insertar las categorias de acceso.
-        if (isset($data['ids_category'])) {
-            $this->createAccessCategoriesDb($data['ids_category']);
         }
 
         /* Notice log of this action */
@@ -249,7 +238,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public function read($id)
     {
         try {
-            $conn = getService('dbal_connection');
+            $conn = getService('orm.manager')->getConnection('instance');
             $rs = $conn->fetchAll(
                 'SELECT * FROM users WHERE id = ?',
                 [ intval($id) ]
@@ -261,10 +250,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
             $this->load($rs[0]);
 
-            $database = $conn->connectionParams['dbname'];
-            if ($database != 'onm-instances') {
-                $this->accesscategories = $this->readAccessCategories();
-            }
 
             // Get user meta information
             $this->meta = $this->getMeta();
@@ -296,67 +281,43 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         }
 
         // Init transaction
-        $GLOBALS['application']->conn->BeginTrans();
+        $conn = getService('orm.manager')->getConnection('instance');
+
+        $conn->beginTransaction();
 
         // Transform groups array to a string separated by commas
         $data['id_user_group'] = implode(',', $data['id_user_group']);
+
+        $values = [
+            'username'      => $data['username'],
+            'url'           => $data['url'],
+            'bio'           => $data['bio'],
+            'avatar_img_id' => (int) $data['avatar_img_id'],
+            'email'         => $data['email'],
+            'name'          => $data['name'],
+            'activated'     => (int) $data['activated'],
+            'id_user_group' => $data['id_user_group'],
+            'type'          => (int) $data['type'],
+        ];
 
         if (isset($data['password'])
             && (strlen($data['password']) > 0)
             && $data['password'] === $data['passwordconfirm']
         ) {
-            $sql = "UPDATE users
-                    SET `username`=?, `password`= ?, `url`=?, `bio`=?,
-                        `avatar_img_id`=?, `email`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
-                    WHERE id=?";
-
-            $values = [
-                $data['username'],
-                md5($data['password']),
-                $data['url'],
-                $data['bio'],
-                (int) $data['avatar_img_id'],
-                $data['email'],
-                $data['name'],
-                (int) $data['activated'],
-                $data['id_user_group'],
-                (int) $data['type'],
-                intval($data['id'])
-            ];
-        } else {
-            $sql = "UPDATE users
-                    SET `username`=?, `email`=?, `url`=?, `bio`=?,
-                        `avatar_img_id`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
-                    WHERE id=?";
-
-            $values = [
-                $data['username'],
-                $data['email'],
-                $data['url'],
-                $data['bio'],
-                (int) $data['avatar_img_id'],
-                $data['name'],
-                (int) $data['activated'],
-                $data['id_user_group'],
-                (int) $data['type'],
-                intval($data['id'])
-            ];
+            $values['password'] = md5($data['password']);
         }
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            // Rollback
-            $GLOBALS['application']->conn->RollbackTrans();
-
+        try {
+            $conn->update('users', $values, [ 'id' => intval($data['id']) ]);
+        } catch (\Exception $e) {
+            $conn->rollBack();
             return false;
         }
 
         // Finish transaction
-        $GLOBALS['application']->conn->CommitTrans();
+        $conn->commit();
 
         $this->id = $data['id'];
-        if (array_key_exists('ids_category', $data)) {
-            $this->createAccessCategoriesDb($data['ids_category']);
-        }
 
         /* Notice log of this action */
         logUserEvent(__METHOD__, $this->id, $data);
@@ -375,13 +336,14 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM users WHERE id=?';
+        try {
+            getService('orm.manager')->getConnection('instance')
+                ->delete('users', [ 'id' => intval($id)]);
 
-        if ($GLOBALS['application']->conn->Execute($sql, [intval($id)])===false) {
-            return false;
-        }
-
-        if (!$this->deleteMeta($id)) {
+            if (!$this->deleteMeta($id)) {
+                return false;
+            }
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -424,114 +386,18 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public function checkIfUserExists($data)
     {
         // FIXME: why username and email twice in different order?
-        $sql = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
+        $sql    = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
+        $values = [ $data['username'], $data['email'], $data['username'], $data['email'] ];
 
-        $values = array($data['username'], $data['email'], $data['username'], $data['email']);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = getService('orm.manager')->getConnection('instance')
+            ->fetchAll($sql, $values);
 
         // If is update, check for more than 1 result
-        if (isset($data['id']) && $rs->_numOfRows == 1 && $rs->fields['id'] == $data['id']) {
+        if (isset($data['id']) && count($rs) == 1 && $rs[0]['id'] == $data['id']) {
             return false;
         }
 
-        return ($rs->fields != null && $rs->fields != false);
-    }
-
-    /**
-     * Stores the list of categories an user has access
-     *
-     * @param int $IdsCategory the list of category ids
-     *
-     * @return boolean
-     **/
-    private function createAccessCategoriesDb($categoryIds)
-    {
-        if ($this->deleteAccessCategoriesDb()) {
-            $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`) VALUES (?,?)";
-
-            if (count($categoryIds) > 0) {
-                $values = array();
-                for ($iIndex = 0; $iIndex < count($categoryIds); $iIndex++) {
-                    $values[] = array($this->id, $categoryIds[$iIndex]);
-                }
-
-                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-                if ($rs === false) {
-                    $GLOBALS['application']->conn->RollbackTrans();
-
-                    return false;
-                }
-            }
-
-            $this->readAccessCategories($this->id);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Loads and returns the categories an user has access
-     *
-     * @param int $id the user id
-     *
-     * @return array the list of category ids
-     **/
-    private function readAccessCategories($id = null)
-    {
-        $cache = getService('cache');
-
-        $id = (!is_null($id))? $id: $this->id;
-
-        $contentCategories = $cache->fetch("categories_for_user_".$id);
-         // If was not fetched from APC now is turn of DB
-        if (!$contentCategories) {
-            $sql = 'SELECT pk_fk_content_category '
-                 . 'FROM users_content_categories '
-                 . 'WHERE pk_fk_user=?';
-            $values = array(intval($id));
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-            if (!$rs) {
-                return null;
-            }
-
-            $contentCategories = array();
-            while (!$rs->EOF) {
-                 $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
-                 $contentCategories[] = $contentCategory;
-                 $rs->MoveNext();
-            }
-
-            $cache->save("categories_for_user_".$id, $contentCategories);
-        }
-
-        return $contentCategories;
-    }
-
-    /**
-     * Removes all the category access assignments to the current user
-     *
-     * @return boolean true if the action was performed
-     **/
-    private function deleteAccessCategoriesDb()
-    {
-        global $kernel;
-        $cache = $kernel->getContainer()->get('cache');
-
-        $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
-        $values = array(intval($this->id));
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            $GLOBALS['application']->conn->RollbackTrans();
-
-            return false;
-        }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
+        return !empty($rs);
     }
 
     /**
@@ -543,14 +409,14 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public function findByEmail($email)
     {
         $sql = 'SELECT * FROM users WHERE email=?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
+        $rs  = getService('orm.manager')->getConnection('instance')
+            ->fetchAll($sql, [ $email ]);
 
-        if (!$rs->fields) {
+        if (!$rs) {
             return null;
         }
 
-        $this->load($rs->fields);
-        $this->accesscategories = $this->readAccessCategories();
+        $this->load($rs[0]);
 
         return $this;
     }
@@ -568,33 +434,17 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return null;
         }
 
-        $sql   = 'SELECT * FROM users WHERE token=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, $token);
+        $sql = 'SELECT * FROM users WHERE token=?';
+        $rs  = getService('orm.manager')->getConnection('instance')
+            ->fetchAll($sql, [ $email ]);
 
-        if (!$rs->fields) {
+        if (!$rs) {
             return null;
         }
 
-        $this->load($rs->fields);
-        $this->accesscategories = $this->readAccessCategories();
+        $this->load($rs[0]);
 
         return $this;
-    }
-
-    /**
-     * Sets the access categories to a user
-     *
-     * @param array $categoryIds the list of category ids
-     *
-     * @return array the same list
-     **/
-    public function setAccessCategories($categoryIds)
-    {
-        for ($iIndex=0; $iIndex < count($categoryIds); $iIndex++) {
-            $contentCategories[] = new ContentCategory($categoryIds[$iIndex]);
-        }
-
-        return $contentCategories;
     }
 
     /**
@@ -609,7 +459,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         }
 
         // Fetch authors info from users table
-        $authorInfos = getService('dbal_connection')->fetchAll(
+        $authorInfos = getService('orm.manager')->getConnection('instance')->fetchAll(
             'SELECT * FROM users WHERE '.$filter.' fk_user_group LIKE "%3%"'
             .' ORDER BY name ASC'
         );
@@ -620,7 +470,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         }, $authorInfos);
         $authorMetas = [];
         if (count($authorIDs) > 0) {
-            $authorMetas = getService('dbal_connection')->fetchAll(
+            $authorMetas = getService('orm.manager')->getConnection('instance')->fetchAll(
                 'SELECT * FROM usermeta WHERE user_id IN ('.implode(',', $authorIDs).')'
             );
         }
@@ -674,40 +524,45 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function setMeta($userMeta = array())
     {
-        $sql = 'REPLACE INTO usermeta (`user_id`, `meta_key`, `meta_value`) VALUES (?, ?, ?)';
+        try {
+            $values = array();
+            foreach ($userMeta as $key => $value) {
+                $this->meta[$key] = $value;
+                $values[] = array($this->id, $key, $value);
+            }
 
-        $values = array();
-        foreach ($userMeta as $key => $value) {
-            $this->meta[$key] = $value;
-            $values[] = array($this->id, $key, $value);
-        }
+            $rs = getService('orm.manager')->getConnection('instance')->executeUpdate(
+                "REPLACE INTO usermeta (`user_id`, `meta_key`, `meta_value`) VALUES (?, ?, ?)",
+                $values
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            dispatchEventWithParams('user.update', array('user' => $this));
 
-        if (!$rs) {
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
     }
 
     public function setPassword($password)
     {
         $this->password = $password;
 
-        $sql = 'UPDATE users SET `password` = ?, `token` = NULL WHERE `id` = ?';
+        try {
+            $rs = getService('orm.manager')->getConnection('instance')->update(
+                "users",
+                [ 'password' => $password, 'token' => null ],
+                [ 'id'       => $this->id ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($password, $this->id));
+            dispatchEventWithParams('user.update', array('user' => $this));
 
-        if (!$rs) {
+
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
     }
 
     /**
@@ -720,18 +575,19 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     public function getMeta($meta = null)
     {
         if (count($this->meta) <= 0) {
-            $sql = 'SELECT * FROM usermeta WHERE `user_id` = ?';
+            try {
+                $rs = getService('orm.manager')->getConnection('instance')->fetchAll(
+                    "SELECT * FROM usermeta WHERE `user_id` = ?",
+                    [ $this->id ]
+                );
 
-            $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-
-            if (!$rs) {
-                return array();
-            }
-
-            $this->meta = array();
-            foreach ($rs as $value) {
-                $this->meta[$rs->fields['meta_key']] = $rs->fields['meta_value'];
+                $this->meta = [];
+                foreach ($rs as $value) {
+                    $this->meta[$value['meta_key']] = $value['meta_value'];
+                }
+            } catch (\Exception $e) {
+                error_log($e->getMessage());
+                return false;
             }
         }
 
@@ -760,15 +616,19 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function deleteMeta($userId)
     {
-        $sql = 'DELETE FROM usermeta WHERE `user_id`=?';
+        try {
+            $rs = getService('orm.manager')->getConnection('instance')->delete(
+                "usermeta",
+                [ 'user_id' => $userId, ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId)))===false) {
+            dispatchEventWithParams('user.update', array('user' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
     }
 
     /**
@@ -781,15 +641,22 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function deleteMetaKey($userId, $metaKey)
     {
-        $sql = 'DELETE FROM usermeta WHERE `user_id`=? AND `meta_key`=?' ;
+        try {
+            $rs = getService('orm.manager')->getConnection('instance')->delete(
+                "usermeta",
+                [
+                    'user_id'  => $userId,
+                    'meta_key' => $metaKey,
+                ]
+            );
 
-        if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId), $metaKey))===false) {
+            dispatchEventWithParams('user.update', array('user' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
     }
 
     /**
@@ -801,14 +668,17 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function checkIfExistsUserEmail($email)
     {
-        $sql = 'SELECT count(*) AS num  FROM `users` WHERE email = ?';
+        try {
+            $rs = getService('orm.manager')->getConnection('instance')->fetchAssoc(
+                'SELECT count(*) AS num  FROM `users` WHERE email = ?',
+                [ $email ]
+            );
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($email));
-        if (!$rs) {
-            return;
+            return $rs['num'] > 0;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
-
-        return ($rs->fields['num'] > 0);
     }
 
     /**
@@ -819,14 +689,17 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function checkIfExistsUserName($userName)
     {
-        $sql = 'SELECT count(*) AS num FROM `users` WHERE username = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($userName));
+        try {
+            $rs = getService('orm.manager')->getConnection('instance')->fetchAssoc(
+                'SELECT count(*) AS num FROM `users` WHERE username = ?',
+                [ $userName ]
+            );
 
-        if (!$rs) {
+            return $rs['num'] > 0;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        return ($rs->fields['num'] > 0);
     }
 
     /**
@@ -839,16 +712,20 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function updateUserToken($id, $token)
     {
-        $sql = "UPDATE users SET `token`= ? WHERE id=?";
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($token, intval($id)));
+        try {
+            $rs = getService('orm.manager')->getConnection('instance')->update(
+                "users",
+                [ 'token' => $token ],
+                [ 'id' => (int) $id ]
+            );
 
-        if ($rs === false) {
+            dispatchEventWithParams('user.update', array('user' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
     }
 
     /**
@@ -861,16 +738,20 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public function updateUserPassword($id, $pass)
     {
-        $sql = "UPDATE users SET `password`= ? WHERE id=?";
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(md5($pass), intval($id)));
+        try {
+            $rs = getService('orm.manager')->getConnection('instance')->update(
+                "users",
+                [ 'password' => md5($pass) ],
+                [ 'id' => (int) $id ]
+            );
 
-        if ($rs === false) {
+            dispatchEventWithParams('user.update', array('user' => $this));
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
-
-        dispatchEventWithParams('user.update', array('user' => $this));
-
-        return true;
     }
 
     /**
@@ -891,64 +772,22 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      * Returns a list of User objects where the users has paywall subscription
      *
      * @return void
-     **/
+     */
     public static function getUsersWithSubscription($config = array())
     {
-        $defaultConfig = array(
-            'limit' => null,
-        );
+        $date = new \DateTime();
+        $date->setTimezone(new \DateTimeZone('UTC'));
+        $date = $date->format('Y-m-d H:i:s');
 
-        $config = array_merge($defaultConfig, $config);
+        $oql = sprintf('paywall_time_limit > "%s"', $date);
 
-        $limit = '';
-        if ($config['limit'] > 0) {
-            $limit = 'LIMIT '.$config['limit'];
-        }
-        $currentTime = new \DateTime();
-        $currentTime->setTimezone(new \DateTimeZone('UTC'));
-
-        $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-        $sql = "SELECT user_id FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ? $limit";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
-
-        if ($rs === false) {
-            return array();
+        if (array_key_exists('limit', $config) && $config['limit'] > 0) {
+            $oql = ' limit ' . $config['limit'];
         }
 
-        $users = array();
-        while (!$rs->EOF) {
-            $user = new \User($rs->fields['user_id']);
-            $user->meta = $user->getMeta();
-
-            // Set paywall values
-            $user->paywall = 0;
-            $user->last_login = 0;
-            if (isset($user->meta['paywall_time_limit'])) {
-                // Overload obj for ordering propouses
-                $user->paywall = $user->meta['paywall_time_limit'];
-                $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $user->meta['paywall_time_limit'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-            if (isset($user->meta['last_login'])) {
-                // Overload obj for ordering propouses
-                $user->last_login = $user->meta['last_login'];
-                $user->meta['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $user->meta['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-            $users []= $user;
-
-            $rs->MoveNext();
-        }
-
-        return $users;
+        return getService('orm.manager')
+            ->getRepository('User', 'instance')
+            ->findBy($oql);
     }
 
     /**
@@ -958,79 +797,30 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      **/
     public static function getUsersOnlyRegistered()
     {
-        $sql = 'SELECT id FROM `users` WHERE type=1 ORDER BY name';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM `users`'
+            . ' WHERE type = 1 AND id NOT IN '
+            .  '(SELECT user_id FROM usermeta WHERE meta_key = "paywall_time_limit")';
 
-        $users = array();
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $user = new User($rs->fields['id']);
-                $user->meta = $user->getMeta();
-
-                // Set paywall values
-                $user->paywall = 0;
-                $user->last_login = 0;
-                if (isset($user->meta['paywall_time_limit'])) {
-                    // Overload obj for ordering propouses
-                    $user->paywall = $user->meta['paywall_time_limit'];
-                    $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
-                        'Y-m-d H:i:s',
-                        $user->meta['paywall_time_limit'],
-                        new \DateTimeZone('UTC')
-                    );
-                }
-                if (isset($user->meta['last_login'])) {
-                    // Overload obj for ordering propouses
-                    $user->last_login = $user->meta['last_login'];
-                    $user->meta['last_login'] = \DateTime::createFromFormat(
-                        'Y-m-d H:i:s',
-                        $user->meta['last_login'],
-                        new \DateTimeZone('UTC')
-                    );
-                }
-                $users[] = $user;
-
-                $rs->MoveNext();
-            }
-        }
-
-        // Exclude users with subscription
-        $users = array_udiff(
-            $users,
-            self::getUsersWithSubscription(),
-            function ($obj_a, $obj_b) {
-                return $obj_a->id - $obj_b->id;
-            }
-        );
-
-        // Reset array indexes to start on 0
-        $users = array_values($users);
-
-        return $users;
+        return getService('orm.manager')
+            ->getRepository('User', 'instance')
+            ->findBySql($sql);
     }
 
     /**
      * Returns a list of User objects where the users has paywall subscription
      *
-     * @return void
-     **/
+     * @return integer The number of users with paywall subscription.
+     */
     public static function countUsersWithSubscription()
     {
-        $currentTime = new \DateTime();
-        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $date = new \DateTime();
+        $date->setTimezone(new \DateTimeZone('UTC'));
+        $date = $date->format('Y-m-d H:i:s');
 
-        $currentTime = $currentTime->format('Y-m-d H:i:s');
+        $oql = sprintf('paywall_time_limit > "%s"', $date);
 
-        $sql = "SELECT count(user_id) as count FROM usermeta ".
-               "WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
-
-        if ($rs === false) {
-            return 0;
-        }
-
-        return $rs->fields['count'];
+        return getService('orm.manager')->getRepository('User', 'instance')
+            ->countBy($oql);
     }
 
     /**
@@ -1087,233 +877,5 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $photoId = $photo->create($data);
 
         return $photoId;
-    }
-
-    /**
-     * Returns the roles granted to the user.
-     *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return array The user roles
-     */
-    public function getRoles()
-    {
-        if (!isset($this->roles)) {
-            if (in_array('4', $this->id_user_group)
-                || in_array('5', $this->id_user_group)
-            ) {
-                $this->roles = \Privilege::getPrivilegeNames();
-
-                if (in_array('4', $this->id_user_group)) {
-                    $this->roles[] = 'ROLE_MASTER';
-                }
-
-                if (in_array('5', $this->id_user_group)) {
-                    $this->roles[] = 'ROLE_ADMIN';
-                }
-            } else {
-                $this->roles = array();
-                foreach ($this->id_user_group as $group) {
-                    $groupPrivileges = \Privilege::getPrivilegesForUserGroup($group);
-                    $this->roles = array_merge(
-                        $this->roles,
-                        $groupPrivileges
-                    );
-                }
-            }
-
-            if ((int) $this->type == 0) {
-                $this->roles[] = 'ROLE_BACKEND';
-            } else {
-                $this->roles[] = 'ROLE_FRONTEND';
-            }
-        }
-
-        return $this->roles;
-    }
-
-    /**
-     * Returns the password used to authenticate the user.
-     *
-     * This should be the encoded password. On authentication, a plain-text
-     * password will be salted, encoded, and then compared to this value.
-     *
-     * @return string The password
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPayload()
-    {
-        return [
-            'email'    => $this->email,
-            'id'       => $this->id,
-            'name'     => $this->name,
-            'username' => $this->username
-        ];
-    }
-
-    /**
-     * Returns the salt that was originally used to encode the password.
-     *
-     * This can return null if the password was not encoded using a salt.
-     *
-     * @return string|null The salt
-     */
-    public function getSalt()
-    {
-        return null;
-    }
-
-    /**
-     * Returns the username used to authenticate the user.
-     *
-     * @return string The username
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
-     */
-    public function eraseCredentials()
-    {
-        $this->read($this->id);
-
-        unset($this->roles);
-        unset($this->password);
-        unset($this->token);
-
-        return $this;
-    }
-
-    /**
-     * Returns whether or not the given user is equivalent to this user.
-     *
-     * @return boolean
-     */
-    public function equals(UserInterface $user)
-    {
-        if ($user->getUsername() === $this->getUsername()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks whether the user's account has expired.
-     *
-     * @return boolean
-     */
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * Checks whether the user is locked.
-     *
-     * @return boolean
-     */
-    public function isAccountNonLocked()
-    {
-        return true;
-    }
-
-    /**
-     * Checks whether the user's credentials (password) has expired.
-     *
-     * @return boolean
-     */
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * Checks whether the user is enabled.
-     *
-     * @return boolean
-     */
-    public function isEnabled()
-    {
-        return $this->isMaster() || $this->activated;
-    }
-
-    /**
-     * The equality comparison should neither be done by referential equality
-     * nor by comparing identities (i.e. getId() === getId()).
-     *
-     * However, you do not need to compare every attribute, but only those that
-     * are relevant for assessing whether re-authentication is required.
-     *
-     * @param  UserInterface $user
-     * @return boolean
-     */
-    public function isEqualTo(UserInterface $user)
-    {
-        if ($user instanceof User
-            && $this->getUsername() === $this->getUsername()
-        ) {
-            $isEqual = count($this->getRoles()) == count($user->getRoles());
-            if ($isEqual) {
-                foreach ($this->getRoles() as $role) {
-                    $isEqual = $isEqual && in_array($role, $user->getRoles());
-                }
-            }
-            return $isEqual;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns whether or not user is in master group.
-     *
-     * @return boolean True if the users is in master group.
-     */
-    public function isMaster()
-    {
-        if (in_array('4', $this->id_user_group)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns whether or not user is in administrator group.
-     *
-     * @return boolean True if the users is in administrator group.
-     */
-    public function isAdmin()
-    {
-        if (in_array('4', $this->id_user_group)
-            || in_array('5', $this->id_user_group)
-        ) {
-            return true;
-        }
-
-        return false;
     }
 }

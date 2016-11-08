@@ -705,33 +705,6 @@ admin_opinions_config:
     path:     /opinions/config
     defaults: { _controller  : BackendBundle:Opinions:config }
 
-# Author controller routes
-admin_opinion_authors:
-    path:     /authors
-    defaults: { _controller  : BackendBundle:Authors:list }
-
-admin_author_show:
-    path:     /author/{id}/show
-    defaults: { _controller  : BackendBundle:Authors:show }
-    options:
-        expose: true
-
-admin_author_create:
-    path:     /authors/create
-    defaults: { _controller  : BackendBundle:Authors:create }
-
-admin_author_update:
-    path:     /author/{id}/update
-    defaults: { _controller  : BackendBundle:Authors:update }
-
-admin_author_delete:
-    path:     /author/{id}/delete
-    defaults: { _controller  : BackendBundle:Authors:delete }
-
-admin_author_batchdelete:
-    path:     /authors/batch-delete
-    defaults: { _controller  : BackendBundle:Authors:batchDelete }
-
 # Comments controller routes
 admin_comments:
     path:     /comments
@@ -1030,6 +1003,10 @@ admin_menu_sidebar_get:
         expose: true
 
 # Routing refactoring starts here
+backend_author:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/author.yml'
+
 backend_account:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/account.yml'
