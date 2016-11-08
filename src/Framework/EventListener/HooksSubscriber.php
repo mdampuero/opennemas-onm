@@ -572,7 +572,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $instance = $event->getArgument('instance');
 
         $this->container->get('cache.manager')->getConnection('manager')
-            ->delete($instance->domains);
+            ->remove($instance->domains);
     }
 
     /**
