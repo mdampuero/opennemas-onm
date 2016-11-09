@@ -214,7 +214,7 @@ class MigrateCommand extends ContainerAwareCommand
         $this->end = new \DateTime();
 
         $diff = date_diff($this->end, $this->start);
-        $secs = $diff->getTimeStamp();
+        $secs = abs($this->end->getTimestamp() - $this->start->getTimestamp());
         $time = $diff->format('%ss');
 
         if ($secs > 60) {
