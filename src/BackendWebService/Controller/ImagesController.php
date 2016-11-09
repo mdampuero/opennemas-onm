@@ -35,7 +35,7 @@ class ImagesController extends ContentController
         }
 
         if (array_key_exists('month', $search) && !empty($search['month'])) {
-            $filter[] = "(DATE_FORMAT(created, '%Y-%c') = '".$search['month'][0]['value']."')";
+            $filter[] = "(DATE_FORMAT(created, '%Y-%m') = '".$search['month'][0]['value']."')";
         }
 
         $filter[] = "(content_type_name = 'photo')";
