@@ -10,6 +10,7 @@
 namespace Common\Migration\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -50,6 +51,8 @@ class MigrateCommand extends ContainerAwareCommand
     {
         $output->writeln("<fg=green;options=bold>Starting migration...</>");
 
+        $progress = null;
+
         $this->start     = new \DateTime();
         $this->path      = $input->getArgument('config-file');
         $this->input     = $input;
@@ -67,10 +70,14 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->getCounters();
 
+        if (!$output->isVeryVerbose()) {
+            $progress = new ProgressBar($output, $this->left);
+        }
+
         while (($item = $this->mm->getRepository()->next()) !== false) {
             $this->current++;
 
-            if ($output->isVerbose()) {
+            if ($output->isVeryVerbose()) {
                 $output->writeln(
                     "    ==> Processing item <fg=red;options=bold>"
                     . "{$this->current}</> of <fg=green;options=bold>$this->left"
@@ -102,6 +109,14 @@ class MigrateCommand extends ContainerAwareCommand
             if ($output->isVeryVerbose()) {
                 $output->writeln("      <fg=green>==></> Translation added");
             }
+
+            if (!empty($progress)) {
+                $progress->advance();
+            }
+        }
+
+        if (!empty($progress)) {
+            $progress->finish();
         }
 
         $this->postMigrate();
