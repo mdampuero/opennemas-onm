@@ -104,10 +104,10 @@ class MigrateCommand extends ContainerAwareCommand
             // Add to translations
             if (!empty($targetId)) {
                 $this->mm->getTracker()->add($sourceId, $targetId, $slug);
-            }
 
-            if ($output->isVeryVerbose()) {
-                $output->writeln("      <fg=green>==></> Translation added");
+                if ($output->isVeryVerbose()) {
+                    $output->writeln("      <fg=green>==></> Translation added");
+                }
             }
 
             if (!empty($progress)) {
@@ -214,7 +214,8 @@ class MigrateCommand extends ContainerAwareCommand
         $this->end = new \DateTime();
 
         $diff = date_diff($this->end, $this->start);
-        $time = $secs = $diff->format('%ss');
+        $secs = $diff->getTimeStamp();
+        $time = $diff->format('%ss');
 
         if ($secs > 60) {
             $time = $diff->format('%mm %ss');
