@@ -52,10 +52,10 @@ class PhotoPersister extends Persister
                 return 0;
             }
 
-            $photo->createFromLocaFile($data);
+            $photo->createFromLocalFile($data);
         }
 
-        return $photo->pk_photo;
+        return $photo->pk_content;
     }
 
     /**

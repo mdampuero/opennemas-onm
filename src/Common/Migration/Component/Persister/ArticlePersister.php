@@ -29,7 +29,7 @@ class ArticlePersister extends Persister
             $article->create($data);
         }
 
-        return $article->pk_article;
+        return $article->pk_content;
     }
 
     /**

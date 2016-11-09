@@ -46,7 +46,7 @@ class VideoPersister extends Persister
             $video->create($data);
         }
 
-        return $video->pk_video;
+        return $video->pk_content;
     }
 
     /**
