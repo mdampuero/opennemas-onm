@@ -169,6 +169,9 @@ class Photo extends Content
         try {
             parent::create($data);
 
+            $this->pk_photo   = $this->id;
+            $this->pk_content = $this->id;
+
             $rs = getService('dbal_connection')->insert(
                 "photos",
                 [
