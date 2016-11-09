@@ -73,7 +73,7 @@ class ImagesController extends Controller
         $conn = $this->get('orm.manager')->getConnection('instance');
 
         $results = $conn->fetchAll(
-            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%c')) as date_month FROM contents
+            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
             WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
         );
 
