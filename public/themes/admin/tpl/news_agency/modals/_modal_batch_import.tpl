@@ -67,11 +67,18 @@
   </span>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-link" ng-click="close(0)" ng-if="!imported" type="button">{t}No{/t}</button>
-  <button class="btn btn-link" ng-click="close(1)" ng-if="imported" type="button">{t}Close{/t}</button>
-  <button class="btn" ng-class="{ 'btn-success': photos === template.contents.length || texts > 1, 'btn-white': photos !== template.contents.length && texts <= 1 }" ng-click="confirm()" ng-disabled="(template.type === 'Article' && !template.category) || (template.type === 'Opinion' && !template.author)" ng-if="!imported" type="button">
-    <span ng-if="photos === template.contents.length">{t}Yes, import them{/t}</span>
-    <span ng-if="photos !== template.contents.length">{t}Yes, import and publish{/t}</span>
-  </button>
-  <button class="btn btn-success" ng-click="confirm(1)" ng-disabled="(template.type === 'Article' && !template.category) || (template.type === 'Opinion' && !template.author)" ng-if="texts === 1 && !imported" type="button" ng-if="template.contents.length === 1">{t}Yes, import and edit{/t}</button>
+  <span ng-if="saving && !imported" class="btn btn-white">
+    <span class="fa fa-circle-o-notch fa-spin"></span> {t}Saving...{/t}
+  </span>
+  <button class="btn btn-link" ng-click="close(1)" ng-if="!saving && imported" type="button">{t}Close{/t}</button>
+  <span ng-if="!saving">
+    <button class="btn btn-link" ng-click="close(0)" ng-if="!imported" type="button">{t}No{/t}</button>
+    <button class="btn" ng-class="{ 'btn-success': photos === template.contents.length || texts > 1, 'btn-white': photos !== template.contents.length && texts <= 1 }" ng-click="confirm()" ng-disabled="(template.type === 'Article' && !template.category) || (template.type === 'Opinion' && !template.author) || saving" ng-if="!imported" type="button">
+        <span ng-if="photos === template.contents.length">{t}Yes, import them{/t}</span>
+        <span ng-if="photos !== template.contents.length">{t}Yes, import and publish{/t}</span>
+    </button>
+    <button class="btn btn-success" ng-click="confirm(1)" ng-disabled="(template.type === 'Article' && !template.category) || (template.type === 'Opinion' && !template.author) || saving" ng-if="texts === 1 && !imported" type="button" ng-if="template.contents.length === 1">
+    {t}Yes, import and edit{/t}
+    </button>
+  </span>
 </div>
