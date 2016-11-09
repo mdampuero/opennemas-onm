@@ -169,9 +169,6 @@ class Photo extends Content
         try {
             parent::create($data);
 
-            $this->pk_photo   = $this->id;
-            $this->pk_content = $this->id;
-
             $rs = getService('dbal_connection')->insert(
                 "photos",
                 [
@@ -190,7 +187,6 @@ class Photo extends Content
             error_log($e->getMessage());
             return false;
         }
-
     }
 
     /**
@@ -348,8 +344,7 @@ class Photo extends Content
             }
         }
 
-        $photo = new Photo();
-        $photoID = $photo->create($dataPhoto);
+        $photoID = $this->create($dataPhoto);
 
         if (!$photoID) {
             $logger = getService('application.log');
