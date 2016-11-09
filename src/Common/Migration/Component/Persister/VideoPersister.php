@@ -13,7 +13,7 @@ use \Panorama\Video as PanoramaVideo;
 
 /**
  * The VideoPersister class provides methods to save a Video from an
- * extenal data source.
+ * external data source.
  */
 class VideoPersister extends Persister
 {

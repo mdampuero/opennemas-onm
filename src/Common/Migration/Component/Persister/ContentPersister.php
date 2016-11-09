@@ -12,8 +12,8 @@ namespace Common\Migration\Component\Persister;
 use Common\ORM\Entity\Content;
 
 /**
- * The ContentPersister class provides methods to save a Content from an extenal
- * data source.
+ * The ContentPersister class provides methods to save a Content from an
+ * external data source.
  */
 class ContentPersister extends Persister
 {

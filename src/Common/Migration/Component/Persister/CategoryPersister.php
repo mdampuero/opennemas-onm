@@ -13,7 +13,7 @@ use Common\ORM\Entity\Category;
 
 /**
  * The CategoryPersister class provides methods to save a Category from an
- * extenal data source.
+ * external data source.
  */
 class CategoryPersister extends Persister
 {

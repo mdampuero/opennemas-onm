@@ -12,7 +12,7 @@ namespace Common\Migration\Component\Persister;
 use Common\ORM\Entity\Album;
 
 /**
- * The AlbumPersister class provides methods to save a Album from an extenal
+ * The AlbumPersister class provides methods to save a Album from an external
  * data source.
  */
 class AlbumPersister extends Persister

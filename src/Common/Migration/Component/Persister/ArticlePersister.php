@@ -11,7 +11,7 @@ namespace Common\Migration\Component\Persister;
 
 /**
  * The ArticlePersister class provides methods to save a Article from an
- * extenal data source.
+ * external data source.
  */
 class ArticlePersister extends Persister
 {
