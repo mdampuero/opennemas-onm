@@ -63,7 +63,7 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->preMigrate();
 
-        $this->mm->getMigrationTracker()->load();
+        $this->mm->getTracker()->load();
 
         $this->getCounters();
 
@@ -96,7 +96,7 @@ class MigrateCommand extends ContainerAwareCommand
 
             // Add to translations
             if (!empty($targetId)) {
-                $this->mm->getMigrationTracker()->add($sourceId, $targetId, $slug);
+                $this->mm->getTracker()->add($sourceId, $targetId, $slug);
             }
 
             if ($output->isVeryVerbose()) {
