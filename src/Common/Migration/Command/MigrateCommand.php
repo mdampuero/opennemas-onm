@@ -97,12 +97,12 @@ class MigrateCommand extends ContainerAwareCommand
             $targetId = $this->mm->persist($item);
             $slug     = $item[$this->migration['target']['slug']];
 
-            if ($output->isVeryVerbose()) {
-                $output->writeln("      <fg=yellow>==></> Item saved");
-            }
-
             // Add to translations
             if (!empty($targetId)) {
+                if ($output->isVeryVerbose()) {
+                    $output->writeln("      <fg=yellow>==></> Item saved");
+                }
+
                 $this->mm->getTracker()->add($sourceId, $targetId, $slug);
 
                 if ($output->isVeryVerbose()) {
