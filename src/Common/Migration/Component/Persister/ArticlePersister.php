@@ -20,13 +20,29 @@ class ArticlePersister extends Persister
      */
     public function persist($data)
     {
-        unset($data['pk_article']);
+        $metas = [];
+        if (array_key_exists('metas', $data)) {
+            $data['metas'] = explode(',', $data['metas']);
+
+            foreach ($data['metas'] as $value) {
+                $value = explode('@', $value);
+
+                $metas[$value[0]] = $value[1];
+            }
+        }
+
+        unset($data['metas']);
+        unset($data['pk_content']);
 
         try {
             $article = $this->find($data);
         } catch (\Exception $e) {
             $article = new \Article();
             $article->create($data);
+
+            foreach ($metas as $key => $value) {
+                $article->setMetadata($key, $value);
+            }
         }
 
         return $article->pk_content;
