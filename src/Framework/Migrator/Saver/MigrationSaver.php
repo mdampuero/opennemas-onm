@@ -1836,19 +1836,40 @@ class MigrationSaver
                     );
                     break;
                 case 'translation_from_slug':
-                    list($type, $field) =
-                        \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
+                    if (!empty($field)) {
+                        list($type, $field) =
+                            \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
+                    }
                     break;
                 case 'replace_body_images':
                     preg_match_all($params['img_pattern'], $field, $matches);
-                    foreach ($matches[0] as $value) {
-                        $filename = pathinfo($value)['basename'];
+
+                    foreach ($matches[1] as $value) {
+                        $filename = $value;
+                        if ($params['img_basename'] == true) {
+                            $filename = pathinfo($value)['basename'];
+                        }
                         list($type, $id) =
                             \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
 
                         $photo = new \Photo($id);
                         $photoUri = $params['media_path']. $photo->path_img;
                         $field = str_replace($value, $photoUri, $field);
+                    }
+                    break;
+                case 'replace_body_files':
+                    preg_match_all($params['file_pattern'], $field, $matches);
+
+                    foreach ($matches[1] as $value) {
+                        $filename = $value;
+                        if ($params['file_basename'] == true) {
+                            $filename = pathinfo($value)['basename'];
+                        }
+                        list($type, $id) =
+                            \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
+
+                        $file = new \Attachment($id);
+                        $field = str_replace($value, $file->uri, $field);
                     }
                     break;
                 case 'username':
