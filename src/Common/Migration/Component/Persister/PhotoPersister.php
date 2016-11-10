@@ -37,7 +37,7 @@ class PhotoPersister extends Persister
             return $ids;
         }
 
-        unset($data['pk_photo']);
+        unset($data['pk_content']);
 
         $info                      = pathinfo($data['original_filename']);
         $data['extension']         = $info['extension'];
