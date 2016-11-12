@@ -2,8 +2,6 @@ orm:
     metadata:
         -
             name: Category
-            enum:
-                content_type_name: [ static_page ]
             properties:
                 pk_content_category: integer
                 title:               string
