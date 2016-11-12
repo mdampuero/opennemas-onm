@@ -117,6 +117,7 @@ class MigrateCommand extends ContainerAwareCommand
 
         if (!empty($progress)) {
             $progress->finish();
+            $output->writeln('');
         }
 
         $this->postMigrate();
