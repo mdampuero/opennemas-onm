@@ -106,7 +106,7 @@
                     </div>
                     <div>
                       <span class="btn btn-file">
-                        <span class="fileinput-new">{t}Add{/t} PDF</span>
+                        <span class="fileinput-new">{t}Add PDF{/t}</span>
                         <span class="fileinput-exists">{t}Change{/t}</span>
                         <input type="file"/>
                         <input type="hidden" name="cover" class="file-input" value="1">
