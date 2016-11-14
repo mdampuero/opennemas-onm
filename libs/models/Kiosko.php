@@ -255,7 +255,7 @@ class Kiosko extends Content
             $imagick->setImageBackgroundColor('white');
             $imagick->thumbnailImage(650, 0);
 
-            //$imagick = $imagick->flattenImages();
+            // Deprecated: $imagick = $imagick->flattenImages();
             $imagick->setImageAlphaChannel(imagick::ALPHACHANNEL_REMOVE);
             $imagick->mergeImageLayers(imagick::LAYERMETHOD_FLATTEN);
             $imagick->setFormat('png');
