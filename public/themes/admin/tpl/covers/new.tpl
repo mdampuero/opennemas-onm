@@ -72,7 +72,7 @@
                 <label for="date" class="form-label">{t}Date{/t}</label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" type="text" id="date" name="date" value="{$cover->created}" required="required" placeholder="{t}Click here to pick a date{/t}" aria-describedby="basic-addon2">
+                    <input class="form-control" type="text" id="date" name="date" value="{$cover->date}" required="required" placeholder="{t}Click here to pick a date{/t}" aria-describedby="basic-addon2">
                     <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
                   </div>
                 </div>
@@ -106,7 +106,7 @@
                     </div>
                     <div>
                       <span class="btn btn-file">
-                        <span class="fileinput-new">{t}Add new photo{/t}</span>
+                        <span class="fileinput-new">{t}Add{/t} PDF</span>
                         <span class="fileinput-exists">{t}Change{/t}</span>
                         <input type="file"/>
                         <input type="hidden" name="cover" class="file-input" value="1">
