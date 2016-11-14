@@ -65,6 +65,8 @@ class PickerController extends Controller
             $filter[] = "(category_name = '$category')";
         }
 
+        $filter[] = "in_litter != 1";
+
         $em = $this->get('entity_repository');
 
         $filter = implode(' AND ', $filter);
