@@ -577,11 +577,11 @@ class InstanceController extends Controller
 
         $cache = $this->get('cache.manager')->getConnection('manager');
         if (!empty($deletedDomains)) {
-            $cache->delete($deletedDomains);
+            $cache->remove($deletedDomains);
         }
 
         if (!empty($owners)) {
-            $cache->delete($owners);
+            $cache->remove($owners);
         }
 
         $em->persist($instance);
