@@ -160,7 +160,8 @@ class Video extends Content
                 [
                   'pk_video'    => $this->id,
                   'video_url'   => $data['video_url'],
-                  'information' => serialize($data['information']),
+                  'information' => array_key_exists('information', $data) ?
+                      serialize($data['information']) : null,
                   'author_name' => $data['author_name'],
                 ]
             );
