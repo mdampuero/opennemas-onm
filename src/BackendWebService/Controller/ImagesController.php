@@ -48,6 +48,8 @@ class ImagesController extends ContentController
                          " metadata LIKE '%".$title."%')";
         }
 
+        $filter[] = "in_litter != 1";
+
         $criteria = implode(' AND ', $filter);
 
         $results = $em->findBy($criteria, $order, $elementsPerPage, $page);
