@@ -53,7 +53,7 @@ class MigrateCommand extends ContainerAwareCommand
 
         $progress = null;
 
-        $this->start     = new \DateTime();
+        $this->start     = time();
         $this->path      = $input->getArgument('config-file');
         $this->input     = $input;
         $this->output    = $output;
@@ -212,19 +212,10 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function getReport()
     {
-        $this->end = new \DateTime();
+        $this->end = time();
 
-        $diff = date_diff($this->end, $this->start);
-        $secs = abs($this->end->getTimestamp() - $this->start->getTimestamp());
-        $time = $diff->format('%ss');
-
-        if ($secs > 60) {
-            $time = $diff->format('%mm %ss');
-        }
-
-        if ($secs > 3600) {
-            $time = $diff->format('%hh %mm %ss');
-        }
+        $diff = $this->end - $this->start;
+        $time = date('H:i:s', $diff);
 
         $this->output->writeln("<options=bold>(6/6) Ending migration...</>");
         $this->output->writeln("    ==> Items migrated: $this->current");
