@@ -39,20 +39,13 @@ class PhotoPersister extends Persister
 
         unset($data['pk_content']);
 
-        $info                      = pathinfo($data['original_filename']);
-        $data['extension']         = $info['extension'];
-        $data['original_filename'] = $info['basename'];
+        $data = $this->normalize($data);
 
         try {
             $photo = $this->find($data);
         } catch (\Exception $e) {
             $photo = new \Photo();
-
-            if (!is_file($data['local_file'])) {
-                return 0;
-            }
-
-            $photo->createFromLocalFile($data);
+            $photo->create($data);
         }
 
         return $photo->pk_content;
@@ -75,5 +68,47 @@ class PhotoPersister extends Persister
         );
 
         return $this->em->getRepository('Content')->findOneBy($oql);
+    }
+
+    /**
+     * Normalizes information for a photo.
+     *
+     * @param array $data The photo information.
+     *
+     * @return array The normalized information.
+     */
+    protected function normalize($data)
+    {
+        $date  = new \Datetime();
+        $info  = pathinfo($data['original_filename']);
+        $t     = gettimeofday();
+        $micro = intval(substr($t['usec'], 0, 5));
+
+        if (!empty($data['created'])) {
+            $date = \DateTime::createFromFormat('Y-m-d H:i:s', $data['created']);
+        }
+
+        $data['extension']         = $info['extension'];
+        $data['original_filename'] = $info['basename'];
+        $data['path_file']         = $date->format('/Y/m/d/');
+
+        $data['name'] = $date->format("YmdHis"). $micro . '.' . $data['extension'];
+
+        // Get height and width from file
+        if (!array_key_exists('height', $data)
+            || empty($data['height'])
+            || !array_key_exists('width', $data)
+            || empty($data['width'])
+        ) {
+            list($data['width'], $data['height']) =
+                getimagesize($data['local_file']);
+        }
+
+        // Get filesize from file
+        if (!array_key_exists('size', $data) || empty($data['size'])) {
+            $data['size'] = round(stat($data['local_file'])['size']/1024, 2);
+        }
+
+        return $data;
     }
 }
