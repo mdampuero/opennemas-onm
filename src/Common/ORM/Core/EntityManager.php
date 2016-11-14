@@ -212,13 +212,15 @@ class EntityManager
      */
     public function getValidator()
     {
-        $validator = new Validator();
-
-        if (array_key_exists('metadata', $this->items)) {
-            $validator->configure($this->items['metadata']);
+        if (empty($this->validator)) {
+            $this->validator = new Validator();
         }
 
-        return $validator;
+        if (array_key_exists('metadata', $this->items)) {
+            $this->validator->configure($this->items['metadata']);
+        }
+
+        return $this->validator;
     }
 
     /**
