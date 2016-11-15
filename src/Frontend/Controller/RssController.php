@@ -96,6 +96,16 @@ class RssController extends Controller
                     $rssTitle = _('Latest News');
                     $contents = $this->getLatestContents('article', $total);
                     break;
+                case 'home':
+                    // Homepage news
+                    $rssTitle = _('Homepage News');
+                    $cm       = new \ContentManager;
+                    $contents = $cm->getContentsForHomepageOfCategory(0);
+                    $contents = $cm->getInTime($contents);
+                    $contents = array_filter($contents, function($item){
+                        return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
+                    });
+                    break;
                 case 'videos':
                     // Latest videos
                     $rssTitle = _('Latest Videos');
