@@ -27,7 +27,7 @@ tag_frontpage:
     path: /tag/{tag_name}
     defaults: { _controller: FrontendBundle:Tags:tags }
     requirements:
-        tag_name: '[A-Za-z0-9\-.]+'
+        tag_name: '[^\/]+'
 
 frontend_paywall_showcase:
     path: /paywall
