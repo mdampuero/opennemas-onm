@@ -184,6 +184,10 @@ frontend_comments_save:
     path: /comments/save
     defaults: { _controller: FrontendBundle:Comments:save }
 
+frontend_comments_count:
+    path: /comments/count/{ids}
+    defaults: { _controller: FrontendBundle:Comments:getCommentsCount }
+
 frontend_redirect_content:
     path: /redirect/content
     defaults: { _controller: FrontendBundle:Redirectors:content }
