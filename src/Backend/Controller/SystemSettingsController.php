@@ -53,6 +53,7 @@ class SystemSettingsController extends Controller
             'webmastertools_google', 'youtube_page',
             'robots_txt_rules',
             'body_end_script', 'body_start_script','header_script',
+            'elements_in_rss',
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);

@@ -82,7 +82,8 @@ class RssController extends Controller
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Set total number of contents
-            $total = 10;
+            $total = $this->get('setting_repository')->get('elements_in_rss', 10);
+
             $rssTitle = '';
             switch ($categoryName) {
                 case 'opinion':
