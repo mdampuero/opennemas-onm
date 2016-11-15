@@ -1021,6 +1021,18 @@
                         <textarea class="form-control" id="custom-css" name="custom_css" disabled="disabled" readonly="readonly">{$configs['custom_css']|stripslashes|default:""}</textarea>
                       </div>
                     </div>
+
+
+                    <h4>RSS</h4>
+
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" for="items_per_page">
+                        {t}Items in RSS{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="elements_in_rss" name="elements_in_rss" type="number" value="{$configs['elements_in_rss']|default:10}">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
