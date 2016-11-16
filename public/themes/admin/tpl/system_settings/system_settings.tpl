@@ -572,6 +572,41 @@
                       </div>
                     </div>
                   </div>
+                  <div class="panel-group" id="accordion_13" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_13" href="#chartbeat">
+                            <i class="fa fa-bar-chart"></i>{t}Chartbeat{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="chartbeat" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="chartbeat_id">
+                              {t}Chartbeat Account ID{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="chartbeat_id" name="chartbeat[id]" type="text" value="{$configs['chartbeat']['id']|default:""}">
+                              <div class="help">{t escape=off}If you also have a <strong>Charbeat statistics service</strong>, add your account id{/t}</div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="chartbeat_domain">
+                              {t}Chartbeat Domain{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="chartbeat_domain" name="chartbeat[domain]" type="text" value="{$configs['chartbeat']['domain']|default:""}">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <h5>{t}Internal settings{/t}</h5>
                   <div class="panel-group" id="accordion_4" data-toggle="collapse">
                     <div class="panel panel-default">
@@ -1021,10 +1056,7 @@
                         <textarea class="form-control" id="custom-css" name="custom_css" disabled="disabled" readonly="readonly">{$configs['custom_css']|stripslashes|default:""}</textarea>
                       </div>
                     </div>
-
-
                     <h4>RSS</h4>
-
                     <div class="col-md-6 form-group">
                       <label class="form-label" for="items_per_page">
                         {t}Items in RSS{/t}
