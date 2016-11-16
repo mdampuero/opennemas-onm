@@ -8,6 +8,7 @@ parameters:
             - ads_scripts
             - canonical_url
             - comscore
+            - chartbeat
             - css_includes
             - generate_fb_admin_tag
             - generate_fb_pages_tag
