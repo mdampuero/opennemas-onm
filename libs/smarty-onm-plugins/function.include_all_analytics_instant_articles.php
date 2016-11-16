@@ -45,6 +45,39 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
             . '</noscript>'
             . '<!-- END Nielsen//NetRatings SiteCensus V5.3 -->'."\n";
     }
+    // Chartbeat
+    $ChartBeatconfig = getService('setting_repository')->get('chartbeat');
+    if (is_array($ChartBeatconfig)
+        && array_key_exists('id', $ChartBeatconfig)
+        && array_key_exists('domain', $ChartBeatconfig)
+        && !empty(trim($ChartBeatconfig['id']))
+        && !empty(trim($ChartBeatconfig['domain']))
+    ) {
+        // Get author if exists otherwise get agency
+        $author = $category = '';
+        if (array_key_exists('item', $smarty->tpl_vars)) {
+            $content = $smarty->tpl_vars['item']->value;
+            $user = getService('user_repository')->find($content->fk_author);
+            $author = (!is_null($user->name)) ? $user->name : $content->agency;
+            if (empty($author)) {
+                $author = getService('setting_repository')->get('site_name');
+            }
+            $category = $content->category_name;
+            $title = $content->title;
+        }
+
+        $codes[] = '<script type="text/javascript">'
+            . 'var _sf_async_config = {};'
+            . '_sf_async_config.uid = '.$ChartBeatconfig['id'].';'
+            . '_sf_async_config.domain = '.$ChartBeatconfig['domain'].';'
+            . '_sf_async_config.title = "'.$title.'";'
+            . '_sf_async_config.sections = "'.$category.'";'
+            . '_sf_async_config.authors = "'.$author.'";'
+            . '_sf_async_config.useCanonical = true;'
+            . 'window._sf_endpt = (new Date()).getTime();'
+        . '</script>'
+        . '<script defer src="//static.chartbeat.com/js/chartbeat_fia.js"></script>'."\n";
+    }
 
     // Google Analytics
     $codes[] = getGoogleAnalyticsCode();
