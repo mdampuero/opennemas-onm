@@ -84,7 +84,7 @@ class UserController extends Controller
 
         $user = $em->getRepository('User', 'manager')->find($id);
 
-        $em->remove($user);
+        $em->remove($user, 'manager');
         $msg->add(_('User deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -119,7 +119,7 @@ class UserController extends Controller
         $deleted = 0;
         foreach ($users as $user) {
             try {
-                $em->remove($user);
+                $em->remove($user, 'manager');
                 $deleted++;
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error');
