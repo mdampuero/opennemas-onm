@@ -59,9 +59,9 @@ class ArticlePersister extends Persister
     protected function find($data)
     {
         $oql = sprintf(
-            'title = "%s" and body = "%s" and content_type_name = "%s"',
+            'title = "%s" and created = "%s" and content_type_name = "%s"',
             $data['title'],
-            $data['body'],
+            $data['created'],
             'article'
         );
 
