@@ -17,28 +17,22 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ReplaceFilterTest extends KernelTestCase
 {
-    public function setUp()
-    {
-        $this->filter = new ReplaceFilter();
-    }
-
     public function testFilter()
     {
-        $this->assertEquals(
-            'foo waldo mumble',
-            $this->filter->filter(
-                'foo norf mumble',
-                [ 'pattern' => 'norf', 'replacement' => 'waldo' ]
-            )
+        $filter = new ReplaceFilter(
+            [ 'pattern' => 'norf', 'replacement' => 'waldo' ]
         );
 
-        $this->assertEquals(
-            '/path/to/wobble',
-            $this->filter->filter(
-                'garply://wobble',
-                [ 'pattern' => 'garply://', 'replacement' => '/path/to/' ]
-            )
+        $this->assertEquals('foo waldo mumble', $filter->filter('foo norf mumble'));
+
+        $filter = new ReplaceFilter(
+            [ 'pattern' => 'garply://', 'replacement' => '/path/to/' ]
         );
 
+        $this->assertEquals('/path/to/wobble', $filter->filter('garply://wobble'));
+
+        $filter = new ReplaceFilter([ 'replacement' => 'wobble' ]);
+
+        $this->assertEquals('mumble', $filter->filter('mumble'));
     }
 }

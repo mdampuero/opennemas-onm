@@ -14,16 +14,22 @@ class ReplaceFilter extends Filter
     /**
      * Replaces a string with another string.
      *
-     * @param string $str  The string to filter.
-     * @param array  $args The arguments for the filter.
+     * @param string $str The string to filter.
      *
      * @return string The string after replace.
      */
-    public function filter($str, $args = [])
+    public function filter($str)
     {
+        $pattern     = $this->getParameter('pattern');
+        $replacement = $this->getParameter('replacement');
+
+        if (empty($pattern)) {
+            return $str;
+        }
+
         return preg_replace(
-            '/' . preg_quote($args['pattern'], '/') . '/',
-            $args['replacement'],
+            '/' . preg_quote($pattern, '/') . '/',
+            $replacement,
             $str
         );
     }
