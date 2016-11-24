@@ -165,10 +165,6 @@ services:
     varnish_ban_message_exchanger:
         class: Onm\Varnish\MessageExchanger
 
-    instance_manager:
-        class: Onm\Instance\InstanceManager
-        arguments: [ '@orm.connection.instance', '@cache_manager', '@setting_repository' ]
-
     onm_templating:
         class: Onm\Templating\Templating
         arguments: [ '@service_container' ]
@@ -196,10 +192,6 @@ services:
 
     onm.validator:
         class: Onm\Validator\Validator
-
-    onm.validator.instance:
-        class: Onm\Validator\InstanceValidator
-        arguments: [ '@instance_manager' ]
 
     onm.braintree.factory:
         class: Framework\Braintree\BraintreeFactory
