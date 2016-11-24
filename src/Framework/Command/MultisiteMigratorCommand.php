@@ -20,7 +20,6 @@ use Symfony\Component\Yaml\Parser;
 
 use Onm\Exception\InstanceAlreadyExistsException;
 use Common\ORM\Entity\Instance;
-use Onm\DatabaseConnection;
 
 class MultisiteMigratorCommand extends ContainerAwareCommand
 {
@@ -218,28 +217,26 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
         // Initialize multisite database connection
         $db = $this->settings['migration']['source'];
 
-        // TODO: remove this DatabaseConnection usage (AdoDB)
-        $this->originConnection = new DatabaseConnection(
-            getContainerParameter('database')
-        );
+        $this->originConnection = $this->getContainer()->get('orm.manager')
+            ->getConnection('instance');
+
         $this->originConnection->selectDatabase($db);
 
         // Find all active blogs
         $sql = "SELECT `blog_id`, `domain`, `path` FROM `wp_blogs`"
             . " WHERE `blog_id` > 1 AND `public` = 1";
-        $rs = $this->originConnection->Execute($sql);
-        $blogs = $rs->getArray();
+        $blogs = $this->originConnection->fetchAll($sql);
 
         // Get all blogs data
         $blogsData = [];
         foreach ($blogs as $blog) {
             $sql = "SELECT `option_value`, `option_name` FROM `wp_".$blog['blog_id']
                 ."_options` WHERE `option_name` IN ('siteurl', 'blogname', 'blogdescription')";
-            $rsAux = $this->originConnection->Execute($sql);
+            $rsAux = $this->originConnection->fetchAll($sql);
 
             $blogsData[$blog['blog_id']]['path'] = $blog['path'];
             $blogsData[$blog['blog_id']]['domain'] = $blog['domain'];
-            foreach ($rsAux->getArray() as $value) {
+            foreach ($rsAux as $value) {
                 $blogsData[$blog['blog_id']][$value['option_name']] = utf8_encode($value['option_value']);
             }
         }
@@ -298,7 +295,7 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
         if ($result != 0) {
             $sql = "DROP DATABASE IF EXISTS `$database`";
 
-            if (!$dbconn->Execute($sql)) {
+            if (!$dbconn->executeQuery($sql)) {
                 throw new \Exception(
                     "Could not drop the database $database"
                 );

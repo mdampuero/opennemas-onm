@@ -333,9 +333,9 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     {
         $sql = "SELECT count(pk_video) as total FROM contents, videos WHERE ".
                "video_url='".$url."' AND pk_content=pk_video";
-        $rs  = $this->connection->Execute($sql);
+        $rs  = $this->connection->fetchAll($sql);
 
-        return (bool)($rs->fields['total']);
+        return (bool)($rs['total']);
     }
 
     /**
