@@ -315,7 +315,7 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
      */
     public function configureInstance(&$instance, $data)
     {
-        $cache     = $this->getContainer()->get('cache')
+        $cache     = $this->getContainer()->get('cache');
         $namespace = $cache->getNamespace();
 
         $cache->setNamespace($instance->internal_name);
