@@ -288,17 +288,17 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th class="pointer">
+                    <th class="pointer" width="100">
                       {t}Date{/t}
                     </th>
-                    <th class="text-center" width="150">
+                    <th class="pointer text-left">
+                      {t}Description{/t}
+                    </th>
+                    <th class="text-center" width="100">
                       {t}Method{/t}
                     </th>
-                    <th class="pointer text-right">
+                    <th class="text-right pointer" width="120">
                       {t}Total{/t}
-                    </th>
-                    <th class="text-center pointer" width="150">
-                      {t}Status{/t}
                     </th>
                     <th width="150">
                     </th>
@@ -309,15 +309,17 @@
                     <td>
                       [% item.updated | moment : 'YYYY-MM-DD' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </td>
+                    <td class="text-left">
+                      <div style="max-width: 350px; overflow: hidden; text-overflow: ellipsis;">
+                        <span ng-repeat="i in item.details">[% i.description + ($index === item.details.length - 1 ? '' : ', ') %]</span>
+                      </div>
+                    </td>
                     <td class="text-center">
                       <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }" ng-if="item.total !== 0 && item.method"></i>
                       <span ng-if="item.total === 0">-</span>
                     </td>
                     <td class="text-right">
                       [% item.total | number : 2 %] €
-                    </td>
-                    <td class="text-center">
-                      {t}Paid{/t}
                     </td>
                     <td>
                       <a ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Show{/t}">
