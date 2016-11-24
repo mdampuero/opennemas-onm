@@ -389,7 +389,7 @@
         var page = this.oql.match(pattern)[0];
         this.oql = this.oql.replace(pattern, '');
 
-        return parseInt(page.replace(/offset\s+/, ''))/epp;
+        return parseInt(page.replace(/offset\s+/, ''))/epp + 1;
       };
 
       /**
