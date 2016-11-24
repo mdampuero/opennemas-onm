@@ -680,7 +680,7 @@ class InstanceController extends Controller
         $purchases = [];
         if (!empty($id)) {
             $purchases = $this->get('orm.manager')->getRepository('Purchase')
-                ->findBy(sprintf('instance_id = %s order by updated desc limit 5', $id));
+                ->findBy(sprintf('instance_id = %s and step = "done" order by updated desc limit 5', $id));
 
             $purchases = $this->get('orm.manager')->getConverter('Purchase')
                 ->responsify($purchases);
