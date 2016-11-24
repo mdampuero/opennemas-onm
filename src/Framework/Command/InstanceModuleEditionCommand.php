@@ -54,54 +54,37 @@ class InstanceModuleEditionCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $instanceName = $input->getArgument('instance');
-        $uuid         = $input->getArgument('uuid');
+        $name   = $input->getArgument('instance');
+        $uuid   = $input->getArgument('uuid');
+        $remove = $input->getOption('remove');
 
-        $em = $this->getContainer()->get('instance_manager');
-        $this->getContainer()->get('cache_manager')->setNamespace('manager');
+        $loader   = $this->getContainer()->get('core.loader');
+        $instance = $loader->loadInstanceFromInternalName($name);
 
-        $instance = $em->findOneBy(
-            ['internal_name' => [ [ 'value' => $instanceName ] ] ]
-        );
+        $loader->init();
 
-        if (!is_object($instance)) {
-            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
+        $before = count($instance->purchased);
+
+        $instance->purchased[] = $uuid;
+        $instance->purchased   = array_unique($instance->purchased);
+
+        if ($remove) {
+            $instance->purchased = array_diff($instance->purchased, [ $uuid ]);
         }
 
-        if (empty($instance->metas)) {
-            $instance->metas = [ 'purchased' => [] ];
-        }
-
-        if (empty($instance->metas['purchased'])) {
-            $instance->metas['purchased'] = [];
-        }
-
-        if ($input->getOption('remove')) {
-            $before = count($instance->metas['purchased']);
-            $instance->metas['purchased'] =
-                array_diff($instance->metas['purchased'], [ $uuid ]);
-            $after = count($instance->metas['purchased']);
-
-            if ($before !== $after) {
-                $msg = "Instance %s saved successfully (%d extensions removed).";
-                $em->persist($instance);
-                $output->writeln(sprintf($msg, $instanceName, $before - $after));
-            }
-
-            return;
-        }
-
-        $before = count($instance->metas['purchased']);
-        $instance->metas['purchased'][] = $uuid;
-        $instance->metas['purchased'] = array_unique($instance->metas['purchased']);
-        $after = count($instance->metas['purchased']);
+        $after = count($instance->purchased);
 
         if ($before !== $after) {
-            $msg = "Instance %s saved successfully (%d extensions added).";
-            $em->persist($instance);
-            $output->writeln(sprintf($msg, $instanceName, $after - $before));
-        }
+            $this->getContainer()->get('orm.manager')->persist($instance);
 
-        return;
+            $msg = sprintf(
+                "Instance %s saved successfully (%d extensions %s).",
+                $name,
+                abs($before - $after),
+                $remove ? 'removed' : 'added'
+            );
+
+            $output->writeln($msg);
+        }
     }
 }
