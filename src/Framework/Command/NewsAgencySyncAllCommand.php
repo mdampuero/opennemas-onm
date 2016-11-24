@@ -56,19 +56,21 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $im  = $this->getContainer()->get('instance_manager');
+        // Force ORM and Cache intialization
+        $this->getContainer()->get('core.loader');
+
         $max = 2;
+        $oql = sprintf(
+            'activated = 1 and activated_modules ~ "%s"',
+            'NEWS_AGENCY_IMPORTER'
+        );
 
         if (!empty($input->getOption('processes'))) {
             $max = $input->getOption('processes');
         }
 
-        $instances = $im->findBy([
-            'activated'         => [ [ 'value' => 1 ] ],
-            'activated_modules' => [
-                [ 'value' => '%NEWS_AGENCY_IMPORTER%', 'operator' => 'like' ]
-            ]
-        ]);
+        $instances = $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->findBy($oql);
 
         if (empty($instances)) {
             $output->writeln('No instances to synchronize');

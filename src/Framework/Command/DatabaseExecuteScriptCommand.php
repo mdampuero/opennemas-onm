@@ -2,13 +2,10 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Openhost Developers <onm-dev@openhost.es>
- *
  */
 namespace Framework\Command;
 
@@ -18,8 +15,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Yaml\Yaml;
-use Doctrine\DBAL\Schema\Schema;
 
 class DatabaseExecuteScriptCommand extends ContainerAwareCommand
 {
@@ -38,13 +33,13 @@ class DatabaseExecuteScriptCommand extends ContainerAwareCommand
         )
         ->addOption(
             'instance',
-            null,
+            'i',
             InputOption::VALUE_REQUIRED,
             'The instance name where execute the script'
         )
         ->addOption(
             'database',
-            null,
+            'd',
             InputOption::VALUE_REQUIRED,
             'The database name where execute the script'
         );
@@ -58,39 +53,34 @@ class DatabaseExecuteScriptCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $database = null;
-        $instance = null;
+        $this->getContainer()->get('core.loader');
+
+        $database = $input->getOption('database');
+        $instance = $input->getOption('instance');
         $script   = $input->getArgument('script');
 
         $this->output  = $output;
         $this->updated = 0;
 
-        if ($input->getOption('database')) {
-            $database = $input->getOption('database');
-        }
-
-        if ($input->getOption('instance')) {
-            $instance = $input->getOption('instance');
-        }
-
         $this->getConfiguration();
 
-        if ($database) {
+        if (!empty($database)) {
             $this->executeScript($database, $script);
             $output->writeln("Update finished: $this->updated instances updated");
             return;
         }
 
-        $this->im = $this->getContainer()->get('instance_manager');
-        if ($instance) {
-            $instances = $this->im->findBy(
-                [ 'internal_name' => [ [ 'value' => $instance ] ] ]
-            );
-        } else {
-            $instances = $this->im->findBy(null, array());
+        $oql = '';
+
+        if (!empty($instance)) {
+            $oql = sprintf('internal_name = "%s"', $instance);
         }
 
+        $instances = $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->findBy($oql);
+
         $output->writeln("Instances to update: " . count($instances));
+
         foreach ($instances as $instance) {
             $this->executeScript($instance->getDatabaseName(), $script);
         }
@@ -148,9 +138,9 @@ class DatabaseExecuteScriptCommand extends ContainerAwareCommand
         $config     = $this->getContainer()->getParameter('database');
         $connection = $config['dbal']['default_connection'];
 
-        $this->user       = $config['dbal']['connections'][$connection]['user'];
-        $this->password   = $config['dbal']['connections'][$connection]['password'];
-        $this->host       = $config['dbal']['connections'][$connection]['host'];
-        $this->port       = $config['dbal']['connections'][$connection]['port'];
+        $this->user     = $config['dbal']['connections'][$connection]['user'];
+        $this->password = $config['dbal']['connections'][$connection]['password'];
+        $this->host     = $config['dbal']['connections'][$connection]['host'];
+        $this->port     = $config['dbal']['connections'][$connection]['port'];
     }
 }
