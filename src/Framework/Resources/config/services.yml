@@ -82,10 +82,6 @@ services:
                 template: '@OnmFramework/collector/cache.html.twig'
                 priority: 100
 
-    db_conn:
-        class: Onm\DatabaseConnection
-        arguments: [ %database% ]
-
     dbal_connection:
         class: Onm\Database\DbalWrapper
         arguments: [ %database%, %kernel.environment% ]
