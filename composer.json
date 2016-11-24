@@ -28,8 +28,7 @@
             "app/AppCache.php"
         ],
         "files": [
-            "libs/functions.php",
-            "libs/adodb5/adodb.inc.php"
+            "libs/functions.php"
         ]
     },
     "autoload-dev": {
