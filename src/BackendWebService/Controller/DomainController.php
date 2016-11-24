@@ -102,15 +102,14 @@ class DomainController extends Controller
     public function delete($domain)
     {
         $instance = $this->get('core.instance');
-
-        $index = array_search($instance->domains, $domain);
+        $index    = array_search($instance->domains, $domain);
 
         if ($index !== false) {
             unset($instance->domains[$index]);
-            $this->get('instance_manager')->persist($instance);
+            $this->get('orm.manager')->persist($instance);
 
             return new JsonResponse(
-                sprintf(_('Domain deleted successfully'))
+                _('Domain deleted successfully')
             );
         }
 
