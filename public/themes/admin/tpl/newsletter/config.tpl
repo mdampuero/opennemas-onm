@@ -9,9 +9,7 @@
 
     //If newsletter is activated and recaptcha is missing don't send form
     if (reCaptcha) {
-      if ($('#warnings-validation')) {
-        $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
-      }
+      $('body').append('<ul class="messenger messenger-fixed messenger-on-bottom"><li><div class="alert alert-error messenger-message"><div class="messenger-message-inner">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}.</div></div></li></ul>');
 
       $('#formulario').on('submit', function(){
         return false;
