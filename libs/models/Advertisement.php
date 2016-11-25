@@ -686,7 +686,8 @@ class Advertisement extends Content
                 $content = $this->script;
             } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto.com.ar') !== false ||
                 strpos($_SERVER['SERVER_NAME'], 'laregion.es') !== false ||
-                strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false
+                strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'salamanca24horas.com') !== false
             ) {
                 $content = $this->script;
             } else {
