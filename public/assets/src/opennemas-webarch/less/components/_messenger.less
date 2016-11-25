@@ -1,5 +1,5 @@
 ul.messenger.messenger-fixed.messenger-on-bottom,
-ul.messenger.messenger-fixed.messenger.on-top {
+ul.messenger.messenger-fixed.messenger-on-top {
   border-radius: 0;
   bottom: 0;
   left: 0;
@@ -8,6 +8,11 @@ ul.messenger.messenger-fixed.messenger.on-top {
   transition: all .25s;
   width: 100%;
   z-index: 750;
+}
+
+ul.messenger.messenger-fixed.messenger-on-top {
+  top: 85px;
+  bottom: auto;
 }
 
 .collapsed ul.messenger.messenger-fixed {
@@ -21,6 +26,11 @@ ul.messenger.messenger-fixed.messenger.on-top {
   margin: 0;
   padding: 15px;
   position: relative;
+
+  a {
+    color: #fff;
+    font-weight: bold;
+  }
 
   &.alert-error {
     background-color: @error-color;
