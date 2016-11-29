@@ -35,10 +35,6 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
-            throw new ResourceNotFoundException();
-        }
-
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
