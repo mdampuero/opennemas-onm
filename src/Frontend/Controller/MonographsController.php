@@ -35,6 +35,10 @@ class MonographsController extends Controller
      **/
     public function init()
     {
+        if (!\Onm\Module\ModuleManager::isActivated('SPECIAL_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         // Setting up available categories for menu.
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
