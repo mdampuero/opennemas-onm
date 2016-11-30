@@ -16,9 +16,11 @@ class InvalidConnectionException extends \Exception
      *
      * @param string $class The classname of the invalid persister.
      */
-    public function __construct($class)
+    public function __construct($class, $message = '')
     {
-        $message = _('The cache connection for \'%s\' does not exist');
+        if (empty($message)) {
+            $message = _('The cache connection for \'%s\' does not exist');
+        }
 
         parent::__construct(sprintf($message, $class));
     }

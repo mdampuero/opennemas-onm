@@ -9,9 +9,12 @@
  */
 namespace Common\Cache\Redis;
 
-use Redis as RedisBase;
 use Common\Cache\Core\Cache;
+use Redis as RedisBase;
 
+/**
+ * The Redis class provides methods to use a Redis based cache.
+ */
 class Redis extends Cache
 {
     /**
@@ -39,17 +42,33 @@ class Redis extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function executeScript($script, $args)
+    protected function contains($id)
     {
-        return $this->getRedis()->eval($script, $args);
+        return $this->getRedis()->exists($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function contains($id)
+    protected function delete($id)
     {
-        return $this->getRedis()->exists($id);
+        $this->getRedis()->delete($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function deleteMulti($id)
+    {
+        $this->getRedis()->delete($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function executeScript($script, $args)
+    {
+        return $this->getRedis()->eval($script, $args);
     }
 
     /**
@@ -94,33 +113,6 @@ class Redis extends Cache
         }
 
         return $this->redis;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function remove($id)
-    {
-        $this->getRedis()->delete($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function removeByPattern($pattern)
-    {
-        $this->execute(
-            'redis.call("del", unpack(redis.call("keys", ARGV[1])))',
-            [ $pattern ]
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function removeMulti($id)
-    {
-        $this->getRedis()->delete($id);
     }
 
     /**

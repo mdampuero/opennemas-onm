@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-17 10:13+0000\n"
-"PO-Revision-Date: 2016-10-16 22:59+0200\n"
+"POT-Creation-Date: 2016-11-10 16:40+0100\n"
+"PO-Revision-Date: 2016-11-02 22:48+0200\n"
 "Last-Translator: Sandra Pereira <sandra@openhost.es>\n"
 "Language-Team: Openhost\n"
 "Language: fr\n"
@@ -94,7 +94,7 @@ msgid "Google DFP"
 msgstr "Google DFP"
 
 msgid "HOMEPAGE"
-msgstr "HOMEPAGE"
+msgstr "PAGE D'ACCUEIL"
 
 msgid "Special elements"
 msgstr "Spécial éléments"
@@ -198,7 +198,7 @@ msgstr "Impossible de mettre à jour l'auteur de cette information"
 
 #, php-format
 msgid "You must put %d books in the HOME widget"
-msgstr "Vous devez mettre %d livres dans le widget HOME"
+msgstr "Vous devez mettre %d livres dans le widget pour la page d'accueil "
 
 #, fuzzy
 msgid "Book created successfully."
@@ -373,10 +373,10 @@ msgid "You must give an id to delete the cover."
 msgstr "Vous devez donner un identifiant à supprimer le couverture."
 
 msgid "Instance not found"
-msgstr "Instance non trouvée"
+msgstr "Journal non trouvée"
 
 msgid "Instance not activated"
-msgstr "Instance pas activée"
+msgstr "Jour pas activée"
 
 msgid "You are not allowed to perform this action."
 msgstr "Vous n'êtes pas autorisé à effectuer cette action."
@@ -714,7 +714,7 @@ msgid "Opinion successfully created."
 msgstr "Opinion créé avec succès."
 
 msgid "Unable to create the new opinion."
-msgstr "Impossible de créer le nouvel avis."
+msgstr "Impossible de créer le nouvel opinion."
 
 msgid "Opinion data sent not valid."
 msgstr "Des données d'opinion envoyés pas valable."
@@ -727,7 +727,7 @@ msgstr "Impossible de mettre à jour l'opinion."
 
 #, php-format
 msgid "Unable to find an opinion with the id \"%d\""
-msgstr "Impossible de trouver un avis avec l'id \"%d\""
+msgstr "Impossible de trouver un opinion avec l'id \"%d\""
 
 #, php-format
 msgid "Successfully changed in home state for the opinion \"%s\""
@@ -1017,7 +1017,7 @@ msgid "Paywall purchases"
 msgstr "Achats paywall"
 
 msgid "Sync Instances"
-msgstr "Instances Sync"
+msgstr "Journaux Sync"
 
 msgid "News Agency"
 msgstr "Agence de presse"
@@ -1181,7 +1181,7 @@ msgid "Item added to home successfully"
 msgstr "Élément ajouté à l'accueil avec succès"
 
 msgid "Item removed from home successfully"
-msgstr "Élément retiré de son foyer avec succès"
+msgstr "Élément retiré dans la page d'accueil avec succès"
 
 #, php-format
 msgid "%d item(s) added to home successfully"
@@ -1189,7 +1189,7 @@ msgstr "%d élément(s) ajouté à l'accueil avec succès"
 
 #, php-format
 msgid "%d item(s) removed from home successfully"
-msgstr "%d élément(s) retiré de son foyer avec succès"
+msgstr "%d élément(s) retiré dans la page d'accueil avec succès"
 
 #, php-format
 msgid "Unable to save the position for the item with id \"%d\""
@@ -1232,8 +1232,9 @@ msgstr "Domaine supprimé avec succès"
 msgid "Unable to delete the domain %s"
 msgstr "Impossible de supprimer le doma \"%s\""
 
-msgid "Domain added successfully"
-msgstr "Domaine ajouté avec succès"
+#, fuzzy
+msgid "Purchase completed!"
+msgstr "Acheté"
 
 #, php-format
 msgid "%d contents imported successfully"
@@ -1269,6 +1270,17 @@ msgstr "Serveur mis à jour avec succès"
 
 msgid "News agency server deleted."
 msgstr "Serveur d l'agence de presse supprimé."
+
+msgid "Newsletter deleted successfully."
+msgstr "Bulletin supprimé avec succès."
+
+#, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Impossible de supprimer le bulletin \"%s\""
+
+msgid "You must provide an id for delete a newsletter."
+msgstr ""
+"Vous devez fournir un identifiant pour supprimer un bulletin d'information."
 
 #, php-format
 msgid "Subscritor with id \"%d\" deleted sucessfully"
@@ -1306,17 +1318,6 @@ msgstr "S'il vous plaît spécifier un numéro d'abonné de changer l'état acti
 #, fuzzy, php-format
 msgid "Successfully changed activated state for %d subscribers."
 msgstr "Avec succès changé d'état activé pour %d abonnés."
-
-msgid "Newsletter deleted successfully."
-msgstr "Bulletin supprimé avec succès."
-
-#, php-format
-msgid "Unable to delete the newsletter \"%s\""
-msgstr "Impossible de supprimer le bulletin \"%s\""
-
-msgid "You must provide an id for delete a newsletter."
-msgstr ""
-"Vous devez fournir un identifiant pour supprimer un bulletin d'information."
 
 msgid "Notification marked as read successfully"
 msgstr "Notification marqués comme lus avec succès"
@@ -1409,15 +1410,6 @@ msgstr ""
 
 msgid "Unable to find the purchase"
 msgstr "Impossible de trouver l'achat"
-
-msgid "Pay with credit card"
-msgstr "Payer par carte de crédit"
-
-msgid "Your request could not been registered"
-msgstr "Votre demande n'a pas pu être enregistrée"
-
-msgid "Your request has been registered"
-msgstr "Votre demande a bien été enregistrée"
 
 msgid "User deleted successfully"
 msgstr "Utilisateur supprimé avec succès"
@@ -1519,7 +1511,7 @@ msgid ""
 msgstr ""
 "Notez que <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
-"\"Découvrez Plus\">le coût est € s% Mb / mois </a>."
+"\"Découvrez Plus\">le coût est %s € Mb/mois </a>."
 
 #, php-format
 msgid "You have %d activated users."
@@ -1531,13 +1523,13 @@ msgid ""
 "pricing-opennemas-user-licenses\" target=\"_blank\" title=\"Learn more\">the "
 "cost is %s € user/month</a>."
 msgstr ""
-"Notez que  <a href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
+"Notez que <a href=\"http://help.opennemas.com/knowledgebase/articles/566172-"
 "pricing-opennemas-user-licenses\" target=\"_blank\" title=\"Découvrez Plus"
-"\">le coût est € s% utilisateur/ mois </a>."
+"\">le coût est %s € utilisateur/mois </a>."
 
 #, php-format
 msgid "This month you're recording %d page views. "
-msgstr "Ce mois-ci vous enregistrez de pages vues %d"
+msgstr "Ce mois-ci vous enregistrez %d pages vues"
 
 #, php-format
 msgid ""
@@ -1545,9 +1537,9 @@ msgid ""
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
 "\"Learn more\">the cost %s € pv/month</a>."
 msgstr ""
-"Notez que  <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
+"Notez que <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
 "pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
-"\"Learn more\"> pv %s €  mois du coût </a>."
+"\"Learn more\"> le coût est %s € pv/mois</a>."
 
 msgid "Already voted."
 msgstr "Déjà voté."
@@ -1769,16 +1761,20 @@ msgid "Client saved successfully"
 msgstr "Client enregistré avec succès"
 
 #, fuzzy
+msgid "Select an user..."
+msgstr "Sélectionnez un type..."
+
+#, fuzzy
 msgid "Instance deleted successfully"
-msgstr "Instance supprimé avec succès."
+msgstr "Journal supprimé avec succès."
 
 #, php-format
 msgid "Error while deleting instance with id \"%s\""
-msgstr "Impossible de supprimer l'instance avec id \"%d\""
+msgstr "Impossible de supprimer l'journal avec id \"%d\""
 
 #, fuzzy, php-format
 msgid "%s instances deleted successfully"
-msgstr "Les instances de %s supprimés avec succès."
+msgstr "Les journaux de %s supprimés avec succès."
 
 #, fuzzy
 msgid "You have reached the maximum number of instances."
@@ -1794,21 +1790,17 @@ msgstr ""
 "nouscontactez-nous</a>"
 
 msgid "Instance saved successfully"
-msgstr "Instance enregistrée avec succès"
+msgstr "Journal enregistrée avec succès"
 
 #, fuzzy, php-format
 msgid "%s instances saved successfully"
-msgstr "Instance enregistrée avec succès"
+msgstr "Journal enregistrée avec succès"
 
 msgid "The instance already exists"
-msgstr "L'instance existe déjà"
+msgstr "L'journal existe déjà"
 
 msgid "Unable to create the database for the instance"
-msgstr "Impossible de créer la base de données pour l'instance"
-
-#, fuzzy
-msgid "Select an user..."
-msgstr "Sélectionnez un type..."
+msgstr "Impossible de créer la base de données pour l'journal"
 
 #, fuzzy, php-format
 msgid "A module with the uuid '%s' already exists"
@@ -1860,7 +1852,7 @@ msgid "Cart"
 msgstr "Panier"
 
 msgid "Billing"
-msgstr ""
+msgstr "Facturation"
 
 msgid "Payment"
 msgstr "Paiement"
@@ -1872,22 +1864,22 @@ msgid "Done"
 msgstr ""
 
 msgid "Instances not used in last month"
-msgstr "Instances pas utilisés dans le mois dernier"
+msgstr "Journaux pas utilisés dans le mois dernier"
 
 msgid ""
 "Generates a report listing instances that were not used in the last month."
 msgstr ""
-"Génère un rapport énumérant les cas qui ne sont pas utilisés dans le dernier "
-"mois."
+"Génère un rapport énumérant les journaux qui ne sont pas utilisés dans le "
+"dernier mois."
 
 msgid "Instances created in the last month"
-msgstr "Les instances créées dans le dernier mois"
+msgstr "Les journaux créées dans le dernier mois"
 
 msgid "Generates a report listing instances created in the last month."
-msgstr "Génère un rapport énumérant les instances créées dans le dernier mois."
+msgstr "Génère un rapport énumérant les journaux créées dans le dernier mois."
 
 msgid "Instances"
-msgstr "Instances"
+msgstr "Journaux"
 
 msgid "Extensions"
 msgstr "Extensions"
@@ -1926,14 +1918,14 @@ msgid "User group saved successfully"
 msgstr "Groupe d'utilisateurs créé avec succès"
 
 msgid "A new opennemas instance has been created"
-msgstr "Une nouvelle instance de opennemas a été créé"
+msgstr "Une nouvelle journal de Opennemas a été créé"
 
 #, php-format
 msgid "Your newspaper is now live"
 msgstr "Votre journal est vivent maintenant"
 
 msgid "Error when creating a new instance"
-msgstr "Erreur lors de la création d'une nouvelle instance"
+msgstr "Erreur lors de la création d'une nouvelle journal"
 
 msgid "First"
 msgstr "Premier"
@@ -1954,11 +1946,13 @@ msgstr "Contenu archivé"
 msgid "Advertisement"
 msgstr "Publicité"
 
+#, fuzzy
 msgid "Top Left LeaderBoard"
-msgstr ""
+msgstr "En haut gauche l'image"
 
+#, fuzzy
 msgid "Top Right LeaderBoard"
-msgstr ""
+msgstr "En haut à droite l'image"
 
 msgid "[OI] Right Skyscraper"
 msgstr ""
@@ -1990,30 +1984,6 @@ msgstr "Statut pas valable"
 #, fuzzy
 msgid "Unable to delete the comment."
 msgstr "Impossible de supprimer le doma \"%s\""
-
-msgid "trashed"
-msgstr "saccagé"
-
-msgid "pending"
-msgstr "En attendant"
-
-msgid "available"
-msgstr "disponible"
-
-msgid "not scheduled"
-msgstr "non prévu"
-
-msgid "scheduled"
-msgstr "planifié"
-
-msgid "dued"
-msgstr "échéance"
-
-msgid "in time"
-msgstr "à l'heure"
-
-msgid "postponed"
-msgstr "reporté"
 
 msgid "Event"
 msgstr "évènement"
@@ -2047,6 +2017,30 @@ msgid ""
 msgstr ""
 "Certains éléments ont été retirés parce que ce couverture avait trop de "
 "contenu"
+
+msgid "trashed"
+msgstr "saccagé"
+
+msgid "pending"
+msgstr "En attendant"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "not scheduled"
+msgstr "non prévu"
+
+msgid "scheduled"
+msgstr "planifié"
+
+msgid "dued"
+msgstr "échéance"
+
+msgid "in time"
+msgstr "à l'heure"
+
+msgid "postponed"
+msgstr "reporté"
 
 msgid "Cover"
 msgstr "Couverture"
@@ -2127,7 +2121,7 @@ msgid "Manager favorite flag"
 msgstr "Manager favorite préféré"
 
 msgid "Manage home frontpage"
-msgstr "Gestionnaire drapeau frontpage"
+msgstr "Gestionnaire la coverture de la page d'accueil"
 
 msgid "Send to trash and restore"
 msgstr "Envoyer à la corbeille et restaurer"
@@ -2136,7 +2130,7 @@ msgid "List articles in arquive"
 msgstr "Liste des articles dans les archives"
 
 msgid "Manage advertisements for homepage"
-msgstr "Gérer des publicités pour le couverture"
+msgstr "Gérer des publicités pour le page d'accueil"
 
 msgid "Manage favorite flag"
 msgstr "Gérer drapeau préféré"
@@ -2184,7 +2178,7 @@ msgid "Manage global settings"
 msgstr "Gérer les paramètres globaux"
 
 msgid "Access instance manager"
-msgstr "L'accès à l'instance gestionnaire"
+msgstr "L'accès à l'journal gestionnaire"
 
 msgid "Modify other users's content"
 msgstr "Modifier le contenu d'autres auteurs"
@@ -2226,7 +2220,7 @@ msgid "Administer synchronization between Opennemas"
 msgstr "Administrer la synchronisation entre Opennemas"
 
 msgid "Administer instances"
-msgstr "Administrer les instances"
+msgstr "Administrer les journaux"
 
 msgid "Administer paywall"
 msgstr "Administrer paywall"
@@ -2250,7 +2244,7 @@ msgid "Download"
 msgstr "Télécharger"
 
 msgid "Execute"
-msgstr ""
+msgstr "Exécuter"
 
 msgid "Static Page"
 msgstr "Page statique"
@@ -2392,13 +2386,13 @@ msgid "Support 8+"
 msgstr "Supporter 8+"
 
 msgid "Instance synchronization"
-msgstr "Synchronisation Instance"
+msgstr "Synchronisation Journal"
 
 msgid "UserVoice integration"
 msgstr "l'intégration UserVoice"
 
 msgid "Basic pack"
-msgstr "Pack Basic"
+msgstr "Paquet Basic"
 
 msgid "Publishing your news is FREE!"
 msgstr "Publication de votre nouvelles est GRATUIT!"
@@ -2408,9 +2402,9 @@ msgid ""
 "access our platform to test it as much as to publish your newspaper for free "
 "and on the spot!</p>"
 msgstr ""
-"<p> Ce pack ne nécessite aucune information de paiement et il vous permet "
+"<p> Ce paquet ne nécessite aucune information de paiement et il vous permet "
 "d'accéder à notre plateforme de tester autant que de publier votre journal "
-"gratuitement et sur place! </ p>"
+"gratuitement et sur place! </p>"
 
 msgid ""
 "<p>Includes:</p>\n"
@@ -2422,11 +2416,15 @@ msgid ""
 "                        <li>Images and files uploading</li>\n"
 "                        <li>Utilities: Trash, Search Advanced...</li>"
 msgstr ""
-"<p> Comprend: </ p> \\ n<ul> \\ n<li> Gestionnaire FrontPage </ li> \\ n<li> "
-"gestionnaire de Widget </ li> \\ n<li> Gestionnaire des articles d'opinion "
-"</ li> \\ n<li> Commentaires gestionnaire </ li> \\ n<li> Images et "
-"téléchargement de fichiers </ li> \\ n<li> Utilitaires: Trash, Recherche "
-"avancée ... </ li> "
+" <p> Comprend: </p> \n"
+" <ul>\n"
+"    <li> Gestionnaire couverture </li> \n"
+"    <li> gestionnaire de Widget </li> \n"
+"    <li> Gestionnaire des articles d'opinion </li> \n"
+"    <li> Gestionnaire commentaires </li> \n"
+"    <li> Images et téléchargement de fichiers </li> \n"
+"    <li> Utilitaires: Trash, Recherche avancée ... </li> \n"
+"</ul>"
 
 #, php-format
 msgid ""
@@ -2439,12 +2437,13 @@ msgid ""
 "                            <li>Online Support (Tickets SLA %d business "
 "days)</li></ul>"
 msgstr ""
-" <ul>\n"
-"<li>%d x utilisateur (1)</li> \n"
-"<li>%s Stockage (2)</li> \n"
-"<li>%s (articles, opinions, commentaires) (2) </li> \n"
-"<li>\\%s pages vues/mois (2)</li>\n"
-"<li> Support en ligne (ticket SLA %d jours ouvrables) </li> </ul>"
+"<ul>\n"
+"    <li>%d x utilisateur (1)</li> \n"
+"    <li>%s Stockage (2)</li> \n"
+"    <li>%s (articles, opinions, commentaires) (2) </li> \n"
+"    <li>\\%s pages vues/mois (2)</li>\n"
+"    <li> Support en ligne (ticket SLA %d jours ouvrables) </li> \n"
+"</ul>"
 
 msgid ""
 "<p><small>1. To add more users refer to <a href=\"http://help.opennemas.com/"
@@ -2456,18 +2455,20 @@ msgid ""
 "Space</a>.</small></p><p><small>All prices above do not include VAT (21%).</"
 "small></p>"
 msgstr ""
-"<p> <small> 1. Pour ajouter plus d'utilisateurs se réfèrent à <ahref="
+"<p><small> 1. Pour ajouter plus d'utilisateurs se réfèrent à <a href="
 "\"http://help.opennemas.com/knowledgebase/articles/368173-precios-opennemas-"
-"licencias-de-usuario\" target = \"_ blank\"> Licence d'utilisation Page </"
-"a>. </ small> </ p> <p> <small> 2. Pour plus d'informations à propos de "
-"stockage ou de pages vues s'il vous plaît aller à notre page <ahref=\"http://"
-"help.opennemas.com/knowledgebase/articles/227476-precios-opennemas-page-"
-"views-y-espacio-ocupado\" target = \"_ blank\"> pages vues et l'espace de "
-"stockage </a>. </ small> </ p> <p> <small> Tous les prix ci-dessus ne "
-"comprennent pas la TVA (21%). </ small> </ p>"
+"licencias-de-usuario\" target=\"_ blank\"> Page dans la Licence "
+"d'utilisation</a>. </small></p> \n"
+"<p><small> 2. Pour plus d'informations à propos de stockage ou de pages vues "
+"s'il vous plaît aller à notre page <a href=\"http://help.opennemas.com/"
+"knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-ocupado"
+"\" target=\"_ blank\"> pages vues et l'espace de stockage </a>. </small> </"
+"p> \n"
+"<p><small> Tous les prix ci-dessus ne comprennent pas la TVA (21%). </small> "
+"</p>"
 
 msgid "Professional pack"
-msgstr "Pack Professionnel"
+msgstr "Paquet Professionnel"
 
 msgid ""
 "Our best selling solution, it allows to manage a professional newspaper and "
@@ -2484,11 +2485,11 @@ msgid ""
 "                        <p>This offer gives you more than 40% discount (if "
 "purchased separately modules have a value of 85EUR/month).</p>"
 msgstr ""
-"<p> Ce pack est pensé pour les professionnels qui commencent leur journal "
+"<p> Ce paquet est pensé pour les professionnels qui commencent leur journal "
 "indépendant et le besoin de gérer la publicité de croître et de publier des "
-"sondages d'engager avec leur public. </ p> \\ n<p> Cette offre vous donne "
-"plus de 40% de réduction (si acheté séparément modules ont une valeur de 85 "
-"EUR / mois). </ p>"
+"sondages d'engager avec leur public. </p> \n"
+" <p> Cette offre vous donne plus de 40% de réduction (si acheté séparément "
+"modules ont une valeur de 85 EUR/mois). </p>"
 
 msgid ""
 "<li>Advertisement manager</li>\n"
@@ -2496,18 +2497,20 @@ msgid ""
 "                        <li>Galleries manager</li>\n"
 "                        <li>Video manager</li>"
 msgstr ""
-"<li> gestionnaire Publicité </ li> \\ n<li> gestionnaire Sondages </ li> \\ "
-"n<li> gestionnaire Galeries </ li> \\ n<li> gestionnaire de la vidéo </ li>"
+" <li> gestionnaire Publicité </li> \n"
+" <li> gestionnaire Sondages </li>\n"
+" <li> gestionnaire Galeries </li>\n"
+" <li> gestionnaire de la vidéo </li>"
 
 msgid "Advanced pack"
-msgstr "Pack avancée"
+msgstr "Paquet avancée"
 
 msgid ""
 "Personalize your frontpages and start sending newsletters to your readers "
 "and let them know what they have missed!."
 msgstr ""
 "Personnalisez vos pages avant et commencer l'envoi des bulletins "
-"d'information à vos lecteurs et leur faire savoir ce qu'ils ont manqué !."
+"d'information à vos lecteurs et leur faire savoir ce qu'ils ont manqué!."
 
 #, php-format
 msgid ""
@@ -2518,22 +2521,22 @@ msgid ""
 "modules (if purchased separately modules have a value of 145EUR/month).</p>"
 msgstr ""
 "<p> Un pas de plus dans la voie de l'engagement que nous ajoutons dans ce "
-"pack la possibilité d'envoyer des bulletins d'information et personnalisons "
-"frontpage quand vous le voulez. </ p> \\ n<p> Cette offre vous donne plus de "
-"30% de réduction sur les modules (si acheté séparément modules ont une "
-"valeur de 145EUR / mois). </ p>"
+"paquet la possibilité d'envoyer des bulletins d'information et "
+"personnalisons frontpage quand vous le voulez. </p> \n"
+"<p> Cette offre vous donne plus de 30% de réduction sur les modules (si "
+"acheté séparément modules ont une valeur de 145 EUR/mois).</p>"
 
 msgid ""
 "<li>Frontpage customization</li>\n"
 "                        <li>Newsletter manager (<a href=\"http://opennemas."
 "com/pricing?language=en_US#newsletter\" target=\"_blank\">0</a>)</li>"
 msgstr ""
-"<li> Couverture personnalisation </ li> \\ n<li> Gestionnaire de bulettin "
-"(<a href=\"http://opennemas.com/pricing?language=en_US#newsletter\" target="
-"\"_blank\"> 0 </a>) </ li>"
+"<li> Couverture personnalisation </li> \n"
+"<li> Gestionnaire de bulettin (<a href=\"http://opennemas.com/pricing?"
+"language=en_US#newsletter\" target=\"_blank\">0</a>)</li>"
 
 msgid "Expert pack"
-msgstr "Pack expert"
+msgstr "Paquet expert"
 
 msgid ""
 "Add news from your favourites agencies, manage multiple personalized "
@@ -2556,18 +2559,19 @@ msgid ""
 "separately modules have a value of 260EUR/month). </p>"
 msgstr ""
 "<p> Cette offre vous donne plus de 25% de réduction sur les modules (si "
-"acheté séparément modules ont une valeur de 260 EUR / mois). </ p>"
+"acheté séparément modules ont une valeur de 260 EUR/mois).</p>"
 
 msgid ""
 "<li>Multiple Frontpage Management</li>\n"
 "                        <li>News Agency</li>\n"
 "                        <li>Opennemas Connect</li>"
 msgstr ""
-"<li> Gestion Couverture multiple </ li> \\ n<li> Agence de presse </ li> \\ "
-"n<li> Opennemas Connect </ li>"
+"<li> Gestion Couverture multiple </li> \n"
+"<li> Agence de presse </li> \n"
+"<li> Opennemas Connect </li>"
 
 msgid "Free Basic Template"
-msgstr "Gratuit Basic modèle "
+msgstr "Gratuit Basic modèle"
 
 msgid "Change your site design with our free available templates."
 msgstr ""
@@ -2587,15 +2591,13 @@ msgid ""
 "                        <li>Delivery time: Inmediate</li>\n"
 "                    </ul>"
 msgstr ""
-"<ul> \\ n<li> \\ nWidgets: non inclus. Pour ajouter de nouveaux contacts "
-"widget \\ n<a </a> href = \"mailto: sales@openhost.es\"> sales@openhost.es "
-"\\ n</ li> \\ n<li> Exclusivité: Cette question est pas unique </ li> \\ "
-"n<li> Livraison: immédiatement </ li> \\ n</ ul>Signaler un problème Inglés "
-"par cette chaîne<ul> \\ n<li> \\ nWidgets: Widgets pas inclus. Pour ajouter "
-"un widget S'il vous plaît contactez-nous au \\ n<a </a> href = \"mailto: "
-"sales@openhost.es\"> sales@openhost.es \\ n</ li> \\ n<li> Exclusivité: Ce "
-"modèle est non exclusif </ li> \\ n<li> Délai de livraison: Immédiatement </ "
-"li> \\ dans</ ul>"
+"<ul> \n"
+"    <li> Widgets: Widgets pas inclus. Pour ajouter un widget S'il vous plaît "
+"contactez-nous au <a href = \"mailto: sales@openhost.es\">sales@openhost.es "
+"</a></li>\n"
+"    <li> Exclusivité: Ce modèle est non exclusif </li>\n"
+"    <li> Délai de livraison: Immédiatement </li>\n"
+"</ul>"
 
 msgid "Custom Template"
 msgstr "modèle personnalisé"
@@ -2651,24 +2653,40 @@ msgid ""
 msgstr ""
 "<p> Modèle de site Web de journaux qui reflètent peut être personnalisé pour "
 "de meilleures lignes directrices de la marque et les préférences des clients "
-"</p> \\ n<ul> \\ n<li> Widgets: widgets standard inclus. pour ajouter un "
-"widget S'il vous plaît nous contacter à l'adresse <a href=\"mailto:"
-"sales@openhost.es\"> sales@openhost.es </a> </ li> \\ n<li> Exclusivité: Ce "
-"modèle est non exclusif </li> \\ n<li> Délai de livraison: De 2 semaines à 1 "
-"mois Selon le travail de personnalisation </ li> \\ n<li> Demande de "
-"changement avant le lancement \\ n<ul> \\ n<li> Les changements inclus: la "
-"typographie, les couleurs et le style journal </ li> \\ n<li> ne change pas "
-"inclus: Widgets, menus, titres, pretitle, article Inner \\ nDisposition, "
-"Images Taille, têtes et pieds </li> \\ n<li> une itération de la rétroaction "
-"et de la demande de changement inclus avant la production </ li> \\ n</ul> "
-"\\ n</li> \\ n<li> Demande de changement après le lancement \\ n<ul> \\ "
-"n<li> une itération de la rétroaction et de la demande de changement inclus "
-"uniquement \\ ndans les 30 jours post-production </li> \\ n<li> Suivi et "
-"Correction (le cas échéant) inclus 30 jours après la production </ li> \\ n</"
-"ul> \\ n</li> \\ n<li> Add On: \\ n<ul> \\ n<li> Nouveaux widgets: 120 € "
-"chaque </li> \\ n<li> Obtenir journal une semaine à l'avance: 500 € </ li> "
-"\\ n<li> le coût de soutien après le lancement </li> \\ n</ul> \\ n</li> \\ "
-"n</ul>"
+"</p>\n"
+"<ul> \n"
+"    <li> Widgets: widgets standard inclus. pour ajouter un widget S'il vous "
+"plaît nous contacter à l'adresse <a href=\"mailto:sales@openhost.es\"> "
+"sales@openhost.es </a> </li> \n"
+"    <li> Exclusivité: Ce modèle est non exclusif </li> \n"
+"    <li> Délai de livraison: De 2 semaines à 1 mois Selon le travail de "
+"personnalisation </li> \n"
+"    <li> Demande de changement avant le lancement:\n"
+"        <ul> \n"
+"              <li> Les changements inclus: la typographie, les couleurs et "
+"le style journal </li>\n"
+"              <li> Ne change pas inclus: Widgets, menus, titres, pretitle, "
+"article intérieur disposition, Images taille, en-tête  et pieds </li>\n"
+"              <li> Une itération de la rétroaction et de la demande de "
+"changement inclus avant la production </li> \n"
+"        </ul> \n"
+"    </li>\n"
+"    <li> Demande de changement après le lancement:\n"
+"        <ul> \n"
+"            <li> une itération de la rétroaction et de la demande de "
+"changement inclus uniquement dans les 30 jours post-production </li>\n"
+"            <li>Suivi et Correction (le cas échéant) inclus 30 jours après "
+"la production </li> \n"
+"        </ul> \n"
+"    </li> \n"
+"    <li> Add On: \n"
+"        <ul> \n"
+"            <li> Nouveaux widgets: 120 € chaque </li> \n"
+"            <li> Obtenir journal une semaine à l'avance: 500 € </li> \n"
+"            <li> le coût de soutien après le lancement </li> \n"
+"        </ul> \n"
+"    </li> \n"
+"</ul>"
 
 msgid "Exclusive Template"
 msgstr "Modèle exclusif"
@@ -2751,37 +2769,62 @@ msgid ""
 "                        </li>\n"
 "                    </ul>"
 msgstr ""
-"<ul> \\ n<li> Type de modèles exclusifs: \\ n<ul> \\ nTemplate <li> Site Web "
-"de journaux qui peut être personnalisé afin de mieux refléter les lignes "
-"directrices de la marque et les préférences des clients </ li> \\ n<li> Le "
-"modèle sera développé maquettes suivantes soumises par client </ li> \\ "
-"n<li> client exige que le nouveau site Web ressemble à un journal précédente "
-"(migration) </ li> \\ n</ ul> \\ n</ li> \\ n<li> Widgets \\ n<ul> \\ n<li> "
-"\\ nWidgets standard inclus. Pour ajouter un widget s'il vous plaît "
-"contactez-nous au \\ n<a href=\"mailto:sales@openhost.es\"> sales@openhost."
-"es </a> \\ n</ li> \\ n<li> \\ n1 un widget supplémentaire inclus \\ n</ li> "
-"\\ n</ ul> \\ n\\ n</ li> \\ n<li> Exclusivité: Ce modèle est exclusif. Le "
-"modèle ne sera pas disponible pour tous les autres journaux. </ Li> \\ n<li> "
-"Délai de livraison: 2 mois </ li> \\ n<li> Demande de changement avant le "
-"lancement \\ n<ul> \\ n<li> les modifications apportées: la typographie, les "
-"couleurs de journaux et de style </ li> \\ n<li> ne change pas inclus: "
-"Widgets, menus, titres, Pretitle, Inner article Disposition, la taille des "
-"images, têtes et pieds </ li> \\ n<li> Pages disponibles: Unes, des "
-"opinions, auteurs, l'article Inner, Inner médias (images, galerie, vidéo), "
-"les sondages internes </ li> \\ n<li> NOTE: 2 itérations de rétroaction et "
-"de la demande de changement inclus avant la production </ li> \\ n</ ul> \\ "
-"n</ li> \\ n<li> Demande de changement après le lancement \\ n<ul> \\ n<li> "
-"2 itération de la rétroaction et le changement demande seulement inclus dans "
-"les 30 jours post-production </ li> \\ n<li> Suivi et Correction (le cas "
-"échéant) inclus 30 jours après la production </ li> \\ n</ ul> \\ n</ li> \\ "
-"n<li> Add On: \\ n<ul> \\ n<li> Nouveaux widgets: 120 € chaque </ li> \\ "
-"n<li> Obtenir journal une semaine à l'avance: 500 € </ li> \\ n<li> Création "
-"de nouvelle page sur inclus ou au fil du temps 1500 € </ li> \\ n<li> \\ "
-"nCoût de soutien après le lancement \\ n<a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
-"target = \"_ blank\"> \\ nhttp://help.opennemas.com/knowledgebase/"
-"articles/463594-precios-opennemas-servicio-de-desarrollo\n"
-"</a> \\ n</ li> \\ n</ ul> \\ n</ li> \\ n</ ul>"
+"<ul> \n"
+"    <li> Type de modèles exclusifs: \n"
+"        <ul>   \n"
+"            <li>Modèle de Site Web de journaux qui peut être personnalisé "
+"afin de mieux refléter les lignes directrices de la marque et les "
+"préférences des clients</li> \n"
+"            <li> Le modèle sera développé maquettes suivantes soumises par "
+"client </li> \n"
+"            <li> Client exige que le nouveau site Web ressemble à un journal "
+"précédente (migration)</li>\n"
+"        </ul>\n"
+"    </li> \n"
+"    <li> Widgets\n"
+"        <ul>\n"
+"            <li> Widgets standard inclus. Pour ajouter un widget s'il vous "
+"plaît contactez-nous au <a href=\"mailto:sales@openhost.es\"> sales@openhost."
+"es </a> </li> \n"
+"            <li> Un widget supplémentaire inclus </li> \n"
+"        </ul> \n"
+"    </li> \n"
+"    <li> Exclusivité: Ce modèle est exclusif. Le modèle ne sera pas "
+"disponible pour tous les autres journaux. </li>\n"
+"    <li> Délai de livraison: 2 mois </li>\n"
+"    <li> Demande de changement avant le lancement \n"
+"        <ul> \n"
+"            <li> les modifications apportées: la typographie, les couleurs "
+"de journaux et de style </li>\n"
+"            <li> ne change pas inclus: Widgets, menus, titres, Pretitle, "
+"Article intérieur disposition, la taille des images, têtes et pieds </li>\n"
+"            <li> Pages disponibles: Unes, des opinions, auteurs, l'article "
+"intérieur, intérieur médias (images, galerie, vidéo), les sondages </li>\n"
+"            <li> NOTE: 2 itérations de rétroaction et de la demande de "
+"changement inclus avant la production</li>\n"
+"        </ul>\n"
+"    </li> \n"
+"    <li> Demande de changement après le lancement \n"
+"        <ul> \n"
+"            <li> Deux itération de la rétroaction et le changement demande "
+"seulement inclus dans les 30 jours post-production </li>\n"
+"            <li> Suivi et Correction (le cas échéant) inclus 30 jours après "
+"la production</li>\n"
+"        </ul>\n"
+"    </li>\n"
+"    <li> Add On:\n"
+"        <ul> \n"
+"            <li> Nouveaux widgets: 120 € chaque </li> \n"
+"            <li> Obtenir journal une semaine à l'avance: 500€ </li>\n"
+"            <li> Création de nouvelle page sur inclus ou au fil du temps "
+"1500€ </li>\n"
+"            <li> Coût de soutien après le lancement <a href=\"http://help."
+"opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-"
+"desarrollo\" target=\"_ blank\">http://help.opennemas.com/knowledgebase/"
+"articles/463594-precios-opennemas-servicio-de-desarrollo</a></li>\n"
+"        </ul>\n"
+"    </li>\n"
+"</ul>"
 
 msgid "Custom Exclusive Template"
 msgstr "Modèle personnalisé exclus"
@@ -2851,33 +2894,54 @@ msgid ""
 "                        </li>\n"
 "                    </ul>"
 msgstr ""
-"<ul> \\ n<li> Widgets: tous les widgets requis inclus </ li> \\ n<li> "
-"Exclusivité: Ce modèle est exclusif. Le modèle sera \\ nne pas être "
-"disponible pour tous les autres journaux. </ li> \\ n<li> Délai de "
-"livraison: à établir au début du projet en fonction des exigences </ li> \\ "
-"n<li> Demande de changement avant le lancement \\ n<ul> \\ n<li> Les "
-"changements inclus: la typographie, les couleurs de journaux et de \\ "
-"nstyle, des menus, des ouvertures et des grilles, des pages intérieures </ "
-"li> \\ n<li> Pages disponibles: toutes les pages prises en charge par les "
-"modules de opennemas </ li> \\ n<li> 3 itérations de rétroaction et de la "
-"demande de changement inclus avant la production </ li> \\ n</ ul> \\ n</ "
-"li> \\ n<li> Demande de changement après le lancement \\ n<ul> \\ n<li> 3 "
-"itération de la rétroaction et le changement demande seulement inclus \\ "
-"ndans les 30 jours post-production </ li> \\ n<li> Suivi et Correction (le "
-"cas échéant) inclus 30 jours après la production </ li> \\ n</ ul> \\ n</ "
-"li> \\ n<li> Coût: \\ n<ul> \\ n<li> Conception: à partir de 3.000 € à "
-"15.000 € (chaque mois de travail de conception) </ li> \\ n<li> "
-"Développement: à partir de 3.000 € à 6.000 € (chaque mites du développement) "
-"</ li> \\ n<li> Opennemas Création d'un modèle: à partir de 3.000 € à 6.000 "
-"€ (chaque mois de travail servant de modèle) </ li> \\ n</ ul> \\ n<li> Add "
-"On: \\ n<ul> \\ n<li> Nouveaux widgets: 120 € chaque </ li> \\ n<li> Obtenir "
-"journal une semaine à l'avance: 500 € </ li> \\ n<li> Création de nouvelle "
-"page sur inclus ou au fil du temps 1500 € </ li> \\ n<li> \\ nCoût de "
-"soutien après le lancement \\ n<a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo\" "
-"target = \"_ blank\"> \\ nhttp://help.opennemas.com/knowledgebase/"
-"articles/463594-precios-opennemas-servicio-de-desarrollo\n"
-"</a> \\ n</ li> \\ n</ ul> \\ n</ li> \\ n</ ul>"
+"<ul> \n"
+"    <li> Widgets: tous les widgets requis inclus </li>\n"
+"    <li> Exclusivité: Ce modèle est exclusif. Le modèle sera ne pas être "
+"disponible pour tous les autres journaux. </li>\n"
+"    <li> Délai de livraison: à établir au début du projet en fonction des "
+"exigences </li>\n"
+"    <li> Demande de changement avant le lancement \n"
+"        <ul> \n"
+"            <li> Les changements inclus: la typographie, les couleurs de "
+"journaux et de style, des menus, des ouvertures et des grilles, des pages "
+"intérieures </li>\n"
+"            <li> Pages disponibles: toutes les pages prises en charge par "
+"les modules de opennemas </li>\n"
+"            <li> 3 itérations de rétroaction et de la demande de changement "
+"inclus avant la production </li> \n"
+"        </ul> \n"
+"    </li>\n"
+"    <li> Demande de changement après le lancement \n"
+"        <ul> \n"
+"            <li>3 itération de la rétroaction et le changement demande "
+"seulement inclus dans les 30 jours post-production</li>\n"
+"            <li> Suivi et Correction (le cas échéant) inclus 30 jours après "
+"la production </li>\n"
+"        </ul> \n"
+"    </li> \n"
+"    <li> Coût: \n"
+"        <ul> \n"
+"            <li> Conception: à partir de 3.000 € à 15.000 € (chaque mois de "
+"travail de conception) </li>\n"
+"            <li> Développement: à partir de 3.000 € à 6.000 € (chaque mites "
+"du développement) </li>\n"
+"            <li> Opennemas Création d'un modèle: à partir de 3.000 € à 6.000 "
+"€ (chaque mois de travail servant de modèle) </li>\n"
+"        </ul> \n"
+"    </li>\n"
+"    <li> Add On: \n"
+"        <ul> \n"
+"            <li> Nouveaux widgets: 120 € chaque </li>\n"
+"            <li> Obtenir journal une semaine à l'avance: 500 € </li>\n"
+"            <li> Création de nouvelle page sur inclus ou au fil du temps "
+"1500 € </li>\n"
+"            <li> Coût de soutien après le lancement <a href=\"http://help."
+"opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-"
+"desarrollo\" target=\"_ blank\">http://help.opennemas.com/knowledgebase/"
+"articles/463594-precios-opennemas-servicio-de-desarrollo</a> </li>\n"
+"        </ul> \n"
+"    </li>\n"
+"</ul>"
 
 msgid "Connect"
 msgstr "Relier"
@@ -2938,7 +3002,7 @@ msgid "Create free newspaper"
 msgstr "Créer un journal gratuit"
 
 msgid "Opennemas homepage"
-msgstr "Opennemas homepage"
+msgstr "Opennemas page d'accueil"
 
 msgid "Help Desk"
 msgstr "Help Desk"
@@ -2991,8 +3055,76 @@ msgstr "Il y a 1 mois"
 msgid "%d months ago"
 msgstr "Il y a %d mois"
 
+msgid "Show"
+msgstr ""
+
+msgid "Go back"
+msgstr "Retourner"
+
+msgid "Loading"
+msgstr "Chargement..."
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Unit price"
+msgstr "Prix unitaire"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "VAT"
+msgstr "TVA"
+
+msgid "Pay with credit card"
+msgstr "Payer par carte de crédit"
+
+msgid "Terms"
+msgstr ""
+
+#, fuzzy
+msgid "Notes"
+msgstr "Votes"
+
+msgid "View"
+msgstr "Vue"
+
+msgid "There is nothing to see here, kid."
+msgstr "Il n'y a rien à voir ici, gamin."
+
+msgid "Method"
+msgstr ""
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "PayPal"
+msgstr ""
+
+#, fuzzy
+msgid "Credit Card"
+msgstr "Payer par Carte de Crédit"
+
+msgid "Paid"
+msgstr "Payé"
+
+#, fuzzy
+msgid "View invoice"
+msgstr "Facture"
+
+msgid "Your invoice is currently unavailable."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Please, contact our <a href=\"javascript:UserVoice.showPopupWidget();"
+"\">support team</a>."
+msgstr ""
+"Quelque chose ne va pas? Contactez notre <a href=\"javascript:UserVoice."
+"showPopupWidget();\"> équipe de support</a>."
+
 msgid "Instance not activated - Opennemas"
-msgstr "Instance pas activée - Opennemas"
+msgstr "Journal pas activée - Opennemas"
 
 msgid "We are improving our platform."
 msgstr "Nous améliorons notre plate-forme."
@@ -3013,7 +3145,7 @@ msgid ""
 "template.content.email %]\"?"
 msgstr ""
 "Etes-vous sûr que vous voulez supprimer le subscriptor avec l'e-mail \"[% "
-"template.content.email%]»?"
+"template.content.email%]\"?"
 
 msgid "Yes, delete"
 msgstr "Oui, supprimer"
@@ -3114,15 +3246,6 @@ msgstr "Recherche par nom ou par email"
 
 msgid "No subscribed"
 msgstr "Aucune souscrit"
-
-msgid "Status"
-msgstr "Statut"
-
-msgid "View"
-msgstr "Vue"
-
-msgid "Loading"
-msgstr "Chargement..."
 
 #, fuzzy
 msgid "No available subscribers."
@@ -3408,15 +3531,6 @@ msgstr "Vous ne serez pas en mesure de les restaurer."
 msgid "Yes, remove them all"
 msgstr "Oui, retirez-les tous"
 
-msgid "Unit price"
-msgstr "Prix unitaire"
-
-msgid "Total"
-msgstr "Total"
-
-msgid "VAT"
-msgstr "TVA"
-
 msgid "Delete newsstands"
 msgstr "supprimer un kiosque à journaux"
 
@@ -3443,9 +3557,6 @@ msgstr "Révision kiosque"
 
 msgid "Go Back"
 msgstr "Retourner"
-
-msgid "Date"
-msgstr "Date"
 
 msgid "Click here to pick a date"
 msgstr "Cliquez ici pour choisir une date"
@@ -3490,10 +3601,10 @@ msgid "Unpublish"
 msgstr "Dépublier"
 
 msgid "In home"
-msgstr "En couvert"
+msgstr "En page d'accueil"
 
 msgid "Drop from home"
-msgstr "se mettre à couvert"
+msgstr "se mettre de la page d'accueil"
 
 msgid "Search by title"
 msgstr "Recherche par titre"
@@ -3628,7 +3739,7 @@ msgid "You are leaving the current page."
 msgstr "Vous quittez la page en cours."
 
 msgid "Instance information"
-msgstr "Informations sur l'instance"
+msgstr "Informations sur l'journal"
 
 msgid "Page"
 msgstr "Page"
@@ -3711,9 +3822,6 @@ msgstr "Lettre d'édition"
 
 msgid "Creating letter"
 msgstr "Créer lettre"
-
-msgid "Go back"
-msgstr "Retourner"
 
 msgid "Body"
 msgstr "Body"
@@ -3873,7 +3981,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Filtering"
-msgstr "Recherche par nom"
+msgstr "Filtrer par nom"
 
 msgid "Filter contents that matches one or more list of words"
 msgstr ""
@@ -3988,7 +4096,7 @@ msgid ""
 "Your opinions have been published, check them in the <a href=\"%1\">opinions "
 "list</a>or you can add them to one of your <a href=\"%2\">frontpages</a>"
 msgstr ""
-"Vos avis ont été publiés, les vérifier dans la <a href=\"%1\">  liste des "
+"Vos opinion ont été publiés, les vérifier dans la <a href=\"%1\">  liste des "
 "opinions</a> ou vous pouvez les ajouter à l'une de vos <a href="
 "\"%2\">couverture  </a>"
 
@@ -3998,6 +4106,10 @@ msgid ""
 msgstr ""
 "Vos photos ont été publiées, les vérifier dans Vos photos ont été publiées, "
 "les vérifier dans la liste des photosla liste des photos</a>"
+
+#, fuzzy
+msgid "Saving..."
+msgstr "Garder"
 
 msgid "Close"
 msgstr "Fermer"
@@ -4122,7 +4234,7 @@ msgid "Unable to find any file that matches your search."
 msgstr "Impossible de trouver un fichier qui correspond à votre recherche."
 
 msgid "You must put %1 polls in the HOME"
-msgstr "Vous devez mettre 1% des sondages dans le HOME"
+msgstr "Vous devez mettre 1% des sondages dans le page d'accueil"
 
 msgid "Unassigned"
 msgstr "non affectée"
@@ -4376,7 +4488,7 @@ msgid ""
 "This will remove selected elements from <strong>ALL FRONTPAGES</strong> but "
 "they will remain available for read."
 msgstr ""
-"Cela permettra d'éliminer des éléments de <strong> TOUT A L'COUVERTURES </ "
+"Cela permettra d'éliminer des éléments de <strong> TOUT A L'COUVERTURES </"
 "strong> sélectionné, mais ils resteront disponibles pour la lecture."
 
 msgid "-- All categories --"
@@ -4462,7 +4574,7 @@ msgid ""
 "Do you need more? Check our packs and power your newspaper with extra "
 "features to make it the best."
 msgstr ""
-"Avez-vous besoin de plus? Consultez nos packs et alimenter votre journal "
+"Avez-vous besoin de plus? Consultez nos paquet et alimenter votre journal "
 "avec des fonctionnalités supplémentaires pour rendre le meilleur."
 
 msgid ""
@@ -4511,7 +4623,7 @@ msgid "Ready!"
 msgstr "Prêt!"
 
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
-msgstr "Etes-vous sûr que vous voulez supprimer \"<span>% title% </ span>\"?"
+msgstr "Etes-vous sûr que vous voulez supprimer \"<span>%title%</span>\"?"
 
 msgid "Editing group"
 msgstr "groupe d'édition"
@@ -4807,7 +4919,7 @@ msgstr ""
 "paiement choisi."
 
 msgid "Click 'Next' button to continue with your purchase."
-msgstr "Cliquez sur le bouton «Suivant» pour poursuivre votre achat."
+msgstr "Cliquez sur le bouton \"Suivant\" pour poursuivre votre achat."
 
 msgid "Pay with Credit Card"
 msgstr "Payer par Carte de Crédit"
@@ -4835,7 +4947,7 @@ msgid ""
 "Click 'Next' button to select the credit card as your payment method and "
 "continue with the purchase."
 msgstr ""
-"Cliquez sur le bouton «Suivant» pour sélectionner la carte de crédit comme "
+"Cliquez sur le bouton \"Suivant\" pour sélectionner la carte de crédit comme "
 "mode de paiement et de continuer à l'achat."
 
 msgid "Not your first payment"
@@ -4889,7 +5001,7 @@ msgid "Added to cart"
 msgstr "Ajouté au panier"
 
 msgid "Packs"
-msgstr "Packs"
+msgstr "Paquets"
 
 msgid "Services"
 msgstr "Services"
@@ -4912,19 +5024,19 @@ msgstr "Caisse"
 msgid "No items available to purchase"
 msgstr "Pas de produits disponibles à l'achat"
 
-msgid "You have requested the following purchases for your newspaper \"%1\""
-msgstr "Demandé Vous avez les achats suivants pour votre journal \"%1\""
+msgid "Thank you for choosing Opennemas!"
+msgstr "Merci d'avoir choisi Opennemas!"
 
-msgid "Modules requested"
-msgstr "Modules demandé"
+msgid "You have just purchased the following items:"
+msgstr "Vous venez d'acquérir les éléments suivants:"
 
-msgid "Our sales department will contact you to get further information"
-msgstr ""
-"Notre service commercial prendra contact avec vous pour obtenir de plus "
-"amples informations"
+#, fuzzy
+msgid "You can find your invoice <a href=\"%1\">here</a>"
+msgstr "Vérifiez vos notifications <a href=\"%1\">précédentes </a>."
 
-msgid "Modules to purchase"
-msgstr "Modules d'achat"
+#, fuzzy
+msgid "Purchased items"
+msgstr "Acheté"
 
 msgid "Company"
 msgstr "Compagnie"
@@ -4941,6 +5053,26 @@ msgstr "Retour à <a href=\"%1\">stocker</a> et réessayer"
 msgid "Check"
 msgstr "Vérifier"
 
+#, fuzzy
+msgid "The selected items are free"
+msgstr "Supprimer les éléments sélectionnés"
+
+msgid "Please, continue to the next step"
+msgstr ""
+
+msgid "Select the payment method."
+msgstr "Sélectionnez la méthode de paiement."
+
+msgid "You'll have a chance to review your order before it's placed."
+msgstr ""
+"Vous aurez la chance de revoir votre commande avant qu'il ne soit placé."
+
+msgid "Any problem with payment?"
+msgstr "Tout problème avec le paiement?"
+
+msgid "Click here for a quick tips."
+msgstr "Cliquez ici pour accéder conseils rapides."
+
 msgid "Purchase summary"
 msgstr "Résumé commande"
 
@@ -4956,27 +5088,16 @@ msgstr ""
 msgid "Confirm"
 msgstr "Confirmer"
 
-msgid "Thank you for your purchase request!"
-msgstr "Nous vous remercions de votre demande d'achat!"
+msgid "Thank you for your purchase!"
+msgstr "Merci pour votre achat!"
 
+#, fuzzy
 msgid ""
-"In the next 24 hours you will receive an email with payment instructions and "
-"invoice."
+"Check your email, we have sent you an email with the invoice and purchase "
+"details."
 msgstr ""
-"Dans les prochaines 24 heures, vous recevrez un courriel avec les "
-"instructions de paiement et la facture."
-
-msgid ""
-"Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check your "
-"active features, navigate to <a href=\"http://help.opennemas.com\">our help</"
-"a> or check out <a href=\"http://youtube.com/opennemas\">our videos</a> to "
-"see how easy is to manage Opennemas."
-msgstr ""
-"En attendant, vous pouvez aller à votre  <a href=\"%1\">Mon journal</a> et "
-"vérifier ses caractéristiques actives, accédez à <a href=\"http://help."
-"opennemas.com\">notre aide</a> ou consultez <a href=\"http://youtube.com/"
-"opennemas\">nos vidéos</a> pour voir combien il est facile de gérer "
-"Opennemas."
+"Vérifiez votre e-mail, nous vous avons envoyé un e-mail avec la facture et "
+"d'achat de détails. Nous examinerons votre achat et activer votre domaine."
 
 msgid ""
 "Oh!, it would be a good time to share with your friends your newspaper's "
@@ -4987,6 +5108,22 @@ msgstr ""
 
 msgid "Have a wonderful day!"
 msgstr "Bonne journée!"
+
+msgid "Something unexpected has happened!"
+msgstr ""
+
+#, fuzzy
+msgid "There were some errors while trying to purchase."
+msgstr "Il y avait une erreur lors de la mise à jour dans le menu."
+
+#, fuzzy
+msgid ""
+"To prevent non-desired charges in your account, please, do not retry the "
+"checkout process and contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+"Quelque chose ne va pas? Contactez notre <a href=\"javascript:UserVoice."
+"showPopupWidget();\"> équipe de support</a>."
 
 msgid "Add new item"
 msgstr "Ajouter un nouvel élément"
@@ -5119,7 +5256,7 @@ msgstr "Texte de pied de page"
 msgid ""
 "Text showed at the bottom of your page. Usually used for copyright notice."
 msgstr ""
-"Texte affiché au bas de votre page. Généralement utilisé pour avis de "
+"Texte affiché au bas de votre page. Généralement utilisé pour opinion de "
 "copyright."
 
 msgid "Appearance"
@@ -5252,6 +5389,10 @@ msgstr "Google Analytics API key"
 msgid "Google Analytics Base domain"
 msgstr "Google Analytics domaine de base"
 
+#, fuzzy
+msgid "Google Analytics Custom variables"
+msgstr "Google Analytics domaine de base"
+
 msgid "Add another"
 msgstr "Ajouter un autre"
 
@@ -5366,8 +5507,8 @@ msgid ""
 "target=\"_blank\">Google maps sign up website</a>."
 msgstr ""
 "Vous pouvez obtenir votre Google <strong> Cartes </strong> clé API de <a "
-"class=\"external-link\"  href = \"http://code.google.com/apis/maps/signup."
-"html\" target = \"_blank »> google maps inscrire site </a>."
+"class=\"external-link\" href=\"http://code.google.com/apis/maps/signup.html"
+"\" target=\"_blank\"> google maps inscrire site </a>."
 
 msgid "Social network integration"
 msgstr "Intégration des réseaux sociaux"
@@ -5445,7 +5586,7 @@ msgid ""
 "If you also have a <strong>Instagram page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Si vous avez également un <strong> Instagram </ strong>, ajoutez votre page "
+"Si vous avez également un <strong> Instagram </strong>, ajoutez votre page "
 "url sur le formulaire."
 
 msgid "Pinterest"
@@ -5458,8 +5599,8 @@ msgid ""
 "If you also have a <strong>Pinterest page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Si vous avez également une <strong>page de Pinterest</ strong>, ajoutez "
-"votre URL de la page sur le formulaire."
+"Si vous avez également une <strong>page de Pinterest</strong>, ajoutez votre "
+"URL de la page sur le formulaire."
 
 msgid "Vimeo"
 msgstr "Vimeo"
@@ -5649,7 +5790,7 @@ msgid "Unable to find any video that matches your search."
 msgstr "Impossible de trouver la vidéo qui correspond à votre recherche."
 
 msgid "You must put %1 videos in the HOME"
-msgstr "Vous devez mettre %1 vidéos dans le HOME"
+msgstr "Vous devez mettre %1 vidéos dans le page d'accueil"
 
 msgid "Mosaic"
 msgstr "Mosaïque"
@@ -5712,8 +5853,8 @@ msgid ""
 "Use  total in widget home for define how many videos can see in widgets in "
 "newspaper frontpage"
 msgstr ""
-"Utilisez total widget de la \tpage d'accueil pour définir le nombre de "
-"vidéos peut voir dans les widgets dans le journal frontpage"
+"Utilisez total widget de la page d'accueil pour définir le nombre de vidéos "
+"peut voir dans les widgets dans le journal frontpage"
 
 msgid "Total in video frontpage column"
 msgstr "Total en colonne frontpage vidéo"
@@ -5738,7 +5879,8 @@ msgstr "Décalage total en vidéo frontpage plus de vidéos"
 
 msgid "Total number of videos that are placed on top home video frontpage"
 msgstr ""
-"Nombre total de vidéos qui sont placées sur le dessus home video frontpage"
+"Nombre total de vidéos qui sont placées sur le dessus de lapage d'accueil de "
+"video coverture"
 
 msgid "Total in video gallery"
 msgstr "Totale dans la galerie vidéo"
@@ -5751,16 +5893,41 @@ msgstr ""
 "voir dans la galerie lorsque vous modifiez ou créez un article"
 
 msgid "Widget home"
-msgstr "Widget home"
+msgstr "Widget de la page d'accueil"
 
 msgid "Config video module"
 msgstr "module vidéo Config"
 
-msgid "Logged in users"
-msgstr "Les utilisateurs connectés"
+msgid "Domain Mapping"
+msgstr "Mapping de domaine"
 
-msgid "Redirect your domain"
-msgstr "Rediriger votre domaine"
+msgid "Domain registration + mapping"
+msgstr "Enregistrement de domaine + mapping"
+
+msgid "Domain mapping"
+msgstr "Mapping de domaine"
+
+msgid "Enter a domain"
+msgstr "Entrez un nom de domaine"
+
+msgid "Map it"
+msgstr "Carte il"
+
+msgid "Requested domains"
+msgstr "Domaines demandés"
+
+msgid "I have read and accept the Terms of creating a new domain"
+msgstr ""
+"Je l'ai lu et accepté les Conditions de la création d'un nouveau domaine"
+
+msgid "I have read and accept the Terms of redirection"
+msgstr "Je l'ai lu et accepté les Conditions de redirection"
+
+msgid "How can I change 'opennemas.com' domain on my newspaper?"
+msgstr "Comment puis-je changer 'opennemas.com' domaine sur mon journal?"
+
+msgid "Redirect your own domain"
+msgstr "Rediriger votre propre domaine"
 
 msgid ""
 "I have an existing domain and I want to redirect it to my Opennemas digital "
@@ -5778,6 +5945,66 @@ msgid ""
 msgstr ""
 "Je n'ai pas mon propre domaine et je veux créer un et rediriger vers mon "
 "journal numérique Opennemas"
+
+msgid "Your domains"
+msgstr "Vos domaines"
+
+msgid "Main"
+msgstr "Principal"
+
+msgid "Points to"
+msgstr "Pointe vers"
+
+msgid "Your domain is properly configured"
+msgstr "Votre domaine est correctement configuré"
+
+msgid "Your domain is not properly configured, check the instructions below."
+msgstr ""
+"Votre domaine est pas correctement configuré, consultez les instructions ci-"
+"dessous."
+
+msgid "Expires"
+msgstr "expires"
+
+msgid "This is your opennemas address"
+msgstr "Ceci est votre adresse Opennemas"
+
+msgid "Update your DNS records"
+msgstr "Mettez à jour vos enregistrements DNS"
+
+msgid "Point the www entrace in your domain to the Opennemas service."
+msgstr "Pointez l'entrée www dans votre domaine au service Opennemas."
+
+msgid ""
+"Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
+"domain.name.replace('www.', '') %]"
+msgstr ""
+"Rediriger le trafic de [% domain.name.replace('www.', '') %] À www.[%domain."
+"name.replace('www.', '')%]"
+
+msgid ""
+"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
+"by the hosting provider for your domain)"
+msgstr ""
+"Trafic Web -> domain.com -> redirect -> www.domain.com (cela devrait être "
+"fait par le fournisseur d'hébergement pour votre domaine)"
+
+msgid "NOTE"
+msgstr "NOTE"
+
+msgid "This change is NOT done in the DNS section"
+msgstr "Ce changement est PAS fait dans la section DNS"
+
+msgid "If you need more help configuring your domains contact our support team"
+msgstr ""
+"Si vous avez besoin de plus d'aide de la configuration de vos domaines "
+"contacter notre équipe d'assistance"
+
+msgid "Logged in users"
+msgstr "Les utilisateurs connectés"
+
+msgid "Redirect your domain"
+msgstr "Rediriger votre domaine"
 
 msgid "Add contents to your site"
 msgstr "Ajouter le contenu à votre site"
@@ -5955,7 +6182,7 @@ msgid "Video frontpage"
 msgstr "Vidéo Couverture"
 
 msgid "Inner video"
-msgstr "Vidéo Inner"
+msgstr "Vidéo intérieure"
 
 msgid "Opinion frontpage"
 msgstr "Opinion Couverture"
@@ -6022,13 +6249,9 @@ msgid ""
 "another web site. If you want to overlap that address with that specified by "
 "you above you should mark this."
 msgstr ""
-"Override défaut cliquez sur handlerWhen vous cliquez dans quelques "
-"publicités en Flash, ils vous redirigent vers un autre site web. Si vous "
-"voulez chevaucher cette adresse avec celle spécifiée par vous ci-dessus, "
-"vous devriez marquer this.When vous cliquez dans certaines publicités en "
-"Flash, ils vous redirigent vers un autre site web. Si vous voulez chevaucher "
-"cette adresse avec celle spécifiée par vous ci-dessus, vous devriez marquer "
-"cela."
+"Lorsque vous cliquez dans certaines publicités en Flash vous rediriger vers "
+"un autre site web. Si vous voulez chevaucher cette adresse avec celle "
+"spécifiée par vous ci-dessus, vous devriez marquer cela."
 
 msgid "Floating ads (for drop them into columns)"
 msgstr "Annonces flottant (pour les déposer dans des colonnes)"
@@ -6057,8 +6280,8 @@ msgstr "Autoriser publicité générique"
 
 msgid "This settings allow printing home ads when ads in category are empty."
 msgstr ""
-"Ce paramètre permet l'impression des annonces à domicile lorsque les "
-"annonces dans la catégorie sont vides."
+"Ce paramètre permet l'impression des annonces de la page d'accueil lorsque "
+"les annonces dans la catégorie sont vides."
 
 msgid "OpenX/Revive Ad server integration"
 msgstr "OpenX/Revive l'intégration du serveur d'annonce"
@@ -6078,6 +6301,13 @@ msgstr ""
 msgid ""
 "Set a key for targeting your ads by category. Note that the value for "
 "targeting will always be the current category internal name"
+msgstr ""
+
+#, fuzzy
+msgid "DFP custom code"
+msgstr "Code postal"
+
+msgid "Custom code at the end of DFP tags"
 msgstr ""
 
 msgid "Tradedoubler integration"
@@ -6117,7 +6347,7 @@ msgid "Viewed:"
 msgstr "Visionné:"
 
 msgid "Instance Synchronization"
-msgstr "Synchronisation de instance"
+msgstr "Synchronisation de journal"
 
 msgid "Ins. Sync."
 msgstr "Sync. Ins."
@@ -6240,153 +6470,9 @@ msgstr "Cela ne veut pas un état valide"
 msgid "State/Province"
 msgstr ""
 
-msgid "Domain Mapping"
-msgstr "Mapping de domaine"
-
-msgid "Primary Domain"
-msgstr "domaine principal"
-
-msgid "Technical information"
-msgstr "Informations techniques"
-
-msgid "Domain registration + mapping"
-msgstr "Enregistrement de domaine + mapping"
-
-msgid "Domain mapping"
-msgstr "Mapping de domaine"
-
-msgid "Enter a domain"
-msgstr "Entrez un nom de domaine"
-
-msgid "Map it"
-msgstr "Carte il"
-
-msgid "Requested domains"
-msgstr "Domaines demandés"
-
-msgid "Select the payment method."
-msgstr "Sélectionnez la méthode de paiement."
-
-msgid "You'll have a chance to review your order before it's placed."
-msgstr ""
-"Vous aurez la chance de revoir votre commande avant qu'il ne soit placé."
-
-msgid "Any problem with payment?"
-msgstr "Tout problème avec le paiement?"
-
-msgid "Click here for a quick tips."
-msgstr "Cliquez ici pour accéder conseils rapides."
-
-msgid "I have read and accept the Terms of creating a new domain"
-msgstr ""
-"Je l'ai lu et accepté les Conditions de la création d'un nouveau domaine"
-
-msgid "I have read and accept the Terms of redirection"
-msgstr "Je l'ai lu et accepté les Conditions de redirection"
-
-msgid "Thank you for your purchase!"
-msgstr "Merci pour votre achat!"
-
-msgid ""
-"Check your email, we have sent you an email with the invoice and purchase "
-"details. We will review your purchase and activate your domain."
-msgstr ""
-"Vérifiez votre e-mail, nous vous avons envoyé un e-mail avec la facture et "
-"d'achat de détails. Nous examinerons votre achat et activer votre domaine."
-
-msgid "Something unexpected has happened!"
-msgstr ""
-
 #, fuzzy
-msgid "There were some errors while trying to purchase."
-msgstr "Il y avait une erreur lors de la mise à jour dans le menu."
-
-#, fuzzy
-msgid ""
-"To prevent non-desired charges in your account, please, do not retry the "
-"checkout process and contact our <a href=\"javascript:UserVoice."
-"showPopupWidget();\">support team</a>."
-msgstr ""
-"Quelque chose ne va pas? Contactez notre <a  href=\"javascript:UserVoice."
-"showPopupWidget();\"> équipe de support </a>."
-
-msgid "How can I change 'opennemas.com' domain on my newspaper?"
-msgstr "Comment puis-je changer 'opennemas.com' domaine sur mon journal?"
-
-msgid "Redirect your own domain"
-msgstr "Rediriger votre propre domaine"
-
-msgid "Your domains"
-msgstr "Vos domaines"
-
-msgid "Main"
-msgstr "Principal"
-
-msgid "Points to"
-msgstr "Pointe vers"
-
-msgid "Your domain is properly configured"
-msgstr "Votre domaine est correctement configuré"
-
-msgid "Your domain is not properly configured, check the instructions below."
-msgstr ""
-"Votre domaine est pas correctement configuré, consultez les instructions ci-"
-"dessous."
-
-msgid "Expires"
-msgstr "expires"
-
-msgid "This is your opennemas address"
-msgstr "Ceci est votre adresse Opennemas"
-
-msgid "Update your DNS records"
-msgstr "Mettez à jour vos enregistrements DNS"
-
-msgid "Point the www entrace in your domain to the Opennemas service."
-msgstr "Pointez l'entrée www dans votre domaine au service Opennemas."
-
-msgid ""
-"Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
-"domain.name.replace('www.', '') %]"
-msgstr ""
-"Rediriger le trafic de [% domain.name.replace('www.', '') %] À www.[%domain."
-"name.replace('www.', '')%]"
-
-msgid ""
-"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
-"by the hosting provider for your domain)"
-msgstr ""
-"Trafic Web -> domain.com -> redirect -> www.domain.com (cela devrait être "
-"fait par le fournisseur d'hébergement pour votre domaine)"
-
-msgid "NOTE"
-msgstr "NOTE"
-
-msgid "This change is NOT done in the DNS section"
-msgstr "Ce changement est PAS fait dans la section DNS"
-
-msgid "If you need more help configuring your domains contact our support team"
-msgstr ""
-"Si vous avez besoin de plus d'aide de la configuration de vos domaines "
-"contacter notre équipe d'assistance"
-
-msgid "Thank you for choosing Opennemas!"
-msgstr "Merci d'avoir choisi Opennemas!"
-
-msgid "You have just purchased the following items:"
-msgstr "Vous venez d'acquérir les éléments suivants:"
-
-msgid "Required Domains:"
-msgstr "Domaines requis:"
-
-msgid "You can find your invoice on the following page:"
-msgstr "Vous pouvez trouver votre facture sur la page suivante:"
-
-msgid "Domains to create"
-msgstr "Domaines de créer"
-
-msgid "Domains to redirect"
-msgstr "Domaines de rediriger"
+msgid "Select a province"
+msgstr "Fixer un prix"
 
 msgid "Add"
 msgstr "Ajouter"
@@ -6429,6 +6515,27 @@ msgid ""
 "            </ul>\n"
 "          "
 msgstr ""
+"\n"
+"<h4>WebSite de journaux avec des widgets standards développés par l'équipe "
+"Opennemas. Aucune personnalisation disponible.</h4>\n"
+"<p>Personnalisation autorisée dans la plate-forme:. Couleur du menu et logo "
+"</p>\n"
+"<p> <strong> Coût: </strong> widgets standard inclus. Pour ajouter un widget "
+"s'il vous plaît nous contacter à l'adresse <a href=\"mailto:sales@openhost.es"
+"\"> sales@openhost.es </a> </p>\n"
+"<p> <strong> Exclusivité: </strong> Ce modèle est non exclusif </p>\n"
+"<p> <strong> Délai de livraison: </strong> 1 jour après paiement </p>\n"
+"<p> Demande de modification avant le lancement: Pas de changement inclus. "
+"Pour toute demande de changement s'il vous plaît vérifier Option "
+"personnalisée. </p>\n"
+"<p> Demande de changement après le lancement: Pas de changement inclus. Pour "
+"toute demande de changement s'il vous plaît vérifier Option personnalisée. </"
+"p>\n"
+"<p>Coût:</p>\n"
+"<ul class=\"alternate\" type=\"square\">\n"
+"    <li>350€* (un seul paiement)</li>\n"
+"    <li>35€* (12 mois)</li>\n"
+"</ul>"
 
 msgid ""
 "\n"
@@ -6478,6 +6585,54 @@ msgid ""
 "          </ul>\n"
 "        "
 msgstr ""
+"\n"
+"<h4>Journaux Site Web modèle qui peut être personnalisé pour refléter de "
+"meilleures lignes directrices de la marque et les préférences des clients. </"
+"h4>\n"
+"             <p> <strong> Widgets: </strong> widgets standard inclus. Pour "
+"ajouter un widget s'il vous plaît nous contacter à l'adresse <a href="
+"\"mailto:sales@openhost.es\"> sales@openhost.es </a> </p>\n"
+"             <p> <strong> Exclusivité: </strong> Ce modèle est non exclusif "
+"</p>\n"
+"             <p> <strong> Délai de livraison: </strong> De 2 semaines à 1 "
+"mois selon les travaux de personnalisation </p>\n"
+"             <p> Demande de modification avant le lancement:\n"
+"             <ul class=\"alternate\" type=\"square\">\n"
+"               <li> Typographie, les couleurs de journaux et de style. </"
+"li>\n"
+"               <li> Modifications non inclus:. Widgets, menus, titres, "
+"Pretitle, Article intérieure disposition, Images Taille, en-tête  et pieds </"
+"li>\n"
+"               <li> 1 itération de la rétroaction et la demande de "
+"changement inclus avant la production. </li>\n"
+"            </ul></li>\n"
+"            <p> Demande de changement après le lancement: Suivi et "
+"Correction (le cas échéant) comprenait 30 jours après la production </li>.\n"
+"          <p> Étapes pour activer le modèle:\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li> Commandez-le. </li>\n"
+"            <li> Nous contacter pour la collecte des exigences et le "
+"processus d'achat que vous. </li>\n"
+"            <li> Dans 2 à 4 semaines après un premier versement de votre "
+"modèle sera actif </li>\n"
+"            <li> Si une correction de bogues est nécessaire, nous allons "
+"prendre soin d'elle, comme dans les 30 premiers jours, nous allons "
+"surveiller votre journal </li>\n"
+"            <li> Add On:\n"
+"              <ul class=\"alternate\" type=\"square\">\n"
+"                <li> Nouveaux widgets: 120€* chaque </li>\n"
+"                <li> Obtenir le journal une semaine à l'avance: 500€* </li>\n"
+"                <li> Coût de soutien après le lancement </li>\n"
+"              </ul>\n"
+"            </li>\n"
+"          </ul>\n"
+"          </li>\n"
+"          <p> Coût: </p>\n"
+"          <ul class=\"alternate\" type=\"square\">\n"
+"            <li> 1450 € (un seul paiement)* </li>\n"
+"            <li> 135€ (12 mois)* <br>\n"
+"              * TVA non comprise </li>\n"
+"          </ul>"
 
 msgid "Available"
 msgstr "Disponible"
@@ -6606,7 +6761,8 @@ msgstr "Donnée IPTC"
 msgid "No available IPTC data."
 msgstr "Aucune donnée IPTC disponible."
 
-msgid "Search by description"
+#, fuzzy
+msgid "Search by description or metadata"
 msgstr "Recherche par description"
 
 msgid "Resolution"
@@ -6985,7 +7141,7 @@ msgid ""
 "template.content.author %]\"?"
 msgstr ""
 "Etes-vous sûr que vous voulez envoyer à la poubelle ce commentaire de \"[% "
-"template.content.author%]»?"
+"template.content.author%]\"?"
 
 msgid "Editing comment"
 msgstr "Modification du commentaire"
@@ -7121,13 +7277,11 @@ msgstr "- Sélectionnez le type d'opinion -"
 msgid "Creating opinion"
 msgstr "Création d'opinion"
 
-#, fuzzy
 msgid "In homepage"
 msgstr "En Page d'accueil"
 
-#, fuzzy
 msgid "-- Select opinion type --"
-msgstr "- Sélectionnez le type d'opinion -"
+msgstr "- Selectionnez le type d'opinion -"
 
 msgid "Opinion from author"
 msgstr "Opinion de l'auteur"
@@ -7142,77 +7296,71 @@ msgid "Blog"
 msgstr "Blogueur"
 
 msgid "Director Articles"
-msgstr ""
+msgstr "Articles du directeur"
 
 msgid "Editorial Articles"
-msgstr ""
+msgstr "Articles d'éditorial"
 
-#, fuzzy
 msgid "Other Articles"
-msgstr "Article"
+msgstr "Autres articles"
 
-#, fuzzy
 msgid "Editorial"
-msgstr "éditer"
+msgstr "Éditorial"
 
 msgid "Director"
-msgstr ""
+msgstr "Directeur"
 
 msgid "Views"
-msgstr ""
+msgstr "Vues"
 
-#, fuzzy
 msgid "Unable to find any opinion that matches your search."
-msgstr "Impossible de trouver un avis avec l'id \"%d\""
+msgstr "Impossible de trouver un examen qui correspond à votre recherche."
 
 msgid "There is no opinions yet."
-msgstr ""
+msgstr "Il n'y a pas encore d'opiniones."
 
-#, fuzzy
 msgid "Director opinions in Opinion frontpage"
-msgstr "opinion couverture à mobile"
+msgstr "Opinion de directeur dans l'opinion page d'accueil"
 
 msgid "How many director opinions will be shown in the opinion frontpage."
 msgstr ""
+"Combien d'opinions sera gestionnaire indiqué dans la page d'accueil de "
+"opinion."
 
-#, fuzzy
 msgid "Editorial opinions in Opinion frontpage"
-msgstr "opinion couverture à mobile"
+msgstr "Opinions éditoriales dans l'opinion page d'accueil"
 
 msgid "How many editorial opinions will be shown in the opinion frontpage."
-msgstr ""
+msgstr "Combien d'opinions éditeur sera affiché dans la revue frontpage."
 
-#, fuzzy
 msgid "Opinions in Opinion frontpage"
-msgstr "Opinion Couverture"
+msgstr "Opinions dans l'opinion couverture"
 
 msgid "How many opinions opinions will be shown in the opinion frontpage."
 msgstr ""
+"Combien d'opinions opinions seront présentées dans la opinion couverture."
 
-#, fuzzy
 msgid "Author opinions in frontpage opinion widget"
-msgstr "Administrer widget opinion"
+msgstr "Auteur opinions dans widget opinion couverture"
 
 msgid "How many author opinions will be shown in the widget."
-msgstr ""
+msgstr "Combien d'opinions auteur sera affiché dans le widget."
 
-#, fuzzy
 msgid "Order blog's frontpage by"
-msgstr "Vidéo Couverture"
+msgstr "Le frontpage blog de commande par"
 
 msgid "Select if order blogs's frontpages by created date or bloggers name."
 msgstr ""
+"Sélectionnez si l'ordre blogs pages avant par date ou blogueurs créé nom."
 
-#, fuzzy
 msgid "Created Date"
-msgstr "Créé"
+msgstr "Date de création"
 
-#, fuzzy
 msgid "Blogger"
 msgstr "Les blogueurs"
 
 msgid "Config opinion module"
-msgstr ""
+msgstr "Configuration du module d'opinion"
 
 msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
 msgstr ""
@@ -7221,382 +7369,382 @@ msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr ""
 
 msgid "'%1' not activated - Opennemas"
-msgstr ""
+msgstr "'%1' non activé - Opennemas"
 
 msgid "%1 temporary deactivated."
-msgstr ""
+msgstr "%1 désactivé temporairement."
 
 msgid "Editing keyword"
-msgstr ""
+msgstr "Modification mot-clé"
 
-#, fuzzy
 msgid "Creating keyword"
-msgstr "Créé"
+msgstr "Mot-clé création"
 
 msgid "Value"
-msgstr ""
+msgstr "Valeur"
 
-#, fuzzy
 msgid "Filter by name"
-msgstr "Recherche par nom"
+msgstr "Filtrer par nom"
 
-#, fuzzy
 msgid "Unable to find any keyword that matches your search."
-msgstr "Impossible de trouver un utilisateur avec cet e-mail"
+msgstr "Impossible de trouver un mot clé qui correspond à votre recherche."
 
-#, fuzzy
 msgid "Keyword"
 msgstr "Mot-clé"
 
 msgid "External link to "
-msgstr ""
+msgstr "Lien externe à"
 
-#, fuzzy
 msgid "Internal search to keyword"
-msgstr "Internal recherche"
+msgstr "Recherche interne au mot-clé"
 
 msgid "Link to send email to"
-msgstr ""
+msgstr "Lien pour envoyer un courriel à"
 
-#, fuzzy
 msgid "Edit this content"
-msgstr "Modifier le contenu d'autres auteurs"
+msgstr "Modifier ce contenu"
 
 msgid "Are you sure that do you want remove \"[% template.content.title %]\"?"
 msgstr ""
+"Êtes-vous sûr que vous voulez Ce ne supprimer \"[%template.content.title%]\"?"
 
-#, fuzzy
 msgid "Delete albums"
-msgstr "Supprimer"
+msgstr "Supprimer des galeries"
 
-#, fuzzy
 msgid "Delete album"
-msgstr "Supprimer"
+msgstr "Supprimer la galerie"
 
 msgid "Are you sure that do you want delete \"[% content.name %]\"?"
-msgstr ""
+msgstr "Etes-vous sûr que vous voulez ne supprimez que \"[%content.name%]\"?"
 
 msgid "Are you sure you want to delete <span>%num%</span> albums?"
-msgstr ""
+msgstr "Etes-vous sûr de vouloir supprimer <span>%num%</span> galeries?"
 
 msgid "Complete all the required album information before save it"
-msgstr ""
+msgstr "Remplissez toutes les informations requises avant le galerie sauver"
 
 msgid "Check that you have included more than one image in this album"
-msgstr ""
+msgstr "Vérifiez que vous avez inclus plus d'une image dans cet galerie"
 
 msgid "Assign an image as a cover image"
-msgstr ""
+msgstr "Attribuer une image comme une image de couverture"
 
 msgid "Editing album"
-msgstr ""
+msgstr "Modifier ce galerie"
 
 msgid "Creating Album"
-msgstr ""
+msgstr "Galerie création"
 
-#, fuzzy
 msgid "Album images"
-msgstr "Album intérieure"
+msgstr "Galerie vous images"
 
-#, fuzzy
 msgid "Add images"
-msgstr "Ajouter des fichiers..."
+msgstr "Ajouter des images"
 
-#, fuzzy
 msgid "Cover image"
-msgstr "Couverture"
+msgstr "Image de couverture"
 
-#, fuzzy
 msgid "Unable to find any album that matches your search."
-msgstr "Impossible de trouver un album avec l'id \"%d\"."
+msgstr "Impossible de trouver un album qui correspond à votre recherche."
 
-#, fuzzy
 msgid "Album details"
-msgstr "Détails de l'élément"
+msgstr "Détails de la galerie"
 
-#, fuzzy
 msgid "You must put %1 albums in the HOME"
-msgstr "Vous devez mettre %d livres dans le widget HOME"
+msgstr "Vous devez mettre %1 albums dans la page d'accueil"
 
 msgid ""
 "Use  total in widget album for define how many albums can see in widgets in "
 "frontpage"
 msgstr ""
+"Utilisez l'album complet dans un widget pour définir la façon dont de "
+"nombreux albums peuvent voir dans les widgets dans frontpage"
 
 msgid "Cover size in widget album (width x height)"
-msgstr ""
+msgstr "Taille de couverture dans un widget album (largeur x hauteur)"
 
-#, fuzzy
 msgid "Order album's frontpage by"
-msgstr "Album Couverture"
+msgstr "Commander couverture galeries par"
 
 msgid ""
 "Select if order album's frontpage by most views or albums checked as "
 "favorites."
 msgstr ""
+"Sélectionnez si des couverture galeries d'ordre par la plupart des points de "
+"vue ou albums vérifiés comme favoris."
 
 msgid "Most views"
-msgstr ""
+msgstr "le plus consulté"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Favoris"
 
 msgid "Time of the last album most viewed (days)"
-msgstr ""
+msgstr "Durée du dernier album le plus consulté (jours)"
 
-#, fuzzy
 msgid "Total in album frontpage"
-msgstr "Album Couverture"
+msgstr "Total des galeries couverture"
 
 msgid "Use this to define how many albums can see in the album frontpage."
 msgstr ""
+"Utilice esta opción para definir el número de discos puede ver en la portada "
+"del álbum"
 
 msgid "Total in album frontpage/widget more albums"
-msgstr ""
+msgstr "Total des galeries couverture/en widget de plus de galeries"
 
 msgid "Total number of album on more albums section in album home frontpage"
 msgstr ""
+"Nombre total de galerie plus d'albums dans la section album dans la page "
+"d'accueil"
 
 msgid "New album"
-msgstr ""
+msgstr "Nouvelle galerie"
 
-#, fuzzy
 msgid "New version available"
-msgstr "Fichier non disponible"
+msgstr "Nouvelle version disponible"
 
 msgid ""
 "There is a new version for this frontpage, if you try to save the current "
 "changes the new version will be overwritten."
 msgstr ""
+"Il y a une nouvelle version de ce frontpage, si vous essayez d'enregistrer "
+"les modifications actuelles, la nouvelle version sera écrasée."
 
-#, fuzzy
 msgid "Reload frontpage"
-msgstr "Vidéo Couverture"
+msgstr "Recharger Couverture"
 
 msgid "Are you sure that do you want to send to trash the next element?"
 msgstr ""
+"Etes-vous sûr que vous voulez envoyer à la corbeille l'élément suivant?"
 
 msgid "Customize font and color style"
-msgstr ""
+msgstr "Personnaliser la police et la couleur de style"
 
-#, fuzzy
 msgid "Image disposition in frontpage"
-msgstr "Opinion Couverture"
+msgstr "disposition de l'image dans couverture"
 
 msgid "Background Color"
-msgstr ""
+msgstr "Couleur de fond"
 
 msgid "Title font color"
-msgstr ""
+msgstr "Police color du titre"
 
 msgid "Title font family"
-msgstr ""
+msgstr "Titre famille de police"
 
 msgid "Title font style"
-msgstr ""
+msgstr "Titre style de police"
 
 msgid "Title font weight"
-msgstr ""
+msgstr "Poids police du titre"
 
 msgid "Title font size"
-msgstr ""
+msgstr "Taille de la police du titre"
 
 msgid "Top Wide Image"
-msgstr ""
+msgstr "Image top large"
 
 msgid "Image wide"
 msgstr "image large"
 
 msgid "Top right Image"
-msgstr ""
+msgstr "En haut à droite l'image"
 
 msgid "image-top-right"
-msgstr ""
+msgstr "image-haut-droite"
 
 msgid "Top Left Image"
-msgstr ""
+msgstr "En haut gauche l'image"
 
 msgid "image-top-left"
-msgstr ""
+msgstr "image-haut-gauche"
 
 msgid "Wide image"
-msgstr ""
+msgstr "Large image"
 
 msgid "image-middle-wide"
-msgstr ""
+msgstr "image-milieu-large"
 
 msgid "Right image"
-msgstr ""
+msgstr "Droite image"
 
 msgid "image-middle-left"
-msgstr ""
+msgstr "image-milieu-gauche"
 
 msgid "Left image"
-msgstr ""
+msgstr "Gauche image"
 
 msgid "Default"
-msgstr ""
+msgstr "Défaut"
 
-#, fuzzy
 msgid "Archive this element"
-msgstr "Publicité"
+msgstr "Archivez cet élément"
 
 msgid "Are you sure that do you want to archive the next element?"
-msgstr ""
+msgstr "Etes-vous sûr que vous voulez archiver l'élément suivant?"
 
 msgid ""
 "This will remove this content from <strong>ALL FRONTPAGES</strong> but it "
 "will remain available for read."
 msgstr ""
+"Cela permettra d'éliminer ce contenu à partir de <strong>TOUTES LES PAGES "
+"AVANT</strong> mais il restera disponible pour la lecture."
 
 msgid "Please, remember save positions after finish."
 msgstr ""
+"S'il vous plaît, souvenez-vous d'enregistrer les positions après à la fin."
 
 msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
 msgstr ""
+"Impossible de charger cet onglet. Nous allons essayer de résoudre ce "
+"problème le plus tôt possible."
 
 #, fuzzy
 msgid ""
-"You have reached the maximum number of elements (100). To add new contents "
-"remove the older."
-msgstr "Vous avez atteint le maximum de courriels autorisés à envoyer"
+"You have reached the maximum number of elements (%number%). To add new "
+"contents remove the older."
+msgstr ""
+"Vous avez atteint le nombre maximum d'éléments (100). Pour ajouter de "
+"nouveaux contenus supprimer l'ancien."
 
 msgid "Preview frontpage with actual content positions"
-msgstr ""
+msgstr "Aperçu frontpage avec des positions de contenu réel"
 
-#, fuzzy
 msgid "Managing frontpage:"
-msgstr "Manager Couverture"
+msgstr "Manager Couverture:"
 
 msgid ""
 "The frontpage manager is currently <strong>unavaible for your screen size</"
 "strong>"
 msgstr ""
+"Le gestionnaire de frontpage est actuellement <strong>indisponible pour "
+"votre taille d'écran </strong>"
 
-#, fuzzy
 msgid "Available contents"
-msgstr "Tous les types de contenu"
+msgstr "Contenus disponibles"
 
 msgid "Suggested"
-msgstr ""
+msgstr "Suggéré"
 
 msgid "Others in category"
-msgstr ""
+msgstr "D'autres dans la catégorie"
 
-#, fuzzy
 msgid "Latest articles"
-msgstr "Liste attendant articles"
+msgstr "Derniers articles"
 
-#, fuzzy
 msgid "Change the layout of this frontpage"
-msgstr "Gestionnaire drapeau frontpage"
+msgstr "Changer la mise en page de ce frontpage"
 
 msgid "Premium users"
-msgstr ""
+msgstr "Les utilisateurs premium"
 
 msgid "Create new user"
-msgstr ""
+msgstr "Créer un nouvel utilisateur"
 
 msgid "Last login"
-msgstr ""
+msgstr "Dernière connexion"
 
-#, fuzzy
 msgid "End of subscription"
-msgstr "Formulaire d'abonnement"
+msgstr "Fin de l'abonnement"
 
 msgid "--All--"
-msgstr ""
-
-msgid "Paid"
-msgstr ""
+msgstr "--Tout--"
 
 msgid "Registered"
-msgstr ""
+msgstr "Inscrit"
 
 msgid "Expired"
-msgstr ""
+msgstr "Expiré"
 
-#, fuzzy
 msgid "%1 users"
-msgstr "Utilisateurs"
+msgstr "%1 utilisateurs"
 
 msgid "Export list"
-msgstr ""
+msgstr "Exporter la liste"
 
 msgid "Filter by name or email"
-msgstr ""
+msgstr "Filtrer par nom ou par email"
 
 msgid "Sort by"
-msgstr ""
+msgstr "Trier par"
 
 msgid "Payment date"
-msgstr ""
+msgstr "Date de paiement"
 
-#, fuzzy
 msgid "%1 purchases"
-msgstr "Achats paywall"
+msgstr "%1 achats"
 
-#, fuzzy
 msgid "Paypal API authentication"
-msgstr "L'authentification de l'API Paypal est incorrect."
+msgstr "Authentification Paypal API"
 
 msgid "Get this parameters from your "
-msgstr ""
+msgstr "Obtenez ces paramètres de votre"
 
 msgid "Paypal identification data"
-msgstr ""
+msgstr "Données d'identification Paypal"
 
 msgid "Use the testing environment Sandbox"
-msgstr ""
+msgstr "Utilisez l'environnement de test Sandbox"
 
 msgid "Real mode (recommended)"
-msgstr ""
+msgstr "Mode réel (recommandé)"
 
 msgid "Testing mode"
-msgstr ""
+msgstr "Mode d'essai"
 
 msgid ""
 "Paypal allows you to enable a testing environment where <strong>all the "
 "transactions will not be real</strong>, so you can test if the paywall is "
 "working well."
 msgstr ""
+"Paypal Permet d'activer un environnement de test où <strong>toutes les "
+"transactions ne seront pas réel </strong>, de sorte que vous pouvez tester "
+"si le paywall fonctionne bien."
 
 msgid ""
 "Active a testing environment in your Paypal account (only if you are a "
 "developer)"
 msgstr ""
+"Environnement de test actif à votre compte Paypal dans (seulement si vous "
+"êtes un développeur)"
 
 msgid "More information"
-msgstr ""
+msgstr "Plus d'informations"
 
 msgid "Validate here your Paypal API credentials in the selected mode"
 msgstr ""
+"Validez vos informations d'identification de l'API Paypal ici dans le mode "
+"sélectionné"
 
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgid "Currency & taxes"
-msgstr ""
+msgstr "Monnaie et taxes"
 
 msgid "Money unit"
-msgstr ""
+msgstr "Unité monétaire"
 
 msgid "VAT %"
-msgstr ""
+msgstr "TVA %"
 
 msgid "Payment modes"
-msgstr ""
+msgstr "Modes de paiement"
 
 msgid ""
 "Below you can add different payment modes by including the time range that "
 "the user can purchase, the description and the price"
 msgstr ""
+"Ci-dessous vous pouvez ajouter différents modes de paiement, y compris "
+"l'intervalle de temps par l'utilisateur peut acheter que, la description et "
+"le prix"
 
 msgid "Add new payment mode"
-msgstr ""
+msgstr "Ajouter un nouveau mode de paiement"
 
 msgid "Recurring payments (optional)"
-msgstr ""
+msgstr "Paiements récurrents (en option)"
 
 msgid ""
 "Paypal allow your users to subscribe to your Paywall through recurring "
@@ -7604,196 +7752,228 @@ msgid ""
 "having to worry about payments and due dates, and will allow you to increase "
 "the user engagement."
 msgstr ""
+"Paypal permet à vos utilisateurs de souscrire à votre Paywall grâce à des "
+"paiements récurrents. Cela signifie que vos utilisateurs seront facturés "
+"périodiquement et sans avoir à se soucier des paiements et les dates "
+"d'échéance, et vous permettra d'augmenter l'utilisateur engagement."
 
 msgid "Mark this if you want to enable recurring payments"
-msgstr ""
+msgstr "Marquez si vous voulez activer les paiements récurrents"
 
 msgid ""
 "You have to activate some options in the Paypal configuration to make "
 "recurring payments work. Please follow next steps:"
 msgstr ""
+"Vous devez activer certaines options dans la configuration Paypal pour faire "
+"fonctionner les paiements récurrents. S'il vous plaît suivre les étapes "
+"suivantes:"
 
 msgid "Go to your merchant Paypal"
-msgstr ""
+msgstr "Accédez à votre marchand Paypal"
 
 msgid "IPN web configuration page "
-msgstr ""
+msgstr "IPN page de configuration Web"
 
 msgid " and log in with your merchant account"
-msgstr ""
+msgstr "et connectez-vous avec votre compte marchand"
 
 msgid "Click in the \"Choose IPN configuration\" button"
-msgstr ""
+msgstr "Cliquez sur le bouton \"Choisir la configuration IPN\""
 
 msgid "Fill in the \"Notification URL\" field with this address"
-msgstr ""
+msgstr "Remplissez le champ \"URL de notification\" avec cette adresse"
 
 msgid "Enable the \"Receive IPN messages\" checkbox"
-msgstr ""
+msgstr "Cochez la case \"Recevoir des messages IPN\""
 
 msgid ""
 "Click on the validate button to check ipn is working fine and enable "
 "recurring payment"
 msgstr ""
+"Cliquez sur le bouton de validation pour vérifier IPN fonctionne bien et "
+"permettre le paiement récurrent"
 
 msgid "Waiting"
-msgstr ""
+msgstr "Attendre"
 
 msgid "Valid"
-msgstr ""
+msgstr "Valide"
 
 msgid "Finally, click in the \"Save\" button to save this configuration"
 msgstr ""
+"Enfin, cliquez sur le bouton \"Enregistrer\" pour enregistrer cette "
+"configuration"
 
 msgid "Accept Opennemas payment agreements terms"
-msgstr ""
+msgstr "Accepter Opennemas accords de modalités de paiement"
 
 msgid ""
 "Read and accept the <a href=\"http://help.opennemas.com/\" target=\"_blank"
 "\">payment agreements terms</a> of Opennemas"
 msgstr ""
+"Lisez et acceptez les  <a href=\"http://help.opennemas.com/\" target=\"_blank"
+"\">accords de modalités de paiement</a> de Opennemas"
 
 msgid "Set a price"
-msgstr ""
+msgstr "Fixer un prix"
 
 msgid "Order id"
-msgstr ""
+msgstr "Numéro de commande"
 
 msgid "Amount"
-msgstr ""
+msgstr "Montant"
 
 msgid "Show all…"
-msgstr ""
+msgstr "Montre tout…"
 
 msgid "No purchases were made yet."
-msgstr ""
+msgstr "Aucun achat n'a été encore fait."
 
-#, fuzzy
 msgid "No paywall users yet."
-msgstr "Utilisateurs paywall"
+msgstr "Aucun utilisateur de paywall encore."
 
 msgid ""
 "The paywall allows you to monetize your contents by enabling a subscription "
 "enabled model access to your contents."
 msgstr ""
+"Le paywall vous permet de monétiser vos contenus en permettant un accès "
+"modèle d'abonnement permis à vos contenus."
 
 msgid "Subscribed users"
-msgstr ""
+msgstr "Les utilisateurs interrogés"
 
-#, fuzzy
 msgid "Lastest purchases"
-msgstr "Achats paywall"
+msgstr "Derniers achats"
 
 msgid "Purchases last month"
-msgstr ""
+msgstr "Acheté le mois dernier"
 
 msgid "Reset <strong>password</strong>"
-msgstr ""
+msgstr "Réinitialiser <strong>Mot de passe</strong>"
 
 msgid "We've sent an e-mail to"
-msgstr ""
+msgstr "Nous avons envoyé un e-mail à"
 
 msgid ""
 "Please check your e-mail now for a message with the subject line \"Password "
 "reminder\"."
 msgstr ""
+"S'il vous plaît vérifier votre e-mail maintenant un message Avec la ligne "
+"d'objet \"rappel de mot de passe\"."
 
 msgid ""
 "If you use e-mail filtering or anti-spam software,please make sure our e-"
 "mail is not filtered or blocked."
 msgstr ""
+"Si vous utilisez le filtrage e-mail ou un logiciel anti-spam, assurez-vous "
+"que notre S'il vous plaît e-mail est pas filtré ou bloqué."
 
 msgid "Enter your e-mail address and click Submit to recover your password."
 msgstr ""
+"Entrez votre adresse e-mail et cliquez sur Envoyer pour récupérer votre mot "
+"de passe."
 
 msgid "Go back to login"
-msgstr ""
+msgstr "Retour à identifier"
 
 msgid "Submit"
-msgstr ""
+msgstr "Soumettre"
 
 msgid "Sign into open<strong>nemas</strong>"
-msgstr ""
+msgstr "Connectez-vous à open<strong>nemas</strong>"
 
 msgid "Use Facebook, Twitter or your email to sign in."
-msgstr ""
+msgstr "Utilisez Facebook, Twitter ou votre adresse email pour vous connecter."
 
-#, fuzzy
 msgid "Username or email"
-msgstr "Nom d'utilisateur"
+msgstr "Nom d'utilisateur ou email"
 
 msgid "Forgot Password?"
-msgstr ""
+msgstr "Vous avez oublié votre mot de passe?"
 
-#, fuzzy
 msgid "Log in"
-msgstr "Blog intérieure"
+msgstr "Connectez-vous"
 
 msgid "About"
-msgstr ""
+msgstr "Sur"
 
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Politique de confidentialité"
 
 msgid "Legal"
-msgstr ""
+msgstr "Juridique"
 
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 msgid "Recover password"
-msgstr ""
+msgstr "Récupérer mot de passe"
 
 msgid ""
 "Please enter your new password in both fields below, and then click Submit."
 msgstr ""
+"S'il vous plaît entrer votre nouveau mot de passe dans les deux champs ci-"
+"dessous, puis un clic Soumettre."
 
-#, fuzzy
 msgid "Password confirmation"
-msgstr "Mot de passe et la confirmation doivent être égaux."
+msgstr "Confirmation mot de passe"
 
 msgid "Dear member"
-msgstr ""
+msgstr "Cher membre"
 
 msgid "Per your request, please follow these steps to regain access to"
 msgstr ""
+"Par votre demande, S'il vous plaît suivez les étapes pour retrouver l'accès "
+"à Ces"
 
 msgid "Click the link below to choose a new password"
-msgstr ""
+msgstr "Cliquez sur le lien ci-dessous pour choisir un nouveau mot de passe"
 
 msgid ""
 "If the link is not clickable, you can copy and paste the address into your "
 "Web browser's address window"
 msgstr ""
+"Si le lien est pas cliquable, vous pouvez copier et coller l'adresse dans la "
+"fenêtre d'adresse de votre navigateur Web"
 
 msgid ""
 "Follow the instructions on the screen to choose a new password.  After you "
 "have chosen a password you will automatically enter"
 msgstr ""
+"Suivez les instructions à l'écran pour choisir un nouveau mot de passe. Une "
+"fois que vous avez choisi un mot de passe que vous entrez automatiquement"
 
 msgid "In the future you can login to"
-msgstr ""
+msgstr "Dans le futur, vous pouvez vous connecter à"
 
 msgid "by entering your e-mail address and this password"
-msgstr ""
+msgstr "en entrant votre adresse e-mail et ce mot de passe"
 
 msgid "If you did not request your ID and password for"
 msgstr ""
+"Si vous ne l'avez pas demandé votre identifiant et votre mot de passe pour"
 
 msgid ""
 "someone has mistakenly entered your e-mail address when requesting their "
 "password"
 msgstr ""
+"quelqu'un a tort saisi votre adresse e-mail lors de la demande de mot de "
+"passe"
 
 msgid ""
 "Please ignore this message, or, if you wish, you may go to the address above "
 "to select a new password for your account"
 msgstr ""
+"S'il vous plaît ignorer ce message, ou, si vous le souhaitez, vous pouvez "
+"vous rendre à l'adresse ci-dessus pour sélectionner un nouveau mot de passe "
+"pour votre compte"
 
 msgid ""
 "To protect your privacy, we will only send this information to the e-mail "
 "address on file for this account"
 msgstr ""
+"Pour protéger votre vie privée, nous n'envoyer ces informations à l'adresse "
+"e-mail dans le dossier pour ce compte"
 
 msgid "My account"
 msgstr "Mon compte"
@@ -7842,14 +8022,30 @@ msgid ""
 "Something wrong? Contact our <a href=\"javascript:UserVoice."
 "showPopupWidget();\">support team</a>."
 msgstr ""
-"Quelque chose ne va pas? Contactez notre <a  href=\"javascript:UserVoice."
-"showPopupWidget();\"> équipe de support </a>."
+"Quelque chose ne va pas? Contactez notre <a href=\"javascript:UserVoice."
+"showPopupWidget();\"> équipe de support</a>."
 
 msgid "You have no billing information"
 msgstr "Vous avez pas d'informations de facturation"
 
 msgid "You will be asked to add it during the checkout in our store"
 msgstr "Vous serez invité à ajouter lors de l'achat dans notre magasin"
+
+#, fuzzy
+msgid "Last purchases"
+msgstr "Derniers achats"
+
+#, fuzzy
+msgid "There are no purchases for now."
+msgstr "Il n'y a pas de notifications pour le moment."
+
+msgid ""
+"Check our <a class=\"bold\" href=\"#\">store</a> and improve your newspaper."
+msgstr ""
+
+#, fuzzy
+msgid "More"
+msgstr "plus d'info"
 
 msgid "Delete books"
 msgstr "Supprimer les livres"
@@ -7873,111 +8069,105 @@ msgid "Unable to find any book that matches your search."
 msgstr "Impossible de trouver un livre qui correspond à votre recherche."
 
 msgid "You must put %1 books in the HOME"
-msgstr "Vous devez mettre 1% des livres dans le HOME"
+msgstr "Vous devez mettre 1% des livres dans le  page d'accueil"
 
 msgid "New book"
 msgstr "Nouveau livre"
 
-msgid "There is nothing to see here, kid."
-msgstr "Il n'y a rien à voir ici, gamin."
-
 msgid "Action"
 msgstr "Action"
 
-#, fuzzy
 msgid "New instance"
-msgstr "Instances Sync"
+msgstr "Nouvelle journal"
 
 msgid "Edit instance"
-msgstr ""
+msgstr "Modifier journal"
 
-#, fuzzy
 msgid "Created from"
-msgstr "Créé"
+msgstr "Créé à partir de"
 
-#, fuzzy
 msgid "Media size"
-msgstr "Média"
+msgstr "Média taille"
 
 msgid "(Human readable name)"
-msgstr ""
+msgstr "(Nom lisible par l'homme)"
 
 msgid "Template"
-msgstr ""
+msgstr "Modèle"
 
 msgid "Contact mail"
-msgstr ""
+msgstr "Email du contact"
 
 msgid "Owner"
 msgstr ""
 
 msgid "No main domain"
-msgstr ""
+msgstr "Pas de domaine principal"
 
 msgid "Instance domains cannot be empty."
-msgstr ""
+msgstr "Les domaines d'instance ne peuvent pas être vides."
 
 msgid "Domain expire date:"
-msgstr ""
+msgstr "Date d'expiration du domaine:"
+
+#, fuzzy
+msgid "View purchase"
+msgstr "Nouveau achat"
 
 msgid "Select all"
-msgstr ""
+msgstr "Sélectionner tout"
 
-#, fuzzy
 msgid "Support"
-msgstr "Aidez-moi et Support"
+msgstr "Support"
 
 msgid "Alphanumeric, without spaces"
-msgstr ""
+msgstr "Alphanumérique, sans espaces"
 
-#, fuzzy
 msgid "Database"
-msgstr "Base de données erreur"
+msgstr "Base de données"
 
 msgid "Minimum password level"
-msgstr ""
+msgstr "Niveau minimum de mot de passe"
 
 msgid "Weak"
-msgstr ""
+msgstr "Faible"
 
 msgid "Good"
-msgstr ""
+msgstr "Bien"
 
 msgid "Strong"
-msgstr ""
+msgstr "Fort"
 
 msgid "Maximun number of emails sent by month"
-msgstr ""
+msgstr "Nombre maximum de courriels envoyés par mois"
 
-#, fuzzy
 msgid "Piwik Statistics"
-msgstr "Statistiques"
+msgstr "Statistiques dans Piwik"
 
 msgid "Page ID:"
-msgstr ""
+msgstr "Page ID:"
 
 msgid ""
 "You can get your Piwik Site information from <a href=\"https://piwik."
 "openhost.es/admin\">our Piwik server</a>."
 msgstr ""
+"Vous pouvez obtenir vos informations Piwik Site de notre <a href=\"https://"
+"piwik.openhost.es/admin\"> serveur Piwik</a>."
 
 msgid "Server url"
-msgstr ""
+msgstr "URL du serveur"
 
-#, fuzzy
 msgid "Do you want to delete the instance?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer le journal?"
 
-#, fuzzy
 msgid "Do you want to delete the selected instances?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer les journaux sélectionnés?"
 
 msgid "Download CSV of selected"
 msgstr "Télécharger CSV sélectionné"
 
-#, fuzzy
 msgid "Search"
-msgstr "Recherche Globale"
+msgstr "Recherche"
 
 msgid "Reset filters"
 msgstr "Réinitialiser les filtres"
@@ -7986,70 +8176,78 @@ msgid "Columns"
 msgstr "Colonnes"
 
 msgid "Domain expire"
-msgstr ""
+msgstr "Domaine expire"
 
 msgid "Last activity"
-msgstr ""
+msgstr "Dernière Activité"
 
-#, fuzzy
 msgid "Emails"
-msgstr "Email"
+msgstr "Emails"
 
 msgid "Alexa"
-msgstr ""
+msgstr "Alexa"
 
 msgid "Page views"
-msgstr ""
+msgstr "Pages vues"
 
-#, fuzzy
 msgid "#"
 msgstr "#"
 
 msgid "No rank"
-msgstr ""
+msgstr "Sans rang"
 
 msgid ""
 "Welcome to Opennemas! Learn how to publish your news in just few seconds!"
 msgstr ""
+"Bienvenue à Opennemas! Apprenez comment publier vos nouvelles en seulement "
+"quelques secondes!"
 
 msgid "Hi"
-msgstr ""
+msgstr "Salut"
 
-#, fuzzy
 msgid "Your newspaper is already live:"
-msgstr "Votre paiement a été déjà enregistré"
+msgstr "Votre journal est déjà en direct:"
 
-#, fuzzy
 msgid "Webpage:"
-msgstr "Page d'accueil"
+msgstr "Page d'accueil:"
 
 msgid "Admin panel:"
-msgstr ""
+msgstr "Panneau d'administration:"
 
 msgid ""
 "For security reasons we advise you to change your password after first login "
 "to Admin Panel."
 msgstr ""
+"Pour des raisons de sécurité, nous vous conseillons de changer votre mot de "
+"passe après la première connexion au panneau d'administration."
 
 msgid ""
 "If you have doubts about frontpage management or need a quick walk through "
 "we have <strong>video demo</strong> 3 minutes long"
 msgstr ""
+"Si vous avez des doutes sur la gestion de frontpage ou si vous avez besoin "
+"d'une marche rapide, nous avons <strong> demo vidéo </strong> 3 minutes"
 
 msgid ""
 "How to create/edit <strong>articles</strong> and place them in a frontpage"
 msgstr ""
+"Comment créer/modifier des <strong> articles </strong> et les placer dans "
+"une première page"
 
 msgid ""
 "How to upload and add&nbsp;<strong>images</strong>&nbsp;to your "
 "articles&nbsp;"
 msgstr ""
+"Comment télécharger et ajouter des &nbsp;<strong>images</strong>&nbsp; à vos "
+"articles&nbsp;"
 
 msgid "How to compose a&nbsp;<strong>frontpage</strong>"
-msgstr ""
+msgstr "Comment composer une &nbsp;<strong>page d'accueil</strong>"
 
 msgid "We also have help page \"First Steps in Opennemas\" that should help"
 msgstr ""
+"Nous avons également la page d'aide \"Premiers pas dans Opennemas\" qui "
+"devrait aider"
 
 msgid "A new instance has been created"
 msgstr "Une nouvelle instance a été créée"
@@ -8092,11 +8290,33 @@ msgstr "Nouveau achat"
 msgid "Edit purchase"
 msgstr "Modifier achat"
 
+msgid "Instance"
+msgstr "Journal"
+
+#, fuzzy
+msgid "ID"
+msgstr "UUID"
+
+msgid "Info"
+msgstr ""
+
 msgid "Client"
 msgstr "Client"
 
+#, fuzzy
+msgid "No client data available"
+msgstr "Contenu non disponible"
+
+#, fuzzy
+msgid "No payment data availble"
+msgstr "Contenu non disponible"
+
 msgid "Invoice"
 msgstr "Facture"
+
+#, fuzzy
+msgid "No invoice data availble"
+msgstr "Sondage non disponible"
 
 msgid "Step"
 msgstr ""
@@ -8127,9 +8347,6 @@ msgstr "Modules d'achat"
 msgid "Search by client"
 msgstr "Recherche par client"
 
-msgid "Method"
-msgstr ""
-
 msgid "Client ID"
 msgstr "ID du Client"
 
@@ -8139,12 +8356,9 @@ msgstr "ID Paiement"
 msgid "Invoice ID"
 msgstr "ID facture"
 
-msgid "Instance"
-msgstr "Instance"
-
 #, fuzzy
 msgid "No information"
-msgstr "Obtenir des information"
+msgstr "Plus d'informations"
 
 msgid "New user group"
 msgstr "Nouveau groupe d'utilisateur"
@@ -8212,15 +8426,18 @@ msgstr "Thème complément"
 msgid "Select a category..."
 msgstr "Choisir une catégorie..."
 
-#, fuzzy
 msgid "Pack"
-msgstr "Pack"
+msgstr "Paquet"
 
 msgid "Partner"
 msgstr "Associé"
 
 msgid "Monthly"
 msgstr "Mensuel"
+
+#, fuzzy
+msgid "w/customization"
+msgstr "Personnalisations Crónicas"
 
 msgid "Yearly"
 msgstr "Annuel"
@@ -8256,208 +8473,195 @@ msgid "translations left"
 msgstr "traductions gauche"
 
 msgid "Delete instance"
-msgstr ""
+msgstr "Supprimer le journal"
 
-#, fuzzy
 msgid "Delete selected instances"
-msgstr "Les éléments sélectionnés supprimés avec succès"
+msgstr "Supprimer les journaux sélectionnées"
 
-#, fuzzy
 msgid "Delete selected users"
-msgstr "Élément sélectionné"
+msgstr "Supprimer les utilisateurs sélectionnés"
 
 msgid "Delete user group"
-msgstr ""
+msgstr "Supprimer un groupe d'utilisateurs"
 
-#, fuzzy
 msgid "Delete selected user groups"
-msgstr "Impossible de créer le nouveau groupe d'utilisateurs"
+msgstr "Supprimer les groupes d'utilisateurs sélectionnés"
 
 msgid "Delete notification"
-msgstr ""
+msgstr "Supprimer notification"
 
 msgid "Delete notifications"
-msgstr ""
+msgstr "Supprimer les notifications"
 
-#, fuzzy
 msgid "Delete module"
-msgstr "Supprimer"
+msgstr "Supprimer le module"
 
-#, fuzzy
 msgid "Delete modules"
-msgstr "Supprimer"
+msgstr "Supprimer les modules"
 
 msgid "Do you really want to exit from backend?"
-msgstr ""
+msgstr "Voulez-vous vraiment quitter le backend?"
 
-#, fuzzy
 msgid "Do you really want to delete the instance?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous vraiment supprimer le journal?"
 
 msgid "Do you really want to delete the selected instances?"
-msgstr ""
+msgstr "Voulez-vous vraiment supprimer les journaux sélectionnées?"
 
-#, fuzzy
 msgid "Do you really want to delete the user?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous vraiment supprimer l'utilisateur?"
 
 msgid "Do you really want to delete the selected users?"
-msgstr ""
+msgstr "Voulez-vous vraiment supprimer les utilisateurs sélectionnés?"
 
-#, fuzzy
 msgid "Do you really want to delete the user group?"
-msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
+msgstr "Voulez-vous vraiment supprimer le groupe d'utilisateurs?"
 
 msgid "Do you really want to delete the selected user groups?"
 msgstr ""
+"Voulez-vous vraiment supprimer les groupes d'utilisateurs sélectionnés?"
 
 msgid "Do you really want to delete the notification?"
-msgstr ""
+msgstr "Voulez-vous vraiment supprimer la notification?"
 
 msgid "Do you really want to delete the selected notifications?"
-msgstr ""
+msgstr "Voulez-vous vraiment supprimer les notifications sélectionnées?"
 
-#, fuzzy
 msgid "Do you really want to delete the selected modules?"
-msgstr "Impossible de supprimer le groupe de l'utilisateur avec l'id \"%d\""
+msgstr "Voulez-vous vraiment supprimer les modules sélectionnés?"
 
 msgid "log out"
-msgstr ""
+msgstr "Déconnecter"
 
-#, fuzzy
 msgid "delete it"
-msgstr "Supprimer"
+msgstr "Supprime-le"
 
 msgid "delete them"
-msgstr ""
+msgstr "supprimer"
 
 msgid "New version"
-msgstr ""
+msgstr "Nouvelle version"
 
 msgid "A new version of Opennemas is downloaded. Launch it?"
-msgstr ""
+msgstr "Une nouvelle version de Opennemas est téléchargé. Lancez-le?"
 
 msgid "Launch"
-msgstr ""
+msgstr "Lancer"
 
 #, fuzzy
-msgid "Welcome to OpenNeMas instance manager"
-msgstr "Accédez au gestionnaire instance"
+msgid "Welcome to OpenNeMas manager"
+msgstr "Bienvenue à  journal OpenNeMas gestionnaire"
 
-msgid ""
-"Here you will see some statistics about <strong>instances</strong> and other "
-"<br>\n"
-"        awesome things that will blow out your imagination."
+msgid "Use the right sidebar to explore the available information."
 msgstr ""
 
 msgid "Zend Opcache status"
-msgstr ""
+msgstr "Statut Zend Opcache"
 
 msgid "Opcache summary"
-msgstr ""
+msgstr "résumé Opcache"
 
-#, fuzzy
 msgid "Detailed statistics"
-msgstr "Statistiques"
+msgstr "Statistiques détaillées"
 
 msgid "Scripts"
 msgstr "Scriptes"
 
 msgid "Path"
-msgstr ""
+msgstr "chemin"
 
 msgid "Memory"
-msgstr ""
+msgstr "Mémoire"
 
 msgid "Hits"
-msgstr ""
+msgstr "Résultats"
 
 msgid "Command output"
-msgstr ""
+msgstr "Sortie de commande"
 
 msgid "Command name:"
-msgstr ""
+msgstr "Nom de la commande:"
 
 msgid "Command name"
-msgstr ""
+msgstr "Nom de la commande"
 
 msgid "Params"
-msgstr ""
+msgstr "Params"
 
 msgid "Cleans the cache for an specific instance"
-msgstr ""
+msgstr "Nettoie le cache pour une instance spécifique"
 
 msgid ""
 "Select the desired instance where clean cache and compile files in.\n"
 "                    <br>Select 'All' for cleaning all the cache/compile "
 "files."
 msgstr ""
+"Sélectionnez le souhaitee Où instance de cache propre et compiler les "
+"fichiers.\n"
+"                     <br> Sélectionnez 'All' pour nettoyer tout le cache / "
+"compiler des fichiers."
 
 msgid ""
 "Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
 "                        from one specific instance."
 msgstr ""
+"Ici vous pouvez supprimer en masse cache, compiler, sessions, et d'autres "
+"choses <br>\n"
+"                         d'une instance spécifique."
 
 msgid "New notification"
-msgstr ""
+msgstr "Nouvelle notification"
 
 msgid "Edit notification"
-msgstr ""
+msgstr "Modifier notification"
 
 msgid "Icon"
-msgstr ""
+msgstr "Icône"
 
-#, fuzzy
 msgid "Pick an icon..."
-msgstr "Choisissez une image"
+msgstr "Choisissez une icône ..."
 
 msgid "No icon"
-msgstr ""
+msgstr "Aucune icône"
 
-#, fuzzy
 msgid "Background"
-msgstr "Backend Gestionnaire"
+msgstr "Background"
 
-#, fuzzy
 msgid "Font color"
-msgstr "Couleur du site"
+msgstr "Couleur de la police"
 
 msgid "Fixed"
 msgstr "Fixé"
 
 msgid "Notification always visible in dropdown"
-msgstr ""
+msgstr "Notification toujours visible dans la liste déroulante"
 
 msgid "Forced"
 msgstr "Forcé"
 
 msgid "Notification always visible before content"
-msgstr ""
+msgstr "Notification toujours visible avant que le contenu"
 
 msgid "Starts"
-msgstr ""
+msgstr "Commence"
 
 msgid "Click to set date"
-msgstr ""
+msgstr "Cliquez pour définir la date"
 
 msgid "Ends"
-msgstr ""
+msgstr "Fin"
 
 msgid "Show only for admins"
-msgstr ""
+msgstr "Afficher uniquement pour les administrateurs"
 
 msgid "Target"
 msgstr ""
 
-#, fuzzy
 msgid "Do you want to delete the notification?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer la notification?"
 
-#, fuzzy
 msgid "Do you want to delete the selected notifications?"
-msgstr ""
-"Etes-vous sûr que vous voulez supprimer la configuration du serveur "
-"sélectionné?"
+msgstr "Voulez-vous supprimer les notifications sélectionnées?"
 
 msgid "Unfixed"
 msgstr "Non fixé"
@@ -8466,13 +8670,13 @@ msgid "Unforced"
 msgstr "Non forcé"
 
 msgid "L10n"
-msgstr ""
+msgstr "L10n"
 
 msgid "Start"
-msgstr ""
+msgstr "Démarrer"
 
 msgid "End"
-msgstr ""
+msgstr "Fin"
 
 #, fuzzy
 msgid "Read"
@@ -8490,69 +8694,69 @@ msgstr "OpenX"
 msgid "Download report"
 msgstr "Télécharger"
 
-#, fuzzy
 msgid "New client"
-msgstr "Nouveau fichier"
+msgstr "Nouveau client"
+
+msgid "Edit client"
+msgstr "Modifier le client"
 
 #, fuzzy
-msgid "Edit client"
-msgstr "Modifier le contenu d'autres auteurs"
+msgid "Partner who can see this client information"
+msgstr "Impossible de créer l'utilisateur avec cette information"
+
+msgid "View on"
+msgstr "Vue sur"
 
 #, fuzzy
 msgid "This field is invalid"
 msgstr "Ce UUID est invalide"
 
 msgid "VAT No."
-msgstr ""
+msgstr "Numéro TVA"
 
-msgid "View on"
-msgstr "Vue sur"
-
-#, fuzzy
 msgid "Do you want to delete the client?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer le client?"
 
-#, fuzzy
 msgid "Do you want to delete the selected clients?"
-msgstr "Vous devez donner un identifiant à supprimer le couverture."
+msgstr "Voulez-vous supprimer les clients sélectionnés?"
 
-#, fuzzy
 msgid "Vat number"
 msgstr "Numéro TVA"
 
 msgid "P.O."
-msgstr ""
+msgstr "P.O."
 
-#, fuzzy
 msgid "Our Videos"
-msgstr "Vidéos"
+msgstr "Nos vidéos"
 
 msgid "Our News"
-msgstr ""
+msgstr "Nos Nouvelles"
 
 msgid "Our Twitter"
-msgstr ""
+msgstr "Notre Twitter"
 
 msgid "Our Facebook"
-msgstr ""
+msgstr "Notre Face"
 
 msgid "Our Google+"
-msgstr ""
+msgstr "Notre Google+"
 
 msgid "Our Company"
-msgstr ""
+msgstr "Notre compagnie"
 
 msgid "Please do not hesitate to share feedback, questions or doubts with us"
 msgstr ""
+"N'hésitez pas à nous faire part de vos commentaires, questions ou doutes."
 
 msgid "<strong>ticketing system"
-msgstr ""
+msgstr "<strong>système de billetterie"
 
 msgid "(also available from Control Panel on the top right);"
 msgstr ""
+"(Également disponible à partir du panneau de commande en haut à droite);"
 
 msgid "Regards,"
-msgstr ""
+msgstr "Cordialement,"
 
 msgid ""
 "<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
@@ -8560,6 +8764,10 @@ msgid ""
 "font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
 "<span style=\"color:#000000\">Team</span>"
 msgstr ""
+"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
+"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
+"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
+"<span style=\"color:#000000\">Équipe</span>"
 
 msgid "We seem to have lost you in the clouds."
 msgstr "Il semble que vous avez perdu dans les nuages."
@@ -8600,7 +8808,7 @@ msgstr "Recherche par nom ou nom d'utilisateur"
 
 #, fuzzy
 msgid "Do you want to log out?"
-msgstr "Voulez-vous supprimer le module?"
+msgstr "Voulez-vous enregistrer %1?"
 
 #~ msgid ""
 #~ "You have reach the maximum users allowed. If you want to create more "
@@ -8621,9 +8829,6 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgstr ""
 #~ "Impossible de modifier l'accès utilisateur backend. Vous avez atteint le "
 #~ "nombre maximum d'utilisateurs."
-
-#~ msgid "Unable to create the user with that information"
-#~ msgstr "Impossible de créer l'utilisateur avec cette information"
 
 #~ msgid "Successfully deleted user with id \"%d\"."
 #~ msgstr "Supprimé avec succès l'utilisateur avec l'id \"%d\"."
@@ -8653,10 +8858,10 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgstr "Impossible d'enregistrer la configuration du cache."
 
 #~ msgid "Smarty cache removed for the instance."
-#~ msgstr "Cache Smarty supprimé pour l'instance."
+#~ msgstr "Cache Smarty supprimé pour l'journal."
 
 #~ msgid "Smarty compiled templates removed for the instance."
-#~ msgstr "Template Smarty compilé supprimés pour l'instance."
+#~ msgstr "Smarty compilé modèles supprimés pour l'journal."
 
 #~ msgid "Base"
 #~ msgstr "Base"
@@ -8668,7 +8873,7 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgstr "Advancé"
 
 #~ msgid "Expert"
-#~ msgstr "Pack Expert"
+#~ msgstr "Expert"
 
 #~ msgid "Unlimited"
 #~ msgstr "Illimité"
@@ -8681,7 +8886,7 @@ msgstr "Voulez-vous supprimer le module?"
 #~ "sera appliqué dès que possible"
 
 #~ msgid "Upgrade instance request for %s"
-#~ msgstr "Demande de actualisation pour le instance %s"
+#~ msgstr "Demande de actualisation pour le journal %s"
 
 #~ msgid "Unable to send your upgrade request. Please try it again."
 #~ msgstr ""
@@ -8733,6 +8938,15 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgid "Redirection: "
 #~ msgstr "Réexpédition:"
 
+#~ msgid "Domain added successfully"
+#~ msgstr "Domaine ajouté avec succès"
+
+#~ msgid "Your request could not been registered"
+#~ msgstr "Votre demande n'a pas pu être enregistrée"
+
+#~ msgid "Your request has been registered"
+#~ msgstr "Votre demande a bien été enregistrée"
+
 #~ msgid "Billing information saved successfully"
 #~ msgstr "Informations de facturation enregistré avec succès"
 
@@ -8767,16 +8981,16 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgstr "Client supprimé avec succès"
 
 #~ msgid "Unable to find the instances for the given criteria"
-#~ msgstr "Impossible de trouver les instances pour les critères donnés"
+#~ msgstr "Impossible de trouver les journaux pour les critères donnés"
 
 #~ msgid "Unable to find the client with id \"%s\""
 #~ msgstr "Impossible de trouver l'élément avec id \"%s\""
 
 #~ msgid "Unable to find the instance with id \"%s\""
-#~ msgstr "Impossible de trouver l'instance avec id \"%s\""
+#~ msgstr "Impossible de trouver l'journal avec id \"%s\""
 
 #~ msgid "%s instances updated successfully."
-#~ msgstr "%d instances mis à jour avec succès"
+#~ msgstr "%d journaux mis à jour avec succès"
 
 #~ msgid "A module with uuid '%s' already exists"
 #~ msgstr "Un module avec le uuid %d id existe déjà"
@@ -8945,6 +9159,14 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgid "User group:"
 #~ msgstr "Groupe d'utilisateurs:"
 
+#~ msgid "You have requested the following purchases for your newspaper \"%1\""
+#~ msgstr "Demandé Vous avez les achats suivants pour votre journal \"%1\""
+
+#~ msgid "Our sales department will contact you to get further information"
+#~ msgstr ""
+#~ "Notre service commercial prendra contact avec vous pour obtenir de plus "
+#~ "amples informations"
+
 #~ msgid ""
 #~ "You are about to order next items. In the next 24hours our sales team "
 #~ "will send you payment and activation information. "
@@ -8963,6 +9185,28 @@ msgstr "Voulez-vous supprimer le module?"
 #~ "You have to complete your billing information to complete the purchase."
 #~ msgstr ""
 #~ "Vous devez remplir vos informations de facturation pour compléter l'achat."
+
+#~ msgid "Thank you for your purchase request!"
+#~ msgstr "Nous vous remercions de votre demande d'achat!"
+
+#~ msgid ""
+#~ "In the next 24 hours you will receive an email with payment instructions "
+#~ "and invoice."
+#~ msgstr ""
+#~ "Dans les prochaines 24 heures, vous recevrez un courriel avec les "
+#~ "instructions de paiement et la facture."
+
+#~ msgid ""
+#~ "Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check "
+#~ "your active features, navigate to <a href=\"http://help.opennemas.com"
+#~ "\">our help</a> or check out <a href=\"http://youtube.com/opennemas\">our "
+#~ "videos</a> to see how easy is to manage Opennemas."
+#~ msgstr ""
+#~ "En attendant, vous pouvez aller à votre  <a href=\"%1\">Mon journal</a> "
+#~ "et vérifier ses caractéristiques actives, accédez à <a href=\"http://help."
+#~ "opennemas.com\">notre aide</a> ou consultez <a href=\"http://youtube.com/"
+#~ "opennemas\">nos vidéos</a> pour voir combien il est facile de gérer "
+#~ "Opennemas."
 
 #~ msgid "Remove cache"
 #~ msgstr "Supprimer le cache"
@@ -8993,7 +9237,7 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgstr "Mise à niveau de l'application"
 
 #~ msgid "Upgrade instance"
-#~ msgstr "La mise à niveau de la instance "
+#~ msgstr "La mise à niveau de la journal "
 
 #~ msgid "Are you sure you want to proceed with this upgrade ?"
 #~ msgstr "Êtes-vous sûr de vouloir procéder à cette mise à jour?"
@@ -9007,12 +9251,33 @@ msgstr "Voulez-vous supprimer le module?"
 #~ msgid "List of modules to unsubscribe"
 #~ msgstr "Liste des modules pour vous désabonner"
 
+#~ msgid "Primary Domain"
+#~ msgstr "domaine principal"
+
+#~ msgid "Technical information"
+#~ msgstr "Informations techniques"
+
 #~ msgid ""
 #~ "I do not have my own domain and I want to create one and redirect it to "
 #~ "my Opennemas digital newspaper"
 #~ msgstr ""
 #~ "Je n'ai pas mon propre domaine et je veux créer un et rediriger vers mon "
 #~ "journal numérique Opennemas"
+
+#~ msgid "Required Domains:"
+#~ msgstr "Domaines requis:"
+
+#~ msgid "You can find your invoice on the following page:"
+#~ msgstr "Vous pouvez trouver votre facture sur la page suivante:"
+
+#~ msgid "Domains to create"
+#~ msgstr "Domaines de créer"
+
+#~ msgid "Domains to redirect"
+#~ msgstr "Domaines de rediriger"
+
+#~ msgid "%1 doesn’t exist."
+#~ msgstr "1% n'existe pas."
 
 #~ msgid "Selected privileges"
 #~ msgstr "Privilèges sélectionnés"
@@ -9022,6 +9287,24 @@ msgstr "Voulez-vous supprimer le module?"
 
 #~ msgid "Use manager account to sign in."
 #~ msgstr "Utilisez le compte de gestionnaire pour vous connecter."
+
+#~ msgid ""
+#~ "Here you will see some statistics about <strong>instances</strong> and "
+#~ "other <br>\n"
+#~ "        awesome things that will blow out your imagination."
+#~ msgstr ""
+#~ "Ici, vous verrez quelques statistiques sur prep <strong> instances </ "
+#~ "strong> et bien d'autres\n"
+#~ "         Que les choses impressionnantes vont souffler votre imagination."
+
+#~ msgid "Maximun activated users"
+#~ msgstr "Nombre maximal d'utilisateurs activés"
+
+#~ msgid "0 for unlimited users"
+#~ msgstr "0 pour les utilisateurs illimités"
+
+#~ msgid "Select modules"
+#~ msgstr "Sélectionnez modules"
 
 #~ msgid "Article - inner"
 #~ msgstr "Article - intérieur"

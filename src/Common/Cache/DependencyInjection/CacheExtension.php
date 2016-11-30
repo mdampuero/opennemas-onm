@@ -5,6 +5,7 @@ namespace Common\Cache\DependencyInjection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class CacheExtension extends Extension
+class CacheExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -24,5 +25,22 @@ class CacheExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        // Parse config to use item names as keys
+        $cache = [];
+        foreach ($config as $conn) {
+            $cache[$conn['name']] = $conn;
+        }
+
+        $container->setParameter('cache', $cache);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/cache'));
+        $loader->load('cache.yml');
     }
 }

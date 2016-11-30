@@ -57,7 +57,7 @@ class InstancePersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete' ])
+            ->setMethods([ 'remove' ])
             ->getMock();
 
         $this->persister = new InstancePersister($this->conn, $this->metadata, $this->cache);
@@ -85,7 +85,7 @@ class InstancePersisterTest extends \PHPUnit_Framework_TestCase
             [ 'domains' => \PDO::PARAM_STR ]
         );
 
-        $this->cache->expects($this->at(1))->method('delete', [ 'garply.com', 'thud.com' ]);
+        $this->cache->expects($this->at(1))->method('remove', [ 'garply.com', 'thud.com' ]);
         $this->persister->update($entity);
     }
 
@@ -107,9 +107,9 @@ class InstancePersisterTest extends \PHPUnit_Framework_TestCase
             [ 'id' => 1 ]
         );
 
-        $this->cache->expects($this->at(0))->method('delete')
+        $this->cache->expects($this->at(0))->method('remove')
             ->with('instance-1');
-        $this->cache->expects($this->at(1))->method('delete')
+        $this->cache->expects($this->at(1))->method('remove')
             ->with([ 'garply.com', 'thud.com' ]);
 
         $this->persister->remove($entity);

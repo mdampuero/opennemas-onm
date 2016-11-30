@@ -135,7 +135,7 @@
               <a href="{url name=admin_store_list}#/module" class="thumbnail">
                 <i class="fa fa-archive"></i>
                 <div class="title">{t}Modules{/t}</div>
-                <div class="description">{t}Adds an specific feature in your site{/t}</div>
+                <div class="description">{t}Add a specific feature in your site{/t}</div>
               </a>
             </div>
           </div>

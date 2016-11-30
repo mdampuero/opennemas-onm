@@ -118,12 +118,12 @@ class RedisTest extends KernelTestCase
         $this->redis->set('foo', 'bar', 60);
         $this->assertTrue($this->redis->exists('foo'));
         $this->assertEquals('bar', $this->redis->get('foo'));
-        $this->redis->delete('foo');
+        $this->redis->remove('foo');
         $this->assertEmpty($this->redis->get('foo'));
 
         $this->redis->set('flob', $object);
         $this->assertEquals($object, $this->redis->get('flob'));
-        $this->redis->delete('flob');
+        $this->redis->remove('flob');
         $this->assertEmpty($this->redis->get('flob'));
     }
 
@@ -150,7 +150,7 @@ class RedisTest extends KernelTestCase
 
         $this->assertEquals('bar', $this->redis->get('foo'));
         $this->assertEquals('wibble', $this->redis->get('fred'));
-        $this->redis->delete([ 'foo', 'fred' ]);
+        $this->redis->remove([ 'foo', 'fred' ]);
         $this->assertEmpty($this->redis->get([ 'foo', 'fred' ]));
     }
 }
