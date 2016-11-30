@@ -101,7 +101,7 @@ class File extends Cache
         $path = $this->path;
 
         if (!$fs->exists($path)) {
-            $fs->mkdir($path, 0755);
+            $fs->mkdir($path, 0775);
         }
 
         return $fs;
