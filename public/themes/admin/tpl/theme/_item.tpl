@@ -30,6 +30,12 @@
           {t}Live demo{/t}
         </h5>
       </a>
+      <a ng-if="type === 'purchased' && item.parameters.guideline_file !== undefined" class="m-t-10 pull-left" ng-href="/themes/forseti/[% item.parameters.guideline_file %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Download the guideline for this theme{/t}">
+        <h5 class="uppercase">
+          <i class="fa fa-download"></i>
+          {t}Download guideline{/t}
+        </h5>
+      </a>
       <button class="btn fly-to-cart pull-right" ng-class="{ 'btn-danger': isInCart(item), 'btn-success': !isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isPurchased(item)">
         <h5>
           <span class="semi-bold text-white uppercase" ng-if="!isInCart(item) && !isPurchased(item)">
