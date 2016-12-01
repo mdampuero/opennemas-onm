@@ -396,10 +396,14 @@ class CheckoutHelper
             ->getRepository('Extension')
             ->findBy($oql);
 
+        $uuids = [];
         foreach ($includes as $extension) {
-            $extensions =
-                array_merge($extensions, $extension->modules_included);
+            $uuids[]    = $extension->uuid;
+            $extensions = array_merge($extensions, $extension->modules_included);
         }
+
+        // Exclude packs
+        $extensions = array_diff($extensions, $uuids);
 
         return $extensions;
     }
