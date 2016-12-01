@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+  <button type="button" class="close" ng-click="close({ success: imported })" aria-hidden="true">×</button>
   <h4 class="modal-title">{t}Import items{/t}</h4>
 </div>
 <div class="modal-body" ng-if="!loading && !imported" ng-init="init()">
