@@ -38,7 +38,7 @@ class KeywordsController extends Controller
      */
     public function listAction(Request $request)
     {
-        $search = $request->request->get('search');
+        $search = $request->query->get('search');
         $page = $request->query->getDigits('page', 1);
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
 
