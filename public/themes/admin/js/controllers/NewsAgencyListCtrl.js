@@ -64,7 +64,7 @@
           });
 
           modal.result.then(function(response) {
-            if (response) {
+            if (response.sucess) {
               if (response.messages) {
                 messenger.post(response.messages);
               }
