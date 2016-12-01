@@ -25,6 +25,9 @@ backend_ws_domain:
 backend_ws_getting_started:
     resource: '@BackendWebServiceBundle/Resources/config/routing/getting_started.yml'
     prefix:   /
+backend_ws_letters:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/letter.yml'
+    prefix:   /
 
 backend_ws_menus:
     resource: '@BackendWebServiceBundle/Resources/config/routing/menus.yml'

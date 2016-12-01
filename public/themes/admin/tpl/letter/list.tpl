@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div action="{url name=admin_letters}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('letter', { content_status: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div action="{url name=admin_letters}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('letter', { content_status: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_letters_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -9,7 +9,7 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-envelope"></i>
-              <span class="hidden-xs">{t}Letters to the Editor{/t}</span> <span class="visible-xs-inline">{t}Letters{/t}</span>
+              <span class="hidden-xs">{t}Letter to the editor{/t}</span> <span class="visible-xs-inline">{t}Letters{/t}</span>
             </h4>
           </li>
         </ul>
@@ -155,7 +155,7 @@
                 </td>
                 <td class="center hidden-xs">
                   <span ng-if="content.image">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.photo.path_img" transform="thumbnail,120,120"></dynamic-image>
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[content.photo].path_img" transform="thumbnail,120,120"></dynamic-image>
                   </span>
                 </td>
                 <td>
