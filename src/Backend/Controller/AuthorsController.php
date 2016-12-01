@@ -226,7 +226,7 @@ class AuthorsController extends Controller
 
                 // TODO: Use remove when merging ONM-1655
                 $this->get('cache.manager')->getConnection('instance')
-                    ->delete('user-' . $user->id);
+                    ->remove('user-' . $user->id);
 
                 // Clear caches
                 dispatchEventWithParams('author.update', array('id' => $userId));
