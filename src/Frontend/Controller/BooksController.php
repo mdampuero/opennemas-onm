@@ -40,8 +40,7 @@ class BooksController extends Controller
         $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
 
         // Setup caching system
-        $this->view = $this->get('core.template');
-        $this->view->setConfig('book-frontpage');
+        $this->view->setConfig('article-inner');
         $cacheID = $this->view->generateCacheId($categoryName, null, $this->page);
 
         $contentType = \ContentManager::getContentTypeIdFromName('book');
@@ -106,7 +105,7 @@ class BooksController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view->setConfig('book-inner');
+        $this->view->setConfig('article-inner');
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $book->id);
         if ($this->view->getCaching() === 0
