@@ -128,7 +128,7 @@ class MenusController extends Controller
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('Content');
 
-        $oql = 'content_type_name = "static_page" and in_litter = 0'
+        $oql = 'content_type_name = "static_page" and in_litter="0"'
            . ' order by created desc';
 
         $staticPages = $em->getRepository('Content')->findBy($oql);
@@ -229,7 +229,7 @@ class MenusController extends Controller
             $em        = $this->get('orm.manager');
             $converter = $em->getConverter('Content');
 
-            $oql = 'content_type_name = "static_page" and in_litter = 0'
+            $oql = 'content_type_name = "static_page" and in_litter = "0"'
                . ' order by created desc';
 
             $staticPages = $em->getRepository('Content')->findBy($oql);

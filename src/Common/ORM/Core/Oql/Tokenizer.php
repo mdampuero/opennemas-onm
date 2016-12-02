@@ -170,7 +170,7 @@ class Tokenizer
             // Split query in tokens to ignore replacements
             $tokens = preg_split('/' . implode('|', $step) . '/', $query);
             $tokens = array_filter($tokens, function ($a) {
-                return !empty(trim($a));
+                return trim($a) !== "";
             });
         }
 

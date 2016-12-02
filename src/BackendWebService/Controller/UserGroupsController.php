@@ -89,6 +89,11 @@ class UserGroupsController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
+        // TODO: Remove the pk_user_group condition when implementing ticket ONM-1660
+        if (!$this->get('core.security')->hasRole('ROLE_MASTER')) {
+            $oql = $this->get('orm.oql.fixer')->fix($oql)->addCondition('pk_user_group != 4')->getOql();
+        }
+
         $repository = $this->get('orm.manager')->getRepository('UserGroup');
         $converter  = $this->get('orm.manager')->getConverter('UserGroup');
 

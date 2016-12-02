@@ -118,7 +118,9 @@ class InstanceSyncController extends Controller
         $element = [];
         $authError = false;
         if (!empty($siteUrl)) {
+            $siteUrl = rtrim($siteUrl, '/\\');
             $url = $siteUrl.'/ws/categories/lists.xml';
+
             // Fetch content using digest authentication
             $xmlString = $this->getContentFromUrlWithDigestAuth($url, $username, $password);
 
@@ -247,41 +249,57 @@ class InstanceSyncController extends Controller
      **/
     private function getContentFromUrlWithDigestAuth($url, $username, $password)
     {
+        $options = [
+            CURLOPT_URL            => $url,
+            CURLOPT_HEADER         => true,
+            CURLOPT_VERBOSE        => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => false,    // for https
+            CURLOPT_USERPWD        => $username . ":" . $password,
+            CURLOPT_HTTPAUTH       => CURLAUTH_DIGEST,
+        ];
         $ch = curl_init();
+        curl_setopt_array( $ch, $options );
 
         $httpCode = '';
         $maxRedirects = 0;
         $redirectsAllowed = 3;
 
         do {
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-            if (!empty($username) && !empty($password)) {
-                curl_setopt($ch, CURLOPT_USERPWD, "{$username}:{$password}");
-            }
-            curl_setopt($ch, CURLOPT_HEADER, 1);
-            $content = curl_exec($ch);
+            try {
+                $content = curl_exec( $ch );
 
-            $response = explode("\r\n\r\n", $content);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                // validate CURL status
+                if (curl_errno($ch)) {
+                    throw new \Exception(curl_error($ch), 500);
+                }
 
-            if ($httpCode == 404) {
+                // validate HTTP status code (user/password credential issues)
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                if ($httpCode != 200) {
+                    throw new \Exception("Response with Status Code [" . $httpCode . "].", 500);
+                }
+                $response = explode("\r\n\r\n", $content);
+                $content = $response[count($response) -1];
+
+                if ($httpCode == 301 || $httpCode == 302) {
+                    $matches = array();
+                    preg_match('/(Location:|URI:)(.*?)\n/', $response[0], $matches);
+                    $url = trim(array_pop($matches));
+                }
+            } catch(\Exception $ex) {
+                if ($ch != null) {
+                    curl_close($ch);
+                }
                 return false;
             }
 
-            $content = $response[count($response) -1];
-
-            if ($httpCode == 301 || $httpCode == 302) {
-                $matches = array();
-                preg_match('/(Location:|URI:)(.*?)\n/', $response[0], $matches);
-                $url = trim(array_pop($matches));
-            }
-
             $maxRedirects++;
-        } while ($httpCode == 302 ||
-                 $httpCode == 301 ||
-                 $maxRedirects > $redirectsAllowed
+        } while (
+            $httpCode == 302 ||
+            $httpCode == 301 ||
+            $maxRedirects > $redirectsAllowed
         );
 
         curl_close($ch);

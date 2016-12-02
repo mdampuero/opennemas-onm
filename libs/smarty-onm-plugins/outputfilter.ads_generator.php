@@ -85,7 +85,7 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
                 $customCode = "\n".base64_decode($dfpCustomCode);
             }
 
-            $dfpOutput = "﻿<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>\n"
+            $dfpOutput = "<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>\n"
                 ."<script>\n"
                 ."var googletag = googletag || {};\n"
                 ."googletag.cmd = googletag.cmd || [];\n"

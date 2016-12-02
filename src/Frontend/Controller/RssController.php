@@ -82,7 +82,8 @@ class RssController extends Controller
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Set total number of contents
-            $total = 10;
+            $total = $this->get('setting_repository')->get('elements_in_rss', 10);
+
             $rssTitle = '';
             switch ($categoryName) {
                 case 'opinion':
@@ -94,6 +95,16 @@ class RssController extends Controller
                     // Latest news
                     $rssTitle = _('Latest News');
                     $contents = $this->getLatestContents('article', $total);
+                    break;
+                case 'home':
+                    // Homepage news
+                    $rssTitle = _('Homepage News');
+                    $cm       = new \ContentManager;
+                    $contents = $cm->getContentsForHomepageOfCategory(0);
+                    $contents = $cm->getInTime($contents);
+                    $contents = array_filter($contents, function($item){
+                        return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
+                    });
                     break;
                 case 'videos':
                     // Latest videos

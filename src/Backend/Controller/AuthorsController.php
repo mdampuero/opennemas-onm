@@ -98,14 +98,12 @@ class AuthorsController extends Controller
         $data = array(
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-            'sessionexpire'   => 60,
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'id_user_group'   => array(3),
             'ids_category'    => array(),
             'activated'       => 0,
             'type'            => 1,
-            'deposit'         => 0,
             'token'           => null,
         );
 

@@ -255,7 +255,13 @@ class Kiosko extends Content
             $imagick->setImageBackgroundColor('white');
             $imagick->thumbnailImage(650, 0);
 
-            $imagick = $imagick->flattenImages();
+            // Deprecated: $imagick = $imagick->flattenImages();
+            // $imagick->setImageAlphaChannel(imagick::ALPHACHANNEL_REMOVE);
+            // This constant used above is not supported for all versions of Imagick
+            // Use number (11) to solve problem
+            // http://php.net/manual/en/imagick.flattenimages.php#116956
+            $imagick->setImageAlphaChannel(11);
+            $imagick->mergeImageLayers(imagick::LAYERMETHOD_FLATTEN);
             $imagick->setFormat('png');
 
             // First, save to PNG (*.pdf => /tmp/xxx.png)

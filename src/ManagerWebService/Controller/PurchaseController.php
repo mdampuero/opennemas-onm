@@ -251,8 +251,12 @@ class PurchaseController extends Controller
             array_pop($purchase->details);
         }
 
+        $converter = $em->getConverter('Instance');
+        $instance  = $em->getRepository('Instance')->find($purchase->instance_id);
+
         return new JsonResponse([
             'purchase' => $converter->responsify($purchase->getData()),
+            'instance' => $converter->responsify($instance),
             'extra'    => $this->getExtraData()
         ]);
     }

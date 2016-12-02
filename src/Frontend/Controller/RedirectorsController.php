@@ -39,9 +39,10 @@ class RedirectorsController extends Controller
         $slug       = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
         $oldVersion = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
         $type       = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
+        $fragment   = '';
 
         if ($slug === 'none') {
-            if (!empty($type)) {
+            if (!empty($type) && !(empty($contentId))) {
                 $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($type, $contentId);
             } else {
                 list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromID($contentId);
@@ -74,6 +75,10 @@ class RedirectorsController extends Controller
             );
         } elseif ($type === 'attachment') {
             $content = new \Attachment($newContentID);
+        } elseif ($type === 'comment') {
+            $comment  = new \Comment($newContentID);
+            $fragment = '#comentarios';
+            $content  = new \Content($comment->content_id);
         } else {
             $content = new \Content($newContentID);
         }
@@ -90,7 +95,7 @@ class RedirectorsController extends Controller
             $url = $content->uri;
         }
 
-        return new RedirectResponse($url, 301);
+        return new RedirectResponse($url . $fragment, 301);
     }
 
     /**

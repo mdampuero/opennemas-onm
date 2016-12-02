@@ -134,7 +134,7 @@
                     <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
                   </div>
                   {else}
-                  <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
+                  <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in Opennemas{/t}">
                     {gravatar email=$user->email image_dir=$_template->getImageDir() image=true size="150"}
                   </div>
                   {/if}
@@ -298,12 +298,12 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label class="form-label" for="id_user_group">{t}User group{/t}</label>
-                  <div class="controls" ng-init="groups = {json_encode($extra['user_groups'])|clear_json};selectedGroups = {json_encode($selected['user_groups'])|clear_json}">
+                  <div class="controls ng-cloak" ng-init="groups = {json_encode($extra['user_groups'])|clear_json};selectedGroups = {json_encode($selected['user_groups'])|clear_json}">
                     {acl isAllowed="USER_ADMIN"}
                     <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                     {/acl}
                   </div>
-                  <div class="m-t-10 m-b-10">
+                  <div class="m-t-10 m-b-10 ng-cloak">
                     <span class="badge m-r-5" ng-repeat="group in selectedGroups">
                       [% group.name %]
                       <input type="hidden" name="fk_user_group[]" value="[% group.id %]">
@@ -315,12 +315,12 @@
                 <div class="form-group">
                   <label class="form-label" for="categories">{t}Categories{/t}</label>
                   <div class="help">{t}Categories that this user will have access to. Leave empty to give access to all categories{/t}</div>
-                  <div class="controls" ng-init="categories = {json_encode($extra['categories'])|clear_json};selectedCategories = {json_encode($selected['categories'])|clear_json}">
+                  <div class="controls ng-cloak" ng-init="categories = {json_encode($extra['categories'])|clear_json};selectedCategories = {json_encode($selected['categories'])|clear_json}">
                     {acl isAllowed="USER_ADMIN"}
                     <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                     {/acl}
                   </div>
-                  <div class="m-t-10 m-b-10">
+                  <div class="m-t-10 m-b-10 ng-cloak">
                     <span class="badge m-r-5" ng-repeat="category in selectedCategories">
                       [% category.title %]
                       <input type="hidden" name="categories[]" value="[% category.id %]">

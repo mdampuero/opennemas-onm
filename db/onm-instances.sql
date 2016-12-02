@@ -409,14 +409,12 @@ CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
-  `sessionexpire` tinyint(2) unsigned NOT NULL DEFAULT '15',
   `url` varchar(255) DEFAULT '',
   `bio` text,
   `avatar_img_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
-  `deposit` decimal(10,0) NOT NULL DEFAULT '0',
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
   `fk_user_group` varchar(100) DEFAULT NULL,
@@ -430,7 +428,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (3,'macada','2f575705daf41049194613e47027200b',30,'',NULL,0,'david.martinez@openhost.es','David Martinez',0,0,NULL,1,'4'),(4,'alex','4c246829b53bc5712d52ee777c52ebe7',60,'',NULL,0,'alex@openhost.es','Alexandre Rico',0,0,NULL,1,'4'),(5,'fran','6d87cd9493f11b830bbfdf628c2c4f08',65,'',NULL,0,'fran@openhost.es','Francisco Dieguez',0,0,NULL,1,'4'),(7,'sandra','bd80e7c35b56dccd2d1796cf39cd05f6',99,'',NULL,0,'sandra@openhost.es','Sandra Pereira',0,0,NULL,1,'4');
+INSERT INTO `users` VALUES (3,'macada','2f575705daf41049194613e47027200b','',NULL,0,'david.martinez@openhost.es','David Martinez',0,NULL,1,'4'),(4,'alex','4c246829b53bc5712d52ee777c52ebe7','',NULL,0,'alex@openhost.es','Alexandre Rico',0,NULL,1,'4'),(5,'fran','6d87cd9493f11b830bbfdf628c2c4f08','',NULL,0,'fran@openhost.es','Francisco Dieguez',0,NULL,1,'4'),(7,'sandra','bd80e7c35b56dccd2d1796cf39cd05f6','',NULL,0,'sandra@openhost.es','Sandra Pereira',0,NULL,1,'4');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

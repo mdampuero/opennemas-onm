@@ -88,9 +88,11 @@ class TagsController extends Controller
                 if (in_array($tag, $arrayMetadatas)) {
                     $item = $item->get($item->id);
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image           = $er->find('Photo', $item->img1);
-                        $item->img1_path = $image->path_file.$image->name;
-                        $item->img1      = $image;
+                        $image = $er->find('Photo', $item->img1);
+                        if (is_object($image) && !is_null($image->id)) {
+                            $item->img1_path = $image->path_file.$image->name;
+                            $item->img1      = $image;
+                        }
                     }
 
                     if ($item->fk_content_type == 7) {

@@ -68,7 +68,27 @@ class ImagesController extends Controller
      */
     public function listAction()
     {
-        return $this->render('image/list.tpl');
+        $years = array();
+
+        $conn = $this->get('orm.manager')->getConnection('instance');
+
+        $results = $conn->fetchAll(
+            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
+            WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
+        );
+
+        foreach ($results as $value) {
+            $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
+            $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+
+            $years[$date->format('Y')]['name'] = $date->format('Y');
+            $years[$date->format('Y')]['months'][]= array(
+                'name'  => ucfirst($fmt->format($date)),
+                'value' => $value['date_month']
+            );
+        }
+
+        return $this->render('image/list.tpl', [ 'years' => array_values($years)]);
     }
 
     /**

@@ -296,7 +296,6 @@ class CoversController extends Controller
                 'type'           => $postReq->getDigits('type', 0),
                 'favorite'       => $postReq->getDigits('favorite', 0),
                 'category'       => $postReq->getDigits('category', 0),
-                'category'       => $postReq->getDigits('category', 0),
                 'name'           => $cover->name,
                 'thumb_url'      => $cover->thumb_url,
                 'fk_user_last_editor' => $this->getUser()->id,
@@ -322,7 +321,6 @@ class CoversController extends Controller
             // Handle new file
             if ($request->files->get('cover')) {
                 $data['name'] = date('His').'-'.$data['category'].'.pdf';
-                $data['thumb_url'] = preg_replace('/\.pdf$/', '.jpg', $_POST['name']);
                 $path = $cover->kiosko_path . $cover->path;
 
                 // Create folder if it doesn't exist

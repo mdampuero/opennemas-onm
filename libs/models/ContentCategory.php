@@ -160,6 +160,8 @@ class ContentCategory
             }
 
             $this->load($rs);
+
+            $this->id = $this->pk_content_category;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;

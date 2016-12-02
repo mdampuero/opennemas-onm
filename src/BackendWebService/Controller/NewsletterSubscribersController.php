@@ -38,9 +38,9 @@ class NewsletterSubscribersController extends Controller
      */
     public function listAction(Request $request)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search', '');
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search', '');
 
         // Build filters for sql
         list($where, $orderBy) = $this->buildFilter($search);
@@ -124,7 +124,7 @@ class NewsletterSubscribersController extends Controller
         $user = new \Subscriber($id);
 
         $subscription = ($user->subscription + 1) % 2;
-        $toggled = $user->setSubscriptionStatus($user->id, 'subscription', $subscription);
+        $toggled = $user->setSubscriptionStatus($user->id, $subscription);
 
         if ($toggled) {
             $messages = array(

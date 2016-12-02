@@ -248,14 +248,12 @@ class FrontpagesController extends Controller
             }
 
             $actualCategory = (empty($subcategory_name))? $categoryName : $subcategory_name;
-            $this->view->assign(
-                array(
-                    'category_name'         => $categoryName,
-                    'actual_category'       => $actualCategory,
-                    'actual_category_id'    => $wsActualCategoryId,
-                    'actual_category_title' => $ccm->getTitle($categoryName),
-                )
-            );
+            $this->view->assign([
+                'category_name'         => $categoryName,
+                'actual_category'       => $actualCategory,
+                'actual_category_id'    => $wsActualCategoryId,
+                'actual_category_title' => $ccm->getTitle($categoryName),
+            ]);
 
             // Get all contents for this frontpage
             $allContentsInHomepage = $cm->getUrlContent(
@@ -267,6 +265,10 @@ class FrontpagesController extends Controller
 
             // Fetch layout for categories
             $layout = $cm->getUrlContent($wsUrl.'/ws/categories/layout/'.$categoryName, true);
+            if (!$layout) {
+                $layout = 'default';
+            }
+
 
             $layoutFile = 'layouts/'.$layout.'.tpl';
 

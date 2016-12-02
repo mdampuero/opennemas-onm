@@ -13,6 +13,7 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
@@ -259,5 +260,54 @@ class CommentsController extends Controller
         }
 
         return  new Response($message, $httpCode);
+    }
+
+    /**
+     * Returns a json containing the list of comments count for each content requested
+     *
+     * @param Request $request the request object
+     *
+     * @return JsonResponse
+     **/
+    public function getCommentsCountAction(Request $request)
+    {
+        // Fetch the list of content ids, clean and filter them
+        $ids  = $ids = $request->query->get('ids', []);
+        $ids = array_unique(array_filter(
+            array_map(
+                function($id) { return (int) $id; },
+                explode(',', $ids)
+            ),
+            function($id){return ((int) $id) > 0; }
+        ));
+
+        // Fetch data from database
+        $commentsCount = [];
+        if (count($ids) > 0) {
+            try {
+                $ids = implode(',', $ids);
+                $conn  = $this->get('orm.manager')->getConnection('instance');
+                $data = $conn->fetchAll('SELECT content_id, COUNT(*) as comments_count FROM comments WHERE content_id IN ('.$ids.') GROUP BY content_id');
+                foreach ($data as $value) {
+                    $commentsCount[$value['content_id']] = $value['comments_count'];
+                }
+            } catch (\Exception $e) {
+                return new JsonResponse($commentsCount, 500);
+            }
+        }
+
+        // Prepare response
+        $response = new JsonResponse();
+        $response->setData($commentsCount);
+        // Add edge cache support
+        $response->headers->set('x-tags', 'comments,'.$ids);
+        $response->headers->set('x-cache-for', '300s');
+        $response->headers->set('x-cacheable', 'true');
+
+        // I've opted to not use JSONP so no need of this
+        // $response->setCallback('setFrontpageComments');
+        // $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
     }
 }

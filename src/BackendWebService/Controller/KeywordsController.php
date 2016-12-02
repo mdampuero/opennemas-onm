@@ -38,12 +38,12 @@ class KeywordsController extends Controller
      */
     public function listAction(Request $request)
     {
-        $search = $request->request->get('search');
+        $search = $request->query->get('search');
         $page = $request->query->getDigits('page', 1);
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
 
         $filter = '';
-        if (array_key_exists('title', $search)) {
+        if (is_array($search) && array_key_exists('title', $search)) {
             $name = $search['title'][0]['value'];
             $filter = '`pclave` LIKE "%' . $name . '%"';
         }
