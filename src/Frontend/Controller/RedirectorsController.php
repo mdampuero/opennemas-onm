@@ -68,6 +68,7 @@ class RedirectorsController extends Controller
         } elseif ($type === 'category') {
             $content = $this->get('category_repository')->find($newContentID);
             $content->content_type_name = 'category';
+            $content->id = $content->pk_content_category;
             $content->uri = $this->generateUrl(
                 'category_frontpage',
                 [ 'category_name' => $content->name ],
