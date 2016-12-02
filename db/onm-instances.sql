@@ -416,7 +416,6 @@ CREATE TABLE `users` (
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
-  `deposit` decimal(10,0) NOT NULL DEFAULT '0',
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
   `fk_user_group` varchar(100) DEFAULT NULL,
