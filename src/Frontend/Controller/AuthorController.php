@@ -60,8 +60,10 @@ class AuthorController extends Controller
                     $item->author = $user;
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $image = $this->get('entity_repository')->find('Photo', $item->img1);
-                        $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
+                        if (is_object($image) && !is_null($image->id)) {
+                            $item->img1_path = $image->path_file.$image->name;
+                            $item->img1 = $image;
+                        }
                     }
 
                     if ($item->fk_content_type == 7) {
