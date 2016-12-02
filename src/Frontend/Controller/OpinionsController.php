@@ -663,7 +663,7 @@ class OpinionsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
-            $author = $this->get('user_repository')->find($opinion->fk_author);
+            $author = $this->get('user_repository')->find((int)$opinion->fk_author);
             $opinion->author = $author;
             if (is_object($author)
                 && is_array($author->meta)

@@ -498,7 +498,7 @@ class Content
             'content_status'      => (int) $data['content_status'],
             'position'            => (empty($data['position']))? 2: (int) $data['position'],
             'frontpage'           => (!isset($data['frontpage']) || empty($data['frontpage'])) ? 0: intval($data['frontpage']),
-            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : (int) $data['fk_author'],
+            'fk_author'           => (!array_key_exists('fk_author', $data)) ? 0 : (int) $data['fk_author'],
             'fk_publisher'        => (int) getService('session')->get('user')->id,
             'fk_user_last_editor' => (int) getService('session')->get('user')->id,
             'in_home'             => (empty($data['in_home']))? 0: intval($data['in_home']),
