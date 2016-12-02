@@ -42,8 +42,8 @@ class UtilitiesController extends Controller
 
         $json['url'] = $request->query->filter('url', '', FILTER_SANITIZE_STRING);
         $json['time'] = time();
-        // $url = urlencode($request->query->filter('url', '', FILTER_SANITIZE_STRING));
-        // $type = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
+        $url = urlencode($request->query->filter('url', '', FILTER_SANITIZE_STRING));
+        $type = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
 
         // if ($json['url']) {
         //     if ($type == 'googlePlus') {
