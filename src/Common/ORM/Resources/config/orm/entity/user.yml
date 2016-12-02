@@ -13,7 +13,6 @@ orm:
                 bio:                string
                 bio_description:    string
                 categories:         array
-                deposit:            float
                 email:              string
                 fk_user_group:      array
                 id:                 integer
@@ -89,9 +88,6 @@ orm:
                         fk_user_group:
                             type: simple_array
                             options: { default: null, length: 65532, notnull: false }
-                        deposit:
-                            type:    float
-                            options: { default: 0, length: 10, notnull: false }
                         sessionexpire:
                             type:    integer
                             options: { default: 0, length: 2, notnull: false }
