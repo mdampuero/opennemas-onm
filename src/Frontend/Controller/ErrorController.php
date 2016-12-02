@@ -63,20 +63,25 @@ class ErrorController extends Controller
                 $page->content = 'Whoups!';
 
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                // error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
                 if ($this->request->isXmlHttpRequest()) {
                     $content = $errorMessage;
                 } else {
                     $ads = \Frontend\Controller\ArticlesController::getAds();
+
+                    // Load config
+                    $this->view->setConfig('articles');
+
+                    $cacheID = $this->view->generateCacheId('error', null, 404);
                     $content = $this->renderView(
                         'static_pages/404.tpl',
-                        array(
+                        [
+                            'cache_id'           => $cacheID,
                             'category_real_name' => $page->title,
                             'page'               => $page,
                             'advertisements'     => $ads,
                             'x-tags'             => 'not_found',
                             'x-cache-for'        => '+1 day'
-                        )
+                        ]
                     );
                 }
 
@@ -99,15 +104,15 @@ class ErrorController extends Controller
 
                 $content = $this->renderView(
                     'static_pages/statics.tpl',
-                    array(
+                    [
                         'category_real_name' => $page->title,
                         'page'               => $page,
-                        'error_message' => $errorMessage,
-                        'error'         => $error,
-                        'error_id'      => $errorID,
-                        'environment'   => $environment,
-                        'backtrace'     => $error->getTrace(),
-                    )
+                        'error_message'      => $errorMessage,
+                        'error'              => $error,
+                        'error_id'           => $errorID,
+                        'environment'        => $environment,
+                        'backtrace'          => $error->getTrace(),
+                    ]
                 );
 
                 return new Response($content, 500);
