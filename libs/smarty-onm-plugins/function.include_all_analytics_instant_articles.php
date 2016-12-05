@@ -80,7 +80,7 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
     }
 
     // Google Analytics
-    $codes[] = getGoogleAnalyticsCode();
+    $codes[] = getGoogleAnalyticsCode('fia');
     // Piwik
     $codes[] = getPiwikCode();
 
