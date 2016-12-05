@@ -49,8 +49,9 @@ class NitfOpennemas extends Nitf
     {
         $resource = parent::parse($data);
 
-        if (is_object($this->getAuthor($data))) {
-            $resource->author = $this->getAuthor($data);
+        $author = $this->getAuthor($data);
+        if (is_object($author)) {
+            $resource->author = $author;
         }
 
         return $resource;
