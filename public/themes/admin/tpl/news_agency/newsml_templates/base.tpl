@@ -65,6 +65,7 @@
                 <head>
                   <title><![CDATA[{$article->title}]]></title>
                   <docdata management-status="usable">
+                    <doc.rights provider="Opennemas"/>
                     <doc-id id-string="{$article->id}" />
                   </docdata>
                 </head>
