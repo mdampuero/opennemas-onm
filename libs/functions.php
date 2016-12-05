@@ -417,6 +417,8 @@ function getGoogleAnalyticsCode($useImage = false)
 
     if ($useImage === 'amp') {
         $code = genarateGAAmpCode($config);
+    } elseif ($useImage === 'fia') {
+        $code = generateGAScriptCode($config, 'fia');
     } elseif ($useImage) {
         $code = genarateGAImageCode($config);
     } else {
@@ -426,7 +428,7 @@ function getGoogleAnalyticsCode($useImage = false)
     return $code;
 }
 
-function generateGAScriptCode($config)
+function generateGAScriptCode($config, $source = null)
 {
     $code = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
     foreach ($config as $key => $account) {
@@ -446,6 +448,10 @@ function generateGAScriptCode($config)
                 ) {
                     $code .= base64_decode(trim($account['custom_var'])) . "\n";
                 }
+                if ($source == 'fia') {
+                    $code .= "_gaq.push(['_setCampSourceKey', 'Facebook']);\n";
+                    $code .= "_gaq.push(['_setCampMediumKey', 'Instant Articles']);\n";
+                }
                 $code .= "_gaq.push(['_trackPageview']);\n";
             } else {
                 $code .= "_gaq.push(['account{$key}._setAccount', '" . trim($account['api_key']) . "']);\n";
@@ -459,6 +465,10 @@ function generateGAScriptCode($config)
                 ) {
                     $code .= base64_decode(trim($account['custom_var'])) . "\n";
                 }
+                if ($source == 'fia') {
+                    $code .= "_gaq.push(['account{$key}._setCampSourceKey', 'Facebook']);\n";
+                    $code .= "_gaq.push(['account{$key}._setCampMediumKey', 'Instant Articles']);\n";
+                }
                 $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
             }
         }
@@ -466,6 +476,10 @@ function generateGAScriptCode($config)
 
     // Add opennemas Account
     $code .= "_gaq.push(['onm._setAccount', 'UA-40838799-5']);\n";
+    if ($source == 'fia') {
+        $code .= "_gaq.push(['onm._setCampSourceKey', 'Facebook']);\n";
+        $code .= "_gaq.push(['onm._setCampMediumKey', 'Instant Articles']);\n";
+    }
     $code .= "_gaq.push(['onm._trackPageview']);\n";
 
     // Load ga.js script
