@@ -33,14 +33,17 @@ class Agency
     /**
      * Get an xml with elements containing url to the NewsML content
      *
-     * @param int $until
+     * @param int|string $until
      *
      * @return mixed
      */
     protected function export($until = 86400)
     {
-        if ($until == 'no_limits') {
-            $until = 604800;
+        $total = $page = null;
+        if ($until == 'no_limits' || $until == '') {
+            $until = 0;
+            $total = 100;
+            $page  = 1;
         }
 
         $this->validateInt($until);
@@ -50,13 +53,16 @@ class Agency
         $er = getService('entity_repository');
 
         $criteria = array(
-            'content_type_name' => array(array('value' => 'article')),
-            'fk_content_type'   => array(array('value' => 1)),
-            'content_status'    => array(array('value' => 1)),
-            'created'           => array(array('value' => $timeLimit, 'operator' => '>=')),
+            'content_type_name' => [[ 'value' => 'article' ]],
+            'fk_content_type'   => [[ 'value' => 1 ]],
+            'content_status'    => [[ 'value' => 1 ]],
         );
 
-        $articles = $er->findBy($criteria, 'created DESC');
+        if ($until != 0) {
+            $criteria['created'] = [[ 'value' => $timeLimit, 'operator' => '>=' ]];
+        }
+
+        $articles = $er->findBy($criteria, 'created DESC', $total, $page);
 
         $tpl = getService('view')->getBackendTemplate();
 
