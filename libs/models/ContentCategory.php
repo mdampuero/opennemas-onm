@@ -430,7 +430,7 @@ class ContentCategory
             $this->params['inrss'] = $status;
             $this->params = serialize($this->params);
 
-            getService('dbal_connection')->update(
+            $rs = getService('dbal_connection')->update(
                 'content_categories',
                 [ 'params' => $this->params ],
                 [ 'pk_content_category' => $this->pk_content_category ]
