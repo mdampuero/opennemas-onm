@@ -78,11 +78,10 @@ class SubscribersController extends Controller
             ];
         } else {
             // Check reCaptcha
-            if ($this->checkRecaptcha($request)) {
+            if (!$this->checkRecaptcha($request)) {
                 $rs = [
                     'message' => _(
-                        "Sorry, we were unable to complete your request.\n"
-                        ."Check the form and try again"
+                        _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
                     ),
                     'class' => 'error'
                 ];
