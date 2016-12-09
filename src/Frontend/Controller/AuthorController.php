@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Common\ORM\Core\Exception\EntityNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,69 +40,70 @@ class AuthorController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
-            try {
-                $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
+            $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
 
-                $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
+            if (empty($user)) {
+                throw new ResourceNotFoundException();
+            }
 
-                $criteria = array(
-                    'fk_author'       => array(array('value' => $user->id)),
-                    'fk_content_type' => array(array('value' => array(1, 4, 7, 9), 'operator' => 'IN')),
-                    'content_status'  => array(array('value' => 1)),
-                    'in_litter'       => array(array('value' => 0)),
-                );
+            $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
 
-                $er = $this->get('entity_repository');
-                $contentsCount  = $er->countBy($criteria);
-                $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
+            $criteria = array(
+                'fk_author'       => array(array('value' => $user->id)),
+                'fk_content_type' => array(array('value' => array(1, 4, 7, 9), 'operator' => 'IN')),
+                'content_status'  => array(array('value' => 1)),
+                'in_litter'       => array(array('value' => 0)),
+            );
 
-                foreach ($contents as &$item) {
-                    $item = $item->get($item->id);
-                    $item->author = $user;
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = $this->get('entity_repository')->find('Photo', $item->img1);
-                        if (is_object($image) && !is_null($image->id)) {
-                            $item->img1_path = $image->path_file.$image->name;
-                            $item->img1 = $image;
-                        }
-                    }
+            $er = $this->get('entity_repository');
+            $contentsCount  = $er->countBy($criteria);
+            $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
-                    if ($item->fk_content_type == 7) {
-                        $image = $this->get('entity_repository')->find('Photo', $item->cover_id);
+            foreach ($contents as &$item) {
+                $item = $item->get($item->id);
+                $item->author = $user;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $image = $this->get('entity_repository')->find('Photo', $item->img1);
+                    if (is_object($image) && !is_null($image->id)) {
                         $item->img1_path = $image->path_file.$image->name;
                         $item->img1 = $image;
-                        $item->summary = $item->subtitle;
-                        $item->subtitle= '';
-                    }
-
-                    if ($item->fk_content_type == 9) {
-                        $item->obj_video = $item;
-                        $item->summary = $item->description;
-                    }
-
-                    if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                        $item->video = $this->get('entity_repository')->find('Video', $item->fk_video2);
                     }
                 }
-                // Build the pagination
-                $pagination = $this->get('paginator')->get([
-                    'directional' => true,
-                    'epp'         => $itemsPerPage,
-                    'page'        => $page,
-                    'total'       => $contentsCount,
-                    'route'       => [
-                        'name'   => 'frontend_author_frontpage',
-                        'params' => [ 'slug' => $slug, ]
-                    ],
-                ]);
 
-                $this->view->assign([
-                    'contents'   => $contents,
-                    'author'     => $user,
-                    'pagination' => $pagination,
-                ]);
-            } catch (\Exception $e) {
+                if ($item->fk_content_type == 7) {
+                    $image = $this->get('entity_repository')->find('Photo', $item->cover_id);
+                    $item->img1_path = $image->path_file.$image->name;
+                    $item->img1 = $image;
+                    $item->summary = $item->subtitle;
+                    $item->subtitle= '';
+                }
+
+                if ($item->fk_content_type == 9) {
+                    $item->obj_video = $item;
+                    $item->summary = $item->description;
+                }
+
+                if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                    $item->video = $this->get('entity_repository')->find('Video', $item->fk_video2);
+                }
             }
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $contentsCount,
+                'route'       => [
+                    'name'   => 'frontend_author_frontpage',
+                    'params' => [ 'slug' => $slug, ]
+                ],
+            ]);
+
+            $this->view->assign([
+                'contents'   => $contents,
+                'author'     => $user,
+                'pagination' => $pagination,
+            ]);
         }
 
         $ads = $this->getInnerAds();
