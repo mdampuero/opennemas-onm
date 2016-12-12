@@ -113,7 +113,7 @@ class AuthorController extends Controller
             'user/author_frontpage.tpl',
             array(
                 'cache_id'    => $cacheID,
-                'x-tags'      => 'author_user_frontpage,'.$slug.','.$page,
+                'x-tags'      => 'author-user-frontpage,'.$slug.','.$page,
                 'x-cache-for' => '+1 day'
             )
         );
@@ -224,7 +224,7 @@ class AuthorController extends Controller
             'user/frontpage_authors.tpl',
             [
                 'cache_id'    => $cacheID,
-                'x-tags'      => 'authors_users_frontpage,' . $page,
+                'x-tags'      => 'authors-users-frontpage,' . $page,
                 'x-cache-for' => '+1 day'
             ]
         );

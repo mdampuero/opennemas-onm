@@ -279,7 +279,7 @@ class FrontpagesController extends Controller
             'frontpage/frontpage.tpl',
             array(
                 'cache_id' => $cacheID,
-                'x-tags'   => 'externalfrontpage-page,'.$categoryName,
+                'x-tags'   => 'frontpage-page,frontpage-page-external,'.$categoryName,
             )
         );
     }

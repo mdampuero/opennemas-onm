@@ -227,7 +227,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'opinion_frontpage,'.$page,
+                'x-tags'          => 'opinion-frontpage,'.$page,
                 'x-cache-for'     => '+1 day'
             )
         );
@@ -488,7 +488,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'author_frontpage,'.$authorID.','.$page,
+                'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
                 'x-cache-for'     => '+1 day'
             )
         );
