@@ -93,7 +93,6 @@ class UserController extends Controller
                 'username'      => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
                 'name'          => $request->request->filter('full_name', null, FILTER_SANITIZE_STRING),
                 'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
-                'sessionexpire' => 15,
                 'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
                 'type'          => 1, // It is a frontend user registration.
                 'id_user_group' => array(),
