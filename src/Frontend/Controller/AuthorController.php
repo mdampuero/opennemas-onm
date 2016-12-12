@@ -203,6 +203,13 @@ class AuthorController extends Controller
                 $user                 = $map[$item['id']];
                 $user->total_contents = $item['total_contents'];
                 $item                 = $user;
+                // Fetch user avatar if exists
+                if (!empty($item->avatar_img_id)) {
+                    $item->photo = $this->get('entity_repository')->find(
+                        'Photo',
+                        $item->avatar_img_id
+                    );
+                }
             }
 
             $this->view->assign([
