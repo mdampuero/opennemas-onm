@@ -170,7 +170,9 @@ class FrontpagesController extends Controller
                     $keys = $relatedMap[$content->pk_content];
 
                     foreach ($keys as $key) {
-                        $content->related_contents[] = $related[$key];
+                        if (array_key_exists($key, $related)) {
+                            $content->related_contents[] = $related[$key];
+                        }
                     }
                 }
             }
