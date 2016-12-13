@@ -132,9 +132,16 @@ class MenusController extends Controller
            . ' order by created desc';
 
         $staticPages = $em->getRepository('Content')->findBy($oql);
-        $staticPages = $converter->responsify($staticPages);
 
-        // Get categories from menu
+        $statics = [];
+        foreach ($staticPages as $staticPage) {
+            $statics[] = [
+                'title'      => $staticPage->title,
+                'slug'       => $staticPage->slug,
+                'pk_content' => $staticPage->pk_content
+            ];
+        }
+
         $menu = new \Menu($id);
 
         // Fetch synchronized elements if exists
@@ -143,6 +150,7 @@ class MenusController extends Controller
             $syncSites = $syncParams;
         }
 
+        // Get categories from menu
         $menu->items = array_values($menu->items);
 
         return $this->render(
@@ -152,7 +160,7 @@ class MenusController extends Controller
                 'albumCategories' => $albumCategories,
                 'videoCategories' => $videoCategories,
                 'pollCategories'  => $pollCategories,
-                'staticPages'     => $staticPages,
+                'staticPages'     => $statics,
                 'pages'           => $this->pages,
                 'menu'            => $menu,
                 'menu_positions'  => $this->menuPositions,
@@ -233,7 +241,15 @@ class MenusController extends Controller
                . ' order by created desc';
 
             $staticPages = $em->getRepository('Content')->findBy($oql);
-            $staticPages = $converter->responsify($staticPages);
+
+            $statics = [];
+            foreach ($staticPages as $staticPage) {
+                $statics[] = [
+                    'title'      => $staticPage->title,
+                    'slug'       => $staticPage->slug,
+                    'pk_content' => $staticPage->pk_content
+                ];
+            }
 
             // Fetch synchronized elements if exists
             $syncSites = [];
@@ -249,7 +265,7 @@ class MenusController extends Controller
                     'albumCategories' => $albumCategories,
                     'videoCategories' => $videoCategories,
                     'pollCategories'  => $pollCategories,
-                    'staticPages'     => $staticPages,
+                    'staticPages'     => $statics,
                     'pages'           => $this->pages,
                     'menu_positions'  => $this->menuPositions,
                     'elements'        => $syncSites,
