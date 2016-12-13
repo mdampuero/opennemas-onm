@@ -662,7 +662,7 @@ class ContentCategoryManager
                 [ $category ]
             );
 
-            return ($rs['number'] + $rs2['number']) == 0;
+            return $rs['number'] == 0;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
