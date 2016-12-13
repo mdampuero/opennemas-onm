@@ -251,16 +251,9 @@ class Widget extends Content
 
         $class = 'Widget' . $this->content;
 
-        try {
-            if (class_exists($class)) {
-                $widget = getService('entity_repository')
-                    ->find('Widget', $this->id);
-
-                $class = new $class($widget);
-            } else {
-                throw new \Exception('', 1);
-            }
-        } catch (\Exception $e) {
+        if (class_exists($class)) {
+            $class = new $class($widget);
+        } else {
             return sprintf(_("Widget %s not available"), $this->content);
         }
 
