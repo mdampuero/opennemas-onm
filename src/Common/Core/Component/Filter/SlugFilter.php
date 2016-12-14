@@ -20,6 +20,12 @@ class SlugFilter extends Filter
     {
         $this->utils = new \Onm\StringUtils;
 
+        $this->defaultParams = [
+            'stop-list' => true,
+            'separator' => '-'
+        ];
+        $params = array_merge($this->defaultParams, $params);
+
         parent::__construct($params);
     }
 
@@ -35,6 +41,6 @@ class SlugFilter extends Filter
         $separator = $this->getParameter('separator', '.');
         $stopList  = $this->getParameter('stop-list');
 
-        return $this->utils->getTitle($str, $stopList, $separator);
+        return $this->utils->generateSlug($str, $stopList, $separator);
     }
 }
