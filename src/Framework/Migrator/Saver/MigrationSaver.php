@@ -2053,7 +2053,7 @@ class MigrationSaver
             $values['verinterior'],
         ];
 
-        $rss  = $this->conn->executeQuery($sql, $values);
+        $rss = $this->conn->executeQuery($sql, $values);
 
         if (!$rss) {
             $this->output->writeln('Insert - updateRelated: check error log');
