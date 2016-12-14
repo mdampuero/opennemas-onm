@@ -2032,7 +2032,7 @@ class MigrationSaver
     {
         $sql = "DELETE FROM related_contents WHERE `pk_content1`=? AND `pk_content2`=?";
 
-        $rss  = $this->conn->executeQuery($sql, [$values['pk_content1'],$values['pk_content2']]);
+        $rss = $this->conn->executeQuery($sql, [$values['pk_content1'],$values['pk_content2']]);
 
         if (!$rss) {
             $this->output->writeln('Delete - updateRelated: Check error log');
@@ -2053,9 +2053,9 @@ class MigrationSaver
             $values['verinterior'],
         ];
 
-        $this->conn->executeQuery($sql, $values);
+        $rss = $this->conn->executeQuery($sql, $values);
 
-        if (!$
+        if (!$rss) {
             $this->output->writeln('Insert - updateRelated: check error log');
         }
 
