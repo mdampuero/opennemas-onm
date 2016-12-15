@@ -206,22 +206,24 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 $published = new \DateTime((string)$video->published);
                 $date = date_format($published, 'Y-m-d H:i:s');
 
+                $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+
                 // Generate data array for creating video in Onm instance
                 $data = [
                     'content_status' => 1,
-                    'with_comment' => 1,
-                    'created' => $date,
-                    'starttime' => $date,
-                    'category' => $this->category,
-                    'fk_author' => 0,
-                    'video_url' => $videoUrl,
-                    'title' => $title,
-                    'metadata' => \Onm\StringUtils::getTags($title),
-                    'description' => (string)$video->summary,
-                    'author_name' => 'Youtube',
-                    'information' => $information,
-                    'type' => 'web-source',
-                    'id' => '',
+                    'with_comment'   => 1,
+                    'created'        => $date,
+                    'starttime'      => $date,
+                    'category'       => $this->category,
+                    'fk_author'      => 0,
+                    'video_url'      => $videoUrl,
+                    'title'          => $title,
+                    'metadata'       => $tagSystem->filter($title),
+                    'description'    => (string)$video->summary,
+                    'author_name'    => 'Youtube',
+                    'information'    => $information,
+                    'type'           => 'web-source',
+                    'id'             => '',
                 ];
 
                 $video = new \Video();
@@ -279,13 +281,15 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 continue;
             }
 
+            $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+
             $data = [
                 'author_name'    => 'script',
                 'body'           => $item[1],
                 'category'       => $this->category,
                 'content_status' => 1,
                 'fk_author'      => 0,
-                'metadata'       => \Onm\StringUtils::getTags($item[0]),
+                'metadata'       => $tagSystem->filter($item[0]),
                 'params'         => [],
                 'description'    => $item[0],
                 'endtime'        => '',

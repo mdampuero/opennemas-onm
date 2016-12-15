@@ -584,7 +584,6 @@ class StringUtils
 
         // Remove duplicates
         $tags = array_unique(explode(',', $text));
-        // $tags = array_filter(function($elem) { return empty($elem); }, $text);
         $tags = implode(', ', $tags);
 
         return $tags;

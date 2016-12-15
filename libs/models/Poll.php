@@ -206,7 +206,6 @@ class Poll extends Content
                         [
                             'fk_pk_poll' => $this->id,
                             'item'       => $item->item,
-                            'metadata'   => \Onm\StringUtils::getTags($item->item)
                         ]
                     );
                 }
