@@ -262,7 +262,7 @@ class Subscriber
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 "SELECT * FROM pc_users WHERE email = ?",
-                [  $email ]
+                [ $email ]
             );
 
             $this->load($rs);
@@ -326,9 +326,7 @@ class Subscriber
         try {
             $rs = getService('dbal_connection')->update(
                 "pc_users",
-                [
-                  'status' => $status
-                ],
+                [ 'status' => $status ],
                 [ 'pk_pc_user' => (int) $id ]
             );
 
@@ -355,9 +353,7 @@ class Subscriber
         try {
             $rs = getService('dbal_connection')->update(
                 "pc_users",
-                [
-                  'subscription' => $status
-                ],
+                [ 'subscription' => $status ],
                 [ 'pk_pc_user' => (int) $id ]
             );
 
