@@ -53,7 +53,7 @@ class SystemSettingsController extends Controller
             'webmastertools_google', 'youtube_page',
             'robots_txt_rules', 'chartbeat',
             'body_end_script', 'body_start_script','header_script',
-            'elements_in_rss',
+            'elements_in_rss', 'redirection'
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);
@@ -200,6 +200,10 @@ class SystemSettingsController extends Controller
 
             // Save settings
             $sm->set($key, $value);
+        }
+
+        if (empty($request->request->get('redirection'))) {
+            $sm->set('redirection', 0);
         }
 
         // Delete caches for custom_css and frontpages
