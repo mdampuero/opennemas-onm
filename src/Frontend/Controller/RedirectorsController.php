@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Common\Core\Component\Exception\ContentNotMigratedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Common\Core\Controller\Controller;
@@ -29,74 +30,165 @@ class RedirectorsController extends Controller
     /**
      * Handles the redirections for all the contents.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object
+     */
     public function contentAction(Request $request)
     {
-        $contentId  = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
-        $slug       = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
-        $oldVersion = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
-        $type       = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
-        $fragment   = '';
+        $id       = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
+        $slug     = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
+        $type     = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
+        $fragment = '';
+        $content  = null;
 
-        if ($slug === 'none') {
-            if (!empty($type) && !(empty($contentId))) {
-                $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($type, $contentId);
-            } else {
-                list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromID($contentId);
-            }
-        } else {
-            if (!empty($type)) {
-                $newContentID  = \ContentManager::getOriginalIdFromSlugAndType($slug, $type);
-            } else {
-                list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
-            }
+        list($type, $id) = $this->getTranslation($slug, $type, $id);
+
+        if (!empty($type) && !empty($id)) {
+            $content = $this->getContent($type, $id);
         }
 
-        if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
-            $content = $this->get('entity_repository')->find('Article', $newContentID);
+        if (empty($content) || is_null($content->id)) {
+            return $this->redirectNotMigratedContent($type);
+        }
 
-            if (!is_null($content)) {
-                $content->category_name = $content->catName;
-            }
-        } elseif ($type == 'opinion') {
-            $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
-        } elseif ($type === 'photo-inline' || $type === 'photo') {
-            $content = $this->get('entity_repository')->find('Photo', $newContentID);
-        } elseif ($type === 'category') {
-            $content = $this->get('category_repository')->find($newContentID);
-            $content->content_type_name = 'category';
-            $content->id = $content->pk_content_category;
-            $content->uri = $this->generateUrl(
-                'category_frontpage',
-                [ 'category_name' => $content->name ],
-                true
-            );
-        } elseif ($type === 'attachment') {
-            $content = new \Attachment($newContentID);
-        } elseif ($type === 'comment') {
-            $comment  = new \Comment($newContentID);
+        if ($content->content_type_name === 'comment') {
             $fragment = '#comentarios';
-            $content  = new \Content($comment->content_id);
-        } else {
-            $content = new \Content($newContentID);
         }
 
-        if (!isset($content) || is_null($content->id)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-        }
-
-        $url =  SITE_URL . $content->uri;
-        if ($content->content_type_name === 'photo') {
-            $url = SITE_URL . '/media/' . $this->get('core.instance')->internal_name
-                . '/images' . $content->path_img;
-        } elseif ($content->content_type_name == 'category') {
-            $url = $content->uri;
-        }
+        $url = SITE_URL . $content->uri;
 
         return new RedirectResponse($url . $fragment, 301);
+    }
+
+    /**
+     * Returns a content from a content type and content id.
+     *
+     * @param string $type The content type.
+     * @param string $id   The content id.
+     *
+     * @return Content The content.
+     */
+    protected function getContent($type, $id)
+    {
+        $fixTypes = [ 'photo-inline' => 'photo' ];
+        $type     = in_array($type, $fixTypes) ? $fixTypes[$type] : $type;
+
+        switch ($type) {
+            case 'article':
+                $content = $this->get('entity_repository')->find('Article', $id);
+
+                if (!is_null($content)) {
+                    $content->category_name = $content->catName;
+                }
+
+                return $content;
+
+            case 'attachment':
+                return new \Attachment($id);
+
+            case 'category':
+                $content = $this->get('category_repository')->find($id);
+                $content->content_type_name = 'category';
+                $content->id = $content->pk_content_category;
+
+                $content->uri = $this->generateUrl(
+                    'category_frontpage',
+                    [ 'category_name' => $content->name ],
+                    true
+                );
+
+                return $content;
+
+            case 'comment':
+                $comment = new \Comment($id);
+
+                if (empty($comment->content_id)) {
+                    return null;
+                }
+
+                return new \Content($comment->content_id);
+
+            case 'opinion':
+                return $this->get('opinion_repository')->find('Opinion', $id);
+
+            case 'photo':
+                $content = $this->get('entity_repository')->find('Photo', $id);
+
+                $content->uri = '/media/'
+                    . $this->get('core.instance')->internal_name
+                    . '/images' . $content->path_img;
+
+                return $content;
+
+            default:
+                return new \Content($id);
+        }
+    }
+
+    /**
+     * Returns the type and id for contents basing on redirection parameters.
+     *
+     * @param string $slug The content slug.
+     * @param string $type The content type.
+     * @param string $id   The old content id.
+     *
+     * @return array An array with the type and content id.
+     */
+    protected function getTranslation($slug = null, $type = null, $id = null)
+    {
+        if (!empty($slug)) {
+            if (!empty($type)) {
+                $id  = \ContentManager::getOriginalIdFromSlugAndType($slug, $type);
+
+                return [ $type, $id ];
+            }
+
+            return \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
+        }
+
+        if (!empty($type) && !(empty($id))) {
+            $id  = \ContentManager::getOriginalIDForContentTypeAndID($type, $id);
+
+            return [ $type, $id ];
+        } else {
+            return \ContentManager::getOriginalIdAndContentTypeFromID($id);
+        }
+    }
+
+    /**
+     * Returns a response when a content was not found basing on a setting from
+     * the instance.
+     *
+     * @param string $type The content type.
+     *
+     * @return RedirectReponse The redirection response object to frontpages
+     *                         when the instance has redirection to frontpages
+     *                         enabled.
+     *
+     * @throws ContentNotMigratedException When instance has redirection to
+     *                                     frontpages disabled.
+     */
+    protected function redirectNotMigratedContent($type)
+    {
+        $ignored     = [ 'article', 'category' ];
+        $redirection = $this->get('setting_repository')->get('redirection');
+
+        if (empty($redirection)) {
+            throw new ContentNotMigratedException();
+        }
+
+        $router = $this->get('router');
+        $route  = preg_replace('/_+/', '_', 'frontend_' . $type . '_frontpage');
+        $url    = $this->get('router')->generate('frontend_frontpage');
+
+        if (!in_array($type, $ignored)
+            && $router->getRouteCollection()->get($route)
+        ) {
+            $url = $router->generate($route);
+        }
+
+        return new RedirectResponse($url, 301);
     }
 
     /**

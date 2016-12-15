@@ -1002,7 +1002,6 @@
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
-
                     <h4>Robots.txt</h4>
                     <div class="form-group">
                       <label class="form-label" for="robots_txt_rules">
@@ -1015,7 +1014,6 @@
                         <textarea class="form-control" id="robots_txt_rules" name="robots_txt_rules" type="text" class="input-xlarge">{$configs['robots_txt_rules']|default:""}</textarea>
                       </div>
                     </div>
-
                     <h4>Scripts</h4>
                     <div class="form-group">
                       <label class="form-label" for="header-script">
@@ -1044,7 +1042,6 @@
                         <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|base64_decode|escape:'html'|default:""}</textarea>
                       </div>
                     </div>
-
                     <h4>CSS</h4>
                     <div class="form-group">
                       <label class="form-label" for="custom-css">
@@ -1056,13 +1053,24 @@
                         <textarea class="form-control" id="custom-css" name="custom_css" disabled="disabled" readonly="readonly">{$configs['custom_css']|stripslashes|default:""}</textarea>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-4">
                     <h4>RSS</h4>
-                    <div class="col-md-6 form-group">
+                    <div class="form-group">
                       <label class="form-label" for="items_per_page">
                         {t}Items in RSS{/t}
                       </label>
                       <div class="controls">
                         <input class="form-control" id="elements_in_rss" name="elements_in_rss" type="number" value="{$configs['elements_in_rss']|default:10}">
+                      </div>
+                    </div>
+                    <h4>{t}Redirection{/t}</h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input {if $configs['redirection'] eq "1"}checked{/if} id="redirection" name="redirection" type="checkbox" value="1">
+                        <label for="redirection">
+                          {t}Redirect to frontpage non-migrated contents{/t}
+                        </label>
                       </div>
                     </div>
                   </div>
