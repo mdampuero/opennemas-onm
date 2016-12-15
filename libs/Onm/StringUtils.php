@@ -493,10 +493,12 @@ class StringUtils
     }
 
     /**
-     * Generates a valid permalink
+     * Generates a valid slug, this function is a "copy" of self::generateSlug,
+     * keep it here to avoid problems for unchanged uses.
      *
      * @param  string  $title
      * @param  boolean $useStopList whether use the stopList array
+     * @param  string  $delimiter
      *
      * @return string
      **/
@@ -546,7 +548,7 @@ class StringUtils
     /**
      * Gets "n" first words from a given text
      *
-     * @example self::get_numWords('hello world', 1)
+     * @example self::getNumWords('hello world', 1)
      *
      * @param  string  $text the text to operate with
      * @param  integer $numWords
