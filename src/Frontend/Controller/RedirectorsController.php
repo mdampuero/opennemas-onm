@@ -92,10 +92,10 @@ class RedirectorsController extends Controller
                 $content->content_type_name = 'category';
                 $content->id = $content->pk_content_category;
 
-                $content->uri = $this->generateUrl(
+                $content->uri = mb_ereg_replace('^/', '', $this->generateUrl(
                     'category_frontpage',
                     [ 'category_name' => $content->name ]
-                );
+                ));
 
                 return $content;
 
