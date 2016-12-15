@@ -58,7 +58,6 @@ class ErrorController extends Controller
 
                 // Redirect to redirectors URLs without /
                 if ($name === 'NotFoundHttpException'
-                    && !preg_match('/^\/admin/', $path)
                     && mb_strpos($path, '/', 1) === false
                 ) {
                     $url = $this->generateUrl('frontend_redirect_content', [
