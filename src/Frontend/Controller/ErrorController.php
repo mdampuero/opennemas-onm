@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -50,9 +51,22 @@ class ErrorController extends Controller
 
         $requestAddress = $request->getSchemeAndHttpHost().$request->getRequestUri();
         switch ($name) {
+            case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
             case 'NotFoundHttpException':
                 $path = $request->getRequestUri();
+
+                // Redirect to redirectors URLs without /
+                if ($name === 'NotFoundHttpException'
+                    && !preg_match('/^\/admin/', $path)
+                    && mb_strpos($path, '/', 1) === false
+                ) {
+                    $url = $this->generateUrl('frontend_redirect_content', [
+                    'slug'  => mb_ereg_replace('^\/', '', $path)
+                    ]);
+
+                    return new RedirectResponse($url, 301);
+                }
 
                 $page = new \stdClass();
 
