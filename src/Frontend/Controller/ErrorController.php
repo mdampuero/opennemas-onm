@@ -57,9 +57,7 @@ class ErrorController extends Controller
                 $path = $request->getRequestUri();
 
                 // Redirect to redirectors URLs without /
-                if ($name === 'NotFoundHttpException'
-                    && mb_strpos($path, '/', 1) === false
-                ) {
+                if ($name === 'NotFoundHttpException') {
                     $url = $this->generateUrl('frontend_redirect_content', [
                     'slug'  => mb_ereg_replace('^\/', '', $path)
                     ]);
