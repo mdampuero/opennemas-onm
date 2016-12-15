@@ -28,4 +28,16 @@ class LiteralFilterTest extends KernelTestCase
         $this->assertEquals('grault', $filter->filter(''));
         $this->assertEquals('grault', $filter->filter('fred'));
     }
+
+    /**
+     * Tests filter.
+     */
+    public function testFilterWithNoValue()
+    {
+        $filter = new LiteralFilter([ ]);
+
+        $this->assertEquals('', $filter->filter(null));
+        $this->assertEquals('', $filter->filter(''));
+        $this->assertEquals('', $filter->filter('fred'));
+    }
 }
