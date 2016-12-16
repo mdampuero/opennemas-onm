@@ -26,11 +26,6 @@
       @AdminTheme/less/_login.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
-  {block name="header-js"}
-    <script type="text/javascript">
-      var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
-    </script>
-  {/block}
 </head>
 <body class="login-body">
   <div class="wrapper">
@@ -76,6 +71,9 @@
                         </div>
                       </div>
                       {if $failed_login_attempts >= 3}
+                        <script type="text/javascript">
+                          var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
+                        </script>
                         {getRecaptchaHtml onm=1}
                       {/if}
                       <div class="form-group text-right">
@@ -129,24 +127,23 @@
         jQuery(document).ready(function($) {
           'use strict';
 
-          // Encode password in md5 on backend login
+          Encode password in md5 on backend login
           $('#loginform').on('submit', function(e, ui) {
-            var form = $('#loginform');
+            var password_input = $('#loginform').find('input[name="_password"]');
 
-            if (form.find('input[name="_password"]').length > 0) {
-              var password = form.find('input[name="_password"]').val();
+            if (form.length > 0) {
+              var password_input_val = password_input.val();
 
               if (password.indexOf('md5:') === -1) {
-                password = 'md5:' + hex_md5(password);
+                password_input_val = 'md5:' + hex_md5(password_input_val);
               }
 
-              form.find('input[name="_password"]').val(password);
+              password_input.val(password);
             }
           });
         });
       </script>
     {/javascripts}
-  {uservoice_widget}
   {/block}
 </body>
 </html>
