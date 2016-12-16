@@ -43,7 +43,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
         // Check logo params
         $logo = getService('setting_repository')->get('site_logo');
         if (!empty($logo)) {
-            $data['logo'] = [
+            $logo = [
                 'url'    => SITE_URL.
                        'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter/'.
                        MEDIA_DIR_URL.'sections/'.$logo,
@@ -51,7 +51,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
                 'height' => '60'
             ];
         } else {
-            $data['logo'] = [
+            $logo = [
                 'url'    => SITE_URL.
                        'assets/images/logos/opennemas-powered-horizontal.png',
                 'width'  => '350',
@@ -74,7 +74,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
             'changed'  => $changed,
             'category' => $category,
             'summary'  => $summary,
-            'logo'     => '',
+            'logo'     => $logo,
             'image'    => $media['image'],
             'video'    => $media['video']
         ];
