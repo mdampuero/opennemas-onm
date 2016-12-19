@@ -160,7 +160,7 @@
                 <div class="controls">
                   <div class="checkbox">
                     <input type="checkbox" id="params[inrss]" name="params[inrss]" value="1"
-                    {if !isset($category->params['inrss']) || $category->params['inrss'] eq 1}checked="checked"{/if}>
+                    {if isset($category->params['inrss']) && $category->params['inrss'] == true}checked="checked"{/if}>
                     <label for="params[inrss]" class="form-label">{t}Show in RSS{/t}</label>
                   </div>
                 </div>
