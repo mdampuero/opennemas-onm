@@ -58,17 +58,20 @@ class Redis extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function deleteMulti($id)
+    protected function deleteByPattern($pattern)
     {
-        $this->getRedis()->delete($id);
+        $this->getRedis()->eval(
+            'redis.call("del", unpack(redis.call("keys", ARGV[1])))',
+            [ $pattern ]
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function executeScript($script, $args)
+    protected function deleteMulti($id)
     {
-        return $this->getRedis()->eval($script, $args);
+        $this->getRedis()->delete($id);
     }
 
     /**
