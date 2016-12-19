@@ -280,7 +280,7 @@
 
         // Update tax when vatTax or subtotal change
         $scope.$watch('[fee, subtotal, vatTax]', function() {
-          $scope.tax = ($scope.subtotal + $scope.fee) * $scope.vatTax / 100;
+          $scope.tax = +(($scope.subtotal + $scope.fee) * $scope.vatTax / 100).toFixed(2);
         }, true);
 
         // Update total when fee, subtotal or tax change
@@ -293,7 +293,7 @@
           $scope.fee = 0;
 
           if (nv && nv.type === 'CreditCard') {
-            $scope.fee = $scope.subtotal * 0.029 + 0.30;
+            $scope.fee = +($scope.subtotal * 0.029 + 0.30).toFixed(2);
           }
         }, true);
 
