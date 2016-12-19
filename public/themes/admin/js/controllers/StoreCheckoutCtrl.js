@@ -97,7 +97,9 @@
         }
 
         if (!$scope.purchase) {
-          http.post('backend_ws_purchase_save').then(function(response) {
+          var data = $scope.getData();
+
+          http.post('backend_ws_purchase_save', data).then(function(response) {
             $scope.purchase = response.data.id;
             webStorage.local.set('purchase', $scope.purchase);
           });
