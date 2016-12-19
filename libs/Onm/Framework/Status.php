@@ -46,7 +46,7 @@ class Status
             $cache->set($cacheId, 'bar');
 
             if ($cache->get($cacheId) !== 'bar'
-                || ($cache->delete($cacheId) && $cache->get($cacheId))
+                || ($cache->remove($cacheId) && $cache->get($cacheId))
             ) {
                 return false;
             }
