@@ -84,8 +84,8 @@
               </th>
               <th class="title">{t}Title{/t}</th>
               <th class="hidden-xs" width="200">{t}Section{/t}</th>
-              {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>{/if}{/acl}
               {acl isAllowed="SPECIAL_HOME"}<th class="hidden-xs text-center" width="100">{t}Home{/t}</th>{/acl}
+              {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>{/if}{/acl}
               {acl isAllowed="SPECIAL_AVAILABLE"}<th class="text-center" width="100">{t}Published{/t}</th>{/acl}
             </tr>
           </thead>
