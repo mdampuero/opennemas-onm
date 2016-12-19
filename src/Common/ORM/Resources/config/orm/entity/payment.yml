@@ -38,9 +38,6 @@ orm:
                         name: paymentMethodNonce
                         type: string
                 freshbooks:
-                    client_id:
-                        name: client_id
-                        type: string
                     invoice_id:
                         name: invoice_id
                         type: integer
@@ -53,3 +50,6 @@ orm:
                     type:
                         name: type
                         type: string
+                    amount:
+                        name: amount
+                        type: float
