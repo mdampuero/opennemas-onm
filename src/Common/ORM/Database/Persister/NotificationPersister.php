@@ -40,7 +40,7 @@ class NotificationPersister extends BasePersister
         $this->conn->delete('user_notification', [ 'notification_id' => $id ]);
 
         if ($this->hasCache()) {
-            $this->cache->deleteByPattern('*user_notification-' . $id . '*');
+            $this->cache->removeByPattern('*user_notification-' . $id . '*');
         }
     }
 }
