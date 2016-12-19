@@ -95,11 +95,13 @@ class PurchaseController extends Controller
      * @apiName CreatePurchase
      * @apiGroup Purchase
      */
-    public function saveAction()
+    public function saveAction(Request $request)
     {
-        $purchase = $this->get('core.helper.checkout')->getPurchase();
+        $ids      = $request->request->get('ids', []);
+        $ph       = $this->get('core.helper.checkout');
+        $purchase = $ph->getPurchase();
 
-        $this->get('orm.manager')->persist($purchase);
+        $ph->next('start', $ids, [], null);
 
         return new JsonResponse([ 'id' => $purchase->id ]);
     }
