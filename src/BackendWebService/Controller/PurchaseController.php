@@ -121,8 +121,12 @@ class PurchaseController extends Controller
         );
 
         $converter = $em->getConverter('Purchase');
-        $purchase  = $em->getRepository('purchase')
-            ->findOneBy($oql);
+        $purchase  = $em->getRepository('purchase')->findOneBy($oql);
+
+        // Remove payment line from purchase
+        if ($purchase->method === 'CreditCard') {
+            array_pop($purchase->details);
+        }
 
         return new JsonResponse([
             'purchase' => $converter->responsify($purchase),
