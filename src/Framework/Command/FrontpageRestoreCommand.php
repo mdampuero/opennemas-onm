@@ -45,6 +45,13 @@ EOF
         $databaseName = $input->getArgument('database');
         $category     = $input->getOption('category');
         $file         = $input->getOption('file');
+        $oql          = "settings regexp '\"BD_DATABASE\";s:[0-9]+:\""
+            . $databaseName . "\"'";
+
+        // Load instance
+        $loader = $this->getContainer()->get('core.loader');
+        $loader->loadInstanceFromOql($oql);
+        $loader->init();
 
         $this->getContainer()->get('session')->set(
             'user',

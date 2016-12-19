@@ -309,7 +309,7 @@ class Loader
      *
      * @param string $oql The OQL query.
      */
-    protected function loadInstanceFromOql($oql)
+    public function loadInstanceFromOql($oql)
     {
         $this->instance = $this->container->get('orm.manager')
             ->getRepository('Instance')
