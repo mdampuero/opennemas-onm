@@ -49,7 +49,7 @@ class NewsletterSubscribersController extends Controller
         $subscribers = $sb->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
         $subscribers = \Onm\StringUtils::convertToUtf8($subscribers);
 
-        $total = $user->countUsers($where);
+        $total = $sb->countUsers($where);
 
         return new JsonResponse(
             array(
