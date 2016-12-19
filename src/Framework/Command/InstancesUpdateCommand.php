@@ -329,7 +329,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             }
 
             if (array_key_exists('last_login', $settings) && !empty($settings['last_login'])) {
-                $i->last_login = new \DateTime($settings['last_login'], $tz);
+                $i->last_login = new \DateTime($settings['last_login']);
             }
         }
 
