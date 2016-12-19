@@ -290,7 +290,7 @@ class CommentsController extends Controller
                 $data = $conn->fetchAll(
                     'SELECT content_id, COUNT(*) as comments_count FROM comments '
                     .'WHERE content_id IN ('.$ids.') AND status = ? GROUP BY content_id',
-                    \Comment::STATUS_ACCEPTED
+                    [ \Comment::STATUS_ACCEPTED ]
                 );
                 foreach ($data as $value) {
                     $commentsCount[$value['content_id']] = $value['comments_count'];
