@@ -1612,7 +1612,8 @@ class MigrationSaver
      */
     protected function convertToMetadata($string)
     {
-        return \Onm\StringUtils::getTags($string);
+        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+        return $tagSystem->filter($field);
     }
 
     /**
@@ -1789,7 +1790,7 @@ class MigrationSaver
                     $field = $this->convertToMap($field, $params['map']);
                     break;
                 case 'metadata':
-                    $field = \Onm\StringUtils::getTags($field);
+                    $field = $this->convertToMetadata($field);
                     break;
                 case 'merge':
                     if (is_array($field) && count($field) > 0) {
@@ -2032,7 +2033,7 @@ class MigrationSaver
     {
         $sql = "DELETE FROM related_contents WHERE `pk_content1`=? AND `pk_content2`=?";
 
-        $rss = $this->conn->executeQuery($sql, [$values['pk_content1'],$values['pk_content2']]);
+        $rss  = $this->conn->executeQuery($sql, [$values['pk_content1'],$values['pk_content2']]);
 
         if (!$rss) {
             $this->output->writeln('Delete - updateRelated: Check error log');

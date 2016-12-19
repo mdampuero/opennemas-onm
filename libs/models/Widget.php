@@ -80,7 +80,6 @@ class Widget extends Content
                     'pk_widget' => $this->id,
                     'content' => $data['content'],
                     'renderlet' => $data['renderlet'],
-
                 ]
             );
             $conn->commit();

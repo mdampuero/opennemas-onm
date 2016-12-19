@@ -202,21 +202,19 @@ class OpinionsController extends Controller
                     $opinion->author->uri = \Uri::generate(
                         'opinion_author_frontpage',
                         [
-                            'slug' => \Onm\StringUtils::getTitle($opinion->author->name),
+                            'slug' => urlencode(\Onm\StringUtils::generateSlug($opinion->author->name)),
                             'id'   => sprintf('%06d', $opinion->author->id)
                         ]
                     );
                 }
             }
 
-            $this->view->assign(
-                [
-                    'opinions'   => $opinions,
-                    'authors'    => $authors,
-                    'pagination' => $pagination,
-                    'page'       => $page
-                ]
-            );
+            $this->view->assign([
+                'opinions'   => $opinions,
+                'authors'    => $authors,
+                'pagination' => $pagination,
+                'page'       => $page
+            ]);
         }
 
         $ads = $this->getAds();

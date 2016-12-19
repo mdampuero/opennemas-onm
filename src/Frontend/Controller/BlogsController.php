@@ -103,7 +103,7 @@ class BlogsController extends Controller
                     $blog->author->uri = \Uri::generate(
                         'frontend_blog_author_frontpage',
                         array(
-                            'slug' => $blog->author->username,
+                            'slug' => urlencode($blog->author->username),
                             'id'   => $blog->author->id
                         )
                     );

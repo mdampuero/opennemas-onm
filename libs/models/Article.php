@@ -140,7 +140,7 @@ class Article extends Content
                             'id'       => sprintf('%06d', $this->id),
                             'date'     => date('YmdHis', strtotime($this->created)),
                             'category' => $this->category_name,
-                            'slug'     => $this->slug,
+                            'slug'     => urlencode($this->slug),
                         )
                     );
                 }
@@ -152,7 +152,7 @@ class Article extends Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return \Onm\StringUtils::getTitle($this->title);
+                    return \Onm\StringUtils::generateSlug($this->title);
                 }
                 break;
             case 'author':
@@ -186,8 +186,8 @@ class Article extends Content
             [
                 'id'       => $this->id,
                 'date'     => date('Y-m-d', strtotime($this->created)),
-                'category' => $this->category_name,
-                'slug'     => $this->slug,
+                'category' => urlencode($this->category_name),
+                'slug'     => urlencode($this->slug),
             ]
         );
 

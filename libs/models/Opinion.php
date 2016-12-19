@@ -114,8 +114,8 @@ class Opinion extends Content
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => $this->slug,
-                        'category' => \Onm\StringUtils::getTitle($authorName),
+                        'slug'     => urlencode($this->slug),
+                        'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
                     )
                 );
 

@@ -31,7 +31,20 @@ class StringUtils
         '-'=>'-', '+'=>'',  '='=>'',  '\\'=>'-', '|'=>'-', '`'=>'',
         '~'=>'',  '/'=>'-', '\"'=>'', '\''=>'', '<'=>'',  '>'=>'',
         '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C',  '·'=>'', 'ª'=>'',
-        'º'=>'', ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'n', 'Ñ'=>'N'
+        'º'=>'', ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'n', 'Ñ'=>'N',
+        'Š'=>'S', 'š'=>'s', 'Đ'=>'Dj', 'đ'=>'dj', 'Ž'=>'Z', 'ž'=>'z',
+        'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c', 'À'=>'A', 'Á'=>'A',
+        'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C',
+        'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I',
+        'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O',
+        'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U',
+        'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a',
+        'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+        'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i',
+        'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o',
+        'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u',
+        'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R',
+        'ŕ'=>'r', '/'=>'-', ' '=>'-', '"'=>'',  '!'=>'',  '¡'=>'',
     ];
 
     /**
@@ -75,7 +88,6 @@ class StringUtils
      **/
     public static function clearQuotes($text)
     {
-
         $text = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $text);
         $text = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $text);
         $text = str_replace('“', '&#8220;', $text);
@@ -230,34 +242,313 @@ class StringUtils
         return $randomString;
     }
 
+    /**
+     * Removes all the accents from a string
+     *
+     * @return void
+     * @author
+     **/
+    public static function removeAccents($string)
+    {
+        $chars = [
+            // Decompositions for Latin-1 Supplement
+            'ª' => 'a', 'º' => 'o',
+            'À' => 'A', 'Á' => 'A',
+            'Â' => 'A', 'Ã' => 'A',
+            'Ä' => 'A', 'Å' => 'A',
+            'Æ' => 'AE','Ç' => 'C',
+            'È' => 'E', 'É' => 'E',
+            'Ê' => 'E', 'Ë' => 'E',
+            'Ì' => 'I', 'Í' => 'I',
+            'Î' => 'I', 'Ï' => 'I',
+            'Ð' => 'D', 'Ñ' => 'N',
+            'Ò' => 'O', 'Ó' => 'O',
+            'Ô' => 'O', 'Õ' => 'O',
+            'Ö' => 'O', 'Ù' => 'U',
+            'Ú' => 'U', 'Û' => 'U',
+            'Ü' => 'U', 'Ý' => 'Y',
+            'Þ' => 'TH','ß' => 's',
+            'à' => 'a', 'á' => 'a',
+            'â' => 'a', 'ã' => 'a',
+            'ä' => 'a', 'å' => 'a',
+            'æ' => 'ae','ç' => 'c',
+            'è' => 'e', 'é' => 'e',
+            'ê' => 'e', 'ë' => 'e',
+            'ì' => 'i', 'í' => 'i',
+            'î' => 'i', 'ï' => 'i',
+            'ð' => 'd', 'ñ' => 'n',
+            'ò' => 'o', 'ó' => 'o',
+            'ô' => 'o', 'õ' => 'o',
+            'ö' => 'o', 'ø' => 'o',
+            'ù' => 'u', 'ú' => 'u',
+            'û' => 'u', 'ü' => 'u',
+            'ý' => 'y', 'þ' => 'th',
+            'ÿ' => 'y', 'Ø' => 'O',
+            // Decompositions for Latin Extended-A
+            'Ā' => 'A', 'ā' => 'a',
+            'Ă' => 'A', 'ă' => 'a',
+            'Ą' => 'A', 'ą' => 'a',
+            'Ć' => 'C', 'ć' => 'c',
+            'Ĉ' => 'C', 'ĉ' => 'c',
+            'Ċ' => 'C', 'ċ' => 'c',
+            'Č' => 'C', 'č' => 'c',
+            'Ď' => 'D', 'ď' => 'd',
+            'Đ' => 'D', 'đ' => 'd',
+            'Ē' => 'E', 'ē' => 'e',
+            'Ĕ' => 'E', 'ĕ' => 'e',
+            'Ė' => 'E', 'ė' => 'e',
+            'Ę' => 'E', 'ę' => 'e',
+            'Ě' => 'E', 'ě' => 'e',
+            'Ĝ' => 'G', 'ĝ' => 'g',
+            'Ğ' => 'G', 'ğ' => 'g',
+            'Ġ' => 'G', 'ġ' => 'g',
+            'Ģ' => 'G', 'ģ' => 'g',
+            'Ĥ' => 'H', 'ĥ' => 'h',
+            'Ħ' => 'H', 'ħ' => 'h',
+            'Ĩ' => 'I', 'ĩ' => 'i',
+            'Ī' => 'I', 'ī' => 'i',
+            'Ĭ' => 'I', 'ĭ' => 'i',
+            'Į' => 'I', 'į' => 'i',
+            'İ' => 'I', 'ı' => 'i',
+            'Ĳ' => 'IJ','ĳ' => 'ij',
+            'Ĵ' => 'J', 'ĵ' => 'j',
+            'Ķ' => 'K', 'ķ' => 'k',
+            'ĸ' => 'k', 'Ĺ' => 'L',
+            'ĺ' => 'l', 'Ļ' => 'L',
+            'ļ' => 'l', 'Ľ' => 'L',
+            'ľ' => 'l', 'Ŀ' => 'L',
+            'ŀ' => 'l', 'Ł' => 'L',
+            'ł' => 'l', 'Ń' => 'N',
+            'ń' => 'n', 'Ņ' => 'N',
+            'ņ' => 'n', 'Ň' => 'N',
+            'ň' => 'n', 'ŉ' => 'n',
+            'Ŋ' => 'N', 'ŋ' => 'n',
+            'Ō' => 'O', 'ō' => 'o',
+            'Ŏ' => 'O', 'ŏ' => 'o',
+            'Ő' => 'O', 'ő' => 'o',
+            'Œ' => 'OE','œ' => 'oe',
+            'Ŕ' => 'R','ŕ' => 'r',
+            'Ŗ' => 'R','ŗ' => 'r',
+            'Ř' => 'R','ř' => 'r',
+            'Ś' => 'S','ś' => 's',
+            'Ŝ' => 'S','ŝ' => 's',
+            'Ş' => 'S','ş' => 's',
+            'Š' => 'S', 'š' => 's',
+            'Ţ' => 'T', 'ţ' => 't',
+            'Ť' => 'T', 'ť' => 't',
+            'Ŧ' => 'T', 'ŧ' => 't',
+            'Ũ' => 'U', 'ũ' => 'u',
+            'Ū' => 'U', 'ū' => 'u',
+            'Ŭ' => 'U', 'ŭ' => 'u',
+            'Ů' => 'U', 'ů' => 'u',
+            'Ű' => 'U', 'ű' => 'u',
+            'Ų' => 'U', 'ų' => 'u',
+            'Ŵ' => 'W', 'ŵ' => 'w',
+            'Ŷ' => 'Y', 'ŷ' => 'y',
+            'Ÿ' => 'Y', 'Ź' => 'Z',
+            'ź' => 'z', 'Ż' => 'Z',
+            'ż' => 'z', 'Ž' => 'Z',
+            'ž' => 'z', 'ſ' => 's',
+            // Decompositions for Latin Extended-B
+            'Ș' => 'S', 'ș' => 's',
+            'Ț' => 'T', 'ț' => 't',
+            // Euro Sign
+            '€' => 'E',
+            // GBP (Pound) Sign
+            '£' => '',
+            // Vowels with diacritic (Vietnamese)
+            // unmarked
+            'Ơ' => 'O', 'ơ' => 'o',
+            'Ư' => 'U', 'ư' => 'u',
+            // grave accent
+            'Ầ' => 'A', 'ầ' => 'a',
+            'Ằ' => 'A', 'ằ' => 'a',
+            'Ề' => 'E', 'ề' => 'e',
+            'Ồ' => 'O', 'ồ' => 'o',
+            'Ờ' => 'O', 'ờ' => 'o',
+            'Ừ' => 'U', 'ừ' => 'u',
+            'Ỳ' => 'Y', 'ỳ' => 'y',
+            // hook
+            'Ả' => 'A', 'ả' => 'a',
+            'Ẩ' => 'A', 'ẩ' => 'a',
+            'Ẳ' => 'A', 'ẳ' => 'a',
+            'Ẻ' => 'E', 'ẻ' => 'e',
+            'Ể' => 'E', 'ể' => 'e',
+            'Ỉ' => 'I', 'ỉ' => 'i',
+            'Ỏ' => 'O', 'ỏ' => 'o',
+            'Ổ' => 'O', 'ổ' => 'o',
+            'Ở' => 'O', 'ở' => 'o',
+            'Ủ' => 'U', 'ủ' => 'u',
+            'Ử' => 'U', 'ử' => 'u',
+            'Ỷ' => 'Y', 'ỷ' => 'y',
+            // tilde
+            'Ẫ' => 'A', 'ẫ' => 'a',
+            'Ẵ' => 'A', 'ẵ' => 'a',
+            'Ẽ' => 'E', 'ẽ' => 'e',
+            'Ễ' => 'E', 'ễ' => 'e',
+            'Ỗ' => 'O', 'ỗ' => 'o',
+            'Ỡ' => 'O', 'ỡ' => 'o',
+            'Ữ' => 'U', 'ữ' => 'u',
+            'Ỹ' => 'Y', 'ỹ' => 'y',
+            // acute accent
+            'Ấ' => 'A', 'ấ' => 'a',
+            'Ắ' => 'A', 'ắ' => 'a',
+            'Ế' => 'E', 'ế' => 'e',
+            'Ố' => 'O', 'ố' => 'o',
+            'Ớ' => 'O', 'ớ' => 'o',
+            'Ứ' => 'U', 'ứ' => 'u',
+            // dot below
+            'Ạ' => 'A', 'ạ' => 'a',
+            'Ậ' => 'A', 'ậ' => 'a',
+            'Ặ' => 'A', 'ặ' => 'a',
+            'Ẹ' => 'E', 'ẹ' => 'e',
+            'Ệ' => 'E', 'ệ' => 'e',
+            'Ị' => 'I', 'ị' => 'i',
+            'Ọ' => 'O', 'ọ' => 'o',
+            'Ộ' => 'O', 'ộ' => 'o',
+            'Ợ' => 'O', 'ợ' => 'o',
+            'Ụ' => 'U', 'ụ' => 'u',
+            'Ự' => 'U', 'ự' => 'u',
+            'Ỵ' => 'Y', 'ỵ' => 'y',
+            // Vowels with diacritic (Chinese, Hanyu Pinyin)
+            'ɑ' => 'a',
+            // macron
+            'Ǖ' => 'U', 'ǖ' => 'u',
+            // acute accent
+            'Ǘ' => 'U', 'ǘ' => 'u',
+            // caron
+            'Ǎ' => 'A', 'ǎ' => 'a',
+            'Ǐ' => 'I', 'ǐ' => 'i',
+            'Ǒ' => 'O', 'ǒ' => 'o',
+            'Ǔ' => 'U', 'ǔ' => 'u',
+            'Ǚ' => 'U', 'ǚ' => 'u',
+            // grave accent
+            'Ǜ' => 'U', 'ǜ' => 'u',
+        ];
+
+        $string = strtr($string, $chars);
+
+        return $string;
+    }
+
      /**
      * Clean the special chars and add - for separate words
      *
-     * @param  string  $text the string to transform
+     * @param  string  $string the string to transform
      *
      * @return string the string cleaned
      **/
-    public static function generateSlug($text)
+    public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
+        $string = strip_tags($string);
 
-        $text = trim($text);
+        // Use intl extension to clean
+        $string = transliterator_transliterate(
+            "NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();",
+            $string
+        );
 
-        $text = html_entity_decode($text, ENT_COMPAT, 'UTF-8');
+        // Remove stop list
+        if ($useStopList) {
+            $string = self::removeShorts($string);
+        }
+        $string = trim(strtr($string, self::$trade));
 
-        $text = self::normalize($text);
-        $text = self::removeShorts($text);
+        // Convert nbsp, ndash and mdash to hyphens
+        $string = str_replace( array( '%c2%a0', '%e2%80%93', '%e2%80%94' ), '-', $string );
+        // Convert nbsp, ndash and mdash HTML entities to hyphens
+        $string = str_replace( array( '&nbsp;', '&#160;', '&ndash;', '&#8211;', '&mdash;', '&#8212;' ), '-', $string );
 
-        $text = preg_replace('/[ ]+/', '-', $text);
-        $text = preg_replace('/[\-]+/', '-', $text);
-        $text = mb_ereg_replace('[^a-z0-9\-]', '', $text);
+        // Strip these characters entirely
+        $string = str_replace( array(
+            // iexcl and iquest
+            '%c2%a1', '%c2%bf',
+            // angle quotes
+            '%c2%ab', '%c2%bb', '%e2%80%b9', '%e2%80%ba',
+            // curly quotes
+            '%e2%80%98', '%e2%80%99', '%e2%80%9c', '%e2%80%9d',
+            '%e2%80%9a', '%e2%80%9b', '%e2%80%9e', '%e2%80%9f',
+            // copy, reg, deg, hellip and trade
+            '%c2%a9', '%c2%ae', '%c2%b0', '%e2%80%a6', '%e2%84%a2',
+            // acute accents
+            '%c2%b4', '%cb%8a', '%cc%81', '%cd%81',
+            // grave accent, macron, caron
+            '%cc%80', '%cc%84', '%cc%8c',
+        ), '', $string );
 
-        return $text;
+        // Convert times to x
+        $string = str_replace( '%c3%97', 'x', $string );
+
+        // Clean trailing and duplicated spaces
+        $string = preg_replace(['/\s+/', '/[\t\n]/'], ' ', $string);
+        $string = trim($string);
+
+        // Replace multi-dashses with one and drop some hyphen transliterations
+        $string = mb_ereg_replace("@[-‐‒–—―⁃−\"\.]@", $delimiter, $string);
+        $string = str_replace('.', '-', $string);
+        $string = preg_replace('/[\-]+/', $delimiter, $string);
+        $string = preg_replace('/&.+?;/', '', $string); // kill entities
+
+        return trim($string, '-');
+    }
+
+    /**
+     * Generates a valid slug, this function is a "copy" of self::generateSlug,
+     * keep it here to avoid problems for unchanged uses.
+     *
+     * @param  string  $title
+     * @param  boolean $useStopList whether use the stopList array
+     * @param  string  $delimiter
+     *
+     * @return string
+     **/
+    public static function getTitle($origString, $useStopList = true, $delimiter = '-')
+    {
+        $string = strip_tags($origString);
+
+        // Use intl extension to clean
+        $string = transliterator_transliterate(
+            "NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();",
+            $string
+        );
+
+        // Remove stop list
+        if ($useStopList) {
+            $string = self::removeShorts($string);
+        }
+        $string = trim(strtr($string, self::$trade));
+
+        $string = self::normalize($string);
+        $string = trim($string);
+        $string = str_replace('・', '', $string);
+
+        # Drop some hyphen transliterations
+        $string = mb_ereg_replace("@[-‐‒–—―⁃−\"\.]@", $delimiter, $string);
+
+        $string = trim($string);
+        if (empty($string) || $string == " ") {
+            $string = $origString;
+        }
+
+        $string = self::setSeparator($string, $delimiter);
+
+        $string = str_replace('.', '', $string);
+        $string = str_replace('"', '', $string);
+        $string = str_replace('…', '', $string);
+
+        # convert double dash to single
+        $string = preg_replace('@[\-]+@', $delimiter, $string);
+
+        #strip off leading/trailing dashes
+        $string = trim($string, $delimiter);
+
+        return $string;
     }
 
     /**
      * Gets "n" first words from a given text
      *
-     * @example self::get_numWords('hello world', 1)
+     * @example self::getNumWords('hello world', 1)
      *
      * @param  string  $text the text to operate with
      * @param  integer $numWords
@@ -283,61 +574,19 @@ class StringUtils
      **/
     public static function getTags($text)
     {
-        $tags = self::clearSpecialChars($text);
+        // $text = self::clearSpecialChars($text);
+        $text = preg_replace('/[\.]+/', '', $text);
 
         // Remove stop list
-        $tags = self::removeShorts($tags);
-        $tags = self::setSeparator($tags, ',');
-        $tags = preg_replace('|-|', ',', $tags);
-        $tags = preg_replace('/[\,]+/', ',', $tags);
+        $text = self::removeShorts($text);
+        $text = self::setSeparator($text, ',');
+        $text = preg_replace('/[\,]+/', ',', $text);
 
         // Remove duplicates
-        $tags = array_unique(explode(',', $tags));
+        $tags = array_unique(explode(',', $text));
         $tags = implode(', ', $tags);
 
         return $tags;
-    }
-
-    /**
-     * Generates a valid permalink
-     *
-     * @param  string  $title
-     * @param  boolean $useStopList whether use the stopList array
-     *
-     * @return string
-     **/
-    public static function getTitle($title, $useStopList = true, $delimiter = '-')
-    {
-        $titule = '';
-        $title = self::normalize($title);
-        $title = self::toAscii($title);
-
-        $title = self::clearSpecialChars($title);
-        $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
-        $title = trim($title);
-
-        if ($useStopList) {
-            // Remove stop list
-            $titule = self::removeShorts($title);
-        }
-
-        $titule = trim($titule);
-        if (empty($titule) || $titule == " ") {
-            $titule = $title;
-        }
-
-        $titule = self::setSeparator($titule, $delimiter);
-
-        # Drop some hyphen transliterations
-        $titule = preg_replace("/[-‐‒–—―⁃−­]/", $delimiter, $titule);
-
-        # convert double dash to single
-        $titule = preg_replace('/[\-]+/', $delimiter, $titule);
-
-        #strip off leading/trailing dashes
-        $titule = trim($titule, $delimiter);
-
-        return $titule;
     }
 
     /**
@@ -637,19 +886,22 @@ unhas
 unas
 uno
 unos
+y
 ya
 yo
 si
 EOF;
-        $shorts = preg_split('@\n@', $shorts);
+        $shorts = explode("\n", $shorts);
 
-        $size = count($shorts);
+        $newstring = $string;
+        foreach ($shorts as $word) {
+            $newstring = preg_replace('/^'.$word.'[\.\, ]/', ' ', $newstring);
+            $newstring = preg_replace('/[\.\, ]'.$word.'[\.\, ]/', ' ', $newstring);
+            $newstring = preg_replace("/[\.\, ]$word$/", ' ', $newstring);
+        }
 
-        for ($i=0; $i<$size; $i++) {
-            $short  = preg_replace('/\n/', '', $shorts[$i]);
-            $string = preg_replace('/^'.$short.'[\.\, ]/', ' ', $string);
-            $string = preg_replace('/[\.\, ]'.$short.'[\.\, ]/', ' ', $string);
-            $string = preg_replace("/[\.\, ]$short$/", ' ', $string);
+        if (!empty(trim($newstring))) {
+            $string = $newstring;
         }
 
         return $string;

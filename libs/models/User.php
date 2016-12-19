@@ -174,6 +174,7 @@ class User
         try {
             $conn = getService('orm.manager')->getConnection('instance');
             $conn->insert('users', $values);
+
             $this->id = $conn->lastInsertId();
         } catch (\Exception $e) {
             error_log('Unable to create the user with the provided info: '.json_encode($values));

@@ -72,7 +72,8 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
-            $tokens = \Onm\StringUtils::getTags($searchString);
+            $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+            $tokens = $tagSystem->filter($searchString);
             $tokens = explode(', ', $tokens);
 
             $er = $this->get('entity_repository');
