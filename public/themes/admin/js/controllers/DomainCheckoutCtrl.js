@@ -316,5 +316,14 @@
             $scope.price = 18;
           }
         });
+
+        if (!$scope.purchase) {
+          http.post('backend_ws_purchase_save').then(function(response) {
+            $scope.purchase = response.data.id;
+            webStorage.local.set('purchase', $scope.purchase);
+          });
+        } else {
+          $scope.start();
+        }
     }]);
 })();

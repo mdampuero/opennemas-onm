@@ -219,7 +219,11 @@
             params: { id: $scope.purchase }
           };
 
-          return http.put(route, { step: 'cart' })
+          var data = $scope.getData();
+
+          data.step = $scope.steps[0];
+
+          return http.put(route, data)
             .then(function(response) {
               if (response.data.id) {
                 $scope.purchase = response.data.id;
@@ -339,15 +343,6 @@
             });
           }
         });
-
-        if (!$scope.purchase) {
-          http.post('backend_ws_purchase_save').then(function(response) {
-            $scope.purchase = response.data.id;
-            webStorage.local.set('purchase', $scope.purchase);
-          });
-        } else {
-          $scope.start();
-        }
       }
     ]);
 })();
