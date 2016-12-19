@@ -75,7 +75,7 @@ class Checker
             $this->cache->set($cacheId, 'bar');
 
             if ($this->cache->get($cacheId) !== 'bar'
-                || ($this->cache->delete($cacheId)
+                || ($this->cache->remove($cacheId)
                     && $this->cache->get($cacheId))
             ) {
                 return false;
