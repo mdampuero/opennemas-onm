@@ -187,7 +187,6 @@ class AuthorsController extends Controller
         $user->url  = empty($user->url) ? ' ' : $user->url;
         $user->bio  = empty($user->bio) ? ' ' : $user->bio;
 
-
         try {
             $file = $request->files->get('avatar');
 
