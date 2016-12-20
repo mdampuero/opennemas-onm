@@ -83,7 +83,7 @@ class NewsletterSubscribersController extends Controller
             if ($user->id && $result) {
                 $success[] = array(
                     'id'      => $id,
-                    'message' => sprintf(_('Subscritor with id "%d" deleted sucessfully'), $id),
+                    'message' => sprintf(_('Subscritor with id "%d" deleted successfully'), $id),
                     'type'    => 'success'
                 );
             } else {
