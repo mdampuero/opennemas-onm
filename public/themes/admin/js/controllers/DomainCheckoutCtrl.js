@@ -187,6 +187,27 @@
         };
 
         /**
+         * @function init
+         * @memberOf DomainCheckoutCtrl
+         *
+         * @description
+         *   Starts the checkout process.
+         */
+        $scope.init = function () {
+          if (!$scope.purchase) {
+            var data = $scope.getData();
+
+            http.post('backend_ws_purchase_save', data).then(function(response) {
+            $scope.purchase = response.data.id;
+            webStorage.local.set('purchase', $scope.purchase);
+            });
+          } else {
+            $scope.start();
+          }
+        };
+
+
+        /**
          * @function isRight
          * @memberOf DomainCheckoutCtrl
          *
@@ -316,16 +337,5 @@
             $scope.price = 18;
           }
         });
-
-        if (!$scope.purchase) {
-          var data = $scope.getData();
-
-          http.post('backend_ws_purchase_save', data).then(function(response) {
-            $scope.purchase = response.data.id;
-            webStorage.local.set('purchase', $scope.purchase);
-          });
-        } else {
-          $scope.start();
-        }
     }]);
 })();

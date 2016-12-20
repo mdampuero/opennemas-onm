@@ -49,7 +49,7 @@
       </div>
     </div>
   </div>
-  <div class="content" ng-controller="DomainCheckoutCtrl" ng-init="extension = {json_encode($extension)|clear_json};description='{if $create}{t}Domain registration + mapping{/t}{else}{t}Domain mapping{/t}{/if}';{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}{if $create}create = 1;{/if}clientToken = '{$token}';countries = {json_encode($countries)|clear_json};provinces = {json_encode($provinces)|clear_json};taxes = {json_encode($taxes)|clear_json}">
+  <div class="content" ng-controller="DomainCheckoutCtrl" ng-init="extension = {json_encode($extension)|clear_json};description='{if $create}{t}Domain registration + mapping{/t}{else}{t}Domain mapping{/t}{/if}';{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}{if $create}create = 1;{/if}clientToken = '{$token}';countries = {json_encode($countries)|clear_json};provinces = {json_encode($provinces)|clear_json};taxes = {json_encode($taxes)|clear_json};init()">
     <div class="row">
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
