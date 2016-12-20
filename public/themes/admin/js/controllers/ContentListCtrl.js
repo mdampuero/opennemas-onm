@@ -1145,6 +1145,16 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     });
 
     /**
+     * Go back to page 1 when changing the elements per page in the list.
+     *
+     * @param array newValues The new values
+     * @param array oldValues The old values
+     */
+    $scope.$watch('[pagination.epp]', function(newValues, oldValues) {
+        $scope.pagination.page = 1;
+    }, true);
+
+    /**
      * Refresh the list of elements when some parameter changes.
      *
      * @param array newValues The new values
