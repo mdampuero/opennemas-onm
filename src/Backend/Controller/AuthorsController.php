@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\ORM\Entity\User;
 use Onm\Settings as s;
 
 /**
@@ -95,67 +96,56 @@ class AuthorsController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $data = array(
-            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
-            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
-            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'id_user_group'   => array(3),
-            'ids_category'    => array(),
-            'activated'       => 0,
-            'type'            => 1,
-            'token'           => null,
-        );
+        $data      = $request->request->all();
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
 
-        // Generate username and password from real name
-        $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::getTitle($data['name'])));
-        $data['password'] = md5($data['name']);
-
-        $file = $request->files->get('avatar');
-
-        try {
-            $user = new \User();
-            // Upload user avatar if exists
-            if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
-                $data['avatar_img_id'] = $photoId;
-            } else {
-                $data['avatar_img_id'] = 0;
+        // Encode password if present
+        if (array_key_exists('password', $data)) {
+            if (empty($data['password'])) {
+                unset($data['password']);
             }
 
-            if ($user->create($data)) {
-                // Set all usermeta information (twitter, rss, language)
-                $meta = $request->request->get('meta');
-                $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
-                $meta['inrss']   = (empty($meta['inrss'])) ? 0 : 1;
-                foreach ($meta as $key => $value) {
-                    $user->setMeta(array($key => $value));
-                }
-
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Author created successfully.')
-                );
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'backend_author_show',
-                        array('id' => $user->id)
-                    )
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to create the author with that information')
-                );
+            if (!empty($data['password'])) {
+                $data['password'] = $this->get('core.security.encoder.password')
+                    ->encodePassword($data['password'], null);
             }
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect(
-            $this->generateUrl('backend_authors_list')
-        );
+        $user = new User($converter->objectify($data));
+
+        $user->username = \Onm\StringUtils::generateSlug($data['name']);
+        $user->type = 1;
+        $user->user_id_group = [3];
+        $user->inrss   = $user->inrss === 'on' ? true : false;
+        $user->is_blog = $user->is_blog === 'on' ? true : false;
+
+        // TODO: Remove when data supports empty values (when using SPA)
+        $user->url = empty($user->url) ? ' ' : $user->url;
+        $user->bio = empty($user->bio) ? ' ' : $user->bio;
+
+        try {
+            $file = $request->files->get('avatar');
+
+            // Upload user avatar if exists
+            if (!empty($file)) {
+                $user->avatar_img_id =
+                    $this->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
+            }
+
+            $em->persist($user);
+
+            $request->getSession()->getFlashBag()
+                ->add('success', _('User created successfully.'));
+
+            return $this->redirect(
+                $this->generateUrl('backend_author_show', ['id' => $user->id])
+            );
+        } catch (\Exception $e) {
+            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
+        }
+
+        return $this->redirect($this->generateUrl('backend_author_create'));
     }
 
     /**
@@ -189,13 +179,14 @@ class AuthorsController extends Controller
 
         $user->merge($converter->objectify($data));
 
-        // TODO: Remove after check and update database schema
-        $user->type = empty($user->type) ? 0 : $user->type;
-        $user->url = empty($user->url) ? ' ' : $user->url;
-        $user->bio = empty($user->bio) ? ' ' : $user->bio;
-
         $user->inrss   = $user->inrss === 'on' ? true : false;
         $user->is_blog = $user->is_blog === 'on' ? true : false;
+
+        // TODO: Remove after check and update database schema
+        $user->type = empty($user->type) ? 0 : $user->type;
+        $user->url  = empty($user->url) ? ' ' : $user->url;
+        $user->bio  = empty($user->bio) ? ' ' : $user->bio;
+
 
         try {
             $file = $request->files->get('avatar');
