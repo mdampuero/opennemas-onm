@@ -35,8 +35,7 @@ class RobotsController extends Controller
     {
         $disableRobots = $this->container->getParameter('disable_robots');
 
-        $sm = $this->get('setting_repository');
-        $rules = $sm->get('robots_txt_rules');
+        $rules = $this->get('setting_repository')->get('robots_txt_rules');
         $customRules = (is_array($rules) && array_key_exists('robots_txt_rules', $rules))
             ? $rules['robots_txt_rules'] : '';
         if ($disableRobots) {

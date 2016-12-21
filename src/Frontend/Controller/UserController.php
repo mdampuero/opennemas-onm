@@ -62,8 +62,6 @@ class UserController extends Controller
      */
     public function registerAction(Request $request)
     {
-        $sm = $this->get('setting_repository');
-
         $errors = [];
         if ('POST' == $request->getMethod()) {
             // Check reCAPTCHA
@@ -86,7 +84,7 @@ class UserController extends Controller
                 }
             }
 
-            $data = array(
+            $data = [
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
                 'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
@@ -95,12 +93,12 @@ class UserController extends Controller
                 'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
                 'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
                 'type'          => 1, // It is a frontend user registration.
-                'id_user_group' => array(),
+                'id_user_group' => [],
                 'bio'           => '',
                 'url'           => '',
                 'avatar_img_id' => 0,
                 'meta'          => $request->request->get('meta'),
-            );
+            ];
 
             // Before send mail and create user on DB, do some checks
             $user = new \User();
@@ -122,17 +120,17 @@ class UserController extends Controller
 
             // If checks are both false and pass is valid then send mail
             if (count($errors) <= 0) {
-                $url = $this->generateUrl('frontend_user_activate', array('token' => $data['token']), true);
+                $url = $this->generateUrl('frontend_user_activate', ['token' => $data['token']], true);
 
                 $this->view->setCaching(0);
 
                 $mailSubject = sprintf(_('New user account in %s'), s::get('site_title'));
                 $mailBody    = $this->renderView(
                     'user/emails/register.tpl',
-                    array(
+                    [
                         'name' => $data['name'],
                         'url'  => $url,
-                    )
+                    ]
                 );
 
                 // If user is successfully created, send an email
@@ -148,7 +146,7 @@ class UserController extends Controller
                             ->setSubject($mailSubject)
                             ->setBody($mailBody, 'text/plain')
                             ->setTo($data['email'])
-                            ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
+                            ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
 
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
@@ -178,7 +176,7 @@ class UserController extends Controller
                     $currentTime->setTimezone(new \DateTimeZone('UTC'));
                     $currentTime = $currentTime->format('Y-m-d H:i:s');
 
-                    $user->setMeta(array('register_date' => $currentTime));
+                    $user->setMeta(['register_date' => $currentTime]);
 
                     $this->view->assign('success', true);
                 }
@@ -187,9 +185,7 @@ class UserController extends Controller
 
         return $this->render(
             'authentication/register.tpl',
-            array(
-                'errors' => $errors,
-            )
+            [ 'errors' => $errors, ]
         );
     }
 
@@ -272,7 +268,6 @@ class UserController extends Controller
 
             $em->persist($user);
 
-            $sm = $this->get('setting_repository');
             $request->getSession()->migrate();
 
             $token   = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
@@ -286,15 +281,15 @@ class UserController extends Controller
             $session->getFlashBag()->add('success', _('Log in succesful.'));
 
             // Send welcome mail with link to subscribe action
-            $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
+            $url = $this->generateUrl('frontend_paywall_showcase', [], true);
 
-            $mailSubject = sprintf(_('Welcome to %s'), $sm->get('site_name'));
+            $mailSubject = sprintf(_('Welcome to %s'), $this->get('setting_repository')->get('site_name'));
             $mailBody    = $this->renderView(
                 'user/emails/welcome.tpl',
-                array(
+                [
                     'name' => $user->name,
                     'url'  => $url,
-                )
+                ]
             );
 
             // Build the message
@@ -303,7 +298,7 @@ class UserController extends Controller
                 ->setSubject($mailSubject)
                 ->setBody($mailBody, 'text/plain')
                 ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
+                ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
 
             try {
                 $mailer = $this->get('mailer');
@@ -350,7 +345,6 @@ class UserController extends Controller
         }
 
         $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-        $sm    = $this->get('setting_repository');
 
         // Get user by email
         $user = new \User();
@@ -362,17 +356,17 @@ class UserController extends Controller
             $token = md5(uniqid(mt_rand(), true));
             $user->updateUserToken($user->id, $token);
 
-            $url = $this->generateUrl('frontend_user_resetpass', array('token' => $token), true);
+            $url = $this->generateUrl('frontend_user_resetpass', ['token' => $token], true);
 
             $this->view->setCaching(0);
 
-            $mailSubject = sprintf(_('Password reminder for %s'), $sm->get('site_title'));
+            $mailSubject = sprintf(_('Password reminder for %s'), $this->get('setting_repository')->get('site_title'));
             $mailBody = $this->renderView(
                 'user/emails/recoverpassword.tpl',
-                array(
+                [
                     'user' => $user,
                     'url'  => $url,
-                )
+                ]
             );
 
             //  Build the message
@@ -381,7 +375,7 @@ class UserController extends Controller
                 ->setSubject($mailSubject)
                 ->setBody($mailBody, 'text/plain')
                 ->setTo($user->email)
-                ->setFrom(array('no-reply@postman.opennemas.com' => $sm->get('site_name')));
+                ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
 
             try {
                 $mailer = $this->get('mailer');
@@ -391,12 +385,10 @@ class UserController extends Controller
                     "Email sent. Frontend recover password (to: ".$user->email.")"
                 );
 
-                $this->view->assign(
-                    array(
-                        'mailSent' => true,
-                        'user' => $user
-                    )
-                );
+                $this->view->assign([
+                    'mailSent' => true,
+                    'user'     => $user
+                ]);
             } catch (\Exception $e) {
                 // Log this error
                 $this->get('application.log')->notice(

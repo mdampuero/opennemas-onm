@@ -125,8 +125,7 @@ class ArticlesController extends Controller
                 24 => '24', 26 => '26', 28 => '28',30 => '30',
                 32 => '32', 34 => '34'
             ],
-            'commentsConfig' => $this->get('setting_repository')
-                ->get('comments_config'),
+            'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
             'id'      => $id,
         ]);
     }
