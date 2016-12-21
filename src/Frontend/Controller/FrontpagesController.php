@@ -177,8 +177,10 @@ class FrontpagesController extends Controller
                 }
             }
 
-            $layout = $this->get('setting_repository')
-                ->get('frontpage_layout_' . $categoryId, 'default');
+            $layout = $this->get('setting_repository')->get('frontpage_layout_' . $categoryId, 'default');
+            if (empty($layout)) {
+                $layout = 'default';
+            }
 
             $layoutFile = 'layouts/' . $layout . '.tpl';
 
