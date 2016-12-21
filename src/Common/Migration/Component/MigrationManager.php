@@ -10,10 +10,11 @@
 namespace Common\Migration\Component;
 
 use Common\Core\Component\Filter\FilterManager;
+use Common\ORM\Core\Connection;
 use Common\Migration\Component\Exception\InvalidPersisterException;
 use Common\Migration\Component\Exception\InvalidRepositoryException;
 use Common\Migration\Component\Exception\InvalidTrackerException;
-use Common\ORM\Core\Connection;
+use Common\Migration\Component\Tracker\Tracker;
 
 /**
  * The MigrationManager creates components to migrate entities between a source
@@ -22,18 +23,18 @@ use Common\ORM\Core\Connection;
 class MigrationManager
 {
     /**
+     * The current configuration.
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
      * The filter manager.
      *
      * @var FilterManager
      */
     protected $fm;
-
-    /**
-     * The migration cofiguration.
-     *
-     * @var array
-     */
-    protected $migration;
 
     /**
      * The migration persister.
@@ -73,10 +74,10 @@ class MigrationManager
      *
      * @param array $migration The migration configuration.
      */
-    public function configure($migration)
+    public function configure($config)
     {
-        $this->migration = $migration;
-        $this->fm        = new FilterManager();
+        $this->config = $config;
+        $this->fm     = new FilterManager();
     }
 
     /**
@@ -88,7 +89,7 @@ class MigrationManager
      */
     public function filter($item)
     {
-        foreach ($this->migration['target']['filter'] as $key => $options) {
+        foreach ($this->config['filter'] as $key => $options) {
             foreach ($options['type'] as $name) {
                 $params = [];
                 $value  = null;
@@ -121,22 +122,19 @@ class MigrationManager
             return $this->tracker;
         }
 
-        $database = $this->migration['target']['database'];
-        $params   = array_merge($this->params, [ 'dbname' => $database ]);
-
-        $conn = new Connection($params);
-        $class = __NAMESPACE__ . '\\Tracker\\'
-            . \classify($this->migration['tracker'])
-            . 'Tracker';
-
-        if (class_exists($class)) {
-
-            $this->tracker = new $class($conn, $this->migration['type']);
-
-            return $this->tracker;
+        if (!array_key_exists('tracker', $this->config)
+            || !is_array($this->config['tracker'])
+        ) {
+            throw new InvalidTrackerException('Invalid tracker configuration');
         }
 
-        throw new InvalidTrackerException($this->migration['tracker']);
+        $database = $this->config['source']['database'];
+        $params   = array_merge($this->params, [ 'dbname' => $database ]);
+        $conn     = new Connection($params);
+
+        $this->tracker = new Tracker($conn, $this->config['tracker']);
+
+        return $this->tracker;
     }
 
     /**
@@ -150,17 +148,30 @@ class MigrationManager
             return $this->persister;
         }
 
-        $name  = $this->migration['target']['persister'];
+        if (!array_key_exists('source', $this->config)
+            || !is_array($this->config['source'])
+            || !array_key_exists('persister', $this->config['source'])
+        ) {
+            throw new InvalidPersisterException('Invalid persister configuration');
+        }
+
+        $name  = $this->config['source']['persister'];
         $class = __NAMESPACE__ . '\\Persister\\' . \classify($name)
             . 'Persister';
 
         if (class_exists($class)) {
-            $this->persister = new $class($this->em);
+            // Add connection params for repository
+            $params = array_merge(
+                $this->config,
+                [ 'connection' => $this->params]
+            );
+
+            $this->persister = new $class($params);
 
             return $this->persister;
         }
 
-        throw new InvalidPersisterException($name);
+        throw new InvalidPersisterException("No '$name' persister found");
     }
 
     /**
@@ -174,14 +185,21 @@ class MigrationManager
             return $this->repository;
         }
 
-        $class = __NAMESPACE__ . '\\Repository\\'
-            . \classify($this->migration['source']['repository'])
+        if (!array_key_exists('source', $this->config)
+            || !is_array($this->config['source'])
+            || !array_key_exists('repository', $this->config['source'])
+        ) {
+            throw new InvalidRepositoryException('Invalid repository configuration');
+        }
+
+        $name  = $this->config['source']['repository'];
+        $class = __NAMESPACE__ . '\\Repository\\' . \classify($name)
             . 'Repository';
 
         if (class_exists($class)) {
             // Add connection params for repository
             $params = array_merge(
-                $this->migration['source'],
+                $this->config,
                 [ 'connection' => $this->params]
             );
 
@@ -191,7 +209,7 @@ class MigrationManager
             return $this->repository;
         }
 
-        throw new InvalidRepositoryException($this->migration['source']['repository']);
+        throw new InvalidRepositoryException("No '$name' repository found");
     }
 
     /**
