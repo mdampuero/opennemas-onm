@@ -38,11 +38,11 @@ class DatabaseRepository implements Repository
      */
     public function __construct($config, $tracker)
     {
+        $config['connection']['dbname'] = $config['source']['database'];
+
         $this->config  = $config;
         $this->conn    = new Connection($config['connection']);
         $this->tracker = $tracker;
-
-        $this->conn->selectDatabase($config['database']);
     }
 
     /**
@@ -52,25 +52,15 @@ class DatabaseRepository implements Repository
     {
         $sql = sprintf(
             'SELECT COUNT(*) as total FROM %s',
-            $this->config['mapping']['table']
+            $this->config['source']['table']
         );
 
         // Support single value and array of values
-        $parsed = $this->tracker->getParsed();
-        $filter = '%s > "%s"';
-        if (is_array($parsed)) {
-            $filter = '%s NOT IN ("%s")';
-            $parsed = implode('", "', $parsed);
-        }
+        $parsed  = $this->tracker->count();
+        $filters = [];
 
-        $filters[] = sprintf(
-            $filter,
-            $this->config['mapping']['id'],
-            $parsed
-        );
-
-        if (!empty($this->config['mapping']['filter'])) {
-            $filters[] = $this->config['mapping']['filter'];
+        if (!empty($this->config['source']['filter'])) {
+            $filters[] = $this->config['source']['filter'];
         }
 
         if (!empty($filters)) {
@@ -79,7 +69,7 @@ class DatabaseRepository implements Repository
 
         $rs = $this->conn->fetchAll($sql);
 
-        return $rs[0]['total'];
+        return $rs[0]['total'] - $parsed;
     }
 
     /**
@@ -89,8 +79,18 @@ class DatabaseRepository implements Repository
     {
         $sql = sprintf(
             'SELECT COUNT(*) as total FROM %s',
-            $this->config['mapping']['table']
+            $this->config['source']['table']
         );
+
+        $filters = [];
+
+        if (!empty($this->config['source']['filter'])) {
+            $filters[] = $this->config['source']['filter'];
+        }
+
+        if (!empty($filters)) {
+            $sql .= ' WHERE ' . implode(' AND ', $filters);
+        }
 
         $rs = $this->conn->fetchAll($sql);
 
@@ -100,43 +100,9 @@ class DatabaseRepository implements Repository
     /**
      * {@inheritdoc}
      */
-    public function countMigrated()
+    public function countFixed()
     {
-        $sql = sprintf(
-            'SELECT COUNT(*) as total FROM %s',
-            $this->config['mapping']['table']
-        );
-
-        // Support single value and array of values
-        $parsed = $this->tracker->getParsed();
-        $filter = '%s <= "%s"';
-        if (is_array($parsed)) {
-            $filter = '%s IN ("%s")';
-            $parsed = implode('", "', $parsed);
-        }
-
-        $filters[] = sprintf(
-            $filter,
-            $this->config['mapping']['id'],
-            $parsed
-        );
-
-        if (!empty($this->config['mapping']['filter'])) {
-            $filters[] = $this->config['mapping']['filter'];
-        }
-
-        if (!empty($filters)) {
-            $sql .= ' WHERE ' . implode(' AND ', $filters);
-        }
-
-        $sql .= sprintf(
-            ' ORDER BY %s ASC',
-            $this->config['mapping']['id']
-        );
-
-        $rs = $this->conn->fetchAll($sql);
-
-        return $rs[0]['total'];
+        return $this->tracker->count();
     }
 
     /**
@@ -146,35 +112,21 @@ class DatabaseRepository implements Repository
     {
         $sql = sprintf(
             'SELECT * FROM %s',
-            $this->config['mapping']['table']
+            $this->config['source']['table']
         );
 
-        // Support single value and array of values
-        $parsed = $this->tracker->getParsed();
-        $filter = '%s > "%s"';
-        if (is_array($parsed)) {
-            $filter = '%s NOT IN ("%s")';
-            $parsed = implode('", "', $parsed);
-        }
+        $parsed  = $this->tracker->count();
+        $filters = [];
 
-        $filters[] = sprintf(
-            $filter,
-            $this->config['mapping']['id'],
-            $parsed
-        );
-
-        if (!empty($this->config['mapping']['filter'])) {
-            $filters[] = $this->config['mapping']['filter'];
+        if (!empty($this->config['source']['filter'])) {
+            $filters[] = $this->config['source']['filter'];
         }
 
         if (!empty($filters)) {
             $sql .= ' WHERE ' . implode(' AND ', $filters);
         }
 
-        $sql .= sprintf(
-            ' ORDER BY %s ASC LIMIT 1',
-            $this->config['mapping']['id']
-        );
+        $sql .= sprintf(' LIMIT 1 OFFSET %s', $parsed);
 
         $rs = $this->conn->fetchAll($sql);
 

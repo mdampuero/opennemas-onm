@@ -23,12 +23,12 @@ class DatabaseRepositoryTest extends KernelTestCase
     public function setUp()
     {
         $this->config = [
-            'database'   => 'foobar',
             'connection' => [],
-            'mapping'    => [
-                'table'  => 'frog',
-                'id'     => 'id',
-                'filter' => 'title LIKE "%foo%"'
+            'source'     => [
+                'database' => 'foobar',
+                'table'    => 'frog',
+                'id'       => 'id',
+                'filter'   => 'title LIKE "%foo%"'
             ]
         ];
 
@@ -37,9 +37,9 @@ class DatabaseRepositoryTest extends KernelTestCase
             ->setMethods([ 'executeQuery', 'fetchAll', 'selectDatabase' ])
             ->getMock();
 
-        $this->tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\MigrationTracker')
+        $this->tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\Tracker')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getParsed' ])
+            ->setMethods([ 'add', 'count' ])
             ->getMock();
 
         $this->conn->expects($this->any())->method('selectDatabase')->with('foobar');
@@ -56,14 +56,13 @@ class DatabaseRepositoryTest extends KernelTestCase
      */
     public function testCount()
     {
-        $this->tracker->expects($this->once())->method('getParsed')
-            ->willReturn([ 1, 2 ]);
+        $this->tracker->expects($this->once())->method('count')->willReturn(2);
 
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT COUNT(*) as total FROM frog WHERE id NOT IN ("1", "2") AND title LIKE "%foo%"')
+            ->with('SELECT COUNT(*) as total FROM frog WHERE title LIKE "%foo%"')
             ->willReturn([ [ 'total' => 10 ] ]);
 
-        $this->assertEquals(10, $this->repository->count());
+        $this->assertEquals(8, $this->repository->count());
     }
 
     /**
@@ -72,25 +71,20 @@ class DatabaseRepositoryTest extends KernelTestCase
     public function testCountAll()
     {
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT COUNT(*) as total FROM frog')
+            ->with('SELECT COUNT(*) as total FROM frog WHERE title LIKE "%foo%"')
             ->willReturn([ [ 'total' => 10 ] ]);
 
         $this->assertEquals(10, $this->repository->countAll());
     }
 
     /**
-     * Tests countMigrated.
+     * Tests countFixed.
      */
-    public function testCountMigrated()
+    public function testCountFixed()
     {
-        $this->tracker->expects($this->once())->method('getParsed')
-            ->willReturn([ 1, 2 ]);
+        $this->tracker->expects($this->once())->method('count')->willReturn(10);
 
-        $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT COUNT(*) as total FROM frog WHERE id IN ("1", "2") AND title LIKE "%foo%" ORDER BY id ASC')
-            ->willReturn([ [ 'total' => 10 ] ]);
-
-        $this->assertEquals(10, $this->repository->countMigrated());
+        $this->assertEquals(10, $this->repository->countFixed());
     }
 
     /**
@@ -98,11 +92,10 @@ class DatabaseRepositoryTest extends KernelTestCase
      */
     public function testNext()
     {
-        $this->tracker->expects($this->once())->method('getParsed')
-            ->willReturn([ 1, 2 ]);
+        $this->tracker->expects($this->once())->method('count')->willReturn(7);
 
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT * FROM frog WHERE id NOT IN ("1", "2") AND title LIKE "%foo%" ORDER BY id ASC LIMIT 1')
+            ->with('SELECT * FROM frog WHERE title LIKE "%foo%" LIMIT 1 OFFSET 7')
             ->willReturn([ [ 'gorp' => 'grault' ] ]);
 
         $this->assertEquals([ 'gorp' => 'grault' ], $this->repository->next());
@@ -113,11 +106,10 @@ class DatabaseRepositoryTest extends KernelTestCase
      */
     public function testNextWhenNoMoreResults()
     {
-        $this->tracker->expects($this->once())->method('getParsed')
-            ->willReturn(1756);
+        $this->tracker->expects($this->once())->method('count')->willReturn(1756);
 
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT * FROM frog WHERE id > "1756" AND title LIKE "%foo%" ORDER BY id ASC LIMIT 1')
+            ->with('SELECT * FROM frog WHERE title LIKE "%foo%" LIMIT 1 OFFSET 1756')
             ->willReturn([]);
 
         $this->assertFalse($this->repository->next());
