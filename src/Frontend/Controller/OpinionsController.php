@@ -75,7 +75,6 @@ class OpinionsController extends Controller
             ];
 
             $em = $this->get('opinion_repository');
-            $sm = $this->get('setting_repository');
 
             $order['in_home'] = 'DESC';
             if ($page == 1) {
@@ -85,7 +84,7 @@ class OpinionsController extends Controller
             $order['starttime'] = 'DESC';
 
             // Fetch configurations for this frontpage
-            $configurations = $sm->get(
+            $configurations = $this->get('setting_repository')->get(
                 'opinion_settings',
                 [
                     'total_editorial' => 2,
@@ -132,7 +131,7 @@ class OpinionsController extends Controller
                 }
             }
 
-            $numOpinions  = $sm->get('items_per_page');
+            $numOpinions  = $this->get('setting_repository')->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
@@ -425,8 +424,7 @@ class OpinionsController extends Controller
             $orderBy      = ['created' => 'DESC'];
 
             // Total opinions per page
-            $sm = $this->get('setting_repository');
-            $numOpinions  = $sm->get('items_per_page');
+            $numOpinions  = $this->get('setting_repository')->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {

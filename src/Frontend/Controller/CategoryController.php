@@ -52,8 +52,7 @@ class CategoryController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $sm = $this->get('setting_repository');
-        $itemsPerPage = $sm->get('items_in_blog', 8);
+        $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 8);
 
         $em = $this->get('entity_repository');
         $order = [ 'starttime' => 'DESC' ];

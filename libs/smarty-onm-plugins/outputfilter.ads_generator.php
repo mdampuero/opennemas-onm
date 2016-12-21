@@ -17,13 +17,11 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         return $output;
     }
 
-    $sm = getService('setting_repository');
-
     if (is_array($smarty->parent->tpl_vars)
         && array_key_exists('advertisements', $smarty->parent->tpl_vars)
         && is_array($smarty->parent->tpl_vars['advertisements']->value)
     ) {
-        $adsReviveConfs = $sm->get('revive_ad_server');
+        $adsReviveConfs = getService('setting_repository')->get('revive_ad_server');
 
         $advertisements = $smarty->parent->tpl_vars['advertisements']->value;
         $actual_category  = $smarty->parent->tpl_vars['actual_category']->value;
@@ -69,7 +67,7 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
 
         if (count($dfpZonesInformation) > 0) {
             // Check if targeting is set
-            $dfpOptions = $sm->get('dfp_options');
+            $dfpOptions = getService('setting_repository')->get('dfp_options');
             $targetingCode = '';
             if (is_array($dfpOptions) &&
                 array_key_exists('target', $dfpOptions) &&
@@ -78,7 +76,7 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
                 $targetingCode = "\ngoogletag.pubads().setTargeting('".$dfpOptions['target']."', ['".$actual_category."']);";
             }
             // Check for custom code
-            $dfpCustomCode = $sm->get('dfp_custom_code');
+            $dfpCustomCode = getService('setting_repository')->get('dfp_custom_code');
             $customCode = '';
             if (!empty($dfpCustomCode)
             ) {
@@ -102,7 +100,6 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
 
             $output = str_replace('</head>', $dfpOutput.'</head>', $output);
         }
-
     }
 
     return $output;

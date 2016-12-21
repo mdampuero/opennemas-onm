@@ -125,8 +125,7 @@ class ArticlesController extends Controller
                 24 => '24', 26 => '26', 28 => '28',30 => '30',
                 32 => '32', 34 => '34'
             ],
-            'commentsConfig' => $this->get('setting_repository')
-                ->get('comments_config'),
+            'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
             'id'      => $id,
         ]);
     }
@@ -143,7 +142,7 @@ class ArticlesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('settings_reporitosy')->get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('settings_repository')->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);

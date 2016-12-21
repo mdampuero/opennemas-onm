@@ -276,8 +276,7 @@ class NewsAgencyController extends Controller
         }, $categories);
 
         // Get servers
-        $params['servers'] = $this->get('setting_repository')
-            ->get('news_agency_config');
+        $params['servers'] = $this->get('setting_repository')->get('news_agency_config');
 
         if (!is_array($params['servers'])) {
             $params['servers'] = array();
