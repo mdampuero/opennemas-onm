@@ -13,40 +13,83 @@ namespace Common\Migration\Component\Tracker;
  * The Tracker class provides methods to track contents during migration
  * process.
  */
-abstract class Tracker
+class Tracker
 {
     /**
-     * The type to track.
+     * The number of parsed items.
      *
      * @var string
      */
-    protected $type;
+    protected $count = null;
 
     /**
      * Initializes the Tracker.
      *
-     * @param Connection $conn The database connection.
-     * @param string     $type The type to track.
+     * @param Connection $conn   The database connection.
+     * @param array      $config The tracker configuration.
      */
-    public function __construct($conn, $type = null)
+    public function __construct($conn, $config)
     {
-        $this->conn = $conn;
-        $this->type = $type;
+        $this->conn   = $conn;
+        $this->config = $config;
     }
 
     /**
-     * Adds a new item to the list.
-     *
-     * @param string $sourceId The content id in the source data source.
-     * @param string $targetId The content id in the target data source.
-     * @param string $slug     The content slug.
+     * Checks and creates table to track fixed items.
      */
-    abstract public function add($sourceId, $targetId, $slug = null);
+    public function start()
+    {
+        $q      = 'CREATE TABLE IF NOT EXISTS migration_fix(%s)';
+        $fields = [];
+
+        foreach ($this->config['fields'] as $field) {
+            $fields[] = $field . ' VARCHAR(255) DEFAULT NULL';
+        }
+
+        $q = sprintf($q, implode(',', $fields));
+
+        $this->conn->executeQuery($q);
+    }
 
     /**
-     * Returns values used to check if an item is already parsed.
+     * Adds a new item to the table of fixed items.
      *
-     * @return mixed The values used to check if an item is already parsed.
+     * @param array $fixed Array of values to identify the fixed item.
      */
-    abstract public function getParsed();
+    public function add($fixed)
+    {
+        if (is_null($this->count)) {
+            $this->count();
+        }
+
+        $data = [ $this->config['fields'][0] => $fixed ];
+
+        $this->conn->insert('migration_fix', $data);
+        $this->count++;
+    }
+
+    /**
+     * Returns number of already fixed items.
+     *
+     * @return mixed The number of already fixed items.
+     */
+    public function count()
+    {
+        if (is_null($this->count)) {
+            $sql = "SELECT COUNT(*) AS total FROM migration_fix";
+            $r   = $this->conn->fetchAll($sql);
+
+            $this->count = (int) $r[0]['total'];
+        }
+
+        return $this->count;
+    }
+
+    /**
+     * Removes the table to track fixed items.
+     */
+    public function end()
+    {
+        $this->conn->executeQuery('DROP TABLE IF EXISTS migration_fix');
+    }
 }
