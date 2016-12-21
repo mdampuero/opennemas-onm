@@ -251,7 +251,7 @@ class Widget extends Content
         $class = 'Widget' . $this->content;
 
         if (class_exists($class)) {
-            $class = new $class($widget);
+            $class = new $class($this);
         } else {
             return sprintf(_("Widget %s not available"), $this->content);
         }
