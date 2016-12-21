@@ -174,10 +174,11 @@ class SubscribersController extends Controller
             $text.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
         }
 
-        //Get configuration params
-        $sr = $this->get('setting_repository');
-        $configSiteName  = $sr->get('site_name');
-        $configMailTo    = $sr->get('newsletter_maillist');
+        // Get configuration params
+        list($configSiteName, $configMailTo) = $this->get('setting_repository')->get([
+            'site_name',
+            'newsletter_maillist'
+        ]);
 
         // Checking the type of action to do (alta/baja)
         if ($data['subscription'] == 'alta') {
@@ -200,7 +201,9 @@ class SubscribersController extends Controller
             ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
             ->setTo(array($configMailTo['subscription'] => _('Subscription form')))
             ->setFrom(array($data['email'] => $data['name']))
-            ->setSender(array('no-reply@postman.opennemas.com' => $sr->get('site_name')));
+            ->setSender([
+                'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
+            ]);
 
         try {
             $mailer = $this->get('mailer');

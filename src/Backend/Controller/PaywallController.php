@@ -61,11 +61,10 @@ class PaywallController extends Controller
             'USD' => '$',
         );
 
-        $this->sm = $this->get('setting_repository');
-        if ($this->sm->get('paywall_settings')) {
+        if ($this->get('setting_repository')->get('paywall_settings')) {
             $this->settings = array_merge(
                 $this->settings,
-                $this->sm->get('paywall_settings')
+                $this->get('setting_repository')->get('paywall_settings')
             );
         }
     }

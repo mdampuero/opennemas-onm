@@ -11,7 +11,6 @@
 function smarty_outputfilter_ads_scripts($output, $smarty)
 {
     $request = getService('request');
-    $sm      = getService('setting_repository');
     $uri     = $request->getUri();
 
     if (!preg_match('/\/admin\/frontpages/', $referer)
@@ -24,7 +23,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         && !preg_match('/\/fb\/instant-articles/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
-        $settings = $sm->get([ 'header_script', 'body_start_script', 'body_end_script' ]);
+        $settings = getService('setting_repository')->get([ 'header_script', 'body_start_script', 'body_end_script' ]);
 
         if (array_key_exists('header_script', $settings)
             && !empty($settings['header_script'])

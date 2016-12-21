@@ -103,9 +103,7 @@ class NewsAgencyServerController extends Controller
     public function cleanAction(Request $request)
     {
         $id = $request->query->getDigits('id');
-        $sm = $this->get('setting_repository');
-
-        $servers = $sm->get('news_agency_config');
+        $servers = $this->get('setting_repository')->get('news_agency_config');
 
         if (!array_key_exists($id, $servers)) {
             return new JsonResponse(
@@ -182,10 +180,8 @@ class NewsAgencyServerController extends Controller
      */
     public function toggleAction(Request $request, $id)
     {
-        $status = $request->request->get('activated');
-        $sm     = $this->get('setting_repository');
-
-        $servers = $sm->get('news_agency_config');
+        $status  = $request->request->get('activated');
+        $servers = $this->get('setting_repository')->get('news_agency_config');
 
         $servers[$id]['activated'] = $status;
 
@@ -193,7 +189,7 @@ class NewsAgencyServerController extends Controller
         $compiler   = new Compiler($repository->syncPath);
         $compiler->cleanCompileForServer($id);
 
-        $sm->set('news_agency_config', $servers);
+        $this->get('setting_repository')->set('news_agency_config', $servers);
 
         return new JsonResponse(
             array(
@@ -221,9 +217,7 @@ class NewsAgencyServerController extends Controller
     public function deleteAction(Request $request)
     {
         $id = $request->query->getDigits('id');
-        $sm = $this->get('setting_repository');
-
-        $servers = $sm->get('news_agency_config');
+        $servers = $this->get('setting_repository')->get('news_agency_config');
 
         if (!array_key_exists($id, $servers)) {
             return new JsonResponse([
@@ -246,7 +240,7 @@ class NewsAgencyServerController extends Controller
 
             unset($servers[$id]);
 
-            $sm->set('news_agency_config', $servers);
+            $this->get('setting_repository')->set('news_agency_config', $servers);
 
             $messages[] = [
                 'message' => _('News agency server deleted.'),

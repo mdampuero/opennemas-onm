@@ -425,8 +425,6 @@ class AdsController extends Controller
      */
     public function configAction(Request $request)
     {
-        $sm = $this->get('setting_repository');
-
         if ('POST' == $this->request->getMethod()) {
             $formValues = $request->request;
 
@@ -452,7 +450,7 @@ class AdsController extends Controller
             }
 
             foreach ($settings as $key => $value) {
-                $sm->set($key, $value);
+                $this->get('setting_repository')->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add(
@@ -470,7 +468,7 @@ class AdsController extends Controller
                 'tradedoubler_id', 'dfp_custom_code'
             ];
 
-            $configurations = $sm->get($keys);
+            $configurations = $this->get('setting_repository')->get($keys);
 
             return $this->render(
                 'advertisement/config.tpl',

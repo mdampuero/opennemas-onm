@@ -177,8 +177,10 @@ class FrontpagesController extends Controller
                 }
             }
 
-            $layout = $this->get('setting_repository')
-                ->get('frontpage_layout_' . $categoryId, 'default');
+            $layout = $this->get('setting_repository')->get('frontpage_layout_' . $categoryId, 'default');
+            if (empty($layout)) {
+                $layout = 'default';
+            }
 
             $layoutFile = 'layouts/' . $layout . '.tpl';
 
@@ -279,10 +281,10 @@ class FrontpagesController extends Controller
 
         return $this->render(
             'frontpage/frontpage.tpl',
-            array(
+            [
                 'cache_id' => $cacheID,
                 'x-tags'   => 'frontpage-page,frontpage-page-external,'.$categoryName,
-            )
+            ]
         );
     }
 
