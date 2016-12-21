@@ -201,34 +201,40 @@ class NewsletterSubscribersController extends Controller
      */
     public function batchDeleteAction(Request $request)
     {
-        $ids = $request->query->get('cid');
+        $ids = $request->request->get('selected');
+        $errors  = array();
+        $success = array();
+        $updated = array();
 
         if (is_array($ids) && count($ids) > 0) {
             $user = new \Subscriber();
             $count = 0;
             foreach ($ids as $id) {
                 if ($user->delete($id)) {
-                    $count++;
+                    $updated[] = $id;
                 } else {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        sprintf(_('Unable to delete the subscriber with the id %d.'), $id)
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
                     );
                 }
             }
+        }
 
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Successfully deleted %d subscribers.'), $count)
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Please specify a subscriber id for delete it.')
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => sprintf(
+                    sprintf(_('Successfully deleted %d subscribers.'), count($updated))
+                ),
+                'type'    => 'success'
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+        return new JsonResponse([
+            'messages'  => array_merge($success, $errors)
+        ]);
     }
 
     /**
