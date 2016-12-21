@@ -143,7 +143,7 @@ class ArticlesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('settings_reporitosy')->get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('settings_repository')->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
