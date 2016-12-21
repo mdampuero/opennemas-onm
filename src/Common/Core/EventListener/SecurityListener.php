@@ -51,7 +51,15 @@ class SecurityListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $uri = $event->getRequest()->getRequestUri();
+        $uri      = $event->getRequest()->getRequestUri();
+        $instance = $this->container->get('core.instance');
+
+        // Instance not registered
+        if (empty($instance)) {
+            return;
+        }
+
+        $this->security->setInstance($instance);
 
         $instance = $this->container->get('core.instance');
         $this->security->setInstance($instance);
