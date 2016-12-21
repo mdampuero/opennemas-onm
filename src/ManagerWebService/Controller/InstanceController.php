@@ -10,7 +10,7 @@ use Onm\Exception\DatabaseNotDeletedException;
 use Onm\Exception\DatabaseNotRestoredException;
 use Onm\Exception\InstanceAlreadyExistsException;
 use Onm\Exception\InstanceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Instance\InstanceCreator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

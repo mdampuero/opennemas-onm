@@ -12,7 +12,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -298,6 +298,8 @@ class ImagesController extends Controller
                         }
                     }
 
+                    $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+
                     $data = array(
                         'local_file'        => $file['tmp_name'],
                         'original_filename' => $file['name'],
@@ -306,7 +308,7 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => \Onm\StringUtils::normalizeMetadata(\Onm\StringUtils::getTags($tempName)),
+                        'metadata'          => $tagSystem->filter($tempName),
                     );
 
                     try {

@@ -11,7 +11,7 @@ namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\ORM\Entity\User;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -285,7 +285,7 @@ class UserController extends Controller
 
         // Encode password
         if (!empty($user->password)) {
-            $user->password = $this->get('onm_password_encoder')
+            $user->password = $this->get('core.security.encoder.password')
                 ->encodePassword($data['password'], null);
         }
 
@@ -367,7 +367,7 @@ class UserController extends Controller
 
         // Encode password
         if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = $this->get('onm_password_encoder')
+            $data['password'] = $this->get('core.security.encoder.password')
                 ->encodePassword($data['password'], null);
         }
 

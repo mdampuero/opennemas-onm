@@ -17,7 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Defines the frontend controller for Amp HTML content
@@ -31,7 +31,7 @@ class AmpController extends Controller
      **/
     public function init()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('AMP_MODULE')) {
+        if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
             throw new ResourceNotFoundException();
         }
 

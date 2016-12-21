@@ -106,7 +106,7 @@ class PurchaseController extends Controller
             . ' FROM purchase, instances'
             . ' WHERE instances.id = purchase.instance_id';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
 
         return $this->export($data, 'all');
     }
@@ -127,7 +127,7 @@ class PurchaseController extends Controller
             . ' FROM purchase, instances'
             . ' WHERE instances.id = purchase.instance_id AND step = "done"';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
 
         return $this->export($data, 'completed');
     }
@@ -148,7 +148,7 @@ class PurchaseController extends Controller
             . ' FROM purchase, instances'
             . ' WHERE instances.id = purchase.instance_id AND step != "done"';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
 
         return $this->export($data, 'uncompleted');
     }

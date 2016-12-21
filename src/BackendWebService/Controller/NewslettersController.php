@@ -17,7 +17,7 @@ namespace BackendWebService\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the newsletters
@@ -41,9 +41,9 @@ class NewslettersController extends Controller
         // Initialization of the newsletter provider
         $nm = $this->get('newsletter_manager');
 
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search', '');
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search', '');
 
         if (is_array($search) && array_key_exists('title', $search)) {
             $titleFilter = 'title LIKE \''.(string) $search['title'][0]['value'].'\'';

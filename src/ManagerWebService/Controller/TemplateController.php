@@ -9,7 +9,7 @@
  */
 namespace ManagerWebService\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class TemplateController extends Controller
 {

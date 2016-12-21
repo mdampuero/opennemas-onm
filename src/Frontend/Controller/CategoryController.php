@@ -16,7 +16,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Shows a paginated page for contents that share a property

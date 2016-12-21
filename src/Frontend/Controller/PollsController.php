@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -76,6 +76,10 @@ class PollsController extends Controller
      **/
     public function frontpageAction()
     {
+        if (!$this->get('core.security')->hasExtension('POLL_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view->setConfig('poll-frontpage');
 
         // Don't execute action logic if was cached before

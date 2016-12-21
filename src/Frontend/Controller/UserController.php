@@ -13,7 +13,7 @@ use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -93,7 +93,6 @@ class UserController extends Controller
                 'username'      => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
                 'name'          => $request->request->filter('full_name', null, FILTER_SANITIZE_STRING),
                 'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
-                'sessionexpire' => 15,
                 'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
                 'type'          => 1, // It is a frontend user registration.
                 'id_user_group' => array(),
@@ -175,7 +174,12 @@ class UserController extends Controller
                         );
                     }
                     // Set registration date
-                    $user->addRegisterDate();
+                    $currentTime = new \DateTime();
+                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
+                    $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+                    $user->setMeta(array('register_date' => $currentTime));
+
                     $this->view->assign('success', true);
                 }
             }
@@ -235,7 +239,7 @@ class UserController extends Controller
             $em->persist($user);
 
             $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
-            $this->dispatchEvent('author.update', array('id' => $user->id));
+            $this->get('core.dispatcher')->dispatch('author.update', array('id' => $user->id));
         } catch (EntityNotFoundException $e) {
             $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
         } catch (\Exception $e) {

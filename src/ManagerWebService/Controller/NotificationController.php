@@ -12,7 +12,7 @@ namespace ManagerWebService\Controller;
 use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Notification;
 use League\Csv\Writer;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -187,7 +187,8 @@ class NotificationController extends Controller
                 . ' AND notification_id = ? AND instance_id = instances.id'
             . ' GROUP BY notification_id, instance_id';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql, [ $id ]);
+        $data = $this->get('orm.manager')->getConnection('manager')
+            ->fetchAll($sql, [ $id ]);
         $data = array_map(function ($a) {
             $title = unserialize($a['title']);
 
@@ -510,7 +511,7 @@ class NotificationController extends Controller
 
         $sql .= ' GROUP BY notification.id ORDER BY id DESC';
 
-        return $this->get('dbal_connection_manager')->fetchAll($sql);
+        return $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
     }
 
     /**

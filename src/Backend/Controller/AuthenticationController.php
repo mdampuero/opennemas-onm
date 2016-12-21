@@ -9,7 +9,7 @@
  */
 namespace Backend\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -102,10 +102,10 @@ class AuthenticationController extends Controller
             'login/login.tpl',
             [
                 'failed_login_attempts' => $session->get('failed_login_attempts'),
-                'current_language'      => \Application::$language,
+                'locale'                => $this->get('core.locale')->getLocale(),
                 'token'                 => $token,
                 'referer'               => $referer,
-                'languages'             => $this->get('core.locale')->getLocales()
+                'locales'               => $this->get('core.locale')->getLocales()
             ]
         );
     }

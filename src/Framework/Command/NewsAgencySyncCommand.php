@@ -68,12 +68,6 @@ EOF
         $this->getContainer()->get('dbal_connection')
             ->selectDatabase($instance->getDatabaseName());
 
-        $connection = $this->getContainer()->get('db_conn')
-            ->selectDatabase($instance->getDatabaseName());
-
-        \Application::load();
-        \Application::initDatabase($connection);
-
         $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
         $logger->info("Start synchronizing {$instance->internal_name} instance", array('cron'));
 

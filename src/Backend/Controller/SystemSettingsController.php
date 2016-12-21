@@ -17,7 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles all the request for Welcome actions
@@ -207,7 +207,7 @@ class SystemSettingsController extends Controller
         }
 
         // Delete caches for custom_css and frontpages
-        $this->dispatchEvent('setting.update');
+        $this->get('core.dispatcher')->dispatch('setting.update');
 
         $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 

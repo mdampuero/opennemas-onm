@@ -6,9 +6,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Diego Blanco Estévez <diego@openhost.es>
- *
  */
 namespace Framework\Command;
 
@@ -20,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
 use Framework\Migrator\Saver\MigrationSaver;
-use Onm\DatabaseConnection;
 
 class OnmMigratorCommand extends ContainerAwareCommand
 {
@@ -76,6 +72,12 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'Describes origin database and how to import from it.'
             )
             ->addOption(
+                'checkTranslations',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, command will check and configure the translations table'
+            )
+           ->addOption(
                 'debug',
                 false,
                 InputOption::VALUE_NONE,
@@ -152,11 +154,12 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $this->getContainer()->get('session')
             ->set('user', json_decode(json_encode(['id' => 0, 'username' => 'cli'])));
 
-        $start        = time();
-        $basePath     = APPLICATION_PATH;
-        $this->debug  = $input->getOption('debug');
-        $this->output = $output;
-        $this->logger = $this->getContainer()->get('logger');
+        $start            = time();
+        $basePath         = APPLICATION_PATH;
+        $this->debug      = $input->getOption('debug');
+        $this->checkTrans = $input->getOption('checkTranslations');
+        $this->output     = $output;
+        $this->logger     = $this->getContainer()->get('logger');
 
         chdir($basePath);
 
@@ -222,6 +225,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $this->translations,
                     $this->stats,
                     $this->output,
+                    $this->checkTrans,
                     $this->debug
                 );
             } else {
@@ -291,6 +295,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     break;
                 case 'related-contents':
                     $this->saver->saveRelatedContents($key, $schema, $data);
+                    break;
+                case 'static-page':
+                    $this->saver->saveStaticPages($key, $schema, $data);
                     break;
                 case 'user':
                     $this->saver->saveUsers($key, $schema, $data);

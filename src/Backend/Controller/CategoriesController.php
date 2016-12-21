@@ -17,7 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -91,8 +91,12 @@ class CategoriesController extends Controller
             $category = new \ContentCategory();
 
             if ($category->create($data)) {
-                $user = new \User();
-                $user->addCategoryToUser($this->getUser()->id, $category->pk_content_category);
+                $user = $this->get('core.user');
+
+                if ($user->getOrigin() != 'manager') {
+                    $user->categories[] = $category->pk_content_category;
+                    $this->get('orm.manager')->persist($user, 'instance');
+                }
 
                 dispatchEventWithParams('category.create', ['category' => $category]);
 
@@ -258,13 +262,20 @@ class CategoriesController extends Controller
 
         if ($category->pk_content_category != null) {
             if ($category->delete($id)) {
-                $user = new \User();
-                $user->delCategoryToUser($this->getUser()->id, $id);
+                $user = $this->get('core.user');
+
+                if ($user->getOrigin() != 'manager'
+                    && in_array($id, $user->categories)
+                    && ($key = array_search($id, $user->categories)) !== false
+                ) {
+                    unset($user->categories[$key]);
+                    $this->get('orm.manager')->persist($user, 'instance');
+                }
 
                 dispatchEventWithParams('category.delete', ['category' => $category]);
 
                 $this->get('session')->getFlashBag()->add(
-                    'sucess',
+                    'success',
                     _("Category deleted successfully.")
                 );
             } else {

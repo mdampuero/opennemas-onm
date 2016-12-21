@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the user authentication in frontend.
@@ -62,14 +62,10 @@ class AuthenticationController extends Controller
 
         $session->set('intention', $intention);
 
-        return $this->render(
-            'authentication/login.tpl',
-            [
-                'failed_login_attempts' => $session->get('failed_login_attempts'),
-                'current_language'      => \Application::$language,
-                'token'                 => $token,
-                'referer'               => $referer
-            ]
-        );
+        return $this->render('authentication/login.tpl', [
+            'failed_login_attempts' => $session->get('failed_login_attempts'),
+            'token'                 => $token,
+            'referer'               => $referer
+        ]);
     }
 }

@@ -57,17 +57,27 @@ class Loader
      */
     public function configureInstance($instance)
     {
+        $database  = $instance->getDatabaseName();
+        $namespace = $instance->internal_name;
+
         // Change database for `instance` database connection
         if ($this->container->has('orm.manager')) {
             $this->container->get('orm.manager')->getConnection('instance')
-                ->selectDatabase($instance->getDatabaseName());
+                ->selectDatabase($database);
         }
 
         // Change namespace for `instance` cache connection
         if ($this->container->has('cache.manager')) {
             $this->container->get('cache.connection.instance')
-                ->setNamespace($instance->internal_name);
+                ->setNamespace($namespace);
         }
+
+        // TODO: Remove when everyone use new cache.manager service
+        $this->container->get('cache')->setNamespace($namespace);
+
+        // TODO: Remove when using new ORM for all models
+        $this->container->get('dbal_connection')
+            ->selectDatabase($database);
     }
 
     /**

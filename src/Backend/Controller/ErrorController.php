@@ -16,7 +16,7 @@ namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -126,8 +126,6 @@ class ErrorController extends Controller
                 return new Response($content, 404);
                 break;
 
-            case 'Onm\Security\Exception\AccessDeniedException':
-            case 'Onm\Security\Exception\ModuleNotActivatedException':
             case 'Symfony\Component\Security\Core\Exception\AccessDeniedException':
                 $errorMessage = _('You are not allowed to perform this action.');
 

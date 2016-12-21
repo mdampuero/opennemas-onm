@@ -9,7 +9,7 @@
 function smarty_function_adsense_page_level_onm($params, &$smarty)
 {
     $output = '';
-    if (!\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+    if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
         $output =   "<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>\n"
                     . "<script>\n"
                     . " (adsbygoogle = window.adsbygoogle || []).push({\n"

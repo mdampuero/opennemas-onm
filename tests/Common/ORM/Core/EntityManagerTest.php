@@ -168,6 +168,14 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getContainer.
+     */
+    public function testGetContainer()
+    {
+        $this->assertEquals($this->container, $this->em->getContainer());
+    }
+
+    /**
      * Tests getConverter when the requested converter is not defined.
      *
      * @expectedException \Common\ORM\Core\Exception\InvalidConverterException

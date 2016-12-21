@@ -5,7 +5,7 @@ namespace BackendWebService\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class ImagesController extends ContentController
 {

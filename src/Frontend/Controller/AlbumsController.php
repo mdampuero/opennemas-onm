@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -35,6 +35,10 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
+        if (!$this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 

@@ -17,7 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -36,34 +36,34 @@ class MenusController extends Controller
     {
         $this->pages = array(array('title'=>_("Frontpage"),'link'=>"/"));
 
-        if (\Onm\Module\ModuleManager::isActivated('OPINION_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             array_push($this->pages, array('title'=>_("Opinion"),'link'=>"opinion/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('BLOG_MANAGER')) {
             array_push($this->pages, array('title'=>_("Bloggers"),'link'=>"blog/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
             array_push($this->pages, array('title'=>_("Album"),'link'=>"album/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
             array_push($this->pages, array('title'=>_("Video"),'link'=>"video/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
             array_push($this->pages, array('title'=>_("Poll"),'link'=>"poll/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('LETTER_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
             array_push($this->pages, array('title'=>_("Letters to the Editor"),'link'=>"cartas-al-director/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('KIOSKO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
             array_push($this->pages, array('title'=>_("News Stand"),'link'=>"portadas-papel/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('FORM_MANAGER')) {
             array_push($this->pages, array('title'=>_("Form"),'link'=>"participa/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('NEWSLETTER_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('NEWSLETTER_MANAGER')) {
             array_push($this->pages, array('title'=>_("Newsletter"),'link'=>"newsletter/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('LIBRARY_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('LIBRARY_MANAGER')) {
             array_push($this->pages, array('title'=>_("Archive"),'link'=>"archive/content/"));
         }
 

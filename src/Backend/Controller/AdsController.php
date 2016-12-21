@@ -12,8 +12,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for managing ads
@@ -242,7 +241,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if ($ad->fk_publisher != $this->getUser()->id
-            && (false === Acl::check('CONTENT_OTHER_UPDATE'))
+            && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -302,7 +301,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if (!$ad->isOwner($this->getUser()->id)
-            && (false === Acl::check('CONTENT_OTHER_UPDATE'))
+            && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -462,7 +461,7 @@ class AdsController extends Controller
             );
 
             // Delete caches for frontpages
-            $this->dispatchEvent('setting.update');
+            $this->get('core.dispatcher')->dispatch('setting.update');
 
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {

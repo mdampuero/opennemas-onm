@@ -6,17 +6,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Diego Blanco Estévez <diego@openhost.es>
- *
  */
 namespace Framework\Migrator\Provider;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
-
-use Onm\DatabaseConnection;
-use Onm\Settings as s;
 
 class EstrellaDigitalProvider extends JsonProvider
 {
@@ -57,6 +51,6 @@ class EstrellaDigitalProvider extends JsonProvider
     {
         $sql = "ALTER TABLE  `translation_ids` CHANGE  `pk_content_old` "
             . " `pk_content_old` VARCHAR( 255 ) NOT NULL";
-        $this->targetConnection->Execute($sql);
+        $this->targetConnection->executeQuery($sql);
     }
 }

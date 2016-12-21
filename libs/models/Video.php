@@ -152,12 +152,16 @@ class Video extends Content
         try {
             parent::create($data);
 
+            $this->pk_video   = $this->id;
+            $this->pk_content = $this->id;
+
             $rs = getService('dbal_connection')->insert(
                 "videos",
                 [
                   'pk_video'    => $this->id,
                   'video_url'   => $data['video_url'],
-                  'information' => serialize($data['information']),
+                  'information' => array_key_exists('information', $data) ?
+                      serialize($data['information']) : null,
                   'author_name' => $data['author_name'],
                 ]
             );
@@ -493,8 +497,8 @@ class Video extends Content
             array(
                 'id'       => sprintf('%06d', $this->id),
                 'date'     => date('YmdHis', strtotime($this->created)),
-                'category' => $this->category_name,
-                'slug'     => $this->slug,
+                'category' => urlencode($this->category_name),
+                'slug'     => urlencode($this->slug),
             )
         );
 

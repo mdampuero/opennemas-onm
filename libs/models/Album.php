@@ -71,8 +71,8 @@ class Album extends Content
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
-                        'category' => $this->category_name,
-                        'slug'     => $this->slug,
+                        'category' => urlencode($this->category_name),
+                        'slug'     => urlencode($this->slug),
                     )
                 );
 
@@ -173,13 +173,17 @@ class Album extends Content
         parent::create($data);
 
         try {
+            $this->pk_content = (int) $this->id;
+            $this->pk_album   = (int) $this->id;
+
             $rs = getService('dbal_connection')->insert(
                 'albums',
                 [
                     'pk_album' => (int) $this->id,
                     'subtitle' => $data["subtitle"],
-                    'agency'   => $data["agency"],
-                    'cover_id' => (int) $data['album_frontpage_image'],
+                    'agency'   => array_key_exists('agency', $data) ? $data["agency"] : '',
+                    'cover_id' => array_key_exists('album_frontpage_image', $data) ?
+                        (int) $data['album_frontpage_image'] : null,
                 ]
             );
 
@@ -345,6 +349,12 @@ class Album extends Content
      **/
     public function saveAttachedPhotos($data)
     {
+        if (!array_key_exists('album_photos_id', $data)
+            || empty($data['album_photos_id'])
+        ) {
+            return false;
+        }
+
         $photoIds = $data['album_photos_id'];
         if (isset($photoIds) && !empty($photoIds)) {
             foreach ($photoIds as $position => $photoID) {

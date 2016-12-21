@@ -16,8 +16,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 use Onm\StringUtils;
 
@@ -215,6 +214,17 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+            && !$book->isOwner($this->getUser()->id)
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this book because you don't have enough privileges.")
+            );
+
+            return $this->redirect($this->generateUrl('admin_books'));
+        }
+
         return $this->render(
             'book/new.tpl',
             array(
@@ -249,10 +259,15 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
-        if (!Acl::check('CONTENT_OTHER_UPDATE')
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$book->isOwner($this->getUser()->id)
         ) {
-            throw new AccessDeniedException();
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this book because you don't have enough privileges.")
+            );
+
+            return $this->redirect($this->generateUrl('admin_books'));
         }
 
         // Check empty data

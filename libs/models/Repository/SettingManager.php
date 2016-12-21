@@ -165,8 +165,8 @@ class SettingManager extends BaseManager
             return $value !== $this->lostValue;
         });
 
-        if (is_array($default)) {
-            $results = array_merge($default, $results);
+        if (is_array($name)) {
+            $results = array_merge($name, $results);
         }
 
         if (!is_array($name)) {

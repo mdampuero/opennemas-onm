@@ -12,8 +12,6 @@
  */
 namespace Onm\UI;
 
-use Onm\Security\Acl;
-
 /**
  * Class for generate a menu from XML file, with support for ACLs system.
  *
@@ -124,13 +122,13 @@ class SimpleMenu
             $moduleAllowed = false;
 
             foreach ($modules as $module) {
-                $moduleAllowed = $moduleAllowed || \Onm\Module\ModuleManager::isActivated($module);
+                $moduleAllowed = $moduleAllowed || getService('core.security')->hasExtension($module);
             }
         }
 
         // Render node content
         if ($moduleAllowed
-            && (!isset($element['privilege']) || $this->checkAcl($element['privilege']))
+            && (!isset($element['privilege']) || $this->checkPermission($element['privilege']))
             && (($hasSubmenu && !empty($submenuContent)) || !$hasSubmenu)
         ) {
             $isCurrent = false;
@@ -261,7 +259,7 @@ class SimpleMenu
      *
      * @return boolean true if the user has access
      **/
-    private function checkAcl($privilege)
+    private function checkPermission($privilege)
     {
         if (empty($privilege)) {
             return true;

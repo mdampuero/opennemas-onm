@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Module\ModuleManager;
 use Onm\Settings as s;
 
 /**
@@ -486,7 +485,7 @@ class Advertisement extends Content
             unset($types[$key]);
         }
 
-        if (!ModuleManager::isActivated('ADS_MANAGER')) {
+        if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
             // Fetch ads from static file
             $advertisements = include APP_PATH.'config/ads/onm_default_ads.php';
 
@@ -627,7 +626,7 @@ class Advertisement extends Content
         $output = '';
 
         // Don't render any non default ads if module is not activated
-        if (!ModuleManager::isActivated('ADS_MANAGER') &&
+        if (!getService('core.security')->hasExtension('ADS_MANAGER') &&
             (
                 !isset($this->default_ad) ||
                 $this->default_ad != 1

@@ -18,7 +18,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($user->id)}{url name=admin_author_update id=$user->id}{else}{url name=admin_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
+  <form action="{if isset($user->id)}{url name=backend_author_update id=$user->id}{else}{url name=backend_author_save}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -53,7 +53,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_opinion_authors}">
+                <a class="btn btn-link" href="{url name=backend_authors_list}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>
@@ -97,7 +97,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="meta[twitter]">
+                <label class="form-label" for="twitter">
                   {t}Twitter user{/t}
                 </label>
                 <div class="controls">
@@ -105,12 +105,12 @@
                     <span class="input-group-addon">
                       <i class="fa fa-at"></i>
                     </span>
-                    <input class="form-control" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[twitter]" name="meta[twitter]" value="{$user->meta['twitter']|default:""}">
+                    <input class="form-control" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="twitter" name="twitter" value="{$user->twitter|default:""}">
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="meta[facebook]">
+                <label class="form-label" for="facebook">
                   {t}Facebook user{/t}
                 </label>
                 <div class="controls">
@@ -118,7 +118,7 @@
                     <span class="input-group-addon">
                       <i class="fa fa-at"></i>
                     </span>
-                    <input class="form-control" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[facebook]" name="meta[facebook]" value="{$user->meta['facebook']|default:""}">
+                    <input class="form-control" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="facebook" name="facebook" value="{$user->facebook|default:""}">
                   </div>
                 </div>
               </div>
@@ -156,8 +156,8 @@
               <label class="form-label">{t}View as Blog{/t}</label>
               <div class="controls">
                 <div class="checkbox">
-                  <input type="checkbox" name="meta[is_blog]" id="meta[is_blog]" {if $user->meta['is_blog'] eq 1}checked="checked"{/if}>
-                  <label for="meta[is_blog]">
+                  <input type="checkbox" name="is_blog" id="is_blog" {if $user->is_blog eq 1}checked="checked"{/if}>
+                  <label for="is_blog">
                     {t}If this option is activated page author will be showed as blog{/t}
                   </label>
                 </div>
@@ -181,21 +181,21 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="meta[bio_description]">
+            <label class="form-label" for="bio_description">
               {t}Biography{/t}
             </label>
             <div class="controls">
-              <textarea class="form-control" id="meta[bio_description]" name="meta[bio_description]" rows="3">{$user->meta['bio_description']|default:""}</textarea>
+              <textarea class="form-control" id="bio_description" name="bio_description" rows="3">{$user->bio_description|default:""}</textarea>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="meta[inrss]">
+            <label class="form-label" for="inrss">
               {t}Show in RSS{/t}
             </label>
             <div class="controls">
               <div class="checkbox">
-                <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on' || $user->meta['inrss'] eq '1'} checked="checked"{/if}>
-                <label for="meta[inrss]">
+                <input type="checkbox" name="inrss" id="inrss" {if !isset($user->inrss) || $user->inrss eq 'on' || $user->inrss eq '1'} checked="checked"{/if}>
+                <label for="inrss">
                   {t}If this option is activated this author will be showed in rss{/t}
                 </label>
               </div>

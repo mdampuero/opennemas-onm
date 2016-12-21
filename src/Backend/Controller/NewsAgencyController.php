@@ -15,7 +15,7 @@ use Framework\Import\Repository\LocalRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -341,6 +341,8 @@ class NewsAgencyController extends Controller
         $servers = s::get('news_agency_config');
         $server = $servers[$sourceId];
 
+        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+
         // If the new has photos import them
         if (count($element->getPhotos()) > 0) {
             $i = 0;
@@ -368,7 +370,7 @@ class NewsAgencyController extends Controller
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => \Onm\StringUtils::getTags($photo->getTitle()),
+                            'metadata'      => $tagSystem->filter($photo->getTitle()),
                             'author_name'   => '&copy; EFE '.date('Y'),
                             'original_filename' => $fileName,
                         );
@@ -518,7 +520,7 @@ class NewsAgencyController extends Controller
                         'category'       => $category,
                         'content_status' => 1,
                         'title'          => $video->getTitle(),
-                        'metadata'       => \Onm\StringUtils::getTags($video->getTitle()),
+                        'metadata'       => $tagSystem->filter($video->getTitle()),
                         'description'    => '',
                         'author_name'    => 'internal',
                     );
@@ -545,7 +547,7 @@ class NewsAgencyController extends Controller
             'frontpage'      => 0,
             'in_home'        => 0,
             'title_int'      => $element->getTitle(),
-            'metadata'       => \Onm\StringUtils::getTags($element->getTitle()),
+            'metadata'       => $tagSystem->filter($element->getTitle()),
             'subtitle'       => $element->getPretitle(),
             'agency'         => $server['agency_string'],
             'fk_author'      => (isset($authorId) ? $authorId : 0),

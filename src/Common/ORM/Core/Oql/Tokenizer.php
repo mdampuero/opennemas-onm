@@ -163,7 +163,7 @@ class Tokenizer
                 $replacement = $this->replaceTokens($token, $matrix, $step);
 
                 // Replace token by replacement
-                $pattern = '/' . preg_quote($token) . '/';
+                $pattern = '/' . preg_quote($token, '/') . '/';
                 $query   = preg_replace($pattern, $replacement, $query, 1);
             }
 

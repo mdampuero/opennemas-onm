@@ -467,10 +467,10 @@ class Content
             }
         }
 
-        if (!isset($data['slug']) || empty($data['slug'])) {
-            $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
+        if (empty($data['slug']) && !empty($data['title'])) {
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
         } else {
-            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
         }
 
         if (!isset($data['with_comment'])) {
@@ -511,7 +511,6 @@ class Content
             'params'              => (!isset($data['params'])
                 || empty($data['params'])) ? null: serialize($data['params'])
         ];
-
 
         $conn = getService('dbal_connection');
         try {
@@ -585,12 +584,12 @@ class Content
 
         if (!isset($data['slug']) || empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = \Onm\StringUtils::getTitle($this->slug);
+                $data['slug'] = \Onm\StringUtils::generateSlug($this->slug);
             } else {
-                $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
+                $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
             }
         } else {
-            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
         }
 
         $contentData = [
@@ -758,8 +757,8 @@ class Content
                 array(
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => $this->category_name,
-                    'slug'     => $this->slug,
+                    'category' => urlencode($this->category_name),
+                    'slug'     => urlencode($this->slug),
                 )
             );
         }
@@ -1793,7 +1792,7 @@ class Content
         $relationsHandler  = getService('related_contents');
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
-        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
+        if (getService('core.security')->hasExtension('CRONICAS_MODULES')
             && ($categoryName == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {

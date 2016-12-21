@@ -12,8 +12,7 @@
  * Class to manage privileges
  *
  * @package    Onm
- * @subpackage Acl
- **/
+ */
 class Privilege
 {
     /**

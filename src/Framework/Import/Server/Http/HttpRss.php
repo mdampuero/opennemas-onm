@@ -84,6 +84,9 @@ class HttpRss extends Http
         }
 
         $xml   = simplexml_load_string($content);
+        if (!is_object($xml)) {
+            return $this->remoteFiles;
+        }
         $files = $xml->xpath('//channel/item');
 
         foreach ($files as $value) {

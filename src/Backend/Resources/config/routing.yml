@@ -705,33 +705,6 @@ admin_opinions_config:
     path:     /opinions/config
     defaults: { _controller  : BackendBundle:Opinions:config }
 
-# Author controller routes
-admin_opinion_authors:
-    path:     /authors
-    defaults: { _controller  : BackendBundle:Authors:list }
-
-admin_author_show:
-    path:     /author/{id}/show
-    defaults: { _controller  : BackendBundle:Authors:show }
-    options:
-        expose: true
-
-admin_author_create:
-    path:     /authors/create
-    defaults: { _controller  : BackendBundle:Authors:create }
-
-admin_author_update:
-    path:     /author/{id}/update
-    defaults: { _controller  : BackendBundle:Authors:update }
-
-admin_author_delete:
-    path:     /author/{id}/delete
-    defaults: { _controller  : BackendBundle:Authors:delete }
-
-admin_author_batchdelete:
-    path:     /authors/batch-delete
-    defaults: { _controller  : BackendBundle:Authors:batchDelete }
-
 # Comments controller routes
 admin_comments:
     path:     /comments
@@ -895,66 +868,66 @@ admin_cache_manager_clearrediscache:
 # User management routes
 admin_acl_user:
     path:     /acl/users
-    defaults: { _controller  : BackendBundle:AclUser:list }
+    defaults: { _controller  : BackendBundle:User:list }
 
 admin_acl_user_create:
     path:     /acl/users/create
-    defaults: { _controller  : BackendBundle:AclUser:create }
+    defaults: { _controller  : BackendBundle:User:create }
 
 admin_acl_user_save:
     path:     /acl/users/save
-    defaults: { _controller  : BackendBundle:AclUser:save }
+    defaults: { _controller  : BackendBundle:User:save }
 
 admin_acl_user_show:
     path:     /acl/users/{id}/show
-    defaults: { _controller  : BackendBundle:AclUser:show }
+    defaults: { _controller  : BackendBundle:User:show }
     options:
         expose: true
 
 admin_acl_user_social:
     path:     /acl/user/{id}/{resource}
-    defaults: { _controller  : BackendBundle:AclUser:social }
+    defaults: { _controller  : BackendBundle:User:social }
     requirements:
         resource: facebook|twitter
 
 admin_acl_user_social_disconnect:
     path:     /acl/user/{id}/{resource}/disconnect
-    defaults: { _controller  : BackendBundle:AclUser:disconnect }
+    defaults: { _controller  : BackendBundle:User:disconnect }
 
 admin_acl_user_update:
     path:     /acl/user/{id}/update
-    defaults: { _controller  : BackendBundle:AclUser:update }
+    defaults: { _controller  : BackendBundle:User:update }
 
 admin_acl_user_set_meta:
     path:     /acl/user/set-meta
-    defaults: { _controller  : BackendBundle:AclUser:setMeta }
+    defaults: { _controller  : BackendBundle:User:setMeta }
 
 admin_acl_user_toogle_enabled:
     path:     /acl/user/{id}/toggle-enabled
-    defaults: { _controller  : BackendBundle:AclUser:toogleEnabled }
+    defaults: { _controller  : BackendBundle:User:toogleEnabled }
 
 # User groups managerment routes
 admin_acl_usergroups:
     path:     /acl/usergroups
-    defaults: { _controller  : BackendBundle:AclUserGroups:list }
+    defaults: { _controller  : BackendBundle:UserGroups:list }
 
 admin_acl_usergroup_show:
     path:     /acl/usergroups/{id}/show
-    defaults: { _controller  : BackendBundle:AclUserGroups:show }
+    defaults: { _controller  : BackendBundle:UserGroups:show }
     options:
         expose: true
 
 admin_acl_usergroups_create:
     path:     /acl/usergroups/create
-    defaults: { _controller  : BackendBundle:AclUserGroups:create }
+    defaults: { _controller  : BackendBundle:UserGroups:create }
 
 admin_acl_usergroups_save:
     path:     /acl/usergroup/save
-    defaults: { _controller  : BackendBundle:AclUserGroups:save }
+    defaults: { _controller  : BackendBundle:UserGroups:save }
 
 admin_acl_usergroups_update:
     path:     /acl/usergroup/{id}/update
-    defaults: { _controller  : BackendBundle:AclUserGroups:update }
+    defaults: { _controller  : BackendBundle:UserGroups:update }
 # System settings routes
 admin_system_settings:
     path:     /system/settings
@@ -994,11 +967,11 @@ admin_logout:
 
 admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
-    defaults: { _controller  : BackendBundle:AclUser:recoverPassword }
+    defaults: { _controller  : BackendBundle:User:recoverPassword }
 
 admin_acl_user_reset_pass:
     path:     /login/user/reset-pass/{token}
-    defaults: { _controller  : BackendBundle:AclUser:regeneratePassword }
+    defaults: { _controller  : BackendBundle:User:regeneratePassword }
 
 # Getting started routes
 admin_getting_started:
@@ -1030,6 +1003,10 @@ admin_menu_sidebar_get:
         expose: true
 
 # Routing refactoring starts here
+backend_author:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/author.yml'
+
 backend_account:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/account.yml'

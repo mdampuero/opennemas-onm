@@ -3,6 +3,7 @@ imports:
     - { resource: connection/manager.yml }
     - { resource: entity/category.yml }
     - { resource: entity/client.yml }
+    - { resource: entity/comment.yml }
     - { resource: entity/content.yml }
     - { resource: entity/extension.yml }
     - { resource: entity/instance.yml }

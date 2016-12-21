@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Common\ORM\Entity\Instance;
 use Common\ORM\Entity\User;
 use Onm\Instance\InstanceCreator;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\DatabaseNotRestoredException;
 
@@ -131,10 +131,11 @@ class WebServiceController extends Controller
             'username'      => $instance->contact_mail
         ]));
 
-        $user->password = $this->get('onm_password_encoder')->encodePassword(
-            $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
-            null
-        );
+        $user->password = $this->get('core.security.encoder.password')
+            ->encodePassword(
+                $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
+                null
+            );
 
         try {
             $errors = [];

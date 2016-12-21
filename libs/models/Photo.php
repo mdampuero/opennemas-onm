@@ -187,7 +187,6 @@ class Photo extends Content
             error_log($e->getMessage());
             return false;
         }
-
     }
 
     /**
@@ -211,6 +210,10 @@ class Photo extends Content
 
         // Check upload directory
         $date = new DateTime();
+
+        if (array_key_exists('created', $data)) {
+            $date = \DateTime::createFromFormat('Y-m-d H:i:s', $data['created']);
+        }
 
         if (empty($dateForDirectory)) {
             $dateForDirectory = $date->format("/Y/m/d/");
@@ -341,8 +344,7 @@ class Photo extends Content
             }
         }
 
-        $photo = new Photo();
-        $photoID = $photo->create($dataPhoto);
+        $photoID = $this->create($dataPhoto);
 
         if (!$photoID) {
             $logger = getService('application.log');

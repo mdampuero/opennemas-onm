@@ -19,8 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -45,7 +44,7 @@ class FrontpagesController extends Controller
         $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
 
         // Check if the user can access a frontpage from other category
-        if ((int) $categoryId !== 0 && !Acl::checkCategoryAccess($categoryId)) {
+        if ((int) $categoryId !== 0 && !$this->get('core.security')->hasCategory($categoryId)) {
             throw new AccessDeniedException();
         }
 
@@ -277,7 +276,7 @@ class FrontpagesController extends Controller
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
         );
 
-        $this->dispatchEvent('frontpage.save_position', array('category' => $categoryID));
+        $this->get('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $categoryID));
 
         // Save the actual date for fronpage
         $dateForDB = time();
@@ -319,7 +318,7 @@ class FrontpagesController extends Controller
         ) {
             $this->get('setting_repository')->set('frontpage_layout_'.$category, $layout);
 
-            $this->dispatchEvent('frontpage.pick_layout', array('category' => $category));
+            $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', array('category' => $category));
 
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -338,7 +337,7 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        $this->dispatchEvent('frontpage.save_position', array('category' => $category));
+        $this->get('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $category));
 
         return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));
     }

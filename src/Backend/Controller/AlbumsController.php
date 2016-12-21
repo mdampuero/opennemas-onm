@@ -17,8 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -167,7 +166,7 @@ class AlbumsController extends Controller
         $cacheManager->delete('home|1');
 
         // Return user to list if has no update acl
-        if (Acl::check('ALBUM_UPDATE')) {
+        if ($this->get('core.security')->hasPermission('ALBUM_UPDATE')) {
             return $this->redirect(
                 $this->generateUrl('admin_album_show', array('id' => $album->id))
             );
@@ -250,6 +249,23 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+            && !$album->isOwner($this->getUser()->id)
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You don't have enough privileges for modify this album.")
+            );
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_albums',
+                    array('category' => $album->category,)
+                )
+            );
+        }
+
+
         $photos          = $album->_getAttachedPhotos($id);
         $authorsComplete = \User::getAllUsersAuthors();
         $authors         = array('0' => _(' - Select one author - '));
@@ -292,8 +308,7 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$album->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(

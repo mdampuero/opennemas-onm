@@ -138,9 +138,9 @@ class Ftp extends Server
      */
     public function getRemoteFiles()
     {
-        ftp_pasv($this->conn, true);
+        @ftp_pasv($this->conn, true);
 
-        $files = ftp_rawlist($this->conn, ftp_pwd($this->conn), true);
+        $files = @ftp_rawlist($this->conn, ftp_pwd($this->conn), true);
 
         $this->remoteFiles = $this->filterOldFiles(
             $this->formatFtpFileList($files),

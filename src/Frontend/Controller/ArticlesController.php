@@ -17,7 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\StringUtils;
 use Onm\Settings as s;
 
@@ -67,7 +67,10 @@ class ArticlesController extends Controller
         $this->view->assign('advertisements', $ads);
 
         // Fetch general layout
-        $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId, 'default');
+        $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId);
+        if (empty($layout)) {
+            $layout = 'default';
+        }
         $layoutFile = 'layouts/'.$layout.'.tpl';
         $this->view->assign('layoutFile', $layoutFile);
 
@@ -83,14 +86,12 @@ class ArticlesController extends Controller
                 $categoryData = $this->ccm->categories[$actualCategoryId];
             }
 
-            $this->view->assign(
-                array(
-                    'category_name'         => $categoryName,
-                    'actual_category_title' => $actualCategoryTitle,
-                    'actual_category_id'    => $actualCategoryId,
-                    'category_data'         => $categoryData,
-                )
-            );
+            $this->view->assign([
+                'category_name'         => $categoryName,
+                'actual_category_title' => $actualCategoryTitle,
+                'actual_category_id'    => $actualCategoryId,
+                'category_data'         => $categoryData,
+            ]);
 
             // Associated media code --------------------------------------
             $er = $this->get('entity_repository');

@@ -100,7 +100,7 @@ class ContentCategoryManager
             );
 
             if (!$rs) {
-                return false;
+                return [];
             }
 
             foreach ($rs as $row) {
@@ -636,7 +636,6 @@ class ContentCategoryManager
             );
 
             return $rs['content_count'] == 0 && $rs2['content_count'] == 0;
-
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -846,5 +845,14 @@ class ContentCategoryManager
             error_log($e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Resets ContentCategoryManager.
+     */
+    public function reset()
+    {
+        $this->categories = [];
+        getService('cache')->delete('content_categories');
     }
 }

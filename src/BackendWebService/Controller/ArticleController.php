@@ -10,7 +10,7 @@
 namespace BackendWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

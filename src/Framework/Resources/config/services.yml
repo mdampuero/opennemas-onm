@@ -60,16 +60,6 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
-    collector.onmbrand:
-        class: Framework\DataCollector\OpennemasBrandCollector
-        public: false
-        tags:
-            -
-                name:     data_collector
-                id:       'brand_collector'
-                template: '@OnmFramework/collector/onmbrand.html.twig'
-                priority: 2000
-
     collector.database:
         class: Framework\DataCollector\DatabaseCollector
         public: false
@@ -92,19 +82,7 @@ services:
                 template: '@OnmFramework/collector/cache.html.twig'
                 priority: 100
 
-    db_conn:
-        class: Onm\DatabaseConnection
-        arguments: [ %database% ]
-
-    db_conn_manager:
-        class: Onm\DatabaseConnection
-        arguments: [  %database% ]
-
     dbal_connection:
-        class: Onm\Database\DbalWrapper
-        arguments: [ %database%, %kernel.environment% ]
-
-    dbal_connection_manager:
         class: Onm\Database\DbalWrapper
         arguments: [ %database%, %kernel.environment% ]
 
@@ -183,10 +161,6 @@ services:
     varnish_ban_message_exchanger:
         class: Onm\Varnish\MessageExchanger
 
-    instance_manager:
-        class: Onm\Instance\InstanceManager
-        arguments: [ '@orm.connection.instance', '@cache_manager', '@setting_repository' ]
-
     onm_templating:
         class: Onm\Templating\Templating
         arguments: [ '@service_container' ]
@@ -215,10 +189,6 @@ services:
     onm.validator:
         class: Onm\Validator\Validator
 
-    onm.validator.instance:
-        class: Onm\Validator\InstanceValidator
-        arguments: [ '@instance_manager' ]
-
     onm.braintree.factory:
         class: Framework\Braintree\BraintreeFactory
         arguments: [ '@comet_cult_braintree.factory' ]
@@ -226,10 +196,6 @@ services:
     paginator:
         class: Framework\Component\Paginator\Paginator
         arguments: [ '@router' ]
-
-    onm.framework_status:
-        class: Onm\Framework\Status
-        arguments: [ '@service_container' ]
 
     related_contents:
         class: RelatedContent

@@ -23,7 +23,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_author_create}" title="{t}Create new author{/t}" accesskey="c" id="create-button">
+              <a class="btn btn-primary" href="{url name=backend_author_create}" title="{t}Create new author{/t}" accesskey="c" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>
@@ -143,7 +143,7 @@
                   [% item.name %]
                   <div class="listing-inline-actions">
                     {acl isAllowed="AUTHOR_UPDATE"}
-                    <a class="link" href="[% routing.generate('admin_author_show', { id:  item.id }) %]" title="{t}Edit{/t}">
+                    <a class="link" href="[% routing.generate('backend_author_show', { id:  item.id }) %]" title="{t}Edit{/t}">
                       <i class="fa fa-pencil"></i> {t}Edit{/t}
                     </a>
                     {/acl}

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -202,21 +202,19 @@ class OpinionsController extends Controller
                     $opinion->author->uri = \Uri::generate(
                         'opinion_author_frontpage',
                         [
-                            'slug' => \Onm\StringUtils::getTitle($opinion->author->name),
+                            'slug' => urlencode(\Onm\StringUtils::generateSlug($opinion->author->name)),
                             'id'   => sprintf('%06d', $opinion->author->id)
                         ]
                     );
                 }
             }
 
-            $this->view->assign(
-                [
-                    'opinions'   => $opinions,
-                    'authors'    => $authors,
-                    'pagination' => $pagination,
-                    'page'       => $page
-                ]
-            );
+            $this->view->assign([
+                'opinions'   => $opinions,
+                'authors'    => $authors,
+                'pagination' => $pagination,
+                'page'       => $page
+            ]);
         }
 
         $ads = $this->getAds();
@@ -227,7 +225,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'opinion_frontpage,'.$page,
+                'x-tags'          => 'opinion-frontpage,'.$page,
                 'x-cache-for'     => '+1 day'
             )
         );
@@ -488,7 +486,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'author_frontpage,'.$authorID.','.$page,
+                'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
                 'x-cache-for'     => '+1 day'
             )
         );

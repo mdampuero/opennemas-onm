@@ -71,6 +71,16 @@ class EntityManager
     }
 
     /**
+     * Returns the service container.
+     *
+     * @return ServiceContainer The service container.
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * Returns a converter configured for the entity.
      *
      * @param string $entity    The entity name.
@@ -202,13 +212,15 @@ class EntityManager
      */
     public function getValidator()
     {
-        $validator = new Validator();
-
-        if (array_key_exists('metadata', $this->items)) {
-            $validator->configure($this->items['metadata']);
+        if (empty($this->validator)) {
+            $this->validator = new Validator();
         }
 
-        return $validator;
+        if (array_key_exists('metadata', $this->items)) {
+            $this->validator->configure($this->items['metadata']);
+        }
+
+        return $this->validator;
     }
 
     /**

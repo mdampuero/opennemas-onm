@@ -416,11 +416,11 @@
               <div class="tab-wrapper">
                 <div class="col-md-6">
                   <h5>{t}Analytic system integration{/t}</h5>
-                  <div class="panel-group" id="accordion_1" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_google_analytics" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_1" href="#goggle">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_google_analytics" href="#goggle">
                             <i class="fa fa-google"></i>{t}Google Analytics{/t}
                           </a>
                         </h4>
@@ -516,11 +516,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_5" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_comscore" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_5" href="#comscore">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_comscore" href="#comscore">
                             <i class="fa fa-area-chart"></i>{t}ComScore Statistics{/t}
                           </a>
                         </h4>
@@ -545,11 +545,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_9" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_ojd" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_9" href="#ojd">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_ojd" href="#ojd">
                             <i class="fa fa-line-chart"></i>{t}OJD Statistics{/t}
                           </a>
                         </h4>
@@ -572,11 +572,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_13" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_chartbeat" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_13" href="#chartbeat">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_chartbeat" href="#chartbeat">
                             <i class="fa fa-bar-chart"></i>{t}Chartbeat{/t}
                           </a>
                         </h4>
@@ -608,11 +608,11 @@
                     </div>
                   </div>
                   <h5>{t}Internal settings{/t}</h5>
-                  <div class="panel-group" id="accordion_4" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_recaptcha" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_4" href="#recaptcha">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_recaptcha" href="#recaptcha">
                             <i class="fa fa-keyboard-o"></i>{t}Recaptcha{/t}
                           </a>
                         </h4>
@@ -642,11 +642,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_8" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_onmagency" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_8" href="#news_agency">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_onmagency" href="#news_agency">
                             <i class="fa fa-microphone"></i>{t}Opennemas News Agency{/t}
                           </a>
                         </h4>
@@ -685,11 +685,11 @@
                     </div>
                   </div>
                   {is_module_activated name="PAYWALL"}
-                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_paypal" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#paypal">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_paypal" href="#paypal">
                             <i class="fa fa-paypal"></i>{t}Paypal Settings{/t}
                           </a>
                         </h4>
@@ -712,11 +712,11 @@
                     </div>
                   </div>
                   {/is_module_activated}
-                  <div class="panel-group" id="accordion_11" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_google" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_11" href="#goggle-services">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_google" href="#goggle-services">
                             <i class="fa fa-google"></i>{t}Google Services{/t}
                           </a>
                         </h4>
@@ -763,11 +763,11 @@
                 </div>
                 <div class="col-md-6">
                   <h5>{t}Social network integration{/t}</h5>
-                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_socialnetwork" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#goggle-plus">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_socialnetwork" href="#goggle-plus">
                             <i class="fa fa-youtube"></i>{t}Google+ and YouTube{/t}
                           </a>
                         </h4>
@@ -800,11 +800,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_6" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_facebook" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_6" href="#facebook">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_facebook" href="#facebook">
                             <i class="fa fa-facebook"></i>{t}Facebook{/t}
                           </a>
                         </h4>
@@ -863,11 +863,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_2" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_twitter" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_2" href="#twitter">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_twitter" href="#twitter">
                             <i class="fa fa-twitter"></i>{t}Twitter{/t}
                           </a>
                         </h4>
@@ -889,11 +889,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_instagram" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#instagram">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_instagram" href="#instagram">
                             <i class="fa fa-instagram"></i>{t}Instagram{/t}
                           </a>
                         </h4>
@@ -915,11 +915,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_pinterest" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#pinterest">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_pinterest" href="#pinterest">
                             <i class="fa fa-pinterest-square"></i>{t}Pinterest{/t}
                           </a>
                         </h4>
@@ -941,11 +941,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_vimeo" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#vimeo">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_vimeo" href="#vimeo">
                             <i class="fa fa-vimeo-square"></i>{t}Vimeo{/t}
                           </a>
                         </h4>
@@ -967,11 +967,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_7" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_linkedin" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_7" href="#linkedin">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_linkedin" href="#linkedin">
                             <i class="fa fa-linkedin"></i>{t}LinkedIn{/t}
                           </a>
                         </h4>

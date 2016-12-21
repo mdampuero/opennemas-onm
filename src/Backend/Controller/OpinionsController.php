@@ -17,8 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -206,8 +205,7 @@ class OpinionsController extends Controller
         }
 
         // Check if you can see others opinions
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && $opinion->fk_author != $this->getUser()->id
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -356,8 +354,7 @@ class OpinionsController extends Controller
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
 
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$opinion->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(

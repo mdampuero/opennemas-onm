@@ -17,7 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -90,7 +90,7 @@ class ErrorController extends Controller
                             'category_real_name' => $page->title,
                             'page'               => $page,
                             'advertisements'     => $ads,
-                            'x-tags'             => 'not_found',
+                            'x-tags'             => 'not-found',
                             'x-cache-for'        => '+1 day'
                         ]
                     );

@@ -30,7 +30,7 @@
 
 {block name="content"}
   <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl">
-    <div class="page-navbar actions-navbar">
+    <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -469,4 +469,7 @@
       {include file="advertisement/modal/dfp_detected.tpl"}
     </script>
   </form>
+  <script type="text/ng-template" id="modal-adblock">
+    {include file="base/modals/modalAdblock.tpl"}
+  </script>
 {/block}

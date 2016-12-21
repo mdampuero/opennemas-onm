@@ -32,7 +32,7 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
     if (count($modules) > 1) {
         $returnContent = false;
         foreach ($modules as $module) {
-            $returnContent = ($returnContent || \Onm\Module\ModuleManager::isActivated($module));
+            $returnContent = ($returnContent || getService('core.security')->hasExtension($module));
             if ($returnContent == true) {
                 break;
             }
@@ -40,7 +40,7 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
 
         $output = ($returnContent) ?  $content : "";
     } else {
-        $output = (\Onm\Module\ModuleManager::isActivated($params['name'])) ?  $content : "";
+        $output = (getService('core.security')->hasExtension($params['name'])) ?  $content : "";
     }
 
     if (isset($params['deactivated']) && $params['deactivated'] == 1) {

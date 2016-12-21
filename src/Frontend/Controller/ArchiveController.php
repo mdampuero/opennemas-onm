@@ -14,11 +14,12 @@
  **/
 namespace Frontend\Controller;
 
+use Common\Core\Annotation\BotDetector;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -34,15 +35,11 @@ class ArchiveController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     *
+     * @BotDetector(bot="bingbot", route="frontend_frontpage")
+     */
     public function archiveAction(Request $request)
     {
-        # Avoid Bing bot to crawl archive page
-        $isBingBot = \Onm\Utils\BotDetector::isSpecificBot($request->headers->get('user-agent'), 'bingbot');
-        if ($isBingBot) {
-            return new RedirectResponse('/');
-        }
-
         $today = new \DateTime();
         $today->modify('-1 day');
 

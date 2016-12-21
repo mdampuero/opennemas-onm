@@ -28,7 +28,7 @@ use PayPal\PayPalAPI\SetExpressCheckoutRequestType;
 use PayPal\PayPalAPI\RefundTransactionReq;
 use PayPal\PayPalAPI\RefundTransactionRequestType;
 use PayPal\Service\PayPalAPIInterfaceServiceService;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class PaywallController extends Controller
 {

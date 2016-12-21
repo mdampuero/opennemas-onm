@@ -9,12 +9,13 @@
  */
 namespace Common\Core\Component\Security\User;
 
+use Common\ORM\Core\EntityManager;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
- * Loads an user by username.
+ * The UserProvider class provides methods to load users by username.
  */
 class UserProvider implements UserProviderInterface
 {
@@ -36,9 +37,8 @@ class UserProvider implements UserProviderInterface
      * Initializes the current user provider.
      *
      * @param EntityManager $em The entity manager.
-     * @param array         $repositories The list of repositories to use.
      */
-    public function __construct($em, $repositories)
+    public function __construct(EntityManager $em, $repositories)
     {
         $this->em           = $em;
         $this->repositories = $repositories;
@@ -49,14 +49,14 @@ class UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $oql  = sprintf('username = "%s" or email = "%s"', $username, $username);
+        $oql = sprintf('username = "%s" or email = "%s"', $username, $username);
 
-        foreach ($this->repositories as $name) {
+        foreach ($this->repositories as $repository) {
             try {
-                $user = $this->em->getRepository('User', $name)
+                $user = $this->em->getRepository('User', $repository)
                     ->findOneBy($oql);
 
-                // Prevent password deletion after external eraseCredentials call
+                // Prevent password deletion when calling eraseCredentials
                 return clone($user);
             } catch (\Exception $e) {
             }

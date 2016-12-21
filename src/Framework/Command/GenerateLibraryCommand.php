@@ -45,11 +45,8 @@ EOF
         $internalName = $input->getArgument('internal_name');
 
         // Loads one ONM instance from database
-        $im = $this->getContainer()->get('instance_manager');
-
-        $instance = $im->findOneBy(
-            array('internal_name' => array(array('value' => $internalName)))
-        );
+        $instance = $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName($internalName);
 
         //If found matching instance initialize its contants and return it
         if (is_object($instance)) {
@@ -63,9 +60,6 @@ EOF
         } else {
             throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
         }
-
-        $im->current_instance = $instance;
-        $im->cache_prefix     = $instance->internal_name;
 
         $cache = $this->getContainer()->get('cache');
         $cache->setNamespace($instance->internal_name);

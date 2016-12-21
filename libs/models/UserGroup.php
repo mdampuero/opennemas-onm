@@ -151,9 +151,7 @@ class UserGroup
             // Updating the user group data
             $rs = $conn->update(
                 "user_groups",
-                [
-                  'name' => $data['name']
-                ],
+                [ 'name' => $data['name'] ],
                 [ 'pk_user_group' => (int) $data['id'] ]
             );
 

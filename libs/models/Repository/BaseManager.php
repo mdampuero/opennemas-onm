@@ -36,9 +36,9 @@ abstract class BaseManager
     /**
      * Initializes the menu manager
      *
-     * @param DatabaseConnection $dbConn      The database connection.
-     * @param CacheInterface     $cache       The cache instance.
-     * @param string             $cachePrefix The cache prefix.
+     * @param Onm\Database\DbalWrapper $dbConn      The database connection.
+     * @param CacheInterface           $cache       The cache instance.
+     * @param string                   $cachePrefix The cache prefix.
      */
     public function __construct($dbConn, $cache, $cachePrefix)
     {

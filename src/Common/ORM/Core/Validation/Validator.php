@@ -271,12 +271,7 @@ class Validator
         $ruleset = \underscore($validation->name);
 
         if (array_key_exists($ruleset, $this->properties)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'The validation rules for entity %s already exist',
-                    $ruleset
-                )
-            );
+            return;
         }
 
         $this->rulesets[] = $ruleset;

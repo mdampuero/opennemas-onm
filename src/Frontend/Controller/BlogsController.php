@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -103,7 +103,7 @@ class BlogsController extends Controller
                     $blog->author->uri = \Uri::generate(
                         'frontend_blog_author_frontpage',
                         array(
-                            'slug' => $blog->author->username,
+                            'slug' => urlencode($blog->author->username),
                             'id'   => $blog->author->id
                         )
                     );
