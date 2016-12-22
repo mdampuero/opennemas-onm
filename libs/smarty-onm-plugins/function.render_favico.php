@@ -1,27 +1,26 @@
 <?php
-use Onm\Settings as s;
-
 function smarty_function_render_favico($params, &$smarty)
 {
-    // Default favico code
-    $output = '<link rel="shorcut icon" href="/assets/images/favicon.png" />
-    <link rel="apple-touch-icon" href="/assets/images/favicon.png" />
-    <link rel="apple-touch-icon-precomposed" href="/assets/images/favicon.png" />';
+    // Use our default favicon
+    $output =
+        "<link rel='shorcut icon' href='/assets/images/favicon.png' />\n".
+        "<link rel='apple-touch-icon' href='/assets/images/favicon.png' />\n".
+        "<link rel='apple-touch-icon-precomposed' href='/assets/images/favicon.png' />\n";
 
-    // Check if is allowed logo on site
+    // Check if the user wants to use the logo
     $allowLogo = false;
-    if ($sectionSettings = s::get('section_settings')) {
-        $allowLogo = $sectionSettings['allowLogo'];
+    if ($sectionSettings = getService('setting_repository')->get('section_settings')) {
+        $allowLogo = (bool) $sectionSettings['allowLogo'];
     }
 
-    // Check if is allowed logo and favico exists
-    $favicoPath = MEDIA_URL.MEDIA_DIR.'/sections/';
-    if ($allowLogo && $favico = s::get('favico')) {
-        $output = '<link rel="shortcut icon" href="'.$favicoPath.rawurlencode($favico).'"/>
-    <link rel="apple-touch-icon" href="'.$favicoPath.rawurlencode($favico).'"/>
-    <link rel="apple-touch-icon-precomposed" href="'.$favicoPath.rawurlencode($favico).'"/>';
+    // If user wants to user the logo and the favicon is defined the use it
+    if ($allowLkogo && $favico = getService('setting_repository')->get('favico')) {
+        $favicoPath = MEDIA_URL.MEDIA_DIR."/sections/".rawurlencode($favico);
+        $output =
+            "<link rel='shortcut icon' href='{$favicoPath}'/>\n".
+            "<link rel='apple-touch-icon' href='{$favicoPath}'/>\n".
+            "<link rel='apple-touch-icon-precomposed' href='{$favicoPath}'/>\n";
     }
 
-    // Render favico code
     return $output;
 }

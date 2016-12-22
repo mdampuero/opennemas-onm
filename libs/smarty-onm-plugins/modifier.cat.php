@@ -1,12 +1,5 @@
 <?php
 /**
- * Smarty plugin
- * @package Smarty
- * @subpackage PluginsModifier
- */
-
-
-/**
  * Smarty cat modifier plugin
  *
  * Type:     modifier<br>
@@ -27,5 +20,3 @@ function smarty_modifier_cat($string, $cat)
 {
     return $string . $cat;
 }
-
-?>

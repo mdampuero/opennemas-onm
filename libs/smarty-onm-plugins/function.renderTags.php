@@ -3,7 +3,6 @@
  * Used to generate links for tags depending on the selected method
  * twitter hashtag, onm internal tags, google search
  **/
-
 function smarty_function_renderTags($params, &$smarty)
 {
     $output = '';
@@ -12,26 +11,21 @@ function smarty_function_renderTags($params, &$smarty)
         return $output;
     }
 
-    // Check for separator
+    // Check and sanitize params: separator, class, limit
     $separator = (!array_key_exists('separator', $params)) ? ', ' : $params['separator'];
+    $class     = (!array_key_exists('class', $params)) ? ' class="tags" ': $params['class'];
+    $limit     = (array_key_exists('limit', $params)) ? $params['limit'] : null;
 
-    // Check for class
-    $class = (!array_key_exists('class', $params)) ? ' class="tags" ': $params['class'];
-
-    // Check for limit
-    $limit = (array_key_exists('limit', $params)) ? $params['limit'] : null;
-
-    // Get url generator
-    $generator = getService('router');
-
-    // Check for search method
+    // Setup desired rendering method (internal, google search) from internal parameter
     if (array_key_exists('internal', $params)) {
         $method = ($params['internal'] == 'true')? 'tags': $params['internal'];
     } else {
-        // Get Google Search Key
-        $googleSearchKey = \Onm\Settings::get('google_custom_search_api_key');
+        $googleSearchKey = getService('setting_repository')->get('google_custom_search_api_key');
         $method = (!empty($googleSearchKey))? 'google': 'tags';
     }
+
+    // Get url generator
+    $generator = getService('router');
 
     // Generate tags links
     $i = 0;

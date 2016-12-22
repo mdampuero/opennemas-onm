@@ -8,21 +8,18 @@
 function smarty_insert_renderbanner($params, $smarty)
 {
     // Get required params
-    $type     = $params['type'];
-    $ads      = $smarty->tpl_vars['advertisements']->value;
+    $type = $params['type'];
+    $ads  = $smarty->tpl_vars['advertisements']->value;
 
     if (!is_array($ads)) {
-        $ads = array();
+        $ads = [];
     }
 
     // Filter advertisements by position
     $ads = array_filter(
         $ads,
         function ($ad) use ($type) {
-            if ($ad->type_advertisement == $type) {
-                return true;
-            }
-            return false;
+            return $ad->type_advertisement == $type;
         }
     );
 
