@@ -17,12 +17,5 @@
  */
 function smarty_modifier_clean_for_html_attributes($string)
 {
-    
-    $patterns = array('/"/', '/\'/');
-    $replace = array('', '');
-       
-    return preg_replace($patterns,$replace, $string);
- 
+    return preg_replace(['/"/', '/\'/'], ['', ''], $string);
 }
-
-

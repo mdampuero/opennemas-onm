@@ -13,9 +13,7 @@
 
 function underscore($name)
 {
-    $withUnderscore = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
-
-    return $withUnderscore;
+    return strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
 }
 
 function classify($name)
@@ -40,8 +38,7 @@ function tableize($name)
 
 function pluralize($name)
 {
-    $name = strtolower($name);
-    return $name . 's';
+    return strtolower($name) . 's';
 }
 
 function clearslash($string)
@@ -60,12 +57,11 @@ function clearslash($string)
 function logContentEvent($action = null, $content = null)
 {
     $logger = getService('application.log');
+    $user = getService('session')->get('user');
 
-    $msg = 'User '.getService('session')->get('user')->username
-        .' ('.getService('session')->get('user')->id.') has executed '
-        .'the action '.$action;
+    $msg = "User {$user->username} ({$user->id}) has executed the action {$action}";
     if (!empty($content)) {
-        $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
+        $msg.=" at ".get_class($content)." (ID:{$content->id})";
     }
 
     $logger->info($msg);
@@ -290,22 +286,12 @@ function dispatchEventWithParams($eventName, $params = array())
     }
 
     $eventDispatcher = getService('event_dispatcher');
-
     $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {
         $event->setArgument($paramName, $paramValue);
     }
 
     $eventDispatcher->dispatch($eventName, $event);
-}
-
-function debug()
-{
-    if (array_key_exists('debug', $_REQUEST) && $_REQUEST['debug'] == 1) {
-        $functionArgs = func_get_args();
-
-        call_user_func_array('var_dump', $functionArgs);
-    }
 }
 
 function getPiwikCode($useImage = false)

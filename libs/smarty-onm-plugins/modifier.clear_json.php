@@ -18,10 +18,5 @@
  */
 function smarty_modifier_clear_json($string)
 {
-    $search  = ['\'', '"', '&#39;' ];
-    $replace = ['\\\'', '\'', '\\\'' ];
-
-    $string = str_replace($search, $replace, $string);
-
-    return $string;
+    return str_replace(['\'', '"', '&#39;' ], ['\\\'', '\'', '\\\'' ], $string);
 }

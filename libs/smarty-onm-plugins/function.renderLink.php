@@ -7,10 +7,9 @@
  */
 function smarty_function_renderLink($params, &$smarty)
 {
-
-    $item = $params['item'];
+    $item     = $params['item'];
     $nameMenu = $params['name'];
-    $nameUrl = 'seccion';
+    $nameUrl  = 'seccion';
     if (isset($nameMenu) && !empty($nameMenu)) {
         if ($nameMenu == 'video') {
             $nameUrl='video';
