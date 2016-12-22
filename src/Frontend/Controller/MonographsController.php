@@ -37,7 +37,7 @@ class MonographsController extends Controller
     {
         // Only is used by cronicas, no one has templates to support specials.
         // https://openhost.atlassian.net/browse/ONM-1995
-        if (!\Onm\Module\ModuleManager::isActivated('SPECIAL_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('SPECIAL_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
