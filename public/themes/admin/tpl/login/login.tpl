@@ -133,11 +133,11 @@
 
             var password_input_val = password_input.val();
             if (password_input_val.length > 0) {
-              if (password.indexOf('md5:') === -1) {
+              if (password_input_val.indexOf('md5:') === -1) {
                 password_input_val = 'md5:' + hex_md5(password_input_val);
               }
 
-              password_input.val(password);
+              password_input.val(password_input_val);
             }
           });
         });
