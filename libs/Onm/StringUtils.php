@@ -483,10 +483,9 @@ class StringUtils
         $string = preg_replace(['/\s+/', '/[\t\n]/'], ' ', $string);
         $string = trim($string);
 
-        // Replace multi-dashses with one and drop some hyphen transliterations
-        $string = mb_ereg_replace("@[-‐‒–—―⁃−\"\.]@", $delimiter, $string);
+        $string = mb_ereg_replace("@[\-‐‒-–—―⁃−\"\.]@", $delimiter, $string);
         $string = str_replace('.', '-', $string);
-        $string = preg_replace('/[\-]+/', $delimiter, $string);
+        $string = preg_replace("@[\-]{2,}@", $delimiter, $string);
         $string = preg_replace('/&.+?;/', '', $string); // kill entities
 
         return trim($string, '-');

@@ -205,6 +205,20 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
                 '0001 ¡El cambio de look de Mariana Antoniale!'
             )
         );
+
+        $this->assertEquals(
+            '0001-cambio-look-mariana-antoniale',
+            $this->object->generateSlug(
+                '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
+            )
+        );
+
+        $this->assertEquals(
+            '',
+            $this->object->generateSlug(
+                ''
+            )
+        );;
     }
 
     /**
