@@ -127,7 +127,7 @@
         jQuery(document).ready(function($) {
           'use strict';
 
-          Encode password in md5 on backend login
+          // Encode password in md5 on backend login
           $('#loginform').on('submit', function(e, ui) {
             var password_input = $('#loginform').find('input[name="_password"]');
 
