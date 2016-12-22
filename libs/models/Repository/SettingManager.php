@@ -128,7 +128,6 @@ class SettingManager extends BaseManager
         $missed = array_diff($keys, array_keys($results));
 
         if (!empty($missed)) {
-            $missed  = array_fill_keys($missed, null);
             $results = array_merge($results, $this->cache->fetch($missed));
         }
 
