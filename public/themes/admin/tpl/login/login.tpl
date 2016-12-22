@@ -131,9 +131,8 @@
           $('#loginform').on('submit', function(e, ui) {
             var password_input = $('#loginform').find('input[name="_password"]');
 
-            if (form.length > 0) {
-              var password_input_val = password_input.val();
-
+            var password_input_val = password_input.val();
+            if (password_input_val.length > 0) {
               if (password.indexOf('md5:') === -1) {
                 password_input_val = 'md5:' + hex_md5(password_input_val);
               }
