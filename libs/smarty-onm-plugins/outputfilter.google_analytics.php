@@ -31,7 +31,6 @@ function smarty_outputfilter_google_analytics($output, $smarty)
             $code   = getGoogleAnalyticsCode();
             $output = preg_replace('@(</head>)@', $code.'${1}', $output);
         }
-
     }
 
     return $output;

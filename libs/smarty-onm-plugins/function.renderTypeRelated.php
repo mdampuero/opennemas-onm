@@ -9,7 +9,6 @@
  *   <li class="res-image"><a href="#">Fototeca: El viaje al sol, un sueño olvidado</a></li>
  *   <li class="res-link"><a href="#">Los grandes pelígros de la humanidad</a></li>
  *   <li class="res-video"><a href="#">Descubre el sistema planetario en este vídeo</a></li>
- *
  */
 function smarty_function_renderTypeRelated($params, &$smarty)
 {

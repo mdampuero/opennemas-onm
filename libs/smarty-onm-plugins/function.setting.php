@@ -12,7 +12,7 @@ function smarty_function_setting($params, &$smarty)
     if (array_key_exists('name',$params)) {
         $key = $params['name'];
         if (array_key_exists('field',$params)) {
-            $key_value = \Onm\Settings::get($key);
+            $key_value = getService('setting_repository')->get($key);
             if (is_array($key_value)) {
                 foreach ($key_value as $name => $value) {
                     if ($name == $params['field']) {
@@ -21,7 +21,7 @@ function smarty_function_setting($params, &$smarty)
                 }
             }
         } else {
-            $output = \Onm\Settings::get($key);
+            $output = getService('setting_repository')->get($key);
         }
     } elseif (count($keys) >0) {
         $keys = array_keys($params);
