@@ -48,6 +48,10 @@ class ErrorController extends Controller
             $errorID = strtoupper('ONM_FRAMEWORK_'.uniqid());
         }
 
+        if (!defined('CURRENT_LANGUAGE')) {
+            define('CURRENT_LANGUAGE', 'en_US');
+        }
+
         $this->view = $this->get('onm_templating')->getBackendTemplate();
 
         $requestAddress = $request->getSchemeAndHttpHost().$request->getRequestUri();
