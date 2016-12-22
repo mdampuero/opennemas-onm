@@ -582,14 +582,14 @@ class Content
             $data['fk_user_last_editor'] = getService('session')->get('user')->id;
         }
 
-        if (!isset($data['slug']) || empty($data['slug'])) {
+        if (empty($data['slug'])) {
             if (!empty($this->slug)) {
                 $data['slug'] = \Onm\StringUtils::generateSlug($this->slug);
             } else {
                 $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
             }
         } else {
-            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
+            $data['slug'] = $data['slug'];
         }
 
         $contentData = [
