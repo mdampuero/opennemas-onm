@@ -116,7 +116,7 @@ class AuthorsController extends Controller
 
         $user->username = \Onm\StringUtils::generateSlug($data['name']);
         $user->type = 1;
-        $user->user_id_group = [3];
+        $user->fk_user_group = [3];
         $user->inrss   = $user->inrss === 'on' ? true : false;
         $user->is_blog = $user->is_blog === 'on' ? true : false;
 
