@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class UserController extends Controller
 {
@@ -158,7 +159,12 @@ class UserController extends Controller
             $token = '';
             // Get user by email
             $em   = $this->get('orm.manager');
-            $user = $em->getRepository('User')->findOneBy("email = '$email'");
+            try {
+                $user = $em->getRepository('User')->findOneBy("email = '$email'");
+            } catch (EntityNotFoundException $e) {
+                $user = new \User();
+            }
+
 
             // If e-mail exists in DB
             if (!is_null($user->id)) {
