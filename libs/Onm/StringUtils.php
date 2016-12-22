@@ -45,6 +45,8 @@ class StringUtils
         'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u',
         'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R',
         'ŕ'=>'r', '/'=>'-', ' '=>'-', '"'=>'',  '!'=>'',  '¡'=>'',
+        '‐' => '', '‒' => '', '–' => '', '—'=> '',
+        '―' => '', '⁃' => '', '−' => '',
     ];
 
     /**
@@ -483,7 +485,6 @@ class StringUtils
         $string = preg_replace(['/\s+/', '/[\t\n]/'], ' ', $string);
         $string = trim($string);
 
-        $string = mb_ereg_replace("@[\-‐‒-–—―⁃−\"\.]@", $delimiter, $string);
         $string = str_replace('.', '-', $string);
         $string = preg_replace("@[\-]{2,}@", $delimiter, $string);
         $string = preg_replace('/&.+?;/', '', $string); // kill entities
@@ -520,9 +521,6 @@ class StringUtils
         $string = self::normalize($string);
         $string = trim($string);
         $string = str_replace('・', '', $string);
-
-        # Drop some hyphen transliterations
-        $string = mb_ereg_replace("@[-‐‒–—―⁃−\"\.]@", $delimiter, $string);
 
         $string = trim($string);
         if (empty($string) || $string == " ") {
