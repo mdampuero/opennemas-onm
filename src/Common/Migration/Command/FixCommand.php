@@ -102,7 +102,7 @@ class FixCommand extends ContainerAwareCommand
             $this->mm->getPersister()->persist($item);
 
             // Add to translations
-            $tracker->add($item['pk_content_category']);
+            $tracker->add($item[$this->fix['tracker']['fields'][0]]);
 
             if (!empty($progress)) {
                 $progress->advance();
