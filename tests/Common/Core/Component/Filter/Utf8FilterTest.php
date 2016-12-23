@@ -22,7 +22,9 @@ class Utf8FilterTest extends KernelTestCase
      */
     public function setUp()
     {
-        $this->filter = new Utf8Filter();
+        $container = $this->getMockBuilder('Container')->getMock();
+
+        $this->filter = new Utf8Filter($container);
     }
 
     /**

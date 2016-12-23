@@ -22,7 +22,9 @@ class NormalizeFilterTest extends KernelTestCase
      */
     public function setUp()
     {
-        $this->filter = new NormalizeFilter();
+        $container = $this->getMockBuilder('Container')->getMock();
+
+        $this->filter = new NormalizeFilter($container);
     }
 
     /**
