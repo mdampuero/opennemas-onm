@@ -61,11 +61,13 @@ class MigrationManager
      * Initializes the MigrationManager.
      *
      * @param EntityManager $em     The entity manager.
+     * @param FilterManager $fm     The filter manager.
      * @param array         $params The database connection parameters.
      */
-    public function __construct($em, $params)
+    public function __construct($em, $fm, $params)
     {
         $this->em     = $em;
+        $this->fm     = $fm;
         $this->params = $params['connection'];
     }
 
@@ -77,7 +79,6 @@ class MigrationManager
     public function configure($config)
     {
         $this->config = $config;
-        $this->fm     = new FilterManager();
     }
 
     /**

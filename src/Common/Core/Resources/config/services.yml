@@ -46,6 +46,10 @@ services:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
 
+    core.filter.manager:
+        class:     Common\Core\Component\Filter\FilterManager
+        arguments: [ '@service_container' ]
+
     core.geo:
         class:     Common\Core\Component\Geo\Geo
         arguments: [ '@core.locale' ]

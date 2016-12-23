@@ -42,11 +42,13 @@ class MigrationManagerTest extends KernelTestCase
             ]
         ];
 
+        $this->container = $this->getMockBuilder('Container')->getMock();
+
         $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mm = new MigrationManager($this->em, [ 'connection' => [] ]);
+        $this->mm = new MigrationManager($this->container, $this->em, [ 'connection' => [] ]);
     }
 
     /**
