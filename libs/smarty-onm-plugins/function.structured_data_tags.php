@@ -3,6 +3,7 @@
  * -------------------------------------------------------------
  * File:        function.structured_data_tags.php
  */
+use \Common\Core\Component\StructuredData\StructuredData;
 
 function smarty_function_structured_data_tags($params, &$smarty)
 {
@@ -59,10 +60,11 @@ function smarty_function_structured_data_tags($params, &$smarty)
             ];
         }
 
-        $structData = new \Common\Core\Component\StructuredData\StructuredData();
+        $sm = getService('setting_repository');
+        $structData = new StructuredData($sm);
 
         // Get image parameters
-        $media = $structData->getMediaObject($smarty);
+        $media = getMediaObject($smarty);
 
         // Complete array of Data
         $data = [
@@ -95,4 +97,61 @@ function smarty_function_structured_data_tags($params, &$smarty)
     }
 
     return preg_replace(["/[\r]/", "[\n]", "/\s{2,}/"], [" ", " ", " "], $output);
+}
+
+/**
+ * Get image params for contents
+ *
+ * @return Array the image data
+ **/
+function getMediaObject($smarty)
+{
+    $photo = $video = '';
+    $content = $smarty->tpl_vars['content']->value;
+    if (array_key_exists('photoInt', $smarty->tpl_vars)) {
+        // Articles
+        $photo = $smarty->tpl_vars['photoInt']->value;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
+    } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
+        // Articles with inner video
+        $video = $smarty->tpl_vars['videoInt']->value;
+        if (!empty($video) && strpos($video->thumb, 'http')  === false) {
+            $video->thumb = SITE_URL.$video->thumb;
+        }
+    } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
+        // Opinions
+        $photo = $smarty->tpl_vars['photo']->value;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
+    } elseif (isset($content->author->photo->path_img) &&
+            !empty($content->author->photo->path_img) &&
+            $content->content_type_name == 'opinion'
+    ) {
+        // Author
+        $photo = $content->author->photo;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$content->author->photo->path_img;
+    } elseif (isset($content->cover) && !empty($content->cover)) {
+        // Album
+        $photo = $content->cover_image;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
+    } elseif (isset($content->img1) && ($content->img1 > 0)) {
+        $photo = getService('entity_repository')->find('Photo', $content->img1);
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
+    } elseif (isset($content->thumb) && !empty($content->thumb)) {
+        // Video
+        $video = $content;
+        if (strpos($content->thumb, 'http')  === false) {
+            $video->url = SITE_URL.$content->thumb;
+        }
+    }
+
+    // Check image size
+    if (!empty($photo)) {
+        $photo->width = (!empty($photo->width)) ? $photo->width : 700;
+        $photo->height = (!empty($photo->height)) ? $photo->height : 450;
+    }
+
+    return [
+        'image' => $photo,
+        'video' => $video
+    ];
 }
