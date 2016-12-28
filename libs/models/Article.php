@@ -266,11 +266,11 @@ class Article extends Content
                     ? null : $data['title_int'],
                 'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
                     ? '0' : $data['img1'],
-                'img1_footer'   => (!array_key_exists('img1_footer', $data) || empty($data['img1_footer']))
+                'img1_footer'   => (!array_key_exists('img1_footer', $data) || is_null($data['img1_footer']))
                     ? null : $data['img1_footer'],
                 'img2'   => (!array_key_exists('img2', $data) || empty($data['img2']))
                     ? '0' : $data['img2'],
-                'img2_footer'   => (!array_key_exists('img2_footer', $data) || empty($data['img2_footer']))
+                'img2_footer'   => (!array_key_exists('img2_footer', $data) || is_null($data['img2_footer']))
                     ? null : $data['img2_footer'],
                 'fk_video'   => (!array_key_exists('fk_video', $data) || empty($data['fk_video']))
                     ? '0' : $data['fk_video'],
@@ -329,11 +329,11 @@ class Article extends Content
                 ? null : $data['title_int'],
             'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
                 ? '0' : $data['img1'],
-            'img1_footer'   => (!array_key_exists('img1_footer', $data) || empty($data['img1_footer']))
+            'img1_footer'   => (!array_key_exists('img1_footer', $data) || is_null($data['img1_footer']))
                 ? null : $data['img1_footer'],
             'img2'   => (!array_key_exists('img2', $data) || empty($data['img2']))
                 ? '0' : $data['img2'],
-            'img2_footer'   => (!array_key_exists('img2_footer', $data) || empty($data['img2_footer']))
+            'img2_footer'   => (!array_key_exists('img2_footer', $data) || is_null($data['img2_footer']))
                 ? null : $data['img2_footer'],
             'fk_video'   => (!array_key_exists('fk_video', $data) || empty($data['fk_video']))
                 ? '0' : $data['fk_video'],
