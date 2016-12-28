@@ -3,6 +3,7 @@
  * -------------------------------------------------------------
  * File:        function.structured_data_tags.php
  */
+use \Common\Core\Component\StructuredData\StructuredData;
 
 function smarty_function_structured_data_tags($params, &$smarty)
 {
@@ -13,7 +14,9 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $content = $smarty->tpl_vars['content']->value;
 
         // Set content data for tags
-        $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
+        $title = htmlspecialchars(
+            html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
+        );
         $summary = $content->summary;
         if (empty($summary)) {
             if (empty($content->body)) {
@@ -27,88 +30,6 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $category = getService('category_repository')->find($content->category);
         $user = getService('user_repository')->find($content->fk_author);
 
-        $imageUrl = '';
-        $imageWidth = $imageHeight = 0;
-        if (array_key_exists('photoInt', $smarty->tpl_vars)) {
-            // Articles
-            $photoInt = $smarty->tpl_vars['photoInt']->value;
-            $imageWidth = $photoInt->width;
-            $imageHeight = $photoInt->height;
-            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoInt->path_file.$photoInt->name;
-        } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
-            // Articles with inner video
-            $videoInt = $smarty->tpl_vars['videoInt']->value;
-            if (!empty($videoInt) && strpos($videoInt->thumb, 'http')  === false) {
-                $videoInt->thumb = SITE_URL.$videoInt->thumb;
-            }
-            $imageUrl = $videoInt->thumb;
-            $imageSize = @getimagesize($imageUrl);
-            if (is_array($imageSize) &&
-                array_key_exists(0, $imageSize)
-                && array_key_exists(1, $imageSize)
-            ) {
-                $imageWidth = $imageSize[0];
-                $imageHeight = $imageSize[1];
-            }
-        } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
-            // Opinions
-            $photo = $smarty->tpl_vars['photo']->value;
-            $imageWidth = $photo->width;
-            $imageHeight = $photo->height;
-            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
-        } elseif (isset($content->author->photo->path_img) &&
-                !empty($content->author->photo->path_img) &&
-                $content->content_type_name == 'opinion'
-        ) {
-            // Author
-            $imageWidth = $content->author->photo->width;
-            $imageHeight = $content->author->photo->height;
-            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$content->author->photo->path_img;
-        } elseif (isset($content->cover) && !empty($content->cover)) {
-            // Album
-            $imageWidth = $content->cover_image->width;
-            $imageHeight = $content->cover_image->height;
-            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
-        } elseif (isset($content->img1) && ($content->img1 > 0)) {
-            $photoFront = getService('entity_repository')->find('Photo', $content->img1);
-            $imageWidth = $photoFront->width;
-            $imageHeight = $photoFront->height;
-            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
-        } elseif (isset($content->thumb) && !empty($content->thumb)) {
-            // Video
-            $imageUrl = $content->thumb;
-            if (strpos($content->thumb, 'http')  === false) {
-                $imageUrl = SITE_URL.$content->thumb;
-            }
-
-            // Don't get thumbnail size with external request
-            // Default is 700x450
-            $imageWidth = 700;
-            $imageHeight = 450;
-
-            // $imageSize = @getimagesize($imageUrl);
-            // if (is_array($imageSize) &&
-            //     array_key_exists(0, $imageSize)
-            //     && array_key_exists(1, $imageSize)
-            // ) {
-            //     $imageWidth = $imageSize[0];
-            //     $imageHeight = $imageSize[1];
-            // }
-
-        }
-
-        // Get primary logo
-        $logo = getService('setting_repository')->get('site_logo');
-        $logoUrl = '';
-        $logoWidth = $logoHeight = 0;
-        if (!empty($logo)) {
-            $logoUrl = SITE_URL.
-                       'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter/'.
-                       MEDIA_DIR_URL.'sections/'.$logo;
-            $logoWidth  = '260';
-            $logoHeight = '60';
-        }
-
         // Get author if exists otherwise get agency
         $author = (!is_null($user->name)) ? $user->name : $content->agency;
         if (empty($author)) {
@@ -120,61 +41,117 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $changed = $content->changed instanceof \DateTime ?
             $content->changed->format('Y-m-d H:i:s') : $content->changed;
 
-        // Generate tags
-        $output = '<script type="application/ld+json">';
-        $output .= '{
-                        "@context" : "http://schema.org",
-                        "@type" : "NewsArticle",
-                        "mainEntityOfPage": {
-                            "@type": "WebPage",
-                            "@id": "'.$url.'"
-                        },';
-                        // "name" : "'.$title.'",';
-        $output .= '
-                        "headline": "'.$title.'",';
-        $output .= '
-                        "author" : {
-                            "@type" : "Person",
-                            "name" : "'.$author.'"
-                        },';
-        $output .= '
-                        "datePublished" : "'.$created.'",
-                        "dateModified": "'.$changed.'",';
-
-        if (!empty($imageUrl)) {
-            if (empty($imageWidth)) {
-                $imageWidth = 700;
-            }
-            if (empty($imageHeight)) {
-                $imageHeight = 450;
-            }
-            $output .= '
-                        "image": {
-                            "@type": "ImageObject",
-                            "url": "'.$imageUrl.'",
-                            "height": '.$imageHeight.',
-                            "width": '.$imageWidth.'
-                        },';
+        // Check logo params
+        $logo = getService('setting_repository')->get('site_logo');
+        if (!empty($logo)) {
+            $logo = [
+                'url'    => SITE_URL.
+                       'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter/'.
+                       MEDIA_DIR_URL.'sections/'.$logo,
+                'width'  => '260',
+                'height' => '60'
+            ];
+        } else {
+            $logo = [
+                'url'    => SITE_URL.
+                       'assets/images/logos/opennemas-powered-horizontal.png',
+                'width'  => '350',
+                'height' => '60'
+            ];
         }
 
-                        // "articleSection" : "'.$category->title.'",
-                        // "keywords" : "'.$content->metadata.'",
-                        // "url" : "'.$url.'",
-        $output .= '
-                        "publisher" : {
-                            "@type" : "Organization",
-                            "name" : "'.getService("setting_repository")->get("site_name").'",
-                            "logo": {
-                                "@type": "ImageObject",
-                                "url": "'.$logoUrl.'",
-                                "width": '.$logoWidth.',
-                                "height": '.$logoHeight.'
-                            }
-                        },
-                        "description": "'.strip_tags($summary).'"
-                    }
-                    </script>';
+        $sm = getService('setting_repository');
+        $structData = new StructuredData($sm);
+
+        // Get image parameters
+        $media = getMediaObject($smarty);
+
+        // Complete array of Data
+        $data = [
+            'content'  => $content,
+            'url'      => $url,
+            'title'    => $title,
+            'author'   => $author,
+            'created'  => $created,
+            'changed'  => $changed,
+            'category' => $category,
+            'summary'  => $summary,
+            'logo'     => $logo,
+            'image'    => $media['image'],
+            'video'    => $media['video']
+        ];
+
+        // Generate NewsArticle tags
+        $output  = '<script type="application/ld+json">[';
+        if ($content->content_type_name == 'album') {
+            $output .= $structData->generateImageGalleryJsonLDCode($data);
+        } elseif (!empty($data['video'])) {
+            $output .= $structData->generateVideoJsonLDCode($data);
+        } else {
+            $output .= $structData->generateNewsArticleJsonLDCode($data);
+        }
+        if (!empty($data['image'])) {
+            $output .= $structData->generateImageJsonLDCode($data);
+        }
+        $output .= ']</script>';
     }
 
-    return str_replace(["\r", "\n"], " ", $output);
+    return preg_replace(["/[\r]/", "[\n]", "/\s{2,}/"], [" ", " ", " "], $output);
+}
+
+/**
+ * Get image params for contents
+ *
+ * @return Array the image data
+ **/
+function getMediaObject($smarty)
+{
+    $photo = $video = '';
+    $content = $smarty->tpl_vars['content']->value;
+    if (array_key_exists('photoInt', $smarty->tpl_vars)) {
+        // Articles
+        $photo = $smarty->tpl_vars['photoInt']->value;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
+    } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
+        // Articles with inner video
+        $video = $smarty->tpl_vars['videoInt']->value;
+        if (!empty($video) && strpos($video->thumb, 'http')  === false) {
+            $video->thumb = SITE_URL.$video->thumb;
+        }
+    } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
+        // Opinions
+        $photo = $smarty->tpl_vars['photo']->value;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
+    } elseif (isset($content->author->photo->path_img) &&
+            !empty($content->author->photo->path_img) &&
+            $content->content_type_name == 'opinion'
+    ) {
+        // Author
+        $photo = $content->author->photo;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$content->author->photo->path_img;
+    } elseif (isset($content->cover) && !empty($content->cover)) {
+        // Album
+        $photo = $content->cover_image;
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
+    } elseif (isset($content->img1) && ($content->img1 > 0)) {
+        $photo = getService('entity_repository')->find('Photo', $content->img1);
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
+    } elseif (isset($content->thumb) && !empty($content->thumb)) {
+        // Video
+        $video = $content;
+        if (strpos($content->thumb, 'http')  === false) {
+            $video->url = SITE_URL.$content->thumb;
+        }
+    }
+
+    // Check image size
+    if (!empty($photo)) {
+        $photo->width = (!empty($photo->width)) ? $photo->width : 700;
+        $photo->height = (!empty($photo->height)) ? $photo->height : 450;
+    }
+
+    return [
+        'image' => $photo,
+        'video' => $video
+    ];
 }
