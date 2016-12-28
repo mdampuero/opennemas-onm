@@ -584,12 +584,10 @@ class Content
 
         if (empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = \Onm\StringUtils::generateSlug($this->slug);
+                $data['slug'] = $this->slug;
             } else {
                 $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
             }
-        } else {
-            $data['slug'] = $data['slug'];
         }
 
         $contentData = [
@@ -662,7 +660,7 @@ class Content
     {
         $conn = getService('dbal_connection');
         $conn->beginTransaction();
-        try{
+        try {
             $conn->delete('contents', [ 'pk_content' => $id ]);
             $conn->delete('contents_categories', [ 'pk_fk_content' => $id ]);
             $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
@@ -672,7 +670,7 @@ class Content
             dispatchEventWithParams('content.delete', array('content' => $this));
 
             return true;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $conn->rollBack();
             error_log('Error removing content (ID:'.$id.'):'.$e->getMessage());
             return false;
@@ -1324,7 +1322,7 @@ class Content
             try {
                 $rs = getService('dbal_connection')->fetchColumn(
                     'SELECT pk_fk_content_category '
-                     . 'FROM `contents_categories` WHERE pk_fk_content =?',
+                    . 'FROM `contents_categories` WHERE pk_fk_content =?',
                     [ $pkContent ]
                 );
 
@@ -1361,7 +1359,7 @@ class Content
         try {
             $rs = getService('dbal_connection')->fetchColumn(
                 'SELECT pk_fk_content_category '
-                 . 'FROM `contents_categories` WHERE pk_fk_content =?',
+                . 'FROM `contents_categories` WHERE pk_fk_content =?',
                 [ $pkContent ]
             );
 
