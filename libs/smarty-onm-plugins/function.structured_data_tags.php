@@ -111,7 +111,9 @@ function getMediaObject($smarty)
     if (array_key_exists('photoInt', $smarty->tpl_vars)) {
         // Articles
         $photo = $smarty->tpl_vars['photoInt']->value;
-        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
+        if (is_object($photo)) {
+            $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
+        }
     } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
         // Articles with inner video
         $video = $smarty->tpl_vars['videoInt']->value;
