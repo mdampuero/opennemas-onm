@@ -130,6 +130,7 @@ function generateFiaGAScriptCode($config, $content)
     $code .= "ga('onm.set', 'campaignSource', 'Facebook');\n";
     $code .= "ga('onm.set', 'campaignMedium', 'Social Instant Article');\n";
     $code .= "ga('onm.send', 'pageview', {title: '{$content->title}'});\n";
+    $code .= "</script>\n";
 
     return $code;
 }
