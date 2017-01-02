@@ -53,6 +53,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->getContainer()->get('core.loader')->init();
         $basePath = APPLICATION_PATH;
         chdir($basePath);
 
