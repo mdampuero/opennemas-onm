@@ -323,7 +323,7 @@ frontend_digital_frontpage:
     path: /archive/digital/{year}/{month}/{day}/{category_name}.{_format}
     defaults: { _controller: FrontendBundle:Archive:digitalFrontpage, _format: html, page: 1 }
     requirements:
-        category_name: '[^/]+'
+        category_name: '[^/\.]+'
         year      : '([0-9]+)'
         month     : '([0-9]+)'
         day       : '([0-9]+)'
