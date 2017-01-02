@@ -50,8 +50,6 @@ EOF
 
         //If found matching instance initialize its contants and return it
         if (is_object($instance)) {
-            $instance->boot();
-
             // If this instance is not activated throw an exception
             if ($instance->activated != '1') {
                 $message =_('Instance not activated');
@@ -68,7 +66,7 @@ EOF
 
         $date          = new \DateTime();
         $directoryDate = $date->format("/Y/m/d/");
-        $basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
+        $basePath      = SITE_PATH."/media/".$instance->internal_name."/library".$directoryDate;
         $curly         = array();
 
         if (!file_exists($basePath)) {
