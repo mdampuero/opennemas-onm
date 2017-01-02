@@ -526,7 +526,6 @@ class User
     public function setMeta($userMeta = [])
     {
         try {
-            $values = [];
             foreach ($userMeta as $key => $value) {
                 $this->meta[$key] = $value;
 
