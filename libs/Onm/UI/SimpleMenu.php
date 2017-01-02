@@ -64,7 +64,7 @@ class SimpleMenu
             $this->contents = $params['contents'];
         }
 
-        $output = '';
+        $output = [];
         foreach ($this->menu as $element) {
             list($content, $isCurrent) = $this->renderElement($element);
             $output []= $content;
