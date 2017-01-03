@@ -194,7 +194,7 @@
             </label>
             <div class="controls">
               <div class="checkbox">
-                <input type="checkbox" name="inrss" id="inrss" {if !isset($user->inrss) || $user->inrss eq 'on' || $user->inrss eq '1'} checked="checked"{/if}>
+                <input type="checkbox" name="inrss" id="inrss" {if $user->inrss eq '1'} checked="checked"{/if}>
                 <label for="inrss">
                   {t}If this option is activated this author will be showed in rss{/t}
                 </label>
