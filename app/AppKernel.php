@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
 
             // Opennemas internal bundles
+            new Api\ApiBundle(),
             new Backend\BackendBundle(),
             new BackendWebService\BackendWebServiceBundle(),
             new Framework\OnmFrameworkBundle(),
