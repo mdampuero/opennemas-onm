@@ -292,14 +292,14 @@
               {t}Letters{/t}
             </label>
           </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
             <label for="checkbox-users">
               {t}Users{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
             <label for="checkbox-emails">
@@ -325,6 +325,12 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-blocked" checklist-model="columns.selected" checklist-value="'blocked'" type="checkbox">
+            <label for="checkbox-blocked">
+              {t}Blocked{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-activated" checklist-model="columns.selected" checklist-value="'activated'" type="checkbox">
             <label for="checkbox-activated">
               {t}Enabled{/t}
@@ -345,7 +351,7 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="pointer" style="width: 50px;" ng-click="sort('id')">
+              <th class="pointer" ng-click="sort('id')" width="50">
                 {t}#{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
               </th>
@@ -451,7 +457,12 @@
                 <i class="fa fa-eye" uib-tooltip="{t}Page views{/t}" tooltip-placement="bottom"></i>
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('activated')" ng-show="isColumnEnabled('activated')" style="width: 60px">
+              <th class="text-center" ng-show="isColumnEnabled('blocked')" width="60">
+                <span>
+                  <i class="fa fa-lock"></i>
+                </span>
+              </th>
+              <th class="text-center pointer" ng-click="sort('activated')" ng-show="isColumnEnabled('activated')" width="60">
                 <span>
                   <i class="fa fa-check"></i>
                   <i ng-class="{ 'fa fa-caret-up': isOrderedBy('activated') == 'asc', 'fa fa-caret-down': isOrderedBy('activated') == 'desc'}"></i>
@@ -571,12 +582,20 @@
               <td class="text-center" ng-show="isColumnEnabled('page_views')" title="{t}Page views{/t}">
                 [% item.page_views %]
               </td>
-              <td class="text-center" ng-show="isColumnEnabled('activated')">
-                <button class="btn btn-white" type="button" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading &&item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
+              <td class="text-center" ng-show="isColumnEnabled('blocked')">
+                <button class="btn btn-white" type="button" ng-click="patch(item, 'blocked', item.blocked == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.blockedLoading, 'fa-lock text-error' : !item.blockedLoading && item.blocked == '1', 'fa-unlock-alt text-success': !item.blockedLoading && (!item.blocked || item.blocked == '0') }"></i>
                 </button>
                 <span ng-if="!security.hasInstance(item.internal_name) || !security.hasPermission('INSTANCE_UPDATE')">
-                <i class="fa m-t-5" ng-class="{ 'fa-check text-success' : item.activated == '1', 'fa-times text-error': item.activated == '0' }"></i>
+                  <i class="fa m-t-5" ng-class="{ 'fa-lock text-error' : item.blocked == '1', 'fa-unlock-alt text-success': !item.blocked || item.blocked == '0' }"></i>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('activated')">
+                <button class="btn btn-white" type="button" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
+                </button>
+                <span ng-if="!security.hasInstance(item.internal_name) || !security.hasPermission('INSTANCE_UPDATE')">
+                  <i class="fa m-t-5" ng-class="{ 'fa-check text-success' : item.activated == '1', 'fa-times text-error': item.activated == '0' }"></i>
                 </span>
               </td>
             </tr>
