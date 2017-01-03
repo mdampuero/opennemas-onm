@@ -23,6 +23,7 @@ orm:
                 internal_name:      string
                 last_login:         datetime
                 letters:            integer
+                blocked:            boolean
                 main_domain:        integer
                 media_size:         float
                 name:               string
