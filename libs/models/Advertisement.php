@@ -175,6 +175,18 @@ class Advertisement extends Content
             }
         }
 
+        if (!array_key_exists('restriction_devices', $this->params) || !empty($this->params['restriction_devices'])) {
+            $this->params['restriction_devices'] = [
+                'phone'   => 1,
+                'tablet'  => 1,
+                'desktop' => 1,
+            ];
+        }
+
+        if (!array_key_exists('restriction_usergorups', $this->params) || !empty($this->params['restriction_usergorups'])) {
+            $this->params['restriction_usergorups'] = [];
+        }
+
         return $this;
     }
 

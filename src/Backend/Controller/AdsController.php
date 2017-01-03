@@ -185,6 +185,8 @@ class AdsController extends Controller
                 'height'            => json_decode($request->request->get('params_height', '')),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
+                'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
+                'restriction_devices'           => $request->request->get('params_devices', []),
             ]
         ];
 
@@ -341,6 +343,8 @@ class AdsController extends Controller
                 'height'            => json_decode($request->request->get('params_height', '')),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
+                'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
+                'restriction_devices'           => $request->request->get('params_devices', []),
             )
         );
 
