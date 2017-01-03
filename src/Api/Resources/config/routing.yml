@@ -1,0 +1,5 @@
+api_ads_endpoint:
+    path: '/ads'
+    defaults: { _controller: ApiBundle:Advertisement:endpoint, other: '' }
+    requirements:
+        other: '.*'

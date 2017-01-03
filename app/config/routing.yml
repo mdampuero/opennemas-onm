@@ -22,6 +22,10 @@ webservice:
     resource: '@WebServiceBundle/Resources/config/routing.yml'
     prefix:   /ws
 
+api:
+    resource: '@ApiBundle/Resources/config/routing.yml'
+    prefix:   /api
+
 frontend:
     resource: '@FrontendBundle/Resources/config/routing.yml'
     prefix:   /
