@@ -229,7 +229,7 @@
                       {is_module_activated name="OPINION_MANAGER"}
                         {acl isAllowed="AUTHOR_ADMIN"}
                           <div class="quick-item">
-                            <a href="{url name=admin_author_create}">
+                            <a href="{url name=backend_author_create}">
                               <i class="fa fa-user"></i>
                               <span class="title">{t}Author{/t}</span>
                             </a>
