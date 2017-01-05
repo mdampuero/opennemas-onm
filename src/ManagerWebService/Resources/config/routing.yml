@@ -39,6 +39,10 @@ manager_ws_report:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/report.yml'
     prefix:   /
 
+manager_ws_setting:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/setting.yml'
+    prefix:   /
+
 manager_ws_sidebar:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/sidebar.yml'
     prefix:   /
