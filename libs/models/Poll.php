@@ -84,10 +84,10 @@ class Poll extends Content
                 $uri =  Uri::generate(
                     'poll',
                     array(
-                        'id'   => sprintf('%06d', $this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
-                        'slug' => $this->slug,
-                        'category' => $this->category_name,
+                        'id'       => sprintf('%06d', $this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
+                        'slug'     => urlencode($this->slug),
+                        'category' => urlencode($this->category_name),
                     )
                 );
 
@@ -206,7 +206,6 @@ class Poll extends Content
                         [
                             'fk_pk_poll' => $this->id,
                             'item'       => $item->item,
-                            'metadata'   => \Onm\StringUtils::getTags($item->item)
                         ]
                     );
                 }

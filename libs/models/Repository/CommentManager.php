@@ -200,10 +200,12 @@ class CommentManager extends BaseManager
     }
 
     /**
-     * undocumented function
+     * Returns the list of comments most voted for a given content id
      *
-     * @return void
-     * @author
+     * @param string $contentId The content id to fetch comments from
+     * @param int $limit The max number of comments to return
+     *
+     * @return array The list of comment objects
      **/
     public function getMostVotedCommentsforContentID($contentId, $limit = 1)
     {
@@ -213,10 +215,10 @@ class CommentManager extends BaseManager
         }
 
         $limitSQL = $this->getLimitSQL($limit);
-
         $criteria = [
             'content_id' => [[ 'value' => $contentId ]],
             'status'     => [[ 'value' => \Comment::STATUS_ACCEPTED ]],
+            'value_pos'  => [[ 'value' => 0, 'operator' => '>' ]],
         ];
 
         $filterSQL  = $this->getFilterSQL($criteria);

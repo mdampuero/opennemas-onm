@@ -136,19 +136,19 @@ class File extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function deleteMulti($ids)
+    protected function deleteByPattern($pattern)
     {
-        foreach ($ids as $id) {
-            $this->remove($id);
-        }
+        $this->delete($pattern);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function executeScript($script, $args)
+    protected function deleteMulti($ids)
     {
-        throw new \Exception();
+        foreach ($ids as $id) {
+            $this->remove($id);
+        }
     }
 
     /**

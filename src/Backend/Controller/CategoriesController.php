@@ -275,7 +275,7 @@ class CategoriesController extends Controller
                 dispatchEventWithParams('category.delete', ['category' => $category]);
 
                 $this->get('session')->getFlashBag()->add(
-                    'sucess',
+                    'success',
                     _("Category deleted successfully.")
                 );
             } else {

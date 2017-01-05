@@ -89,7 +89,7 @@ class Attachment extends Content
 
                 break;
             case 'slug':
-                return \Onm\StringUtils::getTitle($this->title);
+                return \Onm\StringUtils::generateSlug($this->title);
 
                 break;
             default:

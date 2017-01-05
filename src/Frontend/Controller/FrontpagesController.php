@@ -170,13 +170,17 @@ class FrontpagesController extends Controller
                     $keys = $relatedMap[$content->pk_content];
 
                     foreach ($keys as $key) {
-                        $content->related_contents[] = $related[$key];
+                        if (array_key_exists($key, $related)) {
+                            $content->related_contents[] = $related[$key];
+                        }
                     }
                 }
             }
 
-            $layout = $this->get('setting_repository')
-                ->get('frontpage_layout_' . $categoryId, 'default');
+            $layout = $this->get('setting_repository')->get('frontpage_layout_' . $categoryId, 'default');
+            if (empty($layout)) {
+                $layout = 'default';
+            }
 
             $layoutFile = 'layouts/' . $layout . '.tpl';
 
@@ -277,10 +281,10 @@ class FrontpagesController extends Controller
 
         return $this->render(
             'frontpage/frontpage.tpl',
-            array(
+            [
                 'cache_id' => $cacheID,
-                'x-tags'   => 'externalfrontpage-page,'.$categoryName,
-            )
+                'x-tags'   => 'frontpage-page,frontpage-page-external,'.$categoryName,
+            ]
         );
     }
 

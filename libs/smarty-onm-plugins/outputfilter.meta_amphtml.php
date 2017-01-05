@@ -27,12 +27,11 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
                                sprintf('%06d', $content->pk_content),
         ];
 
-        $url = getService('router')
-            ->generate(
-                'frontend_article_show_amp',
-                $params,
-                UrlGeneratorInterface::ABSOLUTE_URL
-            );
+        $url = getService('router')->generate(
+            'frontend_article_show_amp',
+            $params,
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
         $code   = '<link rel="amphtml" href="'.$url.'" />';
         $output = preg_replace('@(</head>)@', $code.'${1}', $output);

@@ -7,23 +7,20 @@
 */
 function smarty_outputfilter_indent_html($output, $smarty)
  {
-
-     $config = array(
-           'indent'         => true,
-           'output-xhtml'   => true,
-           'wrap'           => 200,
-           'drop-proprietary-attributes'    =>    false,
-           'indent-cdata' => true,
-           'indent-spaces' => 4,
-        );
+    $config = [
+        'indent'                      => true,
+        'output-xhtml'                => true,
+        'wrap'                        => 200,
+        'drop-proprietary-attributes' => false,
+        'indent-cdata'                => true,
+        'indent-spaces'               => 4,
+    ];
 
     try {
-
         // Use tidy library to make up the HTML code
         $tidy = new tidy;
         $tidy->parseString($output, $config, 'utf8');
         $tidy->cleanRepair();
-
     } catch (Exception $e) {
         // If something went wrong just output the original HTML code
         $tidy = $output;
@@ -31,6 +28,4 @@ function smarty_outputfilter_indent_html($output, $smarty)
 
     // Output the HTML code
     return $tidy;
-
-
  }

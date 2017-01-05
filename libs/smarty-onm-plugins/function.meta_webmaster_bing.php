@@ -9,7 +9,7 @@ function smarty_function_meta_webmaster_bing($params, &$smarty) {
 
     $output = "";
 
-    $webmasterBingConfig = s::get('webmastertools_bing');
+    $webmasterBingConfig = getService('setting_repository')->get('webmastertools_bing');
 
     // Only return anything if the Ganalytics is setted in the configuration
     if (!empty($webmasterBingConfig))

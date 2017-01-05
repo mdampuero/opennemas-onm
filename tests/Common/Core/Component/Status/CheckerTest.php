@@ -23,7 +23,7 @@ class CheckerTest extends KernelTestCase
     public function setUp()
     {
         $this->cache = $this->getMockBuilder('CacheConnection')
-            ->setMethods([ 'delete', 'get', 'getData', 'set' ])
+            ->setMethods([ 'remove', 'get', 'getData', 'set' ])
             ->getMock();
 
         $this->conn = $this->getMockBuilder('DatabaseConnection')
@@ -70,7 +70,7 @@ class CheckerTest extends KernelTestCase
         $this->assertTrue($this->checker->checkCacheConnection());
 
         $this->cache->expects($this->at(1))->method('get')->willReturn('bar');
-        $this->cache->expects($this->at(2))->method('delete')->willReturn(true);
+        $this->cache->expects($this->at(2))->method('remove')->willReturn(true);
         $this->cache->expects($this->at(3))->method('get')->willReturn('bar');
         $this->assertFalse($this->checker->checkCacheConnection());
 

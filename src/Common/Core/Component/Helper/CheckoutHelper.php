@@ -100,11 +100,8 @@ class CheckoutHelper
         $this->purchase->step        = 'start';
         $this->purchase->updated     = $date;
 
-        if (!empty($this->client) && empty($this->purchase->client)) {
+        if (!empty($this->client)) {
             $this->purchase->client = $this->client;
-        }
-
-        if (!empty($this->client) && empty($this->purchase->client_id)) {
             $this->purchase->client_id = $this->client->id;
         }
 
@@ -186,10 +183,10 @@ class CheckoutHelper
         $this->purchase->notes = trim($notes, "\n");
         $this->purchase->terms = trim($terms, "\n");
 
-        $vat = ($vatTax/100) * $subtotal;
-
         if ($this->purchase->method === 'CreditCard') {
             $this->purchase->fee = round($subtotal * 0.029 + 0.30, 2);
+
+            $subtotal += $this->purchase->fee;
 
             $this->purchase->details[] = [
                 'description'  => _('Pay with credit card'),
@@ -200,12 +197,13 @@ class CheckoutHelper
                 ),
                 'quantity'     => 1,
                 'tax1_name'    => 'IVA',
-                'tax1_percent' => 0
+                'tax1_percent' => $vatTax
             ];
         }
 
-        $this->purchase->total =
-            round($subtotal + $vat + $this->purchase->fee, 2);
+        $vat = round(($vatTax/100) * $subtotal, 2);
+
+        $this->purchase->total = round($subtotal + $vat, 2);
 
         $em->persist($this->purchase);
     }

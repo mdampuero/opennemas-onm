@@ -53,7 +53,7 @@ class SystemSettingsController extends Controller
             'webmastertools_google', 'youtube_page',
             'robots_txt_rules', 'chartbeat',
             'body_end_script', 'body_start_script','header_script',
-            'elements_in_rss',
+            'elements_in_rss', 'redirection'
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);
@@ -115,8 +115,6 @@ class SystemSettingsController extends Controller
         // Generate upload path
         $uploadDirectory = MEDIA_PATH.'/sections/';
 
-        $sm = $this->get('setting_repository');
-
         // Check if upload directory is already created
         if (array_key_exists('allowLogo', $sectionSettings) &&
             $sectionSettings['allowLogo'] == 1 &&
@@ -124,7 +122,7 @@ class SystemSettingsController extends Controller
         ) {
             \Onm\FilesManager::createDirectory($uploadDirectory);
         }
-        $sm->set('section_settings', ['allowLogo' => $sectionSettings['allowLogo']]);
+        $this->get('setting_repository')->set('section_settings', ['allowLogo' => $sectionSettings['allowLogo']]);
 
         if (!is_null($siteLogo)) {
             // Get file original name
@@ -145,7 +143,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $siteLogo->move($uploadDirectory, $siteLogoName);
             // Save name on settings
-            $sm->set('site_logo', $siteLogoName);
+            $this->get('setting_repository')->set('site_logo', $siteLogoName);
         }
 
 
@@ -155,7 +153,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $favico->move($uploadDirectory, $favicoName);
             // Save name on settings
-            $sm->set('favico', $favicoName);
+            $this->get('setting_repository')->set('favico', $favicoName);
         }
 
         if (!is_null($mobileLogo)) {
@@ -164,7 +162,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $mobileLogo->move($uploadDirectory, $mobileLogoName);
             // Save name on settings
-            $sm->set('mobile_logo', $mobileLogoName);
+            $this->get('setting_repository')->set('mobile_logo', $mobileLogoName);
         }
 
 
@@ -199,7 +197,11 @@ class SystemSettingsController extends Controller
             }
 
             // Save settings
-            $sm->set($key, $value);
+            $this->get('setting_repository')->set($key, $value);
+        }
+
+        if (empty($request->request->get('redirection'))) {
+            $this->get('setting_repository')->set('redirection', 0);
         }
 
         // Delete caches for custom_css and frontpages

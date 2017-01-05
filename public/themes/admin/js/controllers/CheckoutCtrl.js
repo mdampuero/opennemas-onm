@@ -219,7 +219,11 @@
             params: { id: $scope.purchase }
           };
 
-          return http.put(route, { step: 'cart' })
+          var data = $scope.getData();
+
+          data.step = $scope.steps[0];
+
+          return http.put(route, data)
             .then(function(response) {
               if (response.data.id) {
                 $scope.purchase = response.data.id;
@@ -275,8 +279,8 @@
         }, true);
 
         // Update tax when vatTax or subtotal change
-        $scope.$watch('[vatTax, subtotal]', function() {
-          $scope.tax = Math.round($scope.subtotal * $scope.vatTax)/100;
+        $scope.$watch('[fee, subtotal, vatTax]', function() {
+          $scope.tax = +(($scope.subtotal + $scope.fee) * $scope.vatTax / 100).toFixed(2);
         }, true);
 
         // Update total when fee, subtotal or tax change
@@ -289,7 +293,7 @@
           $scope.fee = 0;
 
           if (nv && nv.type === 'CreditCard') {
-            $scope.fee = ($scope.subtotal + $scope.tax) * 0.029 + 0.30;
+            $scope.fee = +($scope.subtotal * 0.029 + 0.30).toFixed(2);
           }
         }, true);
 
@@ -339,15 +343,6 @@
             });
           }
         });
-
-        if (!$scope.purchase) {
-          http.post('backend_ws_purchase_save').then(function(response) {
-            $scope.purchase = response.data.id;
-            webStorage.local.set('purchase', $scope.purchase);
-          });
-        } else {
-          $scope.start();
-        }
       }
     ]);
 })();

@@ -287,7 +287,11 @@ class CommentsController extends Controller
             try {
                 $ids = implode(',', $ids);
                 $conn  = $this->get('orm.manager')->getConnection('instance');
-                $data = $conn->fetchAll('SELECT content_id, COUNT(*) as comments_count FROM comments WHERE content_id IN ('.$ids.') GROUP BY content_id');
+                $data = $conn->fetchAll(
+                    'SELECT content_id, COUNT(*) as comments_count FROM comments '
+                    .'WHERE content_id IN ('.$ids.') AND status = ? GROUP BY content_id',
+                    [ \Comment::STATUS_ACCEPTED ]
+                );
                 foreach ($data as $value) {
                     $commentsCount[$value['content_id']] = $value['comments_count'];
                 }

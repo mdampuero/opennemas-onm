@@ -100,11 +100,13 @@ EOF
             throw new \Exception("File content is not valid");
         }
 
+        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+
         $am = new \Advertisement();
         foreach ($ads as $ad) {
             $data = [
                 'title' => $ad['title'],
-                'metadata' => StringUtils::getTags($ad['title']),
+                'metadata' => $tagSystem->filter($ad['title']),
                 'category' => '0',
                 'categories' => $ad['categories'],
                 'available' => '1',
@@ -224,10 +226,12 @@ EOF
                 $height     = (array_key_exists('height', $ad['new']))
                     ? $ad['new']['height'] : $adv->params['height'];
 
+                $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+
                 $data = [
                     'id'                 => $adv->id,
                     'title'              => $title,
-                    'metadata'           => StringUtils::getTags($title),
+                    'metadata'           => $tagSystem->filter($title),
                     'category'           => '0',
                     'categories'         => $categories,
                     'available'          => '1',

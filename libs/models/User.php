@@ -174,6 +174,7 @@ class User
         try {
             $conn = getService('orm.manager')->getConnection('instance');
             $conn->insert('users', $values);
+
             $this->id = $conn->lastInsertId();
         } catch (\Exception $e) {
             error_log('Unable to create the user with the provided info: '.json_encode($values));
@@ -522,21 +523,19 @@ class User
      *
      * @return  boolean true if all went well
      */
-    public function setMeta($userMeta = array())
+    public function setMeta($userMeta = [])
     {
         try {
-            $values = array();
             foreach ($userMeta as $key => $value) {
                 $this->meta[$key] = $value;
-                $values[] = array($this->id, $key, $value);
+
+                $rs = getService('orm.manager')->getConnection('instance')->executeUpdate(
+                    "REPLACE INTO usermeta (`user_id`, `meta_key`, `meta_value`) VALUES (?, ?, ?)",
+                    [ $this->id, $key, $value ]
+                );
             }
 
-            $rs = getService('orm.manager')->getConnection('instance')->executeUpdate(
-                "REPLACE INTO usermeta (`user_id`, `meta_key`, `meta_value`) VALUES (?, ?, ?)",
-                $values
-            );
-
-            dispatchEventWithParams('user.update', array('user' => $this));
+            dispatchEventWithParams('user.update', [ 'user' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -556,9 +555,7 @@ class User
                 [ 'id'       => $this->id ]
             );
 
-            dispatchEventWithParams('user.update', array('user' => $this));
-
-
+            dispatchEventWithParams('user.update', [ 'user' => $this ]);
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -622,7 +619,7 @@ class User
                 [ 'user_id' => $userId, ]
             );
 
-            dispatchEventWithParams('user.update', array('user' => $this));
+            dispatchEventWithParams('user.update', [ 'user' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -650,7 +647,7 @@ class User
                 ]
             );
 
-            dispatchEventWithParams('user.update', array('user' => $this));
+            dispatchEventWithParams('user.update', [ 'user' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -716,10 +713,10 @@ class User
             $rs = getService('orm.manager')->getConnection('instance')->update(
                 "users",
                 [ 'token' => $token ],
-                [ 'id' => (int) $id ]
+                [ 'id'    => (int) $id ]
             );
 
-            dispatchEventWithParams('user.update', array('user' => $this));
+            dispatchEventWithParams('user.update', [ 'user' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -745,7 +742,7 @@ class User
                 [ 'id' => (int) $id ]
             );
 
-            dispatchEventWithParams('user.update', array('user' => $this));
+            dispatchEventWithParams('user.update', [ 'user' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -765,7 +762,7 @@ class User
     {
         $newTime = $planTime->format('Y-m-d H:i:s');
 
-        $this->setMeta(array('paywall_time_limit' => $newTime));
+        $this->setMeta([ 'paywall_time_limit' => $newTime ]);
     }
 
     /**
@@ -773,7 +770,7 @@ class User
      *
      * @return void
      */
-    public static function getUsersWithSubscription($config = array())
+    public static function getUsersWithSubscription($config = [])
     {
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone('UTC'));
@@ -856,7 +853,7 @@ class User
 
         // Get all necessary data for the photo
         $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
-        $data = array(
+        $data = [
             'title'       => $originalFileName,
             'name'        => $newFileName,
             'user_name'   => $newFileName,
@@ -870,7 +867,7 @@ class User
             'height'      => $infor->height,
             'type'        => $infor->type,
             'author_name' => '',
-        );
+        ];
 
         // Create new photo
         $photo = new \Photo();

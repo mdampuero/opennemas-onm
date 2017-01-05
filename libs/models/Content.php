@@ -467,10 +467,10 @@ class Content
             }
         }
 
-        if (!isset($data['slug']) || empty($data['slug'])) {
-            $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
+        if (empty($data['slug']) && !empty($data['title'])) {
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
         } else {
-            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
         }
 
         if (!isset($data['with_comment'])) {
@@ -511,7 +511,6 @@ class Content
             'params'              => (!isset($data['params'])
                 || empty($data['params'])) ? null: serialize($data['params'])
         ];
-
 
         $conn = getService('dbal_connection');
         try {
@@ -583,14 +582,12 @@ class Content
             $data['fk_user_last_editor'] = getService('session')->get('user')->id;
         }
 
-        if (!isset($data['slug']) || empty($data['slug'])) {
+        if (empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = \Onm\StringUtils::getTitle($this->slug);
+                $data['slug'] = $this->slug;
             } else {
-                $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
+                $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
             }
-        } else {
-            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
         }
 
         $contentData = [
@@ -663,7 +660,7 @@ class Content
     {
         $conn = getService('dbal_connection');
         $conn->beginTransaction();
-        try{
+        try {
             $conn->delete('contents', [ 'pk_content' => $id ]);
             $conn->delete('contents_categories', [ 'pk_fk_content' => $id ]);
             $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
@@ -673,7 +670,7 @@ class Content
             dispatchEventWithParams('content.delete', array('content' => $this));
 
             return true;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $conn->rollBack();
             error_log('Error removing content (ID:'.$id.'):'.$e->getMessage());
             return false;
@@ -758,8 +755,8 @@ class Content
                 array(
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => $this->category_name,
-                    'slug'     => $this->slug,
+                    'category' => urlencode($this->category_name),
+                    'slug'     => urlencode($this->slug),
                 )
             );
         }
@@ -1325,7 +1322,7 @@ class Content
             try {
                 $rs = getService('dbal_connection')->fetchColumn(
                     'SELECT pk_fk_content_category '
-                     . 'FROM `contents_categories` WHERE pk_fk_content =?',
+                    . 'FROM `contents_categories` WHERE pk_fk_content =?',
                     [ $pkContent ]
                 );
 
@@ -1362,7 +1359,7 @@ class Content
         try {
             $rs = getService('dbal_connection')->fetchColumn(
                 'SELECT pk_fk_content_category '
-                 . 'FROM `contents_categories` WHERE pk_fk_content =?',
+                . 'FROM `contents_categories` WHERE pk_fk_content =?',
                 [ $pkContent ]
             );
 

@@ -123,7 +123,7 @@ class Articles
                     'id'       => $element['pk_content'],
                     'date'     => date('YmdHis', strtotime($element['created'])),
                     'category' => $element['catName'],
-                    'slug'     => \Onm\StringUtils::getTitle($element['title']),
+                    'slug'     => urlencode(\Onm\StringUtils::generateSlug($element['title'])),
                 )
             );
         }

@@ -80,7 +80,9 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
     }
 
     // Google Analytics
-    $codes[] = getGoogleAnalyticsCode();
+    $gaConfig = getService('setting_repository')->get('google_analytics');
+    $codes[]  = generateFiaGAScriptCode($gaConfig, $smarty->tpl_vars['item']->value);
+
     // Piwik
     $codes[] = getPiwikCode();
 
@@ -90,4 +92,45 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
     }
 
     return $output;
+}
+
+function generateFiaGAScriptCode($config, $content)
+{
+    $code = "\n<script type=\"text/javascript\">\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n";
+    foreach ($config as $key => $account) {
+        if (is_array($account)
+            && array_key_exists('api_key', $account)
+            && !empty(trim($account['api_key']))
+        ) {
+            if (array_key_exists('base_domain', $account)
+                && !empty(trim($account['base_domain']))
+            ) {
+                $code .= "ga('create', '" . trim($account['api_key']) . "', {
+                    cookieDomain: '". trim($account['base_domain']) ."',
+                    name: 'account{$key}'
+                });\n";
+            } else {
+                $code .= "ga('create', '" . trim($account['api_key']) . "', '{
+                    name: 'account{$key}'
+                }');\n";
+            }
+            $code .= "ga('account{$key}.require', 'displayfeatures');\n";
+            $code .= "ga('account{$key}.set', 'campaignSource', 'Facebook');\n";
+            $code .= "ga('account{$key}.set', 'campaignMedium', 'Social Instant Article');\n";
+            $code .= "ga('account{$key}.send', 'pageview', {title: '{$content->title}'});\n";
+        }
+    }
+
+    // Add opennemas Account
+    $code .= "ga('create', 'UA-40838799-5', {
+        cookieDomain: 'opennemas.com',
+        name: 'onm'
+    });\n";
+    $code .= "ga('onm.require', 'displayfeatures');\n";
+    $code .= "ga('onm.set', 'campaignSource', 'Facebook');\n";
+    $code .= "ga('onm.set', 'campaignMedium', 'Social Instant Article');\n";
+    $code .= "ga('onm.send', 'pageview', {title: '{$content->title}'});\n";
+    $code .= "</script>\n";
+
+    return $code;
 }

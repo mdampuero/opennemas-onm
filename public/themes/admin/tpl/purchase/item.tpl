@@ -83,18 +83,17 @@
                       <td class="text-right">[% item.unit_cost %] €</td>
                     </tr>
                     <tr>
-                      <td rowspan="[% payment.type === 'CreditCard' && payment.nonce ? 4 : 3 %]">
-                      </td>
+                      <td colspan="1" rowspan="[% purchase.method === 'CreditCard' ? 4 : 3 %]"></td>
                       <td class="text-right"><strong>Subtotal</strong></td>
-                      <td class="text-right">[% subtotal %] €</td>
-                    </tr>
-                    <tr>
-                      <td class="text-right no-border"><strong>{t}VAT{/t} ([% purchase.details[0].tax1_percent %]%)</strong></td>
-                      <td class="text-right">[% tax %] €</td>
+                      <td class="text-right">[% subtotal | number : 2 %] €</td>
                     </tr>
                     <tr ng-if="purchase.method === 'CreditCard'">
                       <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
                       <td class="text-right">[% purchase.fee | number : 2 %] €</td>
+                    </tr>
+                    <tr>
+                      <td class="text-right no-border"><strong>{t}VAT{/t} ([% purchase.details[0].tax1_percent %]%)</strong></td>
+                      <td class="text-right">[% tax | number : 2 %] €</td>
                     </tr>
                     <tr>
                       <td class="text-right no-border"><div class="well well-small green"><strong>Total</strong></div></td>

@@ -83,11 +83,12 @@
           for (var i = 0; i < $scope.purchase.details.length; i++) {
             var line = $scope.purchase.details[i];
 
-            $scope.tax      += line.unit_cost * line.quantity * (line.tax1_percent / 100);
             $scope.subtotal += line.unit_cost * line.quantity;
+            $scope.vatTax    = line.tax1_percent / 100;
           }
 
-          $scope.total = $scope.subtotal + $scope.tax;
+          $scope.tax   = +(($scope.subtotal + $scope.purchase.fee) * $scope.vatTax).toFixed(2);
+          $scope.total = +($scope.subtotal + $scope.tax).toFixed(2);
         });
       }
     ]);

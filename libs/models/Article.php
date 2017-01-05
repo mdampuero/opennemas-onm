@@ -140,7 +140,7 @@ class Article extends Content
                             'id'       => sprintf('%06d', $this->id),
                             'date'     => date('YmdHis', strtotime($this->created)),
                             'category' => $this->category_name,
-                            'slug'     => $this->slug,
+                            'slug'     => urlencode($this->slug),
                         )
                     );
                 }
@@ -152,7 +152,7 @@ class Article extends Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return \Onm\StringUtils::getTitle($this->title);
+                    return \Onm\StringUtils::generateSlug($this->title);
                 }
                 break;
             case 'author':
@@ -186,8 +186,8 @@ class Article extends Content
             [
                 'id'       => $this->id,
                 'date'     => date('Y-m-d', strtotime($this->created)),
-                'category' => $this->category_name,
-                'slug'     => $this->slug,
+                'category' => urlencode($this->category_name),
+                'slug'     => urlencode($this->slug),
             ]
         );
 
@@ -256,29 +256,29 @@ class Article extends Content
 
             $conn->insert('articles', [
                 'pk_article'    => $this->id,
-                'agency'   => (!isset($data['agency']) || is_null($data['agency']))
+                'agency'   => (!array_key_exists('agency', $data) || empty($data['agency']))
                 ? null : $data['agency'],
-                'summary'   => (!isset($data['summary']) || is_null($data['summary']))
+                'summary'   => (!array_key_exists('summary', $data) || empty($data['summary']))
                     ? null : $data['summary'],
-                'subtitle'   => (!isset($data['subtitle']) || is_null($data['subtitle']))
+                'subtitle'   => (!array_key_exists('subtitle', $data) || empty($data['subtitle']))
                     ? null : $data['subtitle'],
-                'title_int'   => (!isset($data['title_int']) || is_null($data['title_int']))
+                'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
                     ? null : $data['title_int'],
-                'img1'   => (!isset($data['img1']) || is_null($data['img1']))
-                    ? null : $data['img1'],
-                'img1_footer'   => (!isset($data['img1_footer']) || is_null($data['img1_footer']))
+                'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
+                    ? '0' : $data['img1'],
+                'img1_footer'   => (!array_key_exists('img1_footer', $data) || is_null($data['img1_footer']))
                     ? null : $data['img1_footer'],
-                'img2'   => (!isset($data['img2']) || is_null($data['img2']))
-                    ? null : $data['img2'],
-                'img2_footer'   => (!isset($data['img2_footer']) || is_null($data['img2_footer']))
+                'img2'   => (!array_key_exists('img2', $data) || empty($data['img2']))
+                    ? '0' : $data['img2'],
+                'img2_footer'   => (!array_key_exists('img2_footer', $data) || is_null($data['img2_footer']))
                     ? null : $data['img2_footer'],
-                'fk_video'   => (!isset($data['fk_video']) || is_null($data['fk_video']))
-                    ? null : $data['fk_video'],
-                'footer_video1'   => (!isset($data['footer_video1']) || is_null($data['footer_video1']))
+                'fk_video'   => (!array_key_exists('fk_video', $data) || empty($data['fk_video']))
+                    ? '0' : $data['fk_video'],
+                'footer_video1'   => (!array_key_exists('footer_video1', $data) || empty($data['footer_video1']))
                     ? null : $data['footer_video1'],
-                'fk_video2'   => (!isset($data['fk_video2']) || is_null($data['fk_video2']))
-                    ? null : $data['fk_video2'],
-                'footer_video2'   => (!isset($data['footer_video2']) || is_null($data['footer_video2']))
+                'fk_video2'   => (!array_key_exists('fk_video2', $data) || empty($data['fk_video2']))
+                    ? '0' : $data['fk_video2'],
+                'footer_video2'   => (!array_key_exists('footer_video2', $data) || empty($data['footer_video2']))
                     ? null : $data['footer_video2'],
             ]);
 
@@ -319,19 +319,30 @@ class Article extends Content
         }
 
         $contentData = [
-            'subtitle'      => $data['subtitle'],
-            'agency'        => $data['agency'],
-            'summary'       => $data['summary'],
-            'title_int'     => $data['title_int'],
-            'img1'          => empty($data['img1']) ? null: (int) $data['img1'],
-            'img1_footer'   => (!isset($data['img1_footer']) || is_null($data['img1_footer']))
-                ? null: $data['img1_footer'],
-            'img2'          => empty($data['img2']) ? null: (int) $data['img2'],
-            'img2_footer'   => (!isset($data['img2_footer']) || is_null($data['img2_footer']))
-                ? null: $data['img2_footer'],
-            'fk_video'      => (int) $data['fk_video'],
-            'fk_video2'     => (int) $data['fk_video2'],
-            'footer_video2' => $data['footer_video2'],
+            'agency'   => (!array_key_exists('agency', $data) || empty($data['agency']))
+            ? null : $data['agency'],
+            'summary'   => (!array_key_exists('summary', $data) || empty($data['summary']))
+                ? null : $data['summary'],
+            'subtitle'   => (!array_key_exists('subtitle', $data) || empty($data['subtitle']))
+                ? null : $data['subtitle'],
+            'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
+                ? null : $data['title_int'],
+            'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
+                ? '0' : $data['img1'],
+            'img1_footer'   => (!array_key_exists('img1_footer', $data) || is_null($data['img1_footer']))
+                ? null : $data['img1_footer'],
+            'img2'   => (!array_key_exists('img2', $data) || empty($data['img2']))
+                ? '0' : $data['img2'],
+            'img2_footer'   => (!array_key_exists('img2_footer', $data) || is_null($data['img2_footer']))
+                ? null : $data['img2_footer'],
+            'fk_video'   => (!array_key_exists('fk_video', $data) || empty($data['fk_video']))
+                ? '0' : $data['fk_video'],
+            'footer_video1'   => (!array_key_exists('footer_video1', $data) || empty($data['footer_video1']))
+                ? null : $data['footer_video1'],
+            'fk_video2'   => (!array_key_exists('fk_video2', $data) || empty($data['fk_video2']))
+                ? '0' : $data['fk_video2'],
+            'footer_video2'   => (!array_key_exists('footer_video2', $data) || empty($data['footer_video2']))
+                ? null : $data['footer_video2'],
         ];
 
         try {

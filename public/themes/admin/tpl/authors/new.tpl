@@ -85,7 +85,7 @@
                   {t}Display name{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="name" maxlength="50" name="name" required="required" type="text" value="{$user->name|default:""}"  />
+                  <input class="form-control" id="name" maxlength="50" name="name" required type="text" value="{$user->name|default:""}"  />
                 </div>
               </div>
               <div class="form-group">
@@ -93,7 +93,7 @@
                   {t}Email{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required" type="email" value="{$user->email|default:""}">
+                  <input class="form-control" id="email" name="email" placeholder="test@example.com" required type="email" value="{$user->email|default:""}">
                 </div>
               </div>
               <div class="form-group">
@@ -194,7 +194,7 @@
             </label>
             <div class="controls">
               <div class="checkbox">
-                <input type="checkbox" name="inrss" id="inrss" {if !isset($user->inrss) || $user->inrss eq 'on' || $user->inrss eq '1'} checked="checked"{/if}>
+                <input type="checkbox" name="inrss" id="inrss" {if $user->inrss eq '1'} checked="checked"{/if}>
                 <label for="inrss">
                   {t}If this option is activated this author will be showed in rss{/t}
                 </label>

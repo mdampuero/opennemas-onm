@@ -229,7 +229,7 @@
                       {is_module_activated name="OPINION_MANAGER"}
                         {acl isAllowed="AUTHOR_ADMIN"}
                           <div class="quick-item">
-                            <a href="{url name=admin_author_create}">
+                            <a href="{url name=backend_author_create}">
                               <i class="fa fa-user"></i>
                               <span class="title">{t}Author{/t}</span>
                             </a>
@@ -277,7 +277,7 @@
             <div class="pull-right ">
               <ul class="nav quick-section">
                 <li class="quicklinks ng-cloak" ng-if="offline">
-                  <a href="#" uib-tooltip="{t}There is not Internet at the moment, please try to save in a few minutes.{/t}" tooltip-placement="bottom">
+                  <a href="#" uib-tooltip-html="'{t escape=off}There is not Internet at the moment,<br> please try to save in a few minutes.{/t}'" tooltip-placement="bottom">
                     <i class="animated flash fa fa-bolt" style="color: #ff0000 !important; animation-duration: .5s"></i>
                   </a>
                 </li>

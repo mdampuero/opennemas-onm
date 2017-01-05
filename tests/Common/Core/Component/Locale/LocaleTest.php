@@ -94,10 +94,12 @@ class LocaleTest extends KernelTestCase
      */
     public function testSetTimeZone()
     {
+        $timezoneLisbon = array_flip(\DateTimeZone::listIdentifiers())['Europe/Lisbon'];
+
         $this->locale->setTimeZone('foo');
         $this->assertNotEquals('foo', $this->locale->getTimeZone());
 
-        $this->locale->setTimeZone(335);
+        $this->locale->setTimeZone($timezoneLisbon);
         $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone());
     }
 }

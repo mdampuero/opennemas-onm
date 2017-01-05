@@ -95,11 +95,13 @@ class PurchaseController extends Controller
      * @apiName CreatePurchase
      * @apiGroup Purchase
      */
-    public function saveAction()
+    public function saveAction(Request $request)
     {
-        $purchase = $this->get('core.helper.checkout')->getPurchase();
+        $ids      = $request->request->get('ids', []);
+        $ph       = $this->get('core.helper.checkout');
+        $purchase = $ph->getPurchase();
 
-        $this->get('orm.manager')->persist($purchase);
+        $ph->next('start', $ids, [], null);
 
         return new JsonResponse([ 'id' => $purchase->id ]);
     }
@@ -119,8 +121,12 @@ class PurchaseController extends Controller
         );
 
         $converter = $em->getConverter('Purchase');
-        $purchase  = $em->getRepository('purchase')
-            ->findOneBy($oql);
+        $purchase  = $em->getRepository('purchase')->findOneBy($oql);
+
+        // Remove payment line from purchase
+        if ($purchase->method === 'CreditCard') {
+            array_pop($purchase->details);
+        }
 
         return new JsonResponse([
             'purchase' => $converter->responsify($purchase),

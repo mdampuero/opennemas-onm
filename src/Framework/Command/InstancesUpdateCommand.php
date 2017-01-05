@@ -87,6 +87,9 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $loader = $this->getContainer()->get('core.loader');
+        $loader->init();
+
         $options = [
             'instance_stats'  => $input->getOption('instance-stats'),
             'alexa'           => $input->getOption('alexa'),
@@ -308,15 +311,25 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         }
 
         // Get last login date
-        $sql = 'SELECT * FROM settings WHERE name=\'last_login\'';
+        $sql = 'SELECT * FROM settings WHERE name=\'last_login\' or name=\'time_zone\'';
         $rs  = $conn->fetchAll($sql);
+        $tzs = \DateTimeZone::listIdentifiers();
+        $tz  = new \DateTimeZone(date_default_timezone_get());
 
         $i->last_login = null;
 
         if ($rs !== false && !empty($rs)) {
-            $value = unserialize($rs[0]['value']);
-            if (!empty($value)) {
-                $i->last_login = new \DateTime($value);
+            $settings = [];
+            foreach ($rs as $r) {
+                $settings[$r['name']] = unserialize($r['value']);
+            }
+
+            if (array_key_exists('time_zone', $settings) && !empty($settings['time_zone'])) {
+                $tz = new \DateTimeZone($tzs[$settings['time_zone']]);
+            }
+
+            if (array_key_exists('last_login', $settings) && !empty($settings['last_login'])) {
+                $i->last_login = new \DateTime($settings['last_login']);
             }
         }
 
@@ -324,17 +337,13 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         $sql = 'SELECT created FROM contents ORDER BY created desc LIMIT 1 ';
         $rs  = $conn->fetchAll($sql);
 
-        if ($rs !== false && !empty($rs)
-            && !empty($rs[0]['created'])
-            && (
-                is_null($i->last_login)
-                || (
-                    !is_null($i->last_login)
-                    && $rs[0]['created'] > $i->last_login->format('Y-m-d H:i:s')
-                )
-            )
-        ) {
-            $i->last_login = new \DateTime($rs[0]['created']);
+        if (!empty($rs) && !empty($rs[0]['created'])) {
+            $created = new \DateTime($rs[0]['created'], $tz);
+            $created->setTimeZone(new \DateTimeZone('UTC'));
+
+            if (empty($i->last_login) || $created > $i->last_login) {
+                $i->last_login = $created;
+            }
         }
     }
 

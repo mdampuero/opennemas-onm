@@ -8,7 +8,6 @@ use \Onm\Settings as s;
 
 function smarty_function_renderStyleSheet($params, &$smarty)
 {
-
     $output = "";
 
      // Initialicing parameters

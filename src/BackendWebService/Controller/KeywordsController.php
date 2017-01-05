@@ -40,7 +40,7 @@ class KeywordsController extends Controller
     {
         $search = $request->query->get('search');
         $page = $request->query->getDigits('page', 1);
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
 
         $filter = '';
         if (is_array($search) && array_key_exists('title', $search)) {
@@ -51,11 +51,11 @@ class KeywordsController extends Controller
         $keywordManager = new \PClave();
         $keywords = $keywordManager->find($filter);
 
-        $results = array_slice($keywords, ($page-1) * $elementsPerPage, ITEMS_PAGE);
+        $results = array_slice($keywords, ($page-1) * $elementsPerPage, $elementsPerPage);
 
         return new JsonResponse(
             array(
-                'elements_per_page' => 10,
+                'elements_per_page' => $elementsPerPage,
                 'extra'             => array(
                     'types'      => \PClave::getTypes(),
                 ),

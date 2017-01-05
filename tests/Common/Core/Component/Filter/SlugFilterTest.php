@@ -23,8 +23,8 @@ class SlugFilterTest extends KernelTestCase
 
         $filter = new SlugFilter();
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
-        $filter->utils->shouldReceive('getTitle')->once()
-            ->with($str, false, '.');
+        $filter->utils->shouldReceive('generateSlug')->once()
+            ->with($str, true, '-');
 
         $filter->filter($str);
     }
@@ -32,12 +32,12 @@ class SlugFilterTest extends KernelTestCase
     public function testFilterWithParameters()
     {
         $str    = 'The string to convert';
-        $params = [ 'separator' => '-', 'stopList' => false ];
+        $params = [ 'separator' => '', 'stop-list' => false ];
 
         $filter = new SlugFilter($params);
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
-        $filter->utils->shouldReceive('getTitle')->once()
-            ->with($str, $params['stopList'], $params['separator']);
+        $filter->utils->shouldReceive('generateSlug')->once()
+            ->with($str, $params['stop-list'], $params['separator']);
 
         $filter->filter($str, $params);
     }

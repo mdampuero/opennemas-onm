@@ -13,9 +13,7 @@
 
 function underscore($name)
 {
-    $withUnderscore = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
-
-    return $withUnderscore;
+    return strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
 }
 
 function classify($name)
@@ -40,8 +38,7 @@ function tableize($name)
 
 function pluralize($name)
 {
-    $name = strtolower($name);
-    return $name . 's';
+    return strtolower($name) . 's';
 }
 
 function clearslash($string)
@@ -60,12 +57,11 @@ function clearslash($string)
 function logContentEvent($action = null, $content = null)
 {
     $logger = getService('application.log');
+    $user = getService('session')->get('user');
 
-    $msg = 'User '.getService('session')->get('user')->username
-        .' ('.getService('session')->get('user')->id.') has executed '
-        .'the action '.$action;
+    $msg = "User {$user->username} ({$user->id}) has executed the action {$action}";
     if (!empty($content)) {
-        $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
+        $msg.=" at ".get_class($content)." (ID:{$content->id})";
     }
 
     $logger->info($msg);
@@ -228,55 +224,6 @@ function html_attribute($string)
     return \Onm\StringUtils::htmlAttribute($string);
 }
 
-// added Claudio Bustos  clbustos#entelchile.net
-if (!defined('ADODB_ERROR_HANDLER_TYPE')) {
-    define('ADODB_ERROR_HANDLER_TYPE', E_USER_ERROR);
-}
-if (!defined('ADODB_ERROR_HANDLER')) {
-    define('ADODB_ERROR_HANDLER', 'adoDBErrorHandler');
-}
-
-/**
-* Default Error Handler. This will be called with the following params
-*
-* @param $dbms      the RDBMS you are connecting to
-* @param $fn        the name of the calling function (in uppercase)
-* @param $errno     the native error number from the database
-* @param $errmsg    the native error msg from the database
-* @param $p1        $fn specific parameter - see below
-* @param $p2        $fn specific parameter - see below
-* @param $thisConn  $current connection object - can be false if no connection object created
-*/
-function adoDBErrorHandler($dbms, $fn, $errno, $errmsg, $p1, $p2, &$thisConnection)
-{
-    if (error_reporting() == 0) {
-        return; // obey @ protocol
-    }
-
-    switch ($fn) {
-        case 'EXECUTE':
-            $sql = $p1;
-            $inputparams = $p2;
-
-            $s = "$dbms error: [$errno: $errmsg] in $fn(\"$sql\")\n";
-            break;
-
-        case 'PCONNECT':
-        case 'CONNECT':
-            $host = $p1;
-            $database = $p2;
-
-            $s = "$dbms error: [$errno: $errmsg] in $fn($host, '****', '****', $database)\n";
-            break;
-        default:
-            $s = "$dbms error: [$errno: $errmsg] in $fn($p1, $p2)\n";
-            break;
-    }
-
-    $logger = getService('logger');
-    $logger->error('[Database Error] '.$s);
-}
-
 /**
  * undocumented function
  *
@@ -290,22 +237,12 @@ function dispatchEventWithParams($eventName, $params = array())
     }
 
     $eventDispatcher = getService('event_dispatcher');
-
     $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {
         $event->setArgument($paramName, $paramValue);
     }
 
     $eventDispatcher->dispatch($eventName, $event);
-}
-
-function debug()
-{
-    if (array_key_exists('debug', $_REQUEST) && $_REQUEST['debug'] == 1) {
-        $functionArgs = func_get_args();
-
-        call_user_func_array('var_dump', $functionArgs);
-    }
 }
 
 function getPiwikCode($useImage = false)
@@ -413,6 +350,8 @@ function getGoogleAnalyticsCode($useImage = false)
 
     if ($useImage === 'amp') {
         $code = genarateGAAmpCode($config);
+    } elseif ($useImage === 'fia') {
+        $code = generateGAScriptCode($config, 'fia');
     } elseif ($useImage) {
         $code = genarateGAImageCode($config);
     } else {

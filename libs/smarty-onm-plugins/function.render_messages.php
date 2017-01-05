@@ -8,11 +8,9 @@
 */
 function smarty_function_render_messages($params, &$smarty)
 {
-    $session = getService('session');
-
-    $messagesByType = $session->getFlashBag()->all();
     $created        = time();
     $messagesHTML   = '';
+    $messagesByType = getService('session')->getFlashBag()->all();
 
     foreach ($messagesByType as $type => $messages) {
         $innerHTML = '';

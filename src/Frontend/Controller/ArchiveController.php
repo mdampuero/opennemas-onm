@@ -159,7 +159,7 @@ class ArchiveController extends Controller
         $file = MEDIA_PATH."/library/{$path}/{$categoryName}.html";
         $url = "/archive/content/{$path}/";
         if (file_exists($file) && is_readable($file)) {
-            $html = file_get_contents(SITE_URL.INSTANCE_MEDIA."library/{$path}/{$categoryName}.html");
+            $html = file_get_contents($file);
         } else {
             return new RedirectResponse($url, 301);
             //throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
