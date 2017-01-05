@@ -73,15 +73,16 @@ class Editor
     /**
      * Saves the processed image.
      *
-     * @param string $path The path where the image is saved.
+     * @param string $path   The path where the image is saved.
+     * @param array  $params The array of parameters for Imagine.
      */
-    public function save($path)
+    public function save($path, $params = [])
     {
         if (empty($this->img) || empty($path)) {
             return $this;
         }
 
-        $this->img->save($path);
+        $this->img->save($path, $params);
         $this->img = null;
 
         return $this;

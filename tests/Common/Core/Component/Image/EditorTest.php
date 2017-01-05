@@ -86,9 +86,10 @@ class EditorTest extends KernelTestCase
 
         $property->setValue($this->editor, $this->image);
 
-        $this->image->expects($this->once())->method('save')->with('glork/flob');
+        $this->image->expects($this->once())->method('save')
+            ->with('glork/flob', [ 'grault' => 'garply' ]);
 
-        $this->editor->save('glork/flob');
+        $this->editor->save('glork/flob', [ 'grault' => 'garply' ]);
         $this->editor->save('wobble/wibble');
     }
 
