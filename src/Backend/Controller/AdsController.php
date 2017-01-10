@@ -139,11 +139,17 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
+            $ads        = $this->get('core.manager.advertisement')->getPositionsForTheme();
+            $userGroups = $this->get('orm.manager')->getRepository('UserGroup')->findBy();
+
+            $extra['user_groups'] = array_map(function ($a) {
+                return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+            }, $userGroups);
 
             return $this->render(
                 'advertisement/new.tpl',
                 [
+                    'user_groups'   => $userGroups,
                     'ads_positions' => $adsPositions,
                     'themeAds'      => $ads,
                     'filter'        => $filter,
@@ -186,7 +192,11 @@ class AdsController extends Controller
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
-                'restriction_devices'           => $request->request->get('params_devices', []),
+                'restriction_devices'           => [
+                    'desktop' => ($request->request->get('restriction_devices_desktop', 0) == true),
+                    'tablet'  => ($request->request->get('restriction_devices_tablet', 0) == true),
+                    'phone'   => ($request->request->get('restriction_devices_phone', 0) == true),
+                ],
             ]
         ];
 
@@ -233,6 +243,7 @@ class AdsController extends Controller
             $serverUrl = $openXsettings['url'];
         }
 
+
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -263,12 +274,21 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
+        $userGroups = $this->get('orm.manager')->getRepository('UserGroup')->findBy('pk_user_group != 4');
+        $userGroups = array_map(function($group) {
+            return [ 'id' => $group->pk_user_group, 'name' => $group->name ];
+        }, $userGroups);
+        $ad->params['restriction_usergroups'] = array_filter($userGroups, function ($a) use ($ad) {
+            return in_array($a['id'], $ad->params['restriction_usergroups']);
+        });
+
         $positionManager = $this->container->get('core.manager.advertisement');
         return $this->render(
             'advertisement/new.tpl',
             array(
                 'ads_positions' => $adsPositions,
                 'advertisement' => $ad,
+                'user_groups'   => $userGroups,
                 'themeAds'      => $positionManager->getPositionsForTheme(),
                 'filter'        => $filter,
                 'page'          => $page,
@@ -344,7 +364,11 @@ class AdsController extends Controller
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
-                'restriction_devices'           => $request->request->get('params_devices', []),
+                'restriction_devices'           => [
+                    'desktop' => ($request->request->get('restriction_devices_desktop', 0) == true),
+                    'tablet'  => ($request->request->get('restriction_devices_tablet', 0) == true),
+                    'phone'   => ($request->request->get('restriction_devices_phone', 0) == true),
+                ],
             )
         );
 

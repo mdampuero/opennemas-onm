@@ -19,6 +19,8 @@
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
       $scope.sizes = [ { width: 0, height: 0 } ];
+      $scope.params = [];
+      $scope.params.restriction_devices = [ { phone: true, tablet: true, desktop: true } ]
 
       /**
        * @function init
@@ -30,12 +32,12 @@
        * @param Object params The advertisement params
        */
       $scope.init = function(params) {
+        $scope.params = params;
+
+        $scope.sizes = [];
         if (!angular.isArray(params.width) || !angular.isArray(params.height)) {
           return;
         }
-
-        $scope.sizes = [];
-
         for (var i = 0; i < params.width.length; i++) {
           $scope.sizes.push({
             width:  parseInt(params.width[i]),

@@ -175,7 +175,7 @@ class Advertisement extends Content
             }
         }
 
-        if (!array_key_exists('restriction_devices', $this->params) || !empty($this->params['restriction_devices'])) {
+        if (is_null($this->params) || !array_key_exists('restriction_devices', $this->params) || (array_key_exists('restriction_devices', $this->params) && empty($this->params['restriction_devices']))) {
             $this->params['restriction_devices'] = [
                 'phone'   => 1,
                 'tablet'  => 1,
@@ -183,8 +183,8 @@ class Advertisement extends Content
             ];
         }
 
-        if (!array_key_exists('restriction_usergorups', $this->params) || !empty($this->params['restriction_usergorups'])) {
-            $this->params['restriction_usergorups'] = [];
+        if (is_null($this->params) || !array_key_exists('restriction_usergroups', $this->params) || (array_key_exists('restriction_usergroups', $this->params) && empty($this->params['restriction_usergroups']))) {
+            $this->params['restriction_usergroups'] = [];
         }
 
         return $this;

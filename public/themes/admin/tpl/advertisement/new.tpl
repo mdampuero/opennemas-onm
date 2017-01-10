@@ -3,10 +3,6 @@
 {block name="footer-js" append}
   {javascripts}
     <script type="text/javascript">
-      var advertisement_urls = {
-        calculate_tags : '{url name=admin_utils_calculate_tags}'
-      }
-
       jQuery(document).ready(function($) {
         $('#formulario').on('change', '#title', function(e, ui) {
           fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
@@ -29,7 +25,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="starttime = '{$advertisement->starttime}';endtime = '{$advertisement->endtime}';type_advertisement = '{$advertisement->type_advertisement}'; restriction_devices = '{$advertisement->params['devices']}';restriction_usergroups = '{$advertisement->params['usergroups']}';">
+  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json}">
     <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -136,7 +132,7 @@
                   <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
                 </div>
               </div>
-              <div ng-init="init({json_encode($advertisement->params)|clear_json})" id="ad_dimensions">
+              <div id="ad_dimensions">
                 <input name="params_width" ng-value="params_width" type="hidden">
                 <input name="params_height" ng-value="params_height" type="hidden">
                 <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length >= 1" ng-repeat="size in sizes track by $index">
@@ -196,7 +192,7 @@
             <div class="grid-body">
               <div class="form-group">
                 <div class="checkbox">
-                  <input type="checkbox" name="content_status" id="content_status" value="1"
+                  <input type="checkbox" name="content_status" id="content_status" value="1" ng-model="content_status"
                   {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
                   <label class="form-label" for="content_status">
                     {t}Published{/t}
@@ -206,30 +202,29 @@
               <div class="form-group">
                 <label for="type_medida" class="form-label">
                   {t}Restrictions{/t}
-                  <span data-container="body" tooltip-placement="top" uib-tooltip="{t}Show this ad if satisfy all conditions{/t}."><i class="fa fa-info-circle text-info""></i></span>
+                  <span data-container="body" tooltip-placement="top" uib-tooltip="{t}Show this ad if it satisfies all conditions{/t}."><i class="fa fa-info-circle text-info""></i></span>
                 </label>
               </div>
 
               <div class="form-group">
                 <div>
                   <label for="date_range" class="form-label"><i class="fa fa-calendar-check-o"></i> {t}Date range{/t}</label>
-                  <div class="pull-right"><i class="fa fa-pencil text-right" ng-click="restriction_date_range_show =!restriction_date_range_show"></i></div>
+                  <div class="pull-right btn btn-link"><i class="fa fa-pencil text-right" ng-click="restriction_date_range_show =!restriction_date_range_show"></i></div>
                 </div>
                 <div class="controls ng-cloak p-l-10">
                   <div ng-show="!restriction_date_range_show">
-                    <small ng-show="endtime == '' && starttime == ''">{t}No restriction{/t}</small>
-                    <small ng-show="starttime != ''">{t}Show from{/t} <strong>[% starttime %] </strong> </small>
-                    <span ng-show="endtime != ''">
-                      <br>
-                      <small>{t}To:{/t} <strong>[% endtime %]</strong></small>
-                    </span>
+                    <div class="row" ng-show="endtime == null && starttime == null"><small>{t}No restriction{/t}</small></div>
+                    <div class="row" ng-show="starttime != null"> <small><span class="col-xs-3">{t}Show from{/t}</span> <strong class="badge badge-success">[% starttime %] </strong> </small></div>
+                    <div class="row" ng-show="endtime != null">
+                      <small><span class="col-xs-3">{t}To{/t}</span> <strong class="badge badge-success">[% endtime %]</strong></small>
+                    </div>
                   </div>
 
                   <div ng-show="restriction_date_range_show">
                     <label for="starttime">{t}From{/t}</label>
                     <div class="controls">
                       <div class="input-group">
-                        <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" ng-model="starttime" />
+                        <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" datetime-picker ng-model="starttime" />
                         <span class="input-group-addon add-on">
                           <span class="fa fa-calendar"></span>
                         </span>
@@ -238,7 +233,7 @@
                     <label for="endtime">{t}Until{/t}</label>
                     <div class="controls">
                       <div class="input-group">
-                        <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" ng-model="endtime" />
+                        <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" datetime-picker ng-model="endtime" />
                         <span class="input-group-addon add-on">
                           <span class="fa fa-calendar"></span>
                         </span>
@@ -251,30 +246,38 @@
               <div class="form-group">
                 <div>
                   <label for="devices" class="form-label"><i class="fa fa-desktop"></i> {t}Devices{/t}</label>
-                  <div class="pull-right"><i class="fa fa-pencil text-right" ng-click="restriction_devices_show =!restriction_devices_show"></i></div>
+                  <div class="pull-right btn btn-link"><i class="fa fa-pencil text-right" ng-click="restriction_devices_show =!restriction_devices_show"></i></div>
                 </div>
                 <div class="controls ng-cloak p-l-10">
-                  <div>
-                    <small>{t}Show on{/t}:  <span ng-show="restriction_devices[desktop] == 1">{t}Desktop{/t}</span>, <span ng-show="restriction_devices[tablet] == 1">{t}Tablet{/t}</span> and <span ng-show="restriction_devices[phone] == 1">{t}Phone{/t}</span>.</small>
+                  <div ng-show="!restriction_devices_show" class="row">
+                    <small>
+                      <span class="col-xs-3">{t}Show on{/t}</span>
+                      <strong>
+                        <span ng-show="params.restriction_devices.desktop" class="badge badge-success">{t}Desktop{/t}</span>
+                        <span ng-show="params.restriction_devices.tablet" class="badge badge-success">{t}Tablet{/t}</span>
+                        <span ng-show="params.restriction_devices.phone" class="badge badge-success">{t}Phone{/t}</span>
+                        <!-- <span ng-show="params.restriction_devices.desktop && params.restriction_devices.tablet &&  params.restriction_devices.phone" class="badge badge-success">No restriction</span> -->
+                      </strong>
+                    </small>
                   </div>
                   <div ng-show="restriction_devices_show">
                     <div class="checkbox p-b-10">
-                      <input type="checkbox" name="restriction_devices[desktop]" id="restriction_device_desktop" value="1" ng-model="restriction_devices['desktop']"
-                      {if isset($advertisement->params['restriction_devices']['desktop']) && $advertisement->params['devices']['desktop'] == 1}checked="checked"{/if} />
+                      <input type="checkbox" name="restriction_devices_desktop" id="restriction_device_desktop" value="true" ng-model="params.restriction_devices.desktop" ng-true-value="true"
+                      {if !isset($advertisement->params['restriction_devices']) || isset($advertisement->params['restriction_devices']['desktop']) && $advertisement->params['restriction_devices']['desktop'] == true}checked="checked"{/if} />
                       <label class="form-label" for="restriction_device_desktop">
                         {t}Desktop{/t}
                       </label>
                     </div>
                     <div class="checkbox p-b-10">
-                      <input type="checkbox" name="restriction_devices[tablet]" id="restriction_device_tablet" value="1" ng-model="restriction_devices['tablet']"
-                      {if isset($advertisement->params['restriction_devices']['tablet']) && $advertisement->params['devices']['tablet'] == 1}checked="checked"{/if} />
+                      <input type="checkbox" name="restriction_devices_tablet" id="restriction_device_tablet" value="true" ng-model="params.restriction_devices.tablet" ng-true-value="true"
+                      {if !isset($advertisement->params['restriction_devices']) || isset($advertisement->params['restriction_devices']['tablet']) && $advertisement->params['restriction_devices']['tablet'] == true}checked="checked"{/if} />
                       <label class="form-label" for="restriction_device_tablet">
                         {t}Tablet{/t}
                       </label>
                     </div>
                     <div class="checkbox p-b-10">
-                      <input type="checkbox" name="restriction_devices[phone]" id="restriction_device_phone" value="1" ng-model="restriction_devices['phone']"
-                      {if isset($advertisement->params['restriction_devices']['phone']) && $advertisement->params['devices']['phone'] == 1}checked="checked"{/if} />
+                      <input type="checkbox" name="restriction_devices_phone" id="restriction_device_phone" value="true" ng-model="params.restriction_devices.phone" ng-true-value="true"
+                      {if !isset($advertisement->params['restriction_devices']) || isset($advertisement->params['restriction_devices']['phone']) && $advertisement->params['restriction_devices']['phone'] == true}checked="checked"{/if} />
                       <label class="form-label" for="restriction_device_phone">
                         {t}Phone{/t}
                       </label>
@@ -286,22 +289,27 @@
               <div class="form-group">
                 <div>
                   <label for="restriction_usergroups" class="form-label"><i class="fa fa-users"></i> {t}User groups{/t}</label>
-                  <div class="pull-right"><i ng-click="restriction_usergroups_show =! restriction_usergroups_show" class="fa fa-pencil" ></i></div>
+                  <div class="pull-right btn btn-link"><i ng-click="restriction_usergroups_show =! restriction_usergroups_show" class="fa fa-pencil" ></i></div>
                 </div>
                 <div class="controls ng-cloak p-l-10">
-                  <span ng-show="!restriction_usergroups_show">
-                    <small>{t}Show to{/t}: Medicos, Informaticos.</small>
-                  </span>
                   <span ng-show="restriction_usergroups_show">
-                    <select name="restriction_usergroups[]" id="restriction_usergroups" multiple="multiple" size=6 ng-model="restriction_usergroups">
-                        <option value="1" {if isset($advertisement->params['restriction_usergroups']) && in_array(1, $advertisement->params['restriction_usergroups'])}selected="selected"{/if}>Medicos</option>
-                        <option value="2" {if isset($advertisement->params['usergroups']) && in_array(2, $advertisement->params['restriction_usergroups'])}selected="selected"{/if}>Informaticos</option>
-                      </select>
+                    <multiselect ng-model="params.restriction_usergroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% params.restriction_usergroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                  </span>
+                  <span class="col-xs-12">
+                    <small>
+                    <div class="col-xs-3">{t}Show to{/t}</div>
+                    <div class="col-xs-9">
+                      <div ng-show="params.restriction_usergroups.length < 1"><div class="badge badge-success">{t}All user groups{/t}</div></div>
+                      <span class="badge badge-success m-r-5" ng-repeat="group in params.restriction_usergroups">
+                        [% group.name %]
+                        <input type="hidden" name="restriction_usergroups[]" value="[% group.id %]">
+                      </span>
+                    </div>
                   </span>
                 </div>
               </div>
 
-              <div class="form-group" ng-show="((type_advertisement + 50)  % 100) == 0">
+              <div class="form-group ng-cloak" ng-show="((type_advertisement + 50)  % 100) == 0">
                 <label for="timeout" class="form-label">{t}Display banner while{/t}</label>
                 <span data-container="body" tooltip-placement="top" uib-tooltip="{t}Amount of seconds that this banner will block all the page.{/t}"><i class="fa fa-info-circle text-info""></i></span>
                 <div class="controls">
