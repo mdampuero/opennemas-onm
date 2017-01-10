@@ -281,6 +281,7 @@ class CommentsController extends ContentController
 
         $extra['contents'] = array();
         foreach ($contents as $content) {
+            $content->uri = $content->uri;
             $extra['contents'][$content->pk_content] = $content;
         }
 
