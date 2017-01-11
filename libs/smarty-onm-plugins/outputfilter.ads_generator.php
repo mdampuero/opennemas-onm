@@ -57,10 +57,9 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
         // Generate revive ads positions
         if (count($reviveZonesInformation) > 0 && count($adsReviveConfs) > 0) {
-            $reviveAdsPositions = "\n<script type='text/javascript'><!--// <![CDATA[
-var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
-// ]]> --></script>
-<script type='text/javascript' src='{$adsReviveConfs['url']}/www/delivery/spcjs.php?cat_name={$actual_category}'></script>";
+            $reviveAdsPositions = "\n<script type='text/javascript'><!--// <![CDATA[ "
+            ."var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n} // ]]> --></script>\n"
+            ."<script type='text/javascript' src='{$adsReviveConfs['url']}/www/delivery/spcjs.php?cat_name={$actual_category}'></script>";
 
             $output = str_replace('</head>', $reviveAdsPositions.'</head>', $output);
         }
