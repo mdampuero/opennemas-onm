@@ -46,7 +46,7 @@ class StringUtils
         'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R',
         'ŕ'=>'r', '/'=>'-', ' '=>'-', '"'=>'',  '!'=>'',  '¡'=>'',
         '‐' => '', '‒' => '', '–' => '', '—'=> '',
-        '―' => '', '⁃' => '', '−' => '',
+        '―' => '', '⁃' => '', '−' => '', "\r" => ' ', "\n" => '',
     ];
 
     /**
@@ -443,6 +443,9 @@ class StringUtils
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
         $string = strip_tags($string);
+        // Remove UTF-8 C0 controls chars encoded in HTML entities
+        // http://www.w3schools.com/charsets/ref_utf_basic_latin.asp
+        $string = preg_replace('/&#(0?[0-9]|1[0-9]|2[0-9]|3[0-1]);/', '', $string);
 
         // Use intl extension to clean
         $string = transliterator_transliterate(
@@ -504,42 +507,7 @@ class StringUtils
      **/
     public static function getTitle($origString, $useStopList = true, $delimiter = '-')
     {
-        $string = strip_tags($origString);
-
-        // Use intl extension to clean
-        $string = transliterator_transliterate(
-            "NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();",
-            $string
-        );
-
-        // Remove stop list
-        if ($useStopList) {
-            $string = self::removeShorts($string);
-        }
-        $string = trim(strtr($string, self::$trade));
-
-        $string = self::normalize($string);
-        $string = trim($string);
-        $string = str_replace('・', '', $string);
-
-        $string = trim($string);
-        if (empty($string) || $string == " ") {
-            $string = $origString;
-        }
-
-        $string = self::setSeparator($string, $delimiter);
-
-        $string = str_replace('.', '', $string);
-        $string = str_replace('"', '', $string);
-        $string = str_replace('…', '', $string);
-
-        # convert double dash to single
-        $string = preg_replace('@[\-]+@', $delimiter, $string);
-
-        #strip off leading/trailing dashes
-        $string = trim($string, $delimiter);
-
-        return $string;
+        return self::generateSlug($origString, $useStopList = true, $delimiter);
     }
 
     /**

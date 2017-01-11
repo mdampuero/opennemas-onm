@@ -214,11 +214,11 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            '',
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
             $this->object->generateSlug(
-                ''
+                'Detienen a dieciséis personas por el &#10;robo de joyas de Kim Kardashian'
             )
-        );;
+        );
     }
 
     /**
