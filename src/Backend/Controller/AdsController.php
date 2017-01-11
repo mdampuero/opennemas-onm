@@ -139,18 +139,21 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $ads        = $this->get('core.manager.advertisement')->getPositionsForTheme();
             $userGroups = $this->get('orm.manager')->getRepository('UserGroup')->findBy();
-
-            $extra['user_groups'] = array_map(function ($a) {
+            $userGroups = array_map(function ($a) {
                 return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
             }, $userGroups);
+
+            $advertisment = new \Advertisement();
+
+            $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
 
             return $this->render(
                 'advertisement/new.tpl',
                 [
-                    'user_groups'   => $userGroups,
+                    'advertisement' => $advertisement,
                     'ads_positions' => $adsPositions,
+                    'user_groups'   => $userGroups,
                     'themeAds'      => $ads,
                     'filter'        => $filter,
                     'page'          => $page,
@@ -193,9 +196,9 @@ class AdsController extends Controller
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
                 'restriction_devices'           => [
-                    'desktop' => ($request->request->get('restriction_devices_desktop', 0) == true),
-                    'tablet'  => ($request->request->get('restriction_devices_tablet', 0) == true),
-                    'phone'   => ($request->request->get('restriction_devices_phone', 0) == true),
+                    'desktop' => $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => $request->request->get('restriction_devices_phone', 0),
                 ],
             ]
         ];
@@ -243,7 +246,6 @@ class AdsController extends Controller
             $serverUrl = $openXsettings['url'];
         }
 
-
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -274,13 +276,11 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $userGroups = $this->get('orm.manager')->getRepository('UserGroup')->findBy('pk_user_group != 4');
-        $userGroups = array_map(function($group) {
-            return [ 'id' => $group->pk_user_group, 'name' => $group->name ];
+        $em = $this->get('orm.manager');
+        $userGroups = $em->getRepository('UserGroup')->findBy();
+        $userGroups = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
         }, $userGroups);
-        $ad->params['restriction_usergroups'] = array_filter($userGroups, function ($a) use ($ad) {
-            return in_array($a['id'], $ad->params['restriction_usergroups']);
-        });
 
         $positionManager = $this->container->get('core.manager.advertisement');
         return $this->render(
@@ -288,8 +288,8 @@ class AdsController extends Controller
             array(
                 'ads_positions' => $adsPositions,
                 'advertisement' => $ad,
-                'user_groups'   => $userGroups,
                 'themeAds'      => $positionManager->getPositionsForTheme(),
+                'user_groups'   => $userGroups,
                 'filter'        => $filter,
                 'page'          => $page,
                 'server_url'    => $serverUrl,
@@ -365,9 +365,9 @@ class AdsController extends Controller
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
                 'restriction_devices'           => [
-                    'desktop' => ($request->request->get('restriction_devices_desktop', 0) == true),
-                    'tablet'  => ($request->request->get('restriction_devices_tablet', 0) == true),
-                    'phone'   => ($request->request->get('restriction_devices_phone', 0) == true),
+                    'desktop' => $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => $request->request->get('restriction_devices_phone', 0),
                 ],
             )
         );
