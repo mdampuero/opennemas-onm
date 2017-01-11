@@ -473,6 +473,114 @@ class Advertisement extends Content
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public static function findForPositionIdsAndCategoryPlain($types = [], $category = 0)
+    {
+        $banners = [];
+
+        // If advertisement types aren't passed return earlier
+        if (!is_array($types) || count($types) <= 0) {
+            return $banners;
+        }
+
+        // Check category
+        $category = (empty($category) || ($category=='home')) ? 0 : $category;
+
+        // Remove floating banners
+        if (($key = array_search('37', $types)) !== false) {
+            unset($types[$key]);
+        }
+
+        if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
+            // Fetch ads from static file
+            $advertisements = include APP_PATH.'config/ads/onm_default_ads.php';
+
+            foreach ($advertisements as $ad) {
+                if (in_array($ad->type_advertisement, $types) &&
+                    (
+                        in_array($category, $ad->fk_content_categories) ||
+                        in_array(0, $ad->fk_content_categories)
+                    )
+                ) {
+                    $banners []= $ad;
+                }
+            }
+        } else {
+            // Get string of types separated by commas
+            $types = implode(',', $types);
+
+            // Generate sql with or without category
+            if ($category !== 0) {
+                $config = s::get('ads_settings');
+                if (isset($config['no_generics'])
+                    && ($config['no_generics'] == '1')
+                ) {
+                    $generics = '';
+                } else {
+                    $generics = ' OR fk_content_categories=0';
+                }
+                $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.') ';
+            } else {
+                $catsSQL = 'AND advertisements.fk_content_categories=0 ';
+            }
+
+            try {
+                $sql = "SELECT pk_advertisement as id FROM advertisements "
+                  ."WHERE advertisements.type_advertisement IN (".$types.") "
+                  .$catsSQL.' ORDER BY id';
+
+                $conn = getService('dbal_connection');
+                $result = $conn->fetchAll($sql);
+            } catch (\Exception $e) {
+                return $banners;
+            }
+
+            if (count($result) <= 0) {
+                return $banners;
+            }
+
+            $result = array_map(function ($element) {
+                return array('Advertisement', $element['id']);
+            }, $result);
+
+            $adManager = getService('advertisement_repository');
+            $advertisements = $adManager->findMulti($result);
+
+            foreach ($advertisements as $advertisement) {
+                // Dont use this ad if is not in time
+                if (!is_object($advertisement)
+                    || $advertisement->content_status != 1
+                    || $advertisement->in_litter != 0
+                ) {
+                    continue;
+                }
+
+                if (is_string($advertisement->params)) {
+                    $advertisement->params = unserialize($advertisement->params);
+                    if (!is_array($advertisement->params)) {
+                        $advertisement->params = [];
+                    }
+                }
+
+                // If the ad doesn't belong to the given category or home, skip it
+                if (!in_array($category, $advertisement->fk_content_categories)
+                    && !in_array(0, $advertisement->fk_content_categories)
+                ) {
+                    continue;
+                }
+
+                $banners []= $advertisement;
+            }
+        }
+
+        return $banners;
+    }
+
+    /**
      * Get advertisement for a given type and category
      *
      * @param array  $types    Types of advertisement
