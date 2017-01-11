@@ -25,7 +25,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json}">
+  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json};">
     <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -92,7 +92,7 @@
                   {t}Keywords{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="metadata" name="metadata" required="required"
+                  <input class="form-control" id="metadata" name="metadata" required
                   title="Metadatos" type="hidden" value="{$advertisement->metadata|strip|default:""}">
                 </div>
               </div>
@@ -192,7 +192,7 @@
             <div class="grid-body">
               <div class="form-group">
                 <div class="checkbox">
-                  <input type="checkbox" name="content_status" id="content_status" value="1" ng-model="content_status"
+                  <input type="checkbox" name="content_status" id="content_status" value="1"
                   {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
                   <label class="form-label" for="content_status">
                     {t}Published{/t}
@@ -214,9 +214,9 @@
                 <div class="controls ng-cloak p-l-10">
                   <div ng-show="!restriction_date_range_show">
                     <div class="row" ng-show="endtime == null && starttime == null"><small>{t}No restriction{/t}</small></div>
-                    <div class="row" ng-show="starttime != null"> <small><span class="col-xs-3">{t}Show from{/t}</span> <strong class="badge badge-success">[% starttime %] </strong> </small></div>
-                    <div class="row" ng-show="endtime != null">
-                      <small><span class="col-xs-3">{t}To{/t}</span> <strong class="badge badge-success">[% endtime %]</strong></small>
+                    <div class="row" ng-show="starttime != ''"> <small><span class="col-xs-3">{t}Show from{/t}</span> <strong class="badge badge-success">[% starttime %] </strong> </small></div>
+                    <div class="row" ng-show="endtime != ''">
+                      <small><span class="col-xs-3">{t}Until{/t}</span> <strong class="badge badge-success">[% endtime %]</strong></small>
                     </div>
                   </div>
 
@@ -295,12 +295,12 @@
                   <span ng-show="restriction_usergroups_show">
                     <multiselect ng-model="params.restriction_usergroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% params.restriction_usergroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                   </span>
-                  <span class="col-xs-12">
+                  <span class="col-xs-12 m-t-10">
                     <small>
                     <div class="col-xs-3">{t}Show to{/t}</div>
                     <div class="col-xs-9">
                       <div ng-show="params.restriction_usergroups.length < 1"><div class="badge badge-success">{t}All user groups{/t}</div></div>
-                      <span class="badge badge-success m-r-5" ng-repeat="group in params.restriction_usergroups">
+                      <span class="badge badge-success m-r-5 m-b-5" ng-repeat="group in params.restriction_usergroups">
                         [% group.name %]
                         <input type="hidden" name="restriction_usergroups[]" value="[% group.id %]">
                       </span>
