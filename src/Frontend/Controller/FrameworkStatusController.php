@@ -29,7 +29,7 @@ class FrameworkStatusController extends Controller
             $response[$key] = str_replace('"', '', $value->getContent());
 
             if ($value->getStatusCode() !== 200) {
-                $code = 207;
+                $code = 500;
             }
         }
 
@@ -43,7 +43,7 @@ class FrameworkStatusController extends Controller
      */
     public function checkCacheAction()
     {
-        $result = $this->get('onm.framework_status')->checkCacheConnection();
+        $result = $this->get('core.status.checker')->checkCacheConnection();
 
         if ($result) {
             $response = new JsonResponse('OK', 200);
@@ -62,7 +62,7 @@ class FrameworkStatusController extends Controller
      */
     public function checkDatabaseAction()
     {
-        $result = $this->get('onm.framework_status')->checkDatabaseConnection();
+        $result = $this->get('core.status.checker')->checkDatabaseConnection();
 
         if ($result) {
             $response = new JsonResponse('OK', 200);
@@ -81,7 +81,7 @@ class FrameworkStatusController extends Controller
      */
     public function checkNFSAction()
     {
-        $result = $this->get('onm.framework_status')->checkNfs();
+        $result = $this->get('core.status.checker')->checkNfs();
 
         if ($result) {
             $response = new JsonResponse('OK', 200);
