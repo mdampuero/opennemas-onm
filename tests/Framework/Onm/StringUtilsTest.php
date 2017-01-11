@@ -234,12 +234,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        // $this->assertEquals(
-        //     'exito-total-sanxenxo-i-liga-viajes-interrias-padel-tour',
-        //     $this->object->generateSlug(
-        //         'exito-total-sanxenxo-i- liga-viajes-interrias-padel-tour'
-        //     )
-        // );
+        $this->assertEquals(
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            $this->object->generateSlug(
+                'Detienen a dieciséis personas por el &#10;robo de joyas de Kim Kardashian'
+            )
+        );
     }
 
     /**
