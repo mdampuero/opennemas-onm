@@ -673,9 +673,9 @@ class Advertisement extends Content
 
                 // TODO: Introduced in May 20th, 2014. This code avoids to restart memcached for
                 // already stored ad objects. This should be removed after caches will be regenerated
-                if (!is_array($advertisement->fk_content_categories)) {
-                    $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
-                }
+                // if (!is_array($advertisement->fk_content_categories)) {
+                //     $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
+                // }
 
                 if (is_string($advertisement->params)) {
                     $advertisement->params = unserialize($advertisement->params);
@@ -773,7 +773,7 @@ class Advertisement extends Content
             $wrapperClass = 'ad_in_column ad_horizontal_marker clearfix';
         }
         if ($this->type_advertisement == 37) {
-            //floating ads
+            // floating ads
             $params['beforeHTML'] = "<div class=\"$wrapperClass\" style=\"text-align: center;\">";
             $params['afterHTML']  = "</div>";
         }
