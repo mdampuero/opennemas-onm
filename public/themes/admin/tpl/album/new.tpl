@@ -105,7 +105,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" required="required" type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
+                  <input class="form-control" id="title" name="title" required type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
                 </div>
               </div>
               <div class="form-group">

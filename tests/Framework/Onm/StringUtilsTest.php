@@ -218,7 +218,28 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             $this->object->generateSlug(
                 ''
             )
-        );;
+        );
+
+        $this->assertEquals(
+            'son-ridicula-do-seculo-xxi-intensa-chora-ao-pensar-certas-cousas',
+            $this->object->generateSlug(
+                '“Son unha ridícula do século XXI, unha intensa que chora ao pensar certas cousas”'
+            )
+        );
+
+        $this->assertEquals(
+            'exito-total-sanxenxo-i-liga-viajes-interrias-padel-tour',
+            $this->object->generateSlug(
+                'Éxito total en Sanxenxo de la I Liga Viajes InterRías Padel Tour'
+            )
+        );
+
+        $this->assertEquals(
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            $this->object->generateSlug(
+                'Detienen a dieciséis personas por el &#10;robo de joyas de Kim Kardashian'
+            )
+        );
     }
 
     /**

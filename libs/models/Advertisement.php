@@ -468,7 +468,7 @@ class Advertisement extends Content
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public static function findForPositionIdsAndCategory($types = array(), $category = 'home')
+    public static function findForPositionIdsAndCategory($types = [], $category = 'home')
     {
         $banners = $finalBanners = [];
 
@@ -543,10 +543,9 @@ class Advertisement extends Content
             foreach ($advertisements as $advertisement) {
                 // Dont use this ad if is not in time
                 if (!is_object($advertisement)
-                    || (!$advertisement->isInTime()
-                        && $advertisement->type_medida == 'DATE')
                     || $advertisement->content_status != 1
                     || $advertisement->in_litter != 0
+                    || (!$advertisement->isInTime() && $advertisement->type_medida == 'DATE') // Maybe this has to be removed and checked in the render banner
                 ) {
                     continue;
                 }
@@ -560,7 +559,7 @@ class Advertisement extends Content
                 if (is_string($advertisement->params)) {
                     $advertisement->params = unserialize($advertisement->params);
                     if (!is_array($advertisement->params)) {
-                        $advertisement->params = array();
+                        $advertisement->params = [];
                     }
                 }
 
@@ -576,14 +575,14 @@ class Advertisement extends Content
         }
 
         if (!empty($banners)) {
-            $homeBanners = array();
-            $categoryBanners = array();
+            $homeBanners     = [];
+            $categoryBanners = [];
             // Perform operations for each advertisement type
             foreach ($banners as $adType => $advs) {
                 // Initialize banners arrays
-                $homeBanners[$adType] = array();
-                $categoryBanners[$adType] = array();
-                $finalBanners[$adType] = array();
+                $homeBanners[$adType]     = [];
+                $categoryBanners[$adType] = [];
+                $finalBanners[$adType]    = [];
                 if (count($advs) > 1) {
                     foreach ($advs as $ad) {
                         if (in_array(0, $ad->fk_content_categories)) {
@@ -686,7 +685,8 @@ class Advertisement extends Content
             } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto.com.ar') !== false ||
                 strpos($_SERVER['SERVER_NAME'], 'laregion.es') !== false ||
                 strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false ||
-                strpos($_SERVER['SERVER_NAME'], 'salamanca24horas.com') !== false
+                strpos($_SERVER['SERVER_NAME'], 'salamanca24horas.com') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'zamora24horas.com') !== false
             ) {
                 $content = $this->script;
             } else {
