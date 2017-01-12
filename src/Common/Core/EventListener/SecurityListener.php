@@ -9,6 +9,7 @@
  */
 namespace Common\Core\EventListener;
 
+use Common\Core\Component\Exception\Instance\InstanceBlockedException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -61,14 +62,7 @@ class SecurityListener implements EventSubscriberInterface
 
         $this->security->setInstance($instance);
 
-        $instance = $this->container->get('core.instance');
-        $this->security->setInstance($instance);
-
-        if (preg_match('@^/_.*@', $uri)
-            || empty($this->context->getToken())
-            || empty($this->context->getToken()->getUser())
-            || $this->context->getToken()->getUser() === 'anon.'
-        ) {
+        if (!$this->hasSecurity($uri)) {
             return;
         }
 
@@ -87,39 +81,11 @@ class SecurityListener implements EventSubscriberInterface
         $this->security->setCategories($user->categories);
         $this->security->setPermissions($permissions);
 
-        if ($user->isEnabled()
-            && (
-                $this->security->hasPermission('MASTER')
-                || ($this->security->hasPermission('PARTNER')
-                    && $this->security->hasInstance($instance->internal_name))
-                || $user->type === 0
-            )
-        ) {
+        if ($this->isAllowed($instance, $user)) {
             return;
         }
 
-        // Logout for web services
-        if (preg_match('@^/admin/entityws.*@', $uri)
-            || preg_match('@^/manager(ws).*@', $uri)
-        ) {
-            $event->setResponse(new JsonResponse(null, 401));
-            return;
-        }
-
-        // Logout for backend
-        if (preg_match('@^/admin.*@', $uri)) {
-            $this->context->setToken(null);
-
-            $event->getRequest()->getSession()->set(
-                \Symfony\Component\Security\Core\Security::AUTHENTICATION_ERROR,
-                new BadCredentialsException()
-            );
-
-            // Redirect to login and keep the session to show the error properly
-            $event->setResponse(new RedirectResponse(
-                $this->router->generate('admin_login')
-            ));
-        }
+        $this->logout($event, $instance, $uri);
     }
 
     /**
@@ -218,5 +184,75 @@ class SecurityListener implements EventSubscriberInterface
         return array_map(function ($a) {
             return $a['name'];
         }, $permissions);
+    }
+
+    /**
+     * Checks if the current request should include security checks.
+     *
+     * @param string $uri The current URI.
+     *
+     * @return boolean True if the request should pass security checks. False
+     *                 otherwise.
+     */
+    protected function hasSecurity($uri)
+    {
+        return !(preg_match('@^/_.*@', $uri)
+            || empty($this->context->getToken())
+            || empty($this->context->getToken()->getUser())
+            || $this->context->getToken()->getUser() === 'anon.');
+    }
+
+    /**
+     * Checks if the request is allowed basing on the current security status.
+     *
+     * @param Instance $instance The current instance.
+     * @param User     $user     The current user.
+     *
+     * @return boolean True if the request is allowed. False otherwise.
+     */
+    protected function isAllowed($instance, $user)
+    {
+        return ($user->isEnabled()
+            && ($this->security->hasPermission('MASTER')
+                || ($this->security->hasPermission('PARTNER')
+                    && $this->security->hasInstance($instance->internal_name))
+                || ($user->type === 0 && empty($instance->blocked)))
+        );
+    }
+
+    /**
+     * Logs user out basing on current request.
+     *
+     * @param FilterResponseEvent $event    The response event.
+     * @param Instance            $instance The current instance.
+     * @param string              $uri      The current URI.
+     */
+    protected function logout($event, $instance, $uri)
+    {
+        $exception = new BadCredentialsException();
+        $response  = new RedirectResponse($this->router->generate('admin_login'));
+
+        if ($instance->blocked) {
+            $exception = new InstanceBlockedException($instance->internal_name);
+        }
+
+        // Logout for web services
+        if (preg_match('@^/admin/entityws.*@', $uri)
+            || preg_match('@^/manager(ws).*@', $uri)
+        ) {
+            $response = new JsonResponse($exception->getMessage(), 401);
+        }
+
+        // Logout for backend
+        if (preg_match('@^/admin.*@', $uri)) {
+            $this->context->setToken(null);
+
+            $event->getRequest()->getSession()->set(
+                \Symfony\Component\Security\Core\Security::AUTHENTICATION_ERROR,
+                $exception
+            );
+        }
+
+        $event->setResponse($response);
     }
 }
