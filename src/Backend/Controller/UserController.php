@@ -334,6 +334,14 @@ class UserController extends Controller
         $user->bio = empty($user->bio) ? ' ' : $user->bio;
 
         try {
+            // Check if the user is already registered
+            $users = $em->getRepository('User')->findBy(
+                'name ~ "'.$data['username'].'" or email ~ "'.$data['email'].'"'
+            );
+            if (count($users) > 0) {
+                throw new \Exception(_('The email address or user name is already in use.'));
+            }
+
             $file = $request->files->get('avatar');
 
             // Upload user avatar if exists
@@ -577,6 +585,17 @@ class UserController extends Controller
         $user->bio = empty($user->bio) ? ' ' : $user->bio;
 
         try {
+            // Check if the user is already registered
+            $users = array_filter($em->getRepository('User')->findBy(
+                'name ~ "'.$data['username'].'" or email ~ "'.$data['email'].'"'
+            ), function ($element) use ($user) {
+                return $user->id !== $element->id;
+            });
+
+            if (count($users) > 0) {
+                throw new \Exception(_('The email address or user name is already in use.'));
+            }
+
             $file = $request->files->get('avatar');
 
             if (!empty($file)) {
