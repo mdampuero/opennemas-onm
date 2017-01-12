@@ -85,7 +85,7 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        $this->logout($event);
+        $this->logout($event, $instance, $uri);
     }
 
     /**
