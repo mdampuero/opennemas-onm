@@ -439,6 +439,7 @@ class AdsController extends Controller
                 ],
                 'dfp_options' => [
                     'target'  => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
+                    'module'  => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),
                 ],
                 'tradedoubler_id'   => $formValues->getDigits('tradedoubler_id'),
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
