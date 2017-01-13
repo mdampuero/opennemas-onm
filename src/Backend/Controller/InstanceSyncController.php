@@ -215,7 +215,7 @@ class InstanceSyncController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $siteUrl = $request->query->filter('site_url', '', FILTER_VALIDATE_URL);
+        $siteUrl = $request->query->filter('site_url', '');
 
         // Fetch params from db
         $syncParams = s::get('sync_params');
@@ -223,7 +223,7 @@ class InstanceSyncController extends Controller
         // Search the instance by site_url
         $index = false;
         foreach ($syncParams as $key => $value) {
-            if ($value['site_url'] == $siteUrl) {
+            if ($value['site_url'] == $siteUrl || $key == $siteUrl) {
                 $index = $key;
                 break;
             }
