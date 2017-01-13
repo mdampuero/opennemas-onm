@@ -220,7 +220,16 @@ class InstanceSyncController extends Controller
         // Fetch params from db
         $syncParams = s::get('sync_params');
 
-        if (array_key_exists($siteUrl, $syncParams)) {
+        // Search the instance by site_url
+        $index = false;
+        foreach ($syncParams as $key => $value) {
+            if ($value['site_url'] == $siteUrl) {
+                $index = $key;
+                break;
+            }
+        }
+
+        if ($index !== false) {
             unset($syncParams[$siteUrl]);
         }
 
