@@ -91,7 +91,7 @@
                 </td>
                 <td class="right">
                   <div class="btn-group right">
-                    <a class="btn btn-white" href="[% edit(content.id, 'admin_' + content.content_type_name + '_show') %]" title="Editar">
+                    <a class="btn btn-white" href="[% content.content_type_name == 'static_page' ? edit(content.id, 'backend_' + content.content_type_name + '_show') : edit(content.id, 'admin_' + content.content_type_name + '_show') %]" title="Editar">
                       <i class="fa fa-pencil"></i>
                     </a>
                   </div>
