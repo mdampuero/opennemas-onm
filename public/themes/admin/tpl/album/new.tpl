@@ -177,7 +177,7 @@
                   {t}Tags{/t}
                 </label>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$album->metadata}"/>
+                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$album->metadata}"/>
                 </div>
               </div>
             </div>

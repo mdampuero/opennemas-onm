@@ -170,7 +170,7 @@
                   {t}Category available for{/t}
                 </label>
                 <div class="controls">
-                  <select name="internal_category" id="internal_category"  required="required">
+                  <select name="internal_category" id="internal_category" required>
                     <option value="1"
                     {if  (empty($category->internal_category) || $category->internal_category eq 1)} selected="selected"{/if}>{t}All contents{/t}</option>
                     {is_module_activated name="ALBUM_MANAGER"}

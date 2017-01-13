@@ -88,7 +88,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" required="required" type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}"/>
+                  <input class="form-control" id="title" name="title" type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}" required >
                 </div>
               </div>
               <div class="hidden">
@@ -96,7 +96,7 @@
                   {t}Keywords{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="metadata" name="metadata" required="required"
+                  <input class="form-control" id="metadata" name="metadata" required
                   title="Metadatos" type="hidden" value="{$advertisement->metadata|strip|default:""}">
                 </div>
               </div>
@@ -305,7 +305,7 @@
                   <div class="form-group">
                     <label for="category" class="form-label">{t}In categories{/t}</label>
                     <div class="controls">
-                      <select name="category[]" id="category" required="required" multiple="multiple" size=6>
+                      <select name="category[]" id="category" required multiple="multiple" size=6>
                         <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                         <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
                         <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>
