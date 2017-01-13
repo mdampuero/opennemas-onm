@@ -75,6 +75,22 @@ var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
             ) {
                 $targetingCode = "\ngoogletag.pubads().setTargeting('".$dfpOptions['target']."', ['".$actual_category."']);";
             }
+            if (is_array($dfpOptions) &&
+                array_key_exists('module', $dfpOptions) &&
+                !empty($dfpOptions['module'])
+            ) {
+                $content = $smarty->parent->tpl_vars['content']->value;
+                $module = '';
+                if (!is_null($content)) {
+                    $module = $content->content_type_name;
+                } elseif ($smarty->smarty->tpl_vars['x-tags']->value) {
+                    $xTags = $smarty->smarty->tpl_vars['x-tags']->value;
+                    $module = ($xTags == 'frontpage-page,home') ? 'home' : strtok($xTags, ',');
+                } elseif (!empty($smarty->smarty->tpl_vars['polls']->value)) {
+                    $module = 'poll-frontpage';
+                }
+                $targetingCode .= "\ngoogletag.pubads().setTargeting('".$dfpOptions['module']."', ['".$module."']);";
+            }
             // Check for custom code
             $dfpCustomCode = getService('setting_repository')->get('dfp_custom_code');
             $customCode = '';
