@@ -144,7 +144,7 @@ class AdsController extends Controller
                 return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
             }, $userGroups);
 
-            $advertisment = new \Advertisement();
+            $advertisement = new \Advertisement();
 
             $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
 
