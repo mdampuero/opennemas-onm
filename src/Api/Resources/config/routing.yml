@@ -1,5 +1,3 @@
-api_ads_endpoint:
-    path: '/ads'
-    defaults: { _controller: ApiBundle:Advertisement:endpoint, other: '' }
-    requirements:
-        other: '.*'
+api_v1:
+    resource: '@ApiBundle/Resources/config/routing/v1.yml'
+    prefix:   /v1
