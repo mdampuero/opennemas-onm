@@ -7,8 +7,8 @@
       function($routeProvider, routingProvider) {
         $routeProvider
           .when(routingProvider.ngGenerateShort('manager_settings_list'), {
-            templateUrl: '/managerws/template/module:list.' + appVersion + '.tpl',
-            controller: 'ModuleListCtrl',
+            templateUrl: '/managerws/template/setting:list.' + appVersion + '.tpl',
+            controller: 'SettingCtrl',
             reloadOnSearch: false
           });
       }
