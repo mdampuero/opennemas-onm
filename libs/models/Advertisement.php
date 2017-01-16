@@ -45,7 +45,7 @@ class Advertisement extends Content
      *
      * @var string
      **/
-    public $fk_content_categories = null;
+    public $fk_content_categories = [];
 
     /**
      * The related image id to this ad
