@@ -474,6 +474,14 @@
                 <input id="max-mailing" ng-model="settings.max_mailing" type="text">
               </div>
             </div>
+            <div class="form-group">
+              <label class="form-label">{t}Dimensions for image optimization{/t}</label>
+              <div class="controls">
+                <input class="pull-left" ng-model="instance.max_width" placeholder="{t}Width{/t}" type="text">
+                <span class="m-l-5 m-r-5 m-t-10 pull-left">x</span>
+                <input class="pull-left" ng-model="instance.max_height" placeholder="{t}Height{/t}" type="text">
+              </div>
+            </div>
           </div>
         </div>
       </div>

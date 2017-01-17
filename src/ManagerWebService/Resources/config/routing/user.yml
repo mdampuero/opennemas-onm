@@ -4,6 +4,7 @@ manager_ws_user_autocomplete:
     methods:  [ GET ]
     options:
         expose: true
+
 manager_ws_user_delete:
     path:     /users/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:delete }
