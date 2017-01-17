@@ -69,9 +69,9 @@
           <div class="form-group">
             <label class="form-label" for="site_language">{t}Dimensions{/t}</label>
             <div class="controls row">
-              <input class="pull-left" ng-model="settings.max_width" placeholder="{t}Width{/t}" type="text">
+              <input class="pull-left" ng-model="settings.max_width" placeholder="{t}Width (default: 1280){/t}" type="text">
               <i class="fa fa-times m-l-5 m-r-5 m-t-10 pull-left"></i>
-              <input class="m-r-5 pull-left" ng-model="settings.max_height" placeholder="{t}Width{/t}" type="text">
+              <input class="m-r-5 pull-left" ng-model="settings.max_height" placeholder="{t}Height (default: 1280){/t}" type="text">
             </div>
           </div>
         </div>
