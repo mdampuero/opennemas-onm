@@ -128,14 +128,14 @@ class DomainController extends Controller
     {
         $instance = $this->get('core.instance');
 
-        $base    = $instance->internal_name
+        $base    = mb_strtolower($instance->internal_name)
             . $this->getParameter('opennemas.base_domain');
         $primary = $instance->getMainDomain();
 
         $domains = [];
         foreach ($instance->domains as $value) {
             $domains[] = [
-                'free'   => $value === $base,
+                'free'   => mb_strtolower($value) === $base,
                 'name'   => $value,
                 'main'   => $value == $primary,
                 'target' => $this->getTarget($value)

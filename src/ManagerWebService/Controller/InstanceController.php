@@ -420,6 +420,8 @@ class InstanceController extends Controller
         $data     = $em->getConverter('Instance')
             ->objectify($request->request->get('instance'));
 
+        $data['internal_name'] = mb_strtolower($data['internal_name']);
+
         $instance = new Instance($data);
         $creator  = new InstanceCreator($em->getConnection('manager'));
 
