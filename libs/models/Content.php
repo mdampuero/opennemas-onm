@@ -298,10 +298,6 @@ class Content
                 // return $this->comments = $commentRepository->countCommentsForContentId($this->id);
 
                 break;
-            case 'content_type_l10n_name':
-                return get_class($this);
-
-                break;
             default:
                 if (array_key_exists($name, $this->metas)) {
                     return $this->metas[$name];
@@ -414,6 +410,10 @@ class Content
             // Load object properties
             $this->load($rs);
 
+            // Load content_type_l10n_name
+            $this->content_type_l10n_name =
+                \ContentManager::getContentTypeTitleFromId($this->fk_content_type);
+
             return $this;
         } catch (\Exception $e) {
             error_log('Error fetching content with id'.$id.': '.$e->getMessage());
@@ -467,10 +467,10 @@ class Content
             }
         }
 
-        if (!isset($data['slug']) || empty($data['slug'])) {
-            $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
+        if (empty($data['slug']) && !empty($data['title'])) {
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
         } else {
-            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
         }
 
         if (!isset($data['with_comment'])) {
@@ -498,7 +498,7 @@ class Content
             'content_status'      => (int) $data['content_status'],
             'position'            => (empty($data['position']))? 2: (int) $data['position'],
             'frontpage'           => (!isset($data['frontpage']) || empty($data['frontpage'])) ? 0: intval($data['frontpage']),
-            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : (int) $data['fk_author'],
+            'fk_author'           => (!array_key_exists('fk_author', $data)) ? 0 : (int) $data['fk_author'],
             'fk_publisher'        => (int) getService('session')->get('user')->id,
             'fk_user_last_editor' => (int) getService('session')->get('user')->id,
             'in_home'             => (empty($data['in_home']))? 0: intval($data['in_home']),
@@ -511,7 +511,6 @@ class Content
             'params'              => (!isset($data['params'])
                 || empty($data['params'])) ? null: serialize($data['params'])
         ];
-
 
         $conn = getService('dbal_connection');
         try {
@@ -583,14 +582,12 @@ class Content
             $data['fk_user_last_editor'] = getService('session')->get('user')->id;
         }
 
-        if (!isset($data['slug']) || empty($data['slug'])) {
+        if (empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = \Onm\StringUtils::getTitle($this->slug);
+                $data['slug'] = $this->slug;
             } else {
-                $data['slug'] = mb_strtolower(\Onm\StringUtils::getTitle($data['title']));
+                $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
             }
-        } else {
-            $data['slug'] = \Onm\StringUtils::getTitle($data['slug']);
         }
 
         $contentData = [
@@ -663,7 +660,7 @@ class Content
     {
         $conn = getService('dbal_connection');
         $conn->beginTransaction();
-        try{
+        try {
             $conn->delete('contents', [ 'pk_content' => $id ]);
             $conn->delete('contents_categories', [ 'pk_fk_content' => $id ]);
             $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
@@ -673,7 +670,7 @@ class Content
             dispatchEventWithParams('content.delete', array('content' => $this));
 
             return true;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $conn->rollBack();
             error_log('Error removing content (ID:'.$id.'):'.$e->getMessage());
             return false;
@@ -758,8 +755,8 @@ class Content
                 array(
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => $this->category_name,
-                    'slug'     => $this->slug,
+                    'category' => urlencode($this->category_name),
+                    'slug'     => urlencode($this->slug),
                 )
             );
         }
@@ -1325,7 +1322,7 @@ class Content
             try {
                 $rs = getService('dbal_connection')->fetchColumn(
                     'SELECT pk_fk_content_category '
-                     . 'FROM `contents_categories` WHERE pk_fk_content =?',
+                    . 'FROM `contents_categories` WHERE pk_fk_content =?',
                     [ $pkContent ]
                 );
 
@@ -1362,7 +1359,7 @@ class Content
         try {
             $rs = getService('dbal_connection')->fetchColumn(
                 'SELECT pk_fk_content_category '
-                 . 'FROM `contents_categories` WHERE pk_fk_content =?',
+                . 'FROM `contents_categories` WHERE pk_fk_content =?',
                 [ $pkContent ]
             );
 
@@ -1793,7 +1790,7 @@ class Content
         $relationsHandler  = getService('related_contents');
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
-        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
+        if (getService('core.security')->hasExtension('CRONICAS_MODULES')
             && ($categoryName == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {

@@ -166,7 +166,7 @@
                   <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="zoomcrop,220,220"></dynamic-image>
                 </span>
                 <div ng-if="content.cover == ''">
-                  <img ng-src="http://placehold.it/80x60" class="thumbnail" />
+                  <img ng-src="//placehold.it/80x60" class="thumbnail" />
                 </span>
               </td>
               <td>
@@ -175,7 +175,7 @@
                 </div>
                 [% content.title %]
                 <div class="small-text">
-                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="ALBUM_UPDATE"}

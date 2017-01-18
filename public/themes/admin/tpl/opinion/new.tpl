@@ -218,6 +218,16 @@
                                         <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
                                     </div>
                                 </div>
+
+                                {if is_object($opinion)}
+                                <div class="form-group">
+                                  <span>
+                                    <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$opinion->uri}" target="_blank">
+                                      {t}Link{/t} <i class="fa fa-external-link"></i>
+                                    </a>
+                                  </span>
+                                </div>
+                                {/if}
                             </div>
                         </div>
                     </div>

@@ -14,11 +14,12 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\Entity\Theme;
 use Common\ORM\Core\Validation\Validator;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Validator class.
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends KernelTestCase
 {
     /**
      * Configures the test environment.
@@ -87,8 +88,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests loadValidation when the validation to load is already loaded.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testLoadRulesAlreadySet()
     {

@@ -426,7 +426,7 @@ class Opinions
                     'id'       => $origElem['pk_content'],
                     'date'     => date('YmdHis', strtotime($origElem['created'])),
                     'category' => $origElem['author_name_slug'],
-                    'slug'     => \Onm\StringUtils::getTitle($origElem['title']),
+                    'slug'     => urlencode(\Onm\StringUtils::generateSlug($origElem['title'])),
                 )
             );
         }

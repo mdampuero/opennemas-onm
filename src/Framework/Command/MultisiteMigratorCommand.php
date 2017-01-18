@@ -6,9 +6,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @author Diego Blanco Estévez <diego@openhost.es>
- *
  */
 namespace Framework\Command;
 
@@ -22,8 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
 use Onm\Exception\InstanceAlreadyExistsException;
-use Onm\Instance\Instance;
-use Onm\DatabaseConnection;
+use Common\ORM\Entity\Instance;
 
 class MultisiteMigratorCommand extends ContainerAwareCommand
 {
@@ -161,7 +157,7 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
         $internal_name = $prefix.substr($data['path'], 1, -1); # /ourense/
         $domain = $internal_name.$createData['ext_domain']; # ourense.prod
 
-        $instanceData = [
+        $instance = new Instance([
             'name'              => $data['blogname'],
             'domains'           => [ $domain ],
             'contact_mail'      => $createData['contact_mail'],
@@ -170,13 +166,7 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
             'activated_modules' => $packProfesional,
             'settings'          => [ 'TEMPLATE_USER' => $createData['template'] ],
             'support_plan'      => 'SUPPORT_NONE',
-            'external'          => $external,
-        ];
-
-        $instance = new Instance();
-        foreach ($instanceData as $key => $value) {
-            $instance->{$key} = $value;
-        }
+        ]);
 
         // Get default sql if exists
         $defaultSql = null;
@@ -184,16 +174,14 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
             $defaultSql = $createData['default_sql'];
         }
 
-        $im = getService('instance_manager');
+        $em = $this->getContainer()->get('orm.manager');
         try {
-            getService('onm.validator.instance')->validate($instance);
-
-            $im->persist($instance);
+            $em->persist($instance);
 
             $this->createDatabase($instance->id, $defaultSql);
             $this->createMediaDir($instance->internal_name);
 
-            $im->configureInstance($instance);
+            $this->configureInstance($instance, $external);
         } catch (InstanceAlreadyExistsException $e) {
             $helper = $this->getHelper('question');
             $question = new ConfirmationQuestion(
@@ -205,13 +193,11 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
                 return false;
             }
 
-            $instance = $im->findOneBy(
-                [ 'internal_name' => [ [ 'value' => $internal_name ] ] ]
+            $instance = $em->getRepository('Instance')->findOneBy(
+                sprintf('internal_name = "%s"', $internal_name)
             );
         } catch (\Exception $e) {
-            if (!empty($instance->internal_name)) {
-            }
-            $im->remove($instance);
+            $em->remove($instance);
 
             $this->output->writeln($e->getMessage());
             return false;
@@ -230,27 +216,27 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
     {
         // Initialize multisite database connection
         $db = $this->settings['migration']['source'];
-        $this->originConnection = new DatabaseConnection(
-            getContainerParameter('database')
-        );
+
+        $this->originConnection = $this->getContainer()->get('orm.manager')
+            ->getConnection('instance');
+
         $this->originConnection->selectDatabase($db);
 
         // Find all active blogs
         $sql = "SELECT `blog_id`, `domain`, `path` FROM `wp_blogs`"
             . " WHERE `blog_id` > 1 AND `public` = 1";
-        $rs = $this->originConnection->Execute($sql);
-        $blogs = $rs->getArray();
+        $blogs = $this->originConnection->fetchAll($sql);
 
         // Get all blogs data
         $blogsData = [];
         foreach ($blogs as $blog) {
             $sql = "SELECT `option_value`, `option_name` FROM `wp_".$blog['blog_id']
                 ."_options` WHERE `option_name` IN ('siteurl', 'blogname', 'blogdescription')";
-            $rsAux = $this->originConnection->Execute($sql);
+            $rsAux = $this->originConnection->fetchAll($sql);
 
             $blogsData[$blog['blog_id']]['path'] = $blog['path'];
             $blogsData[$blog['blog_id']]['domain'] = $blog['domain'];
-            foreach ($rsAux->getArray() as $value) {
+            foreach ($rsAux as $value) {
                 $blogsData[$blog['blog_id']][$value['option_name']] = utf8_encode($value['option_value']);
             }
         }
@@ -309,7 +295,7 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
         if ($result != 0) {
             $sql = "DROP DATABASE IF EXISTS `$database`";
 
-            if (!$dbconn->Execute($sql)) {
+            if (!$dbconn->executeQuery($sql)) {
                 throw new \Exception(
                     "Could not drop the database $database"
                 );
@@ -320,5 +306,56 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
                 . print_r($output)
             );
         }
+    }
+
+    /**
+     * Configures the instance with the given data.
+     *
+     * @param Instance $instance The instance to configure.
+     */
+    public function configureInstance(&$instance, $data)
+    {
+        $cache     = $this->getContainer()->get('cache');
+        $namespace = $cache->getNamespace();
+
+        $cache->setNamespace($instance->internal_name);
+        $this->sm->setConfig([
+            'database'     => $instance->getDatabaseName(),
+            'cache_prefix' => $instance->internal_name
+        ]);
+
+        // Build external parameters
+        $external['site_name']    = $instance->name;
+        $external['site_created'] = $instance->created;
+
+        $title = $this->sm->get('site_title');
+        if (strpos($title, $instance->name) === false) {
+            $external['site_title'] = $instance->name . ' - ' . $title;
+        }
+
+        $description = $this->sm->get('site_description');
+        if (strpos($description, $instance->name) === false) {
+            $external['site_description'] = $instance->name . ' - ' . $description;
+        }
+
+        $keywords = $this->sm->get('site_keywords');
+        if (strpos($keywords, $instance->name) === false) {
+            $external['site_keywords'] = $instance->name . ' - ' . $keywords;
+        }
+
+        $external['site_agency'] = $instance->internal_name . '.opennemas.com';
+
+        foreach (array_keys($external) as $key) {
+            $cache->delete($key);
+            $this->sm->invalidate($key);
+
+            if (!$this->sm->set($key, $external[$key])) {
+                throw new InstanceNotConfiguredException(
+                    'The instance could not be configured'
+                );
+            }
+        }
+
+        $cache->setNamespace($namespace);
     }
 }

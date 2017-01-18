@@ -30,7 +30,7 @@
         [% item.title %]
       </a>
       <p class="no-margin">
-        [% item.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+        [% item.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
       </p>
     </span>
     <span class="h-seperate"></span>

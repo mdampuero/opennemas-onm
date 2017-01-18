@@ -105,11 +105,13 @@
                 $scope.imported = true;
                 template.messages = response.data.messages;
               } else {
+                $scope.saving = false;
                 $uibModalInstance.close(response.data);
               }
             }
           }, function() {
             $scope.loading = false;
+            $scope.saving = false;
             $uibModalInstance.close(false);
           });
         };

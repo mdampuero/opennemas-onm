@@ -1,0 +1,100 @@
+orm:
+    metadata:
+        -
+            name: Comment
+            properties:
+                id:                      integer
+                content_id:              integer
+                author:                  string
+                author_email:            string
+                author_ip:               string
+                date:                    datetime
+                body:                    string
+                status:                  integer
+                agent:                   string
+                type:                    string
+                parent_id:               integer
+                user_id:                 integer
+                content_type_referenced: string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.comment' ]
+            repositories:
+                database:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.comment', '@cache.connection.instance' ]
+            persisters:
+                database:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.comment', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: comments
+                    metas:
+                        table: commentsmeta
+                        key:   meta_name
+                        ids:
+                            id: fk_content
+                    columns:
+                        id:
+                            type: bigint
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        content_id:
+                            type: bigint
+                            options: { length: 20, default: null, notnull: false, unsigned: true }
+                        author:
+                            type: string
+                            options: { default: null, notnull: false, length: 200 }
+                        author_email:
+                            type: string
+                            options: { default: '', notnull: false, length: 200 }
+                        author_url:
+                            type: string
+                            options: { default: '', notnull: false, length: 200 }
+                        author_ip:
+                            type: string
+                            options: { default: '', notnull: false, length: 100 }
+                        date:
+                            type: datetime
+                            options: { default: CURRENT_TIMESTAMP, notnull: false }
+                        body:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        status:
+                            type: string
+                            options: { default: pending, length: 20 }
+                        agent:
+                            type: string
+                            options: { default: '', length: 255 }
+                        type:
+                            type: string
+                            options: { default: '', length: 20 }
+                        parent_id:
+                            type: bigint
+                            options: { default: null, unsigned: true, default: '0' }
+                        user_id:
+                            type: integer
+                            options: { default: 0 }
+                        content_type_referenced:
+                            type: string
+                            options: { default: null, length: 20 }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [id]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: comment_content_id
+                            columns: [content_id]
+                            primary: false
+                            unique: false
+                            flags: {  }
+                        -
+                            name: comment_parent_id
+                            columns: [parent_id]
+                            primary: false
+                            unique: false
+                            flags: {  }

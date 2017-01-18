@@ -121,7 +121,7 @@ class EuropaPress extends Parser
         $date = \DateTime::createFromFormat(
             'd/m/Y H:i:s',
             $data->FECHA . ' ' . $data->HORA,
-            new \DateTimeZone('Europe/Madrid')
+            new \DateTimeZone('UTC')
         );
 
         return $date;

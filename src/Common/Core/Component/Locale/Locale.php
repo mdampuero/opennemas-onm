@@ -96,7 +96,7 @@ class Locale
      */
     public function getLocaleName()
     {
-        return \Locale::getDisplayLanguage($this->locale);
+        return ucfirst(\Locale::getDisplayLanguage($this->locale));
     }
 
     /**
@@ -107,6 +107,16 @@ class Locale
     public function getLocaleShort()
     {
         return explode('_', $this->locale)[0];
+    }
+
+    /**
+     * Get the timezone.
+     *
+     * @return string The current timezone.
+     */
+    public function getTimeZone()
+    {
+        return $this->timezone;
     }
 
     /**

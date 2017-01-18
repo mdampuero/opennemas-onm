@@ -1,0 +1,12 @@
+backend_purchase_show:
+    path: /purchases/{id}
+    defaults: { _controller  : BackendBundle:Purchase:show }
+    options:
+        expose: true
+
+backend_purchases_list:
+    path: /purchases
+    defaults: { _controller: BackendBundle:Purchase:list }
+    methods: [ GET ]
+    options:
+        expose: true

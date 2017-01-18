@@ -7,13 +7,13 @@ use \Onm\Settings as s;
 
 function smarty_function_meta_twitter_cards($params, &$smarty)
 {
-    $output = array();
+    $output = [];
 
     // only return if th page where is printed
     // this twitter card is a content page
     if (array_key_exists('content', $smarty->tpl_vars)) {
         // Check if the twitter user is not empty
-        $user = preg_split('@.com/[#!/]*@', s::get('twitter_page'));
+        $user = preg_split('@.com/[#!/]*@', getService('setting_repository')->get('twitter_page'));
         $twitterUser = $user[1];
 
         if (empty($twitterUser)) {

@@ -759,6 +759,11 @@ angular.module('onm.picker')
           $timeout(function() {
             $scope.uploader.removeFromQueue(fileItem);
             $scope.addItem(response);
+
+            // Autoselect items uploaded
+            $scope.selected.ids.push(response.pk_photo)
+            $scope.selected.items.push(response);
+            $scope.selected.items.lastSelected = response;
           }, 500);
         };
       };

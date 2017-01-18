@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, description_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, title: '', category_name: -1, in_litter: 0, month: '' }, 'created', 'desc', 'backend_ws_image_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); years = {json_encode($years)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -81,11 +81,21 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.description_like" placeholder="{t}Search by description{/t}" type="text"/>
+            <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by description or metadata{/t}" type="text"/>
             <input type="hidden" name="in_home" ng-model="criteria.in_home">
           </li>
           <li class="quicklinks">
             <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <select name="month" ng-model="criteria.month">
+              <option value="">{t}All months{/t}</option>
+              <optgroup label="[% year.name %]" ng-repeat="year in years">
+                <option value="[% month.value %]" ng-repeat="month in year.months">
+                  [% month.name %] ([% year.name %])
+                </option>
+              </optgroup>
+            </select>
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
             <ui-select name="view" theme="select2" ng-model="pagination.epp">
@@ -166,7 +176,7 @@
                     <span ng-if="content.metadata == ''"><i class="fa fa-tags"></i> {t}No tags{/t}</span>
                   </div>
                   <div class="small-text">
-                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="small-text">
                     <strong>{t}Resolution{/t}:</strong>

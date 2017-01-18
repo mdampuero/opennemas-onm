@@ -34,12 +34,10 @@ angular.module('BackendApp.controllers').controller('NewsletterSubscriptorListCt
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -72,15 +70,13 @@ angular.module('BackendApp.controllers').controller('NewsletterSubscriptorListCt
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
+        $scope.selected.total = 0;
+        $scope.selected.contents = [];
 
-          if (response.status == 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };

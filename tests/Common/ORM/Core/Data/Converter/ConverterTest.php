@@ -9,6 +9,7 @@
  */
 namespace Tests\Common\ORM\Core\Data\Converter;
 
+use Common\Core\Component\Locale\Locale;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Data\Converter\Converter;
@@ -23,7 +24,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        $this->locale = new Locale([ 'en_US' ], 'path/to/foo');
+        $this->locale->setLocale('en_US');
+
         $this->metadata = new Metadata([
+            'translate'  => [ 'baz' ],
             'properties' => [
                 'foo'    => 'string',
                 'bar'    => 'integer',
@@ -46,9 +51,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->converter = new Converter($this->metadata);
+        $this->converter = new Converter($this->metadata, $this->locale);
 
-        $keys    = [ 'convert', 'convertFrom', 'convertTo' ];
+        $keys    = [ 'convert', 'convertFrom', 'convertTo', 'translate' ];
         $this->methods = [];
         foreach ($keys as $method) {
             $this->methods[$method] = new \ReflectionMethod($this->converter, $method);
@@ -114,12 +119,25 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             [
                 'foo' => '2000-01-01 10:00:00',
                 'bar' => [ 'gorp' => 'norf' ],
-                'baz' => 1
+                'baz' => 'wubble'
             ],
             $this->converter->responsify([
                 'foo' => new \DateTime('2000-01-01 10:00:00'),
                 'bar' => new Entity([ 'gorp' => 'norf' ]),
-                'baz' => true
+                'baz' => [ 'en' => 'wubble' ]
+            ], true)
+        );
+
+        $this->assertEquals(
+            [
+                'foo' => '2000-01-01 10:00:00',
+                'bar' => [ 'gorp' => 'norf' ],
+                'baz' => [ 'en' => 'wubble' ]
+            ],
+            $this->converter->responsify([
+                'foo' => new \DateTime('2000-01-01 10:00:00'),
+                'bar' => new Entity([ 'gorp' => 'norf' ]),
+                'baz' => [ 'en' => 'wubble' ]
             ])
         );
     }
@@ -161,5 +179,17 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             $this->methods['convert']->invokeArgs($this->converter, ['Boolean', 'toInteger', false ]),
             $this->methods['convertTo']->invokeArgs($this->converter, ['Boolean', 'Integer', false ])
         );
+    }
+
+    /**
+     * Tests convertTo
+     */
+    public function testTranslate()
+    {
+        $this->assertEmpty($this->methods['translate']->invokeArgs($this->converter, [ 'baz', null ]));
+        $this->assertEquals([ 'corge' ], $this->methods['translate']->invokeArgs($this->converter, [ 'foo', [ 'corge' ] ]));
+        $this->assertEquals('wobble', $this->methods['translate']->invokeArgs($this->converter, [ 'baz', 'wobble' ]));
+        $this->assertEquals('wobble', $this->methods['translate']->invokeArgs($this->converter, ['baz', [ 'en' => 'wobble' ] ]));
+        $this->assertEquals('grault', $this->methods['translate']->invokeArgs($this->converter, ['baz', [ 'es' => 'grault' ] ]));
     }
 }

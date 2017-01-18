@@ -47,7 +47,7 @@ class PaymentPersister extends BasePersister
     public function remove(Entity $entity)
     {
         $this->api->setMethod('payment.delete');
-        $this->api->post([ 'payment_id' => $entity->client_id ]);
+        $this->api->post([ 'payment_id' => $entity->id ]);
         $this->api->request();
 
         if ($this->api->success()) {

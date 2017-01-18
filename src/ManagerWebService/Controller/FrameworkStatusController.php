@@ -12,7 +12,7 @@ namespace ManagerWebService\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class FrameworkStatusController extends Controller
 {

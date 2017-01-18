@@ -79,8 +79,8 @@ class Book extends Content
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => $this->slug,
-                        'category' => $this->category_name,
+                        'slug'     => urlencode($this->slug),
+                        'category' => urlencode($this->category_name),
                     )
                 );
 

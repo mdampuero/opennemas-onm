@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -35,6 +35,12 @@ class MonographsController extends Controller
      **/
     public function init()
     {
+        // Only is used by cronicas, no one has templates to support specials.
+        // https://openhost.atlassian.net/browse/ONM-1995
+        if (!$this->get('core.security')->hasExtension('SPECIAL_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         // Setting up available categories for menu.
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
@@ -199,21 +205,17 @@ class MonographsController extends Controller
                 $special->img      = $photo;
             }
 
-            $this->view->assign(
-                array(
-                    'special'   => $special,
-                    'content'   => $special,
-                    'columns'   => $columns,
-                    'contentId' => $special->id,
-                )
-            );
+            $this->view->assign(['columns' => $columns]);
         }
 
         return $this->render(
             'special/special.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
+            [
+                'special'   => $special,
+                'content'   => $special,
+                'contentId' => $special->id,
+                'cache_id'  => $cacheID,
+            ]
         );
     }
 }

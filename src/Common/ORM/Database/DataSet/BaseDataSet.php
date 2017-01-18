@@ -92,7 +92,7 @@ class BaseDataSet extends DataSet
         );
 
         if ($this->hasCache()) {
-            $this->cache->delete($key);
+            $this->cache->remove($key);
         }
     }
 
@@ -184,7 +184,7 @@ class BaseDataSet extends DataSet
         $this->conn->executeQuery($sql, $data, $types);
 
         if ($this->hasCache()) {
-            $this->cache->delete($key);
+            $this->cache->remove($key);
         }
     }
 

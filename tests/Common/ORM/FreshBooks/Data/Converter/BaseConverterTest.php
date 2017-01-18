@@ -81,6 +81,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'email'        => 'johndoe@example.org',
                 'organization' => 'John Doe, Inc.',
                 'work_phone'   => '555-555-555',
+                'p_country'    => 'Spain'
             ],
             $this->converter->freshbooksfy([
                 'id'        => 1,
@@ -89,6 +90,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'email'     => 'johndoe@example.org',
                 'company'   => 'John Doe, Inc.',
                 'phone'     => '555-555-555',
+                'country'   => 'ES'
             ])
         );
     }
@@ -212,7 +214,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests unnormalizeLines.
+     * Tests unNormalizeLines.
      */
     public function testUnNormalizeLines()
     {
@@ -244,6 +246,4 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
         );
 
     }
-
-
 }

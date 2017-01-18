@@ -16,7 +16,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -45,34 +45,35 @@ class UtilitiesController extends Controller
         $url = urlencode($request->query->filter('url', '', FILTER_SANITIZE_STRING));
         $type = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
 
-        if ($json['url']) {
-            if ($type == 'googlePlus') {
-                //source http://www.helmutgranda.com/2011/11/01/get-a-url-google-count-via-php/
-                $content = $this->createCurlRequest(
-                    "https://plusone.google.com/u/0/_/+1/fastbutton?url=".$url."&count=true",
-                    $cacheFor
-                );
+        // if ($json['url']) {
+        //     if ($type == 'googlePlus') {
+        //         //source http://www.helmutgranda.com/2011/11/01/get-a-url-google-count-via-php/
+        //         $content = $this->createCurlRequest(
+        //             "https://plusone.google.com/u/0/_/+1/fastbutton?url=".$url."&count=true",
+        //             $cacheFor
+        //         );
 
-                $dom = new \DOMDocument;
-                $dom->preserveWhiteSpace = false;
-                @$dom->loadHTML($content);
-                $domxpath = new \DOMXPath($dom);
-                $newDom = new \DOMDocument;
-                $newDom->formatOutput = true;
+        //         $dom = new \DOMDocument;
+        //         $dom->preserveWhiteSpace = false;
+        //         @$dom->loadHTML($content);
+        //         $domxpath = new \DOMXPath($dom);
+        //         $newDom = new \DOMDocument;
+        //         $newDom->formatOutput = true;
 
-                $filtered = $domxpath->query("//div[@id='aggregateCount']");
-                if (isset($filtered->item(0)->nodeValue)) {
-                    $json['count'] = str_replace('>', '', $filtered->item(0)->nodeValue);
-                }
-            } elseif ($type == 'stumbleupon') {
-                $content = $this->createCurlRequest("http://www.stumbleupon.com/services/1.01/badge.getinfo?url=$url");
+        //         $filtered = $domxpath->query("//div[@id='aggregateCount']");
+        //         if (isset($filtered->item(0)->nodeValue)) {
+        //             $json['count'] = str_replace('>', '', $filtered->item(0)->nodeValue);
+        //         }
+        //     } elseif ($type == 'stumbleupon') {
+        //         $content = $this->createCurlRequest("http://www.stumbleupon.com/services/1.01/badge.getinfo?url=$url");
 
-                $result = json_decode($content);
-                if (isset($result->result->views)) {
-                    $json['count'] = $result->result->views;
-                }
-            }
-        }
+        //         $result = json_decode($content);
+        //         if (isset($result->result->views)) {
+        //             $json['count'] = $result->result->views;
+        //         }
+        //     }
+        // }
+        $json['count'] = 0;
 
         $content  = str_replace('\\/', '/', json_encode($json));
 

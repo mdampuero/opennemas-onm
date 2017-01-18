@@ -17,7 +17,7 @@ namespace BackendWebService\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the keywords
@@ -38,12 +38,12 @@ class KeywordsController extends Controller
      */
     public function listAction(Request $request)
     {
-        $search = $request->request->get('search');
+        $search = $request->query->get('search');
         $page = $request->query->getDigits('page', 1);
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
 
         $filter = '';
-        if (array_key_exists('title', $search)) {
+        if (is_array($search) && array_key_exists('title', $search)) {
             $name = $search['title'][0]['value'];
             $filter = '`pclave` LIKE "%' . $name . '%"';
         }
@@ -51,11 +51,11 @@ class KeywordsController extends Controller
         $keywordManager = new \PClave();
         $keywords = $keywordManager->find($filter);
 
-        $results = array_slice($keywords, ($page-1) * $elementsPerPage, ITEMS_PAGE);
+        $results = array_slice($keywords, ($page-1) * $elementsPerPage, $elementsPerPage);
 
         return new JsonResponse(
             array(
-                'elements_per_page' => 10,
+                'elements_per_page' => $elementsPerPage,
                 'extra'             => array(
                     'types'      => \PClave::getTypes(),
                 ),

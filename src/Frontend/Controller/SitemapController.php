@@ -16,7 +16,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -221,18 +221,18 @@ class SitemapController extends Controller
 
         if ($format == 'xml.gz') {
             // disable ZLIB output compression
-            ini_set('zlib.output_compression', 'Off');
+            // ini_set('zlib.output_compression', 'Off');
             // compress data
-            $contents = gzencode($contents);
+            $contents = gzencode($contents, 9);
 
             $headers = array(
-                'Content-Type'     => 'application/x-download',
-                'Content-Encoding' => 'gzip',
-                'Content-Length'   => strlen($contents)
+                'Content-Type'        => 'application/x-gzip',
+                'Content-Length'      => strlen($contents),
+                'Content-Disposition' => 'attachment; filename="sitemap'.$action.'.xml.gz"'
             );
         } else {
             // Return the output as xml
-            $headers = array('Content-Type' => 'application/xml charset=utf-8');
+            $headers = array('Content-Type' => 'application/xml; charset=utf-8');
         }
 
         $instanceName = getService('core.instance')->internal_name;
@@ -241,7 +241,7 @@ class SitemapController extends Controller
             'x-cache-for'  => '+1 day',
             'x-cacheable'  => true,
             'x-instance'   => $instanceName,
-            'x-tags'       => 'instance-'.$instanceName.',sitemap',
+            'x-tags'       => 'instance-'.$instanceName.',sitemap,'.$action,
             'x-tags'       => 'sitemap',
         ]);
 

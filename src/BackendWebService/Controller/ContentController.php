@@ -11,7 +11,7 @@
 namespace BackendWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -44,14 +44,6 @@ class ContentController extends Controller
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
-
-        foreach ($results as &$result) {
-            $createdTime = new \DateTime($result->created);
-            $result->created = $createdTime->format(\DateTime::ISO8601);
-
-            $updatedTime = new \DateTime($result->changed);
-            $result->changed = $updatedTime->format(\DateTime::ISO8601);
-        }
 
         return new JsonResponse(
             array(
@@ -87,14 +79,6 @@ class ContentController extends Controller
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
-        foreach ($results as &$result) {
-            $createdTime = new \DateTime($result->created);
-            $result->created = $createdTime->format(\DateTime::ISO8601);
-
-            $updatedTime = new \DateTime($result->changed);
-            $result->changed = $updatedTime->format(\DateTime::ISO8601);
-        }
-
         return new JsonResponse(
             array(
                 'extra'             => $this->loadExtraData($results),
@@ -124,12 +108,21 @@ class ContentController extends Controller
 
         if (!is_null($content->id)) {
             try {
-                $content->delete($id);
-                $success[] = array(
-                    'id'      => $id,
-                    'message' => _('Item deleted successfully'),
-                    'type'    => 'success'
-                );
+                if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+                    && !$content->isOwner($this->getUser()->id)
+                ) {
+                    $errors[] = [
+                        'error',
+                        _("You don't have enough privileges for modify this content.")
+                    ];
+                } else {
+                    $content->delete($id);
+                    $success[] = array(
+                        'id'      => $id,
+                        'message' => _('Item deleted successfully'),
+                        'type'    => 'success'
+                    );
+                }
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
@@ -176,8 +169,20 @@ class ContentController extends Controller
 
                 if (!is_null($content->id)) {
                     try {
-                        $content->delete($id);
-                        $updated[] = $id;
+                        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+                            && !$content->isOwner($this->getUser()->id)
+                        ) {
+                            $errors[] = [
+                                'error',
+                                sprintf(
+                                    _("You don't have enough privileges to delete the content with id %s."),
+                                    $content->id
+                                )
+                            ];
+                        } else {
+                            $content->delete($id);
+                            $updated[] = $id;
+                        }
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,

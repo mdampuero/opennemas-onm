@@ -12,7 +12,7 @@
     var frontpage_messages = {
       remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
       error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}",
-      frontpage_too_long: "{t}You have reached the maximum number of elements (100). To add new contents remove the older.{/t}"
+      frontpage_too_long: "{t}You have reached the maximum number of elements (%number%). To add new contents remove the older.{/t}"
     };
 
     var tooltip_strings = {

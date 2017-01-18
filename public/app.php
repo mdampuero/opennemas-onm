@@ -4,6 +4,12 @@ use Symfony\Component\Debug\Debug;
 
 umask(0002);
 
+// Force reset opcache if tmp/restart.txt file is present.
+if (file_exists(__DIR__.'/../tmp/restart.txt')) {
+    @unlink(__DIR__.'/../tmp/restart.txt');
+    opcache_reset();
+}
+
 /**
  * @var Composer\Autoload\ClassLoader
  */

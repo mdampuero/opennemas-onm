@@ -13,15 +13,15 @@
      * @requires $uibModal
      * @requires http
      * @requires messenger
-     * @requires oqlBuilder
+     * @requires oqlEncoder
      * @requires webStorage
      *
      * @description
      *   Handles all actions in clients listing.
      */
     .controller('ClientListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlBuilder', 'webStorage',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlBuilder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -146,7 +146,7 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          oqlBuilder.configure({
+          oqlEncoder.configure({
             placeholder: {
               name: 'first_name ~ "[value]" or last_name ~ "[value]"' +
                 ' or email ~ "[value]" or address ~ "[value]"' +
@@ -155,7 +155,7 @@
             }
           });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_clients_list',
             params: { oql: oql }
@@ -195,6 +195,15 @@
         // Get enabled columns from localStorage
         if (webStorage.local.get('clients-columns')) {
           $scope.columns = webStorage.local.get('clients-columns');
+        }
+
+        oqlDecoder.configure({
+          ignore: [ 'address', 'city', 'email' ,'first_name' ,'last_name', 'state' ],
+          map:    { first_name: 'name' }
+        });
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
         }
 
         $scope.list();

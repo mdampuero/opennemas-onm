@@ -11,7 +11,7 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Content;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -178,6 +178,10 @@ class StaticPageController extends Controller
 
         // TODO: Remove after fixing database definition
         $entity->category_name = ' ';
+
+        // TODO:Remove when data supports empty values (when using SPA)
+        $status = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
+        $entity->content_status = (empty($status)) ? 0 : 1;
 
         try {
             $em->persist($entity);

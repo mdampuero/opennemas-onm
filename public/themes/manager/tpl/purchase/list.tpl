@@ -82,7 +82,7 @@
               <span class="fa fa-search fa-lg"></span>
             </span>
             <input class="input-min-45 input-200" ng-class="{ 'dirty': criteria.client }" ng-keyup="searchByKeypress($event)" ng-model="criteria.client" placeholder="{t}Search by client{/t}" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.client = null" ng-show="criteria.client">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('client')" ng-show="criteria.client">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -97,7 +97,7 @@
               {t}From{/t}
             </span>
             <input class="input-100" datetime-picker="pickerFrom" datetime-picker-format="YYYY-MM-DD" name="from" ng-class="{ 'dirty': criteria.from }" ng-model="criteria.from" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.from = null" ng-show="criteria.from">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('from')" ng-show="criteria.from">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -112,7 +112,7 @@
               {t}To{/t}
             </span>
             <input class="input-100" datetime-picker="pickerTo" datetime-picker-format="YYYY-MM-DD" name="to" ng-class="{ 'dirty': criteria.to }" ng-model="criteria.to" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="criteria.to = null" ng-show="criteria.to">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('to')" ng-show="criteria.to">
               <i class="fa fa-times"></i>
             </span>
           </div>
@@ -270,7 +270,7 @@
               <th class="text-center" ng-show="isColumnEnabled('email')" width="250">
                 {t}Email{/t}
               </th>
-              <th class="pointer" ng-click="sort('total')" ng-show="isColumnEnabled('total')" width="80">
+              <th class="pointer text-right" ng-click="sort('total')" ng-show="isColumnEnabled('total')" width="80">
                 {t}Total{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('total') == 'asc', 'fa fa-caret-down': isOrderedBy('total') == 'desc'}"></i>
               </th>
@@ -301,8 +301,9 @@
                 {t}Updated{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('updated') == 'asc', 'fa fa-caret-down': isOrderedBy('updated') == 'desc'}"></i>
               </th>
-              <th class="pointer text-center" ng-show="isColumnEnabled('step')" width="100">
+              <th class="pointer text-center" ng-click="sort('step')" ng-show="isColumnEnabled('step')" width="100">
                 {t}Step{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('step') == 'asc', 'fa fa-caret-down': isOrderedBy('step') == 'desc'}"></i>
               </th>
             </tr>
           </thead>
@@ -337,8 +338,9 @@
               <td class="text-right" ng-show="isColumnEnabled('total')">
                 [% item.total | number : 2 %] €
               </td>
-              <td class="text-right" ng-show="isColumnEnabled('method')">
-                <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }"></i>
+              <td class="text-center" ng-show="isColumnEnabled('method')">
+                <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }" ng-if="item.total !== 0"></i>
+                <span ng-if="item.total === 0">-</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('client_id')">
                 <a ng-href="[% routing.ngGenerate('manager_client_show', { id : item.client.id }) %]" target="_blank">
@@ -346,14 +348,16 @@
                 </a>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('payment_id')">
-                <a ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/transactions/[% item.payment_id %]" target="_blank">
+                <a ng-href="[% extra.braintree.url %]/merchants/[% extra.braintree.merchant_id %]/transactions/[% item.payment_id %]" ng-if="item.total !== 0" target="_blank">
                   [% item.payment_id %]
                 </a>
+                <span ng-if="item.total === 0">-</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('invoice_id')">
-                <a ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% item.invoice_id %]" target="_blank">
+                <a ng-href="[% extra.freshbooks.url %]/showInvoice?invoiceid=[% item.invoice_id %]" ng-if="item.total !== 0" target="_blank">
                   [% item.invoice_id %]
                 </a>
+                <span ng-if="item.total === 0">-</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('instance')">
                 <a ng-href="[% routing.ngGenerate('manager_instance_show', { id: item.instance_id }) %]" target="_blank">

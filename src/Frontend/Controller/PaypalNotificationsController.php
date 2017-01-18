@@ -16,7 +16,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -51,7 +51,7 @@ class PaypalNotificationsController extends Controller
             // Get ipn data
             $ipnData = $ipnMessage->getRawData();
 
-            $this->dispatchEvent('paywall.recurring', array('ipnData' => $ipnData));
+            $this->get('core.dispatcher')->dispatch('paywall.recurring', array('ipnData' => $ipnData));
         } else {
             // Write in log
             $logger = getService('logger');

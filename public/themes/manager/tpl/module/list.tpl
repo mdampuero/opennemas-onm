@@ -75,7 +75,7 @@
               <i class="fa fa-search fa-lg"></i>
             </span>
             <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.uuid }" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by UUID{/t}" ng-model="criteria.uuid" type="text">
-            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="criteria.uuid = null" ng-show="criteria.uuid">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="clear('uuid')" ng-show="criteria.uuid">
               <i class="fa fa-times"></i>
             </span>
           </div>

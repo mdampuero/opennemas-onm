@@ -12,6 +12,7 @@ namespace Tests\Common\ORM\Core;
 use Common\ORM\Braintree\BraintreeManager;
 use Common\ORM\Database\DatabaseManager;
 use Common\ORM\Entity\Client;
+use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\EntityManager;
 use Common\ORM\Core\Metadata;
@@ -34,15 +35,24 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
-        $this->loader = $this->getMockBuilder('Loader')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'load' ])
-            ->getMock();
+        $this->defaults = [
+            'connection' => [
+                'driver'   => 'mysqli',
+                'dbname'   => 'onm-instances',
+                'host'     => '172.17.0.6',
+                'port'     => '3306',
+                'user'     => 'root',
+                'password' => 'root',
+                'charset'  => 'UTF-8',
+            ]
+        ];
 
-        $config = [
-            'connection' => [ 'foo' => true ],
+        $this->config = [
+            'connection' => [
+                'foo' => [ 'name' => 'foo', 'dbname' => 'glorp' ]
+            ],
             'metadata'   => [
-                'Entity' => new Metadata([
+                'Entity' => [
                     'name'       => 'Entity',
                     'properties' => [ 'foo' => 'string', 'bar' => 'integer' ],
                     'converters' => [
@@ -58,17 +68,17 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
                         'Entity' => [ 'class' => 'Repository', 'arguments'  => [] ]
                     ],
                     'mapping'    => [ ]
-                ]),
-                'Client' => new Metadata([
+                ],
+                'Client' => [
                     'name'       => 'Client',
                     'properties' => [],
                     'mapping'    => []
-                ])
+                ]
             ],
-            'schema' => []
+            'schema' => [
+                'flob' => [ 'name' => 'flob', 'entities' => [ 'Entity' ] ],
+            ]
         ];
-
-        $this->loader->expects($this->any())->method('load')->willReturn($config);
 
         $this->converter = $this->getMockBuilder('MockConverter')
             ->setMockClassName('Converter')
@@ -116,8 +126,10 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
                 return 'foo';
             case 'foo':
                 return 'foo';
-            case 'orm.loader':
-                return $this->loader;
+            case 'orm':
+                return $this->config;
+            case 'orm.default':
+                return $this->defaults;
             case 'orm.manager.database':
                 return $this->dm;
             default:
@@ -140,7 +152,27 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionValid()
     {
-        $this->assertNotEmpty($this->em->getConnection('foo'));
+        $this->assertEquals(
+            new Connection([
+                'charset'  => 'UTF-8',
+                'dbname'   => 'glorp',
+                'driver'   => 'mysqli',
+                'host'     => '172.17.0.6',
+                'name'     => 'foo',
+                'password' => 'root',
+                'port'     => '3306',
+                'user'     => 'root'
+            ]),
+            $this->em->getConnection('foo')
+        );
+    }
+
+    /**
+     * Tests getContainer.
+     */
+    public function testGetContainer()
+    {
+        $this->assertEquals($this->container, $this->em->getContainer());
     }
 
     /**

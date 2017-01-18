@@ -34,15 +34,18 @@
             <directory>./libs/Onm</directory>
             <directory>./src/</directory>
             <exclude>
-                <directory>./src/*/*/DependencyInjection</directory>
-                <directory>./src/*/*/Resources</directory>
-                <directory>./src/*/*/Tests</directory>
                 <directory>./src/*Bundle/DependencyInjection</directory>
                 <directory>./src/*Bundle/Resources</directory>
                 <directory>./src/*Bundle/Tests</directory>
                 <directory>./src/*/*Bundle/DependencyInjection</directory>
                 <directory>./src/*/*Bundle/Resources</directory>
                 <directory>./src/*/*Bundle/Tests</directory>
+                <directory>./src/*/DependencyInjection</directory>
+                <directory>./src/*/Resources</directory>
+                <directory>./src/*/Tests</directory>
+                <directory>./src/*/*/DependencyInjection</directory>
+                <directory>./src/*/*/Resources</directory>
+                <directory>./src/*/*/Tests</directory>
             </exclude>
         </whitelist>
         <blacklist>

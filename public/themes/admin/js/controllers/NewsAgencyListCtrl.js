@@ -64,7 +64,7 @@
           });
 
           modal.result.then(function(response) {
-            if (response) {
+            if (response.success) {
               if (response.messages) {
                 messenger.post(response.messages);
               }
@@ -149,6 +149,7 @@
               template: function() {
                 return {
                   content:  content,
+                  timezone: $scope.extra.timezone,
                   imported: $scope.imported.indexOf(content.urn) !== -1,
                   related:  related,
                   routing:  routing

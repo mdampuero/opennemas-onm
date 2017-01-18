@@ -7,16 +7,18 @@
           <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + screenshot %]">
         </uib-slide>
       </uib-carousel>
-      <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.images" src="http://placehold.it/1024x768">
+      <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.images" src="//placehold.it/1024x768">
     </div>
     <div class="clearfix p-t-5 p-b-10">
       <h4 class="uppercase pull-left">[% item.name %]</h4>
       <h4 class="text-right pull-right" ng-if="type !== 'purchased'">
-        <span ng-if="item.price">
-          <strong>[% (item.price | filter: { type: 'monthly' })[0].value %]</strong>
-          <small>€/{t}month{/t}</small>
+        <span ng-if="getPrice(item)">
+          <strong>[% getPrice(item, item.priceType).value %]</strong>
+          <small ng-if="['monthly', 'monthly_custom'].indexOf(getPrice(item, item.priceType).type) !== -1">€/{t}month{/t}</small>
+          <small ng-if="['yearly', 'yearly_custom'].indexOf(getPrice(item, item.priceType).type) !== -1">€/{t}year{/t}</small>
+          <small ng-if="['single', 'single_custom'].indexOf(getPrice(item, item.priceType).type) !== -1">€</small>
         </span>
-        <span class="semi-bold uppercase" ng-if="!isInCart(item) && !isPurchased(item) && !item.price">
+        <span class="semi-bold uppercase" ng-if="!add && !getPrice(item)">
           {t}Free{/t}
         </span>
       </h4>
@@ -26,6 +28,12 @@
         <h5 class="uppercase">
           <i class="fa fa-globe"></i>
           {t}Live demo{/t}
+        </h5>
+      </a>
+      <a ng-if="type === 'purchased' && item.parameters.guideline_file !== undefined" class="m-t-10 pull-left" ng-href="/themes/forseti/[% item.parameters.guideline_file %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Download the style guide for this theme{/t}">
+        <h5 class="uppercase">
+          <i class="fa fa-download"></i>
+          {t}Download style guide{/t}
         </h5>
       </a>
       <button class="btn fly-to-cart pull-right" ng-class="{ 'btn-danger': isInCart(item), 'btn-success': !isInCart(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isPurchased(item)">

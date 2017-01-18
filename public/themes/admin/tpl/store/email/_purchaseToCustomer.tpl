@@ -1,10 +1,18 @@
-<p>{t 1=$instance->name}You have requested the following purchases for your newspaper "%1"{/t}</p>
+{capture name=purchase_url}{url name="backend_ws_purchase_get_pdf" id=$purchase->id absolute=true}{/capture}
+<p>
+  <strong>{t}Thank you for choosing Opennemas!{/t}</strong>
+</p>
 
-{t}Modules requested{/t}:
+<p>
+  {t}You have just purchased the following items:{/t}
+</p>
+
 <ul>
- {foreach from=$modules item=module}
-   <li>{$module}</li>
+ {foreach from=$items item=item}
+   <li>{$item['description']}</li>
  {/foreach}
 </ul>
 
-{t}Our sales department will contact you to get further information{/t}
+<p>
+{t escape=off 1=$smarty.capture.purchase_url}You can find your invoice <a href="%1">here</a>{/t}
+</p>

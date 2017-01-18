@@ -61,8 +61,8 @@ class Letter extends Content
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => $this->slug,
-                        'category' => \Onm\StringUtils::getTitle($this->author),
+                        'slug'     => urlencode($this->slug),
+                        'category' => urlencode(\Onm\StringUtils::generateSlug($this->author)),
                     )
                 );
                 //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'

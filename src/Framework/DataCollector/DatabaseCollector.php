@@ -36,8 +36,6 @@ class DatabaseCollector extends DataCollector
             $this->container->get('orm.manager')->getConnection('instance');
         $connections['dbal_connection'] =
             $this->container->get('dbal_connection');
-        $connections['dbal_connection_manager'] =
-            $this->container->get('dbal_connection_manager');
 
         foreach ($connections as $key => $connection) {
             $data = $connection->getBuffer();

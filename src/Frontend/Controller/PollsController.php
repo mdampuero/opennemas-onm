@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -76,7 +76,7 @@ class PollsController extends Controller
      **/
     public function frontpageAction()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('POLL_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
@@ -184,15 +184,9 @@ class PollsController extends Controller
             );
 
             $this->view->assign([
-                'poll'       => $poll,
-                'content'    => $poll,
-                'contentId'  => $poll->id,
                 'items'      => $items,
                 'otherPolls' => $otherPolls,
             ]);
-
-            // Used on module_comments.tpl
-            $this->view->assign('contentId', $poll->id);
         }
 
         $cookieName = "poll-".$poll->id;
@@ -225,12 +219,14 @@ class PollsController extends Controller
 
         return $this->render(
             'poll/poll.tpl',
-            array(
+            [
+                'poll'          => $poll,
+                'content'       => $poll,
+                'contentId'     => $poll->id,
                 'cache_id'      => $cacheID,
                 'msg'           => $message,
-                'poll'          => $poll,
                 'already_voted' => $alreadyVoted,
-            )
+            ]
         );
     }
 

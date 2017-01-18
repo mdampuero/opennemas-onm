@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the frontend controller for the letter content type
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c) Openhost, S.L. <developers@opennemas.com>
@@ -13,12 +18,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
  * Handles the actions for letters
- */
+ *
+ * @package Frontend_Controllers
+ **/
 class LetterController extends Controller
 {
     /**
@@ -120,18 +127,19 @@ class LetterController extends Controller
                 'ORDER BY created DESC LIMIT 5'
             );
 
-            $this->view->assign([
-                'letter'       => $letter,
-                'content'      => $letter,
-                'otherLetters' => $otherLetters,
-                'contentId'    => $letter->id, // Used on module_comments.tpl
-            ]);
+            $this->view->assign(['otherLetters' => $otherLetters]);
         }
 
-        return $this->render('letter/letter.tpl', [
-            'advertisements' => $this->getAds(),
-            'cache_id'       => $cacheID,
-        ]);
+        return $this->render(
+            'letter/letter.tpl',
+            [
+                'letter'         => $letter,
+                'content'        => $letter,
+                'contentId'      => $letter->id, // Used on module_comments.tpl
+                'cache_id'       => $cacheID,
+                'advertisements' => $this->getAds(),                
+            ]
+        );
     }
 
     /**

@@ -138,7 +138,7 @@ class ContentCategory
         }
 
         if (!empty($this->params) && is_string($this->params)) {
-            $this->params = unserialize($this->params);
+            $this->params = @unserialize($this->params);
         }
     }
 
@@ -160,6 +160,8 @@ class ContentCategory
             }
 
             $this->load($rs);
+
+            $this->id = $this->pk_content_category;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -176,9 +178,7 @@ class ContentCategory
     public function create($data)
     {
         // Generate slug for category
-        $data['name'] = \Onm\StringUtils::getTitle(
-            \Onm\StringUtils::normalizeName(strtolower($data['title']))
-        );
+        $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
 
         // Unserialize params
         $data['params'] = serialize($data['params']);
@@ -433,10 +433,6 @@ class ContentCategory
                 [ 'params' => $this->params ],
                 [ 'pk_content_category' => $this->pk_content_category ]
             );
-
-            if ($rs === false) {
-                return false;
-            }
 
             dispatchEventWithParams('category.update', array('category' => $this));
             return true;

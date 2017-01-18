@@ -1,6 +1,20 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<style>
+  .table-wrapper {
+    white-space: normal !important;
+  }
+  .table td {
+    white-space: normal;
+  }
+
+  .comment-author-info, .comment-body-block {
+    display:block;
+    width:100%;
+    clear:both;
+  }
+</style>
   <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
@@ -126,15 +140,14 @@
             <table class="table table-hover no-margin" ng-if="contents.length > 0">
               <thead>
                 <tr>
-                  <th class="checkbox-cell">
+                  <th class="checkbox-cell" width="10px">
                     <div class="checkbox checkbox-default">
                       <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th>{t}Comment{/t}</th>
-                  <th class="wrap hidden-xs">{t}In response to{/t}</th>
-                  <th class="text-center" width="100">{t}Published{/t}</th>
+                  <th><span class="col-md-offset-1">{t}Comment{/t}</span></th>
+                  <th class="text-right" width="10px">{t}Published{/t}</th>
                 </tr>
               </thead>
               <tbody>
@@ -146,26 +159,34 @@
                     </div>
                   </td>
                   <td>
-                    <div class="submitted-on">{t}Author:{/t} <strong>[% content.author %]</strong> (<span ng-if="content.author_email">[% content.author_email %]</span>) - <span class="hidden-xs">[% content.author_ip %]</span></div>
-                    <div class="submitted-on">{t}Submitted on:{/t} [% content.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
-                    <p>
-                      [% content.body.split('&lt;p&gt;').join(' ').split('&lt;/p&gt;').join(' ') | limitTo : 150  %]<span ng-if="content.body.length > 150">...</span>
-                    </p>
-                    <div class="listing-inline-actions">
-                      {acl isAllowed="COMMENT_UPDATE"}
-                      <a class="link" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
-                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                      </a>
-                      {/acl}
-                      {acl isAllowed="COMMENT_DELETE"}
-                      <button class="link link-danger" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
-                      <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
-                      </button>
-                      {/acl}
+                    <div class="comment-author-info row">
+                      <span class="col-xs-1">
+                        <gravatar class="gravatar thumbnail" ng-model="content.author_email" size="40"></gravatar>
+                      </span>
+                      <small class="gravatar col-xs-11">
+                        <div class="submitted-on">
+                          <strong>{t}Author:{/t}</strong> [% content.author %] <span ng-if="content.author_email">([% content.author_email %])</span>
+                          - <span class="hidden-xs">[% content.author_ip %]</span>
+                        </div>
+                        <div class="submitted-on"><strong>{t}Submitted on:{/t}</strong> [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
+                        <div class="on-response-to"><strong>{t}In response to{/t}:</strong> <a ng-href="/[% extra.contents[content.content_id].uri %]" target="_blank">[% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 100">...</span></a></div>
+                      </small>
                     </div>
-                  </td>
-                  <td class="hidden-xs">
-                    [% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 250">...</span>
+                    <div class="comment-body-block row">
+                      <div ng-bind-html="content.body" class=" col-md-offset-1"></div>
+                      <div class="listing-inline-actions col-md-offset-1">
+                        {acl isAllowed="COMMENT_UPDATE"}
+                        <a class="link" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
+                          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                        </a>
+                        {/acl}
+                        {acl isAllowed="COMMENT_DELETE"}
+                        <button class="link link-danger" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
+                        <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
+                        </button>
+                        {/acl}
+                      </div>
+                    </div>
                   </td>
                   <td class="text-center">
                     {acl isAllowed="COMMENT_AVAILABLE"}

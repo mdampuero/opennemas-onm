@@ -8,6 +8,7 @@ parameters:
             - ads_scripts
             - canonical_url
             - comscore
+            - chartbeat
             - css_includes
             - generate_fb_admin_tag
             - generate_fb_pages_tag
@@ -30,9 +31,28 @@ parameters:
             - css_includes
             - js_includes
 services:
+    core.collector.brand:
+        class: Common\Core\Component\Collector\BrandCollector
+        public: false
+        arguments: [ '%kernel.root_dir%' ]
+        tags:
+            -
+                name:     data_collector
+                id:       'core.collector.brand'
+                template: '@Core/collector/brand.html.twig'
+                priority: 2000
+
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
+
+    core.geo:
+        class:     Common\Core\Component\Geo\Geo
+        arguments: [ '@core.locale' ]
+
+    core.helper.checkout:
+        class:     Common\Core\Component\Helper\CheckoutHelper
+        arguments: [ '@service_container' ]
 
     core.instance:
         class:     Common\ORM\Entity\Instance
@@ -76,6 +96,18 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
 
+    core.listener.bot_detector.annotation:
+        class:     Common\Core\EventListener\BotDetectorAnnotationListener
+        arguments: [ '@annotation_reader', '@router' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+
+    kernel.listener.bot_detector.exception:
+        class: Common\Core\EventListener\BotDetectorExceptionListener
+        arguments: [ '@router' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
     core.listener.template.annotation:
         class:     Common\Core\EventListener\TemplateAnnotationListener
         arguments: [ '@service_container' ]
@@ -94,8 +126,15 @@ services:
         class:     Common\Core\Component\Security\Recaptcha\Recaptcha
         arguments: [ '@service_container' ]
 
+    core.status.checker:
+        class:     Common\Core\Component\Status\Checker
+        arguments: [ '@service_container' ]
+
     core.security:
         class:     Common\Core\Component\Security\Security
+
+    core.security.encoder.password:
+        class:     Common\Core\Component\Security\Encoder\PasswordEncoder
 
     core.security.user:
         class:     Common\ORM\Entity\User

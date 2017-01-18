@@ -45,9 +45,7 @@ class Settings
      */
     public static function get($settingName, $default = null)
     {
-        $settingsManager  = getService('setting_repository');
-
-        return $settingsManager->get($settingName, $default);
+        return getService('setting_repository')->get($settingName, $default);
     }
 
     /**
@@ -64,9 +62,7 @@ class Settings
      */
     public static function set($settingName, $settingValue)
     {
-        $settingsManager  = getService('setting_repository');
-
-        return $settingsManager->set($settingName, $settingValue);
+        return getService('setting_repository')->set($settingName, $settingValue);
     }
 
     /**
@@ -83,8 +79,6 @@ class Settings
      */
     public static function invalidate($settingName, $instanceName = null)
     {
-        $settingsManager  = getService('setting_repository');
-
-        return $settingsManager->invalidate($settingName, $instanceName);
+        return getService('setting_repository')->invalidate($settingName, $instanceName);
     }
 }

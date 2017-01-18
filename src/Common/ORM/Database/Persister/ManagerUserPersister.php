@@ -31,6 +31,8 @@ class ManagerUserPersister extends BasePersister
         parent::create($entity);
 
         $entity->instances = $instances;
+
+        $entity->refresh();
     }
 
     /**

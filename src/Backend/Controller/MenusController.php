@@ -17,7 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -36,34 +36,34 @@ class MenusController extends Controller
     {
         $this->pages = array(array('title'=>_("Frontpage"),'link'=>"/"));
 
-        if (\Onm\Module\ModuleManager::isActivated('OPINION_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             array_push($this->pages, array('title'=>_("Opinion"),'link'=>"opinion/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('BLOG_MANAGER')) {
             array_push($this->pages, array('title'=>_("Bloggers"),'link'=>"blog/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
             array_push($this->pages, array('title'=>_("Album"),'link'=>"album/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
             array_push($this->pages, array('title'=>_("Video"),'link'=>"video/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
             array_push($this->pages, array('title'=>_("Poll"),'link'=>"poll/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('LETTER_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
             array_push($this->pages, array('title'=>_("Letters to the Editor"),'link'=>"cartas-al-director/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('KIOSKO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
             array_push($this->pages, array('title'=>_("News Stand"),'link'=>"portadas-papel/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('FORM_MANAGER')) {
             array_push($this->pages, array('title'=>_("Form"),'link'=>"participa/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('NEWSLETTER_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('NEWSLETTER_MANAGER')) {
             array_push($this->pages, array('title'=>_("Newsletter"),'link'=>"newsletter/"));
         }
-        if (\Onm\Module\ModuleManager::isActivated('LIBRARY_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('LIBRARY_MANAGER')) {
             array_push($this->pages, array('title'=>_("Archive"),'link'=>"archive/content/"));
         }
 
@@ -128,13 +128,20 @@ class MenusController extends Controller
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('Content');
 
-        $oql = 'content_type_name = "static_page" and in_litter = 0'
+        $oql = 'content_type_name = "static_page" and in_litter="0"'
            . ' order by created desc';
 
         $staticPages = $em->getRepository('Content')->findBy($oql);
-        $staticPages = $converter->responsify($staticPages);
 
-        // Get categories from menu
+        $statics = [];
+        foreach ($staticPages as $staticPage) {
+            $statics[] = [
+                'title'      => $staticPage->title,
+                'slug'       => $staticPage->slug,
+                'pk_content' => $staticPage->pk_content
+            ];
+        }
+
         $menu = new \Menu($id);
 
         // Fetch synchronized elements if exists
@@ -143,6 +150,7 @@ class MenusController extends Controller
             $syncSites = $syncParams;
         }
 
+        // Get categories from menu
         $menu->items = array_values($menu->items);
 
         return $this->render(
@@ -152,7 +160,7 @@ class MenusController extends Controller
                 'albumCategories' => $albumCategories,
                 'videoCategories' => $videoCategories,
                 'pollCategories'  => $pollCategories,
-                'staticPages'     => $staticPages,
+                'staticPages'     => $statics,
                 'pages'           => $this->pages,
                 'menu'            => $menu,
                 'menu_positions'  => $this->menuPositions,
@@ -229,11 +237,19 @@ class MenusController extends Controller
             $em        = $this->get('orm.manager');
             $converter = $em->getConverter('Content');
 
-            $oql = 'content_type_name = "static_page" and in_litter = 0'
+            $oql = 'content_type_name = "static_page" and in_litter = "0"'
                . ' order by created desc';
 
             $staticPages = $em->getRepository('Content')->findBy($oql);
-            $staticPages = $converter->responsify($staticPages);
+
+            $statics = [];
+            foreach ($staticPages as $staticPage) {
+                $statics[] = [
+                    'title'      => $staticPage->title,
+                    'slug'       => $staticPage->slug,
+                    'pk_content' => $staticPage->pk_content
+                ];
+            }
 
             // Fetch synchronized elements if exists
             $syncSites = [];
@@ -249,7 +265,7 @@ class MenusController extends Controller
                     'albumCategories' => $albumCategories,
                     'videoCategories' => $videoCategories,
                     'pollCategories'  => $pollCategories,
-                    'staticPages'     => $staticPages,
+                    'staticPages'     => $statics,
                     'pages'           => $this->pages,
                     'menu_positions'  => $this->menuPositions,
                     'elements'        => $syncSites,

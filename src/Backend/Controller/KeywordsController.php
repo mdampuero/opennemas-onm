@@ -12,7 +12,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the keywords.
@@ -77,7 +77,7 @@ class KeywordsController extends Controller
             $keyword = new \PClave();
             $keyword->create($data);
 
-            $this->get('session')->getFlashBag()->add('success', _('Keyword created sucessfully'));
+            $this->get('session')->getFlashBag()->add('success', _('Keyword created successfully'));
 
             return $this->redirect(
                 $this->generateUrl(
@@ -116,7 +116,7 @@ class KeywordsController extends Controller
         $keyword = new \PClave();
         $keyword->update($data);
 
-        $this->get('session')->getFlashBag()->add('success', _('Keyword updated sucessfully'));
+        $this->get('session')->getFlashBag()->add('success', _('Keyword updated successfully'));
 
         return $this->redirect(
             $this->generateUrl(

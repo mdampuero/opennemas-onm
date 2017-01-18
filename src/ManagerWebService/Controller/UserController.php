@@ -11,7 +11,7 @@ namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\ORM\Entity\User;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -84,7 +84,7 @@ class UserController extends Controller
 
         $user = $em->getRepository('User', 'manager')->find($id);
 
-        $em->remove($user);
+        $em->remove($user, 'manager');
         $msg->add(_('User deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -119,7 +119,7 @@ class UserController extends Controller
         $deleted = 0;
         foreach ($users as $user) {
             try {
-                $em->remove($user);
+                $em->remove($user, 'manager');
                 $deleted++;
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error');
@@ -285,7 +285,7 @@ class UserController extends Controller
 
         // Encode password
         if (!empty($user->password)) {
-            $user->password = $this->get('onm_password_encoder')
+            $user->password = $this->get('core.security.encoder.password')
                 ->encodePassword($data['password'], null);
         }
 
@@ -367,7 +367,7 @@ class UserController extends Controller
 
         // Encode password
         if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = $this->get('onm_password_encoder')
+            $data['password'] = $this->get('core.security.encoder.password')
                 ->encodePassword($data['password'], null);
         }
 

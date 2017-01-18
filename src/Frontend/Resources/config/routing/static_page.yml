@@ -3,4 +3,4 @@ frontend_static_page:
     defaults: { _controller: FrontendBundle:StaticPage:show, format:html }
     requirements:
         format : html|htm
-        slug    : '[A-Za-z\d-]+'
+        slug    : '[^/.]+'

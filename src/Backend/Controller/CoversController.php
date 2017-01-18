@@ -17,8 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -143,6 +142,19 @@ class CoversController extends Controller
             return $this->redirect($this->generateUrl('admin_kioskos'));
         }
 
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+            && !$cover->isOwner($this->getUser()->id)
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this cover because you don't have enough privileges.")
+            );
+
+            return $this->redirect(
+                $this->generateUrl('admin_kiosko_show', [ 'id' => $cover->id ])
+            );
+        }
+
         return $this->render(
             'covers/new.tpl',
             array(
@@ -258,8 +270,7 @@ class CoversController extends Controller
             );
         }
 
-        if (!Acl::isAdmin()
-            && !Acl::check('CONTENT_OTHER_UPDATE')
+        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$cover->isOwner($this->getUser()->id)
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -284,7 +295,6 @@ class CoversController extends Controller
                 'content_status' => $postReq->getDigits('content_status', 0),
                 'type'           => $postReq->getDigits('type', 0),
                 'favorite'       => $postReq->getDigits('favorite', 0),
-                'category'       => $postReq->getDigits('category', 0),
                 'category'       => $postReq->getDigits('category', 0),
                 'name'           => $cover->name,
                 'thumb_url'      => $cover->thumb_url,
@@ -311,7 +321,6 @@ class CoversController extends Controller
             // Handle new file
             if ($request->files->get('cover')) {
                 $data['name'] = date('His').'-'.$data['category'].'.pdf';
-                $data['thumb_url'] = preg_replace('/\.pdf$/', '.jpg', $_POST['name']);
                 $path = $cover->kiosko_path . $cover->path;
 
                 // Create folder if it doesn't exist

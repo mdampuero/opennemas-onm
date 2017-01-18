@@ -9,7 +9,7 @@
  */
 namespace Frontend\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,9 @@ class StaticPageController extends Controller
      */
     public function showAction($slug)
     {
-        $oql = 'content_type_name = "static_page" and slug = "%s"';
+        $oql = 'content_type_name = "static_page"'
+            . ' and slug = "%s" and content_status = "1" and in_litter = "0"'
+            . ' order by pk_content desc';
 
         try {
             $content = $this->get('orm.manager')->getRepository('Content')

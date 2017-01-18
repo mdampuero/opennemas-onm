@@ -133,9 +133,9 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            '0001-cambio-look-mariana-antoniale',
+            '0001-cambio-look-mariana-antoniale-padre',
             $this->object->getTitle(
-                '0001 ¡El cambio de look de Mariana Antoniale!'
+                '0001 ¡El cambio de look de Mariana Antoniale y su padre! ??'
             )
         );
 
@@ -143,6 +143,101 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             '0001-cambio-look-mariana-antoniale',
             $this->object->getTitle(
                 '0001 ¡El cambio de look de Mariana Antoniale!'
+            )
+        );
+    }
+
+    /**
+     * @covers Onm\StringUtils::getTitle
+     */
+    public function testGenerateSlug()
+    {
+        $this->assertEquals(
+            'es-por-tu-bien',
+            $this->object->generateSlug(
+                '"Es por tu bien..."'
+            )
+        );
+
+        $this->assertEquals(
+            'es-por-tu-bien',
+            $this->object->generateSlug(
+                '"Es por tu bien…"'
+            )
+        );
+
+        $this->assertEquals(
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'porttitor-non-aliquam-ac-sagittis-urna',
+            $this->object->generateSlug(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,'.
+                ' porttitor non aliquam ac, sagittis a urna.'
+            )
+        );
+
+        # Test with double slashes
+        $this->assertEquals(
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'porttitor-non-aliquam-ac-sagittis-urna',
+            $this->object->generateSlug(
+                'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,'.
+                ' porttitor non aliquam ac, sagittis a urna.'
+            )
+        );
+
+        $this->assertEquals(
+            'cambio-look-mariana-antoniale',
+            $this->object->generateSlug(
+                '¡El cambio de look de Mariana Antoniale!'
+            )
+        );
+
+        $this->assertEquals(
+            '0001-cambio-look-mariana-antoniale-padre',
+            $this->object->generateSlug(
+                '0001 ¡El cambio de look de Mariana Antoniale y su padre! ??'
+            )
+        );
+
+        $this->assertEquals(
+            '0001-cambio-look-mariana-antoniale',
+            $this->object->generateSlug(
+                '0001 ¡El cambio de look de Mariana Antoniale!'
+            )
+        );
+
+        $this->assertEquals(
+            '0001-cambio-look-mariana-antoniale',
+            $this->object->generateSlug(
+                '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
+            )
+        );
+
+        $this->assertEquals(
+            '',
+            $this->object->generateSlug(
+                ''
+            )
+        );
+
+        $this->assertEquals(
+            'son-ridicula-do-seculo-xxi-intensa-chora-ao-pensar-certas-cousas',
+            $this->object->generateSlug(
+                '“Son unha ridícula do século XXI, unha intensa que chora ao pensar certas cousas”'
+            )
+        );
+
+        $this->assertEquals(
+            'exito-total-sanxenxo-i-liga-viajes-interrias-padel-tour',
+            $this->object->generateSlug(
+                'Éxito total en Sanxenxo de la I Liga Viajes InterRías Padel Tour'
+            )
+        );
+
+        $this->assertEquals(
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            $this->object->generateSlug(
+                'Detienen a dieciséis personas por el &#10;robo de joyas de Kim Kardashian'
             )
         );
     }
@@ -177,7 +272,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTags()
     {
         $this->assertEquals(
-            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
+            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
             $this->object->getTags(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing'.
@@ -192,7 +287,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTagsReturnsStringWithUniqueElements()
     {
         $this->assertEquals(
-            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
+            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
             $this->object->getTags(
                 'Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. '.
@@ -207,7 +302,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTagsRemovesUnnecesaryWords()
     {
         $this->assertEquals(
-            'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
+            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
             $this->object->getTags(
                 'de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit.'.

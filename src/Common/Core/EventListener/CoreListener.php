@@ -71,8 +71,6 @@ class CoreListener implements EventSubscriberInterface
 
         $loader->init();
 
-        $this->configure($instance);
-
         // Ignore manager requests
         if ((strpos($uri, '/manager') === 0
             || strpos($uri, '/content/share-by-email') === 0)
@@ -100,36 +98,6 @@ class CoreListener implements EventSubscriberInterface
         return [
             KernelEvents::REQUEST => [ ['onKernelRequest', 100] ],
         ];
-    }
-
-    /**
-     * Configures the services basing on the loaded instance.
-     *
-     * @param Instance $instance The loaded instance.
-     */
-    protected function configure($instance)
-    {
-        $database  = $instance->getDatabaseName();
-        $namespace = $instance->internal_name;
-
-        // TODO: Remove when everyone use new cache.manager service
-        $this->container->get('cache')->setNamespace($namespace);
-
-        // Initialize the instance database connection
-        $connection = $this->container->get('db_conn_manager');
-
-        if ($namespace != 'manager') {
-            // TODO: Remove when using new ORM for all models
-            $this->container->get('dbal_connection')->selectDatabase($database);
-
-            // TODO: Remove when AdoDB removed from models
-            $connection = $this->container->get('db_conn');
-            $connection->selectDatabase($database);
-        }
-
-        // TODO: Remove when AdoDB removed from models
-        \Application::load();
-        \Application::initDatabase($connection);
     }
 
     /**

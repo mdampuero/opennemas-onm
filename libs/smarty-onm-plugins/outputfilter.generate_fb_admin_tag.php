@@ -1,11 +1,9 @@
 <?php
-use \Onm\Settings as s;
-
 function smarty_outputfilter_generate_fb_admin_tag($output, $smarty)
 {
     // Get facebook settings
-    $facebookSettings = s::get('facebook');
-    $commentSystem    = s::get('comment_system');
+    $facebookSettings = getService('setting_repository')->get('facebook');
+    $commentSystem    = getService('setting_repository')->get('comment_system');
 
     // Check facebook api_key
     $value = trim($facebookSettings['api_key']);

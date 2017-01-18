@@ -17,7 +17,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles all the request for Welcome actions
@@ -51,19 +51,28 @@ class SystemSettingsController extends Controller
             'site_language', 'site_logo', 'site_name', 'site_title',
             'time_zone', 'twitter_page', 'vimeo_page', 'webmastertools_bing',
             'webmastertools_google', 'youtube_page',
-            'robots_txt_rules',
+            'robots_txt_rules', 'chartbeat',
             'body_end_script', 'body_start_script','header_script',
+            'elements_in_rss', 'redirection'
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);
 
-        // Keep compatibility with old analytics store format
         if (array_key_exists('google_analytics', $configurations) &&
-            array_key_exists('api_key', $configurations['google_analytics'])
+            is_array($configurations['google_analytics'])
         ) {
-            $oldConfig = $configurations['google_analytics'];
-            $configurations['google_analytics'] = [];
-            $configurations['google_analytics'][]= $oldConfig;
+            // Keep compatibility with old analytics store format
+            if (array_key_exists('api_key', $configurations['google_analytics'])) {
+                $oldConfig = $configurations['google_analytics'];
+                $configurations['google_analytics'] = [];
+                $configurations['google_analytics'][]= $oldConfig;
+            }
+            // Decode base64 custom code for analytics
+            foreach ($configurations['google_analytics'] as &$value) {
+                if (array_key_exists('custom_var', $value) && !empty($value['custom_var'])) {
+                    $value['custom_var'] = base64_decode($value['custom_var']);
+                }
+            }
         }
 
         return $this->render(
@@ -106,8 +115,6 @@ class SystemSettingsController extends Controller
         // Generate upload path
         $uploadDirectory = MEDIA_PATH.'/sections/';
 
-        $sm = $this->get('setting_repository');
-
         // Check if upload directory is already created
         if (array_key_exists('allowLogo', $sectionSettings) &&
             $sectionSettings['allowLogo'] == 1 &&
@@ -115,7 +122,7 @@ class SystemSettingsController extends Controller
         ) {
             \Onm\FilesManager::createDirectory($uploadDirectory);
         }
-        $sm->set('section_settings', ['allowLogo' => $sectionSettings['allowLogo']]);
+        $this->get('setting_repository')->set('section_settings', ['allowLogo' => $sectionSettings['allowLogo']]);
 
         if (!is_null($siteLogo)) {
             // Get file original name
@@ -136,7 +143,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $siteLogo->move($uploadDirectory, $siteLogoName);
             // Save name on settings
-            $sm->set('site_logo', $siteLogoName);
+            $this->get('setting_repository')->set('site_logo', $siteLogoName);
         }
 
 
@@ -146,7 +153,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $favico->move($uploadDirectory, $favicoName);
             // Save name on settings
-            $sm->set('favico', $favicoName);
+            $this->get('setting_repository')->set('favico', $favicoName);
         }
 
         if (!is_null($mobileLogo)) {
@@ -155,7 +162,7 @@ class SystemSettingsController extends Controller
             // Move uploaded file
             $mobileLogo->move($uploadDirectory, $mobileLogoName);
             // Save name on settings
-            $sm->set('mobile_logo', $mobileLogoName);
+            $this->get('setting_repository')->set('mobile_logo', $mobileLogoName);
         }
 
 
@@ -176,15 +183,29 @@ class SystemSettingsController extends Controller
                 if (!$this->getUser()->isMaster()) {
                     continue;
                 }
-                $value = $request->request->filter($key, '', FILTER_SANITIZE_MAGIC_QUOTES);
+                $value = base64_encode($value);
+            }
+
+            if ($key == 'google_analytics' && is_array($value)) {
+                foreach ($value as &$element) {
+                    if (array_key_exists('custom_var', $element) &&
+                        !empty($element['custom_var'])
+                    ) {
+                        $element['custom_var'] = base64_encode($element['custom_var']);
+                    }
+                }
             }
 
             // Save settings
-            $sm->set($key, $value);
+            $this->get('setting_repository')->set($key, $value);
+        }
+
+        if (empty($request->request->get('redirection'))) {
+            $this->get('setting_repository')->set('redirection', 0);
         }
 
         // Delete caches for custom_css and frontpages
-        $this->dispatchEvent('setting.update');
+        $this->get('core.dispatcher')->dispatch('setting.update');
 
         $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 

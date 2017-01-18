@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
-  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
+  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'Encoder', 'queryManager',
+  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, Encoder, queryManager) {
     'use strict';
 
     /**
@@ -205,7 +205,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.selected = { all: false, contents: [] };
       }
 
-      var processedFilters = oqlEncoder.encode($scope.criteria);
+      var processedFilters = Encoder.encode($scope.criteria);
       var filtersToEncode = angular.copy($scope.criteria);
 
       delete filtersToEncode.content_type_name;
@@ -307,7 +307,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var url = routing.generate('backend_ws_opinions_save_frontpage');
 
       $http.post(url, { positions: ids }).success(function(response) {
-        $scope.renderMessages(response.messages);
+        messenger.post(response.messages);
       }).error(function() {});
     };
 
@@ -521,14 +521,14 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       $http.post(url, { value: value }).success(function(response) {
         contents[index][loading] = 0;
         contents[index][name] = response[name];
-        $scope.renderMessages(response.messages);
+        messenger.post(response.messages);
 
         if (reload) {
           $scope.list($scope.route);
         }
       }).error(function(response) {
         contents[index][loading] = 0;
-        $scope.renderMessages(response.messages);
+        messenger.post(response.messages);
       });
 
       // Updated shared variable
@@ -581,9 +581,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       modal.result.then(function(response) {
         if (response) {
-          $scope.renderMessages(response.data.messages);
+          messenger.post(response.data.messages);
 
-          if (response.status === 200) {
+          if (response.success) {
             $scope.updateItemsStatus(loading, 0, name, value);
           }
         }
@@ -621,12 +621,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -752,12 +750,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -790,15 +786,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
+        $scope.selected.total = 0;
+        $scope.selected.contents = [];
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -831,15 +825,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
+        $scope.selected.total = 0;
+        $scope.selected.contents = [];
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -872,12 +864,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -913,15 +903,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
+        $scope.selected.total = 0;
+        $scope.selected.contents = [];
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -954,12 +942,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -995,15 +981,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        if (response) {
-          $scope.renderMessages(response.data.messages);
+        messenger.post(response.data.messages);
 
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
+        $scope.selected.total = 0;
+        $scope.selected.contents = [];
 
-          if (response.status === 200) {
-            $scope.list($scope.route);
-          }
+        if (response.success) {
+          $scope.list($scope.route);
         }
       });
     };
@@ -1159,6 +1143,16 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.list($scope.route, true);
       }
     });
+
+    /**
+     * Go back to page 1 when changing the elements per page in the list.
+     *
+     * @param array newValues The new values
+     * @param array oldValues The old values
+     */
+    $scope.$watch('[pagination.epp]', function(newValues, oldValues) {
+        $scope.pagination.page = 1;
+    }, true);
 
     /**
      * Refresh the list of elements when some parameter changes.

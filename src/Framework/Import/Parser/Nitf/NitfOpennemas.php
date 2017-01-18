@@ -20,7 +20,7 @@ class NitfOpennemas extends Nitf
     public function checkFormat($data)
     {
         if (parent::checkFormat($data)
-            && is_object($this->getAuthor($data))
+            && ($this->getAgencyName($data) === 'Opennemas')
         ) {
             return true;
         }
@@ -33,7 +33,13 @@ class NitfOpennemas extends Nitf
      */
     public function getAgencyName($data)
     {
-        return 'Opennemas';
+        $agency = $data->xpath('//head/docdata/doc.rights');
+
+        if (!empty($agency)) {
+            return (string) $agency[0]->attributes()->{'provider'};
+        }
+
+        return '';
     }
 
     /**
@@ -43,9 +49,39 @@ class NitfOpennemas extends Nitf
     {
         $resource = parent::parse($data);
 
-        $resource->author = $this->getAuthor($data);
+        $author = $this->getAuthor($data);
+        if (is_object($author)) {
+            $resource->author = $author;
+        }
 
         return $resource;
+    }
+
+    /**
+     * Returns the body from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The body.
+     */
+    public function getBody($data)
+    {
+        $bodies = $data->xpath('//body/body.content');
+
+        if (empty($bodies)) {
+            return '';
+        }
+
+        $body = '';
+        if (!empty((string) $bodies[0])) {
+            $body = preg_replace(
+                ["/\n/", '/<p>\s*<\/p>/'],
+                ['', ''],
+                html_entity_decode((string) $bodies[0])
+            );
+        }
+
+        return iconv(mb_detect_encoding($body), "UTF-8", $body);
     }
 
     /**

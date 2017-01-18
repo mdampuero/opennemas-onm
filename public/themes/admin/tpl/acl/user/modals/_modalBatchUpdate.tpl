@@ -29,7 +29,7 @@
 
       <div class="checkbox" ng-show="template.value == 1 && template.backend_access">
         <input id="terms" name="terms" ng-model="terms" type="checkbox">
-        <label for="terms">{t}I understand and accept the charges.{/t}</label>
+        <label for="terms">{t}I understand and accept the cost of the operation.{/t}</label>
       </div>
     </div>
     <div class="modal-footer">

@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Common\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -119,6 +118,14 @@ class ClientController extends Controller
     {
         $oql   = $request->query->get('oql', '');
 
+        // Fix OQL for Non-MASTER users
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
+
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition($condition)->getOql();
+        }
+
         $repository = $this->get('orm.manager')->getRepository('Client');
         $converter  = $this->get('orm.manager')->getConverter('Client');
 
@@ -184,6 +191,11 @@ class ClientController extends Controller
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Client')
             ->objectify($request->request->all());
+
+        // Add current user as owner if current user is a PARTNER
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $data['owner_id'] = $this->get('core.user')->id;
+        }
 
         $client = new Client($data);
 
@@ -259,6 +271,11 @@ class ClientController extends Controller
         $data = $em->getConverter('Client')
             ->objectify($request->request->all());
 
+        // Add current user as owner if current user is a PARTNER
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $data['owner_id'] = $this->get('core.user')->id;
+        }
+
         $client = $em->getRepository('client')->find($id);
         $client->setData($data);
 
@@ -290,23 +307,19 @@ class ClientController extends Controller
             ],
         ];
 
-        $extra['countries']= Intl::getRegionBundle()
-            ->getCountryNames($this->get('core.locale')->getLocaleShort());
+        $extra['countries'] = $this->get('core.geo')->getCountries();
+        $extra['provinces'] = $this->get('core.geo')->getRegions('ES');
 
-        asort($extra['countries']);
+        $users = $this->get('orm.manager')->getRepository('User', 'manager')
+            ->findBy();
 
-        $extra['provinces']= [
-            'Álava', 'Albacete', 'Alicante/Alacant', 'Almería', 'Asturias',
-            'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
-            'Cantabria', 'Castellón/Castelló', 'Ceuta', 'Ciudad Real',
-            'Córdoba', 'Cuenca', 'Girona', 'Las Palmas', 'Granada',
-            'Guadalajara', 'Guipúzcoa', 'Huelva', 'Huesca', 'Illes Balears',
-            'Jaén', 'A Coruña', 'La Rioja', 'León', 'Lleida', 'Lugo', 'Madrid',
-            'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Ourense', 'Palencia',
-            'Pontevedra', 'Salamanca', 'Segovia', 'Sevilla', 'Soria',
-            'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo',
-            'Valencia/València', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
+        $extra['users'] = [
+            [ 'id' => null, 'name' => _('Select an user...') ]
         ];
+
+        foreach ($users as $user) {
+            $extra['users'][] = [ 'id' => $user->id, 'name' => $user->name ];
+        }
 
         if (empty($ids)) {
             return $extra;

@@ -29,8 +29,8 @@
     <tbody>
       <tr ng-repeat="item in cart" ng-controller="CartCtrl">
         <td>[% item.name %]</td>
-        <td class="text-right">[% getPrice($index).value %] €</td>
-        <td class="text-right">[% getPrice($index).value %] €</td>
+        <td class="text-right">[% getPrice(item, item.priceType).value %] €</td>
+        <td class="text-right">[% getPrice(item, item.priceType).value %] €</td>
       </tr>
       <tr>
         <td rowspan="[% payment.type === 'CreditCard' && payment.nonce ? 4 : 3 %]">
@@ -38,13 +38,13 @@
         <td class="text-right"><strong>Subtotal</strong></td>
         <td class="text-right">[% subtotal %] €</td>
       </tr>
-      <tr>
-        <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
-        <td class="text-right">[% tax %] €</td>
-      </tr>
       <tr ng-if="payment.type === 'CreditCard' && payment.nonce">
         <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
         <td class="text-right">[% fee | number : 2 %] €</td>
+      </tr>
+      <tr>
+        <td class="text-right no-border"><strong>{t}VAT{/t} ([% vatTax %]%)</strong></td>
+        <td class="text-right">[% tax | number : 2 %] €</td>
       </tr>
       <tr>
         <td class="text-right no-border"><div class="well well-small green"><strong>Total</strong></div></td>
@@ -52,4 +52,12 @@
       </tr>
     </tbody>
   </table>
+  <div ng-if="getTerms()">
+    <h5 class="semi-bold">{t}Terms{/t}</h5>
+    <div class="m-b-30" ng-bind-html="getTerms()"></div>
+  </div>
+  <div ng-if="getNotes()">
+    <h5 class="semi-bold">{t}Notes{/t}</h5>
+    <div class="m-b-30" ng-bind-html="getNotes()"></div>
+  </div>
 </div>

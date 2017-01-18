@@ -10,7 +10,7 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -64,9 +64,7 @@ class NewsAgencyServerController extends Controller
      */
     public function createAction(Request $request)
     {
-        $sm = $this->get('setting_repository');
-
-        $servers = $sm->get('news_agency_config');
+        $servers = $this->get('setting_repository')->get('news_agency_config');
 
         if (!is_array($servers)) {
             $servers = [];
@@ -100,7 +98,7 @@ class NewsAgencyServerController extends Controller
 
         $servers[$server['id']] = $server;
 
-        $sm->set('news_agency_config', $servers);
+        $this->get('setting_repository')->set('news_agency_config', $servers);
 
         $this->get('session')->getFlashBag()->add(
             'success',
@@ -190,8 +188,7 @@ class NewsAgencyServerController extends Controller
     public function updateAction(Request $request)
     {
         $id      = $request->query->getDigits('id');
-        $sm      = $this->get('setting_repository');
-        $servers = $sm->get('news_agency_config');
+        $servers = $this->get('setting_repository')->get('news_agency_config');
 
         $server = [
             'id'             => $id,
@@ -214,7 +211,7 @@ class NewsAgencyServerController extends Controller
 
         $servers[$id] = $server;
 
-        $sm->set('news_agency_config', $servers);
+        $this->get('setting_repository')->set('news_agency_config', $servers);
 
         $this->get('session')->getFlashBag()->add(
             'success',

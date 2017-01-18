@@ -1,0 +1,4 @@
+manager_settings_list:
+    path: /settings
+    options:
+        expose: true

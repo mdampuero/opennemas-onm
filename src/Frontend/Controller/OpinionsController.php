@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -75,7 +75,6 @@ class OpinionsController extends Controller
             ];
 
             $em = $this->get('opinion_repository');
-            $sm = $this->get('setting_repository');
 
             $order['in_home'] = 'DESC';
             if ($page == 1) {
@@ -85,7 +84,7 @@ class OpinionsController extends Controller
             $order['starttime'] = 'DESC';
 
             // Fetch configurations for this frontpage
-            $configurations = $sm->get(
+            $configurations = $this->get('setting_repository')->get(
                 'opinion_settings',
                 [
                     'total_editorial' => 2,
@@ -132,7 +131,7 @@ class OpinionsController extends Controller
                 }
             }
 
-            $numOpinions  = $sm->get('items_per_page');
+            $numOpinions  = $this->get('setting_repository')->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
@@ -202,21 +201,19 @@ class OpinionsController extends Controller
                     $opinion->author->uri = \Uri::generate(
                         'opinion_author_frontpage',
                         [
-                            'slug' => \Onm\StringUtils::getTitle($opinion->author->name),
+                            'slug' => urlencode(\Onm\StringUtils::generateSlug($opinion->author->name)),
                             'id'   => sprintf('%06d', $opinion->author->id)
                         ]
                     );
                 }
             }
 
-            $this->view->assign(
-                [
-                    'opinions'   => $opinions,
-                    'authors'    => $authors,
-                    'pagination' => $pagination,
-                    'page'       => $page
-                ]
-            );
+            $this->view->assign([
+                'opinions'   => $opinions,
+                'authors'    => $authors,
+                'pagination' => $pagination,
+                'page'       => $page
+            ]);
         }
 
         $ads = $this->getAds();
@@ -227,7 +224,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'opinion_frontpage,'.$page,
+                'x-tags'          => 'opinion-frontpage,'.$page,
                 'x-cache-for'     => '+1 day'
             )
         );
@@ -427,8 +424,7 @@ class OpinionsController extends Controller
             $orderBy      = ['created' => 'DESC'];
 
             // Total opinions per page
-            $sm = $this->get('setting_repository');
-            $numOpinions  = $sm->get('items_per_page');
+            $numOpinions  = $this->get('setting_repository')->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
@@ -488,7 +484,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'author_frontpage,'.$authorID.','.$page,
+                'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
                 'x-cache-for'     => '+1 day'
             )
         );
@@ -663,7 +659,7 @@ class OpinionsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
-            $author = $this->get('user_repository')->find($opinion->fk_author);
+            $author = $this->get('user_repository')->find((int)$opinion->fk_author);
             $opinion->author = $author;
             if (is_object($author)
                 && is_array($author->meta)
@@ -743,13 +739,7 @@ class OpinionsController extends Controller
             }
 
             $this->view->assign(
-                array(
-                    'opinion'         => $opinion,
-                    'content'         => $opinion,
-                    'contentId'       => $opinion->id,
-                    'other_opinions'  => $otherOpinions,
-                    'author'          => $author,
-                )
+                [ 'other_opinions' => $otherOpinions, 'author' => $author]
             );
         } // End if isCached
 
@@ -761,6 +751,9 @@ class OpinionsController extends Controller
         return $this->render(
             'opinion/opinion.tpl',
             [
+                'opinion'         => $opinion,
+                'content'         => $opinion,
+                'contentId'       => $opinion->id,
                 'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'opinion,'.$opinion->id,

@@ -24,6 +24,13 @@ class WidgetFactory
     public $ttl = 1800;
 
     /**
+     * Wether preload CM and CCM in the widget
+     *
+     * @var boolean
+     **/
+    protected $useDB = true;
+
+    /**
      * Initializes the WidgetFactory object instance
      *
      * @param mixed   $content The widget to initializate factory from.
@@ -33,7 +40,7 @@ class WidgetFactory
      */
     public function __construct($content = null, $useDB = true)
     {
-        if ($useDB) {
+        if ($this->useDB) {
             $this->cm = new ContentManager();
             $this->ccm = ContentCategoryManager::get_instance();
         }

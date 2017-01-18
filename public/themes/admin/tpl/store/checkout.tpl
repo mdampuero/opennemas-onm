@@ -5,9 +5,14 @@
     @AdminTheme/less/_checkout.less" filters="cssrewrite,less"}
   {/stylesheets}
 {/block}
+{block name="footer-js" append}
+  {javascripts}
+    <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+  {/javascripts}
+{/block}
 
 {block name="content"}
-<div ng-controller="StoreCheckoutCtrl" ng-init="{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}countries = {json_encode($countries)|clear_json};taxes = {json_encode($taxes)|clear_json}">
+<div ng-controller="StoreCheckoutCtrl" ng-init="{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}clientToken = '{$token}'; countries = {json_encode($countries)|clear_json};provinces = {json_encode($provinces)|clear_json};taxes = {json_encode($taxes)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -80,33 +85,37 @@
       </div>
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" ng-show="(cart && cart.length > 0) || step == 4">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
-          <ul class="wizard-steps form-wizard">
-            <li class="text-center" ng-class="{ 'active': step == 1 }">
+          <ul class="form-wizard wizard-steps wizard-steps-5">
+            <li class="text-center" ng-class="{ 'active': step == 0 }">
               <span class="step">1</span>
               <h5 class="m-t-15">{t}Cart{/t}</h5>
             </li>
-            <li class="text-center" ng-class="{ 'active': step == 2 }" ng-if="!clientValid">
+            <li class="text-center" ng-class="{ 'active': step == 1 }" ng-if="!clientValid">
               <span class="step">2</span>
               <h5 class="m-t-15">{t}Billing information{/t}</h5>
             </li>
+            <li class="text-center" ng-class="{ 'active': step == 2 }">
+              <span class="step">3</span>
+              <h5 class="m-t-15">{t}Payment{/t}</h5>
+            </li>
             <li class="text-center" ng-class="{ 'active': step == 3 }">
-              <span class="step">[% client ? '3' : '4' %]</span>
+              <span class="step">4</span>
               <h5 class="m-t-15">{t}Check{/t}</h5>
             </li>
             <li class="text-center" ng-class="{ 'active': step == 4 }">
-              <span class="step">[% client ? '4' : '5' %]</span>
+              <span class="step">5</span>
               <h5 class="m-t-15">{t}Finish{/t}</h5>
             </li>
           </ul>
         </div>
         <div class="fake-form-wizard-steps ng-cloak">
-          <div class="fake-wizard-steps text-center fake-wizard-steps-active-[% step %]">
+          <div class="fake-wizard-steps fake-wizard-steps-5 text-center fake-wizard-steps-active-[% step + 1 %]">
             <div class="step">
               <i class="fa fa-truck fa-flip-horizontal fa-lg"></i>
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 1">
+        <div class="grid simple ng-hide" ng-show="step == 0 && !error">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Cart{/t}</h4>
             {include file="store/_cart.tpl"}
@@ -121,7 +130,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 2">
+        <div class="grid simple ng-hide" ng-show="step == 1 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
@@ -157,7 +166,63 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 3">
+        <div class="grid simple ng-hide" ng-show="step == 2 && !error">
+          <div class="grid-body">
+            <h4 class="semi-bold">{t}Payment{/t}</h4>
+            <div ng-show="total === 0">
+              <div class="text-center p-b-30 p-t-30">
+                <h3>{t}The selected items are free{/t}</h3>
+                <i class="fa fa-check fa-4x m-b-15 m-t-15 text-success"></i>
+                <h3>{t}Please, continue to the next step{/t}</h3>
+              </div>
+              <div class="row m-t-40 ng-cloak">
+                <div class="col-sm-4">
+                  <button class="btn btn-block btn-loading btn-white" ng-click="previous()" type="button">
+                    <h4 class="text-uppercase">{t}Previous{/t}</h4>
+                  </button>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4">
+                  <button class="btn btn-block btn-loading btn-success" ng-click="next()" type="button">
+                    <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div ng-show="total > 0">
+              <p class="m-t-15">
+                {t}Select the payment method.{/t}
+                {t}You'll have a chance to review your order before it's placed.{/t}
+              </p>
+              <p class="m-b-15 m-t-50 text-center">
+                <strong>
+                  {t}Any problem with payment?{/t}
+                  <a href="#" ng-click="open('payment-help')">
+                    {t}Click here for a quick tips.{/t}
+                  </a>
+                </strong>
+              </p>
+              <form id="braintree-form">
+                <div class="braintree">
+                  <div id="braintree-container"></div>
+                  <div class="row m-t-40 ng-cloak">
+                    <div class="col-sm-4">
+                      <button class="btn btn-block btn-loading btn-white" ng-click="previous()" ng-disabled="paymentLoading" type="button">
+                        <h4 class="text-uppercase">{t}Previous{/t}</h4>
+                      </button>
+                    </div>
+                    <div class="col-sm-4 col-sm-offset-4">
+                      <button class="btn btn-block btn-loading btn-success" ng-disabled="paymentLoading" type="submit">
+                        <i class="fa fa-circle-o-notch fa-spin fa-absolute m-l-15 m-t-15" ng-if="paymentLoading"></i>
+                        <h4 class="text-uppercase text-white">{t}Next{/t}</h4>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="grid simple ng-hide" ng-show="step == 3 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="semi-bold">{t}Purchase summary{/t}</h4>
@@ -182,7 +247,7 @@
                 </div>
                 <div class="col-sm-4 col-sm-offset-4 m-t-15">
                   <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="cart.length === 0 || !terms || !client || loading">
-                    <i class="fa fa-circle-o-notch fa-spin m-t-15" ng-if="loading"></i>
+                    <i class="fa fa-circle-o-notch fa-spin fa-absolute m-l-15 m-t-15" ng-if="loading"></i>
                     <h4 class="text-uppercase text-white">
                       {t}Confirm{/t}
                     </h4>
@@ -192,17 +257,13 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 4">
+        <div class="grid simple ng-hide" ng-show="step == 4 && !error">
           <div class="grid-body text-center">
             <div class="p-b-30 p-l-30 p-r-30 p-t-30 text-center">
               <i class="fa fa-heart fa-3x"></i>
-              <h3 class="p-b-30 ">{t}Thank you for your purchase request!{/t}</h3>
+              <h3 class="p-b-30">{t}Thank you for your purchase!{/t}</h3>
               <p class="p-b-15">
-              {t}In the next 24 hours you will receive an email with payment instructions and invoice.{/t}
-              </p>
-              <p class="p-b-15">
-              {capture name="client_info_url"}{url name=admin_client_info_page}{/capture}
-              {t escape=off 1=$smarty.capture.client_info_url}Meanwhile, you can go to your <a href="%1">My newspaper</a> and check your active features, navigate to <a href="http://help.opennemas.com">our help</a> or check out <a href="http://youtube.com/opennemas">our videos</a> to see how easy is to manage Opennemas.{/t}
+                {t}Check your email, we have sent you an email with the invoice and purchase details.{/t}
               </p>
               <p class="p-b-10">
               {t}Oh!, it would be a good time to share with your friends your newspaper's improvements{/t}
@@ -224,6 +285,20 @@
               <h4 class="m-t-30">
                 {t}Have a wonderful day!{/t}
               </h4>
+            </div>
+          </div>
+        </div>
+        <div class="grid simple ng-hide" ng-show="error">
+          <div class="grid-body text-center">
+            <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center">
+              <i class="fa fa-thumbs-o-down fa-3x"></i>
+              <h3 class="p-b-30">{t}Something unexpected has happened!{/t}</h3>
+              <p class="p-b-15">
+              {t}There were some errors while trying to purchase.{/t}
+              </p>
+              <p class="p-b-15">
+              {t escape=off}To prevent non-desired charges in your account, please, do not retry the checkout process and contact our <a href="javascript:UserVoice.showPopupWidget();">support team</a>.{/t}
+              </p>
             </div>
           </div>
         </div>

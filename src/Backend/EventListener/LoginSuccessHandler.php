@@ -62,8 +62,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $time = $time->format('Y-m-d H:i:s');
 
             if (!$user->isMaster()) {
-                $this->container->get('setting_repository')
-                    ->set('last_login', $time);
+                $this->container->get('setting_repository')->set('last_login', $time);
             }
 
             return new RedirectResponse($request->get('_referer'));

@@ -217,6 +217,7 @@ class EntityManager extends BaseManager
         // Fetch all content metas in one request
         $contentMetaMap = $this->cache->fetch($searchMap);
 
+        $contentMap = array_filter($contentMap, "is_object");
         // Populate contents with fetched content metas
         foreach ($contentMap as $content) {
             // If content metas weren't in cache fetch them from mysql

@@ -9,7 +9,7 @@
  */
 namespace Frontend\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -170,13 +170,17 @@ class FrontpagesController extends Controller
                     $keys = $relatedMap[$content->pk_content];
 
                     foreach ($keys as $key) {
-                        $content->related_contents[] = $related[$key];
+                        if (array_key_exists($key, $related)) {
+                            $content->related_contents[] = $related[$key];
+                        }
                     }
                 }
             }
 
-            $layout = $this->get('setting_repository')
-                ->get('frontpage_layout_' . $categoryId, 'default');
+            $layout = $this->get('setting_repository')->get('frontpage_layout_' . $categoryId, 'default');
+            if (empty($layout)) {
+                $layout = 'default';
+            }
 
             $layoutFile = 'layouts/' . $layout . '.tpl';
 
@@ -248,14 +252,12 @@ class FrontpagesController extends Controller
             }
 
             $actualCategory = (empty($subcategory_name))? $categoryName : $subcategory_name;
-            $this->view->assign(
-                array(
-                    'category_name'         => $categoryName,
-                    'actual_category'       => $actualCategory,
-                    'actual_category_id'    => $wsActualCategoryId,
-                    'actual_category_title' => $ccm->getTitle($categoryName),
-                )
-            );
+            $this->view->assign([
+                'category_name'         => $categoryName,
+                'actual_category'       => $actualCategory,
+                'actual_category_id'    => $wsActualCategoryId,
+                'actual_category_title' => $ccm->getTitle($categoryName),
+            ]);
 
             // Get all contents for this frontpage
             $allContentsInHomepage = $cm->getUrlContent(
@@ -267,6 +269,10 @@ class FrontpagesController extends Controller
 
             // Fetch layout for categories
             $layout = $cm->getUrlContent($wsUrl.'/ws/categories/layout/'.$categoryName, true);
+            if (!$layout) {
+                $layout = 'default';
+            }
+
 
             $layoutFile = 'layouts/'.$layout.'.tpl';
 
@@ -275,10 +281,10 @@ class FrontpagesController extends Controller
 
         return $this->render(
             'frontpage/frontpage.tpl',
-            array(
+            [
                 'cache_id' => $cacheID,
-                'x-tags'   => 'externalfrontpage-page,'.$categoryName,
-            )
+                'x-tags'   => 'frontpage-page,frontpage-page-external,'.$categoryName,
+            ]
         );
     }
 

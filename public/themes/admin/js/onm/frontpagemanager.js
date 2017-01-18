@@ -164,6 +164,9 @@ function initializePopovers() {
 }
 jQuery(function($) {
 
+    // Max number of elements allowed in a frontpage, excluding advertisements.
+    var frontpage_elements_limit = 100;
+
     window.setInterval(function(){
         // Frontpage has changed and needs to be reloaded
         check_available_new_version();
@@ -556,11 +559,15 @@ jQuery(function($) {
         var new_version_available = check_available_new_version(false);
         var btn = $(this);
 
+        var contents_in_frontpagemanager = els.length
+          - els.filter(function(el) { return el.content_type == "Advertisement" }).length;
+
         // If there is a new version available for this frontpage avoid to save
         if (new_version_available) {
             $('#modal-new-version').modal('show');
-        } else if(els.length > 100) {
-            showMessage(frontpage_messages.frontpage_too_long, 'error');
+        } else if(contents_in_frontpagemanager > frontpage_elements_limit) {
+            var message = frontpage_messages.frontpage_too_long.replace('%number%', frontpage_elements_limit);
+            showMessage(message, 'error');
         } else {
             $.ajax({
                 url: frontpage_urls.save_positions + '?category=' + category,

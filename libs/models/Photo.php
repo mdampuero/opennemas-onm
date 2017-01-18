@@ -187,7 +187,6 @@ class Photo extends Content
             error_log($e->getMessage());
             return false;
         }
-
     }
 
     /**
@@ -200,25 +199,25 @@ class Photo extends Content
      * @return int the id of the photo created
      * @return boolean false if the photo was not created
      **/
-    public function createFromLocalFile($data, $dateForDirectory = null, $uploadPath = null)
+    public function createFromLocalFile($data, $dateForDirectory = null, $uploadDir = null)
     {
-        $filePath         = $data["local_file"];
-        $originalFileName = $data['original_filename'];
-
-        if (empty($filePath)) {
+        if (!array_key_exists('local_file', $data) || empty($data['local_file'])) {
             throw new \Exception(_('Image data not valid'));
         }
 
         // Check upload directory
         $date = new DateTime();
 
+        if (array_key_exists('created', $data)) {
+            $date = \DateTime::createFromFormat('Y-m-d H:i:s', $data['created']);
+        }
+
         if (empty($dateForDirectory)) {
             $dateForDirectory = $date->format("/Y/m/d/");
         }
 
-        $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
-        if (!is_null($uploadPath)) {
-            $uploadDir = $uploadPath;
+        if (empty($uploadDir)) {
+            $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
         }
 
         if (!is_dir($uploadDir)) {
@@ -231,60 +230,19 @@ class Photo extends Content
             );
         }
 
-        $filePathInfo = pathinfo($originalFileName);
-
+        $filePathInfo = pathinfo($data['original_filename']);
         // Getting information for creating
         $t                  = gettimeofday();
         $micro              = intval(substr($t['usec'], 0, 5));
         $finalPhotoFileName = $date->format("YmdHis"). $micro . "."
-            . MimeTypeTool::getExtension($filePath);
-        $fileInformation    = new MediaItem($filePath);
+            . MimeTypeTool::getExtension($data['local_file']);
 
-        if (!array_key_exists('urn_source', $data)
-            || empty($data['urn_source'])
+
+        if (array_key_exists('extension', $filePathInfo) &&
+            $filePathInfo['extension'] != 'swf'
         ) {
-            $data['urn_source'] = "urn:newsml:" . SITE . ":" . $date->format("YmdHis")
-                . ":" . StringUtils::cleanFileName($originalFileName).":2";
-        }
-
-        $date = new \DateTime();
-        $date->setTimeStamp($fileInformation->mtime);
-        $dateString = $date->format('Y-m-d H:i:s');
-
-        if (!array_key_exists('created', $data)) {
-            $data['created'] = $dateString;
-        }
-        if (!array_key_exists('changed', $data)) {
-            $data['changed'] = $dateString;
-        }
-        if (!array_key_exists('content_status', $data)) {
-            $data['content_status'] = 1;
-        }
-
-        // Building information for the photo image
-        $dataPhoto = array(
-            'title'               => isset($data['title']) ? $data['title'] :$originalFileName,
-            'name'                => $finalPhotoFileName,
-            'path_file'           => $dateForDirectory,
-            'created'             => $data["created"],
-            'changed'             => $data["changed"],
-            'content_status'      => $data['content_status'],
-            'description'         => $data['description'],
-            'metadata'            => $data["metadata"],
-            'urn_source'          => $data['urn_source'],
-            'size'                => round($fileInformation->size/1024, 2),
-            'date'                => $dateString,
-            'width'               => $fileInformation->width,
-            'height'              => $fileInformation->height,
-            'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
-            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'],
-            'fk_user_last_editor' => getService('session')->get('user')->id,
-            'fk_publisher'        => getService('session')->get('user')->id,
-        );
-
-        if ($filePathInfo['extension'] != 'swf') {
-            $imageCreated = new \Imagine\Imagick\Imagine();
-            $image = $imageCreated->open($data['local_file']);
+            $image = new \Common\Core\Component\Image\Editor();
+            $image->open($data['local_file'])->resize();
 
             // Doesn't work as expected. Commented for now
             // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
@@ -319,10 +277,12 @@ class Photo extends Content
                 throw new Exception(_('Unable to copy your image file'));
             }
         } else {
-            $fileCopied = copy(
-                $data['local_file'],
-                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
-            );
+            // Check source and target
+            $fileCopied = false;
+            $targetPath = realpath($uploadDir).DS.$finalPhotoFileName;
+            if (is_file($data['local_file']) && is_writable($targetPath)) {
+                $fileCopied = copy($data['local_file'], $targetPath);
+            }
 
             if (!$fileCopied) {
                 $logger = getService('application.log');
@@ -337,8 +297,38 @@ class Photo extends Content
             }
         }
 
-        $photo = new Photo();
-        $photoID = $photo->create($dataPhoto);
+        $fileInformation = new MediaItem($data['local_file']);
+        $date = new \DateTime();
+        $date->setTimeStamp($fileInformation->mtime);
+
+        $fileInformation = new MediaItem($uploadDir.$finalPhotoFileName);
+
+        // Building information for the photo image
+        $dataPhoto = array(
+            'title'               => isset($data['title']) ? $data['title'] :$data['original_filename'],
+            'name'                => $finalPhotoFileName,
+            'path_file'           => $dateForDirectory,
+            'created'             => (array_key_exists('created', $data) && !empty($data['created'])) ?
+                $data["created"] : $date->format('Y-m-d H:i:s'),
+            'changed'             => (array_key_exists('changed', $data) && !empty($data['changed'])) ?
+                $data["changed"] : $date->format('Y-m-d H:i:s'),
+            'content_status'      => 1,
+            'description'         => $data['description'],
+            'metadata'            => $data["metadata"],
+            'urn_source'          => (array_key_exists('urn_source', $data) && !empty($data['urn_source'])) ?
+                $data['urn_source'] : 'urn:newsml:' . SITE . ':' . $date->format('YmdHis')
+                    . ':' . StringUtils::cleanFileName($data['original_filename']).':2',
+            'size'                => round($fileInformation->size/1024, 2),
+            'date'                => $date->format('Y-m-d H:i:s'),
+            'width'               => $fileInformation->width,
+            'height'              => $fileInformation->height,
+            'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
+            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'],
+            'fk_user_last_editor' => getService('session')->get('user')->id,
+            'fk_publisher'        => getService('session')->get('user')->id,
+        );
+
+        $photoID = $this->create($dataPhoto);
 
         if (!$photoID) {
             $logger = getService('application.log');

@@ -20,7 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\Yaml\Yaml;
 
-use Onm\DatabaseConnection;
 use Common\ORM\Entity\Client;
 
 class MigratePurchasesCommand extends ContainerAwareCommand

@@ -14,9 +14,10 @@
  **/
 namespace Frontend\Controller;
 
+use Common\Core\Annotation\BotDetector;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -30,14 +31,11 @@ class TagsController extends Controller
      * Shows a paginated list of contents for a given tag name
      *
      * @return Response the response object
-     **/
+     *
+     * @BotDetector(bot="bingbot", route="frontend_frontpage")
+     */
     public function tagsAction(Request $request)
     {
-        $isBingBot = \Onm\Utils\BotDetector::isSpecificBot($request->headers->get('user-agent'), 'bingbot');
-        if ($isBingBot) {
-            return new RedirectResponse('/');
-        }
-
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $tagName = \Onm\StringUtils::normalize($tagName);
         $page    =  $request->query->getDigits('page', 1);
@@ -90,9 +88,11 @@ class TagsController extends Controller
                 if (in_array($tag, $arrayMetadatas)) {
                     $item = $item->get($item->id);
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image           = $er->find('Photo', $item->img1);
-                        $item->img1_path = $image->path_file.$image->name;
-                        $item->img1      = $image;
+                        $image = $er->find('Photo', $item->img1);
+                        if (is_object($image) && !is_null($image->id)) {
+                            $item->img1_path = $image->path_file.$image->name;
+                            $item->img1      = $image;
+                        }
                     }
 
                     if ($item->fk_content_type == 7) {

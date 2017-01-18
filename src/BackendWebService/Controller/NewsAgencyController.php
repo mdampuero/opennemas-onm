@@ -15,7 +15,7 @@ use Framework\Import\Synchronizer\Synchronizer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Controller for News Agency listing
@@ -187,8 +187,14 @@ class NewsAgencyController extends Controller
             }
         }
 
+        $timezone  = $this->container->get('core.locale')->getTimeZone();
+
         $extra = array_merge(
-            [ 'imported' => $imported, 'related' => $related ],
+            [
+                'imported' => $imported,
+                'related' => $related,
+                'timezone' => $timezone
+            ],
             $this->getTemplateParams()
         );
 
@@ -270,8 +276,7 @@ class NewsAgencyController extends Controller
         }, $categories);
 
         // Get servers
-        $params['servers'] = $this->get('setting_repository')
-            ->get('news_agency_config');
+        $params['servers'] = $this->get('setting_repository')->get('news_agency_config');
 
         if (!is_array($params['servers'])) {
             $params['servers'] = array();

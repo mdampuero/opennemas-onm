@@ -55,6 +55,10 @@
             }
 
             $scope.cart.push(item);
+
+            if (item.customize) {
+              $scope.cart.push($scope.customization);
+            }
           }, 1500);
         };
 
@@ -66,26 +70,12 @@
          *   Customize the theme.
          */
         $scope.toggleCustom = function(item) {
-          if (!item.customize) {
-            item.name = item.name.replace('(Custom)', '');
+          item.name      = item.name.replace('(Custom)', '');
+          item.priceType = $scope.getPrice(item).type;
 
-            item.price.filter(function(a) {
-              return a.type === 'single';
-            })[0].value = 350;
-
-            item.price.filter(function(a) {
-              return a.type === 'monthly';
-            })[0].value = 35;
-          } else {
-            item.name = item.name + ' (Custom)';
-
-            item.price.filter(function(a) {
-              return a.type === 'single';
-            })[0].value = 1450;
-
-            item.price.filter(function(a) {
-              return a.type === 'monthly';
-            })[0].value = 135;
+          if (item.customize) {
+            item.name      = item.name + ' (Custom)';
+            item.priceType = item.priceType + '_custom';
           }
         };
 
@@ -108,6 +98,38 @@
           }).error(function() {
             item.loading = false;
           });
+        };
+
+        /**
+         * @function getPrice
+         * @memberOf ThemeListCtrl
+         *
+         * @description
+         *   Returns the item price.
+         *
+         * @param {Object} item  The item.
+         * @param {String} price The price type.
+         *
+         * @return {Float} The item price.
+         */
+        $scope.getPrice = function (item, type) {
+          if (!type) {
+            type = 'monthly';
+          }
+
+          if (!item.price || item.price.length === 0) {
+            return { value: 0 };
+          }
+
+          var prices = item.price.filter(function(a) {
+            return a.type === type;
+          });
+
+          if (prices.length > 0) {
+            return prices[0];
+          }
+
+          return item.price[0];
         };
 
         /**
@@ -180,9 +202,10 @@
           var url = routing.generate('backend_ws_theme_list');
 
           $http.get(url).success(function(response) {
-            $scope.active     = response.active;
-            $scope.exclusive  = response.exclusive;
-            $scope.addons     = response.addons;
+            $scope.active        = response.active;
+            $scope.customization = response.customization;
+            $scope.exclusive     = response.exclusive;
+            $scope.addons        = response.addons;
 
             $scope.purchased = [];
             for (var i = 0; i < response.themes.length; i++) {
@@ -243,6 +266,7 @@
                 return {
                   addToCart:    $scope.addToCart,
                   enable:       $scope.enable,
+                  getPrice:     $scope.getPrice,
                   isActive:     $scope.isActive,
                   isInCart:     $scope.isInCart,
                   isPurchased:  $scope.isPurchased,

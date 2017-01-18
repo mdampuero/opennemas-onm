@@ -90,17 +90,17 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testConsumeOrder()
     {
-        $method = new \ReflectionMethod($this->translator, 'consumeOrder');
+        $method = new \ReflectionMethod($this->translator, 'consumeOrderBy');
         $method->setAccessible(true);
 
-        $this->translator->operators = [ 'M_ORDER', 'M_BY', 'M_ASC', 'COMMA', 'M_DESC' ];
+        $this->translator->operators = [ 'M_ORDER_BY', 'M_ASC', 'COMMA', 'M_DESC' ];
         $this->translator->params    = [
             [ 'value' => 'foo', 'type' => 'T_FIELD' ],
             [ 'value' => 'bar', 'type' => 'T_FIELD' ],
         ];
 
         $this->assertEquals(
-            [ 'order by' => [ 'foo', 'asc', 'bar', 'desc' ] ],
+            [ 'orderBy' => [ 'foo', 'asc', 'bar', 'desc' ] ],
             $method->invokeArgs($this->translator, [])
         );
     }
@@ -148,7 +148,7 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(10, $method->invokeArgs($this->translator, [ [ [ 'offset' => [ '10' ] ] ] ]));
-        $this->assertEmpty($method->invokeArgs($this->translator, [ [ [ 'order by' => [] ] ] ]));
+        $this->assertEmpty($method->invokeArgs($this->translator, [ [ [ 'orderBy' => [] ] ] ]));
         $this->assertEmpty($method->invokeArgs($this->translator, [ [] ]));
     }
 
@@ -160,7 +160,7 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->translator, 'getOrder');
         $method->setAccessible(true);
 
-        $this->assertEquals([ 'foo', 'asc' ], $method->invokeArgs($this->translator, [ [ [ 'order by' => [ 'foo', 'asc' ] ] ] ]));
+        $this->assertEquals([ 'foo', 'asc' ], $method->invokeArgs($this->translator, [ [ [ 'orderBy' => [ 'foo', 'asc' ] ] ] ]));
         $this->assertEmpty($method->invokeArgs($this->translator, [ [ [ 'offset' => [ 1 ] ] ] ]));
         $this->assertEmpty($method->invokeArgs($this->translator, [ [] ]));
     }
@@ -255,7 +255,7 @@ class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(' && ', $method->invokeArgs($this->translator, [ 'C_AND' ]));
         $this->assertEquals('isLess', $method->invokeArgs($this->translator, [ 'O_LESS' ]));
-        $this->assertEquals('order', $method->invokeArgs($this->translator, [ 'M_ORDER' ]));
+        $this->assertEquals('orderBy', $method->invokeArgs($this->translator, [ 'M_ORDER_BY' ]));
     }
 
     /**

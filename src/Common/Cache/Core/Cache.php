@@ -21,19 +21,6 @@ abstract class Cache extends DataBuffer
     public $mru = [];
 
     /**
-     * Executes a script.
-     *
-     * @param string $script The script to execute.
-     * @param array  $args   The script arguments.
-     *
-     * @return mixed The script output.
-     */
-    public function execute($script, $args)
-    {
-        return $this->executeScript($script, $args);
-    }
-
-    /**
      * Checks if there is data in cache for the given id.
      *
      * @param string $id The cache id.
@@ -43,7 +30,7 @@ abstract class Cache extends DataBuffer
      */
     public function exists($id)
     {
-        $this->addToBuffer('exists',  [ 'ids' => $id ]);
+        $this->addToBuffer('exists', [ 'ids' => $id ]);
 
         $cacheId = $this->getNamespacedId($id);
 
@@ -55,36 +42,38 @@ abstract class Cache extends DataBuffer
     }
 
     /**
-     * Deletes the data from cache for the given id.
+     * Removes the data from cache for the given id.
      *
      * @param mixed $id The cache id (or array of cache ids).
      */
-    public function delete($id)
+    public function remove($id)
     {
-        $this->addToBuffer('delete', [ 'ids' => $id ]);
+        $this->addToBuffer('remove', [ 'ids' => $id ]);
 
         $cacheId = $this->getNamespacedId($id);
 
         if (is_array($id)) {
             $this->mru = array_diff_key($this->mru, array_flip($id));
 
-            $this->removeMulti($cacheId);
+            $this->deleteMulti($cacheId);
             return;
         }
 
         unset($this->mru[$id]);
 
-        $this->remove($cacheId);
+        $this->delete($cacheId);
     }
 
     /**
-     * Deletes all entries that match a pattern.
+     * Removes all entries that match a pattern.
      *
      * @param strign $pattern The pattern to match.
      */
-    public function deleteByPattern($pattern)
+    public function removeByPattern($pattern)
     {
-        $this->removeByPattern($pattern);
+        $this->addToBuffer('removeByPattern', [ 'pattern' => $pattern ]);
+
+        $this->deleteByPattern($pattern);
     }
 
     /**
@@ -262,14 +251,25 @@ abstract class Cache extends DataBuffer
     abstract protected function contains($id);
 
     /**
-     * Executes a script.
+     * Deletes data from cache given an id.
      *
-     * @param string $script The script to execute.
-     * @param array  $args   The script arguments.
-     *
-     * @return mixed The script output.
+     * @param mixed $id A cache id.
      */
-    abstract protected function executeScript($script, $args);
+    abstract protected function delete($id);
+
+    /**
+     * Deletes data from cache given a pattern.
+     *
+     * @param string $pattern The cache id pattern.
+     */
+    abstract protected function deleteByPattern($id);
+
+    /**
+     * Deletes data from cache given an array of ids.
+     *
+     * @param mixed $id An array of cache ids.
+     */
+    abstract protected function deleteMulti($ids);
 
     /**
      * Returns data from cache given an id.
@@ -288,27 +288,6 @@ abstract class Cache extends DataBuffer
      * @return array The data from cache.
      */
     abstract protected function fetchMulti($id);
-
-    /**
-     * Removes data from cache given an id.
-     *
-     * @param mixed $id A cache id.
-     */
-    abstract protected function remove($id);
-
-    /**
-     * Removes all entries from cache that match a pattern.
-     *
-     * @param string $pattern The pattern to match.
-     */
-    abstract protected function removeByPattern($pattern);
-
-    /**
-     * Removes data from cache given an array of ids.
-     *
-     * @param mixed $id An array of cache ids.
-     */
-    abstract protected function removeMulti($ids);
 
     /**
      * Saves data into the cache.

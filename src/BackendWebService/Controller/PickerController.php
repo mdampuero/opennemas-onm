@@ -46,7 +46,7 @@ class PickerController extends Controller
         }
 
         if (!empty($date)) {
-            $filter[] = "DATE_FORMAT(created, '%Y-%c') = '$date'";
+            $filter[] = "DATE_FORMAT(created, '%Y-%m') = '$date'";
         }
 
         if (!empty($from)) {
@@ -58,12 +58,14 @@ class PickerController extends Controller
         }
 
         if (!empty($title)) {
-            $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%')";
+            $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%' OR metadata LIKE '%$title%')";
         }
 
         if (!empty($category)) {
             $filter[] = "(category_name = '$category')";
         }
+
+        $filter[] = "in_litter != 1";
 
         $em = $this->get('entity_repository');
 
@@ -148,7 +150,7 @@ class PickerController extends Controller
         $conn = $this->get('orm.manager')->getConnection('instance');
 
         $results = $conn->fetchAll(
-            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%c')) as date_month FROM contents
+            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
             WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
         );
 
@@ -196,9 +198,7 @@ class PickerController extends Controller
             }
             $moduleName = strtoupper($moduleName.'_MANAGER');
 
-            if (\Onm\Module\ModuleManager::moduleExists($moduleName) &&
-                \Onm\Module\ModuleManager::isActivated($moduleName)
-            ) {
+            if ($this->get('core.security')->hasExtension($moduleName)) {
                 $contentTypesFiltered[$contentType['name']] = $contentType['title'];
             }
         }

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -223,15 +223,12 @@ class NewStandController extends Controller
                 );
             }
             $this->view->assign(
-                array(
-                    'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+                [
                     'date'           => '1-'.$month.'-'.$year,
                     'MONTH'          => $month,
                     'YEAR'           => $year,
-                    'epaper'         => $epaper,
-                    'content'        => $epaper,
                     'kiosko'         => $kiosko
-                )
+                ]
             );
         }
 
@@ -240,9 +237,12 @@ class NewStandController extends Controller
 
         return $this->render(
             'newsstand/newsstand.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
+            [
+                'epaper'         => $epaper,
+                'content'        => $epaper,
+                'cache_id'       => $cacheID,
+                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+            ]
         );
     }
 

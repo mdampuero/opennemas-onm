@@ -1,107 +1,115 @@
-entity:
-    name: Extension
-    enum:
-        type: [ domain, module, theme, theme-addon, widget ]
-
-    required:
-        - uuid
-        - author
-        - created
-        - enabled
-        - name
-        - type
-        - updated
-
-    properties:
-        about:               array
-        author:              string
-        category:            string
-        created:             datetime
-        description:         array
-        enabled:             boolean
-        id:                  integer
-        images:              array
-        modules_in_conflict: array
-        modules_included:    array
-        name:                array
-        parameters:          array
-        price:               array
-        type:                enum
-        updated:             datetime
-        uuid:                string
-        url:                 string
-    converters:
-        default:
-            class:     Common\ORM\Database\Data\Converter\BaseConverter
-            arguments: [ '@orm.metadata.extension' ]
-    repositories:
-        database:
-            class:     Common\ORM\Database\Repository\BaseRepository
-            arguments: [ '@orm.connection.manager', '@orm.metadata.extension',  '@cache.connection.manager' ]
-    persisters:
-        database:
-            class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.manager', '@orm.metadata.extension', '@cache.connection.manager' ]
-    mapping:
-        database:
-            table: extension
-            metas:
-                table: extension_meta
-                ids:
-                    id: extension_id
-            columns:
-                id:
-                    type: bigint
-                    options: { default: null, autoincrement: true }
-                uuid:
-                    type:    string
-                    options: { default: null, length: 100, notnull: true }
-                name:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
-                type:
-                    type:    string
-                    options: { default: null, length: 40 }
-                author:
-                    type: string
-                    options: { default: null, length: 140, notnull: false }
-                url:
-                    type: string
-                    options: { default: null, length: 140, notnull: false }
-                description:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
-                about:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
-                images:
-                    type:    text
-                    options: { default: null, length: 65532, notnull: false }
-                created:
-                    type: datetimetz
-                    options: { default: null, notnull: false }
-                updated:
-                    type: datetimetz
-                    options: { default: null, notnull: false }
-                enabled:
-                    type: boolean
-                    options: { default: false }
-            index:
-                -
-                    name: PRIMARY
-                    columns: [ id ]
-                    primary: true
-                    unique: true
-                    flags: {  }
-                -
-                    name: type
-                    columns: [ type ]
-                    primary: false
-                    unique: false
-                    flags: { }
-                -
-                    name: uuid
-                    columns: [ uuid ]
-                    primary: false
-                    unique: true
-                    flags: { }
+orm:
+    metadata:
+        -
+            name: Extension
+            enum:
+                type: [ domain, module, theme, theme-addon, widget ]
+            required:
+                - uuid
+                - author
+                - created
+                - enabled
+                - name
+                - type
+                - updated
+            translate:
+                - about
+                - description
+                - name
+                - notes
+                - terms
+            properties:
+                about:               array
+                author:              string
+                category:            string
+                created:             datetime
+                description:         array
+                enabled:             boolean
+                id:                  integer
+                images:              array
+                modules_in_conflict: array
+                modules_included:    array
+                name:                array
+                notes:               array
+                parameters:          array
+                price:               array
+                terms:               array
+                type:                enum
+                updated:             datetime
+                uuid:                string
+                url:                 string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.extension', '@core.locale' ]
+            repositories:
+                database:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.extension',  '@cache.connection.manager' ]
+            persisters:
+                database:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.extension', '@cache.connection.manager' ]
+            mapping:
+                database:
+                    table: extension
+                    metas:
+                        table: extension_meta
+                        ids:
+                            id: extension_id
+                    columns:
+                        id:
+                            type: bigint
+                            options: { default: null, autoincrement: true }
+                        uuid:
+                            type:    string
+                            options: { default: null, length: 100, notnull: true }
+                        name:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
+                        type:
+                            type:    string
+                            options: { default: null, length: 40 }
+                        author:
+                            type: string
+                            options: { default: null, length: 140, notnull: false }
+                        url:
+                            type: string
+                            options: { default: null, length: 140, notnull: false }
+                        description:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
+                        about:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
+                        images:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
+                        created:
+                            type: datetimetz
+                            options: { default: null, notnull: false }
+                        updated:
+                            type: datetimetz
+                            options: { default: null, notnull: false }
+                        enabled:
+                            type: boolean
+                            options: { default: false }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: type
+                            columns: [ type ]
+                            primary: false
+                            unique: false
+                            flags: { }
+                        -
+                            name: uuid
+                            columns: [ uuid ]
+                            primary: false
+                            unique: true
+                            flags: { }

@@ -30,7 +30,7 @@
 
 {block name="content"}
   <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl">
-    <div class="page-navbar actions-navbar">
+    <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -88,7 +88,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" required="required" type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}"/>
+                  <input class="form-control" id="title" name="title" type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}" required >
                 </div>
               </div>
               <div class="hidden">
@@ -96,7 +96,7 @@
                   {t}Keywords{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="metadata" name="metadata" required="required"
+                  <input class="form-control" id="metadata" name="metadata" required
                   title="Metadatos" type="hidden" value="{$advertisement->metadata|strip|default:""}">
                 </div>
               </div>
@@ -305,7 +305,7 @@
                   <div class="form-group">
                     <label for="category" class="form-label">{t}In categories{/t}</label>
                     <div class="controls">
-                      <select name="category[]" id="category" required="required" multiple="multiple" size=6>
+                      <select name="category[]" id="category" required multiple="multiple" size=6>
                         <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                         <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
                         <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>
@@ -433,7 +433,7 @@
                           <div class="col-md-12">
                             <div class="radio">
                               <input id="fia-inner-button3" name="type_advertisement" type="radio" value="1077" {if isset($advertisement) && $advertisement->type_advertisement == 1077}checked="checked" {/if}/>
-                              <label for="fia-inner-button4">
+                              <label for="fia-inner-button3">
                                 {t}Instant Articles inner article - Button 3{/t}
                               </label>
                             </div>
@@ -469,4 +469,7 @@
       {include file="advertisement/modal/dfp_detected.tpl"}
     </script>
   </form>
+  <script type="text/ng-template" id="modal-adblock">
+    {include file="base/modals/modalAdblock.tpl"}
+  </script>
 {/block}

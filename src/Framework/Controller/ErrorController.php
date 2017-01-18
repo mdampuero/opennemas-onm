@@ -9,7 +9,7 @@
  **/
 namespace Framework\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**

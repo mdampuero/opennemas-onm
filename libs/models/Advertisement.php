@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Module\ModuleManager;
 use Onm\Settings as s;
 
 /**
@@ -469,7 +468,7 @@ class Advertisement extends Content
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public static function findForPositionIdsAndCategory($types = array(), $category = 'home')
+    public static function findForPositionIdsAndCategory($types = [], $category = 'home')
     {
         $banners = $finalBanners = [];
 
@@ -486,7 +485,7 @@ class Advertisement extends Content
             unset($types[$key]);
         }
 
-        if (!ModuleManager::isActivated('ADS_MANAGER')) {
+        if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
             // Fetch ads from static file
             $advertisements = include APP_PATH.'config/ads/onm_default_ads.php';
 
@@ -544,10 +543,9 @@ class Advertisement extends Content
             foreach ($advertisements as $advertisement) {
                 // Dont use this ad if is not in time
                 if (!is_object($advertisement)
-                    || (!$advertisement->isInTime()
-                        && $advertisement->type_medida == 'DATE')
                     || $advertisement->content_status != 1
                     || $advertisement->in_litter != 0
+                    || (!$advertisement->isInTime() && $advertisement->type_medida == 'DATE') // Maybe this has to be removed and checked in the render banner
                 ) {
                     continue;
                 }
@@ -561,7 +559,7 @@ class Advertisement extends Content
                 if (is_string($advertisement->params)) {
                     $advertisement->params = unserialize($advertisement->params);
                     if (!is_array($advertisement->params)) {
-                        $advertisement->params = array();
+                        $advertisement->params = [];
                     }
                 }
 
@@ -577,14 +575,14 @@ class Advertisement extends Content
         }
 
         if (!empty($banners)) {
-            $homeBanners = array();
-            $categoryBanners = array();
+            $homeBanners     = [];
+            $categoryBanners = [];
             // Perform operations for each advertisement type
             foreach ($banners as $adType => $advs) {
                 // Initialize banners arrays
-                $homeBanners[$adType] = array();
-                $categoryBanners[$adType] = array();
-                $finalBanners[$adType] = array();
+                $homeBanners[$adType]     = [];
+                $categoryBanners[$adType] = [];
+                $finalBanners[$adType]    = [];
                 if (count($advs) > 1) {
                     foreach ($advs as $ad) {
                         if (in_array(0, $ad->fk_content_categories)) {
@@ -627,7 +625,7 @@ class Advertisement extends Content
         $output = '';
 
         // Don't render any non default ads if module is not activated
-        if (!ModuleManager::isActivated('ADS_MANAGER') &&
+        if (!getService('core.security')->hasExtension('ADS_MANAGER') &&
             (
                 !isset($this->default_ad) ||
                 $this->default_ad != 1
@@ -686,7 +684,9 @@ class Advertisement extends Content
                 $content = $this->script;
             } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto.com.ar') !== false ||
                 strpos($_SERVER['SERVER_NAME'], 'laregion.es') !== false ||
-                strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false
+                strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'salamanca24horas.com') !== false ||
+                strpos($_SERVER['SERVER_NAME'], 'zamora24horas.com') !== false
             ) {
                 $content = $this->script;
             } else {
@@ -698,12 +698,12 @@ class Advertisement extends Content
                 }
 
                 $content = '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.'px; '
-                            .'height:'.$height.'px; overflow: hidden;border:none"></iframe>';
+                            .'height:'.$height.'px; max-width:100%; overflow: hidden;border:none"></iframe>';
             }
         } elseif ($this->with_script == 2) {
             if (in_array($this->type_advertisement, array(50,150,250,350,450,550))) {
                 $url = url('frontend_ad_get', array('id' => $this->pk_content));
-                $content = '<iframe src="'.$url.'" style="width:800px; height:600px; overflow: hidden;border:none" '.
+                $content = '<iframe src="'.$url.'" style="width:800px; max-width:100%; height:600px; overflow: hidden;border:none" '.
                 'scrolling="no" ></iframe>';
             } else {
                 $content = "<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[

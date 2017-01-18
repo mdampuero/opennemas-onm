@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -35,7 +35,7 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
-        if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+        if (!$this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
@@ -204,8 +204,11 @@ class AlbumsController extends Controller
             );
 
             foreach ($otherAlbums as &$content) {
-                $content->cover_image    = $this->get('entity_repository')->find('Photo', $content->cover_id);
-                $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
+                $content->cover_image = $this->get('entity_repository')->find('Photo', $content->cover_id);
+
+                $content->cover = is_object($content->cover_image)
+                    ? $content->cover_image->path_file.$content->cover_image->name
+                    : '';
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
             }
@@ -228,22 +231,20 @@ class AlbumsController extends Controller
                 array_pop($_albumArrayPaged);
             }
 
-            $this->view->assign(
-                array(
-                    'album'              => $album,
-                    'content'            => $album,
-                    'album_photos'       => $_albumArray,
-                    'album_photos_paged' => $_albumArrayPaged,
-                    'page'               => $this->page,
-                    'items_page'         => $itemsPerPage,
-                    'gallerys'           => $otherAlbums,
-                )
-            );
+            $this->view->assign([
+                'album_photos'       => $_albumArray,
+                'album_photos_paged' => $_albumArrayPaged,
+                'items_page'         => $itemsPerPage,
+                'gallerys'           => $otherAlbums,
+            ]);
         } // END iscached
 
         return $this->render(
             'album/album.tpl',
             array(
+                'album'          => $album,
+                'content'        => $album,
+                'page'           => $this->page,
                 'cache_id'       => $cacheID,
                 'contentId'      => $album->id,
                 'advertisements' => $this->getAds('inner'),

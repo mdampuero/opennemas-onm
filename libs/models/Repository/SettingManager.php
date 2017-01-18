@@ -92,7 +92,7 @@ class SettingManager extends BaseManager
      */
     public function get($name, $default = null)
     {
-        if (!isset($name) || empty($name)) {
+        if (empty($name)) {
             return false;
         }
 
@@ -106,41 +106,35 @@ class SettingManager extends BaseManager
             $this->autoloadSettings();
         }
 
-        $results = array();
+        $results = [];
+        $keys    = $name;
 
-        $searched = $name;
+        // Normalize keys and default values
         if (!is_array($name)) {
-            // $name like setting
-            $searched = array($name);
-
-            if ($default != null) {
-                $default = array($default);
-            }
-        } elseif (array_keys($name) !== range(0, count($name) - 1)) {
-            // $name like [ setting1 => default1, setting2 => default2 ]
-            $searched = array_keys($name);
-            $results = $name;
+            $keys    = [ $name ];
+            $default = [ $default ];
+        } elseif (!is_array($default)) {
+            $default = array_fill(0, count($keys), $default);
         }
 
-        $missed = array_diff($searched, $this->toAutoload);
-        $fromAutoload = array_diff($searched, $missed);
+        // Build results with default values
+        $default = array_combine($keys, $default);
 
-        // Add auto-loaded settings to final results
-        $results = array_merge(
-            $results,
-            array_intersect_key(
-                $this->autoloaded,
-                array_flip($fromAutoload)
-            )
-        );
+        // Load settings from autoload
+        $fromAutoload = array_intersect_key($this->autoloaded, $default);
+        $results      = array_merge($results, $fromAutoload);
 
-        // Add missed settings to final results from cache
+        // Missed keys from autoload
+        $missed = array_diff($keys, array_keys($results));
+
         if (!empty($missed)) {
             $results = array_merge($results, $this->cache->fetch($missed));
         }
 
+        $missed = array_diff($keys, array_keys($results));
+
         // Fetch missed settings from database and add them to cache
-        $missed = array_diff($searched, array_keys($results));
+        $missed = array_diff($keys, array_keys($results));
         if (!empty($missed)) {
             $sql = "SELECT name, value FROM `settings` WHERE name IN ('"
                 . implode("', '", $missed) . "')";
@@ -155,6 +149,7 @@ class SettingManager extends BaseManager
 
             // Save lost settings (not in database) in cache as lost
             $notInDatabase = array_diff($missed, array_keys($results));
+
             foreach ($notInDatabase as $item) {
                 $this->cache->save($item, $this->lostValue);
             }
@@ -165,15 +160,13 @@ class SettingManager extends BaseManager
             return $value !== $this->lostValue;
         });
 
-        if (is_array($default)) {
-            $results = array_merge($default, $results);
+        $results = array_merge($default, $results);
+
+        if (is_array($name)) {
+            return array_merge($default, $results);
         }
 
-        if (!is_array($name)) {
-            return array_pop($results);
-        }
-
-        return $results;
+        return array_pop($results);
     }
 
     /**

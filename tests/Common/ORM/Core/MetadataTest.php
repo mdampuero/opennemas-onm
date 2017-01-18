@@ -51,6 +51,14 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getClassName.
+     */
+    public function testGetClassName()
+    {
+        $this->assertEquals('Metadata', $this->metadata->getClassName());
+    }
+
+    /**
      * Tests getConverter with invalid name.
      *
      * @expectedException \Common\ORM\Core\Exception\InvalidConverterException

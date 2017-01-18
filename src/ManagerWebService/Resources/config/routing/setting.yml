@@ -1,0 +1,20 @@
+manager_ws_settings_save:
+    path:     /settings
+    defaults: { _controller: ManagerWebServiceBundle:Setting:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_settings_update:
+    path:     /settings
+    defaults: { _controller: ManagerWebServiceBundle:Setting:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_settings_list:
+    path:     /settings
+    defaults: { _controller: ManagerWebServiceBundle:Setting:list }
+    methods:  [ GET ]
+    options:
+        expose: true

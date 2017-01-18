@@ -133,9 +133,9 @@
                 </td>*}
                 <td class="left">
                   <p ng-if="content.title != ''">[% content.title %]</p>
-                  <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</p>
+                  <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</p>
                   <div class="small-text">
-                    <strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
 
                   <div class="listing-inline-actions">
@@ -154,7 +154,7 @@
                   </div>
                 </td>
                 <td class="center hidden-xs hidden-sm">
-                  [% content.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  [% content.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </td>
                 <td class="right">
                   [% content.sent != 0 ? content.sent : '{t}No{/t}' %]

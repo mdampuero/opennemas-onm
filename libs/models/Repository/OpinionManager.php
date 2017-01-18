@@ -191,7 +191,7 @@ class OpinionManager extends EntityManager
                             }
                         } elseif (is_null($value)) {
                             // NULL value
-                            $fieldFilters[] = "$field $operator NULL";
+                            $fieldFilters[] = "`$field` $operator NULL";
                         } else {
                             $fieldFilters[] = "`$field` $operator '$value'";
                         }

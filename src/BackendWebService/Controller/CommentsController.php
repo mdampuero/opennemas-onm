@@ -142,10 +142,6 @@ class CommentsController extends ContentController
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
-        foreach ($results as &$result) {
-            $result->date = $result->date->format(\DateTime::ISO8601);
-        }
-
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
@@ -285,6 +281,7 @@ class CommentsController extends ContentController
 
         $extra['contents'] = array();
         foreach ($contents as $content) {
+            $content->uri = $content->uri;
             $extra['contents'][$content->pk_content] = $content;
         }
 

@@ -20,8 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\Yaml\Yaml;
 
-use Onm\DatabaseConnection;
-
 class DatabaseCheckSchemaCommand extends ContainerAwareCommand
 {
     /**

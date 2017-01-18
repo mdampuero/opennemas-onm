@@ -357,7 +357,7 @@ $menuXml = [
             [
                 "id"          => "authors",
                 "title"       => _("Authors"),
-                "link"        => url('admin_opinion_authors'),
+                "link"        => url('backend_authors_list'),
                 'icon'        => 'fa fa-user',
                 "module_name" => "OPINION_MANAGER",
                 "privilege"   => "AUTHOR_ADMIN",
@@ -382,7 +382,7 @@ $menuXml = [
         "id"          => "domain_manager",
         "title"       => _("Domains"),
         "icon"        => "fa fa-server",
-        "link"        => url('admin_domain_management'),
+        "link"        => url('backend_domains_list'),
         "privilege"   => "ROLE_ADMIN",
     ],
     [

@@ -1,23 +1,30 @@
 <?php
 /**
+ * Handles the actions for newsletter subscriptions
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <developers@opennemas.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ **/
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
- * Adds support for readers to send content to the newspaper via email.
- */
+ * Handles the actions for form send by mail
+ *
+ * @package Frontend_Controllers
+ **/
 class FormController extends Controller
 {
     /**

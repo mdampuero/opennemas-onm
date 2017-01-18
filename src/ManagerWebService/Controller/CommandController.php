@@ -16,7 +16,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class CommandController extends Controller
 {

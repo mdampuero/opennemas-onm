@@ -17,7 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -40,8 +40,7 @@ class BooksController extends Controller
         $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
 
         // Setup caching system
-        $this->view = $this->get('core.template');
-        $this->view->setConfig('book-frontpage');
+        $this->view->setConfig('article-inner');
         $cacheID = $this->view->generateCacheId($categoryName, null, $this->page);
 
         $contentType = \ContentManager::getContentTypeIdFromName('book');
@@ -106,7 +105,7 @@ class BooksController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view->setConfig('book-inner');
+        $this->view->setConfig('article-inner');
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $book->id);
         if ($this->view->getCaching() === 0
@@ -128,23 +127,18 @@ class BooksController extends Controller
                     $this->get('entity_repository')->find('Photo', $value->cover_id);
             }
 
-            $this->view->assign(
-                array(
-                    'book'        => $book,
-                    'content'     => $book,
-                    'libros'      => $books,
-                    'contentId'   => $book->id,
-                    'category'    => $book->category,
-                    'cache_id'    => $cacheID,
-                )
-            );
+            $this->view->assign(['libros' => $books]);
         }
 
         return $this->render(
             'books/book_viewer.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
+            [
+                'book'      => $book,
+                'content'   => $book,
+                'contentId' => $book->id,
+                'category'  => $book->category,
+                'cache_id'  => $cacheID,
+            ]
         );
     }
 

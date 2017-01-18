@@ -106,7 +106,7 @@ class PurchaseController extends Controller
             . ' FROM purchase, instances'
             . ' WHERE instances.id = purchase.instance_id';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
 
         return $this->export($data, 'all');
     }
@@ -127,7 +127,7 @@ class PurchaseController extends Controller
             . ' FROM purchase, instances'
             . ' WHERE instances.id = purchase.instance_id AND step = "done"';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
 
         return $this->export($data, 'completed');
     }
@@ -148,7 +148,7 @@ class PurchaseController extends Controller
             . ' FROM purchase, instances'
             . ' WHERE instances.id = purchase.instance_id AND step != "done"';
 
-        $data = $this->get('dbal_connection_manager')->fetchAll($sql);
+        $data = $this->get('orm.manager')->getConnection('manager')->fetchAll($sql);
 
         return $this->export($data, 'uncompleted');
     }
@@ -251,8 +251,12 @@ class PurchaseController extends Controller
             array_pop($purchase->details);
         }
 
+        $converter = $em->getConverter('Instance');
+        $instance  = $em->getRepository('Instance')->find($purchase->instance_id);
+
         return new JsonResponse([
             'purchase' => $converter->responsify($purchase->getData()),
+            'instance' => $converter->responsify($instance),
             'extra'    => $this->getExtraData()
         ]);
     }

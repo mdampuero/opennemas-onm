@@ -16,7 +16,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Shows a paginated page for contents that share a property
@@ -52,8 +52,7 @@ class CategoryController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $sm = $this->get('setting_repository');
-        $itemsPerPage = $sm->get('items_in_blog', 8);
+        $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 8);
 
         $em = $this->get('entity_repository');
         $order = [ 'starttime' => 'DESC' ];

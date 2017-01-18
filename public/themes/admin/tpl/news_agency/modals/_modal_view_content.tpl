@@ -7,7 +7,7 @@
     <h5><strong>[% template.content.title %]</strong></h5>
     <div class="p-b-10 p-t-5 clearfix">
       <div class="pull-left">
-        <strong>{t}Date{/t}:</strong> [% template.content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+        <strong>{t}Date{/t}:</strong> [% template.content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : template.timezone %]
       </div>
       <div class="pull-right">
       <strong>{t}Priority{/t}:</strong>

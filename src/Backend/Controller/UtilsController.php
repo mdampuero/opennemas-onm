@@ -16,7 +16,7 @@ namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\StringUtils;
 
 /**
@@ -37,8 +37,11 @@ class UtilsController extends Controller
     {
         $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
 
-        $tags = StringUtils::getTags($tags);
-        $tags = trim(str_replace(', ', ',', $tags), ',');
+        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+        $tags = $tagSystem->filter($tags);
+
+        // $tags2 = StringUtils::getTags($tags);
+        // $tags2 = trim(str_replace(', ', ',', $tags2), ',');
 
         return new Response($tags, 200);
     }

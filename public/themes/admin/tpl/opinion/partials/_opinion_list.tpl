@@ -18,46 +18,44 @@
       </ul>
       <ul class="nav quick-section pull-right">
         {acl isAllowed="CONTENT_OTHER_UPDATE"}
-        {acl isAllowed="OPINION_AVAILABLE"}
-        <li class="quicklinks">
-          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom">
-            <i class="fa fa-check fa-lg"></i>
-          </a>
-        </li>
-        <li class="quicklinks">
-          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
-            <i class="fa fa-times fa-lg"></i>
-          </a>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
+          {acl isAllowed="OPINION_AVAILABLE"}
+            <li class="quicklinks">
+              <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom">
+                <i class="fa fa-check fa-lg"></i>
+              </a>
+            </li>
+            <li class="quicklinks">
+              <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
+                <i class="fa fa-times fa-lg"></i>
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+          {/acl}
+          {acl isAllowed="OPINION_HOME"}
+            <li class="quicklinks hidden-xs">
+              <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
+                <i class="fa fa-home fa-lg"></i>
+              </a>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
+                <i class="fa fa-home fa-lg"></i>
+                <i class="fa fa-times fa-sub text-danger"></i>
+              </a>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+          {/acl}
         {/acl}
-        {acl isAllowed="OPINION_HOME"}
-        <li class="quicklinks hidden-xs">
-          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
-            <i class="fa fa-home fa-lg"></i>
-          </a>
-        </li>
-        <li class="quicklinks hidden-xs">
-          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
-            <i class="fa fa-home fa-lg"></i>
-            <i class="fa fa-times fa-sub text-danger"></i>
-          </a>
-        </li>
-        <li class="quicklinks hidden-xs">
-          <span class="h-seperate"></span>
-        </li>
-        {/acl}
-        {/acl}
-        {acl isAllowed="CONTENT_OTHER_DELETE"}
         {acl isAllowed="OPINION_DELETE"}
-        <li class="quicklinks">
-          <a class="btn btn-link" href="#" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-            <i class="fa fa-trash-o fa-lg"></i>
-          </a>
-        </li>
-        {/acl}
+          <li class="quicklinks">
+            <a class="btn btn-link" href="#" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+              <i class="fa fa-trash-o fa-lg"></i>
+            </a>
+          </li>
         {/acl}
       </ul>
     </div>
@@ -168,16 +166,16 @@
               <td>
                 [% content.title %]
                 <div class="small-text">
-                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="OPINION_UPDATE"}
-                  <a class="link" href="[% edit(content.id, 'admin_opinion_show') %]" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="{$smarty.session._sf2_attributes.user->isAdmin()} || content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl}>
+                  <a class="link" href="[% edit(content.id, 'admin_opinion_show') %]">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                   {/acl}
                   {acl isAllowed="OPINION_DELETE"}
-                  <button class="link link-danger" {acl isNotAllowed="CONTENT_OTHER_DELETE"} ng-if="{$smarty.session._sf2_attributes.user->isAdmin()} || content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="sendToTrash(content)" type="button">
+                  <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                   {/acl}
@@ -202,17 +200,17 @@
                 </span>
                 {/acl}
               </td>
-              <td class="text-center">
-                {acl isAllowed="OPINION_AVAILABLE"}
-                <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
-                </button>
-                {/acl}
-              </td>
               <td class="text-center hidden-xs">
                 {acl isAllowed="OPINION_FAVORITE"}
                 <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" ng-if="content.type_opinion == 0" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
+                </button>
+                {/acl}
+              </td>
+              <td class="text-center">
+                {acl isAllowed="OPINION_AVAILABLE"}
+                <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
                 </button>
                 {/acl}
               </td>

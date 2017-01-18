@@ -50,13 +50,13 @@
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-lock"></span></span>
-                        <input autofocus class="form-control" name="password" placeholder="{t}Password{/t}" required="required" tabindex="1" type="password">
+                        <input autofocus class="form-control" name="password" placeholder="{t}Password{/t}" required tabindex="1" type="password">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-lock"></span></span>
-                        <input class="form-control" name="password-verify" placeholder="{t}Password confirmation{/t}" required="required" tabindex="2" type="password">
+                        <input class="form-control" name="password-verify" placeholder="{t}Password confirmation{/t}" required tabindex="2" type="password">
                       </div>
                     </div>
                     <div class="form-group text-right">
@@ -83,8 +83,8 @@
           <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas" target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
           <li>
             <select name="language" id="language" class="language-selector">
-              {foreach from=$languages key=key item=language}
-              <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
+              {foreach from=$locales key=key item=value}
+              <option value="{$key}" {if $key == $locale}selected{/if}>{$value}</option>
               {/foreach}
             </select>
           </li>

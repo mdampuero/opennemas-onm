@@ -10,9 +10,12 @@
 namespace Common\ORM\Core;
 
 use Common\ORM\Core\Entity;
+use Common\ORM\Core\Connection;
 use Common\ORM\Core\Exception\InvalidConnectionException;
 use Common\ORM\Core\Exception\InvalidMetadataException;
+use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Schema\Dumper;
+use Common\ORM\Core\Schema\Schema;
 use Common\ORM\Core\Validation\Validator;
 
 /**
@@ -42,8 +45,11 @@ class EntityManager
      */
     public function __construct($container)
     {
-        $this->config    = $container->get('orm.loader')->load();
+        $this->config    = $container->getParameter('orm');
         $this->container = $container;
+        $this->defaults  = $container->getParameter('orm.default');
+
+        $this->items = $this->init();
     }
 
     /**
@@ -57,11 +63,21 @@ class EntityManager
      */
     public function getConnection($name)
     {
-        if (!array_key_exists($name, $this->config['connection'])) {
+        if (!array_key_exists($name, $this->items['connection'])) {
             throw new InvalidConnectionException($name);
         }
 
-        return $this->config['connection'][$name];
+        return $this->items['connection'][$name];
+    }
+
+    /**
+     * Returns the service container.
+     *
+     * @return ServiceContainer The service container.
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**
@@ -114,10 +130,10 @@ class EntityManager
     {
         $dumper = new Dumper();
 
-        if (array_key_exists('schema', $this->config)) {
+        if (array_key_exists('schema', $this->items)) {
             $dumper->configure(
-                $this->config['schema'],
-                $this->config['metadata']
+                $this->items['schema'],
+                $this->items['metadata']
             );
         }
 
@@ -137,13 +153,13 @@ class EntityManager
             $entity = $entity->getClassName();
         }
 
-        if (!array_key_exists('metadata', $this->config)
-            || !array_key_exists($entity, $this->config['metadata'])
+        if (!array_key_exists('metadata', $this->items)
+            || !array_key_exists($entity, $this->items['metadata'])
         ) {
             throw new InvalidMetadataException($entity);
         }
 
-        return $this->config['metadata'][$entity];
+        return $this->items['metadata'][$entity];
     }
 
     /**
@@ -196,13 +212,15 @@ class EntityManager
      */
     public function getValidator()
     {
-        $validator = new Validator();
-
-        if (array_key_exists('metadata', $this->config)) {
-            $validator->configure($this->config['metadata']);
+        if (empty($this->validator)) {
+            $this->validator = new Validator();
         }
 
-        return $validator;
+        if (array_key_exists('metadata', $this->items)) {
+            $this->validator->configure($this->items['metadata']);
+        }
+
+        return $this->validator;
     }
 
     /**
@@ -233,6 +251,67 @@ class EntityManager
     public function remove(Entity $entity, $persister = null)
     {
         $this->getPersister($entity, $persister)->remove($entity);
+    }
+
+    /**
+     * Initializes connections, metadata and schemas basing on ORM
+     * configuration.
+     *
+     * @return array The list of connections, metadata and schemas.
+     */
+    protected function init()
+    {
+        $items = [];
+
+        foreach ($this->config as $key => $values) {
+            $method = 'init' . \classify($key);
+
+            foreach ($values as $name => $config) {
+                $items[$key][$name] = $this->{$method}($config);
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Returns a new configured Connection.
+     *
+     * @param array $config The connection configuration.
+     *
+     * @return Connection The configured connection.
+     */
+    protected function initConnection($config)
+    {
+        if (array_key_exists('connection', $this->defaults)) {
+            $config = array_merge($this->defaults['connection'], $config);
+        }
+
+        return new Connection($config);
+    }
+
+    /**
+     * Returns a new configured Metadata.
+     *
+     * @param array $config The metadata configuration.
+     *
+     * @return Metadata The configured metadata.
+     */
+    protected function initMetadata($config)
+    {
+        return new Metadata($config);
+    }
+
+    /**
+     * Returns a new configured Schema.
+     *
+     * @param array $config The schema configuration.
+     *
+     * @return Schema The configured schema.
+     */
+    protected function initSchema($config)
+    {
+        return new Schema($config);
     }
 
     /**

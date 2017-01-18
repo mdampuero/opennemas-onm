@@ -1,8 +1,11 @@
 <?php
 function smarty_function_uservoice_widget($params, &$smarty)
 {
+    $supportActivated = true;
 
-    $supportActivated = true; //\Onm\Module\ModuleManager::isActivated('USERVOICE_SUPPORT');
+    if (!defined('INSTANCE_UNIQUE_NAME')) {
+        define('INSTANCE_UNIQUE_NAME', 'unknown-instance');
+    }
 
     $instanceName = INSTANCE_UNIQUE_NAME;
 

@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 class WidgetsController extends ContentController
 {
@@ -43,14 +43,6 @@ class WidgetsController extends ContentController
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
-
-        foreach ($results as &$result) {
-            $createdTime = new \DateTime($result->created);
-            $result->created = $createdTime->format(\DateTime::ISO8601);
-
-            $updatedTime = new \DateTime($result->changed);
-            $result->changed = $updatedTime->format(\DateTime::ISO8601);
-        }
 
         return new JsonResponse(
             array(

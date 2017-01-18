@@ -22,8 +22,8 @@ class HttpRss extends Http
         if (array_key_exists('url', $params)
             && preg_match('@rss|feed|xml@', $params['url'])
             && strpos(
-                file_get_contents($params['url']),
-                'http://www.w3.org/2005/Atom'
+                @file_get_contents($params['url']),
+                'application/atom+xml'
             ) === false
         ) {
             return true;
@@ -84,6 +84,9 @@ class HttpRss extends Http
         }
 
         $xml   = simplexml_load_string($content);
+        if (!is_object($xml)) {
+            return $this->remoteFiles;
+        }
         $files = $xml->xpath('//channel/item');
 
         foreach ($files as $value) {

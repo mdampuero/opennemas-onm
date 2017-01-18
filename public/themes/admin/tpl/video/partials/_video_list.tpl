@@ -191,7 +191,7 @@
                 </div>
                 [% content.title %]
                 <div class="small-text">
-                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="VIDEO_UPDATE"}
@@ -307,9 +307,13 @@
     </div>
     <h4 class="ng-cloak" ng-show="selected.lastSelected">{t}Video details{/t}</h4>
     <div ng-if="selected.lastSelected">
-      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="!selected.lastSelected.thumb_image">
-        <dynamic-image autoscale="true" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
+      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.video_url != ''">
+        <dynamic-image autoscale="true" only-image="true" ng-model="selected.lastSelected.thumb"></dynamic-image>
       </div>
+      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.video_url == ''">
+        <dynamic-image autoscale="true" only-image="true" ng-model="selected.lastSelected.thumb_image" instance="{$smarty.const.INSTANCE_MEDIA}"></dynamic-image>
+      </div>
+      <p></p>
       <ul class="media-information">
         <li>
           <strong>[% selected.lastSelected.name %]</strong>

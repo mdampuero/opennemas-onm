@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 function smarty_outputfilter_meta_amphtml($output, $smarty)
 {
-    if (\Onm\Module\ModuleManager::isActivated('AMP_MODULE')
+    if (getService('core.security')->hasExtension('AMP_MODULE')
         && strstr(getService('request')->getUri(), 'amp.html') === false
         && array_key_exists('content', $smarty->tpl_vars)
         && is_object($smarty->tpl_vars['content']->value)
@@ -27,12 +27,11 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
                                sprintf('%06d', $content->pk_content),
         ];
 
-        $url = getService('router')
-            ->generate(
-                'frontend_article_show_amp',
-                $params,
-                UrlGeneratorInterface::ABSOLUTE_URL
-            );
+        $url = getService('router')->generate(
+            'frontend_article_show_amp',
+            $params,
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
         $code   = '<link rel="amphtml" href="'.$url.'" />';
         $output = preg_replace('@(</head>)@', $code.'${1}', $output);

@@ -46,11 +46,11 @@
 <div class="content ng-hide" ng-show="template">
   <form name="instanceForm" novalidate>
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-md-8">
         <div class="grid simple">
           <div class="grid-body instance-form">
             <div class="row">
-              <div class="col-lg-2 col-md-3 col-sm-4" ng-if="instance.id">
+              <div class="col-xlg-2 col-lg-4 col-md-5 col-sm-4" ng-if="instance.id">
                 <dl ng-if="instance.id">
                   <dt>
                     <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
@@ -85,7 +85,7 @@
                   </dd>
                 </dl>
               </div>
-              <div ng-class="{ 'col-lg-10 col-md-9 col-sm-8': instance.id, 'col-sm-12': !instance.id }">
+              <div ng-class="{ 'col-xlg-10 col-lg-8 col-md-7 col-sm-8': instance.id, 'col-sm-12': !instance.id }">
                 <div class="form-group">
                   <label class="form-label">
                     {t}Site name{/t}
@@ -124,10 +124,21 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="template">{t}Activated{/t}</label>
+                  <label class="form-label">{t}Status{/t}</label>
                   <div class="controls">
-                    <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" ng-true-value="1" ng-false-value="0"  ng-checked="instance.activated == 1"/>
-                    <div><div></div></div>
+                    <div class="col-sm-6">
+                      <div class="checkbox">
+                        <input type="checkbox" id="activated" ng-model="instance.activated" ng-true-value="1" ng-false-value="0"  ng-checked="instance.activated == 1"/>
+                        <label class="form-label" for="activated">{t}Activated{/t}</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="checkbox">
+                        <input type="checkbox" id="blocked" ng-model="instance.blocked" ng-true-value="1" ng-false-value="0"  ng-checked="instance.blocked == 1"/>
+                        <label class="form-label" for="blocked">{t}Blocked{/t}</label>
+                        <div class="help m-t-5">{t}Backend access blocked for instance users{/t}</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -135,9 +146,7 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-xs-12">
+      <div class="col-md-4 col-xs-12">
         <div class="grid simple">
           <div class="grid-title">
             <h4>
@@ -191,7 +200,9 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6 col-xs-12" ng-if="security.hasPermission('CLIENT_LIST')">
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-sm-12" ng-if="security.hasPermission('CLIENT_LIST')">
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Billing{/t}</h4>
@@ -202,10 +213,10 @@
                 <span class="input-group-addon">
                   <i class="fa" ng-class="{ 'fa-search': !loading, 'fa-circle-o-notch fa-spin': loading }"></i>
                 </span>
-                <input class="form-control" ng-model="criteria.name" placeholder="{t}Search by name or email{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
+                <input class="form-control" ng-model="criteria.name" placeholder="{t}Search by name or street{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
               </div>
             </div>
-            <div ng-if="client">
+            <div ng-if="client || instance.client_id">
               <div class="row p-b-15">
                 <h4>{t}Contact information{/t}</h4>
                 <div class="col-sm-6">
@@ -249,7 +260,7 @@
                   <strong>{t}Country{/t}:</strong> [% template.countries[client.country] %]
                 </div>
               </div>
-              <div class="row p-t-30">
+              <div class="row p-t-15">
                 <div class="col-sm-4 col-sm-offset-4">
                   <button class="btn btn-danger btn-block" ng-click="instance.client = null">
                     <h4 class="text-white">
@@ -258,6 +269,78 @@
                     </h4>
                   </button>
                 </div>
+              </div>
+            </div>
+            <div class="m-b-20 p-b-100 p-t-50 text-center" ng-if="!client && !client_id">
+              <i class="fa fa-search fa-4x m-t-30"></i>
+              <h3>{t}There is no client linked to this instance{/t}</h3>
+              <h4>{t}Try to search a client by name or street{/t}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Last purchases{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="ng-cloak" ng-if="!template.purchases || template.purchases.length === 0">
+              <div class="p-t-100 p-b-100 text-center">
+                <i class="fa fa-stack fa-3x m-t-20">
+                  <i class="fa fa-shopping-cart fa-stack-1x"></i>
+                  <i class="fa fa-ban fa-stack-2x"></i>
+                </i>
+                <h3 class="m-b-50">{t}There are no purchases for now.{/t}</h3>
+              </div>
+            </div>
+            <div class="table-wrapper ng-cloak" ng-if="template.purchases && template.purchases.length > 0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="pointer" width="100">
+                      {t}Date{/t}
+                    </th>
+                    <th class="pointer text-left">
+                      {t}Description{/t}
+                    </th>
+                    <th class="text-center" width="100">
+                      {t}Method{/t}
+                    </th>
+                    <th class="text-right pointer" width="120">
+                      {t}Total{/t}
+                    </th>
+                    <th width="150">
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in template.purchases">
+                    <td>
+                      [% item.updated | moment : 'YYYY-MM-DD' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
+                    <td class="text-left">
+                      <div style="max-width: 350px; overflow: hidden; text-overflow: ellipsis;">
+                        <span ng-repeat="i in item.details">[% i.description + ($index === item.details.length - 1 ? '' : ', ') %]</span>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <i class="fa" ng-class="{ 'fa-paypal': item.method === 'PayPalAccount', 'fa-credit-card': item.method === 'CreditCard' }" ng-if="item.total !== 0 && item.method"></i>
+                      <span ng-if="item.total === 0">-</span>
+                    </td>
+                    <td class="text-right">
+                      [% item.total | number : 2 %] €
+                    </td>
+                    <td>
+                      <a ng-href="[% routing.ngGenerate('manager_purchase_show', { id: item.id }) %]" title="{t}Show{/t}">
+                        {t}View purchase{/t}
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center" ng-if="template.purchases.length > 0">
+                <a class="bold text-uppercase" ng-href="[% routing.ngGenerate('manager_purchases_list', { oql: 'instance_id=' + instance.id + ' limit 25' }) %]">{t}More{/t}</a>
               </div>
             </div>
           </div>
@@ -389,6 +472,14 @@
               <label for="max-mailing" class="form-label">{t}Maximun number of emails sent by month{/t}</label>
               <div class="controls">
                 <input id="max-mailing" ng-model="settings.max_mailing" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">{t}Dimensions for image optimization{/t}</label>
+              <div class="controls">
+                <input class="pull-left" ng-model="instance.max_width" placeholder="{t}Width{/t}" type="text">
+                <span class="m-l-5 m-r-5 m-t-10 pull-left">x</span>
+                <input class="pull-left" ng-model="instance.max_height" placeholder="{t}Height{/t}" type="text">
               </div>
             </div>
           </div>

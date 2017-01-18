@@ -76,6 +76,23 @@
             <div class="help">{t}Set a key for targeting your ads by category. Note that the value for targeting will always be the current category internal name{/t}</div>
           </div>
         </div>
+        <h4>{t}DFP module targeting{/t}</h4>
+        <div class="form-group">
+          <label for="dfp_options_module" class="form-label">{t}Key for setTargeting function{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="text" name="dfp_options_module" value="{$configs['dfp_options']['module']}">
+            <div class="help">{t}Set a key for targeting your ads by module. Note that the value for targeting will always be the current module name{/t}</div>
+          </div>
+        </div>
+        {if $smarty.session._sf2_attributes.user->isMaster()}
+        <h4>{t}DFP custom code{/t}</h4>
+        <div class="form-group">
+          <label for="dfp_custom_code" class="form-label">{t}Custom code at the end of DFP tags{/t}</label>
+          <div class="controls">
+            <textarea class="form-control" name="dfp_custom_code">{$configs['dfp_custom_code']|base64_decode|escape:'html'}</textarea>
+          </div>
+        </div>
+        {/if}
         <h4 class="m-t-30">{t}Tradedoubler integration{/t}</h4>
         <div class="form-group">
           <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>

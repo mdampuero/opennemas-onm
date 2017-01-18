@@ -2,7 +2,7 @@ frontend_author_frontpage:
     path: /author/{slug}
     defaults: { _controller: FrontendBundle:Author:authorFrontpage }
     requirements:
-        slug: '[A-Za-z\d-.]+'
+        slug: '[^/]+'
 
 frontend_frontpage_authors:
     path: /authors
@@ -12,4 +12,4 @@ frontend_external_author_frontpage:
     path: /extauthor/{slug}
     defaults: { _controller: FrontendBundle:Author:extAuthorFrontpage }
     requirements:
-        slug: '[A-Za-z\d-]+'
+        slug: '[^/]+'

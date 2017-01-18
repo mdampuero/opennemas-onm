@@ -2,7 +2,7 @@
 
 {block name="content"}
 <div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement',{ fk_content_categories: 0, type_advertisement: -1, content_status: -1, with_script: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-  <div class="page-navbar actions-navbar">
+  <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
@@ -251,6 +251,9 @@
   </script>
   <script type="text/ng-template" id="modal-update-selected">
     {include file="common/modals/_modalBatchUpdate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-adblock">
+    {include file="base/modals/modalAdblock.tpl"}
   </script>
 </div>
 {/block}

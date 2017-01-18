@@ -13,15 +13,15 @@
      * @requires $timeout
      * @requires http
      * @requires messenger
-     * @requires oqlBuilder
+     * @requires oqlEncoder
      * @requires webStorage
      *
      * @description
      *   Handles all actions in instances list.
      */
     .controller('InstanceListCtrl', [
-      '$controller', '$uibModal', '$location' ,'$scope', '$timeout', 'http', 'messenger', 'oqlBuilder', 'webStorage',
-      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlBuilder, webStorage) {
+      '$controller', '$uibModal', '$location' ,'$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -149,7 +149,7 @@
         $scope.list = function () {
           $scope.loading = 1;
 
-          oqlBuilder.configure({
+          oqlEncoder.configure({
             placeholder: {
               name: 'name ~ "[value]" or ' +
                 'internal_name ~ "[value]" or ' +
@@ -158,7 +158,7 @@
             }
           });
 
-          var oql   = oqlBuilder.getOql($scope.criteria);
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_instances_list',
             params: { oql: oql }
@@ -265,6 +265,18 @@
         // Get enabled columns from localStorage
         if (webStorage.local.get('instances-columns')) {
           $scope.columns = webStorage.local.get('instances-columns');
+        }
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
+        }
+
+        oqlDecoder.configure({
+          ignore: [ 'internal_name', 'contact_mail', 'domains' ]
+        });
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
         }
 
         $scope.list();

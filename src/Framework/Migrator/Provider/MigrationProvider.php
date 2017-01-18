@@ -79,6 +79,7 @@ abstract class MigrationProvider
         &$translations,
         &$stats,
         $output,
+        $checkTranslations = false,
         $debug = false
     ) {
         $this->debug        = $debug;
@@ -89,6 +90,13 @@ abstract class MigrationProvider
         $this->translations = &$translations;
 
         $this->configure();
+
+        if ($checkTranslations) {
+            $this->configureTranslations();
+        }
+
+        $this->loadTranslations();
+
     }
 
     /**
@@ -101,9 +109,6 @@ abstract class MigrationProvider
         $this->targetConnection->selectDatabase(
             $this->settings['migration']['target']
         );
-
-        $this->configureTranslations();
-        $this->loadTranslations();
     }
 
     /**

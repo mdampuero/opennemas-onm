@@ -133,7 +133,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $this->api->expects($this->once())->method('setMethod')
             ->with('payment.delete');
 
-        $this->api->expects($this->once())->method('post');
+        $this->api->expects($this->once())->method('post')->with([ 'payment_id' => 1 ]);
         $this->api->expects($this->once())->method('success');
 
         $this->persister->remove($this->existingPayment);

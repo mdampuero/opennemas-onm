@@ -12,8 +12,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -33,18 +32,6 @@ class ArticlesController extends Controller
     public function listAction(Request $request)
     {
         $this->loadCategories($request);
-
-        // Check if the user has access to this category
-        if ($this->category != 'all' && $this->category != '0') {
-            if (!Acl::checkCategoryAccess($this->category)) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("You don't have enough privileges to see this category.")
-                );
-
-                return $this->redirect($this->generateUrl('admin_welcome'));
-            }
-        }
 
         // Build the list of authors to render filters
         $allAuthors = \User::getAllUsersAuthors();
@@ -138,8 +125,7 @@ class ArticlesController extends Controller
                 24 => '24', 26 => '26', 28 => '28',30 => '30',
                 32 => '32', 34 => '34'
             ],
-            'commentsConfig' => $this->get('setting_repository')
-                ->get('comments_config'),
+            'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
             'id'      => $id,
         ]);
     }
@@ -156,7 +142,7 @@ class ArticlesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('settings_reporitosy')->get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('settings_repository')->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);

@@ -6,6 +6,10 @@ backend_ws_article:
     resource: '@BackendWebServiceBundle/Resources/config/routing/article.yml'
     prefix:   /
 
+backend_ws_author:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/author.yml'
+    prefix:   /
+
 backend_ws_client:
     resource: '@BackendWebServiceBundle/Resources/config/routing/client.yml'
     prefix:   /
@@ -20,6 +24,9 @@ backend_ws_domain:
 
 backend_ws_getting_started:
     resource: '@BackendWebServiceBundle/Resources/config/routing/getting_started.yml'
+    prefix:   /
+backend_ws_letters:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/letter.yml'
     prefix:   /
 
 backend_ws_menus:

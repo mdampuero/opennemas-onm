@@ -84,8 +84,10 @@
               </th>
               <th class="title">{t}Title{/t}</th>
               <th class="hidden-xs" width="200">{t}Section{/t}</th>
-              {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>{/if}{/acl}
+              {if $category!='widget'}
               {acl isAllowed="SPECIAL_HOME"}<th class="hidden-xs text-center" width="100">{t}Home{/t}</th>{/acl}
+              {acl isAllowed="SPECIAL_FAVORITE"}<th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>{/acl}
+              {/if}
               {acl isAllowed="SPECIAL_AVAILABLE"}<th class="text-center" width="100">{t}Published{/t}</th>{/acl}
             </tr>
           </thead>
@@ -100,7 +102,7 @@
               <td>
                 [% content.title %]
                 <div class="small-text">
-                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="SPECIAL_UPDATE"}

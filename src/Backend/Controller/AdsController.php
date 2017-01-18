@@ -12,8 +12,7 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Security\Acl;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for managing ads
@@ -242,7 +241,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if ($ad->fk_publisher != $this->getUser()->id
-            && (false === Acl::check('CONTENT_OTHER_UPDATE'))
+            && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -302,7 +301,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if (!$ad->isOwner($this->getUser()->id)
-            && (false === Acl::check('CONTENT_OTHER_UPDATE'))
+            && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -426,8 +425,6 @@ class AdsController extends Controller
      */
     public function configAction(Request $request)
     {
-        $sm = $this->get('setting_repository');
-
         if ('POST' == $this->request->getMethod()) {
             $formValues = $request->request;
 
@@ -442,13 +439,19 @@ class AdsController extends Controller
                 ],
                 'dfp_options' => [
                     'target'  => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
+                    'module'  => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),
                 ],
                 'tradedoubler_id'   => $formValues->getDigits('tradedoubler_id'),
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             ];
 
+            if ($this->getUser()->isMaster()) {
+                $settings['dfp_custom_code'] =
+                    base64_encode($formValues->get('dfp_custom_code'));
+            }
+
             foreach ($settings as $key => $value) {
-                $sm->set($key, $value);
+                $this->get('setting_repository')->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add(
@@ -457,16 +460,16 @@ class AdsController extends Controller
             );
 
             // Delete caches for frontpages
-            $this->dispatchEvent('setting.update');
+            $this->get('core.dispatcher')->dispatch('setting.update');
 
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
             $keys = [
                 'ads_settings', 'dfp_options',  'iadbox_id', 'revive_ad_server',
-                'tradedoubler_id',
+                'tradedoubler_id', 'dfp_custom_code'
             ];
 
-            $configurations = $sm->get($keys);
+            $configurations = $this->get('setting_repository')->get($keys);
 
             return $this->render(
                 'advertisement/config.tpl',

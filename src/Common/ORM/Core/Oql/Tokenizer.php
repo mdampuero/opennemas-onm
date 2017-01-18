@@ -18,6 +18,26 @@ use Common\ORM\Core\Exception\InvalidQueryException;
 class Tokenizer
 {
     /**
+     * List of patterns to check by step when tokenizing.
+     *
+     * @var array
+     */
+    protected $steps = [
+        [ 'T_STRING' ],
+        [
+            'COMMA', 'C_AND', 'C_OR', 'G_CPARENTHESIS', 'G_CBRACKET',
+            'G_OBRACKET', 'G_OPARENTHESIS', 'M_ASC', 'M_DESC', 'M_LIMIT',
+            'M_OFFSET', 'M_ORDER_BY', 'O_GREAT_EQUALS', 'O_LESS_EQUALS',
+            'O_NOT_EQUALS', 'O_NOT_IN', 'O_NOT_LIKE', 'O_NOT_REGEXP',
+            'O_EQUALS', 'O_GREAT', 'O_IN', 'O_IS', 'O_NOT_IS', 'O_LESS',
+            'O_LIKE', 'O_REGEXP',
+        ],
+        [
+            'T_BOOL', 'T_DATETIME', 'T_NULL', 'T_FLOAT', 'T_INTEGER', 'T_FIELD',
+        ]
+    ];
+
+    /**
      * Array of valid tokens.
      *
      * @var array
@@ -33,30 +53,29 @@ class Tokenizer
         'M_ASC'          => '/\s*asc\s*/',
         'M_DESC'         => '/\s*desc\s*/',
         'M_LIMIT'        => '/\s*limit\s+/',
-        'M_OFFSET'       => '/\s*offset\s*/',
-        'M_ORDER'        => '/\s*order\s*/',
-        'M_BY'           => '/\s*by\s*/',
+        'M_OFFSET'       => '/\s*offset\s+/',
+        'M_ORDER_BY'     => '/\s*order by\s+/',
         'O_GREAT_EQUALS' => '/\s*>=\s*/',
         'O_LESS_EQUALS'  => '/\s*<=\s*/',
         'O_NOT_EQUALS'   => '/\s*!=\s*/',
-        'O_NOT_IN'       => '/\s*!in\s*/',
+        'O_NOT_IN'       => '/\s+!in\s+/',
         'O_NOT_LIKE'     => '/\s*!~\s*/',
-        'O_NOT_REGEXP'   => '/\s*!regexp\s*/',
+        'O_NOT_REGEXP'   => '/\s+!regexp\s+/',
         'O_EQUALS'       => '/\s*=\s*/',
         'O_GREAT'        => '/\s*>\s*/',
-        'O_IN'           => '/\s*in\s*/',
-        'O_IS'           => '/\s*is\s*/',
-        'O_NOT_IS'       => '/\s*!is\s*/',
+        'O_IN'           => '/\s+in\s+/',
+        'O_IS'           => '/\s+is\s+/',
+        'O_NOT_IS'       => '/\s+!is\s+/',
         'O_LESS'         => '/\s*<\s*/',
         'O_LIKE'         => '/\s*~\s*/',
-        'O_REGEXP'       => '/\s*regexp\s*/',
+        'O_REGEXP'       => '/\s+regexp\s+/',
         'T_BOOL'         => '/true|false/',
         'T_DATETIME'     => '/\'\d{4}\-\d{2}\-\d{2} \d{2}\:\d{2}\:\d{2}\'|\"\d{4}\-\d{2}\-\d{2} \d{2}\:\d{2}\:\d{2}\"/',
         'T_NULL'         => '/null/',
         'T_FLOAT'        => '/-?[0-9]+\.[0-9]+/',
         'T_INTEGER'      => '/-?[0-9]+/',
         'T_STRING'       => '/\'[^\']*\'|\"[^\"]*\"/',
-        'T_FIELD'        => '/[a-zA-Z0-9\_\.]+/',
+        'T_FIELD'        => '/[a-z][a-zA-Z0-9\_\.]+/',
     ];
 
     /**
@@ -71,7 +90,7 @@ class Tokenizer
         'S_OFFSET'    => '/M_OFFSET T_INTEGER/',
         'T_LITERAL'   => '/T_ARRAY|T_BOOL|T_DATETIME|T_FLOAT|T_INTEGER|T_NULL|T_STRING/',
         'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL\s*)*\s*G_CBRACKET/',
-        'S_ORDER'     => '/M_ORDER\s*M_BY\s*T_FIELD\s*(M_ASC|M_DESC)(\s*COMMA\s*T_FIELD\s*(M_ASC|M_DESC))*/',
+        'S_ORDER'     => '/M_ORDER_BY\s*T_FIELD\s*(M_ASC|M_DESC)(\s*COMMA\s*T_FIELD\s*(M_ASC|M_DESC))*/',
         'S_MODIFIER'  => '/S_ORDER(\s*S_LIMIT\s*(S_OFFSET)?)?|(S_ORDER)?\s*S_LIMIT(\s*S_OFFSET)?/',
         'S_CONDITION' => '/T_FIELD\s*T_OPERATOR\s*(T_FIELD|T_LITERAL)|T_LITERAL\s*T_OPERATOR\s*T_FIELD|G_OPARENTHESIS\s*S_CONDITION\s*G_CPARENTHESIS|S_CONDITION(\s*T_CONNECTOR\s*S_CONDITION)+/',
         'OQL'         => '/G_OPARENTHESIS\s*OQL\s*G_CPARENTHESIS|OQL(\s*T_CONNECTOR\s*OQL)+|S_CONDITION(\s*S_MODIFIER|OQL)*|OQL\s*S_MODIFIER|OQL\s*OQL|^S_MODIFIER$/',
@@ -88,20 +107,14 @@ class Tokenizer
     {
         $tokens = $this->getTokens($query);
 
-        // Translate tokens to internal OQL representation
-        $translated = [];
-        foreach ($tokens as &$token) {
-            $translated[] = $this->translateToken($token);
-        }
+        // Get internal OQL tokens
+        $translated = array_map(function ($a) {
+            return $a[1];
+        }, $tokens);
 
         $this->checkOQL($translated);
 
-        $map = [];
-        for ($i = 0; $i < count($tokens); $i++) {
-            $map[] = [ $tokens[$i], $translated[$i] ];
-        }
-
-        return $map;
+        return $tokens;
     }
 
     /**
@@ -113,7 +126,6 @@ class Tokenizer
     {
         $query      = implode(' ', $tokens);
         $translated = '';
-        $i = 0;
 
         while ($query !== 'OQL' && $query !== $translated) {
             $translated = $query;
@@ -132,113 +144,79 @@ class Tokenizer
     }
 
     /**
-     * Returns the tokens of the query.
+    * Returns the list of tokens and OQL internal representation from an OQL
+    * query.
      *
      * @param string $query The query to tokenize.
      *
-     * @return array The list of tokens.
+     * @return array The list of tokens and the OQL internal representation.
      *
      * @throws InvalidTokenException If one or more invalid tokens are found in
      *                               the query.
      */
     protected function getTokens($query)
     {
-        $tokens = [];
-        $i      = 0;
-        $prev   = '';
-        $index  = 0;
-        $token  = '';
+        $matrix = [];
+        $tokens = [ $query ];
+        foreach ($this->steps as $step) {
+            foreach ($tokens as $token) {
+                $replacement = $this->replaceTokens($token, $matrix, $step);
 
-        while ($index < strlen($query)) {
-            if ($this->isToken($token . $query[$index]) || !$this->isToken($token)) {
-                $token = $token . $query[$index];
-            } elseif ($this->isToken($token)) {
-                $tokens[] = $token;
-                $token    = $query[$index];
+                // Replace token by replacement
+                $pattern = '/' . preg_quote($token, '/') . '/';
+                $query   = preg_replace($pattern, $replacement, $query, 1);
             }
 
-            $index++;
+            // Split query in tokens to ignore replacements
+            $tokens = preg_split('/' . implode('|', $step) . '/', $query);
+            $tokens = array_filter($tokens, function ($a) {
+                return trim($a) !== "";
+            });
         }
 
-        if ($this->isToken($token)) {
-            $tokens[] = $token;
+        // Split internal query representation into tokens
+        $tokens = explode(' ', preg_replace('/\s+/', ' ', trim($query)));
 
-            return $tokens;
+        // Build OQL map
+        $map = [];
+        foreach ($tokens as $token) {
+            if (!array_key_exists($token, $matrix)) {
+                throw new InvalidTokenException($token);
+            }
+
+            $replacement = array_shift($matrix[$token]);
+            $map[]       = [ trim($replacement), $token ];
         }
 
-
-        throw new InvalidTokenException($token);
+        return $map;
     }
 
     /**
-     * Checks if a string is a valid sentence.
+     * Replaces tokens into a query.
      *
-     * @param string $str The string to check.
+     * @param string $query  The query to replace into.
+     * @param array  $matrix The list of replaced strings.
+     * @param array  $tokens The tokens to try to replace.
      *
-     * @return boolean True if the string is a valid sentence. Otherwise,
-     *                 returns false.
+     * @return string The replacement query.
      */
-    protected function isSentence($str)
+    protected function replaceTokens($query, &$matrix, $tokens)
     {
-        return $this->translateSentence($str) !== false;
-    }
+        foreach ($tokens as $replacement) {
+            $pattern = $this->tokens[$replacement];
 
-    /**
-     * Checks if a string is a valid token.
-     *
-     * @param string $str The string to check.
-     *
-     * @return boolean True if the string is a valid token. Otherwise, returns
-     *                 false.
-     */
-    protected function isToken($str)
-    {
-        return $this->translateToken($str) !== false;
-    }
+            if (preg_match_all($pattern, $query, $matches)) {
+                if (!array_key_exists($replacement, $matrix)) {
+                    $matrix[$replacement] = [];
+                }
 
-    /**
-     * Translates a string basing on the source.
-     *
-     * @param string $str    The string to translate.
-     * @param array  $source The translation source.
-     *
-     * @return mixed The translated string if the token can be translated.
-     *               Otherwise, returns false.
-     */
-    protected function match($str, $source)
-    {
-        foreach ($source as $replacement => $pattern) {
-            preg_match_all($pattern, $str, $matches);
+                $matrix[$replacement] =
+                    array_merge($matrix[$replacement], $matches[0]);
 
-            if (count($matches[0]) === 1 && $matches[0][0] === $str) {
-                return $replacement;
+                $query = str_replace($matches[0], " $replacement ", $query);
             }
         }
 
-        return false;
-    }
-
-    /**
-     * Translates a OQL sentence to the internal representation.
-     *
-     * @param string $token The sentence to translate.
-     *
-     * @return string The translated sentence.
-     */
-    protected function translateSentence($sentence)
-    {
-        return $this->match($sentence, $this->sentences);
-    }
-
-    /**
-     * Translates a token to the internal representation.
-     *
-     * @param string $token The token to translate.
-     *
-     * @return string The translated token.
-     */
-    protected function translateToken($token)
-    {
-        return $this->match($token, $this->tokens);
+        return $query;
     }
 }

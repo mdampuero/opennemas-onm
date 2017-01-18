@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
@@ -103,7 +103,7 @@ class BlogsController extends Controller
                     $blog->author->uri = \Uri::generate(
                         'frontend_blog_author_frontpage',
                         array(
-                            'slug' => $blog->author->username,
+                            'slug' => urlencode($blog->author->username),
                             'id'   => $blog->author->id
                         )
                     );
@@ -308,17 +308,15 @@ class BlogsController extends Controller
                 $photo = $this->get('entity_repository')->find('Photo', $blog->img2);
                 $this->view->assign('photo', $photo);
             }
-            $this->view->assign([
-                    'blog'     => $blog,
-                    'content'  => $blog,
-                    'author'   => $author,
-            ]);
+            $this->view->assign(['author' => $author]);
         } // End if isCached
 
         // Show in Frontpage
         return $this->render(
             'opinion/blog_inner.tpl',
             [
+                'blog'            => $blog,
+                'content'         => $blog,
                 'cache_id'        => $cacheID,
                 'advertisements'  => $this->getAds('inner'),
                 'actual_category' => 'blog', // Used in renderMenu

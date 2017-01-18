@@ -17,7 +17,7 @@ namespace BackendWebService\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the newsletters
@@ -38,18 +38,18 @@ class NewsletterSubscribersController extends Controller
      */
     public function listAction(Request $request)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search', '');
+        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $page            = $request->query->getDigits('page', 1);
+        $search          = $request->query->get('search', '');
 
         // Build filters for sql
         list($where, $orderBy) = $this->buildFilter($search);
 
-        $user = new \Subscriber();
-        $subscribers = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
+        $sb = new \Subscriber();
+        $subscribers = $sb->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
         $subscribers = \Onm\StringUtils::convertToUtf8($subscribers);
 
-        $total = $user->countUsers($where);
+        $total = $sb->countUsers($where);
 
         return new JsonResponse(
             array(
@@ -83,7 +83,7 @@ class NewsletterSubscribersController extends Controller
             if ($user->id && $result) {
                 $success[] = array(
                     'id'      => $id,
-                    'message' => sprintf(_('Subscritor with id "%d" deleted sucessfully'), $id),
+                    'message' => sprintf(_('Subscritor with id "%d" deleted successfully'), $id),
                     'type'    => 'success'
                 );
             } else {
@@ -124,7 +124,7 @@ class NewsletterSubscribersController extends Controller
         $user = new \Subscriber($id);
 
         $subscription = ($user->subscription + 1) % 2;
-        $toggled = $user->setSubscriptionStatus($user->id, 'subscription', $subscription);
+        $toggled = $user->setSubscriptionStatus($user->id, $subscription);
 
         if ($toggled) {
             $messages = array(
@@ -201,34 +201,40 @@ class NewsletterSubscribersController extends Controller
      */
     public function batchDeleteAction(Request $request)
     {
-        $ids = $request->query->get('cid');
+        $ids = $request->request->get('selected');
+        $errors  = array();
+        $success = array();
+        $updated = array();
 
         if (is_array($ids) && count($ids) > 0) {
             $user = new \Subscriber();
             $count = 0;
             foreach ($ids as $id) {
                 if ($user->delete($id)) {
-                    $count++;
+                    $updated[] = $id;
                 } else {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        sprintf(_('Unable to delete the subscriber with the id %d.'), $id)
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
                     );
                 }
             }
+        }
 
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Successfully deleted %d subscribers.'), $count)
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Please specify a subscriber id for delete it.')
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => sprintf(
+                    sprintf(_('Successfully deleted %d subscribers.'), count($updated))
+                ),
+                'type'    => 'success'
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+        return new JsonResponse([
+            'messages'  => array_merge($success, $errors)
+        ]);
     }
 
     /**

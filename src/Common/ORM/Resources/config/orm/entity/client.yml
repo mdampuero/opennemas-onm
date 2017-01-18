@@ -1,148 +1,150 @@
-entity:
-    name: Client
-    required:
-        - address
-        - city
-        - country
-        - email
-        - first_name
-        - last_name
-        - postal_code
-        - state
-    properties:
-        address:     string
-        city:        string
-        company:     string
-        country:     string
-        email:       string
-        first_name:  string
-        id:          integer
-        last_name:   string
-        phone:       string
-        postal_code: string
-        state:       string
-        vat_number:  string
-    converters:
-        default:
-            class:     Common\ORM\Database\Data\Converter\BaseConverter
-            arguments: [ '@orm.metadata.client' ]
-    repositories:
-        manager:
-            class:     Common\ORM\Database\Repository\BaseRepository
-            arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
-    persisters:
-        manager:
-            class:     Common\ORM\Database\Persister\BasePersister
-            arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
-        braintree:
-            class:     Common\ORM\Braintree\Persister\ClientPersister
-            arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.client' ]
-        freshbooks:
-            class:     Common\ORM\FreshBooks\Persister\ClientPersister
-            arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.client' ]
-    mapping:
-        braintree:
-            id:
-                name: id
-                type: string
-            first_name:
-                name: firstName
-                type: string
-            last_name:
-                name: lastName
-                type: string
-            email:
-                name: email
-                type: string
-            company:
-                name: company
-                type: string
-            phone:
-                name: phone
-                type: string
-        freshbooks:
-            id:
-                name: client_id
-                type: string
-            first_name:
-                name: first_name
-                type: string
-            last_name:
-                name: last_name
-                type: string
-            email:
-                name: email
-                type: string
-            company:
-                name: organization
-                type: string
-            phone:
-                name: work_phone
-                type: string
-            address:
-                name: p_street1
-                type: string
-            postal_code:
-                name: p_code
-                type: string
-            city:
-                name: p_city
-                type: string
-            state:
-                name: p_state
-                type: string
-            country:
-                name: p_country
-                type: string
-        database:
-            table: client
-            columns:
-                id:
-                    type: bigint
-                    options: { default: null }
-                first_name:
-                    type: string
-                    options: { default: null, length: 100 }
-                last_name:
-                    type: string
-                    options: { default: null, length: 100 }
-                email:
-                    type: string
-                    options: { default: null, length: 255 }
-                company:
-                    type: string
-                    options: { default: null, length: 100, notnull: false }
-                phone:
-                    type: string
-                    options: { default: null, length: 50, notnull: false }
-                vat_number:
-                    type: string
-                    options: { default: null, length: 20, notnull: false }
-                address:
-                    type: string
-                    options: { default: null, length: 255 }
-                postal_code:
-                    type: string
-                    options: { default: null, length: 20 }
-                city:
-                    type: string
-                    options: { default: null, length: 100 }
-                state:
-                    type: string
-                    options: { default: null, length: 100 }
-                country:
-                    type: string
-                    options: { default: null, length: 2 }
-            index:
-                -
-                    name: PRIMARY
-                    columns: [ id ]
-                    primary: true
-                    unique: true
-                    flags: {  }
-                -
-                    name: email
-                    columns: [ email ]
-                    primary: false
-                    unique: true
-                    flags: {  }
+orm:
+    metadata:
+        -
+            name: Client
+            required:
+                - address
+                - city
+                - country
+                - email
+                - first_name
+                - last_name
+                - postal_code
+                - state
+            properties:
+                address:     string
+                city:        string
+                company:     string
+                country:     string
+                email:       string
+                first_name:  string
+                id:          integer
+                last_name:   string
+                phone:       string
+                postal_code: string
+                state:       string
+                vat_number:  string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.client' ]
+            repositories:
+                manager:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
+            persisters:
+                manager:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
+                braintree:
+                    class:     Common\ORM\Braintree\Persister\ClientPersister
+                    arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.client' ]
+                freshbooks:
+                    class:     Common\ORM\FreshBooks\Persister\ClientPersister
+                    arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.client' ]
+            mapping:
+                braintree:
+                    id:
+                        name: id
+                        type: string
+                    first_name:
+                        name: firstName
+                        type: string
+                    last_name:
+                        name: lastName
+                        type: string
+                    email:
+                        name: email
+                        type: string
+                    company:
+                        name: company
+                        type: string
+                    phone:
+                        name: phone
+                        type: string
+                freshbooks:
+                    id:
+                        name: client_id
+                        type: string
+                    first_name:
+                        name: first_name
+                        type: string
+                    last_name:
+                        name: last_name
+                        type: string
+                    email:
+                        name: email
+                        type: string
+                    company:
+                        name: organization
+                        type: string
+                    phone:
+                        name: work_phone
+                        type: string
+                    address:
+                        name: p_street1
+                        type: string
+                    postal_code:
+                        name: p_code
+                        type: string
+                    city:
+                        name: p_city
+                        type: string
+                    state:
+                        name: p_state
+                        type: string
+                    country:
+                        name: p_country
+                        type: string
+                database:
+                    table: client
+                    columns:
+                        id:
+                            type: bigint
+                            options: { default: null }
+                        first_name:
+                            type: string
+                            options: { default: null, length: 100 }
+                        last_name:
+                            type: string
+                            options: { default: null, length: 100 }
+                        email:
+                            type: string
+                            options: { default: null, length: 255 }
+                        company:
+                            type: string
+                            options: { default: null, length: 100, notnull: false }
+                        phone:
+                            type: string
+                            options: { default: null, length: 50, notnull: false }
+                        vat_number:
+                            type: string
+                            options: { default: null, length: 20, notnull: false }
+                        address:
+                            type: string
+                            options: { default: null, length: 255 }
+                        postal_code:
+                            type: string
+                            options: { default: null, length: 20 }
+                        city:
+                            type: string
+                            options: { default: null, length: 100 }
+                        state:
+                            type: string
+                            options: { default: null, length: 100 }
+                        country:
+                            type: string
+                            options: { default: null, length: 2 }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: email
+                            columns: [ email ]
+                            primary: false
+                            unique: true
+                            flags: {  }

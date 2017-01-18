@@ -15,7 +15,7 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,7 +72,8 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
-            $tokens = \Onm\StringUtils::getTags($searchString);
+            $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+            $tokens = $tagSystem->filter($searchString);
             $tokens = explode(', ', $tokens);
 
             $er = $this->get('entity_repository');
@@ -180,11 +181,10 @@ class SearchController extends Controller
                     $moduleName = $contentType['name'];
                     break;
             }
+
             $moduleName = strtoupper($moduleName.'_MANAGER');
 
-            if (\Onm\Module\ModuleManager::moduleExists($moduleName) &&
-                \Onm\Module\ModuleManager::isActivated($moduleName)
-            ) {
+            if ($this->get('core.security')->hasExtension($moduleName)) {
                 $contentTypesFiltered[$contentType['name']] = $contentType['title'];
             }
         }

@@ -254,7 +254,7 @@
 
             if (constraints.permission) {
               for (var i = 0; i < constraints.permission.length; i++) {
-                enabled = enabled &&
+                enabled = enabled ||
                   security.hasPermission(constraints.permission[i]);
               }
             }

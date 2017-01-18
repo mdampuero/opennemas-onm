@@ -79,7 +79,7 @@ class NewsMLEuropaPress extends NewsML
             new \DateTimeZone('UTC')
         );
 
-        $date->setTimezone(new \DateTimeZone('Europe/Madrid'));
+        $date->setTimezone(new \DateTimeZone('UTC'));
 
         return $date;
     }
@@ -114,22 +114,25 @@ class NewsMLEuropaPress extends NewsML
      */
     public function parse($data)
     {
-        $content = new Resource();
-
-        $content->agency_name  = $this->getAgencyName($data);
-        $content->body         = $this->getBody($data);
-        $content->category     = $this->getCategory($data);
-        $content->created_time = $this->getCreatedTime($data)
+        $this->bag['agency_name']  = $this->getAgencyName($data);
+        $this->bag['id']           = $this->getId($data);
+        $this->bag['body']         = $this->getBody($data);
+        $this->bag['tags']         = $this->getTags($data);
+        $this->bag['created_time'] = $this->getCreatedTime($data)
             ->format('Y-m-d H:i:s');
-        $content->id           = $this->getId($data);
-        $content->pretitle     = $this->getPretitle($data);
-        $content->priority     = $this->getPriority($data);
-        $content->summary      = $this->getSummary($data);
-        $content->tags         = $this->getTags($data);
-        $content->title        = $this->getTitle($data);
-        $content->type         = 'text';
-        $content->urn          = $this->getUrn($data);
 
-        return $content;
+        $items = $data->xpath('/NewsML/NewsItem');
+
+        $contents = [];
+        foreach ($items as $item) {
+            $items = simplexml_load_string($item->asXML());
+            $contents = array_merge($contents, $this->parseItem($item));
+        }
+
+        foreach ($contents as &$content) {
+            $content->merge($this->bag);
+        }
+
+        return $contents;
     }
 }

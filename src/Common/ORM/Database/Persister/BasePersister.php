@@ -85,6 +85,8 @@ class BasePersister extends Persister
 
             $this->persistMetas($id, $metas);
         }
+
+        $entity->refresh();
     }
 
     /**
@@ -102,7 +104,7 @@ class BasePersister extends Persister
         }
 
         if ($this->hasCache()) {
-            $this->cache->delete($this->metadata->getPrefixedId($entity));
+            $this->cache->remove($this->metadata->getPrefixedId($entity));
         }
     }
 
@@ -135,7 +137,7 @@ class BasePersister extends Persister
         }
 
         if ($this->hasCache() && (!empty($data) || !empty($metas))) {
-            $this->cache->delete($this->metadata->getPrefixedId($entity));
+            $this->cache->remove($this->metadata->getPrefixedId($entity));
         }
     }
 

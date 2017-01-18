@@ -416,11 +416,11 @@
               <div class="tab-wrapper">
                 <div class="col-md-6">
                   <h5>{t}Analytic system integration{/t}</h5>
-                  <div class="panel-group" id="accordion_1" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_google_analytics" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_1" href="#goggle">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_google_analytics" href="#goggle">
                             <i class="fa fa-google"></i>{t}Google Analytics{/t}
                           </a>
                         </h4>
@@ -446,6 +446,17 @@
                                   </label>
                                   <div class="controls">
                                     <input class="form-control" name="google_analytics[0][base_domain]" type="text"  ng-model="gaCodes[0].base_domain" value="[% gaCodes[0].base_domain %]">
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-md-12" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Google Analytics Custom variables{/t}
+                                  </label>
+                                  <div class="controls">
+                                      <textarea class="form-control" name="google_analytics[0][custom_var]" type="text" class="input-xlarge" ng-model="gaCodes[0].custom_var" value="[% gaCodes[0].custom_var %]"></textarea>
                                   </div>
                                 </div>
                               </div>
@@ -479,6 +490,16 @@
                                     </div>
                                   </div>
                                 </div>
+                                <div class="col-md-12" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Google Analytics Custom variables{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <textarea class="form-control" name="google_analytics[[% $index %]][custom_var]" type="text" class="input-xlarge" ng-model="code.custom_var" value="[% code.custom_var %]"></textarea>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                             <div class="form-group" ng-if="gaCodes[0].api_key">
@@ -495,11 +516,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_5" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_comscore" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_5" href="#comscore">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_comscore" href="#comscore">
                             <i class="fa fa-area-chart"></i>{t}ComScore Statistics{/t}
                           </a>
                         </h4>
@@ -524,11 +545,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_9" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_ojd" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_9" href="#ojd">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_ojd" href="#ojd">
                             <i class="fa fa-line-chart"></i>{t}OJD Statistics{/t}
                           </a>
                         </h4>
@@ -551,12 +572,47 @@
                       </div>
                     </div>
                   </div>
-                  <h5>{t}Internal settings{/t}</h5>
-                  <div class="panel-group" id="accordion_4" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_chartbeat" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_4" href="#recaptcha">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_chartbeat" href="#chartbeat">
+                            <i class="fa fa-bar-chart"></i>{t}Chartbeat{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="chartbeat" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="chartbeat_id">
+                              {t}Chartbeat Account ID{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="chartbeat_id" name="chartbeat[id]" type="text" value="{$configs['chartbeat']['id']|default:""}">
+                              <div class="help">{t escape=off}If you also have a <strong>Charbeat statistics service</strong>, add your account id{/t}</div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="chartbeat_domain">
+                              {t}Chartbeat Domain{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="chartbeat_domain" name="chartbeat[domain]" type="text" value="{$configs['chartbeat']['domain']|default:""}">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <h5>{t}Internal settings{/t}</h5>
+                  <div class="panel-group" id="accordion_recaptcha" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_recaptcha" href="#recaptcha">
                             <i class="fa fa-keyboard-o"></i>{t}Recaptcha{/t}
                           </a>
                         </h4>
@@ -586,11 +642,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_8" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_onmagency" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_8" href="#news_agency">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_onmagency" href="#news_agency">
                             <i class="fa fa-microphone"></i>{t}Opennemas News Agency{/t}
                           </a>
                         </h4>
@@ -629,11 +685,11 @@
                     </div>
                   </div>
                   {is_module_activated name="PAYWALL"}
-                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_paypal" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#paypal">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_paypal" href="#paypal">
                             <i class="fa fa-paypal"></i>{t}Paypal Settings{/t}
                           </a>
                         </h4>
@@ -656,11 +712,11 @@
                     </div>
                   </div>
                   {/is_module_activated}
-                  <div class="panel-group" id="accordion_11" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_google" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_11" href="#goggle-services">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_google" href="#goggle-services">
                             <i class="fa fa-google"></i>{t}Google Services{/t}
                           </a>
                         </h4>
@@ -707,11 +763,11 @@
                 </div>
                 <div class="col-md-6">
                   <h5>{t}Social network integration{/t}</h5>
-                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_socialnetwork" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#goggle-plus">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_socialnetwork" href="#goggle-plus">
                             <i class="fa fa-youtube"></i>{t}Google+ and YouTube{/t}
                           </a>
                         </h4>
@@ -744,11 +800,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_6" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_facebook" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_6" href="#facebook">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_facebook" href="#facebook">
                             <i class="fa fa-facebook"></i>{t}Facebook{/t}
                           </a>
                         </h4>
@@ -807,11 +863,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_2" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_twitter" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_2" href="#twitter">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_twitter" href="#twitter">
                             <i class="fa fa-twitter"></i>{t}Twitter{/t}
                           </a>
                         </h4>
@@ -833,11 +889,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_instagram" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#instagram">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_instagram" href="#instagram">
                             <i class="fa fa-instagram"></i>{t}Instagram{/t}
                           </a>
                         </h4>
@@ -859,11 +915,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_pinterest" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#pinterest">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_pinterest" href="#pinterest">
                             <i class="fa fa-pinterest-square"></i>{t}Pinterest{/t}
                           </a>
                         </h4>
@@ -885,11 +941,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_vimeo" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#vimeo">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_vimeo" href="#vimeo">
                             <i class="fa fa-vimeo-square"></i>{t}Vimeo{/t}
                           </a>
                         </h4>
@@ -911,11 +967,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_7" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_linkedin" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_7" href="#linkedin">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_linkedin" href="#linkedin">
                             <i class="fa fa-linkedin"></i>{t}LinkedIn{/t}
                           </a>
                         </h4>
@@ -946,7 +1002,6 @@
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
-
                     <h4>Robots.txt</h4>
                     <div class="form-group">
                       <label class="form-label" for="robots_txt_rules">
@@ -959,7 +1014,6 @@
                         <textarea class="form-control" id="robots_txt_rules" name="robots_txt_rules" type="text" class="input-xlarge">{$configs['robots_txt_rules']|default:""}</textarea>
                       </div>
                     </div>
-
                     <h4>Scripts</h4>
                     <div class="form-group">
                       <label class="form-label" for="header-script">
@@ -967,7 +1021,7 @@
                         <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
                       </label>
                       <div class="controls">
-                        <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|escape:'html'|stripslashes|default:""}</textarea>
+                        <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|base64_decode|escape:'html'|default:""}</textarea>
                       </div>
                     </div>
                     <div class="form-group">
@@ -976,7 +1030,7 @@
                         <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
                       </label>
                       <div class="controls">
-                        <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|escape:'html'|stripslashes|default:""}</textarea>
+                        <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|base64_decode|escape:'html'|default:""}</textarea>
                       </div>
                     </div>
                     <div class="form-group">
@@ -985,10 +1039,9 @@
                         <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
                       </label>
                       <div class="controls">
-                        <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|escape:'html'|stripslashes|default:""}</textarea>
+                        <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|base64_decode|escape:'html'|default:""}</textarea>
                       </div>
                     </div>
-
                     <h4>CSS</h4>
                     <div class="form-group">
                       <label class="form-label" for="custom-css">
@@ -998,6 +1051,26 @@
                       </label>
                       <div class="controls">
                         <textarea class="form-control" id="custom-css" name="custom_css" disabled="disabled" readonly="readonly">{$configs['custom_css']|stripslashes|default:""}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <h4>RSS</h4>
+                    <div class="form-group">
+                      <label class="form-label" for="items_per_page">
+                        {t}Items in RSS{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="elements_in_rss" name="elements_in_rss" type="number" value="{$configs['elements_in_rss']|default:10}">
+                      </div>
+                    </div>
+                    <h4>{t}Redirection{/t}</h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input {if $configs['redirection'] eq "1"}checked{/if} id="redirection" name="redirection" type="checkbox" value="1">
+                        <label for="redirection">
+                          {t}Redirect to frontpage non-migrated contents{/t}
+                        </label>
                       </div>
                     </div>
                   </div>

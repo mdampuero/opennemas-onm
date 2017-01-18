@@ -186,26 +186,14 @@ class BaseRepository extends Repository
     /**
      * Finds entities that match a criteria.
      *
-     * @param string $criteria The criteria.
-     * @param string $tables   The comma-separated list of tables.
+     * @param string $sql The SQL query.
      *
      * @return array The list of entities.
      */
-    public function findBySql($criteria = '', $tables = '')
+    public function findBySql($sql)
     {
-        if (empty($tables)) {
-            $tables = $this->metadata->getTable();
-        }
-
         $keys = $this->metadata->getIdKeys();
-
-        $sql = sprintf('select %s from %s', implode(',', $keys), $tables);
-
-        if (!empty($criteria)) {
-            $sql .= " where $criteria";
-        }
-
-        $rs = $this->conn->fetchAll($sql);
+        $rs   = $this->conn->fetchAll($sql);
 
         $ids = array_map(function ($a) use ($keys) {
             return array_intersect_key($a, array_flip($keys));
@@ -232,7 +220,12 @@ class BaseRepository extends Repository
         $keys     = [];
         if ($this->hasCache()) {
             $entities = $this->cache->get($prefixedIds);
-            $keys     = array_keys($entities);
+            $miss     = $this->miss;
+            $entities = array_filter($entities, function ($a) use ($miss) {
+                return $miss !== $a;
+            });
+
+            $keys = array_keys($entities);
         }
 
         $missed = array_diff($prefixedIds, $keys);

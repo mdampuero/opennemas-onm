@@ -200,6 +200,47 @@ class CommentManager extends BaseManager
     }
 
     /**
+     * Returns the list of comments most voted for a given content id
+     *
+     * @param string $contentId The content id to fetch comments from
+     * @param int $limit The max number of comments to return
+     *
+     * @return array The list of comment objects
+     **/
+    public function getMostVotedCommentsforContentID($contentId, $limit = 1)
+    {
+        $orderBySQL  = '`value_pos` DESC';
+        if (!empty($order)) {
+            $orderBySQL = $this->getOrderBySQL($order);
+        }
+
+        $limitSQL = $this->getLimitSQL($limit);
+        $criteria = [
+            'content_id' => [[ 'value' => $contentId ]],
+            'status'     => [[ 'value' => \Comment::STATUS_ACCEPTED ]],
+            'value_pos'  => [[ 'value' => 0, 'operator' => '>' ]],
+        ];
+
+        $filterSQL  = $this->getFilterSQL($criteria);
+        // Executing the SQL
+        try {
+            $sql = "SELECT id FROM `comments` LEFT JOIN `votes` ON `comments`.`id`=`votes`.`pk_vote` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+            $rs  = $this->dbConn->fetchAll($sql);
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        $ids = array();
+        foreach ($rs as $resultElement) {
+            $ids[] = $resultElement['id'];
+        }
+
+        $comments = $this->findMulti($ids);
+
+        return $comments;
+    }
+
+    /**
      * Gets the number of public comments.
      *
      * @param integer $contentID The id of the content to get comments from.

@@ -25,7 +25,7 @@ class ClearConfigCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->cache = $this->getMockBuilder('Cache')
-            ->setMethods([ 'delete' ])
+            ->setMethods([ 'remove' ])
             ->getMock();
 
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
@@ -46,7 +46,7 @@ class ClearConfigCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $this->cache->expects($this->once())->method('delete');
+        $this->cache->expects($this->once())->method('remove');
 
         $application = new Application();
         $application->add(new ClearConfigCommand());
@@ -67,7 +67,7 @@ class ClearConfigCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithError()
     {
-        $this->cache->expects($this->once())->method('delete')
+        $this->cache->expects($this->once())->method('remove')
             ->will($this->throwException(new \Exception));
 
         $application = new Application();

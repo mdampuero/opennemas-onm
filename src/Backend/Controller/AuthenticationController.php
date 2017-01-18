@@ -9,7 +9,7 @@
  */
 namespace Backend\Controller;
 
-use Onm\Framework\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -112,7 +112,7 @@ class AuthenticationController extends Controller
                 'current_language' => \Application::$language,
                 'token'            => $token,
                 'referer'          => $referer,
-                'languages'        => $this->get('core.locale')->getLocales()
+                'locales'        => $this->get('core.locale')->getLocales()
             ]
         );
     }

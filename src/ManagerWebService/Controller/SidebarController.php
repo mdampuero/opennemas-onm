@@ -39,21 +39,16 @@ class SidebarController extends Controller
                     ],
                     'items' => [
                         [
-                            'name'  => _('Modules'),
-                            'icon'  => 'fa-flip-horizontal fa-plug',
-                            'route' => 'manager_modules_list',
-                            'click' => true
+                            'name'     => _('Modules'),
+                            'icon'     => 'fa-flip-horizontal fa-plug',
+                            'route'    => 'manager_modules_list',
+                            'click'    => true,
+                            'security' => [
+                                'permission' => [ 'EXTENSION_LIST' ],
+                            ],
+
                         ]
                     ]
-                ],
-                [
-                    'name'     => _('Notifications'),
-                    'icon'     => 'fa-bell',
-                    'route'    => 'manager_notifications_list',
-                    'click'    => true,
-                    'security' => [
-                        'permission' => [ 'NOTIFICATION_LIST' ],
-                    ],
                 ],
                 [
                     'name' => _('Store'),
@@ -83,6 +78,15 @@ class SidebarController extends Controller
                     ]
                 ],
                 [
+                    'name'     => _('Notifications'),
+                    'icon'     => 'fa-bell',
+                    'route'    => 'manager_notifications_list',
+                    'click'    => true,
+                    'security' => [
+                        'permission' => [ 'NOTIFICATION_LIST' ],
+                    ],
+                ],
+                [
                     'name'     => _('Reports'),
                     'icon'     => 'fa-files-o',
                     'route'    => 'manager_reports_list',
@@ -92,12 +96,49 @@ class SidebarController extends Controller
                     ],
                 ],
                 [
-                    'name'     => _('Framework'),
-                    'icon'     => 'fa-home',
+                    'name'     => _('System'),
+                    'icon'     => 'fa-gears',
                     'security' => [
-                        'permission' => [ 'COMMAND_LIST', 'OPCACHE_LIST' ],
+                        'permission' => [ 'COMMAND_LIST', 'GROUP_LIST', 'OPCACHE_LIST', 'SETTING_LIST', 'USER_LIST' ],
                     ],
                     'items' => [
+                        [
+                            'name'    => _('Configuration'),
+                            'icon'    => 'fa-gears',
+                            'route'   => 'manager_settings_list',
+                            'click'   => true,
+                           'security' => [
+                                'permission' => [ 'SETTING_LIST' ]
+                            ]
+                        ],
+                        [
+                            'name'     => _('Users & Groups'),
+                            'icon'     => 'fa-users',
+                            'security' => [
+                                'permission' => [ 'USER_LIST', 'GROUP_LIST' ],
+                            ],
+                            'items' => [
+                                [
+                                    'name'     => _('Users'),
+                                    'icon'     => 'fa-user',
+                                    'route'    => 'manager_users_list',
+                                    'click'    => true,
+                                    'security' => [
+                                        'permission' => [ 'USER_LIST' ],
+                                    ],
+                                ],
+                                [
+                                    'name'     => _('User groups'),
+                                    'icon'     => 'fa-users',
+                                    'route'    => 'manager_user_groups_list',
+                                    'click'    => true,
+                                    'security' => [
+                                        'permission' => [ 'GROUP_LIST' ],
+                                    ],
+                                ],
+
+                            ]
+                        ],
                         [
                             'name'     => _('Commands'),
                             'icon'     => 'fa-code',
@@ -116,33 +157,7 @@ class SidebarController extends Controller
                                 'permission' => [ 'OPCACHE_LIST' ],
                             ],
                         ]
-                    ]
-                ],
-                [
-                    'name'     => _('System'),
-                    'icon'     => 'fa-gears',
-                    'security' => [
-                        'permission' => [ 'USER_LIST', 'GROUP_LIST' ],
-                    ],
-                    'items' => [
-                        [
-                            'name'     => _('Users'),
-                            'icon'     => 'fa-user',
-                            'route'    => 'manager_users_list',
-                            'click'    => true,
-                            'security' => [
-                                'permission' => [ 'USER_LIST' ],
-                            ],
-                        ],
-                        [
-                            'name'     => _('User groups'),
-                            'icon'     => 'fa-users',
-                            'route'    => 'manager_user_groups_list',
-                            'click'    => true,
-                            'security' => [
-                                'permission' => [ 'GROUP_LIST' ],
-                            ],
-                        ]
+
                     ]
                 ]
             ],
