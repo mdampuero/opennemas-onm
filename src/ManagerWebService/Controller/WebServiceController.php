@@ -69,10 +69,10 @@ class WebServiceController extends Controller
             ->findOneBy('uuid = "BASIC_PACK"');
 
         $instance = new Instance([
-            'internal_name' => $subdomain,
+            'internal_name' => mb_strtolower($subdomain),
             'name'          => $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING),
             'contact_mail'  => $request->request->filter('user_email', '', FILTER_SANITIZE_STRING),
-            'domains'           => [ strtolower($subdomain) . '.' . $params['base_domain'] ],
+            'domains'           => [ mb_strtolower($subdomain) . '.' . $params['base_domain'] ],
             'main_domain'       => 1,
             'activated'         => true,
             'plan'              => $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING),
