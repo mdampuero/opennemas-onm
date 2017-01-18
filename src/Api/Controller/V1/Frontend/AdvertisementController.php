@@ -12,6 +12,7 @@ namespace Api\Controller\V1\Frontend;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Common\Core\Controller\Controller;
 
 /**
@@ -32,7 +33,7 @@ class AdvertisementController extends Controller
 
         $advertisements = array_map(function ($element) {
             // Only image and html type ads
-            if (!in_array($element->with_script, [0, 1]) && $element->content_status != 0) {
+            if (empty($element->content_status)) {
                 return;
             }
 
@@ -64,17 +65,28 @@ class AdvertisementController extends Controller
     /**
      * Returns a HTML/JS advertisement.
      *
-     * @param integer $id The advertisement id.
+     * @param Request $request The request object.
+     * @param integer $id      The advertisement id.
      *
      * @return Response The advertisement.
      */
-    public function showAction($id)
+    public function showAction(Request $request, $id)
     {
+        $category  = $request->query->get('category', 'home');
         $em = $this->get('entity_repository');
+        $sm = $this->get('setting_repository');
         $ad = $em->find('Advertisement', $id);
 
-        if (!in_array($ad->with_script, [ 0, 1 ])) {
-            throw new \Exception();
+        if (empty($ad) || empty($ad->content_status)) {
+            throw new ResourceNotFoundException();
+        }
+
+        if ($ad->with_script == 3) {
+            return new Response($this->renderDFP($ad, $category));
+        }
+
+        if ($ad->with_script == 2) {
+            return new Response($this->renderOpenX($ad, $category));
         }
 
         if ($ad->with_script != 0) {
@@ -83,7 +95,7 @@ class AdvertisementController extends Controller
 
         $img = $em->find('Photo', $ad->img);
 
-        if (strtolower($img->type_img) == 'swf') {
+        if (!empty($img) && strtolower($img->type_img) == 'swf') {
             return new Response($this->renderFlash($ad, $img));
         }
 
@@ -91,66 +103,69 @@ class AdvertisementController extends Controller
     }
 
     /**
-     * Returns the HTML code for a flash-based advertisement.
+     * Returns the custom code for Google DFP.
      *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The flash object.
-     *
-     * @return string The HTML code for a flash-based advertisement.
+     * @return string The custom code for Google DFP.
      */
-    protected function renderFlash($ad, $img)
+    protected function getCustomCode()
     {
-        $tr = [
-            '[width]'  => $img->width,
-            '[height]' => $img->height,
-            '[url]'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
-                . $img->path_file . $img->name,
-        ];
+        $code = $this->get('setting_repository')->get('dfp_custom_code');
 
-        $html = '<div style="width:[width]px; height:[height]px; margin: 0 auto;">
-            <div style="position: relative; width: [width]px; height: [height]px;">
-                <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;
-                    filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:
-                    [width]px;height:[height]px;"
-                    onclick="javascript:window.open(\'[url]\', \'_blank\');return false;">
-                </div>
-                <object width="[width]" height="[height]" >
-                    <param name="wmode" value="transparent" />
-                    <param name="movie" value="[url]" />
-                    <param name="width" value="[width]" />
-                    <param name="height" value="[height]" />
-                    <embed src="[url]" width="[width]" height="[url]"
-                    SCALE="exactfit" wmode="transparent"></embed>
-                </object>
-            </div>
-        </div>';
+        if (empty($code)) {
+            return '';
+        }
 
-        return strtr($html, $tr);
+        return base64_decode($code);
     }
 
     /**
-     * Returns the HTML code for an image-based advertisement.
+     * Returns the list of sizes for Google DFP.
      *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The image object.
+     * @param Advertisement $ad The advertisement object..
      *
-     * @return string The HTML code for an image-based advertisement.
+     * @return string The list of sizes for Google DFP.
      */
-    protected function renderImage($ad, $img)
+    protected function getSizes($ad)
     {
-        $tr = [
-            '[category]' => $img->category_name,
-            '[width]'    => $img->width,
-            '[height]'   => $img->height,
-            '[url]'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
-                . '/images' . $img->path_file . $img->name,
-        ];
+        $width  = $ad->params['width'];
+        $height = $ad->params['height'];
 
-        $html = '<a target="_blank" href="[url]" rel="nofollow">'
-            . '<img alt="[category]" src="[url]" width="[width]" height="[height]" />'
-            .'</a>';
+        if (!is_array($width)) {
+            $width = [ $width ];
+        }
 
-        return strtr($html, $tr);
+        if (!is_array($height)) {
+            $height = [ $height ];
+        }
+
+        $sizes = [];
+        foreach (array_keys($width) as $key) {
+            $sizes[] = "[{$width[$key]}, {$height[$key]}]";
+        }
+
+        return $sizes;
+    }
+
+    /**
+     * Returns the targeting-related JS code for google DFP.
+     *
+     * @param string $category The current category.
+     *
+     * @return string The targeting-related JS code.
+     */
+    protected function getTargeting($category)
+    {
+        $options = $this->get('setting_repository')->get('dfp_options');
+
+        $targetingCode = '';
+        if (!is_array($options)
+            || !array_key_exists('target', $options)
+            || empty($options['target'])
+        ) {
+            return '';
+        }
+
+        return "googletag.pubads().setTargeting('{$options['target']}', ['{$category}']);";
     }
 
     /**
@@ -163,7 +178,7 @@ class AdvertisementController extends Controller
     protected function normalize($element)
     {
         $object = new \stdClass();
-        // $object->content_status = (int) $element->content_status;
+
         $object->id           = (int) $element->pk_content;
         $object->type         = ((($element->type_advertisement + 50) % 100) == 0) ?
             'interstitial' : 'normal'; // Types: normal, interstitial
@@ -184,8 +199,96 @@ class AdvertisementController extends Controller
             'height' => $element->params['height'],
         ];
 
-        $object->target_url   = ($object->format == 'image') ? $element->url: '';
+        $object->target_url = ($object->format == 'image') ? $element->url: '';
 
         return $object;
+    }
+
+    /**
+     * Returns the HTML code for a Google DFP advertisement.
+     *
+     * @param Advertisement $ad       The advertisement object.
+     * @param string        $category The current category.
+     *
+     * @return string The HTML code for the Google DFP advertisement.
+     */
+    protected function renderDFP($ad, $category)
+    {
+        $params = [
+            'id'        => $ad->id,
+            'dfpId'     => $ad->params['googledfp_unit_id'],
+            'sizes'     => $this->getSizes($ad),
+            'targeting' => $this->getTargeting($category),
+            'custom'    => $this->getCustomCode()
+        ];
+
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/dfp.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for a flash-based advertisement.
+     *
+     * @param Advertisement $ad  The advertisement object.
+     * @param Photo         $img The flash object.
+     *
+     * @return string The HTML code for a flash-based advertisement.
+     */
+    protected function renderFlash($ad, $img)
+    {
+        $params = [
+            'width'  => $img->width,
+            'height' => $img->height,
+            'url'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
+                . $img->path_file . $img->name,
+        ];
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/flash.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for an image-based advertisement.
+     *
+     * @param Advertisement $ad  The advertisement object.
+     * @param Photo         $img The image object.
+     *
+     * @return string The HTML code for the image-based advertisement.
+     */
+    protected function renderImage($ad, $img)
+    {
+        $params = [
+            'category' => $img->category_name,
+            'width'    => $img->width,
+            'height'   => $img->height,
+            'url'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
+                . '/images' . $img->path_file . $img->name,
+        ];
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/image.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for a OpenX advertisement.
+     *
+     * @param Advertisement $ad       The advertisement object.
+     * @param string        $category The current category.
+     *
+     * @return string The HTML code for the OpenX advertisement.
+     */
+    protected function renderOpenX($ad, $category)
+    {
+        $params = [
+            'id'       => $ad->id,
+            'category' => $category,
+            'openXId'  => $ad->params['openx_zone_id'],
+            'url'      => $this->get('setting_repository')
+                ->get('revive_ad_server')['url']
+        ];
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/openx.tpl', $params);
     }
 }
