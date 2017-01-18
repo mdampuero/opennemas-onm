@@ -31,7 +31,7 @@ class PaymentPersister extends BasePersister
         $data = $this->converter->braintreefy($entity);
 
         // Force submit for settlement
-        $entity->options = [ 'submitForSettlement' => true ];
+        $data['options'] = [ 'submitForSettlement' => true ];
 
         $response = $cr::sale($data);
 
