@@ -137,6 +137,11 @@ class UserController extends Controller
                 } else {
                     $user->setMeta($request->request->get('meta'));
 
+                    // Set registration date
+                    $currentTime = new \DateTime();
+                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
+                    $user->setMeta(['register_date' => $currentTime->format('Y-m-d H:i:s')]);
+
                     try {
                         // Build the message
                         $message = \Swift_Message::newInstance();
@@ -169,8 +174,7 @@ class UserController extends Controller
                             _('Unable to send your registration email. Please try it later.')
                         );
                     }
-                    // Set registration date
-                    $user->addRegisterDate();
+
                     $this->view->assign('success', true);
                 }
             }
