@@ -15,7 +15,7 @@
   });
 </script>
 <div id="zone_{$id}">
-    <script type="text/javascript" data-id="{$id}">
-        googletag.cmd.push(function() { googletag.display('zone_{$id}'); });
-    </script>
+  <script type="text/javascript">
+    googletag.cmd.push(function() { googletag.display('zone_{$id}'); });
+  </script>
 </div>
