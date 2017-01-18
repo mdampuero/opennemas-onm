@@ -143,7 +143,7 @@ class AdvertisementController extends Controller
             $sizes[] = "[{$width[$key]}, {$height[$key]}]";
         }
 
-        return $sizes;
+        return '[' . implode(',', $sizes) .']';
     }
 
     /**
