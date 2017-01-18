@@ -27,11 +27,11 @@ class PaymentPersister extends BasePersister
      */
     public function create(Entity &$entity)
     {
-        // Force submit for settlement
-        $entity->options = [ 'submitForSettlement' => true ];
-
         $cr   = $this->factory->get('transaction');
         $data = $this->converter->braintreefy($entity);
+
+        // Force submit for settlement
+        $entity->options = [ 'submitForSettlement' => true ];
 
         $response = $cr::sale($data);
 
