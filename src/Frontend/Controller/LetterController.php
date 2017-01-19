@@ -91,8 +91,6 @@ class LetterController extends Controller
         return $this->render('letter/letter_frontpage.tpl', [
             'advertisements' => $this->getAds(),
             'cache_id'       => $cacheID,
-            'x-tags'         => 'letter-frontpage',
-            'x-cache-for'    => '+1 day',
         ]);
     }
 
@@ -138,8 +136,8 @@ class LetterController extends Controller
                 'contentId'      => $letter->id, // Used on module_comments.tpl
                 'advertisements' => $this->getAds(),
                 'cache_id'       => $cacheID,
-                'x-tags'      => 'letter,'.$letter->id,
-                'x-cache-for' => '+1 day',
+                'x-tags'         => 'letter,'.$letter->id,
+                'x-cache-for'    => '+1 day',
         ]);
     }
 
