@@ -137,7 +137,7 @@ class LetterController extends Controller
                 'content'        => $letter,
                 'contentId'      => $letter->id, // Used on module_comments.tpl
                 'cache_id'       => $cacheID,
-                'advertisements' => $this->getAds(),                
+                'advertisements' => $this->getAds(),
             ]
         );
     }
@@ -173,7 +173,7 @@ class LetterController extends Controller
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$isValid) {
-            $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
+            $msg = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
             $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
 
             return $response;
