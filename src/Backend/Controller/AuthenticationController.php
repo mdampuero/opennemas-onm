@@ -108,11 +108,11 @@ class AuthenticationController extends Controller
         return $this->render(
             'login/login.tpl',
             [
-                'recaptcha'        => $recaptcha,
-                'current_language' => \Application::$language,
-                'token'            => $token,
-                'referer'          => $referer,
-                'locales'        => $this->get('core.locale')->getLocales()
+                'recaptcha' => $recaptcha,
+                'locale'    => $this->get('core.locale')->getLocale(),
+                'token'     => $token,
+                'referer'   => $referer,
+                'locales'   => $this->get('core.locale')->getLocales(),
             ]
         );
     }
