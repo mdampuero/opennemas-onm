@@ -56,14 +56,10 @@ class FormController extends Controller
      */
     public function sendAction(Request $request)
     {
-        if ('POST' != $request->getMethod()) {
-            return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
-        }
-
         // Get request params
         $verify = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
 
-        if (!empty($verify)) {
+        if ('POST' != $request->getMethod() || !empty($verify)) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
 
@@ -73,13 +69,9 @@ class FormController extends Controller
         $message   = '';
         $class     = 'error';
 
-        // Recaptcha for the next content
-        $recaptcha = $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml();
-
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
+            ->configureFromSettings()
             ->isValid($response, $request->getClientIp());
 
         if (empty($email)) {
@@ -99,7 +91,7 @@ class FormController extends Controller
 
             foreach ($request->request as $key => $value) {
                 if (!in_array($key, $notAllowed)) {
-                    $body .= "<p>$key => $value </p> \n";
+                    $body .= "<p><strong>".ucfirst($key)."</strong>: $value </p> \n";
                 }
             }
 
@@ -107,7 +99,7 @@ class FormController extends Controller
             $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
             $recipient = trim($request->request->filter('recipient', null, FILTER_SANITIZE_STRING));
 
-            $settings = $this->get('setting_manager')->get([ 'mail_sender', 'site_name' ]);
+            $settings = $this->get('setting_repository')->get([ 'mail_sender', 'site_name', 'contact_email' ]);
 
             if (!array_key_exists('mail_sender', $settings)
                 || empty($settings['mail_sender'])
@@ -124,18 +116,20 @@ class FormController extends Controller
                 ->setFrom(array($email => $name))
                 ->setSender(array($settings['mail_sender'] => $settings['site_name']));
 
-            if (isset($_FILES['image1']) && !empty($_FILES['image1']["name"])) {
-                $file     = $_FILES["image1"]["tmp_name"];
-                $filename = $_FILES["image1"]["name"];
-                $type     = $_FILES["image1"]["type"];
-                $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
+            $file1 = $request->files->get('image1');
+            if ($file1) {
+                $text->attach(\Swift_Attachment::fromPath(
+                    $file1->getPathname(),
+                    $file1->getClientMimeType()
+                )->setFilename($file1->getClientOriginalName()));
             }
 
-            if (isset($_FILES['image2']) && !empty($_FILES['image2']["name"])) {
-                $file     = $_FILES["image2"]["tmp_name"];
-                $filename = $_FILES["image2"]["name"];
-                $type     = $_FILES["image2"]["type"];
-                $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
+            $file2 = $request->files->get('image2');
+            if ($file2) {
+                $text->attach(\Swift_Attachment::fromPath(
+                    $file2->getPathname(),
+                    $file2->getClientMimeType()
+                )->setFilename($file2->getClientOriginalName()));
             }
 
             try {
@@ -156,8 +150,11 @@ class FormController extends Controller
             }
         }
 
+
         return $this->render('static_pages/form.tpl', [
-            'recaptcha' => $recaptcha,
+            'recaptcha' => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
             'message'   => $message,
             'class'     => $class,
             'formType'  => $formType,
