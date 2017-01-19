@@ -37,7 +37,10 @@ class SubscribersController extends Controller
 
         return $this->render('static_pages/subscription.tpl', [
             'advertisements'  => $ads,
-            'actual_category' => 'newsletter'
+            'actual_category' => 'newsletter',
+            'recaptcha' => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
         ]);
     }
 
@@ -63,13 +66,20 @@ class SubscribersController extends Controller
             'subscription' => $request->request->filter('subscription', '', FILTER_SANITIZE_STRING),
         ];
 
+        $response  = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+
+
+        // Check current recaptcha
+        $isValid = $this->get('core.recaptcha')
+            ->configureFromSettings()
+            ->isValid($response, $request->getClientIp());
 
         // Set default values to return
         $message = null;
         $class   = '';
 
         // Check verify for bots
-        if (!empty($verify)) {
+        if (!$isValid) {
             $rs = [
                 'message' => _(
                     _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
@@ -77,28 +87,18 @@ class SubscribersController extends Controller
                 'class' => 'error'
             ];
         } else {
-            // Check reCaptcha
-            if (!$this->checkRecaptcha($request)) {
+            // Check name and email
+            if (!empty($data['email']) && !empty($data['name'])) {
+                if ($action == 'create_subscriptor') {
+                    $rs = $this->createSubscription($data);
+                } elseif ($action == 'submit') {
+                    $rs = $this->sendSubscriptionMail($request, $data);
+                }
+            } else {
                 $rs = [
-                    'message' => _(
-                        _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
-                    ),
+                    'message' => _("Check the form and try again"),
                     'class' => 'error'
                 ];
-            } else {
-                // Check name and email
-                if (!empty($data['email']) && !empty($data['name'])) {
-                    if ($action == 'create_subscriptor') {
-                        $rs = $this->createSubscription($data);
-                    } elseif ($action == 'submit') {
-                        $rs = $this->sendSubscriptionMail($request, $data);
-                    }
-                } else {
-                    $rs = [
-                        'message' => _("Check the form and try again"),
-                        'class' => 'error'
-                    ];
-                }
             }
         }
 
@@ -108,43 +108,11 @@ class SubscribersController extends Controller
                 'message'         => $rs['message'],
                 'actual_category' => 'newsletter',
                 'class'           => $rs['class'],
+                'recaptcha'       => $this->get('core.recaptcha')
+                    ->configureFromSettings()
+                    ->getHtml(),
             ]
         );
-    }
-
-    /**
-     * Check if recaptcha is valid
-     *
-     * @return $valid bool
-     **/
-    public function checkRecaptcha($request)
-    {
-        $rcChallengeField = $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
-        $rcResponseField  = $request->request->filter('recaptcha_response_field', '', FILTER_SANITIZE_STRING);
-        $configRecaptcha  = $this->get('setting_repository')->get('recaptcha');
-
-        // Check new and old reCAPTCHA
-        $valid = false;
-        $response = $request->get('g-recaptcha-response');
-        if (!is_null($response)) {
-            $rs = $this->get('google_recaptcha');
-            $recaptcha = $rs->getPublicRecaptcha();
-            $resp = $recaptcha->verify(
-                $request->get('g-recaptcha-response'),
-                $request->getClientIp()
-            );
-
-            $valid = $resp->isSuccess();
-        } else {
-            $captcha = $this->get('recaptcha')
-                ->setPrivateKey($configRecaptcha['private_key'])
-                ->setRemoteIp($request->getClientIp());
-
-            $resp = $captcha->check($rcChallengeField, $rcResponseField);
-            $valid = $resp->isValid();
-        }
-
-        return $valid;
     }
 
     /**
@@ -175,10 +143,12 @@ class SubscribersController extends Controller
         }
 
         // Get configuration params
-        list($configSiteName, $configMailTo) = $this->get('setting_repository')->get([
+        $settings = $this->get('setting_repository')->get([
             'site_name',
             'newsletter_maillist'
         ]);
+        $configSiteName = $settings['site_name'];
+        $configMailTo = $settings['newsletter_maillist'];
 
         // Checking the type of action to do (alta/baja)
         if ($data['subscription'] == 'alta') {
