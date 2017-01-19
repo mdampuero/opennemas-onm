@@ -299,6 +299,9 @@ class ContentsController extends Controller
                     'content'    => $content,
                     'content_id' => $contentID,
                     // 'token'      => $token,
+                    'recaptcha' => $this->get('core.recaptcha')
+                        ->configureFromSettings()
+                        ->getHtml(),
                     'ext'        => $ext,
                 )
             );
