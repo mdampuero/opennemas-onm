@@ -91,6 +91,9 @@ class LetterController extends Controller
         return $this->render('letter/letter_frontpage.tpl', [
             'advertisements' => $this->getAds(),
             'cache_id'       => $cacheID,
+            'recaptcha'      => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml()
         ]);
     }
 
@@ -106,6 +109,7 @@ class LetterController extends Controller
     {
         $letter = $this->get('content_url_matcher')
             ->matchContentUrl('letter', $id, $slug);
+
 
         if (empty($letter)) {
             throw new ResourceNotFoundException();
