@@ -138,18 +138,12 @@ class ContentsController extends Controller
             $valid = false;
             $errors = [];
 
-            // Validate captcha
-            if (!empty($request->get('g-recaptcha-response'))) {
-                $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
-                $resp = $recaptcha->verify(
-                    $request->get('g-recaptcha-response'),
-                    $request->getClientIp()
-                );
+            $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
+            $isValid  = $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->isValid($response, $request->getClientIp());
 
-                $valid = $resp->isSuccess();
-            }
-
-            if (!$valid) {
+            if (!$isValid) {
                 $errors []= _(
                     'The reCAPTCHA was not entered correctly.'.
                     ' Try to authenticate again.'
