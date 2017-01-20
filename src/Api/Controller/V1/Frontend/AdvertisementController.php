@@ -228,7 +228,7 @@ class AdvertisementController extends Controller
 
 
         return $this->get('core.template.admin')
-            ->fetch('advertisement/dfp.tpl', $params);
+            ->fetch('advertisement/helpers/dfp.tpl', $params);
     }
 
     /**
@@ -249,7 +249,7 @@ class AdvertisementController extends Controller
         ];
 
         return $this->get('core.template.admin')
-            ->fetch('advertisement/flash.tpl', $params);
+            ->fetch('advertisement/helpers/flash.tpl', $params);
     }
 
     /**
@@ -271,7 +271,7 @@ class AdvertisementController extends Controller
         ];
 
         return $this->get('core.template.admin')
-            ->fetch('advertisement/image.tpl', $params);
+            ->fetch('advertisement/helpers/image.tpl', $params);
     }
 
     /**
@@ -293,6 +293,6 @@ class AdvertisementController extends Controller
         ];
 
         return $this->get('core.template.admin')
-            ->fetch('advertisement/openx.tpl', $params);
+            ->fetch('advertisement/helpers/openx.tpl', $params);
     }
 }
