@@ -74,8 +74,7 @@ class FrontpagesController extends Controller
         $contents = $cm->getInTime($contents);
 
         // Fetch ads
-        $ads = $this->getAds($categoryId, $contents);
-        $this->view->assign('advertisements', $ads);
+        list($adsPositions, $ads) = $this->getAds($categoryId, $contents);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
@@ -188,16 +187,15 @@ class FrontpagesController extends Controller
             $this->view->assign('layoutFile', $layoutFile);
         }
 
-        return $this->render(
-            'frontpage/frontpage.tpl',
-            [
-                'cache_id'        => $cacheId,
-                'category_name'   => $categoryName,
-                'actual_category' => $categoryName,
-                'x-tags'          => 'frontpage-page,' . $categoryName,
-                'x-cache-for'     => $expires,
-            ]
-        );
+        return $this->render('frontpage/frontpage.tpl', [
+            'advertisements'  => $ads,
+            'ads_positions'   => $adsPositions,
+            'cache_id'        => $cacheId,
+            'category_name'   => $categoryName,
+            'actual_category' => $categoryName,
+            'x-tags'          => 'frontpage-page,' . $categoryName,
+            'x-cache-for'     => $expires,
+        ]);
     }
 
     /**
@@ -318,6 +316,6 @@ class FrontpagesController extends Controller
             }
         }
 
-        return $advertisements;
+        return [ $positions, $advertisements ];
     }
 }
