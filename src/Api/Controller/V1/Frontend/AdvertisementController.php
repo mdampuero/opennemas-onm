@@ -187,15 +187,17 @@ class AdvertisementController extends Controller
 
         $object = new \stdClass();
 
-        $object->id           = (int) $element->pk_content;
-        $object->type         = ((($element->type_advertisement + 50) % 100) == 0) ?
+        $object->id          = (int) $element->pk_content;
+        $object->type        = ((($element->type_advertisement + 50) % 100) == 0) ?
             'interstitial' : 'normal'; // Types: normal, interstitial
-        $object->position     = $element->type_advertisement;
-        $object->show_during  = (int) $element->timeout;
-        $object->format       = ($element->with_script == 1) ? 'html' : 'image';
-        $object->html         = $element->script;
-        $object->devices      = $element->params['devices'];
-        $object->user_groups  = $element->params['user_groups'];
+        $object->position    = $element->type_advertisement;
+        $object->publicId    = date('YmdHis', strtotime($element->created)).
+            sprintf('%06d', $element->pk_advertisement);
+        $object->timeout     = (int) $element->timeout;
+        $object->format      = ($element->with_script == 1) ? 'html' : 'image';
+        $object->html        = $element->script;
+        $object->devices     = $element->params['devices'];
+        $object->user_groups = $element->params['user_groups'];
         $object->size = [
             'width'  => $element->params['width'],
             'height' => $element->params['height'],
