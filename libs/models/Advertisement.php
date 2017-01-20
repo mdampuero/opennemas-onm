@@ -755,163 +755,29 @@ class Advertisement extends Content
             return $output;
         }
 
-        $params = array_merge(
-            [
-                'width'      => null,
-                'height'     => null,
-                'beforeHTML' => null,
-                'afterHTML'  => null,
-            ],
-            $params
-        );
+        $params = array_merge([
+            'beforeHTML' => null,
+            'afterHTML'  => null,
+        ], $params);
 
-        if (array_key_exists('cssclass', $params)
-            && isset($params['cssclass'])
-        ) {
-            $wrapperClass = $params['cssclass'].' ad_in_column ad_horizontal_marker clearfix';
-        } else {
-            $wrapperClass = 'ad_in_column ad_horizontal_marker clearfix';
-        }
+        // floating ads
         if ($this->type_advertisement == 37) {
-            // floating ads
+            $wrapperClass = 'ad_in_column ad_horizontal_marker clearfix';
+
+            if (array_key_exists('cssclass', $params)
+                && !empty($params['cssclass'])
+            ) {
+                $wrapperClass = $params['cssclass']
+                    . ' ad_in_column ad_horizontal_marker clearfix';
+            }
+
             $params['beforeHTML'] = "<div class=\"$wrapperClass\" style=\"text-align: center;\">";
             $params['afterHTML']  = "</div>";
         }
 
-        $overlap = (isset($this->params['overlap']))? $this->params['overlap']: false;
-
-        // Extract width and height properties from CSS
-        $width  = $params['width'];
-        $height = $params['height'];
-
-        if (is_array($this->params) && array_key_exists('width', $this->params) && !is_null($this->params['width'])
-            && array_key_exists('height', $this->params) && !is_null($this->params['height'])
-        ) {
-            if (is_array($this->params['width'])
-                && !empty($this->params['width'])
-                && is_array($this->params['height'])
-                && !empty($this->params['height'])
-            ) {
-                $width = $this->params['width'][0];
-                $height = $this->params['height'][0];
-            } else {
-                $width = $this->params['width'];
-                $height = $this->params['height'];
-            }
-        }
-
-        if ($this->with_script == 1) {
-            if (preg_match('/<iframe/', $this->script) || isset($this->default_ad)) {
-                $content = $this->script;
-            } elseif (strpos($_SERVER['SERVER_NAME'], 'pronto.com.ar') !== false ||
-                strpos($_SERVER['SERVER_NAME'], 'laregion.es') !== false ||
-                strpos($_SERVER['SERVER_NAME'], 'atlantico.net') !== false ||
-                strpos($_SERVER['SERVER_NAME'], 'salamanca24horas.com') !== false ||
-                strpos($_SERVER['SERVER_NAME'], 'zamora24horas.com') !== false
-            ) {
-                $content = $this->script;
-            } else {
-                // Check for external advertisement Script
-                if (isset($this->extWsUrl)) {
-                    $url = $this->extWsUrl."ads/get/".$this->pk_content;
-                } else {
-                    $url = url('frontend_ad_get', array('id' => $this->pk_content));
-                }
-
-                $content = '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.'px; '
-                            .'height:'.$height.'px; max-width:100%; overflow: hidden;border:none"></iframe>';
-            }
-        } elseif ($this->with_script == 2) {
-            if (in_array($this->type_advertisement, array(50,150,250,350,450,550))) {
-                $url = url('frontend_ad_get', array('id' => $this->pk_content));
-                $content = '<iframe src="'.$url.'" style="width:800px; max-width:100%; height:600px; overflow: hidden;border:none" '.
-                'scrolling="no" ></iframe>';
-            } else {
-                $content = "<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
-                OA_show('zone_{$this->id}');
-                // ]]> --></script>";
-            }
-        } elseif ($this->with_script == 3) {
-            $content = "<div id='zone_{$this->id}'>"
-                       ."<script type='text/javascript' data-id='{$this->id}'>"
-                       ."googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });"
-                       ."</script></div>";
-        } else {
-            // Check for external advertisement Flash/Image based
-            if (isset($this->extWsUrl)) {
-                $cm = new \ContentManager;
-                $photo = $cm->getUrlContent($this->extWsUrl."ws/images/id/".$this->img, true);
-                $url = $this->extUrl;
-                $mediaUrl = $this->extMediaUrl.$photo->path_file. $photo->name;
-            } else {
-                $photo = getService('entity_repository')->find('Photo', $this->img);
-                $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
-                      .sprintf('%06d', $this->pk_advertisement).'.html';
-                $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;
-                if (isset($this->default_ad) && $this->default_ad == 1) {
-                    $url = $this->url;
-                }
-            }
-
-            // If the Ad is Flash/Image based try to get the width and height fixed
-            if (isset($photo)) {
-                if (($photo->width <= $width)
-                    && ($photo->height <= $height)
-                ) {
-                    $width  = $photo->width;
-                    $height = $photo->height;
-                }
-            }
-
-            // TODO: controlar los banners swf especiales con div por encima
-            if (strtolower($photo->type_img) == 'swf') {
-                if (!$overlap && !$this->overlap) {
-                    // Generate flash object with wmode window
-                    $flashObject =
-                        '<object width="'.$width.'" height="'.$height.'" >
-                            <param name="wmode" value="window" />
-                            <param name="movie" value="'.$mediaUrl. '" />
-                            <param name="width" value="'.$width.'" />
-                            <param name="height" value="'.$height.'" />
-                            <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
-                                .'SCALE="exactfit" wmode="window"></embed>
-                        </object>';
-
-                    $content =
-                        '<a target="_blank" href="'.$url.'" rel="nofollow" '
-                        .'style="display:block;cursor:pointer">'.$flashObject.'</a>';
-                } else {
-                    // Generate flash object with wmode transparent
-                    $flashObject =
-                        '<object width="'.$width.'" height="'.$height.'" >
-                            <param name="wmode" value="transparent" />
-                            <param name="movie" value="'.$mediaUrl. '" />
-                            <param name="width" value="'.$width.'" />
-                            <param name="height" value="'.$height.'" />
-                            <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
-                                .'SCALE="exactfit" wmode="transparent"></embed>
-                        </object>';
-
-                    // CHECK: dropped checking of IE
-                    $content = '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
-                        <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
-                            .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
-                            $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;">
-                            </div>'.$flashObject.'</div>';
-                }
-
-                $content = '<div style="width:'.$width.'px; height:'.$height.'px; margin: 0 auto;">'.$content.'</div>';
-            } else {
-                // Image
-                $imageObject = '<img alt="'.$photo->category_name.'" src="'. $mediaUrl.'" '
-                                .'width="'.$width.'" height="'.$height.'" />';
-
-                $content = '<a target="_blank" href="'.$url.'" rel="nofollow">'.$imageObject.'</a>';
-            }
-        }
-
-        $output = $params['beforeHTML'].$content.$params['afterHTML'];
+        return $params['beforeHTML']
+            . "<div class=\"oat\" data-type=\"{$this->type_advertisement}\"></div>"
+            . $params['afterHTML'];
 
         return $output;
     }
