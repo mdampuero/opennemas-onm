@@ -96,20 +96,37 @@
                   title="Metadatos" type="hidden" value="{$advertisement->metadata|strip|default:""}">
                 </div>
               </div>
-              <h5>{t}Contents{/t}</h5>
               <div class="form-group">
-                <div class="controls">
-                  <label class="form-label" for="with_script">
-                    {t}Type{/t}
-                  </label>
-                  <select name="with_script" id="with_script" ng-model='with_script'>
-                    <option value="0" {if !isset($advertisement) || $advertisement->with_script == 0}selected="selected"{/if}>{t}Image or Flash object{/t}</option>
-                    <option value="1"  {if isset($advertisement) && $advertisement->with_script == 1}selected="selected"{/if}>{t}HTML or Javascript code{/t}</option>
-                    {if !empty($server_url)}
-                      <option value="2" {if isset($advertisement) && $advertisement->with_script == 2}selected="selected"{/if}>{t}Open X zone{/t}</option>
-                    {/if}
-                    <option value="3" {if isset($advertisement) && $advertisement->with_script == 3}selected="selected"{/if}>{t}Google DFP unit{/t}</option>
-                  </select>
+                <label class="form-label">
+                  {t}Type{/t}
+                </label>
+                <div class="controls row" ng-init="with_script = {{$advertisement->with_script}}">
+                  <div class="col-sm-3">
+                    <div class="radio">
+                      <input id="image" name="with_script" ng-model="with_script" {if $with_script == 0}checked{/if} type="radio" value="0">
+                      <label for="image">{t}Image or Flash object{/t}</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="radio">
+                      <input id="html" name="with_script" ng-model="with_script"  {if $with_script == 1}checked{/if} type="radio" value="1">
+                      <label for="html">{t}HTML or Javascript code{/t}</label>
+                    </div>
+                  </div>
+                  {if !empty($server_url)}
+                  <div class="col-sm-3">
+                    <div class="radio">
+                      <input id="open-x" name="with_script" ng-model="with_script"  {if $with_script == 2}checked{/if} type="radio" value="2">
+                      <label for="open-x">{t}OpenX{/t}</label>
+                    </div>
+                  </div>
+                  {/if}
+                  <div class="col-sm-3">
+                    <div class="radio">
+                      <input id="dfp" name="with_script" ng-model="with_script"   {if $with_script == 3}checked{/if} type="radio" value="3">
+                      <label for="dfp">{t}Google DFP{/t}</label>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="form-group ng-cloak">
@@ -189,8 +206,8 @@
         </div>
         <div class="col-md-4">
           <div class="grid simple">
-            <div class="grid-body">
-              <div class="form-group">
+            <div class="grid-body no-padding">
+              <div class="grid-collapse-title">
                 <div class="checkbox">
                   <input type="checkbox" name="content_status" id="content_status" value="1"
                   {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
@@ -199,126 +216,168 @@
                   </label>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="type_medida" class="form-label">
-                  {t}Restrictions{/t}
-                  <span data-container="body" tooltip-placement="top" uib-tooltip="{t}Show this ad if it satisfies all conditions{/t}."><i class="fa fa-info-circle text-info""></i></span>
-                </label>
+              <div class="grid-collapse-title pointer" ng-class="{ 'open': restriction_date_range_show }" ng-click="restriction_date_range_show =!restriction_date_range_show">
+                <i class="fa fa-calendar-check-o m-r-5"></i> {t}Date range{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_date_range_show }" ng-click="restriction_date_range_show =!restriction_date_range_show"></i>
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && endtime"><strong>{t}End{/t}:</strong> [% endtime %]</span>
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && starttime"><strong>{t}Start{/t}:</strong> [% starttime %]</span>
               </div>
-
-              <div class="form-group">
-                <div>
-                  <label for="date_range" class="form-label"><i class="fa fa-calendar-check-o"></i> {t}Date range{/t}</label>
-                  <div class="pull-right btn btn-link"><i class="fa fa-pencil text-right" ng-click="restriction_date_range_show =!restriction_date_range_show"></i></div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_date_range_show }">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-addon add-on">
+                        <i class="fa fa-calendar m-r-5"></i>
+                        {t}Start{/t}
+                      </span>
+                      <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" datetime-picker ng-model="starttime" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-addon add-on">
+                        <span class="fa fa-calendar m-r-5"></span>
+                        {t}End{/t}
+                      </span>
+                      <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" datetime-picker ng-model="endtime" />
+                    </div>
+                  </div>
                 </div>
-                <div class="controls ng-cloak p-l-10">
-                  <div ng-show="!restriction_date_range_show">
-                    <div class="row" ng-show="endtime == null && starttime == null"><small>{t}No restriction{/t}</small></div>
-                    <div class="row" ng-show="starttime != ''"> <small><span class="col-xs-3">{t}Show from{/t}</span> <strong class="badge badge-success">[% starttime %] </strong> </small></div>
-                    <div class="row" ng-show="endtime != ''">
-                      <small><span class="col-xs-3">{t}Until{/t}</span> <strong class="badge badge-success">[% endtime %]</strong></small>
-                    </div>
-                  </div>
-
-                  <div ng-show="restriction_date_range_show">
-                    <label for="starttime">{t}From{/t}</label>
-                    <div class="controls">
-                      <div class="input-group">
-                        <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" datetime-picker ng-model="starttime" />
-                        <span class="input-group-addon add-on">
-                          <span class="fa fa-calendar"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <label for="endtime">{t}Until{/t}</label>
-                    <div class="controls">
-                      <div class="input-group">
-                        <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" datetime-picker ng-model="endtime" />
-                        <span class="input-group-addon add-on">
-                          <span class="fa fa-calendar"></span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                <div class="m-t-10">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Display the advertisement if current date is in range{/t}
+                  </small>
                 </div>
               </div>
-
-              <div class="form-group">
-                <div>
-                  <label for="devices" class="form-label"><i class="fa fa-desktop"></i> {t}Devices{/t}</label>
-                  <div class="pull-right btn btn-link"><i class="fa fa-pencil text-right" ng-click="restriction_devices_show =!restriction_devices_show"></i></div>
-                </div>
-                <div class="controls ng-cloak p-l-10">
-                  <div ng-show="!restriction_devices_show" class="row">
-                    <small>
-                      <span class="col-xs-3">{t}Show on{/t}</span>
-                      <strong>
-                        <span ng-show="params.restriction_devices.desktop" class="badge badge-success">{t}Desktop{/t}</span>
-                        <span ng-show="params.restriction_devices.tablet" class="badge badge-success">{t}Tablet{/t}</span>
-                        <span ng-show="params.restriction_devices.phone" class="badge badge-success">{t}Phone{/t}</span>
-                        <!-- <span ng-show="params.restriction_devices.desktop && params.restriction_devices.tablet &&  params.restriction_devices.phone" class="badge badge-success">No restriction</span> -->
-                      </strong>
-                    </small>
-                  </div>
-                  <div ng-show="restriction_devices_show">
-                    <div class="checkbox p-b-10">
-                      <input type="checkbox" name="restriction_devices_desktop" id="restriction_device_desktop" value="true" ng-model="params.restriction_devices.desktop" ng-true-value="true"
-                      {if !isset($advertisement->params['restriction_devices']) || isset($advertisement->params['restriction_devices']['desktop']) && $advertisement->params['restriction_devices']['desktop'] == true}checked="checked"{/if} />
+              <div class="grid-collapse-title pointer" ng-click="devices_show = !devices_show">
+                <i class="fa fa-desktop m-r-5"></i> {t}Devices{/t}
+                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': devices_show }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.phone">
+                  <i class="fa fa-mobile m-r-5"></i>
+                  <span>{t}Phone{/t}</span>
+                </span>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.tablet">
+                  <i class="fa fa-tablet m-r-5"></i>
+                  <span>{t}Tablet{/t}</span>
+                </span>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.desktop">
+                  <i class="fa fa-desktop m-r-5"></i>
+                  <span>{t}Desktop{/t}</span>
+                </span>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': devices_show }">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="checkbox">
+                      <input type="checkbox" name="restriction_devices_desktop" id="restriction_device_desktop" ng-model="params.devices.desktop" ng-false-value="0" ng-true-value="1" value="1">
                       <label class="form-label" for="restriction_device_desktop">
                         {t}Desktop{/t}
                       </label>
                     </div>
-                    <div class="checkbox p-b-10">
-                      <input type="checkbox" name="restriction_devices_tablet" id="restriction_device_tablet" value="true" ng-model="params.restriction_devices.tablet" ng-true-value="true"
-                      {if !isset($advertisement->params['restriction_devices']) || isset($advertisement->params['restriction_devices']['tablet']) && $advertisement->params['restriction_devices']['tablet'] == true}checked="checked"{/if} />
+                  </div>
+                  <div class="col-md-4">
+                    <div class="checkbox">
+                      <input type="checkbox" name="restriction_devices_tablet" id="restriction_device_tablet" ng-model="params.devices.tablet" ng-false-value="0" ng-true-value="1" value="1">
                       <label class="form-label" for="restriction_device_tablet">
                         {t}Tablet{/t}
                       </label>
                     </div>
-                    <div class="checkbox p-b-10">
-                      <input type="checkbox" name="restriction_devices_phone" id="restriction_device_phone" value="true" ng-model="params.restriction_devices.phone" ng-true-value="true"
-                      {if !isset($advertisement->params['restriction_devices']) || isset($advertisement->params['restriction_devices']['phone']) && $advertisement->params['restriction_devices']['phone'] == true}checked="checked"{/if} />
+                  </div>
+                  <div class="col-md-4">
+                    <div class="checkbox">
+                      <input type="checkbox" name="restriction_devices_phone" id="restriction_device_phone" ng-model="params.devices.phone" ng-false-value="0" ng-true-value="1" value="1">
                       <label class="form-label" for="restriction_device_phone">
                         {t}Phone{/t}
                       </label>
                     </div>
                   </div>
                 </div>
+                <div class="m-t-10">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Display the advertisement only on selected devices{/t}
+                  </small>
+                </div>
+              </div>
+              <div class="grid-collapse-title pointer" ng-click="restriction_user_groups_show = !restriction_user_groups_show">
+                <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
+                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_user_groups_show }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!restriction_user_groups_show">
+                  <span ng-show="params.user_groups.length === 0">{t}All{/t}</span>
+                  <span ng-show="params.user_groups.length != 0">
+                    <strong>[% params.user_groups.length %]</strong>
+                    {t}selected{/t}
+                  </span>
+                </span>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_user_groups_show }">
+                <input name="restriction_usergroups" ng-value="restriction_usergroups" type="hidden">
+                <div class="checkbox p-b-5" ng-repeat="group in groups">
+                  <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="params.user_groups" checklist-value="group.id" type="checkbox">
+                  <label class="form-label" for="group-[% $index %]">
+                    [% group.name %]
+                  </label>
+                </div>
+                <div class="m-t-5">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Display the advertisement if user belongs to one or more of the selected user groups{/t}
+                  </small>
+                </div>
+              </div>
+              <div class="grid-collapse-title pointer" ng-click="restriction_category_show =! restriction_category_show">
+                <i class="fa fa-bookmark m-r-5"></i>
+                {t}Categories{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_category_show }"></i>
+              </div>
+              <div class="grid-collapse-body" ng-class="{ 'expanded': restriction_category_show }">
+                <select name="category[]" id="category" required="required" multiple="multiple" size=6>
+                  <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
+                  <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
+                  <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>
+                  <option value="6" {if isset($advertisement) && in_array(6,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Video{/t}</option>
+
+                  <option value="0">{t}Home{/t}</option>
+                  {section name=as loop=$allcategorys}
+                  {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                  <option value="{$allcategorys[as]->pk_content_category}"
+                          {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                          {$allcategorys[as]->title}
+                  </option>
+                  {/acl}
+                  {section name=su loop=$subcat[as]}
+                  {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                  <option value="{$subcat[as][su]->pk_content_category}"
+                          {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                          &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
+                  </option>
+                  {/acl}
+                  {/section}
+                  {/section}
+                </select>
+              </div>
+              <div class="grid-collapse-title pointer ng-cloak" ng-click="restriction_duration_show = !restriction_duration_show" ng-show="((type_advertisement + 50)  % 100) == 0">
+                <i class="fa fa-clock-o m-r-5"></i>
+                {t}Duration{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_duration_show }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold" ng-show="!restriction_duration_show">
+                  <strong>[% timeout %]</strong>s
+                </span>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_duration_show }" ng-show="((type_advertisement + 50)  % 100) == 0">
+                <div class="input-group">
+                  <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0" max="100" />
+                  <div class="input-group-addon">{t}seconds{/t}</div>
+                </div>
+                <div class="m-t-10">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Display the advertisement for a limited time (intersticials only){/t}
+                  </small>
+                </div>
               </div>
 
-              <div class="form-group">
-                <div>
-                  <label for="restriction_usergroups" class="form-label"><i class="fa fa-users"></i> {t}User groups{/t}</label>
-                  <div class="pull-right btn btn-link"><i ng-click="restriction_usergroups_show =! restriction_usergroups_show" class="fa fa-pencil" ></i></div>
-                </div>
-                <div class="controls ng-cloak p-l-10">
-                  <span ng-show="restriction_usergroups_show">
-                    <multiselect ng-model="params.restriction_usergroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% params.restriction_usergroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
-                  </span>
-                  <span class="col-xs-12 m-t-10">
-                    <small>
-                    <div class="col-xs-3">{t}Show to{/t}</div>
-                    <div class="col-xs-9">
-                      <div ng-show="params.restriction_usergroups.length < 1"><div class="badge badge-success">{t}All user groups{/t}</div></div>
-                      <span class="badge badge-success m-r-5 m-b-5" ng-repeat="group in params.restriction_usergroups">
-                        [% group.name %]
-                        <input type="hidden" name="restriction_usergroups[]" value="[% group.id %]">
-                      </span>
-                    </div>
-                  </span>
-                </div>
-              </div>
-
-              <div class="form-group ng-cloak" ng-show="((type_advertisement + 50)  % 100) == 0">
-                <label for="timeout" class="form-label">{t}Display banner while{/t}</label>
-                <span data-container="body" tooltip-placement="top" uib-tooltip="{t}Amount of seconds that this banner will block all the page.{/t}"><i class="fa fa-info-circle text-info""></i></span>
-                <div class="controls">
-                 <div class="input-group">
-                    <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0" max="100" />
-                    <div class="input-group-addon">{t}seconds{/t}</div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -330,82 +389,42 @@
               <h4>{t}Where to show this ad{/t}</h4>
             </div>
             <div class="grid-body">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="form-label" for="position">
-                      {t}Pages of type{/t}
-                    </label>
-                    <div class="controls">
-                      <select name="position" id="position" ng-model="position">
-                        <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
-                        <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Inner article{/t}</option>
-                        {is_module_activated name="VIDEO_MANAGER"}
-                        <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video frontpage{/t}</option>
-                        <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Inner video{/t}</option>
-                        {/is_module_activated}
-                        {is_module_activated name="OPINION_MANAGER"}
-                        <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion frontpage{/t}</option>
-                        <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Inner opinion{/t}</option>
-                        {/is_module_activated}
-                        {is_module_activated name="ALBUM_MANAGER"}
-                        <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Galleries{/t}</option>
-                        <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery Inner{/t}</option>
-                        {/is_module_activated}
-                        {is_module_activated name="POLL_MANAGER"}
-                        <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll{/t}</option>
-                        <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
-                        {/is_module_activated}
-                        {is_module_activated name="NEWSLETTER_MANAGER"}
-                        <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
-                        {/is_module_activated}
-                        {is_module_activated name="AMP_MODULE"}
-                        <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
-                        {/is_module_activated}
-                        {is_module_activated name="FIA_MODULE"}
-                        <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
-                        {/is_module_activated}
-                        <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="category" class="form-label">{t}In categories{/t}</label>
-                    <div class="controls">
-                      <select name="category[]" id="category" required="required" multiple="multiple" size=6>
-                        <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
-                        <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
-                        <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>
-                        <option value="6" {if isset($advertisement) && in_array(6,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Video{/t}</option>
-
-                        <option value="0">{t}Home{/t}</option>
-                        {section name=as loop=$allcategorys}
-                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                        <option value="{$allcategorys[as]->pk_content_category}"
-                          {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                          {$allcategorys[as]->title}
-                        </option>
-                        {/acl}
-                          {section name=su loop=$subcat[as]}
-                          {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                          <option value="{$subcat[as][su]->pk_content_category}"
-                            {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                            &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
-                          </option>
-                          {/acl}
-                          {/section}
-                        {/section}
-                      </select>
-                    </div>
-                  </div>
+              <div class="form-group">
+                <label class="form-label">{t}Pages of type{/t}</label>
+                <div class="controls">
+                  <select name="position" id="position" ng-model="position">
+                    <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
+                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Inner article{/t}</option>
+                    {is_module_activated name="VIDEO_MANAGER"}
+                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video frontpage{/t}</option>
+                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Inner video{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="OPINION_MANAGER"}
+                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion frontpage{/t}</option>
+                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Inner opinion{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="ALBUM_MANAGER"}
+                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Galleries{/t}</option>
+                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery Inner{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="POLL_MANAGER"}
+                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll{/t}</option>
+                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="NEWSLETTER_MANAGER"}
+                    <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="AMP_MODULE"}
+                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="FIA_MODULE"}
+                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
+                    {/is_module_activated}
+                    <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
+                  </select>
                 </div>
               </div>
-              <div class="form-group" style="position:relative; top:-20px">
-                <label class="form-label" for="position">
-                  {t}and inside the position{/t}
-                </label>
+              <div class="form-group">
                 <div class="controls">
                   <div id="position-adv">
                     <div class="ng-cloak" ng-show="position == 'publi-frontpage'">
