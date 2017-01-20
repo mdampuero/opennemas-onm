@@ -19,8 +19,6 @@
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
       $scope.sizes = [ { width: 0, height: 0 } ];
-      $scope.params = [];
-      $scope.params.restriction_devices = [ { phone: true, tablet: true, desktop: true } ]
 
       /**
        * @function init
@@ -38,11 +36,22 @@
         if (!angular.isArray(params.width) || !angular.isArray(params.height)) {
           return;
         }
+
         for (var i = 0; i < params.width.length; i++) {
           $scope.sizes.push({
             width:  parseInt(params.width[i]),
             height: parseInt(params.height[i])}
           );
+        }
+
+        if (!$scope.params.user_groups ||
+            !angular.isArray($scope.params.user_groups)) {
+          $scope.params.user_groups = [];
+        }
+
+        if (!$scope.params.devices ||
+            !angular.isObject($scope.params.devices)) {
+          $scope.params.devices = { phone: 1, tablet: 1, desktop: 1 };
         }
       };
 
@@ -144,6 +153,11 @@
 
         $scope.checkGoogleDFP(nv);
       });
+
+      // Update value in form when model changes
+      $scope.$watch('params.restrictions.user_groups', function(nv) {
+        $scope.restriction_usergroups = angular.toJson(nv);
+      }, true);
 
       // Track all radio buttons type_advertisement and update the model property
       // in the $scope
