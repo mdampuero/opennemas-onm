@@ -32,24 +32,14 @@ class AdvertisementController extends Controller
         $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($places, $category);
 
         $advertisements = array_map(function ($element) {
-            // Only image and html type ads
-            if (empty($element->content_status)) {
-                return;
-            }
+            $date = date('Y-m-d H:i:s');
 
-            if (!array_key_exists('restriction_devices', $element->params)
-                || !empty($element->params['restriction_devices'])
+            // Only image and html type ads
+            if (empty($element->content_status)
+                || (!empty($element->starttime) && $element->starttime > $date)
+                || (!empty($element->endtime) && $element->endtime < $date)
             ) {
-                $element->params['restriction_devices'] = [
-                    'phone'   => 1,
-                    'tablet'  => 1,
-                    'desktop' => 1,
-                ];
-            }
-            if (!array_key_exists('restriction_usergroups', $element->params)
-                || !empty($element->params['restriction_usergroups'])
-            ) {
-                $element->params['restriction_usergroups'] = [];
+                return;
             }
 
             return $this->normalize($element);
@@ -59,7 +49,7 @@ class AdvertisementController extends Controller
             return !is_null($element);
         });
 
-        return new JsonResponse($advertisements);
+        return new JsonResponse(array_values($advertisements));
     }
 
     /**
@@ -80,6 +70,8 @@ class AdvertisementController extends Controller
         if (empty($ad) || empty($ad->content_status)) {
             throw new ResourceNotFoundException();
         }
+
+        //var_dump($ad->params);die();
 
         if ($ad->with_script == 3) {
             return new Response($this->renderDFP($ad, $category));
@@ -177,6 +169,22 @@ class AdvertisementController extends Controller
      */
     protected function normalize($element)
     {
+        if (!array_key_exists('devices', $element->params)
+            || empty($element->params['devices'])
+        ) {
+            $element->params['devices'] = [
+                'phone'   => 1,
+                'tablet'  => 1,
+                'desktop' => 1,
+            ];
+        }
+
+        if (!array_key_exists('user_groups', $element->params)
+            || empty($element->params['user_groups'])
+        ) {
+            $element->params['user_groups'] = [];
+        }
+
         $object = new \stdClass();
 
         $object->id           = (int) $element->pk_content;
@@ -186,14 +194,8 @@ class AdvertisementController extends Controller
         $object->show_during  = (int) $element->timeout;
         $object->format       = ($element->with_script == 1) ? 'html' : 'image';
         $object->html         = $element->script;
-        $object->restrictions = [
-            'devices'    => $element->params['restriction_devices'],
-            'user_group' => $element->params['restriction_usergroups'],
-            'time'       => [
-                'from'  => $element->starttime,
-                'until' => $element->endtime,
-            ],
-        ];
+        $object->devices      = $element->params['devices'];
+        $object->user_groups  = $element->params['user_groups'];
         $object->size = [
             'width'  => $element->params['width'],
             'height' => $element->params['height'],
