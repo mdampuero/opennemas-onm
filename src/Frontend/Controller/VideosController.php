@@ -40,23 +40,34 @@ class VideosController extends Controller
         $this->page          = $this->request->query->getDigits('page', 1);
         $this->category_name = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
-        if ($this->category_name != 'home') {
-            $ccm = \ContentCategoryManager::get_instance();
-            $this->category = $ccm->get_id($this->category_name);
-            $category_real_name = $ccm->getTitle($this->category_name);
+        if (!empty($this->category_name) && $this->category_name != 'home') {
+            $categoryManager = $this->get('category_repository');
+            $category = $categoryManager->findBy(
+                array('name' => array(array('value' => $this->category_name))),
+                'name ASC'
+            );
+
+            if (empty($category)) {
+                throw new ResourceNotFoundException();
+            }
+
+            $category         = $category[0];
+            $this->category   = $category->pk_content_category;
+
             $this->view->assign(
                 array(
                     'category'           => $this->category,
                     'actual_category_id' => $this->category,
                     'category_name'      => $this->category_name,
                     'actual_category'    => $this->category_name,
+                    'category_data'      => $category,
+                    'category_real_name' => $category->title,
                 )
             );
         } else {
-            $category_real_name = 'Portada';
-            $this->category = 0; //NEED CODE WIDGETS
+            $this->category = 0;
+            $this->view->assign('category_real_name', 'Portada');
         }
-        $this->view->assign('category_real_name', $category_real_name);
 
         $this->cm = new \ContentManager();
     }
