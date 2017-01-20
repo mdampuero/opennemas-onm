@@ -244,8 +244,9 @@ class AdvertisementController extends Controller
         $params = [
             'width'  => $img->width,
             'height' => $img->height,
-            'url'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
+            'src'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
                 . $img->path_file . $img->name,
+            'url'    => $ad->url
         ];
 
         return $this->get('core.template.admin')
