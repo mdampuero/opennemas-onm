@@ -57,7 +57,6 @@ class AlbumsController extends Controller
             }
 
             $category         = $category[0];
-            $categoryRealName = $category->title;
             $this->category   = $category->pk_content_category;
 
             $this->view->assign(
@@ -65,17 +64,17 @@ class AlbumsController extends Controller
                     'category_name'         => $this->categoryName ,
                     'category'              => $category->pk_content_category,
                     'actual_category_id'    => $category->pk_content_category,
-                    'actual_category_title' => $categoryRealName,
-                    'category_real_name'    => $categoryRealName ,
+                    'actual_category_title' => $category->title,
+                    'category_real_name'    => $category->title,
+                    'category_data'         => $category,
                 )
             );
         } else {
-            $categoryRealName = 'Portada';
-            $this->category   = 0;
+            $this->category = 0;
             $this->view->assign(
                 array(
-                    'actual_category_title' => $categoryRealName,
-                    'category_real_name'    => $categoryRealName,
+                    'actual_category_title' => 'Portada',
+                    'category_real_name'    => 'Portada',
                 )
             );
         }
