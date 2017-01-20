@@ -139,11 +139,6 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $userGroups = $this->get('orm.manager')->getRepository('UserGroup')->findBy();
-            $userGroups = array_map(function ($a) {
-                return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
-            }, $userGroups);
-
             $advertisement = new \Advertisement();
 
             $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
@@ -153,7 +148,7 @@ class AdsController extends Controller
                 [
                     'advertisement' => $advertisement,
                     'ads_positions' => $adsPositions,
-                    'user_groups'   => $userGroups,
+                    'user_groups'   => $this->getUserGroups(),
                     'themeAds'      => $ads,
                     'filter'        => $filter,
                     'page'          => $page,
@@ -276,12 +271,6 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $em = $this->get('orm.manager');
-        $userGroups = $em->getRepository('UserGroup')->findBy();
-        $userGroups = array_map(function ($a) {
-            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
-        }, $userGroups);
-
         $positionManager = $this->container->get('core.manager.advertisement');
         return $this->render(
             'advertisement/new.tpl',
@@ -289,7 +278,7 @@ class AdsController extends Controller
                 'ads_positions' => $adsPositions,
                 'advertisement' => $ad,
                 'themeAds'      => $positionManager->getPositionsForTheme(),
-                'user_groups'   => $userGroups,
+                'user_groups'   => $this->getUserGroups(),
                 'filter'        => $filter,
                 'page'          => $page,
                 'server_url'    => $serverUrl,
@@ -504,5 +493,28 @@ class AdsController extends Controller
                 [ 'configs' => $configurations ]
             );
         }
+    }
+
+    /**
+     * Returns the list of public user groups.
+     *
+     * @return array The list of public user groups.
+     */
+    protected function getUserGroups()
+    {
+        $em = $this->get('orm.manager');
+
+        $userGroups = $em->getRepository('UserGroup')->findBy();
+
+        // Show only public groups ()
+        $userGroups = array_filter($userGroups, function ($a) {
+            return in_array(223, $a->privileges);
+        });
+
+        $userGroups = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+        }, $userGroups);
+
+        return $userGroups;
     }
 }
