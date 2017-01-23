@@ -104,27 +104,27 @@
                   <div class="col-sm-3">
                     <div class="radio">
                       <input id="image" name="with_script" ng-model="with_script" {if $with_script == 0}checked{/if} type="radio" value="0">
-                      <label for="image">{t}Image or Flash object{/t}</label>
+                      <label for="image" title="{t}Image or Flash object{/t}">{t}Image or Flash object{/t}</label>
                     </div>
                   </div>
                   <div class="col-sm-3">
                     <div class="radio">
                       <input id="html" name="with_script" ng-model="with_script"  {if $with_script == 1}checked{/if} type="radio" value="1">
-                      <label for="html">{t}HTML or Javascript code{/t}</label>
+                      <label for="html" title="{t}HTML or Javascript code{/t}">{t}HTML or Javascript code{/t}</label>
                     </div>
                   </div>
                   {if !empty($server_url)}
                   <div class="col-sm-3">
                     <div class="radio">
                       <input id="open-x" name="with_script" ng-model="with_script"  {if $with_script == 2}checked{/if} type="radio" value="2">
-                      <label for="open-x">{t}OpenX{/t}</label>
+                      <label for="open-x" title="{t}Open X{/t}">{t}OpenX{/t}</label>
                     </div>
                   </div>
                   {/if}
                   <div class="col-sm-3">
                     <div class="radio">
                       <input id="dfp" name="with_script" ng-model="with_script"   {if $with_script == 3}checked{/if} type="radio" value="3">
-                      <label for="dfp">{t}Google DFP{/t}</label>
+                      <label for="dfp" title="{t}Google DFP{/t}">{t}Google DFP{/t}</label>
                     </div>
                   </div>
                 </div>
