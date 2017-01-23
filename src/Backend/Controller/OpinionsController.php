@@ -649,7 +649,8 @@ class OpinionsController extends Controller
         }
 
         // Fetch information for Advertisements
-        \Frontend\Controller\OpinionsController::getAds('inner');
+        list($positions, $advertisements) =
+            \Frontend\Controller\OpinionsController::getAds('inner');
 
         $author = new \User($opinion->fk_author);
         $opinion->author = $author;
@@ -709,6 +710,8 @@ class OpinionsController extends Controller
         $session = $this->get('session');
 
         $this->view->assign([
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
             'opinion'        => $opinion,
             'content'        => $opinion,
             'other_opinions' => $otherOpinions,

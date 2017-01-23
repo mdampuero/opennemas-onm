@@ -39,8 +39,11 @@ class FormController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         return $this->render('static_pages/form.tpl', [
-            'advertisements' => $this->getAds(),
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
             'x-tags'         => 'frontpage-form',
         ]);
     }
@@ -181,12 +184,11 @@ class FormController extends Controller
      **/
     public function getAds()
     {
-        $category = 0;
-
         // Get letter positions
         $positionManager = $this->get('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, 0);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

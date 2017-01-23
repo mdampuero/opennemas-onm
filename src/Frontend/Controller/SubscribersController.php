@@ -33,10 +33,11 @@ class SubscribersController extends Controller
      **/
     public function showAction()
     {
-        $ads = $this->getAds();
+        list($positions, $advertisements) = $this->getAds();
 
         return $this->render('static_pages/subscription.tpl', [
-            'advertisements'  => $ads,
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
             'actual_category' => 'newsletter'
         ]);
     }
@@ -312,8 +313,9 @@ class SubscribersController extends Controller
 
         // Get letter positions
         $positionManager = $this->get('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

@@ -74,7 +74,7 @@ class FrontpagesController extends Controller
         $contents = $cm->getInTime($contents);
 
         // Fetch ads
-        list($adsPositions, $ads) = $this->getAds($categoryId, $contents);
+        list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
@@ -188,7 +188,7 @@ class FrontpagesController extends Controller
         }
 
         return $this->render('frontpage/frontpage.tpl', [
-            'advertisements'  => $ads,
+            'advertisements'  => $advertisements,
             'ads_positions'   => $adsPositions,
             'cache_id'        => $cacheId,
             'category_name'   => $categoryName,

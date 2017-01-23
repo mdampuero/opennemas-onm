@@ -391,12 +391,10 @@ class FrontpagesController extends Controller
         $this->view   = $this->get('core.template');
         $this->view->setCaching(0);
 
-        $this->view->assign(
-            array(
-                'category_name'   => $categoryName,
-                'actual_category' => $categoryName
-            )
-        );
+        $this->view->assign([
+            'category_name'   => $categoryName,
+            'actual_category' => $categoryName
+        ]);
 
         // Get the ID of the actual category from the categoryName
         $ccm = \ContentCategoryManager::get_instance();
@@ -411,8 +409,10 @@ class FrontpagesController extends Controller
         $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
 
         // Fetch ads
-        $ads = \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) =
+            \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         // Get all frontpage images
         $imageIdsList = array();
@@ -450,16 +450,12 @@ class FrontpagesController extends Controller
         $layout = s::get('frontpage_layout_'.$categoryID, 'default');
         $layoutFile = 'layouts/'.$layout.'.tpl';
 
-        $this->view->assign(
-            array(
-                'layoutFile' => $layoutFile,
-                'actual_category_id' => $categoryID,
-            )
-        );
+        $this->view->assign([
+            'layoutFile'         => $layoutFile,
+            'actual_category_id' => $categoryID,
+        ]);
 
-        $session = $this->get('session');
-
-        $session->set('last_preview', $this->view->fetch('frontpage/frontpage.tpl'));
+        $this->get('session')->set('last_preview', $this->view->fetch('frontpage/frontpage.tpl'));
 
         return new Response('OK');
     }
