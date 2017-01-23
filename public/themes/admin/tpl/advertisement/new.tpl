@@ -253,17 +253,9 @@
               <div class="grid-collapse-title pointer" ng-click="devices_show = !devices_show">
                 <i class="fa fa-desktop m-r-5"></i> {t}Devices{/t}
                 <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': devices_show }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.phone">
-                  <i class="fa fa-mobile m-r-5"></i>
-                  <span>{t}Phone{/t}</span>
-                </span>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.tablet">
-                  <i class="fa fa-tablet m-r-5"></i>
-                  <span>{t}Tablet{/t}</span>
-                </span>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.desktop">
-                  <i class="fa fa-desktop m-r-5"></i>
-                  <span>{t}Desktop{/t}</span>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.phone + params.devices.tablet + params.devices.desktop > 0">
+                  [% params.devices.phone + params.devices.tablet + params.devices.desktop %]
+                  {t}selected{/t}
                 </span>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': devices_show }">
