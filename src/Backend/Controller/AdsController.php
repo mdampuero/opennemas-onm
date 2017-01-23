@@ -158,14 +158,12 @@ class AdsController extends Controller
         }
 
         $advertisement = new \Advertisement();
-
-        $categories    = $request->request->get('category', '', FILTER_SANITIZE_STRING);
-        $firstCategory = $categories[0];
+        $categories    = $request->request->get('category', [], FILTER_SANITIZE_STRING);
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => $firstCategory,
+            'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -322,14 +320,13 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $categories = $request->request->get('category', '', FILTER_SANITIZE_STRING);
-        $firstCategory = $categories[0];
+        $categories = $request->request->get('category', [], FILTER_SANITIZE_STRING);
 
         $data = array(
             'id'                 => $ad->id,
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => $firstCategory,
+            'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
