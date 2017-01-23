@@ -219,8 +219,14 @@
               <div class="grid-collapse-title pointer" ng-class="{ 'open': restriction_date_range_show }" ng-click="restriction_date_range_show =!restriction_date_range_show">
                 <i class="fa fa-calendar-check-o m-r-5"></i> {t}Date range{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_date_range_show }" ng-click="restriction_date_range_show =!restriction_date_range_show"></i>
-                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && endtime"><strong>{t}End{/t}:</strong> [% endtime %]</span>
-                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && starttime"><strong>{t}Start{/t}:</strong> [% starttime %]</span>
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && endtime" uib-tooltip="[% endtime %]">
+                  <strong>{t}End{/t}</strong>
+                  <span class="hidden-lg pull-right visible-xlg">: [% endtime %]</span>
+                </span>
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && starttime" uib-tooltip="[% starttime %]">
+                  <strong>{t}Start{/t}</strong>
+                  <span class="hidden-lg pull-right visible-xlg">: [% starttime %]</span>
+                </span>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_date_range_show }">
                 <div class="row">
@@ -324,7 +330,8 @@
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_category_show }"></i>
               </div>
               <div class="grid-collapse-body" ng-class="{ 'expanded': restriction_category_show }">
-                <select name="category[]" id="category" required="required" multiple="multiple" size=6>
+                <select name="category[]" id="category" multiple="multiple" size=6>
+                  <option value="0">{t}All{/t}</option>
                   {section name=as loop=$allcategorys}
                   {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                   <option value="{$allcategorys[as]->pk_content_category}"
