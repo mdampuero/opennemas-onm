@@ -158,7 +158,7 @@
       item.style.maxHeight = ad.size.height + 'px';
     }
 
-    item.src = this.config.url + '/' + ad.id;
+    item.src = this.normalize(this.config.url + '/' + ad.id);
 
     // Auto-resize on load
     item.onload = function() {
@@ -265,8 +265,8 @@
     var self = this;
     var req  = this.xhr();
 
-    var url = this.config.url +
-      '?places=' + this.config.slots.join() +
+    var url = this.normalize(this.config.url) +
+      'places=' + this.config.slots.join() +
       '&category=' + this.config.category;
 
     req.open('GET', url, true);
@@ -333,6 +333,28 @@
     }
 
     return 'desktop';
+  };
+
+  /**
+   * @function normalize
+   * @memberOf OAM
+   *
+   * @description
+   *   Normalizes URL basing on current URL parameters.
+   *
+   * @param {String} url The URL to normalize.
+   *
+   * @return {String} The normalized URL.
+   */
+  OAM.prototype.normalize = function(url) {
+    url += '?';
+
+    if (parseInt(location.search.split('webview=').splice(1).join('')
+          .split('&')[0]) === 1) {
+      url += 'webview=1&';
+    }
+
+    return url;
   };
 
   /**
