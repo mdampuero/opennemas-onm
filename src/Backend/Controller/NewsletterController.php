@@ -636,7 +636,7 @@ class NewsletterController extends Controller
         $timezoneID = (empty($timezoneID) || !array_key_exists($timezoneID, $timezones))
             ? 424 : $this->get('setting_repository')->get('time_zone', 'UTC');
         $timezone  = new \DateTimeZone($timezones[$timezoneID]);
-s
+
         // Generate last invoice DateTime
         $lastInvoice = new \DateTime(s::get('last_invoice'));
         $lastInvoice->setTimezone(new \DateTimeZone($timezone));
