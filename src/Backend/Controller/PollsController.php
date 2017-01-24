@@ -44,8 +44,11 @@ class PollsController extends Controller
             $category ='home';
         }
 
+        // Get valid timezone
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+        $timezoneID = (empty($timezoneID) || !array_key_exists($timezoneID, $timezones))
+            ? 424 : $this->get('setting_repository')->get('time_zone', 'UTC');
+        $timezone  = new \DateTimeZone($timezones[$timezoneID]);
 
         $this->view->assign(
             [
