@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-23 15:35+0000\n"
-"PO-Revision-Date: 2017-01-23 16:37+0100\n"
+"POT-Creation-Date: 2017-01-24 12:43+0000\n"
+"PO-Revision-Date: 2017-01-24 13:44+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -1351,6 +1351,15 @@ msgstr "Hasta"
 msgid "Thumbnail details"
 msgstr "Detalles de la miniatura"
 
+msgid "Click here to upload"
+msgstr "Pulsa para subir="
+
+msgid "or click here"
+msgstr "o pulsa aquí"
+
+msgid "Drop files here to upload"
+msgstr "Suelta ficheros aqui para subirlos"
+
 msgid "Upload new media"
 msgstr "Subir nuevo fichero multimedia"
 
@@ -1915,23 +1924,19 @@ msgstr ""
 msgid "Unable to find the page you are looking for."
 msgstr "No se pudo encontrar la página que estabas buscando."
 
+msgid "Email is required but it will not be published"
+msgstr "El email es obligatorio aunque no se publicará"
+
 msgid "The reCAPTCHA wasn't entered correctly. Go back and try it again."
 msgstr ""
 "El código de reCAPTCHA no fue escrito correctamente. Vuelva atrás y pruebe "
 "de nuevo."
 
-msgid ""
-"Sorry, we were unable to complete your request.\n"
-"Check the form and try again"
-msgstr ""
-"No hemos podido completar tu petición.\n"
-"Comprueba el formulario e inténtalo de nuevo."
-
-msgid "Email is required but it will not be published"
-msgstr "El email es obligatorio aunque no se publicará"
-
 msgid "The information has been sent"
 msgstr "La información ha sido enviada"
+
+msgid "Sorry, we were unable to complete your request"
+msgstr "No hemos podido completar tu petición."
 
 msgid "Unable to save the letter."
 msgstr "No se pudo guardar la carta."
@@ -1990,6 +1995,13 @@ msgstr "Te has suscrito al boletín de noticias."
 
 msgid "You have been unsubscribed from our newsletter."
 msgstr "Hemos eliminado tu suscripción al boletín de noticias "
+
+msgid ""
+"Sorry, we were unable to complete your request.\n"
+"Check the form and try again"
+msgstr ""
+"No hemos podido completar tu petición.\n"
+"Comprueba el formulario e inténtalo de nuevo."
 
 msgid "You have been unsubscribed from our newsletter"
 msgstr "Hemos eliminado tu suscripción al boletín de noticias"
@@ -2627,9 +2639,6 @@ msgstr ""
 
 msgid "Y-m-d H:i:s"
 msgstr "H:i:s d-m-Y"
-
-msgid "reCaptcha public key is not set"
-msgstr "La llave pública de reCaptcha no está configurada"
 
 msgid "Create free newspaper"
 msgstr "Crear un periódico gratis"
@@ -8457,6 +8466,9 @@ msgstr "Ancho (por defecto: 1280)"
 msgid "Height (default: 1280)"
 msgstr "Alto (por defecto: 1280)"
 
+#~ msgid "reCaptcha public key is not set"
+#~ msgstr "La llave pública de reCaptcha no está configurada"
+
 #~ msgid "Framework"
 #~ msgstr "Framework"
 
@@ -10247,9 +10259,6 @@ msgstr "Alto (por defecto: 1280)"
 
 #~ msgid "User notes"
 #~ msgstr "Notas de usuario"
-
-#~ msgid "Include files to upload by:"
-#~ msgstr "Incluye archivos para subir:"
 
 #~ msgid ""
 #~ "You can <strong>drag &amp; drop</strong> files from your desktop on this "
