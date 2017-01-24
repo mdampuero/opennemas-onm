@@ -592,7 +592,7 @@ class NewsletterController extends Controller
 
         // Get today DateTime
         $today = new \DateTime();
-        $today->setTimezone(new \DateTimeZone($timezone));
+        $today->setTimezone($timezone);
 
         // Get all newsletters updated between today and last invoice
         $nm = $this->get('newsletter_manager');
