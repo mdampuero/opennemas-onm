@@ -54,12 +54,6 @@ class SecurityListener implements EventSubscriberInterface
     {
         $uri      = $event->getRequest()->getRequestUri();
         $instance = $this->container->get('core.instance');
-
-        // Instance not registered
-        if (empty($instance)) {
-            return;
-        }
-
         $this->security->setInstance($instance);
 
         if (!$this->hasSecurity($uri)) {

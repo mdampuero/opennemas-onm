@@ -4,7 +4,6 @@ angular.module('BackendApp.controllers').controller('AdBlockCtrl', [
     'use strict';
 
     var FuckAdBlock = function(options) {
-      console.log('fuck ad block started')
       this._options = {
         checkOnLoad:   false,
         resetOnEnd:    false,
@@ -48,7 +47,7 @@ angular.module('BackendApp.controllers').controller('AdBlockCtrl', [
     FuckAdBlock.prototype._var = null;
     FuckAdBlock.prototype._bait = null;
     FuckAdBlock.prototype._log = function(method, message) {
-      console.log('[FuckAdBlock]['+method+'] '+message);
+      // c/onsole.log('[FuckAdBlock]['+method+'] '+message);
     };
     FuckAdBlock.prototype.setOption = function(options, value) {
       if(value !== undefined) {

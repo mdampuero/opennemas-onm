@@ -65,17 +65,15 @@ class UserController extends Controller
         $errors = [];
         if ('POST' == $request->getMethod()) {
             // Check reCAPTCHA
-            $valid = false;
+            $valid    = false;
             $response = $request->get('g-recaptcha-response');
-            if (!is_null($response)) {
-                $rs = getService('google_recaptcha');
-                $recaptcha = $rs->getPublicRecaptcha();
-                $resp = $recaptcha->verify(
-                    $request->get('g-recaptcha-response'),
-                    $request->getClientIp()
-                );
+            $ip       = $request->getClientIp();
 
-                $valid = $resp->isSuccess();
+            if (!is_null($response)) {
+                $valid = $this->get('core.recaptcha')
+                    ->configureFromSettings()
+                    ->isValid($response, $ip);
+
                 if (!$valid) {
                     $errors []= _(
                         'The reCAPTCHA wasn\'t entered correctly.'.
@@ -139,6 +137,11 @@ class UserController extends Controller
                 } else {
                     $user->setMeta($request->request->get('meta'));
 
+                    // Set registration date
+                    $currentTime = new \DateTime();
+                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
+                    $user->setMeta(['register_date' => $currentTime->format('Y-m-d H:i:s')]);
+
                     try {
                         // Build the message
                         $message = \Swift_Message::newInstance();
@@ -171,22 +174,18 @@ class UserController extends Controller
                             _('Unable to send your registration email. Please try it later.')
                         );
                     }
-                    // Set registration date
-                    $currentTime = new \DateTime();
-                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
-                    $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-                    $user->setMeta(['register_date' => $currentTime]);
 
                     $this->view->assign('success', true);
                 }
             }
         }
 
-        return $this->render(
-            'authentication/register.tpl',
-            [ 'errors' => $errors, ]
-        );
+        return $this->render('authentication/register.tpl', [
+            'errors'    => $errors,
+            'recaptcha' => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml()
+        ]);
     }
 
     /**
@@ -262,7 +261,7 @@ class UserController extends Controller
         try {
             $user = $em->getRepository('User')->findOneBy($oql);
 
-            $user->activated  = true;
+            $user->activated  = 1;
             $user->last_login = new \DateTime('now');
             $user->token      = null;
 
