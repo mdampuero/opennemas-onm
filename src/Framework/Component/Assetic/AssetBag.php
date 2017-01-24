@@ -56,8 +56,11 @@ class AssetBag
     public function __construct($config, $instance)
     {
         $this->config       = $config;
-        $this->currentTheme = $instance->settings['TEMPLATE_USER'];
         $this->sitePath     = SITE_PATH;
+
+        if (!empty($instance)) {
+            $this->currentTheme = $instance->settings['TEMPLATE_USER'];
+        }
     }
 
     /**
@@ -246,7 +249,7 @@ class AssetBag
      */
     private function parseThemeName($theme)
     {
-        if ($theme === 'Theme') {
+        if ($theme === 'Theme' && !empty($this->currentTheme)) {
             $theme = $this->currentTheme;
         }
 
