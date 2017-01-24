@@ -77,16 +77,14 @@ class Recaptcha
     {
         $keys = $this->container->get('setting_repository')->get('recaptcha');
 
-        if (empty($keys)
-            || !is_array($keys)
-            || !array_key_exists('private_key', $keys)
-            || !array_key_exists('public_key', $keys)
+        if (!empty($keys)
+            && is_array($keys)
+            && array_key_exists('private_key', $keys)
+            && array_key_exists('public_key', $keys)
         ) {
-            throw new \RuntimeException();
+            $this->secretKey = $keys['private_key'];
+            $this->siteKey   = $keys['public_key'];
         }
-
-        $this->secretKey = $keys['private_key'];
-        $this->siteKey   = $keys['public_key'];
 
         $this->recaptcha  = new BaseRecaptcha($this->secretKey);
 
