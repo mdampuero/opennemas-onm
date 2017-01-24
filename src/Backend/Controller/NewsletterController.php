@@ -208,7 +208,7 @@ class NewsletterController extends Controller
         $timezone  = new \DateTimeZone($timezones[$timezoneID]);
 
         $time = new \DateTime();
-        $time->setTimezone(new \DateTimeZone($timezone);
+        $time->setTimezone(new \DateTimeZone($timezone));
         $time = $time->format('d/m/Y');
 
         $title = $request->request->filter(
