@@ -126,8 +126,6 @@ class NewsletterController extends Controller
 
         $time = new \DateTime();
         $time->setTimezone($timezone);
-
-
         $time = $time->format('d/m/Y');
 
         return $this->render(
@@ -208,7 +206,7 @@ class NewsletterController extends Controller
         $timezone  = new \DateTimeZone($timezones[$timezoneID]);
 
         $time = new \DateTime();
-        $time->setTimezone(new \DateTimeZone($timezone));
+        $time->setTimezone($timezone);
         $time = $time->format('d/m/Y');
 
         $title = $request->request->filter(
@@ -651,9 +649,7 @@ class NewsletterController extends Controller
 
         // Get today DateTime
         $today = new \DateTime();
-        $today->setTimezone(
-            new \DateTimeZone($timezone)
-        );
+        $today->setTimezone($timezone);
 
         // Get next invoice DateTime
         $nextInvoiceDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
