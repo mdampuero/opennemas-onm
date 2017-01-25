@@ -101,7 +101,7 @@ class NewsletterController extends Controller
                     $item->items        = array();
                     $item->content_type = 'container';
                     $newsletterContent[]     = $item;
-                    if (is_objec($item) && !empty($item->submenu)) {
+                    if (is_object($item) && !empty($item->submenu)) {
                         foreach ($item->submenu as $subitem) {
                             unset($subitem->pk_item);
                             unset($subitem->link);
