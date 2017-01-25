@@ -22,7 +22,10 @@ orm:
                 internal_name:      string
                 last_login:         datetime
                 letters:            integer
+                blocked:            boolean
                 main_domain:        integer
+                max_height:         integer
+                max_width:          integer
                 media_size:         float
                 name:               string
                 opinions:           integer

@@ -27,13 +27,13 @@
     <div class="form-group">
       <label for="description-{$photo->id}" class="form-label">{t}Description{/t}</label>
       <div class="controls">
-        <textarea required="required" id="description-{$photo->id}" name="description[{$photo->id}]" class="form-control" rows="4">{$photo->description|clearslash}</textarea>
+        <textarea required id="description-{$photo->id}" name="description[{$photo->id}]" class="form-control" rows="4">{$photo->description|clearslash}</textarea>
       </div>
     </div>
     <div class="form-group">
       <label for="metadata-{$photo->id}" class="form-label">{t}Keywords{/t}</label>
       <div class="controls">
-        <input data-role="tagsinput" type="text" id="metadata-{$photo->id}" name="metadata[{$photo->id}]" placeholder="{t}Write a tag and press Enter...{/t}" required="required" value="{$photo->metadata|strip}" class="form-control" />
+        <input data-role="tagsinput" type="text" id="metadata-{$photo->id}" name="metadata[{$photo->id}]" placeholder="{t}Write a tag and press Enter...{/t}" required value="{$photo->metadata|strip}" class="form-control" />
         <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
       </div>
     </div>

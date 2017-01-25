@@ -124,10 +124,21 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="template">{t}Activated{/t}</label>
+                  <label class="form-label">{t}Status{/t}</label>
                   <div class="controls">
-                    <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" ng-true-value="1" ng-false-value="0"  ng-checked="instance.activated == 1"/>
-                    <div><div></div></div>
+                    <div class="col-sm-6">
+                      <div class="checkbox">
+                        <input type="checkbox" id="activated" ng-model="instance.activated" ng-true-value="1" ng-false-value="0"  ng-checked="instance.activated == 1"/>
+                        <label class="form-label" for="activated">{t}Activated{/t}</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="checkbox">
+                        <input type="checkbox" id="blocked" ng-model="instance.blocked" ng-true-value="1" ng-false-value="0"  ng-checked="instance.blocked == 1"/>
+                        <label class="form-label" for="blocked">{t}Blocked{/t}</label>
+                        <div class="help m-t-5">{t}Backend access blocked for instance users{/t}</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -202,10 +213,10 @@
                 <span class="input-group-addon">
                   <i class="fa" ng-class="{ 'fa-search': !loading, 'fa-circle-o-notch fa-spin': loading }"></i>
                 </span>
-                <input class="form-control" ng-model="criteria.name" placeholder="{t}Search by name or email{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
+                <input class="form-control" ng-model="criteria.name" placeholder="{t}Search by name or street{/t}" type="text" typeahead-on-select="selectClient($item, $model, $label)" typeahead-template-url="client" typeahead-wait-ms="500" uib-typeahead="client.id for client in getClients($viewValue)">
               </div>
             </div>
-            <div ng-if="client">
+            <div ng-if="client || instance.client_id">
               <div class="row p-b-15">
                 <h4>{t}Contact information{/t}</h4>
                 <div class="col-sm-6">
@@ -249,7 +260,7 @@
                   <strong>{t}Country{/t}:</strong> [% template.countries[client.country] %]
                 </div>
               </div>
-              <div class="row p-t-30">
+              <div class="row p-t-15">
                 <div class="col-sm-4 col-sm-offset-4">
                   <button class="btn btn-danger btn-block" ng-click="instance.client = null">
                     <h4 class="text-white">
@@ -260,6 +271,11 @@
                 </div>
               </div>
             </div>
+            <div class="m-b-20 p-b-100 p-t-50 text-center" ng-if="!client && !client_id">
+              <i class="fa fa-search fa-4x m-t-30"></i>
+              <h3>{t}There is no client linked to this instance{/t}</h3>
+              <h4>{t}Try to search a client by name or street{/t}</h4>
+            </div>
           </div>
         </div>
       </div>
@@ -269,19 +285,13 @@
             <h4>{t}Last purchases{/t}</h4>
           </div>
           <div class="grid-body">
-            <div ng-if="loading">
-              <div class="spinner-wrapper">
-                <div class="loading-spinner"></div>
-                <div class="spinner-text">{t}Loading{/t}...</div>
-              </div>
-            </div>
-            <div class="ng-cloak" ng-if="!loading && (!template.purchases || template.purchases.length === 0)">
-              <div class="p-t-50 p-b-50 text-center">
-                <i class="fa fa-stack fa-3x">
+            <div class="ng-cloak" ng-if="!template.purchases || template.purchases.length === 0">
+              <div class="p-t-100 p-b-100 text-center">
+                <i class="fa fa-stack fa-3x m-t-20">
                   <i class="fa fa-shopping-cart fa-stack-1x"></i>
                   <i class="fa fa-ban fa-stack-2x"></i>
                 </i>
-                <h4>{t}There are no purchases for now.{/t}</h4>
+                <h3 class="m-b-50">{t}There are no purchases for now.{/t}</h3>
               </div>
             </div>
             <div class="table-wrapper ng-cloak" ng-if="template.purchases && template.purchases.length > 0">
@@ -462,6 +472,14 @@
               <label for="max-mailing" class="form-label">{t}Maximun number of emails sent by month{/t}</label>
               <div class="controls">
                 <input id="max-mailing" ng-model="settings.max_mailing" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">{t}Dimensions for image optimization{/t}</label>
+              <div class="controls">
+                <input class="pull-left" ng-model="instance.max_width" placeholder="{t}Width{/t}" type="text">
+                <span class="m-l-5 m-r-5 m-t-10 pull-left">x</span>
+                <input class="pull-left" ng-model="instance.max_height" placeholder="{t}Height{/t}" type="text">
               </div>
             </div>
           </div>
