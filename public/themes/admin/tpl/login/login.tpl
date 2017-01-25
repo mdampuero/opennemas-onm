@@ -26,11 +26,6 @@
       @AdminTheme/less/_login.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
-  {block name="header-js"}
-    <script type="text/javascript">
-      var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
-    </script>
-  {/block}
 </head>
 <body class="login-body">
   <div class="wrapper">
@@ -75,7 +70,12 @@
                           <input class="form-control" id="_password" name="_password" placeholder="{t}Password{/t}" tabindex="2" type="password" value="{$smarty.cookies.login_password|default:""}">
                         </div>
                       </div>
-                      {$recaptcha}
+                      {if $failed_login_attempts >= 3}
+                        <script type="text/javascript">
+                          var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
+                        </script>
+                        {getRecaptchaHtml onm=1}
+                      {/if}
                       <div class="form-group text-right">
                         <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
                         <button class="btn btn-primary" id="login-button" tabindex="4" type="submit">{t}Log in{/t}</button>
@@ -102,12 +102,12 @@
           <li>
             <div class="dropup">
               <a class="dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                {t}Language{/t} {$languages[$current_language]}
+                {t}Language{/t}: {$locales[$locale]}
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                {foreach from=$languages key=key item=language}
-                <li class="{if $key == $current_language}current{/if}"><a href="?language={$key}">{$language}</a></li>
+                {foreach from=$locales key=key item=value}
+                <li class="{if $key == $locale}current{/if}"><a href="?language={$key}">{$value}</a></li>
                 {/foreach}
               </ul>
             </div>
@@ -129,22 +129,20 @@
 
           // Encode password in md5 on backend login
           $('#loginform').on('submit', function(e, ui) {
-            var form = $('#loginform');
+            var password_input = $('#loginform').find('input[name="_password"]');
 
-            if (form.find('input[name="_password"]').length > 0) {
-              var password = form.find('input[name="_password"]').val();
-
-              if (password.indexOf('md5:') === -1) {
-                password = 'md5:' + hex_md5(password);
+            var password_input_val = password_input.val();
+            if (password_input_val.length > 0) {
+              if (password_input_val.indexOf('md5:') === -1) {
+                password_input_val = 'md5:' + hex_md5(password_input_val);
               }
 
-              form.find('input[name="_password"]').val(password);
+              password_input.val(password_input_val);
             }
           });
         });
       </script>
     {/javascripts}
-  {uservoice_widget}
   {/block}
 </body>
 </html>

@@ -37,11 +37,8 @@ class ImagesController extends Controller
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR;
 
-        // Get valid timezone
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezoneID = (empty($timezoneID) || !array_key_exists($timezoneID, $timezones))
-            ? 424 : $this->get('setting_repository')->get('time_zone', 'UTC');
-        $timezone  = new \DateTimeZone($timezones[$timezoneID]);
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
 
         $this->view->assign(
             array(

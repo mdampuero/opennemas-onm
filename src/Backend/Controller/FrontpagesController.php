@@ -49,14 +49,63 @@ class FrontpagesController extends Controller
         }
 
         // Fetch all categories
-        $categories = $this->buildFrontpageCategoriesArray($categoryId);
+        $categories[] = [
+            'id'    => 0,
+            'name'  => _('Frontpage'),
+            'value' => 'home',
+            'group' => _('Frontpages')
+        ];
+        $ccm = \ContentCategoryManager::get_instance();
+        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryId);
+        unset($datos_cat);
+        foreach ($parentCategories as $key => $category) {
+            $categories[$category->id] = [
+                'id'    => $category->id,
+                'name'  => $category->title,
+                'value' => $category->name,
+                'group' => _('Categories')
+            ];
+
+            foreach ($subcat[$key] as $subcategory) {
+                $categories[$subcategory->id] = [
+                    'id'    => $subcategory->id,
+                    'name'  => $subcategory->title,
+                    'value' => $subcategory->name,
+                    'group' => _('Categories')
+                ];
+            }
+        }
+
+        // Fetch menu categories and override group
+        $menu = new \Menu();
+        $menuFrontpage = $menu->getMenu('frontpage');
+        foreach ($menuFrontpage->items as $item) {
+            $id = $ccm->get_id($item->link);
+            if ($item->type == 'category') {
+                $categories[$id] = [
+                    'id'    => $id,
+                    'name'  => $item->title,
+                    'value' => $item->link,
+                    'group' => _('Frontpages')
+                ];
+            }
+            if (!empty($item->submenu)) {
+                foreach ($item->submenu as $subitem) {
+                    if ($subitem->type == 'category') {
+                        $id = $ccm->get_id($subitem->link);
+                        $categories[$id] = [
+                            'id'    => $id,
+                            'name'  => $subitem->title,
+                            'value' => $subitem->link,
+                            'group' => _('Frontpages')
+                        ];
+                    }
+                }
+            }
+        }
 
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_'.$categoryId, 'default');
-        // Check if layout is valid,if not use the default value
-        if (!file_exists(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml")) {
-            $layoutTheme = 'default';
-        }
         $lm = $this->get('core.manager.layout');
         $lm->load(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml");
 
@@ -426,73 +475,5 @@ class FrontpagesController extends Controller
         $session->remove('last_preview');
 
         return new Response($content);
-    }
-
-    /**
-     * Build the list of categories and frontpage menu elements
-     *
-     * @return array the list of categories data
-     **/
-    private function buildFrontpageCategoriesArray($categoryId)
-    {
-        $categories[] = [
-            'id'    => 0,
-            'name'  => _('Frontpage'),
-            'value' => 'home',
-            'group' => _('Frontpages')
-        ];
-        $ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryId);
-        unset($datos_cat);
-        foreach ($parentCategories as $key => $category) {
-            $categories[$category->id] = [
-                'id'    => $category->id,
-                'name'  => $category->title,
-                'value' => $category->name,
-                'group' => _('Categories')
-            ];
-
-            foreach ($subcat[$key] as $subcategory) {
-                $categories[$subcategory->id] = [
-                    'id'    => $subcategory->id,
-                    'name'  => $subcategory->title,
-                    'value' => $subcategory->name,
-                    'group' => _('Categories')
-                ];
-            }
-        }
-
-        // Fetch menu categories and override group
-        $menu = new \Menu();
-        $menuFrontpage = $menu->getMenu('frontpage');
-        if (is_object($menuFrontpage) && property_exists($menuFrontpage, 'items')) {
-            foreach ($menuFrontpage->items as $item) {
-                $id = $ccm->get_id($item->link);
-                if ($item->type == 'category') {
-                    $categories[$id] = [
-                        'id'    => $id,
-                        'name'  => $item->title,
-                        'value' => $item->link,
-                        'group' => _('Frontpages')
-                    ];
-                }
-                if (!empty($item->submenu)) {
-                    foreach ($item->submenu as $subitem) {
-                        if ($subitem->type == 'category') {
-                            $id = $ccm->get_id($subitem->link);
-                            $categories[$id] = [
-                                'id'    => $id,
-                                'name'  => $subitem->title,
-                                'value' => $subitem->link,
-                                'group' => _('Frontpages')
-                            ];
-                        }
-                    }
-                }
-            }
-        }
-
-
-        return $categories;
     }
 }

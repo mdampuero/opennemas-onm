@@ -2,21 +2,13 @@ orm:
     metadata:
         -
             name: Settings
-            properties:
-                max_height: integer
-                max_width:  integer
-                time_zone:  integer
-            converters:
-                default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
-                    arguments: [ '@orm.metadata.settings' ]
             datasets:
                 instance:
                     class:     Common\ORM\Database\DataSet\BaseDataSet
-                    arguments: [ '@orm.connection.instance', '@orm.metadata.settings', '@cache.connection.instance',  [ 'site_language', 'time_zone' ] ]
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.settings', '@cache.connection.instance' ]
                 manager:
                     class:     Common\ORM\Database\DataSet\BaseDataSet
-                    arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.instance', [ 'site_language', 'time_zone' ] ]
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.instance' ]
             mapping:
                 database:
                     table: settings

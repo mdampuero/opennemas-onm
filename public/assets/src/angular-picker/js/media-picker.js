@@ -183,11 +183,11 @@ angular.module('onm.picker')
                           <i class=\"fa fa-film fa-2x\" ng-if=\"picker.isTypeEnabled('video')\"></i>\
                           <i class=\"fa fa-file-o fa-2x\" ng-if=\"picker.isTypeEnabled('pdf')\"></i>\
                         </div>\
-                        <span class=\"hidden-xs\">[% picker.params.upload.drop %]</span>\
-                        <span class=\"visible-xs\">[% picker.params.upload.click %]</span>\
+                        <span class=\"hidden-xs\">Drop files here to upload</span>\
+                        <span class=\"visible-xs\">Click here to upload</span>\
                       </h4>\
                       <h5 class=\"hidden-xs\">\
-                        [% picker.params.upload.clickShort %]\
+                        or click here\
                       </h5>\
                     </div>\
                   </div>\

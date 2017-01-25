@@ -482,11 +482,8 @@ class ArticlesController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category);
 
-        // Get valid timezone
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezoneID = (empty($timezoneID) || !array_key_exists($timezoneID, $timezones))
-            ? 424 : $this->get('setting_repository')->get('time_zone', 'UTC');
-        $timezone  = new \DateTimeZone($timezones[$timezoneID]);
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 421)]);
 
         $this->view->assign(
             array(

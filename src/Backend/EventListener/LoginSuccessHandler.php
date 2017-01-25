@@ -126,15 +126,14 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      */
     protected function isRecaptchaValid(Request $request)
     {
-        if (is_null($request->get('g-recaptcha-response'))) {
+        if (empty($request->get('g-recaptcha-response'))) {
             return true;
         }
 
         $ip       = $request->getClientIp();
         $response = $request->get('g-recaptcha-response');
 
-        return $this->container->get('core.recaptcha')
-            ->configureFromParameters()
-            ->isValid($response, $ip);
+        return $this->container->get('google_recaptcha')->getOnmRecaptcha()
+            ->verify($response, $ip)->isSuccess();
     }
 }

@@ -45,13 +45,14 @@
           <div class="form-group">
             <label class="form-label" for="pclave">{t}Name{/t}</label>
             <div class="controls">
-              <input type="text" id="pclave" name="pclave" value="{$keyword->pclave|default:""}" class="form-control" size="30" maxlength="60" required >
+              <input type="text" id="pclave" name="pclave" value="{$keyword->pclave|default:""}"
+              class="form-control" size="30" maxlength="60" required="required"/>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label" for="tipo">{t}Type{/t}</label>
             <div class="controls">
-              <select name="tipo" id="tipo" required>
+              <select name="tipo" id="tipo" required="required">
                 {html_options options=$tipos selected=$keyword->tipo|default:""}
               </select>
             </div>
@@ -59,7 +60,7 @@
           <div class="form-group">
             <label class="form-label" for="value">{t}Value{/t}</label>
             <div class="controls">
-              <input type="text" id="value" name="value" value="{$keyword->value|default:""}" class="form-control" required >
+              <input type="text" id="value" name="value" value="{$keyword->value|default:""}" class="form-control" required="required"/>
             </div>
           </div>
         </div>

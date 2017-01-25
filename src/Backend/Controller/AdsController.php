@@ -38,11 +38,10 @@ class AdsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentTypes);
 
-        // Get valid timezone
+        $timezone  = $this->get('setting_repository')->get('time_zone', 'UTC');
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezoneID = (empty($timezoneID) || !array_key_exists($timezoneID, $timezones))
-            ? 424 : $this->get('setting_repository')->get('time_zone', 'UTC');
-        $timezone  = new \DateTimeZone($timezones[$timezoneID]);
+
+        $timezone  = new \DateTimeZone($timezones[$timezone]);
 
         $this->view->assign([
             'subcat'       => $this->subcat,

@@ -36,10 +36,6 @@ manager_report:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/report.yml'
 
-manager_setting:
-    prefix:   /manager
-    resource: '@ManagerBundle/Resources/config/routing/setting.yml'
-
 manager_user:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/user.yml'

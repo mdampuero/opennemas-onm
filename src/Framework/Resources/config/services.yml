@@ -145,6 +145,15 @@ services:
     acl_checker:
         class: Onm\Security\Acl
 
+    google_recaptcha:
+        class: Onm\Recaptcha
+        arguments: [ '@setting_repository', %recaptcha_private_key% ]
+
+    recaptcha:
+        class: Captcha\Captcha
+        calls:
+            - [setPrivateKey, [ %recaptcha_private_key% ]]
+
     varnish_cleaner:
         class: Onm\Varnish\BanMessagePusher
         arguments: [ %varnish% ]

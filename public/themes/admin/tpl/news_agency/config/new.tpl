@@ -57,7 +57,7 @@
             <div class="form-group">
               <label for="name" class="form-label">{t}Source name{/t}</label>
               <div class="controls">
-                <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required/>
+                <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required="required"/>
               </div>
             </div>
             <div class="form-group">

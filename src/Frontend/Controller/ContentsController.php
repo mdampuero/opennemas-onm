@@ -138,12 +138,18 @@ class ContentsController extends Controller
             $valid = false;
             $errors = [];
 
-            $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
-            $isValid  = $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->isValid($response, $request->getClientIp());
+            // Validate captcha
+            if (!empty($request->get('g-recaptcha-response'))) {
+                $recaptcha = $this->get('google_recaptcha')->getOnmRecaptcha();
+                $resp = $recaptcha->verify(
+                    $request->get('g-recaptcha-response'),
+                    $request->getClientIp()
+                );
 
-            if (!$isValid) {
+                $valid = $resp->isSuccess();
+            }
+
+            if (!$valid) {
                 $errors []= _(
                     'The reCAPTCHA was not entered correctly.'.
                     ' Try to authenticate again.'
@@ -293,9 +299,6 @@ class ContentsController extends Controller
                     'content'    => $content,
                     'content_id' => $contentID,
                     // 'token'      => $token,
-                    'recaptcha' => $this->get('core.recaptcha')
-                        ->configureFromSettings()
-                        ->getHtml(),
                     'ext'        => $ext,
                 )
             );

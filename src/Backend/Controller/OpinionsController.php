@@ -754,11 +754,8 @@ class OpinionsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData)
             = $this->ccm->getArraysMenu();
 
-        // Get valid timezone
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezoneID = (empty($timezoneID) || !array_key_exists($timezoneID, $timezones))
-            ? 424 : $this->get('setting_repository')->get('time_zone', 'UTC');
-        $timezone  = new \DateTimeZone($timezones[$timezoneID]);
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
 
         $this->view->assign([
             'allcategorys' => $this->parentCategories,

@@ -355,7 +355,7 @@ frontend_letter_form:
     defaults: { _controller: FrontendBundle:Letter:showForm }
 
 frontend_letter_show:
-    path:     /cartas-al-director/{author}/{slug}/{id}.{_format}
+    path: /cartas-al-director/{author}/{slug}/{id}.{_format}
     defaults: { _controller: FrontendBundle:Letter:show, _format: html }
     requirements:
         author  : '([^/]+)'

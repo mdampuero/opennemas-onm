@@ -48,12 +48,6 @@
          */
         $scope.sections = [
         {
-          title: 'Security',
-          rows: [
-            ['SECURITY']
-          ]
-        },
-        {
           title: 'Web',
           rows: [
             ['ADVERTISEMENT', 'WIDGET', 'MENU']
