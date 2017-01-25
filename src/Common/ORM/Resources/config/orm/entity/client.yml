@@ -20,6 +20,7 @@ orm:
                 first_name:  string
                 id:          integer
                 last_name:   string
+                owner_id:    integer
                 phone:       string
                 postal_code: string
                 state:       string
@@ -123,6 +124,9 @@ orm:
                         address:
                             type: string
                             options: { default: null, length: 255 }
+                        owner_id:
+                            type: integer
+                            options: { default: null, unsigned: true, notnull: false }
                         postal_code:
                             type: string
                             options: { default: null, length: 20 }
