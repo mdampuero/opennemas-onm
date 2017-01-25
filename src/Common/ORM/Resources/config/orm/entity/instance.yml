@@ -14,6 +14,7 @@ orm:
                 client:             integer
                 contact_mail:       string
                 contents:           integer
+                country:            string
                 created:            datetime
                 domain_expire:      datetime
                 domains:            array
@@ -93,6 +94,9 @@ orm:
                         contact_mail:
                             type:    string
                             options: { default: null, length: 255, notnull: true }
+                        country:
+                            type: string
+                            options: { default: null, length: 2 }
                         owner_id:
                             type: integer
                             options: { default: null, unsigned: true, notnull: false }
