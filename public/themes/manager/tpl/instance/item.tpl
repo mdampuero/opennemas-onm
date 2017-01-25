@@ -115,6 +115,15 @@
                     <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="email">
                   </div>
                 </div>
+                <div class="form-group">
+                  <label class="form-label" for="country">{t}Country{/t}</label>
+                  <div class="controls">
+                    <select class="form-control" id="country" name="country" ng-model="instance.country" placeholder="{t}Country{/t}" required>
+                      <option value="">{t}Select a country{/t}...</option>
+                      <option value="[% key %]" ng-repeat="(key,value) in template.countries" ng-selected="[% instance.country === value %]">[% value %]</option>
+                    </select>
+                  </div>
+                </div>
                 <div class="form-group" ng-if="security.hasPermission('MASTER')">
                   <label class="form-label" for="owner_id">
                     {t}Owner{/t}

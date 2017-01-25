@@ -628,6 +628,7 @@ class InstanceController extends Controller
                 'EXPERT',
                 'OTHER',
             ],
+            'countries' => $this->get('core.geo')->getCountries(),
             'purchases' => $this->getPurchases($id),
             'themes'    => $this->getThemes(),
             'timezones' => \DateTimeZone::listIdentifiers(),
