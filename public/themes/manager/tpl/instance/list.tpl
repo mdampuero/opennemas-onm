@@ -360,7 +360,7 @@
               <th class="text-center" ng-show="isColumnEnabled('database')">
                 {t}Database{/t}
               </th>
-              <th class="text-center pointer" ng-click="sort('support')" ng-show="isColumnEnabled('support')">
+              <th class="text-center" ng-show="isColumnEnabled('support')">
                 {t}Support plan{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('support') == 'asc', 'fa fa-caret-down': isOrderedBy('support') == 'desc'}"></i>
               </th>
@@ -496,7 +496,7 @@
                 [% item.settings.BD_DATABASE %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('support')">
-                [% item.support_plan %]
+                <span ng-repeat="uuid in item.activated_modules | filter: 'SUPPORT_'">[% uuid %]</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('contents')" title="{t}Contents{/t}">
                 [% item.contents %]
