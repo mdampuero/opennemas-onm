@@ -207,6 +207,12 @@
         </div>
         <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-theme" checklist-model="columns.selected" checklist-value="'theme'" type="checkbox">
+            <label for="checkbox-theme">
+              {t}Theme{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-support" checklist-model="columns.selected" checklist-value="'support'" type="checkbox">
             <label for="checkbox-support">
               {t}Support plan{/t}
@@ -242,14 +248,14 @@
               {t}Albums{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
             <label for="checkbox-photos">
               {t}Photos{/t}
             </label>
           </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
             <label for="checkbox-videos">
@@ -369,6 +375,9 @@
               </th>
               <th class="text-center" ng-show="isColumnEnabled('database')">
                 {t}Database{/t}
+              </th>
+              <th class="text-center" ng-show="isColumnEnabled('theme')">
+                {t}Theme{/t}
               </th>
               <th class="text-center" ng-show="isColumnEnabled('support')">
                 {t}Support plan{/t}
@@ -504,6 +513,9 @@
               </td>
               <td class="text-center" ng-show="isColumnEnabled('database')">
                 [% item.settings.BD_DATABASE %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('theme')">
+                [% item.settings.TEMPLATE_USER %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('support')">
                 <span ng-repeat="uuid in item.activated_modules | filter: 'SUPPORT_'">[% uuid %]</span>
