@@ -84,39 +84,42 @@ class NewsletterController extends Controller
 
         $newsletterContent = array();
         $menu = new \Menu();
-
         $menu->getMenu('frontpage');
-        $i = 1;
-        foreach ($menu->items as $item) {
-            if ($item->type == 'category' ||
-                $item->type == 'blog-category' ||
-                $item->type == 'internal'
-            ) {
-                unset($item->pk_item);
-                unset($item->link);
-                unset($item->pk_father);
-                unset($item->type);
-                $item->id           = $i;
-                $item->items        = array();
-                $item->content_type = 'container';
-                $newsletterContent[]     = $item;
-                if (!empty($item->submenu)) {
-                    foreach ($item->submenu as $subitem) {
-                        unset($subitem->pk_item);
-                        unset($subitem->link);
-                        unset($subitem->pk_father);
-                        unset($subitem->type);
-                        unset($subitem->submenu);
-                        $subitem->id           = $i++;
-                        $subitem->items        = array();
-                        $subitem->content_type = 'container';
-                        $newsletterContent[]   = $subitem;
+
+        if (property_exists($menu, 'items') && is_array($menu->items)) {
+            $i = 1;
+            foreach ($menu->items as $item) {
+                if ($item->type == 'category' ||
+                    $item->type == 'blog-category' ||
+                    $item->type == 'internal'
+                ) {
+                    unset($item->pk_item);
+                    unset($item->link);
+                    unset($item->pk_father);
+                    unset($item->type);
+                    $item->id           = $i;
+                    $item->items        = array();
+                    $item->content_type = 'container';
+                    $newsletterContent[]     = $item;
+                    if (is_objec($item) && !empty($item->submenu)) {
+                        foreach ($item->submenu as $subitem) {
+                            unset($subitem->pk_item);
+                            unset($subitem->link);
+                            unset($subitem->pk_father);
+                            unset($subitem->type);
+                            unset($subitem->submenu);
+                            $subitem->id           = $i++;
+                            $subitem->items        = array();
+                            $subitem->content_type = 'container';
+                            $newsletterContent[]   = $subitem;
+                        }
                     }
+                    unset($item->submenu);
+                    $i++;
                 }
-                unset($item->submenu);
-                $i++;
             }
         }
+
 
         // Get valid timezone
         $timezones = \DateTimeZone::listIdentifiers();
