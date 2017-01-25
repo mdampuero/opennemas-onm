@@ -182,24 +182,22 @@ class CheckoutHelper
 
         $this->purchase->notes = trim($notes, "\n");
         $this->purchase->terms = trim($terms, "\n");
+        $this->purchase->fee   = round($subtotal * 0.029 + 0.30, 2);
 
-        if ($this->purchase->method === 'CreditCard') {
-            $this->purchase->fee = round($subtotal * 0.029 + 0.30, 2);
+        $subtotal += $this->purchase->fee;
 
-            $subtotal += $this->purchase->fee;
-
-            $this->purchase->details[] = [
-                'description'  => _('Pay with credit card'),
-                'unit_cost'    => str_replace(
-                    ',',
-                    '.',
-                    (string) round($this->purchase->fee, 2)
-                ),
-                'quantity'     => 1,
-                'tax1_name'    => 'IVA',
-                'tax1_percent' => $vatTax
-            ];
-        }
+        $this->purchase->details[] = [
+            'description'  => $this->purchase->method === 'CreditCard' ?
+                _('Pay with credit card') : _('Pay via PayPal'),
+            'unit_cost'    => str_replace(
+                ',',
+                '.',
+                (string) round($this->purchase->fee, 2)
+            ),
+            'quantity'     => 1,
+            'tax1_name'    => 'IVA',
+            'tax1_percent' => $vatTax
+        ];
 
         $vat = round(($vatTax/100) * $subtotal, 2);
 
