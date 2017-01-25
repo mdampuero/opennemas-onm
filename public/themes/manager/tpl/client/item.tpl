@@ -48,9 +48,7 @@
           <div class="form-group col-lg-4 col-sm-6">
             <h4>{t}Owner{/t}</h4>
             <div class="controls">
-              <select class="form-control" id="owner_id" name="owner_id" ng-model="client.owner_id" required>
-                <option value="[% user.id %]" ng-repeat="user in extra.users" ng-selected="[% client.owner_id == user.id %]">[% user.name %]</option>
-              </select>
+              <select ng-model="client.owner_id" ng-options="value.id as value.name for value in extra.users"></select>
               <label class="help m-t-5">{t}Partner who can see this client information{/t}</label>
             </div>
           </div>
