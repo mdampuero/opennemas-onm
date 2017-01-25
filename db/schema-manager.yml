@@ -93,9 +93,6 @@ instances:
         users:
             type: integer
             options: { default: 0, unsigned: true }
-        support_plan:
-            type: string
-            options: { default: null, length: 255 }
     index:
         -
             name: PRIMARY

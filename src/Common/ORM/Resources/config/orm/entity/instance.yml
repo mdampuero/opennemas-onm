@@ -34,7 +34,6 @@ orm:
                 purchased:          array
                 settings:           array
                 static_pages:       integer
-                support_plan:       string
                 users:              integer
                 videos:             integer
                 widgets:            integer
@@ -151,9 +150,6 @@ orm:
                         users:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
-                        support_plan:
-                            type:    string
-                            options: { default: null, length: 255, notnull: false }
                     index:
                         -
                             name:    PRIMARY
