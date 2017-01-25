@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles all the request for Welcome actions
- *
- * @package Backend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
@@ -20,16 +15,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
 /**
- * Handles all the request for Welcome actions
- *
- * @package Backend_Controllers
- **/
+ * Displays and saves system settings.
+ */
 class SystemSettingsController extends Controller
 {
     /**
      * Gets all the settings and displays the form
-     *
-     * @return void
      *
      * @Security("hasExtension('SETTINGS_MANAGER')
      *     and hasPermission('ONM_SETTINGS')")
@@ -78,16 +69,11 @@ class SystemSettingsController extends Controller
         return $this->render(
             'system_settings/system_settings.tpl',
             array(
+                'countries' => $this->get('core.geo')->getCountries(),
+                'country'   => $this->get('core.instance')->country,
                 'configs'   => $configurations,
                 'timezones' => \DateTimeZone::listIdentifiers(),
-                'languages' => array(
-                    'en_US' => _("English"),
-                    'es_ES' => _("Spanish"),
-                    'gl_ES' => _("Galician"),
-                    // 'it_IT' => _("Italian"),
-                    // 'pt_PT' => _("Portuguesse"),
-                    // 'fr_FR' => _("French"),
-                ),
+                'languages' => $this->get('core.locale')->getLocales()
             )
         );
     }
@@ -199,6 +185,11 @@ class SystemSettingsController extends Controller
             // Save settings
             $this->get('setting_repository')->set($key, $value);
         }
+
+        // Save country for instance
+        $instance = $this->get('core.instance');
+        $instance->country = $request->request->get('country', '');
+        $this->get('orm.manager')->persist($instance);
 
         if (empty($request->request->get('redirection'))) {
             $this->get('setting_repository')->set('redirection', 0);
