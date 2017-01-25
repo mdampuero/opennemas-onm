@@ -120,7 +120,7 @@
                   <div class="controls">
                     <select class="form-control" id="country" name="country" ng-model="instance.country" placeholder="{t}Country{/t}" required>
                       <option value="">{t}Select a country{/t}...</option>
-                      <option value="[% key %]" ng-repeat="(key,value) in template.countries" ng-selected="[% instance.country === value %]">[% value %]</option>
+                      <option value="[% country.id %]" ng-repeat="country in template.countries" ng-selected="[% instance.country === country.id %]">[% country.name %]</option>
                     </select>
                   </div>
                 </div>

@@ -249,10 +249,16 @@ class InstanceController extends Controller
             return $converter->responsify($a->getData());
         }, $instances);
 
+        $countries = $this->getCountries();
+        array_unshift($countries, [ 'id' => null, 'name' => _('All') ]);
+
         return new JsonResponse([
             'total'   => $total,
             'results' => $instances,
-            'extra'   => [ 'users' => $this->getUsers() ]
+            'extra'   => [
+                'countries' => $countries,
+                'users'     => $this->getUsers()
+            ]
         ]);
     }
 
@@ -527,8 +533,7 @@ class InstanceController extends Controller
                     ->getRepository('Client')
                     ->find($instance->getClient());
 
-                $template['client']    = $client->getData();
-                $template['countries'] = Intl::getRegionBundle()->getCountryNames();
+                $template['client'] = $client->getData();
             } catch (\Exception $e) {
                 // Update instance when no client found
                 $instance->client = null;
@@ -628,13 +633,30 @@ class InstanceController extends Controller
                 'EXPERT',
                 'OTHER',
             ],
-            'countries' => $this->get('core.geo')->getCountries(),
+            'countries' => $this->getCountries(),
             'purchases' => $this->getPurchases($id),
             'themes'    => $this->getThemes(),
             'timezones' => \DateTimeZone::listIdentifiers(),
             'modules'   => $this->getExtensions(),
             'users'     => $this->getUsers()
         ];
+    }
+
+    /**
+     * Returns the list fo countries for UI selectors.
+     *
+     * @return array The list of countries.
+     */
+    protected function getCountries()
+    {
+        $countries = [];
+
+        foreach ($this->get('core.geo')->getCountries() as $key => $value) {
+            $countries[] = [ 'id' => $key, 'name' => $value ];
+
+        }
+
+        return $countries;
     }
 
     /**
