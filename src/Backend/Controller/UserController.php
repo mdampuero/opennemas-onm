@@ -401,6 +401,13 @@ class UserController extends Controller
         $user = $em->getRepository('User')->find($id);
         $user->eraseCredentials();
 
+        if (!empty($user->paywall_time_limit)
+            && is_object($user->paywall_time_limit)
+        ) {
+            $user->paywall_time_limit =
+                $user->paywall_time_limit->format('Y-m-d H:i:s');
+        }
+
         // Fetch user photo if exists
         if (!empty($user->avatar_img_id)) {
             $user->photo = $this->get('entity_repository')
@@ -456,6 +463,18 @@ class UserController extends Controller
 
         $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
         $extra['taxes']     = $this->get('vat')->getTaxes();
+
+        // TODO: Remove when using new ORM to responsify objects
+        if (is_object($user->paywall_time_limit)) {
+            $user->paywall_time_limit =
+                $user->paywall_time_limit->format('Y-m-d H:i:s');
+        }
+
+        // TODO: Remove when using new ORM to responsify objects
+        if (is_object($user->paywall_time_limit)) {
+            $user->terms_accepted =
+                $user->terms_accepted->format('Y-m-d H:i:s');
+        }
 
         return $this->render(
             'acl/user/new.tpl',
@@ -574,15 +593,23 @@ class UserController extends Controller
         }
 
         // TODO: Hack for activated and type flags
-        $data['type'] = !array_key_exists('type', $data) ? 1 : 0;
+        $data['type']      = !array_key_exists('type', $data) ? 1 : 0;
         $data['activated'] = !array_key_exists('activated', $data) ? 0 : 1;
 
         $user->merge($converter->objectify($data));
 
+        // TODO: Hack to fix date conversion. Remove when all dates in UTC.
+        if (!empty($user->paywall_time_limit)) {
+            $user->paywall_time_limit = new \DateTime(
+                $data['paywall_time_limit'],
+                $this->get('core.locale')->getTimeZone()
+            );
+        }
+
         // TODO: Remove after check and update database schema
         $user->type = empty($user->type) ? 0 : $user->type;
-        $user->url = empty($user->url) ? ' ' : $user->url;
-        $user->bio = empty($user->bio) ? ' ' : $user->bio;
+        $user->url  = empty($user->url) ? ' ' : $user->url;
+        $user->bio  = empty($user->bio) ? ' ' : $user->bio;
 
         try {
             // Check if the user is already registered
