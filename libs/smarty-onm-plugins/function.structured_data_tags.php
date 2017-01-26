@@ -108,19 +108,20 @@ function getMediaObject($smarty)
 {
     $photo = $video = '';
     $content = $smarty->tpl_vars['content']->value;
-    if (array_key_exists('photoInt', $smarty->tpl_vars)) {
+    if (array_key_exists('photoInt', $smarty->tpl_vars) &&
+        is_object($smarty->tpl_vars['photoInt']->value)) {
         // Articles
         $photo = $smarty->tpl_vars['photoInt']->value;
-        if (is_object($photo)) {
-            $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
-        }
-    } elseif (array_key_exists('videoInt', $smarty->tpl_vars)) {
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
+    } elseif (array_key_exists('videoInt', $smarty->tpl_vars)&&
+        is_object($smarty->tpl_vars['videoInt']->value)) {
         // Articles with inner video
         $video = $smarty->tpl_vars['videoInt']->value;
         if (!empty($video) && strpos($video->thumb, 'http')  === false) {
             $video->thumb = SITE_URL.$video->thumb;
         }
-    } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
+    } elseif (array_key_exists('photo', $smarty->tpl_vars) &&
+        is_object($smarty->tpl_vars['photo']->value)) {
         // Opinions
         $photo = $smarty->tpl_vars['photo']->value;
         $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photo->path_file.$photo->name;
