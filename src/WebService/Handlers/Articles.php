@@ -77,13 +77,13 @@ class Articles
         }
 
         // Related contents code ---------------------------------------
-        $relations       = getService('related_contents')->getRelations($content->id, 'inner');
+        $relations       = getService('related_contents')->getRelations($article->id, 'inner');
         $relatedContents = [];
         if (count($relations) > 0) {
-            $relatedObjects = $this->get('entity_repository')->findMulti($relations);
+            $relatedObjects = getService('entity_repository')->findMulti($relations);
 
             // Filter out not ready for publish contents.
-            foreach ($relatedObjects as $contentID) {
+            foreach ($relatedObjects as $content) {
                 if (!$content->isReadyForPublish()) {
                     continue;
                 }
