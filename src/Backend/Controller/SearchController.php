@@ -80,9 +80,9 @@ class SearchController extends Controller
 
             // Build field search with LIKE
             $fields = ['metadata', 'title'];
-            $search = '';
+            $search = [];
             foreach ($fields as $field) {
-                $searchChunk = '';
+                $searchChunk = [];
                 foreach ($tokens as $token) {
                     $searchChunk []= $field." LIKE '%".trim($token)."%'";
                 }
