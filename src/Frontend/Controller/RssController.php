@@ -156,7 +156,7 @@ class RssController extends Controller
                 }
 
                 // Related contents code ---------------------------------------
-                $relations       = getService('related_contents')->getRelations('inner', $content->id);
+                $relations       = getService('related_contents')->getRelations($content->id, 'inner');
                 if (count($relations) > 0) {
                     $relatedContents  = [];
                     $relatedContents = $this->get('entity_repository')->findMulti($relations);
