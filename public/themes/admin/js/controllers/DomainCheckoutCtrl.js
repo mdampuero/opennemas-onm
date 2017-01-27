@@ -25,6 +25,16 @@
             { $rootScope: $rootScope, $scope: $scope }));
 
         /**
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *  The shopping cart name.
+         *
+         * @type {String}
+         */
+        $scope.cartName = 'domain';
+
+        /**
          * @memberOf DomainCheckoutCtrl
          *
          * @description
@@ -321,5 +331,10 @@
             $scope.price = 18;
           }
         });
+
+        // Initialize the shopping cart from the webStorage
+        if (webStorage.local.has($scope.cartName + '_cart')) {
+          $scope.cart = webStorage.local.get($scope.cartName + '_cart');
+        }
     }]);
 })();
