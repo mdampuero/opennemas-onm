@@ -206,11 +206,28 @@ class RelatedContent
      *
      * @return array Array of related content IDs
      */
-    public function getRelations($contentID)
+    public function getRelations($contentID, $position = 'frontpage')
     {
-        $sql = "SELECT pk_content2, position FROM related_contents ".
-               "WHERE verportada=\"1\" AND pk_content1=? ".
-               "ORDER BY position ASC";
+        $sql = 'SELECT pk_content2, content_type_name FROM related_contents LEFT JOIN contents ON pk_content2 =  pk_content WHERE pk_content1=? ';
+
+        switch ($position) {
+            case 'frontpage': // Old getRelations
+                $sql .= "AND verportada=1 ";
+                break;
+
+            case 'home': // Old getHomeRelations
+                $sql .= "AND verportada=2";
+                break;
+
+            case 'inner': // Old getRelationsForInner
+                $sql .= "AND verinterior=1 ";
+                break;
+
+            default:
+                break;
+        }
+
+        $sql .= " ORDER BY related_contents.position ASC";
 
         $rs = $this->dbConn->fetchAll($sql, [$contentID]);
 
@@ -220,60 +237,7 @@ class RelatedContent
 
         $related = [];
         foreach ($rs as $key => $value) {
-            $related[] = $value['pk_content2'];
-        }
-
-        return $related;
-    }
-
-    /**
-     * Get contents related to $contentID for inner article
-     *
-     * @param int $contentID Content ID
-     *
-     * @return array Array of related content IDs
-     */
-    public function getRelationsForInner($contentID)
-    {
-        $sql = "SELECT DISTINCT pk_content2, posinterior FROM related_contents ".
-               "WHERE verinterior=\"1\" AND pk_content1=? ".
-               "ORDER BY posinterior ASC";
-
-        $rs = $this->dbConn->fetchAll($sql, [$contentID]);
-
-        if (!$rs) {
-            return [];
-        }
-
-        $related = [];
-        foreach ($rs as $key => $value) {
-            $related[] = $value['pk_content2'];
-        }
-
-        return $related;
-    }
-
-    /**
-     * Returns the frontpage relations for a content given its id
-     *
-     * @param int $contentID the content ID to fetch relations from
-     *
-     * @return boolean true if the relations were saved
-     **/
-    public function getHomeRelations($contentID)
-    {
-        $sql = "SELECT DISTINCT pk_content2, position FROM related_contents ".
-               "WHERE pk_content1=? AND verportada=2 ORDER BY position ASC";
-
-        $rs = $this->dbConn->fetchAll($sql, [$contentID]);
-
-        if (!$rs) {
-            return [];
-        }
-
-        $related = [];
-        foreach ($rs as $key => $value) {
-            $related[] = $value['pk_content2'];
+            $related[] = [ classify($value['content_type_name']), $value['pk_content2'] ];
         }
 
         return $related;

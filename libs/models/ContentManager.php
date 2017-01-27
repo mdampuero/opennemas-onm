@@ -1657,19 +1657,23 @@ class ContentManager
     {
         $ccm = new ContentCategoryManager();
 
-        $relatedContentIDs = getService('related_contents')->getRelations($contentID);
-        $relatedContent = array();
-        foreach ($relatedContentIDs as $contentID) {
-            $content = new Content($contentID);
-            // Filter by scheduled {{{
-            if ($content->isInTime()
-                && $content->content_status == 1
-                && $content->in_litter == 0
-            ) {
-                $content->category_name = $ccm->getName($content->category);
-                $relatedContent[] = $content;
+        // Fetch relations
+        $relations       = getService('related_contents')->getRelations($contentID, 'frontpage');
+
+        if (count($relations) == 0) {
+            return [];
+        }
+        $contentObjects = getService('entity_repository')->findMulti($relations);
+
+        // Filter out not ready for publish contents.
+        $relatedContent  = [];
+        foreach ($contentObjects as $content) {
+            if (!$content->isReadyForPublish()) {
+                continue;
             }
-            // }}}
+
+            $content->category_name = $ccm->getName($content->category);
+            $relatedContent[] = $content;
         }
 
         return $relatedContent;
