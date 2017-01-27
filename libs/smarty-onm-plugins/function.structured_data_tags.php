@@ -138,7 +138,9 @@ function getMediaObject($smarty)
         $photo->url = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
     } elseif (isset($content->img1) && ($content->img1 > 0)) {
         $photo = getService('entity_repository')->find('Photo', $content->img1);
-        $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
+        if (is_object($photo)) {
+            $photo->url = MEDIA_IMG_ABSOLUTE_URL.$photoFront->path_file.$photoFront->name;
+        }
     } elseif (isset($content->thumb) && !empty($content->thumb)) {
         // Video
         $video = $content;
