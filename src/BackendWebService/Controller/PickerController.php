@@ -158,11 +158,13 @@ class PickerController extends Controller
             $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
             $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
-            $years[$date->format('Y')]['name'] = $date->format('Y');
-            $years[$date->format('Y')]['months'][]= array(
-                'name'  => ucfirst($fmt->format($date)),
-                'value' => $value['date_month']
-            );
+            if (!is_null($fmt)) {
+                $years[$date->format('Y')]['name'] = $date->format('Y');
+                $years[$date->format('Y')]['months'][]= array(
+                    'name'  => ucfirst($fmt->format($date)),
+                    'value' => $value['date_month']
+                );
+            }
         }
 
         return array_values($years);
