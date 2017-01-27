@@ -76,19 +76,20 @@ class Articles
             }
         }
 
-        // Get Related contents
-        $relationIDs     = getService('related_contents')->getRelationsForInner($article->id);
+        // Related contents code ---------------------------------------
+        $relations       = getService('related_contents')->getRelations($content->id, 'inner');
         $relatedContents = [];
-        if (count($relationIDs) > 0) {
-            $relatedContents = $this->cm->getContents($relationIDs);
+        if (count($relations) > 0) {
+            $relatedObjects = $this->get('entity_repository')->findMulti($relations);
 
-            // Drop contents that are not available or not in time
-            $relatedContents = $this->cm->getInTime($relatedContents);
-            $relatedContents = $this->cm->getAvailable($relatedContents);
+            // Filter out not ready for publish contents.
+            foreach ($relatedObjects as $contentID) {
+                if (!$content->isReadyForPublish()) {
+                    continue;
+                }
 
-            // Add category name
-            foreach ($relatedContents as &$content) {
-                $content->category_name = $ccm->getCategoryNameByContentId($content->id);
+                $content->category_name = $ccm->getName($content->category);
+
                 // Generate content uri if it's not an attachment
                 if ($content->fk_content_type == '4') {
                     $content->uri = "ext".preg_replace('@//@', '/author/', $content->uri);
@@ -104,6 +105,7 @@ class Articles
                 } else {
                     $content->uri = "ext".$content->uri;
                 }
+                $relatedContents[] = $content;
             }
         }
         $article->relatedContents = $relatedContents;

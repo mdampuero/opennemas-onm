@@ -1787,28 +1787,30 @@ class Content
      **/
     public function loadRelatedContents($categoryName = '')
     {
-        $relationsHandler  = getService('related_contents');
-        $ccm = new ContentCategoryManager();
-        $this->related_contents = array();
+        $this->related_contents = [];
+
+        $ccm              = new ContentCategoryManager();
+        $relationsHandler = getService('related_contents');
         if (getService('core.security')->hasExtension('CRONICAS_MODULES')
             && ($categoryName == 'home')) {
-            $relations = $relationsHandler->getHomeRelations($this->id);
+            $relations = $relationsHandler->getRelations($this->id, 'home');
         } else {
-            $relations = $relationsHandler->getRelations($this->id);
+            $relations = $relationsHandler->getRelations($this->id, 'frontpage');
         }
 
         if (count($relations) > 0) {
-            foreach ($relations as $relatedContentId) {
-                $content = new Content($relatedContentId);
+            $relatedContents = [];
+            $relatedContents = getService('entity_repository')->findMulti($relations);
 
-                // Only include content is is in time and available.
-                if ($content->isReadyForPublish()) {
-                    if ($content->fk_content_type == 4) {
-                         $content = $content->get($relatedContentId);
-                    }
-                    $content->categoryName = $ccm->getName($content->category);
-                    $this->related_contents []= $content;
+            // Filter out not ready for publish contents.
+            foreach ($relatedContents as $content) {
+                if (!$content->isReadyForPublish() && $content->fk_content_type !== 4) {
+                    continue;
                 }
+
+                $content->categoryName = $ccm->getName($content->category);
+
+                $this->related_contents []= $content;
             }
         }
 

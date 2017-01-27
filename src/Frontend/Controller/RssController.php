@@ -155,13 +155,26 @@ class RssController extends Controller
                     unset($contents[$key]);
                 }
 
-                $relationsId = getService('related_contents')->getRelationsForInner($content->id);
-                if (count($relationsId) > 0) {
-                    $cm = new \ContentManager;
-                    $relatedContents  = $cm->getContents($relationsId);
-                    // Drop contents that are not available or not in time
-                    $relatedContents  = $cm->getInTime($relatedContents);
-                    $relatedContents  = $cm->getAvailable($relatedContents);
+                // Related contents code ---------------------------------------
+                $relations       = getService('related_contents')->getRelations($content->id, 'inner');
+                if (count($relations) > 0) {
+                    $relatedContents  = [];
+                    $relatedContents = $this->get('entity_repository')->findMulti($relations);
+                    $ccm = new \ContentCategoryManager();
+
+                    // Filter out not ready for publish contents.
+                    foreach ($relatedContents as $contentID) {
+                        if ($content->isReadyForPublish()) {
+                            $content->category_name = $ccm->getName($content->category);
+                            if ($content->content_type == 1 && !empty($content->img1)) {
+                                $content->photo = $er->find('Photo', $content->img1);
+                            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+                                $content->video = $er->find('Video', $content->fk_video);
+                            }
+                            $relatedContents[] = $content;
+                        }
+                    }
+
                     $content->related = $relatedContents;
                 }
             }
@@ -288,14 +301,18 @@ class RssController extends Controller
                 ) {
                     unset($contents[$key]);
                 } else {
-                    $relationsId = getService('related_contents')->getRelationsForInner($content->id);
-                    if (count($relationsId) > 0) {
-                        $cm = new \ContentManager;
-                        $relatedContents  = $cm->getContents($relationsId);
-                        // Drop contents that are not available or not in time
-                        $relatedContents  = $cm->getInTime($relatedContents);
-                        $relatedContents  = $cm->getAvailable($relatedContents);
-                        $content->related = $relatedContents;
+                    $relations = getService('related_contents')->getRelations($content->id, 'inner');
+                    if (count($relations) > 0) {
+                        $contentObjects = $this->get('entity_repository')->findMulti($relations);
+
+                        // Filter out not ready for publish contents.
+                        foreach ($contentObjects as $contentID) {
+                            if (!$content->isReadyForPublish()) {
+                                continue;
+                            }
+
+                            $relatedContents[] = $content;
+                        }
                     }
 
                     // Wrap img with figure and add caption

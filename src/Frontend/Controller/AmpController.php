@@ -132,23 +132,21 @@ class AmpController extends Controller
             }
 
             // Related contents code ---------------------------------------
-            $relationIDs = getService('related_contents')->getRelationsForInner($article->id);
-            $relatedContents = [];
-            if (count($relationIDs) > 0) {
-                $cm = new \ContentManager;
-                $relatedContents = $cm->getContents($relationIDs);
+            $relatedContents  = [];
+            $relations       = $this->get('related_contents')->getRelations($article->id, 'inner');
+            if (count($relations) > 0) {
+                $contentObjects = $this->get('entity_repository')->findMulti($relations);
 
-                // Drop contents that are not available or not in time
-                $relatedContents = $cm->getInTime($relatedContents);
-                $relatedContents = $cm->getAvailable($relatedContents);
-
-                // Get front media element and add category name
-                foreach ($relatedContents as $key => &$content) {
-                    $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
-                    if ($content->content_type == 1 && !empty($content->img1)) {
-                        $content->photo = $er->find('Photo', $content->img1);
-                    } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                        $content->video = $er->find('Video', $content->fk_video);
+                // Filter out not ready for publish contents.
+                foreach ($contentObjects as $content) {
+                    if ($content->isReadyForPublish()) {
+                        $content->category_name = $this->ccm->getName($content->category);
+                        if ($content->content_type == 1 && !empty($content->img1)) {
+                            $content->photo = $er->find('Photo', $content->img1);
+                        } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+                            $content->video = $er->find('Video', $content->fk_video);
+                        }
+                        $relatedContents[] = $content;
                     }
                 }
             }

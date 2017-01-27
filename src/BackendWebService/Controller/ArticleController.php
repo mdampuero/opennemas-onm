@@ -172,24 +172,33 @@ class ArticleController extends Controller
             $article->promoted_to_category_frontpage = true;
         }
 
-        $rm        = $this->get('related_contents');
-        $galleries = [];
+        $rm = $this->get('related_contents');
 
-        $relations = $rm->getRelations($id);
-        foreach ($relations as $aret) {
-            $params['relatedInFrontpage'][] =
-                \Onm\StringUtils::convertToUtf8(new \Content($aret));
+        $relations = $rm->getRelations($id, 'frontpage');
+        if (count($relations) > 0) {
+            $params['relatedInFrontpage'] = array_map(function($content) {
+                return \Onm\StringUtils::convertToUtf8($content);
+            }, $this->get('entity_repository')->findMulti($relations));
         }
-
-        $relations = $rm->getRelationsForInner($id);
-        foreach ($relations as $aret) {
-            $params['relatedInInner'][] =
-                \Onm\StringUtils::convertToUtf8(new \Content($aret));
+        $relations = $rm->getRelations($id, 'inner');
+        if (count($relations) > 0) {
+            $params['relatedInInner'] = array_map(function($content) {
+                return \Onm\StringUtils::convertToUtf8($content);
+            }, $this->get('entity_repository')->findMulti($relations));
         }
 
         if ($this->get('core.security')->hasExtension('CRONICAS_MODULES')
             && is_array($article->params)
         ) {
+            $galleries = [];
+
+            $relations = $rm->getRelations($id, 'home');
+            if (count($relations) > 0) {
+                $params['relatedInHome'] = array_map(function($content) {
+                    return \Onm\StringUtils::convertToUtf8($content);
+                }, $this->get('entity_repository')->findMulti($relations));
+            }
+
             if (array_key_exists('withGalleryHome', $article->params)
                 && !empty($article->params['withGalleryHome'])
             ) {
@@ -210,12 +219,6 @@ class ArticleController extends Controller
 
             \Onm\StringUtils::convertToUtf8($galleries);
             $this->view->assign('galleries', $galleries);
-
-            $relations = $rm->getHomeRelations($id);
-            foreach ($relations as $aret) {
-                $params['relatedInHome'][] =
-                    \Onm\StringUtils::convertToUtf8(new \Content($aret));
-            }
         }
 
         // Force URI generation
