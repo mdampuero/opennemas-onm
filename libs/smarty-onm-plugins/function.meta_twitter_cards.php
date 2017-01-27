@@ -31,8 +31,13 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
         $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
         $url = SITE_URL.$content->uri;
 
+        // Change summary for videos
+        if ($content->content_type_name == 'video') {
+            $summary = $content->description;
+        }
+
         // Writing Twitter card info
-        $output []= '<meta name="twitter:card"        content="summary">';
+        $output []= '<meta name="twitter:card"        content="summary_large_image">';
         $output []= '<meta name="twitter:title"       content="'.$title.'">';
         $output []= '<meta name="twitter:description" content="'.$summary.'">';
         $output []= '<meta name="twitter:site"        content="@'.$twitterUser.'">';
