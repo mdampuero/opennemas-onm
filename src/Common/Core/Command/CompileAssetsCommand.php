@@ -32,25 +32,42 @@ class CompileAssetsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("<options=bold>(1/4)Configuring services...</>");
+        $themes = $this->getContainer()->getParameter('core.paths.themes');
+        $paths  = [ $themes . '/admin', $themes . '/manager' ] ;
+        $step   = 1;
+        $steps  = 1 + count($paths);
 
-        $path      = $this->getContainer()->getParameter('core.paths.themes') . '/admin';
+        $output->writeln("<options=bold>($step/$steps) Configuring services...</>");
+        $step++;
+
         $this->bag = getService('core.service.assetic.asset_bag');
 
-        $output->writeln("<options=bold>(2/4)Extracting paths from templates...</>");
-        if ($output->isVerbose()) {
-            $output->writeln("  ==> Extracting paths from <fg=blue>$path</>");
+        foreach ($paths as $path) {
+            $theme = substr($path, strrpos($path, '/') + 1);
+
+            $output->writeln("<options=bold>($step/$steps) Compiling $theme theme...</>");
+            $step++;
+
+            if ($output->isVerbose()) {
+                $output->writeln("  <options=bold>==></> <fg=yellow>Extracting</> paths from <fg=blue>$path</>");
+            }
+
+            $this->find($path);
+
+            if ($output->isVerbose()) {
+                $output->writeln("  <options=bold>==></> <fg=yellow>Compiling</> scripts...</>");
+            }
+
+            $this->writeScripts($output);
+
+            if ($output->isVerbose()) {
+                $output->writeln("  <options=bold>==></> <fg=yellow>Compiling</> stylesheets...</>");
+            }
+
+            $this->writeStyles($output);
         }
 
-        $this->find($path);
-
-        $output->writeln("<options=bold>(3/4)Compiling scripts...</>");
-        $this->writeScripts($output);
-
-        $output->writeln("<options=bold>(4/4)Compiling stylesheets...</>");
-        $this->writeStyles($output);
-
-        $output->writeln("<info>DONE</>");
+        $output->writeln("<options=bold>DONE</>");
     }
 
     /**
@@ -136,8 +153,8 @@ class CompileAssetsCommand extends ContainerAwareCommand
         $scripts = $this->bag->getScripts();
         $progress = null;
 
-        if ($output->isVerbose()) {
-            $output->writeln("  ==> {$this->count($scripts)} scripts to compile");
+        if ($output->isVeryVerbose()) {
+            $output->writeln("      - {$this->count($scripts)} scripts to compile");
         }
 
         foreach ($scripts as $bag => $files) {
@@ -156,8 +173,8 @@ class CompileAssetsCommand extends ContainerAwareCommand
         $styles   = $this->bag->getStyles();
         $progress = null;
 
-        if ($output->isVerbose()) {
-            $output->writeln("  ==> {$this->count($styles)} stylesheets to compile");
+        if ($output->isVeryVerbose()) {
+            $output->writeln("      - {$this->count($styles)} stylesheets to compile");
         }
 
         foreach ($styles as $bag => $files) {
