@@ -138,7 +138,7 @@ class AmpController extends Controller
                 $contentObjects = $this->get('entity_repository')->findMulti($relations);
 
                 // Filter out not ready for publish contents.
-                foreach ($contentObjects as $contentID) {
+                foreach ($contentObjects as $content) {
                     if ($content->isReadyForPublish()) {
                         $content->category_name = $this->ccm->getName($content->category);
                         if ($content->content_type == 1 && !empty($content->img1)) {
