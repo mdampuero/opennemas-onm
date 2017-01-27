@@ -160,11 +160,12 @@ class RssController extends Controller
                 if (count($relations) > 0) {
                     $relatedContents  = [];
                     $relatedContents = $this->get('entity_repository')->findMulti($relations);
+                    $ccm = new \ContentCategoryManager();
 
                     // Filter out not ready for publish contents.
                     foreach ($relatedContents as $contentID) {
                         if ($content->isReadyForPublish()) {
-                            $content->category_name = $this->ccm->getName($content->category);
+                            $content->category_name = $ccm->getName($content->category);
                             if ($content->content_type == 1 && !empty($content->img1)) {
                                 $content->photo = $er->find('Photo', $content->img1);
                             } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
