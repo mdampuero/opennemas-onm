@@ -237,7 +237,9 @@ class RelatedContent
 
         $related = [];
         foreach ($rs as $key => $value) {
-            $related[] = [ classify($value['content_type_name']), $value['pk_content2'] ];
+            if (!empty($value['content_type_name']) && !empty($value['pk_content2'])) {
+                $related[] = [ classify($value['content_type_name']), $value['pk_content2'] ];
+            }
         }
 
         return $related;
