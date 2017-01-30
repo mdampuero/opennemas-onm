@@ -38,8 +38,18 @@ class ClientController extends Controller
 
         $client = $em->getRepository('client')->find($id);
 
-        $em->remove($client, 'freshbooks');
-        $em->remove($client, 'braintree');
+        try {
+            $em->remove($client, 'freshbooks');
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error');
+        }
+
+        try {
+            $em->remove($client, 'braintree');
+        } catch (Exception $e) {
+            $msg->add($e->getMessage(), 'error');
+        }
+
         $em->remove($client, 'manager');
 
         $msg->add(_('Client deleted successfully'), 'success');
@@ -77,7 +87,17 @@ class ClientController extends Controller
         foreach ($clients as $client) {
             try {
                 $em->remove($client, 'freshbooks');
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error');
+            }
+
+            try {
                 $em->remove($client, 'braintree');
+            } catch (Exception $e) {
+                $msg->add($e->getMessage(), 'error');
+            }
+
+            try {
                 $em->remove($client, 'manager');
                 $deleted++;
             } catch (\Exception $e) {
