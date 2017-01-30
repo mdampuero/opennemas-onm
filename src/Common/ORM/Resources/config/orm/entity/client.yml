@@ -97,6 +97,9 @@ orm:
                     country:
                         name: p_country
                         type: string
+                    vat_number:
+                        name: vat_number
+                        type: string
                 database:
                     table: client
                     columns:
