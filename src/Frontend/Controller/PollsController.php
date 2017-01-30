@@ -194,7 +194,14 @@ class PollsController extends Controller
 
         $message = null;
         $alreadyVoted = false;
-        if ($poll->status != 'closed') {
+        if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
+            && (!empty($poll->params['closetime']))
+            && ($poll->params['closetime'] != date('00-00-00 00:00:00'))
+            && ($poll->params['closetime'] < date('Y-m-d H:i:s'))
+        ) {
+            $poll->status = 'closed';
+            $message = "<span class='closed'>"._('You can\'t vote this poll, it is closed.')."</span>";
+        } else {
             $voted = (int) $request->query->getDigits('voted', 0);
             $valid = (int) $request->query->getDigits('valid', 3);
             if ($voted == 1) {
@@ -210,8 +217,6 @@ class PollsController extends Controller
                 $alreadyVoted = true;
                 $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
             }
-        } else {
-            $message = "<span class='closed'>"._('You can\'t vote this poll, it is closed.')."</span>";
         }
 
         $ads = $this->getAds('inner');
