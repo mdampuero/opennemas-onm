@@ -49,6 +49,44 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($return), 'The content is not matching');
     }
 
+    public function testWithoutfullArgs()
+    {
+        $this->em->expects($this->any())->method('find')
+            ->willReturn($this->content);
+
+        // Not valid category
+        $return = $this->matcher->matchContentUrl(
+            'article',
+            '20150114235016000184'
+        );
+        $this->assertTrue(is_object($return), 'The content is not matching');
+
+        // Not valid category
+        $return = $this->matcher->matchContentUrl(
+            'article',
+            '20150114235016000184',
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
+        );
+        $this->assertTrue(is_object($return), 'The content is not matching');
+
+        // Not valid category
+        $return = $this->matcher->matchContentUrl(
+            'article',
+            '20150114235016000184',
+            null
+        );
+        $this->assertTrue(is_object($return), 'The content is not matching');
+
+        // Not valid category
+        $return = $this->matcher->matchContentUrl(
+            'article',
+            '20150114235016000184',
+            null,
+            'ciencia'
+        );
+        $this->assertTrue(is_object($return), 'The content is not matching');
+    }
+
     public function testEmptyDirtyId()
     {
         $this->em->expects($this->never())->method('find')
@@ -134,21 +172,21 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertFalse(is_object($return), 'The content is not matching');
 
+        // Not valid slug
+        $return = $this->matcher->matchContentUrl(
+            'article',
+            '20150114235016000336',
+            'invalidslug',
+            'ciencia'
+        );
+        $this->assertFalse(is_object($return), 'The content is not matching');
+
         // Not valid category
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000336',
             'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
             'invalidcategory'
-        );
-        $this->assertFalse(is_object($return), 'The content is not matching');
-
-        // Not valid slug
-        $return = $this->matcher->matchContentUrl(
-            'article',
-            '20150114235016000336',
-            'invalidslug',
-            'sucesos'
         );
         $this->assertFalse(is_object($return), 'The content is not matching');
     }

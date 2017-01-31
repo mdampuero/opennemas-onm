@@ -47,7 +47,6 @@ class ContentUrlMatcher
             return null;
         }
 
-
         // Check for valid Id
         preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyId, $matches);
 
@@ -55,7 +54,7 @@ class ContentUrlMatcher
         $id = $date = 0;
         if (array_key_exists('id', $matches)
             && array_key_exists('date', $matches)
-            && (substr($matches['id'], 0, -6) === '' || substr((int) $matches['id'], 0, -6) > 0)
+            && ((int) $matches['id'] > 0)
         ) {
             $id   = (int) $matches['id'];
             $date = \DateTime::createFromFormat('YmdHis', $matches['date'])->format('Y-m-d H:i:s');
