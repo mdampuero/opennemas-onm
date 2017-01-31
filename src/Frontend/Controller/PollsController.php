@@ -123,7 +123,7 @@ class PollsController extends Controller
                     }
                     if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
                         && (!empty($poll->params['closetime']))
-                        && ($poll->params['closetime'] != date('00-00-00 00:00:00'))
+                        && ($poll->params['closetime'] != '0000-00-00 00:00:00')
                         && ($poll->params['closetime'] < date('Y-m-d H:i:s'))) {
                             $poll->status = 'closed';
                     }
@@ -196,7 +196,7 @@ class PollsController extends Controller
         $alreadyVoted = false;
         if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
             && (!empty($poll->params['closetime']))
-            && ($poll->params['closetime'] != date('00-00-00 00:00:00'))
+            && ($poll->params['closetime'] != '0000-00-00 00:00:00')
             && ($poll->params['closetime'] < date('Y-m-d H:i:s'))
         ) {
             $poll->status = 'closed';
