@@ -111,7 +111,7 @@
                 <label for="created" class="form-label">{t}Created at{/t}</label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" type="text" id="created" name="created" value="{$letter->created}"/>
+                    <input class="form-control" type="text" id="created" name="created" value="{$letter->created}" readonly/>
                     <span class="input-group-addon add-on">
                       <span class="fa fa-calendar"></span>
                     </span>
