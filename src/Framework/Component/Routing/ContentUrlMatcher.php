@@ -47,6 +47,7 @@ class ContentUrlMatcher
             return null;
         }
 
+
         // Check for valid Id
         preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyId, $matches);
 
@@ -68,8 +69,8 @@ class ContentUrlMatcher
             && $content->created           == $date
             && $content->content_type_name == $type
             && $content->isReadyforPublish()
-            && (!is_null($slug) && $slug == $content->slug)
-            && (!is_null($category) && $category == $content->category_name)
+            && (is_null($slug) || (!is_null($slug) && $slug === $content->slug))
+            && (is_null($category) || (!is_null($slug) && $category === $content->category_name))
         ) {
             return $content;
         }
