@@ -92,8 +92,10 @@ abstract class AssetManager
         $this->sitePath = realpath(SITE_PATH) . DS;
 
         // Get current instance theme path
-        $this->themePath = $this->sitePath . 'themes' . DS .
-            $container->get('core.instance')->settings['TEMPLATE_USER'];
+        if (!empty($container->get('core.instance'))) {
+            $this->themePath = $this->sitePath . 'themes' . DS .
+                $container->get('core.instance')->settings['TEMPLATE_USER'];
+        }
 
         $this->am = new BaseAssetManager();
     }
@@ -120,7 +122,7 @@ abstract class AssetManager
      * @param array  $filters The array of filters per file.
      * @param string $name    The name of the output file.
      */
-    public function writeAssets($assets, $assetFilters, $name)
+    public function writeAssets($assets, $assetFilters, $name = null)
     {
         if (empty($assets)) {
             return [];
@@ -165,7 +167,7 @@ abstract class AssetManager
             $parsed[] = $this->createAssetSrc($target);
         }
 
-        if ($this->debug()) {
+        if ($this->debug() || empty($name)) {
             return $parsed;
         }
 
@@ -257,7 +259,7 @@ abstract class AssetManager
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $port = '';
-        if ($request->headers->get('X-Forwarded-port')) {
+        if (!empty($request) && $request->headers->get('X-Forwarded-port')) {
             $port = $request->headers->get('X-Forwarded-port');
         }
 
