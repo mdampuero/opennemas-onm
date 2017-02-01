@@ -30,16 +30,16 @@ class Articles
     {
         $this->validateInt($id);
 
-        $er       = getService('entity_repository');
-        $this->cm = new \ContentManager();
-        $ccm      = \ContentCategoryManager::get_instance();
-
         $article = getService('content_url_matcher')
             ->matchContentUrl('article', $id);
 
         if (empty($article)) {
             throw new RestException(404, 'Page not found');
         }
+
+        $er       = getService('entity_repository');
+        $this->cm = new \ContentManager();
+        $ccm      = \ContentCategoryManager::get_instance();
 
         // Get category title used on tpl's
         $article->category_title   = $ccm->getTitle($article->category_name);

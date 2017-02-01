@@ -26,7 +26,7 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $opinion = $this->get('content_url_matcher')
+        $opinion = getService('content_url_matcher')
             ->matchContentUrl('opinion', $dirtyID);
 
         if (empty($opinion)) {
