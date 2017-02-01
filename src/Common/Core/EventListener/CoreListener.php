@@ -71,11 +71,13 @@ class CoreListener implements EventSubscriberInterface
 
         $loader->init();
 
-        // Ignore manager requests
-        if ((strpos($uri, '/manager') === 0
-            || strpos($uri, '/content/share-by-email') === 0)
-            && strpos($uri, '/ws') !== 0
-            && strpos($uri, '/_wdt') !== 0
+        // Ignore requests
+        if (strpos($uri, '/_wdt') === 0
+            || strpos($uri, '/asset') === 0
+            || strpos($uri, '/build/assets') === 0
+            || strpos($uri, '/content/share-by-email') === 0
+            || strpos($uri, '/manager') === 0
+            || strpos($uri, '/ws') === 0
         ) {
             return;
         }
