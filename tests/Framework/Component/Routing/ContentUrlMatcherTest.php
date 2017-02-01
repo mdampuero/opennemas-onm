@@ -49,6 +49,18 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($return), 'The content is not matching');
     }
 
+    public function testWithInvalidDirtyID()
+    {
+        $this->em->expects($this->never())->method('find')
+            ->willReturn($this->content);
+
+        $return = $this->matcher->matchContentUrl(
+            'article', '23501600014'
+        );
+
+        $this->assertFalse(is_object($return), 'The content is not matching');
+    }
+
     public function testWithoutfullArgs()
     {
         $this->em->expects($this->any())->method('find')

@@ -52,13 +52,15 @@ class ContentUrlMatcher
 
         // Get real content id and date from url
         $id = $date = 0;
-        if (array_key_exists('id', $matches)
-            && array_key_exists('date', $matches)
-            && ((int) $matches['id'] > 0)
+        if (!array_key_exists('id', $matches)
+            || !array_key_exists('date', $matches)
+            || !((int) $matches['id'] > 0)
         ) {
-            $id   = (int) $matches['id'];
-            $date = \DateTime::createFromFormat('YmdHis', $matches['date'])->format('Y-m-d H:i:s');
+            return null;
         }
+
+        $id   = (int) $matches['id'];
+        $date = \DateTime::createFromFormat('YmdHis', $matches['date'])->format('Y-m-d H:i:s');
 
         $content = $this->em->find(\classify($type), $id);
 
