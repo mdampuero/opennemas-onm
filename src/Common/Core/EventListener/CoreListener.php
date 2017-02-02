@@ -87,6 +87,14 @@ class CoreListener implements EventSubscriberInterface
         $expectedUri = $this->getExpectedUri($request, $instance);
 
         if ($originalUri !== $expectedUri) {
+            error_log(
+                sprintf(
+                    'Request redirected: %s URL found but %s URL expected',
+                    $originalUrl,
+                    $expectedUrl
+                )
+            );
+
             $event->setResponse(new RedirectResponse($expectedUri, 301));
         }
     }
