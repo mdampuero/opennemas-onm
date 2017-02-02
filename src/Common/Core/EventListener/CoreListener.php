@@ -90,8 +90,8 @@ class CoreListener implements EventSubscriberInterface
             error_log(
                 sprintf(
                     'Request redirected: %s URL found but %s URL expected',
-                    $originalUrl,
-                    $expectedUrl
+                    $originalUri,
+                    $expectedUri
                 )
             );
 
