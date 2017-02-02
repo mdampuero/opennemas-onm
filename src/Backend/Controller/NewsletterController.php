@@ -120,7 +120,6 @@ class NewsletterController extends Controller
 
         $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
-        $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
         $time = $time->format('d/m/Y');
 
         return $this->render(
@@ -573,11 +572,7 @@ class NewsletterController extends Controller
         $lastInvoiceDate = $this->updateLastInvoice();
 
         // Get today DateTime
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
         $today = new \DateTime();
-        $today->setTimezone(
-            new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')])
-        );
 
         // Get all newsletters updated between today and last invoice
         $nm = $this->get('newsletter_manager');
@@ -605,7 +600,6 @@ class NewsletterController extends Controller
         return $totalSent;
     }
 
-
     /**
      * Updates last invoice date
      *
@@ -615,14 +609,8 @@ class NewsletterController extends Controller
      **/
     private function updateLastInvoice()
     {
-        // Fetch all available Timezones
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
-
         // Generate last invoice DateTime
         $lastInvoice = new \DateTime(s::get('last_invoice'));
-        $lastInvoice->setTimezone(
-            new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')])
-        );
 
         // Set day to 28 if it's more than that
         if ($lastInvoice->format('d') > 28) {
@@ -635,9 +623,6 @@ class NewsletterController extends Controller
 
         // Get today DateTime
         $today = new \DateTime();
-        $today->setTimezone(
-            new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')])
-        );
 
         // Get next invoice DateTime
         $nextInvoiceDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
