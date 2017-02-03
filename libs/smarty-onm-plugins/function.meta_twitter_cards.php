@@ -33,7 +33,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
 
         // Change summary for videos
         if ($content->content_type_name == 'video') {
-            $summary = $content->description;
+            $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
         }
 
         // Writing Twitter card info
