@@ -4,7 +4,7 @@
   {stylesheets src="
     @AdminTheme/less/_store.less,
     @AdminTheme/less/_themes.less
-  " filters="cssrewrite,less" output="theme"}
+  " filters="cssrewrite,less"}
   {/stylesheets}
 
   <style>

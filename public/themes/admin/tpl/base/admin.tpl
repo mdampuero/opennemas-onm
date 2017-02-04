@@ -37,13 +37,13 @@
       @Common/src/webarch/css/style.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/messenger/build/css/messenger.css" filters="cssrewrite" output="core"}
+      @Common/components/messenger/build/css/messenger.css" filters="cssrewrite"}
     {/stylesheets}
     {stylesheets src="
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/opennemas-webarch/less/main.less,
-      @Common/src/sidebar/less/main.less" filters="cssrewrite,less" output="core"}
+      @Common/src/sidebar/less/main.less" filters="cssrewrite,less"}
     {/stylesheets}
 
     {stylesheets src="
@@ -59,7 +59,7 @@
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
-      @Common/components/spinkit/css/spinkit.css" filters="cssrewrite" output="vendor"}
+      @Common/components/spinkit/css/spinkit.css" filters="cssrewrite"}
     {/stylesheets}
     {stylesheets src="
       @Common/src/angular-dynamic-image/less/main.less,
@@ -70,7 +70,7 @@
       @AdminTheme/less/_article.less,
       @AdminTheme/less/_comment.less,
       @AdminTheme/less/_image.less,
-      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less" output="vendor"}
+      @AdminTheme/less/_news-agency.less" filters="cssrewrite,less"}
     {/stylesheets}
   {/block}
   {block name="header-js"}

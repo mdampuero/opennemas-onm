@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_domain.less" filters="cssrewrite,less" output="domain"}
+  {stylesheets src="@AdminTheme/less/_domain.less" filters="cssrewrite,less"}
   {/stylesheets}
 {/block}
 

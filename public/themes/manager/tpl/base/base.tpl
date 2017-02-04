@@ -38,7 +38,6 @@
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/select2/select2.css,
-
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
@@ -327,9 +326,7 @@
       @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
       @Common/components/angular-swfobject/angular-swfobject.js,
-      @FosJsRoutingBundle/js/router.js" filters="uglifyjs" output="vendor"}
-    {/javascripts}
-    {javascripts src="
+      @FosJsRoutingBundle/js/router.js,
       @Common/src/angular-authentication/authService.js,
       @Common/src/angular-datetimepicker/datetimepicker.js,
       @Common/src/angular-form-autofill/formAutoFill.js,
@@ -353,14 +350,12 @@
       @Common/src/sidebar/js/sidebar.js,
       @Common/js/onm/md5.min.js,
       @Common/js/routes.js,
-
       @ManagerTheme/js/app.js,
       @ManagerTheme/js/config.js,
       @ManagerTheme/js/routing.js,
       @ManagerTheme/js/controllers/*,
       @ManagerTheme/js/module/*,
-
-      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs" output="app"}
+      @Common/src/opennemas-webarch/js/core.js" filters="uglifyjs"}
     {/javascripts}
   {/block}
 </body>

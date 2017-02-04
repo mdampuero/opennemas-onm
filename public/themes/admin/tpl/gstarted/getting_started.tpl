@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less" output="getting_started"}{/stylesheets}
+  {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}{/stylesheets}
 {/block}
 
 {block name="body"}
