@@ -9,7 +9,7 @@
  */
 namespace Framework\Migrator\Provider;
 
-use Common\Migration\Component\Tracker\MigrationTracker;
+use Common\Migration\Component\Tracker\SimpleIdTracker;
 use Common\ORM\Core\Connection;
 
 class DatabaseProvider extends MigrationProvider
@@ -40,7 +40,7 @@ class DatabaseProvider extends MigrationProvider
         $conn = getService('orm.manager')->getConnection('instance');
         $conn->selectDatabase($this->settings['migration']['target']);
 
-        $this->tracker = new MigrationTracker($conn);
+        $this->tracker = new SimpleIdTracker($conn);
         $this->tracker->load();
     }
 
@@ -57,11 +57,7 @@ class DatabaseProvider extends MigrationProvider
         $type = $schema['translation']['name'];
         $this->stats[$name]['already_imported'] = 0;
 
-        $translations = $this->tracker->getParsed($type);
-
-        $ids = array_map(function ($a) {
-            return $a['source_id'];
-        }, $translations);
+        $lastId = $this->tracker->getParsed($type);
 
         $sql = sprintf(
             'SELECT DISTINCT(%s.%s) FROM %s WHERE 1',
@@ -70,12 +66,12 @@ class DatabaseProvider extends MigrationProvider
             $schema['source']['table']
         );
 
-        if (!empty($ids)) {
+        if (!empty($lastId)) {
             $sql .= sprintf(
-                ' AND %s.%s NOT IN (%s)',
+                ' AND %s.%s > (%s)',
                 $schema['source']['table'],
                 $schema['source']['id'],
-                implode(',', $ids)
+                $lastId
             );
         }
 
