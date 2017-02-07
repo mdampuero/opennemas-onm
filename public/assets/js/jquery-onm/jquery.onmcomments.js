@@ -16,10 +16,12 @@
                 var iframe = $('<iframe>', {
                     id: 'onmcomments-' + options.content_id,
                     src: options.url + '?content_id=' + options.content_id + '&elems_per_page='+options.elems_per_page,
-                    style: 'width: 100%; border: medium none; overflow: hidden;'
-                }).load(function () {
-                  $(this).css('height', $(this).contents().height() + 50);
+                    style: 'width: 100%; border: medium none; min-height: 180px; overflow: hidden;'
                 });
+
+                setInterval(function() {
+                    iframe.css('height', iframe.contents().height());
+                }, 1000);
 
                 elem.html(iframe);
             }
