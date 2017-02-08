@@ -25,7 +25,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json};">
+  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json}; with_script = {if empty($advertisement->with_script)}1{else}{{$advertisement->with_script}}{/if}">
     <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -100,7 +100,7 @@
                 <label class="form-label">
                   {t}Type{/t}
                 </label>
-                <div class="controls row" ng-init="with_script = {{$advertisement->with_script}}">
+                <div class="controls row">
                   <div class="col-sm-3">
                     <div class="radio">
                       <input id="image" name="with_script" ng-model="with_script" {if $with_script == 0}checked{/if} type="radio" value="0">

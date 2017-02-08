@@ -13,11 +13,29 @@
    *   Handles actions for advertisement inner.
    */
   angular.module('BackendApp.controllers').controller('AdvertisementCtrl', [
-    '$controller', '$uibModal', '$scope', 'messenger',
-    function($controller, $uibModal, $scope, messenger) {
+    '$controller', '$uibModal', '$scope',
+    function($controller, $uibModal, $scope) {
       // Initialize the super class and extend it.
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+      /**
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *  The advertisement parameters.
+       *
+       * @type {Object}
+       */
+      $scope.params = {};
+
+      /**
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *  The list of sizes.
+       *
+       * @type {Array}
+       */
       $scope.sizes = [ { width: 0, height: 0 } ];
 
       /**
@@ -30,18 +48,19 @@
        * @param Object params The advertisement params
        */
       $scope.init = function(params) {
-        $scope.params = params;
-
-        $scope.sizes = [];
-        if (!angular.isArray(params.width) || !angular.isArray(params.height)) {
-          return;
+        if (params) {
+          $scope.params = params;
         }
 
-        for (var i = 0; i < params.width.length; i++) {
-          $scope.sizes.push({
-            width:  parseInt(params.width[i]),
-            height: parseInt(params.height[i])}
-          );
+        $scope.sizes = [];
+        if ($scope.params.width && angular.isArray($scope.params.width) &&
+            $scope.params.height && !angular.isArray($scope.params.height)) {
+          for (var i = 0; i < params.width.length; i++) {
+            $scope.sizes.push({
+              width:  parseInt(params.width[i]),
+              height: parseInt(params.height[i])}
+              );
+          }
         }
 
         if (!$scope.params.user_groups ||
