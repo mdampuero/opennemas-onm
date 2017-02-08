@@ -25,8 +25,8 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json}; with_script = {if empty($advertisement->with_script)}1{else}{{$advertisement->with_script}}{/if}">
-    <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
+  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json}; with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if}">
+    <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -149,7 +149,32 @@
                   <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
                 </div>
               </div>
-              <div id="ad_dimensions">
+              <div class="form-group" id="div_url1" ng-show="with_script == 0">
+                <label for="url" class="form-label">{t}Url{/t}</label>
+                <div class="controls">
+                  <input type="url" id="url" name="url" class="form-control" value="{$advertisement->url}" placeholder="http://" ng-required="with_script == 0" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="grid simple">
+            <div class="grid-body no-padding">
+              <div class="grid-collapse-title">
+                <div class="checkbox">
+                  <input type="checkbox" name="content_status" id="content_status" value="1"
+                  {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
+                  <label class="form-label" for="content_status">
+                    {t}Published{/t}
+                  </label>
+                </div>
+              </div>
+              <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dimensions }" ng-click="expanded.dimensions = !expanded.dimensions" ng-show="with_script == 0 || with_script == 3">
+                <i class="fa fa-arrows m-r-5"></i> {t}Dimensions{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.dimensions }"></i>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dimensions }" ng-show="with_script == 0 || with_script == 3">
                 <input name="params_width" ng-value="params_width" type="hidden">
                 <input name="params_height" ng-value="params_height" type="hidden">
                 <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length >= 1" ng-repeat="size in sizes track by $index">
@@ -195,40 +220,19 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group" id="div_url1" ng-show="with_script == 0">
-                <label for="url" class="form-label">{t}Url{/t}</label>
-                <div class="controls">
-                  <input type="url" id="url" name="url" class="form-control" value="{$advertisement->url}" placeholder="http://" ng-required="with_script == 0" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="grid simple">
-            <div class="grid-body no-padding">
-              <div class="grid-collapse-title">
-                <div class="checkbox">
-                  <input type="checkbox" name="content_status" id="content_status" value="1"
-                  {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
-                  <label class="form-label" for="content_status">
-                    {t}Published{/t}
-                  </label>
-                </div>
-              </div>
-              <div class="grid-collapse-title pointer" ng-class="{ 'open': restriction_date_range_show }" ng-click="restriction_date_range_show =!restriction_date_range_show">
+              <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dates }" ng-click="expanded.dates = !expanded.dates">
                 <i class="fa fa-calendar-check-o m-r-5"></i> {t}Date range{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_date_range_show }" ng-click="restriction_date_range_show =!restriction_date_range_show"></i>
-                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && endtime" uib-tooltip="[% endtime %]">
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.dates }"></i>
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!expanded.dates && endtime" uib-tooltip="[% endtime %]">
                   <strong>{t}End{/t}</strong>
                   <span class="hidden-lg pull-right visible-xlg">: [% endtime %]</span>
                 </span>
-                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!restriction_date_range_show && starttime" uib-tooltip="[% starttime %]">
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!expanded.dates && starttime" uib-tooltip="[% starttime %]">
                   <strong>{t}Start{/t}</strong>
                   <span class="hidden-lg pull-right visible-xlg">: [% starttime %]</span>
                 </span>
               </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_date_range_show }">
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dates }">
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="input-group">
@@ -256,15 +260,15 @@
                   </small>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer" ng-click="devices_show = !devices_show">
+              <div class="grid-collapse-title pointer" ng-click="expanded.devices = !expanded.devices">
                 <i class="fa fa-desktop m-r-5"></i> {t}Devices{/t}
-                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': devices_show }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!devices_show && params.devices.phone + params.devices.tablet + params.devices.desktop > 0">
+                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.devices }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!expanded.devices && params.devices.phone + params.devices.tablet + params.devices.desktop > 0">
                   [% params.devices.phone + params.devices.tablet + params.devices.desktop %]
                   {t}selected{/t}
                 </span>
               </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': devices_show }">
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.devices }">
                 <div class="row">
                   <div class="col-md-4">
                     <div class="checkbox">
@@ -298,10 +302,10 @@
                   </small>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer" ng-click="restriction_user_groups_show = !restriction_user_groups_show">
+              <div class="grid-collapse-title pointer" ng-click="expanded.user_groups = !expanded.user_groups">
                 <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
-                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_user_groups_show }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!restriction_user_groups_show">
+                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups">
                   <span ng-show="params.user_groups.length === 0">{t}All{/t}</span>
                   <span ng-show="params.user_groups.length != 0">
                     <strong>[% params.user_groups.length %]</strong>
@@ -309,7 +313,7 @@
                   </span>
                 </span>
               </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_user_groups_show }">
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
                 <input name="restriction_usergroups" ng-value="restriction_usergroups" type="hidden">
                 <div class="checkbox p-b-5">
                   <input id="group-all" name="group-all" ng-change="selectAll()" ng-model="selected.all" type="checkbox">
@@ -332,12 +336,12 @@
                   </small>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer" ng-click="restriction_category_show =! restriction_category_show">
+              <div class="grid-collapse-title pointer" ng-click="expanded.category = !expanded.category">
                 <i class="fa fa-bookmark m-r-5"></i>
                 {t}Categories{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_category_show }"></i>
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
               </div>
-              <div class="grid-collapse-body" ng-class="{ 'expanded': restriction_category_show }">
+              <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category }">
                 <select name="category[]" id="category" multiple="multiple" size=6>
                   <option value="0">{t}All{/t}</option>
                   {section name=as loop=$allcategorys}
@@ -358,15 +362,15 @@
                   {/section}
                 </select>
               </div>
-              <div class="grid-collapse-title pointer ng-cloak" ng-click="restriction_duration_show = !restriction_duration_show" ng-show="((type_advertisement + 50)  % 100) == 0">
+              <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="((type_advertisement + 50)  % 100) == 0">
                 <i class="fa fa-clock-o m-r-5"></i>
                 {t}Duration{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': restriction_duration_show }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold" ng-show="!restriction_duration_show">
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.duration }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold" ng-show="!expanded.duration">
                   <strong>[% timeout %]</strong>s
                 </span>
               </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_duration_show }" ng-show="((type_advertisement + 50)  % 100) == 0">
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.duration }" ng-show="((type_advertisement + 50)  % 100) == 0">
                 <div class="input-group">
                   <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0" max="100" />
                   <div class="input-group-addon">{t}seconds{/t}</div>
@@ -558,7 +562,4 @@
       {include file="advertisement/modal/dfp_detected.tpl"}
     </script>
   </form>
-  <script type="text/ng-template" id="modal-adblock">
-    {include file="base/modals/modalAdblock.tpl"}
-  </script>
 {/block}

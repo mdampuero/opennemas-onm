@@ -32,6 +32,16 @@
        * @memberOf AdvertisementCtrl
        *
        * @description
+       *  Flags for collapsed items.
+       *
+       * @type {Object}
+       */
+      $scope.expanded = {};
+
+      /**
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
        *  Object to track selected items.
        *
        * @type {Object}
