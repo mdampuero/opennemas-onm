@@ -71,8 +71,6 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        //var_dump($ad->params);die();
-
         if ($ad->with_script == 3) {
             return new Response($this->renderDFP($ad, $category));
         }
@@ -82,7 +80,7 @@ class AdvertisementController extends Controller
         }
 
         if ($ad->with_script != 0) {
-            return new Response($ad->script);
+            return new Response($this->renderHtml($ad));
         }
 
         $img = $em->find('Photo', $ad->img);
@@ -251,6 +249,21 @@ class AdvertisementController extends Controller
 
         return $this->get('core.template.admin')
             ->fetch('advertisement/helpers/flash.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for a HTML/JS advertisement.
+     *
+     * @param Advertisement $ad The advertisement object.
+     *
+     * @return string The HTML code for the HTML/JS advertisement.
+     */
+    protected function renderHtml($ad)
+    {
+        $params = [ 'html' => $ad->script ];
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/helpers/html.tpl', $params);
     }
 
     /**
