@@ -512,6 +512,6 @@ class AdsController extends Controller
             return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
         }, $userGroups);
 
-        return $userGroups;
+        return array_values($userGroups);
     }
 }
