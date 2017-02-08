@@ -32,6 +32,16 @@
        * @memberOf AdvertisementCtrl
        *
        * @description
+       *  Object to track selected items.
+       *
+       * @type {Object}
+       */
+      $scope.selected = { all: true };
+
+      /**
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
        *  The list of sizes.
        *
        * @type {Array}
@@ -39,38 +49,22 @@
       $scope.sizes = [ { width: 0, height: 0 } ];
 
       /**
-       * @function init
+       * @function areAllSelected
        * @memberOf AdvertisementCtrl
        *
        * @description
-       *   Initialize list of other DFP ads sizes.
+       *   Checks if all user groups are selected.
        *
-       * @param Object params The advertisement params
+       * @return {Boolean} True if all user groups are selected. False
+       *                   otherwise.
        */
-      $scope.init = function(params) {
-        if (params) {
-          $scope.params = params;
-        }
+      $scope.areAllSelected = function() {
+        $scope.params.user_groups = [];
 
-        $scope.sizes = [];
-        if ($scope.params.width && angular.isArray($scope.params.width) &&
-            $scope.params.height && !angular.isArray($scope.params.height)) {
-          for (var i = 0; i < params.width.length; i++) {
-            $scope.sizes.push({
-              width:  parseInt(params.width[i]),
-              height: parseInt(params.height[i])}
-              );
-          }
-        }
-
-        if (!$scope.params.user_groups ||
-            !angular.isArray($scope.params.user_groups)) {
-          $scope.params.user_groups = [];
-        }
-
-        if (!$scope.params.devices ||
-            !angular.isObject($scope.params.devices)) {
-          $scope.params.devices = { phone: 1, tablet: 1, desktop: 1 };
+        if ($scope.selected.all) {
+          $scope.params.user_groups = $scope.groups.map(function(e) {
+            return e.id;
+          });
         }
       };
 
@@ -83,19 +77,6 @@
        */
       $scope.addSize = function() {
         $scope.sizes.push({ width: 0, height: 0 });
-      };
-
-      /**
-       * @function removeInput
-       * @memberOf AdvertisementCtrl
-       *
-       * @description
-       *   Removes an advertisement size input.
-       *
-       * @param integer index The index of the input to remove.
-       */
-      $scope.removeSize = function(index) {
-        $scope.sizes.splice(index, 1);
       };
 
       /**
@@ -146,6 +127,55 @@
         }
       };
 
+      /**
+       * @function init
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Initialize list of other DFP ads sizes.
+       *
+       * @param Object params The advertisement params
+       */
+      $scope.init = function(params) {
+        if (params) {
+          $scope.params = params;
+        }
+
+        $scope.sizes = [];
+        if ($scope.params.width && angular.isArray($scope.params.width) &&
+            $scope.params.height && !angular.isArray($scope.params.height)) {
+          for (var i = 0; i < params.width.length; i++) {
+            $scope.sizes.push({
+              width:  parseInt(params.width[i]),
+              height: parseInt(params.height[i])}
+              );
+          }
+        }
+
+        if (!$scope.params.user_groups ||
+            !angular.isArray($scope.params.user_groups)) {
+          $scope.params.user_groups = [];
+        }
+
+        if (!$scope.params.devices ||
+            !angular.isObject($scope.params.devices)) {
+          $scope.params.devices = { phone: 1, tablet: 1, desktop: 1 };
+        }
+      };
+
+      /**
+       * @function removeInput
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Removes an advertisement size input.
+       *
+       * @param integer index The index of the input to remove.
+       */
+      $scope.removeSize = function(index) {
+        $scope.sizes.splice(index, 1);
+      };
+
       // Updates params_width and params_height when sizes change
       $scope.$watch('sizes', function(nv) {
         if (!angular.isArray(nv)) {
@@ -172,6 +202,15 @@
 
         $scope.checkGoogleDFP(nv);
       });
+
+      // Updates selected all flag when groups change
+      $scope.$watch('params.user_groups', function (nv) {
+        $scope.selected.all = false;
+
+        if (nv.length === $scope.groups.length) {
+          $scope.selected.all = true;
+        }
+      }, true);
 
       // Update value in form when model changes
       $scope.$watch('params.restrictions.user_groups', function(nv) {

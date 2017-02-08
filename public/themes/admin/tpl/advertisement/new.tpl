@@ -311,11 +311,19 @@
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': restriction_user_groups_show }">
                 <input name="restriction_usergroups" ng-value="restriction_usergroups" type="hidden">
-                <div class="checkbox p-b-5" ng-repeat="group in groups">
-                  <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="params.user_groups" checklist-value="group.id" type="checkbox">
-                  <label class="form-label" for="group-[% $index %]">
-                    [% group.name %]
+                <div class="checkbox p-b-5">
+                  <input id="group-all" name="group-all" ng-change="selectAll()" ng-model="selected.all" type="checkbox">
+                  <label class="form-label" for="group-all">
+                    {t}Select all{/t}
                   </label>
+                </div>
+                <div class="checkbox-list checkbox-list-user-groups">
+                  <div class="checkbox p-b-5" ng-repeat="group in groups">
+                    <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="params.user_groups" checklist-value="group.id" type="checkbox">
+                    <label class="form-label" for="group-[% $index %]">
+                      [% group.name %]
+                    </label>
+                  </div>
                 </div>
                 <div class="m-t-5">
                   <small class="help">
