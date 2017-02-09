@@ -1,10 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    {stylesheets src="@AdminTheme/less/_welcome.less" filters="cssrewrite,less"}{/stylesheets}
-{/block}
-
-
 {block name="content"}
 <div class="page-navbar actions-navbar">
   <div class="navbar navbar-inverse">

@@ -1,14 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_store.less,
-    @AdminTheme/less/_checkout.less" filters="cssrewrite,less"}
-  {/stylesheets}
-{/block}
 {block name="footer-js" append}
-  {javascripts}
-    <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
-  {/javascripts}
+<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
 {/block}
 
 {block name="content"}

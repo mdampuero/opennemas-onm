@@ -13,8 +13,7 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/onm/video.js,
-    @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+  {javascripts}
     <script type="text/javascript">
       var video_manager_url = {
         get_information: '{url name=admin_videos_get_info}',

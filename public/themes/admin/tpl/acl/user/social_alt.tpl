@@ -3,20 +3,43 @@
   <meta charset="UTF-8">
   <title>Document</title>
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  {block name="header-css"}
-    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
-        @AdminTheme/less/_social.less" filters="cssrewrite,less"}
-      <style>
-        html, body {
-          background: none;
-          margin:0 auto;
-          min-height:0;
-          overflow-y:hidden;
-          padding:0;
-        }
-      </style>
-    {/stylesheets}
-  {/block}
+  <link href="/assets/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <style>
+    html, body {
+      background: none;
+      margin:0 auto;
+      min-height:0;
+      overflow-y:hidden;
+      padding:0;
+    }
+
+    .social-orb {
+      border: 0;
+      border-radius: 100%;
+      height: 100px;
+      margin: 0 auto 10px;
+      overflow: hidden;
+      width: 100px;
+
+      &.facebook-orb {
+        background: #3b5998;
+        color: #fff;
+      }
+
+      &.twitter-orb {
+        background: #55acee;
+        color: #fff;
+      }
+    }
+
+    h5 {
+      color: #fff;
+    }
+
+    p {
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
   <div class="social-connections text-center">

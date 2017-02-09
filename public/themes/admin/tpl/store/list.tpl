@@ -1,18 +1,5 @@
 -{extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="
-    @AdminTheme/less/_store.less
-  " filters="cssrewrite,less"}
-    <link rel="stylesheet" type="text/css" href="{$asset_url}">
-  {/stylesheets}
-  <style>
-  .content {
-    margin-top:50px !important;
-  }
-  </style>
-{/block}
-
 {block name="content"}
   <div ng-controller="StoreListCtrl">
     <div class="page-navbar actions-navbar">

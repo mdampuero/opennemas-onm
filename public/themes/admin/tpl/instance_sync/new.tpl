@@ -1,22 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets}
-    <style>
-      #connect {
-        cursor:pointer;
-      }
-      #connect button {
-        background: none;
-        border:0 none;
-      }
-      #loading {
-        display: none
-      }
-    </style>
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
   {javascripts}
     <script type="text/javascript">
@@ -128,11 +111,11 @@
             </div>
           </div>
           <p class="col-md-12">
-            <a href="#" id="connect" class="btn btn-primary pull-right">{t}Connect{/t}</a>
+            <a href="#" id="connect" class="btn btn-primary pull-right pointer">{t}Connect{/t}</a>
           </p>
           <div id="categories">
             {$output}
-            <div class="spinner-wrapper" id="loading">
+            <div class="spinner-wrapper" id="loading" style="display: none;">
               <div class="loading-spinner"></div>
               <div class="spinner-text">{t}Loading{/t}...</div>
             </div>

@@ -265,7 +265,7 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+  {javascripts}
     <script type="text/javascript">
       jQuery(document).ready(function($) {
         $('.check-pass').on('click', function(e, ui){

@@ -1,19 +1,16 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
-    <script type="text/javascript">
-      $('#date').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:ss'
-      });
+  <script type="text/javascript">
+    $('#date').datetimepicker({
+      format: 'YYYY-MM-DD HH:mm:ss'
+    });
 
-      jQuery('#title').on('change', function(e, ui) {
-        fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-      });
-    </script>
-  {/javascripts}
+    jQuery('#title').on('change', function(e, ui) {
+      fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+  </script>
 {/block}
-
 
 {block name="content"}
 <form id="formulario" action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}" method="POST" ng-controller="BookCtrl">

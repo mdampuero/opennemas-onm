@@ -1,13 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_frontpagemanager.less" filters="cssrewrite,less"}
-    <link rel="stylesheet" href="{$asset_url}">
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/onm/frontpagemanager.js"}
+  {javascripts src="@AdminTheme/js/onm/frontpagemanager.js" output="frontpagemanager"}
   <script type="text/javascript">
     var frontpage_messages = {
       remember_save_positions: "{t}Please, remember save positions after finish.{/t}",

@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}{/stylesheets}
-{/block}
-
 {block name="body"}
 <div class="wizard-wrapper clearfix" ng-class="{ 'active': previous }" ng-controller="GettingStartedCtrl">
     <div class="wizard-container welcome" ng-class="{ 'active': step == 1, 'previous': previous == 1 }">

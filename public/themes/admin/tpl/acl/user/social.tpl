@@ -2,13 +2,8 @@
   <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    {block name="header-css"}
-    {stylesheets src="
-    @Common/components/font-awesome/css/font-awesome.min.css,
-    @Common/components/bootstrap/dist/css/bootstrap.min.css" filters="cssrewrite"}
-    <link rel="stylesheet" href="{$asset_url}">
-    {/stylesheets}
-    {/block}
+    <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <style>
       html, body {
         margin:0 auto;

@@ -1,19 +1,22 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
-    <script>
-      var draftSavedMsg = '{t}Draft saved at {/t}';
-    </script>
-  {/javascripts}
+{block name="header-css" append}
   <style>
-  tags-input .tags .tag-item  {
+    tags-input .tags .tag-item  {
       background-color: #376092 !important;
       font-size: 11px  !important;
       font-family: 'Open Sans' !important;
       font-weight: 600 !important;
-  }
+    }
   </style>
+{/block}
+
+{block name="footer-js" append}
+  {javascripts}
+    <script>
+      var draftSavedMsg = '{t}Draft saved at {/t}';
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}

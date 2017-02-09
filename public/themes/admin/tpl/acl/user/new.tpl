@@ -1,11 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-      @Common/js/jquery/jquery.validate.min.js,
-      @Common/js/jquery/jquery.multiselect.js,
-      @Common/js/jquery/localization/messages_es.js,
-      @Common/js/onm/jquery.password-strength.js"}
+  {javascripts}
     <script>
       jQuery(document).ready(function($){
         // Password strength checker
