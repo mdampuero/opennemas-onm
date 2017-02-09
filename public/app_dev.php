@@ -25,7 +25,9 @@ umask(0002);
 /**
  * @var Composer\Autoload\ClassLoader $loader
  */
-$loader = require __DIR__.'/../tmp/autoload.php';
+$loader = require __DIR__.'/../app/autoload.php';
+include_once __DIR__.'/../tmp/bootstrap.php.cache';
+
 Debug::enable();
 
 // Little hack to allow final slashes in the url
