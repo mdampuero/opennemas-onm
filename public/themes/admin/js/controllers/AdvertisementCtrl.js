@@ -223,8 +223,8 @@
       }, true);
 
       // Update value in form when model changes
-      $scope.$watch('params.restrictions.user_groups', function(nv) {
-        $scope.restriction_usergroups = angular.toJson(nv);
+      $scope.$watch('params.user_groups', function(nv) {
+        $scope.user_groups = angular.toJson(nv);
       }, true);
 
       // Track all radio buttons type_advertisement and update the model property

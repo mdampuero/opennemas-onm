@@ -187,11 +187,11 @@ class AdsController extends Controller
                 'height'            => json_decode($request->request->get('params_height', '')),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
-                'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
-                'restriction_devices'           => [
-                    'desktop' => $request->request->get('restriction_devices_desktop', 0),
-                    'tablet'  => $request->request->get('restriction_devices_tablet', 0),
-                    'phone'   => $request->request->get('restriction_devices_phone', 0),
+                'user_groups'       => json_decode($request->request->get('user_groups')),
+                'devices'           => [
+                    'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => (int) $request->request->get('restriction_devices_phone', 0),
                 ],
             ]
         ];
@@ -349,11 +349,11 @@ class AdsController extends Controller
                 'height'            => json_decode($request->request->get('params_height', '')),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
-                'restriction_usergroups'        => $request->request->get('restriction_usergroups', []),
-                'restriction_devices'           => [
-                    'desktop' => $request->request->get('restriction_devices_desktop', 0),
-                    'tablet'  => $request->request->get('restriction_devices_tablet', 0),
-                    'phone'   => $request->request->get('restriction_devices_phone', 0),
+                'user_groups'       => json_decode($request->request->get('user_groups', '')),
+                'devices'           => [
+                    'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => (int) $request->request->get('restriction_devices_phone', 0),
                 ],
             )
         );

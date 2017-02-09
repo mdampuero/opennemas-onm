@@ -184,7 +184,7 @@
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" ng-model="size.width" type="number" ng-value="[% size.width %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control" ng-model="size.width" type="number" ng-value="size.width" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -194,7 +194,7 @@
                         {t}Height{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control pull-left" ng-model="size.height" type="number" ng-value="[% size.height %]" ng-required="with_script != 2" min="0">
+                        <input class="form-control pull-left" ng-model="size.height" type="number" ng-value="size.height" ng-required="with_script != 2" min="0">
                       </div>
                     </div>
                   </div>
@@ -314,9 +314,9 @@
                 </span>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
-                <input name="restriction_usergroups" ng-value="restriction_usergroups" type="hidden">
+                <input name="user_groups" ng-value="user_groups" type="hidden">
                 <div class="checkbox p-b-5">
-                  <input id="group-all" name="group-all" ng-change="selectAll()" ng-model="selected.all" type="checkbox">
+                  <input id="group-all" name="group-all" ng-change="areAllSelected()" ng-model="selected.all" type="checkbox">
                   <label class="form-label" for="group-all">
                     {t}Select all{/t}
                   </label>
