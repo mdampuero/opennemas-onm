@@ -48,8 +48,9 @@ opennemas:
         asset_compilation_in_dev: %opennemas.assetic.asset_compilation_in_dev%
 
         # Assetic folders
-        build_path:  '%kernel.cache_dir%/assetic'
-        output_path: build/assets
+        cache_path:  '%kernel.cache_dir%/assetic'
+        build_path:  build/assets
+        output_path: build/assets/dist
 
         # Template parameter
         asset_url: asset_url
