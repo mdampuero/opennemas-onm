@@ -43,6 +43,8 @@ class CompileAssetsCommand extends ContainerAwareCommand
         $this->bag = getService('core.service.assetic.asset_bag');
 
         foreach ($paths as $path) {
+            $this->bag->reset();
+
             $theme = substr($path, strrpos($path, '/') + 1);
 
             $output->writeln("<options=bold>($step/$steps) Compiling $theme theme...</>");
