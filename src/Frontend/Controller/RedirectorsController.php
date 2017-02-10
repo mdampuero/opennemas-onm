@@ -37,7 +37,7 @@ class RedirectorsController extends Controller
     public function contentAction(Request $request)
     {
         $id       = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
-        $slug     = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
+        $slug     = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
         $type     = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
         $fragment = '';
         $content  = null;
@@ -200,10 +200,10 @@ class RedirectorsController extends Controller
     public function categoryAction(Request $request)
     {
         $contentType = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
-        $slug        = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
+        $slug        = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
         $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
 
-        if ($slug == 'none') {
+        if (empty($slug)) {
             $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($contentType, $contentId);
         } else {
             list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
