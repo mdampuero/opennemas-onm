@@ -72,7 +72,7 @@ class RedirectorsController extends Controller
     protected function getContent($type, $id)
     {
         $fixTypes = [ 'photo-inline' => 'photo' ];
-        $type     = in_array($type, $fixTypes) ? $fixTypes[$type] : $type;
+        $type     = array_key_exists($type, $fixTypes) ? $fixTypes[$type] : $type;
 
         switch ($type) {
             case 'article':
