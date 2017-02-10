@@ -31,7 +31,8 @@ class StylesheetManagerTest extends AssetManagerTest
                         'options'    => [ 'foo' => 'bar' ]
                     ]
                 ],
-                'output_path' => 'baz/quux',
+                'build_path'  => 'baz/quux',
+                'output_path' => 'baz/quux/dist',
                 'root'        => 'foo'
             ]
         );
