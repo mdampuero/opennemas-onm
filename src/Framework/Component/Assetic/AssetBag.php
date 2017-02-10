@@ -178,6 +178,18 @@ class AssetBag
     }
 
     /**
+     * Empties the list of filters and assets.
+     */
+    public function reset()
+    {
+        $this->filters        = [];
+        $this->literalScripts = [];
+        $this->literalStyles  = [];
+        $this->scripts        = [];
+        $this->styles         = [];
+    }
+
+    /**
      * Parses the bundle name and returns the bundle folder name.
      *
      * @param string $bundle The bundle name.

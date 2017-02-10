@@ -109,4 +109,20 @@ class AssetBagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(realpath(__DIR__ . '/../../../../public/themes/') . '/foo', $theme);
     }
+
+    public function testReset()
+    {
+        $this->bag->addLiteralScript('foo');
+        $this->bag->addLiteralStyle('foo');
+        $this->bag->addScript('foo');
+        $this->bag->addStyle('foo');
+
+        $this->bag->reset();
+
+        $this->assertEmpty($this->bag->getFilters());
+        $this->assertEmpty($this->bag->getLiteralScripts());
+        $this->assertEmpty($this->bag->getLiteralStyles());
+        $this->assertEmpty($this->bag->getScripts());
+        $this->assertEmpty($this->bag->getStyles());
+    }
 }
