@@ -157,14 +157,6 @@ class AlbumsController extends Controller
         // Get category name
         $ccm = \ContentCategoryManager::get_instance();
         $categoryName = $ccm->getName($request->request->get('category'));
-
-        // TODO: remove cache cleaning actions
-        // Clean cache album home and frontpage for category
-        $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty($this->get('core.template'));
-        $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
-        $cacheManager->delete('home|1');
-
         // Return user to list if has no update acl
         if ($this->get('core.security')->hasPermission('ALBUM_UPDATE')) {
             return $this->redirect(
@@ -358,12 +350,6 @@ class AlbumsController extends Controller
             'success',
             _("Album updated successfully.")
         );
-
-        // TODO: remove cache cleaning actions
-        $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty($this->get('core.template'));
-        $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
-        $cacheManager->delete('home|1');
 
         return $this->redirect(
             $this->generateUrl('admin_album_show', array('id' => $album->id))

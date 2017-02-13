@@ -409,6 +409,9 @@ class HooksSubscriber implements EventSubscriberInterface
             $cacheManager->delete('videos|RSS');
         } elseif (property_exists($content, 'pk_album')) {
             $cacheManager->delete('albums|RSS');
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->id);
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|1');
+            $cacheManager->delete('home|1');
         }
     }
 
