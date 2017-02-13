@@ -15,7 +15,7 @@
         });
       });
     </script>
-    {/javascripts}
+  {/javascripts}
 {/block}
 
 {block name="content"}
