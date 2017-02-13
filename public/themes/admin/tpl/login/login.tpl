@@ -120,8 +120,7 @@
     {javascripts src="@Common/components/jquery/jquery.min.js,
         @Common/components/bootstrap/dist/js/bootstrap.min.js,
         @Common/components/modernizr/modernizr.js,
-        @Common/js/onm/md5.min.js,
-        @AdminTheme/js/admin.js" output="login"}
+        @Common/js/onm/md5.min.js" output="login"}
       <script type="text/javascript">
         jQuery(document).ready(function($) {
           'use strict';

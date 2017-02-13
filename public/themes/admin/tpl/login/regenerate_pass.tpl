@@ -93,13 +93,7 @@
     {javascripts src="@Common/js/jquery/jquery.min.js,
         @Common/components/bootstrap/dist/js/bootstrap.min.js,
         @Common/components/modernizr/modernizr.js,
-        @Common/js/onm/md5.min.js,
-        @AdminTheme/js/admin.js" output="login"}
-      <script type="text/javascript">
-        jQuery(document).ready(function($) {
-          BackendAuthentication.init()
-        });
-      </script>
+        @Common/js/onm/md5.min.js" output="login"}
     {/javascripts}
   {/block}
 </body>
