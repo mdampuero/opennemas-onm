@@ -1,15 +1,17 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  <script type="text/javascript">
-    $('#date').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    });
+  {javascripts}
+    <script type="text/javascript">
+      $('#date').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss'
+      });
 
-    jQuery('#title').on('change', function(e, ui) {
-      fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-    });
-  </script>
+      jQuery('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+      });
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}
