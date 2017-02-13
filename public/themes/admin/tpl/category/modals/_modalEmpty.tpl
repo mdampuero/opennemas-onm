@@ -15,7 +15,6 @@
     </div>
   </div>
 </div>
-
 {javascripts}
   <script>
     jQuery("#modal-category-empty").modal({

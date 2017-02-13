@@ -47,7 +47,6 @@
     </div>
   </div>
 </div>
-
 {javascripts}
   <script>
   jQuery("#modal-comment-change").modal({

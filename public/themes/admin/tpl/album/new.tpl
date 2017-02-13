@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+  {javascripts}
     <script>
       $(document).ready(function($){
         $('#title').on('change', function(e, ui) {

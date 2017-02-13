@@ -18,16 +18,13 @@
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
 
-    {stylesheets src="
-      @Common/components/bootstrap/dist/css/bootstrap.min.css,
+    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/animate.css/animate.min.css,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
-      @AdminTheme/less/_login.less
-    " filters="cssrewrite,less"}
-      <link rel="stylesheet" type="text/css" href="{$asset_url}">
+      @AdminTheme/less/_login.less" filters="cssrewrite,less" output="login"}
     {/stylesheets}
   {/block}
 
@@ -94,18 +91,10 @@
   </div>
   {block name="footer-js"}
     {javascripts src="@Common/js/jquery/jquery.min.js,
-      @Common/components/bootstrap/dist/js/bootstrap.min.js,
-      @Common/components/modernizr/modernizr.js,
-      @Common/js/onm/md5.min.js,
-      @AdminTheme/js/admin.js
-    "}
-      <script type="text/javascript" src="{$asset_url}"></script>
+        @Common/components/bootstrap/dist/js/bootstrap.min.js,
+        @Common/components/modernizr/modernizr.js,
+        @Common/js/onm/md5.min.js" output="login"}
     {/javascripts}
-    <script type="text/javascript">
-      jQuery(document).ready(function($) {
-        BackendAuthentication.init()
-      });
-    </script>
   {/block}
 </body>
 </html>

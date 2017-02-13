@@ -23,7 +23,7 @@
       @Common/src/webarch/css/responsive.css,
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
-      @AdminTheme/less/_login.less" filters="cssrewrite,less"}
+      @AdminTheme/less/_login.less" filters="cssrewrite,less" output="login"}
     {/stylesheets}
   {/block}
 </head>
@@ -118,11 +118,9 @@
   </div>
   {block name="footer-js"}
     {javascripts src="@Common/components/jquery/jquery.min.js,
-      @Common/components/bootstrap/dist/js/bootstrap.min.js,
-      @Common/components/modernizr/modernizr.js,
-      @Common/js/onm/md5.min.js"}
-    {/javascripts}
-    {javascripts}
+        @Common/components/bootstrap/dist/js/bootstrap.min.js,
+        @Common/components/modernizr/modernizr.js,
+        @Common/js/onm/md5.min.js" output="login"}
       <script type="text/javascript">
         jQuery(document).ready(function($) {
           'use strict';

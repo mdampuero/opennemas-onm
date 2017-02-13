@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+  {javascripts}
     <script type="text/javascript">
       var advertisement_urls = {
         calculate_tags : '{url name=admin_utils_calculate_tags}'

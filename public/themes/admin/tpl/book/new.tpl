@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+  {javascripts}
     <script type="text/javascript">
       $('#date').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:ss'
@@ -13,7 +13,6 @@
     </script>
   {/javascripts}
 {/block}
-
 
 {block name="content"}
 <form id="formulario" action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}" method="POST" ng-controller="BookCtrl">

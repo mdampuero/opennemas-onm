@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_menu.less" filters="cssrewrite,less"}
-    <link rel="stylesheet" type="text/css" href="{$asset_url}">
-  {/stylesheets}
-{/block}
-
 {block name="content"}
   <form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl">
     <div class="page-navbar actions-navbar">

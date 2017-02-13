@@ -1,15 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets}
-    <style type="text/css">
-      .colorpicker {
-        z-index: 10;
-      }
-    </style>
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
   {javascripts}
     <script type="text/javascript">

@@ -1,20 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets}
-    <style type="text/css">
-      .facebook {
-        padding: 20px;
-        background-color: #ededed;
-        border-radius: 5px;
-      }
-      .facebook .lead {
-        font-size: 14px;
-      }
-    </style>
-  {/stylesheets}
-{/block}
-
 {block name="content"}
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">

@@ -43,6 +43,8 @@ class CompileAssetsCommand extends ContainerAwareCommand
         $this->bag = getService('core.service.assetic.asset_bag');
 
         foreach ($paths as $path) {
+            $this->bag->reset();
+
             $theme = substr($path, strrpos($path, '/') + 1);
 
             $output->writeln("<options=bold>($step/$steps) Compiling $theme theme...</>");
@@ -80,7 +82,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
     protected function extractScripts($file)
     {
         $pattern = '/\{javascripts src="(?<src>[^"]*)"(\s+filters="(?<filters>['
-            . '^"]*)")*(\s+output="[^"]*")*\}/';
+            . '^"]*)")*(\s+output="(?<output>[^"]*)")*\}/';
 
         if (!preg_match_all($pattern, $file, $matches)) {
             return;
@@ -89,9 +91,10 @@ class CompileAssetsCommand extends ContainerAwareCommand
         foreach (array_keys($matches['src']) as $key) {
             $srcs    = explode(',', preg_replace('/\s*|\n/', '', $matches['src'][$key]));
             $filters = explode(',', preg_replace('/\s*|\n/', '', $matches['filters'][$key]));
+            $output  = empty($matches['output'][$key]) ? 'default' : $matches['output'][$key];
 
             foreach ($srcs as $src) {
-                $this->bag->addScript($src, $filters);
+                $this->bag->addScript($src, $filters, $output);
             }
         }
     }
@@ -106,7 +109,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
     protected function extractStyles($file)
     {
         $pattern = '/\{stylesheets src="(?<src>[^"]*)"(\s+filters="(?<filters>['
-            . '^"]*)")*(\s+output="[^"]*")*\}/';
+            . '^"]*)")*(\s+output="(?<output>[^"]*)")*\}/';
 
 
         if (!preg_match_all($pattern, $file, $matches)) {
@@ -116,9 +119,10 @@ class CompileAssetsCommand extends ContainerAwareCommand
         foreach (array_keys($matches['src']) as $key) {
             $srcs    = explode(',', preg_replace('/\s*|\n/', '', $matches['src'][$key]));
             $filters = explode(',', preg_replace('/\s*|\n/', '', $matches['filters'][$key]));
+            $output  = empty($matches['output'][$key]) ? 'default' : $matches['output'][$key];
 
             foreach ($srcs as $src) {
-                $this->bag->addStyle($src, $filters);
+                $this->bag->addStyle($src, $filters, $output);
             }
         }
     }
@@ -158,7 +162,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
         }
 
         foreach ($scripts as $bag => $files) {
-            $am->writeAssets($files, $this->bag->getFilters());
+            $am->writeAssets($files, $this->bag->getFilters(), $bag);
         }
     }
 
@@ -178,7 +182,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
         }
 
         foreach ($styles as $bag => $files) {
-            $am->writeAssets($files, $this->bag->getFilters());
+            $am->writeAssets($files, $this->bag->getFilters(), $bag);
         }
     }
 

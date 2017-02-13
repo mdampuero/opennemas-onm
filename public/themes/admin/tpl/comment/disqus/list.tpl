@@ -1,15 +1,13 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets}
-    <style type="text/css">
-      .disqus .disqus-link { text-align: center;width: 25%;margin: 100px auto;padding: 15px 0;background-color: #444;}
-      .disqus a .disqus-link { font-size: 1.4em;color: #fff;}
-      .disqus a:hover { text-decoration: none;}
-      .disqus a:hover .disqus-link { background-color: #666;}
-      .disqus a .disqus-link img { width: 30px;margin-right: 10px;}
-    </style>
-  {/stylesheets}
+  <style type="text/css">
+    .disqus .disqus-link { text-align: center;width: 25%;margin: 100px auto;padding: 15px 0;background-color: #444;}
+    .disqus a .disqus-link { font-size: 1.4em;color: #fff;}
+    .disqus a:hover { text-decoration: none;}
+    .disqus a:hover .disqus-link { background-color: #666;}
+    .disqus a .disqus-link img { width: 30px;margin-right: 10px;}
+  </style>
 {/block}
 
 {block name="content"}
