@@ -1,19 +1,21 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  <script type="text/javascript">
-    $(document).ready(function ($){
-      $('#title').on('change', function(e, ui) {
-          if (!$('#metadata').val()) {
-              fill_tags($('#title').val(), $('#metadata'), '{url name=admin_utils_calculate_tags}');
-          }
-      });
+  {javascripts}
+    <script type="text/javascript">
+      $(document).ready(function ($){
+        $('#title').on('change', function(e, ui) {
+            if (!$('#metadata').val()) {
+                fill_tags($('#title').val(), $('#metadata'), '{url name=admin_utils_calculate_tags}');
+            }
+        });
 
-      $('#closetime').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:ss'
+        $('#closetime').datetimepicker({
+          format: 'YYYY-MM-DD HH:mm:ss'
+        });
       });
-    });
-  </script>
+    </script>
+  {javascripts}
 {/block}
 
 {block name="content"}
