@@ -13,7 +13,7 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts}
+  {javascripts src="@AdminTheme/js/onm/video.js" filters="uglifyjs" output="video"}
     <script type="text/javascript">
       var video_manager_url = {
         get_information: '{url name=admin_videos_get_info}',
