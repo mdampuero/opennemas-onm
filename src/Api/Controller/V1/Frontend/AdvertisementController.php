@@ -260,10 +260,8 @@ class AdvertisementController extends Controller
      */
     protected function renderHtml($ad)
     {
-        $params = [ 'html' => $ad->script ];
-
-        return $this->get('core.template.admin')
-            ->fetch('advertisement/helpers/html.tpl', $params);
+        return '<html><style>body { margin: 0; padding: 0; }</style><body>'
+            . $ad->script . '</body>';
     }
 
     /**
