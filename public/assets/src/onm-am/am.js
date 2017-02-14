@@ -146,17 +146,11 @@
     var item = document.createElement('iframe');
 
     item.style.padding   = 0;
+    item.style.height    = '100%';
+    item.style.width     = '100%';
     item.style.margin    = 0;
     item.style.border    = 'none';
     item.style.overflow  = 'hidden';
-
-    if (ad.size.width) {
-      item.style.maxWidth  = ad.size.width + 'px';
-    }
-
-    if (ad.size.height) {
-      item.style.maxHeight = ad.size.height + 'px';
-    }
 
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
@@ -228,14 +222,8 @@
       var ad = self.getAdvertisement(available);
 
       container[0].appendChild(self.createNormal(ad));
-
-      if (ad.size.width) {
-        container[0].style.width  = ad.size.width + 'px';
-      }
-
-      if (ad.size.height) {
-        container[0].style.height = ad.size.height + 'px';
-      }
+      container[0].style.width  = '100%';
+      container[0].style.height = '100%';
     });
   };
 
