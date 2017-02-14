@@ -174,7 +174,8 @@
         }
 
         if ($scope.params.width && angular.isArray($scope.params.width) &&
-            $scope.params.height && !angular.isArray($scope.params.height)) {
+            $scope.params.height && angular.isArray($scope.params.height)) {
+          $scope.sizes = [];
           for (var i = 0; i < params.width.length; i++) {
             $scope.sizes.push({
               width:  parseInt(params.width[i]),

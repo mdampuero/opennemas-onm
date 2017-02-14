@@ -178,7 +178,7 @@
                 <input name="params_width" ng-value="params_width" type="hidden">
                 <input name="params_height" ng-value="params_height" type="hidden">
                 <div class="row ng-cloak" ng-repeat="size in sizes track by $index">
-                  <div class="col-xs-4">
+                  <div class="col-xs-5">
                     <div class="form-group">
                       <label class="form-label">
                         {t}Width{/t}
@@ -188,7 +188,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-4">
+                  <div class="col-xs-5">
                     <div class="form-group">
                       <label class="form-label">
                         {t}Height{/t}
