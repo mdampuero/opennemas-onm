@@ -143,22 +143,20 @@ class AdsController extends Controller
 
             $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
 
-            return $this->render(
-                'advertisement/new.tpl',
-                [
-                    'advertisement' => $advertisement,
-                    'ads_positions' => $adsPositions,
-                    'user_groups'   => $this->getUserGroups(),
-                    'themeAds'      => $ads,
-                    'filter'        => $filter,
-                    'page'          => $page,
-                    'server_url'    => $serverUrl,
-                ]
-            );
+            return $this->render('advertisement/new.tpl', [
+                'advertisement' => $advertisement,
+                'ads_positions' => $adsPositions,
+                'categories'    => $this->getCategories(),
+                'user_groups'   => $this->getUserGroups(),
+                'themeAds'      => $ads,
+                'filter'        => $filter,
+                'page'          => $page,
+                'server_url'    => $serverUrl,
+            ]);
         }
 
         $advertisement = new \Advertisement();
-        $categories    = $request->request->get('category', [], FILTER_SANITIZE_STRING);
+        $categories    = json_decode($request->request->get('categories', '[]'));
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
@@ -270,18 +268,17 @@ class AdsController extends Controller
         }
 
         $positionManager = $this->container->get('core.manager.advertisement');
-        return $this->render(
-            'advertisement/new.tpl',
-            array(
-                'ads_positions' => $adsPositions,
-                'advertisement' => $ad,
-                'themeAds'      => $positionManager->getPositionsForTheme(),
-                'user_groups'   => $this->getUserGroups(),
-                'filter'        => $filter,
-                'page'          => $page,
-                'server_url'    => $serverUrl,
-            )
-        );
+
+        return $this->render('advertisement/new.tpl', [
+            'ads_positions' => $adsPositions,
+            'advertisement' => $ad,
+            'categories'    => $this->getCategories(),
+            'themeAds'      => $positionManager->getPositionsForTheme(),
+            'user_groups'   => $this->getUserGroups(),
+            'filter'        => $filter,
+            'page'          => $page,
+            'server_url'    => $serverUrl,
+        ]);
     }
 
     /**
@@ -320,7 +317,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $categories = $request->request->get('category', [], FILTER_SANITIZE_STRING);
+        $categories = json_decode($request->request->get('categories', '[]'));
 
         $data = array(
             'id'                 => $ad->id,
@@ -493,15 +490,31 @@ class AdsController extends Controller
     }
 
     /**
+     * Returns the list of categories.
+     *
+     * @return array The list of categories.
+     */
+    protected function getCategories()
+    {
+        $categories = $this->get('orm.manager')
+            ->getRepository('Category')->findBy('internal_category = 1');
+
+        $categories = array_map(function ($a) {
+            return [ 'id' => $a->pk_content_category, 'name' => $a->title ];
+        }, $categories);
+
+        return array_values($categories);
+    }
+
+    /**
      * Returns the list of public user groups.
      *
      * @return array The list of public user groups.
      */
     protected function getUserGroups()
     {
-        $em = $this->get('orm.manager');
-
-        $userGroups = $em->getRepository('UserGroup')->findBy();
+        $userGroups = $this->get('orm.manager')
+            ->getRepository('UserGroup')->findBy();
 
         // Show only public groups ()
         $userGroups = array_filter($userGroups, function ($a) {

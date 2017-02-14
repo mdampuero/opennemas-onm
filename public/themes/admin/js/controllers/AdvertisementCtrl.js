@@ -46,7 +46,7 @@
        *
        * @type {Object}
        */
-      $scope.selected = { all: true };
+      $scope.selected = { all: { categories: false, user_groups: false } };
 
       /**
        * @memberOf AdvertisementCtrl
@@ -58,8 +58,10 @@
        */
       $scope.sizes = [ { width: 0, height: 0 } ];
 
+      $scope.ui = { categories: [], user_groups: [] }
+
       /**
-       * @function areAllSelected
+       * @function areAllCategoriesSelected
        * @memberOf AdvertisementCtrl
        *
        * @description
@@ -68,11 +70,31 @@
        * @return {Boolean} True if all user groups are selected. False
        *                   otherwise.
        */
-      $scope.areAllSelected = function() {
-        $scope.params.user_groups = [];
+      $scope.areAllCategoriesSelected = function() {
+        $scope.ui.categories = [];
 
-        if ($scope.selected.all) {
-          $scope.params.user_groups = $scope.groups.map(function(e) {
+        if ($scope.selected.all.categories) {
+          $scope.ui.categories = $scope.extra.categories.map(function(e) {
+            return e.id;
+          });
+        }
+      };
+
+      /**
+       * @function areAllUserGroupsSelected
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Checks if all user groups are selected.
+       *
+       * @return {Boolean} True if all user groups are selected. False
+       *                   otherwise.
+       */
+      $scope.areAllUserGroupsSelected = function() {
+        $scope.ui.user_groups = [];
+
+        if ($scope.selected.all.user_groups) {
+          $scope.ui.user_groups = $scope.extra.user_groups.map(function(e) {
             return e.id;
           });
         }
@@ -146,12 +168,11 @@
        *
        * @param Object params The advertisement params
        */
-      $scope.init = function(params) {
+      $scope.init = function(params, categories) {
         if (params) {
           $scope.params = params;
         }
 
-        $scope.sizes = [];
         if ($scope.params.width && angular.isArray($scope.params.width) &&
             $scope.params.height && !angular.isArray($scope.params.height)) {
           for (var i = 0; i < params.width.length; i++) {
@@ -162,9 +183,15 @@
           }
         }
 
-        if (!$scope.params.user_groups ||
-            !angular.isArray($scope.params.user_groups)) {
-          $scope.params.user_groups = [];
+        if ($scope.params.user_groups &&
+            angular.isArray($scope.params.user_groups)) {
+          $scope.ui.user_groups = $scope.params.user_groups;
+        }
+
+        if (categories && angular.isArray(categories)) {
+          $scope.ui.categories = categories.map(function (e) {
+            return parseInt(e);
+          });
         }
 
         if (!$scope.params.devices ||
@@ -213,17 +240,25 @@
         $scope.checkGoogleDFP(nv);
       });
 
-      // Updates selected all flag when groups change
-      $scope.$watch('params.user_groups', function (nv) {
-        $scope.selected.all = false;
+      // Updates selected all flag when categories change
+      $scope.$watch('ui.categories', function (nv) {
+        $scope.selected.all.categories = false;
 
-        if (nv.length === $scope.groups.length) {
-          $scope.selected.all = true;
+        if (nv.length === $scope.extra.categories.length) {
+          $scope.selected.all.categories = true;
         }
+
+        $scope.categories = angular.toJson(nv);
       }, true);
 
-      // Update value in form when model changes
-      $scope.$watch('params.user_groups', function(nv) {
+      // Updates selected all flag when groups change
+      $scope.$watch('ui.user_groups', function (nv) {
+        $scope.selected.all.user_groups = false;
+
+        if (nv.length === $scope.extra.user_groups.length) {
+          $scope.selected.all.user_groups = true;
+        }
+
         $scope.user_groups = angular.toJson(nv);
       }, true);
 

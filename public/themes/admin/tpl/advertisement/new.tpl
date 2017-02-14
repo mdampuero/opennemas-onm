@@ -25,7 +25,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; groups = {json_encode($user_groups)|clear_json}; with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if}">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; extra = { categories: {json_encode($categories)|clear_json}, user_groups: {json_encode($user_groups)|clear_json} }; with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -33,7 +33,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-bullhorn"></i>
-                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/818598-opennemas-como-crear-y-gestionar-publicidades" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/818598-opennemas-como-crear-y-gestionar-publicidades" target="_blank" extra-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
                 <span class="hidden-xs">{t}Advertisements{/t}</span>
@@ -170,21 +170,21 @@
                   </label>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dimensions }" ng-click="expanded.dimensions = !expanded.dimensions" ng-show="with_script == 0 || with_script == 3">
+              <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dimensions }" ng-click="expanded.dimensions = !expanded.dimensions">
                 <i class="fa fa-arrows m-r-5"></i> {t}Dimensions{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.dimensions }"></i>
               </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dimensions }" ng-show="with_script == 0 || with_script == 3">
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dimensions }">
                 <input name="params_width" ng-value="params_width" type="hidden">
                 <input name="params_height" ng-value="params_height" type="hidden">
-                <div class="row ng-cloak" ng-show="with_script != 2 && sizes.length >= 1" ng-repeat="size in sizes track by $index">
+                <div class="row ng-cloak" ng-repeat="size in sizes track by $index">
                   <div class="col-xs-4">
                     <div class="form-group">
                       <label class="form-label">
                         {t}Width{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control" ng-model="size.width" type="number" ng-value="size.width" ng-required="with_script != 2" min="0">
+                        <input class="form-control" min="0" ng-model="size.width" ng-value="size.width" required type="number">
                       </div>
                     </div>
                   </div>
@@ -194,7 +194,7 @@
                         {t}Height{/t}
                       </label>
                       <div class="controls">
-                        <input class="form-control pull-left" ng-model="size.height" type="number" ng-value="size.height" ng-required="with_script != 2" min="0">
+                        <input class="form-control pull-left" min="0" ng-model="size.height" ng-value="size.height" required type="number">
                       </div>
                     </div>
                   </div>
@@ -233,24 +233,22 @@
                 </span>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dates }">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="input-group">
-                      <span class="input-group-addon add-on">
-                        <i class="fa fa-calendar m-r-5"></i>
-                        {t}Start{/t}
-                      </span>
-                      <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" datetime-picker ng-model="starttime" />
-                    </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon add-on">
+                      <i class="fa fa-calendar m-r-5"></i>
+                      {t}Start{/t}
+                    </span>
+                    <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" datetime-picker ng-model="starttime" />
                   </div>
-                  <div class="col-sm-6">
-                    <div class="input-group">
-                      <span class="input-group-addon add-on">
-                        <span class="fa fa-calendar m-r-5"></span>
-                        {t}End{/t}
-                      </span>
-                      <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" datetime-picker ng-model="endtime" />
-                    </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon add-on">
+                      <span class="fa fa-calendar m-r-5"></span>
+                      {t}End{/t}&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" datetime-picker ng-model="endtime" />
                   </div>
                 </div>
                 <div class="m-t-10">
@@ -316,14 +314,14 @@
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
                 <input name="user_groups" ng-value="user_groups" type="hidden">
                 <div class="checkbox p-b-5">
-                  <input id="group-all" name="group-all" ng-change="areAllSelected()" ng-model="selected.all" type="checkbox">
+                  <input id="group-all" name="group-all" ng-change="areAllUserGroupsSelected()" ng-model="selected.all.user_groups" type="checkbox">
                   <label class="form-label" for="group-all">
                     {t}Select all{/t}
                   </label>
                 </div>
                 <div class="checkbox-list checkbox-list-user-groups">
-                  <div class="checkbox p-b-5" ng-repeat="group in groups">
-                    <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="params.user_groups" checklist-value="group.id" type="checkbox">
+                  <div class="checkbox p-b-5" ng-repeat="group in extra.user_groups">
+                    <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="ui.user_groups" checklist-value="group.id" type="checkbox">
                     <label class="form-label" for="group-[% $index %]">
                       [% group.name %]
                     </label>
@@ -337,30 +335,26 @@
                 </div>
               </div>
               <div class="grid-collapse-title pointer" ng-click="expanded.category = !expanded.category">
+                <input name="categories" ng-value="categories" type="hidden">
                 <i class="fa fa-bookmark m-r-5"></i>
                 {t}Categories{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
               </div>
               <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category }">
-                <select name="category[]" id="category" multiple="multiple" size=6>
-                  <option value="0">{t}All{/t}</option>
-                  {section name=as loop=$allcategorys}
-                  {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                  <option value="{$allcategorys[as]->pk_content_category}"
-                          {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                          {$allcategorys[as]->title}
-                  </option>
-                  {/acl}
-                  {section name=su loop=$subcat[as]}
-                  {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                  <option value="{$subcat[as][su]->pk_content_category}"
-                          {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
-                          &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
-                  </option>
-                  {/acl}
-                  {/section}
-                  {/section}
-                </select>
+                <div class="checkbox p-b-5">
+                  <input id="category-all" name="category-all" ng-change="areAllCategoriesSelected()" ng-model="selected.all.categories" type="checkbox">
+                  <label class="form-label" for="category-all">
+                    {t}Select all{/t}
+                  </label>
+                </div>
+                <div class="checkbox-list checkbox-list-user-groups">
+                  <div class="checkbox p-b-5" ng-repeat="category in extra.categories">
+                    <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
+                    <label class="form-label" for="category-[% $index %]">
+                      [% category.name %]
+                    </label>
+                  </div>
+                </div>
               </div>
               <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="((type_advertisement + 50)  % 100) == 0">
                 <i class="fa fa-clock-o m-r-5"></i>
