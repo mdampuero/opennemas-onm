@@ -260,8 +260,10 @@ class AdvertisementController extends Controller
      */
     protected function renderHtml($ad)
     {
-        return '<html><style>body { margin: 0; padding: 0; }</style><body>'
-            . $ad->script . '</body>';
+        $html  = $ad->script;
+        $style = 'body { margin: 0; overflow: hidden; padding: 0; }';
+
+        return "<html><style>$style</style><body>$html</body>";
     }
 
     /**
