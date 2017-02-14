@@ -211,7 +211,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label" for="password">
-                  {t}Registered date:{/t}
+                  {t}Registered date{/t}
                 </label>
                 <div class="controls">
                   <input class="form-control" id="register_date" type="datetime" name="register_date" value="{$user->register_date}"/>
@@ -219,7 +219,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label" for="password">
-                  {t}Postal Code:{/t}
+                  {t}Postal code{/t}
                 </label>
                 <div class="controls">
                   <input class="form-control" id="postal_code" type="text" name="postal_code" value="{$user->postal_code}"/>
@@ -229,7 +229,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label" for="password">
-                  {t}Birth Date:{/t}
+                  {t}Birth date{/t}
                 </label>
                 <div class="controls">
                   <input class="form-control" id="birth_date" type="datetime" name="birth_date" value="{$user->birth_date}"/>
@@ -237,7 +237,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label" for="password">
-                  {t}Gender:{/t}
+                  {t}Gender{/t}
                 </label>
                 <div class="controls">
                   <select name="gender" id="gender">
