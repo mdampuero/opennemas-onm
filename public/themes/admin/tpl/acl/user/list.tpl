@@ -14,7 +14,17 @@
             </li>
           </ul>
           <div class="all-actions pull-right">
-            <ul class="quick-section">
+            <ul class="nav quick-section">
+              {acl isAllowed="USER_SETTINGS"}
+                <li class="quicklinks">
+                  <a class="btn btn-link" href="{url name=admin_users_config}" title="{t}Config users module{/t}">
+                    <i class="fa fa-cog fa-lg"></i>
+                  </a>
+                </li>
+                <li class="quicklinks">
+                  <span class="h-seperate"></span>
+                </li>
+              {/acl}
               <li class="quicklinks">
                 <a class="btn btn-white" href="{url name=backend_ws_users_export}" id="download-button">
                   <span class="fa fa-download"></span>
