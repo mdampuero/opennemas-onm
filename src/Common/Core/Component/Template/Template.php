@@ -288,6 +288,7 @@ class Template extends \Smarty
         }
 
         $this->assign([
+            'app'       => $this->container->get('core.template.globals'),
             '_template' => $this,
             'params'    => [ 'IMAGE_DIR' => $this->image_dir ]
         ]);
