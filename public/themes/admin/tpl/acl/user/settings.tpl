@@ -51,17 +51,17 @@
         <div class="grid-body">
           <h4 class="no-margin m-b-15">{t}Extra fields{/t}</h4>
           <p class="m-b-15">{t}This fields will be asked during registration and can be edited in the control panel.{/t}</p>
-          <div class="row" ng-repeat="field in settings.fields">
+          <div class="row" ng-repeat="field in settings.fields track by $index">
             <div class="form-group col-md-2">
-              <label class="form-label" for="label-[% $index %]-key">{t}Internal name{/t}</label>
+              <label class="form-label" for="label-[% $index %]-name">{t}Internal name{/t}</label>
               <div class="controls">
-                <input class="form-control" ng-model="field.key" type="text">
+                <input class="form-control" ng-model="field.name" type="text">
               </div>
             </div>
             <div class="form-group col-md-2">
-              <label class="form-label" for="label-[% $index %]-name">{t}Name{/t}</label>
+              <label class="form-label" for="label-[% $index %]-title">{t}Name{/t}</label>
               <div class="controls">
-                <input class="form-control" ng-model="field.name" type="text">
+                <input class="form-control" ng-model="field.title" type="text">
               </div>
             </div>
             <div class="form-group col-md-2">
