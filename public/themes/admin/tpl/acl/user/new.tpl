@@ -203,7 +203,7 @@
         </div>
         {acl isAllowed="USER_ADMIN"}
         {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-        <div class="grid simple">
+        <div class="grid simple ng-cloak" ng-if="extra.settings && extra.settings.fields && extra.settings.fields.length > 0">
           <div class="grid-title">
             <h4>{t}Additional data{/t}</h4>
           </div>
