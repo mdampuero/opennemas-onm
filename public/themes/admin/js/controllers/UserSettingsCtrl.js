@@ -33,6 +33,10 @@
        *   Adds a new field to the field list.
        */
       $scope.addField = function() {
+        if (!$scope.settings.fields) {
+          $scope.settings.fields = [];
+        }
+
         $scope.settings.fields.push({ name: '', title: '', type: 'text' });
       };
 
