@@ -48,7 +48,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_save}{/if}" method="POST" enctype="multipart/form-data" autocomplete="off" ng-controller="UserCtrl" ng-init="{if $user->id}id = '{$user->id}'; activated = '{$user->activated}';type = {$user->type}{else}type = 1{/if};extra = {json_encode($extra)|clear_json}">
+<form action="{if isset($user['id'])}{url name=admin_acl_user_update id=$user['id']}{else}{url name=admin_acl_user_save}{/if}" method="POST" enctype="multipart/form-data" autocomplete="off" ng-controller="UserCtrl" ng-init="{if $user['id']}id = '{$user['id']}'; activated = '{$user['activated']}';type = {$user['type']}{else}type = 1{/if};extra = {json_encode($extra)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -101,7 +101,7 @@
                     {t}Display name{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="name" name="name" maxlength="50" required="required" type="text" value="{$user->name|escape:"html"|default:""}" />
+                    <input class="form-control" id="name" name="name" maxlength="50" required="required" type="text" value="{$user['name']|escape:"html"|default:""}" />
                   </div>
                 </div>
                 <div class="form-group">
@@ -109,7 +109,7 @@
                     {t}User name{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="username" maxlength="20" pattern="[a-z0-9\d-.]+" name="username" required="required" type="text" value="{$user->username|default:""}" title="{t}Only lowercase letters, numbers, point and hyphen allowed{/t}" />
+                    <input class="form-control" id="username" maxlength="20" pattern="[a-z0-9\d-.]+" name="username" required="required" type="text" value="{$user['username']|default:""}" title="{t}Only lowercase letters, numbers, point and hyphen allowed{/t}" />
                   </div>
                 </div>
                 <div class="form-group">
@@ -117,21 +117,21 @@
                     {t}Email{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required" type="email" value="{$user->email|default:""}">
+                    <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required" type="email" value="{$user['email']|default:""}">
                   </div>
                 </div>
               </div>
               <div class="col-sm-4 text-center">
-                <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
+                <div class="fileinput {if $user['photo']}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
                   <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                   </div>
-                  {if $user->photo->name}
+                  {if $user['photo']->name}
                   <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
-                    <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
+                    <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user['photo']->path_file}/{$user['photo']->name}" alt="{t}Photo{/t}"/>
                   </div>
                   {else}
                   <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in Opennemas{/t}">
-                    {gravatar email=$user->email image_dir=$_template->getImageDir() image=true size="150"}
+                    {gravatar email=$user['email'] image_dir=$_template->getImageDir() image=true size="150"}
                   </div>
                   {/if}
                   <div>
@@ -153,7 +153,7 @@
                 {t}Blog Url{/t}
               </label>
               <div class="controls">
-                <input class="form-control" id="url" name="url" placeholder="http://" type="text" value="{$user->url|default:""}">
+                <input class="form-control" id="url" name="url" placeholder="http://" type="text" value="{$user['url']|default:""}">
               </div>
             </div>
             <div class="form-group">
@@ -161,7 +161,7 @@
                 {t}Short Biography{/t}
               </label>
               <div class="controls">
-                <input class="form-control" id="bio" name="bio" type="text" value="{$user->bio|default:""}">
+                <input class="form-control" id="bio" name="bio" type="text" value="{$user['bio']|default:""}">
               </div>
             </div>
             <div class="form-group">
@@ -169,7 +169,7 @@
                 {t}Biography{/t}
               </label>
               <div class="controls">
-                <textarea class="form-control" id="bio" name="bio_description" rows="3">{$user->bio_description}</textarea>
+                <textarea class="form-control" id="bio" name="bio_description" rows="3">{$user['bio_description']}</textarea>
               </div>
             </div>
             <div class="form-group">
@@ -181,7 +181,7 @@
                   <span class="input-group-addon">
                     <i class="fa fa-key"></i>
                   </span>
-                  <input class="form-control" id="password" minlength="6" name="password" data-min-strength="{$min_pass_level}" type="password" {if $user->id eq null}required="required"{/if} maxlength="20"/>
+                  <input class="form-control" id="password" minlength="6" name="password" data-min-strength="{$min_pass_level}" type="password" {if $user['id '] eq null}required="required"{/if} maxlength="20"/>
                 </div>
               </div>
             </div>
@@ -304,7 +304,7 @@
             </div>
           </div>
         </div>
-        {if isset($user->id) && $user->id == $smarty.session._sf2_attributes.user->id}
+        {if isset($user['id']) && $user['id ']== $smarty.session._sf2_attributes.user->id}
         <div class="row">
           <div class="col-md-12">
             <div class="grid simple">
@@ -315,13 +315,13 @@
                 <div class="form-group">
                   <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                   <div class="controls">
-                    <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                    <iframe src="{url name=admin_acl_user_social id=$user['id'] resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label" for="twitter_login">{t}Twitter{/t}</label>
                   <div class="controls">
-                    <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                    <iframe src="{url name=admin_acl_user_social id=$user['id'] resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                   </div>
                 </div>
               </div>
@@ -341,7 +341,7 @@
                     {t}User language{/t}
                   </label>
                   <div class="controls">
-                    {html_options name="user_language" options=$languages selected=$user->user_language}
+                    {html_options name="user_language" options=$languages selected=$user['user_language']}
                     <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                   </div>
                 </div>
@@ -352,7 +352,7 @@
                     {t}Paywall time limit:{/t}
                   </label>
                   <div class="controls">
-                    <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{datetime date=$user->paywall_time_limit}"/>
+                    <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{datetime date=$user['paywall_time_limit']}"/>
                   </div>
                 </div>
                 {/is_module_activated}
