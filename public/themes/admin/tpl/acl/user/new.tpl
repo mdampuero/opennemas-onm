@@ -117,7 +117,7 @@
                     {t}Email{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required"type="email" value="{$user->email|default:""}">
+                    <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required" type="email" value="{$user->email|default:""}">
                   </div>
                 </div>
               </div>
@@ -203,11 +203,26 @@
         </div>
         {acl isAllowed="USER_ADMIN"}
         {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-        <div class="grid simple" ng-if="type == 1">
+        <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Additional data{/t}</h4>
           </div>
           <div class="grid-body">
+            <div class="form-group" ng-repeat="field in extra.settings.fields">
+              <label class="form-label" for="[% field.key %]">[% field.name %]</label>
+              <div class="controls">
+                <input class="form-control" id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'text'" ng-model="user[field.key]" type="text">
+                <input class="form-control" datetime-picker id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'date'" ng-model="user[field.key]" type="text">
+                <select class="form-control" id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'country'" ng-model="user[field.key]">
+                  <option value="">{t}Select a country{/t}...</option>
+                  <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% user[field.key] === value %]">[% value %]</option>
+                </select>
+                <div class="radio" ng-if="field.type === 'options'" ng-repeat="option in field.values">
+                  <input id="option-[% option.key %]" name="[% field.key %]" ng-model="user[field.key]" value="[% option.key %]" type="radio">
+                  <label for="option-[% option.key %]">[% option.value %]</label>
+                </div>
+              </div>
+            </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label" for="password">
@@ -294,7 +309,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label class="form-label" for="id_user_group">{t}User group{/t}</label>
-                  <div class="controls ng-cloak" ng-init="groups = {json_encode($extra['user_groups'])|clear_json};selectedGroups = {json_encode($selected['user_groups'])|clear_json}">
+                  <div class="controls ng-cloak" ng-init="groups = {json_encode($extra['user_groups'])|clear_json};selectedGroups = {json_encode($selected['user_groups'])|clear_json}; user = {json_encode($user)|clear_json}">
                     {acl isAllowed="USER_ADMIN"}
                     <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                     {/acl}

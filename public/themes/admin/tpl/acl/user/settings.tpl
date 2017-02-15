@@ -71,7 +71,7 @@
                   <option value="text">{t}Text{/t}</option>
                   <option value="date">{t}Date{/t}</option>
                   <option value="country">{t}Country{/t}</option>
-                  <option value="choices">{t}Choices{/t}</option>
+                  <option value="options">{t}Options{/t}</option>
                 </select>
               </div>
             </div>
@@ -84,11 +84,11 @@
                   </button>
                 </div>
               </div>
-              <div class="m-l-15 pull-left" ng-if="field.type === 'choices'">
-                <label class="form-label">{t}Choices{/t}</label>
+              <div class="m-l-15 pull-left" ng-if="field.type === 'options'">
+                <label class="form-label">{t}Options{/t}</label>
                 <span class="help">{t}Comma separated list of keys and value (key1:value1, key2:value2,...){/t}</span>
                 <div class="controls">
-                  <input class="form-control" id="choices-[% index %]" ng-model="field.values" type="text">
+                  <input class="form-control" id="options-[% index %]" ng-model="field.values" type="text">
                 </div>
               </div>
             </div>
