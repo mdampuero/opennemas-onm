@@ -104,7 +104,8 @@ class BaseDataSet extends DataSet
         $needle = $key;
 
         if (!is_array($key)) {
-            $needle = [ $key ];
+            $needle  = [ $key ];
+            $default = [ $default ];
         }
 
         if (!is_array($default)) {
