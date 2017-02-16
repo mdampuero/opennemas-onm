@@ -90,7 +90,8 @@ class ErrorController extends Controller
                             'cache_id'           => $cacheID,
                             'category_real_name' => $page->title,
                             'page'               => $page,
-                            'advertisements'     => $ads,
+                            'advertisements'     => $advertisements,
+                            'ads_positions'      => $positions,
                             'x-tags'             => 'not-found',
                             'x-cache-for'        => '+1 day'
                         ]
