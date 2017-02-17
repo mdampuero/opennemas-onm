@@ -5,6 +5,11 @@
         margin: 0;
         overflow: hidden;
         padding: 0;
+        text-align: center;
+      }
+
+      img {
+        max-width: 100%;
       }
     </style>
   </head>

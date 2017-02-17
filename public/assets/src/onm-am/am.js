@@ -146,7 +146,6 @@
     var item = document.createElement('iframe');
 
     item.style.padding   = 0;
-    item.style.height    = '100%';
     item.style.width     = '100%';
     item.style.margin    = 0;
     item.style.border    = 'none';
@@ -156,8 +155,7 @@
 
     // Auto-resize on load
     item.onload = function() {
-      //item.style.height = item.contentWindow.document.body.scrollHeight/2 + 'px';
-      //item.style.width  = item.contentWindow.document.body.scrollWidth/2 + 'px';
+      item.style.height = item.contentWindow.document.body.scrollHeight/2 + 'px';
     };
 
     return item;
@@ -202,9 +200,14 @@
     self.config.slots.forEach(function(place) {
       var selector  = '.oat[data-type="' + place + '"]';
       var container = document.querySelectorAll(selector);
+      var id        = null;
 
       if (container[0] === undefined) {
         return;
+      }
+
+      if (container[0].getAttribute('data-id')) {
+        id = parseInt(container[0].getAttribute('data-id'));
       }
 
       var available = ads.filter(function(e) {
@@ -222,8 +225,13 @@
       var ad = self.getAdvertisement(available);
 
       container[0].appendChild(self.createNormal(ad));
-      //container[0].style.width  = '100%';
-      //container[0].style.height = '100%';
+      container[0].style.width  = '100%';
+
+      if (self.device === 'desktop' &&
+          container[0].getAttribute('data-width')) {
+        container[0].style.width =
+          parseInt(container[0].getAttribute('data-width')) + 'px';
+      }
     });
   };
 
