@@ -491,9 +491,9 @@ class Advertisement extends Content
         $category = (empty($category) || ($category=='home')) ? 0 : $category;
 
         // Remove floating banners
-        if (($key = array_search('37', $types)) !== false) {
-            unset($types[$key]);
-        }
+        //if (($key = array_search('37', $types)) !== false) {
+            //unset($types[$key]);
+        //}
 
         if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
             // Fetch ads from static file
@@ -532,6 +532,8 @@ class Advertisement extends Content
                 $sql = "SELECT pk_advertisement as id FROM advertisements "
                   ."WHERE advertisements.type_advertisement IN (".$types.") "
                   .$catsSQL.' ORDER BY id';
+
+                //var_dump($sql);die();
 
                 $conn = getService('dbal_connection');
                 $result = $conn->fetchAll($sql);
@@ -743,42 +745,51 @@ class Advertisement extends Content
      **/
     public function render($params)
     {
-        $output = '';
-
         // Don't render any non default ads if module is not activated
-        if (!getService('core.security')->hasExtension('ADS_MANAGER') &&
-            (
-                !isset($this->default_ad) ||
-                $this->default_ad != 1
-            )
+        if (!getService('core.security')->hasExtension('ADS_MANAGER')
+            && (!isset($this->default_ad) || $this->default_ad != 1)
         ) {
-            return $output;
+            return '';
         }
 
-        $params = array_merge([
-            'beforeHTML' => null,
-            'afterHTML'  => null,
-        ], $params);
+        $html  = '<div class="oat"%s data-type="%s"%s></div>';
+        $id    = '';
+        $type  = $this->type_advertisement;
+        $style = '';
 
-        // floating ads
+        // Style for advertisements via renderbanner
+        if (array_key_exists('height', $params)
+            && array_key_exists('width', $params)
+        ) {
+            $style = sprintf(
+                ' style="height: %dpx; width: %dpx"',
+                (int) $params['height'],
+                (int) $params['width']
+            );
+        }
+
+        // Style for floating advertisements in frontpage manager
         if ($this->type_advertisement == 37) {
-            $wrapperClass = 'ad_in_column ad_horizontal_marker clearfix';
+            $id .= ' data-id="' . $this->pk_content . '" ';
 
-            if (array_key_exists('cssclass', $params)
-                && !empty($params['cssclass'])
+            if (array_key_exists('height', $this->params)
+                && is_array($this->params['height'])
+                && !empty($this->params['height'])
+                && (int) $this->params['height'] > 0
+                && array_key_exists('width', $this->params)
+                && is_array($this->params['width'])
+                && !empty($this->params['width'])
+                && (int) $this->params['width'] > 0
             ) {
-                $wrapperClass = $params['cssclass']
-                    . ' ad_in_column ad_horizontal_marker clearfix';
+                $style = sprintf(
+                    ' style="height: %dpx; width: %dpx"',
+                    (int) $this->params['height'][0],
+                    (int) $this->params['width'][0]
+                );
             }
-
-            $params['beforeHTML'] = "<div class=\"$wrapperClass\" style=\"text-align: center;\">";
-            $params['afterHTML']  = "</div>";
         }
 
-        return $params['beforeHTML']
-            . "<div class=\"oat\" data-type=\"{$this->type_advertisement}\"></div>"
-            . $params['afterHTML'];
 
-        return $output;
+        return sprintf($html, $id, $type, $style);
     }
 }
