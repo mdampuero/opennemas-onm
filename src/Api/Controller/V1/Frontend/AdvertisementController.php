@@ -51,7 +51,7 @@ class AdvertisementController extends Controller
         $response = new JsonResponse(array_values($advertisements));
 
         $response->headers
-            ->set('x-tags', $this->getTags($places, $advertisements));
+            ->set('x-tags', $this->getListTags($places, $advertisements));
 
         return $response;
     }
@@ -93,7 +93,11 @@ class AdvertisementController extends Controller
             return new Response($this->renderFlash($ad, $img));
         }
 
-        return new Response($this->renderImage($ad, $img));
+        $response = new Response($this->renderImage($ad, $img));
+
+        $response->headers->set('x-tags', $this->getItemTags($ad));
+
+        return $response;
     }
 
     /**
@@ -110,6 +114,46 @@ class AdvertisementController extends Controller
         }
 
         return base64_decode($code);
+    }
+
+    /**
+     * Returns the list of tags basing on an advertisement.
+     *
+     * @param Advertisement $advertisement The advertisement object.
+     *
+     * @return string The list of tags.
+     */
+    protected function getItemTags($advertisement)
+    {
+        $tags = [ 'extension-advertisement', 'show' ];
+
+        $tags[] = 'content-' . $advertisement->id;
+        $tags[] = 'position-' . $advertisement->type_advertisement;
+
+        return implode(',', $tags);
+    }
+
+    /**
+     * Returns the list of tags basing on positions and advertisements.
+     *
+     * @param array $positions      The list of positions.
+     * @param array $advertisements The list of advertisements.
+     *
+     * @return string The list of tags.
+     */
+    protected function getListTags($positions, $advertisements)
+    {
+        $tags = [ 'extension-advertisement', 'list' ];
+
+        foreach ($advertisements as $advertisement) {
+            $tags[] = 'content-' . $advertisement->id;
+        }
+
+        foreach ($positions as $position) {
+            $tags[] = 'position-' . $position;
+        }
+
+        return implode(',', $tags);
     }
 
     /**
@@ -138,29 +182,6 @@ class AdvertisementController extends Controller
         }
 
         return '[' . implode(',', $sizes) .']';
-    }
-
-    /**
-     * Returns the list of tags basing on positions and advertisements.
-     *
-     * @param array $positions      The list of positions.
-     * @param array $advertisements The list of advertisements.
-     *
-     * @return string The list of tags.
-     */
-    protected function getTags($positions, $advertisements)
-    {
-        $tags = [ 'advertisement' ];
-
-        foreach ($positions as $position) {
-            $tags[] = 'position-' . $position;
-        }
-
-        foreach ($advertisements as $advertisement) {
-            $tags[] = 'ad-' . $advertisement->id;
-        }
-
-        return implode(',', $tags);
     }
 
     /**
