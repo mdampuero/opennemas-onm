@@ -169,7 +169,9 @@ class ArchiveController extends Controller
             return new RedirectResponse($url, 301);
         }
 
-        return new Response($html);
+        return new Response($html, [
+            'x-tags' => "archive-digital,{$categoryname},{$year}-{$month}-{$day}"
+        ]);
     }
 
     /**
