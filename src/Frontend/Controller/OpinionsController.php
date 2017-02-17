@@ -344,6 +344,8 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'ext-opinion-frontpage',
+                'x-cache-for'     => '+1 day'
             )
         );
     }
@@ -628,6 +630,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
             )
         );
     }
@@ -837,6 +840,9 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'ext-opinion,'.$opinion->id,
+                'x-cache-for'     => '+1 day',
+                'x-cacheable'     => $cacheable,
             )
         );
     }
