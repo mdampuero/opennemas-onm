@@ -156,8 +156,8 @@
 
     // Auto-resize on load
     item.onload = function() {
-      item.style.height = item.contentWindow.document.body.scrollHeight + 'px';
-      item.style.width  = item.contentWindow.document.body.scrollWidth + 'px';
+      //item.style.height = item.contentWindow.document.body.scrollHeight/2 + 'px';
+      //item.style.width  = item.contentWindow.document.body.scrollWidth/2 + 'px';
     };
 
     return item;
@@ -222,8 +222,8 @@
       var ad = self.getAdvertisement(available);
 
       container[0].appendChild(self.createNormal(ad));
-      container[0].style.width  = '100%';
-      container[0].style.height = '100%';
+      //container[0].style.width  = '100%';
+      //container[0].style.height = '100%';
     });
   };
 
