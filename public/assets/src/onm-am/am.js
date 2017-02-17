@@ -155,7 +155,7 @@
 
     // Auto-resize on load
     item.onload = function() {
-      item.style.height = item.contentWindow.document.body.scrollHeight/2 + 'px';
+      item.style.height = item.contentWindow.document.body.scrollHeight + 'px';
     };
 
     return item;
