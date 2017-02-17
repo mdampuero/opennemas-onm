@@ -533,8 +533,6 @@ class Advertisement extends Content
                   ."WHERE advertisements.type_advertisement IN (".$types.") "
                   .$catsSQL.' ORDER BY id';
 
-                //var_dump($sql);die();
-
                 $conn = getService('dbal_connection');
                 $result = $conn->fetchAll($sql);
             } catch (\Exception $e) {
@@ -752,18 +750,16 @@ class Advertisement extends Content
             return '';
         }
 
-        $html  = '<div class="oat"%s data-type="%s"%s></div>';
+        $html  = '<div class="oat"%s data-type="%s"%s%s></div>';
         $id    = '';
         $type  = $this->type_advertisement;
-        $style = '';
+        $style = ' style="display:table;"';
+        $width = '';
 
         // Style for advertisements via renderbanner
-        if (array_key_exists('height', $params)
-            && array_key_exists('width', $params)
-        ) {
-            $style = sprintf(
-                ' style="height: %dpx; width: %dpx"',
-                (int) $params['height'],
+        if (array_key_exists('width', $params)) {
+            $width = sprintf(
+                ' data-width="%d"',
                 (int) $params['width']
             );
         }
@@ -771,25 +767,8 @@ class Advertisement extends Content
         // Style for floating advertisements in frontpage manager
         if ($this->type_advertisement == 37) {
             $id .= ' data-id="' . $this->pk_content . '" ';
-
-            if (array_key_exists('height', $this->params)
-                && is_array($this->params['height'])
-                && !empty($this->params['height'])
-                && (int) $this->params['height'] > 0
-                && array_key_exists('width', $this->params)
-                && is_array($this->params['width'])
-                && !empty($this->params['width'])
-                && (int) $this->params['width'] > 0
-            ) {
-                $style = sprintf(
-                    ' style="height: %dpx; width: %dpx"',
-                    (int) $this->params['height'][0],
-                    (int) $this->params['width'][0]
-                );
-            }
         }
 
-
-        return sprintf($html, $id, $type, $style);
+        return sprintf($html, $id, $type, $width, $style);
     }
 }
