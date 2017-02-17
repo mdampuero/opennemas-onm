@@ -232,13 +232,25 @@
    * @memberOf OAM
    *
    * @description
-   *   Returns an advertisement from a list of available advertisements.
+   *   Returns an advertisement from a list of available advertisements or the
+   *   advertisement with the given id if present.
    *
-   * @param {Object} advertisements The list of available advertisements.
+   * @param {Object}  advertisements The list of available advertisements.
+   * @param {Integer} id             The advertisement id.
    *
    * @return {Object} The selected advertisement.
    */
-  OAM.prototype.getAdvertisement = function(advertisements) {
+  OAM.prototype.getAdvertisement = function(advertisements, id) {
+    if (id) {
+      var advertisement = advertisements.filter(function(e) {
+        return e.id === id;
+      });
+
+      if (advertisement.length > 0) {
+        return advertisement[0];
+      }
+    }
+
     return advertisements[Math.floor(Math.random() * advertisements.length)];
   };
 
