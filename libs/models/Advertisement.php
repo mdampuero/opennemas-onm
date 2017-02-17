@@ -294,6 +294,9 @@ class Advertisement extends Content
      **/
     public function update($data)
     {
+        // TODO: Remove when dispatching events from custom contents
+        $this->old_position = $this->type_advertisement;
+
         parent::update($data);
 
         if (!empty($data['script'])) {
