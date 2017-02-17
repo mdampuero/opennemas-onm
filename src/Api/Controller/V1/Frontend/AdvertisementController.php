@@ -48,7 +48,12 @@ class AdvertisementController extends Controller
             return !is_null($element);
         });
 
-        return new JsonResponse(array_values($advertisements));
+        $response = new JsonResponse(array_values($advertisements));
+
+        $response->headers
+            ->set('x-tags', $this->getTags($places, $advertisements));
+
+        return $response;
     }
 
     /**
@@ -136,6 +141,29 @@ class AdvertisementController extends Controller
     }
 
     /**
+     * Returns the list of tags basing on positions and advertisements.
+     *
+     * @param array $positions      The list of positions.
+     * @param array $advertisements The list of advertisements.
+     *
+     * @return string The list of tags.
+     */
+    protected function getTags($positions, $advertisements)
+    {
+        $tags = [ 'advertisement' ];
+
+        foreach ($positions as $position) {
+            $tags[] = 'position-' . $position;
+        }
+
+        foreach ($advertisements as $advertisement) {
+            $tags[] = 'ad-' . $advertisement->id;
+        }
+
+        return implode(',', $tags);
+    }
+
+    /**
      * Returns the targeting-related JS code for google DFP.
      *
      * @param string $category The current category.
@@ -191,6 +219,8 @@ class AdvertisementController extends Controller
         $object->publicId    = date('YmdHis', strtotime($element->created)).
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;
+        $object->starttime   = $element->starttime;
+        $object->endtime     = $element->endtime;
         $object->format      = ($element->with_script == 1) ? 'html' : 'image';
         $object->devices     = $element->params['devices'];
         $object->user_groups = $element->params['user_groups'];
