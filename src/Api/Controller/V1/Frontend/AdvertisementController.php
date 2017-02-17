@@ -36,7 +36,6 @@ class AdvertisementController extends Controller
 
             // Only image and html type ads
             if (empty($element->content_status)
-                || (!empty($element->starttime) && $element->starttime > $date)
                 || (!empty($element->endtime) && $element->endtime < $date)
             ) {
                 return;
