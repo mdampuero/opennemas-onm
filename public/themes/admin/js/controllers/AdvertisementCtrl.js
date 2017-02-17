@@ -190,6 +190,11 @@
         }
 
         if (categories && angular.isArray(categories)) {
+          // Remove frontpage category
+          categories = categories.filter(function(e) {
+            return parseInt(e) !== 0;
+          });
+
           $scope.ui.categories = categories.map(function (e) {
             return parseInt(e);
           });
