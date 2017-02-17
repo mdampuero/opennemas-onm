@@ -192,7 +192,6 @@ class AdvertisementController extends Controller
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;
         $object->format      = ($element->with_script == 1) ? 'html' : 'image';
-        $object->html        = $element->script;
         $object->devices     = $element->params['devices'];
         $object->user_groups = $element->params['user_groups'];
         $object->size = [
