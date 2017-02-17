@@ -375,7 +375,7 @@
    * @return {Object} The user information.
    */
   OAM.prototype.getUser = function() {
-    var user = this.getCookie('user');
+    var user = this.getCookie('__onm_user');
 
     if (!user) {
       return null;
