@@ -34,7 +34,8 @@ class SearchController extends Controller
         return $this->render(
             'search/search.tpl',
             array(
-                'advertisements' => $ads
+                'advertisements' => $ads,
+                'x-tags'         => 'google-search'
             )
         );
     }
