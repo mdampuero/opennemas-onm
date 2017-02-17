@@ -412,7 +412,14 @@
    * @return {Boolean} True if the advertisement is visible. False otherwise.
    */
   OAM.prototype.isVisible = function(ad) {
-    var groups = [];
+    var groups    = [];
+    var now       = new Date();
+    var endtime   = new Date(ad.endtime);
+    var starttime = new Date(ad.starttime);
+
+    if (now < starttime || (ad.endtime && now >= endtime)) {
+      return false;
+    }
 
     if (this.user) {
       groups = this.user.user_groups.filter(function(e) {
