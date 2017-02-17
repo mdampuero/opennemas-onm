@@ -158,6 +158,10 @@ class AdsController extends Controller
         $advertisement = new \Advertisement();
         $categories    = json_decode($request->request->get('categories', '[]'));
 
+        if (empty($categories)) {
+            $categories = [ 0 ];
+        }
+
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
@@ -318,6 +322,10 @@ class AdsController extends Controller
         }
 
         $categories = json_decode($request->request->get('categories', '[]'));
+
+        if (empty($categories)) {
+            $categories = [ 0 ];
+        }
 
         $data = array(
             'id'                 => $ad->id,
