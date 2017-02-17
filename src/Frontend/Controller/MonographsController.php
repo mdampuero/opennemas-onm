@@ -126,7 +126,10 @@ class MonographsController extends Controller
         return $this->render(
             'special/frontpage_special.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'monograph-frontpage',
+                'x-cache-for' => '+1 day',
+                'x-cacheable' => $cacheable
             )
         );
     }
@@ -216,6 +219,9 @@ class MonographsController extends Controller
                 'content'   => $special,
                 'contentId' => $special->id,
                 'cache_id'  => $cacheID,
+                'x-tags'      => 'monograph,'.$special->id,
+                'x-cache-for' => '+1 day',
+                'x-cacheable' => $cacheable
             ]
         );
     }
