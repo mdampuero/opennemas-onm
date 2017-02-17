@@ -30,7 +30,7 @@ class NewsMLComponentPhotoEuropaPress extends NewsMLComponentPhoto
             '/NewsComponent/NewsComponent/ContentItem/MediaType[@FormalName="Photo"]'
         );
 
-        if (!empty($node)) {
+        if (!empty($node) && $this->getAgencyName($data) === 'Europa Press') {
             return true;
         }
 
