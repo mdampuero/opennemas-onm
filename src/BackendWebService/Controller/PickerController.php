@@ -269,10 +269,13 @@ class PickerController extends Controller
     private function uploadMode()
     {
         return [
+            'add'         => _('Add files...'),
+            'click'       => _('Click here to upload'),
+            'drop'        => _('Drop files or click here'),
+            'explanation' => _('Drop files anywhere here to upload or click on the "Add Files..." button above.'),
             'header'      => _('Upload new media'),
             'menuItem'    => _('Upload'),
-            'add'         => _('Add files...'),
-            'explanation' => _('Drop files anywhere here to upload or click on the "Add Files..." button above.'),
+            'upload'      => _('to upload')
         ];
     }
 }
