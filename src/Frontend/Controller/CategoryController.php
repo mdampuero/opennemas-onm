@@ -228,7 +228,6 @@ class CategoryController extends Controller
                 'advertisements' => $ads,
                 'x-tags'         => 'ext-category,'.$categoryName.','.$page,
                 'x-cache-for'     => '+3 hour',
-                'x-cacheable'     => $cacheable
             )
         );
     }

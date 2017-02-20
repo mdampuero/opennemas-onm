@@ -843,7 +843,6 @@ class OpinionsController extends Controller
                 'actual_category' => 'opinion',
                 'x-tags'          => 'ext-opinion,'.$opinion->id,
                 'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable,
             )
         );
     }

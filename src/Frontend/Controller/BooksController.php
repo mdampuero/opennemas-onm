@@ -141,7 +141,6 @@ class BooksController extends Controller
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'book,'.$book->id,
                 'x-cache-for' => '+1 day',
-                'x-cacheable' => $cacheable,
             ]
         );
     }

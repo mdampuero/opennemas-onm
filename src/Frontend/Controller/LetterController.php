@@ -97,7 +97,6 @@ class LetterController extends Controller
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'letter-frontpage',
                 'x-cache-for' => '+1 day',
-                'x-cacheable' => $cacheable
             )
         );
     }
@@ -152,7 +151,6 @@ class LetterController extends Controller
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'letter,'.$letter->id,
                 'x-cache-for' => '+1 day',
-                'x-cacheable' => $cacheable
             ]
         );
     }

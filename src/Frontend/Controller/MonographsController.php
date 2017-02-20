@@ -129,7 +129,6 @@ class MonographsController extends Controller
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'monograph-frontpage',
                 'x-cache-for' => '+1 day',
-                'x-cacheable' => $cacheable
             )
         );
     }
@@ -221,7 +220,6 @@ class MonographsController extends Controller
                 'cache_id'  => $cacheID,
                 'x-tags'      => 'monograph,'.$special->id,
                 'x-cache-for' => '+1 day',
-                'x-cacheable' => $cacheable
             ]
         );
     }

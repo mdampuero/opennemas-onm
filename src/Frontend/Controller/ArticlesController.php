@@ -226,7 +226,6 @@ class ArticlesController extends Controller
                 'category_name' => $categoryName,
                 'x-tags'          => 'ext-article,'.$article->id,
                 'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable
             )
         );
     }
