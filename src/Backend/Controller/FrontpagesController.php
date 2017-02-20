@@ -106,6 +106,10 @@ class FrontpagesController extends Controller
 
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_'.$categoryId, 'default');
+        // Check if layout is valid,if not use the default value
+        if (!file_exists(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml")) {
+            $layoutTheme = 'default';
+        }
         $lm = $this->get('core.manager.layout');
         $lm->load(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml");
 
