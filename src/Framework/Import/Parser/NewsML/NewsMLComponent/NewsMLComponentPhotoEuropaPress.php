@@ -31,7 +31,7 @@ class NewsMLComponentPhotoEuropaPress extends NewsMLComponentPhoto
         );
 
         if (!empty($node) &&
-            stripos($this->getAgencyName($data), 'europa press') !== false
+            preg_match('/europa\s*press/i', $this->getAgencyName($data))
         ) {
             return true;
         }
