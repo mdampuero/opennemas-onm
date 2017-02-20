@@ -163,19 +163,22 @@ class Synchronizer
             $xml = @simplexml_load_file($file);
 
             if ($xml) {
-                $parser = $this->parserFactory->get($xml);
-                $parsed = $parser->parse($xml, $file);
+                try {
+                    $parser = $this->parserFactory->get($xml);
+                    $parsed = $parser->parse($xml, $file);
+                    if (is_object($parsed)) {
+                        $parsed = [ $parsed ];
+                    }
 
-                if (is_object($parsed)) {
-                    $parsed = [ $parsed ];
+                    foreach ($parsed as $p) {
+                        $p->filename = basename($file);
+                        $p->source   = $source;
+                    }
+
+                    $contents = array_merge($contents, $parsed);
+                } catch (\Exception $e) {
+                    getService('error.log')->error('Cannot parse XML: ' . $file);
                 }
-
-                foreach ($parsed as $p) {
-                    $p->filename = basename($file);
-                    $p->source   = $source;
-                }
-
-                $contents = array_merge($contents, $parsed);
             }
         }
 

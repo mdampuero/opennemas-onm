@@ -103,7 +103,7 @@ swiftmailer:
             logging:  '%kernel.debug%'
 
 monolog:
-    channels: ['main', 'applog']
+    channels: ['main', 'applog', 'errorlog']
     handlers:
         main:
             type:  stream
@@ -114,6 +114,11 @@ monolog:
             path:  %kernel.logs_dir%/application.log
             level: info
             channels: applog
+        errorlog:
+            type:  stream
+            path:  %kernel.logs_dir%/opennemas-error.log
+            level: error
+            channels: errorlog
 
 hwi_oauth:
     firewall_names: [ 'backend' ]
