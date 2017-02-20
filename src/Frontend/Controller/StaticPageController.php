@@ -51,8 +51,8 @@ class StaticPageController extends Controller
                 'actual_category'    => $content->slug,
                 'category_real_name' => $content->title,
                 'content_id'         => $content->id,
-                'x-tags'             => 'static-page,'.$content->id,
                 'advertisements'     => $this->getAds(),
+                'x-tags'             => 'static-page,'.$content->id,
             ]
         );
     }
