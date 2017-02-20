@@ -740,6 +740,18 @@ angular.module('onm.picker')
             url:        routing.generate('admin_image_create')
         });
 
+
+        // FILTERS
+        $scope.uploader.filters.push({
+            name: 'imageFilter',
+            fn: function(item /*{File|FileLikeObject}*/, options) {
+                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+                return 'bmp|gif|jpeg|jpg|doc|docx|flv|ico|odt|otf|ogm|pdf|png|svg|svgz|webp'.indexOf(type) !== -1;
+            }
+        });
+
+        // CALLBACKS
+
         /**
          * Adds an event to change to explore mode on after adding a file.
          *
