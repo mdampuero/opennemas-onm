@@ -30,10 +30,26 @@ class NewsMLComponentPhotoEuropaPress extends NewsMLComponentPhoto
             '/NewsComponent/NewsComponent/ContentItem/MediaType[@FormalName="Photo"]'
         );
 
-        if (!empty($node) && $this->getAgencyName($data) === 'Europa Press') {
+        if (!empty($node) &&
+            preg_match('/europa\s*press/i', $this->getAgencyName($data))
+        ) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAgencyName($data)
+    {
+        $agency = $data->xpath('/NewsComponent/AdministrativeMetadata/Creator/Party');
+
+        if (is_array($agency) && count($agency) > 0) {
+            return (string) $agency[0]->attributes()->FormalName;
+        }
+
+        return $this->getFromBag('agency_name');
     }
 }
