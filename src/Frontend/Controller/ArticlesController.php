@@ -152,7 +152,7 @@ class ArticlesController extends Controller
                 'actual_category' => $categoryName,
                 'time'            => '12345',
                 'x-tags'          => 'article,'.$article->id,
-                'x-cache-for'     => '1d',
+                'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable
             ]
         );
@@ -225,7 +225,7 @@ class ArticlesController extends Controller
                 'cache_id' => $cacheID,
                 'category_name' => $categoryName,
                 'x-tags'          => 'ext-article,'.$article->id,
-                'x-cache-for'     => '1d',
+                'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable
             )
         );

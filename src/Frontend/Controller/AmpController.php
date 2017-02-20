@@ -219,7 +219,7 @@ class AmpController extends Controller
                 'time'            => '12345',
                 'cache_id'        => $cacheID,
                 'x-tags'          => 'article-amp,article,'.$article->id,
-                'x-cache-for'     => '1d',
+                'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable
             ]
         );

@@ -227,7 +227,7 @@ class CategoryController extends Controller
                 'cache_id'       => $cacheId,
                 'advertisements' => $ads,
                 'x-tags'         => 'ext-category,'.$categoryName.','.$page,
-                'x-cache-for'     => '3h',
+                'x-cache-for'     => '+3 hour',
                 'x-cacheable'     => $cacheable
             )
         );

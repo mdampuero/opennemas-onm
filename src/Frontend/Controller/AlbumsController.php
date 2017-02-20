@@ -248,7 +248,7 @@ class AlbumsController extends Controller
                 'advertisements' => $this->getAds('inner'),
                 'cache_id'       => $cacheID,
                 'x-tags'         => 'album,'.$album->id,
-                'x-cache-for'    => '1d',
+                'x-cache-for'    => '+1 day',
                 'x-cacheable'    => $cacheable
             )
         );

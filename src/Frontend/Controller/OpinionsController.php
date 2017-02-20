@@ -225,7 +225,7 @@ class OpinionsController extends Controller
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'opinion-frontpage,'.$page,
-                'x-cache-for'     => '1d'
+                'x-cache-for'     => '+1 day'
             )
         );
     }
@@ -345,7 +345,7 @@ class OpinionsController extends Controller
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'ext-opinion-frontpage',
-                'x-cache-for'     => '1d'
+                'x-cache-for'     => '+1 day'
             )
         );
     }
@@ -487,7 +487,7 @@ class OpinionsController extends Controller
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
-                'x-cache-for'     => '1d'
+                'x-cache-for'     => '+1 day'
             )
         );
     }
@@ -631,7 +631,7 @@ class OpinionsController extends Controller
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
-                'x-cache-for'     => '600s',
+                'x-cache-for'     => '+3 hours',
             )
         );
     }
@@ -761,7 +761,7 @@ class OpinionsController extends Controller
                 'cache_id'        => $cacheId,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'opinion,'.$opinion->id,
-                'x-cache-for'     => '1d',
+                'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable,
             ]
         );
@@ -842,7 +842,7 @@ class OpinionsController extends Controller
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
                 'x-tags'          => 'ext-opinion,'.$opinion->id,
-                'x-cache-for'     => '1d',
+                'x-cache-for'     => '+1 day',
                 'x-cacheable'     => $cacheable,
             )
         );
