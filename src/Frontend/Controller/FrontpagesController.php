@@ -282,8 +282,9 @@ class FrontpagesController extends Controller
         return $this->render(
             'frontpage/frontpage.tpl',
             [
-                'cache_id' => $cacheID,
-                'x-tags'   => 'frontpage-page,frontpage-page-external,'.$categoryName,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'frontpage-page,frontpage-page-external,'.$categoryName,
+                'x-cache-for' => '3h',
             ]
         );
     }

@@ -114,7 +114,7 @@ class AuthorController extends Controller
             array(
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'author-user-frontpage,'.$slug.','.$page,
-                'x-cache-for' => '+1 day'
+                'x-cache-for' => '1d'
             )
         );
     }
@@ -225,7 +225,7 @@ class AuthorController extends Controller
             [
                 'cache_id'    => $cacheID,
                 'x-tags'      => 'authors-users-frontpage,' . $page,
-                'x-cache-for' => '+1 day'
+                'x-cache-for' => '1d'
             ]
         );
     }

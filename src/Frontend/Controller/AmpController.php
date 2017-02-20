@@ -211,15 +211,15 @@ class AmpController extends Controller
         return $this->render(
             "amp/article.tpl",
             [
-                'cache_id'        => $cacheID,
                 'contentId'       => $article->id,
                 'category_name'   => $categoryName,
                 'article'         => $article,
                 'content'         => $article,
                 'actual_category' => $categoryName,
                 'time'            => '12345',
+                'cache_id'        => $cacheID,
                 'x-tags'          => 'article-amp,article,'.$article->id,
-                'x-cache-for'     => '+1 day',
+                'x-cache-for'     => '1d',
                 'x-cacheable'     => $cacheable
             ]
         );

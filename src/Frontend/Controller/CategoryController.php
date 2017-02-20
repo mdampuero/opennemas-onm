@@ -226,7 +226,9 @@ class CategoryController extends Controller
             array(
                 'cache_id'       => $cacheId,
                 'advertisements' => $ads,
-                'x-tags'         => 'ext-category,'.$categoryName.','.$page
+                'x-tags'         => 'ext-category,'.$categoryName.','.$page,
+                'x-cache-for'     => '3h',
+                'x-cacheable'     => $cacheable
             )
         );
     }

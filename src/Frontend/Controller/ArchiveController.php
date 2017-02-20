@@ -127,9 +127,9 @@ class ArchiveController extends Controller
         return $this->render(
             'archive/archive.tpl',
             array(
-                'cache_id'        => $cacheID,
                 'newslibraryDate' => $date,
                 'actual_category' => 'archive',
+                'cache_id'        => $cacheID,
                 'x-tags'          => 'archive-page,'.$date.','.$page.','.$categoryName,
             )
         );
