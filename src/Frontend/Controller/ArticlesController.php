@@ -180,7 +180,7 @@ class ArticlesController extends Controller
         $syncParams = s::get('sync_params');
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
+                if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
                     $wsUrl = $siteUrl;
                 }
             }
