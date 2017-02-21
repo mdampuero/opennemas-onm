@@ -251,9 +251,10 @@ class NewsAgencyController extends Controller
         $path = $this->getParameter('core.paths.cache') .  DS
             . $this->get('core.instance')->internal_name;
         $tpl  = $this->get('view')->getBackendTemplate();
+        $logger = $this->get('error.log');
 
         // Check last synchronization
-        $synchronizer        = new Synchronizer($path, $tpl);
+        $synchronizer        = new Synchronizer($path, $tpl, $logger);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         if ($minutesFromLastSync > 0) {

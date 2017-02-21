@@ -29,6 +29,9 @@ services:
     application.log:
         alias: monolog.logger.applog
 
+    error.log:
+        alias: monolog.logger.errorlog
+
     shared_key_jwt_encoder:
         class: Lexik\Bundle\JWTAuthenticationBundle\Encoder\SharedKeyJWTEncoder
         arguments: [ %shared_key_algorithm%, %shared_key% ]

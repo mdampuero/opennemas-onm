@@ -77,8 +77,9 @@ EOF
         $tpl  = $this->getContainer()->get('view')->getBackendTemplate();
         $path = $this->getContainer()->getParameter('core.paths.cache')
             . '/' . $instance->internal_name;
+        $logger = $this->getContainer()->get('error.log');
 
-        $synchronizer = new Synchronizer($path, $tpl);
+        $synchronizer = new Synchronizer($path, $tpl, $logger);
 
         if (!$synchronizer->isSyncEnvironmetReady()) {
             $synchronizer->setupSyncEnvironment();
