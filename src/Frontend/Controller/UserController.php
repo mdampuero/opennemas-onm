@@ -183,10 +183,11 @@ class UserController extends Controller
             }
         }
 
-        return $this->render(
-            'authentication/register.tpl',
-            [ 'errors' => $errors, ]
-        );
+        return $this->render('authentication/register.tpl', [
+            'errors' => $errors,
+            'countries'   => $this->get('core.geo')->getCountries(),
+            'user_groups' => $this->getUserGroups(),
+        ]);
     }
 
     /**
@@ -468,5 +469,27 @@ class UserController extends Controller
     public function getUserMenuAction()
     {
         return $this->render('user/menu.tpl');
+    }
+
+    /**
+     * Returns the list of public user groups.
+     *
+     * @return array The list of public user groups.
+     */
+    protected function getUserGroups()
+    {
+        $userGroups = $this->get('orm.manager')
+            ->getRepository('UserGroup')->findBy();
+
+        // Show only public groups ()
+        $userGroups = array_filter($userGroups, function ($a) {
+            return in_array(223, $a->privileges);
+        });
+
+        $userGroups = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+        }, $userGroups);
+
+        return array_values($userGroups);
     }
 }

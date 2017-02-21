@@ -48,6 +48,12 @@
          */
         $scope.sections = [
         {
+          title: 'Opennemas',
+          rows: [
+            ['SECURITY', 'INTERNAL']
+          ]
+        },
+        {
           title: 'Web',
           rows: [
             ['ADVERTISEMENT', 'WIDGET', 'MENU']
