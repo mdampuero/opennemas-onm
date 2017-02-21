@@ -279,8 +279,9 @@ class NewsAgencyController extends Controller
         $tpl     = $this->get('view')->getBackendTemplate();
         $path    = $this->getParameter('core.paths.cache') . DS
             . $this->get('core.instance')->internal_name;
+        $logger  = $this->get('error.log');
 
-        $synchronizer = new Synchronizer($path, $tpl);
+        $synchronizer = new Synchronizer($path, $tpl, $logger);
 
         try {
             $synchronizer->syncMultiple($servers);

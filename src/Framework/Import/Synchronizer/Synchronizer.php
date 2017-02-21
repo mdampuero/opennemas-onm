@@ -47,12 +47,20 @@ class Synchronizer
     protected $lockFilePath = '';
 
     /**
+     * The logger service
+     *
+     * @var Logger
+     */
+    protected $logger = null;
+
+    /**
      * Initializes the object and initializes configuration
      *
      * @param string   $path The path to synchronized files.
      * @param Template $tpl  The template service.
+     * @param Logger   $logger  The logger service.
      */
-    public function __construct($path, $tpl)
+    public function __construct($path, $tpl, $logger)
     {
         $this->syncPath     = $path . DS .'importers';
         $this->syncFilePath = $this->syncPath . DS . '.sync';
@@ -61,6 +69,8 @@ class Synchronizer
         $this->compiler      = new Compiler($this->syncPath);
         $this->parserFactory = new ParserFactory();
         $this->serverFactory = new ServerFactory($tpl);
+
+        $this->logger = $logger;
     }
 
     /**
@@ -177,7 +187,7 @@ class Synchronizer
 
                     $contents = array_merge($contents, $parsed);
                 } catch (\Exception $e) {
-                    getService('error.log')->error('Cannot parse XML: ' . $file);
+                    $this->logger->error('Cannot parse XML: ' . $file);
                 }
             }
         }
