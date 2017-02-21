@@ -238,6 +238,7 @@ class OpinionsController extends Controller
     public function extFrontpageAction()
     {
         $page = $this->request->query->getDigits('page', 1);
+        $categoryName = 'opinion';
 
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
@@ -502,9 +503,10 @@ class OpinionsController extends Controller
     public function extFrontpageAuthorAction(Request $request)
     {
         // Fetch HTTP params
-        $authorID   = $request->query->getDigits('author_id', null);
-        $authorSlug = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
-        $page = $this->request->query->getDigits('page', 1);
+        $authorID     = $request->query->getDigits('author_id', null);
+        $authorSlug   = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
+        $page         = $this->request->query->getDigits('page', 1);
+        $categoryName = 'opinion';
 
         if (empty($authorID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
