@@ -170,7 +170,7 @@ class ArchiveController extends Controller
         }
 
         return new Response($html, [
-            'x-tags' => "archive-digital,{$categoryname},{$year}-{$month}-{$day}"
+            'x-tags' => "archive-digital,{$categoryName},{$year}-{$month}-{$day}"
         ]);
     }
 
