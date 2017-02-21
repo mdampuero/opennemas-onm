@@ -378,6 +378,7 @@ class VideosController extends Controller
                 'cache_id'      => $cacheID,
                 'x-tags'        => 'video,'.$video->id,
                 'x-cache-for'   => '+1 day',
+                'x-cacheable'   => $cacheable,
             ]
         );
     }
