@@ -18,7 +18,7 @@ function smarty_function_css_tag($params, &$smarty)
     $output = '';
     $href   = $params['href'];
     $server = DS . 'assets' . DS . 'css' . DS;
-    $mtime  = DEPLOYED_AT;
+    $mtime  = THEMES_DEPLOYED_AT;
     $type   = 'type="text/css"';
     $rel    = 'rel="stylesheet"';
 
