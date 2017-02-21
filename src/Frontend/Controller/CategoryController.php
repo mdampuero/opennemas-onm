@@ -175,7 +175,7 @@ class CategoryController extends Controller
         $syncParams = $this->get('setting_repository')->get('sync_params');
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
+                if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
                     $wsUrl = $siteUrl;
                 }
             }
@@ -226,7 +226,8 @@ class CategoryController extends Controller
             array(
                 'cache_id'       => $cacheId,
                 'advertisements' => $ads,
-                'x-tags'         => 'ext-category,'.$categoryName.','.$page
+                'x-tags'         => 'ext-category,'.$categoryName.','.$page,
+                'x-cache-for'     => '+3 hour',
             )
         );
     }
