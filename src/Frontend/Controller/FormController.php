@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Onm\Settings as s;
 
 /**
  * Handles the actions for form send by mail
@@ -28,10 +29,10 @@ use Common\Core\Controller\Controller;
 class FormController extends Controller
 {
     /**
-     * Displays a form to send content to the newspaper.
+     * Description of the action
      *
-     * @return Response The response object.
-     */
+     * @return void
+     **/
     public function frontpageAction()
     {
         if (!$this->get('core.security')->hasExtension('FORM_MANAGER')) {
@@ -40,138 +41,152 @@ class FormController extends Controller
 
         return $this->render('static_pages/form.tpl', [
             'advertisements' => $this->getAds(),
-            'recaptcha'      => $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml(),
             'x-tags'         => 'frontpage-form',
         ]);
     }
 
     /**
-     * Sends a new content created by readers to the newspaper via email.
+     * Creates the new subscription given information by POST
      *
-     * @param Request $request The request object.
+     * @param Request $request the request object
      *
-     * @return Response The response object.
-     */
+     * @return Response the response object
+     **/
     public function sendAction(Request $request)
     {
-        // Get request params
-        $verify = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
-
-        if ('POST' != $request->getMethod() || !empty($verify)) {
+        if ('POST' != $request->getMethod()) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
 
-        $email     = trim($request->request->filter('email', null, FILTER_SANITIZE_STRING));
-        $response  = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
-        $formType  = $request->request->filter('form_type', '', FILTER_SANITIZE_STRING);
-        $message   = '';
-        $class     = 'error';
+        //Get configuration params
+        $configRecaptcha = s::get('recaptcha');
 
-        // Check current recaptcha
-        $isValid = $this->get('core.recaptcha')
-            ->configureFromSettings()
-            ->isValid($response, $request->getClientIp());
+        // Get request params
+        $verify           = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
+        $rcChallengeField = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
+        $rcResponseField  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
+        $formType         = $request->request->filter('form_type', '', FILTER_SANITIZE_STRING);
+        $message          = null;
+        $class            = "";
 
-        if (empty($email)) {
-            $message .= _('Email is required but it will not be published');
-        }
+        if (empty($verify)) {
+            // New captcha instance
+            $captcha = getService('recaptcha')
+                ->setPrivateKey($configRecaptcha['private_key'])
+                ->setRemoteIp($request->getClientIp());
 
-        if (!$isValid) {
-            $message .= (empty($message) ? '' : '<br>')
-                . _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
-        }
+            // Get reCaptcha validate response
+            $resp = $captcha->check($rcChallengeField, $rcResponseField);
 
-        // What happens when the CAPTCHA was entered incorrectly
-        if (!empty($email) && $isValid) {
-            // Check data form is correcty and serialize form
-            $body       = '';
-            $notAllowed = [ 'subject', 'cx', 'security_code', 'submit', 'g-recapcha-response' ];
+            // What happens when the CAPTCHA was entered incorrectly
+            if (!$resp->isValid()) {
+                $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
+                $class = 'error';
+            } else {
+                // Correct CAPTCHA, bad mail and name empty
+                $email = trim($request->request->filter('email', null, FILTER_SANITIZE_STRING));
 
-            foreach ($request->request as $key => $value) {
-                if (!in_array($key, $notAllowed)) {
-                    $body .= "<p><strong>".ucfirst($key)."</strong>: $value </p> \n";
+                if (empty($email)) {
+                    $message = _(
+                        "Sorry, we were unable to complete your request.\n"
+                        ."Check the form and try again"
+                    );
+                    $message = _("Email is required but it will not be published");
+                    $class = 'error';
+                } else {
+                    // Correct CAPTCHA, correct mail and name not empty
+                    // check data form is correcty and serialize form
+                    $body ='';
+                    $notAllowed = array("subject", "cx", "security_code", "submit",
+                        "recaptcha_challenge_field", "recaptcha_response_field");
+                    foreach ($request->request as $key => $value) {
+                        if (!in_array($key, $notAllowed)) {
+                            $body .= "<p>$key => $value </p> \n";
+                        }
+                    }
+
+                    $name      = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+                    $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
+                    $recipient = trim($request->request->filter('recipient', null, FILTER_SANITIZE_STRING));
+
+
+                    $mailSender = s::get('mail_sender');
+                    if (empty($mailSender)) {
+                        $mailSender = "no-reply@postman.opennemas.com";
+                    }
+                    //  Build the message
+                    $text = \Swift_Message::newInstance();
+                    $text
+                        ->setSubject($subject)
+                        ->setBody($body, 'text/html')
+                        ->setTo(array($recipient => $recipient))
+                        ->setFrom(array($email => $name))
+                        ->setSender(array($mailSender => s::get('site_name')));
+
+                    if (isset($_FILES['image1']) && !empty($_FILES['image1']["name"])) {
+                        $file     = $_FILES["image1"]["tmp_name"];
+                        $filename = $_FILES["image1"]["name"];
+                        $type     = $_FILES["image1"]["type"];
+                        $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
+                    }
+
+                    if (isset($_FILES['image2']) && !empty($_FILES['image2']["name"])) {
+                        $file     = $_FILES["image2"]["tmp_name"];
+                        $filename = $_FILES["image2"]["name"];
+                        $type     = $_FILES["image2"]["type"];
+                        $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
+                    }
+
+                    try {
+                        $mailer = $this->get('swiftmailer.mailer.direct');
+                        $mailer->send($text);
+
+                        $this->get('application.log')->notice(
+                            "Email sent. Frontend form (sender:".$email.", to: ".$recipient.")"
+                        );
+
+                        $action = new \Action();
+                        $action->set(array(
+                            'action_name' => 'form_1',
+                            'counter'     => 1
+                        ));
+
+                        $message = _("The information has been sent");
+                        $class   = 'success';
+                    } catch (\Swift_SwiftException $e) {
+                        $message = _(
+                            "Sorry, we were unable to complete your request.\n"
+                            ."Check the form and try again"
+                        );
+                        $class = 'error';
+                    }
                 }
             }
-
-            $name      = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
-            $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
-            $recipient = trim($request->request->filter('recipient', null, FILTER_SANITIZE_STRING));
-
-            $settings = $this->get('setting_repository')->get([ 'mail_sender', 'site_name', 'contact_email' ]);
-
-            if (!array_key_exists('mail_sender', $settings)
-                || empty($settings['mail_sender'])
-            ) {
-                $settings['mail_sender'] = "no-reply@postman.opennemas.com";
-            }
-
-            //  Build the message
-            $text = \Swift_Message::newInstance();
-            $text
-                ->setSubject($subject)
-                ->setBody($body, 'text/html')
-                ->setTo(array($recipient => $recipient))
-                ->setFrom(array($email => $name))
-                ->setSender(array($settings['mail_sender'] => $settings['site_name']));
-
-            $file1 = $request->files->get('image1');
-            if ($file1) {
-                $text->attach(\Swift_Attachment::fromPath(
-                    $file1->getPathname(),
-                    $file1->getClientMimeType()
-                )->setFilename($file1->getClientOriginalName()));
-            }
-
-            $file2 = $request->files->get('image2');
-            if ($file2) {
-                $text->attach(\Swift_Attachment::fromPath(
-                    $file2->getPathname(),
-                    $file2->getClientMimeType()
-                )->setFilename($file2->getClientOriginalName()));
-            }
-
-            try {
-                $mailer = $this->get('swiftmailer.mailer.direct');
-                $mailer->send($text);
-
-                $this->get('application.log')->notice(
-                    "Email sent. Frontend form (sender:".$email.", to: ".$recipient.")"
-                );
-
-                $action = new \Action();
-                $action->set([ 'action_name' => 'form_1', 'counter' => 1 ]);
-
-                $class   = 'success';
-                $message = _('The information has been sent');
-            } catch (\Swift_SwiftException $e) {
-                $message = _('Sorry, we were unable to complete your request');
-            }
         }
 
-
-        return $this->render('static_pages/form.tpl', [
-            'recaptcha' => $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml(),
-            'message'   => $message,
-            'class'     => $class,
-            'formType'  => $formType,
-        ]);
+        return $this->render(
+            'static_pages/form.tpl',
+            array(
+                'message'  => $message,
+                'class'    => $class,
+                'formType' => $formType,
+            )
+        );
     }
 
     /**
-     * Returns the advertisements for the letters frontpage.
+     * Returns the advertisements for the letters frontpage
      *
-     * @return array The list of advertisemnets.
-     */
+     * @return void
+     **/
     public function getAds()
     {
-        // Get letter positions
-        $positions = $this->get('core.manager.advertisement')
-            ->getPositionsForGroup('article_inner', [ 7, 9 ]);
+        $category = 0;
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        // Get letter positions
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

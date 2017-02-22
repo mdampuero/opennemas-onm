@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+  {javascripts}
     <script type="text/javascript">
       var advertisement_urls = {
         calculate_tags : '{url name=admin_utils_calculate_tags}'
@@ -30,7 +30,7 @@
 
 {block name="content"}
   <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" ng-controller="AdvertisementCtrl">
-    <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
+    <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -88,7 +88,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}" required >
+                  <input class="form-control" id="title" name="title" required="required" type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}"/>
                 </div>
               </div>
               <div class="hidden">
@@ -96,7 +96,7 @@
                   {t}Keywords{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="metadata" name="metadata" required
+                  <input class="form-control" id="metadata" name="metadata" required="required"
                   title="Metadatos" type="hidden" value="{$advertisement->metadata|strip|default:""}">
                 </div>
               </div>
@@ -305,7 +305,7 @@
                   <div class="form-group">
                     <label for="category" class="form-label">{t}In categories{/t}</label>
                     <div class="controls">
-                      <select name="category[]" id="category" required multiple="multiple" size=6>
+                      <select name="category[]" id="category" required="required" multiple="multiple" size=6>
                         <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                         <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
                         <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>

@@ -1441,6 +1441,12 @@ class Privilege
                 'description'  => _('List'),
                 'module'       => 'OPCACHE',
             ],
+            223 => [
+                'pk_privilege' => '223',
+                'name'         => 'GROUP_PUBLIC',
+                'description'  => _('Marks this group as public'),
+                'module'       => 'INTERNAL',
+            ],
         );
 
         return self::$privileges;

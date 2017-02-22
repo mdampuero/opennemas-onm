@@ -25,6 +25,7 @@ use Onm\Settings as s;
  *
  * @package Frontend_Controllers
  **/
+// TODO: REMOVE ME PLEASE! This class is a deprecated in favor of StaticpageController.php
 class StaticPagesController extends Controller
 {
     /**
@@ -59,6 +60,7 @@ class StaticPagesController extends Controller
                 'category_real_name' => $content->title,
                 'content_id'         => $content->id,
                 'advertisements'     => $ads,
+                'x-tags'             => 'static-page,'.$content->id,
             )
         );
     }

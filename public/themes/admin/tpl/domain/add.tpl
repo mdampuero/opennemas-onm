@@ -1,11 +1,5 @@
 {extends file="domain/list.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_store.less,
-    @AdminTheme/less/_domain.less,
-    @AdminTheme/less/_checkout.less" filters="cssrewrite,less" output="domain_add"}
-  {/stylesheets}
-{/block}
 {block name="footer-js" append}
   {javascripts}
     <script src="https://js.braintreegateway.com/v2/braintree.js"></script>

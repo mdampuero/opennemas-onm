@@ -166,7 +166,11 @@
           <div class="form-group col-sm-6">
             <label class="form-label" for="state">{t}State{/t}</label>
             <div class="controls input-with-icon">
-              <input class="form-control" id="state" name="state" ng-model="client.state" placeholder="{t}State{/t}" required type="text">
+              <input class="form-control no-animate" id="state" name="state" ng-if="client.country !== 'ES'" ng-model="client.state" placeholder="{t}State{/t}" required="required" type="text">
+              <select class="form-control no-animate" id="state" name="state" ng-if="client.country === 'ES'" ng-model="client.state">
+                <option value="">{t}Select a province{/t}...</option>
+                <option ng-repeat="province in extra.provinces" value="[% province %]">[% province %]</option>
+              </select>
               <span class="icon right">
                 <span class="fa fa-check text-success" ng-if="clientForm.state.$dirty && clientForm.state.$valid"></span>
                 <span class="fa fa-asterisk" ng-if="!clientForm.state.$dirty && clientForm.state.$invalid" uib-tooltip="{t}This field is required{/t}"></span>

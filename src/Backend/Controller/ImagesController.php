@@ -37,11 +37,8 @@ class ImagesController extends Controller
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR;
 
-        // Get valid timezone
         $timezones = \DateTimeZone::listIdentifiers();
-        $timezoneID = (empty($timezoneID) || !array_key_exists($timezoneID, $timezones))
-            ? 424 : $this->get('setting_repository')->get('time_zone', 'UTC');
-        $timezone  = new \DateTimeZone($timezones[$timezoneID]);
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
 
         $this->view->assign(
             array(
@@ -84,11 +81,13 @@ class ImagesController extends Controller
             $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
             $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
-            $years[$date->format('Y')]['name'] = $date->format('Y');
-            $years[$date->format('Y')]['months'][]= array(
-                'name'  => ucfirst($fmt->format($date)),
-                'value' => $value['date_month']
-            );
+            if (!is_null($fmt)) {
+                $years[$date->format('Y')]['name'] = $date->format('Y');
+                $years[$date->format('Y')]['months'][]= array(
+                    'name'  => ucfirst($fmt->format($date)),
+                    'value' => $value['date_month']
+                );
+            }
         }
 
         return $this->render('image/list.tpl', [ 'years' => array_values($years)]);

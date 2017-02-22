@@ -1,22 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets}
-    <style>
-      #connect {
-        cursor:pointer;
-      }
-      #connect button {
-        background: none;
-        border:0 none;
-      }
-      #loading {
-        display: none
-      }
-    </style>
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
   {javascripts}
     <script type="text/javascript">
@@ -91,20 +74,20 @@
           <div class="form-group">
             <label for="site_url" class="form-label">{t}Site URL{/t}</label>
             <div class="controls">
-              <input type="text" required name="site_url" id="site_url" value="{$site['site_url']}" placeholder="{t}http://example.com{/t}" class="form-control">
+              <input type="text" required="required" name="site_url" id="site_url" value="{$site['site_url']}" placeholder="{t}http://example.com{/t}" class="form-control">
             </div>
           </div>
           <div class="form-group">
             <label for="username" class="form-label">{t}Username{/t}</label>
             <div class="controls">
-              <input type="text" required id="username" name="username" value="{$site['username']}" class="form-control"/>
+              <input type="text" required="required" id="username" name="username" value="{$site['username']}" class="form-control"/>
             </div>
           </div>
           <div class="form-group">
             <label for="password" class="form-label">{t}Password{/t}</label>
             <div class="controls">
               <div class="input-group">
-                <input type="password" required id="password" name="password" value="{$site['password']}" class="form-control"/>
+                <input type="password" required="required" id="password" name="password" value="{$site['password']}" class="form-control"/>
                 <div class="input-group-btn">
                   <button class="btn check-pass" type="button" id="show-pass-button">
                     <i class="fa fa-lock"></i>
@@ -128,11 +111,11 @@
             </div>
           </div>
           <p class="col-md-12">
-            <a href="#" id="connect" class="btn btn-primary pull-right">{t}Connect{/t}</a>
+            <a href="#" id="connect" class="btn btn-primary pull-right pointer">{t}Connect{/t}</a>
           </p>
           <div id="categories">
             {$output}
-            <div class="spinner-wrapper" id="loading">
+            <div class="spinner-wrapper" id="loading" style="display: none;">
               <div class="loading-spinner"></div>
               <div class="spinner-text">{t}Loading{/t}...</div>
             </div>

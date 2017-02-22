@@ -48,9 +48,9 @@
          */
         $scope.sections = [
         {
-          title: 'Security',
+          title: 'Opennemas',
           rows: [
-            ['SECURITY']
+            ['SECURITY', 'INTERNAL']
           ]
         },
         {

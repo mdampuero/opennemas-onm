@@ -1,19 +1,22 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
-    <script>
-      var draftSavedMsg = '{t}Draft saved at {/t}';
-    </script>
-  {/javascripts}
+{block name="header-css" append}
   <style>
-  tags-input .tags .tag-item  {
+    tags-input .tags .tag-item  {
       background-color: #376092 !important;
       font-size: 11px  !important;
       font-family: 'Open Sans' !important;
       font-weight: 600 !important;
-  }
+    }
   </style>
+{/block}
+
+{block name="footer-js" append}
+  {javascripts}
+    <script>
+      var draftSavedMsg = '{t}Draft saved at {/t}';
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}
@@ -113,7 +116,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required type="text">
+                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required="required" type="text">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
                         [% article.title ? article.title.length : 0 %]
@@ -128,7 +131,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title_int">
-                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required>
+                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required="required">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
@@ -265,7 +268,7 @@
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select class="form-control" id="category" name="category" ng-model="article.category" required>
+                      <select class="form-control" id="category" name="category" ng-model="article.category" required="required">
                         <option value="" >{t}- Select a category -{/t}</option>
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}

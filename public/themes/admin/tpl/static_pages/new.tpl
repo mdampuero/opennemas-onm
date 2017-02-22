@@ -124,7 +124,7 @@
   </form>
   {/block}
   {block name="footer-js" append}
-    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
+    {javascripts}
       <script type="text/javascript">
         /* <![CDATA[ */
         $(document).ready(function($){

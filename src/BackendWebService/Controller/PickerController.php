@@ -158,11 +158,13 @@ class PickerController extends Controller
             $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
             $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
-            $years[$date->format('Y')]['name'] = $date->format('Y');
-            $years[$date->format('Y')]['months'][]= array(
-                'name'  => ucfirst($fmt->format($date)),
-                'value' => $value['date_month']
-            );
+            if (!is_null($fmt)) {
+                $years[$date->format('Y')]['name'] = $date->format('Y');
+                $years[$date->format('Y')]['months'][]= array(
+                    'name'  => ucfirst($fmt->format($date)),
+                    'value' => $value['date_month']
+                );
+            }
         }
 
         return array_values($years);
@@ -267,13 +269,14 @@ class PickerController extends Controller
     private function uploadMode()
     {
         return [
-            'click'       => _('Click here to upload'),
-            'clickShort'  => _('or click here'),
-            'drop'        => _('Drop files here to upload'),
-            'header'      => _('Upload new media'),
-            'menuItem'    => _('Upload'),
             'add'         => _('Add files...'),
+            'click'       => _('Click here to upload'),
+            'drop'        => _('Drop files or click here'),
             'explanation' => _('Drop files anywhere here to upload or click on the "Add Files..." button above.'),
+            'header'      => _('Upload new media'),
+            'invalid'     => _('This file type is not supported'),
+            'menuItem'    => _('Upload'),
+            'upload'      => _('to upload')
         ];
     }
 }

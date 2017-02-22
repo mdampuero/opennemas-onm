@@ -105,14 +105,9 @@ function generateFiaGAScriptCode($config, $content)
             if (array_key_exists('base_domain', $account)
                 && !empty(trim($account['base_domain']))
             ) {
-                $code .= "ga('create', '" . trim($account['api_key']) . "', {
-                    cookieDomain: '". trim($account['base_domain']) ."',
-                    name: 'account{$key}'
-                });\n";
+                $code .= "ga('create', '" . trim($account['api_key']) . "', '". trim($account['base_domain']) ."', 'account{$key}');\n";
             } else {
-                $code .= "ga('create', '" . trim($account['api_key']) . "', '{
-                    name: 'account{$key}'
-                }');\n";
+                $code .= "ga('create', '" . trim($account['api_key']) . "', 'auto', 'account{$key}');\n";
             }
             $code .= "ga('account{$key}.require', 'displayfeatures');\n";
             $code .= "ga('account{$key}.set', 'campaignSource', 'Facebook');\n";
@@ -122,10 +117,7 @@ function generateFiaGAScriptCode($config, $content)
     }
 
     // Add opennemas Account
-    $code .= "ga('create', 'UA-40838799-5', {
-        cookieDomain: 'opennemas.com',
-        name: 'onm'
-    });\n";
+    $code .= "ga('create', 'UA-40838799-5', 'opennemas.com','onm');\n";
     $code .= "ga('onm.require', 'displayfeatures');\n";
     $code .= "ga('onm.set', 'campaignSource', 'Facebook');\n";
     $code .= "ga('onm.set', 'campaignMedium', 'Social Instant Article');\n";

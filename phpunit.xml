@@ -26,7 +26,6 @@
 
     <php>
         <server name="KERNEL_DIR" value="app" />
-        <ini name="error_log" value="/dev/null"/>
     </php>
     <filter>
         <whitelist>

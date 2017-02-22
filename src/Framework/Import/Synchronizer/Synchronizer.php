@@ -47,12 +47,20 @@ class Synchronizer
     protected $lockFilePath = '';
 
     /**
+     * The logger service
+     *
+     * @var Logger
+     */
+    protected $logger = null;
+
+    /**
      * Initializes the object and initializes configuration
      *
      * @param string   $path The path to synchronized files.
      * @param Template $tpl  The template service.
+     * @param Logger   $logger  The logger service.
      */
-    public function __construct($path, $tpl)
+    public function __construct($path, $tpl, $logger)
     {
         $this->syncPath     = $path . DS .'importers';
         $this->syncFilePath = $this->syncPath . DS . '.sync';
@@ -61,6 +69,8 @@ class Synchronizer
         $this->compiler      = new Compiler($this->syncPath);
         $this->parserFactory = new ParserFactory();
         $this->serverFactory = new ServerFactory($tpl);
+
+        $this->logger = $logger;
     }
 
     /**
@@ -163,19 +173,22 @@ class Synchronizer
             $xml = @simplexml_load_file($file);
 
             if ($xml) {
-                $parser = $this->parserFactory->get($xml);
-                $parsed = $parser->parse($xml, $file);
+                try {
+                    $parser = $this->parserFactory->get($xml);
+                    $parsed = $parser->parse($xml, $file);
+                    if (is_object($parsed)) {
+                        $parsed = [ $parsed ];
+                    }
 
-                if (is_object($parsed)) {
-                    $parsed = [ $parsed ];
+                    foreach ($parsed as $p) {
+                        $p->filename = basename($file);
+                        $p->source   = $source;
+                    }
+
+                    $contents = array_merge($contents, $parsed);
+                } catch (\Exception $e) {
+                    $this->logger->error('Cannot parse XML: ' . $file);
                 }
-
-                foreach ($parsed as $p) {
-                    $p->filename = basename($file);
-                    $p->source   = $source;
-                }
-
-                $contents = array_merge($contents, $parsed);
             }
         }
 

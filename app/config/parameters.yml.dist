@@ -113,12 +113,10 @@ parameters:
     opennemas.assetic.asset_servers:            3
     opennemas.assetic.asset_domain:             //media%d.opennemas.net
 
-    api.facebook.client_id:     330535510437103
+    api.facebook.client_id: 330535510437103
     api.facebook.client_secret: 292ccd17e59fd413f245c86c5e19e83b
-    api.recaptcha.site_key:     6LdWlgkUAAAAADzgu34FyZ-wBSB0xlCUc7UVFWGw
-    api.recaptcha.secret_key:   6LdWlgkUAAAAAOUnzzBwHNpPgTBIaLwfDjr6XaeQ
-    api.twitter.client_id:      2uP5o5b7ruolJLjEqZhDQPfO4
-    api.twitter.client_secret:  Lv1fVSQ84p936jDfxjcbhmORD6Mwav2DY3JB2NEJJlFfE7CGgB
+    api.twitter.client_id: 2uP5o5b7ruolJLjEqZhDQPfO4
+    api.twitter.client_secret: Lv1fVSQ84p936jDfxjcbhmORD6Mwav2DY3JB2NEJJlFfE7CGgB
 
     piwik.url:   http://piwik.openhost.es
     piwik.token: b4956f6e687b28851fa8a545b6ccd85b
@@ -132,6 +130,9 @@ parameters:
     # JWT (Shared key)
     shared_key_algorithm: HS512
     shared_key:           yoursharedkey
+
+    recaptcha_private_key: 6LeMYAkTAAAAAFpxGah5BY2Svm01npk8iCwKAf1X
+    recaptcha_public_key:  6LeMYAkTAAAAADP0NncqOUIydMymokSI91gFxdJL
 
     sales_email: sales@openhost.es
 

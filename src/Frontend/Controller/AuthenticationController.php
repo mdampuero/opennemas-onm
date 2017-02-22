@@ -64,9 +64,6 @@ class AuthenticationController extends Controller
 
         return $this->render('authentication/login.tpl', [
             'failed_login_attempts' => $session->get('failed_login_attempts'),
-            'recaptcha' => $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml(),
             'token'                 => $token,
             'referer'               => $referer
         ]);

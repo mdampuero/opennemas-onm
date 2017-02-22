@@ -98,8 +98,7 @@
 
 {block name="footer-js" append}
   <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-      @Common/components/gmaps/gmaps.js"}
+  {javascripts src="@Common/components/gmaps/gmaps.js" output="image"}
     <script type="text/javascript">
       var map, marker;
 

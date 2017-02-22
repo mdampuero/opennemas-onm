@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+  {javascripts}
     <script>
       jQuery(document).ready(function($) {
         $('#created').datetimepicker({
@@ -69,7 +69,7 @@
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required class="form-control" />
+                  <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="form-control" />
                 </div>
               </div>
               <div class="form-group">
@@ -84,13 +84,13 @@
                   <div class="form-group col-md-6">
                     <label for="author" class="form-label">{t}Nickname{/t}</label>
                     <div class="controls">
-                      <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required class="form-control" />
+                      <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="form-control" />
                     </div>
                   </div>
                   <div class="form-group col-md-6">
                     <label for="email" class="form-label">{t}Email{/t}</label>
                     <div class="controls">
-                      <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required class="form-control" />
+                      <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="form-control" />
                     </div>
                   </div>
                 </div>
@@ -111,7 +111,7 @@
                 <label for="created" class="form-label">{t}Created at{/t}</label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" type="text" id="created" name="created" value="{$letter->created}"/>
+                    <input class="form-control" type="text" id="created" name="created" value="{$letter->created}" readonly/>
                     <span class="input-group-addon add-on">
                       <span class="fa fa-calendar"></span>
                     </span>
@@ -138,7 +138,7 @@
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <span class="help">{t}List of words separated by words.{/t}</span>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="hidden" value="{$letter->metadata|clearslash|escape:"html"}"/>
+                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="hidden" value="{$letter->metadata|clearslash|escape:"html"}"/>
                 </div>
               </div>
               <div class="form-group">

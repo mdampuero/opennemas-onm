@@ -46,9 +46,11 @@ class UserController extends Controller
         $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
 
         return $this->render( 'user/show.tpl', [
-            'user'             => $user,
+            'countries'        => $this->get('core.geo')->getCountries(),
             'current_time'     => $currentTime,
             'paywall_settings' => $paywallSettings,
+            'user'             => $user,
+            'user_groups'      => $this->getUserGroups(),
             'user_orders'      => $userOrders
         ]);
     }
@@ -65,15 +67,17 @@ class UserController extends Controller
         $errors = [];
         if ('POST' == $request->getMethod()) {
             // Check reCAPTCHA
-            $valid    = false;
+            $valid = false;
             $response = $request->get('g-recaptcha-response');
-            $ip       = $request->getClientIp();
-
             if (!is_null($response)) {
-                $valid = $this->get('core.recaptcha')
-                    ->configureFromSettings()
-                    ->isValid($response, $ip);
+                $rs = getService('google_recaptcha');
+                $recaptcha = $rs->getPublicRecaptcha();
+                $resp = $recaptcha->verify(
+                    $request->get('g-recaptcha-response'),
+                    $request->getClientIp()
+                );
 
+                $valid = $resp->isSuccess();
                 if (!$valid) {
                     $errors []= _(
                         'The reCAPTCHA wasn\'t entered correctly.'.
@@ -137,11 +141,6 @@ class UserController extends Controller
                 } else {
                     $user->setMeta($request->request->get('meta'));
 
-                    // Set registration date
-                    $currentTime = new \DateTime();
-                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
-                    $user->setMeta(['register_date' => $currentTime->format('Y-m-d H:i:s')]);
-
                     try {
                         // Build the message
                         $message = \Swift_Message::newInstance();
@@ -174,6 +173,12 @@ class UserController extends Controller
                             _('Unable to send your registration email. Please try it later.')
                         );
                     }
+                    // Set registration date
+                    $currentTime = new \DateTime();
+                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
+                    $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+                    $user->setMeta(['register_date' => $currentTime]);
 
                     $this->view->assign('success', true);
                 }
@@ -181,10 +186,9 @@ class UserController extends Controller
         }
 
         return $this->render('authentication/register.tpl', [
-            'errors'    => $errors,
-            'recaptcha' => $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml()
+            'errors' => $errors,
+            'countries'   => $this->get('core.geo')->getCountries(),
+            'user_groups' => $this->getUserGroups(),
         ]);
     }
 
@@ -261,7 +265,7 @@ class UserController extends Controller
         try {
             $user = $em->getRepository('User')->findOneBy($oql);
 
-            $user->activated  = 1;
+            $user->activated  = true;
             $user->last_login = new \DateTime('now');
             $user->token      = null;
 
@@ -467,5 +471,27 @@ class UserController extends Controller
     public function getUserMenuAction()
     {
         return $this->render('user/menu.tpl');
+    }
+
+    /**
+     * Returns the list of public user groups.
+     *
+     * @return array The list of public user groups.
+     */
+    protected function getUserGroups()
+    {
+        $userGroups = $this->get('orm.manager')
+            ->getRepository('UserGroup')->findBy();
+
+        // Show only public groups ()
+        $userGroups = array_filter($userGroups, function ($a) {
+            return in_array(223, $a->privileges);
+        });
+
+        $userGroups = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+        }, $userGroups);
+
+        return array_values($userGroups);
     }
 }

@@ -28,173 +28,186 @@ angular.module('onm.picker')
            * @type string
            */
           var contentTpl = {
-            explore: "<div class=\"picker-panel explore-panel\" ng-class=\"{ 'active': picker.isModeActive('explore') }\">\
-              <div class=\"picker-panel-header clearfix\">\
-                <h4 class=\"pull-left\">[% picker.params.explore.header %]</h4>\
-              </div>\
-              <div class=\"picker-panel-body\">\
-                <div class=\"picker-panel-topbar\">\
-                  <ul>\
-                    <li>\
-                      <div class=\"controls\">\
-                        <div class=\"input-group\">\
-                          <span class=\"input-group-addon\">\
-                            <i class=\"fa fa-search\"></i>\
-                          </span>\
-                          <input ng-model=\"$parent.title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
-                        </div>\
-                      </div>\
-                    </li>\
-                    <li ng-if=\"picker.isTypeEnabled('photo')\">\
-                      <select name=\"month\" ng-model=\"$parent.$parent.date\">\
-                        <option value=\"\">[% picker.params.explore.allMonths %]</option>\
-                        <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
-                          <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
-                            [% month.name %] ([% year.name %])\
-                          </option>\
-                        </optgroup>\
-                      </select>\
-                    </li>\
-                    <li class=\"hidden-xs\" ng-if=\"picker.isTypeEnabled('video')\">\
-                      <select name=\"category\" ng-model=\"$parent.category\">\
-                        <option value=\"\">[% picker.params.explore.allCategories %]</option>\
-                        <option value=\"[% category.id %]\" ng-repeat=\"category in picker.params.explore.categories\">\
-                          [% category.name %]\
-                        </option>\
-                      </select>\
-                    </li>\
-                  </ul>\
-                </div>\
-                <div class=\"picker-panel-wrapper\">\
-                  <div class=\"picker-panel-content\" when-scrolled=\"scroll()\">\
-                    <div class=\"clearfix items\" ng-if=\"!searchLoading\">\
-                      <div class=\"media-item\" ng-repeat=\"item in uploader.queue\">\
-                        <div class=\"img-thumbnail\">\
-                          <i class=\"fa fa-picture-o fa-5x\"></i>\
-                          <div class=\"progress\" style=\"margin-bottom: 0;\">\
-                            <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
-                          </div>\
-                        </div>\
-                      </div>\
-                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\" style=\"width: 120px;\">\
-                        <dynamic-image only-image=\"true\" class=\"img-thumbnail\" instance=\""
-                          + instanceMedia
-                          + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
-                        <dynamic-image only-image=\"true\" class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video' && !content.thumb_image\" path=\"[% content.thumb %]\"></dynamic-image>\
-                        <dynamic-image only-image=\"true\" class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video' && content.thumb_image\" instance=\""+instanceMedia+"\" ng-model=\"content.thumb_image\"></dynamic-image>\
-                      </div>\
-                    </div>\
-                    <div class=\"text-center m-b-30 p-t-15 p-b-30 pointer\" ng-click=\"scroll()\" ng-if=\"!searchLoading && total != contents.length\">\
-                      <h5>\
-                        <i class=\"fa fa-circle-o-notch fa-spin fa-lg\" ng-if=\"loadingMore\"></i>\
-                        <span ng-if=\"!loadingMore\">[% picker.params.explore.loadMore %]</span>\
-                        <span ng-if=\"loadingMore\">[% picker.params.explore.loading %]</span>\
-                      </h5>\
-                    </div>\
-                    <div class=\"items-loading\" ng-if=\"searchLoading\">\
-                      <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
-                    </div>\
-                  </div>\
-                </div>\
-                <div class=\"picker-panel-sidebar\">\
-                  <div class=\"picker-panel-sidebar-header\">\
-                    <h4>[% picker.params.explore.thumbnailDetails %]</h4>\
-                  </div>\
-                  <div class=\"picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
-                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)\">\
-                      <dynamic-image autoscale=\"true\" instance=\""
-                        + instanceMedia
-                        + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
-                      </dynamic-image>\
-                    </div>\
-                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image\">\
-                      <dynamic-image autoscale=\"true\" ng-model=\"selected.lastSelected\" property=\"thumb\"></dynamic-image>\
-                    </div>\
-                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video' && selected.lastSelected.thumb_image\">\
-                      <dynamic-image autoscale=\"true\" instance=\""+instanceMedia+"\" ng-model=\"selected.lastSelected.thumb_image\"></dynamic-image>\
-                    </div>\
-                    <div class=\"media-thumbnail-wrapper\" ng-if=\"isFlash(selected.lastSelected)\">\
-                      <dynamic-image autoscale=\"true\" instance=\""
-                          + instanceMedia
-                          + "\" ng-model=\"selected.lastSelected\">\
-                      </dynamic-image>\
-                    </div>\
-                    <ul class=\"media-information\">\
-                      <li>\
-                        <a ng-href=\"[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]\" target=\"_blank\">\
-                          <strong>\
-                            [% selected.lastSelected.name %]\
-                            <i class=\"fa fa-edit\"></i>\
-                          </strong>\
-                        </a>\
-                      </li>\
-                      <li>[% selected.lastSelected.created | moment %]</li>\
-                      <li>[% selected.lastSelected.size %] KB</li>\
-                      <li>[% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>\
-                      <li><span class=\"v-seperate\"></span></li>\
-                      <li>\
-                        <div class=\"form-group\">\
-                          <label for=\"description\">\
-                            [% picker.params.explore.description %]\
-                            <div class=\"pull-right\">\
-                              <i class=\"fa\" ng-class=\"{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }\"></i>\
-                            </div>\
-                          </label>\
-                          <textarea id=\"description\" ng-blur=\"saveDescription(selected.lastSelected.id)\" ng-model=\"selected.lastSelected.description\" cols=\"30\" rows=\"2\"></textarea>\
-                        </div>\
-                      </li>\
-                    </ul>\
-                  </div>\
-                </div>\
-              </div>\
-              <div class=\"picker-panel-footer\" ng-class=\"{ 'collapsed': selected.items.length == 0 }\">\
-                <ul class=\"pull-left\"  ng-if=\"selected.items.length > 0\">\
-                  <li>\
-                    <i class=\"fa fa-check fa-lg\" ng-click=\"selected.ids = [];selected.items = []\"></i>\
-                  </li>\
-                  <li>\
-                    <span class=\"h-seperate\"></span>\
-                  </li>\
-                  <li>\
-                    <h4>\
-                      [% selected.items.length %]\
-                      <span class=\"hidden-xs\">[% picker.params.explore.itemsSelected %]</span>\
-                    </h4>\
-                  </li>\
-                </ul>\
-                <button class=\"btn btn-primary pull-right\" ng-click=\"insert()\">\
-                  <i class=\"fa fa-plus\"></i>\
-                  [% picker.params.explore.insert %]\
-                </button>\
-              </div>\
-            </div>",
+            explore: '<div class="picker-panel explore-panel" ng-class="{ \'active\': picker.isModeActive(\'explore\') }">' +
+              '<div class="picker-panel-header clearfix">' +
+                '<h4 class="pull-left">[% picker.params.explore.header %]</h4>' +
+              '</div>' +
+              '<div class="picker-panel-body">' +
+                '<div class="picker-panel-topbar">' +
+                  '<ul>' +
+                    '<li>' +
+                      '<div class="controls">' +
+                        '<div class="input-group">' +
+                          '<span class="input-group-addon">' +
+                            '<i class="fa fa-search"></i>' +
+                          '</span>' +
+                          '<input ng-model="$parent.title" placeholder="[% picker.params.explore.search %]" type="text"/>' +
+                        '</div>' +
+                      '</div>' +
+                    '</li>' +
+                    '<li ng-if="picker.isTypeEnabled(\'photo\')">' +
+                      '<select name="month" ng-model="$parent.$parent.date">' +
+                        '<option value="">[% picker.params.explore.allMonths %]</option>' +
+                        '<optgroup label="[% year.name %]" ng-repeat="year in picker.params.explore.dates">' +
+                          '<option value="[% month.value %]" ng-repeat="month in year.months">' +
+                            '[% month.name %] ([% year.name %])' +
+                          '</option>' +
+                        '</optgroup>' +
+                      '</select>' +
+                    '</li>' +
+                    '<li class="hidden-xs" ng-if="picker.isTypeEnabled(\'video\')">' +
+                      '<select name="category" ng-model="$parent.category">' +
+                        '<option value="">[% picker.params.explore.allCategories %]</option>' +
+                        '<option value="[% category.id %]" ng-repeat="category in picker.params.explore.categories">' +
+                          '[% category.name %]' +
+                        '</option>' +
+                      '</select>' +
+                    '</li>' +
+                  '</ul>' +
+                '</div>' +
+                '<div class="picker-panel-wrapper">' +
+                  '<div class="picker-panel-content" when-scrolled="scroll()">' +
+                    '<div class="clearfix items" ng-if="!searchLoading">' +
+                      '<div class="media-item" ng-repeat="item in uploader.queue">' +
+                        '<div class="img-thumbnail">' +
+                          '<i class="fa fa-picture-o fa-5x"></i>' +
+                          '<div class="progress" style="margin-bottom: 0;">' +
+                            '<div class="progress-bar" role="progressbar" ng-style="{ \'width\': item.progress + \'%\' }"></div>' +
+                          '</div>' +
+                        '</div>' +
+                      '</div>' +
+                      '<div class="media-item [selectable]"[selection] ng-repeat="content in contents track by $index" style="width: 120px;">' +
+                        '<dynamic-image only-image="true" class="img-thumbnail" instance="' +
+                          instanceMedia +
+                           '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
+                        '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && !content.thumb_image" path="[% content.thumb %]"></dynamic-image>' +
+                        '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && content.thumb_image" instance="' + instanceMedia + '" ng-model="content.thumb_image"></dynamic-image>' +
+                      '</div>' +
+                    '</div>' +
+                    '<div class="text-center m-b-30 p-t-15 p-b-30 pointer" ng-click="scroll()" ng-if="!searchLoading && total != contents.length">' +
+                      '<h5>' +
+                        '<i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>' +
+                        '<span ng-if="!loadingMore">[% picker.params.explore.loadMore %]</span>' +
+                        '<span ng-if="loadingMore">[% picker.params.explore.loading %]</span>' +
+                      '</h5>' +
+                    '</div>' +
+                    '<div class="items-loading" ng-if="searchLoading">' +
+                      '<i class="fa fa-circle-o-notch fa-spin fa-4x"></i>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="picker-panel-sidebar">' +
+                  '<div class="picker-panel-sidebar-header">' +
+                    '<h4>[% picker.params.explore.thumbnailDetails %]</h4>' +
+                  '</div>' +
+                  '<div class="picker-panel-sidebar-body" ng-if="selected.lastSelected">' +
+                    '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'photo\' && !isFlash(selected.lastSelected)">' +
+                      '<dynamic-image autoscale="true" instance="' +
+                        instanceMedia +
+                        '" ng-model="selected.lastSelected" transform="thumbnail,220,220">' +
+                      '</dynamic-image>' +
+                    '</div>' +
+                    '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && !selected.lastSelected.thumb_image">' +
+                      '<dynamic-image autoscale="true" ng-model="selected.lastSelected" property="thumb"></dynamic-image>' +
+                    '</div>' +
+                    '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && selected.lastSelected.thumb_image">' +
+                      '<dynamic-image autoscale="true" instance=""+instanceMedia+"" ng-model="selected.lastSelected.thumb_image"></dynamic-image>' +
+                    '</div>' +
+                    '<div class="media-thumbnail-wrapper" ng-if="isFlash(selected.lastSelected)">' +
+                      '<dynamic-image autoscale="true" instance="' + instanceMedia + '" ng-model="selected.lastSelected">' +
+                      '</dynamic-image>' +
+                    '</div>' +
+                    '<ul class="media-information">' +
+                      '<li>' +
+                        '<a ng-href="[% routing.generate(\'admin_photo_show\', { id: selected.lastSelected.id}) %]" target="_blank">' +
+                          '<strong>' +
+                            '[% selected.lastSelected.name %]' +
+                            '<i class="fa fa-edit"></i>' +
+                          '</strong>' +
+                        '</a>' +
+                      '</li>' +
+                      '<li>[% selected.lastSelected.created | moment %]</li>' +
+                      '<li>[% selected.lastSelected.size %] KB</li>' +
+                      '<li>[% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>' +
+                      '<li><span class="v-seperate"></span></li>' +
+                      '<li>' +
+                        '<div class="form-group">' +
+                          '<label for="description">' +
+                            '[% picker.params.explore.description %]' +
+                            '<div class="pull-right">' +
+                              '<i class="fa" ng-class="{ \'fa-circle-o-notch fa-spin\': saving, \'fa-check text-success\': saved, \'fa-times text-danger\': error }"></i>' +
+                            '</div>' +
+                          '</label>' +
+                          '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
+                        '</div>' +
+                      '</li>' +
+                    '</ul>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="picker-panel-footer" ng-class="{ \'collapsed\': selected.items.length == 0 }">' +
+                '<ul class="pull-left"  ng-if="selected.items.length > 0">' +
+                  '<li>' +
+                    '<i class="fa fa-check fa-lg" ng-click="selected.ids = [];selected.items = []"></i>' +
+                  '</li>' +
+                  '<li>' +
+                    '<span class="h-seperate"></span>' +
+                  '</li>' +
+                  '<li>' +
+                    '<h4>' +
+                      '[% selected.items.length %]' +
+                      '<span class="hidden-xs">[% picker.params.explore.itemsSelected %]</span>' +
+                    '</h4>' +
+                  '</li>' +
+                '</ul>' +
+                '<button class="btn btn-primary pull-right" ng-click="insert()">' +
+                  '<i class="fa fa-plus"></i>' +
+                  '[% picker.params.explore.insert %]' +
+                '</button>' +
+              '</div>' +
+            '</div>',
 
-            upload: "<div class=\"picker-panel upload-panel\" ng-class=\"{ 'active': picker.isModeActive('upload') }\">\
-              <div class=\"picker-panel-header clearfix\">\
-                <h4 class=\"pull-left\">[% picker.params.upload.header %]</h4>\
-              </div>\
-              <div class=\"picker-panel-body\">\
-                <div class=\"picker-panel-wrapper\">\
-                  <div class=\"picker-panel-content\">\
-                    <div class=\"drop-zone-text\">\
-                      <h4>\
-                        <div>\
-                          <i class=\"fa fa-picture-o fa-2x\" ng-if=\"picker.isTypeEnabled('photo')\"></i>\
-                          <i class=\"fa fa-film fa-2x\" ng-if=\"picker.isTypeEnabled('video')\"></i>\
-                          <i class=\"fa fa-file-o fa-2x\" ng-if=\"picker.isTypeEnabled('pdf')\"></i>\
-                        </div>\
-                        <span class=\"hidden-xs\">[% picker.params.upload.drop %]</span>\
-                        <span class=\"visible-xs\">[% picker.params.upload.click %]</span>\
-                      </h4>\
-                      <h5 class=\"hidden-xs\">\
-                        [% picker.params.upload.clickShort %]\
-                      </h5>\
-                    </div>\
-                  </div>\
-                  <input type=\"file\" nv-file-select uploader=\"uploader\" multiple/>\
-                </div>\
-              </div>\
-            </div>",
+            upload: '<div class="picker-panel upload-panel" ng-class="{ \'active\': picker.isModeActive(\'upload\') }">' +
+              '<div class="picker-panel-header clearfix">' +
+                '<h4 class="pull-left">[% picker.params.upload.header %]</h4>' +
+              '</div>' +
+              '<div class="picker-panel-body">' +
+                '<div class="picker-panel-wrapper">' +
+                  '<div class="picker-panel-content">' +
+                    '<div class="drop-zone-text">' +
+                      '<h4>' +
+                        '<div>' +
+                          '<i class="fa fa-picture-o fa-2x" ng-if="picker.isTypeEnabled(\'photo\')"></i>' +
+                          '<i class="fa fa-film fa-2x" ng-if="picker.isTypeEnabled(\'video\')"></i>' +
+                          '<i class="fa fa-file-o fa-2x" ng-if="picker.isTypeEnabled(\'pdf\')"></i>' +
+                        '</div>' +
+                        '<span class="hidden-xs">[% picker.params.upload.drop %]</span>' +
+                        '<span class="visible-xs">[% picker.params.upload.click %]</span>' +
+                      '</h4>' +
+                      '<h5 class="hidden-xs">' +
+                        '[% picker.params.upload.upload %]' +
+                      '</h5>' +
+                    '</div>' +
+                  '</div>' +
+                  '<input type="file" nv-file-select uploader="uploader" multiple/>' +
+                '</div>' +
+              '</div>' +
+              '<div class="picker-panel-footer picker-panel-footer-full picker-panel-footer-error" ng-class="{ \'collapsed\': !invalid }">' +
+                '<ul class="pull-left">' +
+                  '<li>' +
+                    '<i class="fa fa-times fa-lg"></i>' +
+                  '</li>' +
+                  '<li>' +
+                    '<span class="h-seperate"></span>' +
+                  '</li>' +
+                  '<li>' +
+                    '<h4>' +
+                      '<span class="hidden-xs">[% picker.params.upload.invalid %]</span>' +
+                    '</h4>' +
+                  '</li>' +
+                '</ul>' +
+              '</div>' +
+            '</div>',
           };
 
           /**
@@ -202,26 +215,26 @@ angular.module('onm.picker')
            *
            * @type string
            */
-          var pickerTpl = "<div class=\"picker\">\
-            <div class=\"picker-backdrop\"></div>\
-            <div class=\"picker-dialog\">\
-                <div class=\"picker-close\" ng-click=\"close()\">\
-                  <i class=\"fa fa-lg fa-times pull-right\"></i>\
-                </div>\
-                <div class=\"picker-loading\" ng-if=\"loading\">\
-                  <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
-                </div>\
-                <div class=\"picker-sidebar\" ng-if=\"!loading\">\
-                  <ul>\
-                    [sidebar]\
-                  </ul>\
-                </div>\
-                <div class=\"picker-content\" ng-if=\"!loading\">\
-                  [content]\
-                </div>\
-              </div>\
-            </div>\
-          </div>";
+          var pickerTpl = '<div class="picker">' +
+            '<div class="picker-backdrop"></div>' +
+            '<div class="picker-dialog">' +
+                '<div class="picker-close" ng-click="close()">' +
+                  '<i class="fa fa-lg fa-times pull-right"></i>' +
+                '</div>' +
+                '<div class="picker-loading" ng-if="loading">' +
+                  '<i class="fa fa-circle-o-notch fa-spin fa-4x"></i>' +
+                '</div>' +
+                '<div class="picker-sidebar" ng-if="!loading">' +
+                  '<ul>' +
+                    '[sidebar]' +
+                  '</ul>' +
+                '</div>' +
+                '<div class="picker-content" ng-if="!loading">' +
+                  '[content]' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
 
           /**
            * Template for the media picker sidebar items.
@@ -229,19 +242,19 @@ angular.module('onm.picker')
            * @type string
            */
           var sidebarTpl = {
-            explore: "<li ng-class=\"{ 'active': picker.isModeActive('explore') }\" ng-click=\"picker.enable('explore'); explore()\">\
-              <h5>\
-                <i class=\"fa fa-folder\"></i>\
-                [% picker.params.explore.menuItem %]\
-              </h5>\
-            </li>",
+            explore: '<li ng-class="{ \'active\': picker.isModeActive(\'explore\') }" ng-click="picker.enable(\'explore\'); explore()">' +
+              '<h5>' +
+                '<i class="fa fa-folder"></i>' +
+                '[% picker.params.explore.menuItem %]' +
+              '</h5>' +
+            '</li>',
 
-            upload: "<li ng-class=\"{ 'active': picker.isModeActive('upload') }\" ng-click=\"picker.enable('upload'); upload()\">\
-              <h5>\
-                <i class=\"fa fa-upload\"></i>\
-                [% picker.params.upload.menuItem %]\
-              </h5>\
-            </li>"
+            upload: '<li ng-class="{ \'active\': picker.isModeActive(\'upload\') }" ng-click="picker.enable(\'upload\'); upload()">' +
+              '<h5>' +
+                '<i class="fa fa-upload"></i>' +
+                '[% picker.params.upload.menuItem %]' +
+              '</h5>' +
+            '</li>'
           };
 
           /**
@@ -359,7 +372,7 @@ angular.module('onm.picker')
               // Add selection actions
               if (this.selection.enabled) {
                 selectable = ' selectable';
-                selection  = "ng-class=\"{ 'selected': isSelected(content) }\" ng-click=\"toggle(content, $event)\"";
+                selection  = 'ng-class="{ \'selected\': isSelected(content) }" ng-click="toggle(content, $event)"';
               }
 
               content = content.replace(/\[selectable\]/g, selectable);
@@ -377,8 +390,8 @@ angular.module('onm.picker')
              * @param string mode The content mode.
              */
             setMode: function (mode) {
-              if (this.modes.available.indexOf(mode) !== -1
-                  && this.modes.enabled.indexOf(mode) === -1) {
+              if (this.modes.available.indexOf(mode) !== -1 &&
+                  this.modes.enabled.indexOf(mode) === -1) {
                 this.modes.enabled.push(mode);
               }
             },
@@ -389,8 +402,8 @@ angular.module('onm.picker')
              * @param string type The content type.
              */
             setType: function(type) {
-              if (this.types.available.indexOf(type) !== -1
-                  && this.types.enabled.indexOf(type) === -1) {
+              if (this.types.available.indexOf(type) !== -1 &&
+                  this.types.enabled.indexOf(type) === -1) {
                 this.types.enabled.push(type);
               }
             }
@@ -740,6 +753,29 @@ angular.module('onm.picker')
             url:        routing.generate('admin_image_create')
         });
 
+        // Filter files by extension
+        $scope.uploader.filters.push({
+            name: 'image',
+            fn: function(item) {
+              if (!item.type) {
+                return false;
+              }
+
+              var type = item.type.slice(item.type.lastIndexOf('/') + 1);
+
+              if (!type) {
+                return false;
+              }
+
+              var types = [
+                'bmp', 'flv', 'gif', 'ico', 'jpeg', 'jpg', 'ogm', 'pdf', 'png',
+                'svg', 'svgz', 'swf', 'webp',
+              ];
+
+              return types.indexOf(type) !== -1;
+            }
+        });
+
         /**
          * Adds an event to change to explore mode on after adding a file.
          *
@@ -747,6 +783,17 @@ angular.module('onm.picker')
          */
         $scope.uploader.onAfterAddingFile = function () {
           $scope.picker.enable('explore');
+        };
+
+        /**
+         * Shows a messege when the file to upload is invalid.
+         */
+        $scope.uploader.onWhenAddingFileFailed = function () {
+          $scope.invalid = true;
+
+          $timeout(function() {
+            $scope.invalid = false;
+          }, 5000);
         };
 
         /**
@@ -761,7 +808,7 @@ angular.module('onm.picker')
             $scope.addItem(response);
 
             // Autoselect items uploaded
-            $scope.selected.ids.push(response.pk_photo)
+            $scope.selected.ids.push(response.pk_photo);
             $scope.selected.items.push(response);
             $scope.selected.items.lastSelected = response;
           }, 500);

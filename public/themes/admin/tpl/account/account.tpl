@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_account.less" filters="cssrewrite,less"}
-    <link rel="stylesheet" href="{$asset_url}">
-  {/stylesheets}
-{/block}
-
 {block name="content"}
 <div class="content my-account-page" ng-controller="AccountCtrl" ng-init="instance = {json_encode($instance)|clear_json}">
     <div class="page-navbar actions-navbar">

@@ -79,7 +79,8 @@ class BooksController extends Controller
             array(
                 'categoryBooks' => $bookCategories,
                 'cache_id'      => $cacheID,
-                'page'          => $this->page
+                'page'          => $this->page,
+                'x-tags'        => 'books-frontpage',
             )
         );
     }
@@ -94,9 +95,9 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
-        $dirtyID      = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $categoryName = $this->request->query->get('category_name', null);
+        $dirtyID      = $request->query->get('id', null);
+        $urlSlug      = $request->query->get('slug', null);
 
         $book = $this->get('content_url_matcher')
             ->matchContentUrl('book', $dirtyID, $urlSlug, $categoryName);
@@ -133,11 +134,13 @@ class BooksController extends Controller
         return $this->render(
             'books/book_viewer.tpl',
             [
-                'book'      => $book,
-                'content'   => $book,
-                'contentId' => $book->id,
-                'category'  => $book->category,
-                'cache_id'  => $cacheID,
+                'book'        => $book,
+                'content'     => $book,
+                'contentId'   => $book->id,
+                'category'    => $book->category,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'book,'.$book->id,
+                'x-cache-for' => '+1 day',
             ]
         );
     }

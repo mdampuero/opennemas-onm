@@ -56,18 +56,11 @@ class UserGroupsController extends Controller
         $userGroup = $this->get('orm.manager')->getRepository('UserGroup')
             ->find($id);
 
-        $privilege  = new \Privilege();
-        $privileges = $privilege->getPrivilegesByModules();
-
-        if (!$this->get('core.security')->hasPermission('MASTER')
-            || !$this->get('core.security')->hasPermission('PARTNER')
-        ) {
-            unset($privileges['SECURITY']);
-        }
+        $privilege = new \Privilege();
 
         return $this->render('acl/user_group/new.tpl', [
             'user_group' => $userGroup,
-            'modules'    => $privileges,
+            'modules'    => $privilege->getPrivilegesByModules(),
         ]);
     }
 

@@ -26,7 +26,8 @@ class JavascriptManagerTest extends AssetManagerTest
                         'options' => [ 'mangle' => true ]
                     ],
                 ],
-                'output_path' => 'baz/quux',
+                'build_path'  => 'baz/quux',
+                'output_path' => 'baz/quux/dist',
                 'root'        => 'foo'
             ]
         );
@@ -58,8 +59,11 @@ class JavascriptManagerTest extends AssetManagerTest
         $src = $method->invokeArgs($this->manager, [ 'foo.js' ]);
         $this->assertEquals(1, preg_match('/baz\/quux\/foo\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.js/', $src));
 
-        $src = $method->invokeArgs($this->manager, [ [ 'foo.js', 'bar.js' ] ]);
-        $this->assertEquals(1, preg_match('/baz\/quux\/default\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.js/', $src));
+        $src = $method->invokeArgs($this->manager, [ 'foo.js', 'default', true ]);
+        $this->assertEquals(1, preg_match('/baz\/quux\/dist\/foo\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.js/', $src));
+
+        $src = $method->invokeArgs($this->manager, [ [ 'foo.js', 'bar.js' ], 'norf' ]);
+        $this->assertEquals(1, preg_match('/baz\/quux\/norf\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.js/', $src));
     }
 
     public function testGetFilterManager()

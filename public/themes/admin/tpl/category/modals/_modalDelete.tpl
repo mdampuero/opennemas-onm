@@ -17,7 +17,6 @@
     </div>
   </div>
 </div>
-
 {javascripts}
   <script>
     jQuery("#modal-category-delete").modal({

@@ -9,7 +9,7 @@
  */
 namespace Framework\Migrator\Saver;
 
-use Common\Migration\Component\Tracker\MigrationTracker;
+use Common\Migration\Component\Tracker\SimpleIdTracker;
 use Onm\Exception\UserAlreadyExistsException;
 use Onm\Settings as s;
 use Onm\StringUtils;
@@ -344,11 +344,7 @@ class MigrationSaver
      */
     public function saveArticles($name, $schema, $data)
     {
-        $type = $schema['translation']['name'];
-
         foreach ($data as $item) {
-            $sourceId = $item[$schema['translation']['field']];
-
             $values = array(
                 'title'          => null,
                 'with_comment'   => 0,
@@ -385,28 +381,48 @@ class MigrationSaver
             $values = $this->merge($values, $item, $schema);
 
             try {
-                $slug = array_key_exists('slug', $schema['translation']) ?
-                    $values[$schema['translation']['slug']] : '';
+                if ($this->matchTranslation(
+                    $values[$schema['translation']['field']],
+                    $schema['translation']['name']
+                ) === false
+                ) {
+                    $articleId = $this->findContent($values['title']);
 
-                if (!$this->tracker->isParsed($sourceId)) {
+                    if (!empty($articleId)) {
+                        throw new UserAlreadyExistsException();
+                    }
+
                     $article = new \Article();
                     $article->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
-                    $targetId = $article->id;
+                    $this->createTranslation(
+                        $values[$schema['translation']['field']],
+                        $article->id,
+                        $schema['translation']['name'],
+                        $slug
+                    );
+
                     $this->stats[$name]['imported']++;
                 } else {
                     $this->stats[$name]['already_imported']++;
-                    $targetId = $this->tracker->getTargetId($sourceId, $type);
                 }
+            } catch (UserAlreadyExistsException $e) {
+                $articleId = $this->findContent($values['title']);
 
-                $this->tracker->add($sourceId, $targetId, $type, $slug);
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $articleId,
+                    $schema['translation']['name'],
+                    ''
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
-                $this->tracker->persist();
             }
         }
-
-        $this->tracker->persist();
     }
 
     /**
@@ -914,7 +930,7 @@ class MigrationSaver
                 'body'                => '',
                 'starttime'           => null,
                 'endtime'             => null,
-                'created'             => null,
+                // 'created'             => null,
                 'changed'             => null,
                 'metadata'            => null,
                 'content_status'      => 1,
@@ -954,7 +970,7 @@ class MigrationSaver
                         'match'             => $fileName,
                         'extension'         => $info['extension'],
                         'original_filename' => $info['basename'],
-                        'title'             => $values['title'].' - '.$info['basename'],
+                        'title'             => $values['title'],
                         'id'                => $values['id'].'-'.$key
                     ]);
 
@@ -967,10 +983,10 @@ class MigrationSaver
                     'local_file'        => $values['path'] . $values['local_file'],
                     'extension'         => $info['extension'],
                     'original_filename' => $info['basename'],
-                    'title'             => $values['title'].' - '.$info['basename']
+                    'title'             => $values['title']
                 ]);
 
-                $items[] = $values;
+                $items[] = $value;
             }
 
             try {
@@ -1549,7 +1565,7 @@ class MigrationSaver
         $this->conn = getService('orm.manager')->getConnection('instance');
         $this->conn->selectDatabase($this->settings['migration']['target']);
 
-        $this->tracker = new MigrationTracker($conn);
+        $this->tracker = new SimpleIdTracker($this->conn);
         $this->tracker->load();
 
         if (array_key_exists('user', $this->settings['migration'])) {
@@ -1613,7 +1629,7 @@ class MigrationSaver
     protected function convertToMetadata($string)
     {
         $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
-        return $tagSystem->filter($field);
+        return $tagSystem->filter($string);
     }
 
     /**
@@ -1769,8 +1785,9 @@ class MigrationSaver
                         [^\w\-\s]))([\w\-]{11})[a-z0-9;:@?&%=+\/\$_.-]*~i';
 
                     preg_match($pattern, $field, $matches);
-
-                    $field = $matches[1];
+                    if (!empty($matches) && array_key_exists(1, $matches)) {
+                        $field = $matches[1];
+                    }
                     break;
                 case 'findUser':
                     $id = $this->findUser($field);
@@ -1912,6 +1929,9 @@ class MigrationSaver
                     break;
                 case 'summary':
                     $field = StringUtils::getNumWords($field, 50);
+                    break;
+                case 'html_entity_decode':
+                    $field = html_entity_decode($field);
                     break;
                 case 'replace':
                     $field = preg_replace($params['pattern'], $params['replacement'], $field);
@@ -2192,7 +2212,7 @@ class MigrationSaver
      */
     private function findPhoto($title)
     {
-        if (!empty($tiltle)) {
+        if (!empty($title)) {
             $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
             $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
 
@@ -2220,7 +2240,7 @@ class MigrationSaver
 
         $rs = $this->conn->fetchAll($sql);
 
-        if ($rs && count($ss) == 1 && array_key_exists('id', $rs[0])) {
+        if ($rs && count($rs) == 1 && array_key_exists('id', $rs[0])) {
             return $rs[0]['id'];
         }
 

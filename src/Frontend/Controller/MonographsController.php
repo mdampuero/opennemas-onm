@@ -126,7 +126,9 @@ class MonographsController extends Controller
         return $this->render(
             'special/frontpage_special.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'monograph-frontpage',
+                'x-cache-for' => '+1 day',
             )
         );
     }
@@ -140,11 +142,12 @@ class MonographsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID      = $request->query->get('special_id', '');
+        $urlSlug      = $request->query->get('slug', '');
+        $categoryName = $request->query->get('category_name', '');
 
         $special = $this->get('content_url_matcher')
-            ->matchContentUrl('special', $dirtyID, $urlSlug);
+            ->matchContentUrl('special', $dirtyID, $urlSlug, $categoryName);
 
         if (empty($special)) {
             throw new ResourceNotFoundException();
@@ -215,6 +218,8 @@ class MonographsController extends Controller
                 'content'   => $special,
                 'contentId' => $special->id,
                 'cache_id'  => $cacheID,
+                'x-tags'      => 'monograph,'.$special->id,
+                'x-cache-for' => '+1 day',
             ]
         );
     }

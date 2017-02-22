@@ -221,7 +221,7 @@ class FrontpagesController extends Controller
         $syncParams = $this->get('setting_repository')->get('sync_params');
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
+                if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
                     $wsUrl = $siteUrl;
                 }
             }
@@ -282,8 +282,9 @@ class FrontpagesController extends Controller
         return $this->render(
             'frontpage/frontpage.tpl',
             [
-                'cache_id' => $cacheID,
-                'x-tags'   => 'frontpage-page,frontpage-page-external,'.$categoryName,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'frontpage-page,frontpage-page-external,'.$categoryName,
+                'x-cache-for' => '+3 hour',
             ]
         );
     }

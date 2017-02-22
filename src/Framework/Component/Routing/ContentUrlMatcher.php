@@ -44,7 +44,7 @@ class ContentUrlMatcher
     public function matchContentUrl($type, $dirtyId, $slug = null, $category = null)
     {
         if (empty($dirtyId)) {
-            return false;
+            return null;
         }
 
         // Check for valid Id
@@ -52,46 +52,30 @@ class ContentUrlMatcher
 
         // Get real content id and date from url
         $id = $date = 0;
-        if (array_key_exists('id', $matches)
-            && array_key_exists('date', $matches)
-            && (substr($matches['id'], 0, -6) === ''
-                || substr((int) $matches['id'], 0, -6) > 0)
+        if (!array_key_exists('id', $matches)
+            || !array_key_exists('date', $matches)
+            || !((int) $matches['id'] > 0)
         ) {
-            $id   = (int) $matches['id'];
-            $date = $matches['date'];
+            return null;
         }
 
-        // Get content from id, contentType, category, slug and date
-        $now = date('Y-m-d H:i:s');
-        $criteria = [
-            'in_litter'         => [ [ 'value' => 0 ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'pk_content'        => [ [ 'value' => $id ] ],
-            'created'           => [ [ 'value' => $date ] ],
-            'content_type_name' => [ [ 'value' => $type ] ],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => $now, 'operator' => '<' ],
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-            ],
-            'endtime'           => [
-                'union'   => 'OR',
-                [ 'value' => $now, 'operator' => '>' ],
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-            ],
-        ];
+        $id   = (int) $matches['id'];
+        $date = \DateTime::createFromFormat('YmdHis', $matches['date'])->format('Y-m-d H:i:s');
 
-        // Check slug and category before add on criteria
-        if (!is_null($slug)) {
-            $criteria['slug'] = [ [ 'value' => $slug ] ];
+        $content = $this->em->find(\classify($type), $id);
+
+        // Check if the content matches the info provided and is ready for publish.
+        if (is_object($content)
+            && $content->pk_content        == $id
+            && $content->created           == $date
+            && $content->content_type_name == $type
+            && $content->isReadyforPublish()
+            && (is_null($slug) || $slug === $content->slug)
+            && (is_null($category) || $category === $content->category_name)
+        ) {
+            return $content;
         }
 
-        if (!is_null($category)) {
-            $criteria['category_name'] = [ [ 'value' => $category ] ];
-        }
-
-        // Fetch content if exist
-        return $this->em->findOneBy($criteria, null, null, null);
+        return null;
     }
 }

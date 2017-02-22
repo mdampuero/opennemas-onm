@@ -2,22 +2,22 @@
 
 {block name="footer-js" append}
 {capture name=url}{url name=admin_system_settings}{/capture}
-{javascripts}
-<script type="text/javascript">
-  jQuery(document).ready(function($){
-    var reCaptcha = '{$missing_recaptcha}';
+  {javascripts}
+    <script type="text/javascript">
+      jQuery(document).ready(function($){
+        var reCaptcha = '{$missing_recaptcha}';
 
-    //If newsletter is activated and recaptcha is missing don't send form
-    if (reCaptcha) {
-      $('body').append('<ul class="messenger messenger-fixed messenger-on-bottom"><li><div class="alert alert-error messenger-message"><div class="messenger-message-inner">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}.</div></div></li></ul>');
+        //If newsletter is activated and recaptcha is missing don't send form
+        if (reCaptcha) {
+          $('body').append('<ul class="messenger messenger-fixed messenger-on-bottom"><li><div class="alert alert-error messenger-message"><div class="messenger-message-inner">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}.</div></div></li></ul>');
 
-      $('#formulario').on('submit', function(){
-        return false;
+          $('#formulario').on('submit', function(){
+            return false;
+          });
+        }
       });
-    }
-  });
-</script>
-{/javascripts}
+    </script>
+  {/javascripts}
 {/block}
 
 {block name="content"}

@@ -92,8 +92,10 @@ abstract class AssetManager
         $this->sitePath = realpath(SITE_PATH) . DS;
 
         // Get current instance theme path
-        $this->themePath = $this->sitePath . 'themes' . DS .
-            $container->get('core.instance')->settings['TEMPLATE_USER'];
+        if (!empty($container->get('core.instance'))) {
+            $this->themePath = $this->sitePath . 'themes' . DS .
+                $container->get('core.instance')->settings['TEMPLATE_USER'];
+        }
 
         $this->am = new BaseAssetManager();
     }
@@ -119,8 +121,10 @@ abstract class AssetManager
      * @param array  $assets  The array of assets.
      * @param array  $filters The array of filters per file.
      * @param string $name    The name of the output file.
+     *
+     * @codeCoverageIgnore
      */
-    public function writeAssets($assets, $assetFilters, $name)
+    public function writeAssets($assets, $assetFilters, $name = 'default')
     {
         if (empty($assets)) {
             return [];
@@ -128,7 +132,7 @@ abstract class AssetManager
 
         if (!$this->debug()) {
             // Check all-in-one asset if prod environment
-            $target     = $this->getTargetPath($assets);
+            $target     = $this->getTargetPath($assets, $name, true);
             $targetPath = $this->config['root'] . $target;
 
             if (file_exists($targetPath)) {
@@ -136,7 +140,7 @@ abstract class AssetManager
             }
         }
 
-        $cache   = new FileSystemCache($this->config['build_path']);
+        $cache   = new FileSystemCache($this->config['cache_path']);
         $factory = $this->getAssetFactory();
         $parsed  = [];
         $writer  = new AssetWriter($this->config['root']);
@@ -165,7 +169,7 @@ abstract class AssetManager
             $parsed[] = $this->createAssetSrc($target);
         }
 
-        if ($this->debug()) {
+        if ($this->debug() || empty($name)) {
             return $parsed;
         }
 
@@ -178,7 +182,7 @@ abstract class AssetManager
             return substr($a, 1);
         }, $parsed);
 
-        $target = $this->getTargetPath($assets, $name);
+        $target = $this->getTargetPath($assets, $name, true);
 
         $assets = $factory->createAsset($parsed);
         $assets->setTargetPath($target);
@@ -200,7 +204,7 @@ abstract class AssetManager
         $af = new AssetFactory($this->config['root']);
         $af->setAssetManager($this->am);
         $af->setDefaultOutput(
-            $this->config['output_path'] . '/*.' . $this->extension
+            $this->config['build_path'] . '/*.' . $this->extension
         );
         $af->setDebug($this->debug());
 
@@ -210,14 +214,21 @@ abstract class AssetManager
     /**
      * Returns a target path from real asset paths.
      *
-     * @param mixed  $asset The real path to asset.
-     * @param string $name  The target filename.
+     * @param mixed   $asset The real path to asset.
+     * @param string  $name  The target filename.
+     * @param boolean $dist  Whether to use the dist path instead of output
+     *                       path.
      *
      * @return string The target path for given assets.
      */
-    protected function getTargetPath($asset, $name = 'default')
+    protected function getTargetPath($asset, $name = 'default', $dist = false)
     {
-        $src = '';
+        $src  = '';
+        $path = $this->config['build_path'];
+
+        if ($dist) {
+            $path = $this->config['output_path'];
+        }
 
         // Get original filename when no output provided
         if (is_string($asset)) {
@@ -240,7 +251,7 @@ abstract class AssetManager
             $src = substr($src, 0, strrpos($src, '.'));
         }
 
-        return $this->config['output_path'] . DS . $src . '.'
+        return $path . DS . $src . '.'
             . substr(md5($asset), 0, 8) . '.' . DEPLOYED_AT . '.xzy.'
             . $this->extension;
     }
@@ -257,7 +268,7 @@ abstract class AssetManager
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $port = '';
-        if ($request->headers->get('X-Forwarded-port')) {
+        if (!empty($request) && $request->headers->get('X-Forwarded-port')) {
             $port = $request->headers->get('X-Forwarded-port');
         }
 

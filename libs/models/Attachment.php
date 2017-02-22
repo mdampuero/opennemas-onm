@@ -145,7 +145,7 @@ class Attachment extends Content
     {
         $dirDate = date("/Y/m/d/");
 
-        if ($this->exists($data['path'])) {
+        if ($this->exists($data['path']) && !array_key_exists('no_path', $data)) {
             return false;
         }
 
@@ -262,7 +262,7 @@ class Attachment extends Content
     */
     public function exists($path)
     {
-       try {
+        try {
             $rs = getService('dbal_connection')->fetchColumn(
                 'SELECT count(*) AS total FROM attachments WHERE `path`=?',
                 [ $path ]
@@ -285,7 +285,7 @@ class Attachment extends Content
     public static function batchDelete($arrayIds)
     {
         try {
-            $contents = implode(', ', array_map(function($item) {
+            $contents = implode(', ', array_map(function ($item) {
                 return (int) $item;
             }, $arrayIds));
 

@@ -48,8 +48,9 @@ opennemas:
         asset_compilation_in_dev: %opennemas.assetic.asset_compilation_in_dev%
 
         # Assetic folders
-        build_path:  '%kernel.cache_dir%/assetic'
-        output_path: build/assets
+        cache_path:  '%kernel.cache_dir%/assetic'
+        build_path:  build/assets
+        output_path: build/assets/dist
 
         # Template parameter
         asset_url: asset_url
@@ -102,7 +103,7 @@ swiftmailer:
             logging:  '%kernel.debug%'
 
 monolog:
-    channels: ['main', 'applog']
+    channels: ['main', 'applog', 'errorlog']
     handlers:
         main:
             type:  stream
@@ -113,6 +114,11 @@ monolog:
             path:  %kernel.logs_dir%/application.log
             level: info
             channels: applog
+        errorlog:
+            type:  stream
+            path:  %kernel.logs_dir%/opennemas-error.log
+            level: error
+            channels: errorlog
 
 hwi_oauth:
     firewall_names: [ 'backend' ]

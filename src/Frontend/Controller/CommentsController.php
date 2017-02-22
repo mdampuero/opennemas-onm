@@ -121,7 +121,7 @@ class CommentsController extends Controller
 
             // Inform the client if there is more elements
             $more = true;
-            if ($total < ($elemsByPage + ($elemsByPage*$offset))) {
+            if ($total < ($elemsByPage*$offset)) {
                 $more = false;
             }
 

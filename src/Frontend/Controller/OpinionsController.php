@@ -238,6 +238,7 @@ class OpinionsController extends Controller
     public function extFrontpageAction()
     {
         $page = $this->request->query->getDigits('page', 1);
+        $categoryName = 'opinion';
 
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
@@ -251,7 +252,9 @@ class OpinionsController extends Controller
             $syncParams = s::get('sync_params');
             if ($syncParams) {
                 foreach ($syncParams as $siteUrl => $values) {
-                    if (in_array($categoryName, $values['categories'])) {
+                    if (is_array($values['categories'])
+                        && in_array($categoryName, $values['categories'])
+                    ) {
                         $wsUrl = $siteUrl;
                     }
                 }
@@ -344,6 +347,8 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'ext-opinion-frontpage',
+                'x-cache-for'     => '+1 day'
             )
         );
     }
@@ -500,9 +505,10 @@ class OpinionsController extends Controller
     public function extFrontpageAuthorAction(Request $request)
     {
         // Fetch HTTP params
-        $authorID   = $request->query->getDigits('author_id', null);
-        $authorSlug = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
-        $page = $this->request->query->getDigits('page', 1);
+        $authorID     = $request->query->getDigits('author_id', null);
+        $authorSlug   = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
+        $page         = $this->request->query->getDigits('page', 1);
+        $categoryName = 'opinion';
 
         if (empty($authorID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
@@ -519,7 +525,7 @@ class OpinionsController extends Controller
             $syncParams = s::get('sync_params');
             if ($syncParams) {
                 foreach ($syncParams as $siteUrl => $values) {
-                    if (in_array($categoryName, $values['categories'])) {
+                    if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
                         $wsUrl = $siteUrl;
                     }
                 }
@@ -628,6 +634,8 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
+                'x-cache-for'     => '+3 hours',
             )
         );
     }
@@ -837,6 +845,8 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'ext-opinion,'.$opinion->id,
+                'x-cache-for'     => '+1 day',
             )
         );
     }

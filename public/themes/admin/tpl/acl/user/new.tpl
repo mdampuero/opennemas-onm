@@ -1,11 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-      @Common/js/jquery/jquery.validate.min.js,
-      @Common/js/jquery/jquery.multiselect.js,
-      @Common/js/jquery/localization/messages_es.js,
-      @Common/js/onm/jquery.password-strength.js"}
+  {javascripts}
     <script>
       jQuery(document).ready(function($){
         // Password strength checker
@@ -105,7 +101,7 @@
                     {t}Display name{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="name" name="name" maxlength="50" required type="text" value="{$user->name|escape:"html"|default:""}" />
+                    <input class="form-control" id="name" name="name" maxlength="50" required="required" type="text" value="{$user->name|escape:"html"|default:""}" />
                   </div>
                 </div>
                 <div class="form-group">
@@ -113,7 +109,7 @@
                     {t}User name{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="username" maxlength="20" pattern="[a-z0-9\d-.]+" name="username" required type="text" value="{$user->username|default:""}" title="{t}Only lowercase letters, numbers, point and hyphen allowed{/t}" />
+                    <input class="form-control" id="username" maxlength="20" pattern="[a-z0-9\d-.]+" name="username" required="required" type="text" value="{$user->username|default:""}" title="{t}Only lowercase letters, numbers, point and hyphen allowed{/t}" />
                   </div>
                 </div>
                 <div class="form-group">
@@ -121,7 +117,7 @@
                     {t}Email{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="email" name="email" placeholder="test@example.com" requiredtype="email" value="{$user->email|default:""}">
+                    <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required"type="email" value="{$user->email|default:""}">
                   </div>
                 </div>
               </div>
@@ -185,7 +181,7 @@
                   <span class="input-group-addon">
                     <i class="fa fa-key"></i>
                   </span>
-                  <input class="form-control" id="password" minlength="6" name="password" data-min-strength="{$min_pass_level}" type="password" {if $user->id eq null}required{/if} maxlength="20"/>
+                  <input class="form-control" id="password" minlength="6" name="password" data-min-strength="{$min_pass_level}" type="password" {if $user->id eq null}required="required"{/if} maxlength="20"/>
                 </div>
               </div>
             </div>

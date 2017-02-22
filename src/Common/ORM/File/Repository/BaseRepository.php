@@ -47,16 +47,18 @@ class BaseRepository extends Repository
      *
      * @param string           $name     The repository name.
      * @param ServiceContainer $cache    The service container.
+     * @param string           $deployed The deploy number to use in cache id.
      * @param string           $paths    The path to folders to load from.
      * @param Metadata         $metadata The entity metadata.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($name, $container, $paths, Metadata $metadata, Cache $cache)
+    public function __construct($name, $container, $paths, $deployed, Metadata $metadata, Cache $cache)
     {
         $this->cache      = $cache;
         $this->container  = $container;
         $this->converter  = new BaseConverter($metadata);
+        $this->deployed   = constant($deployed);
         $this->metadata   = $metadata;
         $this->name       = $name;
         $this->paths      = $paths;
@@ -334,7 +336,8 @@ class BaseRepository extends Repository
      */
     protected function load()
     {
-        $cacheId        = \underscore($this->metadata->name) . '.' . DEPLOYED_AT;
+        $cacheId = \underscore($this->metadata->name) . '.' . $this->deployed;
+
         $this->entities = $this->cache->get($cacheId);
 
         if (!empty($this->entities)) {

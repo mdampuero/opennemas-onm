@@ -26,8 +26,8 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $opinion = $this->get('content_url_matcher')
-            ->matchContentUrl('opinion', $dirtyID);
+        $opinion = getService('content_url_matcher')
+            ->matchContentUrl('opinion', $id);
 
         if (empty($opinion)) {
             throw new RestException(404, 'Page not found');
