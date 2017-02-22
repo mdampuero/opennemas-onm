@@ -497,18 +497,29 @@ class RssController extends Controller
             return 1;
         });
 
+        $theme = $this->get('core.theme');
+
+        // Sort by theme parameter
+        if (!empty($theme->parameters)
+            && array_key_exists('frontpage_order', $theme->parameters)
+        ) {
+            $placeholders = $theme->parameters['frontpage_order'];
+
+            // Sort by placeholder
+            uasort($contents, function ($a, $b) use ($placeholders) {
+                return array_search($a->placeholder, $placeholders)
+                    < array_search($b->placeholder, $placeholders) ?
+                    -1 : (array_search($a->placeholder, $placeholders) ===
+                    array_search($b->placeholder, $placeholders) ? 0 : 1);
+            });
+
+            return;
+        }
 
         // Sort by placeholder
         uasort($contents, function ($a, $b) {
-            if ($a->placeholder < $b->placeholder) {
-                return -1;
-            }
-
-            if ($a->placeholder === $b->placeholder) {
-                return 0;
-            }
-
-            return 1;
+            return $a->placeholder < $b->placeholder ?
+                -1 : ($a->placeholder === $b->placeholder ? 0 : 1);
         });
     }
 }
