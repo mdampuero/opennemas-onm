@@ -6,6 +6,7 @@
 *.todo
 .development
 .deploy.php
+.deploy.themes.php
 .maintenance
 
 # app

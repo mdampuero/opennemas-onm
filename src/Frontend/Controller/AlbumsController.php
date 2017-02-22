@@ -149,8 +149,8 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album_frontpage.tpl',
             array(
-                'cache_id'       => $cacheID,
                 'advertisements' => $this->getAds(),
+                'cache_id'       => $cacheID,
                 'x-tags'         => 'album-frontpage,'.$this->page
             )
         );
@@ -167,7 +167,7 @@ class AlbumsController extends Controller
     {
         $this->page = $request->query->getDigits('page', 1);
         $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $urlSlug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         $album = $this->get('content_url_matcher')
             ->matchContentUrl('album', $dirtyID, $urlSlug, $this->categoryName);
@@ -244,9 +244,9 @@ class AlbumsController extends Controller
                 'album'          => $album,
                 'content'        => $album,
                 'page'           => $this->page,
-                'cache_id'       => $cacheID,
                 'contentId'      => $album->id,
                 'advertisements' => $this->getAds('inner'),
+                'cache_id'       => $cacheID,
                 'x-tags'         => 'album,'.$album->id,
                 'x-cache-for'    => '+1 day',
                 'x-cacheable'    => $cacheable

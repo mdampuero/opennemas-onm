@@ -169,7 +169,7 @@ class NewStandController extends Controller
         return $this->render(
             'newsstand/newsstand.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'       => $cacheID,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
                 'selected_date'  => '1-'.$month.'-'.$year,
                 'MONTH'          => $month,
@@ -177,7 +177,8 @@ class NewStandController extends Controller
                 'year'           => $year,
                 'month'          => $month,
                 'order'          => $order,
-                'kiosko'         => $kiosko
+                'kiosko'         => $kiosko,
+                'x-tags'         => 'newsstand-frontpage',
             )
         );
 
@@ -240,8 +241,9 @@ class NewStandController extends Controller
             [
                 'epaper'         => $epaper,
                 'content'        => $epaper,
-                'cache_id'       => $cacheID,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+                'cache_id'       => $cacheID,
+                'x-tags'         => 'newsstand,'.$epaper->id,
             ]
         );
     }

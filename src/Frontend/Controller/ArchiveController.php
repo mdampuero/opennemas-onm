@@ -127,9 +127,9 @@ class ArchiveController extends Controller
         return $this->render(
             'archive/archive.tpl',
             array(
-                'cache_id'        => $cacheID,
                 'newslibraryDate' => $date,
                 'actual_category' => 'archive',
+                'cache_id'        => $cacheID,
                 'x-tags'          => 'archive-page,'.$date.','.$page.','.$categoryName,
             )
         );
@@ -169,7 +169,9 @@ class ArchiveController extends Controller
             return new RedirectResponse($url, 301);
         }
 
-        return new Response($html);
+        return new Response($html, 200, [
+            'x-tags' => "archive-digital,{$categoryName},{$year}-{$month}-{$day}"
+        ]);
     }
 
     /**

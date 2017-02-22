@@ -94,7 +94,9 @@ class LetterController extends Controller
         return $this->render(
             'letter/letter_frontpage.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'letter-frontpage',
+                'x-cache-for' => '+1 day',
             )
         );
     }
@@ -143,10 +145,12 @@ class LetterController extends Controller
         return $this->render(
             'letter/letter.tpl',
             [
-                'letter'    => $letter,
-                'content'   => $letter,
-                'contentId' => $letter->id, // Used on module_comments.tpl
-                'cache_id'  => $cacheID,
+                'letter'      => $letter,
+                'content'     => $letter,
+                'contentId'   => $letter->id, // Used on module_comments.tpl
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'letter,'.$letter->id,
+                'x-cache-for' => '+1 day',
             ]
         );
     }

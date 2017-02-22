@@ -137,9 +137,9 @@ class TagsController extends Controller
         return $this->render(
             'frontpage/tags.tpl',
             array(
-                'cache_id'       => $cacheId,
                 'tagName'        => $tagName,
                 'advertisements' => $this->getInnerAds(),
+                'cache_id'       => $cacheId,
                 'x-tags'         => 'tag-page,'.$tagName,
             )
         );

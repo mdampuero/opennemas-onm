@@ -79,7 +79,8 @@ class BooksController extends Controller
             array(
                 'categoryBooks' => $bookCategories,
                 'cache_id'      => $cacheID,
-                'page'          => $this->page
+                'page'          => $this->page,
+                'x-tags'        => 'books-frontpage',
             )
         );
     }
@@ -133,11 +134,13 @@ class BooksController extends Controller
         return $this->render(
             'books/book_viewer.tpl',
             [
-                'book'      => $book,
-                'content'   => $book,
-                'contentId' => $book->id,
-                'category'  => $book->category,
-                'cache_id'  => $cacheID,
+                'book'        => $book,
+                'content'     => $book,
+                'contentId'   => $book->id,
+                'category'    => $book->category,
+                'cache_id'    => $cacheID,
+                'x-tags'      => 'book,'.$book->id,
+                'x-cache-for' => '+1 day',
             ]
         );
     }

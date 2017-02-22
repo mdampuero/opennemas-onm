@@ -259,7 +259,7 @@ class VideosController extends Controller
         ) {
             // Fetch video settings
             $videosSettings = $this->get('setting_repository')->get('video_settings');
-            $itemsPerPage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
+            $itemsPerPage   = isset($videosSettings['total_front_more']) ? $videosSettings['total_front_more']:12;
 
             $order   = [ 'created' => 'DESC' ];
             $filters = [
@@ -291,12 +291,10 @@ class VideosController extends Controller
                 'route'       => $route
             ]);
 
-            $this->view->assign(
-                [
-                    'videos' => $videos,
-                    'pager'  => $pager,
-                ]
-            );
+            $this->view->assign([
+                'videos' => $videos,
+                'pager'  => $pager,
+            ]);
         }
 
         return $this->render(
@@ -376,11 +374,11 @@ class VideosController extends Controller
                 'category'      => $video->category,
                 'category_name' => $video->category_name,
                 'contentId'     => $video->id,
-                'cache_id'      => $cacheID,
                 'action'        => 'inner',
+                'cache_id'      => $cacheID,
                 'x-tags'        => 'video,'.$video->id,
                 'x-cache-for'   => '+1 day',
-                'x-cacheable'   => $cacheable
+                'x-cacheable'   => $cacheable,
             ]
         );
     }

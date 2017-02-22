@@ -197,9 +197,9 @@ EOF
     protected function generateDeployFile()
     {
         $time = time();
-        $contents = "<?php define('DEPLOYED_AT', '$time');";
+        $contents = "<?php define('THEMES_DEPLOYED_AT', '$time');";
 
-        file_put_contents(APPLICATION_PATH.'/.deploy.php', $contents);
+        file_put_contents(APPLICATION_PATH.'/.deploy.themes.php', $contents);
     }
 
     /**

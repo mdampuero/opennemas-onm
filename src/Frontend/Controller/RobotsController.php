@@ -68,8 +68,8 @@ Sitemap: ".SITE_URL."sitemapimage.xml.gz
             array(
                 'Content-Type' => 'text/plain',
                 'x-cacheable'  => true,
-                'x-cache-for'  => '+100 day',
-                'x-tags'       =>  'instance-'.$instanceName.',robots',
+                'x-cache-for'  => '100d',
+                'x-tags'       => 'instance-'.$instanceName.',robots',
                 'x-instance'   => $instanceName,
             )
         );
