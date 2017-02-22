@@ -46,9 +46,11 @@ class UserController extends Controller
         $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
 
         return $this->render( 'user/show.tpl', [
-            'user'             => $user,
+            'countries'        => $this->get('core.geo')->getCountries(),
             'current_time'     => $currentTime,
             'paywall_settings' => $paywallSettings,
+            'user'             => $user,
+            'user_groups'      => $this->getUserGroups(),
             'user_orders'      => $userOrders
         ]);
     }
