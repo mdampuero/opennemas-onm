@@ -166,7 +166,7 @@
                 <td class="text-right">[% line.unit_cost %] €</td>
               </tr>
               <tr>
-                <td colspan="2" rowspan="[% purchase.method === 'CreditCard' ? 4 : 3 %]"></td>
+                <td colspan="2" rowspan="4"></td>
                 <td class="text-right">
                   <strong>{t}Subtotal{/t}</strong>
                 </td>
@@ -174,8 +174,11 @@
                   [% subtotal | number : 2 %] €
                 </td>
               </tr>
-              <tr ng-if="purchase.method === 'CreditCard'">
-                <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
+              <tr>
+                <td class="text-right no-border">
+                  <strong ng-if="purchase.method === 'CreditCard'">{t}Pay with credit card{/t}</strong>
+                  <strong ng-if="purchase.method !== 'CreditCard'">{t}Pay via PayPal{/t}</strong>
+                </td>
                 <td class="text-right">[% purchase.fee | number : 2 %] €</td>
               </tr>
               <tr>

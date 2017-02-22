@@ -247,9 +247,7 @@ class PurchaseController extends Controller
         $purchase  = $em->getRepository('Purchase', 'manager')->find($id);
 
         // Remove payment line from purchase
-        if ($purchase->method === 'CreditCard') {
-            array_pop($purchase->details);
-        }
+        array_pop($purchase->details);
 
         $converter = $em->getConverter('Instance');
         $instance  = $em->getRepository('Instance')->find($purchase->instance_id);

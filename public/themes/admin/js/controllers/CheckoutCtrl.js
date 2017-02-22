@@ -292,7 +292,7 @@
         $scope.$watch('payment', function(nv) {
           $scope.fee = 0;
 
-          if (nv && nv.type === 'CreditCard') {
+          if (nv) {
             $scope.fee = +($scope.subtotal * 0.029 + 0.30).toFixed(2);
           }
         }, true);

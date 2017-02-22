@@ -33,12 +33,12 @@
         <td class="text-right">[% getPrice(item, item.priceType).value %] €</td>
       </tr>
       <tr>
-        <td rowspan="[% payment.type === 'CreditCard' && payment.nonce ? 4 : 3 %]">
+        <td rowspan="[% payment.nonce ? 4 : 3 %]">
         </td>
         <td class="text-right"><strong>Subtotal</strong></td>
         <td class="text-right">[% subtotal %] €</td>
       </tr>
-      <tr ng-if="payment.type === 'CreditCard' && payment.nonce">
+      <tr ng-if="payment.nonce">
         <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
         <td class="text-right">[% fee | number : 2 %] €</td>
       </tr>
