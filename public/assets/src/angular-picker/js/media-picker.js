@@ -768,8 +768,8 @@ angular.module('onm.picker')
               }
 
               var types = [
-                'bmp', 'doc', 'docx', 'flv', 'gif', 'ico', 'jpeg', 'jpg',
-                'odt', 'ogm', 'otf', 'pdf', 'png', 'svg', 'svgz', 'webp',
+                'bmp', 'flv', 'gif', 'ico', 'jpeg', 'jpg', 'ogm', 'pdf', 'png',
+                'svg', 'svgz', 'swf', 'webp',
               ];
 
               return types.indexOf(type) !== -1;
