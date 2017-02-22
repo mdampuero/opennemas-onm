@@ -274,6 +274,7 @@ class PickerController extends Controller
             'drop'        => _('Drop files or click here'),
             'explanation' => _('Drop files anywhere here to upload or click on the "Add Files..." button above.'),
             'header'      => _('Upload new media'),
+            'invalid'     => _('This file type is not supported'),
             'menuItem'    => _('Upload'),
             'upload'      => _('to upload')
         ];
