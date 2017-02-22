@@ -303,10 +303,10 @@
               <div class="grid-collapse-title pointer" ng-click="expanded.user_groups = !expanded.user_groups">
                 <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
                 <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups">
-                  <span ng-show="params.user_groups.length === 0">{t}All{/t}</span>
-                  <span ng-show="params.user_groups.length != 0">
-                    <strong>[% params.user_groups.length %]</strong>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups && ui.user_groups.length > 0">
+                  <span ng-show="ui.user_groups.length === 0">{t}All{/t}</span>
+                  <span ng-show="ui.user_groups.length != 0">
+                    <strong>[% ui.user_groups.length %]</strong>
                     {t}selected{/t}
                   </span>
                 </span>
@@ -339,6 +339,13 @@
                 <i class="fa fa-bookmark m-r-5"></i>
                 {t}Categories{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category && ui.categories.length > 0">
+                  <span ng-show="ui.categories.length === 0">{t}All{/t}</span>
+                  <span ng-show="ui.categories.length != 0">
+                    <strong>[% ui.categories.length %]</strong>
+                    {t}selected{/t}
+                  </span>
+                </span>
               </div>
               <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category }">
                 <div class="checkbox p-b-5">
