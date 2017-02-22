@@ -101,10 +101,14 @@ class RssController extends Controller
                     $rssTitle = _('Homepage News');
                     $cm       = new \ContentManager;
                     $contents = $cm->getContentsForHomepageOfCategory(0);
+
                     $contents = $cm->getInTime($contents);
-                    $contents = array_filter($contents, function($item){
+                    $contents = array_filter($contents, function ($item){
                         return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
                     });
+
+                    $this->sortByPlaceholder($contents);
+
                     break;
                 case 'videos':
                     // Latest videos
@@ -471,5 +475,40 @@ class RssController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
+    }
+
+    /**
+     * Sorts a list of contents by position and placeholder.
+     *
+     * @param array $contents The list of contents to sort.
+     */
+    protected function sortByPlaceholder(&$contents)
+    {
+        // Sort by position
+        uasort($contents, function ($a, $b) {
+            if ($a->position > $b->position) {
+                return -1;
+            }
+
+            if ($a->position === $b->position) {
+                return 0;
+            }
+
+            return 1;
+        });
+
+
+        // Sort by placeholder
+        uasort($contents, function ($a, $b) {
+            if ($a->placeholder < $b->placeholder) {
+                return -1;
+            }
+
+            if ($a->placeholder === $b->placeholder) {
+                return 0;
+            }
+
+            return 1;
+        });
     }
 }
