@@ -17,7 +17,7 @@ function smarty_function_script_tag($params, &$smarty)
 
     $output = '';
     $src    = $params['src'];
-    $mtime  = DEPLOYED_AT;
+    $mtime  = THEMES_DEPLOYED_AT;
     $server = '';
     $type   = "type=\"text/javascript\"";
     $escape = false;

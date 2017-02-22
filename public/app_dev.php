@@ -20,8 +20,6 @@ umask(0002);
 //     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 // }
 
-umask(0002);
-
 /**
  * @var Composer\Autoload\ClassLoader $loader
  */
