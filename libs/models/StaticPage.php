@@ -131,8 +131,9 @@ class StaticPage extends Content
     {
         if (empty($slug) && !empty($title)) {
             $slug = \Onm\StringUtils::generateSlug($title, $useStopList = false);
+        } else {
+            $slug = \Onm\StringUtils::generateSlug($slug, $useStopList = false);
         }
-        $slug = \Onm\StringUtils::generateSlug($slug, $useStopList = false);
 
         // Get titles to check unique value
         $slugs = $this->getSlugs([
