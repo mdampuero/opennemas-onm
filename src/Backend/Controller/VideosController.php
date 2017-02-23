@@ -43,16 +43,12 @@ class VideosController extends Controller
             $this->category ='widget';
         }
 
-        $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
-
         $this->view->assign(
             array(
                 'category'     => $this->category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
                 'datos_cat'    => $this->categoryData,
-                'timezone'     => $timezone->getName()
             )
         );
     }
