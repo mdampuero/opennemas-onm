@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-21 22:22+0000\n"
-"PO-Revision-Date: 2017-02-21 23:31+0100\n"
+"POT-Creation-Date: 2017-02-22 22:57+0000\n"
+"PO-Revision-Date: 2017-02-23 00:01+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2534,6 +2534,9 @@ msgstr "Descargar"
 msgid "Execute"
 msgstr "Executar"
 
+msgid "Marks this group as public"
+msgstr "Marca este grupo como público"
+
 msgid "Static Page"
 msgstr "Páxina estática"
 
@@ -3103,6 +3106,9 @@ msgstr "Prezo unitario"
 
 msgid "Pay with credit card"
 msgstr "Pagar con tarxeta de crédito"
+
+msgid "Pay via PayPal"
+msgstr "Pagar con PayPal"
 
 msgid "VAT"
 msgstr "IVE"
