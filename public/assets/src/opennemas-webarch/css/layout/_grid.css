@@ -9,6 +9,7 @@
 
 .grid .grid-collapse-title {
   border-top: 1px solid #e5e5e5;
+  overflow: hidden;
 }
 
 .grid .grid-collapse-title,

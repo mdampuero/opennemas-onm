@@ -190,6 +190,7 @@ class AdsController extends Controller
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'user_groups'       => json_decode($request->request->get('user_groups')),
+                'orientation'       => $request->request->get('orientation', 'horizontal'),
                 'devices'           => [
                     'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
                     'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
@@ -355,6 +356,7 @@ class AdsController extends Controller
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'user_groups'       => json_decode($request->request->get('user_groups', '')),
+                'orientation'       => $request->request->get('orientation', 'horizontal'),
                 'devices'           => [
                     'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
                     'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),

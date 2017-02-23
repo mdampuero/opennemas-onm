@@ -177,7 +177,7 @@
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dimensions }">
                 <input name="params_width" ng-value="params_width" type="hidden">
                 <input name="params_height" ng-value="params_height" type="hidden">
-                <div class="row ng-cloak" ng-repeat="size in sizes track by $index">
+                <div class="row" ng-repeat="size in sizes track by $index">
                   <div class="col-xs-5">
                     <div class="form-group">
                       <label class="form-label">
@@ -212,12 +212,47 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group ng-cloak" ng-show="with_script == 3">
-                  <div class="input-group">
-                    <div class="input-group-btn">
-                      <button class="btn btn-default" ng-click="addSize();" type="button">{t}Add another size{/t}</button>
+              </div>
+              <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.mark }" ng-click="expanded.mark = !expanded.mark">
+                <i class="fa fa-tags m-r-5"></i> {t}Mark{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.mark }"></i>
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!expanded.mark">
+                  <span ng-if="params.orientation === 'horizontal'">{t}Horizontal{/t}</span>
+                  <span ng-if="params.orientation === 'vertical'">{t}Vertical{/t}</span>
+                </span>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.mark }">
+                <div class="row">
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-horizontal" name="orientation" ng-model="params.orientation" type="radio" value="horizontal">
+                      <label for="mark-horizontal">
+                        {t}Horizontal{/t}
+                      </label>
                     </div>
+                    <label class="pointer" for="mark-horizontal" style="padding-left: 25px; position: relative;">
+                      <small style="display: block; height: 20px; text-align: center; width: 80px;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
                   </div>
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-vertical" name="orientation" ng-model="params.orientation" type="radio" value="vertical">
+                      <label for="mark-vertical">
+                        {t}Vertical{/t}
+                      </label>
+                    </div>
+                    <label class="pointer" for="mark-vertical" style="padding-left: 25px; padding-top: 20px; position: relative;">
+                      <small style="height: 20px; margin-left: -50px; position: absolute; text-align: center; transform: rotate(-90deg); top: 50%; width: 80px; -webkit-backface-visibility: hidden;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
+                  </div>
+                </div>
+                <div class="m-t-10">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Defines the orientation for the word that marks advertisement position.{/t}
+                  </small>
                 </div>
               </div>
               <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dates }" ng-click="expanded.dates = !expanded.dates">
