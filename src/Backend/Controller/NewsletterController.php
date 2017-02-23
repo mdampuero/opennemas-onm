@@ -118,7 +118,6 @@ class NewsletterController extends Controller
             }
         }
 
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
         $time = $time->format('d/m/Y');
 
@@ -193,9 +192,7 @@ class NewsletterController extends Controller
             }
         }
 
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
-        $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
         $time = $time->format('d/m/Y');
 
         $title = $request->request->filter(
