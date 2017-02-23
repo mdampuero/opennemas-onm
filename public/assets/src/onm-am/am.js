@@ -212,48 +212,37 @@
    * @param {Array} ads The list of advertisements to display.
    */
   OAM.prototype.displayNormal = function(ads) {
-    var self = this;
+    var self  = this;
+    var slots = document.querySelectorAll('.oat');
 
     // Display normal advertisements
-    self.config.slots.forEach(function(place) {
-      var selector  = '.oat[data-type="' + place + '"]';
-      var container = document.querySelectorAll(selector);
-      var id        = null;
-
-      if (container[0] === undefined) {
-        return;
-      }
-
-      if (container[0].getAttribute('data-id')) {
-        id = parseInt(container[0].getAttribute('data-id'));
-      }
+    slots.forEach(function(slot) {
+      var id = parseInt(slot.getAttribute('data-type'));
 
       var available = ads.filter(function(e) {
         return e.type === 'normal' &&
-          parseInt(e.position) === parseInt(place) &&
+          parseInt(e.position) === parseInt(id) &&
           self.isVisible(e);
       });
 
       // Remove advertisement marker if empty
       if (available.length === 0) {
-        container[0].remove();
+        slot.remove();
         return;
       }
 
       var ad = self.getAdvertisement(available);
 
-      container[0].appendChild(self.createNormal(ad));
-      container[0].style.width      = '100%';
-      container[0].style.visibility = 'visible';
+      slot.appendChild(self.createNormal(ad));
+      slot.style.width      = '100%';
+      slot.style.visibility = 'visible';
 
       if (!ad.orientation) {
-        container[0].className += ' oat-vertical';
+        slot.className += ' oat-vertical';
       }
 
-      if (self.device === 'desktop' &&
-          container[0].getAttribute('data-width')) {
-        container[0].style.width =
-          parseInt(container[0].getAttribute('data-width')) + 'px';
+      if (self.device === 'desktop' && slot.getAttribute('data-width')) {
+        slot.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
     });
   };
