@@ -40,7 +40,7 @@ class Locale
      *
      * @var string
      */
-    protected $timezone = 'UTC';
+    protected $timezone;
 
     /**
      * Initializes the Locale.
@@ -50,8 +50,9 @@ class Locale
      */
     public function __construct($locales, $path)
     {
-        $this->locales = $locales;
-        $this->path    = $path;
+        $this->locales  = $locales;
+        $this->path     = $path;
+        $this->timezone = new \DateTimeZone('UTC');
     }
 
     /**
@@ -154,12 +155,19 @@ class Locale
      */
     public function setTimeZone($timezone)
     {
+        $timezone  = is_numeric($timezone) ? (int) $timezone : $timezone;
         $timezones = \DateTimeZone::listIdentifiers();
 
-        if (array_key_exists($timezone, $timezones)) {
-            $this->timezone = $timezones[$timezone];
+        // Convert timezone id to timezone name
+        if (is_numeric($timezone) && array_key_exists($timezone, $timezones)) {
+           $timezone = $timezones[(int) $timezone];
         }
 
-        date_default_timezone_set($this->timezone);
+        // Change timezone if name valid
+        if (in_array($timezone, $timezones)) {
+            $this->timezone = new \DateTimeZone($timezone);
+        }
+
+        date_default_timezone_set($this->timezone->getName());
     }
 }
