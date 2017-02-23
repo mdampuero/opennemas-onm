@@ -113,7 +113,7 @@
                 <div class="col-lg-4 col-lg-offset-4">
                   <a class="btn btn-block btn-loading btn-success" ng-href="[% routing.generate('backend_ws_purchase_get_pdf', { id: purchase.id }) %]" target="_blank">
                     <h4 class="text-uppercase text-white">
-                      <i class="fa fa-absolute fa-download m-l-15 m-t-5"></i>
+                      <i class="fa fa-download m-r-5"></i>
                       {t}Download{/t}
                     </h4>
                   </a>
