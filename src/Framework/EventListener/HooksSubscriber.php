@@ -528,6 +528,9 @@ class HooksSubscriber implements EventSubscriberInterface
 
             $this->container->get('varnish_ban_message_exchanger')
                 ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName));
+            $this->container->get('varnish_ban_message_exchanger')
+                ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*rss.*', $instanceName));
+
         }
     }
 
