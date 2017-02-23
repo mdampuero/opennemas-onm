@@ -182,9 +182,7 @@ class NewsletterManager extends BaseManager
             'Octubre', 'Noviembre', 'Diciembre'
         );
 
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
-        $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
 
         $currentDate = $days[$time->format('w')].' '.
                        $time->format('j').' de '.
