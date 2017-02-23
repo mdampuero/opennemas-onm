@@ -92,6 +92,23 @@
   };
 
   /**
+   * @function configureSlot
+   * @memberOf OAM
+   *
+   * @description
+   *   Configures the slot for advertisements.
+   */
+  OAM.prototype.configureSlot = function() {
+    // Configure mark for advertisements
+    var mark = document.createElement('style');
+
+    mark.innerHTML = '.oat { visibility: hidden; } .oat:before { content: \'' +
+      this.config.mark + '\'; }';
+
+    document.head.appendChild(mark);
+  };
+
+  /**
    * @function createInterstitial
    * @memberOf OAM
    *
@@ -219,14 +236,19 @@
 
       // Remove advertisement marker if empty
       if (available.length === 0) {
-        container[0].parentNode.remove();
+        container[0].remove();
         return;
       }
 
       var ad = self.getAdvertisement(available);
 
       container[0].appendChild(self.createNormal(ad));
-      container[0].style.width  = '100%';
+      container[0].style.width      = '100%';
+      container[0].style.visibility = 'visible';
+
+      if (!ad.orientation) {
+        container[0].className += ' oat-vertical';
+      }
 
       if (self.device === 'desktop' &&
           container[0].getAttribute('data-width')) {
@@ -396,6 +418,7 @@
     this.user   = this.getUser();
     this.device = this.getDevice();
 
+    this.configureSlot();
     this.getAdvertisements();
   };
 
