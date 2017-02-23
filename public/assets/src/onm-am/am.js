@@ -103,7 +103,7 @@
     var mark = document.createElement('style');
 
     mark.innerHTML = '.oat { visibility: hidden; } .oat:before { content: \'' +
-      this.config.mark + '\'; }';
+      this.config.strings.mark + '\'; }';
 
     document.head.appendChild(mark);
   };
@@ -130,11 +130,11 @@
       '<div class="header">' +
         '<div class="logo-and-phrase">' +
           '<div class="logo"></div>' +
-          'Entrando en la página solicitada' +
+          this.config.strings.entering +
         '</div>' +
         '<div class="closeButton">' +
-          '<a href="#" title="Saltar publicidad" style="padding-right: 40px; width: auto;">' +
-            '<span>Saltar publicidad</span>' +
+          '<a href="#" title="' + this.config.strings.skip + '" style="padding-right: 40px; width: auto;">' +
+            '<span>' + this.config.strings.skip + '</span>' +
           '</a>' +
         '</div>'+
       '</div>'+
