@@ -4,6 +4,7 @@
   _onmaq.category       = '{{$category}}';
   _onmaq.extension      = '{{$app.extension}}';
   _onmaq.cookieLifetime = {if empty($lifetime)}86400{else}{{$lifetime}}{/if};
+  _onmaq.mark           = '{t}Advertisement{/t}';
   _onmaq.slots          = [ {{$positions}} ];
   _onmaq.url            = '{{$url}}';
 </script>
