@@ -488,14 +488,13 @@ class RssController extends Controller
 
         // Sort by theme parameter and position
         if (empty($theme->parameters)
-            || array_key_exists('frontpage_order', $theme->parameters)
+            || !array_key_exists('frontpage_order', $theme->parameters)
         ) {
             // Sort by placeholder name and position
             uasort($contents, function ($a, $b) {
                 return $a->placeholder < $b->placeholder ? -1 :
                     ($a->placeholder > $b->placeholder ? 1 :
-                    ($a->position < $b->position ? -1 : 1)
-                );
+                    ($a->position < $b->position ? -1 : 1));
             });
 
             return;
@@ -512,6 +511,5 @@ class RssController extends Controller
                 ($a->position < $b->position ? -1 : 1)
             );
         });
-
     }
 }
