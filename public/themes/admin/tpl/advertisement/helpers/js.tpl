@@ -4,9 +4,13 @@
   _onmaq.category       = '{{$category}}';
   _onmaq.extension      = '{{$app.extension}}';
   _onmaq.cookieLifetime = {if empty($lifetime)}86400{else}{{$lifetime}}{/if};
-  _onmaq.mark           = '{t}Advertisement{/t}';
   _onmaq.slots          = [ {{$positions}} ];
   _onmaq.url            = '{{$url}}';
+  _onmaq.strings        = {
+    'entering': '{t}Enterinig on the requested page{/t}',
+    'mark':     '{t}Advertisement{/t}',
+    'skip':     '{t}Skip advertisement{/t}'
+  };
 </script>
 
 <script>
