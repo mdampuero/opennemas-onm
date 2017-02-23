@@ -101,10 +101,14 @@ class RssController extends Controller
                     $rssTitle = _('Homepage News');
                     $cm       = new \ContentManager;
                     $contents = $cm->getContentsForHomepageOfCategory(0);
+
                     $contents = $cm->getInTime($contents);
-                    $contents = array_filter($contents, function($item){
+                    $contents = array_filter($contents, function ($item){
                         return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
                     });
+
+                    $this->sortByPlaceholder($contents);
+
                     break;
                 case 'videos':
                     // Latest videos
@@ -471,5 +475,41 @@ class RssController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
+    }
+
+    /**
+     * Sorts a list of contents by position and placeholder.
+     *
+     * @param array $contents The list of contents to sort.
+     */
+    protected function sortByPlaceholder(&$contents)
+    {
+        $theme = $this->get('core.theme');
+
+        // Sort by theme parameter and position
+        if (empty($theme->parameters)
+            || !array_key_exists('frontpage_order', $theme->parameters)
+        ) {
+            // Sort by placeholder name and position
+            uasort($contents, function ($a, $b) {
+                return $a->placeholder < $b->placeholder ? -1 :
+                    ($a->placeholder > $b->placeholder ? 1 :
+                    ($a->position < $b->position ? -1 : 1));
+            });
+
+            return;
+        }
+
+        $placeholders = $theme->parameters['frontpage_order'];
+
+        uasort($contents, function ($a, $b) use ($placeholders) {
+            $positionA = array_search($a->placeholder, $placeholders);
+            $positionB = array_search($b->placeholder, $placeholders);
+
+            return $positionA < $positionB ? -1 :
+                ($positionA > $positionB ? 1 :
+                ($a->position < $b->position ? -1 : 1)
+            );
+        });
     }
 }
