@@ -484,42 +484,34 @@ class RssController extends Controller
      */
     protected function sortByPlaceholder(&$contents)
     {
-        // Sort by position
-        uasort($contents, function ($a, $b) {
-            if ($a->position > $b->position) {
-                return -1;
-            }
-
-            if ($a->position === $b->position) {
-                return 0;
-            }
-
-            return 1;
-        });
-
         $theme = $this->get('core.theme');
 
-        // Sort by theme parameter
-        if (!empty($theme->parameters)
-            && array_key_exists('frontpage_order', $theme->parameters)
+        // Sort by theme parameter and position
+        if (empty($theme->parameters)
+            || array_key_exists('frontpage_order', $theme->parameters)
         ) {
-            $placeholders = $theme->parameters['frontpage_order'];
-
-            // Sort by placeholder
-            uasort($contents, function ($a, $b) use ($placeholders) {
-                return array_search($a->placeholder, $placeholders)
-                    < array_search($b->placeholder, $placeholders) ?
-                    -1 : (array_search($a->placeholder, $placeholders) ===
-                    array_search($b->placeholder, $placeholders) ? 0 : 1);
+            // Sort by placeholder name and position
+            uasort($contents, function ($a, $b) {
+                return $a->placeholder < $b->placeholder ? -1 :
+                    ($a->placeholder > $b->placeholder ? 1 :
+                    ($a->position < $b->position ? -1 : 1)
+                );
             });
 
             return;
         }
 
-        // Sort by placeholder
-        uasort($contents, function ($a, $b) {
-            return $a->placeholder < $b->placeholder ?
-                -1 : ($a->placeholder === $b->placeholder ? 0 : 1);
+        $placeholders = $theme->parameters['frontpage_order'];
+
+        uasort($contents, function ($a, $b) use ($placeholders) {
+            $positionA = array_search($a->placeholder, $placeholders);
+            $positionB = array_search($b->placeholder, $placeholders);
+
+            return $positionA < $positionB ? -1 :
+                ($positionA > $positionB ? 1 :
+                ($a->position < $b->position ? -1 : 1)
+            );
         });
+
     }
 }
