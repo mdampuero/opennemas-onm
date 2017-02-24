@@ -204,6 +204,10 @@
             !angular.isObject($scope.params.devices)) {
           $scope.params.devices = { phone: 1, tablet: 1, desktop: 1 };
         }
+
+        if (!$scope.params.orientation) {
+          $scope.params.orientation = 'horizontal';
+        }
       };
 
       /**
