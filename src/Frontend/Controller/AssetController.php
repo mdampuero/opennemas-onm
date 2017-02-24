@@ -289,20 +289,14 @@ class AssetController extends Controller
             ]);
         }
 
-        return new Response(
-            $this->renderView(
-                'base/custom_css.tpl',
-                array(
-                    'cache_id' => $cacheID
-                )
-            ),
-            200,
-            array(
-                // 'Expire'       => new \DateTime("+5 min"),
-                'Content-Type' => 'text/css',
-                'x-instance'   => $this->get('core.instance')->internal_name,
-                'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',
-            )
-        );
+        $coreCss   = $this->get('core.template.admin')
+            ->fetch('css/global.tpl');
+        $customCss = $this->renderView('base/custom_css.tpl');
+
+        return new Response($coreCss . ' ' . $customCss, 200, [
+            'Content-Type' => 'text/css',
+            'x-instance'   => $this->get('core.instance')->internal_name,
+            'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',
+        ]);
     }
 }
