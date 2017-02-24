@@ -193,7 +193,7 @@ class NewsAgencyController extends Controller
             [
                 'imported' => $imported,
                 'related' => $related,
-                'timezone' => $timezone
+                'timezone' => $timezone->getName(),
             ],
             $this->getTemplateParams()
         );
@@ -203,7 +203,7 @@ class NewsAgencyController extends Controller
             'page'    => $page,
             'results' => $elements,
             'total'   => $total,
-            'extra'   => $extra
+            'extra'   => $extra,
         ]);
     }
 
