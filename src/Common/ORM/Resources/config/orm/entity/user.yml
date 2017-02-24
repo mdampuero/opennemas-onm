@@ -14,6 +14,7 @@ orm:
                 bio_description:    string
                 categories:         array
                 email:              string
+                extensions:         array
                 fk_user_group:      array
                 id:                 integer
                 name:               string
