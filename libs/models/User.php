@@ -461,8 +461,9 @@ class User
 
         // Fetch authors info from users table
         $authorInfos = getService('orm.manager')->getConnection('instance')->fetchAll(
-            'SELECT * FROM users WHERE '.$filter.' fk_user_group LIKE "%3%"'
-            .' ORDER BY name ASC'
+            'SELECT * FROM users WHERE ' . $filter
+            . ' fk_user_group REGEXP "^3($|,)|,\s*3\s*,|(^|,)\s*3$"'
+            . ' ORDER BY name ASC'
         );
 
         // Fetch user meta from previously fetched authors.
