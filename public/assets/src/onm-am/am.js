@@ -92,23 +92,6 @@
   };
 
   /**
-   * @function configureSlot
-   * @memberOf OAM
-   *
-   * @description
-   *   Configures the slot for advertisements.
-   */
-  OAM.prototype.configureSlot = function() {
-    // Configure mark for advertisements
-    var mark = document.createElement('style');
-
-    mark.innerHTML = '.oat { visibility: hidden; } .oat:before { content: \'' +
-      this.config.strings.mark + '\'; }';
-
-    document.head.appendChild(mark);
-  };
-
-  /**
    * @function createInterstitial
    * @memberOf OAM
    *
@@ -234,8 +217,8 @@
       var ad = self.getAdvertisement(available);
 
       slot.appendChild(self.createNormal(ad));
-      slot.style.width      = '100%';
-      slot.style.visibility = 'visible';
+      slot.style.width   = '100%';
+      slot.style.display = 'block';
 
       if (!ad.orientation) {
         slot.className += ' oat-vertical';
@@ -407,7 +390,6 @@
     this.user   = this.getUser();
     this.device = this.getDevice();
 
-    this.configureSlot();
     this.getAdvertisements();
   };
 

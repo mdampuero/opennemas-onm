@@ -1,15 +1,20 @@
 .oat {
-  color: #838383;
+  clear: both;
   display: none;
-  font-size: 10px;
-  text-align: center;
-  text-transform: uppercase;
 }
 
 .oat:before {
+  color: #838383;
   content: '{t}Advertisement{/t}';
   display: block;
-  margin-bottom: 2px;
+  font-size: 10px;
+  left: 50%;
+  margin-left: -40px;
+  margin-top: -15px;
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  width: 80px;
 }
 
 .oat-vertical:before {
