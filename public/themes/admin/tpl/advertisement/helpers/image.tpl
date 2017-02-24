@@ -16,7 +16,7 @@
   </head>
   <body>
     <a target="_blank" href="{{$url}}" rel="nofollow">
-      <img alt="{{$category}}" src="{{$url}}" width="{{$width}}" height="{{$height}}"/>
+      <img alt="{{$category}}" src="{{$src}}" width="{{$width}}" height="{{$height}}"/>
     </a>
   </body>
 </html>

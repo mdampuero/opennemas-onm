@@ -330,8 +330,9 @@ class AdvertisementController extends Controller
             'category' => $img->category_name,
             'width'    => $img->width,
             'height'   => $img->height,
-            'url'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
+            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
+            'url'      => $ad->url,
         ];
 
         return $this->get('core.template.admin')
