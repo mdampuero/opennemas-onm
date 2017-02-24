@@ -357,12 +357,13 @@ class InstancesUpdateCommand extends ContainerAwareCommand
     {
         $sql  = 'SELECT * FROM settings WHERE name=\'site_created\'';
         $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
-        $rs   = $conn->fetchAll($sql);
+        $rs   = $conn->fetchAssoc($sql);
 
         if ($rs !== false && !empty($rs)) {
-            foreach ($rs as $value) {
-                $i->created = unserialize($rs['value']);
-            }
+            $created = new \DateTime(unserialize($rs['value']));
+            $created->setTimeZone(new \DateTimeZone('UTC'));
+
+            $i->created = $created;
         }
     }
 
