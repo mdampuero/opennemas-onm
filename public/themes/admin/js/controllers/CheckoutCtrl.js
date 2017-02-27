@@ -171,6 +171,7 @@
 
             if ($scope.steps[$scope.step] === 'done') {
               webStorage.local.remove('purchase');
+              webStorage.local.remove($scope.cartName + '_cart');
             }
           });
         };
