@@ -43,14 +43,12 @@ class VideosController extends Controller
             $this->category ='widget';
         }
 
-        $this->view->assign(
-            array(
-                'category'     => $this->category,
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData,
-            )
-        );
+        $this->view->assign([
+            'category'     => $this->category,
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->parentCategories,
+            'datos_cat'    => $this->categoryData,
+        ]);
     }
 
     /**

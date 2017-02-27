@@ -44,14 +44,12 @@ class PollsController extends Controller
             $category ='home';
         }
 
-        $this->view->assign(
-            [
-                'category'     => $category,
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData,
-            ]
-        );
+        $this->view->assign([
+            'category'     => $category,
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->parentCategories,
+            'datos_cat'    => $this->categoryData,
+        ]);
     }
 
     /**

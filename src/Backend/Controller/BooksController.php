@@ -51,14 +51,12 @@ class BooksController extends Controller
             }
         }
 
-        $this->view->assign(
-            array(
-                'category'     => $this->category,
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->bookCategories,
-                'datos_cat'    => $this->categoryData,
-            )
-        );
+        $this->view->assign([
+            'category'     => $this->category,
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->bookCategories,
+            'datos_cat'    => $this->categoryData,
+        ]);
     }
 
     /**

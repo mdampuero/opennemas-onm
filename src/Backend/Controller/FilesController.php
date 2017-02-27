@@ -39,14 +39,12 @@ class FilesController extends Controller
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
-        $this->view->assign(
-            array(
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->datos_cat,
-                'category'     => $this->category,
-            )
-        );
+        $this->view->assign([
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->parentCategories,
+            'datos_cat'    => $this->datos_cat,
+            'category'     => $this->category,
+        ]);
 
         // Optimize  this crap from this ---------------------------------------
         $this->fileSavePath = INSTANCE_MEDIA_PATH.FILE_DIR;

@@ -121,13 +121,10 @@ class NewsletterController extends Controller
         $time = new \DateTime();
         $time = $time->format('d/m/Y');
 
-        return $this->render(
-            'newsletter/steps/1-pick-elements.tpl',
-            [
-                'name'              => $configurations['name']." [".$time."]",
-                'newsletterContent' => $newsletterContent,
-            ]
-        );
+        return $this->render('newsletter/steps/1-pick-elements.tpl', [
+            'name'              => $configurations['name']." [".$time."]",
+            'newsletterContent' => $newsletterContent,
+        ]);
     }
 
     /**
