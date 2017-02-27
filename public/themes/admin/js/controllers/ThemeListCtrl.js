@@ -22,7 +22,7 @@
       '$analytics', '$http', '$location', '$uibModal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
       function($analytics, $http, $location, $uibModal, $scope, $timeout, routing, messenger, webStorage) {
         /**
-         * @memberOf StoreCheckoutCtrl
+         * @memberOf ThemeListCtrl
          *
          * @description
          *  The shopping cart name.
