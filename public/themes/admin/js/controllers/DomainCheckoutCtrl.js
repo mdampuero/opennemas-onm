@@ -25,14 +25,14 @@
             { $rootScope: $rootScope, $scope: $scope }));
 
         /**
-         * @memberOf DomainCheckoutCtrl
+         * @memberOf StoreCheckoutCtrl
          *
          * @description
-         *   Flag to know if it is a purchase or redirection.
+         *  The shopping cart name.
          *
-         * @type {Boolean}
+         * @type {String}
          */
-        $scope.create = 0;
+        $scope.cartName = 'cart_domain_redirect';
 
         /**
          * @memberOf DomainCheckoutCtrl
@@ -111,6 +111,20 @@
          */
         $scope.expand = function(index) {
           $scope.expanded[index] = !$scope.expanded[index];
+        };
+
+        /**
+         * @function getCart
+         * @memberOf DomainCheckoutCtrl
+         *
+         * @description
+         *   Gets the cart from local storage.
+         */
+        $scope.getCart = function() {
+          // Initialize the shopping cart from the webStorage
+          if (webStorage.local.has($scope.cartName)) {
+            $scope.cart = webStorage.local.get($scope.cartName);
+          }
         };
 
         /**
@@ -315,11 +329,15 @@
           }
         };
 
-        // Updates domain price when create flag changes
-        $scope.$watch('create', function(nv) {
-          if (nv === 1) {
-            $scope.price = 18;
+        // Updates cart name when extension changes
+        $scope.$watch('extension', function(nv) {
+          $scope.cartName = 'cart_domain_redirect';
+
+          if (nv && nv.uuid && nv.uuid === 'es.openhost.domain.create') {
+            $scope.cartName = 'cart_domain_create';
           }
-        });
+
+          $scope.getCart();
+        }, true);
     }]);
 })();

@@ -43,7 +43,7 @@
       </div>
     </div>
   </div>
-  <div class="content" ng-controller="DomainCheckoutCtrl" ng-init="extension = {json_encode($extension)|clear_json};description='{if $create}{t}Domain registration + mapping{/t}{else}{t}Domain mapping{/t}{/if}';{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}{if $create}create = 1;{/if}clientToken = '{$token}';countries = {json_encode($countries)|clear_json};provinces = {json_encode($provinces)|clear_json};taxes = {json_encode($taxes)|clear_json};init()">
+  <div class="content" ng-controller="DomainCheckoutCtrl" ng-init="extension = {json_encode($extension)|clear_json};{if !empty($client)}client = {json_encode($client)|clear_json}; {/if}clientToken = '{$token}';countries = {json_encode($countries)|clear_json};provinces = {json_encode($provinces)|clear_json};taxes = {json_encode($taxes)|clear_json};init()">
     <div class="row">
       <div class="col-vlg-6 col-vlg-offset-3 col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
@@ -226,11 +226,8 @@
                   <div class="checkbox">
                     <input id="terms" name="terms" ng-model="terms" type="checkbox">
                     <label class="no-margin text-left" for="terms">
-                      {if $create}
-                        {t}I have read and accept the Terms of creating a new domain{/t}
-                      {else}
-                        {t}I have read and accept the Terms of redirection{/t}
-                      {/if}
+                      <span ng-if="extension.uuid === 'es.openhost.domain.create'">{t}I have read and accept the Terms of creating a new domain{/t}</span>
+                      <span ng-if="extension.uuid === 'es.openhost.domain.redirect'">{t}I have read and accept the Terms of redirection{/t}</span>
                     </label>
                   </div>
                 </div>

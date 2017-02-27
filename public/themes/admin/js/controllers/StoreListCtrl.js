@@ -29,6 +29,16 @@
         $scope.available = [];
 
         /**
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *  The shopping cart name.
+         *
+         * @type {String}
+         */
+        $scope.cartName = 'cart_store';
+
+        /**
          * The type of the modules to list.
          *
          * @type {String}
@@ -307,11 +317,11 @@
         // Save changes in chart in web storage
         $scope.$watch('cart', function(nv, ov) {
           if (!nv || (nv instanceof Array && nv.length === 0)) {
-            webStorage.local.remove('cart');
+            webStorage.local.remove($scope.cartName);
             return;
           }
 
-          webStorage.local.set('cart', nv);
+          webStorage.local.set($scope.cartName, nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
@@ -334,8 +344,8 @@
         }, true);
 
         // Initialize the shopping cart from the webStorage
-        if (webStorage.local.has('cart')) {
-          $scope.cart = webStorage.local.get('cart');
+        if (webStorage.local.has($scope.cartName)) {
+          $scope.cart = webStorage.local.get($scope.cartName);
         }
 
         // Initialize the type from current location
