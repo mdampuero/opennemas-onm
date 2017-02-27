@@ -287,18 +287,15 @@ class ContentsController extends Controller
                 $content = new \Content($contentID);
             }
 
-            return $this->render(
-                'common/share_by_mail.tpl',
-                array(
-                    'content'    => $content,
-                    'content_id' => $contentID,
-                    // 'token'      => $token,
-                    'recaptcha' => $this->get('core.recaptcha')
-                        ->configureFromSettings()
-                        ->getHtml(),
-                    'ext'        => $ext,
-                )
-            );
+            return $this->render('common/share_by_mail.tpl', [
+                'content'    => $content,
+                'content_id' => $contentID,
+                // 'token'      => $token,
+                'recaptcha' => $this->get('core.recaptcha')
+                    ->configureFromSettings()
+                    ->getHtml(),
+                'ext'        => $ext,
+            ]);
         }
     }
 

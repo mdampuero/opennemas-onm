@@ -68,7 +68,6 @@ class SubscribersController extends Controller
 
         $response  = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
 
-
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
             ->configureFromSettings()
@@ -102,17 +101,14 @@ class SubscribersController extends Controller
             }
         }
 
-        return $this->render(
-            'static_pages/subscription.tpl',
-            [
-                'message'         => $rs['message'],
-                'actual_category' => 'newsletter',
-                'class'           => $rs['class'],
-                'recaptcha'       => $this->get('core.recaptcha')
-                    ->configureFromSettings()
-                    ->getHtml(),
-            ]
-        );
+        return $this->render('static_pages/subscription.tpl', [
+            'message'         => $rs['message'],
+            'actual_category' => 'newsletter',
+            'class'           => $rs['class'],
+            'recaptcha'       => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
+        ]);
     }
 
     /**
@@ -159,7 +155,6 @@ class SubscribersController extends Controller
         } else {
             $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
             $body    =  "Solicitud de Baja en el boletín de: \r\n". $text;
-
             $message = _("You have been unsusbscribed from the newsletter.");
         }
 

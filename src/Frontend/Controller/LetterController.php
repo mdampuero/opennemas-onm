@@ -134,13 +134,13 @@ class LetterController extends Controller
         }
 
         return $this->render('letter/letter.tpl', [
-                'letter'         => $letter,
-                'content'        => $letter,
-                'contentId'      => $letter->id, // Used on module_comments.tpl
-                'advertisements' => $this->getAds(),
-                'cache_id'       => $cacheID,
-                'x-tags'         => 'letter,'.$letter->id,
-                'x-cache-for'    => '+1 day',
+            'letter'         => $letter,
+            'content'        => $letter,
+            'contentId'      => $letter->id, // Used on module_comments.tpl
+            'advertisements' => $this->getAds(),
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'letter,'.$letter->id,
+            'x-cache-for'    => '+1 day',
         ]);
     }
 
