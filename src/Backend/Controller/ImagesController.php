@@ -37,14 +37,12 @@ class ImagesController extends Controller
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR;
 
-        $this->view->assign(
-            array(
-                'subcat'        => $this->subcat,
-                'allcategorys'  => $this->parentCategories,
-                'datos_cat'     => $this->datos_cat,
-                'MEDIA_IMG_URL' => $this->imgUrl,
-            )
-        );
+        $this->view->assign([
+            'subcat'        => $this->subcat,
+            'allcategorys'  => $this->parentCategories,
+            'datos_cat'     => $this->datos_cat,
+            'MEDIA_IMG_URL' => $this->imgUrl,
+        ]);
 
         if ($this->category != 'GLOBAL'
             && $this->category != 0

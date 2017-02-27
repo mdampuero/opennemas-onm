@@ -42,14 +42,12 @@ class AlbumsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData)
             = $this->ccm->getArraysMenu($category, $contentType);
 
-        $this->view->assign(
-            array(
-                'category'     => $category,
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData,
-            )
-        );
+        $this->view->assign([
+            'category'     => $category,
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->parentCategories,
+            'datos_cat'    => $this->categoryData,
+        ]);
     }
 
     /**
