@@ -22,6 +22,16 @@
       '$analytics', '$http', '$location', '$uibModal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
       function($analytics, $http, $location, $uibModal, $scope, $timeout, routing, messenger, webStorage) {
         /**
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
+         *  The shopping cart name.
+         *
+         * @type {String}
+         */
+        $scope.cartName = 'store';
+
+        /**
          * The available modules.
          *
          * @type {Array}
@@ -291,11 +301,11 @@
         // Save changes in chart in web storage
         $scope.$watch('cart', function(nv, ov) {
           if (!nv || (nv instanceof Array && nv.length === 0)) {
-            webStorage.local.remove('cart');
+            webStorage.local.remove($scope.cartName + '_cart');
             return;
           }
 
-          webStorage.local.set('cart', nv);
+          webStorage.local.set($scope.cartName + '_cart', nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
@@ -320,8 +330,8 @@
         });
 
         // Initialize the shopping cart from the webStorage
-        if (webStorage.local.has('cart')) {
-          $scope.cart = webStorage.local.get('cart');
+        if (webStorage.local.has($scope.cartName + '_cart')) {
+          $scope.cart = webStorage.local.get($scope.cartName + '_cart');
         }
 
         // Initialize the type from current location
