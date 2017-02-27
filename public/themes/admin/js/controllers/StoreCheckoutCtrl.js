@@ -27,6 +27,16 @@
          * @memberOf StoreCheckoutCtrl
          *
          * @description
+         *  The shopping cart name.
+         *
+         * @type {String}
+         */
+        $scope.cartName = 'cart_store';
+
+        /**
+         * @memberOf StoreCheckoutCtrl
+         *
+         * @description
          *   The name for steps.
          *
          * @type {Array}
@@ -53,7 +63,7 @@
           http.post('backend_ws_store_checkout', data).then(function() {
             $scope.next().then(function() {
               $scope.cart = [];
-              webStorage.local.remove('cart');
+              webStorage.local.remove($scope.cartName);
               webStorage.local.remove('purchase');
               $analytics.pageTrack('/store/checkout/done');
             });
@@ -92,8 +102,8 @@
         };
 
         // Initialize the shopping cart from the webStorage
-        if (webStorage.local.has('cart')) {
-          $scope.cart = webStorage.local.get('cart');
+        if (webStorage.local.has($scope.cartName)) {
+          $scope.cart = webStorage.local.get($scope.cartName);
         }
 
         if (!$scope.purchase) {
