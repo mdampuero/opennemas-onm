@@ -217,8 +217,9 @@
       var ad = self.getAdvertisement(available);
 
       slot.appendChild(self.createNormal(ad));
-      slot.style.width   = '100%';
-      slot.style.display = 'block';
+      slot.style.width      = '100%';
+      slot.style.display    = 'block';
+      slot.style.visibility = 'visible';
 
       if (!ad.orientation) {
         slot.className += ' oat-vertical';

@@ -1,6 +1,17 @@
+.ads-skyscraper-container .oat:before {
+  display:none;
+}
+
+.ads-skyscraper-container {
+  padding-left: 0;
+  padding-top: 0;
+}
+
 .oat {
   clear: both;
   display: none;
+  padding-top: 15px;
+  visibility: none;
 }
 
 .oat:before {
@@ -15,6 +26,11 @@
   text-align: center;
   text-transform: uppercase;
   width: 80px;
+}
+
+.oat-vertical {
+  padding-top: 0;
+  padding-left: 15px;
 }
 
 .oat-vertical:before {
