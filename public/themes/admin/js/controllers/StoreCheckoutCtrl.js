@@ -63,7 +63,7 @@
           http.post('backend_ws_store_checkout', data).then(function() {
             $scope.next().then(function() {
               $scope.cart = [];
-              webStorage.local.remove('cart');
+              webStorage.local.remove($scope.cartName);
               webStorage.local.remove('purchase');
               $analytics.pageTrack('/store/checkout/done');
             });
