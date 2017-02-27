@@ -29,7 +29,7 @@
          *
          * @type {String}
          */
-        $scope.cartName = 'store';
+        $scope.cartName = 'cart_store';
 
         /**
          * The available modules.
@@ -301,11 +301,11 @@
         // Save changes in chart in web storage
         $scope.$watch('cart', function(nv, ov) {
           if (!nv || (nv instanceof Array && nv.length === 0)) {
-            webStorage.local.remove($scope.cartName + '_cart');
+            webStorage.local.remove($scope.cartName);
             return;
           }
 
-          webStorage.local.set($scope.cartName + '_cart', nv);
+          webStorage.local.set($scope.cartName);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
@@ -330,8 +330,8 @@
         });
 
         // Initialize the shopping cart from the webStorage
-        if (webStorage.local.has($scope.cartName + '_cart')) {
-          $scope.cart = webStorage.local.get($scope.cartName + '_cart');
+        if (webStorage.local.has($scope.cartName)) {
+          $scope.cart = webStorage.local.get($scope.cartName);
         }
 
         // Initialize the type from current location

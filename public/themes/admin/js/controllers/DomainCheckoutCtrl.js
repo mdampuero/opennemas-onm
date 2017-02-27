@@ -32,7 +32,7 @@
          *
          * @type {String}
          */
-        $scope.cartName = 'domain_redirect';
+        $scope.cartName = 'cart_domain_redirect';
 
         /**
          * @memberOf DomainCheckoutCtrl
@@ -122,8 +122,8 @@
          */
         $scope.getCart = function() {
           // Initialize the shopping cart from the webStorage
-          if (webStorage.local.has($scope.cartName + '_cart')) {
-            $scope.cart = webStorage.local.get($scope.cartName + '_cart');
+          if (webStorage.local.has($scope.cartName)) {
+            $scope.cart = webStorage.local.get($scope.cartName);
           }
         };
 
@@ -331,10 +331,10 @@
 
         // Updates cart name when extension changes
         $scope.$watch('extension', function(nv) {
-          $scope.cartName = 'domain_redirect';
+          $scope.cartName = 'cart_domain_redirect';
 
           if (nv && nv.uuid && nv.uuid === 'es.openhost.domain.create') {
-            $scope.cartName = 'domain_create';
+            $scope.cartName = 'cart_domain_create';
           }
 
           $scope.getCart();

@@ -31,7 +31,7 @@
          *
          * @type {String}
          */
-        $scope.cartName = 'store';
+        $scope.cartName = 'cart_store';
 
         /**
          * @memberOf StoreCheckoutCtrl
@@ -102,8 +102,8 @@
         };
 
         // Initialize the shopping cart from the webStorage
-        if (webStorage.local.has($scope.cartName + '_cart')) {
-          $scope.cart = webStorage.local.get($scope.cartName + '_cart');
+        if (webStorage.local.has($scope.cartName)) {
+          $scope.cart = webStorage.local.get($scope.cartName);
         }
 
         if (!$scope.purchase) {

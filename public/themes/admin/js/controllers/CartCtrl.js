@@ -74,13 +74,13 @@
 
         // Force float type for prices
         $scope.$watch('cart', function(nv) {
-          webStorage.local.remove($scope.cartName + '_cart');
+          webStorage.local.remove($scope.cartName);
 
           if (!nv || nv.length === 0) {
             return;
           }
 
-          webStorage.local.set($scope.cartName + '_cart', nv);
+          webStorage.local.set($scope.cartName, nv);
 
           for (var i = 0; i < nv.length; i++) {
             for (var j = 0; j < nv[i].price.length; j++) {
