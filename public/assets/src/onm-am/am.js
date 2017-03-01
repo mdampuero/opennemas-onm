@@ -210,7 +210,10 @@
 
       // Remove advertisement marker if empty
       if (available.length === 0) {
-        slot.remove();
+        if (!self.config.debug) {
+          slot.remove();
+        }
+
         return;
       }
 
@@ -221,7 +224,7 @@
       slot.style.display    = 'block';
       slot.style.visibility = 'visible';
 
-      if (!ad.orientation) {
+      if (ad.orientation && ad.orientation === 'vertical') {
         slot.className += ' oat-vertical';
       }
 

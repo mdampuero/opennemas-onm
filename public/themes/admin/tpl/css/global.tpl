@@ -1,5 +1,7 @@
-.ads-skyscraper-container .oat:before {
-  display:none;
+.ads,
+.ad-skyscraper-left,
+.ad-skyscraper-right {
+  overflow: visible;
 }
 
 .ads-skyscraper-container {
@@ -10,8 +12,8 @@
 .oat {
   clear: both;
   display: none;
-  padding-top: 15px;
-  visibility: none;
+  position: relative;
+  visibility: hidden;
 }
 
 .oat:before {
@@ -30,12 +32,12 @@
 
 .oat-vertical {
   padding-top: 0;
-  padding-left: 15px;
+  margin-left: 0;
 }
 
 .oat-vertical:before {
   left: 0;
-  margin-left: -10px;
+  margin-left: -50px;
   position: absolute;
   top: 50%;
   transform: rotate(-90deg);
