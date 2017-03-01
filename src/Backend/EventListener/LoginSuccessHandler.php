@@ -134,7 +134,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $response = $request->get('g-recaptcha-response');
 
         return $this->container->get('core.recaptcha')
-                    ->configureFromParameters()
-                    ->isValid($response, $ip);
+            ->configureFromParameters()
+            ->isValid($response, $ip);
     }
 }
