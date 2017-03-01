@@ -22,6 +22,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         return $output;
     }
 
+    $app       = $smarty->parent->tpl_vars['app']->value;
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
     $settings  = getService('setting_repository')->get('ads_settings');
     $positions = is_object($smarty->parent->tpl_vars['ads_positions']) ?
@@ -30,7 +31,9 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     if (count($positions) > 0) {
         $content = getService('core.template.admin')
             ->fetch('advertisement/helpers/js.tpl', [
+                'debug'     => $app['environment'] === 'dev' ? 'true' : false,
                 'category'  => $category,
+                'extension' => $app['extension'],
                 'lifetime'  => $settings['lifetime_cookie'],
                 'positions' => implode(',', $positions),
                 'time'      => time(),
