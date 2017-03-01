@@ -50,7 +50,7 @@
             {t}Subtitle{/t}
             </label>
             <div class="controls">
-              <input class="form-control" id="subtitle-home" name="params[subtitleHome]" type="text" value="{$article->params['subtitleHome']|clearslash|escape:"html"}"/>
+              <input class="form-control" id="subtitle-home" name="params[subtitleHome]" ng-model="article.params.subtitleHome" type="text" value="{$article->params['subtitleHome']|clearslash|escape:"html"}"/>
             </div>
           </div>
           <div class="form-group">
