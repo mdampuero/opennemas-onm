@@ -538,7 +538,7 @@
       @Common/js/jquery/jquery.multiselect.js,
       @Common/js/jquery/localization/messages_es.js,
       @Common/js/onm/jquery.password-strength.js,
-      @Common/src/fuckadblock/fuckadblock.js,
+      @Common/src/fadblock/fablock.js,
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-oql-encoder/oql-encoder.js,
