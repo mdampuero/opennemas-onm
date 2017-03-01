@@ -23,37 +23,21 @@ class GlobalVariablesTest extends KernelTestCase
     public function setUp()
     {
         $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get' ])
+            ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
         $this->globals = new GlobalVariables($this->container);
     }
 
     /**
-     * Tests get and set methods for action.
+     * Tests getEnvironment.
      */
-    public function testSetAndGetAction()
+    public function testGetEnvironment()
     {
-        $this->globals->setAction('glork');
-        $this->assertEquals('glork', $this->globals->getAction());
-    }
+        $this->container->expects($this->once())->method('getParameter')
+            ->with('kernel.environment');
 
-    /**
-     * Tests get and set methods for endpoint.
-     */
-    public function testSetAndGetEndpoint()
-    {
-        $this->globals->setEndpoint('corge');
-        $this->assertEquals('corge', $this->globals->getEndpoint());
-    }
-
-    /**
-     * Tests get and set methods for extension.
-     */
-    public function testSetAndGetExtension()
-    {
-        $this->globals->setExtension('quux');
-        $this->assertEquals('quux', $this->globals->getExtension());
+        $this->globals->getEnvironment();
     }
 
     /**
@@ -120,5 +104,32 @@ class GlobalVariablesTest extends KernelTestCase
 
         unset($this->globals['action']);
         $this->assertEmpty($this->globals->getAction());
+    }
+
+    /**
+     * Tests get and set methods for action.
+     */
+    public function testSetAndGetAction()
+    {
+        $this->globals->setAction('glork');
+        $this->assertEquals('glork', $this->globals->getAction());
+    }
+
+    /**
+     * Tests get and set methods for endpoint.
+     */
+    public function testSetAndGetEndpoint()
+    {
+        $this->globals->setEndpoint('corge');
+        $this->assertEquals('corge', $this->globals->getEndpoint());
+    }
+
+    /**
+     * Tests get and set methods for extension.
+     */
+    public function testSetAndGetExtension()
+    {
+        $this->globals->setExtension('quux');
+        $this->assertEquals('quux', $this->globals->getExtension());
     }
 }

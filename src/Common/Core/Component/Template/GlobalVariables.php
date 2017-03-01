@@ -70,6 +70,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the current environment.
+     *
+     * @return string The current environment.
+     */
+    public function getEnvironment()
+    {
+        return $this->container->getParameter('kernel.environment');
+    }
+
+    /**
      * Returns the name of the extension that handles the current request.
      *
      * @return string The extension name.
