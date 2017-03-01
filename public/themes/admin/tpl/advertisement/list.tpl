@@ -89,6 +89,15 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
+          <li class="m-r-10 input-prepend inside search-input no-boarder">
+            <span class="add-on">
+              <span class="fa fa-search fa-lg"></span>
+            </span>
+            <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" type="text"/>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
           <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
             <ui-select name="author" theme="select2" ng-model="criteria.fk_content_categories">
               <ui-select-match>
