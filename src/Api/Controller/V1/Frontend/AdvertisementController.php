@@ -27,9 +27,10 @@ class AdvertisementController extends Controller
      */
     public function listAction(Request $request)
     {
-        $places         = explode(',', $request->query->get('places'));
-        $category       = (int) $request->query->get('category');
-        $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($places, $category);
+        $places   = explode(',', $request->query->get('places'));
+        $category = (int) $request->query->get('category');
+
+        $advertisements = $this->getAdvertisements($places, $category);
 
         $advertisements = array_map(function ($element) {
             $date = date('Y-m-d H:i:s');
@@ -67,9 +68,8 @@ class AdvertisementController extends Controller
     public function showAction(Request $request, $id)
     {
         $category  = $request->query->get('category', 'home');
-        $em = $this->get('entity_repository');
-        $sm = $this->get('setting_repository');
-        $ad = $em->find('Advertisement', $id);
+
+        $ad = $this->getAdvertisement($id);
 
         if (empty($ad) || empty($ad->content_status)) {
             throw new ResourceNotFoundException();
@@ -87,7 +87,7 @@ class AdvertisementController extends Controller
             return new Response($this->renderHtml($ad));
         }
 
-        $img = $em->find('Photo', $ad->img);
+        $img = $this->get('entity_repository')->find('Photo', $ad->img);
 
         if (!empty($img) && strtolower($img->type_img) == 'swf') {
             return new Response($this->renderFlash($ad, $img));
@@ -98,6 +98,60 @@ class AdvertisementController extends Controller
         $response->headers->set('x-tags', $this->getItemTags($ad));
 
         return $response;
+    }
+
+    /**
+     * Returns an advertisement by id.
+     *
+     * @param integer $id The advertisement id.
+     *
+     * @return Advertisement The advertisement.
+     */
+    protected function getAdvertisement($id)
+    {
+        if (in_array('ADS_MANAGER', $this->get('core.instance')->activated_modules)) {
+            return $em->find('Advertisement', $id);
+        }
+
+        // TODO: Improve this shit
+        $advertisements = include APP_PATH . 'config/ads/onm_default_ads.php';
+
+        foreach ($advertisements as $advertisement) {
+            if ($advertisement->id == $id) {
+                return $advertisement;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the list of advertisements.
+     *
+     * @param array   $places   The list of places.
+     * @param integer $category The category id.
+     *
+     * @return array The list of advertisements.
+     */
+    protected function getAdvertisements($places, $category)
+    {
+        if (in_array('ADS_MANAGER', $this->get('core.instance')->activated_modules)) {
+            return \Advertisement::findForPositionIdsAndCategoryPlain($places, $category);
+        }
+
+        // TODO: Improve this shit
+        $advertisements = include APP_PATH . 'config/ads/onm_default_ads.php';
+
+        $advertisements = array_filter(
+            $advertisements,
+            function ($a) use ($places, $category) {
+                return in_array($a->type_advertisement, $places)
+                    && (in_array($category, $a->fk_content_categories)
+                    || in_array(0, $a->fk_content_categories));
+            }
+        );
+
+        return $advertisements;
     }
 
     /**
