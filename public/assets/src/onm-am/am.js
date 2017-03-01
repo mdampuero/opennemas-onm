@@ -145,7 +145,6 @@
   OAM.prototype.createNormal = function(ad) {
     var item = document.createElement('iframe');
 
-    item.style.background = 'transparent';
     item.style.padding    = 0;
     item.style.width      = '100%';
     item.style.margin     = 0;
