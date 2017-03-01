@@ -69,19 +69,20 @@ class WebServiceController extends Controller
             ->findOneBy('uuid = "BASIC_PACK"');
 
         $instance = new Instance([
-            'internal_name' => mb_strtolower($subdomain),
-            'name'          => $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING),
-            'contact_mail'  => $request->request->filter('user_email', '', FILTER_SANITIZE_STRING),
+            'internal_name'     => mb_strtolower($subdomain),
+            'name'              => $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING),
+            'contact_mail'      => $request->request->filter('user_email', '', FILTER_SANITIZE_STRING),
             'domains'           => [ mb_strtolower($subdomain) . '.' . $params['base_domain'] ],
             'main_domain'       => 1,
             'activated'         => true,
             'plan'              => $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING),
             'price'             => 0,
             'activated_modules' => [ 'es.openhost.theme.basic' ],
-            'purchased'    => [ 'es.openhost.theme.basic' ],
-            'created'      => new \DateTime(),
-            'settings'     => [ 'TEMPLATE_USER' => $params['template'] ],
-            'support_plan' => 'SUPPORT_NONE'
+            'purchased'         => [ 'es.openhost.theme.basic' ],
+            'country'           => $request->request->filter('country', 'ES', FILTER_SANITIZE_STRING),
+            'created'           => new \DateTime(),
+            'settings'          => [ 'TEMPLATE_USER' => $params['template'] ],
+            'support_plan'      => 'SUPPORT_NONE'
         ]);
 
 
