@@ -1,30 +1,38 @@
-angular.module('BackendApp.controllers').controller('AdBlockCtrl', [
-  '$uibModal', '$scope', '$http',
-  function ($uibModal, $scope, $http) {
-    'use strict';
+(function() {
+  'use strict';
 
-    /**
-     * Detects adblockers and raises a modal informing the user
-     * that it has to deactivate them.
-     **/
-    $scope.detectAdBlock = function() {
-      $http.get('/ads.html').then(function(data) {
-          // console.log('not blocking')
-      }, function(data) {
-          if (data.status !== 404) {
-            $uibModal.open({
-              templateUrl: 'modal-adblock',
-              backdrop: 'static',
-              controller: 'modalCtrl',
-              resolve: {
-                template: function() {return null; },
-                success: function() {return null; }
-              }
-            });
-          }
+  /**
+   * @ngdoc controller
+   * @name  AdBlockCtrl
+   *
+   * @requires $uibModal
+   * @requires $scope
+   *
+   * @description
+   *   Detects ad blockers and show modal.
+   */
+  angular.module('BackendApp.controllers').controller('AdBlockCtrl', [
+    '$uibModal', '$scope',
+    function ($uibModal, $scope) {
+      // Initialize add block
+      var fuckAdBlock = new FuckAdBlock({
+        debug: false,
+        checkOnLoad: true,
+        resetOnEnd: true
       });
-    };
 
-    $scope.detectAdBlock();
-  }
-]);
+      // Show modal when adblock detected
+      fuckAdBlock.onDetected(function() {
+        $uibModal.open({
+          templateUrl: 'modal-adblock',
+          backdrop: 'static',
+          controller: 'modalCtrl',
+          resolve: {
+            template: function() { return null; },
+            success: function() { return null; }
+          }
+        });
+      });
+    }
+  ]);
+})();
