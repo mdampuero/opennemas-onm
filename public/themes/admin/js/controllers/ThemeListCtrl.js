@@ -305,7 +305,7 @@
             return;
           }
 
-          webStorage.local.set($scope.cartName);
+          webStorage.local.set($scope.cartName, nv);
 
           // Adding first item or initialization from webstorage
           if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
