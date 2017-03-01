@@ -13,8 +13,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     // Don't render any advertisement if module is not activated
     // Just render default onm ads from file
     // No DFP nor OpenX allowed
-    if (!getService('core.security')->hasExtension('ADS_MANAGER')
-        || !is_array($smarty->parent->tpl_vars)
+    if (!is_array($smarty->parent->tpl_vars)
         || !array_key_exists('ads_positions', $smarty->parent->tpl_vars)
         || !is_array($smarty->parent->tpl_vars['ads_positions']->value)
 
