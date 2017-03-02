@@ -30,7 +30,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     if (count($positions) > 0) {
         $content = getService('core.template.admin')
             ->fetch('advertisement/helpers/js.tpl', [
-                'debug'     => $app['environment'] === 'dev' ? 'true' : false,
+                'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
                 'category'  => $category,
                 'extension' => $app['extension'],
                 'lifetime'  => $settings['lifetime_cookie'],
