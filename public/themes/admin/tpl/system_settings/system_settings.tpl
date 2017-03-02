@@ -331,6 +331,17 @@
                     </div>
                     <h4>{t}Language & Time{/t}</h4>
                     <div class="form-group">
+                      <label class="form-label" for="country">{t}Country{/t}</label>
+                      <div class="controls">
+                        <select id="country" name="country">
+                          <option value="">{t}Select a country{/t}...</option>
+                          {foreach from=$countries key=key item=value}
+                            <option{if $country === $key} selected="selected"{/if} value="{{$key}}">{{$value}}</option>
+                          {/foreach}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
                       <label class="form-label" for="site_language">
                         {t}Default language{/t}
                       </label>
