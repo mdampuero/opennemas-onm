@@ -14,6 +14,7 @@ orm:
                 client:             integer
                 contact_mail:       string
                 contents:           integer
+                country:            string
                 created:            datetime
                 domain_expire:      datetime
                 domains:            array
@@ -33,7 +34,6 @@ orm:
                 purchased:          array
                 settings:           array
                 static_pages:       integer
-                support_plan:       string
                 users:              integer
                 videos:             integer
                 widgets:            integer
@@ -93,6 +93,9 @@ orm:
                         contact_mail:
                             type:    string
                             options: { default: null, length: 255, notnull: true }
+                        country:
+                            type: string
+                            options: { default: null, length: 2 }
                         owner_id:
                             type: integer
                             options: { default: null, unsigned: true, notnull: false }
@@ -147,9 +150,6 @@ orm:
                         users:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
-                        support_plan:
-                            type:    string
-                            options: { default: null, length: 255, notnull: false }
                     index:
                         -
                             name:    PRIMARY

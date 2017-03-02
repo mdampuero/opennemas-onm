@@ -100,6 +100,16 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
+          <ui-select name="view" theme="select2" ng-model="criteria.country">
+            <ui-select-match>
+              <strong>{t}Country{/t}:</strong> [% $select.selected.name %]
+            </ui-select-match>
+            <ui-select-choices repeat="country.id as country in extra.countries | filter: $select.search">
+              <div ng-bind-html="country.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </li>
+        <li class="quicklinks">
           <ui-select name="view" theme="select2" ng-model="criteria.owner_id">
             <ui-select-match>
               <strong>{t}Owner{/t}:</strong> [% $select.selected.name %]
@@ -197,6 +207,12 @@
         </div>
         <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-theme" checklist-model="columns.selected" checklist-value="'theme'" type="checkbox">
+            <label for="checkbox-theme">
+              {t}Theme{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-support" checklist-model="columns.selected" checklist-value="'support'" type="checkbox">
             <label for="checkbox-support">
               {t}Support plan{/t}
@@ -232,14 +248,14 @@
               {t}Albums{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
             <label for="checkbox-photos">
               {t}Photos{/t}
             </label>
           </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
             <label for="checkbox-videos">
@@ -360,7 +376,10 @@
               <th class="text-center" ng-show="isColumnEnabled('database')">
                 {t}Database{/t}
               </th>
-              <th class="text-center pointer" ng-click="sort('support')" ng-show="isColumnEnabled('support')">
+              <th class="text-center" ng-show="isColumnEnabled('theme')">
+                {t}Theme{/t}
+              </th>
+              <th class="text-center" ng-show="isColumnEnabled('support')">
                 {t}Support plan{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('support') == 'asc', 'fa fa-caret-down': isOrderedBy('support') == 'desc'}"></i>
               </th>
@@ -495,8 +514,11 @@
               <td class="text-center" ng-show="isColumnEnabled('database')">
                 [% item.settings.BD_DATABASE %]
               </td>
+              <td class="text-center" ng-show="isColumnEnabled('theme')">
+                [% item.settings.TEMPLATE_USER %]
+              </td>
               <td class="text-center" ng-show="isColumnEnabled('support')">
-                [% item.support_plan %]
+                <span ng-repeat="uuid in item.activated_modules | filter: 'SUPPORT_'">[% uuid %]</span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('contents')" title="{t}Contents{/t}">
                 [% item.contents %]

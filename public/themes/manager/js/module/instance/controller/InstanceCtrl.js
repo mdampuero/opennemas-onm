@@ -41,7 +41,6 @@
         $scope.instance = {
           domains: [],
           activated_modules: [],
-          support_plan: 'SUPPORT_NONE',
           settings: {
             TEMPLATE_USER: 'base'
           },
@@ -106,16 +105,6 @@
         };
 
         /**
-         * @memberOf InstanceCtrl
-         *
-         * @description
-         *  Array of support modules
-         *
-         * @type {Array}
-         */
-        $scope.supportModules = [];
-
-        /**
          * @function addDomain
          * @memberOf InstanceCtrl
          *
@@ -164,19 +153,6 @@
             }, function() {
               $scope.loading = 0;
             });
-        };
-
-        /**
-         * @function initializeSupportPlan
-         * @memberOf InstanceCtrl
-         *
-         * @description
-         *   Initialize support plan
-         */
-        $scope.initializeSupportPlan = function() {
-          if ($scope.instance.support_plan.indexOf('SUPPORT') === -1) {
-            $scope.instance.support_plan = 'SUPPORT_NONE';
-          }
         };
 
         /**
@@ -301,7 +277,7 @@
             }
           } else {
             $scope.selected.plan = {};
-            $scope.instance.activated_modules = [ $scope.instance.support_plan ];
+            $scope.instance.activated_modules = [];
           }
         };
 
@@ -349,21 +325,6 @@
           });
         };
 
-        $scope.$watch('instance.support_plan', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if ($scope.instance.activated_modules.indexOf(ov) !== -1) {
-            $scope.instance.activated_modules
-              .splice($scope.instance.activated_modules.indexOf(ov), 1);
-          }
-
-          if ($scope.instance.activated_modules.indexOf(nv) === -1) {
-            $scope.instance.activated_modules.push(nv);
-          }
-        }, true);
-
         $scope.$watch('instance.activated_modules', function() {
           var all = true;
 
@@ -397,13 +358,8 @@
 
             modules.push(module.uuid);
 
-            // Ignore grouping for PACKS and SUPPORT
-            if (/SUPPORT_/.test(module.uuid)) {
-              $scope.supportModules.push(module.uuid);
-            }
-
-            // Ignore grouping for PACKS and SUPPORT
-            if (module.modules_included || /SUPPORT_/.test(module.uuid)) {
+            // Ignore grouping for PACKS
+            if (module.modules_included) {
               modulesInAPack.push(module.uuid);
             }
 
@@ -431,7 +387,7 @@
           $scope.packs.push('OTHER_PACK');
           $scope.modulesByPack.OTHER_PACK = _.difference(modules, modulesInAPack);
           $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
-              $scope.instance.activated_modules) == 0;
+              $scope.instance.activated_modules) === 0;
         };
 
         $scope.$on('$destroy', function() {
