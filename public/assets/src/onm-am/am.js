@@ -199,11 +199,16 @@
 
     // Display normal advertisements
     slots.forEach(function(slot) {
-      var id = parseInt(slot.getAttribute('data-type'));
+      var type = parseInt(slot.getAttribute('data-type'));
+      var id   = parseInt(slot.getAttribute('data-id'));
 
       var available = ads.filter(function(e) {
+        if (id) {
+          return e.id === id;
+        }
+
         return e.type === 'normal' &&
-          parseInt(e.position) === parseInt(id) &&
+          parseInt(e.position) === type &&
           self.isVisible(e);
       });
 
@@ -242,21 +247,10 @@
    *   advertisement with the given id if present.
    *
    * @param {Object}  advertisements The list of available advertisements.
-   * @param {Integer} id             The advertisement id.
    *
    * @return {Object} The selected advertisement.
    */
-  OAM.prototype.getAdvertisement = function(advertisements, id) {
-    if (id) {
-      var advertisement = advertisements.filter(function(e) {
-        return e.id === id;
-      });
-
-      if (advertisement.length > 0) {
-        return advertisement[0];
-      }
-    }
-
+  OAM.prototype.getAdvertisement = function(advertisements) {
     return advertisements[Math.floor(Math.random() * advertisements.length)];
   };
 
