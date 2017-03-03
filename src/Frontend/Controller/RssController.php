@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for the public RSS
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -22,18 +17,16 @@ use Onm\Settings as s;
 
 /**
  * Handles the actions for the public RSS
- *
- * @package Frontend_Controllers
- **/
+ */
 class RssController extends Controller
 {
     /**
-     * Shows a page that shows a list of available RSS sources
+     * Shows a page that shows a list of available RSS sources.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function indexAction()
     {
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
@@ -64,12 +57,76 @@ class RssController extends Controller
     }
 
     /**
-     * Displays the RSS feed for a given category, opinion or topic
+     * Displays the RSS feed with contents in frontpage.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
+    public function frontpageRssAction(Request $request)
+    {
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $author       = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
+
+        $this->view->setConfig('rss');
+
+        $id       = 0;
+        $cm       = new \ContentManager;
+        $cacheID  = $this->view->generateCacheId($categoryName, '', 'RSS|frontpage');
+        $rssTitle = '';
+
+        if (($this->view->getCaching() === 0)
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+        ) {
+            if (!empty($categoryName) && $categoryName !== 'home') {
+                $category = getService('category_repository')->findOneBy(
+                    [ 'name' => [[ 'value' => $categoryName ]] ],
+                    'name ASC'
+                );
+
+                if (is_null($category)) {
+                    throw new ResourceNotFoundException();
+                }
+
+                $id       = $category->id;
+                $rssTitle = $category->title;
+            }
+
+            $contents = $cm->getContentsForHomepageOfCategory($id);
+            $contents = $cm->getInTime($contents);
+
+            // Remove advertisements and widgets
+            $contents = array_filter($contents, function ($a) {
+                return !in_array(
+                    $a->content_type_name,
+                    [ 'advertisement', 'widget' ]
+                );
+            });
+
+            $this->sortByPlaceholder($contents, $categoryName);
+            $this->getRelatedContents($contents);
+
+            $this->view->assign([
+                'rss_title' => $rssTitle,
+                'contents'  => $contents,
+                'type'      => $categoryName,
+            ]);
+        }
+
+        return $this->render(
+            'rss/rss.tpl',
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss' ],
+            new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
+        );
+    }
+
+    /**
+     * Displays the RSS feed for a given category, opinion or topic.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
     public function generalRssAction(Request $request)
     {
         $categoryName = $request->query->filter('category_name', 'last', FILTER_SANITIZE_STRING);
@@ -77,14 +134,16 @@ class RssController extends Controller
 
         $this->view->setConfig('rss');
 
+        $cm      = new \ContentManager;
         $cacheID = $this->view->generateCacheId($categoryName, '', 'RSS'.$author);
+
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Set total number of contents
-            $total = $this->get('setting_repository')->get('elements_in_rss', 10);
-
+            $total    = $this->get('setting_repository')->get('elements_in_rss', 10);
             $rssTitle = '';
+
             switch ($categoryName) {
                 case 'opinion':
                     // Latest opinions
@@ -99,15 +158,12 @@ class RssController extends Controller
                 case 'home':
                     // Homepage news
                     $rssTitle = _('Homepage News');
-                    $cm       = new \ContentManager;
                     $contents = $cm->getContentsForHomepageOfCategory(0);
 
                     $contents = $cm->getInTime($contents);
-                    $contents = array_filter($contents, function ($item){
+                    $contents = array_filter($contents, function ($item) {
                         return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
                     });
-
-                    $this->sortByPlaceholder($contents);
 
                     break;
                 case 'videos':
@@ -144,52 +200,14 @@ class RssController extends Controller
                     break;
             }
 
-            // Fetch photo for each article
-            $er = getService('entity_repository');
-            foreach ($contents as $key => $content) {
-                // Fetch photo for each content
-                if (isset($content->img1) && !empty($content->img1)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img1);
-                } elseif (isset($content->img2) && !empty($content->img2)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img2);
-                }
-                // Exclude articles with external link from RSS
-                if (isset($content->params['bodyLink'])
-                    && !empty($content->params['bodyLink'])) {
-                    unset($contents[$key]);
-                }
+            $this->sortByPlaceholder($contents, $categoryName);
+            $this->getRelatedContents($contents);
 
-                // Related contents code ---------------------------------------
-                $relations       = getService('related_contents')->getRelations($content->id, 'inner');
-                if (count($relations) > 0) {
-                    $relatedContents  = [];
-                    $relatedContents = $this->get('entity_repository')->findMulti($relations);
-                    $ccm = new \ContentCategoryManager();
-
-                    // Filter out not ready for publish contents.
-                    foreach ($relatedContents as $contentID) {
-                        if ($content->isReadyForPublish()) {
-                            $content->category_name = $ccm->getName($content->category);
-                            if ($content->content_type == 1 && !empty($content->img1)) {
-                                $content->photo = $er->find('Photo', $content->img1);
-                            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                                $content->video = $er->find('Video', $content->fk_video);
-                            }
-                            $relatedContents[] = $content;
-                        }
-                    }
-
-                    $content->related = $relatedContents;
-                }
-            }
-
-            $this->view->assign(
-                [
-                    'rss_title' => $rssTitle,
-                    'contents'  => $contents,
-                    'type'      => $categoryName,
-                ]
-            );
+            $this->view->assign([
+                'rss_title' => $rssTitle,
+                'contents'  => $contents,
+                'type'      => $categoryName,
+            ]);
         }
 
         return $this->render(
@@ -200,12 +218,12 @@ class RssController extends Controller
     }
 
     /**
-     * Shows the author frontpage
+     * Shows the author frontpage.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function authorRSSAction(Request $request)
     {
         $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
@@ -264,12 +282,12 @@ class RssController extends Controller
     }
 
     /**
-     * Displays the RSS feed for a given category, opinion or topic
+     * Displays the RSS feed for a given category, opinion or topic.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function facebookInstantArticlesRSSAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
@@ -356,12 +374,12 @@ class RssController extends Controller
     }
 
     /**
-     * Get latest opinions
+     * Get latest opinions.
      *
-     * @param int $total The total number of contents
+     * @param int $total The total number of contents.
      *
-     * @return Array Latest opinions
-     **/
+     * @return Array Latest opinions.
+     */
     public function getLatestOpinions($total = 10)
     {
         $or = getService('opinion_repository');
@@ -390,13 +408,13 @@ class RssController extends Controller
     }
 
     /**
-     * Get latest contents given a type of content
+     * Get latest contents given a type of content.
      *
-     * @param int $contentType The type of the contents to fetch
-     * @param int $total The total number of contents
+     * @param int $contentType The type of the contents to fetch.
+     * @param int $total The total number of contents.
      *
-     * @return Array Latest contents
-     **/
+     * @return Array Latest contents.
+     */
     public function getLatestContents($contentType = 'article', $total = 10)
     {
         $er = getService('entity_repository');
@@ -426,13 +444,13 @@ class RssController extends Controller
     }
 
     /**
-     * Get latest articles by category
+     * Get latest articles by category.
      *
-     * @param int $total The total number of contents
-     * @param string $category The category to fetch articles from
+     * @param int    $total    The total number of contents.
+     * @param string $category The category to fetch articles from.
      *
-     * @return Array Latest articles of category
-     **/
+     * @return Array Latest articles of category.
+     */
     public function getLatestArticlesByCategory($category, $total = 10)
     {
         $er = getService('entity_repository');
@@ -457,19 +475,16 @@ class RssController extends Controller
             ]
         ];
 
-        $contents = $er->findBy($filters, $order, $total, 1);
-
-        return $contents;
+        return $er->findBy($filters, $order, $total, 1);
     }
 
-
     /**
-     * Fetches advertisements for Instant article
+     * Fetches advertisements for Instant article.
      *
-     * @param string category the category identifier
+     * @param string category The category identifier.
      *
-     * @return array the list of advertisements for this page
-     **/
+     * @return array The list of advertisements for this page.
+     */
     public static function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
@@ -480,36 +495,117 @@ class RssController extends Controller
     /**
      * Sorts a list of contents by position and placeholder.
      *
-     * @param array $contents The list of contents to sort.
+     * @param array  $contents The list of contents to sort.
+     * @param string $category The category name.
      */
-    protected function sortByPlaceholder(&$contents)
+    protected function sortByPlaceholder(&$contents, $category)
     {
-        $theme = $this->get('core.theme');
+        $order = $this->getPlaceholders($category);
 
-        // Sort by theme parameter and position
-        if (empty($theme->parameters)
-            || !array_key_exists('frontpage_order', $theme->parameters)
-        ) {
-            // Sort by placeholder name and position
-            uasort($contents, function ($a, $b) {
-                return $a->placeholder < $b->placeholder ? -1 :
-                    ($a->placeholder > $b->placeholder ? 1 :
-                    ($a->position < $b->position ? -1 : 1));
-            });
-
+        if (empty($order)) {
             return;
         }
 
-        $placeholders = $theme->parameters['frontpage_order'];
-
-        uasort($contents, function ($a, $b) use ($placeholders) {
-            $positionA = array_search($a->placeholder, $placeholders);
-            $positionB = array_search($b->placeholder, $placeholders);
+        uasort($contents, function ($a, $b) use ($order) {
+            $positionA = array_search($a->placeholder, $order);
+            $positionB = array_search($b->placeholder, $order);
 
             return $positionA < $positionB ? -1 :
                 ($positionA > $positionB ? 1 :
                 ($a->position < $b->position ? -1 : 1)
             );
         });
+    }
+
+    /**
+     * Returns the list of placeholders to sort by for the category.
+     *
+     * @param string $name The category name.
+     *
+     * @return array The list of placeholders to sort by.
+     */
+    protected function getPlaceholders($name)
+    {
+        $setting = null;
+
+        if (!empty($name)) {
+            try {
+                $category = $this->get('orm.manager')->getRepository('Category')
+                    ->findOneBy(sprintf('title = "%s"', $name));
+
+                $setting = 'frontpage_layout_' . $category->pk_content_category;
+            } catch (\Exception $e) {
+                if ($name === 'home') {
+                    $setting = 'frontpage_layout_0';
+                }
+            }
+        }
+
+        // TODO: Use new repository when cache is unified
+        $layout = $this->get('setting_repository')->get($setting);
+        $theme  = $this->get('core.theme');
+
+        if (empty($layout)) {
+            $layout = 'default';
+        }
+
+        if (!empty($theme->parameters)
+            && array_key_exists('layouts', $theme->parameters)
+            && array_key_exists($layout, $theme->parameters['layouts'])
+            && array_key_exists('order', $theme->parameters['layouts'][$layout])
+        ) {
+            return $theme->parameters['layouts'][$layout]['order'];
+        }
+
+        return [];
+    }
+
+    /**
+     * Search related contents for each content in list.
+     *
+     * @param array $contents The list of contents.
+     */
+    protected function getRelatedContents(&$contents)
+    {
+        // Fetch photo for each article
+        $er = getService('entity_repository');
+        foreach ($contents as $key => $content) {
+            // Fetch photo for each content
+            if (isset($content->img1) && !empty($content->img1)) {
+                $contents[$key]->photo = $er->find('Photo', $content->img1);
+            } elseif (isset($content->img2) && !empty($content->img2)) {
+                $contents[$key]->photo = $er->find('Photo', $content->img2);
+            }
+
+            // Exclude articles with external link from RSS
+            if (isset($content->params['bodyLink'])
+                && !empty($content->params['bodyLink'])) {
+                unset($contents[$key]);
+            }
+
+            // Related contents code ---------------------------------------
+            $relations = getService('related_contents')->getRelations($content->id, 'inner');
+
+            if (count($relations) > 0) {
+                $relatedContents  = [];
+                $relatedContents = $this->get('entity_repository')->findMulti($relations);
+                $ccm = new \ContentCategoryManager();
+
+                // Filter out not ready for publish contents.
+                foreach ($relatedContents as $contentID) {
+                    if ($content->isReadyForPublish()) {
+                        $content->category_name = $ccm->getName($content->category);
+                        if ($content->content_type == 1 && !empty($content->img1)) {
+                            $content->photo = $er->find('Photo', $content->img1);
+                        } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+                            $content->video = $er->find('Video', $content->fk_video);
+                        }
+                        $relatedContents[] = $content;
+                    }
+                }
+
+                $content->related = $relatedContents;
+            }
+        }
     }
 }
