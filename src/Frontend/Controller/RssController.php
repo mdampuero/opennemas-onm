@@ -57,6 +57,70 @@ class RssController extends Controller
     }
 
     /**
+     * Displays the RSS feed with contents in frontpage.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function frontpageRssAction(Request $request)
+    {
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $author       = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
+
+        $this->view->setConfig('rss');
+
+        $id       = 0;
+        $cm       = new \ContentManager;
+        $cacheID  = $this->view->generateCacheId($categoryName, '', 'rss.frontpage');
+        $rssTitle = '';
+
+        if (($this->view->getCaching() === 0)
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+        ) {
+            if (!empty($categoryName) && $categoryName !== 'home') {
+                $category = getService('category_repository')->findOneBy(
+                    [ 'name' => [[ 'value' => $categoryName ]] ],
+                    'name ASC'
+                );
+
+                if (is_null($category)) {
+                    throw new ResourceNotFoundException();
+                }
+
+                $id       = $category->id;
+                $rssTitle = $category->title;
+            }
+
+            $contents = $cm->getContentsForHomepageOfCategory($id);
+            $contents = $cm->getInTime($contents);
+
+            // Remove advertisements and widgets
+            $contents = array_filter($contents, function ($a) {
+                return !in_array(
+                    $a->content_type_name,
+                    [ 'advertisement', 'widget' ]
+                );
+            });
+
+            $this->sortByPlaceholder($contents, $categoryName);
+            $this->getRelatedContents($contents);
+
+            $this->view->assign([
+                'rss_title' => $rssTitle,
+                'contents'  => $contents,
+                'type'      => $categoryName,
+            ]);
+        }
+
+        return $this->render(
+            'rss/rss.tpl',
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss' ],
+            new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
+        );
+    }
+
+    /**
      * Displays the RSS feed for a given category, opinion or topic.
      *
      * @param Request $request The request object.
@@ -70,14 +134,16 @@ class RssController extends Controller
 
         $this->view->setConfig('rss');
 
+        $cm      = new \ContentManager;
         $cacheID = $this->view->generateCacheId($categoryName, '', 'RSS'.$author);
+
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Set total number of contents
-            $total = $this->get('setting_repository')->get('elements_in_rss', 10);
-
+            $total    = $this->get('setting_repository')->get('elements_in_rss', 10);
             $rssTitle = '';
+
             switch ($categoryName) {
                 case 'opinion':
                     // Latest opinions
@@ -92,7 +158,6 @@ class RssController extends Controller
                 case 'home':
                     // Homepage news
                     $rssTitle = _('Homepage News');
-                    $cm       = new \ContentManager;
                     $contents = $cm->getContentsForHomepageOfCategory(0);
 
                     $contents = $cm->getInTime($contents);
@@ -136,53 +201,13 @@ class RssController extends Controller
             }
 
             $this->sortByPlaceholder($contents, $categoryName);
+            $this->getRelatedContents($contents);
 
-            // Fetch photo for each article
-            $er = getService('entity_repository');
-            foreach ($contents as $key => $content) {
-                // Fetch photo for each content
-                if (isset($content->img1) && !empty($content->img1)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img1);
-                } elseif (isset($content->img2) && !empty($content->img2)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img2);
-                }
-                // Exclude articles with external link from RSS
-                if (isset($content->params['bodyLink'])
-                    && !empty($content->params['bodyLink'])) {
-                    unset($contents[$key]);
-                }
-
-                // Related contents code ---------------------------------------
-                $relations       = getService('related_contents')->getRelations($content->id, 'inner');
-                if (count($relations) > 0) {
-                    $relatedContents  = [];
-                    $relatedContents = $this->get('entity_repository')->findMulti($relations);
-                    $ccm = new \ContentCategoryManager();
-
-                    // Filter out not ready for publish contents.
-                    foreach ($relatedContents as $contentID) {
-                        if ($content->isReadyForPublish()) {
-                            $content->category_name = $ccm->getName($content->category);
-                            if ($content->content_type == 1 && !empty($content->img1)) {
-                                $content->photo = $er->find('Photo', $content->img1);
-                            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                                $content->video = $er->find('Video', $content->fk_video);
-                            }
-                            $relatedContents[] = $content;
-                        }
-                    }
-
-                    $content->related = $relatedContents;
-                }
-            }
-
-            $this->view->assign(
-                [
-                    'rss_title' => $rssTitle,
-                    'contents'  => $contents,
-                    'type'      => $categoryName,
-                ]
-            );
+            $this->view->assign([
+                'rss_title' => $rssTitle,
+                'contents'  => $contents,
+                'type'      => $categoryName,
+            ]);
         }
 
         return $this->render(
@@ -536,5 +561,54 @@ class RssController extends Controller
         }
 
         return [];
+    }
+
+    /**
+     * Search related contents for each content in list.
+     *
+     * @param array $contents The list of contents.
+     */
+    protected function getRelatedContents(&$contents)
+    {
+        // Fetch photo for each article
+        $er = getService('entity_repository');
+        foreach ($contents as $key => $content) {
+            // Fetch photo for each content
+            if (isset($content->img1) && !empty($content->img1)) {
+                $contents[$key]->photo = $er->find('Photo', $content->img1);
+            } elseif (isset($content->img2) && !empty($content->img2)) {
+                $contents[$key]->photo = $er->find('Photo', $content->img2);
+            }
+
+            // Exclude articles with external link from RSS
+            if (isset($content->params['bodyLink'])
+                && !empty($content->params['bodyLink'])) {
+                unset($contents[$key]);
+            }
+
+            // Related contents code ---------------------------------------
+            $relations = getService('related_contents')->getRelations($content->id, 'inner');
+
+            if (count($relations) > 0) {
+                $relatedContents  = [];
+                $relatedContents = $this->get('entity_repository')->findMulti($relations);
+                $ccm = new \ContentCategoryManager();
+
+                // Filter out not ready for publish contents.
+                foreach ($relatedContents as $contentID) {
+                    if ($content->isReadyForPublish()) {
+                        $content->category_name = $ccm->getName($content->category);
+                        if ($content->content_type == 1 && !empty($content->img1)) {
+                            $content->photo = $er->find('Photo', $content->img1);
+                        } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+                            $content->video = $er->find('Video', $content->fk_video);
+                        }
+                        $relatedContents[] = $content;
+                    }
+                }
+
+                $content->related = $relatedContents;
+            }
+        }
     }
 }
