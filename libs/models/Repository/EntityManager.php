@@ -54,6 +54,7 @@ class EntityManager extends BaseManager
         $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!empty($id)
+            && class_exists($contentType)
             && (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
             || !is_object($entity))
