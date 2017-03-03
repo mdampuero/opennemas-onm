@@ -100,8 +100,6 @@ class RssController extends Controller
                         return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
                     });
 
-                    $this->sortByPlaceholder($contents);
-
                     break;
                 case 'videos':
                     // Latest videos
@@ -136,6 +134,8 @@ class RssController extends Controller
                     $contents = $this->getLatestArticlesByCategory($categoryName, $total);
                     break;
             }
+
+            $this->sortByPlaceholder($contents, $categoryName);
 
             // Fetch photo for each article
             $er = getService('entity_repository');
@@ -470,11 +470,16 @@ class RssController extends Controller
     /**
      * Sorts a list of contents by position and placeholder.
      *
-     * @param array $contents The list of contents to sort.
+     * @param array  $contents The list of contents to sort.
+     * @param string $category The category name.
      */
-    protected function sortByPlaceholder(&$contents)
+    protected function sortByPlaceholder(&$contents, $category)
     {
-        $theme = $this->get('core.theme');
+        $order = $this->getPlaceholders($category);
+
+        if (empty($order)) {
+            return;
+        }
 
         // Sort by theme parameter and position
         if (empty($theme->parameters)
@@ -486,20 +491,50 @@ class RssController extends Controller
                     ($a->placeholder > $b->placeholder ? 1 :
                     ($a->position < $b->position ? -1 : 1));
             });
+        }
+    }
 
-            return;
+    /**
+     * Returns the list of placeholders to sort by for the category.
+     *
+     * @param string $name The category name.
+     *
+     * @return array The list of placeholders to sort by.
+     */
+    protected function getPlaceholders($name)
+    {
+        $setting = null;
+
+        if (!empty($name)) {
+            try {
+                $category = $this->get('orm.manager')->getRepository('Category')
+                    ->findBy(sprintf('title = "%s"', $name));
+
+                $setting = 'frontpage_layout_' . $name->id;
+            } catch (\Exception $e) {
+                if ($name === 'home') {
+                    $setting = 'frontpage_layout_0';
+                }
+            }
         }
 
-        $placeholders = $theme->parameters['frontpage_order'];
+        if (empty($setting)) {
+            return [];
+        }
 
-        uasort($contents, function ($a, $b) use ($placeholders) {
-            $positionA = array_search($a->placeholder, $placeholders);
-            $positionB = array_search($b->placeholder, $placeholders);
+        // TODO: Use new repository when cache is unified
+        $layout = $this->get('setting_repository')->get($setting);
+        $theme  = $this->get('core.theme');
 
-            return $positionA < $positionB ? -1 :
-                ($positionA > $positionB ? 1 :
-                ($a->position < $b->position ? -1 : 1)
-            );
-        });
+        if (!empty($layout)
+            && !empty($theme->parameters)
+            && array_key_exists('layouts', $theme->parameters)
+            && array_key_exists($layout, $theme->parameters['layouts'])
+            && array_key_exists('order', $theme->parameters['layouts'][$layout])
+        ) {
+            return $theme->parameters['layouts'][$layout]['order'];
+        }
+
+        return [];
     }
 }
