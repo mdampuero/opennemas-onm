@@ -72,7 +72,7 @@ class RssController extends Controller
 
         $id       = 0;
         $cm       = new \ContentManager;
-        $cacheID  = $this->view->generateCacheId($categoryName, '', 'rss.frontpage');
+        $cacheID  = $this->view->generateCacheId($categoryName, '', 'RSS|frontpage');
         $rssTitle = '';
 
         if (($this->view->getCaching() === 0)
