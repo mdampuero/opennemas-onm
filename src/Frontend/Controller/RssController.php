@@ -535,7 +535,7 @@ class RssController extends Controller
                 $category = $this->get('orm.manager')->getRepository('Category')
                     ->findBy(sprintf('title = "%s"', $name));
 
-                $setting = 'frontpage_layout_' . $name->id;
+                $setting = 'frontpage_layout_' . $category->pk_content_category;
             } catch (\Exception $e) {
                 if ($name === 'home') {
                     $setting = 'frontpage_layout_0';
@@ -543,16 +543,15 @@ class RssController extends Controller
             }
         }
 
-        if (empty($setting)) {
-            return [];
-        }
-
         // TODO: Use new repository when cache is unified
         $layout = $this->get('setting_repository')->get($setting);
         $theme  = $this->get('core.theme');
 
-        if (!empty($layout)
-            && !empty($theme->parameters)
+        if (empty($layout)) {
+            $layout = 'default';
+        }
+
+        if (!empty($theme->parameters)
             && array_key_exists('layouts', $theme->parameters)
             && array_key_exists($layout, $theme->parameters['layouts'])
             && array_key_exists('order', $theme->parameters['layouts'][$layout])
