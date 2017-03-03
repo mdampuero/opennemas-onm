@@ -245,7 +245,8 @@ class Album extends Content
 
         try {
             $rs = getService('dbal_connection')->delete(
-                "albums", [ 'pk_album' => $id ]
+                "albums",
+                [ 'pk_album' => $id ]
             );
 
             return $this->removeAttachedImages($id);
@@ -278,11 +279,17 @@ class Album extends Content
                 ]
             );
             foreach ($rs as $photo) {
+                $photoObject = getService('entity_repository')
+                    ->find('Photo', $photo['pk_photo']);
+                if (is_null($photoObject)) {
+                    continue;
+                }
+
                 $photosAlbum []= [
                     'id'          => $photo['pk_photo'],
                     'position'    => $photo['position'],
                     'description' => $photo['description'],
-                    'photo'       => getService('entity_repository')->find('Photo', $photo['pk_photo']),
+                    'photo'       => $photoObject,
                 ];
             }
 
