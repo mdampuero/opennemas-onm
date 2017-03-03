@@ -531,7 +531,7 @@ class RssController extends Controller
         if (!empty($name)) {
             try {
                 $category = $this->get('orm.manager')->getRepository('Category')
-                    ->findBy(sprintf('title = "%s"', $name));
+                    ->findOneBy(sprintf('title = "%s"', $name));
 
                 $setting = 'frontpage_layout_' . $category->pk_content_category;
             } catch (\Exception $e) {
