@@ -446,9 +446,10 @@ class HooksSubscriber implements EventSubscriberInterface
             $categoryName = preg_replace('@-@', '', $categoryName);
 
             $cacheManager->delete($categoryName . '|RSS');
+            $cacheManager->delete($categoryName . '|RSS|frontpage');
             $cacheManager->delete('last|RSS');
 
-            $cacheManager->delete('frontpage|'.$categoryName);
+            $cacheManager->delete('frontpage|' . $categoryName);
 
             $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
