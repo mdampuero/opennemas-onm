@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for the public RSS
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -22,18 +17,16 @@ use Onm\Settings as s;
 
 /**
  * Handles the actions for the public RSS
- *
- * @package Frontend_Controllers
- **/
+ */
 class RssController extends Controller
 {
     /**
-     * Shows a page that shows a list of available RSS sources
+     * Shows a page that shows a list of available RSS sources.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function indexAction()
     {
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
@@ -64,12 +57,12 @@ class RssController extends Controller
     }
 
     /**
-     * Displays the RSS feed for a given category, opinion or topic
+     * Displays the RSS feed for a given category, opinion or topic.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function generalRssAction(Request $request)
     {
         $categoryName = $request->query->filter('category_name', 'last', FILTER_SANITIZE_STRING);
@@ -103,7 +96,7 @@ class RssController extends Controller
                     $contents = $cm->getContentsForHomepageOfCategory(0);
 
                     $contents = $cm->getInTime($contents);
-                    $contents = array_filter($contents, function ($item){
+                    $contents = array_filter($contents, function ($item) {
                         return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
                     });
 
@@ -200,12 +193,12 @@ class RssController extends Controller
     }
 
     /**
-     * Shows the author frontpage
+     * Shows the author frontpage.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function authorRSSAction(Request $request)
     {
         $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
@@ -264,12 +257,12 @@ class RssController extends Controller
     }
 
     /**
-     * Displays the RSS feed for a given category, opinion or topic
+     * Displays the RSS feed for a given category, opinion or topic.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function facebookInstantArticlesRSSAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
@@ -356,12 +349,12 @@ class RssController extends Controller
     }
 
     /**
-     * Get latest opinions
+     * Get latest opinions.
      *
-     * @param int $total The total number of contents
+     * @param int $total The total number of contents.
      *
-     * @return Array Latest opinions
-     **/
+     * @return Array Latest opinions.
+     */
     public function getLatestOpinions($total = 10)
     {
         $or = getService('opinion_repository');
@@ -390,13 +383,13 @@ class RssController extends Controller
     }
 
     /**
-     * Get latest contents given a type of content
+     * Get latest contents given a type of content.
      *
-     * @param int $contentType The type of the contents to fetch
-     * @param int $total The total number of contents
+     * @param int $contentType The type of the contents to fetch.
+     * @param int $total The total number of contents.
      *
-     * @return Array Latest contents
-     **/
+     * @return Array Latest contents.
+     */
     public function getLatestContents($contentType = 'article', $total = 10)
     {
         $er = getService('entity_repository');
@@ -426,13 +419,13 @@ class RssController extends Controller
     }
 
     /**
-     * Get latest articles by category
+     * Get latest articles by category.
      *
-     * @param int $total The total number of contents
-     * @param string $category The category to fetch articles from
+     * @param int    $total    The total number of contents.
+     * @param string $category The category to fetch articles from.
      *
-     * @return Array Latest articles of category
-     **/
+     * @return Array Latest articles of category.
+     */
     public function getLatestArticlesByCategory($category, $total = 10)
     {
         $er = getService('entity_repository');
@@ -457,19 +450,16 @@ class RssController extends Controller
             ]
         ];
 
-        $contents = $er->findBy($filters, $order, $total, 1);
-
-        return $contents;
+        return $er->findBy($filters, $order, $total, 1);
     }
 
-
     /**
-     * Fetches advertisements for Instant article
+     * Fetches advertisements for Instant article.
      *
-     * @param string category the category identifier
+     * @param string category The category identifier.
      *
-     * @return array the list of advertisements for this page
-     **/
+     * @return array The list of advertisements for this page.
+     */
     public static function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
