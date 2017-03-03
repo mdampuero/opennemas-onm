@@ -506,20 +506,15 @@ class RssController extends Controller
             return;
         }
 
-        // Sort by theme parameter and position
-        if (empty($theme->parameters)
-            || !array_key_exists('frontpage_order', $theme->parameters)
-        ) {
-            uasort($contents, function ($a, $b) use ($order) {
-                $positionA = array_search($a->placeholder, $order);
-                $positionB = array_search($b->placeholder, $order);
+        uasort($contents, function ($a, $b) use ($order) {
+            $positionA = array_search($a->placeholder, $order);
+            $positionB = array_search($b->placeholder, $order);
 
-                return $positionA < $positionB ? -1 :
-                    ($positionA > $positionB ? 1 :
-                    ($a->position < $b->position ? -1 : 1)
-                );
-            });
-        }
+            return $positionA < $positionB ? -1 :
+                ($positionA > $positionB ? 1 :
+                ($a->position < $b->position ? -1 : 1)
+            );
+        });
     }
 
     /**
