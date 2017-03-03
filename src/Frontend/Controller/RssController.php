@@ -510,11 +510,14 @@ class RssController extends Controller
         if (empty($theme->parameters)
             || !array_key_exists('frontpage_order', $theme->parameters)
         ) {
-            // Sort by placeholder name and position
-            uasort($contents, function ($a, $b) {
-                return $a->placeholder < $b->placeholder ? -1 :
-                    ($a->placeholder > $b->placeholder ? 1 :
-                    ($a->position < $b->position ? -1 : 1));
+            uasort($contents, function ($a, $b) use ($order) {
+                $positionA = array_search($a->placeholder, $order);
+                $positionB = array_search($b->placeholder, $order);
+
+                return $positionA < $positionB ? -1 :
+                    ($positionA > $positionB ? 1 :
+                    ($a->position < $b->position ? -1 : 1)
+                );
             });
         }
     }
