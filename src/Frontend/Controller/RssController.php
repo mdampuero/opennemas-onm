@@ -136,6 +136,9 @@ class RssController extends Controller
             'video'   => _('Latest Videos'),
         ];
 
+        if ($category === 'last') {
+            $category = null;
+        }
 
         $this->view->setConfig('rss');
 
