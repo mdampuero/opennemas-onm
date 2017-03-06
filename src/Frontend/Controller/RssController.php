@@ -42,12 +42,10 @@ class RssController extends Controller
             $categoriesTree = $ccm->getCategoriesTreeMenu();
             $opinionAuthors = \User::getAllUsersAuthors();
 
-            $this->view->assign(
-                [
-                    'categoriesTree' => $categoriesTree,
-                    'opinionAuthors' => $opinionAuthors,
-                ]
-            );
+            $this->view->assign([
+                'categoriesTree' => $categoriesTree,
+                'opinionAuthors' => $opinionAuthors,
+            ]);
         }
 
         return $this->render(
@@ -65,15 +63,14 @@ class RssController extends Controller
      */
     public function frontpageRssAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $author       = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
         $this->view->setConfig('rss');
 
         $id       = 0;
         $cm       = new \ContentManager;
         $cacheID  = $this->view->generateCacheId($categoryName, '', 'RSS|frontpage');
-        $rssTitle = '';
+        $rssTitle = _('Homepage News');
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
@@ -129,84 +126,42 @@ class RssController extends Controller
      */
     public function generalRssAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', 'last', FILTER_SANITIZE_STRING);
-        $author       = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
+        $type     = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
+        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $cacheID  = $this->view->generateCacheId($type, '', 'RSS|' . $category);
+        $titles   = [
+            'album'   => _('Latest Albums'),
+            'article' => _('Latest News'),
+            'opinion' => _('Latest Opinions'),
+            'video'   => _('Latest Videos'),
+        ];
+
 
         $this->view->setConfig('rss');
-
-        $cm      = new \ContentManager;
-        $cacheID = $this->view->generateCacheId($categoryName, '', 'RSS'.$author);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            // Set total number of contents
+            $rssTitle = $titles[$type];
             $total    = $this->get('setting_repository')->get('elements_in_rss', 10);
-            $rssTitle = '';
+            $contents = $this->getLatestContents($type, $category, $total);
 
-            switch ($categoryName) {
-                case 'opinion':
-                    // Latest opinions
-                    $rssTitle = _('Latest Opinions');
-                    $contents = $this->getLatestOpinions($total);
-                    break;
-                case 'last':
-                    // Latest news
-                    $rssTitle = _('Latest News');
-                    $contents = $this->getLatestContents('article', $total);
-                    break;
-                case 'home':
-                    // Homepage news
-                    $rssTitle = _('Homepage News');
-                    $contents = $cm->getContentsForHomepageOfCategory(0);
-
-                    $contents = $cm->getInTime($contents);
-                    $contents = array_filter($contents, function ($item) {
-                        return in_array($item->content_type_name, ['article', 'opinion', 'video', 'album']);
-                    });
-
-                    break;
-                case 'videos':
-                    // Latest videos
-                    $rssTitle = _('Latest Videos');
-                    $contents = $this->getLatestContents('video', $total);
-                    foreach ($contents as &$content) {
-                        $content->thumb = $content->getThumb();
-                        $content->category_name  = $content->loadCategoryName($content->pk_content);
-                        $content->category_title = $content->loadCategoryTitle($content->pk_content);
-                    }
-                    break;
-                case 'albums':
-                    // Latest albums
-                    $rssTitle = _('Latest Albums');
-                    $contents   = $this->getLatestContents('album', $total);
-                    foreach ($contents as &$content) {
-                        $content->cover          = $content->cover_image->path_img;
-                        $content->category_name  = $content->loadCategoryName($content->id);
-                        $content->category_title = $content->loadCategoryTitle($content->id);
-                    }
-                    break;
-                default:
-                    // Latest news by category
-                    $category = getService('category_repository')->findOneBy(
-                        [ 'name' => [[ 'value' => $categoryName ]] ],
-                        'name ASC'
-                    );
-                    if (is_null($category)) {
-                        throw new ResourceNotFoundException();
-                    }
-                    $rssTitle = $category->title;
-                    $contents = $this->getLatestArticlesByCategory($categoryName, $total);
-                    break;
-            }
-
-            $this->sortByPlaceholder($contents, $categoryName);
             $this->getRelatedContents($contents);
+
+            if (!empty($category)) {
+                $c = getService('category_repository')
+                    ->findOneBy([ 'name' => [[ 'value' => $category ]] ]);
+
+                if (!empty($c)) {
+                    $rssTitle = $rssTitle . ' - ' . $c->title;
+                }
+            }
 
             $this->view->assign([
                 'rss_title' => $rssTitle,
                 'contents'  => $contents,
-                'type'      => $categoryName,
+                'type'      => $type,
+                'category'  => $category
             ]);
         }
 
@@ -226,14 +181,14 @@ class RssController extends Controller
      */
     public function authorRSSAction(Request $request)
     {
-        $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
-        $total = 10;
+        $slug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $total   = 10;
+        $cacheId = $this->view->generateCacheId('rss|author', '', $slug);
 
         $this->view->setConfig('rss');
 
-        $cacheID = $this->view->generateCacheId('rss|author', '', $slug);
         if (($this->view->getCaching() === 0)
-           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+           || (!$this->view->isCached('rss/rss.tpl', $cacheId))
         ) {
             // Get user by slug
             $user = $this->get('user_repository')->findOneBy(
@@ -265,6 +220,7 @@ class RssController extends Controller
                 if (isset($content->img1) && ($content->img1 > 0)) {
                     $contents[$key]->photo = $er->find('Photo', $content->img1);
                 }
+
                 // Get album cover photo
                 if ($content->fk_content_type == 7) {
                     $contents[$key]->photo = $er->find('Photo', $content->cover_id);
@@ -276,7 +232,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss' ],
+            [ 'cache_id' => $cacheId, 'x-tags' => 'rss' ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
     }
@@ -374,40 +330,6 @@ class RssController extends Controller
     }
 
     /**
-     * Get latest opinions.
-     *
-     * @param int $total The total number of contents.
-     *
-     * @return Array Latest opinions.
-     */
-    public function getLatestOpinions($total = 10)
-    {
-        $or = getService('opinion_repository');
-
-        $order = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'content_status' => [[ 'value' => 1 ]],
-            'in_litter'      => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'           => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
-
-        $contents = $or->findBy($filters, $order, $total, 1);
-
-        return $contents;
-    }
-
-    /**
      * Get latest contents given a type of content.
      *
      * @param int $contentType The type of the contents to fetch.
@@ -415,11 +337,15 @@ class RssController extends Controller
      *
      * @return Array Latest contents.
      */
-    public function getLatestContents($contentType = 'article', $total = 10)
+    public function getLatestContents($contentType = 'article', $category = null, $total = 10)
     {
-        $er = getService('entity_repository');
+        $em = getService('entity_repository');
 
-        $order = [ 'starttime' => 'DESC' ];
+        if ($contentType === 'opinion') {
+            $em = getService('opinion_repository');
+        }
+
+        $order   = [ 'starttime' => 'DESC' ];
         $filters = [
             'content_type_name' => [[ 'value' => $contentType ]],
             'content_status'    => [[ 'value' => 1 ]],
@@ -438,44 +364,13 @@ class RssController extends Controller
             ]
         ];
 
-        $contents = $er->findBy($filters, $order, $total, 1);
+        if ($contentType !== 'opinion' && !empty($category)) {
+            $filters['category_name'] = [ [ 'value' => $category ] ];
+        }
+
+        $contents = $em->findBy($filters, $order, $total, 1);
 
         return $contents;
-    }
-
-    /**
-     * Get latest articles by category.
-     *
-     * @param int    $total    The total number of contents.
-     * @param string $category The category to fetch articles from.
-     *
-     * @return Array Latest articles of category.
-     */
-    public function getLatestArticlesByCategory($category, $total = 10)
-    {
-        $er = getService('entity_repository');
-
-        $order = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'content_type_name' => [[ 'value' => 'article' ]],
-            'category_name'     => [[ 'value' => $category ]],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'           => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
-
-        return $er->findBy($filters, $order, $total, 1);
     }
 
     /**
@@ -575,6 +470,10 @@ class RssController extends Controller
                 $contents[$key]->photo = $er->find('Photo', $content->img1);
             } elseif (isset($content->img2) && !empty($content->img2)) {
                 $contents[$key]->photo = $er->find('Photo', $content->img2);
+            } elseif (isset($content->fk_video) && !empty($content->fk_video)) {
+                $contents[$key]->photo = $er->find('Photo', $content->fk_video);
+            } elseif (isset($content->fk_video2) && !empty($content->fk_video2)) {
+                $contents[$key]->photo = $er->find('Photo', $content->fk_video2);
             }
 
             // Exclude articles with external link from RSS
