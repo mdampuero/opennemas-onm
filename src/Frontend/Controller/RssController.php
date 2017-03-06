@@ -470,10 +470,12 @@ class RssController extends Controller
                 $contents[$key]->photo = $er->find('Photo', $content->img1);
             } elseif (isset($content->img2) && !empty($content->img2)) {
                 $contents[$key]->photo = $er->find('Photo', $content->img2);
-            } elseif (isset($content->fk_video) && !empty($content->fk_video)) {
-                $contents[$key]->photo = $er->find('Photo', $content->fk_video);
+            }
+
+            if (isset($content->fk_video) && !empty($content->fk_video)) {
+                $contents[$key]->video = $er->find('Video', $content->fk_video);
             } elseif (isset($content->fk_video2) && !empty($content->fk_video2)) {
-                $contents[$key]->photo = $er->find('Photo', $content->fk_video2);
+                $contents[$key]->video = $er->find('Video', $content->fk_video2);
             }
 
             // Exclude articles with external link from RSS
