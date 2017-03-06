@@ -437,7 +437,7 @@ class User
 
         $sql = 'SELECT * FROM users WHERE token=?';
         $rs  = getService('orm.manager')->getConnection('instance')
-            ->fetchAll($sql, [ $email ]);
+            ->fetchAll($sql, [ $token ]);
 
         if (!$rs) {
             return null;
