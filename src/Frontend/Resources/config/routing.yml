@@ -99,7 +99,7 @@ frontend_rss_listing:
     defaults: { _controller: FrontendBundle:Rss:index }
 
 frontend_rss_author:
-    path: /rss/author/{slug}
+    path: /rss/author/{author_slug}
     defaults: { _controller: FrontendBundle:Rss:authorRSS }
     requirements:
         author_slug: '[A-Za-z\d-.]+'

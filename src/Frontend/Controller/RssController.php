@@ -181,7 +181,7 @@ class RssController extends Controller
      */
     public function authorRSSAction(Request $request)
     {
-        $slug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $slug    = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
         $total   = 10;
         $cacheId = $this->view->generateCacheId('rss|author', '', $slug);
 
