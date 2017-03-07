@@ -583,7 +583,7 @@
                 [% item.page_views %]
               </td>
               <td class="text-center" ng-show="isColumnEnabled('blocked')">
-                <button class="btn btn-white" type="button" ng-click="patch(item, 'blocked', item.blocked == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
+                <button class="btn btn-loading btn-white" type="button" ng-click="patch(item, 'blocked', item.blocked == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.blockedLoading, 'fa-lock text-error' : !item.blockedLoading && item.blocked == '1', 'fa-unlock-alt text-success': !item.blockedLoading && (!item.blocked || item.blocked == '0') }"></i>
                 </button>
                 <span ng-if="!security.hasInstance(item.internal_name) || !security.hasPermission('INSTANCE_UPDATE')">
@@ -591,7 +591,7 @@
                 </span>
               </td>
               <td class="text-center" ng-show="isColumnEnabled('activated')">
-                <button class="btn btn-white" type="button" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
+                <button class="btn btn-loading btn-white" type="button" ng-click="patch(item, 'activated', item.activated == '1' ? '0' : '1')" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                 </button>
                 <span ng-if="!security.hasInstance(item.internal_name) || !security.hasPermission('INSTANCE_UPDATE')">
