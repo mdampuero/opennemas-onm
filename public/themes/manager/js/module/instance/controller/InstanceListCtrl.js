@@ -154,7 +154,7 @@
               name: 'name ~ "[value]" or ' +
                 'internal_name ~ "[value]" or ' +
                 'contact_mail ~ "[value]" or ' +
-                'domains ~ "[value]"'
+                'domains ~ "[value]" or settings ~ "[value]"'
             }
           });
 
@@ -272,7 +272,7 @@
         }
 
         oqlDecoder.configure({
-          ignore: [ 'internal_name', 'contact_mail', 'domains' ]
+          ignore: [ 'internal_name', 'contact_mail', 'domains', 'settings' ]
         });
 
         if ($location.search().oql) {
