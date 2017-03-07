@@ -263,7 +263,7 @@ class RssController extends Controller
            || (!$this->view->isCached('rss/fb_instant_articles.tpl', $cacheID))
         ) {
             // Get last articles contents
-            $contents = $this->getLatestContents('article', 50);
+            $contents = $this->getLatestContents('article', null, 50);
 
             // Fetch photo for each article
             $er = getService('entity_repository');
