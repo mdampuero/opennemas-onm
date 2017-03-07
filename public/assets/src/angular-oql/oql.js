@@ -321,7 +321,7 @@
           return {};
         }
 
-        var conditions = this.oql.split(/and|or/);
+        var conditions = this.oql.split(/ and | or /);
         var criteria   = {};
 
         for (var i = 0; i < conditions.length; i++) {
