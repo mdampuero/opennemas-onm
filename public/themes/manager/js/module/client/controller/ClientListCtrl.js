@@ -198,7 +198,7 @@
         }
 
         oqlDecoder.configure({
-          ignore: [ 'address', 'city', 'email' ,'first_name' ,'last_name', 'state' ],
+          ignore: [ 'address', 'city', 'email', 'last_name', 'state' ],
           map:    { first_name: 'name' }
         });
 
