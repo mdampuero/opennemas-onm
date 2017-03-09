@@ -82,6 +82,13 @@ class DomainController extends Controller
         $domain = $request->query->get('domain');
         $create = $request->query->get('create');
 
+        if (in_array($domain, $this->get('core.instance')->domains)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is already configured'), $domain),
+                400
+            );
+        }
+
         if (empty($domain) || !$this->isTLDValid($domain, $create)) {
             return new JsonResponse(
                 sprintf(_('The domain %s is not valid'), $domain),
