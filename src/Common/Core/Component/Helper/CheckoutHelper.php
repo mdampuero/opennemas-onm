@@ -360,7 +360,7 @@ class CheckoutHelper
         });
 
         return array_map(function ($a) {
-            return substr($a['description'], strrpos($a['description'], ' '));
+            return trim(substr($a['description'], strrpos($a['description'], ' ')));
         }, $domains);
     }
 
