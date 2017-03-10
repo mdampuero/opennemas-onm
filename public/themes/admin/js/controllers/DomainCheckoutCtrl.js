@@ -92,9 +92,13 @@
           }
 
           http.post('backend_ws_domain_save', data).then(function() {
-            $scope.next();
-            $scope.loading = false;
-            $scope.cart = [];
+            $scope.next().then(function() {
+              $scope.loading = false;
+              $scope.cart    = [];
+
+              webStorage.local.remove($scope.cartName);
+              webStorage.local.remove('purchase');
+            });
           }, function() {
             $scope.error   = true;
             $scope.loading = false;

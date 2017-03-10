@@ -14,7 +14,7 @@
      */
     .controller('CartCtrl', [
       '$rootScope', '$scope', 'webStorage',
-      function ($rootScope, $scope, webStorage) {
+      function ($rootScope, $scope) {
         /**
          * @function getPrice
          * @memberOf CartCtrl
@@ -74,13 +74,9 @@
 
         // Force float type for prices
         $scope.$watch('cart', function(nv) {
-          webStorage.local.remove($scope.cartName);
-
           if (!nv || nv.length === 0) {
             return;
           }
-
-          webStorage.local.set($scope.cartName, nv);
 
           for (var i = 0; i < nv.length; i++) {
             for (var j = 0; j < nv[i].price.length; j++) {

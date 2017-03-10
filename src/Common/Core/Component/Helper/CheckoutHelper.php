@@ -61,11 +61,11 @@ class CheckoutHelper
         $themes     = $this->getThemes($items);
 
         $this->instance->domains =
-            array_merge($this->instance->domains, $domains);
+            array_unique(array_merge($this->instance->domains, $domains));
         $this->instance->activated_modules =
-            array_merge($this->instance->activated_modules, $extensions);
+            array_unique(array_merge($this->instance->activated_modules, $extensions));
         $this->instance->purchased =
-            array_merge($this->instance->purchased, $themes);
+            array_unique(array_merge($this->instance->purchased, $themes));
 
         $this->container->get('orm.manager')->persist($this->instance);
     }
@@ -360,7 +360,7 @@ class CheckoutHelper
         });
 
         return array_map(function ($a) {
-            return substr($a['description'], strrpos($a['description'], ' '));
+            return trim(substr($a['description'], strrpos($a['description'], ' ')));
         }, $domains);
     }
 
