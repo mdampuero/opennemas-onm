@@ -303,6 +303,17 @@
           $scope.purchase = webStorage.local.get('purchase');
         }
 
+        // Update local storage when cart changes
+        $scope.$watch('cart', function(nv) {
+          webStorage.local.remove($scope.cartName);
+
+          if (!nv || nv.length === 0) {
+            return;
+          }
+
+          webStorage.local.set($scope.cartName, nv);
+        }, true);
+
         // Configure braintree
         $scope.$watch('clientToken', function(nv) {
           if (!nv) {
