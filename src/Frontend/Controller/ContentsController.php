@@ -144,10 +144,7 @@ class ContentsController extends Controller
                 ->isValid($response, $request->getClientIp());
 
             if (!$isValid) {
-                $errors []= _(
-                    'The reCAPTCHA was not entered correctly.'.
-                    ' Try to authenticate again.'
-                );
+                $errors[] = _('The reCAPTCHA was not entered correctly. Try to authenticate again.');
             }
 
             // If the content is external load it from the external webservice
