@@ -598,14 +598,6 @@ class UserController extends Controller
 
         $user->merge($converter->objectify($data));
 
-        // TODO: Hack to fix date conversion. Remove when all dates in UTC.
-        if (!empty($user->paywall_time_limit)) {
-            $user->paywall_time_limit = new \DateTime(
-                $data['paywall_time_limit'],
-                $this->get('core.locale')->getTimeZone()
-            );
-        }
-
         // TODO: Remove after check and update database schema
         $user->type = empty($user->type) ? 0 : $user->type;
         $user->url  = empty($user->url) ? ' ' : $user->url;
