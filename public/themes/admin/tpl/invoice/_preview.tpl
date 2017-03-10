@@ -39,7 +39,10 @@
         <td class="text-right">[% subtotal %] €</td>
       </tr>
       <tr ng-if="payment.nonce">
-        <td class="text-right no-border"><strong>{t}Pay with credit card{/t}</strong></td>
+        <td class="text-right no-border">
+          <strong ng-if="payment.type === 'CreditCard'">{t}Pay with credit card{/t}</strong>
+          <strong ng-if="payment.type !== 'CreditCard'">{t}Pay via PayPal{/t}</strong>
+        </td>
         <td class="text-right">[% fee | number : 2 %] €</td>
       </tr>
       <tr>

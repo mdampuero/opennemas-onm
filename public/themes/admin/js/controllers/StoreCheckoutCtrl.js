@@ -62,7 +62,9 @@
 
           http.post('backend_ws_store_checkout', data).then(function() {
             $scope.next().then(function() {
-              $scope.cart = [];
+              $scope.loading = false;
+              $scope.cart    = [];
+
               webStorage.local.remove($scope.cartName);
               webStorage.local.remove('purchase');
               $analytics.pageTrack('/store/checkout/done');
@@ -70,6 +72,7 @@
           }, function() {
             $scope.error   = true;
             $scope.loading = false;
+            webStorage.local.remove('purchase');
           });
         };
 
