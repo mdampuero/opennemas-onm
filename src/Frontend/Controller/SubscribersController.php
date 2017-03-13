@@ -74,9 +74,7 @@ class SubscribersController extends Controller
             ->isValid($response, $request->getClientIp());
 
         // Set default values to return
-        $message = null;
-        $class   = '';
-        $rs      = null;
+        $rs = [ 'class' => null, 'message' => null ];
 
         // Check verify for bots
         if (!$isValid) {
