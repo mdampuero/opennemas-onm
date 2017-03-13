@@ -76,6 +76,7 @@ class SubscribersController extends Controller
         // Set default values to return
         $message = null;
         $class   = '';
+        $rs      = null;
 
         // Check verify for bots
         if (!$isValid) {
