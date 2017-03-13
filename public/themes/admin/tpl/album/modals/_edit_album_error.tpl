@@ -8,6 +8,3 @@
   <p>{t}Check that you have included more than one image in this album{/t}</p>
   <p>{t}Assign an image as a cover image{/t}</p>
 </div>
-<div class="modal-footer">
-  <button class="btn btn-primary" ng-click="close()" type="button">{t}Close{/t}</button>
-</div>
