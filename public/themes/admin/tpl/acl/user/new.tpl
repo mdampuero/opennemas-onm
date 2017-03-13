@@ -375,7 +375,7 @@
                     {t}Paywall time limit:{/t}
                   </label>
                   <div class="controls">
-                    <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{datetime date=$user->paywall_time_limit}"/>
+                    <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{{$user->paywall_time_limit}}"/>
                   </div>
                 </div>
                 {/is_module_activated}

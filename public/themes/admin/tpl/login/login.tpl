@@ -26,6 +26,11 @@
       @AdminTheme/less/_login.less" filters="cssrewrite,less" output="login"}
     {/stylesheets}
   {/block}
+  {block name="header-js"}
+    <script type="text/javascript">
+      var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
+    </script>
+  {/block}
 </head>
 <body class="login-body">
   <div class="wrapper">
@@ -70,12 +75,7 @@
                           <input class="form-control" id="_password" name="_password" placeholder="{t}Password{/t}" tabindex="2" type="password" value="{$smarty.cookies.login_password|default:""}">
                         </div>
                       </div>
-                      {if $failed_login_attempts >= 3}
-                        <script type="text/javascript">
-                          var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
-                        </script>
-                        {getRecaptchaHtml onm=1}
-                      {/if}
+                      {$recaptcha}
                       <div class="form-group text-right">
                         <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
                         <button class="btn btn-primary" id="login-button" tabindex="4" type="submit">{t}Log in{/t}</button>
@@ -106,8 +106,8 @@
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                {foreach from=$locales key=key item=value}
-                <li class="{if $key == $locale}current{/if}"><a href="?language={$key}">{$value}</a></li>
+                {foreach from=$locales key=key item=language}
+                <li class="{if $key == $locale}current{/if}"><a href="?language={$key}">{$language}</a></li>
                 {/foreach}
               </ul>
             </div>
@@ -127,15 +127,14 @@
 
           // Encode password in md5 on backend login
           $('#loginform').on('submit', function(e, ui) {
-            var password_input = $('#loginform').find('input[name="_password"]');
+            var form = $('#loginform');
 
-            var password_input_val = password_input.val();
-            if (password_input_val.length > 0) {
+            if (form.find('input[name="_password"]').length > 0) {
+              var password = form.find('input[name="_password"]').val();
               if (password_input_val.indexOf('md5:') === -1) {
                 password_input_val = 'md5:' + hex_md5(password_input_val);
               }
-
-              password_input.val(password_input_val);
+              form.find('input[name="_password"]').val(password);
             }
           });
         });
