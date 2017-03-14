@@ -60,7 +60,6 @@ class VarnishCleanerListener implements EventSubscriberInterface
 
                 foreach ($response as $message) {
                     $this->logger->info($message);
-                    // $responses []= $message;
                 }
             }
         }

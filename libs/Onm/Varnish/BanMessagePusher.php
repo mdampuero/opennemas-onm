@@ -49,7 +49,20 @@ class BanMessagePusher
                 ''
             );
 
-            $response []= "BAN queued - {$serverName}({$serverConf['host']}:{$serverConf['port']}) - {$banHeader} || Return:".$return;
+            // Do not register long return messages as we only expect some
+            // prebuild messages from Varnish
+            if (!preg_match('@(Ban not allowed|Ban added|No Ban specified)@i', $return)) {
+                $return = 'Not valid response from varnish.';
+            }
+
+            $response[] = sprintf(
+                "BAN queued - %s (%s:%s) - %s || Return: %s",
+                $serverName,
+                $serverConf['host'],
+                $serverConf['port'],
+                $banHeader,
+                $return
+            );
         }
 
         return $response;
