@@ -140,7 +140,7 @@ class ContentsController extends Controller
 
             $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
             $isValid  = $this->get('core.recaptcha')
-                ->configureFromSettings()
+                ->configureFromParameters()
                 ->isValid($response, $request->getClientIp());
 
             if (!$isValid) {
