@@ -59,6 +59,10 @@ angular.module('BackendApp.controllers')
               return null;
             }
           }
+        }).closed.then(function(){
+          var btn = $('.btn.btn-primary');
+          btn.attr('disabled', false);
+          $('.btn.btn-primary .text').html(btn.data('text-original'));
         });
       }
     };
