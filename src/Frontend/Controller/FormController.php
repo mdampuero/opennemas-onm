@@ -162,7 +162,95 @@ class FormController extends Controller
     }
 
     /**
-     * Returns the advertisements for the letters frontpage.
+     * Sends an email with form fields.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function widgetSendAction(Request $request)
+    {
+        // Get verify value to avoid bots
+        $verify = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
+
+        if ('POST' == $request->getMethod() && empty($verify)) {
+            $email     = trim($request->request->filter('email', null, FILTER_SANITIZE_STRING));
+            $response  = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+            $errors    = [];
+
+            // Check current recaptcha
+            $isValid = $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->isValid($response, $request->getClientIp());
+
+            if (!$isValid) {
+                $errors[] = _(
+                    "The reCAPTCHA wasn't entered correctly. Go back and try it again."
+                );
+            }
+
+            // Check email not empty
+            if (empty($email)) {
+                $errors[] = _('Email is required but it will not be published');
+            }
+
+            // If errors, return Response
+            if (count($errors) > 0) {
+                $content = json_encode($errors);
+                $httpCode = 400;
+
+                return new Response($content, $httpCode);
+            }
+
+            // Check if data is correct and generate email body
+            $body       = '';
+            $notAllowed = [ 'subject', 'cx', 'security_code', 'submit', 'g-recaptcha-response', 'recipients' ];
+            foreach ($request->request as $key => $value) {
+                if (!in_array($key, $notAllowed)) {
+                    $body .= "<p><strong>".ucfirst($key)."</strong>: $value </p> \n";
+                }
+            }
+
+            // Get subject and recipients. Also clean recipients
+            $subject    = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
+            $recipients = $request->request->filter('recipients', null, FILTER_SANITIZE_STRING);
+            $cleanRecipients = [];
+            $recipientsArray = explode(',', $recipients);
+            foreach ($recipientsArray as $recipient) {
+                $cleanRecipients[] = trim($recipient);
+            }
+
+            $settings = $this->get('setting_repository')->get([ 'site_name', 'contact_email' ]);
+
+            //  Build the message
+            $text = \Swift_Message::newInstance();
+            $text
+                ->setSubject($subject)
+                ->setBody($body, 'text/html')
+                ->setTo($cleanRecipients)
+                ->setFrom($email)
+                ->setSender([ 'no-reply@postman.opennemas.com' => $settings['site_name'] ]);
+
+            try {
+                $mailer = $this->get('mailer');
+                $mailer->send($text);
+
+                $this->get('application.log')->notice(
+                    "Email sent. Frontend widget form (sender:".$email.", to: ".$recipients.")"
+                );
+                $content = _('The information has been sent');
+                $httpCode = 200;
+            } catch (\Swift_SwiftException $e) {
+                $content = _('Unable to send the email. Please try to send it later.');
+                $httpCode = 500;
+            }
+
+            return new Response($content, $httpCode);
+        }
+    }
+
+    /**
+     * Returns the advertisements for the form frontpage.
      *
      * @return array The list of advertisemnets.
      */
