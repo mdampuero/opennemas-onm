@@ -455,8 +455,12 @@ class StringUtils
 
         // Remove stop list
         if ($useStopList) {
-            $string = self::removeShorts($string);
+            $newString = self::removeShorts($string);
+            if (mb_strlen($newString) > 20) {
+                $string = $newString;
+            }
         }
+
         $string = trim(strtr($string, self::$trade));
 
         // Convert nbsp, ndash and mdash to hyphens
