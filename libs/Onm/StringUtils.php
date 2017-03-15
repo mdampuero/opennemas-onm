@@ -449,7 +449,7 @@ class StringUtils
 
         // Use intl extension to clean
         $string = transliterator_transliterate(
-            "NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();",
+            "NFD; [:Nonspacing Mark:] Remove; NFC; Lower();",
             $string
         );
 
@@ -483,6 +483,12 @@ class StringUtils
 
         // Convert times to x
         $string = str_replace( '%c3%97', 'x', $string );
+        // Remove punctuation marks
+        $string = str_replace(
+            ['"', "'", "…", ".", ",", "“", "”", ",", ".", ":", ";", "?", "¿", "!", "¡", "'", ")", ")"],
+            '',
+            $string
+        );
 
         // Clean trailing and duplicated spaces
         $string = preg_replace(['/\s+/', '/[\t\n]/'], ' ', $string);
