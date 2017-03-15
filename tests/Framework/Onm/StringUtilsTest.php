@@ -219,6 +219,13 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
                 'Detienen a dieciséis personas por el &#10;robo de joyas de Kim Kardashian'
             )
         );
+
+        $this->assertEquals(
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            $this->object->generateSlug(
+                'detienen-dieciseis-personas-robo-joyas-kim-kardashian'
+            )
+        );
     }
 
     /**
@@ -296,7 +303,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testRemoveShorts()
     {
         $this->assertEquals(
-            ' cousa non lembraba ven vagar.',
+            'cousa non lembraba ven vagar.',
             $this->object->removeShorts('unha cousa que non me lembraba e ven de vagar.')
         );
     }
