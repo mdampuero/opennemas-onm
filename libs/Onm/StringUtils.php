@@ -860,9 +860,9 @@ EOF;
 
         $newstring = $string;
         foreach ($shorts as $word) {
-            $newstring = preg_replace('/^'.$word.'[\.\, ]/', ' ', $newstring);
-            $newstring = preg_replace('/[\.\, ]'.$word.'[\.\, ]/', ' ', $newstring);
-            $newstring = preg_replace("/[\.\, ]$word$/", ' ', $newstring);
+            $newstring = preg_replace('/\b'.$word.'[\.\,\s]/', '', $newstring);
+            $newstring = preg_replace('/[\.\,\s]'.$word.'[\.\,\s]/', '', $newstring);
+            $newstring = preg_replace('/[\.\,\s]'.$word.'\b/', '', $newstring);
         }
 
         if (!empty(trim($newstring))) {
