@@ -231,8 +231,15 @@ class SecurityListener implements EventSubscriberInterface
     {
         $exception = new BadCredentialsException();
         $response  = new RedirectResponse($this->router->generate('admin_login'));
+        $uri       = $event->getRequest()->getUri();
 
         if ($instance->blocked) {
+            // Redirect to last URL
+            if ($uri !== '/admin/login') {
+                $event->getRequest()->getSession()
+                    ->set('_security.backend.target_path', $uri);
+            }
+
             $exception = new InstanceBlockedException($instance->internal_name);
         }
 
