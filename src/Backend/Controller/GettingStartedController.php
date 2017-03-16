@@ -35,22 +35,15 @@ class GettingStartedController extends Controller
     public function gettingStartedAction(Request $request)
     {
         $session = $request->getSession();
-        $session->set(
-            '_security.backend.target_path',
-            $this->generateUrl('admin_login_callback')
-        );
+        $params  = ['user' => $this->get('core.user') ];
 
-        $user = $this->get('core.user');
-
-        if ($user->facebook_id) {
+        if ($params['user']->facebook_id) {
             $params['facebook'] = true;
         }
 
-        if ($user->twitter_id) {
+        if ($params['user']->twitter_id) {
             $params['twitter'] = true;
         }
-
-        $params['user'] = $this->getUser();
 
         return $this->render('gstarted/getting_started.tpl', $params);
     }
