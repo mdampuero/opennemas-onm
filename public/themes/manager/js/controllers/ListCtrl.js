@@ -36,6 +36,31 @@
         $scope.tm = null;
 
         /**
+         * @function cleanCriteria
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Removes empty values from criteria.
+         *
+         * @param {Object} The criteria object.
+         *
+         * @return {Object} The cleaned criteria object.
+         */
+        $scope.cleanCriteria = function(criteria) {
+          var cleaned = {};
+
+          for (var name in criteria) {
+            if (criteria[name] !== null &&
+                criteria[name] !== undefined &&
+                criteria[name] !== '') {
+              cleaned[name] = criteria[name];
+            }
+          }
+
+          return cleaned;
+        };
+
+        /**
          * @function clear
          * @memberOf ListCtrl
          *
@@ -238,7 +263,7 @@
 
           var criteria = oqlDecoder.decode($location.search().oql);
 
-          if (criteria !== $scope.criteria) {
+          if (!angular.equals(criteria, $scope.criteria)) {
             $scope.criteria = criteria;
           }
         });
@@ -253,8 +278,11 @@
             return;
           }
 
+          // Remove empty values from criteria
+          $scope.criteria = $scope.cleanCriteria(nv);
+
           // Reset page when epp changes
-          if (nv.epp != ov.epp) {
+          if (nv.epp !== ov.epp) {
             nv.page = 1;
           }
 
