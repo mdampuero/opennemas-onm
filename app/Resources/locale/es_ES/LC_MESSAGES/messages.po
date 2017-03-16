@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-09 16:20+0000\n"
-"PO-Revision-Date: 2017-03-09 17:23+0100\n"
+"POT-Creation-Date: 2017-03-16 10:14+0000\n"
+"PO-Revision-Date: 2017-03-16 11:29+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -1922,23 +1922,19 @@ msgstr ""
 msgid "Unable to find the page you are looking for."
 msgstr "No se pudo encontrar la página que estabas buscando."
 
+msgid "Email is required but it will not be published"
+msgstr "El email es obligatorio aunque no se publicará"
+
 msgid "The reCAPTCHA wasn't entered correctly. Go back and try it again."
 msgstr ""
 "El código de reCAPTCHA no fue escrito correctamente. Vuelva atrás y pruebe "
 "de nuevo."
 
-msgid ""
-"Sorry, we were unable to complete your request.\n"
-"Check the form and try again"
-msgstr ""
-"No hemos podido completar tu petición.\n"
-"Comprueba el formulario e inténtalo de nuevo."
-
-msgid "Email is required but it will not be published"
-msgstr "El email es obligatorio aunque no se publicará"
-
 msgid "The information has been sent"
 msgstr "La información ha sido enviada"
+
+msgid "Sorry, we were unable to complete your request"
+msgstr "No hemos podido completar tu petición."
 
 msgid "Unable to save the letter."
 msgstr "No se pudo guardar la carta."
@@ -1997,6 +1993,13 @@ msgstr "Te has suscrito al boletín de noticias."
 
 msgid "You have been unsubscribed from our newsletter."
 msgstr "Hemos eliminado tu suscripción al boletín de noticias "
+
+msgid ""
+"Sorry, we were unable to complete your request.\n"
+"Check the form and try again"
+msgstr ""
+"No hemos podido completar tu petición.\n"
+"Comprueba el formulario e inténtalo de nuevo."
 
 msgid "You have been unsubscribed from our newsletter"
 msgstr "Hemos eliminado tu suscripción al boletín de noticias"
@@ -2646,9 +2649,6 @@ msgstr ""
 
 msgid "Y-m-d H:i:s"
 msgstr "H:i:s d-m-Y"
-
-msgid "reCaptcha public key is not set"
-msgstr "La llave pública de reCaptcha no está configurada"
 
 msgid "Create free newspaper"
 msgstr "Crear un periódico gratis"
@@ -4495,9 +4495,6 @@ msgstr "Comprueba que has incluído más de una imagen en este álbum"
 msgid "Assign an image as a cover image"
 msgstr "Asigna una imagen como imagen de portada"
 
-msgid "Close"
-msgstr "Cerrar"
-
 msgid "New album"
 msgstr "Nuevo álbum"
 
@@ -5696,6 +5693,9 @@ msgid ""
 msgstr ""
 "Completa el formulario de debajo con el título y la URL externa que quieres "
 "añadir al menú."
+
+msgid "Close"
+msgstr "Cerrar"
 
 msgid "Add item"
 msgstr "Añadir elemento"
@@ -7881,6 +7881,9 @@ msgstr "Alexa"
 msgid "Page views"
 msgstr "Páginas vistas"
 
+msgid "Blocked"
+msgstr "Bloqueada"
+
 msgid "No rank"
 msgstr "Sin clasificación"
 
@@ -7988,6 +7991,10 @@ msgstr "Plantilla"
 msgid "Contact mail"
 msgstr "Email de contacto"
 
+msgid "Backend access blocked for instance users"
+msgstr ""
+"Acceso al panel de administración bloqueado para usuarios de la instancia"
+
 msgid "No main domain"
 msgstr "Sin dominio principal"
 
@@ -7996,6 +8003,15 @@ msgstr "Los dominios de la instancia no pueden estar vacíos."
 
 msgid "Domain expire date:"
 msgstr "Tiempo de expiración de dominio:"
+
+msgid "Search by name or street"
+msgstr "Buscar por nombre o dirección"
+
+msgid "There is no client linked to this instance"
+msgstr "No hay ningún cliente asociado a esta instancia"
+
+msgid "Try to search a client by name or street"
+msgstr "Intenta buscar un cliente por nombre o dirección"
 
 msgid "View purchase"
 msgstr "Ver compra"
@@ -8212,6 +8228,9 @@ msgstr "Finaliza"
 msgid "Show only for admins"
 msgstr "Mostrar solo a administradores"
 
+msgid "Instance, domain or theme name"
+msgstr "Instancia, dominio o nombre de tema"
+
 msgid "Do you want to delete the notification?"
 msgstr "¿Estás seguro de que quieres eliminar la notificación?"
 
@@ -8425,15 +8444,12 @@ msgstr "¿Quieres cerrar la sesión?"
 msgid "Action"
 msgstr "Acción"
 
+#~ msgid "reCaptcha public key is not set"
+#~ msgstr "La llave pública de reCaptcha no está configurada"
+
 #, fuzzy
 #~ msgid "Drop files here to upload"
 #~ msgstr "Pincha aquí para subir"
-
-#, fuzzy
-#~ msgid "Sorry, we were unable to complete your request"
-#~ msgstr ""
-#~ "No hemos podido completar tu petición.\n"
-#~ "Comprueba el formulario e inténtalo de nuevo."
 
 #, fuzzy
 #~ msgid "Settings saved successfully"
@@ -8456,22 +8472,6 @@ msgstr "Acción"
 #~ msgid ""
 #~ "Click here to associate your %1 account to login into Opennemas with it."
 #~ msgstr "Le permitirá iniciar sesión en Opennemas con %1"
-
-#, fuzzy
-#~ msgid "Blocked"
-#~ msgstr "Clickadas"
-
-#, fuzzy
-#~ msgid "Search by name or street"
-#~ msgstr "Buscar por nombre o correo"
-
-#, fuzzy
-#~ msgid "There is no client linked to this instance"
-#~ msgstr "No hay ningún contenedor activado"
-
-#, fuzzy
-#~ msgid "Try to search a client by name or street"
-#~ msgstr "Buscar por nombre o correo"
 
 #~ msgid "Support"
 #~ msgstr "Soporte"
