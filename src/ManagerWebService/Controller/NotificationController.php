@@ -63,8 +63,8 @@ class NotificationController extends Controller
                 $oql .= 'and ';
             }
 
-            $oql .= '(internal_name ~ "%s" or name ~ "%s") ';
-            $oql  = sprintf($oql, $query, $query);
+            $oql .= '(internal_name ~ "%s" or name ~ "%s" or domains ~ "%s") ';
+            $oql  = sprintf($oql, $query, $query, $query);
         }
 
         $oql .= 'order by internal_name asc limit 10';
@@ -74,8 +74,9 @@ class NotificationController extends Controller
 
         foreach ($instances as $instance) {
             $target[] = [
-                'id'   => $instance->internal_name,
-                'name' => $instance->internal_name
+                'id'      => $instance->internal_name,
+                'name'    => $instance->internal_name,
+                'domains' => $instance->getMainDomain()
             ];
         }
 
