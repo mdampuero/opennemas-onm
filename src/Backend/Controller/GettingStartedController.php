@@ -35,7 +35,7 @@ class GettingStartedController extends Controller
     public function gettingStartedAction(Request $request)
     {
         $session = $request->getSession();
-        $params  = ['user' => $this->get('core.user') ];
+        $params  = [ 'user' => $this->get('core.user') ];
 
         if ($params['user']->facebook_id) {
             $params['facebook'] = true;
