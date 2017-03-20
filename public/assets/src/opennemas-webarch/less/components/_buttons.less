@@ -1,6 +1,10 @@
 .btn {
   text-overflow: ellipsis;
   overflow: hidden;
+
+  i {
+    min-width: 14px;
+  }
 }
 
 .btn-default,
@@ -66,7 +70,7 @@
   }
 
   .fa-circle-o-notch.fa-spin {
-    border: 3px solid #fff;
+    border: 3px solid @text-color;
     border-radius: 50%;
     border-top-color: transparent;
     display: inline-block;
@@ -77,6 +81,14 @@
 
     &:before {
       content: "";
+    }
+  }
+
+  &.btn-danger,
+  &.btn-success {
+    .fa-circle-o-notch.fa-spin {
+      border-color: #fff;
+      border-top-color: transparent;
     }
   }
 }

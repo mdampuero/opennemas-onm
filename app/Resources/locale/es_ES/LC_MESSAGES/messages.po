@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-09 16:20+0000\n"
-"PO-Revision-Date: 2017-03-09 17:23+0100\n"
+"POT-Creation-Date: 2017-03-20 11:01+0000\n"
+"PO-Revision-Date: 2017-03-20 12:10+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -1922,23 +1922,19 @@ msgstr ""
 msgid "Unable to find the page you are looking for."
 msgstr "No se pudo encontrar la página que estabas buscando."
 
+msgid "Email is required but it will not be published"
+msgstr "El email es obligatorio aunque no se publicará"
+
 msgid "The reCAPTCHA wasn't entered correctly. Go back and try it again."
 msgstr ""
 "El código de reCAPTCHA no fue escrito correctamente. Vuelva atrás y pruebe "
 "de nuevo."
 
-msgid ""
-"Sorry, we were unable to complete your request.\n"
-"Check the form and try again"
-msgstr ""
-"No hemos podido completar tu petición.\n"
-"Comprueba el formulario e inténtalo de nuevo."
-
-msgid "Email is required but it will not be published"
-msgstr "El email es obligatorio aunque no se publicará"
-
 msgid "The information has been sent"
 msgstr "La información ha sido enviada"
+
+msgid "Sorry, we were unable to complete your request"
+msgstr "No hemos podido completar tu petición."
 
 msgid "Unable to save the letter."
 msgstr "No se pudo guardar la carta."
@@ -1997,6 +1993,13 @@ msgstr "Te has suscrito al boletín de noticias."
 
 msgid "You have been unsubscribed from our newsletter."
 msgstr "Hemos eliminado tu suscripción al boletín de noticias "
+
+msgid ""
+"Sorry, we were unable to complete your request.\n"
+"Check the form and try again"
+msgstr ""
+"No hemos podido completar tu petición.\n"
+"Comprueba el formulario e inténtalo de nuevo."
 
 msgid "You have been unsubscribed from our newsletter"
 msgstr "Hemos eliminado tu suscripción al boletín de noticias"
@@ -2270,6 +2273,309 @@ msgstr "Anterior"
 
 msgid "Content already imported"
 msgstr "Contenido ya importado"
+
+#, fuzzy, php-format
+msgid "The cache connection for '%s' does not exist"
+msgstr "El repositorio «%s» no existe en %s"
+
+#, fuzzy, php-format
+msgid "The instance \"%s\" is not activated"
+msgstr "Instancia no activada"
+
+msgid "Pay with credit card"
+msgstr "Pagar con tarjeta de crédito"
+
+msgid "Pay via PayPal"
+msgstr "Pagar con PayPal"
+
+#, fuzzy
+msgid "There is no billing information."
+msgstr "No tienes información de facturación"
+
+msgid ""
+"Url must be longer than 4 characters and only must content characters and "
+"numbers"
+msgstr ""
+"La URL debe tener al menos 4 caracteres y solo puede contener letras y "
+"números"
+
+msgid "The email that you entered is already in use"
+msgstr "La dirección de correo electrónico que escribiste ya está en uso"
+
+msgid "Name of the newspaper must be longer than 5 characters"
+msgstr "El nombre del periódico debe tener al menos 5 caracteres"
+
+msgid "Your newspaper name cointains disallowed words."
+msgstr "El nombre de tu periódico contiene palabras no permitidas."
+
+msgid "The url that you entered is already in use"
+msgstr "La URL que escribiste ya está en uso"
+
+#, php-format
+msgid "No persisters found for \"%s\""
+msgstr ""
+
+#, php-format
+msgid "No repositories found for \"%s\""
+msgstr ""
+
+#, php-format
+msgid "No trackers found for \"%s\""
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Unable to create a %s"
+msgstr "No se pudo crear el nuevo servidor"
+
+#, fuzzy, php-format
+msgid "Unable to remove the %s"
+msgstr "No se pudo crear el menú"
+
+#, fuzzy, php-format
+msgid "Unable to update the %s"
+msgstr "No se pudo actualizar el usuario."
+
+#, fuzzy, php-format
+msgid "Unable to find entity of type \"%s\""
+msgstr "No se pudo encontrar la entidad con el identificador «%s»"
+
+#, fuzzy, php-format
+msgid "Unable to find entity of type \"%s\" with id \"%s\""
+msgstr "No se pudo encontrar la entidad con el identificador «%s»"
+
+#, fuzzy, php-format
+msgid "The data source connection for '%s' does not exist"
+msgstr "El repositorio «%s» no existe en %s"
+
+#, php-format
+msgid "No converters found for \"%s\""
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The converter \"%s\" for \"%s\" does not exist"
+msgstr "El persistor «%s» no existe en %s"
+
+#, fuzzy, php-format
+msgid "The criteria (%s) is not valid"
+msgstr "El criterio (%s) no es válido en %s"
+
+#, php-format
+msgid "No datasets found for \"%s\""
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The dataset \"%s\" for \"%s\" does not exist"
+msgstr "El usuario no existe."
+
+#, php-format
+msgid "No metadata found for \"%s\""
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The persister \"%s\" for \"%s\" does not exist"
+msgstr "El persistor «%s» no existe en %s"
+
+#, php-format
+msgid "You have a syntax error near '%s'"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The repository \"%s\" for \"%s\" does not exist"
+msgstr "El repositorio «%s» no existe en %s"
+
+#, fuzzy, php-format
+msgid "The token '%s' is not valid"
+msgstr "El dominio %s no es válido"
+
+#, fuzzy, php-format
+msgid "The token '%s' is not valid for entities of type '%s'"
+msgstr "El criterio (%s) no es válido en %s"
+
+#, fuzzy, php-format
+msgid "Unable to dump schema '%s'"
+msgstr "No se pudo eliminar el dominio «%s»"
+
+#, fuzzy
+msgid "No mapping information"
+msgstr "Sin información"
+
+msgid "Empty table name"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Invalid table name '%s'"
+msgstr "Tema non válido"
+
+#, php-format
+msgid "Invalid field '%s' in table '%s'"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Invalid index name in table '%s'"
+msgstr "Fichero de imagen inválido"
+
+#, php-format
+msgid "Invalid columns in index '%s' name in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Invalid flags in index '%s' name in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Duplicated index in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Invalid option '%s' for field '%s' in table '%s"
+msgstr ""
+
+#, php-format
+msgid "Invalid option %s for field %s in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "No fields found for table '%s'"
+msgstr ""
+
+#, php-format
+msgid "No index found for table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Invalid type for field %s in table '%s'"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Unable to validate entity of type '%s'"
+msgstr "No se pudo encontrar la entidad con el identificador «%s»"
+
+#, php-format
+msgid "The property '%s' of type '%s' has an invalid value of '%s'"
+msgstr ""
+
+#, php-format
+msgid "The fields '%s' are missing for entity of class '%s'"
+msgstr ""
+
+msgid "Society"
+msgstr ""
+
+msgid "Agriculture"
+msgstr ""
+
+msgid "Council"
+msgstr ""
+
+msgid "Society (CUL)"
+msgstr ""
+
+#, fuzzy
+msgid "Event CYA"
+msgstr "Evento"
+
+msgid "Society CYT"
+msgstr ""
+
+msgid "Disturbs"
+msgstr ""
+
+#, fuzzy
+msgid "Sports"
+msgstr "Informes"
+
+msgid "Economy"
+msgstr ""
+
+msgid "Society Education EDU"
+msgstr ""
+
+msgid "GALICIA"
+msgstr ""
+
+msgid "JUSTICIA"
+msgstr ""
+
+msgid "Environment"
+msgstr ""
+
+msgid "Politics OPL"
+msgstr ""
+
+msgid "Politics POL"
+msgstr ""
+
+msgid "TV Guide"
+msgstr ""
+
+msgid "Society REL"
+msgstr ""
+
+msgid "Society SAN"
+msgstr ""
+
+msgid "Society SOC"
+msgstr ""
+
+#, fuzzy
+msgid "Event SUC"
+msgstr "Evento"
+
+msgid "Society SYS"
+msgstr ""
+
+#, fuzzy
+msgid "Society Toros"
+msgstr "Redes sociales"
+
+msgid "Justice"
+msgstr ""
+
+#, php-format
+msgid "Can't connect to server %s. Please check your conn details."
+msgstr ""
+
+#, php-format
+msgid "Can't login into server %s"
+msgstr ""
+
+#, php-format
+msgid ""
+"Directory '%s' in the server '%s' doesn't exists or you don't have enought "
+"permissions to access it"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Directory %s is not writable."
+msgstr "Widget %s no disponible"
+
+#, php-format
+msgid "Can't connect to server %s. Please check your connection details."
+msgstr ""
+
+#, fuzzy
+msgid "Instance is blocked"
+msgstr "Instancia no encontrada"
+
+#, php-format
+msgid "The instance \"%s\" is blocked"
+msgstr "La instancia \"%s\" está bloqueada"
+
+#, fuzzy
+msgid "ReCaptcha service is not configured"
+msgstr "La llave pública de reCaptcha no está configurada"
+
+#, fuzzy
+msgid "Unable to find an user linked to that account."
+msgstr "No se pudo encontrar un usuario con ese e-mail."
+
+#, fuzzy, php-format
+msgid "First you have to link your %s account to your opennemas account."
+msgstr "Le permitirá iniciar sesión en Opennemas con %1"
+
+#, fuzzy, php-format
+msgid "Unable to link your opennemas account to your %s account"
+msgstr "No se pudieron encontrar opiniones que coincidan con tu búsqueda."
 
 msgid "Advertisement"
 msgstr "Publicidad"
@@ -2646,9 +2952,6 @@ msgstr ""
 
 msgid "Y-m-d H:i:s"
 msgstr "H:i:s d-m-Y"
-
-msgid "reCaptcha public key is not set"
-msgstr "La llave pública de reCaptcha no está configurada"
 
 msgid "Create free newspaper"
 msgstr "Crear un periódico gratis"
@@ -3140,12 +3443,6 @@ msgstr "Ver factura"
 
 msgid "Unit price"
 msgstr "Precio unitario"
-
-msgid "Pay with credit card"
-msgstr "Pagar con tarjeta de crédito"
-
-msgid "Pay via PayPal"
-msgstr "Pagar con PayPal"
 
 msgid "VAT"
 msgstr "IVA"
@@ -4495,9 +4792,6 @@ msgstr "Comprueba que has incluído más de una imagen en este álbum"
 msgid "Assign an image as a cover image"
 msgstr "Asigna una imagen como imagen de portada"
 
-msgid "Close"
-msgstr "Cerrar"
-
 msgid "New album"
 msgstr "Nuevo álbum"
 
@@ -5696,6 +5990,9 @@ msgid ""
 msgstr ""
 "Completa el formulario de debajo con el título y la URL externa que quieres "
 "añadir al menú."
+
+msgid "Close"
+msgstr "Cerrar"
 
 msgid "Add item"
 msgstr "Añadir elemento"
@@ -7371,7 +7668,7 @@ msgid "Legal"
 msgstr "Legal"
 
 msgid "Language"
-msgstr "Idioma:"
+msgstr "Idioma"
 
 msgid "Dear member"
 msgstr "Estimado usuario"
@@ -7881,6 +8178,9 @@ msgstr "Alexa"
 msgid "Page views"
 msgstr "Páginas vistas"
 
+msgid "Blocked"
+msgstr "Bloqueada"
+
 msgid "No rank"
 msgstr "Sin clasificación"
 
@@ -7988,6 +8288,10 @@ msgstr "Plantilla"
 msgid "Contact mail"
 msgstr "Email de contacto"
 
+msgid "Backend access blocked for instance users"
+msgstr ""
+"Acceso al panel de administración bloqueado para usuarios de la instancia"
+
 msgid "No main domain"
 msgstr "Sin dominio principal"
 
@@ -7996,6 +8300,15 @@ msgstr "Los dominios de la instancia no pueden estar vacíos."
 
 msgid "Domain expire date:"
 msgstr "Tiempo de expiración de dominio:"
+
+msgid "Search by name or street"
+msgstr "Buscar por nombre o dirección"
+
+msgid "There is no client linked to this instance"
+msgstr "No hay ningún cliente asociado a esta instancia"
+
+msgid "Try to search a client by name or street"
+msgstr "Intenta buscar un cliente por nombre o dirección"
 
 msgid "View purchase"
 msgstr "Ver compra"
@@ -8211,6 +8524,9 @@ msgstr "Finaliza"
 
 msgid "Show only for admins"
 msgstr "Mostrar solo a administradores"
+
+msgid "Instance, domain or theme name"
+msgstr "Instancia, dominio o nombre de tema"
 
 msgid "Do you want to delete the notification?"
 msgstr "¿Estás seguro de que quieres eliminar la notificación?"
@@ -8430,12 +8746,6 @@ msgstr "Acción"
 #~ msgstr "Pincha aquí para subir"
 
 #, fuzzy
-#~ msgid "Sorry, we were unable to complete your request"
-#~ msgstr ""
-#~ "No hemos podido completar tu petición.\n"
-#~ "Comprueba el formulario e inténtalo de nuevo."
-
-#, fuzzy
 #~ msgid "Settings saved successfully"
 #~ msgstr "Configuraciones guardadas con éxito."
 
@@ -8451,27 +8761,6 @@ msgstr "Acción"
 
 #~ msgid "Domain mapping"
 #~ msgstr "Redirección de dominio"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click here to associate your %1 account to login into Opennemas with it."
-#~ msgstr "Le permitirá iniciar sesión en Opennemas con %1"
-
-#, fuzzy
-#~ msgid "Blocked"
-#~ msgstr "Clickadas"
-
-#, fuzzy
-#~ msgid "Search by name or street"
-#~ msgstr "Buscar por nombre o correo"
-
-#, fuzzy
-#~ msgid "There is no client linked to this instance"
-#~ msgstr "No hay ningún contenedor activado"
-
-#, fuzzy
-#~ msgid "Try to search a client by name or street"
-#~ msgstr "Buscar por nombre o correo"
 
 #~ msgid "Support"
 #~ msgstr "Soporte"
@@ -9034,9 +9323,6 @@ msgstr "Acción"
 #~ msgid "Static page updated successfully."
 #~ msgstr "Página estática actualizada correctamente."
 
-#~ msgid "Invalid theme"
-#~ msgstr "Tema non válido"
-
 #~ msgid "Unable to delete the item with the id \"%s\""
 #~ msgstr "No se pudo eliminar el elemento con el identificador «%s»"
 
@@ -9091,9 +9377,6 @@ msgstr "Acción"
 #~ msgid "%s modules updated successfully."
 #~ msgstr "%s módulos actualizados correctamente."
 
-#~ msgid "Unable to find the entity with id \"%s\""
-#~ msgstr "No se pudo encontrar la entidad con el identificador «%s»"
-
 #~ msgid "Unable to find the notifications for the given criteria"
 #~ msgstr ""
 #~ "No se pudieron encontrar notificaciones para el criterio proporcionado"
@@ -9147,15 +9430,6 @@ msgstr "Acción"
 #~ msgid "The client with id '%d' was not found in %s"
 #~ msgstr "No se pudo encontrar el cliente con id «%d» en %s"
 
-#~ msgid "The criteria (%s) is not valid in %s"
-#~ msgstr "El criterio (%s) no es válido en %s"
-
-#~ msgid "The persister '%s' does not exist in %s"
-#~ msgstr "El persistor «%s» no existe en %s"
-
-#~ msgid "The repository '%s' does not exist in %s"
-#~ msgstr "El repositorio «%s» no existe en %s"
-
 #~ msgid "The invoice with id '%d' was not found in %s"
 #~ msgstr "No se pudo encontrar la factura con id «%d» en %s"
 
@@ -9165,24 +9439,8 @@ msgstr "Acción"
 #~ msgid "Unable to load plugins. No folder specified."
 #~ msgstr "No se pudieron cargar los plugins. No se especificó un directorio."
 
-#~ msgid "Name of the newspaper must be longer than 5 characters"
-#~ msgstr "El nombre del periódico debe tener al menos 5 caracteres"
-
-#~ msgid ""
-#~ "Url must be longer than 4 characters and only must content characters and "
-#~ "numbers"
-#~ msgstr ""
-#~ "La URL debe tener al menos 4 caracteres y solo puede contener letras y "
-#~ "números"
-
-#~ msgid "The url that you entered is already in use"
-#~ msgstr "La URL que escribiste ya está en uso"
-
 #~ msgid "Please enter a valid url"
 #~ msgstr "Escribe una url válida"
-
-#~ msgid "Your newspaper name cointains disallowed words."
-#~ msgstr "El nombre de tu periódico contiene palabras no permitidas."
 
 #~ msgid "Your desired address contains disallowed words."
 #~ msgstr "Tu dirección contiene palabras no permitidas."
@@ -9195,9 +9453,6 @@ msgstr "Acción"
 #~ msgstr ""
 #~ "Se ha producido un error al validar los datos contra palabras no "
 #~ "permitidas."
-
-#~ msgid "The email that you entered is already in use"
-#~ msgstr "La dirección de correo electrónico que escribiste ya está en uso"
 
 #~ msgid "Upgrade instance"
 #~ msgstr "Actualizar instancia"

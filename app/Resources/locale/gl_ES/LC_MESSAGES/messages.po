@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-09 16:20+0000\n"
-"PO-Revision-Date: 2017-03-09 17:24+0100\n"
+"POT-Creation-Date: 2017-03-20 11:01+0000\n"
+"PO-Revision-Date: 2017-03-20 12:11+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -1892,23 +1892,19 @@ msgstr "Non se puido enviar o correo electrónico. Téntao máis tarde"
 msgid "Unable to find the page you are looking for."
 msgstr "Non se puido atopar o ficheiro co identificador «%d»."
 
+msgid "Email is required but it will not be published"
+msgstr "O campo de correo-e é obrigatorio porén non será publicado"
+
 msgid "The reCAPTCHA wasn't entered correctly. Go back and try it again."
 msgstr ""
 "O campo de reCAPTCHA non foi completado correctamente. Vai atrás e téntao de "
 "novo."
 
-msgid ""
-"Sorry, we were unable to complete your request.\n"
-"Check the form and try again"
-msgstr ""
-"Non puidemos completar a túa petición.\n"
-"Comproba o formulario e téntao de novo."
-
-msgid "Email is required but it will not be published"
-msgstr "O campo de correo-e é obrigatorio porén non será publicado"
-
 msgid "The information has been sent"
 msgstr "A información foi enviada"
+
+msgid "Sorry, we were unable to complete your request"
+msgstr "Non puidemos completar a túa petición."
 
 msgid "Unable to save the letter."
 msgstr "Non se puido gardar a carta."
@@ -1967,6 +1963,13 @@ msgstr "Subscribicheste ao boletin de novas."
 
 msgid "You have been unsubscribed from our newsletter."
 msgstr "Desubscribicheste do boletin de novas. "
+
+msgid ""
+"Sorry, we were unable to complete your request.\n"
+"Check the form and try again"
+msgstr ""
+"Non puidemos completar a túa petición.\n"
+"Comproba o formulario e téntao de novo."
 
 msgid "You have been unsubscribed from our newsletter"
 msgstr "Eliminaches a subscrición ao boletin de novas."
@@ -2239,6 +2242,315 @@ msgstr "Anterior"
 
 msgid "Content already imported"
 msgstr "Contido xa importado"
+
+#, fuzzy, php-format
+msgid "The cache connection for '%s' does not exist"
+msgstr "O repositorio «%s» non existe en %s"
+
+#, fuzzy, php-format
+msgid "The instance \"%s\" is not activated"
+msgstr "Instancia non activada"
+
+msgid "Pay with credit card"
+msgstr "Pagar con tarxeta de crédito"
+
+msgid "Pay via PayPal"
+msgstr "Pagar con PayPal"
+
+#, fuzzy
+msgid "There is no billing information."
+msgstr "Non tes ningunha información de facturación"
+
+msgid ""
+"Url must be longer than 4 characters and only must content characters and "
+"numbers"
+msgstr "A url debe ter cando menos 4 letras ou números"
+
+msgid "The email that you entered is already in use"
+msgstr "O enderezo que escribiu xa está en uso"
+
+msgid "Name of the newspaper must be longer than 5 characters"
+msgstr "O nome do periódico debe conter cando menos 5 caracteres"
+
+msgid "Your newspaper name cointains disallowed words."
+msgstr "O nome do periódico contén palabras non permitidas."
+
+msgid "The url that you entered is already in use"
+msgstr "A url xa está en uso"
+
+#, php-format
+msgid "No persisters found for \"%s\""
+msgstr ""
+
+#, php-format
+msgid "No repositories found for \"%s\""
+msgstr ""
+
+#, php-format
+msgid "No trackers found for \"%s\""
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Unable to create a %s"
+msgstr "Non foi posíbel crear un servidor"
+
+#, fuzzy, php-format
+msgid "Unable to remove the %s"
+msgstr "Non se puido crear o menú"
+
+#, fuzzy, php-format
+msgid "Unable to update the %s"
+msgstr "Non se puido actualizar o usuario."
+
+#, fuzzy, php-format
+msgid "Unable to find entity of type \"%s\""
+msgstr "Non se puido atopar a entidade co identificador «%s»"
+
+#, fuzzy, php-format
+msgid "Unable to find entity of type \"%s\" with id \"%s\""
+msgstr "Non se puido atopar a entidade co identificador «%s»"
+
+#, fuzzy, php-format
+msgid "The data source connection for '%s' does not exist"
+msgstr "O repositorio «%s» non existe en %s"
+
+#, php-format
+msgid "No converters found for \"%s\""
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The converter \"%s\" for \"%s\" does not exist"
+msgstr "O persistor «%s» non existe en %s"
+
+#, fuzzy, php-format
+msgid "The criteria (%s) is not valid"
+msgstr "O criterio (%s) non é válido en %s"
+
+#, fuzzy, php-format
+msgid "No datasets found for \"%s\""
+msgstr "Debe asignar unha sección para \"% s\""
+
+#, fuzzy, php-format
+msgid "The dataset \"%s\" for \"%s\" does not exist"
+msgstr "O usuario non existe."
+
+#, fuzzy, php-format
+msgid "No metadata found for \"%s\""
+msgstr "Debe asignar unha sección para \"% s\""
+
+#, fuzzy, php-format
+msgid "The persister \"%s\" for \"%s\" does not exist"
+msgstr "O persistor «%s» non existe en %s"
+
+#, php-format
+msgid "You have a syntax error near '%s'"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "The repository \"%s\" for \"%s\" does not exist"
+msgstr "O repositorio «%s» non existe en %s"
+
+#, fuzzy, php-format
+msgid "The token '%s' is not valid"
+msgstr "O dominio %s non é válido"
+
+#, fuzzy, php-format
+msgid "The token '%s' is not valid for entities of type '%s'"
+msgstr "O criterio (%s) non é válido en %s"
+
+#, fuzzy, php-format
+msgid "Unable to dump schema '%s'"
+msgstr "Non foi posíbel eliminar o dominio %s"
+
+#, fuzzy
+msgid "No mapping information"
+msgstr "Sen información"
+
+#, fuzzy
+msgid "Empty table name"
+msgstr "Nome da base de datos"
+
+#, fuzzy, php-format
+msgid "Invalid table name '%s'"
+msgstr "Tema non válido"
+
+#, php-format
+msgid "Invalid field '%s' in table '%s'"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Invalid index name in table '%s'"
+msgstr "Ficheiro de imaxe non válido"
+
+#, php-format
+msgid "Invalid columns in index '%s' name in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Invalid flags in index '%s' name in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Duplicated index in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Invalid option '%s' for field '%s' in table '%s"
+msgstr ""
+
+#, php-format
+msgid "Invalid option %s for field %s in table '%s'"
+msgstr ""
+
+#, php-format
+msgid "No fields found for table '%s'"
+msgstr ""
+
+#, php-format
+msgid "No index found for table '%s'"
+msgstr ""
+
+#, php-format
+msgid "Invalid type for field %s in table '%s'"
+msgstr ""
+
+#, fuzzy, php-format
+msgid "Unable to validate entity of type '%s'"
+msgstr "Non se puido atopar a entidade co identificador «%s»"
+
+#, php-format
+msgid "The property '%s' of type '%s' has an invalid value of '%s'"
+msgstr ""
+
+#, php-format
+msgid "The fields '%s' are missing for entity of class '%s'"
+msgstr ""
+
+msgid "Society"
+msgstr "Sociedade"
+
+msgid "Agriculture"
+msgstr "Agricultura"
+
+msgid "Council"
+msgstr "Concellos"
+
+msgid "Society (CUL)"
+msgstr "Sociedade (CUL)"
+
+#, fuzzy
+msgid "Event CYA"
+msgstr "Eventos SUC"
+
+msgid "Society CYT"
+msgstr "Sociedade CYT"
+
+msgid "Disturbs"
+msgstr "Disturbios"
+
+#, fuzzy
+msgid "Sports"
+msgstr "Informes"
+
+msgid "Economy"
+msgstr "Economía"
+
+msgid "Society Education EDU"
+msgstr "Sociedade Educación EDU"
+
+msgid "GALICIA"
+msgstr "Galiza"
+
+msgid "JUSTICIA"
+msgstr "Xustiza"
+
+#, fuzzy
+msgid "Environment"
+msgstr "Aliñamento"
+
+msgid "Politics OPL"
+msgstr "Política OPL"
+
+msgid "Politics POL"
+msgstr "Política POL"
+
+msgid "TV Guide"
+msgstr "Programación TV"
+
+msgid "Society REL"
+msgstr "Sociedade REL"
+
+msgid "Society SAN"
+msgstr "Sociedade SAN"
+
+msgid "Society SOC"
+msgstr "Sociedade SOC"
+
+msgid "Event SUC"
+msgstr "Eventos SUC"
+
+msgid "Society SYS"
+msgstr "Sociedade SYS"
+
+#, fuzzy
+msgid "Society Toros"
+msgstr "Sociedade CYT"
+
+msgid "Justice"
+msgstr "Xustiza"
+
+#, fuzzy, php-format
+msgid "Can't connect to server %s. Please check your conn details."
+msgstr ""
+"Non foi posíbel conectarse ao servidor %s. Comprobe as preferencias da "
+"conexión."
+
+#, php-format
+msgid "Can't login into server %s"
+msgstr "Non é posíbel iniciar a sesión no servidor %s"
+
+#, fuzzy, php-format
+msgid ""
+"Directory '%s' in the server '%s' doesn't exists or you don't have enought "
+"permissions to access it"
+msgstr ""
+"O cartafol de subida non existe ou non ten privilexios dabondo para escribir "
+"ficheiros nel"
+
+#, php-format
+msgid "Directory %s is not writable."
+msgstr "Non é posíbel escribir no cartafol «%s»."
+
+#, php-format
+msgid "Can't connect to server %s. Please check your connection details."
+msgstr ""
+"Non foi posíbel conectarse ao servidor %s. Comprobe as preferencias da "
+"conexión."
+
+#, fuzzy
+msgid "Instance is blocked"
+msgstr "Instancia non atopada"
+
+#, php-format
+msgid "The instance \"%s\" is blocked"
+msgstr "A instancia \"%s\" está bloqueada"
+
+#, fuzzy
+msgid "ReCaptcha service is not configured"
+msgstr "Chave pública de reCaptcha non configurada"
+
+#, fuzzy
+msgid "Unable to find an user linked to that account."
+msgstr ""
+"Non se puido atopar un usuario con este enderezo de correo electrónico."
+
+#, fuzzy, php-format
+msgid "First you have to link your %s account to your opennemas account."
+msgstr "Permiteche iniciar sesión en Opennemas con %1"
+
+#, fuzzy, php-format
+msgid "Unable to link your opennemas account to your %s account"
+msgstr "Non se puideron atopar opinións que coincidan coa súa busca."
 
 msgid "Advertisement"
 msgstr "Publicidade"
@@ -2612,9 +2924,6 @@ msgstr ""
 
 msgid "Y-m-d H:i:s"
 msgstr "H:i:s d-m-Y"
-
-msgid "reCaptcha public key is not set"
-msgstr "Chave pública de reCaptcha non configurada"
 
 msgid "Create free newspaper"
 msgstr "Crear periódico de balde"
@@ -3106,12 +3415,6 @@ msgstr "Ver factura"
 
 msgid "Unit price"
 msgstr "Prezo unitario"
-
-msgid "Pay with credit card"
-msgstr "Pagar con tarxeta de crédito"
-
-msgid "Pay via PayPal"
-msgstr "Pagar con PayPal"
 
 msgid "VAT"
 msgstr "IVE"
@@ -4444,9 +4747,6 @@ msgstr "Comproba que incluiches cando menos unha imaxe neste álbum"
 msgid "Assign an image as a cover image"
 msgstr "Debes asignar unha imaxe como imaxe principal"
 
-msgid "Close"
-msgstr "Pechar"
-
 msgid "New album"
 msgstr "Novo álbum"
 
@@ -5631,6 +5931,9 @@ msgid ""
 msgstr ""
 "Completa o formulario de embaixo co titulo e a URL externa que queres "
 "engadir ao menú."
+
+msgid "Close"
+msgstr "Pechar"
 
 msgid "Add item"
 msgstr "Engadir elemento"
@@ -7301,7 +7604,7 @@ msgid "Legal"
 msgstr "Información legal"
 
 msgid "Language"
-msgstr "Idioma:"
+msgstr "Idioma"
 
 msgid "Dear member"
 msgstr "Estimado membro"
@@ -7808,6 +8111,9 @@ msgstr "Alexa"
 msgid "Page views"
 msgstr "Páx. vistas"
 
+msgid "Blocked"
+msgstr "Bloqueada"
+
 msgid "No rank"
 msgstr "Sen calificar"
 
@@ -7911,6 +8217,9 @@ msgstr "Plantilla"
 msgid "Contact mail"
 msgstr "Correo-e de contacto"
 
+msgid "Backend access blocked for instance users"
+msgstr "Acceso ao panel de administración bloqueado para usuarios da instancia"
+
 msgid "No main domain"
 msgstr "Sen dominio principal"
 
@@ -7919,6 +8228,15 @@ msgstr "Os dominios da instancia non poden quedar valeiros."
 
 msgid "Domain expire date:"
 msgstr "Data de expiración do dominio:"
+
+msgid "Search by name or street"
+msgstr "Buscar por nome ou dirección"
+
+msgid "There is no client linked to this instance"
+msgstr "Non hai ningún cliente asociado a esta instancia"
+
+msgid "Try to search a client by name or street"
+msgstr "Intenta buscar un cliente por nome ou dirección"
 
 msgid "View purchase"
 msgstr "Ver compra"
@@ -8134,6 +8452,9 @@ msgstr "Remata"
 msgid "Show only for admins"
 msgstr "Mostrar só aos administradores"
 
+msgid "Instance, domain or theme name"
+msgstr "Instancia, dominio ou nome de tema"
+
 msgid "Do you want to delete the notification?"
 msgstr "Tes certeza que queres eliminar a notificación?"
 
@@ -8346,12 +8667,6 @@ msgstr "Acción"
 #~ msgstr "Arrastrar ficheiros aquí"
 
 #, fuzzy
-#~ msgid "Sorry, we were unable to complete your request"
-#~ msgstr ""
-#~ "Non puidemos completar a túa petición.\n"
-#~ "Comproba o formulario e téntao de novo."
-
-#, fuzzy
 #~ msgid "Settings saved successfully"
 #~ msgstr "Configuracións gardadas correctamente."
 
@@ -8367,27 +8682,6 @@ msgstr "Acción"
 
 #~ msgid "Domain mapping"
 #~ msgstr "Redirección de dominio"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click here to associate your %1 account to login into Opennemas with it."
-#~ msgstr "Permiteche iniciar sesión en Opennemas con %1"
-
-#, fuzzy
-#~ msgid "Blocked"
-#~ msgstr "Clickadas"
-
-#, fuzzy
-#~ msgid "Search by name or street"
-#~ msgstr "Buscar por nome ou nome de usuario"
-
-#, fuzzy
-#~ msgid "There is no client linked to this instance"
-#~ msgstr "Non hai ningún elemento no lixo"
-
-#, fuzzy
-#~ msgid "Try to search a client by name or street"
-#~ msgstr "Buscar por nome ou nome de usuario"
 
 #~ msgid "Support"
 #~ msgstr "Asistencia técnica"
@@ -8941,9 +9235,6 @@ msgstr "Acción"
 #~ msgid "Static page updated successfully."
 #~ msgstr "Páxina estática actualizada correctamente."
 
-#~ msgid "Invalid theme"
-#~ msgstr "Tema non válido"
-
 #~ msgid "Unable to delete the item with the id \"%s\""
 #~ msgstr "Non se puido eliminar o elemento co identificador «%s»"
 
@@ -8998,9 +9289,6 @@ msgstr "Acción"
 #~ msgid "%s modules updated successfully."
 #~ msgstr "%s módulos actualizados correctamente."
 
-#~ msgid "Unable to find the entity with id \"%s\""
-#~ msgstr "Non se puido atopar a entidade co identificador «%s»"
-
 #~ msgid "Unable to find the notifications for the given criteria"
 #~ msgstr "Non foi posíbel atopar ningunha notificación co criterio fornecido"
 
@@ -9052,15 +9340,6 @@ msgstr "Acción"
 #~ msgid "The client with id '%d' was not found in %s"
 #~ msgstr "Non se puido atopar o cliente con id «%d» en %s"
 
-#~ msgid "The criteria (%s) is not valid in %s"
-#~ msgstr "O criterio (%s) non é válido en %s"
-
-#~ msgid "The persister '%s' does not exist in %s"
-#~ msgstr "O persistor «%s» non existe en %s"
-
-#~ msgid "The repository '%s' does not exist in %s"
-#~ msgstr "O repositorio «%s» non existe en %s"
-
 #~ msgid "The invoice with id '%d' was not found in %s"
 #~ msgstr "Non se puido atopar a factura con id «%d» en %s"
 
@@ -9070,22 +9349,8 @@ msgstr "Acción"
 #~ msgid "Unable to load plugins. No folder specified."
 #~ msgstr "Non se puideron cargar os plugins. Non se especificou un cartafol."
 
-#~ msgid "Name of the newspaper must be longer than 5 characters"
-#~ msgstr "O nome do periódico debe conter cando menos 5 caracteres"
-
-#~ msgid ""
-#~ "Url must be longer than 4 characters and only must content characters and "
-#~ "numbers"
-#~ msgstr "A url debe ter cando menos 4 letras ou números"
-
-#~ msgid "The url that you entered is already in use"
-#~ msgstr "A url xa está en uso"
-
 #~ msgid "Please enter a valid url"
 #~ msgstr "Escribe un URL válido"
-
-#~ msgid "Your newspaper name cointains disallowed words."
-#~ msgstr "O nome do periódico contén palabras non permitidas."
 
 #~ msgid "Your desired address contains disallowed words."
 #~ msgstr "O enderezo desexado contén palabras non permitidas."
@@ -9098,9 +9363,6 @@ msgstr "Acción"
 #~ msgstr ""
 #~ "Produciuse un erro ao validar os teus datos fronte a palabras non "
 #~ "permitidas."
-
-#~ msgid "The email that you entered is already in use"
-#~ msgstr "O enderezo que escribiu xa está en uso"
 
 #~ msgid "Upgrade instance"
 #~ msgstr "Actualizar instancia"
@@ -11313,9 +11575,6 @@ msgstr "Acción"
 #~ msgid "Opcache status"
 #~ msgstr "Estado de Opcache"
 
-#~ msgid "Instance domains cannot be empty"
-#~ msgstr "Os dominios da instancia non poden quedar valeiros"
-
 #~ msgid "Instance updated successfully."
 #~ msgstr "Instancia actualizada correctamente."
 
@@ -11576,9 +11835,6 @@ msgstr "Acción"
 
 #~ msgid "Error saving"
 #~ msgstr "Erro ao gardar"
-
-#~ msgid "Alignment"
-#~ msgstr "Aliñamento"
 
 #~ msgid "Left"
 #~ msgstr "Esquerda"
@@ -12146,9 +12402,6 @@ msgstr "Acción"
 #~ msgid "Used for cache prefixes and internal ONM operations"
 #~ msgstr "Usado para os prefixos da cache e operacións internas de ONM"
 
-#~ msgid "Database name"
-#~ msgstr "Nome da base de datos"
-
 #~ msgid ""
 #~ "Please provide your EFE auth credentials to start to use your EFE "
 #~ "Importer module"
@@ -12217,13 +12470,6 @@ msgstr "Acción"
 
 #~ msgid "Not valid photo data"
 #~ msgstr "Datos de foto non válidos"
-
-#~ msgid ""
-#~ "Upload directory doesn't exists or you don't have enough privileges to "
-#~ "write files there"
-#~ msgstr ""
-#~ "O cartafol de subida non existe ou non ten privilexios dabondo para "
-#~ "escribir ficheiros nel"
 
 #~ msgid "Unable to register the photo object %s (destination: %s)."
 #~ msgstr "Non foi posíbel rexistrar o obxecto de foto %s (destino: %s)."
@@ -12518,9 +12764,6 @@ msgstr "Acción"
 #~ msgstr ""
 #~ "Estado de dispoñibilidade cambiado correctamente para o artigo co "
 #~ "identificador «%d»"
-
-#~ msgid "You must assign a section for \"%s\""
-#~ msgstr "Debe asignar unha sección para \"% s\""
 
 #~ msgid "Unable to find book with id \"%d\""
 #~ msgstr "Non foi posíbel atopar o libro co identificador «%d»"
@@ -13453,17 +13696,6 @@ msgstr "Acción"
 #~ msgid "Seems that other user is syncing the news."
 #~ msgstr "Semella que outro usuario está sincronizando as novas."
 
-#~ msgid "Can't connect to server %s. Please check your connection details."
-#~ msgstr ""
-#~ "Non foi posíbel conectarse ao servidor %s. Comprobe as preferencias da "
-#~ "conexión."
-
-#~ msgid "Can't login into server %s"
-#~ msgstr "Non é posíbel iniciar a sesión no servidor %s"
-
-#~ msgid "Directory %s is not writable."
-#~ msgstr "Non é posíbel escribir no cartafol «%s»."
-
 #~ msgid "Opinion: frontpage"
 #~ msgstr "Opinion: portada"
 
@@ -13546,63 +13778,6 @@ msgstr "Acción"
 
 #~ msgid "File '%d' can't be loaded."
 #~ msgstr "Non é posíbel cargar o ficheiro «%d»."
-
-#~ msgid "Society"
-#~ msgstr "Sociedade"
-
-#~ msgid "Agriculture"
-#~ msgstr "Agricultura"
-
-#~ msgid "Council"
-#~ msgstr "Concellos"
-
-#~ msgid "Society (CUL)"
-#~ msgstr "Sociedade (CUL)"
-
-#~ msgid "Society CYT"
-#~ msgstr "Sociedade CYT"
-
-#~ msgid "Disturbs"
-#~ msgstr "Disturbios"
-
-#~ msgid "Economy"
-#~ msgstr "Economía"
-
-#~ msgid "Society Education EDU"
-#~ msgstr "Sociedade Educación EDU"
-
-#~ msgid "GALICIA"
-#~ msgstr "Galiza"
-
-#~ msgid "JUSTICIA"
-#~ msgstr "Xustiza"
-
-#~ msgid "Politics OPL"
-#~ msgstr "Política OPL"
-
-#~ msgid "Politics POL"
-#~ msgstr "Política POL"
-
-#~ msgid "TV Guide"
-#~ msgstr "Programación TV"
-
-#~ msgid "Society REL"
-#~ msgstr "Sociedade REL"
-
-#~ msgid "Society SAN"
-#~ msgstr "Sociedade SAN"
-
-#~ msgid "Society SOC"
-#~ msgstr "Sociedade SOC"
-
-#~ msgid "Event SUC"
-#~ msgstr "Eventos SUC"
-
-#~ msgid "Society SYS"
-#~ msgstr "Sociedade SYS"
-
-#~ msgid "Justice"
-#~ msgstr "Xustiza"
 
 #~ msgid "WIDGET"
 #~ msgstr "WIDGET"
