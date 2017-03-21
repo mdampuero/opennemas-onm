@@ -41,7 +41,17 @@ class FixCommand extends ContainerAwareCommand
                 false,
                 InputOption::VALUE_NONE,
                 'If set, command will delete the table of fixed items when starting'
-            );
+            )->addOption(
+                'no-pre',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, command will NOT execute the pre-migration actions'
+            )->addOption(
+                'no-post',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, command will NOT execute the post-migration actions'
+            );;
     }
 
     /**
@@ -66,6 +76,9 @@ class FixCommand extends ContainerAwareCommand
         $this->mm = $this->getContainer()->get('migration.manager');
         $this->mm->configure($this->fix);
 
+        $this->conn = $this->getContainer()->get('orm.manager')
+            ->getConnection('manager');
+
         $tracker = $this->mm->getTracker();
 
         if ($reset) {
@@ -79,6 +92,8 @@ class FixCommand extends ContainerAwareCommand
         if (!$output->isVeryVerbose()) {
             $progress = new ProgressBar($output, $this->left);
         }
+
+        $this->preFix();
 
         while (($item = $this->mm->getRepository()->next()) !== false) {
             $this->current++;
@@ -108,6 +123,8 @@ class FixCommand extends ContainerAwareCommand
                 $progress->advance();
             }
         }
+
+        $this->postFix();
 
         if (!$end) {
             $tracker->end();
@@ -202,5 +219,82 @@ class FixCommand extends ContainerAwareCommand
         $this->output->writeln("<options=bold>(4/4) Ending migration...</>");
         $this->output->writeln("    ==> Items migrated: $this->current");
         $this->output->writeln("    ==> Time: $time");
+    }
+
+    /**
+     * Replaces placeholders with real values from migration configuration.
+     *
+     * @return string The query to execute.
+     */
+    protected function prepareQuery($q)
+    {
+        if (!preg_match_all('/\[[a-z.]+\]/', $q, $matches)) {
+            return $q;
+        }
+
+        foreach ($matches[0] as $placeholder) {
+            $keys  = explode('.', preg_replace('/\[|\]/', '', $placeholder));
+            $value = $this->fix;
+
+            foreach ($keys as $key) {
+                $value = $value[$key];
+            }
+
+            if (!is_numeric($value) && !is_string($value)) {
+                throw new \InvalidArgumentException();
+            }
+
+            $q = preg_replace('/' . preg_quote($placeholder) . '/', $value, $q);
+        }
+
+        return $q;
+    }
+
+    /**
+     * Executes actions before migrating items.
+     */
+    protected function preFix()
+    {
+        $this->output->writeln("<options=bold>(3/6) Executing pre-fixing actions...</>");
+
+        if (!empty($this->input->getOption('no-pre'))
+            || !array_key_exists('pre', $this->fix)
+            || empty($this->fix['pre'])
+        ) {
+            $this->output->writeln("    ==> No actions executed");
+            return;
+        }
+
+        $this->conn->selectDatabase($this->fix['source']['database']);
+
+        foreach ($this->fix['pre'] as $q) {
+            $q = $this->prepareQuery($q);
+
+            $this->conn->executeQuery($q);
+        }
+    }
+
+    /**
+     * Executes actions after fixing items.
+     */
+    protected function postFix()
+    {
+        $this->output->writeln("<options=bold>(5/6) Executing post-fixing actions...</>");
+
+        if (!empty($this->input->getOption('no-post'))
+            || !array_key_exists('post', $this->fix)
+            || empty($this->fix['post'])
+        ) {
+            $this->output->writeln("    ==> No actions executed");
+            return;
+        }
+
+        $this->conn->selectDatabase($this->fix['target']['database']);
+
+        foreach ($this->fix['post'] as $q) {
+            $q = $this->prepareQuery($q);
+
+            $this->conn->executeQuery($q);
+        }
     }
 }
