@@ -156,7 +156,7 @@ class FixCommand extends ContainerAwareCommand
 
         $loader->init();
 
-        $this->output->writeln("<options=bold>(2/4) Configuring the fix...</>");
+        $this->output->writeln("<options=bold>(2/7) Configuring the fix...</>");
 
         $this->output->writeln(sprintf(
             "    ==> Fixing <fg=magenta>%s</>",
@@ -170,16 +170,16 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function getCounters()
     {
-        $this->output->writeln("<options=bold>(3/4) Migrating items...</>");
+        $this->output->writeln("<options=bold>(3/7) Fixing items...</>");
 
         $this->total = $this->mm->getRepository()->countAll();
         $this->output->writeln("    ==> Total items in source: $this->total");
 
         $this->left = $this->mm->getRepository()->count();
-        $this->output->writeln("    ==> Items ready to migrate: $this->left");
+        $this->output->writeln("    ==> Items ready to fix: $this->left");
 
         $this->fixed = $this->mm->getRepository()->countFixed();
-        $this->output->writeln("    ==> Items already migrated: $this->fixed");
+        $this->output->writeln("    ==> Items already fixed: $this->fixed");
 
         $this->current = 0;
     }
@@ -191,7 +191,7 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function getFix()
     {
-        $this->output->writeln("<options=bold>(1/4) Parsing fix file...</>");
+        $this->output->writeln("<options=bold>(1/7) Parsing fix file...</>");
 
         $yaml = new Parser();
         $fix  = $yaml->parse(file_get_contents($this->path));
@@ -216,7 +216,7 @@ class FixCommand extends ContainerAwareCommand
         $diff = $this->end - $this->start;
         $time = date('H:i:s', $diff);
 
-        $this->output->writeln("<options=bold>(4/4) Ending migration...</>");
+        $this->output->writeln("<options=bold>(7/7) Ending fixing...</>");
         $this->output->writeln("    ==> Items migrated: $this->current");
         $this->output->writeln("    ==> Time: $time");
     }
@@ -255,7 +255,7 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function preFix()
     {
-        $this->output->writeln("<options=bold>(3/6) Executing pre-fixing actions...</>");
+        $this->output->writeln("<options=bold>(3/7) Executing pre-fixing actions...</>");
 
         if (!empty($this->input->getOption('no-pre'))
             || !array_key_exists('pre', $this->fix)
@@ -279,7 +279,7 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function postFix()
     {
-        $this->output->writeln("<options=bold>(5/6) Executing post-fixing actions...</>");
+        $this->output->writeln("<options=bold>(6/7) Executing post-fixing actions...</>");
 
         if (!empty($this->input->getOption('no-post'))
             || !array_key_exists('post', $this->fix)
