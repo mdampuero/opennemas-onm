@@ -336,6 +336,25 @@
   };
 
   /**
+   * @function getUser
+   * @memberOf OAM
+   *
+   * @description
+   *   Returns the user information from cookie.
+   *
+   * @return {Object} The user information.
+   */
+  OAM.prototype.getUser = function() {
+    var user = this.getCookie('__onm_user');
+
+    if (!user) {
+      return null;
+    }
+
+    return JSON.parse(decodeURIComponent(user));
+  };
+
+  /**
    * @function normalize
    * @memberOf OAM
    *
@@ -355,25 +374,6 @@
     }
 
     return url;
-  };
-
-  /**
-   * @function getUser
-   * @memberOf OAM
-   *
-   * @description
-   *   Returns the user information from cookie.
-   *
-   * @return {Object} The user information.
-   */
-  OAM.prototype.getUser = function() {
-    var user = this.getCookie('__onm_user');
-
-    if (!user) {
-      return null;
-    }
-
-    return JSON.parse(decodeURIComponent(user));
   };
 
   /**
