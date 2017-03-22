@@ -299,10 +299,7 @@ class AdvertisementController extends Controller
         $object->format      = ($element->with_script == 1) ? 'html' : 'image';
         $object->devices     = $element->params['devices'];
         $object->user_groups = $element->params['user_groups'];
-        $object->size = [
-            'width'  => $element->params['width'],
-            'height' => $element->params['height'],
-        ];
+        $object->sizes       = $this->normalizeSizes($element->params);
 
         $object->orientation = array_key_exists('orientation', $element->params) ?
             $element->params['orientation'] : 'horizontal';
@@ -310,6 +307,42 @@ class AdvertisementController extends Controller
         $object->target_url = ($object->format == 'image') ? $element->url: '';
 
         return $object;
+    }
+
+    /**
+     * Checks all parameters (old version) and returns the list of sizes.
+     *
+     * @param array $params The item parameters.
+     *
+     * @return array The list of sizes.
+     */
+    protected function normalizeSizes($params) {
+        // New system, sizes with devices
+        if (array_key_exists('sizes', $params)) {
+            return $params['sizes'];
+        }
+
+        if (!array_key_exists('height', $params)
+            || !array_key_exists('width', $params)) {
+            return [];
+        }
+
+        $sizes = [];
+        for ($i = 0; $i < $params['width']; $i++) {
+            $size = [
+                'height' => $params['height'][$i],
+                'width' =>  $params['width'][$i]
+            ];
+
+            if ($i < 3) {
+                $size['device'] = $i === 0 ? 'desktop' :
+                    $i === 1 ? 'tablet' : 'phone';
+            }
+
+            $sizes[] = $size;
+        }
+
+        return $sizes;
     }
 
     /**
