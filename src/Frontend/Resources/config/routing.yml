@@ -363,10 +363,6 @@ frontend_participa_send:
     path: /participa/send
     defaults: { _controller: FrontendBundle:Form:send }
 
-frontend_participa_widget_send:
-    path: /participa/widget/send
-    defaults: { _controller: FrontendBundle:Form:widgetSend }
-
 frontend_letter_frontpage:
     path: /cartas-al-director
     defaults: { _controller: FrontendBundle:Letter:frontpage }
@@ -681,3 +677,7 @@ frontend_static_page:
 frontend_user:
     resource: '@FrontendBundle/Resources/config/routing/user.yml'
     prefix: /
+
+frontend_widget_execute:
+    path: /widget/{id}/{action}
+    defaults: { _controller: FrontendBundle:Widget:execute }
