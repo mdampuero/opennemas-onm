@@ -95,6 +95,9 @@ class FixCommand extends ContainerAwareCommand
 
         $this->preFix();
 
+
+        $this->output->writeln("<options=bold>(5/7) Executing the fix...</>");
+
         while (($item = $this->mm->getRepository()->next()) !== false) {
             $this->current++;
 
@@ -255,7 +258,7 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function preFix()
     {
-        $this->output->writeln("<options=bold>(3/7) Executing pre-fixing actions...</>");
+        $this->output->writeln("<options=bold>(4/7) Executing pre-fixing actions...</>");
 
         if (!empty($this->input->getOption('no-pre'))
             || !array_key_exists('pre', $this->fix)
