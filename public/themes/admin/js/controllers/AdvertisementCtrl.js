@@ -177,6 +177,15 @@
        * @param Object params The advertisement params
        */
       $scope.init = function(params, categories) {
+        var devices = [];
+
+        // Get the list of enabled devices to add type to sizes
+        for (var i in params.devices) {
+          if (params.devices[i]) {
+            devices.push(i);
+          }
+        }
+
         if (params) {
           $scope.params = params;
         }
@@ -187,8 +196,9 @@
           for (var i = 0; i < params.width.length; i++) {
             $scope.sizes.push({
               width:  parseInt(params.width[i]),
-              height: parseInt(params.height[i])}
-              );
+              height: parseInt(params.height[i]),
+              type:   devices[i]
+            });
           }
         }
 
