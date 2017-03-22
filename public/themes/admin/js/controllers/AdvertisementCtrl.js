@@ -56,9 +56,17 @@
        *
        * @type {Array}
        */
-      $scope.sizes = [ { width: 0, height: 0 } ];
+      $scope.sizes = [];
 
-      $scope.ui = { categories: [], user_groups: [] }
+      /**
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *  Object for UI elements.
+       *
+       * @type {Object}
+       */
+      $scope.ui = { categories: [], user_groups: [] };
 
       /**
        * @function areAllCategoriesSelected
@@ -202,12 +210,49 @@
 
         if (!$scope.params.devices ||
             !angular.isObject($scope.params.devices)) {
-          $scope.params.devices = { phone: 1, tablet: 1, desktop: 1 };
+          $scope.params.devices = { desktop: 1, tablet: 1, phone: 1 };
         }
 
         if (!$scope.params.orientation) {
           $scope.params.orientation = 'horizontal';
         }
+      };
+
+      /**
+       * @function countEmpty
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Counts how many sizes have zero or empty values.
+       *
+       * @return {Integer} The number of empty sizes.
+       */
+      $scope.countEmpty = function() {
+        var empty = 0;
+
+        for (var i = 0; i < $scope.sizes.length; i++) {
+          if (!$scope.sizes[i].width || !$scope.sizes[i].height) {
+            empty++;
+          }
+        }
+
+        return empty;
+      };
+
+      /**
+       * @function isEmpty
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Checks if a size in the list is valid.
+       *
+       * @param {Integer} The index to check.
+       *
+       * @return {Boolean} True if the size is valid. False otherwise.
+       */
+      $scope.isEmpty = function(index) {
+        return !$scope.sizes || !$scope.sizes[index] ||
+          !$scope.sizes[index].width || !$scope.sizes[index].height;
       };
 
       /**
@@ -222,6 +267,25 @@
       $scope.removeSize = function(index) {
         $scope.sizes.splice(index, 1);
       };
+
+      // Adds/removes sizes when devices changes
+      $scope.$watch('params.devices', function(nv) {
+        var indexes = { desktop: 0, tablet: 1, phone: 2 };
+
+        for (var i in nv) {
+          var sizes = $scope.sizes.filter(function(e) {
+            return e.type === i;
+          });
+
+          if (nv[i] && sizes.length === 0) {
+            $scope.sizes.splice(indexes[i], 0, { height: 0, type: i, width: 0 });
+          }
+
+          if (!nv[i]) {
+            $scope.sizes = _.difference($scope.sizes, sizes);
+          }
+        }
+      }, true);
 
       // Updates params_width and params_height when sizes change
       $scope.$watch('sizes', function(nv) {
@@ -272,8 +336,7 @@
         $scope.user_groups = angular.toJson(nv);
       }, true);
 
-      // Track all radio buttons type_advertisement and update the model property
-      // in the $scope
+      // Track all radio buttons type_advertisement and update the model
       var type_advertisement_el = $('input[name=type_advertisement]');
       $scope.type_advertisement = parseInt(type_advertisement_el.val());
       type_advertisement_el.on('change', function() {
@@ -285,4 +348,3 @@
     }
   ]);
 })();
-
