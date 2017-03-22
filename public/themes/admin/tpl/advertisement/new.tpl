@@ -170,46 +170,105 @@
                   </label>
                 </div>
               </div>
+              <div class="grid-collapse-title pointer" ng-click="expanded.devices = !expanded.devices">
+                <i class="fa fa-desktop m-r-5"></i> {t}Devices{/t}
+                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.devices }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!expanded.devices && params.devices.phone + params.devices.tablet + params.devices.desktop > 0">
+                  [% params.devices.phone + params.devices.tablet + params.devices.desktop %]
+                  {t}selected{/t}
+                </span>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.devices }">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="checkbox">
+                      <input type="checkbox" name="restriction_devices_desktop" id="restriction_device_desktop" ng-model="params.devices.desktop" ng-false-value="0" ng-true-value="1" value="1">
+                      <label class="form-label" for="restriction_device_desktop">
+                        {t}Desktop{/t}
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="checkbox">
+                      <input type="checkbox" name="restriction_devices_tablet" id="restriction_device_tablet" ng-model="params.devices.tablet" ng-false-value="0" ng-true-value="1" value="1">
+                      <label class="form-label" for="restriction_device_tablet">
+                        {t}Tablet{/t}
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="checkbox">
+                      <input type="checkbox" name="restriction_devices_phone" id="restriction_device_phone" ng-model="params.devices.phone" ng-false-value="0" ng-true-value="1" value="1">
+                      <label class="form-label" for="restriction_device_phone">
+                        {t}Phone{/t}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="m-t-10">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Display the advertisement only on selected devices{/t}
+                  </small>
+                </div>
+              </div>
               <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dimensions }" ng-click="expanded.dimensions = !expanded.dimensions">
                 <i class="fa fa-arrows m-r-5"></i> {t}Dimensions{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.dimensions }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-class="{ 'badge-danger': countEmpty() >= 3, 'badge-warning text-black': countEmpty() === 1 || countEmpty() === 2 }" ng-if="sizes && sizes.length > 0" tooltip-enable="countEmpty() > 0" uib-tooltip="{t}One or more dimensions are invalid{/t}""" tooltip-placement="left">
+                  [% sizes.length %] {t}Dimensions{/t}
+                </span>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dimensions }">
                 <input name="params_width" ng-value="params_width" type="hidden">
                 <input name="params_height" ng-value="params_height" type="hidden">
-                <div class="row" ng-repeat="size in sizes track by $index">
-                  <div class="col-xs-5">
-                    <div class="form-group">
-                      <label class="form-label">
-                        {t}Width{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" min="0" ng-model="size.width" ng-value="size.width" required type="number">
-                      </div>
-                    </div>
+                <div class="no-animate row" ng-repeat="size in sizes track by $index">
+                  <div class="col-xs-1 p-t-15 text-center">
+                    <i class="fa fa-desktop" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.type === 'desktop'" uib-tooltip="{t}Desktop{/t}"></i>
+                    <i class="fa fa-tablet" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.type === 'tablet'" uib-tooltip="{t}Tablet{/t}"></i>
+                    <i class="fa fa-mobile" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.type === 'phone'" uib-tooltip="{t}Phone{/t}"></i>
+                    <i class="fa fa-external-link" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="!size.type" uib-tooltip="{t}Google DFP{/t}"></i>
                   </div>
-                  <div class="col-xs-5">
-                    <div class="form-group">
-                      <label class="form-label">
-                        {t}Height{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control pull-left" min="0" ng-model="size.height" ng-value="size.height" required type="number">
+                  <div class="col-xs-9">
+                    <div class="row">
+                      <div class="col-xs-6 form-group">
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="input-group-addon" uib-tooltip="{t}Width{/t}">
+                              <i class="fa fa-arrows-h"></i>
+                            </span>
+                            <input class="form-control" min="0" ng-model="size.width" ng-value="size.width" required type="number">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-6 form-group">
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="input-group-addon" uib-tooltip="{t}Height{/t}">
+                              <i class="fa fa-arrows-v"></i>
+                            </span>
+                            <input class="form-control pull-left" min="0" ng-model="size.height" ng-value="size.height" required type="number">
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="col-xs-2">
                     <div class="form-group">
-                      <label class="form-label">&nbsp;</label>
                       <div class="controls">
-                        <button class="btn btn-success pull-left" ng-click="addSize();" ng-if="$index === 0" type="button">
-                          <i class="fa fa-plus"></i>
-                        </button>
-                        <button class="btn btn-danger" ng-click="removeSize($index)" ng-if="$index !== 0" type="button">
+                        <button class="btn btn-danger" ng-click="removeSize($index)" ng-if="$index > 2" type="button">
                           <i class="fa fa-trash-o"></i>
                         </button>
                       </div>
                     </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 text-center">
+                    <button class="btn btn-block btn-white no-animate" ng-click="addSize();" ng-if="sizes.length >= 3 && with_script == 3" type="button">
+                      <i class="fa fa-plus m-r-5"></i>
+                      {t}Add{/t}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -290,48 +349,6 @@
                   <small class="help">
                     <i class="fa fa-info-circle m-r-5 text-info"></i>
                     {t}Display the advertisement if current date is in range{/t}
-                  </small>
-                </div>
-              </div>
-              <div class="grid-collapse-title pointer" ng-click="expanded.devices = !expanded.devices">
-                <i class="fa fa-desktop m-r-5"></i> {t}Devices{/t}
-                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.devices }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-if="!expanded.devices && params.devices.phone + params.devices.tablet + params.devices.desktop > 0">
-                  [% params.devices.phone + params.devices.tablet + params.devices.desktop %]
-                  {t}selected{/t}
-                </span>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.devices }">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="checkbox">
-                      <input type="checkbox" name="restriction_devices_desktop" id="restriction_device_desktop" ng-model="params.devices.desktop" ng-false-value="0" ng-true-value="1" value="1">
-                      <label class="form-label" for="restriction_device_desktop">
-                        {t}Desktop{/t}
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="checkbox">
-                      <input type="checkbox" name="restriction_devices_tablet" id="restriction_device_tablet" ng-model="params.devices.tablet" ng-false-value="0" ng-true-value="1" value="1">
-                      <label class="form-label" for="restriction_device_tablet">
-                        {t}Tablet{/t}
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="checkbox">
-                      <input type="checkbox" name="restriction_devices_phone" id="restriction_device_phone" ng-model="params.devices.phone" ng-false-value="0" ng-true-value="1" value="1">
-                      <label class="form-label" for="restriction_device_phone">
-                        {t}Phone{/t}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="m-t-10">
-                  <small class="help">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Display the advertisement only on selected devices{/t}
                   </small>
                 </div>
               </div>
