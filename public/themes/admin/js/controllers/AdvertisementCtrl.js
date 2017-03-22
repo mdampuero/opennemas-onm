@@ -26,7 +26,7 @@
        *
        * @type {Object}
        */
-      $scope.params = {};
+      $scope.params = { sizes: [] };
 
       /**
        * @memberOf AdvertisementCtrl
@@ -177,29 +177,8 @@
        * @param Object params The advertisement params
        */
       $scope.init = function(params, categories) {
-        var devices = [];
-
-        // Get the list of enabled devices to add type to sizes
-        for (var i in params.devices) {
-          if (params.devices[i]) {
-            devices.push(i);
-          }
-        }
-
         if (params) {
           $scope.params = params;
-        }
-
-        if ($scope.params.width && angular.isArray($scope.params.width) &&
-            $scope.params.height && angular.isArray($scope.params.height)) {
-          $scope.sizes = [];
-          for (var i = 0; i < params.width.length; i++) {
-            $scope.sizes.push({
-              width:  parseInt(params.width[i]),
-              height: parseInt(params.height[i]),
-              type:   devices[i]
-            });
-          }
         }
 
         if ($scope.params.user_groups &&
@@ -240,8 +219,8 @@
       $scope.countEmpty = function() {
         var empty = 0;
 
-        for (var i = 0; i < $scope.sizes.length; i++) {
-          if (!$scope.sizes[i].width || !$scope.sizes[i].height) {
+        for (var i = 0; i < $scope.params.sizes.length; i++) {
+          if (!$scope.params.sizes[i].width || !$scope.params.sizes[i].height) {
             empty++;
           }
         }
@@ -261,8 +240,9 @@
        * @return {Boolean} True if the size is valid. False otherwise.
        */
       $scope.isEmpty = function(index) {
-        return !$scope.sizes || !$scope.sizes[index] ||
-          !$scope.sizes[index].width || !$scope.sizes[index].height;
+        return !$scope.params.sizes || !$scope.params.sizes[index] ||
+          !$scope.params.sizes[index].width ||
+          !$scope.params.sizes[index].height;
       };
 
       /**
@@ -275,44 +255,41 @@
        * @param integer index The index of the input to remove.
        */
       $scope.removeSize = function(index) {
-        $scope.sizes.splice(index, 1);
+        $scope.params.sizes.splice(index, 1);
       };
 
       // Adds/removes sizes when devices changes
-      $scope.$watch('params.devices', function(nv) {
+      $scope.$watch('params.devices', function(nv, ov) {
+        if (!ov || ov === nv) {
+          return;
+        }
+
         var indexes = { desktop: 0, tablet: 1, phone: 2 };
 
         for (var i in nv) {
-          var sizes = $scope.sizes.filter(function(e) {
-            return e.type === i;
+          // Sizes for device
+          var sizes = $scope.params.sizes.filter(function(e) {
+            return e.device === i;
           });
 
           if (nv[i] && sizes.length === 0) {
-            $scope.sizes.splice(indexes[i], 0, { height: 0, type: i, width: 0 });
+            $scope.params.sizes.splice(indexes[i], 0,
+                { height: 0, device: i, width: 0 });
           }
 
           if (!nv[i]) {
-            $scope.sizes = _.difference($scope.sizes, sizes);
+            $scope.params.sizes = _.difference($scope.sizes, sizes);
           }
         }
       }, true);
 
       // Updates params_width and params_height when sizes change
-      $scope.$watch('sizes', function(nv) {
+      $scope.$watch('params.sizes', function(nv) {
         if (!angular.isArray(nv)) {
           return;
         }
 
-        var height = [];
-        var width  = [];
-
-        for (var i = 0; i < nv.length; i++) {
-          width.push(nv[i].width);
-          height.push(nv[i].height);
-        }
-
-        $scope.params_height = angular.toJson(height);
-        $scope.params_width  = angular.toJson(width);
+        $scope.json_sizes = angular.toJson(nv);
       }, true);
 
       // Watch script to detect Google DFP advertisement.

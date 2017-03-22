@@ -215,19 +215,18 @@
               <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dimensions }" ng-click="expanded.dimensions = !expanded.dimensions">
                 <i class="fa fa-arrows m-r-5"></i> {t}Dimensions{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.dimensions }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-class="{ 'badge-danger': countEmpty() >= 3, 'badge-warning text-black': countEmpty() === 1 || countEmpty() === 2 }" ng-if="sizes && sizes.length > 0" tooltip-enable="countEmpty() > 0" uib-tooltip="{t}One or more dimensions are invalid{/t}""" tooltip-placement="left">
-                  [% sizes.length %] {t}Dimensions{/t}
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-class="{ 'badge-danger': countEmpty() >= 3, 'badge-warning text-black': countEmpty() === 1 || countEmpty() === 2 }" ng-if="params.sizes && params.sizes.length > 0" tooltip-enable="countEmpty() > 0" uib-tooltip="{t}One or more dimensions are invalid{/t}""" tooltip-placement="left">
+                  [% params.sizes.length %] {t}Dimensions{/t}
                 </span>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dimensions }">
-                <input name="params_width" ng-value="params_width" type="hidden">
-                <input name="params_height" ng-value="params_height" type="hidden">
-                <div class="no-animate row" ng-repeat="size in sizes track by $index">
+                <input name="sizes" ng-value="json_sizes" type="hidden">
+                <div class="no-animate row" ng-repeat="size in params.sizes track by $index">
                   <div class="col-xs-1 p-t-15 text-center">
-                    <i class="fa fa-desktop" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.type === 'desktop'" uib-tooltip="{t}Desktop{/t}"></i>
-                    <i class="fa fa-tablet" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.type === 'tablet'" uib-tooltip="{t}Tablet{/t}"></i>
-                    <i class="fa fa-mobile" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.type === 'phone'" uib-tooltip="{t}Phone{/t}"></i>
-                    <i class="fa fa-external-link" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="!size.type" uib-tooltip="{t}Google DFP{/t}"></i>
+                    <i class="fa fa-desktop" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'desktop'" uib-tooltip="{t}Desktop{/t}"></i>
+                    <i class="fa fa-tablet" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'tablet'" uib-tooltip="{t}Tablet{/t}"></i>
+                    <i class="fa fa-mobile" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'phone'" uib-tooltip="{t}Phone{/t}"></i>
+                    <i class="fa fa-external-link" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="!size.device" uib-tooltip="{t}Google DFP{/t}"></i>
                   </div>
                   <div class="col-xs-9">
                     <div class="row">
@@ -265,7 +264,7 @@
                 </div>
                 <div class="row">
                   <div class="col-xs-12 text-center">
-                    <button class="btn btn-block btn-white no-animate" ng-click="addSize();" ng-if="sizes.length >= 3 && with_script == 3" type="button">
+                    <button class="btn btn-block btn-white no-animate" ng-click="addSize();" ng-if="params.sizes.length >= 3 && with_script == 3" type="button">
                       <i class="fa fa-plus m-r-5"></i>
                       {t}Add{/t}
                     </button>
