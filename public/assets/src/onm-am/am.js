@@ -221,17 +221,22 @@
         return;
       }
 
-      var ad = self.getAdvertisement(available);
+      var ad   = self.getAdvertisement(available);
+      var size = self.getSize(ad);
 
       slot.appendChild(self.createNormal(ad));
-      slot.style.width      = '100%';
+
+      slot.style.width      = size.width + 'px';
       slot.style.display    = 'block';
       slot.style.visibility = 'visible';
+
+      slot.style.height = size.height + (size.height === 'auto' ? '' : 'px');
 
       if (ad.orientation && ad.orientation === 'vertical') {
         slot.className += ' oat-vertical';
       }
 
+      // TODO: Remove when no support sizes in templates
       if (self.device === 'desktop' && slot.getAttribute('data-width')) {
         slot.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
@@ -333,6 +338,31 @@
     }
 
     return 'desktop';
+  };
+
+  /**
+   * @function getSize
+   * @memberOf OAM
+   *
+   * @description
+   *   Returns the slot size basing on the advertisement.
+   *
+   * @param {Object} ad The advertisement object.
+   *
+   * @return {Object} An object with height and width values for slot.
+   */
+  OAM.prototype.getSize = function(ad) {
+    var device  = this.getDevice();
+
+    var sizes = ad.sizes.filter(function(e) {
+      return e.device === device;
+    });
+
+    if (sizes.length > 0) {
+      return sizes[0];
+    }
+
+    return { height: 'auto', width: '100%' };
   };
 
   /**
