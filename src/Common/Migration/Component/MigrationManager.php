@@ -92,17 +92,16 @@ class MigrationManager
     {
         foreach ($this->config['filter'] as $key => $options) {
             foreach ($options['type'] as $name) {
-                $params = [];
                 $value  = null;
-
                 if (array_key_exists($key, $item)) {
                     $value = $item[$key];
                 }
 
+                $params = [];
                 if (array_key_exists('params', $options)
                     && array_key_exists($name, $options['params'])
                 ) {
-                    $params = $options['params'][$name];
+                    $params = $this->translateParams($item, $options['params'][$name]);
                 }
 
                 $item[$key] = $this->fm->filter($name, $value, $params);
@@ -223,5 +222,31 @@ class MigrationManager
     public function persist($item)
     {
         return $this->getPersister()->persist($item);
+    }
+
+    /**
+     * Parse the input params and replace item.* values
+     * with real values from the item info array
+     *
+     * @param array $item the current item info in array form
+     * @param array $filterparams the current filter params before parsing them
+     *
+     * @return array the filter params already parsed and translated
+     **/
+    public function translateParams($item, $filterParams)
+    {
+        if (array_key_exists('input', $filterParams)) {
+            foreach ($filterParams['input'] as $filterKey => &$filterValue) {
+                if (strpos($filterValue, 'item') !== 0) {
+                    continue;
+                }
+
+                $property = str_replace('item.', '', $filterValue);
+
+                $filterParams['input'][$filterKey] = $item[$property];
+            }
+        }
+
+        return $filterParams;
     }
 }
