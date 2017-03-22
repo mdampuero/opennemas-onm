@@ -289,7 +289,7 @@ class FixCommand extends ContainerAwareCommand
             return;
         }
 
-        $this->conn->selectDatabase($this->fix['target']['database']);
+        $this->conn->selectDatabase($this->fix['source']['database']);
 
         foreach ($this->fix['post'] as $q) {
             $q = $this->prepareQuery($q);
