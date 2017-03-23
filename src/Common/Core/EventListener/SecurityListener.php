@@ -212,15 +212,18 @@ class SecurityListener implements EventSubscriberInterface
      */
     protected function isAllowed($instance, $user)
     {
+        if (!$user->isEnabled()) {
+            return false;
+        }
+
         if (!preg_match('@^/(admin|managerws)/.*@')) {
             return true;
         }
 
-        return ($user->isEnabled()
-            && ($this->security->hasPermission('MASTER')
+        return ($this->security->hasPermission('MASTER')
                 || ($this->security->hasPermission('PARTNER')
                     && $this->security->hasInstance($instance->internal_name))
-                || ($user->type === 0 && empty($instance->blocked)))
+                || ($user->type === 0 && empty($instance->blocked))
         );
     }
 
