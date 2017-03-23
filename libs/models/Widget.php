@@ -74,7 +74,7 @@ class Widget extends Content
             $conn->beginTransaction();
             parent::create($data);
 
-           $conn->insert(
+            $conn->insert(
                 'widgets',
                 [
                     'pk_widget' => $this->id,
@@ -102,7 +102,9 @@ class Widget extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -246,18 +248,36 @@ class Widget extends Content
      **/
     private function renderletIntelligentWidget($params = null)
     {
+        $class = $this->factoryWidget($params);
+
+        if (is_null($class)) {
+            return sprintf(_("Widget %s not available"), $this->content);
+        }
+
+        return $class->render($params);
+    }
+
+    /**
+     * Returns an instance for a widget
+     *
+     * @param array $params parameters for rendering the widget
+     *
+     * @return Object the widget instance
+     **/
+    public function factoryWidget($params = null)
+    {
         getService('widget_repository')->loadWidget($this->content);
 
         $class = 'Widget' . $this->content;
 
-        if (class_exists($class)) {
-            $class = new $class($this);
-        } else {
-            return sprintf(_("Widget %s not available"), $this->content);
+        if (!class_exists($class)) {
+            return null;
         }
+
+        $class = new $class($this);
 
         $class->parseParams($params);
 
-        return $class->render($params);
+        return $class;
     }
 }

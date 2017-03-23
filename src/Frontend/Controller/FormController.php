@@ -162,7 +162,7 @@ class FormController extends Controller
     }
 
     /**
-     * Returns the advertisements for the letters frontpage.
+     * Returns the advertisements for the form frontpage.
      *
      * @return array The list of advertisemnets.
      */
