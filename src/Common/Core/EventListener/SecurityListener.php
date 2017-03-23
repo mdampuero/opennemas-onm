@@ -81,7 +81,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->security->setCategories($user->categories);
         $this->security->setPermissions($permissions);
 
-        if ($this->isAllowed($instance, $user)) {
+        if ($this->isAllowed($instance, $user, $uri)) {
             return;
         }
 
@@ -207,16 +207,17 @@ class SecurityListener implements EventSubscriberInterface
      *
      * @param Instance $instance The current instance.
      * @param User     $user     The current user.
+     * @param string   $uri      The requested URI.
      *
      * @return boolean True if the request is allowed. False otherwise.
      */
-    protected function isAllowed($instance, $user)
+    protected function isAllowed($instance, $user, $uri)
     {
         if (!$user->isEnabled()) {
             return false;
         }
 
-        if (!preg_match('@^/(admin|managerws)/.*@')) {
+        if (!preg_match('@^/(admin|managerws)/.*@', $uri)) {
             return true;
         }
 
