@@ -26,7 +26,7 @@
 </div>
 <div class="content">
   <div class="tiles white m-20">
-    <div class="tiles-body">
+    <div class="tiles-body container-fluid">
       <div class="pull-right b-grey">
         <i class="fa fa-trash-o fa-4x"></i>
       </div>
@@ -39,12 +39,18 @@
       <hr>
 
       <h6 class="text-error semi-bold">Smarty</h6>
-      <a href="{url name=admin_cache_manager_clearcache}" class="span-6 btn btn-white btn-cons btn-large btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">
-        Remove smarty cache
-      </a>
-      <a href="{url name=admin_cache_manager_clearcompiled}" class="span-6 btn btn-white btn-cons btn-large btn-block">
-        Remove smarty compiles
-      </a>
+      <div class="row">
+        <div class="col-xs-6">
+          <a href="{url name=admin_cache_manager_clearcache}" class="btn btn-white btn-cons btn-large btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">
+          Remove smarty cache
+        </a>
+        </div>
+        <div class="col-xs-6">
+          <a href="{url name=admin_cache_manager_clearcompiled}" class="btn btn-white btn-cons btn-large btn-block">
+            Remove smarty compiles
+          </a>
+        </div>
+      </div>
 
       <h6 class="text-error semi-bold">Edge cache</h6>
       <a href="{url name=admin_cache_manager_banvarnishcache}" class="btn btn-white btn-cons btn-large btn-block">

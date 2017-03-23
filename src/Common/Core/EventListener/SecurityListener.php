@@ -234,6 +234,20 @@ class SecurityListener implements EventSubscriberInterface
 
         if ($instance->blocked) {
             $exception = new InstanceBlockedException($instance->internal_name);
+
+            // Redirect to last URL
+            $target = $event->getRequest()->headers->get('referer');
+
+            // Redirect to login callback when login with social networks
+            if (empty($target)) {
+                $target = $this->router->generate('admin_login_callback');
+            }
+
+            // Prevent redirection to login after logging in
+            if (strpos($target, '/admin/login') === false) {
+                $event->getRequest()->getSession()
+                    ->set('_security.backend.target_path', $target);
+            }
         }
 
         // Logout for web services
