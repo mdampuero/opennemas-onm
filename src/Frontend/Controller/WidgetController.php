@@ -22,10 +22,12 @@ class WidgetController extends Controller
      * Get a widget and execute an action.
      *
      * @param Request $request The request object.
+     * @param integer $id      The widget id.
+     * @param string $action   The widget action.
      *
      * @return Response The response object.
      */
-    public function executeAction($id, $action)
+    public function executeAction(Request $request, $id, $action)
     {
         $response = new Response(
             _('Sorry, we were unable to complete your request'),
