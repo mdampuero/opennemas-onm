@@ -57,10 +57,9 @@ class FrontpagesController extends Controller
         $expiresStarttime = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
         $expiresEndtime   = \ContentManager::getEarlierEndtimeOfScheduledContents($contents);
 
-
         $expires = ($expiresStarttime < $expiresEndtime)? $expiresStarttime : $expiresEndtime;
-        if (is_null($expiresStarttime)) {
-            $expires = $expiresEndtime;
+        if (is_null($expiresEndtime)) {
+            $expires = $expiresStarttime;
         }
 
         if (!empty($expires)) {
