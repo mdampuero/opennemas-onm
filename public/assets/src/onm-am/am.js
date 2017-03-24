@@ -145,18 +145,15 @@
   OAM.prototype.createNormal = function(ad) {
     var item = document.createElement('iframe');
 
-    item.style.padding    = 0;
-    item.style.width      = '100%';
-    item.style.margin     = 0;
-    item.style.border     = 'none';
-    item.style.overflow   = 'hidden';
-
-    item.src = this.normalize(this.config.url + '/' + ad.id);
+    item.className   += 'oat-content';
+    item.style.width  = '100%';
 
     // Auto-resize on load
     item.onload = function() {
       item.style.height = item.contentWindow.document.body.scrollHeight + 'px';
     };
+
+    item.src = this.normalize(this.config.url + '/' + ad.id);
 
     return item;
   };
@@ -223,14 +220,13 @@
 
       var ad   = self.getAdvertisement(available);
       var size = self.getSize(ad);
+      var div  = document.createElement('div');
 
-      slot.appendChild(self.createNormal(ad));
+      div.className  += 'oat-container';
+      slot.className += ' oat-visible oat-' + ad.position;
 
-      slot.style.width      = size.width + 'px';
-      slot.style.display    = 'block';
-      slot.style.visibility = 'visible';
-
-      slot.style.height = size.height + (size.height === 'auto' ? '' : 'px');
+      div.style.width    = size.width + 'px';
+      div.style.height   = size.height + (size.height === 'auto' ? '' : 'px');
 
       if (ad.orientation && ad.orientation === 'vertical') {
         slot.className += ' oat-vertical';
@@ -238,8 +234,11 @@
 
       // TODO: Remove when no support sizes in templates
       if (self.device === 'desktop' && slot.getAttribute('data-width')) {
-        slot.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
+        div.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
+
+      div.appendChild(self.createNormal(ad));
+      slot.appendChild(div);
     });
   };
 

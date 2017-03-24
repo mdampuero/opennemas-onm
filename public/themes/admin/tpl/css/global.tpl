@@ -30,9 +30,25 @@
   width: 80px;
 }
 
+.oat-container {
+  overflow: hidden;
+}
+
+.oat-content {
+  border: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
 .oat-vertical {
   padding-top: 0;
   margin-left: 0;
+}
+
+.oat-visible {
+  display: block;
+  visibility: visible;
 }
 
 .oat-vertical:before {
