@@ -213,29 +213,17 @@ class AdvertisementController extends Controller
     /**
      * Returns the list of sizes for Google DFP.
      *
-     * @param Advertisement $ad The advertisement object..
+     * @param array $sizes The list of sizes for the current add.
      *
      * @return string The list of sizes for Google DFP.
      */
-    protected function getSizes($ad)
+    protected function getSizes($sizes)
     {
-        $width  = $ad->params['width'];
-        $height = $ad->params['height'];
+        $sizes = array_map(function ($a) {
+            return "[ {$a['width']}, {$a['height']} ]";
+        }, $sizes);
 
-        if (!is_array($width)) {
-            $width = [ $width ];
-        }
-
-        if (!is_array($height)) {
-            $height = [ $height ];
-        }
-
-        $sizes = [];
-        foreach (array_keys($width) as $key) {
-            $sizes[] = "[{$width[$key]}, {$height[$key]}]";
-        }
-
-        return '[' . implode(',', $sizes) .']';
+        return '[ ' . implode(', ', $sizes) . ' ]';
     }
 
     /**
@@ -316,7 +304,8 @@ class AdvertisementController extends Controller
      *
      * @return array The list of sizes.
      */
-    protected function normalizeSizes($params) {
+    protected function normalizeSizes($params)
+    {
         // New system, sizes with devices
         if (array_key_exists('sizes', $params)) {
             return $params['sizes'];
@@ -358,11 +347,10 @@ class AdvertisementController extends Controller
         $params = [
             'id'        => $ad->id,
             'dfpId'     => $ad->params['googledfp_unit_id'],
-            'sizes'     => $this->getSizes($ad),
+            'sizes'     => $this->getSizes($this->normalizeSizes($ad->params)),
             'targeting' => $this->getTargeting($category),
             'custom'    => $this->getCustomCode()
         ];
-
 
         return $this->get('core.template.admin')
             ->fetch('advertisement/helpers/dfp.tpl', $params);
