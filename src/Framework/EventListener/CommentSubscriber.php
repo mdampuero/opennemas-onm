@@ -56,7 +56,7 @@ class CommentSubscriber implements EventSubscriberInterface
         $system = $this->container->get('setting_repository')
             ->get('comment_system');
 
-        if (!empty($system) || $system !== 'onm') {
+        if (empty($system) || $system !== 'onm') {
             return;
         }
 
