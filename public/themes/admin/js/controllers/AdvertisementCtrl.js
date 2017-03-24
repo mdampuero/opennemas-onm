@@ -26,7 +26,13 @@
        *
        * @type {Object}
        */
-      $scope.params = { sizes: [] };
+      $scope.params = {
+        sizes: [
+          { device: 'desktop', height: 0, width: 0 },
+          { device: 'tablet', height: 0, width: 0 },
+          { device: 'phone', height: 0, width: 0 },
+        ]
+      };
 
       /**
        * @memberOf AdvertisementCtrl
@@ -47,16 +53,6 @@
        * @type {Object}
        */
       $scope.selected = { all: { categories: false, user_groups: false } };
-
-      /**
-       * @memberOf AdvertisementCtrl
-       *
-       * @description
-       *  The list of sizes.
-       *
-       * @type {Array}
-       */
-      $scope.sizes = [];
 
       /**
        * @memberOf AdvertisementCtrl
@@ -116,7 +112,7 @@
        *   Add new input for advertisement size
        */
       $scope.addSize = function() {
-        $scope.sizes.push({ width: 0, height: 0 });
+        $scope.params.sizes.push({ width: 0, height: 0 });
       };
 
       /**
@@ -278,7 +274,7 @@
           }
 
           if (!nv[i]) {
-            $scope.params.sizes = _.difference($scope.sizes, sizes);
+            $scope.params.sizes = _.difference($scope.params.sizes, sizes);
           }
         }
       }, true);
