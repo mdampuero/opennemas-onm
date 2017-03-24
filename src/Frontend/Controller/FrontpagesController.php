@@ -52,14 +52,14 @@ class FrontpagesController extends Controller
             ->get('setting_repository')
             ->get('frontpage_' . $categoryId . '_last_saved');
 
-        $cm       = new \ContentManager;
-        $contents = $cm->getContentsForHomepageOfCategory($categoryId);
-        $expiresStarttime = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
-        $expiresEndtime   = \ContentManager::getEarlierEndtimeOfScheduledContents($contents);
+        $cm        = new \ContentManager;
+        $contents  = $cm->getContentsForHomepageOfCategory($categoryId);
+        $starttime = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
+        $endtime   = \ContentManager::getEarlierEndtimeOfScheduledContents($contents);
+        $expires   = $starttime;
 
-        $expires = ($expiresStarttime < $expiresEndtime)? $expiresStarttime : $expiresEndtime;
-        if (is_null($expiresEndtime)) {
-            $expires = $expiresStarttime;
+        if (!empty($endtime) && (empty($expires) || $endtime < $starttime)) {
+            $expires = $endtime;
         }
 
         if (!empty($expires)) {
