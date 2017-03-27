@@ -1,17 +1,12 @@
 <?php
 /**
- * Generates the robots.txt file
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,54 +18,44 @@ use Onm\Settings as s;
  * Generates the robots.txt file
  *
  * @package Frontend_Controllers
- **/
+ */
 class RobotsController extends Controller
 {
     /**
      * Displays a prebuilt robots.txt file
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function indexAction()
     {
         $disableRobots = $this->container->getParameter('disable_robots');
 
-        $rules = $this->get('setting_repository')->get('robots_txt_rules');
+        $rules       = $this->get('setting_repository')->get('robots_txt_rules');
         $customRules = (is_string($rules)) ? $rules : '';
+
+        $content = "User-Agent: *\nDisallow: /admin\n";
+
         if ($disableRobots) {
-            $content = "User-Agent: *
-Disallow: /
-";
-        } else {
-            $content = "User-Agent: *
-Disallow: /admin/
-Allow: /
-
-Disallow: /harming/humans
-Disallow: /ignoring/human/orders
-Disallow: /harm/to/self
-
-{$customRules}
-
-Sitemap: ".SITE_URL."sitemapnews.xml.gz
-Sitemap: ".SITE_URL."sitemapweb.xml.gz
-Sitemap: ".SITE_URL."sitemapvideo.xml.gz
-Sitemap: ".SITE_URL."sitemapimage.xml.gz
-";
+            $content = "User-Agent: *\nDisallow: /\n";
         }
+
+        $content .= "Disallow: /harming/humans\n"
+            . "Disallow: /ignoring/human/orders\n"
+            . "Disallow: /harm/to/self\n"
+            . $customRules . "\n"
+            . "Sitemap: " . SITE_URL . "sitemapnews.xml.gz\n"
+            . "Sitemap: " . SITE_URL . "sitemapweb.xml.gz\n"
+            . "Sitemap: " . SITE_URL . "sitemapvideo.xml.gz\n"
+            . "Sitemap: " . SITE_URL . "sitemapimage.xml.gz";
 
         $instanceName = getService('core.instance')->internal_name;
 
-        return new Response(
-            $content,
-            200,
-            array(
-                'Content-Type' => 'text/plain',
-                'x-cacheable'  => true,
-                'x-cache-for'  => '100d',
-                'x-tags'       => 'instance-'.$instanceName.',robots',
-                'x-instance'   => $instanceName,
-            )
-        );
+        return new Response($content, 200, [
+            'Content-Type' => 'text/plain',
+            'x-cacheable'  => true,
+            'x-cache-for'  => '100d',
+            'x-tags'       => 'instance-' . $instanceName . ',robots',
+            'x-instance'   => $instanceName,
+        ]);
     }
 }
