@@ -52,7 +52,7 @@ class LocaleListener implements EventSubscriberInterface
 
         // Get locale from instance settings
         $settings = $this->container->get('setting_repository')
-            ->get([ 'time_zone', 'site_language' ], [ 421, 'en_US' ]);
+            ->get([ 'time_zone', 'site_language' ], [ 'UTC', 'en_US' ]);
 
         $locale   = $settings['site_language'];
         $timezone = $settings['time_zone'];

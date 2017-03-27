@@ -47,18 +47,12 @@ class CoversController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
-        $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
-
-        $this->view->assign(
-            array(
-                'category'     => $category,
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData,
-                'timezone'     => $timezone->getName()
-            )
-        );
+        $this->view->assign([
+            'category'     => $category,
+            'subcat'       => $this->subcat,
+            'allcategorys' => $this->parentCategories,
+            'datos_cat'    => $this->categoryData,
+        ]);
     }
 
     /**

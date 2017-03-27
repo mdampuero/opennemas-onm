@@ -103,13 +103,10 @@ class WebServiceController extends Controller
 
         // Also get timezone if comes from openhost form
         $timezone = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
-        if (!empty($timezone)) {
-            $allTimezones = \DateTimeZone::listIdentifiers();
-            foreach ($allTimezones as $key => $value) {
-                if ($timezone == $value) {
-                    $timezone = $key;
-                }
-            }
+        if (empty($timezone)
+            || !in_array($timezone, \DateTimeZone::listIdentifiers())
+        ) {
+            $timezone = 'UTC';
         }
 
         $em        = $this->get('orm.manager');

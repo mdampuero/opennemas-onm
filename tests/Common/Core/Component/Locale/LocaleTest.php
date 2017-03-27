@@ -74,7 +74,7 @@ class LocaleTest extends KernelTestCase
      */
     public function testGetTimeZone()
     {
-        $this->assertEquals('UTC', $this->locale->getTimeZone());
+        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
     }
 
     /**
@@ -94,12 +94,18 @@ class LocaleTest extends KernelTestCase
      */
     public function testSetTimeZone()
     {
-        $timezoneLisbon = array_flip(\DateTimeZone::listIdentifiers())['Europe/Lisbon'];
+        $id = array_flip(\DateTimeZone::listIdentifiers())['Europe/Lisbon'];
 
         $this->locale->setTimeZone('foo');
-        $this->assertNotEquals('foo', $this->locale->getTimeZone());
+        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
 
-        $this->locale->setTimeZone($timezoneLisbon);
-        $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone());
+        $this->locale->setTimeZone(9999);
+        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
+
+        $this->locale->setTimeZone($id);
+        $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone()->getName());
+
+        $this->locale->setTimeZone('Europe/Lisbon');
+        $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone()->getName());
     }
 }
