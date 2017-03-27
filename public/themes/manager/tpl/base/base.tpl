@@ -49,7 +49,8 @@
       @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
     {/stylesheets}
-    {stylesheets src="@ManagerTheme/less/main.less" filters="cssrewrite,less" output="manager"}
+    {stylesheets src="@Common/components/flag-sprites/dist/css/flag-sprites.min.css,
+      @ManagerTheme/less/main.less" filters="cssrewrite,less" output="manager"}
     {/stylesheets}
   {/block}
   {block name="header-js"}
