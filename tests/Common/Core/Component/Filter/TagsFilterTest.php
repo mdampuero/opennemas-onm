@@ -17,8 +17,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class TagsFilterTest extends KernelTestCase
 {
+    /**
+     * Tests filter.
+     */
     public function testFilterWithParameters()
     {
+        $container = $this->getMockBuilder('Container')->getMock();
+
         $str = '通訳・翻訳キャリアガイド・オンライン 2017 y otras Cosas mas en Español متوقعًا إفلاسه، النظام ينتهج استراتيجية القمع الوقائي Đ Ó 3';
         $params = [ 'separator' => ',', 'lowercase' => false ];
 
@@ -31,7 +36,7 @@ class TagsFilterTest extends KernelTestCase
 
 
         $params = [ 'separator' => ',', 'lowercase' => true ];
-        $filter = new TagsFilter($params);
+        $filter = new TagsFilter($container, $params);
         $tags = $filter->filter($str);
         $this->assertEquals(
             '通訳・翻訳キャリアガイド・オンライン, 2017, otras, cosas, mas, español, متوقعًا, إفلاسه،, النظام, ينتهج, استراتيجية, القمع, الوقائي, đ, ó, 3',

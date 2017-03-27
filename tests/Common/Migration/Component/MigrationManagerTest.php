@@ -22,28 +22,33 @@ class MigrationManagerTest extends KernelTestCase
      */
     public function setUp()
     {
-        $this->migration = [
+        $this->config = [
             'type'    => 'bar',
-            'tracker' => 'simple_id',
-            'source'  => [ 'repository' => 'database', 'database' => 'wobble' ],
-            'target'  => [
-                'persister' => 'content' ,
-                'database'  => 'flob',
-                'filter'    => [
-                    'wubble' => [
-                        'type'   => [ 'literal' ],
-                        'params' => [ 'literal' => [ 'value' => 'bar' ] ]
-                    ],
-                    'foobar' => [ 'type' => [ 'html' ] ]
-                ]
+            'tracker' => [
+                'type'   => 'simple_id',
+                'fields' => [ 'id' ]
+            ],
+            'source'  => [
+                'persister'  => 'database',
+                'repository' => 'database',
+                'database'   => 'flob'
+            ],
+            'filter'  => [
+                'wubble' => [
+                    'type'   => [ 'literal' ],
+                    'params' => [ 'literal' => [ 'value' => 'bar' ] ]
+                ],
+                'foobar' => [ 'type' => [ 'html' ] ]
             ]
         ];
+
+        $this->container = $this->getMockBuilder('Container')->getMock();
 
         $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mm = new MigrationManager($this->em, [ 'connection' => [] ]);
+        $this->mm = new MigrationManager($this->container, $this->em, [ 'connection' => [] ]);
     }
 
     /**
@@ -51,12 +56,12 @@ class MigrationManagerTest extends KernelTestCase
      */
     public function testConfigure()
     {
-        $property  = new \ReflectionProperty($this->mm, 'migration');
+        $property  = new \ReflectionProperty($this->mm, 'config');
         $property->setAccessible(true);
 
-        $this->mm->configure($this->migration);
+        $this->mm->configure($this->config);
 
-        $this->assertEquals($this->migration, $property->getValue($this->mm));
+        $this->assertEquals($this->config, $property->getValue($this->mm));
     }
 
     /**
@@ -68,7 +73,7 @@ class MigrationManagerTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mm->configure($this->migration);
+        $this->mm->configure($this->config);
 
         $property  = new \ReflectionProperty($this->mm, 'fm');
         $property->setAccessible(true);
@@ -88,25 +93,13 @@ class MigrationManagerTest extends KernelTestCase
      */
     public function testGetPersister()
     {
-        $this->mm->configure($this->migration);
+        $this->mm->configure($this->config);
         $persister = $this->mm->getPersister();
 
         $this->assertInstanceOf(
-            'Common\Migration\Component\Persister\ContentPersister',
+            'Common\Migration\Component\Persister\DatabasePersister',
             $persister
         );
-    }
-
-    /**
-     * Tests getPersister when the given entity is invalid.
-     *
-     * @expectedException Common\Migration\Component\Exception\InvalidPersisterException
-     */
-    public function testGetPersisterWhenNoPersister()
-    {
-        $this->migration['target']['persister'] = 'garply';
-        $this->mm->configure($this->migration);
-        $this->mm->getPersister();
     }
 
     /**
@@ -126,6 +119,30 @@ class MigrationManagerTest extends KernelTestCase
     }
 
     /**
+     * Tests getPersister when the persister configuration is invalid.
+     *
+     * @expectedException Common\Migration\Component\Exception\InvalidPersisterException
+     */
+    public function testGetPersisterWhenInvalidConfiguration()
+    {
+        $this->config['source']['persister'] = 'garply';
+        $this->mm->configure($this->config);
+        $this->mm->getPersister();
+    }
+
+    /**
+     * Tests getPersister when no persister configured.
+     *
+     * @expectedException Common\Migration\Component\Exception\InvalidPersisterException
+     */
+    public function testGetPersisterWhenNoConfiguration()
+    {
+        unset($this->config['source']['persister']);
+        $this->mm->configure($this->config);
+        $this->mm->getPersister();
+    }
+
+    /**
      * Tests getRepository.
      */
     public function testGetRepository()
@@ -138,25 +155,13 @@ class MigrationManagerTest extends KernelTestCase
         $property->setAccessible(true);
         $property->setValue($this->mm, $tracker);
 
-        $this->mm->configure($this->migration);
+        $this->mm->configure($this->config);
         $persister = $this->mm->getRepository();
 
         $this->assertInstanceOf(
             'Common\Migration\Component\Repository\DatabaseRepository',
             $persister
         );
-    }
-
-    /**
-     * Tests getRepository when the given entity is invalid.
-     *
-     * @expectedException Common\Migration\Component\Exception\InvalidRepositoryException
-     */
-    public function testGetRepositoryWhenNoRepository()
-    {
-        $this->migration['source']['repository'] = 'garply';
-        $this->mm->configure($this->migration);
-        $this->mm->getRepository();
     }
 
     /**
@@ -176,36 +181,48 @@ class MigrationManagerTest extends KernelTestCase
     }
 
     /**
+     * Tests getRepository when the repository configuration is invalid.
+     *
+     * @expectedException Common\Migration\Component\Exception\InvalidRepositoryException
+     */
+    public function testGetRepositoryWhenInvalidConfiguration()
+    {
+        $this->config['source']['repository'] = 'garply';
+        $this->mm->configure($this->config);
+        $this->mm->getRepository();
+    }
+
+    /**
+     * Tests getRepository when no repository configured.
+     *
+     * @expectedException Common\Migration\Component\Exception\InvalidRepositoryException
+     */
+    public function testGetRepositoryWhenNoConfiguration()
+    {
+        unset($this->config['source']['repository']);
+        $this->mm->configure($this->config);
+        $this->mm->getRepository();
+    }
+
+    /**
      * Tests getTracker.
      */
     public function testGetTracker()
     {
-        $this->mm->configure($this->migration);
+        $this->mm->configure($this->config);
 
         $this->assertInstanceOf(
-            'Common\Migration\Component\Tracker\SimpleIdTracker',
+            'Common\Migration\Component\Tracker\Tracker',
             $this->mm->getTracker()
         );
     }
 
     /**
-     * Tests getRepository when the given entity is invalid.
-     *
-     * @expectedException Common\Migration\Component\Exception\InvalidTrackerException
-     */
-    public function testGetRepositoryWhenNoTracker()
-    {
-        $this->migration['tracker'] = 'garply';
-        $this->mm->configure($this->migration);
-        $this->mm->getTracker();
-    }
-
-    /**
-     * Tests getTracker when a Tracker was previously created.
+     * Tests getTracker when a Tracker is already created.
      */
     public function testGetTrackerWhenCreated()
     {
-        $tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\SimpleIdTracker')
+        $tracker = $this->getMockBuilder('Common\Migration\Component\Tracker\Tracker')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -214,6 +231,18 @@ class MigrationManagerTest extends KernelTestCase
         $property->setValue($this->mm, $tracker);
 
         $this->assertEquals($tracker, $this->mm->getTracker());
+    }
+
+    /**
+     * Tests getRepository when the tracker configuration is invalid.
+     *
+     * @expectedException Common\Migration\Component\Exception\InvalidTrackerException
+     */
+    public function testGetRepositoryWhenNoTracker()
+    {
+        $this->config['tracker'] = 'garply';
+        $this->mm->configure($this->config);
+        $this->mm->getTracker();
     }
 
     /**

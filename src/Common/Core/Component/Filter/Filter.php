@@ -12,6 +12,13 @@ namespace Common\Core\Component\Filter;
 abstract class Filter
 {
     /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * The filter parameters.
      *
      * @var array
@@ -23,8 +30,10 @@ abstract class Filter
      *
      * @param array $params The filter parameters.
      */
-    public function __construct($params = [])
+    public function __construct($container, $params = [])
     {
+        $this->container = $container;
+
         if (!is_array($params)) {
             $message = 'Filter expects an argument of type array. '
                 . gettype($params) . ' given.';
@@ -48,6 +57,10 @@ abstract class Filter
     {
         if (array_key_exists($name, $this->params)) {
             return $this->params[$name];
+        }
+
+        if ($this->container->hasParameter($name)) {
+            return $this->container->getParameter($name);
         }
 
         return $default;

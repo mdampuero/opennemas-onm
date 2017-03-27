@@ -449,14 +449,18 @@ class StringUtils
 
         // Use intl extension to clean
         $string = transliterator_transliterate(
-            "NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();",
+            "NFD; [:Nonspacing Mark:] Remove; NFC; Lower();",
             $string
         );
 
         // Remove stop list
         if ($useStopList) {
-            $string = self::removeShorts($string);
+            $newString = self::removeShorts($string);
+            if (mb_strlen($newString) > 20) {
+                $string = $newString;
+            }
         }
+
         $string = trim(strtr($string, self::$trade));
 
         // Convert nbsp, ndash and mdash to hyphens
@@ -483,6 +487,12 @@ class StringUtils
 
         // Convert times to x
         $string = str_replace( '%c3%97', 'x', $string );
+        // Remove punctuation marks
+        $string = str_replace(
+            ['"', "'", "…", ".", ",", "“", "”", ",", ".", ":", ";", "?", "¿", "!", "¡", "'", ")", ")"],
+            '',
+            $string
+        );
 
         // Clean trailing and duplicated spaces
         $string = preg_replace(['/\s+/', '/[\t\n]/'], ' ', $string);
@@ -860,9 +870,9 @@ EOF;
 
         $newstring = $string;
         foreach ($shorts as $word) {
-            $newstring = preg_replace('/^'.$word.'[\.\, ]/', ' ', $newstring);
-            $newstring = preg_replace('/[\.\, ]'.$word.'[\.\, ]/', ' ', $newstring);
-            $newstring = preg_replace("/[\.\, ]$word$/", ' ', $newstring);
+            $newstring = preg_replace('/\b'.$word.'[\.\,\s]/', '', $newstring);
+            $newstring = preg_replace('/[\.\,\s]'.$word.'[\.\,\s]/', '', $newstring);
+            $newstring = preg_replace('/[\.\,\s]'.$word.'\b/', '', $newstring);
         }
 
         if (!empty(trim($newstring))) {

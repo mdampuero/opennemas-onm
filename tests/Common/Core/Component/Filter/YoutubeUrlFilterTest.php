@@ -19,7 +19,9 @@ class YoutubeUrlFilterTest extends KernelTestCase
 {
     public function setUp()
     {
-        $this->filter = new YoutubeUrlFilter();
+        $container = $this->getMockBuilder('Container')->getMock();
+
+        $this->filter = new YoutubeUrlFilter($container);
     }
 
     public function testFilterWithId()

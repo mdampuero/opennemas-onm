@@ -18,11 +18,19 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class MapFilterTest extends KernelTestCase
 {
     /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        $this->container = $this->getMockBuilder('Container')->getMock();
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      */
     public function testFilterWithoutParameters()
     {
-        new MapFilter();
+        new MapFilter($this->container);
     }
 
     /**
@@ -30,13 +38,13 @@ class MapFilterTest extends KernelTestCase
      */
     public function testFilterWithoutInvalidMap()
     {
-        new MapFilter([ 'map' => 'bar' ]);
+        new MapFilter($this->container, [ 'map' => 'bar' ]);
     }
 
     public function testFilterWithInvalidString()
     {
         $params = [ 'map' => [ 'foo' => 'bar' ] ];
-        $filter = new MapFilter($params);
+        $filter = new MapFilter($this->container, $params);
 
         $this->assertFalse($filter->filter('xyz'));
     }
@@ -44,7 +52,7 @@ class MapFilterTest extends KernelTestCase
     public function testFilterWithValidMapAndString()
     {
         $params = [ 'map' => [ 'foo' => 'bar' ] ];
-        $filter = new MapFilter($params);
+        $filter = new MapFilter($this->container, $params);
 
         $this->assertEquals($params['map']['foo'], $filter->filter('foo'));
     }
