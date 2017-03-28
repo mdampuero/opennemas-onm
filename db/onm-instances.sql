@@ -178,7 +178,7 @@ CREATE TABLE `instances` (
   `emails` int(10) unsigned NOT NULL DEFAULT '0',
   `users` int(10) unsigned NOT NULL DEFAULT '0',
   `activated_modules` text,
-  `support_plan` varchar(255) NOT NULL,
+  `country` varchar(2) NOT NULL,
   `owner_id` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `owner_id` (`owner_id`),
