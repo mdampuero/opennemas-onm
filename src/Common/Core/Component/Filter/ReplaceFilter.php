@@ -27,8 +27,8 @@ class ReplaceFilter extends Filter
             return $str;
         }
 
-        return preg_replace(
-            '/' . preg_quote($pattern, '/') . '/',
+        return str_replace(
+            $pattern,
             $replacement,
             $str
         );
