@@ -121,8 +121,6 @@ class LetterController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
-            $letter->with_comment = 1;
-
             $cm = new \ContentManager();
             $otherLetters = $cm->find(
                 'Letter',
