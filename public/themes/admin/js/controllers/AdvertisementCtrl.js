@@ -199,7 +199,7 @@
         }
 
         if (!$scope.params.orientation) {
-          $scope.params.orientation = 'horizontal';
+          $scope.params.orientation = 'top';
         }
       };
 
