@@ -228,8 +228,8 @@
       div.style.width    = size.width + 'px';
       div.style.height   = size.height + (size.height === 'auto' ? '' : 'px');
 
-      if (ad.orientation && ad.orientation === 'vertical') {
-        slot.className += ' oat-vertical';
+      if (ad.orientation) {
+        slot.className += ' oat-' + ad.orientation;
       }
 
       // TODO: Remove when no support sizes in templates

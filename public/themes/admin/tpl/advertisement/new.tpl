@@ -275,33 +275,59 @@
                 <i class="fa fa-tags m-r-5"></i> {t}Mark{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.mark }"></i>
                 <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!expanded.mark">
-                  <span ng-if="params.orientation === 'horizontal'">{t}Horizontal{/t}</span>
-                  <span ng-if="params.orientation === 'vertical'">{t}Vertical{/t}</span>
+                  <span ng-if="params.orientation === 'top'">{t}Top{/t}</span>
+                  <span ng-if="params.orientation === 'right'">{t}Left{/t}</span>
+                  <span ng-if="params.orientation === 'bottom'">{t}Left{/t}</span>
+                  <span ng-if="params.orientation === 'left'">{t}Left{/t}</span>
                 </span>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.mark }">
                 <div class="row">
                   <div class="col-xs-6 form-group">
                     <div class="radio">
-                      <input id="mark-horizontal" name="orientation" ng-model="params.orientation" type="radio" value="horizontal">
-                      <label for="mark-horizontal">
-                        {t}Horizontal{/t}
+                      <input id="mark-top" name="orientation" ng-model="params.orientation" type="radio" value="top">
+                      <label for="mark-top">
+                        {t}Top{/t}
                       </label>
                     </div>
-                    <label class="pointer" for="mark-horizontal" style="padding-left: 25px; position: relative;">
+                    <label class="pointer" for="mark-top" style="padding-left: 25px; position: relative;">
                       <small style="display: block; height: 20px; text-align: center; width: 80px;">{t}Advertisement{/t}</small>
                       <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
                     </label>
                   </div>
                   <div class="col-xs-6 form-group">
                     <div class="radio">
-                      <input id="mark-vertical" name="orientation" ng-model="params.orientation" type="radio" value="vertical">
-                      <label for="mark-vertical">
-                        {t}Vertical{/t}
+                      <input id="mark-right" name="orientation" ng-model="params.orientation" type="radio" value="right">
+                      <label for="mark-right">
+                        {t}Right{/t}
                       </label>
                     </div>
-                    <label class="pointer" for="mark-vertical" style="padding-left: 25px; padding-top: 20px; position: relative;">
+                    <label class="pointer" for="mark-right" style="padding-right: 25px; padding-top: 20px; position: relative; width: 80px;">
+                      <small style="height: 20px; margin-bottom: -50px; position: absolute; right: 0; margin-right: -50px; text-align: center; transform: rotate(90deg); top: 50%; width: 80px; -webkit-backface-visibility: hidden;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
+                  </div>
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-left" name="orientation" ng-model="params.orientation" type="radio" value="left">
+                      <label for="mark-left">
+                        {t}Left{/t}
+                      </label>
+                    </div>
+                    <label class="pointer" for="mark-left" style="padding-left: 25px; padding-top: 20px; position: relative;">
                       <small style="height: 20px; margin-left: -50px; position: absolute; text-align: center; transform: rotate(-90deg); top: 50%; width: 80px; -webkit-backface-visibility: hidden;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
+                  </div>
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-bottom" name="orientation" ng-model="params.orientation" type="radio" value="bottom">
+                      <label for="mark-bottom">
+                        {t}Bottom{/t}
+                      </label>
+                    </div>
+                    <label class="pointer" for="mark-bottom" style="padding-bottom: 20px; padding-top: 20px; position: relative;">
+                      <small style="bottom: 0;display: block; height: 20px; position: absolute; text-align: center; width: 80px;">{t}Advertisement{/t}</small>
                       <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
                     </label>
                   </div>

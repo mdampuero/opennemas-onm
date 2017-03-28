@@ -31,6 +31,7 @@
 }
 
 .oat-container {
+  margin: 0 auto;
   overflow: hidden;
 }
 
@@ -41,7 +42,8 @@
   padding: 0;
 }
 
-.oat-vertical {
+.oat-left,
+.oat-rigth {
   padding-top: 0;
   margin-left: 0;
 }
@@ -51,10 +53,25 @@
   visibility: visible;
 }
 
-.oat-vertical:before {
+.oat-bottom:before {
+  position: absolute;
+  margin-bottom: -15px;
+  bottom: 0;
+}
+
+.oat-left:before {
   left: 0;
   margin-left: -50px;
   position: absolute;
   top: 50%;
   transform: rotate(-90deg);
+}
+
+.oat-right:before {
+  right: 0;
+  margin-left: auto;
+  margin-right: -50px;
+  position: absolute;
+  top: 50%;
+  transform: rotate(90deg);
 }
