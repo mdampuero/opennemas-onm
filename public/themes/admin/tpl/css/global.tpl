@@ -22,6 +22,7 @@
   display: block;
   font-size: 10px;
   left: 50%;
+  line-height: 15px;
   margin-left: -40px;
   margin-top: -15px;
   position: absolute;
@@ -53,6 +54,18 @@
   visibility: visible;
 }
 
+.oat-bottom {
+  margin-bottom: 15px;
+}
+
+.oat-top {
+  margin-top: 15px;
+}
+
+.oat-bottom + .oat-top {
+  margin-top: 30px;
+}
+
 .oat-bottom:before {
   position: absolute;
   margin-bottom: -15px;
@@ -62,6 +75,7 @@
 .oat-left:before {
   left: 0;
   margin-left: -50px;
+  margin-top: -10px;
   position: absolute;
   top: 50%;
   transform: rotate(-90deg);
@@ -70,7 +84,8 @@
 .oat-right:before {
   right: 0;
   margin-left: auto;
-  margin-right: -50px;
+  margin-right: -45px;
+  margin-top: -10px;
   position: absolute;
   top: 50%;
   transform: rotate(90deg);
