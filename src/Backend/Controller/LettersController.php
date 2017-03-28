@@ -58,6 +58,7 @@ class LettersController extends Controller
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
                 'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
                 'params'         => $request->request->get('params'),
@@ -84,7 +85,13 @@ class LettersController extends Controller
                 )
             );
         } else {
-            return $this->render('letter/new.tpl');
+            return $this->render(
+                'letter/new.tpl',
+                [
+                    'commentsConfig' => $this->get('setting_repository')
+                        ->get('comments_config')
+                ]
+            );
         }
     }
 
@@ -117,7 +124,14 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        return $this->render('letter/new.tpl', [ 'letter' => $letter ]);
+        return $this->render(
+            'letter/new.tpl',
+            [
+                'letter' => $letter,
+                'commentsConfig' => $this->get('setting_repository')
+                    ->get('comments_config')
+            ]
+        );
     }
 
     /**
@@ -149,6 +163,7 @@ class LettersController extends Controller
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'content_status' => $request->request->filter('content_status', '', FILTER_SANITIZE_STRING),
+            'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
             'params'         => $request->request->get('params'),
