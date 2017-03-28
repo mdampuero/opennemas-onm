@@ -76,7 +76,7 @@
               <li class="quicklinks">
                 {if isset($album->id)}
                   {acl isAllowed="ALBUM_UPDATE"}
-                    <button class="btn btn-primary" data-text="{t}Updating{/t}..." data-text-original="{t}Update{/t}" type="submit" id="update-button">
+                    <button class="btn btn-primary" data-text="{t}Updating{/t}..." disabled data-text-original="{t}Update{/t}" type="submit" id="update-button">
                       <i class="fa fa-save"></i>
                       <span class="text">{t}Update{/t}</span>
                     </button>
