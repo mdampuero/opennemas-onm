@@ -493,11 +493,6 @@ class Advertisement extends Content
         // Check category
         $category = (empty($category) || ($category=='home')) ? 0 : $category;
 
-        // Remove floating banners
-        //if (($key = array_search('37', $types)) !== false) {
-            //unset($types[$key]);
-        //}
-
         if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
             // Fetch ads from static file
             $advertisements = include APP_PATH.'config/ads/onm_default_ads.php';
@@ -514,7 +509,8 @@ class Advertisement extends Content
             }
         } else {
             // Get string of types separated by commas
-            $types = implode(',', $types);
+            $types = '(' . implode('|', $types) . '){1}';
+            $types = sprintf('"^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"', $types, $types, $types);
 
             // Generate sql with or without category
             if ($category !== 0) {
@@ -533,8 +529,8 @@ class Advertisement extends Content
 
             try {
                 $sql = "SELECT pk_advertisement as id FROM advertisements "
-                  ."WHERE advertisements.type_advertisement IN (".$types.") "
-                  .$catsSQL.' ORDER BY id';
+                    . "WHERE advertisements.type_advertisement REGEXP $types "
+                    . " $catsSQL ORDER BY id";
 
                 $conn = getService('dbal_connection');
                 $result = $conn->fetchAll($sql);

@@ -278,7 +278,7 @@ class AdvertisementController extends Controller
         $object->id          = (int) $element->pk_content;
         $object->type        = ((($element->type_advertisement + 50) % 100) == 0) ?
             'interstitial' : 'normal'; // Types: normal, interstitial
-        $object->position    = $element->type_advertisement;
+        $object->position    = array_map('intval', explode(',', $element->type_advertisement));
         $object->publicId    = date('YmdHis', strtotime($element->created)).
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;

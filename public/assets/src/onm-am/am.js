@@ -204,9 +204,11 @@
           return e.id === id;
         }
 
-        return e.type === 'normal' &&
-          parseInt(e.position) === type &&
-          self.isVisible(e);
+        if (e.type !== 'normal' || !self.isVisible(e)) {
+          return false;
+        }
+
+        return e.position.indexOf(type) !== -1;
       });
 
       // Remove advertisement marker if empty
@@ -223,7 +225,7 @@
       var div  = document.createElement('div');
 
       div.className  += 'oat-container';
-      slot.className += ' oat-visible oat-' + ad.position;
+      slot.className += ' oat-visible oat-' + type;
 
       div.style.width    = size.width + 'px';
       div.style.height   = size.height + (size.height === 'auto' ? '' : 'px');
