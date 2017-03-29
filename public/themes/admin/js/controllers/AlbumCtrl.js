@@ -21,6 +21,8 @@ angular.module('BackendApp.controllers')
         photos[i].photo.footer = photos[i].description;
         $scope.photos.push(photos[i].photo);
       }
+
+      $('.btn.btn-primary').attr('disabled', false);
     };
 
     /**
