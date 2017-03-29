@@ -188,8 +188,6 @@ class AlbumsController extends Controller
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
-            $album->with_comment = 1;
-
             // Get the other albums for the albums widget
             $settings = s::get('album_settings');
             $total    = isset($settings['total_front'])?($settings['total_front']):2;

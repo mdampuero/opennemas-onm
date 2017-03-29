@@ -341,7 +341,6 @@ class VideosController extends Controller
             // Load Video and categories
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
-            $video->with_comment = 1;
 
             // Fetch video author
             $ur = getService('user_repository');
