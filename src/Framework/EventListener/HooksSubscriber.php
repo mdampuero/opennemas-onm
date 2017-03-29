@@ -416,6 +416,9 @@ class HooksSubscriber implements EventSubscriberInterface
             $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->id);
             $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|1');
             $cacheManager->delete('home|1');
+        } elseif (property_exists($content, 'pk_letter')) {
+            $cacheManager->delete('letterinner|'.$content->id);
+            $cacheManager->delete('letterfrontpage|1');
         }
     }
 
