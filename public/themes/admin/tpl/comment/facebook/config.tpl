@@ -71,6 +71,7 @@
           </div>
         </div>
       </div>
+      {include file="comment/partials/_config.tpl"}
     </div>
   </form>
 {/block}
