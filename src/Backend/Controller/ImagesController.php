@@ -294,7 +294,7 @@ class ImagesController extends Controller
                         }
                     }
 
-                    $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+                    $fm = $this->get('core.filter.manager');
 
                     $data = array(
                         'local_file'        => $file['tmp_name'],
@@ -304,7 +304,7 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => $tagSystem->filter($tempName),
+                        'metadata'          => $fm->filter('tags', $tempName),
                     );
 
                     try {
