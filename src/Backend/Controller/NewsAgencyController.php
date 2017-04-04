@@ -342,7 +342,7 @@ class NewsAgencyController extends Controller
         $servers = s::get('news_agency_config');
         $server = $servers[$sourceId];
 
-        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
+        $fm = $this->get('core.filter.manager');
 
         // If the new has photos import them
         if (count($element->getPhotos()) > 0) {
@@ -371,7 +371,7 @@ class NewsAgencyController extends Controller
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => $tagSystem->filter($photo->getTitle()),
+                            'metadata'      => $fm->filter('tags', $photo->getTitle()),
                             'author_name'   => '&copy; EFE '.date('Y'),
                             'original_filename' => $fileName,
                         );

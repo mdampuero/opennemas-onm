@@ -100,13 +100,12 @@ EOF
             throw new \Exception("File content is not valid");
         }
 
-        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
-
+        $fm = $this->getContainer()->get('core.filter.manager');
         $am = new \Advertisement();
         foreach ($ads as $ad) {
             $data = [
                 'title' => $ad['title'],
-                'metadata' => $tagSystem->filter($ad['title']),
+                'metadata' => $fm->filter('tags', $ad['title']),
                 'category' => '0',
                 'categories' => $ad['categories'],
                 'available' => '1',
@@ -226,12 +225,11 @@ EOF
                 $height     = (array_key_exists('height', $ad['new']))
                     ? $ad['new']['height'] : $adv->params['height'];
 
-                $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
-
+                $fm   = $this->getContainer()->get('core.filter.manager');
                 $data = [
                     'id'                 => $adv->id,
                     'title'              => $title,
-                    'metadata'           => $tagSystem->filter($title),
+                    'metadata'           => $fm->filter('tags', $title),
                     'category'           => '0',
                     'categories'         => $categories,
                     'available'          => '1',

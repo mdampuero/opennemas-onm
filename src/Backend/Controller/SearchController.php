@@ -72,8 +72,8 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
-            $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
-            $tokens = $tagSystem->filter($searchString);
+            $fm     = $this->get('core.filter.manager');
+            $tokens = $fm->filter('tags', $searchString);
             $tokens = explode(', ', $tokens);
 
             $er = $this->get('entity_repository');

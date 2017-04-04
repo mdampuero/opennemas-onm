@@ -1628,8 +1628,9 @@ class MigrationSaver
      */
     protected function convertToMetadata($string)
     {
-        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
-        return $tagSystem->filter($string);
+        $fm = getService('core.filter.manager');
+
+        return $fm->filter('tags', $string);
     }
 
     /**

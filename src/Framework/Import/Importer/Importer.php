@@ -354,8 +354,7 @@ class Importer
      */
     protected function getData($resource, $category, $author, $enabled, $target)
     {
-        $tagSystem = new \Common\Core\Component\Filter\TagsFilter();
-
+        $fm   = getService('core.filter.manager');
         $data = [
             'category'            => $category,
             'content_status'      => $enabled,
@@ -365,7 +364,7 @@ class Importer
             'fk_publisher'        => $this->getAuthor($resource, $author),
             'fk_user_last_editor' => $this->getAuthor($resource, $author),
             'in_home'             => 0,
-            'metadata'            => $tagSystem->filter($resource->title),
+            'metadata'            => $fm->filter('tags', $resource->title),
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'with_comment'        => $this->getComments(),
