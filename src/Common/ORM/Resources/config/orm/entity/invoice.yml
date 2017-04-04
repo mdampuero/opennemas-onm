@@ -12,7 +12,9 @@ orm:
                 date:      datetime
                 id:        integer
                 lines:     array
+                notes:     string
                 status:    string
+                terms:     string
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -36,6 +38,12 @@ orm:
                     lines:
                         name: lines
                         type: array
+                    notes:
+                        name: notes
+                        type: string
                     status:
                         name: status
+                        type: string
+                    terms:
+                        name: terms
                         type: string
