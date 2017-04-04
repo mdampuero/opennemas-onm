@@ -14,9 +14,10 @@ class SlugFilter extends Filter
     /**
      * Initializes the SlugFilter.
      *
-     * @param array $params The filter parameters.
+     * @param ServiceContainer $container The service container.
+     * @param array            $params    The filter parameters.
      */
-    public function __construct($params = [])
+    public function __construct($container, $params = [])
     {
         $this->utils = new \Onm\StringUtils;
 
@@ -26,7 +27,7 @@ class SlugFilter extends Filter
         ];
         $params = array_merge($this->defaultParams, $params);
 
-        parent::__construct($params);
+        parent::__construct($container, $params);
     }
 
     /**

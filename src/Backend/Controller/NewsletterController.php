@@ -118,17 +118,13 @@ class NewsletterController extends Controller
             }
         }
 
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
         $time = $time->format('d/m/Y');
 
-        return $this->render(
-            'newsletter/steps/1-pick-elements.tpl',
-            [
-                'name'              => $configurations['name']." [".$time."]",
-                'newsletterContent' => $newsletterContent,
-            ]
-        );
+        return $this->render('newsletter/steps/1-pick-elements.tpl', [
+            'name'              => $configurations['name']." [".$time."]",
+            'newsletterContent' => $newsletterContent,
+        ]);
     }
 
     /**
@@ -193,9 +189,7 @@ class NewsletterController extends Controller
             }
         }
 
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
-        $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
         $time = $time->format('d/m/Y');
 
         $title = $request->request->filter(

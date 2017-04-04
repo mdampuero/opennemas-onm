@@ -1,4 +1,4 @@
 services:
     migration.manager:
         class:     Common\Migration\Component\MigrationManager
-        arguments: [ '@orm.manager', '%orm.default%' ]
+        arguments: [ '@orm.manager', '@core.filter.manager', '%orm.default%' ]

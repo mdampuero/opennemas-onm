@@ -14,9 +14,10 @@ class MapFilter extends Filter
     /**
      * Initializes the MapFilter.
      *
-     * @param string $params The filter parameters.
+     * @param ServiceContainer $container The service container.
+     * @param string           $params    The filter parameters.
      */
-    public function __construct($params = [])
+    public function __construct($container, $params = [])
     {
         if (!array_key_exists('map', $params) || !is_array($params['map'])) {
             $message = 'MapFilter expects an argument of type array.';
@@ -28,7 +29,7 @@ class MapFilter extends Filter
             throw new \InvalidArgumentException($message);
         }
 
-        parent::__construct($params);
+        parent::__construct($container, $params);
     }
 
     /**

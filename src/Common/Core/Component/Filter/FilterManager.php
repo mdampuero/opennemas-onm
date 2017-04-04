@@ -17,6 +17,16 @@ use Common\Core\Component\Exception\Filter\InvalidFilterException;
 class FilterManager
 {
     /**
+     * Initalizes the filter manager.
+     *
+     * @param ServiceContainer $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+    /**
      * Applies a filter to a value.
      *
      * @param string $name  The filter name.
@@ -30,7 +40,7 @@ class FilterManager
         $class = __NAMESPACE__ . '\\' . \classify($name) . 'Filter';
 
         if (class_exists($class)) {
-            $filter = new $class($args);
+            $filter = new $class($this->container, $args);
 
             return $filter->filter($value);
         }

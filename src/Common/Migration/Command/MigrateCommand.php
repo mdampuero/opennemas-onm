@@ -51,8 +51,6 @@ class MigrateCommand extends ContainerAwareCommand
     {
         $output->writeln("<fg=green;options=bold>Starting migration...</>");
 
-        $progress = null;
-
         $this->start     = time();
         $this->path      = $input->getArgument('config-file');
         $this->input     = $input;
@@ -61,65 +59,10 @@ class MigrateCommand extends ContainerAwareCommand
 
         $this->getConfiguration();
 
-        $this->mm = $this->getContainer()->get('migration.manager');
-        $this->mm->configure($this->migration);
+        $this->conn = $this->getContainer()->get('orm.manager')
+            ->getConnection('manager');
 
         $this->preMigrate();
-
-        $this->mm->getTracker()->load();
-
-        $this->getCounters();
-
-        if (!$output->isVeryVerbose()) {
-            $progress = new ProgressBar($output, $this->left);
-        }
-
-        while (($item = $this->mm->getRepository()->next()) !== false) {
-            $this->current++;
-
-            if ($output->isVeryVerbose()) {
-                $output->writeln(
-                    "    ==> Processing item <fg=red;options=bold>"
-                    . "{$this->current}</> of <fg=green;options=bold>$this->left"
-                    . "</></>"
-                );
-            }
-
-            // Apply filters
-            $item = $this->mm->filter($item);
-
-            if ($output->isVeryVerbose()) {
-                $output->writeln("      <fg=red>==></> Item parsed");
-            }
-
-            // Save item
-            $sourceId = $item[$this->migration['source']['mapping']['id']];
-            $targetId = $this->mm->persist($item);
-            $slug     = $item[$this->migration['target']['slug']];
-
-            // Add to translations
-            if (!empty($targetId)) {
-                if ($output->isVeryVerbose()) {
-                    $output->writeln("      <fg=yellow>==></> Item saved");
-                }
-
-                $this->mm->getTracker()->add($sourceId, $targetId, $slug);
-
-                if ($output->isVeryVerbose()) {
-                    $output->writeln("      <fg=green>==></> Translation added");
-                }
-            }
-
-            if (!empty($progress)) {
-                $progress->advance();
-            }
-        }
-
-        if (!empty($progress)) {
-            $progress->finish();
-            $output->writeln('');
-        }
-
         $this->postMigrate();
 
         $this->getReport();
@@ -132,8 +75,10 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function getConfiguration()
     {
-        $this->getContainer()->get('session')
-            ->set('user', json_decode(json_encode(['id' => 0, 'username' => 'cli'])));
+        $this->getContainer()->get('session')->set(
+            'user',
+            json_decode(json_encode(['id' => 0, 'username' => 'cli']))
+        );
 
         // Load instance and force ORM and Cache initialization
         $loader = $this->getContainer()->get('core.loader');
@@ -146,7 +91,7 @@ class MigrateCommand extends ContainerAwareCommand
         $this->output->writeln("<options=bold>(2/6) Configuring the migration...</>");
 
         $this->output->writeln(sprintf(
-            "    ==> Tracking <fg=magenta>%s</>",
+            "    ==> Migrating <fg=magenta>%s</>",
             $this->migration['type']
         ));
 
@@ -157,32 +102,6 @@ class MigrateCommand extends ContainerAwareCommand
                 $this->migration['source']['database'] :
                 $this->migration['source']['path']
         ));
-
-        $this->output->writeln(sprintf(
-            "    ==> Saving as <fg=magenta>%s</> to <fg=green>%s</>",
-            $this->migration['target']['persister'],
-            $this->migration['target']['database']
-        ));
-    }
-
-    /**
-     * Displays the number of contents that are in the source, were migrated and
-     * are ready to migrate.
-     */
-    protected function getCounters()
-    {
-        $this->output->writeln("<options=bold>(4/6) Migrating items...</>");
-
-        $this->total = $this->mm->getRepository()->countAll();
-        $this->output->writeln("    ==> Total items in source: $this->total");
-
-        $this->left = $this->mm->getRepository()->count();
-        $this->output->writeln("    ==> Items ready to migrate: $this->left");
-
-        $this->migrated = $this->mm->getRepository()->countMigrated();
-        $this->output->writeln("    ==> Items already migrated: $this->migrated");
-
-        $this->current  = 0;
     }
 
     /**
@@ -218,7 +137,6 @@ class MigrateCommand extends ContainerAwareCommand
         $time = date('H:i:s', $diff);
 
         $this->output->writeln("<options=bold>(6/6) Ending migration...</>");
-        $this->output->writeln("    ==> Items migrated: $this->current");
         $this->output->writeln("    ==> Time: $time");
     }
 
@@ -230,14 +148,20 @@ class MigrateCommand extends ContainerAwareCommand
         $this->output->writeln("<options=bold>(3/6) Executing pre-migration actions...</>");
 
         if (!empty($this->input->getOption('no-pre'))
-            || !array_key_exists('pre', $this->migration['source'])
-            || empty($this->migration['source']['pre'])
+            || !array_key_exists('pre', $this->migration)
+            || empty($this->migration['pre'])
         ) {
             $this->output->writeln("    ==> No actions executed");
             return;
         }
 
-        $this->mm->getRepository()->prepare($this->migration['source']['pre']);
+        $this->conn->selectDatabase($this->migration['source']['database']);
+
+        foreach ($this->migration['pre'] as $q) {
+            $q = $this->prepareQuery($q);
+
+            $this->conn->executeQuery($q);
+        }
     }
 
     /**
@@ -248,13 +172,48 @@ class MigrateCommand extends ContainerAwareCommand
         $this->output->writeln("<options=bold>(5/6) Executing post-migration actions...</>");
 
         if (!empty($this->input->getOption('no-post'))
-            || !array_key_exists('post', $this->migration['target'])
-            || empty($this->migration['target']['post'])
+            || !array_key_exists('post', $this->migration)
+            || empty($this->migration['post'])
         ) {
             $this->output->writeln("    ==> No actions executed");
             return;
         }
 
-        $this->mm->getPersister()->prepare($this->migration['target']['post']);
+        $this->conn->selectDatabase($this->migration['target']['database']);
+
+        foreach ($this->migration['post'] as $q) {
+            $q = $this->prepareQuery($q);
+
+            $this->conn->executeQuery($q);
+        }
+    }
+
+    /**
+     * Replaces placeholders with real values from migration configuration.
+     *
+     * @return string The query to execute.
+     */
+    protected function prepareQuery($q)
+    {
+        if (!preg_match_all('/\[[a-z.]+\]/', $q, $matches)) {
+            return $q;
+        }
+
+        foreach ($matches[0] as $placeholder) {
+            $keys  = explode('.', preg_replace('/\[|\]/', '', $placeholder));
+            $value = $this->migration;
+
+            foreach ($keys as $key) {
+                $value = $value[$key];
+            }
+
+            if (!is_numeric($value) && !is_string($value)) {
+                throw new \InvalidArgumentException();
+            }
+
+            $q = preg_replace('/' . preg_quote($placeholder) . '/', $value, $q);
+        }
+
+        return $q;
     }
 }

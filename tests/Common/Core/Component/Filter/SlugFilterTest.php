@@ -17,11 +17,22 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class SlugFilterTest extends KernelTestCase
 {
+    /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        $this->container = $this->getMockBuilder('Container')->getMock();
+    }
+
+    /**
+     * Tests filter when no parameters provided.
+     */
     public function testFilterWithNoParameters()
     {
         $str = 'The string to convert';
 
-        $filter = new SlugFilter();
+        $filter = new SlugFilter($this->container);
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
         $filter->utils->shouldReceive('generateSlug')->once()
             ->with($str, true, '-');
@@ -29,12 +40,15 @@ class SlugFilterTest extends KernelTestCase
         $filter->filter($str);
     }
 
+    /**
+     * Test filter when parameters provided.
+     */
     public function testFilterWithParameters()
     {
         $str    = 'The string to convert';
         $params = [ 'separator' => '', 'stop-list' => false ];
 
-        $filter = new SlugFilter($params);
+        $filter = new SlugFilter($this->container, $params);
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
         $filter->utils->shouldReceive('generateSlug')->once()
             ->with($str, $params['stop-list'], $params['separator']);

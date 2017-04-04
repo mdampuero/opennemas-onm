@@ -313,7 +313,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         // Get last login date
         $sql = 'SELECT * FROM settings WHERE name=\'last_login\' or name=\'time_zone\'';
         $rs  = $conn->fetchAll($sql);
-        $tzs = \DateTimeZone::listIdentifiers();
         $tz  = new \DateTimeZone(date_default_timezone_get());
 
         $i->last_login = null;
@@ -325,7 +324,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             }
 
             if (array_key_exists('time_zone', $settings) && !empty($settings['time_zone'])) {
-                $tz = new \DateTimeZone($tzs[$settings['time_zone']]);
+                $this->getContainer()->get('core.locale')->setTimeZone($settings['time_zone']);
+                $tz = $this->getContainer()->get('core.locale')->getTimeZone();
             }
 
             if (array_key_exists('last_login', $settings) && !empty($settings['last_login'])) {
@@ -357,12 +357,13 @@ class InstancesUpdateCommand extends ContainerAwareCommand
     {
         $sql  = 'SELECT * FROM settings WHERE name=\'site_created\'';
         $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
-        $rs   = $conn->fetchAll($sql);
+        $rs   = $conn->fetchAssoc($sql);
 
         if ($rs !== false && !empty($rs)) {
-            foreach ($rs as $value) {
-                $i->created = unserialize($rs['value']);
-            }
+            $created = new \DateTime(unserialize($rs['value']));
+            $created->setTimeZone(new \DateTimeZone('UTC'));
+
+            $i->created = $created;
         }
     }
 

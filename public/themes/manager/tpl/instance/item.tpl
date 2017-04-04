@@ -81,7 +81,7 @@
                     <h5><i class="fa fa-globe"></i> {t}Time Zone{/t}</h5>
                   </dt>
                   <dd>
-                    [% template.timezones[settings.time_zone] %]
+                    [% template.timezones[settings.time_zone] ? template.timezones[settings.time_zone] : settings.time_zone %]
                   </dd>
                 </dl>
               </div>

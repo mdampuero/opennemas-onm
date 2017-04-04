@@ -17,18 +17,34 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class DateFilterTest extends KernelTestCase
 {
+    /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        $this->container = $this->getMockBuilder('Container')
+            ->setMethods([ 'hasParameter', 'getParameter' ])
+            ->getMock();
+    }
+
+    /**
+     * Tests filter when value is a timestamp string.
+     */
     public function testFilterForTimestamp()
     {
         $str    = '1478220949';
-        $filter = new DateFilter([ 'timestamp' => true ]);
+        $filter = new DateFilter($this->container, [ 'timestamp' => true ]);
 
         $this->assertEquals('2016-11-04 00:55:49', $filter->filter($str));
     }
 
+    /**
+     * Tests filter when value is a human readable string.
+     */
     public function testFilterForString()
     {
         $str    = 'Fri, 04 Nov 2016 00:55:49 GMT';
-        $filter = new DateFilter();
+        $filter = new DateFilter($this->container);
 
         $this->assertEquals('2016-11-04 00:55:49', $filter->filter($str));
     }

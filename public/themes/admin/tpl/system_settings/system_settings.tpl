@@ -360,7 +360,11 @@
                         {t}Used for all the dates used in your webpage.{/t}
                       </span>
                       <div class="controls">
-                        {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
+                        <select name="time_zone">
+                          {foreach from=$timezones item=name key=id}
+                            <option value="{{$name}}" {if $configs['time_zone'] == $id || $configs['time_zone'] == $name}selected="selected"{/if}>{{$name}}</option>
+                          {/foreach}
+                        </select>
                       </div>
                     </div>
                   </div>

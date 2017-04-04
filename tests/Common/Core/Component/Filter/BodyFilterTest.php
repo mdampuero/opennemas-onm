@@ -17,11 +17,19 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class BodyFilterTest extends KernelTestCase
 {
+    /**
+     * Configures the testing environment.
+     */
     public function setUp()
     {
-        $this->filter = new BodyFilter();
+        $container = $this->getMockBuilder('Container')->getMock();
+
+        $this->filter = new BodyFilter($container);
     }
 
+    /**
+     * Tests filter when body contains empty lines.
+     */
     public function testFilterWithEmptyLines()
     {
         $str      = "The string\nto\nparse\nwith\nempty lines";
@@ -30,6 +38,9 @@ class BodyFilterTest extends KernelTestCase
         $this->assertEquals($expected, $this->filter->filter($str));
     }
 
+    /**
+     * Tests filter when body does not contain empty lines.
+     */
     public function testFilterWithoutEmptyLines()
     {
         $str      = 'The string to parse with no empty lines';

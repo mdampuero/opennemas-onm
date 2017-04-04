@@ -198,6 +198,13 @@ class SystemSettingsController extends Controller
         // Delete caches for custom_css and frontpages
         $this->get('core.dispatcher')->dispatch('setting.update');
 
+        // TODO: Remove when using new ORM features
+        $keys  = [ 'max_mailing', 'pass_level', 'piwik', 'time_zone' ];
+        $cache = $this->get('cache.manager')->getConnection('instance');
+        foreach ($keys as $key) {
+            $cache->remove($key);
+        }
+
         $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
         // Send the user back to the form

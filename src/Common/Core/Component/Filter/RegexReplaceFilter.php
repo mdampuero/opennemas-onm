@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Filter;
 
-class ReplaceFilter extends Filter
+class RegexReplaceFilter extends Filter
 {
     /**
      * Replaces a string with another string.
@@ -27,8 +27,8 @@ class ReplaceFilter extends Filter
             return $str;
         }
 
-        return str_replace(
-            $pattern,
+        return preg_replace(
+            '/' . $pattern . '/',
             $replacement,
             $str
         );

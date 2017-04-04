@@ -56,17 +56,15 @@ class PollsController extends Controller
 
         $pollSettings = s::get('poll_settings');
 
-        $this->view->assign(
-            array(
-                'category_name'         => $this->categoryName,
-                'category'              => $this->category,
-                'actual_category_id'    => $actual_category_id,
-                'category_real_name'    => $category_real_name,
-                'actual_category_title' => $category_real_name,
-                'actual_category'       => $this->categoryName,
-                'settings'              => $pollSettings
-            )
-        );
+        $this->view->assign([
+            'category_name'         => $this->categoryName,
+            'category'              => $this->category,
+            'actual_category_id'    => $actual_category_id,
+            'category_real_name'    => $category_real_name,
+            'actual_category_title' => $category_real_name,
+            'actual_category'       => $this->categoryName,
+            'settings'              => $pollSettings
+        ]);
     }
 
     /**

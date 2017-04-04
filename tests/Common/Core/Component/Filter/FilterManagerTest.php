@@ -22,7 +22,10 @@ class FilterManagerTest extends KernelTestCase
      */
     public function setUp()
     {
-        $this->fm = new FilterManager();
+        $container = $this->getMockBuilder('Container')
+            ->getMock();
+
+        $this->fm = new FilterManager($container);
     }
 
     /**

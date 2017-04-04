@@ -17,11 +17,19 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class NoHtmlFilterTest extends KernelTestCase
 {
+    /**
+     * Configures the testing environment
+     */
     public function setUp()
     {
-        $this->filter = new NoHtmlFilter();
+        $container = $this->getMockBuilder('Container')->getMock();
+
+        $this->filter = new NoHtmlFilter($container);
     }
 
+    /**
+     * Tests filter when the string contains HTML.
+     */
     public function testFilterWithHtmlEntities()
     {
         $str = '<p>The string to parse</p>';
@@ -29,6 +37,9 @@ class NoHtmlFilterTest extends KernelTestCase
         $this->assertEquals('The string to parse', $this->filter->filter($str));
     }
 
+    /**
+     * Tests filter when the string does not contain HTML.
+     */
     public function testFilterWithNoHtmlEntities()
     {
         $str = 'The string to parse';

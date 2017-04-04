@@ -18,11 +18,21 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class LiteralFilterTest extends KernelTestCase
 {
     /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        $this->container = $this->getMockBuilder('Container')
+            ->setMethods([ 'hasParameter' ])
+            ->getMock();
+    }
+
+    /**
      * Tests filter.
      */
     public function testFilter()
     {
-        $filter = new LiteralFilter([ 'value' => 'grault' ]);
+        $filter = new LiteralFilter($this->container, [ 'value' => 'grault' ]);
 
         $this->assertEquals('grault', $filter->filter(null));
         $this->assertEquals('grault', $filter->filter(''));
@@ -34,7 +44,7 @@ class LiteralFilterTest extends KernelTestCase
      */
     public function testFilterWithNoValue()
     {
-        $filter = new LiteralFilter([ ]);
+        $filter = new LiteralFilter($this->container, [ ]);
 
         $this->assertEquals('', $filter->filter(null));
         $this->assertEquals('', $filter->filter(''));
