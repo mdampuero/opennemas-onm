@@ -325,7 +325,7 @@ class AdvertisementController extends Controller
 
             if ($i < 3) {
                 $size['device'] = $i === 0 ? 'desktop' :
-                    $i === 1 ? 'tablet' : 'phone';
+                    ($i === 1 ? 'tablet' : 'phone');
             }
 
             $sizes[] = $size;
