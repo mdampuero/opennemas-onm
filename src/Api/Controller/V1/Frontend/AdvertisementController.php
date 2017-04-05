@@ -317,7 +317,7 @@ class AdvertisementController extends Controller
         }
 
         $sizes = [];
-        for ($i = 0; $i < $params['width']; $i++) {
+        for ($i = 0; $i < count($params['width']); $i++) {
             $size = [
                 'height' => $params['height'][$i],
                 'width' =>  $params['width'][$i]
