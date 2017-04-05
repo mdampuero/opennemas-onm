@@ -201,6 +201,26 @@
         if (!$scope.params.orientation) {
           $scope.params.orientation = 'top';
         }
+
+        // Parse and convert old height and width to new sizes
+        if ($scope.params.width && $scope.params.height) {
+          $scope.params.sizes = [];
+
+          var devices = [ 'desktop', 'tablet', 'phone' ];
+
+          for (var i = 0; i < $scope.params.width.length; i++) {
+            var item = {
+              height: parseInt($scope.params.height[i]),
+              width: parseInt($scope.params.width)
+            };
+
+            if (i < 3) {
+              item.device = devices[i];
+            }
+
+            $scope.params.sizes.push(item);
+          }
+        }
       };
 
       /**
