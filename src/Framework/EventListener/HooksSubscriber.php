@@ -39,6 +39,15 @@ class HooksSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            'advertisement.create' => [
+                [ 'removeVarnishCacheForAdvertisement', 5 ],
+            ],
+            'advertisement.update' => [
+                [ 'removeVarnishCacheForAdvertisement', 5 ],
+            ],
+            'advertisement.delete' => [
+                [ 'removeVarnishCacheForAdvertisement', 5 ],
+            ],
             // Author hooks
             'author.create' => [
                 ['mockHookAction', 0],
@@ -504,6 +513,33 @@ class HooksSubscriber implements EventSubscriberInterface
         $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
 
         $this->cleanOpcode();
+    }
+
+    /**
+     * Removes varnish cache for advertisement when an advertisement is created,
+     * updated or deleted.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeVarnishCacheForAdvertisement(Event $event)
+    {
+        if (!$this->container->hasParameter('varnish')) {
+            return false;
+        }
+
+        $ad = $event->getArgument('advertisement');
+
+        $this->container->get('varnish_ban_message_exchanger')
+            ->addBanMessage(sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id))
+            ->addBanMessage(sprintf('obj.http.x-tags ~ .*position-%s.*', $ad->type_advertisement));
+
+        if (!empty($ad->old_position)) {
+            $this->container->get('varnish_ban_message_exchanger')
+                ->addBanMessage(sprintf(
+                    'obj.http.x-tags ~ .*position-%s.*',
+                    $ad->old_position
+                ));
+        }
     }
 
     /**

@@ -63,8 +63,9 @@ class ArticlesController extends Controller
 
         // Advertisements for single article NO CACHE
         $actualCategoryId = $this->ccm->get_id($categoryName);
-        $ads = $this->getAds($actualCategoryId);
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds($actualCategoryId);
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         // Fetch general layout
         $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId);
@@ -263,8 +264,9 @@ class ArticlesController extends Controller
 
         // TODO: Use $this->get when the function changes to non-static
         $positionManager = getService('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
-        return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

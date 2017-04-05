@@ -44,7 +44,7 @@ class ErrorController extends Controller
         $error = $request->attributes->get('exception');
         $name = join('', array_slice(explode('\\', $error->getClass()), -1));
         if (!defined('INSTANCE_UNIQUE_NAME')) {
-           define('INSTANCE_UNIQUE_NAME', 'unknown-instance');
+            define('INSTANCE_UNIQUE_NAME', 'unknown-instance');
         }
 
         $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
@@ -77,7 +77,8 @@ class ErrorController extends Controller
                 if ($this->request->isXmlHttpRequest()) {
                     $content = $errorMessage;
                 } else {
-                    $ads = \Frontend\Controller\ArticlesController::getAds();
+                    list($positions, $advertisements) =
+                        \Frontend\Controller\ArticlesController::getAds();
 
                     // Load config
                     $this->view->setConfig('articles');
@@ -89,7 +90,8 @@ class ErrorController extends Controller
                             'cache_id'           => $cacheID,
                             'category_real_name' => $page->title,
                             'page'               => $page,
-                            'advertisements'     => $ads,
+                            'advertisements'     => $advertisements,
+                            'ads_positions'      => $positions,
                             'x-tags'             => 'not-found',
                             'x-cache-for'        => '+1 day'
                         ]

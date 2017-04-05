@@ -1,10 +1,5 @@
 <?php
 /**
- * Defines the frontend controller for the letter content type
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
  * (c) Openhost, S.L. <developers@opennemas.com>
@@ -88,12 +83,17 @@ class LetterController extends Controller
             ]);
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         return $this->render('letter/letter_frontpage.tpl', [
-            'advertisements' => $this->getAds(),
             'cache_id'       => $cacheID,
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
             'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
-                ->getHtml()
+                ->getHtml(),
+            'x-tags'         => 'letter-frontpage',
+            'x-cache-for'    => '+1 day',
         ]);
     }
 
@@ -131,11 +131,14 @@ class LetterController extends Controller
             $this->view->assign(['otherLetters' => $otherLetters]);
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         return $this->render('letter/letter.tpl', [
+            'advertisements' => $advertisements,
+            'ads_positions'  => $positions,
             'letter'         => $letter,
             'content'        => $letter,
             'contentId'      => $letter->id, // Used on module_comments.tpl
-            'advertisements' => $this->getAds(),
             'cache_id'       => $cacheID,
             'x-tags'         => 'letter,'.$letter->id,
             'x-cache-for'    => '+1 day',
@@ -149,8 +152,11 @@ class LetterController extends Controller
      */
     public function showFormAction()
     {
+        list($positions, $advertisements) = $this->getAds();
+
         return $this->render('letter/letter_form.tpl', [
-            'advertisements' => $this->getAds(),
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
             'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml()
@@ -317,9 +323,11 @@ class LetterController extends Controller
      */
     public function getAds()
     {
-        $positions = $this->get('core.manager.advertisement')
-            ->getPositionsForGroup('article_inner', [ 7, 9 ]);
+        // Get letter positions
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, 0);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        return [ $positions, $advertisements ];
     }
 }

@@ -386,8 +386,8 @@ class ArticlesController extends Controller
 
         // Get advertisements for single article
         $actualCategoryId = $ccm->get_id($category_name);
-        $ads = \Frontend\Controller\ArticlesController::getAds($actualCategoryId);
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) =
+            Frontend\Controller\ArticlesController::getAds($actualCategoryId);
 
         // Fetch media associated to the article
         $photoInt = '';
@@ -430,6 +430,8 @@ class ArticlesController extends Controller
         );
 
         $this->view->assign([
+            'ads_positions'         => $positions,
+            'advertisements'        => $advertisements,
             'relationed'            => $relat,
             'suggested'             => $machineSuggestedContents,
             'contentId'             => $article->id,

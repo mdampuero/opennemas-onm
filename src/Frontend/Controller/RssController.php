@@ -31,9 +31,6 @@ class RssController extends Controller
     {
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 
-        // Fetch information for Advertisements
-        \Frontend\Controller\ArticlesController::getAds();
-
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
@@ -249,9 +246,9 @@ class RssController extends Controller
      */
     public function facebookInstantArticlesRSSAction(Request $request)
     {
-        if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
-            throw new ResourceNotFoundException();
-        }
+        //if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
+            //throw new ResourceNotFoundException();
+        //}
 
         $this->view->setConfig('rss');
 

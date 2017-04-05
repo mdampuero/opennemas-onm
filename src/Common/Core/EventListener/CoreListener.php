@@ -74,6 +74,7 @@ class CoreListener implements EventSubscriberInterface
         // Ignore requests
         if (strpos($uri, '/_wdt') === 0
             || strpos($uri, '/_profiler') === 0
+            || strpos($uri, '/api') === 0
             || strpos($uri, '/asset') === 0
             || strpos($uri, '/build/assets') === 0
             || strpos($uri, '/content/share-by-email') === 0

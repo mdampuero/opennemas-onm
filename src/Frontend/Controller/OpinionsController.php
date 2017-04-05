@@ -216,8 +216,9 @@ class OpinionsController extends Controller
             ]);
         }
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         return $this->render(
             'opinion/opinion_frontpage.tpl',
@@ -340,17 +341,16 @@ class OpinionsController extends Controller
             );
         }
 
-        $this->getAds();
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'opinion/opinion_frontpage.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'ext-opinion-frontpage',
-                'x-cache-for'     => '+1 day'
-            )
-        );
+        return $this->render('opinion/opinion_frontpage.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'ext-opinion-frontpage',
+            'x-cache-for'     => '+1 day'
+        ]);
     }
 
 
@@ -481,18 +481,16 @@ class OpinionsController extends Controller
         }
 
         // Fetch information for Advertisements
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'opinion/opinion_author_index.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
-                'x-cache-for'     => '+1 day'
-            )
-        );
+        return $this->render('opinion/opinion_author_index.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
+            'x-cache-for'     => '+1 day'
+        ]);
     }
 
     /**
@@ -525,7 +523,9 @@ class OpinionsController extends Controller
             $syncParams = s::get('sync_params');
             if ($syncParams) {
                 foreach ($syncParams as $siteUrl => $values) {
-                    if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
+                    if (is_array($values['categories'])
+                        && in_array($categoryName, $values['categories'])
+                    ) {
                         $wsUrl = $siteUrl;
                     }
                 }
@@ -627,17 +627,16 @@ class OpinionsController extends Controller
             );
         } // End if isCached
 
-        $this->getAds();
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'opinion/opinion_author_index.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
-                'x-cache-for'     => '+3 hours',
-            )
-        );
+        return $this->render('opinion/opinion_author_index.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
+            'x-cache-for'     => '+3 hours'
+        ]);
     }
 
     /**
@@ -752,23 +751,21 @@ class OpinionsController extends Controller
         } // End if isCached
 
         //Fetch information for Advertisements
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds('inner');
 
         // Show in Frontpage
-        return $this->render(
-            'opinion/opinion.tpl',
-            [
-                'opinion'         => $opinion,
-                'content'         => $opinion,
-                'contentId'       => $opinion->id,
-                'cache_id'        => $cacheId,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'opinion,'.$opinion->id,
-                'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable,
-            ]
-        );
+        return $this->render('opinion/opinion.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'opinion'         => $opinion,
+            'content'         => $opinion,
+            'contentId'       => $opinion->id,
+            'cache_id'        => $cacheId,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'opinion,'.$opinion->id,
+            'x-cache-for'     => '+1 day',
+            'x-cacheable'     => $cacheable,
+        ]);
     }
 
     /**
@@ -813,8 +810,9 @@ class OpinionsController extends Controller
             $opinion->category_name = $this->category_name;
 
             //Fetch information for Advertisements
-            $ads = $this->getAds('inner');
-            $this->view->assign('advertisements', $ads);
+            list($positions, $advertisements) = $this->getAds('inner');
+            $this->view->assign('ads_positions', $positions);
+            $this->view->assign('advertisements', $advertisements);
 
             if (($opinion->content_status==1) && ($opinion->in_litter == 0)) {
                 if (isset($opinion->img2) && ($opinion->img2 > 0)) {
@@ -868,6 +866,8 @@ class OpinionsController extends Controller
             $positions = $positionManager->getPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, '4');
+        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, '4');
+
+        return [ $positions, $advertisements ];
     }
 }

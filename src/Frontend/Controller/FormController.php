@@ -38,8 +38,11 @@ class FormController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         return $this->render('static_pages/form.tpl', [
-            'advertisements' => $this->getAds(),
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
             'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
@@ -150,7 +153,6 @@ class FormController extends Controller
             }
         }
 
-
         return $this->render('static_pages/form.tpl', [
             'recaptcha' => $this->get('core.recaptcha')
                 ->configureFromSettings()
@@ -169,9 +171,10 @@ class FormController extends Controller
     public function getAds()
     {
         // Get letter positions
-        $positions = $this->get('core.manager.advertisement')
-            ->getPositionsForGroup('article_inner', [ 7, 9 ]);
+        $positionManager = $this->get('core.manager.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, 0);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        return [ $positions, $advertisements ];
     }
 }

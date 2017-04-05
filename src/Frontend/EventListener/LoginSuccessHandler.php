@@ -9,6 +9,7 @@
  */
 namespace Frontend\EventListener;
 
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
@@ -122,7 +123,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $session->set('failed_login_attempts', 0);
         $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
 
+        $response = new RedirectResponse($request->get('_referer'));
+        $response->headers->setCookie(
+            new Cookie('__onm_user', json_encode([
+                'name'        => $user->name,
+                'language'    => $user->user_language,
+                'user_groups' => $user->fk_user_group
+            ]), 0, null, null, false, false)
+        );
 
-        return new RedirectResponse($request->get('_referer'));
+        return $response;
     }
 }

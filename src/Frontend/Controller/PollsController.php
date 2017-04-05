@@ -136,15 +136,13 @@ class PollsController extends Controller
             );
         }
 
-        $ads = $this->getAds('frontpage');
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds('frontpage');
 
-        return $this->render(
-            'poll/poll_frontpage.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
-        );
+        return $this->render('poll/poll_frontpage.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+        ]);
     }
 
     /**
@@ -217,20 +215,18 @@ class PollsController extends Controller
             }
         }
 
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds('inner');
 
-        return $this->render(
-            'poll/poll.tpl',
-            [
-                'poll'          => $poll,
-                'content'       => $poll,
-                'contentId'     => $poll->id,
-                'cache_id'      => $cacheID,
-                'msg'           => $message,
-                'already_voted' => $alreadyVoted,
-            ]
-        );
+        return $this->render('poll/poll.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'poll'           => $poll,
+            'content'        => $poll,
+            'contentId'      => $poll->id,
+            'cache_id'       => $cacheID,
+            'msg'            => $message,
+            'already_voted'  => $alreadyVoted,
+        ]);
     }
 
     /**
@@ -298,7 +294,9 @@ class PollsController extends Controller
             $positions = $positionManager->getPositionsForGroup('polls_frontpage', array(7, 9));
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
+        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
+
+        return [ $positions, $advertisements ];
     }
 
     /**

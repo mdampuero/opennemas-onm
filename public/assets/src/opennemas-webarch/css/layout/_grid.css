@@ -1,8 +1,42 @@
 .grid.simple .grid-body,
 .grid.simple .grid-title,
 .grid.solid .grid-body,
-.grid.solid .grid-title {
+.grid.solid .grid-title,
+.grid .grid-collapse-title,
+.grid .grid-collapse-body {
   padding: 15px;
+}
+
+.grid .grid-collapse-title {
+  border-top: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+
+.grid .grid-collapse-title,
+.grid .grid-collapse-body {
+  background: #fff;
+}
+
+.grid .grid-collapse-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding-bottom: 0;
+  padding-top: 0;
+  transition: all .25s;
+  visibility: hidden;
+}
+
+.grid .grid-collapse-body.expanded {
+  max-height: 1000px;
+  opacity: 1;
+  overflow: visible;
+  padding-bottom: 15px;
+  visibility: visible;
+}
+
+.grid-collapse-title .fa-chevron-right {
+  transition: all .25s;
 }
 
 .grid.simple .grid-body {

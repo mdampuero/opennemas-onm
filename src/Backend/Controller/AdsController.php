@@ -133,29 +133,33 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
+            $advertisement = new \Advertisement();
+
             $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
 
-            return $this->render(
-                'advertisement/new.tpl',
-                [
-                    'ads_positions' => $adsPositions,
-                    'themeAds'      => $ads,
-                    'filter'        => $filter,
-                    'page'          => $page,
-                    'server_url'    => $serverUrl,
-                ]
-            );
+            return $this->render('advertisement/new.tpl', [
+                'advertisement' => $advertisement,
+                'ads_positions' => $adsPositions,
+                'categories'    => $this->getCategories(),
+                'user_groups'   => $this->getUserGroups(),
+                'themeAds'      => $ads,
+                'filter'        => $filter,
+                'page'          => $page,
+                'server_url'    => $serverUrl,
+            ]);
         }
 
         $advertisement = new \Advertisement();
+        $categories    = json_decode($request->request->get('categories', '[]'), true);
 
-        $categories    = $request->request->get('category', '', FILTER_SANITIZE_STRING);
-        $firstCategory = $categories[0];
+        if (empty($categories)) {
+            $categories = [ 0 ];
+        }
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => $firstCategory,
+            'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -175,10 +179,16 @@ class AdsController extends Controller
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
-                'width'             => json_decode($request->request->get('params_width', '')),
-                'height'            => json_decode($request->request->get('params_height', '')),
+                'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
+                'user_groups'       => json_decode($request->request->get('user_groups'), true),
+                'orientation'       => $request->request->get('orientation', 'horizontal'),
+                'devices'           => [
+                    'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => (int) $request->request->get('restriction_devices_phone', 0),
+                ],
             ]
         ];
 
@@ -255,18 +265,18 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $positionManager = $this->container->get('core.manager.advertisement');
-        return $this->render(
-            'advertisement/new.tpl',
-            array(
-                'ads_positions' => $adsPositions,
-                'advertisement' => $ad,
-                'themeAds'      => $positionManager->getPositionsForTheme(),
-                'filter'        => $filter,
-                'page'          => $page,
-                'server_url'    => $serverUrl,
-            )
-        );
+        $pm = $this->container->get('core.manager.advertisement');
+
+        return $this->render('advertisement/new.tpl', [
+            'ads_positions' => $adsPositions,
+            'advertisement' => $ad,
+            'categories'    => $this->getCategories(),
+            'themeAds'      => $pm->getPositionsForTheme(),
+            'user_groups'   => $this->getUserGroups(),
+            'filter'        => $filter,
+            'page'          => $page,
+            'server_url'    => $serverUrl,
+        ]);
     }
 
     /**
@@ -305,14 +315,17 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $categories = $request->request->get('category', '', FILTER_SANITIZE_STRING);
-        $firstCategory = $categories[0];
+        $categories = json_decode($request->request->get('categories', '[]'), true);
 
-        $data = array(
+        if (empty($categories)) {
+            $categories = [ 0 ];
+        }
+
+        $data = [
             'id'                 => $ad->id,
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => $firstCategory,
+            'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => implode(',', $categories),
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -330,13 +343,19 @@ class AdsController extends Controller
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
-            'params'             => array(
-                'width'             => json_decode($request->request->get('params_width', '')),
-                'height'            => json_decode($request->request->get('params_height', '')),
+            'params'             => [
+                'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
-            )
-        );
+                'user_groups'       => json_decode($request->request->get('user_groups', ''), true),
+                'orientation'       => $request->request->get('orientation', 'horizontal'),
+                'devices'           => [
+                    'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => (int) $request->request->get('restriction_devices_phone', 0),
+                ],
+            ]
+        ];
 
         if ($ad->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -350,16 +369,11 @@ class AdsController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_ad_show',
-                array(
-                    'id'     => $data['id'],
-                    'filter' => $filter,
-                    'page'   => $page
-                )
-            )
-        );
+        return $this->redirect($this->generateUrl('admin_ad_show', [
+            'id'     => $data['id'],
+            'filter' => $filter,
+            'page'   => $page
+        ]));
     }
 
     /**
@@ -470,5 +484,44 @@ class AdsController extends Controller
                 [ 'configs' => $configurations ]
             );
         }
+    }
+
+    /**
+     * Returns the list of categories.
+     *
+     * @return array The list of categories.
+     */
+    protected function getCategories()
+    {
+        $categories = $this->get('orm.manager')
+            ->getRepository('Category')->findBy('internal_category = 1');
+
+        $categories = array_map(function ($a) {
+            return [ 'id' => $a->pk_content_category, 'name' => $a->title ];
+        }, $categories);
+
+        return array_values($categories);
+    }
+
+    /**
+     * Returns the list of public user groups.
+     *
+     * @return array The list of public user groups.
+     */
+    protected function getUserGroups()
+    {
+        $userGroups = $this->get('orm.manager')
+            ->getRepository('UserGroup')->findBy();
+
+        // Show only public groups ()
+        $userGroups = array_filter($userGroups, function ($a) {
+            return in_array(223, $a->privileges);
+        });
+
+        $userGroups = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+        }, $userGroups);
+
+        return array_values($userGroups);
     }
 }

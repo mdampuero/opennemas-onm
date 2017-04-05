@@ -43,18 +43,18 @@ class StaticPageController extends Controller
         // TODO: Remove when pk_content column renamed to id
         $content->id = $content->pk_content;
 
-        return $this->render(
-            'static_pages/statics.tpl',
-            [
-                'page'               => $content,
-                'content'            => $content,
-                'actual_category'    => $content->slug,
-                'category_real_name' => $content->title,
-                'content_id'         => $content->id,
-                'advertisements'     => $this->getAds(),
-                'x-tags'             => 'static-page,'.$content->id,
-            ]
-        );
+        list($positions, $advertisements) = $this->getAds();
+
+        return $this->render('static_pages/statics.tpl', [
+            'actual_category'    => $content->slug,
+            'ads_positions'      => $positions,
+            'advertisements'     => $advertisements,
+            'category_real_name' => $content->title,
+            'content'            => $content,
+            'content_id'         => $content->id,
+            'page'               => $content,
+            'x-tags'             => 'static-page,'.$content->id,
+        ]);
     }
 
     /**
@@ -69,6 +69,8 @@ class StaticPageController extends Controller
         $positions = $positionManager
             ->getPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7, 9 ]);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, 0);
+
+        return [ $positions, $advertisements ];
     }
 }
