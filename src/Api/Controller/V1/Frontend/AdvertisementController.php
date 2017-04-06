@@ -28,7 +28,7 @@ class AdvertisementController extends Controller
     public function listAction(Request $request)
     {
         $places   = explode(',', $request->query->get('places'));
-        $category = (int) $request->query->get('category');
+        $category = $request->query->get('category');
 
         $advertisements = $this->getAdvertisements($places, $category);
 
@@ -135,8 +135,21 @@ class AdvertisementController extends Controller
      */
     protected function getAdvertisements($places, $category)
     {
+        $id = 0;
+
+        if (!empty($category) && $category != 'home') {
+            $category = $this->get('category_repository')
+                ->findOneBy([ 'name' => [ [ 'value' => $category ] ] ]);
+
+            if (empty($category)) {
+                return [];
+            }
+
+            $id = $category->pk_content_category;
+        }
+
         if (in_array('ADS_MANAGER', $this->get('core.instance')->activated_modules)) {
-            return \Advertisement::findForPositionIdsAndCategoryPlain($places, $category);
+            return \Advertisement::findForPositionIdsAndCategoryPlain($places, $id);
         }
 
         // TODO: Improve this shit
@@ -144,9 +157,9 @@ class AdvertisementController extends Controller
 
         $advertisements = array_filter(
             $advertisements,
-            function ($a) use ($places, $category) {
+            function ($a) use ($places, $id) {
                 return in_array($a->type_advertisement, $places)
-                    && (in_array($category, $a->fk_content_categories)
+                    && (in_array($id, $a->fk_content_categories)
                     || in_array(0, $a->fk_content_categories));
             }
         );
