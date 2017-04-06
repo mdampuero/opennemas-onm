@@ -11,7 +11,7 @@
      * @requires $routeParams
      * @requires $scope
      * @requires $timeout
-     * @requires Cleaner
+     * @requires cleaner
      * @requires http
      * @requires routing
      * @requires messenger
@@ -20,8 +20,8 @@
      *   Handles actions for module edition form
      */
     .controller('ModuleCtrl', [
-      '$http', '$location', '$routeParams', '$scope', '$timeout', 'Cleaner', 'http', 'routing', 'messenger',
-      function ($http, $location, $routeParams, $scope, $timeout, Cleaner, http, routing, messenger) {
+      '$http', '$location', '$routeParams', '$scope', '$timeout', 'cleaner', 'http', 'routing', 'messenger',
+      function ($http, $location, $routeParams, $scope, $timeout, cleaner, http, routing, messenger) {
         /**
          * @memberOf ModuleCtrl
          *
@@ -218,7 +218,7 @@
               .map(function(e) { return e.text; });
           }
 
-          Cleaner.clean($scope.module);
+          cleaner.clean($scope.module);
 
           for (var key in $scope.module) {
             if (key !== 'images') {

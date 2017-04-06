@@ -12,17 +12,17 @@
   angular.module('onm.cleaner', [])
     /**
      * @ngdoc service
-     * @name  Cleaner
+     * @name  cleaner
      *
      * @description
      *   Service to remove $$hasKey properties from objects used inside
      *   ng-repeat.
      */
-    .service('Cleaner', [
+    .service('cleaner', [
       function() {
         /**
          * @function cleanObject
-         * @memberOf Cleaner
+         * @memberOf cleaner
          *
          * @description
          *   Removes $$hashKey properties from object.
@@ -48,7 +48,7 @@
 
         /**
          * @function clean
-         * @memberOf Cleaner
+         * @memberOf cleaner
          *
          * @description
          *   Cleans an item.
