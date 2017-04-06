@@ -37,6 +37,11 @@
           delete obj.$$hashKey;
 
           for (var key in obj) {
+            // Convert undefined to null
+            if (typeof obj[key] === 'undefined') {
+              obj[key] = null
+            }
+
             this.clean(obj[key]);
           }
         };
