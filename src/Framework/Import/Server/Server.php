@@ -124,6 +124,8 @@ abstract class Server
                     CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
                     CURLOPT_USERPWD => $auth,
                     CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_SSL_VERIFYHOST => 0,
+                    CURLOPT_SSL_VERIFYPEER => 0,
                 ]
             );
 
