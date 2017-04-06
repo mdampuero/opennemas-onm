@@ -329,8 +329,22 @@ class AdvertisementController extends Controller
             return [];
         }
 
-        $sizes = [];
-        for ($i = 0; $i < count($params['width']); $i++) {
+        $sizes  = [];
+        $totalW = is_array($params['width']) ? count($params['width']) : 1;
+        $totalH = is_array($params['height']) ? count($params['height']) : 1;
+        $total  = max($totalH, $totalW);
+
+        // Convert non-array values to array
+        if (!is_array($params['height'])) {
+            $params['height'] = array_fill(0, $total, $params['height']);
+        }
+
+        // Convert non-array values to array
+        if (!is_array($params['width'])) {
+            $params['width'] = array_fill(0, $total, $params['width']);
+        }
+
+        for ($i = 0; $i < $total; $i++) {
             $size = [
                 'height' => $params['height'][$i],
                 'width' =>  $params['width'][$i]
