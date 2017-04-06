@@ -8,7 +8,7 @@
   _onmaq.slots          = [ {{$positions}} ];
   _onmaq.url            = '{{$url}}';
   _onmaq.strings        = {
-    'entering': '{t}Enterinig on the requested page{/t}',
+    'entering': '{t}Entering on the requested page{/t}',
     'mark':     '{t}Advertisement{/t}',
     'skip':     '{t}Skip advertisement{/t}'
   };
