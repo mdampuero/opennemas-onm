@@ -654,7 +654,8 @@ class InstanceController extends Controller
      */
     protected function getCountries($inDb = false)
     {
-        $fromIntl  = $this->get('core.geo')->getCountries();
+        $locale   = $this->get('core.locale')->getLocale();
+        $fromIntl = $this->get('core.geo')->getCountries();
 
         if (!$inDb) {
             return array_map(function ($id, $name) {
@@ -664,13 +665,16 @@ class InstanceController extends Controller
 
         $conn      = $this->get('orm.manager')->getConnection('manager');
         $cache     = $this->get('cache.manager')->getConnection('manager');
-        $countries = $cache->get('countries');
+        $countries = $cache->get('countries_' . $locale);
 
         if (!empty($countries)) {
             return $countries;
         }
 
-        $fromDb = $conn->fetchAll('SELECT DISTINCT(country) FROM instances');
+        $fromDb = $conn->fetchAll(
+            'SELECT DISTINCT(country) FROM instances WHERE country IS NOT NULL'
+        );
+
         $fromDb = array_map(function ($a) {
             return $a['country'];
         }, $fromDb);
@@ -682,7 +686,7 @@ class InstanceController extends Controller
             $countries[] = [ 'id' => $key, 'name' => $value ];
         }
 
-        $cache->set('countries', $countries);
+        $cache->set('countries_' . $locale, $countries);
 
         return $countries;
     }

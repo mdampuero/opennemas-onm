@@ -373,7 +373,7 @@
                 {t}Domain expire{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domain_expire') == 'asc', 'fa fa-caret-down': isOrderedBy('domain_expire') == 'desc'}"></i>
               </th>
-              <th class="text-center pointer" ng-click="sort('country')" ng-show="isColumnEnabled('country')">
+              <th class="pointer" ng-click="sort('country')" ng-show="isColumnEnabled('country')">
                 {t}Country{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('country') == 'asc', 'fa fa-caret-down': isOrderedBy('country') == 'desc'}"></i>
               </th>
@@ -523,8 +523,9 @@
                 [% item.domain_expire %]
               </td>
               <td ng-show="isColumnEnabled('country')">
-                <i class="flag flag-[% item.country.toLowerCase() %] m-r-5"></i>
-                [% getCountry(item.country) %]
+                <i class="flag flag-[% item.country.toLowerCase() %] m-r-5" ng-if="item.country"></i>
+                <span ng-if="item.country">[% getCountry(item.country) %]</span>
+                <i ng-if="!item.country">{t}None{/t}</i>
               </td>
               <td ng-show="isColumnEnabled('contact_mail')">
                 <div class="creator">
