@@ -634,7 +634,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeCountries(Event $event)
     {
         $this->container->get('cache.manager')->getConnection('manager')
-            ->remove('countries');
+            ->removeByPattern('*countries*');
     }
 
     /**

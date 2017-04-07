@@ -151,6 +151,10 @@
          * @return {Object} The country object.
          */
         $scope.getCountry = function(code) {
+          if (!code) {
+            return null;
+          }
+
           var countries = $scope.extra.countries.filter(function(e) {
             return e.id === code;
           });

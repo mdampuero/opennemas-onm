@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-20 11:01+0000\n"
-"PO-Revision-Date: 2017-03-20 12:11+0100\n"
+"POT-Creation-Date: 2017-04-06 13:09+0000\n"
+"PO-Revision-Date: 2017-04-06 15:21+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -2279,7 +2279,63 @@ msgid "The url that you entered is already in use"
 msgstr "A url xa está en uso"
 
 #, php-format
+msgid "Unable to create a %s"
+msgstr ""
+
+#, php-format
+msgid "Unable to remove the %s"
+msgstr ""
+
+#, php-format
+msgid "Unable to update the %s"
+msgstr ""
+
+#, php-format
+msgid "Unable to find entity of type \"%s\""
+msgstr ""
+
+#, php-format
+msgid "Unable to find entity of type \"%s\" with id \"%s\""
+msgstr ""
+
+#, php-format
+msgid "The data source connection for '%s' does not exist"
+msgstr ""
+
+#, php-format
+msgid "No converters found for \"%s\""
+msgstr ""
+
+#, php-format
+msgid "The converter \"%s\" for \"%s\" does not exist"
+msgstr ""
+
+#, php-format
+msgid "The criteria (%s) is not valid"
+msgstr ""
+
+#, php-format
+msgid "No datasets found for \"%s\""
+msgstr ""
+
+#, php-format
+msgid "The dataset \"%s\" for \"%s\" does not exist"
+msgstr ""
+
+#, php-format
+msgid "No metadata found for \"%s\""
+msgstr ""
+
+#, php-format
 msgid "No persisters found for \"%s\""
+msgstr ""
+
+#, php-format
+msgid "The persister \"%s\" for \"%s\" does not exist"
+msgstr ""
+
+#, php-format
+msgid "You have a syntax error near '%s'"
 msgstr ""
 
 #, php-format
@@ -2287,100 +2343,38 @@ msgid "No repositories found for \"%s\""
 msgstr ""
 
 #, php-format
-msgid "No trackers found for \"%s\""
-msgstr ""
-
-#, fuzzy, php-format
-msgid "Unable to create a %s"
-msgstr "Non foi posíbel crear un servidor"
-
-#, fuzzy, php-format
-msgid "Unable to remove the %s"
-msgstr "Non se puido crear o menú"
-
-#, fuzzy, php-format
-msgid "Unable to update the %s"
-msgstr "Non se puido actualizar o usuario."
-
-#, fuzzy, php-format
-msgid "Unable to find entity of type \"%s\""
-msgstr "Non se puido atopar a entidade co identificador «%s»"
-
-#, fuzzy, php-format
-msgid "Unable to find entity of type \"%s\" with id \"%s\""
-msgstr "Non se puido atopar a entidade co identificador «%s»"
-
-#, fuzzy, php-format
-msgid "The data source connection for '%s' does not exist"
-msgstr "O repositorio «%s» non existe en %s"
-
-#, php-format
-msgid "No converters found for \"%s\""
-msgstr ""
-
-#, fuzzy, php-format
-msgid "The converter \"%s\" for \"%s\" does not exist"
-msgstr "O persistor «%s» non existe en %s"
-
-#, fuzzy, php-format
-msgid "The criteria (%s) is not valid"
-msgstr "O criterio (%s) non é válido en %s"
-
-#, fuzzy, php-format
-msgid "No datasets found for \"%s\""
-msgstr "Debe asignar unha sección para \"% s\""
-
-#, fuzzy, php-format
-msgid "The dataset \"%s\" for \"%s\" does not exist"
-msgstr "O usuario non existe."
-
-#, fuzzy, php-format
-msgid "No metadata found for \"%s\""
-msgstr "Debe asignar unha sección para \"% s\""
-
-#, fuzzy, php-format
-msgid "The persister \"%s\" for \"%s\" does not exist"
-msgstr "O persistor «%s» non existe en %s"
-
-#, php-format
-msgid "You have a syntax error near '%s'"
-msgstr ""
-
-#, fuzzy, php-format
 msgid "The repository \"%s\" for \"%s\" does not exist"
-msgstr "O repositorio «%s» non existe en %s"
+msgstr ""
 
-#, fuzzy, php-format
+#, php-format
 msgid "The token '%s' is not valid"
-msgstr "O dominio %s non é válido"
+msgstr ""
 
-#, fuzzy, php-format
+#, php-format
 msgid "The token '%s' is not valid for entities of type '%s'"
-msgstr "O criterio (%s) non é válido en %s"
+msgstr ""
 
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to dump schema '%s'"
-msgstr "Non foi posíbel eliminar o dominio %s"
+msgstr ""
 
-#, fuzzy
 msgid "No mapping information"
-msgstr "Sen información"
+msgstr ""
 
-#, fuzzy
 msgid "Empty table name"
-msgstr "Nome da base de datos"
+msgstr ""
 
-#, fuzzy, php-format
+#, php-format
 msgid "Invalid table name '%s'"
-msgstr "Tema non válido"
+msgstr ""
 
 #, php-format
 msgid "Invalid field '%s' in table '%s'"
 msgstr ""
 
-#, fuzzy, php-format
+#, php-format
 msgid "Invalid index name in table '%s'"
-msgstr "Ficheiro de imaxe non válido"
+msgstr ""
 
 #, php-format
 msgid "Invalid columns in index '%s' name in table '%s'"
@@ -2414,9 +2408,9 @@ msgstr ""
 msgid "Invalid type for field %s in table '%s'"
 msgstr ""
 
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to validate entity of type '%s'"
-msgstr "Non se puido atopar a entidade co identificador «%s»"
+msgstr ""
 
 #, php-format
 msgid "The property '%s' of type '%s' has an invalid value of '%s'"
@@ -2527,30 +2521,26 @@ msgstr ""
 "Non foi posíbel conectarse ao servidor %s. Comprobe as preferencias da "
 "conexión."
 
-#, fuzzy
 msgid "Instance is blocked"
-msgstr "Instancia non atopada"
+msgstr "A instancia está bloqueada"
 
 #, php-format
 msgid "The instance \"%s\" is blocked"
 msgstr "A instancia \"%s\" está bloqueada"
 
-#, fuzzy
 msgid "ReCaptcha service is not configured"
-msgstr "Chave pública de reCaptcha non configurada"
+msgstr "O servizo de ReCaptcha non configurado"
 
-#, fuzzy
 msgid "Unable to find an user linked to that account."
-msgstr ""
-"Non se puido atopar un usuario con este enderezo de correo electrónico."
+msgstr "Non se puido atopar un usuario asociado a esa conta"
 
-#, fuzzy, php-format
+#, php-format
 msgid "First you have to link your %s account to your opennemas account."
-msgstr "Permiteche iniciar sesión en Opennemas con %1"
+msgstr "Primerio debes asociar a túa conta %s á túa conta opennemas."
 
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to link your opennemas account to your %s account"
-msgstr "Non se puideron atopar opinións que coincidan coa súa busca."
+msgstr "Non se puido asociar a túa conta opennemas á túa conta %s"
 
 msgid "Advertisement"
 msgstr "Publicidade"
@@ -8114,6 +8104,9 @@ msgstr "Páx. vistas"
 msgid "Blocked"
 msgstr "Bloqueada"
 
+msgid "None"
+msgstr "Ningún"
+
 msgid "No rank"
 msgstr "Sen calificar"
 
@@ -8237,6 +8230,9 @@ msgstr "Non hai ningún cliente asociado a esta instancia"
 
 msgid "Try to search a client by name or street"
 msgstr "Intenta buscar un cliente por nome ou dirección"
+
+msgid "There are no purchases for now"
+msgstr "Non hai compras por agora"
 
 msgid "View purchase"
 msgstr "Ver compra"
@@ -11841,9 +11837,6 @@ msgstr "Acción"
 
 #~ msgid "Right"
 #~ msgstr "Dereita"
-
-#~ msgid "None"
-#~ msgstr "Ningún"
 
 #~ msgid "Uploaded"
 #~ msgstr "Subido"

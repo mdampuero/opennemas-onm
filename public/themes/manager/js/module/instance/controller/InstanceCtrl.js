@@ -18,8 +18,8 @@
      *   Handles actions for instance edition form
      */
     .controller('InstanceCtrl', [
-      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder',
-      function ($filter, $location, $routeParams, $scope, $uibModal, http, messenger, oqlEncoder) {
+      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'cleaner', 'http', 'messenger', 'oqlEncoder',
+      function ($filter, $location, $routeParams, $scope, $uibModal, cleaner, http, messenger, oqlEncoder) {
         /**
          * @memberOf InstanceCtrl
          *
@@ -225,24 +225,26 @@
         $scope.save = function() {
           $scope.saving = 1;
 
-          http.post('manager_ws_instance_save', { instance: $scope.instance,
-            settings: $scope.settings }).then(function (response) {
-              messenger.post(response.data);
+          http.post('manager_ws_instance_save', {
+            instance: cleaner.clean($scope.instance),
+            settings: $scope.settings
+          }).then(function (response) {
+            messenger.post(response.data);
 
-              if (response.status === 201) {
-                // Add instance to owned instances
-                if (!$scope.security.hasPermission('MASTER') &&
-                    $scope.security.hasPermission('PARTNER')) {
-                  $scope.refreshSecurity();
-                }
-
-                var url = response.headers().location.replace('/managerws', '');
-                $location.path(url);
+            if (response.status === 201) {
+              // Add instance to owned instances
+              if (!$scope.security.hasPermission('MASTER') &&
+                  $scope.security.hasPermission('PARTNER')) {
+                $scope.refreshSecurity();
               }
-            }, function(response) {
-              messenger.post(response.data);
-              $scope.saving = 0;
-            });
+
+              var url = response.headers().location.replace('/managerws', '');
+              $location.path(url);
+            }
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          });
         };
 
         /**
@@ -310,7 +312,11 @@
         $scope.update = function() {
           $scope.saving = 1;
 
-          var data  = { instance: $scope.instance, settings: $scope.settings };
+          var data  = {
+            instance: cleaner.clean($scope.instance),
+            settings: $scope.settings
+          };
+
           var route = {
             name:   'manager_ws_instance_update',
             params: { id: $scope.instance.id }
