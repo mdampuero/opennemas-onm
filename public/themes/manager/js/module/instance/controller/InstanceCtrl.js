@@ -168,8 +168,8 @@
          *                 Otherwise, return false.
          */
         $scope.areAllSelected = function() {
-          for (var i = 0; i < $scope.selected.plan.length; i++) {
-            if (!$scope.selected.plan[i]) {
+          for (var i = 0; i < $scope.packs.length; i++) {
+            if (!$scope.selected.plan[$scope.packs[i]]) {
               return false;
             }
           }
@@ -271,10 +271,10 @@
          */
         $scope.toggleAll = function() {
           if ($scope.selected.all) {
-            for (var i in $scope.selected.plan) {
-              if ($scope.security.canEnable(i)) {
-                $scope.selected.plan[i] = true;
-                $scope.togglePlan(i);
+            for (var i = 0; i < $scope.packs.length; i++) {
+              if ($scope.security.canEnable($scope.packs[i])) {
+                $scope.selected.plan[$scope.packs[i]] = true;
+                $scope.togglePlan($scope.packs[i]);
               }
             }
           } else {
@@ -331,7 +331,7 @@
           });
         };
 
-        $scope.$watch('instance.activated_modules', function() {
+        $scope.$watch('[packs, instance.activated_modules]', function() {
           var all = true;
 
           // Initializes the selected flags
@@ -339,12 +339,13 @@
             var pack = $scope.packs[i];
 
             $scope.selected.plan[pack] = _.difference($scope.modulesByPack[pack],
-                $scope.instance.activated_modules) == 0;
+                $scope.instance.activated_modules).length === 0;
 
             all = all && $scope.selected.plan[pack];
           }
+
           $scope.selected.all = all;
-        },true);
+        }, true);
 
         // Remove client when instance meta is deleted
         $scope.$watch('instance.client', function(nv) {
