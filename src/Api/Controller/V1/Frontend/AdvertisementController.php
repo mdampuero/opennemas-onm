@@ -303,7 +303,7 @@ class AdvertisementController extends Controller
         $object->sizes       = $this->normalizeSizes($element->params);
 
         $object->orientation = array_key_exists('orientation', $element->params) ?
-            $element->params['orientation'] : 'horizontal';
+            $element->params['orientation'] : 'top';
 
         $object->target_url = ($object->format == 'image') ? $element->url: '';
 
