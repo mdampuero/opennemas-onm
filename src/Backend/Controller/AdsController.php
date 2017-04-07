@@ -500,6 +500,8 @@ class AdsController extends Controller
             return [ 'id' => $a->pk_content_category, 'name' => $a->title ];
         }, $categories);
 
+        array_unshift($categories, [ 'id' => 0, 'name' => _('Home') ]);
+
         return array_values($categories);
     }
 
