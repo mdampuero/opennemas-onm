@@ -375,9 +375,9 @@ class Content
             $this->category_name = $ccm->getName($this->category);
         }
 
-        $this->permalink = '';//$this->uri;
+        $this->permalink = '';
         if (!empty($this->params) && is_string($this->params)) {
-            $this->params = unserialize($this->params);
+            $this->params = @unserialize($this->params);
         }
 
         $this->fk_user = $this->fk_author;
