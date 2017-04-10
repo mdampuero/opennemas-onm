@@ -183,7 +183,7 @@
                     <div class="checkbox">
                       <input type="checkbox" name="restriction_devices_desktop" id="restriction_device_desktop" ng-model="params.devices.desktop" ng-false-value="0" ng-true-value="1" value="1">
                       <label class="form-label" for="restriction_device_desktop">
-                        {t}Desktop{/t}
+                        {t}Desktop{/t} (>= 992px)
                       </label>
                     </div>
                   </div>
@@ -191,7 +191,7 @@
                     <div class="checkbox">
                       <input type="checkbox" name="restriction_devices_tablet" id="restriction_device_tablet" ng-model="params.devices.tablet" ng-false-value="0" ng-true-value="1" value="1">
                       <label class="form-label" for="restriction_device_tablet">
-                        {t}Tablet{/t}
+                        {t}Tablet{/t} (< 992px)
                       </label>
                     </div>
                   </div>
@@ -199,7 +199,7 @@
                     <div class="checkbox">
                       <input type="checkbox" name="restriction_devices_phone" id="restriction_device_phone" ng-model="params.devices.phone" ng-false-value="0" ng-true-value="1" value="1">
                       <label class="form-label" for="restriction_device_phone">
-                        {t}Phone{/t}
+                        {t}Phone{/t} (< 768px)
                       </label>
                     </div>
                   </div>
