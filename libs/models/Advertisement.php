@@ -749,10 +749,9 @@ class Advertisement extends Content
             return '';
         }
 
-        $html  = '<div class="oat"%s data-type="%s"%s%s></div>';
+        $html  = '<div class="oat"%s data-type="%s"%s></div>';
         $id    = '';
         $type  = $this->type_advertisement;
-        $style = ' style="display:table;"';
         $width = '';
 
         // Style for advertisements via renderbanner
@@ -768,6 +767,6 @@ class Advertisement extends Content
             $id .= ' data-id="' . $this->pk_content . '" ';
         }
 
-        return sprintf($html, $id, $type, $width, $style);
+        return sprintf($html, $id, $type, $width);
     }
 }
