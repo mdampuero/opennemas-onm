@@ -442,7 +442,7 @@
                   </div>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="((type_advertisement + 50)  % 100) == 0">
+              <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="isInterstitial()">
                 <i class="fa fa-clock-o m-r-5"></i>
                 {t}Duration{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.duration }"></i>
@@ -450,7 +450,7 @@
                   <strong>[% timeout %]</strong>s
                 </span>
               </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.duration }" ng-show="((type_advertisement + 50)  % 100) == 0">
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.duration }" ng-show="isInterstitial()">
                 <div class="input-group">
                   <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0" max="100" />
                   <div class="input-group-addon">{t}seconds{/t}</div>

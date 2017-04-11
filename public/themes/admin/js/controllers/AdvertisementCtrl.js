@@ -265,6 +265,32 @@
       };
 
       /**
+       * @function isInterstitial
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Checks if the advertisement is an interstitial.
+       *
+       * @return {Boolean} True if the advertisement is an interstitial. False
+       *                   otherwise
+       */
+      $scope.isInterstitial = function() {
+        if (!angular.isArray($scope.type_advertisement)) {
+          return (parseInt($scope.type_advertisement) + 50) % 100 === 0;
+        }
+
+        for (var i = 0; i < $scope.type_advertisement.length; i++) {
+          var position = parseInt($scope.type_advertisement[i]);
+
+          if ((position + 50) % 100 === 0) {
+            return true;
+          }
+        }
+
+        return false;
+      };
+
+      /**
        * @function removeInput
        * @memberOf AdvertisementCtrl
        *
