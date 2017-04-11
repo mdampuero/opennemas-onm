@@ -198,7 +198,10 @@
           $scope.params.devices = { desktop: 1, tablet: 1, phone: 1 };
         }
 
-        if (!$scope.params.orientation) {
+        var orientations = [ 'top', 'right', 'bottom', 'left' ];
+
+        if (!$scope.params.orientation ||
+            orientations.indexOf($scope.params.orientation) === -1) {
           $scope.params.orientation = 'top';
         }
 
