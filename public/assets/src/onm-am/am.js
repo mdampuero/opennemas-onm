@@ -47,48 +47,28 @@
   };
 
   /**
-   * @function configureInterstitial
+   * @function close
    * @memberOf OAM
    *
    * @description
-   *   Configures the interstitial advertisement.
+   *   Closes the interstitial advertisement.
    *
-   * @param {Object} ad      The advertisement object.
-   * @param {Object} element The HTML element.
+   * @param {Object} element The HTML element for interstitial.
+   * @param {Object} e       The event object.
    */
-  OAM.prototype.configureInterstitial = function(ad, element) {
-    // Hide interstitial after X seconds
-    window.setTimeout(function () {
-      element.remove();
-    }, ad.timeout * 1000);
-
-    // Removes the interstitial
-    var close = function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-
-      element.remove();
-    };
-
-    // Opens the interstital in a new window
-    var goTo = function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-
-      window.open('/ads/' + ad.publicId + '.html', '_blank');
-
-      close(e);
-    };
-
-    element.getElementsByClassName('closeButton')[0].onclick = close;
-    element.getElementsByClassName('content')[0].onclick     = goTo;
-
+  OAM.prototype.close = function(element, e) {
     var expires = new Date();
 
     expires.setMinutes(expires.getMinutes() + this.config.cookieLifetime);
 
-    // Create cookie for interstitial
-    document.cookie = '__onm_interstitial=1; expires=' + expires + '; path=/';
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    //document.cookie = '__onm_interstitial=1; expires=' + expires + '; path=/';
+
+    element.remove();
   };
 
   /**
@@ -110,6 +90,7 @@
 
     // TODO: Remove style from <a> element (again, fuck you, frontenders!!!)
     div.innerHTML = '<div class="wrapper">' +
+      '<style>body { height: 100%; overflow: hidden; }</style>' +
       '<div class="header">' +
         '<div class="logo-and-phrase">' +
           '<div class="logo"></div>' +
@@ -124,9 +105,26 @@
       '<div class="content"></div>' +
     '</div>';
 
-    div.getElementsByClassName('content')[0].appendChild(this.createNormal(ad));
+    div.getElementsByClassName('closeButton')[0].onclick = function(e) {
+      self.close(div, e);
+    };
 
-    this.configureInterstitial(ad, div);
+    var content = div.getElementsByClassName('content')[0];
+    var iframe  = this.createNormal(ad);
+    var self    = this;
+    var size    = this.getSize(ad);
+
+    // Hide interstitial after X seconds
+    iframe.onload = function() {
+      window.setTimeout(function () {
+        self.close(div);
+      }, ad.timeout * 1000);
+    };
+
+    content.style.width  = size.width + 'px';
+    content.style.height = size.height + (size.height === 'auto' ? '' : 'px');
+
+    content.appendChild(iframe);
 
     return div;
   };
