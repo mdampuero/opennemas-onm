@@ -145,8 +145,9 @@
   OAM.prototype.createNormal = function(ad) {
     var item = document.createElement('iframe');
 
-    item.className   += 'oat-content';
-    item.style.width  = '100%';
+    item.className    += 'oat-content';
+    item.style.width   = '100%';
+    item.style.height  = '100%';
 
     // Auto-resize on load
     item.onload = function() {
@@ -154,6 +155,13 @@
     };
 
     item.src = this.normalize(this.config.url + '/' + ad.id);
+
+    // Dispatch event when iframe loaded
+    item.onload = function () {
+      var event = document.createEvent('Event');
+      event.initEvent('oam-advertisement-loaded', true, true);
+      window.dispatchEvent(event);
+    };
 
     return item;
   };
