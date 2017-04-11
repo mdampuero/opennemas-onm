@@ -66,7 +66,7 @@
       e.preventDefault();
     }
 
-    //document.cookie = '__onm_interstitial=1; expires=' + expires + '; path=/';
+    document.cookie = '__onm_interstitial=1; expires=' + expires + '; path=/';
 
     element.remove();
   };
