@@ -28,9 +28,9 @@
        */
       $scope.params = {
         sizes: [
-          { device: 'desktop', height: 0, width: 0 },
-          { device: 'tablet', height: 0, width: 0 },
-          { device: 'phone', height: 0, width: 0 },
+          { device: 'desktop', height: null, width: null },
+          { device: 'tablet', height: null, width: null },
+          { device: 'phone', height: null, width: null },
         ]
       };
 
@@ -112,7 +112,7 @@
        *   Add new input for advertisement size
        */
       $scope.addSize = function() {
-        $scope.params.sizes.push({ width: 0, height: 0 });
+        $scope.params.sizes.push({ width: null, height: null });
       };
 
       /**
@@ -290,7 +290,7 @@
 
           if (nv[i] && sizes.length === 0) {
             $scope.params.sizes.splice(indexes[i], 0,
-                { height: 0, device: i, width: 0 });
+                { height: null, device: i, width: null });
           }
 
           if (!nv[i]) {
