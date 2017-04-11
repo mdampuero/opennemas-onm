@@ -177,6 +177,18 @@
           $scope.params = params;
         }
 
+        if (!$scope.params.devices ||
+            !angular.isObject($scope.params.devices)) {
+          $scope.params.devices = { desktop: 1, tablet: 1, phone: 1 };
+        }
+
+        if (!$scope.params.sizes) {
+          $scope.params.sizes = [];
+
+          // Force sizes initialization
+          $scope.parseDevices($scope.params.devices);
+        }
+
         if ($scope.params.user_groups &&
             angular.isArray($scope.params.user_groups)) {
           $scope.ui.user_groups = $scope.params.user_groups;
@@ -186,11 +198,6 @@
           $scope.ui.categories = categories.map(function (e) {
             return parseInt(e);
           });
-        }
-
-        if (!$scope.params.devices ||
-            !angular.isObject($scope.params.devices)) {
-          $scope.params.devices = { desktop: 1, tablet: 1, phone: 1 };
         }
 
         var orientations = [ 'top', 'right', 'bottom', 'left' ];
@@ -206,10 +213,30 @@
 
           var devices = [ 'desktop', 'tablet', 'phone' ];
 
-          for (var i = 0; i < $scope.params.width.length; i++) {
+          var totalW = angular.isArray($scope.params.width) ?
+            $scope.params.width.length : 1;
+          var totalH = angular.isArray($scope.params.height) ?
+            $scope.params.height.length : 1;
+          var totalD = $scope.params.devices.desktop +
+            $scope.params.devices.tablet + $scope.params.devices.phone;
+          var total = Math.max(totalH, totalW, totalD);
+
+          if (!angular.isArray($scope.params.height)) {
+            var value = $scope.params.height;
+
+            $scope.params.height = _.fill(new Array(total), value);
+          }
+
+          if (!angular.isArray($scope.params.width)) {
+            var value = $scope.params.width;
+
+            $scope.params.width = _.fill(new Array(total), value);
+          }
+
+          for (var i = 0; i < total; i++) {
             var item = {
               height: parseInt($scope.params.height[i]),
-              width: parseInt($scope.params.width)
+              width:  parseInt($scope.params.width[i])
             };
 
             if (i < 3) {
@@ -286,6 +313,35 @@
       };
 
       /**
+       * @function parseDevices
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Parses the devices and initializes the array of sizes.
+       *
+       * @param {Object} devices The list of devices.
+       */
+      $scope.parseDevices = function(devices) {
+        var indexes = { desktop: 0, tablet: 1, phone: 2 };
+
+        for (var i in devices) {
+          // Sizes for device
+          var sizes = $scope.params.sizes.filter(function(e) {
+            return e.device === i;
+          });
+
+          if (devices[i] && sizes.length === 0) {
+            $scope.params.sizes.splice(indexes[i], 0,
+                { height: null, device: i, width: null });
+          }
+
+          if (!devices[i]) {
+            $scope.params.sizes = _.difference($scope.params.sizes, sizes);
+          }
+        }
+      };
+
+      /**
        * @function removeInput
        * @memberOf AdvertisementCtrl
        *
@@ -304,23 +360,7 @@
           return;
         }
 
-        var indexes = { desktop: 0, tablet: 1, phone: 2 };
-
-        for (var i in nv) {
-          // Sizes for device
-          var sizes = $scope.params.sizes.filter(function(e) {
-            return e.device === i;
-          });
-
-          if (nv[i] && sizes.length === 0) {
-            $scope.params.sizes.splice(indexes[i], 0,
-                { height: null, device: i, width: null });
-          }
-
-          if (!nv[i]) {
-            $scope.params.sizes = _.difference($scope.params.sizes, sizes);
-          }
-        }
+        $scope.parseDevices(nv);
       }, true);
 
       // Updates params_width and params_height when sizes change
