@@ -182,24 +182,27 @@
                   <div class="col-md-4">
                     <div class="checkbox">
                       <input type="checkbox" name="restriction_devices_desktop" id="restriction_device_desktop" ng-model="params.devices.desktop" ng-false-value="0" ng-true-value="1" value="1">
-                      <label class="form-label" for="restriction_device_desktop">
-                        {t}Desktop{/t} (>= 992px)
+                      <label class="form-label" for="restriction_device_desktop" uib-tooltip="{t}Width{/t} >= 992px">
+                        <i class="fa fa-desktop m-l-5"></i>
+                        {t}Desktop{/t}
                       </label>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="checkbox">
                       <input type="checkbox" name="restriction_devices_tablet" id="restriction_device_tablet" ng-model="params.devices.tablet" ng-false-value="0" ng-true-value="1" value="1">
-                      <label class="form-label" for="restriction_device_tablet">
-                        {t}Tablet{/t} (< 992px)
+                      <label class="form-label" for="restriction_device_tablet" uib-tooltip="{t}Width{/t} < 992px">
+                        <i class="fa fa-tablet m-l-5"></i>
+                        {t}Tablet{/t}
                       </label>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="checkbox">
                       <input type="checkbox" name="restriction_devices_phone" id="restriction_device_phone" ng-model="params.devices.phone" ng-false-value="0" ng-true-value="1" value="1">
-                      <label class="form-label" for="restriction_device_phone">
-                        {t}Phone{/t} (< 768px)
+                      <label class="form-label" for="restriction_device_phone" uib-tooltip="{t}Width{/t} < 768px"s>
+                        <i class="fa fa-phone m-l-5"></i>
+                        {t}Phone{/t}
                       </label>
                     </div>
                   </div>
@@ -222,9 +225,9 @@
                 <input name="sizes" ng-value="json_sizes" type="hidden">
                 <div class="no-animate row" ng-repeat="size in params.sizes track by $index">
                   <div class="col-xs-1 p-t-15 text-center">
-                    <i class="fa fa-desktop" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'desktop'" uib-tooltip="{t}Desktop{/t}"></i>
-                    <i class="fa fa-tablet" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'tablet'" uib-tooltip="{t}Tablet{/t}"></i>
-                    <i class="fa fa-mobile" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'phone'" uib-tooltip="{t}Phone{/t}"></i>
+                    <i class="fa fa-desktop" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'desktop'" uib-tooltip="{t}Desktop{/t} (>= 992px)"></i>
+                    <i class="fa fa-tablet" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'tablet'" uib-tooltip="{t}Tablet{/t} (< 992px)"></i>
+                    <i class="fa fa-mobile" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="size.device === 'phone'" uib-tooltip="{t}Phone{/t} (< 768px)"></i>
                     <i class="fa fa-external-link" ng-class="{ 'text-success': !isEmpty($index), 'text-danger ': isEmpty($index) }" ng-if="!size.device" uib-tooltip="{t}Google DFP{/t}"></i>
                   </div>
                   <div class="col-xs-9">
@@ -235,7 +238,7 @@
                             <span class="input-group-addon" uib-tooltip="{t}Width{/t}">
                               <i class="fa fa-arrows-h"></i>
                             </span>
-                            <input class="form-control" min="0" ng-model="size.width" ng-value="size.width" required type="number">
+                            <input class="form-control" min="0" ng-model="size.width" ng-value="size.width" placeholder="{t}Width{/t}" required type="number">
                           </div>
                         </div>
                       </div>
@@ -245,7 +248,7 @@
                             <span class="input-group-addon" uib-tooltip="{t}Height{/t}">
                               <i class="fa fa-arrows-v"></i>
                             </span>
-                            <input class="form-control pull-left" min="0" ng-model="size.height" ng-value="size.height" required type="number">
+                            <input class="form-control pull-left" min="0" ng-model="size.height" ng-value="size.height" placeholder="{t}Height{/t}" required type="number">
                           </div>
                         </div>
                       </div>
