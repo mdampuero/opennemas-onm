@@ -116,7 +116,7 @@
                   <div class="col-sm-3">
                     <div class="radio">
                       <input id="open-x" name="with_script" ng-model="with_script"  {if $with_script == 2}checked{/if} type="radio" value="2">
-                      <label for="open-x" title="{t}Open X{/t}">{t}OpenX{/t}</label>
+                      <label for="open-x" title="{t}OpenX{/t}">{t}OpenX{/t}</label>
                     </div>
                   </div>
                   {/if}
@@ -136,7 +136,7 @@
                   <textarea name="script" id="script" class="form-control" rows="10" ng-model="script">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
                 <div  ng-show="'{$server_url}' && with_script == 2">
-                  <label for="openx_zone">{t}Open X zone id{/t}</label>
+                  <label for="openx_zone">{t}OpenX zone id{/t}</label>
                   <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
                   <div class="help-block"><small>{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</small></div>
                 </div>
@@ -210,7 +210,7 @@
                 <div class="m-t-10">
                   <small class="help">
                     <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Display the advertisement only on selected devices{/t}
+                    {t}Display the advertisement only on the selected devices{/t}
                   </small>
                 </div>
               </div>
@@ -334,10 +334,10 @@
                     </label>
                   </div>
                 </div>
-                <div class="m-t-10">
+                <div>
                   <small class="help">
                     <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Defines the orientation for the word that marks advertisement position.{/t}
+                    {t}Defines the orientation for the word that marks the advertisement position{/t}
                   </small>
                 </div>
               </div>
@@ -440,6 +440,12 @@
                       [% category.name %]
                     </label>
                   </div>
+                </div>
+                <div class="m-t-5">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Display the advertisement only in the selected categories{/t}
+                  </small>
                 </div>
               </div>
               <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="isInterstitial()">
