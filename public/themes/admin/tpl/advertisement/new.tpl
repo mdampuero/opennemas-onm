@@ -379,7 +379,7 @@
                   </small>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer" ng-click="expanded.user_groups = !expanded.user_groups">
+              <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.user_groups = !expanded.user_groups" ng-hide="!extra.user_groups || extra.user_groups.length === 0">
                 <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
                 <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
                 <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups">
