@@ -148,23 +148,7 @@ class AdvertisementController extends Controller
             $id = $category->pk_content_category;
         }
 
-        if (in_array('ADS_MANAGER', $this->get('core.instance')->activated_modules)) {
-            return \Advertisement::findForPositionIdsAndCategoryPlain($places, $id);
-        }
-
-        // TODO: Improve this shit
-        $advertisements = include APP_PATH . 'config/ads/onm_default_ads.php';
-
-        $advertisements = array_filter(
-            $advertisements,
-            function ($a) use ($places, $id) {
-                return in_array($a->type_advertisement, $places)
-                    && (in_array($id, $a->fk_content_categories)
-                    || in_array(0, $a->fk_content_categories));
-            }
-        );
-
-        return $advertisements;
+        return \Advertisement::findForPositionIdsAndCategoryPlain($places, $id);
     }
 
     /**
