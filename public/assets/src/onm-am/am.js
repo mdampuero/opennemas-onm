@@ -138,11 +138,12 @@
    * @description
    *   Returns the HTML element to display a normal advertisement.
    *
-   * @param {Object} ad The advertisement.
+   * @param {Object}  ad       The advertisement.
+   * @param {Integer} position The position where advertisement is rendered.
    *
    * @return {Object} The HTML element.
    */
-  OAM.prototype.createNormal = function(ad) {
+  OAM.prototype.createNormal = function(ad, position) {
     var item = document.createElement('iframe');
 
     item.className    += 'oat-content';
@@ -157,11 +158,13 @@
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
     // Dispatch event when iframe loaded
-    item.onload = function () {
-      var event = document.createEvent('Event');
-      event.initEvent('oam-advertisement-loaded', true, true);
-      window.dispatchEvent(event);
-    };
+    if (position) {
+      item.onload = function () {
+        var event = document.createEvent('Event');
+        event.initEvent('oat-' + position + '-loaded', true, true);
+        window.dispatchEvent(event);
+      };
+    }
 
     return item;
   };
@@ -247,7 +250,7 @@
         div.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
 
-      div.appendChild(self.createNormal(ad));
+      div.appendChild(self.createNormal(ad, type));
       slot.appendChild(div);
     });
   };
