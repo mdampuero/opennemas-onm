@@ -549,9 +549,9 @@ class VideosController extends Controller
         // Get video positions
         $positionManager = $this->get('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('video_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('video_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('video_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('video_frontpage', [ 7, 9 ]);
         }
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);

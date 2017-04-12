@@ -264,7 +264,7 @@ class ArticlesController extends Controller
 
         // TODO: Use $this->get when the function changes to non-static
         $positionManager = getService('core.manager.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
         $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];

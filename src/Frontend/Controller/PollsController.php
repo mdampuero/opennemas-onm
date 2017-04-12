@@ -289,9 +289,9 @@ class PollsController extends Controller
         // Get polls positions
         $positionManager = $this->get('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('polls_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('polls_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('polls_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('polls_frontpage', [ 7, 9 ]);
         }
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $this->category);

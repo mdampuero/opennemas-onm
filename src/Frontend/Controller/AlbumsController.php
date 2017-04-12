@@ -376,9 +376,9 @@ class AlbumsController extends Controller
         // Get album_inner positions
         $positionManager = getService('core.manager.advertisement');
         if ($position == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('album_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('album_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('album_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('album_frontpage', [ 7, 9 ]);
         }
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);

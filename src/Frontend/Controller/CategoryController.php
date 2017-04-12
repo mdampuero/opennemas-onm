@@ -246,7 +246,7 @@ class CategoryController extends Controller
 
         // Get article_inner positions
         $positionManager = $this->get('core.manager.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];

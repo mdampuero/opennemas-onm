@@ -338,9 +338,9 @@ class BlogsController extends Controller
         // Get opinion positions
         $positionManager = $this->get('core.manager.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', [ 7, 9 ]);
         }
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, '4');
