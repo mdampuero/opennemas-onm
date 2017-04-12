@@ -9,6 +9,40 @@
   padding-top: 0;
 }
 
+.interstitial {
+  background: #fff;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.interstitial-wrapper {
+  margin: 0 auto;
+}
+
+.interstitial-content {
+  width: 100%;
+}
+
+.interstitial-header {
+  clear: both;
+  display: table;
+  padding: 8px 0;
+  width: 100%;
+}
+
+.interstitial-close-button {
+  cursor: pointer;
+  float: right;
+}
+
+.interstitial-close-button:hover {
+  text-decoration: underline;
+}
+
 .oat {
   clear: both;
   display: none;

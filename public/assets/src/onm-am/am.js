@@ -86,27 +86,26 @@
     var div = document.createElement('div');
 
     // TODO: Remove style from <a> element (again, fuck you, frontenders!!!)
-    div.innerHTML = '<div class="wrapper">' +
-      '<style>body { height: 100%; overflow: hidden; }</style>' +
-      '<div class="header">' +
-        '<div class="logo-and-phrase">' +
-          '<div class="logo"></div>' +
+    div.innerHTML = '<div class="interstitial">' +
+      '<div class="interstitial-wrapper">' +
+        '<style>body { height: 100%; overflow: hidden; }</style>' +
+        '<div class="interstitial-header">' +
           this.config.strings.entering +
-        '</div>' +
-        '<div class="closeButton">' +
-          '<a href="#" title="' + this.config.strings.skip + '" style="padding-right: 40px; width: auto;">' +
+          '<a class="interstitial-close-button" href="#" title="' + this.config.strings.skip + '">' +
             '<span>' + this.config.strings.skip + '</span>' +
           '</a>' +
         '</div>'+
-      '</div>'+
-      '<div class="content"></div>' +
+        '<div class="interstitial-content"></div>' +
+      '</div>' +
     '</div>';
 
-    div.getElementsByClassName('closeButton')[0].onclick = function(e) {
-      self.close(div, e);
-    };
+    div.getElementsByClassName('interstitial-close-button')[0]
+      .onclick = function(e) {
+        self.close(div, e);
+      };
 
-    var content = div.getElementsByClassName('content')[0];
+    var content = div.getElementsByClassName('interstitial-content')[0];
+    var wrapper = div.getElementsByClassName('interstitial-wrapper')[0];
     var iframe  = this.createNormal(ad);
     var self    = this;
     var size    = this.getSize(ad);
@@ -120,7 +119,7 @@
       };
     }
 
-    content.style.width  = size.width + 'px';
+    wrapper.style.width  = size.width + 'px';
     content.style.height = size.height + (size.height === 'auto' ? '' : 'px');
 
     content.appendChild(iframe);
