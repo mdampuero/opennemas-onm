@@ -148,7 +148,7 @@
 
     // Auto-resize on load
     item.onload = function() {
-      item.style.height = item.contentWindow.document.body.scrollHeight + 'px';
+      //item.style.height = item.contentWindow.document.body.scrollHeight + 'px';
     };
 
     item.src = this.normalize(this.config.url + '/' + ad.id);
@@ -218,7 +218,7 @@
         return e.position.indexOf(type) !== -1;
       });
 
-      // Remove advertisement marker if empty
+      // Remove slot when no advertisement
       if (available.length === 0) {
         if (!self.config.debug) {
           slot.remove();
@@ -246,7 +246,19 @@
         div.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
 
-      div.appendChild(self.createNormal(ad, type));
+      var item = self.createNormal(ad, type);
+
+      // Remove slot when advertisement with empty content
+      item.onload = function() {
+        var content = item.contentWindow.document.body
+          .getElementsByClassName('content')[0];
+
+        if (content.scrollHeight === 0) {
+          slot.remove();
+        }
+      };
+
+      div.appendChild(item);
       slot.appendChild(div);
     });
   };
