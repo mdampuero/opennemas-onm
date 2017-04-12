@@ -458,7 +458,7 @@
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.duration }" ng-show="isInterstitial()">
                 <div class="input-group">
-                  <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0" max="100" />
+                  <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0"/>
                   <div class="input-group-addon">{t}seconds{/t}</div>
                 </div>
                 <div class="m-t-10">
@@ -468,7 +468,6 @@
                   </small>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
