@@ -85,9 +85,6 @@
   OAM.prototype.createInterstitial = function(ad) {
     var div = document.createElement('div');
 
-    // TODO: Fix this shitty id (fuck you, frontenders!!!)
-    div.id = 'intesticial-ad';
-
     // TODO: Remove style from <a> element (again, fuck you, frontenders!!!)
     div.innerHTML = '<div class="wrapper">' +
       '<style>body { height: 100%; overflow: hidden; }</style>' +
