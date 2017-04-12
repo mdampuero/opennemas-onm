@@ -46,7 +46,6 @@ class StaticPageController extends Controller
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('static_pages/statics.tpl', [
-            'actual_category'    => $content->slug,
             'ads_positions'      => $positions,
             'advertisements'     => $advertisements,
             'category_real_name' => $content->title,
