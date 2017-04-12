@@ -115,11 +115,13 @@
     var size    = this.getSize(ad);
 
     // Hide interstitial after X seconds
-    iframe.onload = function() {
-      window.setTimeout(function () {
-        self.close(div);
-      }, ad.timeout * 1000);
-    };
+    if (ad.timeout > 0) {
+      iframe.onload = function() {
+        window.setTimeout(function () {
+          self.close(div);
+        }, ad.timeout * 1000);
+      };
+    }
 
     content.style.width  = size.width + 'px';
     content.style.height = size.height + (size.height === 'auto' ? '' : 'px');
