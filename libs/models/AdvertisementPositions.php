@@ -602,6 +602,10 @@ class AdvertisementPositions
      */
     public function addPositions($positions)
     {
+        if (!is_array($positions)) {
+            return $this;
+        }
+
         foreach ($positions as $data) {
             $data['custom'] = true;
             $this->positions[$data['position']] = $data;
