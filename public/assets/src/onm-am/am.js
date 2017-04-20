@@ -66,7 +66,8 @@
       e.preventDefault();
     }
 
-    document.cookie = '__onm_interstitial=1; expires=' + expires + '; path=/';
+    document.cookie = '__onm_interstitial=' + expires + ';expires=' +
+      expires + ';path=/';
 
     element.remove();
   };
@@ -146,11 +147,6 @@
     item.style.width   = '100%';
     item.style.height  = '100%';
 
-    // Auto-resize on load
-    item.onload = function() {
-      //item.style.height = item.contentWindow.document.body.scrollHeight + 'px';
-    };
-
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
     // Dispatch event when iframe loaded
@@ -180,7 +176,18 @@
       return e.type === 'interstitial';
     });
 
-    if (!this.getCookie('__onm_interstitial') && interstitials.length > 0) {
+    if (interstitials.length === 0) {
+      return;
+    }
+
+    var expires = new Date();
+    var now     = new Date();
+
+    if (this.getCookie('__onm_interstitial')) {
+      expires = new Date(this.getCookie('__onm_interstitial'));
+    }
+
+    if (expires <= now) {
       var ad = this.getAdvertisement(interstitials);
 
       document.getElementsByTagName('body')[0]
@@ -202,7 +209,8 @@
     var slots = document.querySelectorAll('.oat');
 
     // Display normal advertisements
-    slots.forEach(function(slot) {
+    for (var i = 0; i < slots.length; i++) {
+      var slot = slots[i];
       var type = parseInt(slot.getAttribute('data-type'));
       var id   = parseInt(slot.getAttribute('data-id'));
 
@@ -250,17 +258,24 @@
 
       // Remove slot when advertisement with empty content
       item.onload = function() {
-        var content = item.contentWindow.document.body
-          .getElementsByClassName('content')[0];
+        setTimeout(function() {
+          if (!item || !item.contentWindow || !item.contentWindow.document ||
+              !item.contentWindow.document.body) {
+            return;
+          }
 
-        if (content.scrollHeight === 0) {
-          slot.remove();
-        }
+          var content = item.contentWindow.document.body
+            .getElementsByClassName('content')[0];
+
+          if (content.scrollHeight === 0) {
+            slot.remove();
+          }
+        }, 2500);
       };
 
       div.appendChild(item);
       slot.appendChild(div);
-    });
+    }
   };
 
   /**
