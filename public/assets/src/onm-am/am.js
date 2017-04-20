@@ -137,10 +137,11 @@
    *
    * @param {Object}  ad       The advertisement.
    * @param {Integer} position The position where advertisement is rendered.
+   * @param {Integer} index    The slot index in the list of slots.
    *
    * @return {Object} The HTML element.
    */
-  OAM.prototype.createNormal = function(ad, position) {
+  OAM.prototype.createNormal = function(ad, position, index) {
     var item = document.createElement('iframe');
 
     item.className    += 'oat-content';
@@ -150,13 +151,21 @@
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
     // Dispatch event when iframe loaded
-    if (position) {
-      item.onload = function () {
+    item.onload = function () {
+      if (index) {
         var event = document.createEvent('Event');
+        event.item = item;
+        event.initEvent('oat-index-' + index + '-loaded', true, true);
+        window.dispatchEvent(event);
+      }
+
+      if (position) {
+        var event = document.createEvent('Event');
+        event.item = item;
         event.initEvent('oat-' + position + '-loaded', true, true);
         window.dispatchEvent(event);
-      };
-    }
+      }
+    };
 
     return item;
   };
@@ -241,6 +250,7 @@
 
       div.className  += 'oat-container';
       slot.className += ' oat-visible oat-' + type;
+      slot.id         = 'oat-index-' + i;
 
       div.style.width    = size.width + 'px';
       div.style.height   = size.height + (size.height === 'auto' ? '' : 'px');
@@ -254,24 +264,7 @@
         div.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
 
-      var item = self.createNormal(ad, type);
-
-      // Remove slot when advertisement with empty content
-      item.onload = function() {
-        setTimeout(function() {
-          if (!item || !item.contentWindow || !item.contentWindow.document ||
-              !item.contentWindow.document.body) {
-            return;
-          }
-
-          var content = item.contentWindow.document.body
-            .getElementsByClassName('content')[0];
-
-          if (content.scrollHeight === 0) {
-            slot.remove();
-          }
-        }, 2500);
-      };
+      var item = self.createNormal(ad, type, i);
 
       div.appendChild(item);
       slot.appendChild(div);
