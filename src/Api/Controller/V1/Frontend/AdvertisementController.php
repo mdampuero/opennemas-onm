@@ -49,12 +49,15 @@ class AdvertisementController extends Controller
             return !is_null($element);
         });
 
-        $response = new JsonResponse(array_values($advertisements));
+        $instance = $this->get('core.instance');
+        $headers  = array_merge($headers, [
+            'x-cache-for'  => '1d',
+            'x-cacheable'  => true,
+            'x-instance'   => $instance->internal_name,
+            'x-tags'       => $this->getListTags($places, $advertisements, $instance)
+        ]);
 
-        $response->headers
-            ->set('x-tags', $this->getListTags($places, $advertisements));
-
-        return $response;
+        return new JsonResponse(array_values($advertisements), 200, $headers);
     }
 
     /**
@@ -75,29 +78,33 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        $instance = $this->get('core.instance');
+        $headers  = array_merge($headers, [
+            'x-cache-for'  => '1d',
+            'x-cacheable'  => true,
+            'x-instance'   => $instance->internal_name,
+            'x-tags'       => $this->getItemTags($ad, $instance),
+        ]);
+
         if ($ad->with_script == 3) {
-            return new Response($this->renderDFP($ad, $category));
+            return new Response($this->renderDFP($ad, $category), 200, $headers);
         }
 
         if ($ad->with_script == 2) {
-            return new Response($this->renderOpenX($ad, $category));
+            return new Response($this->renderOpenX($ad, $category), 200, $headers);
         }
 
         if ($ad->with_script != 0) {
-            return new Response($this->renderHtml($ad));
+            return new Response($this->renderHtml($ad), 200, $headers);
         }
 
         $img = $this->get('entity_repository')->find('Photo', $ad->img);
 
         if (!empty($img) && strtolower($img->type_img) == 'swf') {
-            return new Response($this->renderFlash($ad, $img));
+            return new Response($this->renderFlash($ad, $img), 200, $headers);
         }
 
-        $response = new Response($this->renderImage($ad, $img));
-
-        $response->headers->set('x-tags', $this->getItemTags($ad));
-
-        return $response;
+        return new Response($this->renderImage($ad, $img), 200, $headers);
     }
 
     /**
@@ -171,12 +178,17 @@ class AdvertisementController extends Controller
      * Returns the list of tags basing on an advertisement.
      *
      * @param Advertisement $advertisement The advertisement object.
+     * @param Instance      $instance      The current instance.
      *
      * @return string The list of tags.
      */
-    protected function getItemTags($advertisement)
+    protected function getItemTags($advertisement, $instance)
     {
-        $tags = [ 'extension-advertisement', 'show' ];
+        $tags = [
+            'instance-' . $instance->internal_name,
+            'extension-advertisement',
+            'show'
+        ];
 
         $tags[] = 'content-' . $advertisement->id;
         $tags[] = 'position-' . $advertisement->type_advertisement;
@@ -187,14 +199,19 @@ class AdvertisementController extends Controller
     /**
      * Returns the list of tags basing on positions and advertisements.
      *
-     * @param array $positions      The list of positions.
-     * @param array $advertisements The list of advertisements.
+     * @param array    $positions      The list of positions.
+     * @param array    $advertisements The list of advertisements.
+     * @param Instance $instance       The current instance.
      *
      * @return string The list of tags.
      */
-    protected function getListTags($positions, $advertisements)
+    protected function getListTags($positions, $advertisements, $instance)
     {
-        $tags = [ 'extension-advertisement', 'list' ];
+        $tags = [
+            'instance-' . $instance->internal_name,
+            'extension-advertisement',
+            'list'
+        ];
 
         foreach ($advertisements as $advertisement) {
             $tags[] = 'content-' . $advertisement->id;
