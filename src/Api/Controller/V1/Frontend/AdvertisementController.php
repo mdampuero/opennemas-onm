@@ -50,12 +50,12 @@ class AdvertisementController extends Controller
         });
 
         $instance = $this->get('core.instance');
-        $headers  = array_merge($headers, [
+        $headers  = [
             'x-cache-for'  => '1d',
             'x-cacheable'  => true,
             'x-instance'   => $instance->internal_name,
             'x-tags'       => $this->getListTags($places, $advertisements, $instance)
-        ]);
+        ];
 
         return new JsonResponse(array_values($advertisements), 200, $headers);
     }
@@ -79,12 +79,12 @@ class AdvertisementController extends Controller
         }
 
         $instance = $this->get('core.instance');
-        $headers  = array_merge($headers, [
+        $headers  = [
             'x-cache-for'  => '1d',
             'x-cacheable'  => true,
             'x-instance'   => $instance->internal_name,
             'x-tags'       => $this->getItemTags($ad, $instance),
-        ]);
+        ];
 
         if ($ad->with_script == 3) {
             return new Response($this->renderDFP($ad, $category), 200, $headers);
