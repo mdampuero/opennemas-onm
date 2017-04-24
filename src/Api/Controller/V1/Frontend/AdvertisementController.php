@@ -394,12 +394,17 @@ class AdvertisementController extends Controller
      */
     protected function renderFlash($ad, $img)
     {
+        $publicId = date('YmdHis', strtotime($ad->created)) .
+            sprintf('%06d', $ad->pk_advertisement);
+
         $params = [
             'width'  => $img->width,
             'height' => $img->height,
             'src'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
                 . $img->path_file . $img->name,
-            'url'    => $ad->url
+            'url'    => $this->get('router')->generate('frontend_ad_redirect', [
+                'id' => $publicId
+            ])
         ];
 
         return $this->get('core.template.admin')
@@ -432,13 +437,19 @@ class AdvertisementController extends Controller
      */
     protected function renderImage($ad, $img)
     {
+        $publicId = date('YmdHis', strtotime($ad->created)) .
+            sprintf('%06d', $ad->pk_advertisement);
+
         $params = [
             'category' => $img->category_name,
             'width'    => $img->width,
             'height'   => $img->height,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $ad->url,
+            'url'      => $this->get('router')
+                ->generate('frontend_ad_redirect', [
+                    'id' => $publicId
+                ]),
         ];
 
         return $this->get('core.template.admin')
