@@ -39,10 +39,24 @@
     };
 
     // Initialize the advertisement manager on load
+    self.addEventListener('load', load);
+  };
+
+  /**
+   * @function addEventListener
+   * @memberOf OAM
+   *
+   * @description
+   *   Adds an event listener.
+   *
+   * @param {Function} callback The funcion to execute.
+   */
+  OAM.prototype.addEventListener = function(name, callback) {
+    // Initialize the advertisement manager on load
     if (window.addEventListener !== undefined) {
-      window.addEventListener('load', load, false);
+      window.addEventListener(name, callback, false);
     } else {
-      window.attachEvent('onload', load);
+      window.attachEvent(name, callback);
     }
   };
 
