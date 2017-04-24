@@ -344,6 +344,10 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheAuthorOpinion(Event $event)
     {
+        if (!$event->hasArgument('authorId')) {
+            return;
+        }
+
         $authorId = $event->getArgument('authorId');
 
         // Delete caches for opinion frontpages and author frontpages
