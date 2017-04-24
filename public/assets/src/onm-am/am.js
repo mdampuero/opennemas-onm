@@ -166,16 +166,22 @@
 
     // Dispatch event when iframe loaded
     item.onload = function () {
-      if (index) {
-        var event = document.createEvent('Event');
-        event.item = item;
+      if (index !== undefined) {
+        var event   = document.createEvent('Event');
+        var content = item.contentWindow.document.body
+          .getElementsByClassName('content')[0];
+
+        event.args = {
+          height: content.scrollHeight,
+          width:  content.scrollWidth,
+        };
+
         event.initEvent('oat-index-' + index + '-loaded', true, true);
         window.dispatchEvent(event);
       }
 
       if (position) {
         var event = document.createEvent('Event');
-        event.item = item;
         event.initEvent('oat-' + position + '-loaded', true, true);
         window.dispatchEvent(event);
       }
@@ -279,6 +285,17 @@
       }
 
       var item = self.createNormal(ad, type, i);
+
+      // Resize container when content loaded
+      var resize = function(e) {
+        var el = window.document.getElementById(e.type.replace('-loaded', ''))
+          .getElementsByClassName('oat-container')[0];
+
+        el.style.height = e.args.height + 'px';
+        el.style.width  = e.args.width + 'px';
+      };
+
+      self.addEventListener('oat-index-' + i + '-loaded', resize);
 
       div.appendChild(item);
       slot.appendChild(div);
