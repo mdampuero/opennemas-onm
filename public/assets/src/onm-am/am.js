@@ -241,7 +241,7 @@
           slot.remove();
         }
 
-        return;
+        continue;
       }
 
       var ad   = self.getAdvertisement(available);
