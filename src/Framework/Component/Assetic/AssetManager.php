@@ -182,9 +182,15 @@ abstract class AssetManager
             return substr($a, 1);
         }, $parsed);
 
-        $target = $this->getTargetPath($assets, $name, true);
+        // Apply CSS rewrite when unifiying
+        $target  = $this->getTargetPath($assets, $name, true);
+        $filters = $this->getFilters($target, [ 'cssrewrite' ]);
+        $fm      = $this->getFilterManager($filters);
 
-        $assets = $factory->createAsset($parsed);
+        $factory->setFilterManager($fm);
+
+        $assets = $factory
+            ->createAsset($parsed, $filters, [ 'output' => $target ]);
         $assets->setTargetPath($target);
 
         $cached = new AssetCache($assets, $cache);

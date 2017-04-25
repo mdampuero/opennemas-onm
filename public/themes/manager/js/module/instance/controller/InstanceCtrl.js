@@ -18,8 +18,8 @@
      *   Handles actions for instance edition form
      */
     .controller('InstanceCtrl', [
-      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder',
-      function ($filter, $location, $routeParams, $scope, $uibModal, http, messenger, oqlEncoder) {
+      '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'cleaner', 'http', 'messenger', 'oqlEncoder',
+      function ($filter, $location, $routeParams, $scope, $uibModal, cleaner, http, messenger, oqlEncoder) {
         /**
          * @memberOf InstanceCtrl
          *
@@ -168,8 +168,8 @@
          *                 Otherwise, return false.
          */
         $scope.areAllSelected = function() {
-          for (var i = 0; i < $scope.selected.plan.length; i++) {
-            if (!$scope.selected.plan[i]) {
+          for (var i = 0; i < $scope.packs.length; i++) {
+            if (!$scope.selected.plan[$scope.packs[i]]) {
               return false;
             }
           }
@@ -225,24 +225,26 @@
         $scope.save = function() {
           $scope.saving = 1;
 
-          http.post('manager_ws_instance_save', { instance: $scope.instance,
-            settings: $scope.settings }).then(function (response) {
-              messenger.post(response.data);
+          http.post('manager_ws_instance_save', {
+            instance: cleaner.clean($scope.instance),
+            settings: $scope.settings
+          }).then(function (response) {
+            messenger.post(response.data);
 
-              if (response.status === 201) {
-                // Add instance to owned instances
-                if (!$scope.security.hasPermission('MASTER') &&
-                    $scope.security.hasPermission('PARTNER')) {
-                  $scope.refreshSecurity();
-                }
-
-                var url = response.headers().location.replace('/managerws', '');
-                $location.path(url);
+            if (response.status === 201) {
+              // Add instance to owned instances
+              if (!$scope.security.hasPermission('MASTER') &&
+                  $scope.security.hasPermission('PARTNER')) {
+                $scope.refreshSecurity();
               }
-            }, function(response) {
-              messenger.post(response.data);
-              $scope.saving = 0;
-            });
+
+              var url = response.headers().location.replace('/managerws', '');
+              $location.path(url);
+            }
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.saving = 0;
+          });
         };
 
         /**
@@ -269,10 +271,10 @@
          */
         $scope.toggleAll = function() {
           if ($scope.selected.all) {
-            for (var i in $scope.selected.plan) {
-              if ($scope.security.canEnable(i)) {
-                $scope.selected.plan[i] = true;
-                $scope.togglePlan(i);
+            for (var i = 0; i < $scope.packs.length; i++) {
+              if ($scope.security.canEnable($scope.packs[i])) {
+                $scope.selected.plan[$scope.packs[i]] = true;
+                $scope.togglePlan($scope.packs[i]);
               }
             }
           } else {
@@ -310,7 +312,11 @@
         $scope.update = function() {
           $scope.saving = 1;
 
-          var data  = { instance: $scope.instance, settings: $scope.settings };
+          var data  = {
+            instance: cleaner.clean($scope.instance),
+            settings: $scope.settings
+          };
+
           var route = {
             name:   'manager_ws_instance_update',
             params: { id: $scope.instance.id }
@@ -325,7 +331,7 @@
           });
         };
 
-        $scope.$watch('instance.activated_modules', function() {
+        $scope.$watch('[packs, instance.activated_modules]', function() {
           var all = true;
 
           // Initializes the selected flags
@@ -333,12 +339,13 @@
             var pack = $scope.packs[i];
 
             $scope.selected.plan[pack] = _.difference($scope.modulesByPack[pack],
-                $scope.instance.activated_modules) == 0;
+                $scope.instance.activated_modules).length === 0;
 
             all = all && $scope.selected.plan[pack];
           }
+
           $scope.selected.all = all;
-        },true);
+        }, true);
 
         // Remove client when instance meta is deleted
         $scope.$watch('instance.client', function(nv) {

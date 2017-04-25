@@ -81,7 +81,7 @@
                     <h5><i class="fa fa-globe"></i> {t}Time Zone{/t}</h5>
                   </dt>
                   <dd>
-                    [% template.timezones[settings.time_zone] %]
+                    [% template.timezones[settings.time_zone] ? template.timezones[settings.time_zone] : settings.time_zone %]
                   </dd>
                 </dl>
               </div>
@@ -300,7 +300,7 @@
                   <i class="fa fa-shopping-cart fa-stack-1x"></i>
                   <i class="fa fa-ban fa-stack-2x"></i>
                 </i>
-                <h3 class="m-b-50">{t}There are no purchases for now.{/t}</h3>
+                <h3 class="m-b-50">{t}There are no purchases for now{/t}</h3>
               </div>
             </div>
             <div class="table-wrapper ng-cloak" ng-if="template.purchases && template.purchases.length > 0">

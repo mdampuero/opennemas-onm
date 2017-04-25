@@ -111,11 +111,13 @@ class HooksSubscriber implements EventSubscriberInterface
             // Instance hooks
             'instance.delete' => [
                 ['removeCacheForInstance', 5],
+                ['removeCountries', 5],
             ],
             'instance.update' => [
                 ['removeCacheForInstance', 5],
                 ['removeSmartyForInstance', 5],
                 ['removeVarnishInstanceCacheUsingInstance', 5],
+                ['removeCountries', 5],
             ],
             'instance.client.update' => [
                 ['removeCacheForInstance', 5],
@@ -586,6 +588,17 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('cache.manager')->getConnection('manager')
             ->remove($instance->domains);
+    }
+
+    /**
+     * Removes the list of countries for manager from cache.
+     *
+     * @param Event $event The event object.
+     */
+    public function removeCountries(Event $event)
+    {
+        $this->container->get('cache.manager')->getConnection('manager')
+            ->removeByPattern('*countries*');
     }
 
     /**

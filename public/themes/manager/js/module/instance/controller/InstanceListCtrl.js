@@ -140,6 +140,33 @@
         };
 
         /**
+         * @function getCountry
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Returns the country given a code.
+         *
+         * @param {String} code The country code.
+         *
+         * @return {Object} The country object.
+         */
+        $scope.getCountry = function(code) {
+          if (!code) {
+            return null;
+          }
+
+          var countries = $scope.extra.countries.filter(function(e) {
+            return e.id === code;
+          });
+
+          if (countries.length === 0) {
+            return '';
+          }
+
+          return countries[0].name;
+        };
+
+        /**
          * @function list
          * @memberOf InstanceListCtrl
          *

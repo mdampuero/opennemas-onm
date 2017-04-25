@@ -249,7 +249,7 @@ class InstanceController extends Controller
             return $converter->responsify($a->getData());
         }, $instances);
 
-        $countries = $this->getCountries();
+        $countries = $this->getCountries(true);
         array_unshift($countries, [ 'id' => null, 'name' => _('All') ]);
 
         return new JsonResponse([
@@ -457,6 +457,9 @@ class InstanceController extends Controller
 
             $em->getDataSet('Settings', 'instance')->set($settings);
 
+            $this->get('core.dispatcher')
+                ->dispatch('instance.update', [ 'instance' => $instance ]);
+
             $msg->add(_('Instance saved successfully'), 'success', 201);
 
             // Add permanent URL for the current instance
@@ -645,16 +648,45 @@ class InstanceController extends Controller
     /**
      * Returns the list fo countries for UI selectors.
      *
+     * @param boolean $inDb Whether to return only countries in database.
+     *
      * @return array The list of countries.
      */
-    protected function getCountries()
+    protected function getCountries($inDb = false)
     {
+        $locale   = $this->get('core.locale')->getLocale();
+        $fromIntl = $this->get('core.geo')->getCountries();
+
+        if (!$inDb) {
+            return array_map(function ($id, $name) {
+                return [ 'id' => $id, 'name' => $name ];
+            }, array_keys($fromIntl), $fromIntl);
+        }
+
+        $conn      = $this->get('orm.manager')->getConnection('manager');
+        $cache     = $this->get('cache.manager')->getConnection('manager');
+        $countries = $cache->get('countries_' . $locale);
+
+        if (!empty($countries)) {
+            return $countries;
+        }
+
+        $fromDb = $conn->fetchAll(
+            'SELECT DISTINCT(country) FROM instances WHERE country IS NOT NULL'
+        );
+
+        $fromDb = array_map(function ($a) {
+            return $a['country'];
+        }, $fromDb);
+
+        $fromIntl  = array_intersect_key($fromIntl, array_flip($fromDb));
         $countries = [];
 
-        foreach ($this->get('core.geo')->getCountries() as $key => $value) {
+        foreach ($fromIntl as $key => $value) {
             $countries[] = [ 'id' => $key, 'name' => $value ];
-
         }
+
+        $cache->set('countries_' . $locale, $countries);
 
         return $countries;
     }

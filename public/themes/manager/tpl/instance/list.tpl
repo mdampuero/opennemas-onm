@@ -181,6 +181,12 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-country" checklist-model="columns.selected" checklist-value="'country'" type="checkbox">
+            <label for="checkbox-country">
+              {t}Country{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'contact_mail'" type="checkbox">
             <label for="checkbox-contact">
               {t}Contact{/t}
@@ -248,14 +254,14 @@
               {t}Albums{/t}
             </label>
           </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
             <label for="checkbox-photos">
               {t}Photos{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
             <label for="checkbox-videos">
@@ -366,6 +372,10 @@
               <th class="pointer" ng-click="sort('domain_expire')" ng-show="isColumnEnabled('domain_expire')">
                 {t}Domain expire{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domain_expire') == 'asc', 'fa fa-caret-down': isOrderedBy('domain_expire') == 'desc'}"></i>
+              </th>
+              <th class="pointer" ng-click="sort('country')" ng-show="isColumnEnabled('country')">
+                {t}Country{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('country') == 'asc', 'fa fa-caret-down': isOrderedBy('country') == 'desc'}"></i>
               </th>
               <th class="pointer" ng-click="sort('contact_email')" ng-show="isColumnEnabled('contact_mail')">
                 {t}Contact{/t}
@@ -482,6 +492,7 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('name')">
+                <i class="flag flag-[% item.country.toLowerCase() %] m-r-5" ng-if="!isColumnEnabled('country')" uib-tooltip="[% getCountry(item.country) %]"></i>
                 [% item.name %]
                 <div class="listing-inline-actions">
                   <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_instance_show', { id: item.id }) %]" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')" title="{t}Edit{/t}">
@@ -510,6 +521,11 @@
               </td>
               <td ng-show="isColumnEnabled('domain_expire')">
                 [% item.domain_expire %]
+              </td>
+              <td ng-show="isColumnEnabled('country')">
+                <i class="flag flag-[% item.country.toLowerCase() %] m-r-5" ng-if="item.country"></i>
+                <span ng-if="item.country">[% getCountry(item.country) %]</span>
+                <i ng-if="!item.country">{t}None{/t}</i>
               </td>
               <td ng-show="isColumnEnabled('contact_mail')">
                 <div class="creator">
