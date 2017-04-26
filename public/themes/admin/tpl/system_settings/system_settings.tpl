@@ -761,6 +761,17 @@
                               </span>
                             </div>
                           </div>
+                          <div class="form-group">
+                            <label class="form-label" for="google_tags_id">
+                              {t}Google Tags container Id{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google_tags_id" name="google_tags_id" type="text" value="{$configs['google_tags_id']|default:""}">
+                              <span class="help">
+                                {t escape=off}You can get your Google <strong>Tags</strong> container Id from <a class="external-link" href="https://tagmanager.google.com/#/home" target="_blank">Google tags sign up website</a>.{/t}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
