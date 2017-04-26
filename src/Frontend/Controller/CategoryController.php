@@ -192,6 +192,7 @@ class CategoryController extends Controller
         $ccm = \ContentCategoryManager::get_instance();
         $cm = new \ContentManager();
         $cacheId = "sync|category|$categoryName|$page";
+
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
             // Get category object
             $category = unserialize(
@@ -220,9 +221,7 @@ class CategoryController extends Controller
             ]);
         }
 
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        $ads                = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
-        $positions          = array_keys($ads);
+        list($positions, $advertisements) = $this->getInnerAds();
 
         return $this->render('blog/blog.tpl', [
             'ads_positions'  => $positions,
