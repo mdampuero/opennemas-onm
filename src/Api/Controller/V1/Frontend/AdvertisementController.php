@@ -420,11 +420,12 @@ class AdvertisementController extends Controller
      */
     protected function renderHtml($ad)
     {
+        $tpl   = '<html><style>%s</style><body><div class="content">%s</div></body>';
         $html  = $ad->script;
         $style = 'body { margin: 0; overflow: hidden; padding: 0; text-align:'
             . ' center; } img { max-width: 100% }';
 
-        return "<html><style>$style</style><body>$html</body>";
+        return sprintf($tpl, $style, $html);
     }
 
     /**
