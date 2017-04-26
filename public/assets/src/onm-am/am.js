@@ -244,15 +244,7 @@
       var id   = parseInt(slot.getAttribute('data-id'));
 
       var available = ads.filter(function(e) {
-        if (id) {
-          return e.id === id;
-        }
-
-        if (e.type !== 'normal' || !self.isVisible(e)) {
-          return false;
-        }
-
-        return e.position.indexOf(type) !== -1;
+        return self.isVisible(e, type, id);
       });
 
       // Remove slot when no advertisement
@@ -484,14 +476,24 @@
    * @memberOf OAM
    *
    * @description
-   *   Checks if an advertisement is visible basing on user and device
+   *   Checks if an advertisement is visible basing on user, slot and device
    *   information.
    *
-   * @param {Object} ad The advertisement object.
+   * @param {Object}  ad   The advertisement object.
+   * @param {Integer} type The advertisement position.
+   * @param {Integer} id   The advertisement id.
    *
    * @return {Boolean} True if the advertisement is visible. False otherwise.
    */
-  OAM.prototype.isVisible = function(ad) {
+  OAM.prototype.isVisible = function(ad, type, id) {
+    if (id && id !== parseInt(ad.id)) {
+      return false;
+    }
+
+    if (ad.position.indexOf(type) === -1) {
+      return false;
+    }
+
     var groups    = [];
     var now       = new Date();
     var endtime   = new Date(ad.endtime);
