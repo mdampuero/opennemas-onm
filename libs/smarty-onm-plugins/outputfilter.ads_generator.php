@@ -40,7 +40,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
                     ->generate('api_v1_advertisements_list')
             ]);
 
-        $output = str_replace('</body>', $content.'</body>', $output);
+        $output = str_replace('</head>', $content . '</head>', $output);
     }
 
     return $output;
