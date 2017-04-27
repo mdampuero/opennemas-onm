@@ -12,13 +12,14 @@
     'mark':     '{t}Advertisement{/t}',
     'skip':     '{t}Skip advertisement{/t}'
   };
-</script>
 
-<script>
   (function() {
+
     var am = document.createElement('script');
-    am.type = 'text/javascript';
-    am.src = '/assets/src/onm-am/am.{{$time}}.js';
+
+    am.type  = 'text/javascript';
+    am.src   = '/assets/src/onm-am/am.{{$time}}.js';
+    am.async = true;
 
     (document.getElementsByTagName('head')[0] ||
         document.getElementsByTagName('body')[0]).appendChild(am);
