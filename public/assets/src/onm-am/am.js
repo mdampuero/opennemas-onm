@@ -283,8 +283,10 @@
         var el = window.document.getElementById(e.type.replace('-loaded', ''))
           .getElementsByClassName('oat-container')[0];
 
-        el.style.height = e.args.height + 'px';
-        el.style.width  = e.args.width + 'px';
+        if (e.args.height > 0 && e.args.width > 0) {
+          el.style.height = e.args.height + 'px';
+          el.style.width  = e.args.width + 'px';
+        }
       };
 
       self.addEventListener('oat-index-' + i + '-loaded', resize);
