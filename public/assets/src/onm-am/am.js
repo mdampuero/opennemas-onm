@@ -280,8 +280,13 @@
 
       // Resize container when content loaded
       var resize = function(e) {
-        var el = window.document.getElementById(e.type.replace('-loaded', ''))
-          .getElementsByClassName('oat-container')[0];
+        var s = window.document.getElementById(e.type.replace('-loaded', ''));
+
+        if (!s) {
+          return;
+        }
+
+        var el = s.getElementsByClassName('oat-container')[0];
 
         if (e.args.height > 0 && e.args.width > 0) {
           el.style.height = e.args.height + 'px';
@@ -289,7 +294,25 @@
         }
       };
 
+      // Remove sloat when no height
+      var remove = function(e) {
+        if (e.args.height === 0) {
+          var s = window.document.getElementById(e.type.replace('-loaded', ''));
+
+          if (!s) {
+            return;
+          }
+
+          s.remove();
+        }
+      };
+
       self.addEventListener('oat-index-' + i + '-loaded', resize);
+
+      // Remove DFP slots when empty
+      if (ad.format === 'DFP') {
+        self.addEventListener('oat-index-' + i + '-loaded', remove);
+      }
 
       div.appendChild(item);
       slot.appendChild(div);
