@@ -175,6 +175,33 @@ class AdvertisementController extends Controller
     }
 
     /**
+     * Returns the current advertisement format.
+     *
+     * @param Advertisement $advertisement The advertisement object.
+     *
+     * @return string The current advertisement format.
+     */
+    protected function getFormat($advertisement)
+    {
+        if ((int) $advertisement->with_script === 0) {
+            return 'image';
+        }
+
+        if ((int) $advertisement->with_script === 2) {
+            return 'OpenX';
+        }
+
+        if ((int) $advertisement->with_script === 3
+            || ((int) $advertisement->with_script === 1
+                && preg_match('/googletag\.defineSlot/', $advertisement->script))
+        ) {
+            return 'DFP';
+        }
+
+        return 'html';
+    }
+
+    /**
      * Returns the list of tags basing on an advertisement.
      *
      * @param Advertisement $advertisement The advertisement object.
@@ -298,7 +325,7 @@ class AdvertisementController extends Controller
         $object->timeout     = (int) $element->timeout;
         $object->starttime   = $element->starttime;
         $object->endtime     = $element->endtime;
-        $object->format      = ($element->with_script == 1) ? 'html' : 'image';
+        $object->format      = $this->getFormat($element);
         $object->devices     = $element->params['devices'];
         $object->user_groups = $element->params['user_groups'];
         $object->sizes       = $this->normalizeSizes($element->params);
