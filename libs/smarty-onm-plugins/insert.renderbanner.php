@@ -7,5 +7,5 @@
  */
 function smarty_insert_renderbanner($params, $smarty)
 {
-    return sprintf('<div class="oat" data-type="%s"></div>', $params['type']);
+    return sprintf('<div class="ad-slot oat" data-type="%s"></div>', $params['type']);
 }
