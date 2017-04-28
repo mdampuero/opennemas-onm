@@ -294,7 +294,7 @@
         }
       };
 
-      // Remove sloat when no height
+      // Remove slot when no height
       var remove = function(e) {
         if (e.args.height === 0) {
           var s = window.document.getElementById(e.type.replace('-loaded', ''));
