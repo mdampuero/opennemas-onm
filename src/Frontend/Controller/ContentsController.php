@@ -63,7 +63,8 @@ class ContentsController extends Controller
             $this->view->assign('photoInt', $photoInt);
         }
 
-        $cacheID = $this->view->generateCacheId($content->content_type_name, null, $contentID);
+        // Setup templating cache layer
+        $cacheID = $this->view->getCacheId('content', $contentID, 'print');
 
         return $this->render(
             'article/article_printer.tpl',
@@ -103,7 +104,6 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
-        $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         // Fetch content
         $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
@@ -113,6 +113,9 @@ class ContentsController extends Controller
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
         }
+
+        // Setup templating cache layer
+        $cacheID = $this->view->getCacheId('sync', 'content', $contentID, 'print');
 
         return $this->render(
             'article/article_printer.tpl',
