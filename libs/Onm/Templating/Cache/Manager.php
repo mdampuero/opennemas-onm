@@ -61,6 +61,8 @@ class Manager
         $this->smarty = $smarty;
 
         $this->cacheDir = $this->smarty->cache_dir;
+
+        return $this;
     }
 
     /**
