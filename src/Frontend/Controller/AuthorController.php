@@ -35,7 +35,8 @@ class AuthorController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
-        $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
+        // Setup templating cache layer
+        $cacheID = $this->view->getCacheId('frontpage', 'author', $slug, $page);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
@@ -118,7 +119,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Shows the author frontpage from external source.
+     * Redirects to the author frontpage in the external site.
      *
      * @param Request $request The request object.
      *
@@ -159,7 +160,8 @@ class AuthorController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 16;
 
-        $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
+        // Setup templating cache layer
+        $cacheID = $this->view->getCacheId('frontpage', 'authors', $page);
 
         if ($this->view->getCaching() === 0
            || !$this->view->isCached('user/frontpage_author.tpl', $cacheID)
@@ -173,15 +175,6 @@ class AuthorController extends Controller
 
             $total   = count($authors);
             $authors = array_slice($authors, ($page - 1) * $itemsPerPage, $itemsPerPage);
-
-            // Build the pagination
-            $pagination = $this->get('paginator')->get([
-                'directional' => true,
-                'epp'         => $itemsPerPage,
-                'page'        => $page,
-                'total'       => $total,
-                'route'       => 'frontend_frontpage_authors'
-            ]);
 
             $ids = array_map(function ($a) {
                 return $a['id'];
@@ -209,6 +202,15 @@ class AuthorController extends Controller
                     );
                 }
             }
+
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $total,
+                'route'       => 'frontend_frontpage_authors'
+            ]);
 
             $this->view->assign([
                 'authors_contents' => $authors,
