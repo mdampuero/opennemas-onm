@@ -40,7 +40,6 @@ class PollsController extends Controller
 
         $request = $this->get('request_stack')->getCurrentRequest();
         $this->categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $this->page         = $request->query->getDigits('page', 1);
 
         if (!empty($this->categoryName)) {
             $this->ccm = new \ContentCategoryManager();
@@ -72,16 +71,18 @@ class PollsController extends Controller
      *
      * @return Response the response object
      **/
-    public function frontpageAction()
+    public function frontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('POLL_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $this->view->setConfig('poll-frontpage');
+        $this->page = $request->query->getDigits('page', 1);
 
-        // Don't execute action logic if was cached before
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
+        // Setup templating cache layer
+        $this->view->setConfig('poll-frontpage');
+        $cacheID = $this->view->getCacheId('frontpage', 'poll', $this->page);
+
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
@@ -154,7 +155,6 @@ class PollsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->page = $request->query->getDigits('page', 1);
         $dirtyID    = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         $urlSlug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
@@ -165,8 +165,10 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        // Setup templating cache layer
         $this->view->setConfig('poll-inner');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $poll->id);
+        $cacheID = $this->view->getCacheId('content', $poll->id);
+
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
@@ -186,7 +188,7 @@ class PollsController extends Controller
         }
 
         $cookieName = "poll-".$poll->id;
-        $cookie = $request->cookies->get($cookieName);
+        $cookie     = $request->cookies->get($cookieName);
 
         $message = null;
         $alreadyVoted = false;
@@ -261,8 +263,6 @@ class PollsController extends Controller
             $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
 
             // Clear all caches
-            $this->cleanCache($poll->category_name, $pollID);
-            $this->cleanCache('home', $pollID);
             dispatchEventWithParams('content.update', array('content' => $poll));
         } elseif (empty($answer)) {
             $valid = 0;
@@ -297,30 +297,5 @@ class PollsController extends Controller
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
 
         return [ $positions, $advertisements ];
-    }
-
-    /**
-     * Clean the cache for a given poll
-     *
-     * @param string $categoryName the category where the clean has to be done
-     * @param int $pollID the poll id where the clean has to be done
-     *
-     * @return void
-     **/
-    protected function cleanCache($categoryName, $pollID)
-    {
-
-        // TODO: remove cache cleaning actions
-        $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty($this->get('core.template'));
-
-        $cacheID      = $this->view->generateCacheId($categoryName, '', $pollID);
-        $cacheManager->delete($cacheID, 'poll.tpl');
-
-        $cacheID      = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
-        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
-
-        $cacheID      = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
-        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
     }
 }
