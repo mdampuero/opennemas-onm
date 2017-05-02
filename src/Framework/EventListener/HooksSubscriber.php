@@ -233,8 +233,8 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->cacheHandler->delete('user-' . $authorId);
 
         // Delete caches for all author opinions and frontpages
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
+        $view = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
 
         // Get the list articles for this author
         $cm = new \ContentManager();
@@ -246,14 +246,12 @@ class HooksSubscriber implements EventSubscriberInterface
 
         if (!empty($opinions)) {
             foreach ($opinions as &$opinion) {
-                $cacheManager->delete('opinion|'.$opinion['id']);
+                $cacheManager->deleteGroup($view->getCacheId('content', $opinion->pk_content));
             }
         }
-        // Delete opinions frontpage caches
-        $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
-
-        // Delete author frontpages caches
-        $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+        // Delete frontpage caches
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'opinion'));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'opinion', sprintf('%06d', $authorId)));
 
         $this->cleanOpcode();
     }
@@ -333,8 +331,10 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheAll()
     {
         // Initialization of the frontend template object
-        $frontpageTemplate = $this->container->get('view')->getTemplate();
-        $frontpageTemplate->clearAllCache();
+        $view         = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
+
+        $cacheManager->deleteAll();
     }
 
     /**
@@ -350,13 +350,12 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $authorId = $event->getArgument('authorId');
 
-        // Delete caches for opinion frontpages and author frontpages
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
+        $view         = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
 
-        $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
-        $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
-        $cacheManager->delete('blog', 'blog_frontpage.tpl');
+        // Delete caches for opinion frontpage and author frontpages
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'opinion', sprintf('%06d', $authorId)));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'blog', sprintf('%06d', $authorId)));
 
         $this->cleanOpcode();
     }
@@ -368,19 +367,23 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheCategories(Event $event)
     {
-        $category = $event->getArgument('category');
+        if (!$event->hasArgument('category')) {
+            return;
+        }
 
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
+        $category     = $event->getArgument('category');
 
-        // Delete smarty cache for RSS frontpage of category
-        $cacheManager->delete($category->name.'|RSS');
-        // Delete smarty cache for blog frontpage of category
-        $cacheManager->delete('category|'.$category->name.'|1');
-        // Delete smarty cache for manual frontpage of category
-        $cacheManager->delete('frontpage|'.$category->name);
+        $view         = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
+
+        // Delete smarty cache for frontpage RSS, manual frontpage
+        // and blog frontpage frontpage of category
+        $cacheManager->deleteGroup($view->getCacheId('rss', $category->name));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', $category->name));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'category', $category->name));
+
         // Delete object cache
-        $this->cacheHandler->delete('category-' . $category->id);
+        $this->cacheHandler->deleteGroup('category-' . $category->id);
     }
 
     /**
@@ -390,51 +393,36 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheForContent(Event $event)
     {
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
+        if (!$event->hasArgument('content')) {
+            return;
+        }
 
         $content = $event->getArgument('content');
 
-        if (property_exists($content, 'pk_article')) {
-            $cacheManager->delete(
-                preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->pk_article
-            );
+        $view         = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
+
+        // Clean cache for the content
+        $cacheManager->deleteGroup($view->getCacheId('content', $content->pk_content));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', $content->content_type_name));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'category', $content->category_name));
+        $cacheManager->deleteGroup($view->getCacheId('rss', $content->content_type_name));
+        $cacheManager->deleteGroup($view->getCacheId('archive', date('%y%m%d')));
+
+        if ($content->content_type_name == 'article') {
+            // Deleting rss cache files
+            $cacheManager->deleteGroup($view->getCacheId('rss', 'frontpage', 'home'));
+            $cacheManager->deleteGroup($view->getCacheId('rss', 'last'));
+            $cacheManager->deleteGroup($view->getCacheId('rss', 'fia'));
+            $cacheManager->deleteGroup($view->getCacheId('rss', $content->category_name));
 
             // Deleting frontpage cache files
-            $cacheManager->delete('frontpage|home');
-            $cacheManager->delete('home|RSS');
-            $cacheManager->delete('last|RSS');
-            $cacheManager->delete('instantArticles|RSS');
-            $cacheManager->delete(
-                'blog|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
-            );
-            $cacheManager->delete(
-                'frontpage|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
-            );
-            $cacheManager->delete(
-                'category|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
-            );
-            $cacheManager->delete(
-                preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|RSS'
-            );
-
-            $this->cleanOpcode();
-        } elseif (property_exists($content, 'pk_opinion')) {
-            $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
-            $cacheManager->delete('blog', 'blog_frontpage.tpl');
-        } elseif (property_exists($content, 'pk_video')) {
-            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->id);
-            $cacheManager->delete('home|1');
-            $cacheManager->delete('videos|RSS');
-        } elseif (property_exists($content, 'pk_album')) {
-            $cacheManager->delete('albums|RSS');
-            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->id);
-            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|1');
-            $cacheManager->delete('home|1');
-        } elseif (property_exists($content, 'pk_letter')) {
-            $cacheManager->delete('letterinner|'.$content->id);
-            $cacheManager->delete('letterfrontpage|1');
+            $cacheManager->deleteGroup($view->getCacheId('frontpage', 'home'));
+        } elseif ($content->content_type_name == 'opinion') {
+            $cacheManager->deleteGroup($view->getCacheId('frontpage', 'blog'));
         }
+
+        $this->cleanOpcode();
     }
 
     /**
@@ -444,11 +432,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheForFrontpageOfCategory(Event $event)
     {
-        $instance = $this->container->get('core.instance');
-
-        // Clean smarty cache
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
+        $view         = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
 
         $category = $event->getArgument('category');
 
@@ -459,19 +444,17 @@ class HooksSubscriber implements EventSubscriberInterface
                 $categoryName = 'home';
             } elseif ($category == 'opinion') {
                 $categoryName = 'opinion';
-                $cacheManager->delete($categoryName, 'opinion_frontpage.tpl');
+                $cacheManager->deleteGroup('frontpage', 'opinion');
             } else {
                 $categoryName = $ccm->getName($category);
             }
 
-            $categoryName = preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName);
-            $categoryName = preg_replace('@-@', '', $categoryName);
+            $cacheManager->deleteGroup($view->getCacheId('rss', 'frontpage', 'home'));
+            $cacheManager->deleteGroup($view->getCacheId('rss', 'last'));
+            $cacheManager->deleteGroup($view->getCacheId('rss', 'fia'));
+            $cacheManager->deleteGroup($view->getCacheId('rss', $category));
 
-            $cacheManager->delete($categoryName . '|RSS');
-            $cacheManager->delete($categoryName . '|RSS|frontpage');
-            $cacheManager->delete('last|RSS');
-
-            $cacheManager->delete('frontpage|' . $categoryName);
+            $cacheManager->deleteGroup($view->getCacheId('frontpage', $category));
 
             $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
@@ -487,8 +470,9 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeSmartyCacheGlobalCss(Event $event)
     {
         $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('view')->getTemplate());
-        $cacheManager->delete('css|global');
+        $view         = $this->container->get('view')->getTemplate()->setSmarty($view);
+
+        $cacheManager->deleteGroup($view->getCacheId('css', 'global'));
     }
 
     /**
@@ -498,25 +482,43 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheOpinion(Event $event)
     {
-        $authorId = $event->getArgument('authorId');
+        $authorId   = $event->getArgument('authorId');
         $authorSlug = $event->getArgument('authorSlug');
-        $opinionId = $event->getArgument('opinionId');
+        $opinionId  = $event->getArgument('opinionId');
 
-        // Delete caches for opinion inner, opinion frontpages and author frontpages
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty($this->container->get('core.template'));
+        $view         = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
 
-        $authorSlug = preg_replace('/[^a-zA-Z0-9\s]+/', '', $authorSlug);
+        $cacheManager->deleteGroup($view->getCacheId('content', $opinionId));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'blog'));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'opinion'));
 
-        $cacheManager->delete('blog|'.$opinionId);
-        $cacheManager->delete('blog', 'blog_frontpage.tpl');
-        $cacheManager->delete($authorSlug, 'blog_author_index.tpl');
-
-        $cacheManager->delete('opinion|'.$opinionId);
-        $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
-        $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+        // TODO check this condition not sure if this works as expected
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'blog', sprintf('%06d', $authorId)));
+        $cacheManager->deleteGroup($view->getCacheId('frontpage', 'opinion', sprintf('%06d', $authorId)));
 
         $this->cleanOpcode();
+    }
+
+    /**
+     * Removes the Smarty cache for an instance.
+     *
+     * @param Event $event The event object.
+     */
+    public function removeSmartyForInstance(Event $event)
+    {
+        if (!$event->hasArgument('instance')) {
+            return false;
+        }
+
+        $instance = $event->getArgument('instance');
+
+        // Setup cache manager fro the target instance
+        $view = $this->container->get('core.template');
+        $view->addInstance($instance);
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
+
+        $cacheManager->deleteAll();
     }
 
     /**
@@ -639,20 +641,5 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $this->container->get('cache.manager')->getConnection('manager')
             ->removeByPattern('*countries*');
-    }
-
-    /**
-     * Removes the Smarty cache for an instance.
-     *
-     * @param Event $event The event object.
-     */
-    public function removeSmartyForInstance(Event $event)
-    {
-        $instance = $event->getArgument('instance');
-
-        $tpl = $this->container->get('core.template');
-        $tpl->addInstance($instance);
-
-        $tpl->clearAllCache();
     }
 }
