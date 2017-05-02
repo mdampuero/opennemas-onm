@@ -80,20 +80,20 @@ class ErrorController extends Controller
                     list($positions, $advertisements) =
                         \Frontend\Controller\ArticlesController::getAds();
 
-                    // Load config
+                    // Setup templating cache layer
                     $this->view->setConfig('articles');
+                    $cacheID = $this->view->getCacheId('error', 404);
 
-                    $cacheID = $this->view->generateCacheId('error', null, 404);
                     $content = $this->renderView(
                         'static_pages/404.tpl',
                         [
+                            'ads_positions'      => $positions,
+                            'advertisements'     => $advertisements,
                             'cache_id'           => $cacheID,
                             'category_real_name' => $page->title,
                             'page'               => $page,
-                            'advertisements'     => $advertisements,
-                            'ads_positions'      => $positions,
+                            'x-cache-for'        => '+1 day',
                             'x-tags'             => 'not-found',
-                            'x-cache-for'        => '+1 day'
                         ]
                     );
                 }
@@ -118,13 +118,13 @@ class ErrorController extends Controller
                 $content = $this->renderView(
                     'static_pages/statics.tpl',
                     [
+                        'backtrace'          => $error->getTrace(),
                         'category_real_name' => $page->title,
-                        'page'               => $page,
-                        'error_message'      => $errorMessage,
+                        'environment'        => $environment,
                         'error'              => $error,
                         'error_id'           => $errorID,
-                        'environment'        => $environment,
-                        'backtrace'          => $error->getTrace(),
+                        'error_message'      => $errorMessage,
+                        'page'               => $page,
                     ]
                 );
 
