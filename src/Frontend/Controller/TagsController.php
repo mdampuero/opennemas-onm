@@ -44,12 +44,13 @@ class TagsController extends Controller
             $page = 2;
         }
 
-        // Load config
+        // Setup templating cache layer
         $this->view->setConfig('frontpages');
+        $cacheID = $this->view->getCacheId('tag', $tagName, $page);
 
-        $cacheId = "tag|$tagName|$page";
-
-        if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
+        ) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
             $itemsPerPage = $this->get('setting_repository')->get('items_in_blog');
             if (empty($itemsPerPage)) {
