@@ -41,7 +41,7 @@ class StaticPagesController extends Controller
         $slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
 
         $content = getService('entity_repository')->findOneBy([
-            'slug' => [[ 'value' => $slug ]],
+            'slug'              => [[ 'value' => $slug ]],
             'content_type_name' => [[ 'value' => 'static_page' ]]
         ]);
 
@@ -49,6 +49,10 @@ class StaticPagesController extends Controller
         if (is_null($content) || (!$content->content_status)) {
             throw new ResourceNotFoundException();
         }
+
+        // Setup templating cache layer
+        $this->view->setConfig('article-inner');
+        $cacheID = $this->view->getCacheId('content', $content->id);
 
         list($positions, $advertisements) = $this->getAds();
 
@@ -60,6 +64,7 @@ class StaticPagesController extends Controller
             'content'            => $content,
             'content_id'         => $content->id,
             'page'               => $content,
+            'cache_id'           => $cacheID,
             'x-tags'             => 'static-page,'.$content->id,
         ]);
     }
