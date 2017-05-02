@@ -55,6 +55,7 @@ class AmpController extends Controller
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $actualCategoryId = $this->ccm->get_id($categoryName);
 
         $this->ccm  = \ContentCategoryManager::get_instance();
 
@@ -75,18 +76,13 @@ class AmpController extends Controller
             newrelic_disable_autorum();
         }
 
-        // Load config
-        $this->view->setConfig('articles');
-
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($article);
 
-        // Advertisements for single article NO CACHE
-        $actualCategoryId = $this->ccm->get_id($categoryName);
-        $ads = $this->getAds($actualCategoryId);
-        $this->view->assign('advertisements', $ads);
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('content', $article->id, 'amp');
 
-        $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
         if ($this->view->getCaching() === 0
             || !$this->view->isCached("amp/article.tpl", $cacheID)
         ) {
@@ -199,9 +195,12 @@ class AmpController extends Controller
             }
         }
 
+        $advertisements = $this->getAds($actualCategoryId);
+
         return $this->render(
             "amp/article.tpl",
             [
+                'advertisements'  => $advertisements,
                 'contentId'       => $article->id,
                 'category_name'   => $categoryName,
                 'article'         => $article,
