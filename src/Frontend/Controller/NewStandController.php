@@ -35,8 +35,6 @@ class NewStandController extends Controller
      **/
     public function init()
     {
-        $this->view->setConfig('kiosko');
-
         $this->cm = new \ContentManager();
 
         // Esta variable no se utiliza?¿ Ni tp viene por .htaccess
@@ -61,22 +59,27 @@ class NewStandController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        // Avoid to run the entire app logic if is available a cache for this page
-        $configurations = s::get('kiosko_settings');
-        $month = $request->query->getDigits('month', date('n'));
-        $year  = $request->query->getDigits('year', date('Y'));
+        $month     = $request->query->getDigits('month', date('m'));
+        $year      = $request->query->getDigits('year', date('Y'));
+        $day       = $request->query->getDigits('day', 1);
 
-        $order = $configurations['orderFrontpage'];
-        if ($order =='grouped') {
-            $cache_date = $year.$month;
-            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
-            $kiosko =array();
-            if (($this->view->getCaching() === 0)
-                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
-            ) {
-                $ccm = \ContentCategoryManager::get_instance();
+        // Get settings for frontpage rendering
+        $configurations = s::get('kiosko_settings');
+        $order          = $configurations['orderFrontpage'];
+
+        $kiosko         = [];
+
+        // Setup templating cache layer
+        $this->view->setConfig('kiosko');
+        $cacheID = $this->view->getCacheId('frontend', 'kiosko', $this->category_name, $order.$year.$month.$day);
+
+        if (($this->view->getCaching() === 0)
+            || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
+        ) {
+            if ($order =='grouped') {
+                $ccm         = \ContentCategoryManager::get_instance();
                 $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
-                $category = $ccm->get_id($this->category_name);
+                $category    = $ccm->get_id($this->category_name);
 
                 list($allcategorys, $subcat, $categoryData)
                     = $ccm->getArraysMenu($category, $contentType);
@@ -102,22 +105,14 @@ class NewStandController extends Controller
                         "ORDER BY `kioskos`.date DESC  {$limit}"
                     );
                     if (!empty($portadas)) {
-                        $kiosko[] = array (
+                        $kioskos[] = array (
                             'category' => $theCategory->title,
                             'portadas' => $portadas
                         );
                     }
                 }
-            }
-        } elseif ($order =='sections') {
-            $day        = $request->query->getDigits('day', 1);
-            $cache_date = $year.$month.$day;
-            $cacheID    = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
-            $kiosko     = array();
-            if (($this->view->getCaching() === 0)
-                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
-            ) {
-                $date = "$year-$month-$day";
+            } elseif ($order =='sections') {
+                $date     = "$year-$month-$day";
                 $portadas = $this->cm->findAll(
                     'Kiosko',
                     ' `contents`.`content_status`=1 AND  `kioskos`.date ="'.$date.'"',
@@ -125,21 +120,14 @@ class NewStandController extends Controller
                 );
 
                 if (!empty($portadas)) {
-                    $kiosko[] = array (
+                    $kioskos[] = array (
                         'portadas' => $portadas
                     );
                 }
-            }
-        } else {
-            $cacheDate = $year.$month;
-            $cacheID   = $this->view->generateCacheId('newsstand', $this->category_name, $cacheDate);
-            $kiosko    = array();
-            if (($this->view->getCaching() === 0)
-                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
-            ) {
-                $ccm = \ContentCategoryManager::get_instance();
+            } else {
+                $ccm         = \ContentCategoryManager::get_instance();
                 $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
-                $category = $ccm->get_id($this->category_name);
+                $category    = $ccm->get_id($this->category_name);
                 list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
                 foreach ($allcategorys as $theCategory) {
@@ -152,15 +140,18 @@ class NewStandController extends Controller
                         'ORDER BY `kioskos`.date DESC '
                     );
                     if (!empty($portadas)) {
-                        $kiosko[] = array (
+                        $kioskos[] = array (
                             'category' => $theCategory->title,
                             'portadas' => $portadas
                         );
                     }
                 }
             }
+
+            $this->view->assign('kiosko', $kioskos);
         }
 
+        // TODO: not used anymore, now tempaltes use the EpaperDates widget
         $this->widgetNewsstandDates();
 
         list($positions, $advertisements) = $this->getAds();
@@ -176,7 +167,6 @@ class NewStandController extends Controller
             'year'           => $year,
             'month'          => $month,
             'order'          => $order,
-            'kiosko'         => $kiosko,
             'x-tags'         => 'newsstand-frontpage'
         ]);
     }
@@ -192,32 +182,35 @@ class NewStandController extends Controller
     {
         $dirtyID = $request->query->getDigits('id', null);
 
-        $epaper = $this->get('content_url_matcher')
+        $content = $this->get('content_url_matcher')
             ->matchContentUrl('kiosko', $dirtyID, null, $this->category_name);
 
-        if (empty($epaper)) {
+        if (empty($content)) {
             throw new ResourceNotFoundException();
         }
 
-        $cacheID = $this->view->generateCacheId('newsstand', null, $epaper->id);
+        // Setup templating cache layer
+        $this->view->setConfig('kiosko');
+        $cacheID = $this->view->getCacheId('content', $content->id);
+
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
         ) {
-            $format_date = strtotime($epaper->date);
-            $month       = date('m', $format_date);
-            $year        = date('Y', $format_date);
+            $date  = strtotime($content->date);
+            $month = date('m', $date);
+            $year  = date('Y', $date);
 
-            $portadas = $this->cm->find_by_category(
+            $kioskos = $this->cm->find_by_category(
                 'Kiosko',
-                $epaper->category,
+                $content->category,
                 ' `contents`.`content_status`=1   ',
                 'ORDER BY `kioskos`.date DESC  LIMIT 4'
             );
-            $kiosko =array();
-            if (!empty($portadas)) {
+            $otherKioskos = [];
+            if (!empty($kioskos)) {
                 $kiosko[] = array (
                     'category' => '',
-                    'portadas' => $portadas
+                    'portadas' => $kioskos
                 );
             }
             $this->view->assign(
@@ -225,11 +218,12 @@ class NewStandController extends Controller
                     'date'           => '1-'.$month.'-'.$year,
                     'MONTH'          => $month,
                     'YEAR'           => $year,
-                    'kiosko'         => $kiosko
+                    'kiosko'         => $otherKioskos
                 ]
             );
         }
 
+        // TODO: not used anymore, now tempaltes use the EpaperDates widget
         $this->widgetNewsstandDates();
 
         list($positions, $advertisements) = $this->getAds();
@@ -237,11 +231,11 @@ class NewStandController extends Controller
         return $this->render('newsstand/newsstand.tpl', [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
-            'epaper'         => $epaper,
-            'content'        => $epaper,
+            'epaper'         => $content,
+            'content'        => $content,
             'cache_id'       => $cacheID,
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-            'x-tags'         => 'newsstand,'.$epaper->id,
+            'x-tags'         => 'newsstand,'.$content->pk_content,
         ]);
     }
 
