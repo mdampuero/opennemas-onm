@@ -239,9 +239,9 @@ class AssetController extends Controller
      **/
     public function globalCssAction(Request $request)
     {
+        // Setup templating cache layer
         $this->view->setConfig('frontpages');
-
-        $cacheID = 'css|global';
+        $cacheID = $this->view->getCacheId('css', 'global');
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
@@ -289,11 +289,16 @@ class AssetController extends Controller
             ]);
         }
 
-        $coreCss   = $this->get('core.template.admin')
-            ->fetch('css/global.tpl');
-        $customCss = $this->renderView('base/custom_css.tpl');
+        $coreCss   = $this->get('core.template.admin')->fetch('css/global.tpl');
 
-        return new Response($coreCss . ' ' . $customCss, 200, [
+        $customCss = $this->renderView(
+            'base/custom_css.tpl',
+            [ 'cache_id' => $cacheID ]
+        );
+
+        $contents = $coreCss . PHP_EOL . $customCss;
+
+        return new Response($contents, 200, [
             'Content-Type' => 'text/css',
             'x-instance'   => $this->get('core.instance')->internal_name,
             'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',
