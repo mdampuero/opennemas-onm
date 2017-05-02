@@ -29,7 +29,9 @@ class RssController extends Controller
      */
     public function indexAction()
     {
-        $cacheID = $this->view->generateCacheId('Index', '', "RSS");
+        // Setup templating cache layer
+        $this->view->setConfig('rss');
+        $cacheID = $this->view->getCacheId('rss', 'index');
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
@@ -47,7 +49,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/index.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss' ]
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,index' ]
         );
     }
 
@@ -62,16 +64,17 @@ class RssController extends Controller
     {
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
+        // Setup templating cache layer
         $this->view->setConfig('rss');
-
-        $id       = 0;
-        $cm       = new \ContentManager;
-        $cacheID  = $this->view->generateCacheId($categoryName, '', 'RSS|frontpage');
-        $rssTitle = _('Homepage News');
+        $cacheID  = $this->view->getCacheId('rss', 'frontpage', $categoryName);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
+            $id       = 0;
+            $cm       = new \ContentManager;
+            $rssTitle = _('Homepage News');
+
             if (!empty($categoryName) && $categoryName !== 'home') {
                 $category = getService('category_repository')->findOneBy(
                     [ 'name' => [[ 'value' => $categoryName ]] ],
@@ -109,7 +112,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss' ],
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,frontpage-'.$categoryName ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
     }
@@ -125,7 +128,6 @@ class RssController extends Controller
     {
         $type     = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $cacheID  = $this->view->generateCacheId($type, '', 'RSS|' . $category);
         $titles   = [
             'album'   => _('Latest Albums'),
             'article' => _('Latest News'),
@@ -137,7 +139,9 @@ class RssController extends Controller
             $category = null;
         }
 
+        // Setup templating cache layer
         $this->view->setConfig('rss');
+        $cacheID  = $this->view->getCacheId('rss', $type, $category);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
@@ -167,7 +171,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss' ],
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,'.$type.','.$category ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
     }
@@ -183,12 +187,13 @@ class RssController extends Controller
     {
         $slug    = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
         $total   = 10;
-        $cacheId = $this->view->generateCacheId('rss|author', '', $slug);
 
+        // Setup templating cache layer
         $this->view->setConfig('rss');
+        $cacheID  = $this->view->getCacheId('rss', 'author', $slug);
 
         if (($this->view->getCaching() === 0)
-           || (!$this->view->isCached('rss/rss.tpl', $cacheId))
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Get user by slug
             $user = $this->get('user_repository')->findOneBy(
@@ -232,7 +237,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            [ 'cache_id' => $cacheId, 'x-tags' => 'rss' ],
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,author-'.$slug ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
     }
@@ -250,12 +255,10 @@ class RssController extends Controller
             //throw new ResourceNotFoundException();
         //}
 
+        // Setup templating cache layer
         $this->view->setConfig('rss');
+        $cacheID = $this->view->getCacheId('rss', 'fia');
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
-        $cacheID = $this->view->generateCacheId('instantArticles', '', 'RSS');
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/fb_instant_articles.tpl', $cacheID))
         ) {
@@ -322,11 +325,27 @@ class RssController extends Controller
             $this->view->assign('contents', $contents);
         }
 
+        $this->view->assign('advertisements', $this->getAds());
+
         return $this->render(
             'rss/fb_instant_articles.tpl',
             [ 'cache_id' => $cacheID, 'x-tags' => 'rss,instant-articles' ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
+    }
+
+    /**
+     * Fetches advertisements for Instant article.
+     *
+     * @param string category The category identifier.
+     *
+     * @return array The list of advertisements for this page.
+     */
+    public static function getAds($category = 'home')
+    {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
+        return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
     }
 
     /**
@@ -371,20 +390,6 @@ class RssController extends Controller
         $contents = $em->findBy($filters, $order, $total, 1);
 
         return $contents;
-    }
-
-    /**
-     * Fetches advertisements for Instant article.
-     *
-     * @param string category The category identifier.
-     *
-     * @return array The list of advertisements for this page.
-     */
-    public static function getAds($category = 'home')
-    {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
-
-        return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
     }
 
     /**
