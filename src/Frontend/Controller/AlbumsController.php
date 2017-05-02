@@ -89,11 +89,10 @@ class AlbumsController extends Controller
      */
     public function frontpageAction()
     {
-        // Setup caching system
+        // Setup templating cache layer
         $this->view->setConfig('gallery-frontpage');
+        $cacheID = $this->view->getCacheId('frontpage', 'album', $this->page);
 
-        // Don't execute the action logic if was cached before
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
@@ -165,9 +164,10 @@ class AlbumsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->page = $request->query->getDigits('page', 1);
-        $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $urlSlug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $this->page   = $request->query->getDigits('page', 1);
+        $dirtyID      = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
+        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $itemsPerPage = 8; // Items_page refers to the widget
 
         $album = $this->get('content_url_matcher')
             ->matchContentUrl('album', $dirtyID, $urlSlug, $this->categoryName);
@@ -176,15 +176,13 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->view->setConfig('gallery-inner');
-
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($album);
 
-        // Items_page refers to the widget
-        $itemsPerPage = 8;
+        // Setup templating cache layer
+        $this->view->setConfig('gallery-inner');
+        $cacheID = $this->view->getCacheId('content', $album->id);
 
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $album->id);
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
@@ -195,8 +193,9 @@ class AlbumsController extends Controller
 
             $otherAlbums = $this->cm->findAll(
                 'Album',
-                'content_status=1 AND pk_content !='.$album->id.' AND `contents_categories`.`pk_fk_content_category` ='
-                . $this->category . ' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
+                'content_status=1 AND pk_content !='.$album->id
+                .' AND `contents_categories`.`pk_fk_content_category` ='.$this->category
+                .' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
                 ' ORDER BY created DESC LIMIT '.$total
             );
 
