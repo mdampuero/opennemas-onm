@@ -38,9 +38,10 @@ class LetterController extends Controller
 
         $page = $request->query->getDigits('page', 1);
 
+        // Setup templating cache layer
         $this->view->setConfig('letter-frontpage');
+        $cacheID = $this->view->getCacheId('frontpage', 'letter', $page);
 
-        $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter_frontpage.tpl', $cacheID)
         ) {
@@ -116,8 +117,8 @@ class LetterController extends Controller
 
         // Setup view
         $this->view->setConfig('letter-inner');
+        $cacheID = $this->view->getCacheId('content', $letter->id);
 
-        $cacheID = $this->view->generateCacheId('letter-inner', '', $letter->id);
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
@@ -134,12 +135,12 @@ class LetterController extends Controller
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('letter/letter.tpl', [
-            'advertisements' => $advertisements,
             'ads_positions'  => $positions,
-            'letter'         => $letter,
-            'content'        => $letter,
-            'contentId'      => $letter->id, // Used on module_comments.tpl
+            'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
+            'content'        => $letter,
+            'contentId'      => $letter->id,
+            'letter'         => $letter,
             'x-tags'         => 'letter,'.$letter->id,
             'x-cache-for'    => '+1 day',
         ]);
