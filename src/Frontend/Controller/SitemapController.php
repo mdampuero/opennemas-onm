@@ -37,8 +37,9 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
+        // Setup templating cache layer
         $this->view->setConfig('sitemap');
-        $cacheID = $this->view->generateCacheId('sitemap', '', '');
+        $cacheID = $this->view->getCacheId('sitemap', 'index');
 
         return $this->buildResponse($format, $cacheID, null);
     }
@@ -54,8 +55,9 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
+        // Setup templating cache layer
         $this->view->setConfig('sitemap');
-        $cacheID = $this->view->generateCacheId('sitemap', '', 'web');
+        $cacheID = $this->view->getCacheId('sitemap', 'web');
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
@@ -87,8 +89,9 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
+        // Setup templating cache layer
         $this->view->setConfig('sitemap');
-        $cacheID = $this->view->generateCacheId('sitemap', '', 'news');
+        $cacheID = $this->view->getCacheId('sitemap', 'news');
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
@@ -140,8 +143,9 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
+        // Setup templating cache layer
         $this->view->setConfig('sitemap');
-        $cacheID = $this->view->generateCacheId('sitemap', '', 'image');
+        $cacheID = $this->view->getCacheId('sitemap', 'image');
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
@@ -188,8 +192,9 @@ class SitemapController extends Controller
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
 
+        // Setup templating cache layer
         $this->view->setConfig('sitemap');
-        $cacheID = $this->view->generateCacheId('sitemap', '', 'video');
+        $cacheID = $this->view->getCacheId('sitemap', 'video');
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
@@ -216,8 +221,10 @@ class SitemapController extends Controller
      **/
     public function buildResponse($format, $cacheID, $action)
     {
-        $this->view->assign('action', $action);
-        $contents = $this->renderView('sitemap/sitemap.tpl', array('cache_id' => $cacheID));
+        $contents = $this->renderView('sitemap/sitemap.tpl', [
+            'action'   => $action,
+            'cache_id' => $cacheID
+        ]);
 
         if ($format == 'xml.gz') {
             // disable ZLIB output compression
