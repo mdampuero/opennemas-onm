@@ -26,7 +26,7 @@ use Common\Core\Controller\Controller;
 class CategoryController extends Controller
 {
     /**
-     * Description of the action
+     * Shows the latest contents in a category given its name and page number
      *
      * @return Response the response object
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the category is not available
@@ -35,12 +35,11 @@ class CategoryController extends Controller
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 8);
 
         if ($page > 1) {
             $page = 2;
         }
-
-        $this->view->setConfig('frontpages');
 
         $categoryManager = $this->get('category_repository');
         $category = $categoryManager->findOneBy(
@@ -51,8 +50,6 @@ class CategoryController extends Controller
         if (empty($category)) {
             throw new ResourceNotFoundException();
         }
-
-        $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 8);
 
         $em = $this->get('entity_repository');
         $order = [ 'starttime' => 'DESC' ];
@@ -85,8 +82,13 @@ class CategoryController extends Controller
         $cm = new \ContentManager();
         $articles = $cm->getInTime($articles);
 
-        $cacheId = "category|$categoryName|$page";
-        if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
+        // Setup templating cache layer
+        $this->view->setConfig('frontpages');
+        $cacheId = $this->view->getCacheId('frontpage', 'category', $categoryName, $page);
+
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('blog/blog.tpl', $cacheId)
+        ) {
             $imageIdsList = [];
             foreach ($articles as &$content) {
                 if (isset($content->img1) && !empty($content->img1)) {
@@ -172,8 +174,6 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        $this->view->setConfig('frontpages');
-
         // Get sync params
         $wsUrl = '';
         $syncParams = $this->get('setting_repository')->get('sync_params');
@@ -189,10 +189,16 @@ class CategoryController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
-        $cm = new \ContentManager();
-        $cacheId = "sync|category|$categoryName|$page";
-        if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
+        // Setup templating cache layer
+        $this->view->setConfig('frontpages');
+        $cacheId = $this->view->getCacheId('sync', 'frontpage', 'category', $categoryName, $page);
+
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('blog/blog.tpl', $cacheId)
+        ) {
+            $ccm = \ContentCategoryManager::get_instance();
+            $cm  = new \ContentManager();
+
             // Get category object
             $category = unserialize(
                 $cm->getUrlContent(
