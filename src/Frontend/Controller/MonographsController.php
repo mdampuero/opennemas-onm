@@ -81,9 +81,9 @@ class MonographsController extends Controller
     {
         $this->page = $request->query->getDigits('page', 1);
 
-        // Setup caching system
-        $this->view->setConfig('special_frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
+        // Setup templating cache layer
+        $this->view->setConfig('specials');
+        $cacheID = $this->view->getCacheId('frontpage', 'special', $this->categoryName, $this->page);
 
         // Don't execute the action logic if was cached before
         if (($this->view->getCaching() === 0)
@@ -115,11 +115,7 @@ class MonographsController extends Controller
                     $monograph->category_title = $monograph->loadCategoryTitle($monograph->id);
                 }
 
-                $this->view->assign(
-                    array(
-                        'specials' => $monographs
-                    )
-                );
+                $this->view->assign(['specials' => $monographs]);
             }
         }
 
@@ -153,7 +149,10 @@ class MonographsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $special->id);
+        // Setup templating cache layer
+        $this->view->setConfig('specials');
+        $cacheID = $this->view->getCacheId('content', $special->id);
+
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
