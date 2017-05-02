@@ -41,8 +41,6 @@ class ArticlesController extends Controller
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        $this->ccm  = \ContentCategoryManager::get_instance();
-
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
 
@@ -55,17 +53,13 @@ class ArticlesController extends Controller
             return $this->redirect($article->params['bodyLink']);
         }
 
-        // Load config
-        $this->view->setConfig('articles');
-
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->get('core.user'));
         $cacheable = $subscriptionFilter->subscriptionHook($article);
 
         // Advertisements for single article NO CACHE
+        $this->ccm  = \ContentCategoryManager::get_instance();
         $actualCategoryId = $this->ccm->get_id($categoryName);
         list($positions, $advertisements) = $this->getAds($actualCategoryId);
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
 
         // Fetch general layout
         $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId);
@@ -75,7 +69,10 @@ class ArticlesController extends Controller
         $layoutFile = 'layouts/'.$layout.'.tpl';
         $this->view->assign('layoutFile', $layoutFile);
 
-        $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('content', $article->id);
+
         if ($this->view->getCaching() === 0
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
@@ -140,11 +137,13 @@ class ArticlesController extends Controller
             );
 
             $this->view->assign('suggested', $machineSuggestedContents);
-        } // end if $this->view->is_cached
+        }
 
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
             [
+                'ads_positions'   => $positions,
+                'advertisements'  => $advertisements,
                 'cache_id'        => $cacheID,
                 'contentId'       => $article->id,
                 'category_name'   => $categoryName,
@@ -154,7 +153,7 @@ class ArticlesController extends Controller
                 'time'            => '12345',
                 'x-tags'          => 'article,'.$article->id,
                 'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable
+                'x-cacheable'     => $cacheable,
             ]
         );
     }
@@ -172,10 +171,6 @@ class ArticlesController extends Controller
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
-        // Setup view
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
-
         // Get sync params
         $wsUrl = '';
         $syncParams = s::get('sync_params');
@@ -187,17 +182,13 @@ class ArticlesController extends Controller
             }
         }
 
-        // Advertisements for single article NO CACHE
-        $cm = new \ContentManager;
-        // Get category id correspondence
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        // Fetch advertisement information from external
-        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
-        $this->view->assign('advertisements', $ads);
-
         // Get full article
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
         $article = unserialize($article);
+
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('sync', 'content', $dirtyID);
 
         if (($article->content_status==1) && ($article->in_litter==0)
             && ($article->isStarted())
@@ -219,6 +210,12 @@ class ArticlesController extends Controller
         } else {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
+
+        // Fetch synced ads
+        $cm = new \ContentManager;
+        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
+        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'article/article.tpl',
