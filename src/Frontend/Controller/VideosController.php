@@ -35,8 +35,6 @@ class VideosController extends Controller
      **/
     public function init()
     {
-        $this->view->setConfig('video');
-
         $this->page          = $this->request->query->getDigits('page', 1);
         $this->category_name = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
@@ -82,22 +80,20 @@ class VideosController extends Controller
      **/
     public function frontpageAction()
     {
-        list($positions, $advertisements) = $this->getAds();
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
+        // Setup templating cache layer
+        $this->view->setConfig('video');
+        $cacheID = $this->view->getCacheId('frontpage', 'video', $this->category_name, $this->page);
 
-        # If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
         if (($this->view->getCaching() === 0)
-                || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
+            || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
-            $videosSettings = s::get('video_settings');
-            $totalVideosFrontpage       = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
-            $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
-            $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
-            $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:0;
-            $totalVideosBlockOther      = isset($videosSettings['block_others'])?$videosSettings['block_others']:6;
+            $videosSettings             = s::get('video_settings');
+            $totalVideosFrontpage       = isset($videosSettings['total_front']) ? $videosSettings['total_front'] : 2;
+            $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more']) ? $videosSettings['total_front_more'] : 12;
+            $totalVideosFrontpageOffset = isset($videosSettings['front_offset']) ? $videosSettings['front_offset'] : 3;
+            $totalVideosBlockInCategory = isset($videosSettings['block_in_category']) ? $videosSettings['block_in_category'] : 0;
+            $totalVideosBlockOther      = isset($videosSettings['block_others']) ? $videosSettings['block_others'] : 6;
 
             if ($this->category_name != 'home') {
                 // Fetch total of videos for this category
@@ -223,21 +219,27 @@ class VideosController extends Controller
             );
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         if ($this->category_name != 'home') {
             return $this->render(
                 'video/video_frontpage.tpl',
                 array(
-                    'cache_id'     => $cacheID,
-                    'categoryName' => $this->category_name,
-                    'x-tags'       => 'video-frontpage,'.$this->category_name.','.$this->page
+                    'ads_positions'  => $positions,
+                    'advertisements' => $advertisements,
+                    'cache_id'       => $cacheID,
+                    'categoryName'   => $this->category_name,
+                    'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
                 )
             );
         } else {
             return $this->render(
                 'video/video_main_frontpage.tpl',
                 array(
-                    'cache_id' => $cacheID,
-                    'x-tags'   => 'video-frontpage,'.$this->category_name.','.$this->page
+                    'ads_positions'  => $positions,
+                    'advertisements' => $advertisements,
+                    'cache_id'       => $cacheID,
+                    'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
                 )
             );
         }
@@ -250,14 +252,12 @@ class VideosController extends Controller
      **/
     public function frontpagePaginatedAction()
     {
-        list($positions, $advertisements) = $this->getAds();
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
+        // Setup templating cache layer
+        $this->view->setConfig('video');
+        $cacheID = $this->view->getCacheId('frontpage', 'video', $this->category_name, $this->page);
 
-        // If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
         if (($this->view->getCaching() === 0)
-                || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
+            || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
             $videosSettings = $this->get('setting_repository')->get('video_settings');
@@ -299,12 +299,16 @@ class VideosController extends Controller
             ]);
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         return $this->render(
             'video/video_frontpage.tpl',
             [
-                'cache_id'     => $cacheID,
-                'categoryName' => $this->category_name,
-                'x-tags'       => 'video-frontpage,'.$this->category_name.','.$this->page
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
+                'cache_id'       => $cacheID,
+                'categoryName'   => $this->category_name,
+                'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
             ]
         );
 
@@ -329,15 +333,13 @@ class VideosController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        list($positions, $advertisements) = $this->getAds('inner');
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
-
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($video);
 
-        // If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, null, $video->id);
+        // Setup templating cache layer
+        $this->view->setConfig('video-inner');
+        $cacheID = $this->view->getCacheId('content', $video->id);
+
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('video/video_inner.tpl', $video->id)
         ) {
@@ -366,11 +368,15 @@ class VideosController extends Controller
             }
 
             $this->view->assign(['others_videos' => $otherVideos]);
-        } //end iscached
+        }
+
+        list($positions, $advertisements) = $this->getAds('inner');
 
         return $this->render(
             'video/video_inner.tpl',
             [
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
                 'video'         => $video,
                 'content'       => $video,
                 'category'      => $video->category,
