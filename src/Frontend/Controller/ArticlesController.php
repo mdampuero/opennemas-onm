@@ -190,25 +190,11 @@ class ArticlesController extends Controller
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('sync', 'content', $dirtyID);
 
-        if (($article->content_status==1) && ($article->in_litter==0)
-            && ($article->isStarted())
+        if ($article->content_status != 1
+            || $article->in_litter == 1
+            || !$article->isStarted()
         ) {
-            // Template vars
-            $this->view->assign(
-                array(
-                    'article'               => $article,
-                    'content'               => $article,
-                    'photoInt'              => $article->photoInt,
-                    'videoInt'              => $article->videoInt,
-                    'relationed'            => $article->relatedContents,
-                    'contentId'             => $article->id,// Used on module_comments.tpl
-                    'actual_category_title' => $article->category_title,
-                    'suggested'             => $article->suggested,
-                    'ext'                   => 1,
-                )
-            );
-        } else {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         // Fetch synced ads
@@ -217,15 +203,23 @@ class ArticlesController extends Controller
         $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
         $this->view->assign('advertisements', $ads);
 
-        return $this->render(
-            'article/article.tpl',
-            array(
-                'cache_id' => $cacheID,
-                'category_name' => $categoryName,
-                'x-tags'          => 'ext-article,'.$article->id,
-                'x-cache-for'     => '+1 day',
-            )
-        );
+        return $this->render('article/article.tpl', [
+            'actual_category_title' => $article->category_title,
+            'ads_positions'         => $positions,
+            'advertisements'        => $advertisements,
+            'article'               => $article,
+            'cache_id'              => $cacheID,
+            'category_name'         => $categoryName,
+            'content'               => $article,
+            'contentId'             => $article->id,// Used on module_comments.tpl
+            'ext'                   => 1,
+            'photoInt'              => $article->photoInt,
+            'relationed'            => $article->relatedContents,
+            'suggested'             => $article->suggested,
+            'videoInt'              => $article->videoInt,
+            'x-cache-for'           => '+1 day',
+            'x-tags'                => 'ext-article,'.$article->id
+        ]);
     }
 
     /**

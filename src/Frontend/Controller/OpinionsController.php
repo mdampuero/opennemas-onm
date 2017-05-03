@@ -795,46 +795,41 @@ class OpinionsController extends Controller
             $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
             $opinion = unserialize($opinion);
 
+            if ($opinion->content_status != 1 || $opinion->in_litter == 1) {
+                throw new ResourceNotFoundException();
+            }
             // Overload opinion object with category_name (used on ext_print)
             $opinion->category_name = $this->category_name;
 
-            if (($opinion->content_status==1) && ($opinion->in_litter == 0)) {
-                if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-                    $photo = new \Photo($opinion->img2);
-                    $this->view->assign('photo', $photo);
-                }
 
-                $this->view->assign(
-                    array(
-                        'other_opinions'  => $opinion->otherOpinions,
-                        'suggested'       => $opinion->machineRelated,
-                        'opinion'         => $opinion,
-                        'content'         => $opinion,
-                        'actual_category' => 'opinion',
-                        'media_url'       => $opinion->externalMediaUrl,
-                        'contentId'       => $opinion->id,
-                        'ext'             => 1 //Used on widgets
-                    )
-                );
-            } else {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+                $photo = new \Photo($opinion->img2);
+                $this->view->assign('photo', $photo);
             }
-        } // End if isCached
+
+            $this->view->assign([
+                'other_opinions'  => $opinion->otherOpinions,
+                'suggested'       => $opinion->machineRelated,
+                'opinion'         => $opinion,
+                'content'         => $opinion,
+                'actual_category' => 'opinion',
+                'media_url'       => $opinion->externalMediaUrl,
+                'contentId'       => $opinion->id,
+                'ext'             => 1 //Used on widgets
+            ]);
+        }
 
         list($positions, $advertisements) = $this->getAds('inner');
 
         // Show in Frontpage
-        return $this->render(
-            'opinion/opinion.tpl',
-            array(
-                'actual_category' => 'opinion',
-                'ads_positions'   => $positions,
-                'advertisements'  => $advertisements,
-                'cache_id'        => $cacheID,
-                'x-tags'          => 'ext-opinion,'.$opinion->id,
-                'x-cache-for'     => '+1 day',
-            )
-        );
+        return $this->render('opinion/opinion.tpl', [
+            'actual_category' => 'opinion',
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'x-tags'          => 'ext-opinion,'.$opinion->id,
+            'x-cache-for'     => '+1 day',
+        ]);
     }
 
     /**

@@ -188,6 +188,8 @@ class CategoryController extends Controller
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
+        
+        $cm  = new \ContentManager();
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
@@ -197,7 +199,6 @@ class CategoryController extends Controller
             || !$this->view->isCached('blog/blog.tpl', $cacheId)
         ) {
             $ccm = \ContentCategoryManager::get_instance();
-            $cm  = new \ContentManager();
 
             // Get category object
             $category = unserialize(
@@ -226,13 +227,11 @@ class CategoryController extends Controller
             ]);
         }
 
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        $ads                = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
-        $positions          = array_keys($ads);
+        list($positions, $advertisements) = $this->getInnerAds();
 
         return $this->render('blog/blog.tpl', [
             'ads_positions'  => $positions,
-            'advertisements' => $ads,
+            'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
             'x-cache-for'    => '+3 hour',
             'x-tags'         => 'ext-category,'.$categoryName.','.$page,
