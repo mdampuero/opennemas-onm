@@ -41,10 +41,12 @@ class ContentsController extends Controller
         $dirtyID = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve article ID
+        // Resolve content ID, we dont know which type the content is so we have to
+        // perform some calculations
         preg_match("@(?P<date>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
-        $dirtyID = $matches['date'].sprintf('%06d', $matches['id']);
+        $dirtyID   = $matches['date'].sprintf('%06d', $matches['id']);
         $contentID = $matches['id'];
+
         $content = new \Content($contentID);
         $content = $this->get('content_url_matcher')
             ->matchContentUrl($content->content_type_name, $dirtyID, $urlSlug);

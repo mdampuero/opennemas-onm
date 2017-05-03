@@ -101,12 +101,10 @@ class CategoryController extends Controller
             // Fetch images
             $imageIdsList = array_unique($imageIdsList);
             if (count($imageIdsList) > 0) {
-                $imageList = $em->findBy(
-                    [
-                        'content_type_name' => [ [ 'value' => 'photo' ] ],
-                        'pk_content'        => [ [ 'value' => $imageIdsList, 'operator' => 'IN' ] ]
-                    ]
-                );
+                $imageList = $em->findBy([
+                    'content_type_name' => [ [ 'value' => 'photo' ] ],
+                    'pk_content'        => [ [ 'value' => $imageIdsList, 'operator' => 'IN' ] ]
+                ]);
             } else {
                 $imageList = [];
             }
@@ -188,7 +186,7 @@ class CategoryController extends Controller
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
-        
+
         $cm  = new \ContentManager();
 
         // Setup templating cache layer
