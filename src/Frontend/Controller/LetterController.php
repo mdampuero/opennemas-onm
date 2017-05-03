@@ -190,88 +190,86 @@ class LetterController extends Controller
         $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
         $msg           = _('Unable to save the letter.');
 
-        if (empty($security_code)) {
-            $params  = array();
-            $data    = array();
-            $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
-            $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
-            $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
-            $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
-            $items   = $request->request->get('items');
+        if (!empty($security_code)) {
+            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
+        }
 
-            $moreData = _("Name")." {$name} \n "._("Email"). "{$mail} \n ";
-            if (!empty($items)) {
-                foreach ($items as $key => $value) {
-                    if (!empty($key) && !empty($value)) {
-                        $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
-                        $moreData .= " {$key}: {$value}\n ";
-                    }
-                }
-            }
+        $params  = [];
+        $data    = [];
+        $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+        $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
+        $email   = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
+        $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
+        $items   = $request->request->get('items');
 
-            $data['url']            = $url;
-            $data['body']           = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
-            $data['author']         = $name;
-            $data['title']          = $subject;
-            $data['email']          = $mail;
-            $data['content_status'] = 0; //pendding
-            $data['image']          = $this->saveImage($data);
-
-            $letter = new \Letter();
-
-            $request->getSession()->set(
-                'user',
-                json_decode(json_encode([ 'id' => 'user', 'username' => $data['author'] ]))
-            );
-
-            // Prevent XSS attack
-            $data = array_map('strip_tags', $data);
-            $data['body'] = nl2br($moreData.$data['body']);
-
-            if ($letter->hasBadWords($data)) {
-                $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
-            } else {
-                $ip = getUserRealIP();
-                $params['ip']   = $ip;
-                $data["params"] = $params;
-
-                if ($letter->create($data)) {
-                    $msg = "Su carta ha sido guardada y está pendiente de publicación.";
-
-                    $recipient = s::get('contact_email');
-                    if (!empty($recipient)) {
-                        $mailSender = s::get('mail_sender');
-                        if (empty($mailSender)) {
-                            $mailSender = "no-reply@postman.opennemas.com";
-                        }
-                        //  Build the message
-                        $text = \Swift_Message::newInstance();
-                        $text
-                            ->setSubject($subject)
-                            ->setBody($data['body'], 'text/html')
-                            ->setTo(array($recipient => $recipient))
-                            ->setFrom(array($mail => $name))
-                            ->setSender(array($mailSender => s::get('site_name')));
-                        try {
-                            $mailer = $this->get('mailer');
-                            $mailer->send($text);
-
-                            $this->get('application.log')->notice(
-                                "Email sent. Frontend letter (sender:".$mail.", to: ".$recipient.")"
-                            );
-                        } catch (\Swift_SwiftException $e) {
-                        }
-                    }
-                } else {
-                    $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
-                        ."correctamente todos los campos.";
+        $moreData = _("Name")." {$name} \n "._("Email"). "{$email} \n ";
+        if (!empty($items)) {
+            foreach ($items as $key => $value) {
+                if (!empty($key) && !empty($value)) {
+                    $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
+                    $moreData .= " {$key}: {$value}\n ";
                 }
             }
         }
 
-        $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
+        $data = [
+            'author'         => $url,
+            'body'           => iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext),
+            'content_status' => 0, // pending status
+            'email'          => $email,
+            'image'          => $this->saveImage($data),
+            'title'          => $subject,
+            'url'            => $url,
 
-        return $response;
+        ];
+
+        // Prevent XSS attack
+        $data = array_map('strip_tags', $data);
+        $data['body'] = nl2br($moreData.$data['body']);
+
+        $data['params'] = [
+            'ip' => getUserRealIP(),
+        ];
+
+        $letter = new \Letter();
+        if ($letter->hasBadWords($data)) {
+            $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
+
+            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
+        }
+
+        if ($letter->create($data)) {
+            $msg = "Su carta ha sido guardada y está pendiente de publicación.";
+
+            $recipient = s::get('contact_email');
+            if (!empty($recipient)) {
+                $mailSender = s::get('mail_sender');
+                if (empty($mailSender)) {
+                    $mailSender = "no-reply@postman.opennemas.com";
+                }
+                //  Build the message
+                $text = \Swift_Message::newInstance();
+                $text
+                    ->setSubject($subject)
+                    ->setBody($data['body'], 'text/html')
+                    ->setTo([ $recipient => $recipient ])
+                    ->setFrom([ $email => $name ])
+                    ->setSender([ $mailSender => s::get('site_name') ]);
+                try {
+                    $this->get('mailer')->send($text);
+
+                    $this->get('application.log')->notice(
+                        "Email sent. Frontend letter (sender:".$email.", to: ".$recipient.")"
+                    );
+                } catch (\Swift_SwiftException $e) {
+                }
+            }
+        } else {
+            $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
+                ."correctamente todos los campos.";
+        }
+
+        return new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
     }
 
     /**
@@ -288,33 +286,34 @@ class LetterController extends Controller
         $category_name = 'fotos';
 
         $upload        = isset($_FILES['image']) ? $_FILES['image'] : null;
-        $info          = array();
+        $info          = [];
 
-        if ($upload) {
-            $data = array(
-                'local_file'        => $upload['tmp_name'],
-                'original_filename' => $upload['name'] ,
-                'title'             => $data['title'],
-                'fk_category'       => $category,
-                'category'          => $category,
-                'category_name'     => $category_name,
-                'description'       => '',
-                'metadata'          => '',
-            );
-
-            try {
-                $photo = new \Photo();
-                $photo = $photo->createFromLocalFile($data);
-
-                return $photo->id;
-            } catch (Exception $e) {
-                $info [] = array(
-                    'error'         => $e->getMessage(),
-                );
-            }
+        // Return if no
+        if (!$upload) {
+            return null;
         }
 
-        return null;
+        $data = array(
+            'local_file'        => $upload['tmp_name'],
+            'original_filename' => $upload['name'] ,
+            'title'             => $data['title'],
+            'fk_category'       => $category,
+            'category'          => $category,
+            'category_name'     => $category_name,
+            'description'       => '',
+            'metadata'          => '',
+        );
+
+        try {
+            $photo = new \Photo();
+            $photo = $photo->createFromLocalFile($data);
+
+            return $photo->id;
+        } catch (\Exception $e) {
+            error_log('Unable to save letter image: '.$e->getMessage());
+
+            return null;
+        }
     }
 
     /**
