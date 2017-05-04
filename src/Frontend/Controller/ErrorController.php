@@ -59,7 +59,7 @@ class ErrorController extends Controller
                 // Redirect to redirectors URLs without /
                 if ($name === 'NotFoundHttpException') {
                     $url = $this->generateUrl('frontend_redirect_content', [
-                    'slug'  => mb_ereg_replace('^\/', '', $path)
+                        'slug'  => mb_ereg_replace('^\/', '', $path)
                     ]);
 
                     return new RedirectResponse($url, 301);
@@ -84,18 +84,15 @@ class ErrorController extends Controller
                     $this->view->setConfig('articles');
                     $cacheID = $this->view->getCacheId('error', 404);
 
-                    $content = $this->renderView(
-                        'static_pages/404.tpl',
-                        [
-                            'ads_positions'      => $positions,
-                            'advertisements'     => $advertisements,
-                            'cache_id'           => $cacheID,
-                            'category_real_name' => $page->title,
-                            'page'               => $page,
-                            'x-cache-for'        => '+1 day',
-                            'x-tags'             => 'not-found',
-                        ]
-                    );
+                    $content = $this->renderView('static_pages/404.tpl', [
+                        'ads_positions'      => $positions,
+                        'advertisements'     => $advertisements,
+                        'cache_id'           => $cacheID,
+                        'category_real_name' => $page->title,
+                        'page'               => $page,
+                        'x-cache-for'        => '+1 day',
+                        'x-tags'             => 'not-found',
+                    ]);
                 }
 
                 return new Response($content, 404);
@@ -115,18 +112,15 @@ class ErrorController extends Controller
                 $page->title   = $errorMessage;
                 $page->content = 'Whoups!';
 
-                $content = $this->renderView(
-                    'static_pages/statics.tpl',
-                    [
-                        'backtrace'          => $error->getTrace(),
-                        'category_real_name' => $page->title,
-                        'environment'        => $environment,
-                        'error'              => $error,
-                        'error_id'           => $errorID,
-                        'error_message'      => $errorMessage,
-                        'page'               => $page,
-                    ]
-                );
+                $content = $this->renderView('static_pages/statics.tpl', [
+                    'backtrace'          => $error->getTrace(),
+                    'category_real_name' => $page->title,
+                    'environment'        => $environment,
+                    'error'              => $error,
+                    'error_id'           => $errorID,
+                    'error_message'      => $errorMessage,
+                    'page'               => $page,
+                ]);
 
                 return new Response($content, 500);
 
