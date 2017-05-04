@@ -63,7 +63,7 @@ class SitemapController extends Controller
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Fetch contents
-            $contents = $this->fetchContents(array());
+            $contents = $this->fetchContents([]);
 
             // Remove external articles
             foreach ($contents as $key => &$content) {
@@ -72,7 +72,7 @@ class SitemapController extends Controller
                 }
             }
 
-            $this->view->assign(array('contents' => $contents));
+            $this->view->assign(['contents' => $contents]);
         }
 
         return $this->buildResponse($format, $cacheID, 'web');
@@ -97,7 +97,7 @@ class SitemapController extends Controller
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Fetch contents
-            $contents = $this->fetchContents(array());
+            $contents = $this->fetchContents([]);
 
             // Fetch images and videos from contents
             $er = getService('entity_repository');
@@ -121,12 +121,10 @@ class SitemapController extends Controller
                 }
             }
 
-            $this->view->assign(
-                array(
-                    'contents'   => $contents,
-                    'googleNews' => s::get('google_news_name'),
-                )
-            );
+            $this->view->assign([
+                'contents'   => $contents,
+                'googleNews' => s::get('google_news_name'),
+            ]);
         }
 
         return $this->buildResponse($format, $cacheID, 'news');
@@ -152,10 +150,10 @@ class SitemapController extends Controller
         ) {
             // Set sql filters for articles with inner image
             $filters = array(
-                'tables'            => array('articles'),
-                'pk_content'        => array(array('value' => 'pk_article', 'field' => true)),
-                'content_type_name' => array(array('value' => 'article')),
-                'img2'              => array(array('value' => 'NULL', 'operator' => '<>')),
+                'tables'            => ['articles'],
+                'pk_content'        => [['value' => 'pk_article', 'field' => true]],
+                'content_type_name' => [['value' => 'article']],
+                'img2'              => [['value' => 'NULL', 'operator' => '<>']],
             );
 
             // Fetch contents
@@ -175,7 +173,7 @@ class SitemapController extends Controller
                 }
             }
 
-            $this->view->assign(array('contents' => $contents));
+            $this->view->assign(['contents' => $contents]);
         }
 
         return $this->buildResponse($format, $cacheID, 'image');
@@ -200,11 +198,11 @@ class SitemapController extends Controller
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Fetch contents
-            $contents = $this->fetchContents(
-                array('content_type_name' => array(array('value' => 'video')))
-            );
+            $contents = $this->fetchContents([
+                'content_type_name' => [['value' => 'video']]
+            ]);
 
-            $this->view->assign(array('contents' => $contents));
+            $this->view->assign(['contents' => $contents]);
         }
 
         return $this->buildResponse($format, $cacheID, 'video');
@@ -239,7 +237,7 @@ class SitemapController extends Controller
             );
         } else {
             // Return the output as xml
-            $headers = array('Content-Type' => 'application/xml; charset=utf-8');
+            $headers = ['Content-Type' => 'application/xml; charset=utf-8'];
         }
 
         $instanceName = getService('core.instance')->internal_name;
@@ -265,13 +263,13 @@ class SitemapController extends Controller
     {
         // Set search filters
         $filters = array(
-            'content_type_name' => array(
+            'content_type_name' => [
                 'union' => 'OR',
-                array('value' => 'article'),
-                array('value' => 'opinion')
-            ),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '<>'))
+                ['value' => 'article'],
+                ['value' => 'opinion']
+            ],
+            'content_status'    => [['value' => 1]],
+            'in_litter'         => [['value' => 1, 'operator' => '<>']],
         );
 
         if (!empty($criteria)) {
@@ -280,7 +278,7 @@ class SitemapController extends Controller
 
         // Fetch contents
         $er = getService('entity_repository');
-        $contents = $er->findBy($filters, array('created' => 'desc'), $limit, 1);
+        $contents = $er->findBy($filters, ['created' => 'desc'], $limit, 1);
 
         // Filter by scheduled
         $cm = new \ContentManager();
