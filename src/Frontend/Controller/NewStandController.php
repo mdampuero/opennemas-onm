@@ -67,8 +67,6 @@ class NewStandController extends Controller
         $configurations = s::get('kiosko_settings');
         $order          = $configurations['orderFrontpage'];
 
-        $kiosko         = [];
-
         // Setup templating cache layer
         $this->view->setConfig('kiosko');
         $cacheID = $this->view->getCacheId('frontend', 'kiosko', $this->category_name, $order.$year.$month.$day);
@@ -76,6 +74,8 @@ class NewStandController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
         ) {
+            $kiosko = [];
+
             if ($order =='grouped') {
                 $ccm         = \ContentCategoryManager::get_instance();
                 $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
@@ -105,10 +105,10 @@ class NewStandController extends Controller
                         "ORDER BY `kioskos`.date DESC  {$limit}"
                     );
                     if (!empty($portadas)) {
-                        $kioskos[] = array (
+                        $kioskos[] = [
                             'category' => $theCategory->title,
                             'portadas' => $portadas
-                        );
+                        ];
                     }
                 }
             } elseif ($order =='sections') {
@@ -120,9 +120,7 @@ class NewStandController extends Controller
                 );
 
                 if (!empty($portadas)) {
-                    $kioskos[] = array (
-                        'portadas' => $portadas
-                    );
+                    $kioskos[] = [ 'portadas' => $portadas ];
                 }
             } else {
                 $ccm         = \ContentCategoryManager::get_instance();
@@ -208,19 +206,17 @@ class NewStandController extends Controller
             );
             $otherKioskos = [];
             if (!empty($kioskos)) {
-                $kiosko[] = array (
+                $kiosko[] = [
                     'category' => '',
                     'portadas' => $kioskos
-                );
+                ];
             }
-            $this->view->assign(
-                [
-                    'date'           => '1-'.$month.'-'.$year,
-                    'MONTH'          => $month,
-                    'YEAR'           => $year,
-                    'kiosko'         => $otherKioskos
-                ]
-            );
+            $this->view->assign([
+                'date'           => '1-'.$month.'-'.$year,
+                'MONTH'          => $month,
+                'YEAR'           => $year,
+                'kiosko'         => $otherKioskos
+            ]);
         }
 
         // TODO: not used anymore, now tempaltes use the EpaperDates widget
