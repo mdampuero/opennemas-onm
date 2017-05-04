@@ -50,10 +50,10 @@ class AuthorController extends Controller
             $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
 
             $criteria = array(
-                'fk_author'       => array(array('value' => $user->id)),
-                'fk_content_type' => array(array('value' => array(1, 4, 7, 9), 'operator' => 'IN')),
-                'content_status'  => array(array('value' => 1)),
-                'in_litter'       => array(array('value' => 0)),
+                'fk_author'       => [[ 'value' => $user->id ]],
+                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
+                'content_status'  => [[ 'value' => 1 ]],
+                'in_litter'       => [[ 'value' => 0 ]],
             );
 
             $er = $this->get('entity_repository');
