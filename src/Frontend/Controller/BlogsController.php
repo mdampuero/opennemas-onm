@@ -57,10 +57,10 @@ class BlogsController extends Controller
             $order   = array('starttime' => 'DESC');
             $date    = date('Y-m-d H:i:s');
             $filters = array(
-                'content_type_name' => array(array('value' => 'opinion')),
-                'type_opinion'      => array(array('value' => 0)),
-                'content_status'    => array(array('value' => 1)),
-                'blog'              => array(array('value' => 1)),
+                'content_type_name' => [[ 'value' => 'opinion' ]],
+                'type_opinion'      => [[ 'value' => 0 ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'blog'              => [[ 'value' => 1 ]],
                 'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS' ],
@@ -109,14 +109,12 @@ class BlogsController extends Controller
                 }
             }
 
-            $this->view->assign(
-                array(
-                    'opinions'   => $blogs,
-                    'authors'    => $authors,
-                    'pagination' => $pagination,
-                    'page'       => $page
-                )
-            );
+            $this->view->assign([
+                'opinions'   => $blogs,
+                'authors'    => $authors,
+                'pagination' => $pagination,
+                'page'       => $page
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds();
@@ -227,14 +225,12 @@ class BlogsController extends Controller
                     ],
                 ]);
 
-                $this->view->assign(
-                    array(
-                        'pagination' => $pagination,
-                        'blogs'      => $blogs,
-                        'author'     => $author,
-                        'page'       => $page,
-                    )
-                );
+                $this->view->assign([
+                    'pagination' => $pagination,
+                    'blogs'      => $blogs,
+                    'author'     => $author,
+                    'page'       => $page,
+                ]);
             }
         } // End if isCached
 
@@ -278,7 +274,6 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
-
             $author = $this->get('user_repository')->find($blog->fk_author);
             $blog->author = $author;
 
@@ -288,14 +283,11 @@ class BlogsController extends Controller
                 || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)
             ) {
                 return new RedirectResponse(
-                    $this->generateUrl(
-                        'frontend_opinion_show',
-                        array(
-                            'blog_id' => $dirtyID,
-                            'author_name' => $author->username,
-                            'blog_title'  => $blog->slug,
-                        )
-                    )
+                    $this->generateUrl('frontend_opinion_show',[
+                        'blog_id' => $dirtyID,
+                        'author_name' => $author->username,
+                        'blog_title'  => $blog->slug,
+                    ])
                 );
             }
 
@@ -305,7 +297,7 @@ class BlogsController extends Controller
                 $this->view->assign('photo', $photo);
             }
             $this->view->assign(['author' => $author]);
-        } // End if isCached
+        }
 
         list($positions, $advertisements) = $this->getAds('inner');
 
