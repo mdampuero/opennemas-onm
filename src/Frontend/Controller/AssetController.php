@@ -132,7 +132,7 @@ class AssetController extends Controller
                 )
             );
 
-            return new Response($contents, 200, array('Content-Type' => $imageFormat));
+            return new Response($contents, 200, ['Content-Type' => $imageFormat]);
         } else {
             return new Response('', 404);
         }
@@ -218,16 +218,12 @@ class AssetController extends Controller
             $response .= "}\n\n";
         }
 
-        return new Response(
-            $response,
-            200,
-            array(
-                // 'Expire'       => new \DateTime("+5 min"),
-                'Content-Type' => 'text/css',
-                'x-instance'   => $this->get('core.instance')->internal_name,
-                'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',frontpagecss',
-            )
-        );
+        return new Response($response, 200, [
+            // 'Expire'       => new \DateTime("+5 min"),
+            'Content-Type' => 'text/css',
+            'x-instance'   => $this->get('core.instance')->internal_name,
+            'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',frontpagecss',
+        ]);
     }
 
     /**
