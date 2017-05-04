@@ -68,15 +68,12 @@ class ContentsController extends Controller
         // Setup templating cache layer
         $cacheID = $this->view->getCacheId('content', $contentID, 'print');
 
-        return $this->render(
-            'article/article_printer.tpl',
-            array(
-                'cache_id' => $cacheID,
-                'content'  => $content,
-                'article'  => $content,
-                'x-tags'   => 'content-print,'.$contentID
-            )
-        );
+        return $this->render('article/article_printer.tpl', [
+            'cache_id' => $cacheID,
+            'content'  => $content,
+            'article'  => $content,
+            'x-tags'   => 'content-print,'.$contentID
+        ]);
     }
 
     /**
@@ -119,15 +116,12 @@ class ContentsController extends Controller
         // Setup templating cache layer
         $cacheID = $this->view->getCacheId('sync', 'content', $contentID, 'print');
 
-        return $this->render(
-            'article/article_printer.tpl',
-            array(
-                'cache_id' => $cacheID,
-                'content'  => $content,
-                'article'  => $content,
-                'x-tags'   => 'ext-content-print,'.$contentID
-            )
-        );
+        return $this->render('article/article_printer.tpl', [
+            'cache_id' => $cacheID,
+            'content'  => $content,
+            'article'  => $content,
+            'x-tags'   => 'ext-content-print,'.$contentID
+        ]);
     }
 
     /**
@@ -217,13 +211,11 @@ class ContentsController extends Controller
             }
 
             $this->view->setCaching(0);
-            $this->view->assign(
-                array(
-                    'content'     => $content,
-                    'senderName'  => $senderName,
-                    'senderEmail' => $senderEmail,
-                )
-            );
+            $this->view->assign([
+                'content'     => $content,
+                'senderName'  => $senderName,
+                'senderEmail' => $senderEmail,
+            ]);
 
             $mailBody      = $this->renderView('email/send_to_friend.tpl');
             $mailBodyPlain = $this->renderView('email/send_to_friend_just_text.tpl');
@@ -370,10 +362,10 @@ class ContentsController extends Controller
                 if (!$hasSubscription) {
                     $newContent = $this->renderView(
                         'paywall/partials/content_only_for_subscribers.tpl',
-                        array(
+                        [
                             'logged' => $isLogged,
                             'id'     => $content->id
-                        )
+                        ]
                     );
                     $content->body = $newContent;
                 }
