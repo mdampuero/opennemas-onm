@@ -62,7 +62,7 @@ class ArchiveController extends Controller
             $order    = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
             $criteria = [
                 'in_litter'       => [[ 'value' => 0 ]],
-                'fk_content_type' => [[ 'value' => [1,4,7,9], 'operator' => 'IN' ]],
+                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
                 'DATE(starttime)' => [[ 'value' => '"'.$date.'"', 'field' => true ]]
             ];
 
