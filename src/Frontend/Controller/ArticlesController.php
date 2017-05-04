@@ -139,23 +139,20 @@ class ArticlesController extends Controller
             $this->view->assign('suggested', $machineSuggestedContents);
         }
 
-        return $this->render(
-            "extends:{$layoutFile}|article/article.tpl",
-            [
-                'ads_positions'   => $positions,
-                'advertisements'  => $advertisements,
-                'cache_id'        => $cacheID,
-                'contentId'       => $article->id,
-                'category_name'   => $categoryName,
-                'article'         => $article,
-                'content'         => $article,
-                'actual_category' => $categoryName,
-                'time'            => '12345',
-                'x-tags'          => 'article,'.$article->id,
-                'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable,
-            ]
-        );
+        return $this->render("extends:{$layoutFile}|article/article.tpl", [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'contentId'       => $article->id,
+            'category_name'   => $categoryName,
+            'article'         => $article,
+            'content'         => $article,
+            'actual_category' => $categoryName,
+            'time'            => '12345',
+            'x-tags'          => 'article,'.$article->id,
+            'x-cache-for'     => '+1 day',
+            'x-cacheable'     => $cacheable,
+        ]);
     }
 
     /**
