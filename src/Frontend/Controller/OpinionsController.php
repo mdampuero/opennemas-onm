@@ -205,17 +205,14 @@ class OpinionsController extends Controller
 
         list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'opinion/opinion_frontpage.tpl',
-            array(
-                'ads_positions'   => $positions,
-                'advertisements'  => $advertisements,
-                'actual_category' => 'opinion',
-                'cache_id'        => $cacheID,
-                'x-tags'          => 'opinion-frontpage,'.$page,
-                'x-cache-for'     => '+1 day'
-            )
-        );
+        return $this->render('opinion/opinion_frontpage.tpl',[
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'actual_category' => 'opinion',
+            'cache_id'        => $cacheID,
+            'x-tags'          => 'opinion-frontpage,'.$page,
+            'x-cache-for'     => '+1 day',
+        ]);
     }
 
     /**
@@ -316,16 +313,14 @@ class OpinionsController extends Controller
                 'route'       => 'frontend_opinion_external_frontpage'
             ]);
 
-            $this->view->assign(
-                array(
-                    'editorial'  => $editorial,
-                    'opinions'   => $opinions,
-                    'authors'    => $authors,
-                    'pagination' => $pagination,
-                    'page'       => $page,
-                    'ext'        => $externalMediaUrl,
-                )
-            );
+            $this->view->assign([
+                'editorial'  => $editorial,
+                'opinions'   => $opinions,
+                'authors'    => $authors,
+                'pagination' => $pagination,
+                'page'       => $page,
+                'ext'        => $externalMediaUrl,
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds();
@@ -457,14 +452,12 @@ class OpinionsController extends Controller
                 ]
             ]);
 
-            $this->view->assign(
-                array(
-                    'pagination' => $pagination,
-                    'opinions'   => $opinions,
-                    'author'     => $author,
-                    'page'       => $page,
-                )
-            );
+            $this->view->assign([
+                'pagination' => $pagination,
+                'opinions'   => $opinions,
+                'author'     => $author,
+                'page'       => $page,
+            ]);
         }
 
         // Fetch information for Advertisements
@@ -564,19 +557,19 @@ class OpinionsController extends Controller
 
                     $opinion->uri = $this->generateUrl(
                         'frontend_opinion_external_show_with_author_slug',
-                        array(
+                        [
                             'opinion_id'    => date('YmdHis', strtotime($opinion->created)).$opinion->id,
                             'author_name'   => $author->slug,
                             'opinion_title' => $opinion->slug,
-                        )
+                        ]
                     );
 
                     $opinion->author_uri = $this->generateUrl(
                         'frontend_opinion_external_author_frontpage',
-                        array(
+                        [
                             'author_id' => sprintf('%06d', $author->id),
                             'author_slug' => $author->slug,
-                        )
+                        ]
                     );
 
                     $opinion = (array)$opinion; // template dependency
@@ -603,15 +596,13 @@ class OpinionsController extends Controller
                 ]
             ]);
 
-            $this->view->assign(
-                array(
-                    'pagination' => $pagination,
-                    'opinions'   => $opinions,
-                    'author'     => $author,
-                    'page'       => $page,
-                    'ext'        => $externalMediaUrl,
-                )
-            );
+            $this->view->assign([
+                'pagination' => $pagination,
+                'opinions'   => $opinions,
+                'author'     => $author,
+                'page'       => $page,
+                'ext'        => $externalMediaUrl,
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds();
@@ -663,14 +654,11 @@ class OpinionsController extends Controller
                 && $author->meta['is_blog'] == 1
             ) {
                 return new RedirectResponse(
-                    $this->generateUrl(
-                        'frontend_blog_show',
-                        array(
-                            'blog_id'     => $dirtyID,
-                            'author_name' => $author->username,
-                            'blog_title'  => $opinion->slug,
-                        )
-                    )
+                    $this->generateUrl('frontend_blog_show', [
+                        'blog_id'     => $dirtyID,
+                        'author_name' => $author->username,
+                        'blog_title'  => $opinion->slug,
+                    ])
                 );
             }
 
