@@ -274,15 +274,12 @@ class FrontpagesController extends Controller
 
         $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
 
-        return $this->render(
-            'frontpage/frontpage.tpl',
-            [
-                'advertisements' => $ads,
-                'cache_id'       => $cacheID,
-                'x-tags'         => 'frontpage-page,frontpage-page-external,'.$categoryName,
-                'x-cache-for'    => '+3 hour',
-            ]
-        );
+        return $this->render('frontpage/frontpage.tpl', [
+            'advertisements' => $ads,
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'frontpage-page,frontpage-page-external,'.$categoryName,
+            'x-cache-for'    => '+3 hour',
+        ]);
     }
 
     /**
