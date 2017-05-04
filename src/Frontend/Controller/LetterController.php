@@ -220,7 +220,6 @@ class LetterController extends Controller
             'image'          => $this->saveImage($data),
             'title'          => $subject,
             'url'            => $url,
-
         ];
 
         // Prevent XSS attack
@@ -293,7 +292,7 @@ class LetterController extends Controller
             return null;
         }
 
-        $data = array(
+        $data = [
             'local_file'        => $upload['tmp_name'],
             'original_filename' => $upload['name'] ,
             'title'             => $data['title'],
@@ -302,7 +301,7 @@ class LetterController extends Controller
             'category_name'     => $category_name,
             'description'       => '',
             'metadata'          => '',
-        );
+        ];
 
         try {
             $photo = new \Photo();
