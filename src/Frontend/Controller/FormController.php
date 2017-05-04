@@ -115,9 +115,9 @@ class FormController extends Controller
             $text
                 ->setSubject($subject)
                 ->setBody($body, 'text/html')
-                ->setTo(array($recipient => $recipient))
-                ->setFrom(array($email => $name))
-                ->setSender(array($settings['mail_sender'] => $settings['site_name']));
+                ->setTo([$recipient => $recipient])
+                ->setFrom([$email => $name])
+                ->setSender([$settings['mail_sender'] => $settings['site_name']]);
 
             $file1 = $request->files->get('image1');
             if ($file1) {
