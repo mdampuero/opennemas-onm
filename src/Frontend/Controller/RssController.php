@@ -47,10 +47,10 @@ class RssController extends Controller
             ]);
         }
 
-        return $this->render(
-            'rss/index.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,index' ]
-        );
+        return $this->render('rss/index.tpl', [
+            'cache_id' => $cacheID,
+            'x-tags'   => 'rss,index',
+        ]);
     }
 
     /**
