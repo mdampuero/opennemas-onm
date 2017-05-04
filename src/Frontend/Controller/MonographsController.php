@@ -58,16 +58,14 @@ class MonographsController extends Controller
             $actual_category_id = 0;
         }
 
-        $this->view->assign(
-            array(
-                'category_name'         => $this->categoryName,
-                'category'              => $this->category,
-                'actual_category'       => $this->categoryName,
-                'actual_category_id'    => $actual_category_id,
-                'actual_category_title' => $category_real_name,
-                'category_real_name'    => $category_real_name,
-            )
-        );
+        $this->view->assign([
+            'category_name'         => $this->categoryName,
+            'category'              => $this->category,
+            'actual_category'       => $this->categoryName,
+            'actual_category_id'    => $actual_category_id,
+            'actual_category_title' => $category_real_name,
+            'category_real_name'    => $category_real_name,
+        ]);
     }
 
     /**
@@ -119,14 +117,11 @@ class MonographsController extends Controller
             }
         }
 
-        return $this->render(
-            'special/frontpage_special.tpl',
-            array(
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'monograph-frontpage',
-                'x-cache-for' => '+1 day',
-            )
-        );
+        return $this->render('special/frontpage_special.tpl', [
+            'cache_id'    => $cacheID,
+            'x-tags'      => 'monograph-frontpage',
+            'x-cache-for' => '+1 day',
+        ]);
     }
 
     /**
@@ -210,16 +205,13 @@ class MonographsController extends Controller
             $this->view->assign(['columns' => $columns]);
         }
 
-        return $this->render(
-            'special/special.tpl',
-            [
-                'special'   => $special,
-                'content'   => $special,
-                'contentId' => $special->id,
-                'cache_id'  => $cacheID,
-                'x-tags'      => 'monograph,'.$special->id,
-                'x-cache-for' => '+1 day',
-            ]
-        );
+        return $this->render('special/special.tpl', [
+            'special'   => $special,
+            'content'   => $special,
+            'contentId' => $special->id,
+            'cache_id'  => $cacheID,
+            'x-tags'      => 'monograph,'.$special->id,
+            'x-cache-for' => '+1 day',
+        ]);
     }
 }
