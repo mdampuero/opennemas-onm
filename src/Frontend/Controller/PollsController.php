@@ -129,12 +129,10 @@ class PollsController extends Controller
                 }
             }
 
-            $this->view->assign(
-                array(
-                    'polls'      => $polls,
-                    'otherPolls' => $otherPolls
-                )
-            );
+            $this->view->assign([
+                'polls'      => $polls,
+                'otherPolls' => $otherPolls
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds('frontpage');
