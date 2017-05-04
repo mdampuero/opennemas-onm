@@ -48,7 +48,7 @@ class AlbumsController extends Controller
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $categoryManager = $this->get('category_repository');
             $category = $categoryManager->findBy(
-                array('name' => array(array('value' => $this->categoryName))),
+                [ 'name' => [[ 'value' => $this->categoryName ]] ],
                 'name ASC'
             );
 
@@ -59,24 +59,20 @@ class AlbumsController extends Controller
             $category         = $category[0];
             $this->category   = $category->pk_content_category;
 
-            $this->view->assign(
-                array(
-                    'category_name'         => $this->categoryName ,
-                    'category'              => $category->pk_content_category,
-                    'actual_category_id'    => $category->pk_content_category,
-                    'actual_category_title' => $category->title,
-                    'category_real_name'    => $category->title,
-                    'category_data'         => $category,
-                )
-            );
+            $this->view->assign([
+                'category_name'         => $this->categoryName ,
+                'category'              => $category->pk_content_category,
+                'actual_category_id'    => $category->pk_content_category,
+                'actual_category_title' => $category->title,
+                'category_real_name'    => $category->title,
+                'category_data'         => $category,
+            ]);
         } else {
             $this->category = 0;
-            $this->view->assign(
-                array(
-                    'actual_category_title' => 'Portada',
-                    'category_real_name'    => 'Portada',
-                )
-            );
+            $this->view->assign([
+                'actual_category_title' => 'Portada',
+                'category_real_name'    => 'Portada',
+            ]);
         }
 
         $this->view->assign('actual_category', $this->categoryName);
@@ -103,20 +99,20 @@ class AlbumsController extends Controller
 
             $order = array();
             $filters = array(
-                'content_type_name' => array(array('value' => 'album')),
-                'content_status'    => array(array('value' => 1)),
-                'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+                'content_type_name' => [[ 'value' => 'album' ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
             );
 
             if ($this->category != 0) {
                 $category = $this->get('category_repository')->find($this->category);
-                $filters['category_name'] = array(array('value' => $category->name));
+                $filters['category_name'] = [[ 'value' => $category->name ]];
             }
 
             if ($orderBy == 'favorite') {
-                $order = array('favorite' => 'DESC', 'created' => 'DESC');
+                $order = [ 'favorite' => 'DESC', 'created' => 'DESC' ];
             } else {
-                $order = array('created' => 'DESC');
+                $order = [ 'created' => 'DESC' ];
             }
 
             $em          = $this->get('entity_repository');
@@ -136,12 +132,10 @@ class AlbumsController extends Controller
                     'params' => ['category_name' => $this->categoryName]
                 ]
             ]);
-            $this->view->assign(
-                array(
-                    'albums'     => $albums,
-                    'pagination' => $pagination,
-                )
-            );
+            $this->view->assign([
+                'albums'     => $albums,
+                'pagination' => $pagination,
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds();
@@ -237,21 +231,18 @@ class AlbumsController extends Controller
 
         list($positions, $advertisements) = $this->getAds('inner');
 
-        return $this->render(
-            'album/album.tpl',
-            array(
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
-                'album'          => $album,
-                'content'        => $album,
-                'page'           => $this->page,
-                'cache_id'       => $cacheID,
-                'contentId'      => $album->id,
-                'x-tags'         => 'album,'.$album->id,
-                'x-cache-for'    => '+1 day',
-                'x-cacheable'    => $cacheable
-            )
-        );
+        return $this->render('album/album.tpl',[
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'album'          => $album,
+            'content'        => $album,
+            'page'           => $this->page,
+            'cache_id'       => $cacheID,
+            'contentId'      => $album->id,
+            'x-tags'         => 'album,'.$album->id,
+            'x-cache-for'    => '+1 day',
+            'x-cacheable'    => $cacheable
+        ]);
     }
 
     /**
@@ -285,16 +276,13 @@ class AlbumsController extends Controller
             array_pop($_albumArrayPaged);
         }
 
-        return $this->render(
-            'album/partials/_gallery_thumbs.tpl',
-            array(
-                'album_photos'       => $albumPhotos,
-                'album_photos_paged' => $albumPhotosPaged,
-                'page'               => $page,
-                'items_page'         => $itemsPage,
-                'album'              => $album,
-            )
-        );
+        return $this->render('album/partials/_gallery_thumbs.tpl', [
+            'album_photos'       => $albumPhotos,
+            'album_photos_paged' => $albumPhotosPaged,
+            'page'               => $page,
+            'items_page'         => $itemsPage,
+            'album'              => $album,
+        ]);
     }
 
     /**
@@ -349,14 +337,11 @@ class AlbumsController extends Controller
             ]
         ]);
 
-        return $this->render(
-            'album/partials/_widget_more_albums.tpl',
-            array(
-                'others_albums'      => $othersAlbums,
-                'page'               => $this->page,
-                'pagination'         => $pagination,
-            )
-        );
+        return $this->render('album/partials/_widget_more_albums.tpl',[
+            'others_albums'      => $othersAlbums,
+            'page'               => $this->page,
+           'pagination'         => $pagination,
+        ]);
     }
 
     /**
