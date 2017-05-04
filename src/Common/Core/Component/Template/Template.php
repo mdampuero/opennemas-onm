@@ -189,11 +189,6 @@ class Template extends \Smarty
 
         $cacheID = implode('|', $params);
 
-        // if (array_key_exists('debug', $_REQUEST) && $_REQUEST['debug'] == 1) {
-        //     var_dump($cacheID , debug_backtrace());
-        //     die();
-        // }
-
         return $cacheID;
     }
 
