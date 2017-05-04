@@ -56,7 +56,7 @@ class CategoryController extends Controller
         $filters = [
             'category_name'     => [ [ 'value' => $category->name ] ],
             'content_status'    => [ [ 'value' => 1 ] ],
-            'fk_content_type'   => [ [ 'value' => [1,7,9], 'operator' => 'IN' ] ],
+            'fk_content_type'   => [ [ 'value' => [1, 7, 9], 'operator' => 'IN' ] ],
             'in_litter'         => [ [ 'value' => 0 ] ],
         ];
 
