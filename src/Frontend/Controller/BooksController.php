@@ -132,7 +132,6 @@ class BooksController extends Controller
             $this->view->assign(['libros' => $books]);
         }
 
-
         return $this->render('books/book_viewer.tpl', [
             'book'        => $content,
             'content'     => $content,
@@ -186,14 +185,11 @@ class BooksController extends Controller
             $book->cover_img = new \Photo($book->cover_id);
         }
 
-        return $this->render(
-            'books/widget_books.tpl',
-            array(
-                'actualCat' => $category,
-                'page'      => $this->page,
-                'last'      => $last,
-                'libros'    => $books,
-            )
-        );
+        return $this->render('books/widget_books.tpl', [
+            'actualCat' => $category,
+            'page'      => $this->page,
+            'last'      => $last,
+            'libros'    => $books,
+        ]);
     }
 }
