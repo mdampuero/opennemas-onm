@@ -156,7 +156,7 @@ class TagsController extends Controller
     public static function getInnerAds($category = 'home')
     {
         $category       = (!isset($category) || ($category=='home'))? 0: $category;
-        $positions      = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $positions      = [7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193];
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
