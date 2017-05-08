@@ -12,7 +12,10 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
         $codes[] = '<!-- BegincomScore Tag -->'
             . '<script>'
             . 'var _comscore = _comscore || [];'
-            . '_comscore.push({ c1: "2", c2: "'. $comScoreConfig['page_id'] .'" });'
+            . '_comscore.push({ c1: "2", c2: "'. $comScoreConfig['page_id'] .'",
+                options: {
+                    url_append: "comscorekw=fbia"
+                }});'
             . '(function() {'
             . 'var s = document.createElement("script"), el = document.getElementsByTagName("script")[0]; s.async = true;'
             . 's.src = (document.location.protocol == "https:" ? "https://sb" :"http://b") + ".scorecardresearch.com/beacon.js";'
@@ -20,7 +23,7 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
             . '})();'
             . '</script>'
             . '<noscript>'
-            . '<img src="http://b.scorecardresearch.com/p?c1=2&c2='. $comScoreConfig['page_id'] .'&cv=2.0&cj=1" />'
+            . '<img src="http://b.scorecardresearch.com/p?c1=2&c2='. $comScoreConfig['page_id'] .'&cv=2.0&cj=1&comscorekw=fbia" />'
             . '</noscript>'
             . '<!-- EndcomScore  Tag -->'."\n";
     }
