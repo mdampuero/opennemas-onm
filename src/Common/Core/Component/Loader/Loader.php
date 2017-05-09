@@ -94,6 +94,13 @@ class Loader
 
         foreach ($parents as $t) {
             $template->addTheme($t);
+
+            // Load advertisements, layouts and menus for parents
+            foreach ($t->parameters as $key => $values) {
+                if (method_exists($this, 'load' . $key)) {
+                    $this->{'load' . $key}($values);
+                }
+            }
         }
 
         if (empty($theme->parameters)) {
