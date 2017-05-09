@@ -1,4 +1,7 @@
 <?php
+
+namespace Common\Core\Component\Helper;
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,7 +10,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class AdvertisementPositions
+class AdvertisementHelper
 {
     /**
      * Array with all ads positions.
@@ -17,20 +20,20 @@ class AdvertisementPositions
     private $positions = [];
 
     /**
-     * undocumented function
+     * Initializes the AdvertisementHelper.
      *
-     * @return void
-     * @author
-     **/
-    public function __construct()
+     * @param Connection $conn The database connection.
+     */
+    public function __construct($conn)
     {
+        $this->conn      = $conn;
         $this->positions = [
             1 => [
-                'name'  => _('Top Left LeaderBoard'),
+                'name'  => 'Top Left LeaderBoard',
                 'group' => 'frontpage'
             ],
             2 => [
-                'name'  => _('Top Right LeaderBoard'),
+                'name'  => 'Top Right LeaderBoard',
                 'group' => 'frontpage'
             ],
             3 => [
@@ -467,7 +470,7 @@ class AdvertisementPositions
                 'group' => 'opinion_inner'
             ],
             792 => [
-                'name'  => _('[OI] Right Skyscraper'),
+                'name'  => '[OI] Right Skyscraper',
                 'group' => 'opinion_inner'
             ],
             793 => [

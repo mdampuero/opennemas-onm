@@ -71,7 +71,7 @@ class StaticPagesController extends Controller
      **/
     public static function getAds()
     {
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', array(1, 2, 5, 6, 7, 9));
         $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, 0);
 

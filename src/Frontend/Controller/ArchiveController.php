@@ -182,7 +182,7 @@ class ArchiveController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 

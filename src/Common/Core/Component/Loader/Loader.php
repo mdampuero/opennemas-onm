@@ -336,7 +336,7 @@ class Loader
      */
     protected function loadAdvertisements($positions)
     {
-        $this->container->get('core.manager.advertisement')
+        $this->container->get('core.helper.advertisement')
             ->addPositions($positions);
     }
 

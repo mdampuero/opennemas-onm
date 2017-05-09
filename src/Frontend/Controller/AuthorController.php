@@ -236,7 +236,7 @@ class AuthorController extends Controller
      */
     public static function getInnerAds($category = 0)
     {
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner');
         $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
