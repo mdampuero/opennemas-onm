@@ -1,8 +1,6 @@
--- MySQL dump 10.13  Distrib 5.7.15, for Linux (x86_64)
---
--- Host: 172.17.0.8    Database: onm-instances
+-- MySQL dump 10.13  Distrib 5.7.18, for Linux (x86_64)
 -- ------------------------------------------------------
--- Server version	5.6.26-log
+-- Server version	5.7.18-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -35,6 +33,7 @@ CREATE TABLE `client` (
   `city` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `state` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `country` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
+  `owner_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -193,7 +192,7 @@ CREATE TABLE `instances` (
 
 LOCK TABLES `instances` WRITE;
 /*!40000 ALTER TABLE `instances` DISABLE KEYS */;
-INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.opennemas.localhost,opennemas.test.opennemas.com,opennemas.staging.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:0:\"\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-04 03:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:16:{i:0;s:12:\"SUPPORT_NONE\";i:1;s:15:\"ADVANCED_SEARCH\";i:2;s:15:\"ARTICLE_MANAGER\";i:3;s:16:\"CATEGORY_MANAGER\";i:4;s:15:\"COMMENT_MANAGER\";i:5;s:12:\"FILE_MANAGER\";i:6;s:17:\"FRONTPAGE_MANAGER\";i:7;s:13:\"IMAGE_MANAGER\";i:8;s:15:\"KEYWORD_MANAGER\";i:9;s:12:\"MENU_MANAGER\";i:10;s:15:\"OPINION_MANAGER\";i:11;s:16:\"SETTINGS_MANAGER\";i:12;s:20:\"STATIC_PAGES_MANAGER\";i:13;s:13:\"TRASH_MANAGER\";i:14;s:17:\"USERVOICE_SUPPORT\";i:15;s:14:\"WIDGET_MANAGER\";}','SUPPORT_NONE',NULL);
+INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.opennemas.localhost,opennemas.test.opennemas.com,opennemas.staging.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:0:\"\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-04 03:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:16:{i:0;s:12:\"SUPPORT_NONE\";i:1;s:15:\"ADVANCED_SEARCH\";i:2;s:15:\"ARTICLE_MANAGER\";i:3;s:16:\"CATEGORY_MANAGER\";i:4;s:15:\"COMMENT_MANAGER\";i:5;s:12:\"FILE_MANAGER\";i:6;s:17:\"FRONTPAGE_MANAGER\";i:7;s:13:\"IMAGE_MANAGER\";i:8;s:15:\"KEYWORD_MANAGER\";i:9;s:12:\"MENU_MANAGER\";i:10;s:15:\"OPINION_MANAGER\";i:11;s:16:\"SETTINGS_MANAGER\";i:12;s:20:\"STATIC_PAGES_MANAGER\";i:13;s:13:\"TRASH_MANAGER\";i:14;s:17:\"USERVOICE_SUPPORT\";i:15;s:14:\"WIDGET_MANAGER\";}','SU',NULL);
 /*!40000 ALTER TABLE `instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,6 +250,8 @@ CREATE TABLE `purchase` (
   `invoice_id` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created` datetime NOT NULL,
   `updated` datetime DEFAULT NULL,
+  `notes` text COLLATE utf8_unicode_ci,
+  `terms` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -418,6 +419,8 @@ CREATE TABLE `users` (
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
   `fk_user_group` varchar(100) DEFAULT NULL,
+  `sessionexpire` tinyint(1) NOT NULL DEFAULT '15',
+  `deposit` decimal(10,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -428,7 +431,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (3,'macada','2f575705daf41049194613e47027200b','',NULL,0,'david.martinez@openhost.es','David Martinez',0,NULL,1,'4'),(4,'alex','4c246829b53bc5712d52ee777c52ebe7','',NULL,0,'alex@openhost.es','Alexandre Rico',0,NULL,1,'4'),(5,'fran','6d87cd9493f11b830bbfdf628c2c4f08','',NULL,0,'fran@openhost.es','Francisco Dieguez',0,NULL,1,'4'),(7,'sandra','bd80e7c35b56dccd2d1796cf39cd05f6','',NULL,0,'sandra@openhost.es','Sandra Pereira',0,NULL,1,'4');
+INSERT INTO `users` VALUES (5,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,0,'fran@openhost.es','Francisco Dieguez',0,NULL,1,'4',15,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -441,4 +444,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-28 10:20:49
+-- Dump completed on 2017-05-10 11:47:53
