@@ -431,7 +431,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (5,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,0,'fran@openhost.es','Francisco Dieguez',0,NULL,1,'4',15,0);
+INSERT INTO `users` VALUES (5,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,0,'support@opennemas.com','Administrator',0,NULL,1,'4',15,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -444,4 +444,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-10 11:47:53
+-- Dump completed on 2017-05-10 16:50:58
