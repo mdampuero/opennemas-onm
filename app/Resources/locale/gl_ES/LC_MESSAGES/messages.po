@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-06 13:09+0000\n"
-"PO-Revision-Date: 2017-04-06 15:21+0200\n"
+"POT-Creation-Date: 2017-04-11 17:41+0000\n"
+"PO-Revision-Date: 2017-04-11 19:47+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -75,6 +75,9 @@ msgstr "Non se puido actualizar a publicidade."
 
 msgid "Settings saved successfully."
 msgstr "Configuracións gardadas correctamente."
+
+msgid "Home"
+msgstr "Portada"
 
 msgid " - Select one author - "
 msgstr " - Seleccione un autor - "
@@ -2243,9 +2246,15 @@ msgstr "Anterior"
 msgid "Content already imported"
 msgstr "Contido xa importado"
 
-#, fuzzy, php-format
+msgid "Settings saved successfully"
+msgstr "Configuración gardada correctamente"
+
+msgid "Unable to save settings"
+msgstr "Non se puido gardar as configuración"
+
+#, php-format
 msgid "The cache connection for '%s' does not exist"
-msgstr "O repositorio «%s» non existe en %s"
+msgstr ""
 
 #, fuzzy, php-format
 msgid "The instance \"%s\" is not activated"
@@ -2257,9 +2266,8 @@ msgstr "Pagar con tarxeta de crédito"
 msgid "Pay via PayPal"
 msgstr "Pagar con PayPal"
 
-#, fuzzy
 msgid "There is no billing information."
-msgstr "Non tes ningunha información de facturación"
+msgstr "Non hai información de facturación."
 
 msgid ""
 "Url must be longer than 4 characters and only must content characters and "
@@ -2421,77 +2429,73 @@ msgid "The fields '%s' are missing for entity of class '%s'"
 msgstr ""
 
 msgid "Society"
-msgstr "Sociedade"
+msgstr ""
 
 msgid "Agriculture"
-msgstr "Agricultura"
+msgstr ""
 
 msgid "Council"
-msgstr "Concellos"
+msgstr ""
 
 msgid "Society (CUL)"
-msgstr "Sociedade (CUL)"
+msgstr ""
 
-#, fuzzy
 msgid "Event CYA"
-msgstr "Eventos SUC"
+msgstr ""
 
 msgid "Society CYT"
-msgstr "Sociedade CYT"
+msgstr ""
 
 msgid "Disturbs"
-msgstr "Disturbios"
+msgstr ""
 
-#, fuzzy
 msgid "Sports"
-msgstr "Informes"
+msgstr ""
 
 msgid "Economy"
-msgstr "Economía"
+msgstr ""
 
 msgid "Society Education EDU"
-msgstr "Sociedade Educación EDU"
+msgstr ""
 
 msgid "GALICIA"
-msgstr "Galiza"
+msgstr ""
 
 msgid "JUSTICIA"
-msgstr "Xustiza"
+msgstr ""
 
-#, fuzzy
 msgid "Environment"
-msgstr "Aliñamento"
+msgstr ""
 
 msgid "Politics OPL"
-msgstr "Política OPL"
+msgstr ""
 
 msgid "Politics POL"
-msgstr "Política POL"
+msgstr ""
 
 msgid "TV Guide"
-msgstr "Programación TV"
+msgstr ""
 
 msgid "Society REL"
-msgstr "Sociedade REL"
+msgstr ""
 
 msgid "Society SAN"
-msgstr "Sociedade SAN"
+msgstr ""
 
 msgid "Society SOC"
-msgstr "Sociedade SOC"
+msgstr ""
 
 msgid "Event SUC"
-msgstr "Eventos SUC"
+msgstr ""
 
 msgid "Society SYS"
-msgstr "Sociedade SYS"
+msgstr ""
 
-#, fuzzy
 msgid "Society Toros"
-msgstr "Sociedade CYT"
+msgstr ""
 
 msgid "Justice"
-msgstr "Xustiza"
+msgstr ""
 
 #, fuzzy, php-format
 msgid "Can't connect to server %s. Please check your conn details."
@@ -3059,9 +3063,6 @@ msgstr ""
 
 msgid "Section"
 msgstr "Sección"
-
-msgid "Home"
-msgstr "Portada"
 
 msgid "Favorite"
 msgstr "Favorito"
@@ -4903,6 +4904,9 @@ msgstr "Si, gardar"
 msgid "Yes, update it"
 msgstr "Si, actualizar"
 
+msgid "Config users module"
+msgstr "Configuración do módulo «usuarios»"
+
 msgid "Backend"
 msgstr "Panel de control"
 
@@ -4981,17 +4985,8 @@ msgstr "Confirmar contrasinal"
 msgid "Additional data"
 msgstr "Datos adicionais"
 
-msgid "Registered date:"
-msgstr "Data de rexistro:"
-
-msgid "Postal Code:"
-msgstr "Código postal:"
-
-msgid "Birth Date:"
-msgstr "Data de nacemento:"
-
-msgid "Gender:"
-msgstr "Sexo:"
+msgid "Select a country"
+msgstr "Seleccione un país"
 
 msgid "Has backend access"
 msgstr "Acceso ao panel"
@@ -5038,6 +5033,24 @@ msgstr "Limite de tiempo del paywall:"
 
 msgid "Allows you to login into Opennemas with %1"
 msgstr "Permiteche iniciar sesión en Opennemas con %1"
+
+msgid "Extra fields"
+msgstr "Campos adicionais"
+
+msgid ""
+"This fields will be asked during registration and can be edited in the "
+"control panel."
+msgstr ""
+"Estes campos serán solicitados durante o rexistro e poden editarse no panel "
+"de control."
+
+msgid "Country"
+msgstr "País"
+
+msgid "Comma separated list of keys and value (key1:value1, key2:value2,...)"
+msgstr ""
+"Lista de chaves e valores separados por comas (chave1:valor1, chave2:"
+"valor2,...)"
 
 msgid "Instance not activated - Opennemas"
 msgstr "Instancia non activada - Opennemas"
@@ -6077,12 +6090,6 @@ msgstr "URL da páxina de aceptación de cookies"
 msgid "Language & Time"
 msgstr "Idioma e hora"
 
-msgid "Country"
-msgstr "País"
-
-msgid "Select a country"
-msgstr "Seleccione un país"
-
 msgid "Default language"
 msgstr "Idioma por omisión"
 
@@ -6791,13 +6798,7 @@ msgstr "Imaxe ou obxecto Flash"
 msgid "HTML or Javascript code"
 msgstr "Código HTML ou Javascript"
 
-msgid "Open X zone"
-msgstr "Zona de OpenX"
-
-msgid "Google DFP unit"
-msgstr "Unidade de Google DFP"
-
-msgid "Open X zone id"
+msgid "OpenX zone id"
 msgstr "Id de zona OpenX"
 
 msgid ""
@@ -6818,46 +6819,81 @@ msgstr ""
 "Google DFP usa un identificador de unidade para identificar unha "
 "publicidade. Completa o identificador de zona desde o teu panel de Google DFP"
 
+msgid "Url"
+msgstr "URL"
+
+msgid "Devices"
+msgstr "Dispositivos"
+
 msgid "Width"
 msgstr "Ancho"
+
+msgid "Desktop"
+msgstr "Escritorio"
+
+msgid "Tablet"
+msgstr "Tablet"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Display the advertisement only on the selected devices"
+msgstr "Mostrar a publicidade só nos dispositivos seleccionados"
+
+msgid "Dimensions"
+msgstr "Dimensións"
+
+msgid "One or more dimensions are invalid"
+msgstr "Unha ou máis dimensións son inválidas"
 
 msgid "Height"
 msgstr "Alto"
 
-msgid "Add another size"
-msgstr "Añadir otro tamaño"
+msgid "Mark"
+msgstr "Marca"
 
-msgid "When to show this ad"
-msgstr "Cando mostrar esta publicidade"
+msgid "Top"
+msgstr "Enriba"
 
-msgid "Restrictions"
-msgstr "Restricións"
+msgid "Left"
+msgstr "Esquerda"
 
-msgid "Show this ad if satisfy one condition"
-msgstr "Mostra esta publicidade só se cumpre unha condición"
+msgid "Right"
+msgstr "Dereita"
 
-msgid "Without limits"
-msgstr "Sen limites"
+msgid "Bottom"
+msgstr "Debaixo"
+
+msgid ""
+"Defines the orientation for the word that marks the advertisement position"
+msgstr "Define a orientación da palabra que marca o espazo de publicidade"
 
 msgid "Date range"
 msgstr "Rango de datas"
 
-msgid "Until"
-msgstr "Até"
+msgid "End"
+msgstr "Fin"
 
-msgid "Show this ad within a range of dates."
-msgstr "Mostra esta publicidade durante un rango de datas."
+msgid "Start"
+msgstr "Iniciar"
 
-msgid "Url"
-msgstr "URL"
+msgid "Display the advertisement if current date is in range"
+msgstr "Mostrar a publicidade se a data actual está dentro do rango"
 
-msgid "Display banner while"
-msgstr "Mostrar a publicidade durante"
+msgid "Select all"
+msgstr "Seleccionar todo"
 
-msgid "Amount of seconds that this banner will block all the page."
+msgid ""
+"Display the advertisement if user belongs to one or more of the selected "
+"user groups"
 msgstr ""
-"Cantidade de segundos durante os que esta publicidade bloqueara toda a "
-"páxina."
+"Mostrar a publicidade se o usuario pertence a un ou máis grupos seleccionados"
+
+msgid "Display the advertisement only in the selected categories"
+msgstr "Mostrar a publicidade só nas categorías seleccionadas"
+
+msgid "Display the advertisement for a limited time (intersticials only)"
+msgstr "Mostrar a publicidade durante un tempo limitado (só intersticiais)"
 
 msgid "Where to show this ad"
 msgstr "Onde mostrar esta publicidade"
@@ -6895,12 +6931,6 @@ msgstr "Páxinas de Instant Articles"
 msgid "Others"
 msgstr "Outros"
 
-msgid "In categories"
-msgstr "Nas categorías"
-
-msgid "and inside the position"
-msgstr "e na posición"
-
 msgid "AMP inner article - Button 1"
 msgstr "Artigo interior AMP - Botón 1"
 
@@ -6919,6 +6949,12 @@ msgstr "Artigo interior Instant Articles - Botón 2"
 msgid "Instant Articles inner article - Button 3"
 msgstr "Artigo interior Instant Articles - Botón 3"
 
+msgid "Entering on the requested page"
+msgstr "Entrando na páxina solicitada"
+
+msgid "Skip advertisement"
+msgstr "Saltar publicidade"
+
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
 "advertisement but Opennemas already supports this type of advertisements."
@@ -6932,6 +6968,9 @@ msgid ""
 msgstr ""
 "Desexa corrixir automaticamente esta publicidade para usar a integración de "
 "Google DFP?"
+
+msgid "Google DFP unit"
+msgstr "Unidade de Google DFP"
 
 msgid "Cookie lifetime for intersticials"
 msgstr "Tempo de vida da cookie para os intersticiais"
@@ -7743,9 +7782,6 @@ msgstr "Empresa"
 msgid "VAT number"
 msgstr "Identificador fiscal"
 
-msgid "Phone"
-msgstr "Teléfono"
-
 msgid "Screenshots and videos"
 msgstr "Imaxes e vídeos"
 
@@ -8237,9 +8273,6 @@ msgstr "Non hai compras por agora"
 msgid "View purchase"
 msgstr "Ver compra"
 
-msgid "Select all"
-msgstr "Seleccionar todo"
-
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
 
@@ -8390,12 +8423,6 @@ msgstr "Obxectivo"
 
 msgid "L10n"
 msgstr "L10n"
-
-msgid "Start"
-msgstr "Iniciar"
-
-msgid "End"
-msgstr "Fin"
 
 msgid "Read"
 msgstr "Lidas"
@@ -8659,12 +8686,70 @@ msgid "Action"
 msgstr "Acción"
 
 #, fuzzy
-#~ msgid "Drop files here to upload"
-#~ msgstr "Arrastrar ficheiros aquí"
+#~ msgid ""
+#~ "Display the advertisement if frontpage or content belongs to one or more "
+#~ "of the selected categories"
+#~ msgstr ""
+#~ "Mostrar a publicidade se o usuario pertence a un ou máis grupos "
+#~ "seleccionados"
 
 #, fuzzy
-#~ msgid "Settings saved successfully"
-#~ msgstr "Configuracións gardadas correctamente."
+#~ msgid "Open X"
+#~ msgstr "OpenX"
+
+#~ msgid "Registered date:"
+#~ msgstr "Data de rexistro:"
+
+#~ msgid "Postal Code:"
+#~ msgstr "Código postal:"
+
+#~ msgid "Birth Date:"
+#~ msgstr "Data de nacemento:"
+
+#~ msgid "Gender:"
+#~ msgstr "Sexo:"
+
+#~ msgid "Open X zone"
+#~ msgstr "Zona de OpenX"
+
+#~ msgid "Add another size"
+#~ msgstr "Añadir otro tamaño"
+
+#~ msgid "When to show this ad"
+#~ msgstr "Cando mostrar esta publicidade"
+
+#~ msgid "Restrictions"
+#~ msgstr "Restricións"
+
+#~ msgid "Show this ad if satisfy one condition"
+#~ msgstr "Mostra esta publicidade só se cumpre unha condición"
+
+#~ msgid "Without limits"
+#~ msgstr "Sen limites"
+
+#~ msgid "Until"
+#~ msgstr "Até"
+
+#~ msgid "Show this ad within a range of dates."
+#~ msgstr "Mostra esta publicidade durante un rango de datas."
+
+#~ msgid "Display banner while"
+#~ msgstr "Mostrar a publicidade durante"
+
+#~ msgid "Amount of seconds that this banner will block all the page."
+#~ msgstr ""
+#~ "Cantidade de segundos durante os que esta publicidade bloqueara toda a "
+#~ "páxina."
+
+#~ msgid "In categories"
+#~ msgstr "Nas categorías"
+
+#~ msgid "and inside the position"
+#~ msgstr "e na posición"
+
+#, fuzzy
+#~ msgid "Drop files here to upload"
+#~ msgstr "Arrastrar ficheiros aquí"
 
 #~ msgid ""
 #~ "We have detected that you are using an Adblocker, please disable it to "
@@ -8692,10 +8777,6 @@ msgstr "Acción"
 #, fuzzy
 #~ msgid "Site language"
 #~ msgstr "Idioma do usuario"
-
-#, fuzzy
-#~ msgid "Dimensions"
-#~ msgstr "Extensións"
 
 #~ msgid "You don't have enough privileges to see this category."
 #~ msgstr "Non tes permisos dabondo para ver esta categoría."
@@ -10886,9 +10967,6 @@ msgstr "Acción"
 #~ "<div><p>Non se puideron atopar vídeos que coincidan coa súa busca.</p></"
 #~ "div>"
 
-#~ msgid "Market"
-#~ msgstr "Tenda"
-
 #~ msgid "Get next page"
 #~ msgstr "Páxina seguinte"
 
@@ -11831,12 +11909,6 @@ msgstr "Acción"
 
 #~ msgid "Error saving"
 #~ msgstr "Erro ao gardar"
-
-#~ msgid "Left"
-#~ msgstr "Esquerda"
-
-#~ msgid "Right"
-#~ msgstr "Dereita"
 
 #~ msgid "Uploaded"
 #~ msgstr "Subido"

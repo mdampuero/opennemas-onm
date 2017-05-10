@@ -54,6 +54,10 @@ services:
         class:     Common\Core\Component\Geo\Geo
         arguments: [ '@core.locale' ]
 
+    core.helper.advertisement:
+        class: Common\Core\Component\Helper\AdvertisementHelper
+        arguments: [ '@orm.connection.instance' ]
+
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
@@ -73,6 +77,12 @@ services:
     core.instance.validator:
         class:     Common\Core\Component\Instance\Validator
         arguments: [ '@orm.manager' ]
+
+    core.listener.controller:
+        class:     Common\Core\EventListener\ControllerListener
+        arguments: [ '@core.template.globals' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
 
     core.listener.core:
         class:     Common\Core\EventListener\CoreListener
@@ -147,6 +157,10 @@ services:
     core.template:
         class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.filters%' ]
+
+    core.template.globals:
+        class:     Common\Core\Component\Template\GlobalVariables
+        arguments: [ '@service_container' ]
 
     core.template.admin:
         class:     Common\Core\Component\Template\Template

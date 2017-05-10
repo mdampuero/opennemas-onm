@@ -120,15 +120,15 @@ class BlogsController extends Controller
             );
         }
 
-        return $this->render(
-            'opinion/blog_frontpage.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'advertisements'  => $this->getAds(),
-                'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => 'blog-frontpage,'.$page
-            )
-        );
+        list($positions, $advertisements) = $this->getAds();
+
+        return $this->render('opinion/blog_frontpage.tpl', [
+            'advertisements'  => $advertisements,
+            'ads_positions'   => $positions,
+            'cache_id'        => $cacheID,
+            'actual_category' => 'blog', // Used in renderMenu
+            'x-tags'          => 'blog-frontpage,'.$page
+        ]);
     }
 
     /**
@@ -239,16 +239,15 @@ class BlogsController extends Controller
             }
         } // End if isCached
 
-        return $this->render(
-            'opinion/blog_author_index.tpl',
-            [
-                'cache_id'        => $cacheID,
-                'advertisements'  => $this->getAds(),
-                'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => 'blog-author-frontpage,'.$slug.','.$page
-            ]
-        );
+        list($positions, $advertisements) = $this->getAds();
 
+        return $this->render('opinion/blog_author_index.tpl', [
+            'cache_id'        => $cacheID,
+            'advertisements'  => $advertisements,
+            'ads_positions'   => $positions,
+            'actual_category' => 'blog', // Used in renderMenu
+            'x-tags'          => 'blog-author-frontpage,'.$slug.','.$page
+        ]);
     }
 
     /**
@@ -311,20 +310,20 @@ class BlogsController extends Controller
             $this->view->assign(['author' => $author]);
         } // End if isCached
 
+        list($positions, $advertisements) = $this->getAds('inner');
+
         // Show in Frontpage
-        return $this->render(
-            'opinion/blog_inner.tpl',
-            [
-                'blog'            => $blog,
-                'content'         => $blog,
-                'cache_id'        => $cacheID,
-                'advertisements'  => $this->getAds('inner'),
-                'actual_category' => 'blog', // Used in renderMenu
-                'x-tags'          => 'blog-inner,'.$blog->id,
-                'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable
-            ]
-        );
+        return $this->render('opinion/blog_inner.tpl', [
+            'blog'            => $blog,
+            'content'         => $blog,
+            'cache_id'        => $cacheID,
+            'advertisements'  => $advertisements,
+            'ads_positions'   => $positions,
+            'actual_category' => 'blog', // Used in renderMenu
+            'x-tags'          => 'blog-inner,'.$blog->id,
+            'x-cache-for'     => '+1 day',
+            'x-cacheable'     => $cacheable
+        ]);
     }
 
     /**
@@ -337,13 +336,15 @@ class BlogsController extends Controller
     private function getAds($context = '')
     {
         // Get opinion positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', [ 7, 9 ]);
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, '4');
+        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, '4');
+
+        return [ $positions, $advertisements ];
     }
 }

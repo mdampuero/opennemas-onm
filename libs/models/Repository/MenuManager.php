@@ -202,7 +202,6 @@ class MenuManager extends BaseManager
     {
         if (!is_array($menu)
             || !array_key_exists('name', $menu)
-            || array_key_exists($menu['name'], $this->menus)
         ) {
             throw new \Exception(_('Unable to register the menu'));
         }

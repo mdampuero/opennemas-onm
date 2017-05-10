@@ -122,7 +122,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $session->set('failed_login_attempts', 0);
         $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
 
+        $response = new RedirectResponse($request->get('_referer'));
 
-        return new RedirectResponse($request->get('_referer'));
+        return $response;
     }
 }
