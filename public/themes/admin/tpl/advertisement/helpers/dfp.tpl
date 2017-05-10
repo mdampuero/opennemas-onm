@@ -2,6 +2,7 @@
   <head>
     <style>
       body {
+        display: table;
         margin: 0;
         overflow: hidden;
         padding: 0;

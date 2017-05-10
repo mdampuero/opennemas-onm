@@ -374,7 +374,7 @@ class AlbumsController extends Controller
         $category = $ccm->get_id($categoryName);
 
         // Get album_inner positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         if ($position == 'inner') {
             $positions = $positionManager->getPositionsForGroup('album_inner', [ 7 ]);
         } else {

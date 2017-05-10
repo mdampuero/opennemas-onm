@@ -749,7 +749,7 @@ class Advertisement extends Content
             return '';
         }
 
-        $html  = '<div class="oat"%s data-type="%s"%s></div>';
+        $html  = '<div class="ad-slot oat"%s data-type="%s"%s></div>';
         $id    = '';
         $type  = $this->type_advertisement;
         $width = '';

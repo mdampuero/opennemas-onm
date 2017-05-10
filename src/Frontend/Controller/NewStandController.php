@@ -269,7 +269,7 @@ class NewStandController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get news_stand positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('frontpage', array(103, 105));
         $advertisements =  \Advertisement::findForPositionIdsAndCategory($positions, $category);
 

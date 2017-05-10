@@ -301,7 +301,7 @@ class FrontpagesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // TODO: Use $this->get when the function changes to non-static
-        $positions = getService('core.manager.advertisement')
+        $positions = getService('core.helper.advertisement')
             ->getPositionsForGroup('frontpage');
 
         $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);

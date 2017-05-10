@@ -175,6 +175,33 @@ class AdvertisementController extends Controller
     }
 
     /**
+     * Returns the current advertisement format.
+     *
+     * @param Advertisement $advertisement The advertisement object.
+     *
+     * @return string The current advertisement format.
+     */
+    protected function getFormat($advertisement)
+    {
+        if ((int) $advertisement->with_script === 0) {
+            return 'image';
+        }
+
+        if ((int) $advertisement->with_script === 2) {
+            return 'OpenX';
+        }
+
+        if ((int) $advertisement->with_script === 3
+            || ((int) $advertisement->with_script === 1
+                && preg_match('/googletag\.defineSlot/', $advertisement->script))
+        ) {
+            return 'DFP';
+        }
+
+        return 'html';
+    }
+
+    /**
      * Returns the list of tags basing on an advertisement.
      *
      * @param Advertisement $advertisement The advertisement object.
@@ -298,7 +325,7 @@ class AdvertisementController extends Controller
         $object->timeout     = (int) $element->timeout;
         $object->starttime   = $element->starttime;
         $object->endtime     = $element->endtime;
-        $object->format      = ($element->with_script == 1) ? 'html' : 'image';
+        $object->format      = $this->getFormat($element);
         $object->devices     = $element->params['devices'];
         $object->user_groups = $element->params['user_groups'];
         $object->sizes       = $this->normalizeSizes($element->params);
@@ -394,12 +421,17 @@ class AdvertisementController extends Controller
      */
     protected function renderFlash($ad, $img)
     {
+        $publicId = date('YmdHis', strtotime($ad->created)) .
+            sprintf('%06d', $ad->pk_advertisement);
+
         $params = [
             'width'  => $img->width,
             'height' => $img->height,
             'src'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
                 . $img->path_file . $img->name,
-            'url'    => $ad->url
+            'url'    => $this->get('router')->generate('frontend_ad_redirect', [
+                'id' => $publicId
+            ])
         ];
 
         return $this->get('core.template.admin')
@@ -415,11 +447,12 @@ class AdvertisementController extends Controller
      */
     protected function renderHtml($ad)
     {
+        $tpl   = '<html><style>%s</style><body><div class="content">%s</div></body>';
         $html  = $ad->script;
         $style = 'body { margin: 0; overflow: hidden; padding: 0; text-align:'
             . ' center; } img { max-width: 100% }';
 
-        return "<html><style>$style</style><body>$html</body>";
+        return sprintf($tpl, $style, $html);
     }
 
     /**
@@ -432,13 +465,19 @@ class AdvertisementController extends Controller
      */
     protected function renderImage($ad, $img)
     {
+        $publicId = date('YmdHis', strtotime($ad->created)) .
+            sprintf('%06d', $ad->pk_advertisement);
+
         $params = [
             'category' => $img->category_name,
             'width'    => $img->width,
             'height'   => $img->height,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $ad->url,
+            'url'      => $this->get('router')
+                ->generate('frontend_ad_redirect', [
+                    'id' => $publicId
+                ]),
         ];
 
         return $this->get('core.template.admin')

@@ -30,7 +30,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         $id = 3200;
     }
 
-    $html        = '<div class="oat" data-type="%s"></div>';
+    $html        = '<div class="ad-slot oat" data-type="%s"></div>';
     $bodyWithAds = [];
 
     foreach ($paragraphs as $key => $paragraph) {

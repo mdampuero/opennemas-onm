@@ -852,7 +852,7 @@ class OpinionsController extends Controller
     public static function getAds($context = '')
     {
         // TODO: Use $this->get when the function changes to non-static
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         if ($context == 'inner') {
             $positions = $positionManager->getPositionsForGroup('opinion_inner', [ 7 ]);
         } else {

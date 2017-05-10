@@ -31,6 +31,7 @@
   clear: both;
   display: table;
   padding: 8px 0;
+  text-align: left;
   width: 100%;
 }
 
@@ -67,6 +68,7 @@
 
 .oat-container {
   margin: 0 auto;
+  max-width: 100%;
   overflow: hidden;
 }
 

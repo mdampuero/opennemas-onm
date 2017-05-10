@@ -253,7 +253,7 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // TODO: Use $this->get when the function changes to non-static
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
         $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 

@@ -57,7 +57,7 @@ class AdsController extends Controller
     public function listAction()
     {
         // Get ads positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $map             = $positionManager->getPositions();
         $adsNames        = $positionManager->getPositionNames();
 
@@ -126,7 +126,7 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
 
         if ('POST' !== $request->getMethod()) {
-            $adsPositions = $this->container->get('core.manager.advertisement');
+            $adsPositions = $this->container->get('core.helper.advertisement');
 
             $serverUrl = '';
             if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
@@ -135,7 +135,7 @@ class AdsController extends Controller
 
             $advertisement = new \Advertisement();
 
-            $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
+            $ads = $this->get('core.helper.advertisement')->getPositionsForTheme();
 
             return $this->render('advertisement/new.tpl', [
                 'advertisement' => $advertisement,
@@ -229,7 +229,7 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
 
-        $adsPositions = $this->container->get('core.manager.advertisement');
+        $adsPositions = $this->container->get('core.helper.advertisement');
         $serverUrl = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
@@ -265,7 +265,7 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $pm = $this->container->get('core.manager.advertisement');
+        $pm = $this->container->get('core.helper.advertisement');
 
         return $this->render('advertisement/new.tpl', [
             'ads_positions' => $adsPositions,

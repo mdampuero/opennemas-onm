@@ -547,7 +547,7 @@ class VideosController extends Controller
         $category     = $ccm->get_id($categoryName);
 
         // Get video positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         if ($context == 'inner') {
             $positions = $positionManager->getPositionsForGroup('video_inner', [ 7 ]);
         } else {

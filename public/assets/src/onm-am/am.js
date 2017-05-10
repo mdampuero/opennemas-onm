@@ -39,10 +39,24 @@
     };
 
     // Initialize the advertisement manager on load
+    self.addEventListener('load', load);
+  };
+
+  /**
+   * @function addEventListener
+   * @memberOf OAM
+   *
+   * @description
+   *   Adds an event listener.
+   *
+   * @param {Function} callback The funcion to execute.
+   */
+  OAM.prototype.addEventListener = function(name, callback) {
+    // Initialize the advertisement manager on load
     if (window.addEventListener !== undefined) {
-      window.addEventListener('load', load, false);
+      window.addEventListener(name, callback, false);
     } else {
-      window.attachEvent('onload', load);
+      window.attachEvent(name, callback);
     }
   };
 
@@ -152,16 +166,22 @@
 
     // Dispatch event when iframe loaded
     item.onload = function () {
-      if (index) {
-        var event = document.createEvent('Event');
-        event.item = item;
+      if (index !== undefined) {
+        var event   = document.createEvent('Event');
+        var content = item.contentWindow.document.body
+          .getElementsByClassName('content')[0];
+
+        event.args = {
+          height: content.scrollHeight,
+          width:  content.scrollWidth,
+        };
+
         event.initEvent('oat-index-' + index + '-loaded', true, true);
         window.dispatchEvent(event);
       }
 
       if (position) {
         var event = document.createEvent('Event');
-        event.item = item;
         event.initEvent('oat-' + position + '-loaded', true, true);
         window.dispatchEvent(event);
       }
@@ -224,15 +244,7 @@
       var id   = parseInt(slot.getAttribute('data-id'));
 
       var available = ads.filter(function(e) {
-        if (id) {
-          return e.id === id;
-        }
-
-        if (e.type !== 'normal' || !self.isVisible(e)) {
-          return false;
-        }
-
-        return e.position.indexOf(type) !== -1;
+        return self.isVisible(e, type, id);
       });
 
       // Remove slot when no advertisement
@@ -241,7 +253,7 @@
           slot.remove();
         }
 
-        return;
+        continue;
       }
 
       var ad   = self.getAdvertisement(available);
@@ -265,6 +277,42 @@
       }
 
       var item = self.createNormal(ad, type, i);
+
+      // Resize container when content loaded
+      var resize = function(e) {
+        var s = window.document.getElementById(e.type.replace('-loaded', ''));
+
+        if (!s) {
+          return;
+        }
+
+        var el = s.getElementsByClassName('oat-container')[0];
+
+        if (e.args.height > 0 && e.args.width > 0) {
+          el.style.height = e.args.height + 'px';
+          el.style.width  = e.args.width + 'px';
+        }
+      };
+
+      // Remove slot when no height
+      var remove = function(e) {
+        if (e.args.height === 0) {
+          var s = window.document.getElementById(e.type.replace('-loaded', ''));
+
+          if (!s) {
+            return;
+          }
+
+          s.remove();
+        }
+      };
+
+      self.addEventListener('oat-index-' + i + '-loaded', resize);
+
+      // Remove DFP slots when empty
+      if (ad.format === 'DFP') {
+        self.addEventListener('oat-index-' + i + '-loaded', remove);
+      }
 
       div.appendChild(item);
       slot.appendChild(div);
@@ -453,14 +501,24 @@
    * @memberOf OAM
    *
    * @description
-   *   Checks if an advertisement is visible basing on user and device
+   *   Checks if an advertisement is visible basing on user, slot and device
    *   information.
    *
-   * @param {Object} ad The advertisement object.
+   * @param {Object}  ad   The advertisement object.
+   * @param {Integer} type The advertisement position.
+   * @param {Integer} id   The advertisement id.
    *
    * @return {Boolean} True if the advertisement is visible. False otherwise.
    */
-  OAM.prototype.isVisible = function(ad) {
+  OAM.prototype.isVisible = function(ad, type, id) {
+    if (id && id !== parseInt(ad.id)) {
+      return false;
+    }
+
+    if (ad.position.indexOf(type) === -1) {
+      return false;
+    }
+
     var groups    = [];
     var now       = new Date();
     var endtime   = new Date(ad.endtime);
