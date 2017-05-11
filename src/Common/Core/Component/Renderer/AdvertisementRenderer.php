@@ -132,7 +132,7 @@ class AdvertisementRenderer
                 ."\n  googletag.pubads().enableSingleRequest();\n"
                 ."  googletag.pubads().collapseEmptyDivs();\n"
                 ."  googletag.enableServices();\n"
-                ."});\n</script>";
+                ."});\n</script>".PHP_EOL;
         }
 
         return $headerContents;
