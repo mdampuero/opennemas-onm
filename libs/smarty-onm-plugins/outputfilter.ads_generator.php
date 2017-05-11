@@ -12,13 +12,15 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 {
     $adsInline = true;
     if ($adsInline) {
-        $ads = $smarty->parent->tpl_vars['advertisements']->value;
         $adsRenderer    = getService('core.renderer.advertisement');
+        $ads            = $smarty->parent->tpl_vars['advertisements']->value;
         $actualCategory = $smarty->parent->tpl_vars['actual_category']->value;
         $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
+        $content        = $smarty->parent->tpl_vars['content']->value;
 
         $params = [
             'category' => $actualCategory,
+            'content'  => $content,
             'x-tags'   => $xtags,
         ];
 
@@ -26,9 +28,9 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         if ($reviveOutput) {
             $output = str_replace('</head>', $reviveOutput.'</head>', $output);
         }
-
         $dfpOutput = $adsRenderer->renderDFPHeader($ads, $params);
-        if ($dfpOutput) {
+
+        if (!empty($dfpOutput)) {
             $output = str_replace('</head>', $dfpOutput.'</head>', $output);
         }
     } else {

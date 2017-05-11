@@ -66,27 +66,23 @@ class AdvertisementRenderer
      **/
     public function renderDFPHeader($ads, $params)
     {
+        $headerContents = '';
         $dfpZonesInformation = [];
         foreach ($ads as $advertisement) {
             if ($advertisement->with_script == 3
                 && array_key_exists('googledfp_unit_id', $advertisement->params)
                 && !empty($advertisement->params['googledfp_unit_id'])
             ) {
-                if (is_array($advertisement->params['width'])
-                    && is_array($advertisement->params['height'])
-                ) {
-                    $sizes = "[";
-                    $comma = '';
-                    foreach ($advertisement->params['width'] as $key => $value) {
-                        $sizes .= $comma."[".$value.",".$advertisement->params['height'][$key]."]";
-                        $comma = ', ';
-                    }
-                    $sizes .= "]";
-                } else {
-                    $sizes = " [{$advertisement->params['width']}, {$advertisement->params['height']}]";
-                }
-                $dfpZonesInformation []= "googletag.defineSlot('{$advertisement->params['googledfp_unit_id']}',".$sizes.
-                    ", 'zone_{$advertisement->id}').addService(googletag.pubads());";
+                // TODO: Check Api/AdvertisementController::getSizes.
+                $sizes = array_map(function ($a) {
+                    return "[ {$a['width']}, {$a['height']} ]";
+                }, $advertisement->params['sizes']);
+
+                $sizes     = "[".implode(', ', $sizes)."]";
+                $dfpUnitID = $advertisement->params['googledfp_unit_id'];
+                $adId      = $advertisement->id;
+
+                $dfpZonesInformation []= "  googletag.defineSlot('{$dfpUnitID}', {$sizes}, 'zone_{$adId}').addService(googletag.pubads());";
             }
         }
 
@@ -98,14 +94,14 @@ class AdvertisementRenderer
                 array_key_exists('target', $dfpOptions) &&
                 !empty($dfpOptions['target'])
             ) {
-                $targetingCode = "\ngoogletag.pubads().setTargeting('".$dfpOptions['target']."', ['".$params['category']."']);";
+                $targetingCode = "googletag.pubads().setTargeting('".$dfpOptions['target']."', ['".$params['category']."']);";
             }
             if (is_array($dfpOptions) &&
                 array_key_exists('module', $dfpOptions) &&
                 !empty($dfpOptions['module'])
             ) {
-                $content = $smarty->parent->tpl_vars['content']->value;
                 $module = '';
+                $content = $params['content'];
                 if (!is_null($content)) {
                     $module = $content->content_type_name;
                 } elseif ($params['x-tags']->value) {
@@ -114,31 +110,32 @@ class AdvertisementRenderer
                 } elseif (!empty($params['polls']->value)) {
                     $module = 'poll-frontpage';
                 }
-                $targetingCode .= "\ngoogletag.pubads().setTargeting('".$dfpOptions['module']."', ['".$module."']);";
+                $targetingCode .= "\ngoogletag.pubads().setTargeting('".$dfpOptions['module']."', ['".$module."']);\n";
             }
+
             // Check for custom code
             $dfpCustomCode = getService('setting_repository')->get('dfp_custom_code');
             $customCode = '';
             if (!empty($dfpCustomCode)
             ) {
-                $customCode = "\n".base64_decode($dfpCustomCode);
+                $customCode = "\n".base64_decode($dfpCustomCode)."\n";
             }
 
-            $dfpOutput = "<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>\n"
+            $headerContents = "<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>\n"
                 ."<script>\n"
                 ."var googletag = googletag || {};\n"
                 ."googletag.cmd = googletag.cmd || [];\n"
-                ."</script>\n";
-            $dfpOutput .= "<script type='text/javascript'>\n"
-                          ."googletag.cmd.push(function() {\n"
-                          .implode("\n", $dfpZonesInformation)
-                          .$targetingCode
-                          .$customCode
-                          ."\ngoogletag.pubads().enableSingleRequest();\n"
-                          ."googletag.pubads().collapseEmptyDivs();\n"
-                          ."googletag.enableServices();\n"
-                          ."});\n</script>";
+                ."googletag.cmd.push(function() {\n"
+                .implode("\n", $dfpZonesInformation)
+                .$targetingCode
+                .$customCode
+                ."\n  googletag.pubads().enableSingleRequest();\n"
+                ."  googletag.pubads().collapseEmptyDivs();\n"
+                ."  googletag.enableServices();\n"
+                ."});\n</script>";
         }
+
+        return $headerContents;
     }
 
     /**
