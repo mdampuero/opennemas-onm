@@ -9,10 +9,10 @@ use \Common\Core\Component\Renderer\AdvertisementRenderer;
  */
 function smarty_insert_renderbanner($params, $smarty)
 {
-    $adsRenderer = getService('core.renderer.advertisement');
-
     $safeFrame = getService('setting_repository')->get('ads_settings')['safe_frame'];
+
     if (!$safeFrame) {
+        $adsRenderer = getService('core.renderer.advertisement');
         $type = $params['type'];
         $ads  = $smarty->tpl_vars['advertisements']->value;
 
