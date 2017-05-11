@@ -10,10 +10,15 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
+
+    $ads = $smarty->parent->tpl_vars['advertisements']->value;
+    if (count($ads) <= 0) {
+        return;
+    }
+
     $safeFrame = getService('setting_repository')->get('ads_settings')['safe_frame'];
     if (!$safeFrame) {
         $adsRenderer    = getService('core.renderer.advertisement');
-        $ads            = $smarty->parent->tpl_vars['advertisements']->value;
         $actualCategory = $smarty->parent->tpl_vars['actual_category']->value;
         $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
         $content        = $smarty->parent->tpl_vars['content']->value;
@@ -28,8 +33,8 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         if ($reviveOutput) {
             $output = str_replace('</head>', $reviveOutput.'</head>', $output);
         }
-        $dfpOutput = $adsRenderer->renderDFPHeader($ads, $params);
 
+        $dfpOutput = $adsRenderer->renderDFPHeader($ads, $params);
         if (!empty($dfpOutput)) {
             $output = str_replace('</head>', $dfpOutput.'</head>', $output);
         }
