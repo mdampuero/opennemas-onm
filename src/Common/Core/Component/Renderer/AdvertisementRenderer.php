@@ -194,10 +194,11 @@ class AdvertisementRenderer
     }
 
     /**
-     * undocumented function
+     * Renders an image/swf slot
      *
-     * @return void
-     * @author
+     * @param string $ad the ad object to render from
+     *
+     * @return string the HTML code for the ad image
      **/
     public function renderImage($ad)
     {
