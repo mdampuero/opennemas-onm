@@ -439,7 +439,8 @@ class AdsController extends Controller
             $settings = [
                 'ads_settings' => [
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
-                    'no_generics'     => $formValues->getDigits('ads_settings_no_generics'),
+                    'no_generics'     => is_null($formValues->get('ads_settings_no_generics')) ? 1 : 0,
+                    'safe_frame'      => empty($formValues->get('safe_frame')) ? 0 : 1
                 ],
                 'revive_ad_server' => [
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
