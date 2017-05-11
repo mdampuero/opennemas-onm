@@ -343,7 +343,7 @@ class BlogsController extends Controller
             $positions = $positionManager->getPositionsForGroup('opinion_frontpage', [ 7, 9 ]);
         }
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, '4');
+        $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($positions, '4');
 
         return [ $positions, $advertisements ];
     }

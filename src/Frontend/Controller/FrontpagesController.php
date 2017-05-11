@@ -304,7 +304,7 @@ class FrontpagesController extends Controller
         $positions = getService('core.helper.advertisement')
             ->getPositionsForGroup('frontpage');
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($positions, $category);
 
         // Get all the ads and add them to the advertisements list
         if (is_array($contents)) {

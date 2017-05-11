@@ -277,7 +277,7 @@ class SubscribersController extends Controller
         // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
-        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        $advertisements  = \Advertisement::findForPositionIdsAndCategoryPlain($positions, 0);
 
         return [ $positions, $advertisements ];
     }

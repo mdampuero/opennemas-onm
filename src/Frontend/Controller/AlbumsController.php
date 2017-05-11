@@ -381,7 +381,7 @@ class AlbumsController extends Controller
             $positions = $positionManager->getPositionsForGroup('album_frontpage', [ 7, 9 ]);
         }
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($positions, $category);
 
         return [ $positions, $advertisements ];
     }

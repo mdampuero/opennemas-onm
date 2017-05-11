@@ -384,7 +384,7 @@ class RssController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
+        return \Advertisement::findForPositionIdsAndCategoryPlain([1075, 1076, 1077], $category);
     }
 
     /**

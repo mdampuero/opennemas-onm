@@ -238,7 +238,7 @@ class AuthorController extends Controller
     {
         $positionManager = getService('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner');
-        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $advertisements  = \Advertisement::findForPositionIdsAndCategoryPlain($positions, $category);
 
         return [ $positions, $advertisements ];
     }

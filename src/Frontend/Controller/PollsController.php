@@ -294,7 +294,7 @@ class PollsController extends Controller
             $positions = $positionManager->getPositionsForGroup('polls_frontpage', [ 7, 9 ]);
         }
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
+        $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($positions, $this->category);
 
         return [ $positions, $advertisements ];
     }

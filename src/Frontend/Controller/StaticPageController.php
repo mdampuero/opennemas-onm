@@ -68,7 +68,7 @@ class StaticPageController extends Controller
         $positions = $positionManager
             ->getPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7 ]);
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($positions, 0);
 
         return [ $positions, $advertisements ];
     }

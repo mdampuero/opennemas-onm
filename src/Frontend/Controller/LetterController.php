@@ -326,7 +326,7 @@ class LetterController extends Controller
         // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
-        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        $advertisements  = \Advertisement::findForPositionIdsAndCategoryPlain($positions, 0);
 
         return [ $positions, $advertisements ];
     }
