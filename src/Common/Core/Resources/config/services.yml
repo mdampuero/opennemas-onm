@@ -58,6 +58,9 @@ services:
         class: Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@orm.connection.instance' ]
 
+    core.helper.advertisement_renderer:
+        class: Common\Core\Component\Renderer\AdvertisementRenderer
+
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
