@@ -12,8 +12,8 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 {
     $adsInline = true;
     if ($adsInline) {
-        $adsRenderer = new \Common\Core\Component\Renderer\AdvertisementRenderer();
         $ads = $smarty->parent->tpl_vars['advertisements']->value;
+        $adsRenderer    = getService('core.renderer.advertisement');
         $actualCategory = $smarty->parent->tpl_vars['actual_category']->value;
         $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
 

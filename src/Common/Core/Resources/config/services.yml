@@ -58,9 +58,6 @@ services:
         class: Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@orm.connection.instance' ]
 
-    core.helper.advertisement_renderer:
-        class: Common\Core\Component\Renderer\AdvertisementRenderer
-
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
@@ -142,6 +139,10 @@ services:
     core.locale:
         class:     Common\Core\Component\Locale\Locale
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
+
+    core.renderer.advertisement:
+        class: Common\Core\Component\Renderer\AdvertisementRenderer
+        arguments: [ '@core.template.admin' ]
 
     core.status.checker:
         class:     Common\Core\Component\Status\Checker

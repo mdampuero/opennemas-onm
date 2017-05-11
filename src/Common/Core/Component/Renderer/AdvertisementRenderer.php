@@ -12,6 +12,14 @@ namespace Common\Core\Component\Renderer;
 class AdvertisementRenderer
 {
     /**
+     * Initializes the renderer
+     * @param  Templating $template the tempalte service object
+     **/
+    public function __construct($template)
+    {
+        $this->template = $template;
+    }
+    /**
      * Renders an advertisement given and $ad
      *
      * @param  Advertisement $ad the ad to render

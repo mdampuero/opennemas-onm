@@ -9,7 +9,7 @@ use \Common\Core\Component\Renderer\AdvertisementRenderer;
  */
 function smarty_insert_renderbanner($params, $smarty)
 {
-    $adsRenderer = getService('core.helper.advertisement_renderer');
+    $adsRenderer = getService('core.renderer.advertisement');
 
     $adsInline = true;
     if ($adsInline) {
