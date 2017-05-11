@@ -11,8 +11,8 @@ function smarty_insert_renderbanner($params, $smarty)
 {
     $adsRenderer = getService('core.renderer.advertisement');
 
-    $adsInline = true;
-    if ($adsInline) {
+    $safeFrame = getService('setting_repository')->get('ads_settings')['safe_frame'];
+    if (!$safeFrame) {
         $type = $params['type'];
         $ads  = $smarty->tpl_vars['advertisements']->value;
 

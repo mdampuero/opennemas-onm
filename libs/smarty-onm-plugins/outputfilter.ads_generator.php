@@ -10,8 +10,8 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
-    $adsInline = true;
-    if ($adsInline) {
+    $safeFrame = getService('setting_repository')->get('ads_settings')['safe_frame'];
+    if (!$safeFrame) {
         $adsRenderer    = getService('core.renderer.advertisement');
         $ads            = $smarty->parent->tpl_vars['advertisements']->value;
         $actualCategory = $smarty->parent->tpl_vars['actual_category']->value;
