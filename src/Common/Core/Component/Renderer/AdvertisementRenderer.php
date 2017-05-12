@@ -46,20 +46,6 @@ class AdvertisementRenderer
     }
 
     /**
-     * Renders a DFP advertisement slot.
-     *
-     * @param Advertisement $ad The advertisement to render.
-     *
-     * @return string The HTML content for the DFP advertisement slot.
-     */
-    public function renderDFPSlot($ad)
-    {
-        return $this->tpl->fetch('advertisement/helpers/inline/dfp_slot.tpl', [
-            'id' => $ad->pk_advertisement
-        ]);
-    }
-
-    /**
      * Generates the HTML header section for the DFP ads.
      *
      * @param array $ads    The list of advertisements to generate the header
@@ -114,25 +100,54 @@ class AdvertisementRenderer
     }
 
     /**
-     * Renders a Revive advertisement.
+     * Renders a DFP advertisement slot.
      *
-     * @param Advertisement $ad the ad to render.
+     * @param Advertisement $ad The advertisement to render.
      *
-     * @return string the HTML content for the DFP slot.
+     * @return string The HTML content for the DFP advertisement slot.
      */
-    public function renderReviveSlot($ad)
+    public function renderDFPSlot($ad)
     {
-        $iframe = in_array($ad->type_advertisement, [ 50, 150, 250, 350, 450, 550 ]);
-        $url    = $this->router->generate('frontend_ad_get', [
-            'id' => $ad->pk_content
+        return $this->tpl->fetch('advertisement/helpers/inline/dfp_slot.tpl', [
+            'id' => $ad->pk_advertisement
         ]);
+    }
 
-        return $this->tpl
-            ->fetch('advertisement/helpers/inline/revive.slot.tpl', [
-                'id'     => $ad->id,
-                'iframe' => $iframe,
-                'url'    => $url,
-            ]);
+    /**
+     * Renders an image/swf based advertisement.
+     *
+     * @param string $ad The advertisement to render.
+     *
+     * @return string The HTML code for the advertisement.
+     */
+    public function renderImage($ad)
+    {
+        try {
+            $img = $this->container->get('entity_repository')
+                ->find('Photo', $ad->img);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+
+            return '';
+        }
+
+        $template = 'advertisement/helper/inline/image.tpl';
+
+        if ($img->type_img === 'swf') {
+            $template = 'advertisement/helper/inline/flash.tpl';
+        }
+
+        return $this->tpl->fetch($template, [
+            'height'   => $img->height,
+            'mediaUrl' => $img->path_img . $img->path_file,
+            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
+                . '/images' . $img->path_file . $img->name,
+            'url'      => $this->get('router')
+                ->generate('frontend_ad_redirect', [
+                    'id' => $publicId
+                ]),
+            'width'    => $img->width
+        ]);
     }
 
     /**
@@ -172,39 +187,24 @@ class AdvertisementRenderer
     }
 
     /**
-     * Renders an image/swf based advertisement.
+     * Renders a Revive advertisement.
      *
-     * @param string $ad The advertisement to render.
+     * @param Advertisement $ad the ad to render.
      *
-     * @return string The HTML code for the advertisement.
+     * @return string the HTML content for the DFP slot.
      */
-    public function renderImage($ad)
+    public function renderReviveSlot($ad)
     {
-        try {
-            $img = $this->container->get('entity_repository')
-                ->find('Photo', $ad->img);
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-
-            return '';
-        }
-
-        $template = 'advertisement/helper/inline/image.tpl';
-
-        if ($img->type_img === 'swf') {
-            $template = 'advertisement/helper/inline/flash.tpl';
-        }
-
-        return $this->tpl->fetch($template, [
-            'height'   => $img->height,
-            'mediaUrl' => $img->path_img . $img->path_file,
-            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
-                . '/images' . $img->path_file . $img->name,
-            'url'      => $this->get('router')
-                ->generate('frontend_ad_redirect', [
-                    'id' => $publicId
-                ]),
-            'width'    => $img->width
+        $iframe = in_array($ad->type_advertisement, [ 50, 150, 250, 350, 450, 550 ]);
+        $url    = $this->router->generate('frontend_ad_get', [
+            'id' => $ad->pk_content
         ]);
+
+        return $this->tpl
+            ->fetch('advertisement/helpers/inline/revive.slot.tpl', [
+                'id'     => $ad->id,
+                'iframe' => $iframe,
+                'url'    => $url,
+            ]);
     }
 }
