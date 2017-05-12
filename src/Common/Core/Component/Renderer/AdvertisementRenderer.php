@@ -142,10 +142,12 @@ class AdvertisementRenderer
             return '';
         }
 
-        $template = 'advertisement/helper/inline/image.tpl';
+        $publicId = date('YmdHis', strtotime($ad->created)) .
+            sprintf('%06d', $ad->pk_advertisement);
+        $template = 'advertisement/helpers/inline/image.tpl';
 
         if ($img->type_img === 'swf') {
-            $template = 'advertisement/helper/inline/flash.tpl';
+            $template = 'advertisement/helpers/inline/flash.tpl';
         }
 
         return $this->tpl->fetch($template, [
@@ -153,7 +155,7 @@ class AdvertisementRenderer
             'mediaUrl' => $img->path_img . $img->path_file,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->get('router')
+            'url'      => $this->container->get('router')
                 ->generate('frontend_ad_redirect', [
                     'id' => $publicId
                 ]),
