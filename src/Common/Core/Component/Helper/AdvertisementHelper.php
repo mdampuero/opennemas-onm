@@ -49,6 +49,18 @@ class AdvertisementHelper
     }
 
     /**
+     * Returns the name for an advertisement given its position.
+     *
+     * @param integer $id The advertisement position.
+     *
+     * @return string The advertisement name.
+     */
+    public function getAdvertisementName($id)
+    {
+        return $this->positions[$id]['name'];
+    }
+
+    /**
      * Returns the list of positions.
      *
      * @return array The list of positions.
@@ -117,16 +129,5 @@ class AdvertisementHelper
         }
 
         return $adsNames;
-    }
-
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function getAdvertisementName($id)
-    {
-        return $this->positions[$id]['name'];
     }
 }
