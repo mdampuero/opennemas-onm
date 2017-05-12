@@ -9,37 +9,36 @@ use \Common\Core\Component\Renderer\AdvertisementRenderer;
  */
 function smarty_insert_renderbanner($params, $smarty)
 {
-    $safeFrame = getService('setting_repository')->get('ads_settings')['safe_frame'];
+    $safeFrame = getService('setting_repository')
+        ->get('ads_settings')['safe_frame'];
 
-    if (!$safeFrame) {
-        $adsRenderer = getService('core.renderer.advertisement');
-        $type = $params['type'];
-        $ads  = $smarty->tpl_vars['advertisements']->value;
+    $tpl   = '<div class="ad-slot oat%s">%s</div>';
+    $class = '" data-type="' . $params['type'];
 
-        if (!is_array($ads)) {
-            $ads = [];
-        }
+    if ($safeFrame) {
+        return sprintf($tpl, $class, '');
+    }
 
-        // Filter advertisements by position
-        $ads = array_filter(
-            $ads,
-            function ($ad) use ($type) {
-                return $ad->type_advertisement == $type;
-            }
-        );
+    $class    = ' oat-visible';
+    $renderer = getService('core.renderer.advertisement');
+    $type     = $params['type'];
+    $ads      = $smarty->tpl_vars['advertisements']->value;
 
-        // Render the advertisement content
-        $content = '';
-        if (count($ads) > 0) {
-            // Pick one random advertisement from those available
-            $selectedAd = $ads[array_rand($ads)];
+    if (!is_array($ads)) {
+        $ads = [];
+    }
 
-            $adContent = $adsRenderer->render($selectedAd);
+    $ads = array_filter($ads, function ($ad) use ($type) {
+        return $ad->type_advertisement == $type;
+    });
 
-            $content =  sprintf('<div class="ad-slot oat">%s</div>', $adContent);
-        }
-    } else {
-        $content = sprintf('<div class="ad-slot oat" data-type="%s"></div>', $params['type']);
+    // Render the advertisement content
+    $content = '';
+
+    if (count($ads) > 0) {
+        $selectedAd = $ads[array_rand($ads)];
+        $content    = $renderer->render($selectedAd);
+        $content    = sprintf($tpl, $class, $content);
     }
 
     return $content;
