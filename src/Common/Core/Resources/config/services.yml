@@ -142,7 +142,7 @@ services:
 
     core.renderer.advertisement:
         class: Common\Core\Component\Renderer\AdvertisementRenderer
-        arguments: [ '@core.template.admin' ]
+        arguments: [ '@service_container' ]
 
     core.status.checker:
         class:     Common\Core\Component\Status\Checker

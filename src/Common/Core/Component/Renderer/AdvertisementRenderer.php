@@ -9,8 +9,19 @@
  */
 namespace Common\Core\Component\Renderer;
 
+/**
+ * The AdvertisementRenderer service provides methods to generate the HTML code
+ * for advertisements basing on the advertisements information.
+ */
 class AdvertisementRenderer
 {
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
     /**
      * Initializes the AdvertisementRenderer
      *
