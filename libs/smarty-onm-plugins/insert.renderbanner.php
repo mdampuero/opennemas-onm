@@ -37,7 +37,7 @@ function smarty_insert_renderbanner($params, $smarty)
 
     if (count($ads) > 0) {
         $selectedAd = $ads[array_rand($ads)];
-        $content    = $renderer->render($selectedAd);
+        $content    = $renderer->renderInline($selectedAd);
         $content    = sprintf($tpl, $class, $content);
     }
 

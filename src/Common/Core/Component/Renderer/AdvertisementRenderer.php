@@ -43,17 +43,17 @@ class AdvertisementRenderer
      *
      * @return string The HTML for the slot.
      */
-    public function render(\Advertisement $ad)
+    public function renderInline(\Advertisement $ad)
     {
         if ($ad->with_script == 1) {
             return $ad->script;
         } elseif ($ad->with_script == 2) {
-            return $this->renderReviveSlot($ad);
+            return $this->renderInlineReviveSlot($ad);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderDFPSlot($ad);
+            return  $this->renderInlineDFPSlot($ad);
         }
 
-        return $this->renderImage($ad);
+        return $this->renderInlineImage($ad);
     }
 
     /**
@@ -65,7 +65,7 @@ class AdvertisementRenderer
      *
      * @return string the HTML content for the DFP slot.
      */
-    public function renderDFPHeader($ads, $params)
+    public function renderInlineDFPHeader($ads, $params)
     {
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 3
@@ -100,7 +100,7 @@ class AdvertisementRenderer
             $customCode = base64_decode($dfpCustomCode);
         }
 
-        return $this->tpl->fetch('advertisement/helpers/inline/dfp_header.tpl', [
+        return $this->tpl->fetch('advertisement/helpers/inline/dfp.header.tpl', [
             'category'      => $category,
             'extension'     => $extension,
             'customCode'    => $customCode,
@@ -117,9 +117,9 @@ class AdvertisementRenderer
      *
      * @return string The HTML content for the DFP advertisement slot.
      */
-    public function renderDFPSlot($ad)
+    public function renderInlineDFPSlot($ad)
     {
-        return $this->tpl->fetch('advertisement/helpers/inline/dfp_slot.tpl', [
+        return $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
             'id' => $ad->pk_advertisement
         ]);
     }
@@ -131,7 +131,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML code for the advertisement.
      */
-    public function renderImage($ad)
+    public function renderInlineImage($ad)
     {
         try {
             $img = $this->container->get('entity_repository')
@@ -170,7 +170,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML code to include in header.
      */
-    public function renderReviveHeader($ads)
+    public function renderInlineReviveHeader($ads)
     {
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 2
@@ -206,7 +206,7 @@ class AdvertisementRenderer
      *
      * @return string the HTML content for the DFP slot.
      */
-    public function renderReviveSlot($ad)
+    public function renderInlineReviveSlot($ad)
     {
         $iframe = in_array($ad->type_advertisement, [ 50, 150, 250, 350, 450, 550 ]);
         $url    = $this->router->generate('frontend_ad_get', [
@@ -219,5 +219,24 @@ class AdvertisementRenderer
                 'iframe' => $iframe,
                 'url'    => $url,
             ]);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function renderSafeFrame(\Advertisement $ad)
+    {
+        if ($ad->with_script == 1) {
+            return $ad->script;
+        } elseif ($ad->with_script == 2) {
+            return $this->renderSafeFrameReviveSlot($ad);
+        } elseif ($ad->with_script == 3) {
+            return  $this->renderSafeFrameInlineDFPSlot($ad);
+        }
+
+        return $this->renderSafeFrameInlineImage($ad);
     }
 }

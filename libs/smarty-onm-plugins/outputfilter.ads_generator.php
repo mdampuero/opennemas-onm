@@ -29,12 +29,12 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'   => $xtags,
         ];
 
-        $reviveOutput = $adsRenderer->renderReviveHeader($ads, $params);
+        $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads, $params);
         if ($reviveOutput) {
             $output = str_replace('</head>', $reviveOutput.'</head>', $output);
         }
 
-        $dfpOutput = $adsRenderer->renderDFPHeader($ads, $params);
+        $dfpOutput = $adsRenderer->renderInlineDFPHeader($ads, $params);
         if (!empty($dfpOutput)) {
             $output = str_replace('</head>', $dfpOutput.'</head>', $output);
         }
