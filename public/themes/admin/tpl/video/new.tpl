@@ -26,7 +26,8 @@
 
       $('#starttime, #endtime').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:ss',
-        useCurrent: false
+        useCurrent: false,
+        minDate: '{$video->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
       });
 
       $("#starttime").on("dp.change",function (e) {
