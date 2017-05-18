@@ -58,7 +58,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
         if (count($positions) > 0) {
             $content = getService('core.template.admin')
-                ->fetch('advertisement/helpers/js.tpl', [
+                ->fetch('advertisement/helpers/safeframe/js.tpl', [
                     'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
                     'category'  => $category,
                     'extension' => $app['extension'],
