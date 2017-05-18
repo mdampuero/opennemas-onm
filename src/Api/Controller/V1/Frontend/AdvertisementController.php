@@ -70,7 +70,8 @@ class AdvertisementController extends Controller
      */
     public function showAction(Request $request, $id)
     {
-        $category  = $request->query->get('category', 'home');
+        $category = $request->query->get('category', 'home');
+        $module   = $request->query->get('module', 'frontpage');
 
         $ad = $this->getAdvertisement($id);
 
@@ -86,7 +87,11 @@ class AdvertisementController extends Controller
             'x-tags'       => $this->getItemTags($ad, $instance),
         ];
 
-        $contents = $this->get('core.renderer.advertisement')->renderSafeFrame($ad, $category);
+        $contents = $this->get('core.renderer.advertisement')
+            ->renderSafeFrame($ad, [
+                'category' => $category,
+                'extension' => $module,
+            ]);
 
         return new Response($contents, 200, $headers);
     }
@@ -127,8 +132,9 @@ class AdvertisementController extends Controller
     protected function getAdvertisements($places, $category)
     {
         $id = 0;
+        $excluded = [ 'home', 'opinion', 'blog', 'newsletter' ];
 
-        if (!empty($category) && $category != 'home') {
+        if (!empty($category) && !in_array($category, $excluded)) {
             $category = $this->get('category_repository')
                 ->findOneBy([ 'name' => [ [ 'value' => $category ] ] ]);
 

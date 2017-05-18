@@ -94,8 +94,8 @@ class AdvertisementRenderer
         }
 
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.header.tpl', [
-            'category'      => $category,
-            'extension'     => $extension,
+            'category'      => $params['category'],
+            'extension'     => $params['extension'],
             'customCode'    => $customCode,
             'options'       => $options,
             'targetingCode' => $targetingCode,
@@ -220,14 +220,14 @@ class AdvertisementRenderer
      * @return void
      * @author
      **/
-    public function renderSafeFrame(\Advertisement $ad, $category)
+    public function renderSafeFrame(\Advertisement $ad, $params)
     {
         if ($ad->with_script == 1) {
             return $this->renderSafeFrameHtml($ad);
         } elseif ($ad->with_script == 2) {
-            return $this->renderSafeFrameRevive($ad, $category);
+            return $this->renderSafeFrameRevive($ad, $params);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderSafeFrameDFP($ad, $category);
+            return  $this->renderSafeFrameDFP($ad, $params);
         }
 
         $img = $this->get('entity_repository')->find('Photo', $ad->img);
@@ -248,13 +248,14 @@ class AdvertisementRenderer
      *
      * @return string The HTML code for the OpenX advertisement.
      */
-    protected function renderSafeFrameRevive($ad, $category)
+    protected function renderSafeFrameRevive($ad, $params)
     {
         $params = [
-            'id'       => $ad->id,
-            'category' => $category,
-            'openXId'  => $ad->params['openx_zone_id'],
-            'url'      => $this->get('setting_repository')
+            'id'        => $ad->id,
+            'category'  => $params['category'],
+            'extension' => $params['extension'],
+            'openXId'   => $ad->params['openx_zone_id'],
+            'url'       => $this->get('setting_repository')
                 ->get('revive_ad_server')['url']
         ];
 
@@ -270,14 +271,14 @@ class AdvertisementRenderer
      *
      * @return string The HTML code for the Google DFP advertisement.
      */
-    protected function renderSafeFrameDFP($ad, $category)
+    protected function renderSafeFrameDFP($ad, $params)
     {
         $params = [
             'id'        => $ad->id,
             'dfpId'     => $ad->params['googledfp_unit_id'],
             'sizes'     => $ad->getSizes($ad->normalizeSizes($ad->params)),
-            'targetingCode' => $this->getTargeting($category),
-            'customCode'    => $this->getCustomCode()
+            'targetingCode' => $this->getDFPTargeting($params['category'], $params['extension']),
+            'customCode'    => $this->getDFPCustomCode()
         ];
 
         return $this->tpl->fetch('advertisement/helpers/safeframe/dfp.tpl', $params);
@@ -361,7 +362,7 @@ class AdvertisementRenderer
      *
      * @return string The custom code for Google DFP.
      */
-    protected function getCustomCode()
+    protected function getDFPCustomCode()
     {
         $code = $this->container->get('setting_repository')->get('dfp_custom_code');
 
@@ -379,19 +380,25 @@ class AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getTargeting($category)
+    protected function getDFPTargeting($category, $module)
     {
         $options = $this->container->get('setting_repository')->get('dfp_options');
 
-        $targetingCode = '';
-        if (!is_array($options)
-            || !array_key_exists('target', $options)
-            || empty($options['target'])
-        ) {
+        if (!is_array($options)) {
             return '';
         }
 
-        return "googletag.pubads().setTargeting('{$options['target']}', ['{$category}']);";
-    }
+        $targetingCode = '';
+        if (array_key_exists('target', $options) && !empty($options['target'])) {
+            $targetingCode .=
+                "googletag.pubads().setTargeting('{$options['target']}', ['{$category}']);\n";
+        }
 
+        if (array_key_exists('module', $options) && !empty($options['module'])) {
+            $targetingCode .=
+                "googletag.pubads().setTargeting('{$options['module']}', ['{$module}']);\n";
+        }
+
+        return $targetingCode;
+    }
 }
