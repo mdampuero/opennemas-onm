@@ -79,17 +79,10 @@ class AdvertisementRenderer
 
         $zones = [];
         foreach ($ads as $advertisement) {
-            // TODO: Check Api/AdvertisementController::getSizes.
-            $sizes = array_map(function ($a) {
-                return "[ {$a['width']}, {$a['height']} ]";
-            }, $advertisement->params['sizes']);
-
-            $sizes = '[ ' . implode(', ', $sizes) . ' ]';
-
             $zones[] = [
                 'id'    => $advertisement->id,
                 'dfpId' => $advertisement->params['googledfp_unit_id'],
-                'sizes' => $sizes
+                'sizes' => $advertisement->getSizes()
             ];
         }
 
@@ -227,16 +220,178 @@ class AdvertisementRenderer
      * @return void
      * @author
      **/
-    public function renderSafeFrame(\Advertisement $ad)
+    public function renderSafeFrame(\Advertisement $ad, $category)
     {
         if ($ad->with_script == 1) {
-            return $ad->script;
+            return $this->renderSafeFrameHtml($ad);
         } elseif ($ad->with_script == 2) {
-            return $this->renderSafeFrameReviveSlot($ad);
+            return $this->renderSafeFrameRevive($ad, $category);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderSafeFrameInlineDFPSlot($ad);
+            return  $this->renderSafeFrameDFP($ad, $category);
         }
 
-        return $this->renderSafeFrameInlineImage($ad);
+        $img = $this->get('entity_repository')->find('Photo', $ad->img);
+
+        if (!empty($img) && strtolower($img->type_img) == 'swf') {
+
+            return $this->renderSafeFrameFlash($ad, $img);
+        }
+
+        return $this->renderSafeFrameImage($ad, $img);
     }
+
+    /**
+     * Returns the HTML code for a OpenX advertisement.
+     *
+     * @param Advertisement $ad       The advertisement object.
+     * @param string        $category The current category.
+     *
+     * @return string The HTML code for the OpenX advertisement.
+     */
+    protected function renderSafeFrameRevive($ad, $category)
+    {
+        $params = [
+            'id'       => $ad->id,
+            'category' => $category,
+            'openXId'  => $ad->params['openx_zone_id'],
+            'url'      => $this->get('setting_repository')
+                ->get('revive_ad_server')['url']
+        ];
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for a Google DFP advertisement.
+     *
+     * @param Advertisement $ad       The advertisement object.
+     * @param string        $category The current category.
+     *
+     * @return string The HTML code for the Google DFP advertisement.
+     */
+    protected function renderSafeFrameDFP($ad, $category)
+    {
+        $params = [
+            'id'        => $ad->id,
+            'dfpId'     => $ad->params['googledfp_unit_id'],
+            'sizes'     => $ad->getSizes($ad->normalizeSizes($ad->params)),
+            'targetingCode' => $this->getTargeting($category),
+            'customCode'    => $this->getCustomCode()
+        ];
+
+        return $this->tpl->fetch('advertisement/helpers/safeframe/dfp.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for a flash-based advertisement.
+     *
+     * @param Advertisement $ad  The advertisement object.
+     * @param Photo         $img The flash object.
+     *
+     * @return string The HTML code for a flash-based advertisement.
+     */
+    protected function renderSafeFrameFlash($ad, $img)
+    {
+        $publicId = date('YmdHis', strtotime($ad->created)) .
+            sprintf('%06d', $ad->pk_advertisement);
+
+        $params = [
+            'width'  => $img->width,
+            'height' => $img->height,
+            'src'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
+                . $img->path_file . $img->name,
+            'url'    => $this->get('router')->generate('frontend_ad_redirect', [
+                'id' => $publicId
+            ])
+        ];
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for a HTML/JS advertisement.
+     *
+     * @param Advertisement $ad The advertisement object.
+     *
+     * @return string The HTML code for the HTML/JS advertisement.
+     */
+    protected function renderSafeFrameHtml($ad)
+    {
+        $tpl   = '<html><style>%s</style><body><div class="content">%s</div></body>';
+        $html  = $ad->script;
+        $style = 'body { margin: 0; overflow: hidden; padding: 0; text-align:'
+            . ' center; } img { max-width: 100% }';
+
+        return sprintf($tpl, $style, $html);
+    }
+
+    /**
+     * Returns the HTML code for an image-based advertisement.
+     *
+     * @param Advertisement $ad  The advertisement object.
+     * @param Photo         $img The image object.
+     *
+     * @return string The HTML code for the image-based advertisement.
+     */
+    protected function renderSafeFrameImage($ad, $img)
+    {
+        $publicId = date('YmdHis', strtotime($ad->created)) .
+            sprintf('%06d', $ad->pk_advertisement);
+
+        $params = [
+            'category' => $img->category_name,
+            'width'    => $img->width,
+            'height'   => $img->height,
+            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
+                . '/images' . $img->path_file . $img->name,
+            'url'      => $this->get('router')
+                ->generate('frontend_ad_redirect', [
+                    'id' => $publicId
+                ]),
+        ];
+
+        return $this->get('core.template.admin')
+            ->fetch('advertisement/helpers/safeframe/image.tpl', $params);
+    }
+
+    /**
+     * Returns the custom code for Google DFP.
+     *
+     * @return string The custom code for Google DFP.
+     */
+    protected function getCustomCode()
+    {
+        $code = $this->container->get('setting_repository')->get('dfp_custom_code');
+
+        if (empty($code)) {
+            return '';
+        }
+
+        return base64_decode($code);
+    }
+
+    /**
+     * Returns the targeting-related JS code for google DFP.
+     *
+     * @param string $category The current category.
+     *
+     * @return string The targeting-related JS code.
+     */
+    protected function getTargeting($category)
+    {
+        $options = $this->container->get('setting_repository')->get('dfp_options');
+
+        $targetingCode = '';
+        if (!is_array($options)
+            || !array_key_exists('target', $options)
+            || empty($options['target'])
+        ) {
+            return '';
+        }
+
+        return "googletag.pubads().setTargeting('{$options['target']}', ['{$category}']);";
+    }
+
 }
