@@ -554,7 +554,8 @@ class VideosController extends Controller
             $positions = $positionManager->getPositionsForGroup('video_frontpage', [ 7, 9 ]);
         }
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategoryPlain($positions, $category);
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
     }
