@@ -87,11 +87,7 @@ class AdvertisementRenderer
         }
 
         $options    = $this->sm->get('dfp_options');
-        $customCode = $this->sm->get('dfp_custom_code');
-
-        if (!empty($customCode)) {
-            $customCode = base64_decode($dfpCustomCode);
-        }
+        $customCode = $this->getDFPCustomCode();
 
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.header.tpl', [
             'category'      => $params['category'],
