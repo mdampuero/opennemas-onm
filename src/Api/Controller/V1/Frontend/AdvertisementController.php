@@ -42,7 +42,7 @@ class AdvertisementController extends Controller
                 return;
             }
 
-            return $this->normalize($element);
+            return $this->normalizeAdObject($element);
         }, $advertisements);
 
         $advertisements = array_filter($advertisements, function ($element) {
@@ -86,25 +86,9 @@ class AdvertisementController extends Controller
             'x-tags'       => $this->getItemTags($ad, $instance),
         ];
 
-        if ($ad->with_script == 3) {
-            return new Response($this->renderDFP($ad, $category), 200, $headers);
-        }
+        $contents = $this->get('core.renderer.advertisement')->renderSafeFrame($ad, $category);
 
-        if ($ad->with_script == 2) {
-            return new Response($this->renderOpenX($ad, $category), 200, $headers);
-        }
-
-        if ($ad->with_script != 0) {
-            return new Response($this->renderHtml($ad), 200, $headers);
-        }
-
-        $img = $this->get('entity_repository')->find('Photo', $ad->img);
-
-        if (!empty($img) && strtolower($img->type_img) == 'swf') {
-            return new Response($this->renderFlash($ad, $img), 200, $headers);
-        }
-
-        return new Response($this->renderImage($ad, $img), 200, $headers);
+        return new Response($contents, 200, $headers);
     }
 
     /**
@@ -155,23 +139,8 @@ class AdvertisementController extends Controller
             $id = $category->pk_content_category;
         }
 
-        return \Advertisement::findForPositionIdsAndCategoryPlain($places, $id);
-    }
-
-    /**
-     * Returns the custom code for Google DFP.
-     *
-     * @return string The custom code for Google DFP.
-     */
-    protected function getCustomCode()
-    {
-        $code = $this->get('setting_repository')->get('dfp_custom_code');
-
-        if (empty($code)) {
-            return '';
-        }
-
-        return base64_decode($code);
+        return $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($places, $id);
     }
 
     /**
@@ -252,51 +221,13 @@ class AdvertisementController extends Controller
     }
 
     /**
-     * Returns the list of sizes for Google DFP.
-     *
-     * @param array $sizes The list of sizes for the current add.
-     *
-     * @return string The list of sizes for Google DFP.
-     */
-    protected function getSizes($sizes)
-    {
-        $sizes = array_map(function ($a) {
-            return "[ {$a['width']}, {$a['height']} ]";
-        }, $sizes);
-
-        return '[ ' . implode(', ', $sizes) . ' ]';
-    }
-
-    /**
-     * Returns the targeting-related JS code for google DFP.
-     *
-     * @param string $category The current category.
-     *
-     * @return string The targeting-related JS code.
-     */
-    protected function getTargeting($category)
-    {
-        $options = $this->get('setting_repository')->get('dfp_options');
-
-        $targetingCode = '';
-        if (!is_array($options)
-            || !array_key_exists('target', $options)
-            || empty($options['target'])
-        ) {
-            return '';
-        }
-
-        return "googletag.pubads().setTargeting('{$options['target']}', ['{$category}']);";
-    }
-
-    /**
      * Returns a normalized advertisement.
      *
      * @param Advertisement $element The advertisement object.
      *
      * @return StdClass The normalized advertisement.
      */
-    protected function normalize($element)
+    protected function normalizeAdObject($element)
     {
         if (!array_key_exists('devices', $element->params)
             || empty($element->params['devices'])
@@ -328,7 +259,7 @@ class AdvertisementController extends Controller
         $object->format      = $this->getFormat($element);
         $object->devices     = $element->params['devices'];
         $object->user_groups = $element->params['user_groups'];
-        $object->sizes       = $this->normalizeSizes($element->params);
+        $object->sizes       = $element->normalizeSizes();
 
         $object->orientation = array_key_exists('orientation', $element->params) ?
             $element->params['orientation'] : 'top';
@@ -336,173 +267,5 @@ class AdvertisementController extends Controller
         $object->target_url = ($object->format == 'image') ? $element->url: '';
 
         return $object;
-    }
-
-    /**
-     * Checks all parameters (old version) and returns the list of sizes.
-     *
-     * @param array $params The item parameters.
-     *
-     * @return array The list of sizes.
-     */
-    protected function normalizeSizes($params)
-    {
-        // New system, sizes with devices
-        if (array_key_exists('sizes', $params)) {
-            return $params['sizes'];
-        }
-
-        if (!array_key_exists('height', $params)
-            || !array_key_exists('width', $params)) {
-            return [];
-        }
-
-        $sizes  = [];
-        $totalW = is_array($params['width']) ? count($params['width']) : 1;
-        $totalH = is_array($params['height']) ? count($params['height']) : 1;
-        $total  = max($totalH, $totalW);
-
-        // Convert non-array values to array
-        if (!is_array($params['height'])) {
-            $params['height'] = array_fill(0, $total, $params['height']);
-        }
-
-        // Convert non-array values to array
-        if (!is_array($params['width'])) {
-            $params['width'] = array_fill(0, $total, $params['width']);
-        }
-
-        for ($i = 0; $i < $total; $i++) {
-            $size = [
-                'height' => $params['height'][$i],
-                'width' =>  $params['width'][$i]
-            ];
-
-            if ($i < 3) {
-                $size['device'] = $i === 0 ? 'desktop' :
-                    ($i === 1 ? 'tablet' : 'phone');
-            }
-
-            $sizes[] = $size;
-        }
-
-        return $sizes;
-    }
-
-    /**
-     * Returns the HTML code for a Google DFP advertisement.
-     *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
-     *
-     * @return string The HTML code for the Google DFP advertisement.
-     */
-    protected function renderDFP($ad, $category)
-    {
-        $params = [
-            'id'        => $ad->id,
-            'dfpId'     => $ad->params['googledfp_unit_id'],
-            'sizes'     => $this->getSizes($this->normalizeSizes($ad->params)),
-            'targeting' => $this->getTargeting($category),
-            'custom'    => $this->getCustomCode()
-        ];
-
-        return $this->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/dfp.tpl', $params);
-    }
-
-    /**
-     * Returns the HTML code for a flash-based advertisement.
-     *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The flash object.
-     *
-     * @return string The HTML code for a flash-based advertisement.
-     */
-    protected function renderFlash($ad, $img)
-    {
-        $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->pk_advertisement);
-
-        $params = [
-            'width'  => $img->width,
-            'height' => $img->height,
-            'src'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
-                . $img->path_file . $img->name,
-            'url'    => $this->get('router')->generate('frontend_ad_redirect', [
-                'id' => $publicId
-            ])
-        ];
-
-        return $this->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
-    }
-
-    /**
-     * Returns the HTML code for a HTML/JS advertisement.
-     *
-     * @param Advertisement $ad The advertisement object.
-     *
-     * @return string The HTML code for the HTML/JS advertisement.
-     */
-    protected function renderHtml($ad)
-    {
-        $tpl   = '<html><style>%s</style><body><div class="content">%s</div></body>';
-        $html  = $ad->script;
-        $style = 'body { margin: 0; overflow: hidden; padding: 0; text-align:'
-            . ' center; } img { max-width: 100% }';
-
-        return sprintf($tpl, $style, $html);
-    }
-
-    /**
-     * Returns the HTML code for an image-based advertisement.
-     *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The image object.
-     *
-     * @return string The HTML code for the image-based advertisement.
-     */
-    protected function renderImage($ad, $img)
-    {
-        $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->pk_advertisement);
-
-        $params = [
-            'category' => $img->category_name,
-            'width'    => $img->width,
-            'height'   => $img->height,
-            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
-                . '/images' . $img->path_file . $img->name,
-            'url'      => $this->get('router')
-                ->generate('frontend_ad_redirect', [
-                    'id' => $publicId
-                ]),
-        ];
-
-        return $this->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/image.tpl', $params);
-    }
-
-    /**
-     * Returns the HTML code for a OpenX advertisement.
-     *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
-     *
-     * @return string The HTML code for the OpenX advertisement.
-     */
-    protected function renderOpenX($ad, $category)
-    {
-        $params = [
-            'id'       => $ad->id,
-            'category' => $category,
-            'openXId'  => $ad->params['openx_zone_id'],
-            'url'      => $this->get('setting_repository')
-                ->get('revive_ad_server')['url']
-        ];
-
-        return $this->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
     }
 }
