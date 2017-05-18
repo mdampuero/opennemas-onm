@@ -10,10 +10,9 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
-
     $ads = $smarty->parent->tpl_vars['advertisements']->value;
     if (count($ads) <= 0) {
-        return;
+        return $output;
     }
 
     $safeFrame = getService('setting_repository')->get('ads_settings')['safe_frame'];
@@ -45,7 +44,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         if (!is_array($smarty->parent->tpl_vars)
             || !array_key_exists('ads_positions', $smarty->parent->tpl_vars)
             || !is_array($smarty->parent->tpl_vars['ads_positions']->value)
-
         ) {
             return $output;
         }
@@ -72,8 +70,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             $output = str_replace('</head>', $content . '</head>', $output);
         }
     }
-
-
 
     return $output;
 }
