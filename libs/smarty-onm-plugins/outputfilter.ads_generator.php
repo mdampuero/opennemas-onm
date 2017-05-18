@@ -11,6 +11,7 @@
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
     $ads = $smarty->parent->tpl_vars['advertisements']->value;
+    $app = $smarty->parent->tpl_vars['app']->value;
     if (count($ads) <= 0) {
         return $output;
     }
@@ -23,9 +24,10 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $content        = $smarty->parent->tpl_vars['content']->value;
 
         $params = [
-            'category' => $actualCategory,
-            'content'  => $content,
-            'x-tags'   => $xtags,
+            'category'  => $actualCategory,
+            'extension' => $app['extension'],
+            'content'   => $content,
+            'x-tags'    => $xtags,
         ];
 
         $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads, $params);
@@ -48,7 +50,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             return $output;
         }
 
-        $app       = $smarty->parent->tpl_vars['app']->value;
         $category  = $smarty->parent->tpl_vars['actual_category']->value;
         $settings  = getService('setting_repository')->get('ads_settings');
         $positions = is_object($smarty->parent->tpl_vars['ads_positions']) ?
