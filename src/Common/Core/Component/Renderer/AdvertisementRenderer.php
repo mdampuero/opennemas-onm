@@ -107,6 +107,7 @@ class AdvertisementRenderer
                 'sizes' => $advertisement->getSizes()
             ];
         }
+        $targetingCode = $this->getDFPTargeting($params['category'], $params['extension']);
 
         $options    = $this->sm->get('dfp_options');
         $customCode = $this->getDFPCustomCode();
