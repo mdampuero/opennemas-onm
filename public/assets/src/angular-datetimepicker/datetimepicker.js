@@ -29,7 +29,9 @@
           restrict: 'A',
           scope: {
             'ngModel': '=',
-            'datetimePicker': '='
+            'datetimePicker': '=',
+            'datetimePickerMin': '=?',
+            'datetimePickerMax': '=?'
           },
           link: function ($scope, element, $attrs) {
             var format = 'YYYY-MM-DD HH:mm:ss';
@@ -38,7 +40,15 @@
               format = $attrs.datetimePickerFormat;
             }
 
-            element.datetimepicker({ useCurrent: false, format: format });
+            if (!$scope.datetimePickerMin) {
+              $scope.datetimePickerMin = $window.moment(new Date()).format(format);
+            }
+
+            element.datetimepicker({
+              useCurrent: false,
+              format: format,
+              minDate: $scope.datetimePickerMin
+            });
 
             var picker = element.data('DateTimePicker');
 
@@ -56,6 +66,19 @@
                   });
                 }
             });
+
+            // Update min/max values
+            $scope.$watch('datetimePickerMin', function (nv) {
+              if (moment(nv, format, true).isValid() && nv < $scope.datetimePickerMax) {
+                element.data("DateTimePicker").minDate(nv);
+              }
+            }, true);
+
+            $scope.$watch('datetimePickerMax', function (nv) {
+              if (moment(nv, format, true).isValid() && nv > $scope.datetimePickerMin) {
+                element.data("DateTimePicker").maxDate(nv);
+              }
+            }, true);
           }
         };
       }
