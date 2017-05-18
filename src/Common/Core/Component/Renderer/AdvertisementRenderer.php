@@ -37,6 +37,28 @@ class AdvertisementRenderer
     }
 
     /**
+     * Renders an advertisement given some params
+     *
+     * @param Advertisement $ad The advertisement to render.
+     * @param array $params an array of parameters to render the ad
+     *
+     * @return string the HTML content for the advertisement
+     **/
+    public function render(\Advertisement $ad, $params = [])
+    {
+        $safeFrame = $this->container->get('setting_repository')
+            ->get('ads_settings')['safe_frame'];
+
+        if ($safeFrame) {
+            $content = $this->renderSafeFrameSlot($ad, $params);
+        } else {
+            $content = $this->renderInline($ad, $params);
+        }
+
+        return $content;
+    }
+
+    /**
      * Renders an advertisement.
      *
      * @param Advertisement $ad The advertisement to render.
@@ -211,10 +233,43 @@ class AdvertisementRenderer
     }
 
     /**
-     * undocumented function
+     * Returns the HTML for a safe frame ad slot
      *
-     * @return void
-     * @author
+     * @param  Advertisement $ad The ad to render.
+     * @param array $params the list of parameters
+     *
+     * @return string the HTML generated
+     **/
+    public function renderSafeFrameSlot(\Advertisement $ad, $params)
+    {
+        $html  = '<div class="ad-slot oat"%s data-type="%s"%s></div>';
+        $id    = '';
+        $type  = $ad->type_advertisement;
+        $width = '';
+
+        // Style for advertisements via renderbanner
+        if (array_key_exists('width', $params)) {
+            $width = sprintf(
+                ' data-width="%d"',
+                (int) $params['width']
+            );
+        }
+
+        // Style for floating advertisements in frontpage manager
+        if ($ad->type_advertisement == 37) {
+            $id .= ' data-id="' . $ad->pk_content . '" ';
+        }
+
+        return sprintf($html, $id, $type, $width);
+    }
+
+    /**
+     * Renders a SafeFrame document for an advertisement
+     *
+     * @param  Advertisement $ad The ad to render.
+     * @param array $params the list of parameters
+     *
+     * @return string the HTML generated
      **/
     public function renderSafeFrame(\Advertisement $ad, $params)
     {

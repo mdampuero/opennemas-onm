@@ -563,24 +563,9 @@ class Advertisement extends Content
             return '';
         }
 
-        $html  = '<div class="ad-slot oat"%s data-type="%s"%s></div>';
-        $id    = '';
-        $type  = $this->type_advertisement;
-        $width = '';
 
-        // Style for advertisements via renderbanner
-        if (array_key_exists('width', $params)) {
-            $width = sprintf(
-                ' data-width="%d"',
-                (int) $params['width']
-            );
-        }
+        $adsRenderer = getService('core.renderer.advertisement');
 
-        // Style for floating advertisements in frontpage manager
-        if ($this->type_advertisement == 37) {
-            $id .= ' data-id="' . $this->pk_content . '" ';
-        }
-
-        return sprintf($html, $id, $type, $width);
+        return $adsRenderer->render($this, $params);
     }
 }
