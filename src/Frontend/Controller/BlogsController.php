@@ -344,7 +344,7 @@ class BlogsController extends Controller
         }
 
         $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, '4');
+            ->findByPositionsAndCategory($positions, 0);
 
         return [ $positions, $advertisements ];
     }

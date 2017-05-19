@@ -860,7 +860,7 @@ class OpinionsController extends Controller
         }
 
         $advertisements = getService('advertisement_repository')
-            ->findByPositionsAndCategory($positions, '4');
+            ->findByPositionsAndCategory($positions, 0);
 
         return [ $positions, $advertisements ];
     }
