@@ -53,6 +53,11 @@ class AdvertisementRenderer
             $content = $this->renderSafeFrameSlot($ad, $params);
         } else {
             $content = $this->renderInline($ad, $params);
+
+            $tpl   = '<div class="ad-slot oat%s">%s</div>';
+            $class = ' oat-visible';
+
+            $content = sprintf($tpl, $class, $content);
         }
 
         return $content;
