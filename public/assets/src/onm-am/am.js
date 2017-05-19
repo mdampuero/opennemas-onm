@@ -164,6 +164,8 @@
 
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
+    item.src += 'category=' + this.config.category + '&module=' + this.config.extension;
+
     // Dispatch event when iframe loaded
     item.onload = function () {
       if (index !== undefined) {
