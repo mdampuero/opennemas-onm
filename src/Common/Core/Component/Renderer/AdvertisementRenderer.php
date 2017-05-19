@@ -55,7 +55,7 @@ class AdvertisementRenderer
             $content = $this->renderInline($ad, $params);
 
             $tpl   = '<div class="ad-slot oat%s">%s</div>';
-            $class = ' oat-visible';
+            $class = ' oat-visible text-center oat-'.$ad->params['orientation'];
 
             $content = sprintf($tpl, $class, $content);
         }
