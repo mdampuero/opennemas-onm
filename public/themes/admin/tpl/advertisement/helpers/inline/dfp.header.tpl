@@ -2,6 +2,8 @@
 <script>
   var googletag = googletag || {};
   googletag.cmd = googletag.cmd || [];
+</script>
+<script>
   googletag.cmd.push(function() {
     {foreach $zones as $zone}
     googletag.defineSlot('{$zone['dfpId']}', {$zone['sizes']}, 'zone_{$zone['id']}').addService(googletag.pubads());
