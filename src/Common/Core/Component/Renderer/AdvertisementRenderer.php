@@ -445,6 +445,8 @@ class AdvertisementRenderer
             return '';
         }
 
+        $module = ($module == 'frontpages') ? 'home' : $module;
+
         $targetingCode = '';
         if (array_key_exists('target', $options) && !empty($options['target'])) {
             $targetingCode .=
