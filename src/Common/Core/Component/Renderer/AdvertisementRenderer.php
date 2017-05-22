@@ -43,7 +43,7 @@ class AdvertisementRenderer
      * @param array $params an array of parameters to render the ad
      *
      * @return string the HTML content for the advertisement
-     **/
+     */
     public function render(\Advertisement $ad, $params = [])
     {
         $safeFrame = $this->container->get('setting_repository')
@@ -239,13 +239,64 @@ class AdvertisementRenderer
     }
 
     /**
+     * Selects and renders an interstitial from a list of advertisements.
+     *
+     * @param array $ads The list of advertisements.
+     *
+     * @return string The HTML code for
+     */
+    public function renderInterstitial($ads, $params)
+    {
+        $tpl = '<div class="interstitial">'
+            . '<div class="ad-slot oat oat-visible" data-id="%s" data-timeout="%s" data-type="%s">'
+                . '<div class="interstitial-wrapper" style="width: %s;">'
+                    . '<style>body { height: 100%%; overflow: hidden; }</style>'
+                    . '<div class="interstitial-header">'
+                        . _('Entering on the requested page')
+                        . '<a class="interstitial-close-button" href="#" title="'
+                            . _('Skip advertisement') . '">'
+                            . '<span>' . _('Skip advertisement') . '</span>'
+                        . '</a>'
+                    . '</div>'
+                    . '<div class="interstitial-content" style="height: %s;">%s</div>'
+                . '</div>'
+            . '</div>'
+        . '</div>';
+
+
+        $interstitials = array_filter($ads, function ($a) {
+            return ($a->type_advertisement + 50) % 100 == 0;
+        });
+
+        if (empty($interstitials)) {
+            return '';
+        }
+
+        $ad   = $interstitials[array_rand($interstitials)];
+        $size = $ad->normalizeSizes($ad->params);
+        $size = array_pop($size);
+
+        $html = $this->renderInline($ad);
+
+        return sprintf(
+            $tpl,
+            $ad->pk_advertisement,
+            empty($ad->timeout) ? 5 : $ad->timeout,
+            $ad->type_advertisement,
+            $size['width'] . 'px',
+            empty($size['height']) ? 'auto' : $size['height'] . 'px',
+            $html
+        );
+    }
+
+    /**
      * Returns the HTML for a safe frame ad slot
      *
      * @param  Advertisement $ad The ad to render.
      * @param array $params the list of parameters
      *
      * @return string the HTML generated
-     **/
+     */
     public function renderSafeFrameSlot(\Advertisement $ad, $params)
     {
         $html  = '<div class="ad-slot oat"%s data-type="%s"%s></div>';
@@ -276,7 +327,7 @@ class AdvertisementRenderer
      * @param array $params the list of parameters
      *
      * @return string the HTML generated
-     **/
+     */
     public function renderSafeFrame(\Advertisement $ad, $params)
     {
         if ($ad->with_script == 1) {
