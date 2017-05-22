@@ -62,10 +62,8 @@ class EntityManager extends BaseManager
             $entity = new $contentType($id);
 
             if (!is_object($entity)
-                || (is_object($entity)
-                    && property_exists($entity, 'id')
-                    && is_null($entity->id)
-                )
+                || $entity->content_type_name !== \underscore($contentType)
+                || (property_exists($entity, 'id') && is_null($entity->id))
             ) {
                 return null;
             }

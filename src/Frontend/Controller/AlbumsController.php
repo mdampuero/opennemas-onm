@@ -145,15 +145,15 @@ class AlbumsController extends Controller
             );
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         // Send the response to the user
-        return $this->render(
-            'album/album_frontpage.tpl',
-            array(
-                'advertisements' => $this->getAds(),
-                'cache_id'       => $cacheID,
-                'x-tags'         => 'album-frontpage,'.$this->page
-            )
-        );
+        return $this->render('album/album_frontpage.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'album-frontpage,'.$this->page
+        ]);
     }
 
     /**
@@ -236,15 +236,18 @@ class AlbumsController extends Controller
             ]);
         } // END iscached
 
+        list($positions, $advertisements) = $this->getAds('inner');
+
         return $this->render(
             'album/album.tpl',
             array(
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
                 'album'          => $album,
                 'content'        => $album,
                 'page'           => $this->page,
-                'contentId'      => $album->id,
-                'advertisements' => $this->getAds('inner'),
                 'cache_id'       => $cacheID,
+                'contentId'      => $album->id,
                 'x-tags'         => 'album,'.$album->id,
                 'x-cache-for'    => '+1 day',
                 'x-cacheable'    => $cacheable
@@ -371,13 +374,15 @@ class AlbumsController extends Controller
         $category = $ccm->get_id($categoryName);
 
         // Get album_inner positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         if ($position == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('album_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('album_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('album_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('album_frontpage', [ 7, 9 ]);
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+
+        return [ $positions, $advertisements ];
     }
 }

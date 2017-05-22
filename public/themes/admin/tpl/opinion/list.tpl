@@ -47,51 +47,51 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               {acl isAllowed="OPINION_SETTINGS"}
-              <li class="quicklinks">
-               <a class="btn btn-link" href="{url name=admin_opinions_config}" title="{t}Config opinion module{/t}">
-                <i class="fa fa-cog fa-lg"></i>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            {/acl}
-            {acl isAllowed="OPINION_FRONTPAGE"}
-            {if $home}
-            <li>
-              <button class="btn btn-white" id="save_positions" ng-click="saveOpinionsFrontpage()" title="{t}Save positions{/t}" type="button">
-                <i class="fa fa-save"></i> <span class="hidden-xs">{t}Save positions{/t}</span>
-              </button>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            {/if}
-            {/acl}
-            {acl isAllowed="OPINION_CREATE"}
-            <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" id="create-button">
-                <i class="fa fa-plus"></i>
-                {t}Create{/t}
-              </a>
-            </li>
-            {/acl}
-          </ul>
+                <li class="quicklinks">
+                  <a class="btn btn-link" href="{url name=admin_opinions_config}" title="{t}Config opinion module{/t}">
+                    <i class="fa fa-cog fa-lg"></i>
+                  </a>
+                </li>
+                <li class="quicklinks">
+                  <span class="h-seperate"></span>
+                </li>
+              {/acl}
+              {acl isAllowed="OPINION_FRONTPAGE"}
+                {if $home}
+                  <li>
+                    <button class="btn btn-white" id="save_positions" ng-click="saveOpinionsFrontpage()" title="{t}Save positions{/t}" type="button">
+                      <i class="fa fa-save"></i> <span class="hidden-xs">{t}Save positions{/t}</span>
+                    </button>
+                  </li>
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                {/if}
+              {/acl}
+              {acl isAllowed="OPINION_CREATE"}
+                <li class="quicklinks">
+                  <a class="btn btn-primary" href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" id="create-button">
+                    <i class="fa fa-plus"></i>
+                    {t}Create{/t}
+                  </a>
+                </li>
+              {/acl}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  {if $home}
-    {include file="opinion/partials/_opinion_list_home.tpl"}
-  {else}
-    {include file="opinion/partials/_opinion_list.tpl"}
-  {/if}
-  <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-delete-selected">
-    {include file="common/modals/_modalBatchDelete.tpl"}
-  </script>
+    {if $home}
+      {include file="opinion/partials/_opinion_list_home.tpl"}
+    {else}
+      {include file="opinion/partials/_opinion_list.tpl"}
+    {/if}
+    <script type="text/ng-template" id="modal-delete">
+      {include file="common/modals/_modalDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-delete-selected">
+      {include file="common/modals/_modalBatchDelete.tpl"}
+    </script>
     <script type="text/ng-template" id="modal-update-selected">
       {include file="common/modals/_modalBatchUpdate.tpl"}
     </script>

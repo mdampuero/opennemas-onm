@@ -195,9 +195,6 @@ services:
     core.messenger:
         class: Framework\Messenger\Messenger
 
-    core.manager.advertisement:
-        class: AdvertisementPositions
-
     core.manager.layout:
         class:     Onm\LayoutManager
         arguments: [ '@onm_templating' ]

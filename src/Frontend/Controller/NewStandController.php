@@ -162,26 +162,23 @@ class NewStandController extends Controller
         }
 
         $this->widgetNewsstandDates();
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
 
-        // Show in Frontpage
-        return $this->render(
-            'newsstand/newsstand.tpl',
-            array(
-                'cache_id'       => $cacheID,
-                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'selected_date'  => '1-'.$month.'-'.$year,
-                'MONTH'          => $month,
-                'YEAR'           => $year,
-                'year'           => $year,
-                'month'          => $month,
-                'order'          => $order,
-                'kiosko'         => $kiosko,
-                'x-tags'         => 'newsstand-frontpage',
-            )
-        );
+        list($positions, $advertisements) = $this->getAds();
 
+        return $this->render('newsstand/newsstand.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+            'selected_date'  => '1-'.$month.'-'.$year,
+            'MONTH'          => $month,
+            'YEAR'           => $year,
+            'year'           => $year,
+            'month'          => $month,
+            'order'          => $order,
+            'kiosko'         => $kiosko,
+            'x-tags'         => 'newsstand-frontpage'
+        ]);
     }
 
     /**
@@ -234,18 +231,18 @@ class NewStandController extends Controller
         }
 
         $this->widgetNewsstandDates();
-        $this->getAds();
 
-        return $this->render(
-            'newsstand/newsstand.tpl',
-            [
-                'epaper'         => $epaper,
-                'content'        => $epaper,
-                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'cache_id'       => $cacheID,
-                'x-tags'         => 'newsstand,'.$epaper->id,
-            ]
-        );
+        list($positions, $advertisements) = $this->getAds();
+
+        return $this->render('newsstand/newsstand.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'epaper'         => $epaper,
+            'content'        => $epaper,
+            'cache_id'       => $cacheID,
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
+            'x-tags'         => 'newsstand,'.$epaper->id,
+        ]);
     }
 
     /**
@@ -272,9 +269,10 @@ class NewStandController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get news_stand positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('frontpage', array(103, 105));
+        $advertisements =  \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

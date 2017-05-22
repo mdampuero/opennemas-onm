@@ -14,7 +14,19 @@
             </li>
           </ul>
           <div class="all-actions pull-right">
-            <ul class="quick-section">
+            <ul class="nav quick-section">
+              {acl isAllowed="USER_SETTINGS"}
+                {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
+                  <li class="quicklinks">
+                    <a class="btn btn-link" href="{url name=admin_acl_user_settings_show}" title="{t}Config users module{/t}">
+                      <i class="fa fa-cog fa-lg"></i>
+                    </a>
+                  </li>
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                {/is_module_activated}
+              {/acl}
               <li class="quicklinks">
                 <a class="btn btn-white" href="{url name=backend_ws_users_export}" id="download-button">
                   <span class="fa fa-download"></span>
@@ -183,7 +195,7 @@
                     </div>
                   </td>
                   <td class="text-center hidden-xs">
-                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id != 0"></dynamic-image>
+                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
                     <gravatar class="gravatar" ng-model="item.email" size="40" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
                   <td class="left">

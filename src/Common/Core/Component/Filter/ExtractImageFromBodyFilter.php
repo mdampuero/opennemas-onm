@@ -31,7 +31,8 @@ class ExtractImageFromBodyFilter extends Filter
      */
     public function filter($str)
     {
-        $separator = $this->getParameter('separator', '@@@@');
+        $separator   = $this->getParameter('separator', '@@@@');
+        $imageRegexp = $this->getParameter('image-regexp', '@<img\s+[^>]*src="([^"]*)"[^>]*>@');
 
         if (strpos($str, $separator) === false) {
             return $str;
@@ -39,7 +40,7 @@ class ExtractImageFromBodyFilter extends Filter
 
         list($body, $created) = explode($separator, $str);
 
-        $found = preg_match('@<img\s+[^>]*src="([^"]*)"[^>]*>@', $body, $matches);
+        $found = preg_match($imageRegexp, $body, $matches);
 
         // If there are no images in import just skip this
         if (!$found) {

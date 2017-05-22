@@ -375,9 +375,9 @@ class Content
             $this->category_name = $ccm->getName($this->category);
         }
 
-        $this->permalink = '';//$this->uri;
+        $this->permalink = '';
         if (!empty($this->params) && is_string($this->params)) {
-            $this->params = unserialize($this->params);
+            $this->params = @unserialize($this->params);
         }
 
         $this->fk_user = $this->fk_author;
@@ -541,7 +541,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.create', array('content' => $this));
+            dispatchEventWithParams('content.create', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.create',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -640,7 +644,11 @@ class Content
             }
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -667,7 +675,11 @@ class Content
             $conn->commit();
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.delete', array('content' => $this));
+            dispatchEventWithParams('content.delete', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.delete',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (Exception $e) {
@@ -703,7 +715,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
         } catch (\Exception $e) {
             error_log('Error Content:delete, aka sendToTrash (ID:'.$id.'):'.$e->getMessage());
             return false;
@@ -791,7 +807,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -823,7 +843,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -866,7 +890,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -898,7 +926,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -930,7 +962,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -956,7 +992,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -1015,7 +1055,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            getService('core.dispatcher')->dispatch(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             // Set status for it's updated to next event
             if (!empty($this)) {
@@ -1072,7 +1116,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -1113,7 +1161,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1145,7 +1197,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1180,7 +1236,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.set_positions', array('content' => $this));
+            dispatchEventWithParams('content.set_positions', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.set_positions',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1217,7 +1277,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1998,7 +2062,11 @@ class Content
                 [ $this->id, $property, $value, $value ]
             );
 
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -2029,7 +2097,11 @@ class Content
                 ]
             );
 
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {

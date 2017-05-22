@@ -121,18 +121,16 @@ class ArchiveController extends Controller
             ]);
         }
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'archive/archive.tpl',
-            array(
-                'newslibraryDate' => $date,
-                'actual_category' => 'archive',
-                'cache_id'        => $cacheID,
-                'x-tags'          => 'archive-page,'.$date.','.$page.','.$categoryName,
-            )
-        );
+        return $this->render('archive/archive.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'newslibraryDate' => $date,
+            'actual_category' => 'archive',
+            'x-tags'          => 'archive-page,'.$date.','.$page.','.$categoryName,
+        ]);
     }
 
     /**
@@ -184,9 +182,10 @@ class ArchiveController extends Controller
         $category = 0;
 
         // Get letter positions
-        $positionManager = $this->get('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.helper.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
+        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }
