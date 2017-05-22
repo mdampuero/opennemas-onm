@@ -626,6 +626,7 @@
                     {/is_module_activated}
                     <div class="ng-cloak" ng-show="position == 'publi-others'">
                       {foreach $themeAds as $adId => $ad}
+                      {if $ad['theme'] == $app['theme']->uuid}
                       <div class="row">
                         <div class="col-md-12">
                           <div class="radio">
@@ -637,6 +638,7 @@
                         </div>
                       </div>
                       <hr>
+                      {/if}
                       {/foreach}
                     </div>
                   </div><!-- /position-adv -->

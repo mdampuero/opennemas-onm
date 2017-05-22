@@ -33,8 +33,9 @@ class AdvertisementHelper
      * Add new advertisement position.
      *
      * @param array $positions Positions to add.
+     * @param string $themeName The theme name.
      */
-    public function addPositions($positions)
+    public function addPositions($positions, $themeName)
     {
         if (!is_array($positions)) {
             return $this;
@@ -42,6 +43,7 @@ class AdvertisementHelper
 
         foreach ($positions as $data) {
             $data['custom'] = true;
+            $data['theme'] = $themeName;
             $this->positions[$data['position']] = $data;
         }
 
