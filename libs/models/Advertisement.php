@@ -162,7 +162,7 @@ class Advertisement extends Content
         $this->img = $this->path;
 
         // Initialize the categories array of this advertisement
-        if (!is_array($this->fk_content_categories)) {
+        if (!is_array($this->fk_content_categories) && !empty($this->fk_content_categories)) {
             $this->fk_content_categories = explode(',', $this->fk_content_categories);
         }
 

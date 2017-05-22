@@ -197,6 +197,7 @@ class AdvertisementManager extends EntityManager
             $types = sprintf('"^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"', $types, $types, $types);
 
             // Generate sql with or without category
+            $catsSQL = '';
             if ($category !== 0) {
                 $config = getService('setting_repository')->get('ads_settings');
                 if (isset($config['no_generics'])
@@ -211,7 +212,7 @@ class AdvertisementManager extends EntityManager
                 $catsSQL = 'AND advertisements.fk_content_categories=0';
             }
 
-            $catsSQL .= ' OR advertisements.fk_content_categories = \'\'';
+            $catsSQL .= ' OR advertisements.fk_content_categories IS EMPTY';
 
             try {
                 $sql = "SELECT pk_advertisement as id FROM advertisements "
@@ -253,6 +254,7 @@ class AdvertisementManager extends EntityManager
                 // If the ad doesn't belong to the given category or home, skip it
                 if (!in_array($category, $advertisement->fk_content_categories)
                     && !in_array(0, $advertisement->fk_content_categories)
+                    && !empty($advertisement->fk_content_categories)
                 ) {
                     continue;
                 }

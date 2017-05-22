@@ -419,8 +419,8 @@
                 {t}Categories{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
                 <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
-                  <span ng-show="ui.categories.length === 0">{t}All{/t}</span>
-                  <span ng-show="ui.categories.length != 0">
+                  <span ng-show="categories.length === 0 || categories == null">{t}All{/t}</span>
+                  <span ng-show="categories.length != 0">
                     <strong>[% ui.categories.length %]</strong>
                     {t}selected{/t}
                   </span>
@@ -428,18 +428,31 @@
               </div>
               <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category }">
                 <div class="checkbox p-b-5">
-                  <input id="category-all" name="category-all" ng-change="areAllCategoriesSelected()" ng-model="selected.all.categories" type="checkbox">
+                  <input id="category-all" name="category-all" ng-model="ui.categories_all" ng-change="toggleAllCategories()" type="checkbox">
                   <label class="form-label" for="category-all">
-                    {t}Select all{/t}
+                    {t}Show in all{/t}
                   </label>
                 </div>
-                <div class="checkbox-list checkbox-list-user-groups">
+
+                <hr ng-if="ui.categories_all != true">
+                <div class="checkbox p-b-5" ng-if="ui.categories_all != true">
+                  <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected()" ng-model="selected.all.categories" type="checkbox">
+                  <label class="form-label" for="toggle-categories">
+                    {t}Select/deselect all{/t}
+                  </label>
+                </div>
+                <div class="checkbox-list checkbox-list-user-groups" ng-if="ui.categories_all != true">
                   <div class="checkbox p-b-5" ng-repeat="category in extra.categories">
                     <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
                     <label class="form-label" for="category-[% $index %]">
                       [% category.name %]
                     </label>
                   </div>
+                </div>
+                <div class="m-t-5" ng-if="selected.all.categories && ui.categories_all != true">
+                  <small class="help text-danger">
+                    {t}You have selected all categories. We recomend you to use the "Show in all" mark to avoid unchecked future created categories.{/t}
+                  </small>
                 </div>
                 <div class="m-t-5">
                   <small class="help">

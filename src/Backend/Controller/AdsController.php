@@ -150,9 +150,9 @@ class AdsController extends Controller
         }
 
         $advertisement = new \Advertisement();
-        $categories    = json_decode($request->request->get('categories', '[]'), true);
+        $categories    = json_decode($request->request->get('categories', ''), true);
 
-        if (empty($categories)) {
+        if (is_array($categories) && empty($categories)) {
             $categories = [ 0 ];
         }
 
@@ -255,7 +255,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        if (!is_array($ad->fk_content_categories)) {
+        if (!is_array($ad->fk_content_categories) && !empty($ad->fk_content_categories)) {
             $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
         }
 
@@ -315,9 +315,9 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $categories = json_decode($request->request->get('categories', '[]'), true);
+        $categories = json_decode($request->request->get('categories', ''), true);
 
-        if (empty($categories)) {
+        if (is_array($categories) && empty($categories)) {
             $categories = [ 0 ];
         }
 
@@ -326,7 +326,7 @@ class AdsController extends Controller
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
-            'categories'         => implode(',', $categories),
+            'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),

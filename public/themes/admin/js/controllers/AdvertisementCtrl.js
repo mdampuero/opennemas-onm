@@ -200,6 +200,11 @@
           });
         }
 
+        if (categories === null) {
+          $scope.ui.categories = [];
+          $scope.ui.categories_all = true;
+        }
+
         var orientations = [ 'top', 'right', 'bottom', 'left' ];
 
         if (!$scope.params.orientation ||
@@ -362,6 +367,14 @@
 
         $scope.parseDevices(nv);
       }, true);
+
+      $scope.toggleAllCategories = function() {
+        if ($scope.ui.categories_all) {
+          $scope.categories = '';
+        } else {
+          $scope.categories = $scope.ui.categories;
+        }
+      }
 
       // Updates params_width and params_height when sizes change
       $scope.$watch('params.sizes', function(nv) {
