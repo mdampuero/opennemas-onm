@@ -463,25 +463,31 @@
   };
 
   /**
-   * @function normalize
+   * @function hideInterstitials
    * @memberOf OAM
    *
    * @description
-   *   Normalizes URL basing on current URL parameters.
-   *
-   * @param {String} url The URL to normalize.
-   *
-   * @return {String} The normalized URL.
+   *   Displays interstitials already present in the HTML document.
    */
-  OAM.prototype.normalize = function(url) {
-    url += '?';
+  OAM.prototype.hideInterstitials = function() {
+    var self = this;
+    var interstitials = document.getElementsByClassName('interstitial');
 
-    if (parseInt(location.search.split('webview=').splice(1).join('')
-          .split('&')[0]) === 1) {
-      url += 'webview=1&';
+    if (interstitials.length > 0) {
+      for (var i = 0; i < interstitials.length; i++) {
+        var interstitial = interstitials[i];
+        var timeout      = interstitials[i].getAttribute('data-timeout');
+
+        interstitial.getElementsByClassName('interstitial-close-button')[0]
+          .onclick = function(e) {
+            self.close(interstitial, e);
+          };
+
+        window.setTimeout(function () {
+          self.close(interstitial);
+        }, timeout * 1000);
+      }
     }
-
-    return url;
   };
 
   /**
@@ -496,6 +502,7 @@
     this.device = this.getDevice();
 
     this.getAdvertisements();
+    this.hideInterstitials();
   };
 
   /**
@@ -538,6 +545,28 @@
 
     return ad.devices[this.device] === 1 &&
       (ad.user_groups.length === 0 || groups.length > 0);
+  };
+
+  /**
+   * @function normalize
+   * @memberOf OAM
+   *
+   * @description
+   *   Normalizes URL basing on current URL parameters.
+   *
+   * @param {String} url The URL to normalize.
+   *
+   * @return {String} The normalized URL.
+   */
+  OAM.prototype.normalize = function(url) {
+    url += '?';
+
+    if (parseInt(location.search.split('webview=').splice(1).join('')
+          .split('&')[0]) === 1) {
+      url += 'webview=1&';
+    }
+
+    return url;
   };
 
   /**
