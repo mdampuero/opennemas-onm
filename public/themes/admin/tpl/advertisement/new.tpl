@@ -413,54 +413,6 @@
                   </small>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer" ng-click="expanded.category = !expanded.category">
-                <input name="categories" ng-value="categories" type="hidden">
-                <i class="fa fa-bookmark m-r-5"></i>
-                {t}Categories{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
-                  <span ng-show="ui.categories.length === 0 || ui.categories_all == true">{t}All{/t}</span>
-                  <span ng-show="ui.categories.length != 0 && ui.categories_all == false">
-                    <strong>[% ui.categories.length %]</strong> {t}selected{/t}
-                  </span>
-                </span>
-              </div>
-              <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category }">
-
-                <div class="checkbox p-b-5">
-                  <input id="category-all" name="category-all" ng-model="ui.categories_all" ng-change="toggleAllCategories()" ng-true-value=true ng-false-value=false type="checkbox">
-                  <label class="form-label" for="category-all">
-                    {t}Show in all{/t}
-                  </label>
-                </div>
-
-                <hr ng-if="ui.categories_all != true">
-                <div class="checkbox p-b-5" ng-if="ui.categories_all != true">
-                  <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected()" ng-model="selected.all.categories" type="checkbox">
-                  <label class="form-label" for="toggle-categories">
-                    {t}Select/deselect all{/t}
-                  </label>
-                </div>
-                <div class="checkbox-list checkbox-list-user-groups" ng-if="ui.categories_all != true">
-                  <div class="checkbox p-b-5" ng-repeat="category in extra.categories">
-                    <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
-                    <label class="form-label" for="category-[% $index %]">
-                      [% category.name %]
-                    </label>
-                  </div>
-                </div>
-                <div class="m-t-5" ng-if="selected.all.categories && ui.categories_all != true">
-                  <small class="help text-danger">
-                    {t}You have selected all categories. We recomend you to use the "Show in all" mark to avoid unchecked future created categories.{/t}
-                  </small>
-                </div>
-                <div class="m-t-5">
-                  <small class="help">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Display the advertisement only in the selected categories{/t}
-                  </small>
-                </div>
-              </div>
               <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="isInterstitial()">
                 <i class="fa fa-clock-o m-r-5"></i>
                 {t}Duration{/t}
@@ -478,6 +430,54 @@
                   <small class="help">
                     <i class="fa fa-info-circle m-r-5 text-info"></i>
                     {t}Display the advertisement for a limited time (intersticials only){/t}
+                  </small>
+                </div>
+              </div>
+              <div class="grid-collapse-title">
+                <div class="checkbox">
+                  <input id="category-all" name="category-all" ng-model="ui.categories_all" ng-true-value="true" ng-false-value="false" type="checkbox">
+                  <label class="form-label" for="category-all">
+                    {t}Show in all categories{/t}
+                  </label>
+                </div>
+              </div>
+              <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category" ng-show="!ui.categories_all">
+                <input name="categories" ng-value="categories" type="hidden">
+                <i class="fa fa-bookmark m-r-5"></i>
+                {t}Categories{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
+                  <span ng-show="ui.categories.length === 0 || ui.categories_all == true">{t}All{/t}</span>
+                  <span ng-show="ui.categories.length != 0 && ui.categories_all == false">
+                    <strong>[% ui.categories.length %]</strong> {t}selected{/t}
+                  </span>
+                </span>
+              </div>
+              <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category && !ui.categories_all, 'no-animate': ui.categories_all }">
+                <div class="checkbox p-b-5">
+                  <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected()" ng-model="selected.all.categories" type="checkbox">
+                  <label class="form-label" for="toggle-categories">
+                    {t}Select/deselect all{/t}
+                  </label>
+                </div>
+                <div class="checkbox-list checkbox-list-user-groups">
+                  <div class="checkbox p-b-5" ng-repeat="category in extra.categories">
+                    <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
+                    <label class="form-label" for="category-[% $index %]">
+                      [% category.name %]
+                    </label>
+                  </div>
+                </div>
+                <div class="m-t-5">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Display the advertisement only in the selected categories{/t}
+                  </small>
+                </div>
+                <div class="m-t-5" ng-if="selected.all.categories">
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}We recomend you to use the "Show in all categories" mark to avoid unchecked future created categories.{/t}
                   </small>
                 </div>
               </div>
