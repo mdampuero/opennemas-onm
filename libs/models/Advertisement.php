@@ -1,7 +1,8 @@
 <?php
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,109 +14,106 @@ use Onm\Settings as s;
  *
  * Handles all the CRUD operations with advertisement content.
  * The class use MethodCacheManager for better performance.
- *
- * @package Onm
- * @subpackage Model
- **/
+ */
 class Advertisement extends Content
 {
     /**
      * The category that all the advertisements belongs to
      *
      * @var int
-     **/
+     */
     const ADVERTISEMENT_CATEGORY = 2;
 
     /**
      * the advertisement id
      *
      * @var int
-     **/
+     */
     public $pk_advertisement = null;
 
     /**
      * The type of advertisement
      *
      * @var int
-     **/
+     */
     public $type_advertisement = null;
 
     /**
      * List of categories that this advertisement will be available
      *
      * @var string
-     **/
+     */
     public $fk_content_categories = [];
 
     /**
      * The related image id to this ad
      *
      * @var int
-     **/
+     */
     public $img  = null;
 
     /**
      * The position of the advertisement
      *
      * @var int
-     **/
+     */
     public $path = null;
 
     /**
      * The url that this advertisment links to
      *
      * @var string
-     **/
-    public $url            = null;
+     */
+    public $url = null;
 
     /**
      * The type of measure for this ad (views, clicks, data range)
      *
      * @var string
-     **/
-    public $type_medida    = null;
+     */
+    public $type_medida = null;
 
     /**
      * TODO: maybe this is replicated with num_clic_count
      * Number of user clicks in this advertismenet
      *
      * @var int
-     **/
-    public $num_clic       = null;
+     */
+    public $num_clic = null;
 
     /**
      * Number of user clicks in this advertisement
      *
      * @var int
-     **/
+     */
     public $num_clic_count = null;
 
     /**
      * Number of views for this advertisement
      *
      * @var int
-     **/
-    public $num_view       = null;
+     */
+    public $num_view = null;
 
     /**
      * Whether overlap flash events when rendering this advertisement
      *
      * @var boolean
-     **/
-    public $overlap        = null;
+     */
+    public $overlap = null;
 
     /**
      * The script content of this advertisement
      *
      * @varstring
-     **/
-    public $script      = null;
+     */
+    public $script = null;
 
     /**
      * Whether this advertisement has a script content
      *
      * @var boolean
-     **/
+     */
     public $with_script = null;
 
     /**
@@ -123,14 +121,14 @@ class Advertisement extends Content
      * be shown to the user
      *
      * @var int
-     **/
-    public $timeout     = null;
+     */
+    public $timeout = null;
 
     /**
      * Whether this advertisement has a flash image
      *
      * @var boolean
-     **/
+     */
     public $is_flash = null;
 
     /**
@@ -139,7 +137,7 @@ class Advertisement extends Content
      * @param int $id ID of the Advertisement
      *
      * @return Advertisement the instance of the advertisement class
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Advertisement');
@@ -153,7 +151,7 @@ class Advertisement extends Content
      * @param array $properties
      *
      * @return void
-     **/
+     */
     public function load($properties)
     {
         parent::load($properties);
@@ -175,7 +173,11 @@ class Advertisement extends Content
             }
         }
 
-        if (is_null($this->params) || !array_key_exists('restriction_devices', $this->params) || (array_key_exists('restriction_devices', $this->params) && empty($this->params['restriction_devices']))) {
+        if (is_null($this->params)
+            || !array_key_exists('restriction_devices', $this->params)
+            || (array_key_exists('restriction_devices', $this->params)
+                && empty($this->params['restriction_devices']))
+        ) {
             $this->params['restriction_devices'] = [
                 'phone'   => 1,
                 'tablet'  => 1,
@@ -183,7 +185,11 @@ class Advertisement extends Content
             ];
         }
 
-        if (is_null($this->params) || !array_key_exists('restriction_usergroups', $this->params) || (array_key_exists('restriction_usergroups', $this->params) && empty($this->params['restriction_usergroups']))) {
+        if (is_null($this->params)
+            || !array_key_exists('restriction_usergroups', $this->params)
+            || (array_key_exists('restriction_usergroups', $this->params)
+            && empty($this->params['restriction_usergroups']))
+        ) {
             $this->params['restriction_usergroups'] = [];
         }
 
@@ -196,7 +202,7 @@ class Advertisement extends Content
      * @param int $id the ID of the Advertisement
      *
      * @return Advertisement the instance for the Ad
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -227,6 +233,14 @@ class Advertisement extends Content
 
         $this->load($rs);
 
+        if (is_string($this->params)) {
+            $advertisement->params = unserialize($this->params);
+
+            if (!is_array($advertisement->params)) {
+                $advertisement->params = [];
+            }
+        }
+
         // Return instance to method chaining
         return $this;
     }
@@ -237,7 +251,7 @@ class Advertisement extends Content
      * @param array $data the needed data for create a new ad.
      *
      * @return Advertisement
-     **/
+     */
     public function create($data)
     {
         parent::create($data);
@@ -291,7 +305,7 @@ class Advertisement extends Content
      * @param array $data
      *
      * @return Advertisement Return the instance to chaining method
-     **/
+     */
     public function update($data)
     {
         // TODO: Remove when dispatching events from custom contents
@@ -343,7 +357,7 @@ class Advertisement extends Content
      *
      * @return void
      *
-     **/
+     */
     public function remove($id)
     {
         if ((int) $id <= 0) {
@@ -353,9 +367,8 @@ class Advertisement extends Content
         parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->delete(
-                "advertisements", [ 'pk_advertisement' => $id ]
-            );
+            $rs = getService('dbal_connection')
+                ->delete("advertisements", [ 'pk_advertisement' => $id ]);
 
             if (!$rs) {
                 return false;
@@ -374,7 +387,7 @@ class Advertisement extends Content
      * @param int $id Advertisement Id
      *
      * @return string
-     **/
+     */
     public function getUrl($id)
     {
         // If no valid id then return
@@ -413,7 +426,7 @@ class Advertisement extends Content
      *
      * @param  string $advType
      * @return string $name_advertisement
-     **/
+     */
     public function getNameOfAdvertisementPlaceholder($advType)
     {
         if ($advType > 0 && $advType < 100) {
@@ -448,7 +461,7 @@ class Advertisement extends Content
      *
      * @return string The list of sizes for Google DFP.
      */
-    public  function getSizes()
+    public function getSizes()
     {
         $sizes = $this->normalizeSizes();
 
@@ -518,7 +531,7 @@ class Advertisement extends Content
      * @param int $id the id of the advertisement to increase num_count
      *
      * @return void
-     **/
+     */
     public static function setNumClics($id)
     {
         // If no valid id then return
@@ -553,7 +566,7 @@ class Advertisement extends Content
      * @param Template $tpl the Template class instance
      *
      * @return string the final html for the ad
-     **/
+     */
     public function render($params)
     {
         // Don't render any non default ads if module is not activated

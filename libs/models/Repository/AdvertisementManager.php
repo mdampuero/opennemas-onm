@@ -164,110 +164,111 @@ class AdvertisementManager extends EntityManager
      * @param int   $category the id of the category
      *
      * @return array the list of arrays
-     **/
-    public static function findByPositionsAndCategory($types = [], $category = 0)
+     */
+    public function findByPositionsAndCategory($types = [], $category = 0)
     {
-        $banners = [];
-
-        // If advertisement types aren't passed return earlier
         if (!is_array($types) || count($types) <= 0) {
-            return $banners;
+            return [];
         }
 
-        // Check category
         $category = (empty($category) || ($category=='home')) ? 0 : $category;
 
         if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
-            // Fetch ads from static file
-            $advertisements = include APP_PATH.'config/ads/onm_default_ads.php';
-
-            foreach ($advertisements as $ad) {
-                if (in_array($ad->type_advertisement, $types) &&
-                    (
-                        in_array($category, $ad->fk_content_categories) ||
-                        in_array(0, $ad->fk_content_categories) ||
-                        $ad->fk_content_categories == null
-                    )
-                ) {
-                    $banners []= $ad;
-                }
-            }
-        } else {
-            // Get string of types separated by commas
-            $types = '(' . implode('|', $types) . '){1}';
-            $types = sprintf('"^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"', $types, $types, $types);
-
-            // Generate sql with or without category
-            $catsSQL = 'advertisements.fk_content_categories=0';
-            if ($category !== 0) {
-                $config = getService('setting_repository')->get('ads_settings');
-
-                $generics = ' OR fk_content_categories=0';
-                if (isset($config['no_generics'])
-                    && ($config['no_generics'] == '1')
-                ) {
-                    $generics = '';
-                }
-                $catsSQL = 'advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.' ';
-            }
-
-            $catsSQL .= ' OR advertisements.fk_content_categories = \'\'';
-
-            try {
-                $sql = "SELECT pk_advertisement as id FROM advertisements "
-                    . "WHERE advertisements.type_advertisement REGEXP $types "
-                    . "AND ($catsSQL) ORDER BY id";
-                $conn = getService('dbal_connection');
-                $result = $conn->fetchAll($sql);
-            } catch (\Exception $e) {
-                return $banners;
-            }
-
-            if (count($result) <= 0) {
-                return $banners;
-            }
-
-            $result = array_map(function ($element) {
-                return array('Advertisement', $element['id']);
-            }, $result);
-
-            $adManager = getService('advertisement_repository');
-            $advertisements = $adManager->findMulti($result);
-
-            foreach ($advertisements as $advertisement) {
-                // Dont use this ad if is not in time
-                if (!is_object($advertisement)
-                    || $advertisement->content_status != 1
-                    || $advertisement->in_litter != 0
-                ) {
-                    continue;
-                }
-
-                if (is_string($advertisement->params)) {
-                    $advertisement->params = unserialize($advertisement->params);
-                    if (!is_array($advertisement->params)) {
-                        $advertisement->params = [];
-                    }
-                }
-
-                // If the ad doesn't belong to the given category or home, skip it
-                if ((
-                        is_array($advertisement->fk_content_categories)
-                        && !in_array($category, $advertisement->fk_content_categories)
-                    )
-                    && (
-                        is_array($advertisement->fk_content_categories)
-                        && !in_array(0, $advertisement->fk_content_categories)
-                    )
-                    && !empty($advertisement->fk_content_categories)
-                ) {
-                    continue;
-                }
-
-                $banners []= $advertisement;
-            }
+            return  $this->findAdvertisements($types, $category);
         }
 
-        return $banners;
+        $generics = true;
+        $config   = getService('setting_repository')->get('ads_settings');
+
+        if (isset($config['no_generics'])
+            && ($config['no_generics'] == '1')
+        ) {
+            $generics = false;
+        }
+
+        return $this->findAdvertisements($types, $category, $generics);
+    }
+
+    /**
+     * Returns the list of advertisements basing on the list of positions to
+     * render, the current category and the generic advertisements flag.
+     *
+     * @param array   $types    The list of positions to render.
+     * @param integer $category The current category id.
+     * @param boolean $generics Whether generig advertisements are enabled.
+     *
+     * @return array The list of advertisements.
+     */
+    protected function findAdvertisements($types, $category, $generics)
+    {
+        $sql = 'SELECT pk_advertisement as id FROM advertisements'
+            . ' WHERE type_advertisement IN (%s)'
+            . ' AND (fk_content_categories IS NULL OR %s)'
+            . ' ORDER BY id';
+
+        $categories = '';
+
+        // Return advertisements in frontpage if generic advertisements allowed
+        if ($category !== 0 && $generics) {
+            $categories = 'fk_content_categories REGEXP "^0($|,)|,\s*0\s*,|(^|,)\s*0$" OR ';
+        }
+
+        $categories .= sprintf(
+            'fk_content_categories REGEXP "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
+            $category,
+            $category,
+            $category
+        );
+
+        $sql = sprintf($sql, implode(',', $types), $categories);
+
+        try {
+            $result = $this->dbConn->fetchAll($sql);
+            $result = array_map(function ($element) {
+                return [ 'Advertisement', $element['id'] ];
+            }, $result);
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        $advertisements = $this->findMulti($result);
+
+        return array_filter($advertisements, function ($a) {
+            if (!is_object($a)
+                || (!$a->isInTime()
+                && $a->type_medida == 'DATE')
+                || $a->content_status != 1
+                || $a->in_litter != 0
+            ) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    /**
+     * Returns the list of default advertisements.
+     *
+     * @param type variable Description
+     *
+     * @return type Description
+     */
+    protected function findDefaultAdvertisements($types, $category)
+    {
+        $ads = include APP_PATH.'config/ads/onm_default_ads.php';
+
+        $ads = array_filter($ads, function ($a) use ($types, $category) {
+            if (in_array($a->type_advertisement, $types) &&
+                (in_array($category, $a->fk_content_categories) ||
+                    in_array(0, $a->fk_content_categories))
+            ) {
+                $banners[$ad->type_advertisement][] = $ad;
+            }
+
+            return false;
+        });
+
+        return $ads;
     }
 }
