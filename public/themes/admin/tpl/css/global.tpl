@@ -49,6 +49,7 @@
   display: none;
   position: relative;
   visibility: hidden;
+  text-align: center;
 }
 
 .oat:before {
