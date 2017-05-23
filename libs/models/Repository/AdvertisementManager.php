@@ -251,8 +251,14 @@ class AdvertisementManager extends EntityManager
                 }
 
                 // If the ad doesn't belong to the given category or home, skip it
-                if ((is_array($categories) && !in_array($category, $advertisement->fk_content_categories))
-                    && (is_array($categories) && !in_array(0, $advertisement->fk_content_categories))
+                if ((
+                        is_array($advertisement->fk_content_categories)
+                        && !in_array($category, $advertisement->fk_content_categories)
+                    )
+                    && (
+                        is_array($advertisement->fk_content_categories)
+                        && !in_array(0, $advertisement->fk_content_categories)
+                    )
                     && !empty($advertisement->fk_content_categories)
                 ) {
                     continue;
