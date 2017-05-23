@@ -304,6 +304,10 @@ class FrontpagesController extends Controller
         $positions = getService('core.helper.advertisement')
             ->getPositionsForGroup('frontpage');
 
+        // We have to remove the floating ads from the positions because
+        // we will add them later from the $contents array
+        unset($positions[array_search(37, $positions)]);
+
         $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
