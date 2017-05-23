@@ -47,9 +47,10 @@
 .oat {
   clear: both;
   display: none;
+  overflow: hidden;
   position: relative;
-  visibility: hidden;
   text-align: center;
+  visibility: hidden;
 }
 
 .oat:before {
@@ -60,11 +61,15 @@
   left: 50%;
   line-height: 15px;
   margin-left: -40px;
-  margin-top: -15px;
+  margin-top: 0;
   position: absolute;
   text-align: center;
   text-transform: uppercase;
   width: 80px;
+}
+
+.oat > *:not(script) {
+  display: block !important;
 }
 
 .oat-container {
@@ -80,8 +85,8 @@
   padding: 0;
 }
 
-.oat-left,
-.oat-rigth {
+.oat-left > *,
+.oat-right > * {
   padding-top: 0;
   margin-left: 0;
 }
@@ -91,27 +96,31 @@
   visibility: visible;
 }
 
-.oat-bottom {
+.oat-bottom > * {
   margin-bottom: 15px;
 }
 
-.oat-top {
-  margin-top: 15px;
+.oat-left > * {
+  margin-left: 15px !important;
 }
 
-.oat-bottom + .oat-top {
-  margin-top: 30px;
+.oat-right > * {
+  margin-right: 15px !important;
+}
+
+.oat-top > * {
+  margin-top: 15px !important;
 }
 
 .oat-bottom:before {
   position: absolute;
-  margin-bottom: -15px;
+  margin-bottom: 0;
   bottom: 0;
 }
 
 .oat-left:before {
   left: 0;
-  margin-left: -50px;
+  margin-left: -35px;
   margin-top: -10px;
   position: absolute;
   top: 50%;
@@ -121,7 +130,7 @@
 .oat-right:before {
   right: 0;
   margin-left: auto;
-  margin-right: -45px;
+  margin-right: -35px;
   margin-top: -10px;
   position: absolute;
   top: 50%;
