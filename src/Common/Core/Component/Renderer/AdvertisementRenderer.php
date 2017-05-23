@@ -342,7 +342,7 @@ class AdvertisementRenderer
             return  $this->renderSafeFrameDFP($ad, $params);
         }
 
-        $img = $this->get('entity_repository')->find('Photo', $ad->img);
+        $img = $this->container->get('entity_repository')->find('Photo', $ad->img);
 
         if (!empty($img) && strtolower($img->type_img) == 'swf') {
 
@@ -367,11 +367,11 @@ class AdvertisementRenderer
             'category'  => $params['category'],
             'extension' => $params['extension'],
             'openXId'   => $ad->params['openx_zone_id'],
-            'url'       => $this->get('setting_repository')
+            'url'       => $this->container->get('setting_repository')
                 ->get('revive_ad_server')['url']
         ];
 
-        return $this->get('core.template.admin')
+        return $this->container->get('core.template.admin')
             ->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
     }
 
@@ -414,12 +414,12 @@ class AdvertisementRenderer
             'height' => $img->height,
             'src'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
                 . $img->path_file . $img->name,
-            'url'    => $this->get('router')->generate('frontend_ad_redirect', [
+            'url'    => $this->container->get('router')->generate('frontend_ad_redirect', [
                 'id' => $publicId
             ])
         ];
 
-        return $this->get('core.template.admin')
+        return $this->container->get('core.template.admin')
             ->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
     }
 
@@ -459,13 +459,13 @@ class AdvertisementRenderer
             'height'   => $img->height,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->get('router')
+            'url'      => $this->container->get('router')
                 ->generate('frontend_ad_redirect', [
                     'id' => $publicId
                 ]),
         ];
 
-        return $this->get('core.template.admin')
+        return $this->container->get('core.template.admin')
             ->fetch('advertisement/helpers/safeframe/image.tpl', $params);
     }
 
