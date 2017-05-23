@@ -501,7 +501,10 @@
     this.user   = this.getUser();
     this.device = this.getDevice();
 
-    this.getAdvertisements();
+    if (this.config.slots.length > 0) {
+      this.getAdvertisements();
+    }
+
     this.hideInterstitials();
   };
 
