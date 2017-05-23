@@ -198,27 +198,25 @@ class AdvertisementManager extends EntityManager
             $types = sprintf('"^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"', $types, $types, $types);
 
             // Generate sql with or without category
-            $catsSQL = '';
+            $catsSQL = 'advertisements.fk_content_categories=0';
             if ($category !== 0) {
                 $config = getService('setting_repository')->get('ads_settings');
+
+                $generics = ' OR fk_content_categories=0';
                 if (isset($config['no_generics'])
                     && ($config['no_generics'] == '1')
                 ) {
                     $generics = '';
-                } else {
-                    $generics = ' OR fk_content_categories=0';
                 }
-                $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.') ';
-            } else {
-                $catsSQL = 'AND advertisements.fk_content_categories=0';
+                $catsSQL = 'advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.' ';
             }
 
-            $catsSQL .= ' OR advertisements.fk_content_categories IS EMPTY';
+            $catsSQL .= ' OR advertisements.fk_content_categories = \'\'';
 
             try {
                 $sql = "SELECT pk_advertisement as id FROM advertisements "
                     . "WHERE advertisements.type_advertisement REGEXP $types "
-                    . " $catsSQL ORDER BY id";
+                    . "AND ($catsSQL) ORDER BY id";
                 $conn = getService('dbal_connection');
                 $result = $conn->fetchAll($sql);
             } catch (\Exception $e) {
