@@ -13,20 +13,28 @@ namespace Common\Core\Component\Helper;
 class AdvertisementHelper
 {
     /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * Array with all ads positions.
      *
      * @var array
      */
-    private $positions = [];
+    protected $positions = [];
 
     /**
      * Initializes the AdvertisementHelper.
      *
-     * @param Connection $conn The database connection.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct($conn)
+    public function __construct($container)
     {
-        $this->conn = $conn;
+        $this->container = $container;
+        $this->conn      = $container->get('orm.connection.instance');
     }
 
     /**
@@ -131,5 +139,24 @@ class AdvertisementHelper
         }
 
         return $adsNames;
+    }
+
+    /**
+     * Checks if SafeFrame is enabled.
+     *
+     * @return boolean True if SafeFrame is enabled. False otherwise.
+     */
+    public function isSafeFrameEnabled()
+    {
+        $settings = $this->container->get('setting_repository')
+            ->get('ads_settings');
+
+        if (array_key_exists('safeframe', $settings)
+            && $settings['safeframe']
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
