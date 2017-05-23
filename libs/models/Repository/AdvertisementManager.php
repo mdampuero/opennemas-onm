@@ -185,7 +185,8 @@ class AdvertisementManager extends EntityManager
                 if (in_array($ad->type_advertisement, $types) &&
                     (
                         in_array($category, $ad->fk_content_categories) ||
-                        in_array(0, $ad->fk_content_categories)
+                        in_array(0, $ad->fk_content_categories) ||
+                        $ad->fk_content_categories == null
                     )
                 ) {
                     $banners []= $ad;

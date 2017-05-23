@@ -419,16 +419,16 @@
                 {t}Categories{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
                 <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
-                  <span ng-show="categories.length === 0 || categories == null">{t}All{/t}</span>
-                  <span ng-show="categories.length != 0">
-                    <strong>[% ui.categories.length %]</strong>
-                    {t}selected{/t}
+                  <span ng-show="ui.categories.length === 0 || ui.categories_all == true">{t}All{/t}</span>
+                  <span ng-show="ui.categories.length != 0 && ui.categories_all == false">
+                    <strong>[% ui.categories.length %]</strong> {t}selected{/t}
                   </span>
                 </span>
               </div>
               <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category }">
+
                 <div class="checkbox p-b-5">
-                  <input id="category-all" name="category-all" ng-model="ui.categories_all" ng-change="toggleAllCategories()" type="checkbox">
+                  <input id="category-all" name="category-all" ng-model="ui.categories_all" ng-change="toggleAllCategories()" ng-true-value=true ng-false-value=false type="checkbox">
                   <label class="form-label" for="category-all">
                     {t}Show in all{/t}
                   </label>
