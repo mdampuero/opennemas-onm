@@ -151,8 +151,8 @@ class AdvertisementHelper
         $settings = $this->container->get('setting_repository')
             ->get('ads_settings');
 
-        if (array_key_exists('safeframe', $settings)
-            && $settings['safeframe']
+        if (array_key_exists('safe_frame', $settings)
+            && $settings['safe_frame']
         ) {
             return true;
         }

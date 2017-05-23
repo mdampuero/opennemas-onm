@@ -20,8 +20,9 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
     $positions = [];
     $settings  = getService('setting_repository')->get('ads_settings');
+    $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
 
-    if (!$settings['safeFrame']) {
+    if (!$safeFrameEnabled) {
         $adsRenderer    = getService('core.renderer.advertisement');
         $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
         $content        = $smarty->parent->tpl_vars['content']->value;
