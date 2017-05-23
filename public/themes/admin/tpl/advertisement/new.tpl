@@ -379,40 +379,42 @@
                   </small>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.user_groups = !expanded.user_groups" ng-hide="!extra.user_groups || extra.user_groups.length === 0">
-                <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
-                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups">
-                  <span ng-show="ui.user_groups.length === 0">{t}All{/t}</span>
-                  <span ng-show="ui.user_groups.length != 0">
-                    <strong>[% ui.user_groups.length %]</strong>
-                    {t}selected{/t}
+              {if $safeFrame}
+                <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.user_groups = !expanded.user_groups" ng-hide="!extra.user_groups || extra.user_groups.length === 0">
+                  <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
+                  <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups">
+                    <span ng-show="ui.user_groups.length === 0">{t}All{/t}</span>
+                    <span ng-show="ui.user_groups.length != 0">
+                      <strong>[% ui.user_groups.length %]</strong>
+                      {t}selected{/t}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
-                <input name="user_groups" ng-value="user_groups" type="hidden">
-                <div class="checkbox p-b-5">
-                  <input id="group-all" name="group-all" ng-change="areAllUserGroupsSelected()" ng-model="selected.all.user_groups" type="checkbox">
-                  <label class="form-label" for="group-all">
-                    {t}Select all{/t}
-                  </label>
                 </div>
-                <div class="checkbox-list checkbox-list-user-groups">
-                  <div class="checkbox p-b-5" ng-repeat="group in extra.user_groups">
-                    <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="ui.user_groups" checklist-value="group.id" type="checkbox">
-                    <label class="form-label" for="group-[% $index %]">
-                      [% group.name %]
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
+                  <input name="user_groups" ng-value="user_groups" type="hidden">
+                  <div class="checkbox p-b-5">
+                    <input id="group-all" name="group-all" ng-change="areAllUserGroupsSelected()" ng-model="selected.all.user_groups" type="checkbox">
+                    <label class="form-label" for="group-all">
+                      {t}Select all{/t}
                     </label>
                   </div>
+                  <div class="checkbox-list checkbox-list-user-groups">
+                    <div class="checkbox p-b-5" ng-repeat="group in extra.user_groups">
+                      <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="ui.user_groups" checklist-value="group.id" type="checkbox">
+                      <label class="form-label" for="group-[% $index %]">
+                        [% group.name %]
+                      </label>
+                    </div>
+                  </div>
+                  <div class="m-t-5">
+                    <small class="help">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}Display the advertisement if user belongs to one or more of the selected user groups{/t}
+                    </small>
+                  </div>
                 </div>
-                <div class="m-t-5">
-                  <small class="help">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Display the advertisement if user belongs to one or more of the selected user groups{/t}
-                  </small>
-                </div>
-              </div>
+              {/if}
               <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="isInterstitial()">
                 <i class="fa fa-clock-o m-r-5"></i>
                 {t}Duration{/t}

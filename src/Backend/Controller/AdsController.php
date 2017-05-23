@@ -265,17 +265,18 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $pm = $this->container->get('core.helper.advertisement');
+        $ah = $this->container->get('core.helper.advertisement');
 
         return $this->render('advertisement/new.tpl', [
             'ads_positions' => $adsPositions,
             'advertisement' => $ad,
             'categories'    => $this->getCategories(),
-            'themeAds'      => $pm->getPositionsForTheme(),
-            'user_groups'   => $this->getUserGroups(),
             'filter'        => $filter,
             'page'          => $page,
+            'safeFrame'     => $ah->isSafeFrameEnabled(),
             'server_url'    => $serverUrl,
+            'themeAds'      => $ah->getPositionsForTheme(),
+            'user_groups'   => $this->getUserGroups(),
         ]);
     }
 
