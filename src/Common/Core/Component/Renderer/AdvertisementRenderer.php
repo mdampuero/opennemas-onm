@@ -50,17 +50,15 @@ class AdvertisementRenderer
             ->get('ads_settings')['safe_frame'];
 
         if ($safeFrame) {
-            $content = $this->renderSafeFrameSlot($ad, $params);
-        } else {
-            $content = $this->renderInline($ad, $params);
-
-            $tpl   = '<div class="ad-slot oat%s">%s</div>';
-            $class = ' oat-visible text-center oat-'.$ad->params['orientation'];
-
-            $content = sprintf($tpl, $class, $content);
+            return $this->renderSafeFrameSlot($ad, $params);
         }
 
-        return $content;
+        $tpl         = '<div class="ad-slot oat oat-visible oat-%s">%s</div>';
+        $content     = $this->renderInline($ad, $params);
+        $orientation = empty($ad->params['orientation']) ?
+            'top' : $ad->params['orientation'];
+
+        return sprintf($tpl, $orientation, $content);
     }
 
     /**
@@ -245,10 +243,10 @@ class AdvertisementRenderer
      *
      * @return string The HTML code for
      */
-    public function renderInterstitial($ads, $params)
+    public function renderInlineInterstitial($ads, $params)
     {
         $tpl = '<div class="interstitial">'
-            . '<div class="ad-slot oat oat-visible" data-id="%s" data-timeout="%s" data-type="%s">'
+            . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s" data-timeout="%s" data-type="%s">'
                 . '<div class="interstitial-wrapper" style="width: %s;">'
                     . '<style>body { height: 100%%; overflow: hidden; }</style>'
                     . '<div class="interstitial-header">'
@@ -272,14 +270,20 @@ class AdvertisementRenderer
             return '';
         }
 
-        $ad   = $interstitials[array_rand($interstitials)];
+        $ad = $interstitials[array_rand($interstitials)];
+
+        $orientation = empty($ad->params['orientation']) ?
+            'top' : $ad->params['orientation'];
+
         $size = $ad->normalizeSizes($ad->params);
         $size = array_pop($size);
+
 
         $html = $this->renderInline($ad);
 
         return sprintf(
             $tpl,
+            $orientation,
             $ad->pk_advertisement,
             empty($ad->timeout) ? 5 : $ad->timeout,
             $ad->type_advertisement,

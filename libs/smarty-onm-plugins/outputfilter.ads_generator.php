@@ -35,7 +35,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
         $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads, $params);
         $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
-        $interstitial = $adsRenderer->renderInterstitial($ads, $params);
+        $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
 
         $output = str_replace('</head>', $reviveOutput . '</head>', $output);
         $output = str_replace('</head>', $dfpOutput . '</head>', $output);

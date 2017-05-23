@@ -19,7 +19,6 @@ function smarty_insert_renderbanner($params, $smarty)
         return sprintf($tpl, $class, '');
     }
 
-    $class    = ' oat-visible';
     $renderer = getService('core.renderer.advertisement');
     $type     = $params['type'];
     $ads      = $smarty->tpl_vars['advertisements']->value;
@@ -36,9 +35,14 @@ function smarty_insert_renderbanner($params, $smarty)
     $content = '';
 
     if (count($ads) > 0) {
-        $selectedAd = $ads[array_rand($ads)];
-        $content    = $renderer->renderInline($selectedAd);
-        $content    = sprintf($tpl, $class, $content);
+        $ad = $ads[array_rand($ads)];
+
+        $orientation = empty($ad->params['orientation']) ?
+            'top' : $ad->params['orientation'];
+
+        $class   = ' oat-visible oat-' . $orientation;
+        $content = $renderer->renderInline($ad);
+        $content = sprintf($tpl, $class, $content);
     }
 
     return $content;
