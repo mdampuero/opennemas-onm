@@ -40,7 +40,8 @@ function smarty_insert_renderbanner($params, $smarty)
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
 
-        $class   = ' oat-visible oat-' . $orientation;
+        $deviceClasses = $renderer->getDeviceCSSClases($ad);
+        $class   = ' oat-visible oat-' . $orientation . ' ' . $deviceClasses;
         $content = $renderer->renderInline($ad);
         $content = sprintf($tpl, $class, $content);
     }
