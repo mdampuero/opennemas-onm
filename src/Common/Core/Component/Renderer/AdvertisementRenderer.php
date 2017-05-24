@@ -247,18 +247,18 @@ class AdvertisementRenderer
      */
     public function renderInlineInterstitial($ads, $params)
     {
-        $tpl = '<div class="interstitial">'
-            . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s" data-timeout="%s" data-type="%s">'
-                . '<div class="interstitial-wrapper" style="width: %s;">'
-                    . '<style>body { height: 100%%; overflow: hidden; }</style>'
-                    . '<div class="interstitial-header">'
-                        . _('Entering on the requested page')
-                        . '<a class="interstitial-close-button" href="#" title="'
-                            . _('Skip advertisement') . '">'
-                            . '<span>' . _('Skip advertisement') . '</span>'
-                        . '</a>'
-                    . '</div>'
-                    . '<div class="interstitial-content" style="height: %s;">%s</div>'
+        $tpl = '<div class="interstitial interstitial-hidden">'
+            . '<div class="interstitial-wrapper" style="width: %s;">'
+                . '<style>body { height: 100%%; overflow: hidden; }</style>'
+                . '<div class="interstitial-header">'
+                    . _('Entering on the requested page')
+                    . '<a class="interstitial-close-button" href="#" title="'
+                        . _('Skip advertisement') . '">'
+                        . '<span>' . _('Skip advertisement') . '</span>'
+                    . '</a>'
+                . '</div>'
+                . '<div class="interstitial-content" style="height: %s;">'
+                    . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s" data-timeout="%s" data-type="%s" >%s</div>'
                 . '</div>'
             . '</div>'
         . '</div>';
@@ -277,21 +277,26 @@ class AdvertisementRenderer
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
 
-        $size = $ad->normalizeSizes($ad->params);
-        $size = array_pop($size);
+        $sizes = $ad->normalizeSizes($ad->params);
+        $size  = array_filter($sizes, function ($a) {
+            return $a['device'] === 'desktop';
+        });
 
+        if (empty($size)) {
+            $size = $sizes;
+        }
 
-        $html = $this->renderInline($ad);
+        $size = array_shift($sizes);
 
         return sprintf(
             $tpl,
+            $size['width'] . 'px',
+            empty($size['height']) ? 'auto' : $size['height'] . 'px',
             $orientation,
             $ad->pk_advertisement,
             empty($ad->timeout) ? 5 : $ad->timeout,
             $ad->type_advertisement,
-            $size['width'] . 'px',
-            empty($size['height']) ? 'auto' : $size['height'] . 'px',
-            $html
+            $this->renderInline($ad)
         );
     }
 

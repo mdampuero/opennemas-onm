@@ -471,17 +471,32 @@
    */
   OAM.prototype.hideInterstitials = function() {
     var self = this;
+    var expires = new Date();
+    var now     = new Date();
+
+    if (this.getCookie('__onm_interstitial')) {
+      expires = new Date(this.getCookie('__onm_interstitial'));
+    }
+
+    if (expires > now) {
+      return;
+    }
+
     var interstitials = document.getElementsByClassName('interstitial');
 
     if (interstitials.length > 0) {
       for (var i = 0; i < interstitials.length; i++) {
         var interstitial = interstitials[i];
-        var timeout      = interstitials[i].getAttribute('data-timeout');
+        var timeout      = interstitial.getElementsByClassName('oat')[0]
+          .getAttribute('data-timeout');
 
         interstitial.getElementsByClassName('interstitial-close-button')[0]
           .onclick = function(e) {
             self.close(interstitial, e);
           };
+
+        interstitial.className = interstitial.className
+          .replace('interstitial-hidden', '');
 
         window.setTimeout(function () {
           self.close(interstitial);

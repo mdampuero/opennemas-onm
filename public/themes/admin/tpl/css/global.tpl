@@ -19,12 +19,24 @@
   z-index: 1000;
 }
 
+.interstitial-hidden {
+  display: none;
+}
+
 .interstitial-wrapper {
   margin: 0 auto;
 }
 
 .interstitial-content {
   width: 100%;
+}
+
+.interstitial-content .oat:before {
+  content: "";
+}
+
+.interstitial-content .oat > *:not(script) {
+  margin: 0 !important
 }
 
 .interstitial-header {
