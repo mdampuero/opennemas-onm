@@ -480,10 +480,14 @@ class AdvertisementRenderer
      **/
     public function getDeviceCSSClases(\Advertisement $ad)
     {
+        if (!array_key_exists('devices', $ad->params)) {
+            return '';
+        }
+
         $cssClasses= [];
         foreach ($ad->params['devices'] as $device => $status) {
             if ($status === 0) {
-                $cssClasses[] = 'hidden-'.$device;
+                $cssClasses[] = 'hidden-' . $device;
             }
         }
 
