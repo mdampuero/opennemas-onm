@@ -53,12 +53,14 @@ class AdvertisementRenderer
             return $this->renderSafeFrameSlot($ad, $params);
         }
 
-        $tpl         = '<div class="ad-slot oat oat-visible oat-%s">%s</div>';
+        $deviceClasses = $this->getDeviceCSSClases($ad);
+
+        $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s">%s</div>';
         $content     = $this->renderInline($ad, $params);
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
 
-        return sprintf($tpl, $orientation, $content);
+        return sprintf($tpl, $orientation, $deviceClasses, $content);
     }
 
     /**
@@ -467,6 +469,25 @@ class AdvertisementRenderer
 
         return $this->container->get('core.template.admin')
             ->fetch('advertisement/helpers/safeframe/image.tpl', $params);
+    }
+
+    /**
+     * Returns the list of CSS classes according to device restrictions for an Ad
+     *
+     * @param Advertisement $ad the advertisement to get restrictions from
+     *
+     * @return string the css classes to apply
+     **/
+    public function getDeviceCSSClases(\Advertisement $ad)
+    {
+        $cssClasses= [];
+        foreach ($ad->params['devices'] as $device => $status) {
+            if ($status === 0) {
+                $cssClasses[] = 'hidden-'.$device;
+            }
+        }
+
+        return implode(' ', $cssClasses);
     }
 
     /**

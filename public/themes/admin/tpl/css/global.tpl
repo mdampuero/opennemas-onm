@@ -136,3 +136,21 @@
   top: 50%;
   transform: rotate(90deg);
 }
+
+@media (max-width: 767px) {
+  .oat.hidden-phone {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .oat.hidden-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .oat.hidden-desktop {
+    display: none !important;
+  }
+}
