@@ -32,7 +32,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
 
     $bodyWithAds = [];
 
-    $safeFrame = getService('setting_repository')->get('ads_settings')['safe_frame'];
+    $safeFrame = getService('core.helper.advertisement')->isSafeFrameEnabled();
     if (!$safeFrame) {
         $adsRepository = getService('advertisement_repository');
         switch ($contentType) {
