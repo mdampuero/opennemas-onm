@@ -247,9 +247,8 @@ class AdvertisementRenderer
      */
     public function renderInlineInterstitial($ads, $params)
     {
-        $tpl = '<div class="interstitial interstitial-hidden">'
+        $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
-                . '<style>body { height: 100%%; overflow: hidden; }</style>'
                 . '<div class="interstitial-header">'
                     . _('Entering on the requested page')
                     . '<a class="interstitial-close-button" href="#" title="'
@@ -258,11 +257,11 @@ class AdvertisementRenderer
                     . '</a>'
                 . '</div>'
                 . '<div class="interstitial-content" style="height: %s;">'
-                    . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s" data-timeout="%s" data-type="%s" >%s</div>'
+                    . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s"'
+                        .  ' data-timeout="%s" data-type="%s" >%s</div>'
                 . '</div>'
             . '</div>'
         . '</div>';
-
 
         $interstitials = array_filter($ads, function ($a) {
             return ($a->type_advertisement + 50) % 100 == 0;

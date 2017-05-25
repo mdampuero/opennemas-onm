@@ -12,6 +12,7 @@
 .interstitial {
   background: #fff;
   bottom: 0;
+  display: none;
   left: 0;
   position: absolute;
   right: 0;
@@ -19,8 +20,13 @@
   z-index: 1000;
 }
 
-.interstitial-hidden {
-  display: none;
+.interstitial-open {
+  height: 100%;
+  overflow: hidden;
+}
+
+.interstitial-visible {
+  display: block;
 }
 
 .interstitial-wrapper {

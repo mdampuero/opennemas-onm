@@ -83,6 +83,9 @@
     document.cookie = '__onm_interstitial=' + expires + ';expires=' +
       expires + ';path=/';
 
+    document.body.className = document.body.className
+      .replace(' interstitial-open', '');
+
     element.remove();
   };
 
@@ -101,7 +104,7 @@
     var div = document.createElement('div');
 
     // TODO: Remove style from <a> element (again, fuck you, frontenders!!!)
-    div.innerHTML = '<div class="interstitial">' +
+    div.innerHTML = '<div class="interstitial interstitial-visible">' +
       '<div class="interstitial-wrapper">' +
         '<style>body { height: 100%; overflow: hidden; }</style>' +
         '<div class="interstitial-header">' +
@@ -220,9 +223,8 @@
 
     if (expires <= now) {
       var ad = this.getAdvertisement(interstitials);
-
-      document.getElementsByTagName('body')[0]
-        .appendChild(this.createInterstitial(ad));
+      document.body.appendChild(this.createInterstitial(ad));
+      document.body.className = document.body.className + ' interstitial-open';
     }
   };
 
@@ -470,19 +472,22 @@
    *   Displays interstitials already present in the HTML document.
    */
   OAM.prototype.hideInterstitials = function() {
-    var self = this;
-    var expires = new Date();
-    var now     = new Date();
+    var self          = this;
+    var expires       = new Date();
+    var now           = new Date();
+    var interstitials = document.getElementsByClassName('interstitial');
 
     if (this.getCookie('__onm_interstitial')) {
       expires = new Date(this.getCookie('__onm_interstitial'));
     }
 
     if (expires > now) {
+      for (var i = 0; i < interstitials.length; i++) {
+        interstitials[i].remove();
+      }
+
       return;
     }
-
-    var interstitials = document.getElementsByClassName('interstitial');
 
     if (interstitials.length > 0) {
       for (var i = 0; i < interstitials.length; i++) {
@@ -495,13 +500,15 @@
             self.close(interstitial, e);
           };
 
-        interstitial.className = interstitial.className
-          .replace('interstitial-hidden', '');
+        interstitial.className = interstitial.className +
+          ' interstitial-visible';
 
         window.setTimeout(function () {
           self.close(interstitial);
         }, timeout * 1000);
       }
+
+      document.body.className = document.body.className + ' interstitial-open';
     }
   };
 
