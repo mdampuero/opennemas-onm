@@ -126,3 +126,36 @@
   top: 50%;
   transform: rotate(90deg);
 }
+
+.cookies-overlay button {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 5px;
+  float: right;
+  color: white;
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  font-style: normal;
+}
+
+.cookies-overlay p {
+  width: 85%;
+}
+
+.cookies-overlay a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+@media (max-width: 479px) {
+  .cookies-overlay p {
+    margin: 0;
+    float: none;
+    width: 100%;
+    padding: 5px;
+    font-size: .8em;
+    line-height: 1.3em;
+  }
+}

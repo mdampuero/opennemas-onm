@@ -11,11 +11,9 @@ function smarty_function_cookie_hint($params, &$smarty)
         $url = s::get('cookies_hint_url');
         $message = sprintf(
             _(
-                'We use cookies to personalise content and ads, to provide social media '
-                .'features and to analyse our traffic. We also share information about '
-                .'your use of our site with our social media, advertising and analytics '
-                .'partners who may combine it with other information you’ve provided '
-                .'to them or they’ve collected from your use of their services. '
+                'This website uses its own and third party cookies to elaborate '
+                .'statistical information and to be able to show you advertising '
+                .'related to your preferences through the analysis of your navigation.'
                 .'<a target="_blank" href="%s"> See details &gt; </a>'
             ),
             $url
@@ -23,8 +21,10 @@ function smarty_function_cookie_hint($params, &$smarty)
 
         $html = "<div id='cookies_overlay' style='display: none;'>
                 <div class='cookies-overlay'>
-                    <p>$message</p>
-                    <button class='closeover' onclick='acceptCookies()' type='button'>Aceptar</button>
+                    <p>
+                        <button class='closeover' onclick='acceptCookies()' type='button'>&times;</button>
+                        $message
+                    </p>
                 </div>
             </div>
             <script type='text/javascript'>
