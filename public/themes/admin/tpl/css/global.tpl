@@ -87,7 +87,7 @@
 }
 
 .oat > *:not(script) {
-  display: block !important;
+  display: block;
 }
 
 .oat-container {
