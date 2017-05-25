@@ -153,7 +153,7 @@ class AdsController extends Controller
         $categories    = json_decode($request->request->get('categories', ''), true);
 
         if (is_array($categories) && empty($categories)) {
-            $categories = [ 0 ];
+            $categories = '';
         }
 
         $data = [
@@ -319,7 +319,7 @@ class AdsController extends Controller
         $categories = json_decode($request->request->get('categories', ''), true);
 
         if (is_array($categories) && empty($categories)) {
-            $categories = [ 0 ];
+            $categories = '';
         }
 
         $data = [
