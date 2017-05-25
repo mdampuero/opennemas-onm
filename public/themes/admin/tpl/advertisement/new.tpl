@@ -499,31 +499,31 @@
                 <div class="controls">
                   <select name="position" id="position" ng-model="position">
                     <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
-                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Inner article{/t}</option>
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video frontpage{/t}</option>
-                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Inner video{/t}</option>
+                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Article: inner{/t}</option>
+                    {is_module_activated name="ALBUM_MANAGER"}
+                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Gallery: frontpage{/t}</option>
+                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery: inner{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
-                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion frontpage{/t}</option>
-                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Inner opinion{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Galleries{/t}</option>
-                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery Inner{/t}</option>
+                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion: frontpage{/t}</option>
+                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Opinion: inner{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="POLL_MANAGER"}
-                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll{/t}</option>
-                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
+                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll: frontpage{/t}</option>
+                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll: inner{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="NEWSLETTER_MANAGER"}
                     <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
                     {/is_module_activated}
+                    {is_module_activated name="VIDEO_MANAGER"}
+                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video: frontpage{/t}</option>
+                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Video: inner{/t}</option>
+                    {/is_module_activated}
                     {is_module_activated name="AMP_MODULE"}
-                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
+                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}Google AMP{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="FIA_MODULE"}
-                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
+                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Facebook Instant Articles{/t}</option>
                     {/is_module_activated}
                     <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
                   </select>
