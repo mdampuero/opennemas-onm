@@ -294,8 +294,12 @@ class PollsController extends Controller
             $positions = $positionManager->getPositionsForGroup('polls_frontpage', [ 7, 9 ]);
         }
 
+        // We force category = 0 because we dont support category segmentation
+        // on polls by category. Something to look again in the future.
+        $category = 0;
+
         $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $this->category);
+            ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
     }
