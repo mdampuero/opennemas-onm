@@ -153,14 +153,14 @@ class AdsController extends Controller
         $categories    = json_decode($request->request->get('categories', ''), true);
 
         if (is_array($categories) && empty($categories)) {
-            $categories = '';
+            $categories = null;
         }
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
-            'categories'         => implode(',', $categories),
+            'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),
@@ -319,7 +319,7 @@ class AdsController extends Controller
         $categories = json_decode($request->request->get('categories', ''), true);
 
         if (is_array($categories) && empty($categories)) {
-            $categories = '';
+            $categories = null;
         }
 
         $data = [
