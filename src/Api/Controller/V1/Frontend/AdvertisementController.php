@@ -105,7 +105,7 @@ class AdvertisementController extends Controller
      */
     protected function getAdvertisement($id)
     {
-        if (in_array('ADS_MANAGER', $this->get('core.instance')->activated_modules)) {
+        if ($this->get('core.security')->hasExtension('ADS_MANAGER')) {
             return $this->get('entity_repository')->find('Advertisement', $id);
         }
 

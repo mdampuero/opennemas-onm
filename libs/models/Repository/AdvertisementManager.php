@@ -174,7 +174,7 @@ class AdvertisementManager extends EntityManager
         $category = (empty($category) || ($category=='home')) ? 0 : $category;
 
         if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
-            return  $this->findAdvertisements($types, $category);
+            return  $this->findDefaultAdvertisements($types, $category);
         }
 
         $generics = true;
