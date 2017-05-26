@@ -326,6 +326,12 @@ class AssetController extends Controller
             $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($favicoFileName);
         }
 
-        return new RedirectResponse($favicoUrl, 301);
+        $favicoUrl =  realpath(SITE_PATH.'/'.$favicoUrl);
+
+        return new Response(
+            file_get_contents($favicoUrl),
+            200,
+            [ 'Content-Type' => 'image/' . pathinfo($favicoFileName, PATHINFO_EXTENSION) ]
+        );
     }
 }
