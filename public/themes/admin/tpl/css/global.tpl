@@ -1,3 +1,15 @@
+.ad-left,
+.ad-right {
+  display: inline-block;
+  float: none;
+  text-align: center;
+  vertical-align: top;
+}
+
+.ad-left + .ad-right {
+  margin-left: 10px;
+}
+
 .ads,
 .ad-skyscraper-left,
 .ad-skyscraper-right {
