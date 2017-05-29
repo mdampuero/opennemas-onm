@@ -166,8 +166,9 @@ class NewsletterManager extends BaseManager
         $menuFrontpage= $menuManager->getMenu('frontpage');
         $this->tpl->assign('menuFrontpage', $menuFrontpage->items);
 
-        // render ads
-        $ads = \Advertisement::findForPositionIdsAndCategory(array(1001, 1009), 0);
+        // Render ads
+        $ads = getService('advertisement_repository')
+            ->findByPositionsAndCategory([ 1001, 1009 ], 0);
         $this->tpl->assign('advertisements', $ads);
 
          // VIERNES 4 DE SEPTIEMBRE 2009
