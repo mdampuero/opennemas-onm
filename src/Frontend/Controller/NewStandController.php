@@ -271,7 +271,8 @@ class NewStandController extends Controller
         // Get news_stand positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('frontpage', array(103, 105));
-        $advertisements =  \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $advertisements =  $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
     }

@@ -49,15 +49,21 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="ads_settings_no_generics" class="form-label">{t}Allow generic advertisement{/t}</label>
-          <div class="controls">
-            <select name="ads_settings_no_generics" id="ads_settings_no_generics">
-              <option value="0">{t}Yes{/t}</option>
-              <option value="1" {if $configs['ads_settings']['no_generics'] eq "1"} selected {/if}>{t}No{/t}</option>
-            </select>
-            <div class="help">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
+          <div class="checkbox">
+            <input{if $configs['ads_settings']['no_generics'] eq "0"}checked{/if} id="ads_settings_no_generics" name="ads_settings_no_generics" type="checkbox" value="0">
+            <label for="ads_settings_no_generics" class="form-label">{t}Allow generic advertisement{/t}</label>
+            <div class="help m-t-5">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
           </div>
         </div>
+        {acl isAllowed="MASTER"}
+          <div class="form-group">
+            <div class="checkbox">
+              <input {if $configs['ads_settings']['safe_frame'] eq 1}checked{/if} id="safe-frame" name="safe_frame" type="checkbox">
+              <label for="safe-frame">{t}SafeFrame by default{/t} ({t}Recommended{/t})</label>
+            </div>
+            <div class="help m-t-5">{t}This feature displays advertisements inside iframes. It improves the user experience and has a better performance.{/t}</div>
+          </div>
+        {/acl}
       </uib-tab>
       <uib-tab heading="{t}External services{/t}">
         <h4>{t}OpenX/Revive Ad server integration{/t}</h4>

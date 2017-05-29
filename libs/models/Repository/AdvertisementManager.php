@@ -156,4 +156,119 @@ class AdvertisementManager extends EntityManager
 
         return $filterSQL;
     }
+
+    /**
+     * Retrieves the list of ads for a list of types and a category
+     *
+     * @param array $types the list of position ids
+     * @param int   $category the id of the category
+     *
+     * @return array the list of arrays
+     */
+    public function findByPositionsAndCategory($types = [], $category = 0)
+    {
+        if (!is_array($types) || count($types) <= 0) {
+            return [];
+        }
+
+        $category = (empty($category) || ($category=='home')) ? 0 : $category;
+
+        if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
+            return  $this->findDefaultAdvertisements($types, $category);
+        }
+
+        $generics = true;
+        $config   = getService('setting_repository')->get('ads_settings');
+
+        if (isset($config['no_generics'])
+            && ($config['no_generics'] == '1')
+        ) {
+            $generics = false;
+        }
+
+        return $this->findAdvertisements($types, $category, $generics);
+    }
+
+    /**
+     * Returns the list of advertisements basing on the list of positions to
+     * render, the current category and the generic advertisements flag.
+     *
+     * @param array   $types    The list of positions to render.
+     * @param integer $category The current category id.
+     * @param boolean $generics Whether generig advertisements are enabled.
+     *
+     * @return array The list of advertisements.
+     */
+    protected function findAdvertisements($types, $category, $generics)
+    {
+        $sql = 'SELECT pk_advertisement as id FROM advertisements'
+            . ' WHERE type_advertisement IN (%s)'
+            . ' AND (fk_content_categories IS NULL OR %s)'
+            . ' ORDER BY id';
+
+        $categories = '';
+
+        // Return advertisements in frontpage if generic advertisements allowed
+        if ($category !== 0 && $generics) {
+            $categories = 'fk_content_categories REGEXP "^0($|,)|,\s*0\s*,|(^|,)\s*0$" OR ';
+        }
+
+        $categories .= sprintf(
+            'fk_content_categories REGEXP "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
+            $category,
+            $category,
+            $category
+        );
+
+        $sql = sprintf($sql, implode(',', $types), $categories);
+
+        try {
+            $result = $this->dbConn->fetchAll($sql);
+            $result = array_map(function ($element) {
+                return [ 'Advertisement', $element['id'] ];
+            }, $result);
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        $advertisements = $this->findMulti($result);
+
+        return array_filter($advertisements, function ($a) {
+            if (!is_object($a)
+                || (!$a->isInTime()
+                && $a->type_medida == 'DATE')
+                || $a->content_status != 1
+                || $a->in_litter != 0
+            ) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    /**
+     * Returns the list of default advertisements.
+     *
+     * @param type variable Description
+     *
+     * @return type Description
+     */
+    protected function findDefaultAdvertisements($types, $category)
+    {
+        $ads = include APP_PATH.'config/ads/onm_default_ads.php';
+
+        $ads = array_filter($ads, function ($a) use ($types, $category) {
+            if (in_array($a->type_advertisement, $types) &&
+                (in_array($category, $a->fk_content_categories) ||
+                    in_array(0, $a->fk_content_categories))
+            ) {
+                $banners[$ad->type_advertisement][] = $ad;
+            }
+
+            return false;
+        });
+
+        return $ads;
+    }
 }
