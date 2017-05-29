@@ -1283,7 +1283,7 @@ msgid "Unable to save the positions."
 msgstr "Non se puideron gardar as posicións."
 
 msgid "All categories"
-msgstr "Tódalas categorías"
+msgstr "Todas as categorías"
 
 msgid "All content types"
 msgstr "Todos os tipos de contido"
@@ -7350,7 +7350,7 @@ msgid "Display the advertisement for a limited time (intersticials only)"
 msgstr "Mostrar a publicidade durante un tempo limitado (só intersticiais)"
 
 msgid "Show in all categories"
-msgstr "Mostrar en tódalas categorías"
+msgstr "Mostrar en todas as categorías"
 
 msgid "Display the advertisement only in the selected categories"
 msgstr "Mostrar a publicidade só nas categorías seleccionadas"
@@ -7362,7 +7362,7 @@ msgid ""
 "We recomend you to use the \"Show in all categories\" mark to avoid "
 "unchecked future created categories."
 msgstr ""
-"Recomendámoslle usar a opción «Mostrar en tódalas categorías» para evitar "
+"Recomendámoslle usar a opción «Mostrar en todas as categorías» para evitar "
 "que as categorías creadas no futuro queden sen marcar."
 
 msgid "Where to show this ad"
