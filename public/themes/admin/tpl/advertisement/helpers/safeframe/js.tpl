@@ -16,7 +16,7 @@
   };
 
   window.onload = function() {
-    var devices = [ 'desktop', 'tablet', 'smartphone' ];
+    var devices = [ 'desktop', 'tablet', 'phone' ];
 
     for (var i = 0; i < devices.length; i++) {
       if (devices[i] === _onmaq.device) {
