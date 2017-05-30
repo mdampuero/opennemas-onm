@@ -276,7 +276,7 @@
       }
 
       // TODO: Remove when no support sizes in templates
-      if (self.device === 'desktop' && slot.getAttribute('data-width')) {
+      if (self.config.device === 'desktop' && slot.getAttribute('data-width')) {
         div.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
 
@@ -397,30 +397,6 @@
   };
 
   /**
-   * @function getDevice
-   * @memberOf OAM
-   *
-   * @description
-   *   Returns the device name basing on the window width.
-   *
-   * @return {String} The device name.
-   */
-  OAM.prototype.getDevice = function() {
-    var width = window.innerWidth || document.documentElement.clientWidth ||
-      document.getElementsByTagName('body')[0];
-
-    if (width < 768) {
-      return 'phone';
-    }
-
-    if (width < 992) {
-      return 'tablet';
-    }
-
-    return 'desktop';
-  };
-
-  /**
    * @function getSize
    * @memberOf OAM
    *
@@ -432,7 +408,7 @@
    * @return {Object} An object with height and width values for slot.
    */
   OAM.prototype.getSize = function(ad) {
-    var device  = this.getDevice();
+    var device = this.config.device;
 
     var sizes = ad.sizes.filter(function(e) {
       return e.device === device;
@@ -520,8 +496,7 @@
    *   Initializes the advertisement manager.
    */
   OAM.prototype.init = function() {
-    this.user   = this.getUser();
-    this.device = this.getDevice();
+    this.user = this.getUser();
 
     if (this.config.slots.length > 0) {
       this.getAdvertisements();
@@ -568,7 +543,7 @@
       });
     }
 
-    return ad.devices[this.device] === 1 &&
+    return ad.devices[this.config.device] === 1 &&
       (ad.user_groups.length === 0 || groups.length > 0);
   };
 

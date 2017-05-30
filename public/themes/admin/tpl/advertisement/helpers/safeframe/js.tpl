@@ -1,8 +1,10 @@
 <script>
   var _onmaq = _onmaq || {};
 
+  _onmaq.width          = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   _onmaq.category       = '{{$category}}';
   _onmaq.debug          = {{$debug}};
+  _onmaq.device         = _onmaq.width < 768 ? 'phone' : (_onmaq.width < 990 ? 'tablet' : 'desktop');
   _onmaq.extension      = '{{$extension}}';
   _onmaq.cookieLifetime = {if empty($lifetime)}86400{else}{{$lifetime}}{/if};
   _onmaq.slots          = [ {{$positions}} ];
@@ -13,8 +15,21 @@
     'skip':     '{t}Skip advertisement{/t}'
   };
 
-  (function() {
+  window.onload = function() {
+    var devices = [ 'desktop', 'tablet', 'smartphone' ];
 
+    for (var i = 0; i < devices.length; i++) {
+      if (devices[i] === _onmaq.device) {
+        var slots = document.getElementsByClassName('hidden-' + devices[i]);
+
+        for (var j = 0; j < slots.length; j++) {
+          slots[j].remove();
+        }
+      }
+    }
+  };
+
+  (function() {
     var am = document.createElement('script');
 
     am.type  = 'text/javascript';
