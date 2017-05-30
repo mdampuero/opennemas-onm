@@ -325,7 +325,7 @@ class AssetController extends Controller
             $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($favicoFileName);
         }
 
-        $favicoUrl =  realpath(SITE_PATH.'/'.$favicoUrl);
+        $favicoUrl =  realpath(SITE_PATH . '/' . $favicoUrl);
 
         return new Response(
             file_get_contents($favicoUrl),
