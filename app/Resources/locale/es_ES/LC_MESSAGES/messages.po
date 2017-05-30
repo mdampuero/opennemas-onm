@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-30 14:53+0000\n"
-"PO-Revision-Date: 2017-05-30 16:57+0200\n"
+"POT-Creation-Date: 2017-05-30 15:12+0000\n"
+"PO-Revision-Date: 2017-05-30 17:14+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -6219,6 +6219,18 @@ msgstr ""
 "\"external-link\" href=\"http://code.google.com/apis/maps/signup.html\" "
 "target=\"_blank\">el sitio web Google Maps sign up</a>."
 
+msgid "Google Tags container Id"
+msgstr "Google Tags Id de contenedor"
+
+msgid ""
+"You can get your Google <strong>Tags</strong> container Id from <a class="
+"\"external-link\" href=\"https://tagmanager.google.com/#/home\" target="
+"\"_blank\">Google tags sign up website</a>."
+msgstr ""
+"Puedes obtener el Id de contenedor de Google <strong>Tags</strong> desde <a "
+"class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" target="
+"\"_blank\">el sitio web de Google Tags</a>."
+
 msgid "Social network integration"
 msgstr "Integración con redes sociales"
 
@@ -6510,27 +6522,6 @@ msgstr ""
 "plugins/comments/\">sistema de comentarios de Facebook</a> y use su potente "
 "sistema para gestionar los comentarios de su sitio web."
 
-msgid "Allow comments in contents by default"
-msgstr "Por omisión permitir los comentarios en los contenidos"
-
-msgid ""
-"Whether to allow users to comment in comments by default for all contents "
-"(you can change this setting for specific contents)"
-msgstr ""
-"Indica si los usuarios pueden comentar en los contenidos por omisión (puede "
-"cambiar esta preferencia para contenidos específicos)"
-
-#, fuzzy
-msgid "Disable all comments on site"
-msgstr "Eliminar todos los contenidos en esta categoría"
-
-msgid ""
-"If set, users will not be able to comment on the site and comments already "
-"approved will not be displayed"
-msgstr ""
-"Si se establece, los usuarios no podrán comentar en el sitio y los "
-"comentarios ya aprobados no se mostrarán"
-
 msgid "Change comments module"
 msgstr "Cambiar módulo de comentarios"
 
@@ -6591,6 +6582,16 @@ msgstr "Mostrar"
 
 msgid "Number of comments to show by page"
 msgstr "Numero de comentarios a mostrar por página"
+
+msgid "Allow comments in contents by default"
+msgstr "Por omisión permitir los comentarios en los contenidos"
+
+msgid ""
+"Whether to allow users to comment in comments by default for all contents "
+"(you can change this setting for specific contents)"
+msgstr ""
+"Indica si los usuarios pueden comentar en los contenidos por omisión (puede "
+"cambiar esta preferencia para contenidos específicos)"
 
 msgid "Before a comment appears"
 msgstr "Antes de que el comentario aparezca"
