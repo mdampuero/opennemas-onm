@@ -63,8 +63,9 @@ class ArticlesController extends Controller
 
         // Advertisements for single article NO CACHE
         $actualCategoryId = $this->ccm->get_id($categoryName);
-        $ads = $this->getAds($actualCategoryId);
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds($actualCategoryId);
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         // Fetch general layout
         $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId);
@@ -186,48 +187,38 @@ class ArticlesController extends Controller
             }
         }
 
-        // Advertisements for single article NO CACHE
         $cm = new \ContentManager;
-        // Get category id correspondence
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        // Fetch advertisement information from external
-        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
-        $this->view->assign('advertisements', $ads);
 
         // Get full article
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
         $article = unserialize($article);
 
-        if (($article->content_status==1) && ($article->in_litter==0)
-            && ($article->isStarted())
+        if ($article->content_status != 1
+            || $article->in_litter == 1
+            || !$article->isStarted()
         ) {
-            // Template vars
-            $this->view->assign(
-                array(
-                    'article'               => $article,
-                    'content'               => $article,
-                    'photoInt'              => $article->photoInt,
-                    'videoInt'              => $article->videoInt,
-                    'relationed'            => $article->relatedContents,
-                    'contentId'             => $article->id,// Used on module_comments.tpl
-                    'actual_category_title' => $article->category_title,
-                    'suggested'             => $article->suggested,
-                    'ext'                   => 1,
-                )
-            );
-        } else {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
-        return $this->render(
-            'article/article.tpl',
-            array(
-                'cache_id' => $cacheID,
-                'category_name' => $categoryName,
-                'x-tags'          => 'ext-article,'.$article->id,
-                'x-cache-for'     => '+1 day',
-            )
-        );
+        list($positions, $advertisements) = $this->getAds();
+
+        return $this->render('article/article.tpl', [
+            'actual_category_title' => $article->category_title,
+            'ads_positions'         => $positions,
+            'advertisements'        => $advertisements,
+            'article'               => $article,
+            'cache_id'              => $cacheID,
+            'category_name'         => $categoryName,
+            'content'               => $article,
+            'contentId'             => $article->id,// Used on module_comments.tpl
+            'ext'                   => 1,
+            'photoInt'              => $article->photoInt,
+            'relationed'            => $article->relatedContents,
+            'suggested'             => $article->suggested,
+            'videoInt'              => $article->videoInt,
+            'x-cache-for'           => '+1 day',
+            'x-tags'                => 'ext-article,'.$article->id
+        ]);
     }
 
     /**
@@ -262,9 +253,11 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // TODO: Use $this->get when the function changes to non-static
-        $positionManager = getService('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = getService('core.helper.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
+        $advertisements  = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
-        return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

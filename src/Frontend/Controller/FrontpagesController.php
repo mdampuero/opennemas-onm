@@ -73,8 +73,7 @@ class FrontpagesController extends Controller
         $contents = $cm->getInTime($contents);
 
         // Fetch ads
-        $ads = $this->getAds($categoryId, $contents);
-        $this->view->assign('advertisements', $ads);
+        list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
@@ -187,16 +186,15 @@ class FrontpagesController extends Controller
             $this->view->assign('layoutFile', $layoutFile);
         }
 
-        return $this->render(
-            'frontpage/frontpage.tpl',
-            [
-                'cache_id'        => $cacheId,
-                'category_name'   => $categoryName,
-                'actual_category' => $categoryName,
-                'x-tags'          => 'frontpage-page,' . $categoryName,
-                'x-cache-for'     => $expires,
-            ]
-        );
+        return $this->render('frontpage/frontpage.tpl', [
+            'advertisements'  => $advertisements,
+            'ads_positions'   => $adsPositions,
+            'cache_id'        => $cacheId,
+            'category_name'   => $categoryName,
+            'actual_category' => $categoryName,
+            'x-tags'          => 'frontpage-page,' . $categoryName,
+            'x-cache-for'     => $expires,
+        ]);
     }
 
     /**
@@ -303,10 +301,16 @@ class FrontpagesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // TODO: Use $this->get when the function changes to non-static
-        $positions = getService('core.manager.advertisement')
+        $positions = getService('core.helper.advertisement')
             ->getPositionsForGroup('frontpage');
+        $positionsToFetch = $positions;
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        // We have to remove the floating ads from the positions because
+        // we will add them later from the $contents array
+        unset($positionsToFetch[array_search(37, $positionsToFetch)]);
+
+        $advertisements = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positionsToFetch, $category);
 
         // Get all the ads and add them to the advertisements list
         if (is_array($contents)) {
@@ -317,6 +321,6 @@ class FrontpagesController extends Controller
             }
         }
 
-        return $advertisements;
+        return [ $positions, $advertisements ];
     }
 }

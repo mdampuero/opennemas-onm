@@ -1,4 +1,9 @@
 services:
+    frontend.listener.authentication:
+        class:     Frontend\EventListener\AuthenticationListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 99 }
     frontend_login_success_handler:
         class:     Frontend\EventListener\LoginSuccessHandler
         arguments: [ '@security.token_storage', '@router', '@core.recaptcha', '@application.log' ]

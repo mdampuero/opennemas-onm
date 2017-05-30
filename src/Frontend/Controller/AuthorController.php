@@ -106,17 +106,15 @@ class AuthorController extends Controller
             ]);
         }
 
-        $ads = $this->getInnerAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getInnerAds();
 
-        return $this->render(
-            'user/author_frontpage.tpl',
-            array(
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'author-user-frontpage,'.$slug.','.$page,
-                'x-cache-for' => '+1 day'
-            )
-        );
+        return $this->render('user/author_frontpage.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'author-user-frontpage,'.$slug.','.$page,
+            'x-cache-for'    => '+1 day'
+        ]);
     }
 
     /**
@@ -218,16 +216,15 @@ class AuthorController extends Controller
             ]);
         }
 
-        $this->view->assign('advertisements', $this->getInnerAds());
+        list($positions, $advertisements) = $this->getInnerAds();
 
-        return $this->render(
-            'user/frontpage_authors.tpl',
-            [
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'authors-users-frontpage,' . $page,
-                'x-cache-for' => '+1 day'
-            ]
-        );
+        return $this->render('user/frontpage_authors.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'authors-users-frontpage,' . $page,
+            'x-cache-for'    => '+1 day'
+        ]);
     }
 
     /**
@@ -239,8 +236,11 @@ class AuthorController extends Controller
      */
     public static function getInnerAds($category = 0)
     {
-        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $positionManager = getService('core.helper.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner');
+        $advertisements  = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

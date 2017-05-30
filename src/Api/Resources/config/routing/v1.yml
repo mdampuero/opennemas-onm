@@ -1,0 +1,7 @@
+api_v1_advertisement:
+    resource: '@ApiBundle/Resources/config/routing/v1/advertisement.yml'
+    prefix:   /
+
+api_v1_user:
+    resource: '@ApiBundle/Resources/config/routing/v1/user.yml'
+    prefix:   /

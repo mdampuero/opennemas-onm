@@ -216,9 +216,9 @@ class Validator
                 _('Name of the newspaper must be longer than 5 characters');
         }
 
-        if (!$this->validateBadWords('internal_name', $name)) {
+        if (!$this->validateBadWords($name)) {
             $this->errors['internal_name'][] =
-                _('Your newspaper name cointains disallowed words.');
+                _('Your newspaper name contains disallowed words.');
         }
     }
 
@@ -232,7 +232,6 @@ class Validator
         try {
             $this->em->getRepository('Instance')
                 ->findOneBy(sprintf('internal_name = "%s"', $name));
-
 
             $this->errors['internal_name'][] = _('The url that you entered is already in use');
         } catch (\Exception $e) {
@@ -250,12 +249,11 @@ class Validator
     {
         $badWords  = $this->getBadWords();
 
+        $value = mb_strtolower($value);
         foreach ($badWords as $word) {
             similar_text($value, $word, $percent);
 
-            if (preg_match('/' . $word . '/i', '/' . $value . '/', $badWords)
-                || $percent > 80
-            ) {
+            if ($percent > 80 ) {
                 return false;
             }
         }
