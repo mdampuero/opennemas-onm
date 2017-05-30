@@ -150,17 +150,17 @@ class AdsController extends Controller
         }
 
         $advertisement = new \Advertisement();
-        $categories    = json_decode($request->request->get('categories', '[]'), true);
+        $categories    = json_decode($request->request->get('categories', ''), true);
 
-        if (empty($categories)) {
-            $categories = [ 0 ];
+        if (is_array($categories) && empty($categories)) {
+            $categories = null;
         }
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
-            'categories'         => implode(',', $categories),
+            'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),
@@ -255,7 +255,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        if (!is_array($ad->fk_content_categories)) {
+        if (!is_array($ad->fk_content_categories) && !empty($ad->fk_content_categories)) {
             $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
         }
 
@@ -265,17 +265,18 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $pm = $this->container->get('core.helper.advertisement');
+        $ah = $this->container->get('core.helper.advertisement');
 
         return $this->render('advertisement/new.tpl', [
             'ads_positions' => $adsPositions,
             'advertisement' => $ad,
             'categories'    => $this->getCategories(),
-            'themeAds'      => $pm->getPositionsForTheme(),
-            'user_groups'   => $this->getUserGroups(),
             'filter'        => $filter,
             'page'          => $page,
+            'safeFrame'     => $ah->isSafeFrameEnabled(),
             'server_url'    => $serverUrl,
+            'themeAds'      => $ah->getPositionsForTheme(),
+            'user_groups'   => $this->getUserGroups(),
         ]);
     }
 
@@ -315,10 +316,10 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $categories = json_decode($request->request->get('categories', '[]'), true);
+        $categories = json_decode($request->request->get('categories', ''), true);
 
-        if (empty($categories)) {
-            $categories = [ 0 ];
+        if (is_array($categories) && empty($categories)) {
+            $categories = null;
         }
 
         $data = [
@@ -326,7 +327,7 @@ class AdsController extends Controller
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
-            'categories'         => implode(',', $categories),
+            'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),
@@ -439,7 +440,8 @@ class AdsController extends Controller
             $settings = [
                 'ads_settings' => [
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
-                    'no_generics'     => $formValues->getDigits('ads_settings_no_generics'),
+                    'no_generics'     => is_null($formValues->get('ads_settings_no_generics')) ? 1 : 0,
+                    'safe_frame'      => empty($formValues->get('safe_frame')) ? 0 : 1
                 ],
                 'revive_ad_server' => [
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),

@@ -110,6 +110,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the theme service.
+     *
+     * @return Locale The theme service.
+     */
+    public function getTheme()
+    {
+        return $this->container->get('core.theme');
+    }
+
+    /**
      * Returns the current user.
      *
      * @return User The current user.

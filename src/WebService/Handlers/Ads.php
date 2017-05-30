@@ -28,7 +28,8 @@ class Ads
         $positionManager = getService('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('frontpage');
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl = SITE_URL;
@@ -51,7 +52,8 @@ class Ads
         $positionManager = getService('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl = SITE_URL;
@@ -74,7 +76,8 @@ class Ads
         $positionManager = getService('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl = SITE_URL;
