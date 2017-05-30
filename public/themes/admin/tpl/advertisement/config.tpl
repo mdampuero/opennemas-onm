@@ -50,7 +50,7 @@
         </div>
         <div class="form-group">
           <div class="checkbox">
-            <input{if $configs['ads_settings']['no_generics'] eq "0"}checked{/if} id="ads_settings_no_generics" name="ads_settings_no_generics" type="checkbox" value="0">
+            <input{if $configs['ads_settings']['no_generics'] eq "0"} checked{/if} id="ads_settings_no_generics" name="ads_settings_no_generics" type="checkbox" value="0">
             <label for="ads_settings_no_generics" class="form-label">{t}Allow generic advertisement{/t}</label>
             <div class="help m-t-5">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
           </div>
