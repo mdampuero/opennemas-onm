@@ -301,12 +301,12 @@ class AssetController extends Controller
     }
 
     /**
-     * Redirect requests to apple-touch-icon
+     * Redirect requests to apple-touch-icon.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response The response object
-     **/
+     * @return Response The response object.
+     */
     public function favicoAction(Request $request)
     {
         // Default favico
