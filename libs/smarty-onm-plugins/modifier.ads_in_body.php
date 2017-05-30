@@ -1,16 +1,15 @@
 <?php
 /**
- * Splits body into paragraphs and renders slots for advertisements between
- * them.
+ * Splits body into paragraphs and renders slots for advertisements before them.
  *
  * @param string $body The body to split.
  * @param string $type The content type name.
  *
- * @return type Description
+ * @return string The body with advertisements.
  */
 function smarty_modifier_ads_in_body($body, $contentType = 'article')
 {
-    // Split body in paragraphs
+    // Split body into paragraphs
     preg_match_all('/(.*?)<\/p>/s', $body, $matches);
 
     if (empty($matches[0])) {
@@ -22,23 +21,34 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         return !in_array($a, ['<p>&nbsp;</p>', '<p></p>']);
     });
 
-    // Id for articles
-    $id = 2200;
+    $id  = $contentType === 'opinion' ? 3200 : 2200;
+    $ads = getService('core.template')->getSmarty()
+        ->tpl_vars['advertisements']->value;
 
-    // Id for opinions
-    if ($contentType === 'opinion') {
-        $id = 3200;
-    }
-
-    $html        = '<div class="ad-slot oat" data-type="%s"></div>';
     $bodyWithAds = [];
+    $safeFrame   = getService('core.helper.advertisement')->isSafeFrameEnabled();
+    $renderer    = getService('core.renderer.advertisement');
+    $html        = '<div class="ad-slot oat" data-type="%s"></div>';
 
     foreach ($paragraphs as $key => $paragraph) {
-        $slot   = '';
-        $slotId = $id + 1 + $key;
-
+        $slotId        = $id + 1 + $key;
         $bodyWithAds[] = $paragraph;
-        $bodyWithAds[] = sprintf($html, $slotId);
+        $ad            = sprintf($html, $slotId);
+
+        if (!$safeFrame) {
+            $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
+                return (int) $a->type_advertisement == $slotId;
+            });
+
+            if (count($adsForPosition) < 1) {
+                continue;
+            }
+
+            $ad = $adsForPosition[array_rand($adsForPosition)];
+            $ad = $renderer->render($ad);
+        }
+
+        $bodyWithAds[] = $ad;
     }
 
     return implode('', $bodyWithAds);

@@ -125,6 +125,14 @@ class AuthorsController extends Controller
         $user->bio = empty($user->bio) ? ' ' : $user->bio;
 
         try {
+            // Check if the user email is already in use
+            $users = $em->getRepository('User')->findBy(
+                'email ~ "'.$data['email'].'"'
+            );
+            if (count($users) > 0) {
+                throw new \Exception(_('The email address is already in use.'));
+            }
+
             $file = $request->files->get('avatar');
 
             // Upload user avatar if exists
@@ -188,6 +196,17 @@ class AuthorsController extends Controller
         $user->bio  = empty($user->bio) ? ' ' : $user->bio;
 
         try {
+            // Check if the user email is already in use
+            $users = array_filter($em->getRepository('User')->findBy(
+                'email ~ "'.$data['email'].'"'
+            ), function ($element) use ($user) {
+                return $user->id !== $element->id;
+            });
+
+            if (count($users) > 0) {
+                throw new \Exception(_('The email address is already in use.'));
+            }
+
             $file = $request->files->get('avatar');
 
             if (!empty($file)) {
