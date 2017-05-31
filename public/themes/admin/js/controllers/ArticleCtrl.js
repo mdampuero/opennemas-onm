@@ -34,7 +34,12 @@
          *
          * @type {Object}
          */
-        $scope.article = { body: '', params: {}, summary: '' };
+        $scope.article = {
+          body: '',
+          params: {},
+          summary: '',
+          created: new Date()
+        };
 
         /**
          * @memberOf ArticleCtrl

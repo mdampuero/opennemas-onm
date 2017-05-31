@@ -40,15 +40,20 @@
               format = $attrs.datetimePickerFormat;
             }
 
-            if (!$scope.datetimePickerMin) {
-              $scope.datetimePickerMin = $window.moment(new Date()).format(format);
+            var config = {
+              useCurrent: false,
+              format: format
+            };
+
+            if ($attrs.datetimePickerMin) {
+              config.minDate = $scope.datetimePickerMin;
             }
 
-            element.datetimepicker({
-              useCurrent: false,
-              format: format,
-              minDate: $scope.datetimePickerMin
-            });
+            if ($attrs.datetimePickerMax) {
+              config.maxDate = $scope.datetimePickerMax;
+            }
+
+            element.datetimepicker(config);
 
             var picker = element.data('DateTimePicker');
 
@@ -69,13 +74,15 @@
 
             // Update min/max values
             $scope.$watch('datetimePickerMin', function (nv) {
-              if (moment(nv, format, true).isValid() && nv < $scope.datetimePickerMax) {
+              if ($window.moment(nv, format, true).isValid() &&
+                  $attrs.datetimePickerMin) {
                 element.data("DateTimePicker").minDate(nv);
               }
             }, true);
 
             $scope.$watch('datetimePickerMax', function (nv) {
-              if (moment(nv, format, true).isValid() && nv > $scope.datetimePickerMin) {
+              if ($window.moment(nv, format, true).isValid() &&
+                  $attrs.datetimePickerMax) {
                 element.data("DateTimePicker").maxDate(nv);
               }
             }, true);
