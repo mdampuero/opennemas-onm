@@ -102,6 +102,11 @@
   display: block;
 }
 
+.oat img {
+  height: auto;
+  max-width: 100%;
+}
+
 .oat-container {
   margin: 0 auto;
   max-width: 100%;
