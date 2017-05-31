@@ -402,7 +402,7 @@
           $scope.selected.all.categories = true;
         }
 
-        if ($scope.ui.categories_all) {
+        if (!$scope.ui.categories_all) {
           $scope.categories = angular.toJson(nv);
         }
       }, true);
