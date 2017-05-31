@@ -45,11 +45,11 @@
               format: format
             };
 
-            if ($attrs.datetimePickerMin) {
+            if ($attrs.datetimePickerMin && $scope.datetimePickerMin) {
               config.minDate = $scope.datetimePickerMin;
             }
 
-            if ($attrs.datetimePickerMax) {
+            if ($attrs.datetimePickerMax && $scope.datetimePickerMax) {
               config.maxDate = $scope.datetimePickerMax;
             }
 
