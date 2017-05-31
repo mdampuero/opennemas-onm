@@ -134,15 +134,15 @@ class TagsController extends Controller
             $this->view->assign([ 'pagination' => $pagination, ]);
         }
 
-        return $this->render(
-            'frontpage/tags.tpl',
-            array(
-                'tagName'        => $tagName,
-                'advertisements' => $this->getInnerAds(),
-                'cache_id'       => $cacheId,
-                'x-tags'         => 'tag-page,'.$tagName,
-            )
-        );
+        list($positions, $advertisements) = $this->getInnerAds();
+
+        return $this->render('frontpage/tags.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheId,
+            'tagName'        => $tagName,
+            'x-tags'         => 'tag-page,' . $tagName,
+        ]);
     }
 
     /**
@@ -154,10 +154,11 @@ class TagsController extends Controller
      **/
     public static function getInnerAds($category = 'home')
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category       = (!isset($category) || ($category=='home'))? 0: $category;
+        $positions      = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $advertisements = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
-        $positions = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

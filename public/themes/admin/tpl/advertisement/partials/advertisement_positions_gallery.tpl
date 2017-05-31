@@ -39,35 +39,30 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="radio">
-            <input id="gallery-frontpage-banner-top-right-234x90" name="type_advertisement" type="radio" value="402" {if isset($advertisement) && $advertisement->type_advertisement == 402}checked="checked" {/if}/>
-            <label for="gallery-frontpage-banner-top-right-234x90">
-              Banner Top Right (234x90)
-            </label>
-          </div>
-        </div>
+      <div class="radio">
+        <input id="gallery-frontpage-banner-top-right-234x90" name="type_advertisement" type="radio" value="402" {if isset($advertisement) && $advertisement->type_advertisement == 402}checked="checked" {/if}/>
+        <label for="gallery-frontpage-banner-top-right-234x90">
+          Banner Top Right (234x90)
+        </label>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="radio">
-            <input id="gallery-frontpage-banner1-column-right-I-300x*" name="type_advertisement" type="radio" value="403" {if isset($advertisement) && $advertisement->type_advertisement == 403}checked="checked" {/if}/>
-            <label for="gallery-frontpage-banner1-column-right-I-300x*">
-              Banner1 Column Right (I) (300x*)
-            </label>
-          </div>
-        </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-6">
+      <div class="radio">
+        <input id="gallery-frontpage-banner1-column-right-I-300x*" name="type_advertisement" type="radio" value="403" {if isset($advertisement) && $advertisement->type_advertisement == 403}checked="checked" {/if}/>
+        <label for="gallery-frontpage-banner1-column-right-I-300x*">
+          Banner1 Column Right (I) (300x*)
+        </label>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="radio">
-            <input id="gallery-frontpage-banner2-column-right-II-300x*" name="type_advertisement" type="radio" value="405" {if isset($advertisement) && $advertisement->type_advertisement == 405}checked="checked" {/if}/>
-            <label for="gallery-frontpage-banner2-column-right-II-300x*">
-              Banner2 Column Right(II) (300x*)
-            </label>
-          </div>
-        </div>
+    </div>
+    <div class="col-md-6 col-md-offset-6">
+      <div class="radio">
+        <input id="gallery-frontpage-banner2-column-right-II-300x*" name="type_advertisement" type="radio" value="405" {if isset($advertisement) && $advertisement->type_advertisement == 405}checked="checked" {/if}/>
+        <label for="gallery-frontpage-banner2-column-right-II-300x*">
+          Banner2 Column Right(II) (300x*)
+        </label>
       </div>
     </div>
   </div>

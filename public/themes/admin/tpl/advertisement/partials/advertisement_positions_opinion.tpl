@@ -49,7 +49,7 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6 col-md-offset-6">
       <div class="radio">
         <input id="opinion-frontpage-banner-column-right-300x*" name="type_advertisement" type="radio" value="603" {if isset($advertisement) && $advertisement->type_advertisement == 603}checked="checked" {/if}/>
         <label for="opinion-frontpage-banner-column-right-300x*">
@@ -60,7 +60,7 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6 col-md-offset-6">
       <div class="radio">
         <input id="opinion-frontpage-banner-column-right-2-300x*" name="type_advertisement" type="radio" value="605" {if isset($advertisement) && $advertisement->type_advertisement == 605}checked="checked" {/if}/>
         <label for="opinion-frontpage-banner-column-right-2-300x*">

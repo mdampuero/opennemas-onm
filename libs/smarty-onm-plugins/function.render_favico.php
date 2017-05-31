@@ -1,25 +1,34 @@
 <?php
-use Onm\Settings as s;
 
 function smarty_function_render_favico($params, &$smarty)
 {
-    // Default favico code
-    $output = '<link rel="shorcut icon" href="/assets/images/favicon.png" />
-    <link rel="apple-touch-icon" href="/assets/images/favicon.png" />
-    <link rel="apple-touch-icon-precomposed" href="/assets/images/favicon.png" />';
+    // Default favico
+    $favicoUrl = '/assets/images/favicon.png';
 
-    // Check if is allowed logo on site
+    // Check if favico is defined on site
+    $favicoFileName  = getService('setting_repository')->get('favico');
+    $sectionSettings = getService('setting_repository')->get('section_settings');
+
     $allowLogo = false;
-    if ($sectionSettings = s::get('section_settings')) {
+    if (is_array($sectionSettings) && array_key_exists('allowLogo', $sectionSettings)) {
         $allowLogo = $sectionSettings['allowLogo'];
     }
 
-    // Check if is allowed logo and favico exists
-    $favicoPath = MEDIA_URL.MEDIA_DIR.'/sections/';
-    if ($allowLogo && $favico = s::get('favico')) {
-        $output = '<link rel="shortcut icon" href="'.$favicoPath.rawurlencode($favico).'"/>
-    <link rel="apple-touch-icon" href="'.$favicoPath.rawurlencode($favico).'"/>
-    <link rel="apple-touch-icon-precomposed" href="'.$favicoPath.rawurlencode($favico).'"/>';
+    if ($allowLogo && $favicoFileName) {
+        $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($favicoFileName);
+    }
+
+    $output = "<link rel='shorcut icon' href='" . $favicoUrl . "'>\n";
+    $output .= "\t<link rel='apple-touch-icon' href='" . $favicoUrl . "'>\n";
+
+    $appleSizes = ['57x57', '60x60', '72x72', '76x76', '114x114', '120x120', '144x144', '152x152', '180x180'];
+    foreach ($appleSizes as $size) {
+        $output .= "\t<link rel='apple-touch-icon' sizes='" . $size . "' href='" . $favicoUrl . "'>\n";
+    }
+
+    $iconSizes = ['192x192', '96x96', '32x32', '16x16'];
+    foreach ($iconSizes as $size) {
+        $output .= "\t<link rel='icon' sizes='" . $size . "' href='" . $favicoUrl . "'>\n";
     }
 
     // Render favico code

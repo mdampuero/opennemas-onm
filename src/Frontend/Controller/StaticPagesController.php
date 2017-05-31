@@ -24,8 +24,9 @@ use Onm\Settings as s;
  * Handles the actions for advertisements
  *
  * @package Frontend_Controllers
- **/
-// TODO: REMOVE ME PLEASE! This class is a deprecated in favor of StaticpageController.php
+ *
+ * TODO: REMOVE ME PLEASE! This class is a deprecated in favor of StaticpageController.php
+ */
 class StaticPagesController extends Controller
 {
     /**
@@ -49,20 +50,18 @@ class StaticPagesController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $ads = $this->getAds();
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'static_pages/statics.tpl',
-            array(
-                'page'               => $content,
-                'content'            => $content,
-                'actual_category'    => $content->slug,
-                'category_real_name' => $content->title,
-                'content_id'         => $content->id,
-                'advertisements'     => $ads,
-                'x-tags'             => 'static-page,'.$content->id,
-            )
-        );
+        return $this->render('static_pages/statics.tpl', [
+            'actual_category'    => $content->slug,
+            'ads_positions'      => $positions,
+            'advertisements'     => $advertisements,
+            'category_real_name' => $content->title,
+            'content'            => $content,
+            'content_id'         => $content->id,
+            'page'               => $content,
+            'x-tags'             => 'static-page,'.$content->id,
+        ]);
     }
 
     /**
@@ -72,12 +71,11 @@ class StaticPagesController extends Controller
      **/
     public static function getAds()
     {
-        $category = 0;
+        $positionManager = getService('core.helper.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(1, 2, 5, 6, 7, 9));
+        $advertisements  = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 0);
 
-        // Get static_pages positions
-        $positionManager = getService('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(1, 2, 5, 6, 7, 9));
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

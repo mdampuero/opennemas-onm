@@ -216,8 +216,9 @@ class OpinionsController extends Controller
             ]);
         }
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         return $this->render(
             'opinion/opinion_frontpage.tpl',
@@ -340,17 +341,16 @@ class OpinionsController extends Controller
             );
         }
 
-        $this->getAds();
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'opinion/opinion_frontpage.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'ext-opinion-frontpage',
-                'x-cache-for'     => '+1 day'
-            )
-        );
+        return $this->render('opinion/opinion_frontpage.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'ext-opinion-frontpage',
+            'x-cache-for'     => '+1 day'
+        ]);
     }
 
 
@@ -481,18 +481,16 @@ class OpinionsController extends Controller
         }
 
         // Fetch information for Advertisements
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'opinion/opinion_author_index.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
-                'x-cache-for'     => '+1 day'
-            )
-        );
+        return $this->render('opinion/opinion_author_index.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
+            'x-cache-for'     => '+1 day'
+        ]);
     }
 
     /**
@@ -525,7 +523,9 @@ class OpinionsController extends Controller
             $syncParams = s::get('sync_params');
             if ($syncParams) {
                 foreach ($syncParams as $siteUrl => $values) {
-                    if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
+                    if (is_array($values['categories'])
+                        && in_array($categoryName, $values['categories'])
+                    ) {
                         $wsUrl = $siteUrl;
                     }
                 }
@@ -627,17 +627,16 @@ class OpinionsController extends Controller
             );
         } // End if isCached
 
-        $this->getAds();
+        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render(
-            'opinion/opinion_author_index.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
-                'x-cache-for'     => '+3 hours',
-            )
-        );
+        return $this->render('opinion/opinion_author_index.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
+            'x-cache-for'     => '+3 hours'
+        ]);
     }
 
     /**
@@ -752,23 +751,21 @@ class OpinionsController extends Controller
         } // End if isCached
 
         //Fetch information for Advertisements
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds('inner');
 
         // Show in Frontpage
-        return $this->render(
-            'opinion/opinion.tpl',
-            [
-                'opinion'         => $opinion,
-                'content'         => $opinion,
-                'contentId'       => $opinion->id,
-                'cache_id'        => $cacheId,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'opinion,'.$opinion->id,
-                'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable,
-            ]
-        );
+        return $this->render('opinion/opinion.tpl', [
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'opinion'         => $opinion,
+            'content'         => $opinion,
+            'contentId'       => $opinion->id,
+            'cache_id'        => $cacheId,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'opinion,'.$opinion->id,
+            'x-cache-for'     => '+1 day',
+            'x-cacheable'     => $cacheable,
+        ]);
     }
 
     /**
@@ -801,7 +798,7 @@ class OpinionsController extends Controller
 
         $cacheID = $this->view->generateCacheId('sync'.$this->category_name, null, $dirtyID);
 
-        if (($this->view->getCaching() === 0)
+        if ($this->view->getCaching() === 0
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
             $this->cm = new \ContentManager();
@@ -809,46 +806,40 @@ class OpinionsController extends Controller
             $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
             $opinion = unserialize($opinion);
 
+            if ($opinion->content_status != 1 || $opinion->in_litter == 1) {
+                throw new ResourceNotFoundException();
+            }
+
             // Overload opinion object with category_name (used on ext_print)
             $opinion->category_name = $this->category_name;
 
-            //Fetch information for Advertisements
-            $ads = $this->getAds('inner');
-            $this->view->assign('advertisements', $ads);
-
-            if (($opinion->content_status==1) && ($opinion->in_litter == 0)) {
-                if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-                    $photo = new \Photo($opinion->img2);
-                    $this->view->assign('photo', $photo);
-                }
-
-                $this->view->assign(
-                    array(
-                        'other_opinions'  => $opinion->otherOpinions,
-                        'suggested'       => $opinion->machineRelated,
-                        'opinion'         => $opinion,
-                        'content'         => $opinion,
-                        'actual_category' => 'opinion',
-                        'media_url'       => $opinion->externalMediaUrl,
-                        'contentId'       => $opinion->id,
-                        'ext'             => 1 //Used on widgets
-                    )
-                );
-            } else {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+                $photo = new \Photo($opinion->img2);
+                $this->view->assign('photo', $photo);
             }
-        } // End if isCached
 
-        // Show in Frontpage
-        return $this->render(
-            'opinion/opinion.tpl',
-            array(
-                'cache_id'        => $cacheID,
+            list($positions, $advertisements) = $this->getAds('inner');
+
+            $this->view->assign([
+                'ads_positions'   => $positions,
+                'advertisements'  => $advertisements,
+                'other_opinions'  => $opinion->otherOpinions,
+                'suggested'       => $opinion->machineRelated,
+                'opinion'         => $opinion,
+                'content'         => $opinion,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'ext-opinion,'.$opinion->id,
-                'x-cache-for'     => '+1 day',
-            )
-        );
+                'media_url'       => $opinion->externalMediaUrl,
+                'contentId'       => $opinion->id,
+                'ext'             => 1 // Used on widgets
+            ]);
+        }
+
+        return $this->render('opinion/opinion.tpl', [
+            'cache_id'        => $cacheID,
+            'actual_category' => 'opinion',
+            'x-tags'          => 'ext-opinion,'.$opinion->id,
+            'x-cache-for'     => '+1 day',
+        ]);
     }
 
     /**
@@ -861,13 +852,16 @@ class OpinionsController extends Controller
     public static function getAds($context = '')
     {
         // TODO: Use $this->get when the function changes to non-static
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('opinion_frontpage', [ 7, 9 ]);
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, '4');
+        $advertisements = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 4);
+
+        return [ $positions, $advertisements ];
     }
 }

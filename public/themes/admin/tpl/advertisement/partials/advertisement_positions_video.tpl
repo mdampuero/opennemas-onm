@@ -50,7 +50,7 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6 col-md-offset-6">
       <div class="radio">
         <input id="video-frontpage-banner1-column-right-I-300x*" name="type_advertisement" type="radio" value="203" {if isset($advertisement) && $advertisement->type_advertisement == 203}checked="checked" {/if}/>
         <label for="video-frontpage-banner1-column-right-I-300x*">
@@ -68,7 +68,6 @@
           Big Banner Bottom (728x90)
         </label>
       </div>
-
     </div>
     <div class="col-md-6">
       <div class="radio">

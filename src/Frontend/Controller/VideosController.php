@@ -82,8 +82,9 @@ class VideosController extends Controller
      **/
     public function frontpageAction()
     {
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
@@ -249,8 +250,9 @@ class VideosController extends Controller
      **/
     public function frontpagePaginatedAction()
     {
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         // If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
@@ -327,8 +329,9 @@ class VideosController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds('inner');
+        $this->view->assign('ads_positions', $positions);
+        $this->view->assign('advertisements', $advertisements);
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($video);
@@ -539,18 +542,21 @@ class VideosController extends Controller
      */
     private function getAds($context = 'frontpage')
     {
-        $ccm = \ContentCategoryManager::get_instance();
+        $ccm          = \ContentCategoryManager::get_instance();
         $categoryName = 'video';
-        $category = $ccm->get_id($categoryName);
+        $category     = $ccm->get_id($categoryName);
 
         // Get video positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         if ($context == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('video_inner', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('video_inner', [ 7 ]);
         } else {
-            $positions = $positionManager->getPositionsForGroup('video_frontpage', array(7, 9));
+            $positions = $positionManager->getPositionsForGroup('video_frontpage', [ 7, 9 ]);
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
+
+        return [ $positions, $advertisements ];
     }
 }

@@ -358,11 +358,17 @@ class Content
             $this->content_type = null;
         }
 
-        if (!isset($this->starttime) || empty($this->starttime)) {
+        if (!isset($this->starttime)
+            || empty($this->starttime)
+            || $this->starttime === '0000-00-00 00:00:00'
+        ) {
             $this->starttime = null;
         }
 
-        if (!isset($this->endtime) || empty($this->endtime)) {
+        if (!isset($this->endtime)
+            || empty($this->endtime)
+            || $this->endtime === '0000-00-00 00:00:00'
+        ) {
             $this->endtime = null;
         }
 
@@ -375,9 +381,9 @@ class Content
             $this->category_name = $ccm->getName($this->category);
         }
 
-        $this->permalink = '';//$this->uri;
+        $this->permalink = '';
         if (!empty($this->params) && is_string($this->params)) {
-            $this->params = unserialize($this->params);
+            $this->params = @unserialize($this->params);
         }
 
         $this->fk_user = $this->fk_author;
@@ -541,7 +547,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.create', array('content' => $this));
+            dispatchEventWithParams('content.create', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.create',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -640,7 +650,11 @@ class Content
             }
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -667,7 +681,11 @@ class Content
             $conn->commit();
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.delete', array('content' => $this));
+            dispatchEventWithParams('content.delete', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.delete',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (Exception $e) {
@@ -703,7 +721,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
         } catch (\Exception $e) {
             error_log('Error Content:delete, aka sendToTrash (ID:'.$id.'):'.$e->getMessage());
             return false;
@@ -791,7 +813,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -823,7 +849,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -866,7 +896,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -898,7 +932,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -930,7 +968,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -956,7 +998,11 @@ class Content
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -1015,7 +1061,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            getService('core.dispatcher')->dispatch(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             // Set status for it's updated to next event
             if (!empty($this)) {
@@ -1072,7 +1122,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -1113,7 +1167,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1145,7 +1203,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1180,7 +1242,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.set_positions', array('content' => $this));
+            dispatchEventWithParams('content.set_positions', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.set_positions',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1217,7 +1283,11 @@ class Content
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -1435,14 +1505,12 @@ class Content
      * @param string $now the current time
      *
      * @return boolean
-     **/
+     */
     public function isInTime($now = null)
     {
-        if ($this->isScheduled($now) && ($this->isDued($now) || $this->isPostponed($now))) {
-            return false;
-        }
-
-        return true;
+        return $this->isScheduled($now)
+                && !$this->isDued($now)
+                && !$this->isPostponed($now);
     }
 
     /**
@@ -1456,34 +1524,19 @@ class Content
     */
     public function isScheduled($now = null)
     {
-        // Return false if start and end time are set to no date
-        if (is_null($this->starttime)) {
-            $this->starttime = '0000-00-00 00:00:00';
-        }
-
-        if (is_null($this->endtime)) {
-            $this->endtime = '0000-00-00 00:00:00';
-        }
-
-        if (is_null($now)) {
-            $actual  = new \DateTime();
-        } else {
-            $actual  = new \DateTime($now);
-        }
+        $actual  = new \DateTime();
         $start   = new \DateTime($this->starttime);
         $end     = new \DateTime($this->endtime);
 
-        // If for whatever reason the start and end times are equals return that
-        // this contents is not scheduled
-        if (($start->getTimeStamp() - $end->getTimeStamp()) == 0) {
+        if (empty($this->starttime)) {
             return false;
         }
 
-        // If the start time is in the past from now and this content has no end
-        // time limit this content is not scheduled
-        if ($start->getTimeStamp() <= $actual->getTimeStamp() &&
-            $end->getTimeStamp() < 0
-        ) {
+        // If the starttime is equals to and endtime (wrong values), this is not
+        // scheduled
+        //
+        // TODO: Remove this checking when values fixed in database
+        if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
             return false;
         }
 
@@ -1527,19 +1580,14 @@ class Content
      */
     public function isPostponed($now = null)
     {
-        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
+        if (empty($this->starttime) || $this->starttime == '0000-00-00 00:00:00') {
             return false;
         }
 
         $start = new \DateTime($this->starttime);
         $now   = new \DateTime($now);
 
-        // If $start isn't defined then return false
-        if ($start->getTimeStamp() > 0) {
-            return ($now->getTimeStamp() < $start->getTimeStamp());
-        }
-
-        return false;
+        return ($now->getTimeStamp() < $start->getTimeStamp());
     }
 
     /**
@@ -1553,18 +1601,14 @@ class Content
      */
     public function isDued($now = null)
     {
-        if ($this->endtime == null || $this->endtime == '0000-00-00 00:00:00') {
+        if (empty($this->endtime) || $this->endtime == '0000-00-00 00:00:00') {
             return false;
         }
+
         $end = new \DateTime($this->endtime);
         $now = new \DateTime($now);
 
-        // If $end isn't defined then return false
-        if ($end->getTimeStamp() > 0) {
-            return ($now->getTimeStamp() > $end->getTimeStamp());
-        }
-
-        return false;
+        return ($now->getTimeStamp() > $end->getTimeStamp());
     }
 
     /**
@@ -1773,8 +1817,8 @@ class Content
     public function isReadyForPublish()
     {
         return ($this->isInTime()
-                && $this->content_status == 1
-                && $this->in_litter == 0);
+            && $this->content_status == 1
+            && $this->in_litter == 0);
     }
 
     /**
@@ -1998,7 +2042,11 @@ class Content
                 [ $this->id, $property, $value, $value ]
             );
 
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -2029,7 +2077,11 @@ class Content
                 ]
             );
 
-            dispatchEventWithParams('content.update', array('content' => $this));
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ $this->content_type_name => $this ]
+            );
 
             return true;
         } catch (\Exception $e) {

@@ -1,17 +1,12 @@
 <?php
 /**
- * Defines the frontend controller for the article content type
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -21,9 +16,7 @@ use Common\Core\Controller\Controller;
 
 /**
  * Defines the frontend controller for Amp HTML content
- *
- * @package Frontend_Controllers
- **/
+ */
 class AmpController extends Controller
 {
     /**
@@ -105,14 +98,12 @@ class AmpController extends Controller
                 $categoryData = $this->ccm->categories[$actualCategoryId];
             }
 
-            $this->view->assign(
-                array(
-                    'category_name'         => $categoryName,
-                    'actual_category_title' => $actualCategoryTitle,
-                    'actual_category_id'    => $actualCategoryId,
-                    'category_data'         => $categoryData,
-                )
-            );
+            $this->view->assign([
+                'category_name'         => $categoryName,
+                'actual_category_title' => $actualCategoryTitle,
+                'actual_category_id'    => $actualCategoryId,
+                'category_data'         => $categoryData,
+            ]);
 
             // Associated media code --------------------------------------
             $er = $this->get('entity_repository');
@@ -236,6 +227,7 @@ class AmpController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        return \Advertisement::findForPositionIdsAndCategory([1051, 1052, 1053], $category);
+        return getService('advertisement_repository')
+            ->findByPositionsAndCategory([1051, 1052, 1053], $category);
     }
 }

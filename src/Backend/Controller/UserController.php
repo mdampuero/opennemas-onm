@@ -68,6 +68,8 @@ class UserController extends Controller
 
         $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
         $extra['taxes']     = $this->get('vat')->getTaxes();
+        $extra['settings']  = $em->getDataSet('Settings', 'instance')
+            ->get('user_settings', []);
 
         return $this->render(
             'acl/user/new.tpl',
@@ -335,13 +337,15 @@ class UserController extends Controller
 
         try {
             // Check if the user is already registered
-            $users = $em->getRepository('User')->findBy(
+            $em->getRepository('User')->findOneBy(
                 'name ~ "'.$data['username'].'" or email ~ "'.$data['email'].'"'
             );
-            if (count($users) > 0) {
-                throw new \Exception(_('The email address or user name is already in use.'));
-            }
 
+            throw new \Exception(_('The email address or user name is already in use.'));
+        } catch (\Exception $e) {
+        }
+
+        try {
             $file = $request->files->get('avatar');
 
             // Upload user avatar if exists
@@ -386,7 +390,8 @@ class UserController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->get('orm.manager');
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('User');
 
         if ($id === 'me') {
             $id = $this->getUser()->id;
@@ -463,6 +468,8 @@ class UserController extends Controller
 
         $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
         $extra['taxes']     = $this->get('vat')->getTaxes();
+        $extra['settings']  = $em->getDataSet('Settings', 'instance')
+            ->get('user_settings', []);
 
         // TODO: Remove when using new ORM to responsify objects
         if (is_object($user->paywall_time_limit)) {
@@ -480,7 +487,7 @@ class UserController extends Controller
             'acl/user/new.tpl',
             array(
                 'extra'          => $extra,
-                'user'           => $user,
+                'user'           => $converter->responsify($user),
                 'user_groups'    => $userGroups,
                 'languages'      => $languages,
                 'categories'     => $categories,
@@ -494,6 +501,11 @@ class UserController extends Controller
                 ],
             )
         );
+    }
+
+    public function showSettingsAction()
+    {
+        return $this->render('acl/user/settings.tpl');
     }
 
     /**

@@ -186,10 +186,11 @@ class UserController extends Controller
         return $this->render('authentication/register.tpl', [
             'errors'      => $errors,
             'countries'   => $this->get('core.geo')->getCountries(),
-            'user_groups' => $this->getUserGroups(),
             'recaptcha'   => $this->get('core.recaptcha')
                 ->configureFromSettings()
-                ->getHtml()
+                ->getHtml(),
+            'settings'    => $this->getSettings(),
+            'user_groups' => $this->getUserGroups()
         ]);
     }
 
@@ -472,6 +473,44 @@ class UserController extends Controller
     public function getUserMenuAction()
     {
         return $this->render('user/menu.tpl');
+    }
+
+    /**
+     * Returns the list of user settings.
+     *
+     * @return array The list of user settings.
+     */
+    protected function getSettings()
+    {
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('user_settings');
+
+        if (empty($settings) || !array_key_exists('fields', $settings)) {
+            return [];
+        }
+
+        foreach ($settings['fields'] as &$field) {
+            if ($field['type'] === 'options') {
+                $options = [];
+                $values  = explode(',', $field['values']);
+                $values  = array_map(function($a) {
+                    return trim($a);
+                }, $values);
+
+                foreach ($values as $value) {
+                    $value = explode(':', $value);
+                    $key   = trim($value[0]);
+                    $value = trim($value[1]);
+
+                    $options[] = [ 'key' => $key, 'name' => $value ];
+                }
+
+                $field['values'] = $options;
+            }
+        }
+
+        return $settings;
     }
 
     /**

@@ -57,7 +57,7 @@ class AdsController extends Controller
     public function listAction()
     {
         // Get ads positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $map             = $positionManager->getPositions();
         $adsNames        = $positionManager->getPositionNames();
 
@@ -126,37 +126,41 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
 
         if ('POST' !== $request->getMethod()) {
-            $adsPositions = $this->container->get('core.manager.advertisement');
+            $adsPositions = $this->container->get('core.helper.advertisement');
 
             $serverUrl = '';
             if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
                 $serverUrl = $openXsettings['url'];
             }
 
-            $ads = $this->get('core.manager.advertisement')->getPositionsForTheme();
+            $advertisement = new \Advertisement();
 
-            return $this->render(
-                'advertisement/new.tpl',
-                [
-                    'ads_positions' => $adsPositions,
-                    'themeAds'      => $ads,
-                    'filter'        => $filter,
-                    'page'          => $page,
-                    'server_url'    => $serverUrl,
-                ]
-            );
+            $ads = $this->get('core.helper.advertisement')->getPositionsForTheme();
+
+            return $this->render('advertisement/new.tpl', [
+                'advertisement' => $advertisement,
+                'ads_positions' => $adsPositions,
+                'categories'    => $this->getCategories(),
+                'user_groups'   => $this->getUserGroups(),
+                'themeAds'      => $ads,
+                'filter'        => $filter,
+                'page'          => $page,
+                'server_url'    => $serverUrl,
+            ]);
         }
 
         $advertisement = new \Advertisement();
+        $categories    = json_decode($request->request->get('categories', ''), true);
 
-        $categories    = $request->request->get('category', '', FILTER_SANITIZE_STRING);
-        $firstCategory = $categories[0];
+        if (is_array($categories) && empty($categories)) {
+            $categories = null;
+        }
 
         $data = [
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => $firstCategory,
-            'categories'         => implode(',', $categories),
+            'category'           => !empty($categories) ? $categories[0] : 0,
+            'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),
@@ -175,10 +179,16 @@ class AdsController extends Controller
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
-                'width'             => json_decode($request->request->get('params_width', '')),
-                'height'            => json_decode($request->request->get('params_height', '')),
+                'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
+                'user_groups'       => json_decode($request->request->get('user_groups'), true),
+                'orientation'       => $request->request->get('orientation', 'horizontal'),
+                'devices'           => [
+                    'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => (int) $request->request->get('restriction_devices_phone', 0),
+                ],
             ]
         ];
 
@@ -219,7 +229,7 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
 
-        $adsPositions = $this->container->get('core.manager.advertisement');
+        $adsPositions = $this->container->get('core.helper.advertisement');
         $serverUrl = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
@@ -245,7 +255,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        if (!is_array($ad->fk_content_categories)) {
+        if (!is_array($ad->fk_content_categories) && !empty($ad->fk_content_categories)) {
             $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
         }
 
@@ -255,18 +265,19 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $positionManager = $this->container->get('core.manager.advertisement');
-        return $this->render(
-            'advertisement/new.tpl',
-            array(
-                'ads_positions' => $adsPositions,
-                'advertisement' => $ad,
-                'themeAds'      => $positionManager->getPositionsForTheme(),
-                'filter'        => $filter,
-                'page'          => $page,
-                'server_url'    => $serverUrl,
-            )
-        );
+        $ah = $this->container->get('core.helper.advertisement');
+
+        return $this->render('advertisement/new.tpl', [
+            'ads_positions' => $adsPositions,
+            'advertisement' => $ad,
+            'categories'    => $this->getCategories(),
+            'filter'        => $filter,
+            'page'          => $page,
+            'safeFrame'     => $ah->isSafeFrameEnabled(),
+            'server_url'    => $serverUrl,
+            'themeAds'      => $ah->getPositionsForTheme(),
+            'user_groups'   => $this->getUserGroups(),
+        ]);
     }
 
     /**
@@ -305,15 +316,18 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $categories = $request->request->get('category', '', FILTER_SANITIZE_STRING);
-        $firstCategory = $categories[0];
+        $categories = json_decode($request->request->get('categories', ''), true);
 
-        $data = array(
+        if (is_array($categories) && empty($categories)) {
+            $categories = null;
+        }
+
+        $data = [
             'id'                 => $ad->id,
             'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => $firstCategory,
-            'categories'         => implode(',', $categories),
+            'category'           => !empty($categories) ? $categories[0] : 0,
+            'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),
@@ -330,13 +344,19 @@ class AdsController extends Controller
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
-            'params'             => array(
-                'width'             => json_decode($request->request->get('params_width', '')),
-                'height'            => json_decode($request->request->get('params_height', '')),
+            'params'             => [
+                'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
-            )
-        );
+                'user_groups'       => json_decode($request->request->get('user_groups', ''), true),
+                'orientation'       => $request->request->get('orientation', 'horizontal'),
+                'devices'           => [
+                    'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
+                    'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
+                    'phone'   => (int) $request->request->get('restriction_devices_phone', 0),
+                ],
+            ]
+        ];
 
         if ($ad->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -350,16 +370,11 @@ class AdsController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_ad_show',
-                array(
-                    'id'     => $data['id'],
-                    'filter' => $filter,
-                    'page'   => $page
-                )
-            )
-        );
+        return $this->redirect($this->generateUrl('admin_ad_show', [
+            'id'     => $data['id'],
+            'filter' => $filter,
+            'page'   => $page
+        ]));
     }
 
     /**
@@ -425,7 +440,8 @@ class AdsController extends Controller
             $settings = [
                 'ads_settings' => [
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
-                    'no_generics'     => $formValues->getDigits('ads_settings_no_generics'),
+                    'no_generics'     => is_null($formValues->get('ads_settings_no_generics')) ? 1 : 0,
+                    'safe_frame'      => empty($formValues->get('safe_frame')) ? 0 : 1
                 ],
                 'revive_ad_server' => [
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
@@ -470,5 +486,46 @@ class AdsController extends Controller
                 [ 'configs' => $configurations ]
             );
         }
+    }
+
+    /**
+     * Returns the list of categories.
+     *
+     * @return array The list of categories.
+     */
+    protected function getCategories()
+    {
+        $categories = $this->get('orm.manager')
+            ->getRepository('Category')->findBy('internal_category = 1');
+
+        $categories = array_map(function ($a) {
+            return [ 'id' => $a->pk_content_category, 'name' => $a->title ];
+        }, $categories);
+
+        array_unshift($categories, [ 'id' => 0, 'name' => _('Home') ]);
+
+        return array_values($categories);
+    }
+
+    /**
+     * Returns the list of public user groups.
+     *
+     * @return array The list of public user groups.
+     */
+    protected function getUserGroups()
+    {
+        $userGroups = $this->get('orm.manager')
+            ->getRepository('UserGroup')->findBy();
+
+        // Show only public groups ()
+        $userGroups = array_filter($userGroups, function ($a) {
+            return in_array(223, $a->privileges);
+        });
+
+        $userGroups = array_map(function ($a) {
+            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
+        }, $userGroups);
+
+        return array_values($userGroups);
     }
 }

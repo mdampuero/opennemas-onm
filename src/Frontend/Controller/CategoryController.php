@@ -139,28 +139,26 @@ class CategoryController extends Controller
                 ]
             ]);
 
-            $this->view->assign(
-                [
-                    'articles'              => $articles,
-                    'category'              => $category,
-                    'time'                  => time(),
-                    'pagination'            => $pagination,
-                    'actual_category_title' => $category->title
-                ]
-            );
+            $this->view->assign([
+                'articles'              => $articles,
+                'category'              => $category,
+                'time'                  => time(),
+                'pagination'            => $pagination,
+                'actual_category_title' => $category->title
+            ]);
         }
 
-        return $this->render(
-            'blog/blog.tpl',
-            [
-                'cache_id'        => $cacheId,
-                'actual_category' => $categoryName,
-                'category_name'   => $categoryName,
-                'advertisements'  => $this->getInnerAds($category->id),
-                'x-tags'          => 'category-frontpage,'.$categoryName.','.$page,
-                'x-cache-for'     => $expires,
-            ]
-        );
+        list($positions, $advertisements) = $this->getInnerAds($category->id);
+
+        return $this->render('blog/blog.tpl', [
+            'actual_category' => $categoryName,
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheId,
+            'category_name'   => $categoryName,
+            'x-cache-for'     => $expires,
+            'x-tags'          => 'category-frontpage,'.$categoryName.','.$page,
+        ]);
     }
 
 
@@ -194,6 +192,7 @@ class CategoryController extends Controller
         $ccm = \ContentCategoryManager::get_instance();
         $cm = new \ContentManager();
         $cacheId = "sync|category|$categoryName|$page";
+
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
             // Get category object
             $category = unserialize(
@@ -213,29 +212,24 @@ class CategoryController extends Controller
                 )
             );
 
-            $this->view->assign(
-                array(
-                    'articles'              => $articles,
-                    'category'              => $category,
-                    'pagination'            => $pagination,
-                    'actual_category_title' => $ccm->getTitle($categoryName),
-                    'actual_category'       => $categoryName
-                )
-            );
+            $this->view->assign([
+                'articles'              => $articles,
+                'category'              => $category,
+                'pagination'            => $pagination,
+                'actual_category_title' => $ccm->getTitle($categoryName),
+                'actual_category'       => $categoryName
+            ]);
         }
 
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
+        list($positions, $advertisements) = $this->getInnerAds();
 
-        return $this->render(
-            'blog/blog.tpl',
-            array(
-                'cache_id'       => $cacheId,
-                'advertisements' => $ads,
-                'x-tags'         => 'ext-category,'.$categoryName.','.$page,
-                'x-cache-for'     => '+3 hour',
-            )
-        );
+        return $this->render('blog/blog.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $ads,
+            'cache_id'       => $cacheId,
+            'x-cache-for'    => '+3 hour',
+            'x-tags'         => 'ext-category,'.$categoryName.','.$page,
+        ]);
     }
 
     /**
@@ -250,9 +244,11 @@ class CategoryController extends Controller
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = $this->get('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.helper.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
+        $advertisements  = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

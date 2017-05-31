@@ -1,7 +1,7 @@
 backend_ws_user_delete:
-    path:     /users/{id}/delete
+    path:     /users/{id}
     defaults: { _controller: BackendWebServiceBundle:User:delete }
-    methods:  [ GET ]
+    methods:  [ DELETE ]
     options:
         expose: true
 

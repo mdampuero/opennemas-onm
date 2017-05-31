@@ -49,7 +49,7 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 col-md-offset-6">
       <div class="radio">
         <input id="gallery-inner-banner1-column-right-I-300x*" name="type_advertisement" type="radio" value="503" {if isset($advertisement) && $advertisement->type_advertisement == 503}checked="checked" {/if}/>
         <label for="gallery-inner-banner1-column-right-I-300x*">

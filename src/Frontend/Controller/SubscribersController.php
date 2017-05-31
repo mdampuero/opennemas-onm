@@ -33,10 +33,11 @@ class SubscribersController extends Controller
      **/
     public function showAction()
     {
-        $ads = $this->getAds();
+        list($positions, $advertisements) = $this->getAds();
 
         return $this->render('static_pages/subscription.tpl', [
-            'advertisements'  => $ads,
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
             'actual_category' => 'newsletter',
             'recaptcha' => $this->get('core.recaptcha')
                 ->configureFromSettings()
@@ -142,6 +143,7 @@ class SubscribersController extends Controller
             'site_name',
             'newsletter_maillist'
         ]);
+
         $configSiteName = $settings['site_name'];
         $configMailTo = $settings['newsletter_maillist'];
 
@@ -272,12 +274,12 @@ class SubscribersController extends Controller
      **/
     public function getAds()
     {
-        $category = 0;
-
         // Get letter positions
-        $positionManager = $this->get('core.manager.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positionManager = $this->get('core.helper.advertisement');
+        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $advertisements  = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 0);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return [ $positions, $advertisements ];
     }
 }

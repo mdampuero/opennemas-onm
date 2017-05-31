@@ -31,9 +31,6 @@ class RssController extends Controller
     {
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 
-        // Fetch information for Advertisements
-        \Frontend\Controller\ArticlesController::getAds();
-
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
@@ -387,7 +384,8 @@ class RssController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
+        return getService('advertisement_repository')
+            ->findByPositionsAndCategory([1075, 1076, 1077], $category);
     }
 
     /**
