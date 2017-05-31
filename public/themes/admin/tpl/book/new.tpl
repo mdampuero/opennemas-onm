@@ -4,7 +4,8 @@
   {javascripts}
     <script type="text/javascript">
       $('#date').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:ss'
+        format: 'YYYY-MM-DD HH:mm:ss',
+        minDate: '{$book->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
       });
 
       jQuery('#title').on('change', function(e, ui) {

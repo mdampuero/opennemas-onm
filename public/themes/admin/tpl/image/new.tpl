@@ -105,10 +105,6 @@
       jQuery(document).ready(function($) {
         $('[rel="tooltip"]').tooltip({ position: 'left' });
 
-        $('.date').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss'
-        });
-
         $('.geocode_button').on('click', function(e,ui){
           e.preventDefault();
           geolocate_photo()

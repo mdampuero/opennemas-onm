@@ -5,7 +5,8 @@
     <script type="text/javascript">
       jQuery(document).ready(function($) {
         $('#date').datetimepicker({
-          format: 'YYYY-MM-DD'
+          format: 'YYYY-MM-DD',
+          minDate: '{$cover->created|default:$smarty.now|date_format:"%Y-%m-%d"}'
         });
 
         $('#title').on('change', function(e, ui) {
