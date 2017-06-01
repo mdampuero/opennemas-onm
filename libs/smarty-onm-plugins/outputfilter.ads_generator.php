@@ -37,10 +37,15 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads, $params);
         $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
         $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
+        $devices      = getService('core.template.admin')
+            ->fetch('advertisement/helpers/inline/js.tpl');
+
+        $devices = "\n" . str_replace("\n", ' ', $devices);
 
         $output = str_replace('</head>', $reviveOutput . '</head>', $output);
         $output = str_replace('</head>', $dfpOutput . '</head>', $output);
         $output = str_replace('</body>', $interstitial . '</body>', $output);
+        $output = str_replace('</body>', $devices . '</body>', $output);
     } else {
         // No advertisements
         if (!array_key_exists('ads_positions', $smarty->parent->tpl_vars)
