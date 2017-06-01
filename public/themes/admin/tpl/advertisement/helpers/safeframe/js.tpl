@@ -15,20 +15,6 @@
     'skip':     '{t}Skip advertisement{/t}'
   };
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var devices = [ 'desktop', 'tablet', 'phone' ];
-
-    for (var i = 0; i < devices.length; i++) {
-      if (devices[i] === _onmaq.device) {
-        var slots = document.getElementsByClassName('hidden-' + devices[i]);
-
-        for (var j = 0; j < slots.length; j++) {
-          slots[j].remove();
-        }
-      }
-    }
-  });
-
   (function() {
     var am = document.createElement('script');
 
