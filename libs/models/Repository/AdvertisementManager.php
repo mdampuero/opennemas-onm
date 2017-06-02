@@ -259,14 +259,10 @@ class AdvertisementManager extends EntityManager
         $ads = include APP_PATH.'config/ads/onm_default_ads.php';
 
         $ads = array_filter($ads, function ($a) use ($types, $category) {
-            if (in_array($a->type_advertisement, $types) &&
-                (in_array($category, $a->fk_content_categories) ||
-                    in_array(0, $a->fk_content_categories))
-            ) {
-                $banners[$ad->type_advertisement][] = $ad;
-            }
-
-            return false;
+            return in_array($a->type_advertisement, $types)
+                && (is_null($a->fk_content_categories)
+                    || in_array($category, $a->fk_content_categories)
+                    || in_array(0, $a->fk_content_categories));
         });
 
         return $ads;
