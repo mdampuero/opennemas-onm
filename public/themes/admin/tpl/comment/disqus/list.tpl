@@ -32,7 +32,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <a class="btn btn-link" href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
-                <i class="fa fa-gear"></i>
+                <i class="fa fa-gear fa-lg"></i>
               </a>
             </li>
           </ul>

@@ -18,7 +18,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for comments
@@ -41,6 +40,8 @@ class CommentsController extends Controller
             [ 'title' => _('Pending'), 'value' => \Comment::STATUS_PENDING ],
         ];
 
+        $this->sm = $this->get('setting_repository');
+
         $this->view->assign('statuses', $this->statuses);
     }
 
@@ -55,7 +56,7 @@ class CommentsController extends Controller
     public function defaultAction()
     {
         // Select between comments system
-        $commentSystem = s::get('comment_system');
+        $commentSystem = $this->sm->get('comment_system');
 
         switch ($commentSystem) {
             case 'onm':
@@ -94,7 +95,7 @@ class CommentsController extends Controller
 
         switch ($type) {
             case 'onm':
-                $this->get('setting_repository')->set('comment_system', 'onm');
+                $this->sm->set('comment_system', 'onm');
                 $this->get('session')->getFlashBag()->add(
                     'success',
                     _("Now you are using the Opennemas comment system.")
@@ -107,7 +108,7 @@ class CommentsController extends Controller
                 break;
 
             case 'facebook':
-                $this->get('setting_repository')->set('comment_system', 'facebook');
+                $this->sm->set('comment_system', 'facebook');
                 $this->get('session')->getFlashBag()->add(
                     'success',
                     _("Now you are using the Facebook comment system.")
@@ -139,8 +140,8 @@ class CommentsController extends Controller
      */
     public function defaultDisqusAction()
     {
-        $disqusShortName = s::get('disqus_shortname');
-        $disqusSecretKey = s::get('disqus_secret_key');
+        $disqusShortName = $this->sm->get('disqus_shortname');
+        $disqusSecretKey = $this->sm->get('disqus_secret_key');
 
         // Check if module is configured, if not redirect to configuration form
         if (!$disqusShortName || !$disqusSecretKey) {
@@ -174,22 +175,28 @@ class CommentsController extends Controller
     public function configDisqusAction(Request $request)
     {
         if ($request->getMethod() != 'POST') {
-            $disqusShortName = s::get('disqus_shortname');
-            $disqusSecretKey = s::get('disqus_secret_key');
+            $disqusShortName = $this->sm->get('disqus_shortname');
+            $disqusSecretKey = $this->sm->get('disqus_secret_key');
 
             return $this->render(
                 'comment/disqus/config.tpl',
                 array(
                     'shortname' => $disqusShortName,
                     'secretKey' => $disqusSecretKey,
+                    'configs'   => $this->sm->get('comments_config'),
                 )
             );
         } else {
             $shortname = $request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
             $secretKey = $request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
+            $configs   = $request->request->filter('configs', array(), FILTER_SANITIZE_STRING);
 
-            if (s::set('disqus_shortname', $shortname) && s::set('disqus_secret_key', $secretKey)) {
-                s::set('comment_system', 'disqus');
+            if ($this->sm->set('disqus_shortname', $shortname)
+                && $this->sm->set('disqus_secret_key', $secretKey)
+                && $this->sm->set('comments_config', $configs)
+            ) {
+                $this->sm->set('comment_system', 'disqus');
+
                 return $this->redirect($this->generateUrl('admin_comments_disqus'));
             } else {
                 $this->get('session')->getFlashBag()->add(
@@ -213,7 +220,7 @@ class CommentsController extends Controller
      */
     public function defaultFacebookAction()
     {
-        $fbSettings = s::get('facebook');
+        $fbSettings = $this->sm->get('facebook');
 
         return $this->render(
             'comment/facebook/list.tpl',
@@ -236,22 +243,26 @@ class CommentsController extends Controller
      */
     public function configFacebookAction(Request $request)
     {
-        $fbSettings = s::get('facebook');
+        $fbSettings = $this->sm->get('facebook');
 
         if ($request->getMethod() != 'POST') {
             $fbAppId = $fbSettings['api_key'];
 
             return $this->render(
                 'comment/facebook/config.tpl',
-                array(
-                    'fb_app_id'  => $fbAppId,
-                )
+                [
+                    'fb_app_id' => $fbAppId,
+                    'configs'   => $this->sm->get('comments_config'),
+                ]
             );
         } else {
             $fbAppId    = $request->request->filter('facebook', null, FILTER_SANITIZE_STRING);
+            $configs    = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
             $fbSettings = array_merge($fbSettings, $fbAppId);
 
-            if (s::set('facebook', $fbSettings)) {
+            if ($this->sm->set('facebook', $fbSettings)
+                && $this->sm->set('comments_config', $configs)
+            ) {
                 $this->get('session')->getFlashBag()->add(
                     'success',
                     _('Facebook configuration saved successfully')
@@ -281,9 +292,7 @@ class CommentsController extends Controller
     {
         return $this->render(
             'comment/list.tpl',
-            array(
-                'statuses' => $this->statuses,
-            )
+            [ 'statuses' => $this->statuses ]
         );
     }
 
@@ -307,7 +316,7 @@ class CommentsController extends Controller
 
             return $this->render(
                 'comment/new.tpl',
-                array('comment' => $comment)
+                [ 'comment' => $comment ]
             );
         }
 
@@ -349,13 +358,18 @@ class CommentsController extends Controller
                 'error',
                 _("Comment data sent not valid.")
             );
-            return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_comment_show',
+                    [ 'id' => $id ]
+                )
+            );
         }
 
-        $data = array(
+        $data = [
             'status' => $request->request->filter('status'),
             'body'   => $request->request->filter('body', ''),
-        );
+        ];
 
         try {
             $comment->update($data);
@@ -371,8 +385,12 @@ class CommentsController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
-
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_comment_show',
+                [ 'id' => $id ]
+            )
+        );
     }
 
     /**
@@ -388,16 +406,16 @@ class CommentsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $configs = $request->request->filter('configs', array(), FILTER_SANITIZE_STRING);
+            $configs = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
 
-            $defaultConfigs = array(
+            $defaultConfigs = [
                 'moderation'      => false,
                 'with_comments'   => false,
                 'number_elements' => 10,
-            );
+            ];
             $configs = array_merge($defaultConfigs, $configs);
 
-            if (s::set('comments_config', $configs)) {
+            if ($this->sm->set('comments_config', $configs)) {
                 $this->get('session')->getFlashBag()->add(
                     'success',
                     _('Settings saved.')
@@ -411,9 +429,9 @@ class CommentsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_comments_config'));
         } else {
-            $configs = s::get('comments_config');
+            $configs = $this->sm->get('comments_config');
 
-            return $this->render('comment/config.tpl', array('configs' => $configs,));
+            return $this->render('comment/config.tpl', [ 'configs' => $configs ]);
         }
     }
 }

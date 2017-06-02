@@ -11,6 +11,12 @@ asset_image:
     options:
         expose: true
 
+asset_favico:
+    path: /apple-touch-icon{type}.png
+    defaults: { _controller: FrontendBundle:Asset:favico }
+    requirements:
+        type : '[A-Za-z0-9\-]*'
+
 category_frontpage:
     path: /blog/section/{category_name}
     defaults: { _controller: FrontendBundle:Category:category }
