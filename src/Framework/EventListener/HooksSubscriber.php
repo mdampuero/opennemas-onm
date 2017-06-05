@@ -407,7 +407,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $cacheManager->deleteGroup($view->getCacheId('frontpage', $content->content_type_name));
         $cacheManager->deleteGroup($view->getCacheId('frontpage', 'category', $content->category_name));
         $cacheManager->deleteGroup($view->getCacheId('rss', $content->content_type_name));
-        $cacheManager->deleteGroup($view->getCacheId('archive', date('%y%m%d')));
+        $cacheManager->deleteGroup($view->getCacheId('archive', date('Ymd')));
 
         if ($content->content_type_name == 'article') {
             // Deleting rss cache files
