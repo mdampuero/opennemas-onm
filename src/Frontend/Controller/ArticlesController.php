@@ -179,8 +179,9 @@ class ArticlesController extends Controller
             }
         }
 
-        // Get full article
         $cm = new \ContentManager;
+
+        // Get full article
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
         $article = unserialize($article);
 
