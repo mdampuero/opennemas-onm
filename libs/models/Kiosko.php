@@ -289,7 +289,8 @@ class Kiosko extends Content
      */
     public function getMonthsByYears()
     {
-        $sql = 'SELECT DISTINCT MONTH(date) as month, YEAR(date) as year'
+        $items = [];
+        $sql   = 'SELECT DISTINCT MONTH(date) as month, YEAR(date) as year'
             .  ' FROM `kioskos` ORDER BY year DESC, month DESC';
 
         $rs = getService('dbal_connection')->fetchAll($sql);
