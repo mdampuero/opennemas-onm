@@ -180,6 +180,7 @@ class ArticlesController extends Controller
         }
 
         // Get full article
+        $cm = new \ContentManager;
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
         $article = unserialize($article);
 
@@ -194,11 +195,7 @@ class ArticlesController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // Fetch synced ads
-        $cm = new \ContentManager;
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
-        $this->view->assign('advertisements', $ads);
+        list($positions, $advertisements) = $this->getAds();
 
         return $this->render('article/article.tpl', [
             'actual_category_title' => $article->category_title,
