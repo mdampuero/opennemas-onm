@@ -52,12 +52,12 @@ class AmpController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $actualCategoryId = $this->ccm->get_id($categoryName);
-
         $this->ccm  = \ContentCategoryManager::get_instance();
+
+        $dirtyID          = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $categoryName     = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $urlSlug          = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $actualCategoryId = $this->ccm->get_id($categoryName);
 
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
