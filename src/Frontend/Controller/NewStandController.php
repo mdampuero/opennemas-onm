@@ -61,7 +61,7 @@ class NewStandController extends Controller
     {
         $month     = $request->query->getDigits('month', date('m'));
         $year      = $request->query->getDigits('year', date('Y'));
-        $day       = $request->query->getDigits('day', 1);
+        $day       = $request->query->getDigits('day', '01');
 
         // Get settings for frontpage rendering
         $configurations = s::get('kiosko_settings');
@@ -69,12 +69,17 @@ class NewStandController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('kiosko');
-        $cacheID = $this->view->getCacheId('frontend', 'kiosko', $this->category_name, $order.$year.$month.$day);
+        $cacheID = $this->view->getCacheId(
+            'frontpage',
+            'kiosko',
+            $this->category_name,
+            $order . $year . $month . $day
+        );
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
         ) {
-            $kiosko = [];
+            $kioskos = [];
 
             if ($order =='grouped') {
                 $ccm         = \ContentCategoryManager::get_instance();
