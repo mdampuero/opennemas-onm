@@ -75,6 +75,8 @@ class Manager
     public function deleteGroup($cacheGroup)
     {
         $this->smarty->clearCache(null, $cacheGroup);
+
+        return $this;
     }
 
     /**
