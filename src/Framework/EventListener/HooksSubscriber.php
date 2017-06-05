@@ -383,7 +383,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $cacheManager->deleteGroup($view->getCacheId('frontpage', 'category', $category->name));
 
         // Delete object cache
-        $this->cacheHandler->deleteGroup('category-' . $category->id);
+        $this->cacheHandler->delete('category-' . $category->id);
     }
 
     /**
@@ -469,8 +469,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheGlobalCss(Event $event)
     {
-        $cacheManager = $this->container->get('template_cache_manager');
-        $view         = $this->container->get('view')->getTemplate()->setSmarty($view);
+        $view         = $this->container->get('view')->getTemplate();
+        $cacheManager = $this->container->get('template_cache_manager')->setSmarty($view);
 
         $cacheManager->deleteGroup($view->getCacheId('css', 'global'));
     }
