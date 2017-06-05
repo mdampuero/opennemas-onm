@@ -1,21 +1,15 @@
 # Galician translations for PACKAGE package.
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# David Martinez <david.martinez@openhost.es>, 2011.
-# Fran Diéguez <frandieguez@gnome.org>, 2011.
-# sandra <sandra@openhost.es>, 2012, 2013.
-# Diego Blanco <diego@openhost.es>, 2014, 2015, 2016.
-# Fran Dieguez <frandieguez@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 17:41+0000\n"
-"PO-Revision-Date: 2017-04-11 19:46+0200\n"
-"Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
-"Language: gl\n"
+"POT-Creation-Date: 2017-05-30 17:22+0000\n"
+"PO-Revision-Date: 2017-05-30 22:32+0200\n"
+"Last-Translator: ONM Developers <developers@opennemas.com>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -120,6 +114,9 @@ msgstr "Tu token de inicio de sesión no es válido. Inténtalo de nuevo."
 #, php-format
 msgid "Unable to find the author with the id '%d'"
 msgstr "No se pudo encontrar el autor con el identificador «%d»"
+
+msgid "The email address is already in use."
+msgstr "La dirección de correo electrónico ya está en uso."
 
 msgid "User created successfully."
 msgstr "Usuario creado correctamente."
@@ -2014,9 +2011,6 @@ msgstr ""
 msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
 msgstr "El código de reCAPTCHA no fue escrito correctamente. Pruebe de nuevo."
 
-msgid "The email address is already in use."
-msgstr "La dirección de correo electrónico ya está en uso."
-
 msgid "The user name is already in use."
 msgstr "El nombre de usuario ya está en uso."
 
@@ -2285,7 +2279,7 @@ msgstr "No se pudo guardar la configuración"
 
 #, php-format
 msgid "The cache connection for '%s' does not exist"
-msgstr ""
+msgstr "La conexión de cache para «%s» non existe"
 
 #, php-format
 msgid "The instance \"%s\" is not activated"
@@ -2313,79 +2307,85 @@ msgstr "La dirección de correo electrónico que escribiste ya está en uso"
 msgid "Name of the newspaper must be longer than 5 characters"
 msgstr "El nombre del periódico debe tener al menos 5 caracteres"
 
-msgid "Your newspaper name cointains disallowed words."
+msgid "Your newspaper name contains disallowed words."
 msgstr "El nombre de tu periódico contiene palabras no permitidas."
 
 msgid "The url that you entered is already in use"
 msgstr "La URL que escribiste ya está en uso"
 
+msgid "Entering on the requested page"
+msgstr "Entrando en la página solicitada"
+
+msgid "Skip advertisement"
+msgstr "Saltar publicidad"
+
 #, php-format
 msgid "Unable to create a %s"
-msgstr ""
+msgstr "No se pudo crear un %s"
 
 #, php-format
 msgid "Unable to remove the %s"
-msgstr ""
+msgstr "No se pudo eliminar el %s"
 
 #, php-format
 msgid "Unable to update the %s"
-msgstr ""
+msgstr "No se pudo actualizar el %s"
 
 #, php-format
 msgid "Unable to find entity of type \"%s\""
-msgstr ""
+msgstr "No se pudo encontrar una entidad de tipo «%s»"
 
 #, php-format
 msgid "Unable to find entity of type \"%s\" with id \"%s\""
-msgstr ""
+msgstr "No se pudo encontrar una entidad del tipo «%s» con el id «%s»"
 
 #, php-format
 msgid "The data source connection for '%s' does not exist"
-msgstr ""
+msgstr "La conexión de origen de datos para «%s» no existe"
 
 #, php-format
 msgid "No converters found for \"%s\""
-msgstr ""
+msgstr "No se encontraron conversores para «%s»"
 
 #, php-format
 msgid "The converter \"%s\" for \"%s\" does not exist"
-msgstr ""
+msgstr "El conversor «%s» para «%s» no existe"
 
 #, php-format
 msgid "The criteria (%s) is not valid"
-msgstr ""
+msgstr "El criterio (%s) no es válido"
 
 #, php-format
 msgid "No datasets found for \"%s\""
-msgstr ""
+msgstr "No se encontraron conjuntos de datos para «%s»"
 
 #, php-format
 msgid "The dataset \"%s\" for \"%s\" does not exist"
-msgstr ""
+msgstr "El conjunto de datos «%s» para «%s» no existe"
 
 #, php-format
 msgid "No metadata found for \"%s\""
-msgstr ""
+msgstr "No se encontraron metadatos para «%s»"
 
 #, php-format
 msgid "No persisters found for \"%s\""
-msgstr ""
+msgstr "No se encontraron persistores para «%s»"
 
 #, php-format
 msgid "The persister \"%s\" for \"%s\" does not exist"
-msgstr ""
+msgstr "El persistor «%s» para «%s» no existe"
 
 #, php-format
 msgid "You have a syntax error near '%s'"
-msgstr ""
+msgstr "Tiene un error de sintaxis cerca de «%s»"
 
 #, php-format
 msgid "No repositories found for \"%s\""
-msgstr ""
+msgstr "No se encontraron repositorios para «%s»"
 
 #, php-format
 msgid "The repository \"%s\" for \"%s\" does not exist"
-msgstr ""
+msgstr "El repositorio «%s» para «%s» non existe"
 
 #, php-format
 msgid "The token '%s' is not valid"
@@ -2462,95 +2462,99 @@ msgid "The fields '%s' are missing for entity of class '%s'"
 msgstr ""
 
 msgid "Society"
-msgstr ""
+msgstr "Sociedad"
 
 msgid "Agriculture"
-msgstr ""
+msgstr "Agricultura"
 
 msgid "Council"
-msgstr ""
+msgstr "Ayuntamiento"
 
 msgid "Society (CUL)"
-msgstr ""
+msgstr "Sociedad (CUL)"
 
 msgid "Event CYA"
-msgstr ""
+msgstr "Evento CYA"
 
 msgid "Society CYT"
-msgstr ""
+msgstr "Sociedad CYT"
 
 msgid "Disturbs"
-msgstr ""
+msgstr "Disturbios"
 
 msgid "Sports"
-msgstr ""
+msgstr "Deportes"
 
 msgid "Economy"
-msgstr ""
+msgstr "Economía"
 
 msgid "Society Education EDU"
-msgstr ""
+msgstr "Educación"
 
 msgid "GALICIA"
-msgstr ""
+msgstr "GALICIA"
 
 msgid "JUSTICIA"
-msgstr ""
+msgstr "JUSTICIA"
 
 msgid "Environment"
-msgstr ""
+msgstr "Entorno"
 
 msgid "Politics OPL"
-msgstr ""
+msgstr "Política"
 
 msgid "Politics POL"
-msgstr ""
+msgstr "Política"
 
 msgid "TV Guide"
-msgstr ""
+msgstr "Programación de TV"
 
 msgid "Society REL"
-msgstr ""
+msgstr "Sociedad REL"
 
 msgid "Society SAN"
-msgstr ""
+msgstr "Sociedad SAN"
 
 msgid "Society SOC"
-msgstr ""
+msgstr "Sociedad SOC"
 
 msgid "Event SUC"
-msgstr ""
+msgstr "Evento SUC"
 
 msgid "Society SYS"
-msgstr ""
+msgstr "Sociedad SYS"
 
 msgid "Society Toros"
-msgstr ""
+msgstr "Toros"
 
 msgid "Justice"
-msgstr ""
+msgstr "Justicia"
 
 #, php-format
 msgid "Can't connect to server %s. Please check your conn details."
 msgstr ""
+"No se pudo conectar al servidor %s. Compruebe los detalles de su conexión."
 
 #, php-format
 msgid "Can't login into server %s"
-msgstr ""
+msgstr "No se pudo iniciar seesión en el servidor %s"
 
 #, php-format
 msgid ""
 "Directory '%s' in the server '%s' doesn't exists or you don't have enought "
 "permissions to access it"
 msgstr ""
+"El directorio «%s» en el servidor «%s» no existe o no tiene permisos "
+"suficientes para acceder a el."
 
 #, php-format
 msgid "Directory %s is not writable."
-msgstr ""
+msgstr "No se puede escribir en el directorio %s."
 
 #, php-format
 msgid "Can't connect to server %s. Please check your connection details."
 msgstr ""
+"No se puede conectar al servidor %s. Compruebe los detalles de su conexión."
 
 msgid "Instance is blocked"
 msgstr "Instancia bloqueada"
@@ -2575,15 +2579,6 @@ msgstr "No se ha podido asociar to cuenta opennemas a tu cuenta %s"
 
 msgid "Advertisement"
 msgstr "Publicidad"
-
-msgid "Top Left LeaderBoard"
-msgstr ""
-
-msgid "Top Right LeaderBoard"
-msgstr ""
-
-msgid "[OI] Right Skyscraper"
-msgstr ""
 
 msgid "Album not available"
 msgstr "Álbum no disponible"
@@ -5894,7 +5889,7 @@ msgid "Left image"
 msgstr "Imagen de la izquierda"
 
 msgid "Default"
-msgstr "Por omisión"
+msgstr "Por defecto"
 
 msgid "Are you sure that do you want to send to trash the next element?"
 msgstr ""
@@ -6067,7 +6062,7 @@ msgid "Site agency"
 msgstr "Agencia del sitio"
 
 msgid "This will be displayed as the default article signature."
-msgstr "Usado como firma por omisión en los artículos."
+msgstr "Usado como firma por defecto en los artículos."
 
 msgid ""
 "Text showed at the bottom of your page. Usually used for copyright notice."
@@ -6152,7 +6147,7 @@ msgid "Language & Time"
 msgstr "Idioma y hora"
 
 msgid "Default language"
-msgstr "Idioma por omisión"
+msgstr "Idioma por defecto"
 
 msgid "Time Zone"
 msgstr "Zona horaria"
@@ -6336,6 +6331,18 @@ msgstr ""
 "\"external-link\" href=\"http://code.google.com/apis/maps/signup.html\" "
 "target=\"_blank\">el sitio web Google Maps sign up</a>."
 
+msgid "Google Tags container Id"
+msgstr "Id de contenedor de Google Tags"
+
+msgid ""
+"You can get your Google <strong>Tags</strong> container Id from <a class="
+"\"external-link\" href=\"https://tagmanager.google.com/#/home\" target="
+"\"_blank\">Google tags sign up website</a>."
+msgstr ""
+"Puedes obtener el id de contenedor de Google <strong>Tags</strong> desde <a "
+"class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" target="
+"\"_blank\">el sitio web de Google Tags</a>."
+
 msgid "Social network integration"
 msgstr "Integración con redes sociales"
 
@@ -6398,7 +6405,7 @@ msgid ""
 "form. Default will be set with Opennemas."
 msgstr ""
 "Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
-"en el formulario. Por omisión se usará el de OpenNemas"
+"en el formulario. Por defecto, se usará el de OpenNemas"
 
 msgid "Instagram"
 msgstr "Instragram"
@@ -6450,7 +6457,7 @@ msgid ""
 "form. Default will be set with Opennemas."
 msgstr ""
 "Si tienes una <strong>página en LinkedIn</strong>, añade el nombre de perfíl "
-"en el formulario. Por omisión se usará el de OpenNemas"
+"en el formulario. Por defecto, se usará el de OpenNemas"
 
 msgid "Only masters"
 msgstr "Solo masters"
@@ -6463,6 +6470,9 @@ msgid ""
 "\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\">documentation</"
 "a>."
 msgstr ""
+"Añade reglas personalizadas como 'Disallow: /tag' al fichero robots.txt. "
+"Consulta la <a href=\"http://www.robotstxt.org/robotstxt.html\" target=\"_bla"
+"nk\">documentación</a>."
 
 msgid "Scripts in header"
 msgstr "Scripts en la cabecera"
@@ -6885,6 +6895,25 @@ msgstr ""
 msgid "Url"
 msgstr "Url"
 
+msgid "Mark"
+msgstr "Marca"
+
+msgid "Top"
+msgstr "Encima"
+
+msgid "Right"
+msgstr "Derecha"
+
+msgid "Bottom"
+msgstr "Debajo"
+
+msgid "Left"
+msgstr "Izquierda"
+
+msgid ""
+"Defines the orientation for the word that marks the advertisement position"
+msgstr "Define la orientación de la palabra que marca el espacio de publicidad"
+
 msgid "Devices"
 msgstr "Dispositivos"
 
@@ -6912,25 +6941,6 @@ msgstr "Una o más dimensiones son inválidas"
 msgid "Height"
 msgstr "Alto"
 
-msgid "Mark"
-msgstr "Marca"
-
-msgid "Top"
-msgstr "Encima"
-
-msgid "Left"
-msgstr "Izquierda"
-
-msgid "Right"
-msgstr "Derecha"
-
-msgid "Bottom"
-msgstr "Debajo"
-
-msgid ""
-"Defines the orientation for the word that marks the advertisement position"
-msgstr "Define la orientación de la palabra que marca el espacio de publicidad"
-
 msgid "Date range"
 msgstr "Rango de fechas"
 
@@ -6953,11 +6963,24 @@ msgstr ""
 "Mostrar la publicidad si el usuario pertenece a uno o más grupos "
 "seleccionados"
 
+msgid "Display the advertisement for a limited time (intersticials only)"
+msgstr "Mostrar la publicidad durante un tiempo limitado (solo intersticiales)"
+
+msgid "Show in all categories"
+msgstr "Mostrar en todas las categorías"
+
 msgid "Display the advertisement only in the selected categories"
 msgstr "Mostrar la publicidad solo en las categorías seleccionadas"
 
-msgid "Display the advertisement for a limited time (intersticials only)"
-msgstr "Mostrar la publicidad durante un tiempo limitado (solo intersticiales)"
+msgid "Select/deselect all"
+msgstr "Seleccionar/deseleccionar todo"
+
+msgid ""
+"We recomend you to use the \"Show in all categories\" mark to avoid "
+"unchecked future created categories."
+msgstr ""
+"Le recomendamos usar la opción «Mostrar en todas las categorías» para evitar "
+"que categorías que se creen en el futuro queden sin desmarcar."
 
 msgid "Where to show this ad"
 msgstr "Donde mostrar esta publicidad"
@@ -6965,32 +6988,38 @@ msgstr "Donde mostrar esta publicidad"
 msgid "Pages of type"
 msgstr "Páginas del tipo"
 
-msgid "Inner article"
-msgstr "Noticia interior"
+msgid "Article: inner"
+msgstr "Articulo: interior"
 
-msgid "Video frontpage"
-msgstr "Vídeo: portadas"
+msgid "Gallery: frontpage"
+msgstr "Galería: portada"
 
-msgid "Inner video"
-msgstr "Vídeo: interior"
+msgid "Gallery: inner"
+msgstr "Galería: interior"
 
-msgid "Inner opinion"
+msgid "Opinion: frontpage"
+msgstr "Opinión: portada"
+
+msgid "Opinion: inner"
 msgstr "Opinión: interior"
 
-msgid "Galleries"
-msgstr "Galerías"
+msgid "Poll: frontpage"
+msgstr "Encuesta: portada"
 
-msgid "Gallery Inner"
-msgstr "Álbum: interior"
+msgid "Poll: inner"
+msgstr "Encuesta: interior"
 
-msgid "Poll Inner"
-msgstr "Encuesta interior"
+msgid "Video: frontpage"
+msgstr "Vídeo: portada"
 
-msgid "AMP pages"
-msgstr "Páginas AMP"
+msgid "Video: inner"
+msgstr "Vídeo: interior"
 
-msgid "Instant Articles pages"
-msgstr "Páginas de Instant Articles"
+msgid "Google AMP"
+msgstr "Google AMP"
+
+msgid "Facebook Instant Articles"
+msgstr "Facebook Instant Articles"
 
 msgid "Others"
 msgstr "Otros"
@@ -7012,12 +7041,6 @@ msgstr "Artículo interior Instant Articles - Botón 2"
 
 msgid "Instant Articles inner article - Button 3"
 msgstr "Artículo interior Instant Articles - Botón 3"
-
-msgid "Entering on the requested page"
-msgstr "Entrando en la página solicitada"
-
-msgid "Skip advertisement"
-msgstr "Saltar publicidad"
 
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
@@ -7056,6 +7079,19 @@ msgid "This settings allow printing home ads when ads in category are empty."
 msgstr ""
 "Estos ajustes permiten imprimir anuncios de portada cuando los anuncios en "
 "la categoría están vacíos."
+
+msgid "SafeFrame by default"
+msgstr "SafeFrame por defecto"
+
+msgid "Recommended"
+msgstr "Recomendado"
+
+msgid ""
+"This feature displays advertisements inside iframes. It improves the user "
+"experience and has a better performance."
+msgstr ""
+"Esta característica mustra las publicidades dentro de «iframes». Mejora la "
+"experiencia de usuario y tiene mejor rendimiento."
 
 msgid "OpenX/Revive Ad server integration"
 msgstr "Integración con servidor de publicidad OpenX/Revive"
@@ -7495,6 +7531,25 @@ msgstr ""
 "developers.facebook.com/apps\" target=\"_blank\">el sitio web Facebook "
 "Developers</a>."
 
+msgid "Allow comments in contents by default"
+msgstr "Por defecto, permitir los comentarios en los contenidos"
+
+msgid ""
+"Whether to allow users to comment in comments by default for all contents "
+"(you can change this setting for specific contents)"
+msgstr ""
+"Indica si los usuarios pueden comentar, por defecto, en los contenidos ("
+"puede cambiar esta preferencia para contenidos específicos)"
+
+msgid "Disable all comments on site"
+msgstr "Deshabilitar todos los comentarios del sitio"
+
+msgid ""
+"If set, users will not be able to comment on the site and comments already "
+"approved will not be displayed"
+msgstr "Si se activa, los usuarios no podrán comentar en el sitio y los "
+"comentarios ya aprobados no se mostrarán"
+
 msgid "Disqus"
 msgstr "Disqus"
 
@@ -7541,16 +7596,6 @@ msgstr "Mostrar"
 
 msgid "Number of comments to show by page"
 msgstr "Numero de comentarios a mostrar por página"
-
-msgid "Allow comments in contents by default"
-msgstr "Por omisión permitir los comentarios en los contenidos"
-
-msgid ""
-"Whether to allow users to comment in comments by default for all contents "
-"(you can change this setting for specific contents)"
-msgstr ""
-"Indica si los usuarios pueden comentar en los contenidos por omisión (puede "
-"cambiar esta preferencia para contenidos específicos)"
 
 msgid "Before a comment appears"
 msgstr "Antes de que el comentario aparezca"
@@ -8768,2854 +8813,3 @@ msgstr "¿Quieres cerrar la sesión?"
 
 msgid "Action"
 msgstr "Acción"
-
-#, fuzzy
-#~ msgid ""
-#~ "Display the advertisement if frontpage or content belongs to one or more "
-#~ "of the selected categories"
-#~ msgstr ""
-#~ "Mostrar la publicidad si el usuario pertenece a uno o más grupos "
-#~ "seleccionados"
-
-#, fuzzy
-#~ msgid "Open X"
-#~ msgstr "OpenX"
-
-#~ msgid "Registered date:"
-#~ msgstr "Fecha de registro:"
-
-#~ msgid "Postal Code:"
-#~ msgstr "Código postal:"
-
-#~ msgid "Birth Date:"
-#~ msgstr "Fecha de nacimiento:"
-
-#~ msgid "Gender:"
-#~ msgstr "Sexo:"
-
-#~ msgid "Open X zone"
-#~ msgstr "Zona de OpenX"
-
-#~ msgid "Add another size"
-#~ msgstr "Añadir otro tamaño"
-
-#~ msgid "When to show this ad"
-#~ msgstr "Cuando mostrar este anuncio"
-
-#~ msgid "Restrictions"
-#~ msgstr "Restricciones"
-
-#~ msgid "Show this ad if satisfy one condition"
-#~ msgstr "Muestra esta publicidad si satisface una condición"
-
-#~ msgid "Without limits"
-#~ msgstr "Sin límites"
-
-#~ msgid "Until"
-#~ msgstr "Hasta"
-
-#~ msgid "Show this ad within a range of dates."
-#~ msgstr "Muestra esta publicidad durante un rango de fechas."
-
-#~ msgid "Display banner while"
-#~ msgstr "Mostrar publicidad durante"
-
-#~ msgid "Amount of seconds that this banner will block all the page."
-#~ msgstr "Segundos durante los que este banner bloqueará toda la página."
-
-#~ msgid "In categories"
-#~ msgstr "En las categorías"
-
-#~ msgid "and inside the position"
-#~ msgstr "y en la posición"
-
-#, fuzzy
-#~ msgid "Drop files here to upload"
-#~ msgstr "Pincha aquí para subir"
-
-#~ msgid ""
-#~ "We have detected that you are using an Adblocker, please disable it to "
-#~ "work with Opennemas."
-#~ msgstr ""
-#~ "Hemos detectado que estas usando un bloqueador de publicidad, por favor "
-#~ "desactivalo para usar Opennemas."
-
-#~ msgid "Domain registration + mapping"
-#~ msgstr "Registro de dominio + redirección"
-
-#~ msgid "Domain mapping"
-#~ msgstr "Redirección de dominio"
-
-#~ msgid "Support"
-#~ msgstr "Soporte"
-
-#~ msgid "No support"
-#~ msgstr "Sin soporte"
-
-#, fuzzy
-#~ msgid "Date & Time"
-#~ msgstr "Idioma y hora"
-
-#, fuzzy
-#~ msgid "Site language"
-#~ msgstr "Idioma del usuario"
-
-#~ msgid "You don't have enough privileges to see this category."
-#~ msgstr "No tienes permisos suficientes para ver esta categoría."
-
-#~ msgid "Author created successfully."
-#~ msgstr "Autor creado correctamente."
-
-#~ msgid "Unable to create the author with that information"
-#~ msgstr "No se pudo crear el autor con la información proporcionada"
-
-#~ msgid "The data send by the user is not valid."
-#~ msgstr "Los datos enviados del usuario no son válidos."
-
-#~ msgid "Unable to update the author with that information"
-#~ msgstr "No se pudo actualizar el autor con la información proporcionada"
-
-#~ msgid "Could not find user. Sorry!"
-#~ msgstr "No se pudo encontrar el usuario."
-
-#~ msgid ""
-#~ "Unable to find an associated user to that social account. Notice that "
-#~ "first you have to associated it from your Opennemas user account."
-#~ msgstr ""
-#~ "No fue posible encontrar un usuario asociado a tu cuenta de red social. "
-#~ "Ten en cuenta que primero debes asociarla desde tu cuenta de usuario en "
-#~ "Opennemas."
-
-#~ msgid "Unable to delete the subscriber with the id %d."
-#~ msgstr "No se pudo eliminar la suscripción con el identificador %d."
-
-#~ msgid "Please specify a subscriber id for delete it."
-#~ msgstr "Especifique el identificador de un suscriptor para eliminarlo."
-
-#~ msgid "Accelerated Mobile Pages integration"
-#~ msgstr "Integración con Accelerated Mobile Pages"
-
-#~ msgid "Advanced search"
-#~ msgstr "Búsqueda avanzada"
-
-#~ msgid "Advanced article options"
-#~ msgstr "Opciones avanzadas de artículo"
-
-#~ msgid "Frontpage Customization"
-#~ msgstr "Personalizar portadas"
-
-#~ msgid "Authors Blog"
-#~ msgstr "Blogs de Autores"
-
-#~ msgid "Cronicas customizations"
-#~ msgstr "Personalizaciones para Cronicas"
-
-#~ msgid "Facebook Instant Articles integration"
-#~ msgstr "Integración con Instance Articles de Facebook"
-
-#~ msgid "Frontpages Manager"
-#~ msgstr "Gestor de portadas"
-
-#~ msgid "iadbox"
-#~ msgstr "iadbox"
-
-#~ msgid "Import XMLs"
-#~ msgstr "Importación de XMLs"
-
-#~ msgid "NewsStand"
-#~ msgstr "Kiosko"
-
-#~ msgid "Library"
-#~ msgstr "Hemeroteca"
-
-#~ msgid "News Agency importer"
-#~ msgstr "Importador de noticias agencias"
-
-#~ msgid "Articles Synchronization"
-#~ msgstr "Sincronización de artículos"
-
-#~ msgid "Promotional bar"
-#~ msgstr "Barra promocional"
-
-#~ msgid "Schedules"
-#~ msgstr "Planificaciones"
-
-#~ msgid "System wide settings"
-#~ msgstr "Opciones del sistema"
-
-#~ msgid "Static library"
-#~ msgstr "Hemeroteca de estáticos"
-
-#~ msgid "Basic support"
-#~ msgstr "Soporte básico"
-
-#~ msgid "Training and Advisory Services"
-#~ msgstr "Soporte Asesoramiento y Formación"
-
-#~ msgid "Profesional support"
-#~ msgstr "Soporte profesional"
-
-#~ msgid "Support 2"
-#~ msgstr "Soporte 2"
-
-#~ msgid "Support 3"
-#~ msgstr "Support 3"
-
-#~ msgid "Support 4"
-#~ msgstr "Soporte 4"
-
-#~ msgid "Support 8"
-#~ msgstr "Soporte 8"
-
-#~ msgid "Support 8+"
-#~ msgstr "Soporte 8+"
-
-#~ msgid "Instance synchronization"
-#~ msgstr "Sincronización de instancias"
-
-#~ msgid "UserVoice integration"
-#~ msgstr "Integración con Uservoice"
-
-#~ msgid "Basic pack"
-#~ msgstr "Pack base"
-
-#~ msgid "Publishing your news is FREE!"
-#~ msgstr "Publicar tus noticias es GRATIS!"
-
-#~ msgid ""
-#~ "<p>This pack does not require any payment information and it allows you "
-#~ "to access our platform to test it as much as to publish your newspaper "
-#~ "for free and on the spot!</p>"
-#~ msgstr ""
-#~ "<p>ESte pack no requiere ninguna información de pago y te permite acceder "
-#~ "a nuestra plataforma para probarla y publicar tu periódico de forma "
-#~ "gratuíta y rápidamente!</p>"
-
-#~ msgid ""
-#~ "<p>Includes:</p>\n"
-#~ "                        <ul>\n"
-#~ "                        <li>Frontpage manager</li>\n"
-#~ "                        <li>Widget manager</li>\n"
-#~ "                        <li>Opinion articles manager</li>\n"
-#~ "                        <li>Comments manager</li>\n"
-#~ "                        <li>Images and files uploading</li>\n"
-#~ "                        <li>Utilities: Trash, Search Advanced...</li>"
-#~ msgstr ""
-#~ "<p>Incluye</p>\n"
-#~ "                    <ul>\n"
-#~ "                        <li>Gestor de portadas</li>\n"
-#~ "                        <li>Gestor de widgetsr</li>\n"
-#~ "                        <li>Gestor de artículos opinión</li>\n"
-#~ "                        <li>Gestor de comentarios</li>\n"
-#~ "                        <li>Subida de imagenes y archivos</li>\n"
-#~ "                        <li>Utilidades: Papelera, búsqueda avanzada...</"
-#~ "li>"
-
-#~ msgid ""
-#~ "<ul>\n"
-#~ "                            <li>%d x  User (1)</li>\n"
-#~ "                            <li>%s Storage (2)</li>\n"
-#~ "                            <li>%s Items (Articles, Opinions, Comments) "
-#~ "(2)</li>\n"
-#~ "                            <li>%s page views/month (2)</li>\n"
-#~ "                            <li>Online Support (Tickets SLA %d business "
-#~ "days)</li></ul>"
-#~ msgstr ""
-#~ "<ul>\n"
-#~ "                            <li>%d x  usuarios (1)</li>\n"
-#~ "                            <li>%s de almacenamiento (2)</li>\n"
-#~ "                            <li>%s elementos (artículos, opiniones, "
-#~ "comentarios) (2)</li>\n"
-#~ "                            <li>%s páginas vistas/mes</li>\n"
-#~ "                            <li>Asistencia online (Tickets SLA %d días "
-#~ "laborales)</li></ul>"
-
-#~ msgid ""
-#~ "<p><small>1. To add more users refer to <a href=\"http://help.opennemas."
-#~ "com/knowledgebase/articles/368173-precios-opennemas-licencias-de-usuario"
-#~ "\" target=\"_blank\">User Licence Page</a>.</small></p><p><small>2. For "
-#~ "more information about storage or page views please go to our page <a "
-#~ "href=\"http://help.opennemas.com/knowledgebase/articles/227476-precios-"
-#~ "opennemas-page-views-y-espacio-ocupado\" target=\"_blank\">Page Views and "
-#~ "Storage Space</a>.</small></p><p><small>All prices above do not include "
-#~ "VAT (21%).</small></p>"
-#~ msgstr ""
-#~ "<p><small>1. Para añadir más usuarios consulta nuestra página de <a href="
-#~ "\"http://help.opennemas.com/knowledgebase/articles/368173-precios-"
-#~ "opennemas-licencias-de-usuario\" target=\"_blank\">Licencias de Usuarios</"
-#~ "a>.</small></p><p><small>2. Para más información sobre páginas vistas o "
-#~ "almacenamiento consulta nuestra página <a href=\"http://help.opennemas."
-#~ "com/knowledgebase/articles/227476-precios-opennemas-page-views-y-espacio-"
-#~ "ocupado\" target=\"_blank\">Paginas Vistas y Espacio Ocupado</a>.</"
-#~ "small></p><p><small>Todos los precios de arriba no incluyen IVA (21%).</"
-#~ "small></p>"
-
-#~ msgid "Professional pack"
-#~ msgstr "Pack profesional"
-
-#~ msgid ""
-#~ "Our best selling solution, it allows to manage a professional newspaper "
-#~ "and start gaining money with it!"
-#~ msgstr ""
-#~ "Nuestra mejor solución. Te permite gestionar tu periódico profesional y "
-#~ "comenzar a ganar dinero con el."
-
-#~ msgid ""
-#~ "<p>This pack is thought for professional that are starting their "
-#~ "indipendent newspaper and need to manage advertising to grow and to "
-#~ "publish polls to engage with their audience.</p>\n"
-#~ "                        <p>This offer gives you more than 40% discount "
-#~ "(if purchased separately modules have a value of 85EUR/month).</p>"
-#~ msgstr ""
-#~ "<p>Este pack está pensado para todos los profesionales que están "
-#~ "empezando su periódico independiente y necesitan gestionar la publicidad "
-#~ "para crecer y conectar con los lectores.</p>\n"
-#~ "<p>Esta oferta te da más del 40% de descuento (si comprados por separados "
-#~ "los módulos tienen un valor de 85EUR/mes).</p>"
-
-#~ msgid ""
-#~ "<li>Advertisement manager</li>\n"
-#~ "                        <li>Polls manager</li>\n"
-#~ "                        <li>Galleries manager</li>\n"
-#~ "                        <li>Video manager</li>"
-#~ msgstr ""
-#~ "<li>Gestor de publicidad</li>\n"
-#~ "                        <li>Gestor de encuestas</li>\n"
-#~ "                        <li>Gestor de galerías</li>\n"
-#~ "                        <li>Gestor de vídeo</li>"
-
-#~ msgid "Advanced pack"
-#~ msgstr "Pack avanzado"
-
-#~ msgid ""
-#~ "Personalize your frontpages and start sending newsletters to your readers "
-#~ "and let them know what they have missed!."
-#~ msgstr ""
-#~ "Personaliza las portadas y empieza a enviar boletines a tus lectores para "
-#~ "que sepan lo que se han perdido!"
-
-#~ msgid ""
-#~ "<p>A step further into the engagement path we add in this pack the "
-#~ "possibility of sending newsletters and customize frontpage anytime you "
-#~ "want.</p>\n"
-#~ "                        <p>This offer gives you more than 30% discount on "
-#~ "modules (if purchased separately modules have a value of 145EUR/month).</"
-#~ "p>"
-#~ msgstr ""
-#~ "<p>Un paso más en la trayectoria de compromiso con los lectores añadimos "
-#~ "en este paquete la posibilidad de envío de boletines informativos y de "
-#~ "personalizar las portadas en cualquier momento que desees.</p>\n"
-#~ "<p>Esta oferta te da más del 30% de descuento (si comprados por separados "
-#~ "los módulos tienen un valor de 145EUR/mes).</p>"
-
-#~ msgid ""
-#~ "<li>Frontpage customization</li>\n"
-#~ "                        <li>Newsletter manager (<a href=\"http://"
-#~ "opennemas.com/pricing?language=en_US#newsletter\" target=\"_blank\">0</"
-#~ "a>)</li>"
-#~ msgstr ""
-#~ "<li>Personalización de portadas</li>\n"
-#~ "                        <li>Gestor de boletines (<a href=\"http://"
-#~ "opennemas.com/pricing?language=en_US#newsletter\" target=\"_blank\">0</"
-#~ "a>)</li>"
-
-#~ msgid "Expert pack"
-#~ msgstr "Pack experto"
-
-#~ msgid ""
-#~ "Add news from your favourites agencies, manage multiple personalized "
-#~ "frontpages and let your readers become contributors!"
-#~ msgstr ""
-#~ "Añade las noticias de tus agencias favoritas, gestiona múltiples portadas "
-#~ "personalizadas y deja que tus lectores contribuyan publicando!"
-
-#~ msgid ""
-#~ "Add news from your favourites agencies, manage multiple personalized "
-#~ "frontpages and let your readers to become contributors to your newspaper!"
-#~ msgstr ""
-#~ "Añade las noticias de tus agencias favoritas, gestiona múltiples portadas "
-#~ "personalizadas y deja que tus lectores contribuyan publicando en el "
-#~ "periódico!"
-
-#~ msgid ""
-#~ "<p>This offer gives you more than 25% discount on modules (if purchased "
-#~ "separately modules have a value of 260EUR/month). </p>"
-#~ msgstr ""
-#~ "<p>Esta oferta te da más del 25% de descuento (si comprados por separados "
-#~ "los módulos tienen un valor de 260EUR/mes).</p>"
-
-#~ msgid ""
-#~ "<li>Multiple Frontpage Management</li>\n"
-#~ "                        <li>News Agency</li>\n"
-#~ "                        <li>Opennemas Connect</li>"
-#~ msgstr ""
-#~ "<li>Gestión de Multiple Portadas</li>\n"
-#~ "                        <li>Agencias de Noticias</li>\n"
-#~ "                        <li>Opennemas Conecta</li>"
-
-#~ msgid "Free Basic Template"
-#~ msgstr "Temas gratuitos"
-
-#~ msgid "Change your site design with our free available templates."
-#~ msgstr "Cambia el diseño de tu sitio con nuestros temas gratuitos."
-
-#~ msgid ""
-#~ "<ul>\n"
-#~ "                        <li>\n"
-#~ "                            Widgets: No widgets included. To add a widget "
-#~ "please contact us at\n"
-#~ "                            <a href=\"mailto:sales@openhost.es"
-#~ "\">sales@openhost.es</a>\n"
-#~ "                        </li>\n"
-#~ "                        <li>Exclusivity: This template is not exclusive</"
-#~ "li>\n"
-#~ "                        <li>Delivery time: Inmediate</li>\n"
-#~ "                    </ul>"
-#~ msgstr ""
-#~ "<ul>\n"
-#~ "                        <li>\n"
-#~ "                            Widgets: no incluidos. Para añadir nuevos "
-#~ "widgets contacta con\n"
-#~ "                            <a href=\"mailto:sales@openhost.es"
-#~ "\">sales@openhost.es</a>\n"
-#~ "                        </li>\n"
-#~ "                        <li>Exclusividad: Este tema no es exclusivo</li>\n"
-#~ "                        <li>Entrega: inmediata</li>\n"
-#~ "                    </ul>"
-
-#~ msgid "Engage your readers with your own personalised newsletter."
-#~ msgstr "Comparte más con tus lectores enviándole un boletín."
-
-#~ msgid "Polls Manager"
-#~ msgstr "Gestor de encuestas"
-
-#~ msgid "Frontpage Synchronization"
-#~ msgstr "Sincronización de portadas"
-
-#~ msgid "Add description..."
-#~ msgstr "Añadir descripción..."
-
-#~ msgid "Missed long description..."
-#~ msgstr "Descripción larga omitida..."
-
-#~ msgid "Support Pro"
-#~ msgstr "Soporte Pro"
-
-#~ msgid "Support 8 Plus"
-#~ msgstr "Soporte 8 Plus"
-
-#~ msgid "Sorry, you don't have enough privileges"
-#~ msgstr "No tienes suficientes permisos"
-
-#, fuzzy
-#~ msgid "There is an error with your invoice."
-#~ msgstr "Se ha producido un error al procesar tu ficheiro de vídeo"
-
-#~ msgid "Domain added successfully"
-#~ msgstr "Dominio añadido correctamente."
-
-#~ msgid "Your request could not been registered"
-#~ msgstr "Tu solicitud no pudo guardarse"
-
-#~ msgid "Your request has been registered"
-#~ msgstr "Tu solicitud se ha guardado"
-
-#~ msgid "You have requested the following purchases for your newspaper \"%1\""
-#~ msgstr ""
-#~ "Acabas de solicitar las siguientes características para tu compra \"%1\""
-
-#~ msgid "Modules requested"
-#~ msgstr "Modulos solicitados"
-
-#~ msgid "Our sales department will contact you to get further information"
-#~ msgstr ""
-#~ "Nuestro departamento de ventas se pondrá en contacto contigo para obtener "
-#~ "más información"
-
-#~ msgid "Modules to purchase"
-#~ msgstr "Módulos a comprar"
-
-#~ msgid "Thank you for your purchase request!"
-#~ msgstr "¡Gracias por tu solicitud de compra!"
-
-#~ msgid ""
-#~ "In the next 24 hours you will receive an email with payment instructions "
-#~ "and invoice."
-#~ msgstr ""
-#~ "En las próximas 24 horas recibirás un correo con las instrucciones de "
-#~ "pago y la factura."
-
-#~ msgid ""
-#~ "Meanwhile, you can go to your <a href=\"%1\">My newspaper</a> and check "
-#~ "your active features, navigate to <a href=\"http://help.opennemas.com"
-#~ "\">our help</a> or check out <a href=\"http://youtube.com/opennemas\">our "
-#~ "videos</a> to see how easy is to manage Opennemas."
-#~ msgstr ""
-#~ "Mientras tanto, puedes ir a <a href=\"%1\">Mi periódico</a> y comprobar "
-#~ "tus características activadas, navegar por <a href=\"http://help."
-#~ "opennemas.com\">nuestra ayuda</a> o comprobar <a href=\"http://youtube."
-#~ "com/opennemas\">nuestros vídeos</a> para ver lo fácil que es usar "
-#~ "Opennemas."
-
-#~ msgid "Technical information"
-#~ msgstr "Más información"
-
-#~ msgid "Required Domains:"
-#~ msgstr "Dominios requeridos:"
-
-#~ msgid "You can find your invoice on the following page:"
-#~ msgstr "Puedes encontrar tu factura en la siguiente página:"
-
-#~ msgid "Domains to create"
-#~ msgstr "Dominios a crear"
-
-#~ msgid "Domains to redirect"
-#~ msgstr "Dominios a redirigir"
-
-#~ msgid ""
-#~ "Here you will see some statistics about <strong>instances</strong> and "
-#~ "other <br>\n"
-#~ "        awesome things that will blow out your imagination."
-#~ msgstr ""
-#~ "Aquí puede ver algunas estadísticas sobre las <strong>instancias</strong> "
-#~ "y otras cosas que te dejarán con el culo traspuesto."
-
-#~ msgid "There is a previous draft"
-#~ msgstr "Hay un borrador anterior"
-
-#~ msgid "Do you want to edit the existing draft?"
-#~ msgstr "¿Desea editar el borrador existente?"
-
-#~ msgid "No, discard"
-#~ msgstr "No, rechazarlo"
-
-#~ msgid "You are offline."
-#~ msgstr "Está sin conexión."
-
-#~ msgid "You are offline"
-#~ msgstr "Está sin conexión."
-
-#~ msgid "%1 doesn’t exist."
-#~ msgstr "%1 no existe."
-
-#~ msgid "Do you want to register %1?"
-#~ msgstr "¿Quieres registrar %1?"
-
-#~ msgid "Cache configuration saved successfully."
-#~ msgstr "Configuración de caché guardada correctamente."
-
-#~ msgid "Unable to save the cache configuration."
-#~ msgstr "No se pudo guardar la configuración de caché."
-
-#~ msgid "Smarty cache removed for the instance."
-#~ msgstr "Caché de smarty eliminada para la instancia."
-
-#~ msgid "Smarty compiled templates removed for the instance."
-#~ msgstr "Plantillas compiladas de smarty eliminadas para la instancia."
-
-#~ msgid "Varnish BAN queued for current instance."
-#~ msgstr "BAN en Varnish encolado para la instancia actual."
-
-#, fuzzy
-#~ msgid "Redis cache cleared for current instance."
-#~ msgstr "BAN en Varnish encolado para la instancia actual."
-
-#~ msgid "Remove smarty cache"
-#~ msgstr "Eliminar caché Smarty"
-
-#~ msgid "Remove smarty compiles"
-#~ msgstr "Eliminar Smarty compiles"
-
-#~ msgid "Remove varnish cache"
-#~ msgstr "Ban de cache de varnish"
-
-#~ msgid "Remove redis cache"
-#~ msgstr "Eliminar caché Redis"
-
-#~ msgid ""
-#~ "We use cookies to offer you a better experience. By using this site you "
-#~ "agree to our use of cookies. <a target=\"_blank\" href=\"%s\"> Learn more "
-#~ "&gt; </a>"
-#~ msgstr ""
-#~ "Usamos cookies para ofrecerle una experiencia mejorada. Al usar este "
-#~ "sitio acepta el uso que hacemos de las cookies <a target=\"_blank\" href="
-#~ "\"%s\"> Más información &gt; </a>"
-
-#, fuzzy
-#~ msgid "Content saved successfully."
-#~ msgstr "Contenido guardado con éxito"
-
-#~ msgid ""
-#~ "You have reach the maximum users allowed. If you want to create more "
-#~ "users, please contact us."
-#~ msgstr ""
-#~ "Has alcanzado el máximo de usuario permitidos. Si quieres crear más "
-#~ "usuarios contacta con nosotros."
-
-#~ msgid "Unable to find the user with the id '%d'"
-#~ msgstr "No se pudo encontrar el usuario con el identificador «%d»"
-
-#~ msgid "Unable to update the user with that information"
-#~ msgstr "No se pudo actualizar el usuario con la información proporcionada"
-
-#~ msgid ""
-#~ "Unable to change user backend access. You have reached the max number of "
-#~ "users."
-#~ msgstr ""
-#~ "No se pudo cambiar el acceso de administración del usuario. Has alcanzado "
-#~ "el número máximo de usuarios."
-
-#~ msgid "Unable to create the user with that information"
-#~ msgstr "No se pudo crear el usuario con la información proporcionada"
-
-#~ msgid "Successfully deleted user with id \"%d\"."
-#~ msgstr "Se ha eliminado el usuario con id «%d»."
-
-#~ msgid "You have deleted %d users."
-#~ msgstr "Se han eliminado %d usuarios."
-
-#~ msgid "You haven't selected any user to delete."
-#~ msgstr "No has seleccionado ningún usuario para eliminar."
-
-#~ msgid "Unable to find user group with id '%d'"
-#~ msgstr "No se pudo encontrar el grupo de usuarios con el identificador «%d»"
-
-#~ msgid "Unable to delete the user group with id \"%d\""
-#~ msgstr "No se pudo eliminar el grupo de usuario con el identificador «%d»"
-
-#~ msgid "Sorry, newsletter \"%d\" was been sent previously"
-#~ msgstr "El boletín de noticias «%d» ya fue enviado anteriormente"
-
-#~ msgid "Unable to find a static page with the id \"%d\"."
-#~ msgstr "No se pudo encontrar la página estática con el identificador «%d»"
-
-#~ msgid "Static page created successfully."
-#~ msgstr "Página estática creada correctamente."
-
-#~ msgid ""
-#~ "You can't modify this static page because you don't have enough "
-#~ "privileges."
-#~ msgstr "No tienes suficientes permisos para modificar esta página estática."
-
-#~ msgid "Static Page data sent not valid."
-#~ msgstr "Los datos enviados de la página estática no son válidos."
-
-#~ msgid "Static page updated successfully."
-#~ msgstr "Página estática actualizada correctamente."
-
-#~ msgid "Unable to delete the item with the id \"%s\""
-#~ msgstr "No se pudo eliminar el elemento con el identificador «%s»"
-
-#~ msgid "Unable to find the item with the id \"%s\""
-#~ msgstr "No se pudo encontrar el elemento con el identificador «%s»"
-
-#~ msgid "%s item(s) deleted successfully"
-#~ msgstr "%s elemento(s) eliminado(s) correctamente."
-
-#~ msgid "Selected items deleted successfully"
-#~ msgstr "Los elementos seleccionados fueron eliminados correctamente"
-
-#~ msgid ""
-#~ "Unable to change user backend access. You have reach the maximum allowed"
-#~ msgstr ""
-#~ "No se pudo cambiar el acceso de administración del usuario. Has alcanzado "
-#~ "el máximo permitido."
-
-#~ msgid "Unable to delete the item with the id \"%d\""
-#~ msgstr "No se pudo eliminar el elemento con el identificador «%d»"
-
-#~ msgid "Unable to find the item with the id \"%d\""
-#~ msgstr "No se pudo encontrar el elemento con el identificador «%d»"
-
-#~ msgid "Client removed successfully"
-#~ msgstr "Cliente eliminado con éxito"
-
-#~ msgid "Unable to find the instances for the given criteria"
-#~ msgstr "No se pudieron encontrar instancias para el criterio proporcionado"
-
-#~ msgid "Unable to find the client with id \"%s\""
-#~ msgstr "No se pudo encontrar el cliente con el identificador «%s»"
-
-#~ msgid "Unable to find the instance with id \"%s\""
-#~ msgstr "No se pudo encontrar la instancia con el identificador «%s»"
-
-#~ msgid "%s instances updated successfully."
-#~ msgstr "%s instancias actualizadas correctamente."
-
-#~ msgid "A module with uuid '%s' already exists"
-#~ msgstr "Ya existe un módulo con el UUID %d"
-
-#~ msgid "Manager"
-#~ msgstr "Gestor"
-
-#~ msgid "Unable to find the module with id \"%s\""
-#~ msgstr "No se pudo encontrar el módulo con el identificador «%s»"
-
-#~ msgid "Unable to find the modules for the given criteria"
-#~ msgstr "No se pudieron encontrar módulos para el criterio proporcionado"
-
-#~ msgid "%s modules updated successfully."
-#~ msgstr "%s módulos actualizados correctamente."
-
-#~ msgid "Unable to find the notifications for the given criteria"
-#~ msgstr ""
-#~ "No se pudieron encontrar notificaciones para el criterio proporcionado"
-
-#~ msgid "%s notifications updated successfully."
-#~ msgstr "%s notificaciones actualizadas correctamente."
-
-#~ msgid "Purchased removed successfully"
-#~ msgstr "Compra eliminada correctamente."
-
-#~ msgid "Unable to find the purchase with id \"%s\""
-#~ msgstr "No se pudo encontrar la compra con el identificador «%s»"
-
-#~ msgid "Unable to delete the user with the id \"%d\""
-#~ msgstr "No se pudo eliminar el usuario con el identificador «%d»"
-
-#~ msgid "Unable to find users for the given criteria"
-#~ msgstr "No se pudieron encontrar usuarios para el criterio proporcionado"
-
-#~ msgid "User updated successfully."
-#~ msgstr "Usuario actualizado correctamente."
-
-#~ msgid "Error while updating user with id \"%s\""
-#~ msgstr "No se pudo actualizar el usuario con el identificador «%s»"
-
-#~ msgid "Unable to find the user with id \"%s\""
-#~ msgstr "No se pudo encontrar el usuario con el identificador «%s»"
-
-#~ msgid "Unable to find the users for the given criteria"
-#~ msgstr "No se pudieron encontrar usuarios para el criterio proporcionado"
-
-#~ msgid "%s users updated successfully."
-#~ msgstr "%s usuarios actualizados correctamente."
-
-#~ msgid "Unable to find the current user"
-#~ msgstr "No se pudo encontrar el usuario actual"
-
-#~ msgid "User group name cannot be empty"
-#~ msgstr "El nombre del grupo de usuarios no puede estar vacío"
-
-#~ msgid "Unable to create a new usergroup"
-#~ msgstr "No se pudo crear el nuevo grupo de usuarios"
-
-#~ msgid "Unable to find user groups for the given criteria"
-#~ msgstr ""
-#~ "No se pudieron encontrar grupos de usuarios para el criterio proporcionado"
-
-#~ msgid "User group updated successfully"
-#~ msgstr "Grupo de usuario actualizado correctamente"
-
-#~ msgid "The client with id '%d' was not found in %s"
-#~ msgstr "No se pudo encontrar el cliente con id «%d» en %s"
-
-#~ msgid "The invoice with id '%d' was not found in %s"
-#~ msgstr "No se pudo encontrar la factura con id «%d» en %s"
-
-#~ msgid "The payment with id '%d' was not found in %s"
-#~ msgstr "No se pudo encontrar el pago con id «%d» en %s"
-
-#~ msgid "Unable to load plugins. No folder specified."
-#~ msgstr "No se pudieron cargar los plugins. No se especificó un directorio."
-
-#~ msgid "Please enter a valid url"
-#~ msgstr "Escribe una url válida"
-
-#~ msgid "Your desired address contains disallowed words."
-#~ msgstr "Tu dirección contiene palabras no permitidas."
-
-#~ msgid "Your user name contains disallowed words."
-#~ msgstr "Tu nombre de usuario contiene palabras no permitidas."
-
-#~ msgid ""
-#~ "There was an error while validating your data against disallowed words."
-#~ msgstr ""
-#~ "Se ha producido un error al validar los datos contra palabras no "
-#~ "permitidas."
-
-#~ msgid "Upgrade instance"
-#~ msgstr "Actualizar instancia"
-
-#~ msgid "Are you sure you want to proceed with this upgrade ?"
-#~ msgstr "¿Está seguro de que quiere proceder con esta actualización?"
-
-#~ msgid "Request upgrade"
-#~ msgstr "Solicitar actualización"
-
-#~ msgid "List of modules to hire"
-#~ msgstr "Lista de módulos para adquirir"
-
-#~ msgid "List of modules to unsubscribe"
-#~ msgstr "Lista de módulos para desuscribir"
-
-#~ msgid "Select modules"
-#~ msgstr "Módulos seleccionados"
-
-#~ msgid "Maximun activated users"
-#~ msgstr "Usuarios activados máximos"
-
-#~ msgid "0 for unlimited users"
-#~ msgstr "0 para usuarios ilimitados"
-
-#~ msgid "Selected privileges"
-#~ msgstr "Privilegios seleccionados"
-
-#~ msgid "Opennemas manager"
-#~ msgstr "Gestor de opennemas"
-
-#~ msgid "Use manager account to sign in."
-#~ msgstr "Use una cuenta del gestor para iniciar sesión."
-
-#~ msgid "Domain + redirection: "
-#~ msgstr "Dominio + redirección:"
-
-#~ msgid "Remove compiled templates"
-#~ msgstr "Eliminar templates compiladas"
-
-#~ msgid ""
-#~ "I do not have my own domain and I want to create one and redirect it to "
-#~ "my Opennemas digital newspaper"
-#~ msgstr ""
-#~ "NO tengo mi propio dominio y quiero crear uno y redirigirlo a mi "
-#~ "periódico digital Opennemas"
-
-#~ msgid ""
-#~ "There was a problem while uploading the file. Please check if you have "
-#~ "completed all the form fields."
-#~ msgstr ""
-#~ "Se ha producido un error al subir el archivo. Compruebe que ha completado "
-#~ "todos los campos del formulario."
-
-#~ msgid ""
-#~ "There was an error while uploading the form, the video type is not "
-#~ "specified."
-#~ msgstr ""
-#~ "Se ha producido un error al subir el archivo, el tipo de vídeo no se "
-#~ "especificó."
-
-#~ msgid "Subscriptors"
-#~ msgstr "Suscriptores"
-
-#~ msgid "Field '%s' not valid"
-#~ msgstr "El campo '%s' no es válido"
-
-#~ msgid "Database error."
-#~ msgstr "Error de base de datos."
-
-#~ msgid "Unable to save the cover data."
-#~ msgstr "No se pudo guardar la portada."
-
-#~ msgid "Show password"
-#~ msgstr "Mostrar contraseña"
-
-#~ msgid "Hide password"
-#~ msgstr "Ocultar contraseña"
-
-#~ msgid "File path"
-#~ msgstr "Ruta al archivo"
-
-#~ msgid "Article deleted successfully."
-#~ msgstr "Artículo eliminado correctamente."
-
-#~ msgid "You must give an id to delete an article."
-#~ msgstr "Debes proporcionar un identificador para eliminar un artículo."
-
-#~ msgid "Instance ID"
-#~ msgstr "ID de Instancia"
-
-#~ msgid "Base"
-#~ msgstr "Base"
-
-#~ msgid "Professional"
-#~ msgstr "Profesional"
-
-#~ msgid "Advanced"
-#~ msgstr "Pack avanzado"
-
-#~ msgid "Expert"
-#~ msgstr "Pack experto"
-
-#~ msgid "Unlimited"
-#~ msgstr "Sin límite"
-
-#~ msgid ""
-#~ "You had already sent an upgrade request. Your upgrade will be applied as "
-#~ "soon as possible"
-#~ msgstr ""
-#~ "Ya has enviado una solicitud de actualización. Tu actualización se "
-#~ "aplicará tan pronto como podamos."
-
-#~ msgid "Upgrade instance request for %s"
-#~ msgstr "Solicitud de actualización de instancia para %s"
-
-#~ msgid "Unable to send your upgrade request. Please try it again."
-#~ msgstr ""
-#~ "No se pudo enviar su solicitud de actualización. Por favor inténtalo más "
-#~ "tarde."
-
-#~ msgid "Your upgrade request has been sent."
-#~ msgstr "Se ha enviado tu solicitud de respuesta."
-
-#~ msgid "Billing information saved successfully"
-#~ msgstr "Información de facturación guardada correctamente"
-
-#~ msgid "Contact name"
-#~ msgstr "Nombre de contacto"
-
-#~ msgid "This is not a valid phone"
-#~ msgstr "Este no es un número de teléfono válido"
-
-#~ msgid "This is not a valid vat"
-#~ msgstr "Este no es un CIF válido"
-
-#~ msgid "VAT Number"
-#~ msgstr "Número de identificación fiscal"
-
-#~ msgid "User group:"
-#~ msgstr "Grupos de usuario:"
-
-#~ msgid ""
-#~ "You are about to order next items. In the next 24hours our sales team "
-#~ "will send you payment and activation information. "
-#~ msgstr ""
-#~ "Estás a punto de solicitar los siguientes elementos. En las próximas 24 "
-#~ "horas nuestro departamento de ventas te enviará la información de pago y "
-#~ "activación."
-
-#~ msgid "This is not a valid VAT identification number"
-#~ msgstr "No es un número de identificación fiscal válido"
-
-#~ msgid "VAT identification number"
-#~ msgstr "Número de identificación fiscal"
-
-#~ msgid ""
-#~ "You have to complete your billing information to complete the purchase."
-#~ msgstr "Debes introducir la información de pago para completar la compra."
-
-#~ msgid "Base + Modules"
-#~ msgstr "Base + Módulos"
-
-#~ msgid ""
-#~ "Note: this number has not being used for billing purpose. Billing "
-#~ "pageviews count goes from 26th to 25th of each month."
-#~ msgstr ""
-#~ "Nota: este número no ha sido usado para las facturas. Las contía de "
-#~ "páginas vistas en la facturación comienzan desde el 26 de cada mes al 25 "
-#~ "del siguiente."
-
-#~ msgid "Max"
-#~ msgstr "Máximo"
-
-#~ msgid "Activated plans & modules"
-#~ msgstr "Planes y módulos activados"
-
-#~ msgid "Upgrade"
-#~ msgstr "Actualizar"
-
-#~ msgid "Waiting for upgrade"
-#~ msgstr "Esperando actualización"
-
-#~ msgid "Gain money with your Opennemas newspaper: manage your ads!"
-#~ msgstr "Gana dinero con tu periódico Opennemas."
-
-#~ msgid ""
-#~ "<p>Thanks to this module all Opennemas journals will be able to create, "
-#~ "add and manage ads on any pages: Frontpage Home/Sections, Inner Articles, "
-#~ "Opinions, Gallery, Media.</p>\n"
-#~ "                        <p>There are more than 15 types of ads.</p>"
-#~ msgstr ""
-#~ "<p>Gracias a este módulo todos los diarios Opennemas podrán crear, añadir "
-#~ "y gestionar anuncios en cualquier página: Portada Home/portadillas, "
-#~ "artículo interior, Portada de Opinión, Opinión Interior, galerías, vídeos."
-#~ "</p>\n"
-#~ "                        <p>Hay más de 15 tipos de publicidad.</p>"
-
-#~ msgid "Allows searching for content directly inside the manager"
-#~ msgstr "Te permite buscar contenidos directamente desde el gestor"
-
-#~ msgid "Allow you to create photo galleries and use them in your site."
-#~ msgstr "Te permite creare fotogalerías y usarlas en tu sitio web."
-
-#~ msgid ""
-#~ "<p>Add Video and Image Galleries to your content.</p>\n"
-#~ "                        <p>This module will allow you to create Photo "
-#~ "Galleries, add video from YouTube, Vimeo, Dailymotion, MarcaTV, etc</p>\n"
-#~ "                        <p>And the most interesting fact is that the "
-#~ "video manager is the same as youtube one, perfect consistency and "
-#~ "performance.</p>"
-#~ msgstr ""
-#~ "<p>Añade vídeo y galerías a tu contenido.</p>\n"
-#~ "<p>Gracias a este módulo te permitirá crear fotoalerías  y añadír vídeo "
-#~ "de outube, Vimeo, Dailymotion., MarcaTV, etc.</p>\n"
-#~ "<p>Lo interesante del gestor de vídeos es que la apariencia al usuario es "
-#~ "igual que la de Youtube.</p>"
-
-#~ msgid "Create your article and publish it with SEO included."
-#~ msgstr "Crea tus artículos y publícalos con SEO incluído."
-
-#~ msgid ""
-#~ "<p>Publish articles including Title, Subtitle, Summary, Comment, Image, "
-#~ "whenever you want and from wherever you want.</p>"
-#~ msgstr ""
-#~ "<p>Publica artículos que incluyen título, subtítulo, resumen, "
-#~ "comentarios, imágenes o cualquier cosa que quieras de forma gratuíta.</p>"
-
-#~ msgid "Module to allow the second article signature"
-#~ msgstr "Módulo que permite una firma de artículo secundaria"
-
-#~ msgid "Change the look and feel of your frontpages every time you want."
-#~ msgstr "Cambia estilo y apariencia de tus portadas cuando quieras."
-
-#~ msgid ""
-#~ "<p>Changing frontpage is more and more frequent in order to disrupt with "
-#~ "daily monotony.</p>\n"
-#~ "                        <p>By activating this module you will be allowed "
-#~ "to:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Change background color of the news, so "
-#~ "that a column can gain a different style from others.</li>\n"
-#~ "                            <li>Change font size, so that you can give "
-#~ "more weight to a title in the page.</li>\n"
-#~ "                            <li>Change colour of titles fonts, so that "
-#~ "you can combine it with the different background.</li>\n"
-#~ "                            <li>Change of style: font, bold, italic, etc."
-#~ "</li>\n"
-#~ "                            <li>Change the disposition of the image with "
-#~ "respect to the text (right, left, above/below of the title, etc.)</li>\n"
-#~ "                        </ul>"
-#~ msgstr ""
-#~ "<p>El cambio de estilos dentro de portada principal es cada vez más "
-#~ "frecuente para romper la monotonía del periódico.</p>\n"
-#~ "                        <p>Las posibilidades de este módulo son:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Cambio de color el fondo de la noticia, "
-#~ "haciendo posible que toda una columna tenga un estilo diferente.</li>\n"
-#~ "                            <li>Tamaño de la fuente. De esta forma se "
-#~ "puede dar más fuerza a un titular.</li>\n"
-#~ "                            <li>Color de los titulares para combinar con "
-#~ "el fondo de color de la noticia</li>\n"
-#~ "                            <li>Estilos del titular: fuente de letra, "
-#~ "negrita, cursiva, etc.</li>\n"
-#~ "<li>Alineación de las fotos de portada con respecto al texto (derecha, "
-#~ "izquierda, por encima/debajo del titular, etc.)</li>\n"
-#~ "                        </ul>"
-
-#~ msgid ""
-#~ "Would you like to give to your Opinion authors a Blog Space, this is the "
-#~ "feature you were looking for."
-#~ msgstr ""
-#~ "Tienes autores de opinión a los que te gustaría dedicarle un espacio "
-#~ "formato blog, este es el módulo que estabas buscando."
-
-#~ msgid ""
-#~ "<p>Authors will have a dedicated space where all their contributions will "
-#~ "appear in chronological order and readers alse set a RSS notification to "
-#~ "receive the latest articles posted by a particular Author.</p>"
-#~ msgstr ""
-#~ "<p>Los autores tendrán un espacio destacado donde aparecerán sus "
-#~ "artículos en orden de salida y los lectores podrán también ponerse una "
-#~ "notificación RSS para recibir los últimos artículos escritos por el autor."
-#~ "</p>\n"
-#~ "                    "
-
-#~ msgid "Module for managing book pages"
-#~ msgstr "Módulo para gestionar páginas de libro"
-
-#~ msgid "Module for managing the cache of pages"
-#~ msgstr "Módulo para gestionar la caché de las páginas"
-
-#~ msgid "Create, update and delete categories for contents."
-#~ msgstr "Gestiona categories para los contenidos"
-
-#~ msgid ""
-#~ "<p>Module included in the Basic pack (FREE) of opennemas, it allows users "
-#~ "to create and manage categories of content.</p>"
-#~ msgstr ""
-#~ "<p>Le permite a tus usuarios crear y gestionar categorías de contenido.</"
-#~ "p>"
-
-#~ msgid ""
-#~ "Allow your readers to comment articles whether through Opennemas comment "
-#~ "system or connecting with Facebook or Disqus."
-#~ msgstr ""
-#~ "Permite a tus lectores dejar comentarios usando nuestro sistema de "
-#~ "comentarios o conectándo tu sitio a Facebook o Disqus."
-
-#~ msgid ""
-#~ "<p>Module included in the FREE version, it allows users to add comments "
-#~ "to any content generated by newspaper."
-#~ msgstr ""
-#~ "<p>Le permite a tus usuarios crear y gestionar categorías de contenido.</"
-#~ "p>"
-
-#~ msgid "Module for managing Cronicas customizations"
-#~ msgstr "Módulo para gestionar personalizaciones de Cronicas"
-
-#~ msgid "Upload your files and share them on your newspaper."
-#~ msgstr "Sube tus archivos y compártelos en tu periódico."
-
-#~ msgid ""
-#~ "<p>Module included in the Basic pack (FREE) of Opennemas, it allows users "
-#~ "to upload files to the system and share them with a url in the newspaper "
-#~ "articles."
-#~ msgstr ""
-#~ "Permite a los usuarios subir archivos al sistema y compartirlos con una "
-#~ "url en artículos de tu periódico."
-
-#~ msgid "Let your readers send you content with or without attachments."
-#~ msgstr ""
-#~ "Deja que tus lectores te envíen contenido con o sin archivos adjuntos."
-
-#~ msgid ""
-#~ "<p>Our feature Opennemas Contact will allow readers to submit their "
-#~ "opinions with or without attachment, so that they can communicate with "
-#~ "the newspapers.</p>"
-#~ msgstr ""
-#~ "<p>Nuestro módulo Opennemas Comunica da la posibilidad a los lectores de "
-#~ "enviar sus opiniones, noticias con o sin imágenes, vídeos o archivos "
-#~ "adjuntos, para que se comuniquen directamente con el periódico.</p><p>Los "
-#~ "periódicos pueden crear formularios personalizados y recibirán el "
-#~ "contenido a través de un e-mail.</p>"
-
-#~ msgid ""
-#~ "Most important asset of a newspaper, the frontpage manager allows live "
-#~ "update of frontpages content."
-#~ msgstr ""
-#~ "El valor más importante en un periódico, el gestor de portadas le permite "
-#~ "actualizar en vivo los contenidos de las portadas."
-
-#~ msgid ""
-#~ "<p>Module included in the Basic pack (FREE) of opennemas, the frontpage "
-#~ "manager will allow you to add articles and modify visualization of your "
-#~ "frontpages instantly.<p>"
-#~ msgstr ""
-#~ "<p>Módulo incluído en el pack Básico (GRATUITO) de Opennemas, el gestor "
-#~ "de portadas te permite añadir artículos y modificar la visualización de "
-#~ "las portadas de forma instantánea.<p>"
-
-#~ msgid ""
-#~ "Create and Manage Frontpage Layouts made by you, every time you want!"
-#~ msgstr ""
-#~ "Crea y gestiona el diseño de las portadas como quieras, cuando quieras."
-
-#~ msgid ""
-#~ "<p>Manual Frontpages Disposition Management/Frontpages Organization</p>\n"
-#~ "                        <p>You can change the appearance of Opennemas "
-#~ "newspaper in a matter of seconds with this module. In this way you can "
-#~ "select a different frontpage model on each of the sections frontpages.</p>"
-#~ msgstr ""
-#~ "<p>Gestión MANUAL de maquetero/Disposiciones de portadas<p>\n"
-#~ "                        <p>Poder cambiar la apariencia del periódico "
-#~ "Opennemas es cosa de segundos con este módulo. De esta forma se puede "
-#~ "seleccionar una maqueta diferente en cada una de las portadas.</p>"
-
-#~ msgid "Allows user to upload images"
-#~ msgstr "Permite al usuario subir imágenes"
-
-#~ msgid ""
-#~ "<p>iadbox is a way to serve ads when users want to receive them.</p>\n"
-#~ "                        <p>Let us know if you want to try it on your "
-#~ "newspaper, we are alreday using it on ours!</p>\n"
-#~ "                        <p>We will set it up for you for FREE and let "
-#~ "iadbox team know so that you receive your reports and revenue.</p>\n"
-#~ "                    "
-#~ msgstr ""
-#~ "<p>iadbox es la manera para ofrecer publicidad cuando los usuarios "
-#~ "quieren recibirla.</p>\n"
-#~ "                        <p>Te invitamos a probar iadbox en tu periódico, "
-#~ "¡nosotros ya lo usamos en los nuestros!</p>\n"
-#~ "                        <p>Te activaremos iadbox GRATUITAMENTE e "
-#~ "informaremos al equipo de iadbox para que puedan llegarte tus informes e "
-#~ "ingresos.</p>"
-
-#~ msgid ""
-#~ "<p>iadbox is an intelligent commercial messaging for the smartphone "
-#~ "generation.</p>\n"
-#~ "                        <p>It is a mobile and desktop marketing platform, "
-#~ "with a user-controlled inbox for interaction with audiences.</p>\n"
-#~ "                        <p><strong>More info</strong>: <a target=\"_blank"
-#~ "\" href=\"http://www.iadbox.com\">www.iadbox.com</a></p>\n"
-#~ "                        <p><a class=\"btn btn-success\" href=\"mailto:"
-#~ "sales@openhost.es\">Ask for it</a></p>"
-#~ msgstr ""
-#~ "<p>iadbox es un sistema de mensajería inteligente pensada para la "
-#~ "generación de los smartphones.</p>\n"
-#~ "                        <p>Es una plataforma de marketing para móviles y "
-#~ "ordenadores, con una bandeja de entrada para la interacción con las "
-#~ "audiencias.</p>\n"
-#~ "                        <p><strong>Más información</strong>: <a target="
-#~ "\"_blank\" href=\"http://www.iadbox.com\">www.iadbox.com</a></p>\n"
-#~ "                        <p><a class=\"btn btn-success\" href=\"mailto:"
-#~ "sales@openhost.es\">Pídelo ya</a></p>"
-
-#~ msgid "Do you have your articles in Adobe InDesign or QuarkXPress"
-#~ msgstr "¿Trabajas tus artículos con InDesign o QuarkXPress?"
-
-#~ msgid ""
-#~ "<p>By activating this module you will be able to import XML from Adobe "
-#~ "InDesign and QuarkXPress, so that your print articles will become "
-#~ "digital. This automatisation is one of the most popular because it saves "
-#~ "so much time...</p>"
-#~ msgstr ""
-#~ "<p>Este gestor permite importar los XML de Adobe InDesign / QuarkXPress "
-#~ "de las páginas de papel de esta versión. Muchos medios disfrutan de esta "
-#~ "automatización. Se ahorran horas al día en este proceso.</p>"
-
-#~ msgid ""
-#~ "Create a list of your favourite keywords and choose if you want to link "
-#~ "it to something or assign an action to it."
-#~ msgstr ""
-#~ "Gestiona tus palabras clave y elige si quieres enlazar cualquier texto a "
-#~ "una web automáticamente o asignar una accción al mismo."
-
-#~ msgid ""
-#~ "<p>Feature included in the Basic pack (FREE) of opennemas.</p>\n"
-#~ "                        <p>It allows you to create a list of keywords and "
-#~ "assign a landing page to each of them, or mail_to, and automatically "
-#~ "every time that this keyword will be used the system will tag it for you."
-#~ "</p>"
-#~ msgstr ""
-#~ "<p>Le permite crear una lista de palabras clave a las que asignar una "
-#~ "dirección web, o un correo, y cada vez que use esta palabra clave el "
-#~ "sistema la etiquetará por ti.</p>"
-
-#~ msgid "Let your readers download the pdf copy of your print newspaper."
-#~ msgstr "Deja que tus lectores disfruten de tu periódico de papel en PDF."
-
-#~ msgid ""
-#~ "<p>If you would like to keep the print version of your newspaper in a "
-#~ "newsstand like <a href=\"http://kiosko.net/\" target=\"_blank\">kiosko."
-#~ "net</a>, you just need to upload the full version or the frontpage and "
-#~ "your users will be able to download it whenever they want.</p>"
-#~ msgstr ""
-#~ "<p>Quieres tener la versión de papel de tu periódico en un gestor de "
-#~ "kiosko como <a href=\"http://kiosko.net/\" target=\"_blank\">kiosko.net</"
-#~ "a>, con este módulo es posible.</p><p>Sube la versión completa o solo la "
-#~ "portada. El lector se descargará el PDF subido.\n"
-#~ "</p>"
-
-#~ msgid "Let your readers be contributors."
-#~ msgstr "Deja que tus lectores contribuyan con sus noticias."
-
-#~ msgid ""
-#~ "<p>Our feature Opennemas Connect will allow readers to submit their news, "
-#~ "so that the newspaper can become the \"voice of people/Internet\".</p>\n"
-#~ "                        <p>You will be able to create custom submission "
-#~ "forms for your contributors so that they can share daily in the easiest "
-#~ "way.</p>\n"
-#~ "                        <p>All contributions can be moderated.</p>"
-#~ msgstr ""
-#~ "                        <p>Opennemas Connect permite a los lectores crear "
-#~ "noticias para la plataforma, de manera que el periódico pueda ser la voz "
-#~ "de las personas.</p>\n"
-#~ "                        <p>El periódico podrá crear un formulario "
-#~ "personalizado para que los lectores compartan diariamente y de manera "
-#~ "fácil.</p>\n"
-#~ "                        <p>Todas las contribuciones se pueden moderar.</p>"
-
-#~ msgid "Control your site navegation with menus and custom elements."
-#~ msgstr ""
-#~ "Controle la navegación de su sitio con menús y elementos personalizados."
-
-#, fuzzy
-#~ msgid ""
-#~ "<p>Feature included in the Basic Pack (FREE) of Opennemas, it enables you "
-#~ "to control your site navigation.</p>\n"
-#~ "                        <p>You can add different kind of elements to "
-#~ "menus:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Internal links</li>\n"
-#~ "                            <li>Frontages</li>\n"
-#~ "                            <li>Static pages</li>\n"
-#~ "                            <li>External links</li>\n"
-#~ "                        </ul>"
-#~ msgstr ""
-#~ "<p>Este módulo te permite controlar los menús de navegación de tu sitio.</"
-#~ "p>\n"
-#~ "                        <p>Añade varios tipos de elementos en los menús:</"
-#~ "p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Enlaces internos</li>\n"
-#~ "                            <li>Portadas</li>\n"
-#~ "                            <li>Páginas estáticas</li>\n"
-#~ "                            <li>Enlaces externos</li>\n"
-#~ "                            <li>...</li>\n"
-#~ "                        </ul>"
-
-#~ msgid ""
-#~ "Keeping your digital news up to date with agencies is already a reality!"
-#~ msgstr ""
-#~ "¡Mantener tu noticias actualizadas con las agencias ya es una realidad!"
-
-#~ msgid ""
-#~ "<p>With just a few clicks the administrator will be able to add any news "
-#~ "from agencies in the frontpage of the newspaper together with any image "
-#~ "or media attached.</p>\n"
-#~ "                        <p>Whichever is your agency you can configure it: "
-#~ "<a href=\"http://www.efe.com/\" target=\"_blank\">Agencia EFE</a>, <a "
-#~ "href=\"http://www.europapress.es/\" target=\"_blank\">Agencia Europa "
-#~ "press</a>, <a href=\"http://www.reuters.com/\" target=\"_blank\">Reuters</"
-#~ "a> and other RSS/XML sources, etc. Every and each of this channels will "
-#~ "be available in your administration panel.</p>"
-#~ msgstr ""
-#~ "<a href=\"http://www.efe.com/\" target=\"_blank\">Agencia EFE</a>, <a "
-#~ "href=\"http://www.europapress.es/\" target=\"_blank\">Agencia Europa "
-#~ "press</a>, <a href=\"http://www.reuters.com/\" target=\"_blank\">Reuters</"
-#~ "a> y otras fuentes de RSS/XML. Cualquiera de estos canales estarán "
-#~ "disponibles para los periódicos Opennemas. Con unos cuantos clicks el "
-#~ "usuario podrá insertar cualquier noticia de estas agencias en la portada "
-#~ "de su diario con la foto, vídeo o element adjunto.</p>\n"
-#~ "<p>Mantener tu publicación digital al día con las agencias ya es una "
-#~ "realidad gracias a este módulo<p>\n"
-#~ "<p>Nota: No se incluye el alta de las agencias. Eso es gestión del "
-#~ "cliente.<p>"
-
-#~ msgid ""
-#~ "<p>It is more and more frequent that newspapers send bulletins with a "
-#~ "selection of the most interesting news of the day/week/month.</p>\n"
-#~ "                        <p>This module allows administrators to create "
-#~ "custom layouts of the bulletin and to edit the style before sending it.</"
-#~ "p>\n"
-#~ "                        <p>This way you will be able to create the "
-#~ "newsletter your style.</p>"
-#~ msgstr ""
-#~ "<p>Cada vez es más común enviar boletines a los clientes con las noticias "
-#~ "más interesantes del diario.</p>\n"
-#~ "                        <p>Este módulo contiene un gestor para maquetar "
-#~ "el boletín al igual que poder editar los estilos de éste antes de "
-#~ "enviarlo.</p>\n"
-#~ "                        <p>De esta forma podrás crear el Newsletter a tu "
-#~ "forma y estilo.</p>"
-
-#~ msgid "emails"
-#~ msgstr "correos"
-
-#~ msgid "Update more newspapers at once by syncing articles."
-#~ msgstr "Actualiza más periódicos sincronizando artículos."
-
-#~ msgid ""
-#~ "<p>Similarly to the frontpage synchronisation feature you will be able to "
-#~ "update multiple newspapers by adding or editing articles in the main one."
-#~ "</p>\n"
-#~ "                        <p>If you have many local newspapers you can "
-#~ "import all the articles you want from the main one.</p>"
-#~ msgstr ""
-#~ "<p>Este módulo es muy parecido al módulo de sincronización, pero en este "
-#~ "caso se pueden sincronizar artículos sueltos.</p>\n"
-#~ "                        <p>Así los periodistas de una publicación podrán "
-#~ "importar cuantos artículos quieran de la publicación principal.</p>\n"
-#~ "                    "
-
-#~ msgid "Have your opinionist publishing on your newspaper."
-#~ msgstr "Permite a articulistas de opinión publicar en tu periódico."
-
-#, fuzzy
-#~ msgid ""
-#~ "<p>Module included in the Basic pack (FREE) of Opennemas.</p>\n"
-#~ "                        <p>It allows all newspapers to have a section "
-#~ "dedicated to opinions organized by author and with author frontpage too.</"
-#~ "p>"
-#~ msgstr ""
-#~ "<p>Le permite al periódico tener una sección dedicada para opiniones "
-#~ "organizadas por autor y portadas de autor.</p>"
-
-#~ msgid ""
-#~ "Create and manage your polls, engage your audience and collect useful "
-#~ "information."
-#~ msgstr ""
-#~ "Crea y gestiona encuestas, atrae a los lectores y aprende más sobre lo "
-#~ "que piensan."
-
-#~ msgid ""
-#~ "<p>Polls questions can be created with single or multiple choice answers "
-#~ "and the results displayed on bar charts, pie charts, etc.</p>\n"
-#~ "                        <p>The most relevant aspect is that they are "
-#~ "compatible and available on any browsers in the world.</p>"
-#~ msgstr ""
-#~ "<p>Multiples opciones son posibles en este módulo, desde encuestas de "
-#~ "tipo barras, de tipo tarta, multiple respuesta, etc.</p>\n"
-#~ "                        <p>Lo más importante es que son visibles en todos "
-#~ "los navegadores del mercado."
-
-#~ msgid "Manage your internal information in a static page."
-#~ msgstr "Gestiona tu información interna con una página estática."
-
-#, fuzzy
-#~ msgid ""
-#~ "<p>Module included in the Basic pack (FREE) of opennemas.</p>\n"
-#~ "                        <p>It allows newspapers to have static pages if "
-#~ "needed for legal information and or \"about us\" information."
-#~ msgstr ""
-#~ "<p>Le permite al periódico tener una sección dedicada para opiniones "
-#~ "organizadas por autor y portadas de autor.</p>"
-
-#~ msgid "Update many frontpages by updating 1 frontpage!"
-#~ msgstr "¡Actualiza más de una portada a la vez!"
-
-#~ msgid ""
-#~ "<p>Do you have more than 1 newspaper and you would like for the \"home\" "
-#~ "pages to be synchronised?</p>\n"
-#~ "                        <p>No problem. By activating this module you will "
-#~ "have all your news synchronised in many frontpages all at once. For "
-#~ "instance if you have many locak newspapers and one main one, you can "
-#~ "update the frontpage of all locals with news of the general newspaper.</"
-#~ "p>\n"
-#~ "                        <p>If you modify a frontpage in the main "
-#~ "newspaper the frontpage of local newspapers will update automatically too."
-#~ "</p>\n"
-#~ "                        <p>The only requirement is that all newspapers "
-#~ "need to belong to the same group, so that the frontpage is stored in the "
-#~ "one place.</p>"
-#~ msgstr ""
-#~ "<p>¿Tienes más de dos periódicos y quieres que los periódicos \"anexos\" "
-#~ "tengan sincronizadas las portadas generales del periódico principal?</p>\n"
-#~ "                        <p>De esta forma podrás tener diarios locales con "
-#~ "información local o diferente del principal pero con toda las noticias "
-#~ "del sitio general.</p>\n"
-#~ "                        <p>Si una portada se modifica en el periódico "
-#~ "principal también se modificará en los diarios \"anexos\".</p>\n"
-#~ "                        <p>Imprescindible para varios periódicos de un "
-#~ "mismo grupo. Así no es necesario mantener la misma portada en varios "
-#~ "sitios.</p>"
-
-#~ msgid ""
-#~ "<p>Would you like for your readers to be able to unlock premium content "
-#~ "for free?</p><p>This is the module you should add to your newspaper!</p>"
-#~ msgstr ""
-#~ "<p>¿Te gustaría que tus lectores pudiesen leer contenido Premium de forma "
-#~ "gratuita, mediante una simple suscripción?</p><p>Este es el módulo que "
-#~ "deberías añadir a tu periódico.</p>"
-
-#~ msgid ""
-#~ "<p>This module enables newspapers to add a customized subscription form "
-#~ "to allow users to unlock premium content.</p>\n"
-#~ "                        <p>The subscription form generates login details "
-#~ "for the user.</p>\n"
-#~ "                        <p>Newspapers will be able to mark content as "
-#~ "\"premium\" and users will need to register in order to access the full "
-#~ "extent of it.</p>\n"
-#~ "                        <p>Note: if the newspaper needs to collect user's "
-#~ "data will have to provide certification of inscription to \"Agencia "
-#~ "Española de Protección de Datos\" or equivalent. Openhost, S.L. is not "
-#~ "responsible of any data saved or required by newspapers."
-#~ msgstr ""
-#~ "<p>Este módulo permite marcar qué contenidos de un periódico son Premium "
-#~ "y, así de esta forma, hacer que sus lectores tengan que realizar una "
-#~ "suscripción mediante un formulario vía web. Una vez suscrito, el usuario "
-#~ "tendrá acceso a leer cualquier contenido marcado como Premium.</p>\n"
-#~ "<p>NOTA: Si un periódico necesita almacenar datos de sus lectores "
-#~ "necesitará entregar la certificación de que está dado de alta en la "
-#~ "\"Agencia Española de Protección de Datos\" o algún otro organismo "
-#~ "equivalente de cada país. Openhost, S.L. no es responsable de cualquier "
-#~ "dato guardado o requerido por los periódicos."
-
-#~ msgid "Make money creating exclusive content only subscribers can access."
-#~ msgstr "Gana dinero mientras te dedicas a lo que amas."
-
-#~ msgid ""
-#~ "<p>The News business is a very challenging and advertising alone often "
-#~ "does not allow to newspapers to keep going. Add paywall to your newspaper "
-#~ "and you will be able to select articles that you want to sell. This way "
-#~ "in order to access this news users will need to register.</p>\n"
-#~ "                        <p>You will be able to set the payment/"
-#~ "subscription the way you want (weekly, monthly, annual, etc.) and also "
-#~ "add currency and % of taxes that the item is subject to.</p>"
-#~ msgstr ""
-#~ "<p>Es la mejor forma de ganar dinero con Opennemas. Selecciona qué "
-#~ "artículos son de pago. De esta forma, las informaciones configuradas \"de "
-#~ "pago\" no podrán ser leídas sin que el usuario no esté registrado.</p>\n"
-#~ "<p>Se puden crear/configurar los tipos de suscripción que se necesiten "
-#~ "(semanal, mensual, anual, etc.), la moneda y el % de tasas/impuestos que "
-#~ "el producto lleve.\n"
-#~ "</p>"
-
-#~ msgid ""
-#~ "Ask all your questions, walk through Opennemas and/or receive personal "
-#~ "training via phone"
-#~ msgstr ""
-#~ "Haz todas tus preguntas, recibe formación acerca de Opennemas via "
-#~ "telefono/hangouts/skype"
-
-#~ msgid ""
-#~ "<p>Do you need 2 hours on hangouts/skype/phone to ask all your questions "
-#~ "or to walk through Opennemas and make sure you know it all?</p>\n"
-#~ "                        <p>This is the Support Offer perfect for you!</"
-#~ "p>\n"
-#~ "                        <p>For a very small fee you will get our expert "
-#~ "team on the line and you will be able to ask all the questions you have "
-#~ "and/or receive personal training.</p>\n"
-#~ "                        <p>Please remember that we guarantee FREE support "
-#~ "via tickets/emails.</p>"
-#~ msgstr ""
-#~ "<p>¿Necesitas atención personalizada de nuestro equipo por teléfono/"
-#~ "hangouts/skype para hacer todas las preguntas posibles y/o para tener una "
-#~ "formación completa y asegurarte de que lo sabes todo de nuestra "
-#~ "plataforma Opennemas?</p>\n"
-#~ "<p>¡Esta es la oferta perfecta para ti!</p>\n"
-#~ "<p>Por un coste muy pequeño tendrás nuestro experto equipo en línea y "
-#~ "podrás hacer todo tipo de preguntas acerca de tu proyecto y/o recibir "
-#~ "formación individual.</p>\n"
-#~ "<p>Por favor recuerda que garantizamos soporte GRATUITO vía incidencias y "
-#~ "e-mails.</p>"
-
-#~ msgid ""
-#~ "This support plan is thought for changes and creation of new widgets."
-#~ msgstr ""
-#~ "Este plan de soporte está pensada para cambios y creación de nuevos "
-#~ "widgets."
-
-#~ msgid ""
-#~ "<p>10 hours (2h day/1week).</p>\n"
-#~ "                        <p>Examples of usage of support:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Creation and change of widgets</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Support provided by emails/tickets</p>"
-#~ msgstr ""
-#~ "<p>10 horas (2h día/1 semana).</p>\n"
-#~ "                        <p>Ejemplos de uso de este soporte:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Creación y cambios en widgets</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Soporte proporcionado por correo/tickets</p>"
-
-#~ msgid ""
-#~ "This support plan is ideal for updating your theme if you have had it for "
-#~ "a long time."
-#~ msgstr ""
-#~ "Este plan de soporte es perfeto para actualizar tu tema si lo has tenido "
-#~ "durante mucho tiempo."
-
-#~ msgid ""
-#~ "<p>40 hours (2h per day during 1 month)</p>\n"
-#~ "                        <p>Examples of usage of support:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Standard changes of HTML/CSS in "
-#~ "templates</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Support provided by emails/tickets and "
-#~ "hangouts/skype</p>"
-#~ msgstr ""
-#~ "<p>40 horas (2h día durante 1 mes).</p>\n"
-#~ "                        <p>Ejemplos de uso de este soporte:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Cambios estándar de HTML/CSS en "
-#~ "plantillas</li>\n"
-#~ "                        </ul>\n"
-#~ "<p>Soporte proporcionado por correo/tickets y Google Hangouts</p>"
-
-#~ msgid ""
-#~ "This support plan is ideal for updating your theme and at the same time "
-#~ "redefining spaces."
-#~ msgstr ""
-#~ "Este plan de soporte es perfecto para actualizar tu tema y al mismo "
-#~ "tiempo redefinir espacios."
-
-#~ msgid ""
-#~ "<p>60 hours (3h day/1month)</p>\n"
-#~ "                        <p>Examples of usage of support:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Standard changes of HTML/CSS in "
-#~ "templates</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Support provided by emails/tickets and "
-#~ "hangouts/skype</p>"
-#~ msgstr ""
-#~ "<p>60 horas (3h día durante 1 mes).</p>\n"
-#~ "                        <p>Ejemplos de uso de este soporte:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Cambios estándar de HTML/CSS en "
-#~ "plantillas</li>\n"
-#~ "                        </ul>\n"
-#~ "<p>Soporte proporcionado por correo/tickets y Google Hangouts</p>"
-
-#~ msgid ""
-#~ "<p>80 hours (4h day/1month)</p>\n"
-#~ "                        <p>Examples of usage of support:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Examples of usage of support:\n"
-#~ "                            <li>Standard changes of HTML/CSS in "
-#~ "templates</li>\n"
-#~ "                            <li>Change Requests of the disposition of "
-#~ "frontpage templates</li>\n"
-#~ "                            <li>Category Titles, New structure of inner "
-#~ "articles.</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Support provided by emails/tickets and "
-#~ "hangouts/skype</p>"
-#~ msgstr ""
-#~ "<p>80 horas (4h día durante 1 mes)</p>\n"
-#~ "                        <p>Ejemplos de uso de este soporte:</p>\n"
-#~ "                        <ul>                            \n"
-#~ "                            <li>Cambios HTML/CSS estándar en plantillas</"
-#~ "li>\n"
-#~ "                            <li>Solicitud de cambio de disposiciones en "
-#~ "plantillas de portadas</li>\n"
-#~ "                            <li>Títulos de categoría, nueva estructura en "
-#~ "artículos interiores.</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Soporte proporcionado por emails/tickets y "
-#~ "Google Hangouts/Skype</p>"
-
-#~ msgid ""
-#~ "This support plan fits the purpose of a restyling of newspapers by "
-#~ "redefining spaces, disegn and style."
-#~ msgstr ""
-#~ "Este plan de soporte encaja en los proyectos de rediseño de periódicos "
-#~ "redefiniendo espacios, diseño y estilo."
-
-#~ msgid ""
-#~ "<p>160 hours (8h day/1month)</p>\n"
-#~ "                        <p>This support is all about customization and "
-#~ "having one of our resources dedicated to a newsaper full time.</p>\n"
-#~ "                        <p>Examples of usage of support:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Creation and change requests of widgets\n"
-#~ "                            <li>Standard changes of HTML/CSS in "
-#~ "templates</li>\n"
-#~ "                            <li>Change Requests of the disposition of "
-#~ "frontpage templates</li>\n"
-#~ "                            <li>Category Titles</li>\n"
-#~ "                            <li>New structure of inner articles.</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Support provided by emails/tickets, hangouts/"
-#~ "skype and phone</p>"
-#~ msgstr ""
-#~ "<p>160 horas (8h día durante 1 mes)</p>\n"
-#~ "                        <p>Ejemplos de uso de este soporte:</p>\n"
-#~ "                        <ul>                            \n"
-#~ "                            <li>Creación y solicitud de cambio en "
-#~ "widgets</li>\n"
-#~ "                            <li>Cambios HTML/CSS estándar en plantillas</"
-#~ "li>\n"
-#~ "                            <li>Solicitud de cambio de disposiciones en "
-#~ "plantillas de portadas</li>\n"
-#~ "                            <li>Títulos de categoría</li>\n"
-#~ "                            <li>nueva estructura en artículos interiores."
-#~ "</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Soporte proporcionado por emails/tickets, "
-#~ "Google Hangouts/Skype y teléfono</p>"
-
-#~ msgid ""
-#~ "This Support is designed for all newspapers that need may need help "
-#~ "including during the weekend."
-#~ msgstr ""
-#~ "Este plan de soporte está diseñado para todos los periódicos que "
-#~ "requieren ayuda durante fines de semana."
-
-#~ msgid ""
-#~ "<p>8h day/7 days/ 1month</p>\n"
-#~ "                        <p>Examples of usage of support:</p>\n"
-#~ "                        <ul>\n"
-#~ "                            <li>Creation and change requests of widgets</"
-#~ "li>\n"
-#~ "                            <li>Standard changes of HTML/CSS in "
-#~ "templates</li>\n"
-#~ "                            <li>Change Requests of the disposition of "
-#~ "frontpage templates</li>\n"
-#~ "                            <li>Category Titles</li>\n"
-#~ "                            <li>New structure of inner articles.</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Support provided by emails/tickets, hangouts/"
-#~ "skype and phone</p>"
-#~ msgstr ""
-#~ "<p>8 horas los 7 días de la semana durante 1 mes</p>\n"
-#~ "                        <p>Ejemplos de uso de este soporte:</p>\n"
-#~ "                        <ul>                            \n"
-#~ "                            <li>Creación y solicitud de cambio en "
-#~ "widgets</li>\n"
-#~ "                            <li>Cambios HTML/CSS estándar en plantillas</"
-#~ "li>\n"
-#~ "                            <li>Solicitud de cambio de disposiciones en "
-#~ "plantillas de portadas</li>\n"
-#~ "                            <li>Títulos de categoría</li>\n"
-#~ "                            <li>nueva estructura en artículos interiores."
-#~ "</li>\n"
-#~ "                        </ul>\n"
-#~ "                        <p>Soporte proporcionado por emails/tickets, "
-#~ "Google Hangouts/Skype y teléfono</p>"
-
-#~ msgid "Style"
-#~ msgstr "Estilo"
-
-#~ msgid "Terms of create a new domain"
-#~ msgstr "Términos para la creación de un nuevo dominio"
-
-#~ msgid "Terms of redirection"
-#~ msgstr "Términos de redirección"
-
-#~ msgid ""
-#~ "Payment: the registration and redirection service requires payment in "
-#~ "advance. This amount cannot be divided into several payments."
-#~ msgstr ""
-#~ "Pago: el servicio de registro y redirección requiere un pago por "
-#~ "adelantado. Esta cantidad no puede dividir en varios pagos."
-
-#~ msgid ""
-#~ "Identity: when buying a new domain, the identity of the domains would be "
-#~ "the one of your entity. The administrative identity, technical contact, "
-#~ "billing contact name would be Openhost, SL"
-#~ msgstr ""
-#~ "Identidad: ao comprar un nuevo dominio, la identidad de los dominios "
-#~ "debería ser la de tu entidad. La identidad administrativa, contacto "
-#~ "técnico y nome de contacto de facturación deberá ser la de Openhost, SL"
-
-#~ msgid ""
-#~ "Availability: please inform us of the name of the domain that you wish to "
-#~ "register and we will let you know if it is available. May be one or more "
-#~ "domains."
-#~ msgstr ""
-#~ "Disponibilidad: informanos del nombre del dominio que quieres registrar y "
-#~ "nosotro te diremos la disponibilidad. Puede ser de un dominio o varios."
-
-#~ msgid ""
-#~ "The service of registering and redirecting the domain is valid for one "
-#~ "year, so you will be notified prior to the renewal date."
-#~ msgstr ""
-#~ "El servicio de registro y redirección de dominio es válido durante un "
-#~ "año, de esta forma se te notificará antes de la fecha de renovación."
-
-#~ msgid ""
-#~ "Following the purchase of the domain, if the user wants to transfer it to "
-#~ "another provider, which may only be transferred to another from the 6th "
-#~ "month after the date of registration of the domain."
-#~ msgstr ""
-#~ "Despues de la compra del dominio, si el usuario quiere transferirlo a "
-#~ "otro proveedor podrá hacerlo desde el 6º mes despues de la fecha de "
-#~ "registro del dominio."
-
-#~ msgid ""
-#~ "Payment: the redirection service requires payment in advance. The amount "
-#~ "cannot be divided into several payments. "
-#~ msgstr ""
-#~ "Pago: el servicio de redirección requiere el pago por adelantado. La "
-#~ "cantidad no se podrá dividir en varios pagos."
-
-#~ msgid ""
-#~ "Identity: the identity of the domains would be the customer's identity "
-#~ "because the domain does not undergo any change. "
-#~ msgstr ""
-#~ "Identidad: la identidad de los dominios será la identidad del cliente ya "
-#~ "que el dominio no supone ningún cargo."
-
-#~ msgid ""
-#~ "The service domain redirection is valid for one year, so you will be "
-#~ "notified prior to the renewal date. "
-#~ msgstr ""
-#~ "El servicio de redirección es válido durante un año, de esta forma se te "
-#~ "notificará antes de la fecha de renovación."
-
-#~ msgid ""
-#~ "The customer must make changes to the DNS zone for your domain "
-#~ "registration www. This change has nothing to do with the Opennemas "
-#~ "platform or company Openhost, SL (company that maintains the service). "
-#~ msgstr ""
-#~ "El cliente debe hacer los cambios en la zona DNS www para su registro de "
-#~ "dominio. Este cambio no involucra la plataforma Opennemas o la compañía "
-#~ "Openhost, SL (empresa que mantiene el servicio)."
-
-#~ msgid ""
-#~ "If redirection does not work through no fault of the platform, ie by "
-#~ "malfunction of the DNS servers the client, Openhost, SL area will have "
-#~ "nothing to do with the damage caused to the hours of service failure. "
-#~ msgstr ""
-#~ "Si la redirección no funciona por causas ajenas a la plataforma, por "
-#~ "ejemplo un mal funcionamiento de los servidores DNS del cliente, "
-#~ "Openhost, SL no tendrá nada que ver con el daño causado a las horas de "
-#~ "fallo en el servicio ."
-
-#~ msgid ""
-#~ "In the next 24 hours you will receive an email with payment instructions "
-#~ "and the invoice."
-#~ msgstr ""
-#~ "En las próximas 24 horas recibirás un correo con las instrucciones de "
-#~ "pago y la factura."
-
-#, fuzzy
-#~ msgid ""
-#~ "Mark this if you want to show a message to your users that your site is "
-#~ "using ab blockers."
-#~ msgstr ""
-#~ "Marca esta casilla si quieres mostrarle un mensaje a tus usuarios que les "
-#~ "informe que tu sitio web está usando cookies."
-
-#~ msgid "Add billing information"
-#~ msgstr "Añadir información de facturación"
-
-#~ msgid "Last invoice date"
-#~ msgstr "Fecha de la última factura"
-
-#~ msgid "Search by name, domain or contact"
-#~ msgstr "Filtrar por nome, dominio o contacto"
-
-#~ msgid "There is no available instances yet"
-#~ msgstr "No hay ninguna instancia todavía"
-
-#~ msgid "of"
-#~ msgstr "de"
-
-#~ msgid ""
-#~ "There is no users created yet or <br/>your search don't match your "
-#~ "criteria"
-#~ msgstr ""
-#~ "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no "
-#~ "coincide con ningún usuario."
-
-#~ msgid ""
-#~ "There is no reports created yet or <br/>your search don't match your "
-#~ "criteria"
-#~ msgstr ""
-#~ "No hay ningún infome creado aún <br/>o tu criterio de búsqueda no "
-#~ "coincide con ningún informe."
-
-#~ msgid "Users groups"
-#~ msgstr "Grupos de usuario"
-
-#~ msgid ""
-#~ "There is no available groups yet or <br/>your search don't match your "
-#~ "criteria"
-#~ msgstr ""
-#~ "No hay ningún grupo disponible aún <br/>o tu criterio de búsqueda no "
-#~ "coincide con ningún grupo."
-
-#~ msgid "Usage of your newspaper"
-#~ msgstr "Uso de tu periódico"
-
-#~ msgid "Success"
-#~ msgstr "Éxito"
-
-#~ msgid "Warning"
-#~ msgstr "Aviso"
-
-#~ msgid "Maintenance mode."
-#~ msgstr "Modo mantenimiento."
-
-#~ msgid "This user is a master"
-#~ msgstr "Este usuario es master"
-
-#~ msgid ""
-#~ "Please click in the \"Edit uploaded\" button from above to edit latest "
-#~ "upload photo's data"
-#~ msgstr ""
-#~ "Haz clic en el botón «Editar subidas» de arriba para editar los datos de "
-#~ "las últimas fotos subidas"
-
-#~ msgid ""
-#~ "Drop files anywhere here to upload or click on the \"Select Files\" "
-#~ "button above."
-#~ msgstr ""
-#~ "Suelta archivos aquí para subirlos ou pulse en el botón «Añadir archivos»."
-
-#~ msgid "User notes"
-#~ msgstr "Notas de usuario"
-
-#~ msgid ""
-#~ "You can <strong>drag &amp; drop</strong> files from your desktop on this "
-#~ "webpage with Google Chrome, Mozilla Firefox and Apple Safari."
-#~ msgstr ""
-#~ "Puedes <strong>arrastrar y soltar</strong> archivos desde tu escritorio a "
-#~ "esta página web sólo si usas Google Chrome, Mozilla Firefox o Apple "
-#~ "Safari."
-
-#~ msgid ""
-#~ "If you are using Internet Explorer click in \"Add Files...\" buton and "
-#~ "select the files you want to upload."
-#~ msgstr ""
-#~ "Si usas Internet Explorer haz clic sobre el botón «Añadir archivos...» y "
-#~ "selecciona los archivos que quieres subir."
-
-#~ msgid "The maximum file size for uploads is <strong>%1 MB</strong>."
-#~ msgstr ""
-#~ "El tamaño de archivo máximo permitido para subir es <strong>%1 MB</"
-#~ "strong>."
-
-#~ msgid "Only image files (<strong>JPG, GIF, PNG</strong>) are allowed."
-#~ msgstr ""
-#~ "Sólo se permite subir ficheros de imagen (<strong>JPG, GIF, PNG</strong>)."
-
-#~ msgid "File is too big"
-#~ msgstr "El archivo es muy grande"
-
-#~ msgid "File is too small"
-#~ msgstr "El archivo es muy pequeño"
-
-#~ msgid "Max number of files exceeded"
-#~ msgstr "Número de archivos máximo excedido"
-
-#~ msgid "Uploaded bytes exceed file size"
-#~ msgstr "Los bytes subidos exceden el tamaño de archivo"
-
-#~ msgid "Empty file upload result"
-#~ msgstr "Resultado de subida de archivo vacío"
-
-#~ msgid "Iniciar"
-#~ msgstr "Iniciar"
-
-#~ msgid "Help &amp; FAQ"
-#~ msgstr "Ayuda y FAQ"
-
-#~ msgid "Privacy"
-#~ msgstr "Privacidad"
-
-#~ msgid "Article - inner"
-#~ msgstr "Artículo - interior"
-
-#~ msgid "Mobile - frontpages"
-#~ msgstr "Móbil - portadas"
-
-#~ msgid "Opinion - Authors"
-#~ msgstr "Opinión - Autores"
-
-#~ msgid "Opinion - inner"
-#~ msgstr "Opinión - interior"
-
-#~ msgid "Video - frontpage"
-#~ msgstr "Vídeo - portadas"
-
-#~ msgid "Video - inner"
-#~ msgstr "Vídeo - interior"
-
-#~ msgid "Album - frontpage"
-#~ msgstr "Álbum - portadas"
-
-#~ msgid "Album - inner"
-#~ msgstr "Álbum - interior"
-
-#~ msgid "Poll - frontpage"
-#~ msgstr "Encuestas - portadas"
-
-#~ msgid "Poll - inner"
-#~ msgstr "Encuestas - interior"
-
-#~ msgid "SQL errors registered in database cleaned sucessfully."
-#~ msgstr ""
-#~ "Los errores de SQL registrados en la base de datos fueron limpiados con "
-#~ "éxito."
-
-#~ msgid "SQL error log"
-#~ msgstr "Registro de errores SQL"
-
-#~ msgid "Unable to delete the item \"%s\""
-#~ msgstr "No se pudo eliminar el elemento «%s»"
-
-#~ msgid "No items selected"
-#~ msgstr "No se seleccionaron elementos"
-
-#~ msgid "Unknown cache file"
-#~ msgstr "Fichero de caché desconocido"
-
-#~ msgid "Article inner"
-#~ msgstr "Articulo interior"
-
-#~ msgid "Mobile article inner"
-#~ msgstr "Artículo interior en móvil"
-
-#~ msgid "Mobile frontpage"
-#~ msgstr "Móvil - portadas"
-
-#~ msgid "Mobile opinion inner"
-#~ msgstr "Móvil: Opinión interior"
-
-#~ msgid "Mobile opinion frontpage"
-#~ msgstr "Móvil: portada de opinión"
-
-#~ msgid "Video inner"
-#~ msgstr "Vídeo: interior"
-
-#~ msgid "Album frontpage"
-#~ msgstr "Álbum: portada"
-
-#~ msgid "Album inner"
-#~ msgstr "Álbum: interior"
-
-#~ msgid "Page %s"
-#~ msgstr "Página %s"
-
-#~ msgid "Opinion inner"
-#~ msgstr "Opinión: interior"
-
-#~ msgid "Blog inner"
-#~ msgstr "Blog interior"
-
-#~ msgid "RSS Author"
-#~ msgstr "RSS de autor"
-
-#~ msgid "Poll inner"
-#~ msgstr "Encuestas: interior"
-
-#~ msgid "Poll frontpage"
-#~ msgstr "Encuestas: portadas"
-
-#~ msgid "Sitemap: "
-#~ msgstr "Mapa do sitio: "
-
-#~ msgid "Add Video and Image Galleries to your content. "
-#~ msgstr "Añade vídeo y galerías de imágenes a tu contenido."
-
-#~ msgid ""
-#~ "<p>This module will allow you to create Photo Galleries, add video from "
-#~ "YouTube, Vimeo, Dailymotion and from other 10 sources more.</p><p>And the "
-#~ "most interesting fact is that the video manager is the same as youtube "
-#~ "one, perfect consistency and performance.</p>"
-#~ msgstr ""
-#~ "<p>Gracias a este módulo el usuario podrá crear galerias de fotos, "
-#~ "enlazar videos de los sitios más importantes de internet (youtube, vimeo, "
-#~ "dailymotion y de otras 10 fuentes más).</p>                    <p>Lo "
-#~ "interesante del gestor de videos, es que la apariencia al usuario es "
-#~ "igual que la de youtube.</p>"
-
-#~ msgid "Add Video and Image Galleries to your content."
-#~ msgstr "Añade vídeo y galerías de imágenes a tu contenido."
-
-#~ msgid ""
-#~ "<p>This module will allow you to create Photo Galleries, add video from "
-#~ "YouTube, Vimeo, Dailymotion and from other 10 sources more.</p>\n"
-#~ "                    <p>Our video manager is the same as youtube one, "
-#~ "perfect consistency and performance.</p>"
-#~ msgstr ""
-#~ "<p>Gracias a este módulo el usuario podrá crear galerias de fotos, "
-#~ "enlazar videos de los sitios más importantes de internet (youtube, vimeo, "
-#~ "dailymotion y de otras 10 fuentes más)</p>                    <p>Lo "
-#~ "interesante del gestor de videos, es que la apariencia al usuario es "
-#~ "igual que la de youtube.</p>"
-
-#~ msgid "Support 1"
-#~ msgstr "Soporte 1"
-
-#~ msgid "No cache files were generated for now."
-#~ msgstr "No se generó ningún fichero de caché por ahora."
-
-#~ msgid ""
-#~ "Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</"
-#~ "a>  and come back here"
-#~ msgstr ""
-#~ "Visite alguna de las páginas en \n"
-#~ "<a href=\"%1\" title=\"Visit your site\">su sitio</a> y vuelve aquí"
-
-#~ msgid "Resource"
-#~ msgstr "Recurso"
-
-#~ msgid "Valid until"
-#~ msgstr "Válido hasta"
-
-#~ msgid "View page"
-#~ msgstr "Ver página"
-
-#~ msgid "Delete cache file"
-#~ msgstr "Eliminar archivo de caché"
-
-#~ msgid "Delete cache elements"
-#~ msgstr "Eliminar elemento de caché"
-
-#~ msgid ""
-#~ "Are you sure you want to delete [% template.selected.length %] cache "
-#~ "elements?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres eliminar [% semplate.selected.length %] "
-#~ "elemento(s) de caché?"
-
-#~ msgid "Delete cache element"
-#~ msgstr "Eliminar elemento de caché"
-
-#~ msgid ""
-#~ "Are you sure you want to delete the cache element \"[% template.content."
-#~ "title %]\"."
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres eliminar el elemento de caché \"[% template."
-#~ "content.title %]\"?"
-
-#~ msgid "Refresh the list for getting newest error list"
-#~ msgstr "Actualiza la lista para obtener la lista de errores más actual."
-
-#~ msgid "Refresh list"
-#~ msgstr "Recargar listado"
-
-#~ msgid "Clean"
-#~ msgstr "Limpiar"
-
-#~ msgid "Error explanation"
-#~ msgstr "Explicación del error"
-
-#~ msgid "Execution time"
-#~ msgstr "Tiempo de ejecución"
-
-#~ msgid "There is no SQL errors registered in database."
-#~ msgstr "No hay ningún error SQL registrado en la base de datos."
-
-#~ msgid "Come back later."
-#~ msgstr "Vuelva más tarde."
-
-#~ msgid "Last access"
-#~ msgstr "Último acceso"
-
-#~ msgid "pending activation"
-#~ msgstr "activación pendiente"
-
-#~ msgid "pending deactivation"
-#~ msgstr "desactivación pendiente"
-
-#~ msgid "Dark Gray"
-#~ msgstr "Gris oscuro"
-
-#~ msgid "Black"
-#~ msgstr "Negro"
-
-#~ msgid "Bold red"
-#~ msgstr "Rojo oscuro"
-
-#~ msgid "Green"
-#~ msgstr "Verde"
-
-#~ msgid "Blue"
-#~ msgstr "Azul"
-
-#~ msgid "Turquoise"
-#~ msgstr "Turquesa"
-
-#~ msgid "Light green"
-#~ msgstr "Verde claro"
-
-#~ msgid "Bold green"
-#~ msgstr "Verde oscuro"
-
-#~ msgid "Yellow"
-#~ msgstr "Amarillo"
-
-#~ msgid "Orange"
-#~ msgstr "Naranja"
-
-#~ msgid "Red"
-#~ msgstr "Rojo"
-
-#~ msgid "Purple"
-#~ msgstr "Violeta"
-
-#~ msgid "White"
-#~ msgstr "Blanco"
-
-#~ msgid "Light Blue"
-#~ msgstr "Azul claro"
-
-#~ msgid "Light Red"
-#~ msgstr "Rojo claro"
-
-#~ msgid "Light Orange"
-#~ msgstr "Naranja claro"
-
-#~ msgid "Light purple"
-#~ msgstr "Violeta claro"
-
-#~ msgid "Light yellow"
-#~ msgstr "Amarillo claro"
-
-#~ msgid "Bold blue"
-#~ msgstr "Azul oscuro"
-
-#~ msgid "Gray"
-#~ msgstr "Gris"
-
-#~ msgid ""
-#~ "Note that <a href=\"http://help.opennemas.com/knowledgebase/"
-#~ "articles/666994-pricing-opennemas-page-views-and-storage-space\" target="
-#~ "\"_blank\" title=\"Get more info about page views pricing\">the cost %s € "
-#~ "pv/month</a>."
-#~ msgstr ""
-#~ "Nota que <a href=\"http://help.opennemas.com/knowledgebase/"
-#~ "articles/227476-precios-opennemas-page-views-y-espacio-ocupado\" target="
-#~ "\"_blank\" title=\"Obtener más información sobre los precios de páginas "
-#~ "vistas\">el coste es de %s € pv/month</a>."
-
-#~ msgid ""
-#~ "<li>You have %d activated users. Note that the cost is %s €/month</li>"
-#~ msgstr ""
-#~ "<li>Tienes %d usuarios activos. Nota que el coste es de %s €/mes</li>"
-
-#~ msgid "Note that the cost %s € pv/month."
-#~ msgstr "Nota que el coste es de %s € pv/mes."
-
-#~ msgid "Note that the cost %s € Mb/month."
-#~ msgstr "Nota que el coste es de %d € Mb/mes."
-
-#~ msgid "iadbox is a way to serve ads when users want to receive them."
-#~ msgstr ""
-#~ "iadox es la manera para ofrecer publicidad cuando los usuarios quieren "
-#~ "recibirla."
-
-#~ msgid "<li>Your storage size is %d MB"
-#~ msgstr "<li>Usas %d MB de almacenamiento"
-
-#~ msgid "Gain money by inserting ads in your site"
-#~ msgstr "Gana dinero insertando publicidad en tu sitio"
-
-#~ msgid "Module for managing categories"
-#~ msgstr "Módulo para gestionar categorías"
-
-#~ msgid "<p>Module included in the Basic pack (FREE) of opennemas.</p>"
-#~ msgstr "<p>Módulo incluído en el Pack Básico (Gratuito) de Opennemas.</p>"
-
-#~ msgid ""
-#~ "It allows users to publish comments to any content generated by "
-#~ "newspaper. It can be through comment form provided by us or through "
-#~ "integration with facebook or disqus comment system."
-#~ msgstr ""
-#~ "Le permite a tus usuarios publicar comentarios en cualquier contenido "
-#~ "generado por su periódico. Pueden realizarse comentarios usando nuestro "
-#~ "formulario o mediante la integración de sistemas de comentarios como "
-#~ "Facebook o Disqus."
-
-#~ msgid "<p>Management Personal Frontpages/Frontpages Organization</p>"
-#~ msgstr "<p>Gestión MANUAL de maquetero/Disposición de portadas</p>"
-
-#~ msgid ""
-#~ "<p>Let us know if you want to try it on your newspaper, we are alreday "
-#~ "using it on ours!</p>"
-#~ msgstr ""
-#~ "<p>Te invitamos a probar iadbox en tu periódico ¡nosotros ya lo usamos en "
-#~ "los nuestros!</p>"
-
-#~ msgid ""
-#~ "<p>We will set it up for you for FREE and let iadbox team know so that "
-#~ "you receive your reports and revenue.</p>"
-#~ msgstr ""
-#~ "<p>Te activaremos iadbox GRATUITAMENTE y informaremos al equipo de iadbox "
-#~ "para que puedan llegarte tus informes y ingresos.</p>"
-
-#~ msgid ""
-#~ "<p>iadbox is an intelligent commercial messaging for the smartphone "
-#~ "generation.</p>"
-#~ msgstr ""
-#~ "<p>iadbox es un sistema de mensajería inteligente pensada para la "
-#~ "generación de los smartphones.</p>"
-
-#~ msgid ""
-#~ "<p>It is a mobile and desktop marketing platform, with a user-controlled "
-#~ "inbox for interaction with audiences.</p>"
-#~ msgstr ""
-#~ "<p>Es una plataforma de marketing para móviles y ordenadores, con una "
-#~ "bandeja de entrada para la interacción con las audiencias.</p>"
-
-#~ msgid ""
-#~ "<p><strong>More info</strong>: <a target=\"_blank\" href=\"http://www."
-#~ "iadbox.com\">www.iadbox.com</a></p>"
-#~ msgstr ""
-#~ "<p><strong>Más información</strong>: <a target=\"_blank\" href=\"http://"
-#~ "www.iadbox.com\">www.iadbox.com</a>"
-
-#~ msgid ""
-#~ "<p><a class=\"btn btn-success\" target=\"_blank\" href=\"mailto:"
-#~ "sales@openhost.es\">Ask for it</a></p>"
-#~ msgstr ""
-#~ "<p><a class=\"btn btn-success\" target=\"_blank\" href=\"mailto:"
-#~ "sales@openhost.es\">Pídelo ya</a></p>"
-
-#~ msgid "With this module users can access all contents by date"
-#~ msgstr "Con este módulo los usuarios pueden acceder a contenidos por fechas"
-
-#~ msgid ""
-#~ "<p>Keeping your digital news up to date with agencies is already a "
-#~ "reality!</p>\n"
-#~ "                        <p><a href=\"http://www.efe.com/\" target=\"_blank"
-#~ "\">Agencia EFE</a>,\n"
-#~ "                        <a href=\"http://www.europapress.es/\" target="
-#~ "\"_blank\">agencia Europa press</a>,\n"
-#~ "                        <a href=\"http://www.reuters.com/\" target="
-#~ "\"_blank\">Reuters</a>, etc Every and each of this\n"
-#~ "                        channels will be available for opennemas "
-#~ "newspapers. With just few clicks the administrator\n"
-#~ "                        will be able to add any news from agencies in the "
-#~ "frontpage of the newspaper together with\n"
-#~ "                        any image or media attached.</p>"
-#~ msgstr ""
-#~ "<p>Mantener tu publicación digital al día con las agencias ya es una "
-#~ "realidad gracias a este módulo!</p>\n"
-#~ "                        <p><a href=\"http://www.efe.com/\" target=\"_blank"
-#~ "\">Agencia EFE</a>,\n"
-#~ "                        <a href=\"http://www.europapress.es/\" target="
-#~ "\"_blank\">agencia Europa press</a>,\n"
-#~ "                        <a href=\"http://www.reuters.com/\" target="
-#~ "\"_blank\">Reuters</a>, etc Cualquiera de estos canales estarán "
-#~ "disponibles para los periódicos Opennemas. Con unos cuantos clics el "
-#~ "usuario podrá insertar cualquier noticia de estas agencias en la portada "
-#~ "de su diario con la foto, video o elemento adjunto.</p>\n"
-#~ "<small>Nota: No se incluye el alta de las agencias. Eso es gestión del "
-#~ "cliente.</small>"
-
-#~ msgid ""
-#~ "Allows newspapers to have static pages if needed for legal information "
-#~ "and or \"about us\" information."
-#~ msgstr ""
-#~ "Permite incluír páginas estáticas en tu periódico. Normalmente se usan "
-#~ "para información legal y páginas \"Sobre nosotros\"."
-
-#~ msgid ""
-#~ "PayWall is a way to make money on your website's content by user "
-#~ "subscriptions."
-#~ msgstr ""
-#~ "El Paywall es una forma de ganar dinero con el contenido de tu sitio web "
-#~ "mediante subscripciones de usuarios."
-
-#~ msgid ""
-#~ "<div><p>Unable to find any video matching your search criteria.</p></div>"
-#~ msgstr ""
-#~ "<div><p>No se pudo encontrar ningún video que coincida con tu búsqueda</"
-#~ "p></div>"
-
-#~ msgid "Get next page"
-#~ msgstr "Ir a la página siguiente"
-
-#~ msgid "Next »"
-#~ msgstr "Siguiente »"
-
-#~ msgid "Get previous page"
-#~ msgstr "Ir a la página anterior"
-
-#~ msgid "« Previous"
-#~ msgstr "« Anterior"
-
-#~ msgid "No notifications for now"
-#~ msgstr "No hay notificaciones por ahora"
-
-#~ msgid "Delete polls"
-#~ msgstr "Eliminar encuestas"
-
-#~ msgid "Delete poll"
-#~ msgstr "Eliminar encuesta"
-
-#~ msgid "Are you sure you want to delete <span>%num%</span> polls?"
-#~ msgstr "¿Estás seguro de que quieres eliminar <span>%num%</span> encuestas?"
-
-#~ msgid "Delete video"
-#~ msgstr "Eliminar vídeo"
-
-#~ msgid "Are you sure you want to delete <span>%num%</span> videos?"
-#~ msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> vídeos?"
-
-#~ msgid "No available videos for your search criteria"
-#~ msgstr "No hay ningún vídeo disponible bajo tu criterio de búsqueda"
-
-#~ msgid "Unable to find any module that matches your search."
-#~ msgstr "No se pudo encontrar ningún módulo que coincida con tu búsqueda."
-
-#~ msgid "Delete opinions"
-#~ msgstr "Eliminar opiniones"
-
-#~ msgid "Standard Template"
-#~ msgstr "Plantilla estándar"
-
-#~ msgid ""
-#~ "Standard newspaper web site design with prebuild widgets developed by "
-#~ "Opennemas team. No customization available"
-#~ msgstr ""
-#~ "Plantilla profesional para periódicos con widgets estándar ya "
-#~ "desarrollados al que no se pueden aplicar cambios."
-
-#~ msgid "This is a notification for a success"
-#~ msgstr "This is a notification for a success"
-
-#~ msgid "This notification is a warning"
-#~ msgstr "This notification is a warning"
-
-#~ msgid "Getting help"
-#~ msgstr "Obtener ayuda"
-
-#~ msgid "Social Network"
-#~ msgstr "Redes sociales"
-
-#~ msgid "Here you can see a list of your activated modules"
-#~ msgstr "Aquí puedes ver una lista de los módulos que tiene activados"
-
-#~ msgid "Cart review"
-#~ msgstr "Revisión del carro"
-
-#~ msgid "To confirm your purchase press the button below."
-#~ msgstr "Para confirmar tu compra pulsa el botón de debajo"
-
-#~ msgid ""
-#~ "Our sales department will receive an email with the new features you want "
-#~ "to include in your newspaper."
-#~ msgstr ""
-#~ "Nuestro departamento de ventas recibirá un correo electrónico con las "
-#~ "funcionalidades que deseas incluír en tu periódico."
-
-#~ msgid ""
-#~ "You will receive an email with the list of features you are purchasing."
-#~ msgstr ""
-#~ "Receibirás un correo electrónico con la lista de características que "
-#~ "estás comprando."
-
-#~ msgid "Nice"
-#~ msgstr "Genial"
-
-#~ msgid ""
-#~ "Thank you! We have received your request and will get back to you as soon "
-#~ "as possible. You will receive a confirmation e-mail too."
-#~ msgstr ""
-#~ "¡Gracias! Acabamos de recibir tu petición y nos pondremos en contacto "
-#~ "contigo lo antes posible. Recibirás una confirmación por email en unos "
-#~ "minutos."
-
-#~ msgid "Continue shopping"
-#~ msgstr "Continar comprando"
-
-#~ msgid "Development plan"
-#~ msgstr "Plan de desarrollo"
-
-#~ msgid "%s is now on-line"
-#~ msgstr "%s está ahora conectado"
-
-#~ msgid "WELCOME TO OPENNEMAS"
-#~ msgstr "BIENVENIDO A OPENNEMAS"
-
-#, fuzzy
-#~ msgid "Editar"
-#~ msgstr "Editar"
-
-#~ msgid "Unable to find an element with the id \"%d\""
-#~ msgstr "No se pudo encontrar un elemento con el identificador «%d»"
-
-#~ msgid ""
-#~ "This content was imported before. You may cause a content duplication "
-#~ "while importing it."
-#~ msgstr ""
-#~ "Este contenido ya se ha importado. Si lo importa puede causar un "
-#~ "duplicado de contenidos."
-
-#~ msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
-#~ msgstr "Si estás seguro <a href=\"%s\">intenta desbloquearlo</a>"
-
-#~ msgid "Files for \"%s\" cleaned."
-#~ msgstr "Archivos de «%s» limpiados."
-
-#~ msgid "Seems that the server configuration for %s is not correct."
-#~ msgstr "Parece que la configuración del servidor para %s no es correcta."
-
-#~ msgid "Downloaded %d new articles and deleted %d old ones from \"%s\"."
-#~ msgstr ""
-#~ "Se han descargado %d nuevos artículos y se han eliminado %d obsoletos "
-#~ "desde \"%s\"."
-
-#~ msgid "Removes the synchronized files for this source"
-#~ msgstr "Elimina los archivos sincronizados para este origen"
-
-#~ msgid "Activate server"
-#~ msgstr "Activar servidor"
-
-#~ msgid "Sync with server"
-#~ msgstr "Sincronizar con servidor"
-
-#~ msgid "Search by title or content"
-#~ msgstr "Buscar por título o contenido"
-
-#~ msgid "With image"
-#~ msgstr "Con imagen"
-
-#~ msgid "This new has attached images"
-#~ msgstr "Esta noticia tiene imagenes asociadas"
-
-#~ msgid "With video"
-#~ msgstr "Con vídeo"
-
-#~ msgid ""
-#~ "Please do not hesitate to share feedback, questions or doubts with us via "
-#~ "email at %1 or via our <strong>ticketing system</strong> %2 (also "
-#~ "available from Control Panel on the top right)"
-#~ msgstr ""
-#~ "Por favor no dudes en ponerte en contacto con nosotros si tienes "
-#~ "cualquier duda o pregunta mediante correo electrónico %1 o mediante "
-#~ "nuestro <strong>servicio de incidencias</strong> %2 (también disponible "
-#~ "desde el panel de control)."
-
-#~ msgid ""
-#~ "Regards<br>\n"
-#~ "Opennemas Team<br>\n"
-#~ "Powered by OpenHost SL."
-#~ msgstr ""
-#~ "Atentamente,<br>\n"
-#~ "El equipo de Opennemas<br>\n"
-#~ "Powered by OpenHost SL."
-
-#~ msgid "Sorry, that email is already subscribed to our newsletter"
-#~ msgstr ""
-#~ "Lo sentimos, pero el correo electrónico ya está suscrito a nuestro "
-#~ "boletín de noticias."
-
-#~ msgid ""
-#~ "In order to be able to access your control panel please <strong>accept "
-#~ "out Terms and Conditions</strong> at"
-#~ msgstr ""
-#~ "Para acceder a tu panel de control por favor <strong>acepta nuestros "
-#~ "términos de servicio</strong> en"
-
-#~ msgid ""
-#~ "using the username and password you chose when creating your newspaper or "
-#~ "via direct access to Terms and Conditions at"
-#~ msgstr ""
-#~ "usando el nombre de usuario y contraseña que pusiste al crear el "
-#~ "periódico o a través del acceso directo a los términos de servicio"
-
-#~ msgid "Welcome to OpenNemas"
-#~ msgstr "Bienvenido a Opennemas"
-
-#~ msgid "To enable your account go to:"
-#~ msgstr "Para activar tu cuenta vete a:"
-
-#~ msgid "You can access to newspaper with this link"
-#~ msgstr "Puedes acceder al diario con este enlace"
-
-#~ msgid "You can also access the administrative area through this link"
-#~ msgstr ""
-#~ "Tambien puedes acceder al panel de administración a través de este enlace"
-
-#~ msgid ""
-#~ "Please change your password on your first access to the administrative "
-#~ "area to improve security."
-#~ msgstr ""
-#~ "Por favor, cambia tu contraseña al acceder por primera vez al panel de "
-#~ "administración para mejorar la seguridad."
-
-#~ msgid "In case you have any problems, please contact us via e-mail %1."
-#~ msgstr ""
-#~ "En caso de encontrar cualquier problema, contáctanos mediante correo-e %1."
-
-#~ msgid "Silver"
-#~ msgstr "Silver"
-
-#~ msgid "Gold"
-#~ msgstr "Gold"
-
-#~ msgid "Smarty"
-#~ msgstr "Smarty"
-
-#~ msgid "Content subscriptions"
-#~ msgstr "Suscripciones de contenido"
-
-#~ msgid "Content Subscriptions"
-#~ msgstr "Suscripciones de contenido"
-
-#~ msgid "Username reminder for %s"
-#~ msgstr "Recordatorio de nombre de usuario para %s"
-
-#~ msgid "Logout"
-#~ msgstr "Salir"
-
-#~ msgid "Register"
-#~ msgstr "Registrarse"
-
-#~ msgid "The video has some relations"
-#~ msgstr "El vídeo tiene relaciones"
-
-#~ msgid ""
-#~ "Caution! Are you sure that you want to delete this video and its "
-#~ "relations?"
-#~ msgstr ""
-#~ "Cuidado! Estás seguro que quieres eliminar este vídeo y sus relaciones?"
-
-# Albums edit
-#~ msgid "Image for Special:"
-#~ msgstr "Imagen para el especial"
-
-#~ msgid "File:"
-#~ msgstr "Fichero:"
-
-#~ msgid "Weight:"
-#~ msgstr "Peso:"
-
-#~ msgid "Description:"
-#~ msgstr "Descripción:"
-
-#~ msgid "Default image:"
-#~ msgstr "Imagen predeterminada:"
-
-#~ msgid "Tags:"
-#~ msgstr "Etiquetas:"
-
-#~ msgid "Footer image:"
-#~ msgstr "Imágenes en footer:"
-
-#~ msgid "Available images"
-#~ msgstr "Imágenes disponibles"
-
-#~ msgid "Search images by title..."
-#~ msgstr "Buscar imágenes por título…"
-
-#~ msgid "Checking"
-#~ msgstr "Comprobando"
-
-#~ msgid "Image size"
-#~ msgstr "Tamaño de imagen"
-
-#~ msgid "File size"
-#~ msgstr "Tamaño de archivo"
-
-#~ msgid "Filename"
-#~ msgstr "Nombre de archivo"
-
-#~ msgid "Created on"
-#~ msgstr "Creado en"
-
-#~ msgid "No available images with your search criteria"
-#~ msgstr "No hay ninguna imagen disponible para su criterio de búsqueda"
-
-#~ msgid "Media flash"
-#~ msgstr "Multimedia Flash"
-
-#~ msgid "Search for numbers and letters in the image and write them below:"
-#~ msgstr "Busque números y letras en la imagen y escríbalos debajo:"
-
-#~ msgid "The journalism CMS"
-#~ msgstr "El CMS para periodismo"
-
-#~ msgid "Check Your E-Mail"
-#~ msgstr "Compruebe el correo electrónico"
-
-#~ msgid ""
-#~ "Please check your e-mail now for a message with the subject line "
-#~ "\"Username reminder\" from"
-#~ msgstr ""
-#~ "Comprueba ahora el correo electrónico, te hemos enviado un mensaje con el "
-#~ "asunto \"Recordatorio de nombre de usuario\" de"
-
-#~ msgid ""
-#~ "To protect your privacy, we only send this information to the e-mail "
-#~ "address associated with this account."
-#~ msgstr ""
-#~ "Para proteger la privacidad, sólo enviaremos esta información a la "
-#~ "dirección de correo electrónico asociada a esta cuenta."
-
-#~ msgid "PLEASE NOTE"
-#~ msgstr "NOTA"
-
-#~ msgid ""
-#~ "If this is not the e-mail address associated with your account, click the "
-#~ "link to resubmit request with the correct e-mail address"
-#~ msgstr ""
-#~ "Si esta no es la dirección de correo electrónico asociada con tu cuenta, "
-#~ "haz clic en el vínculo para volver a mostrar la solicitud para la "
-#~ "dirección de correo electrónico correcta"
-
-#~ msgid "Recover your username"
-#~ msgstr "Recupera tu nombre de usuario"
-
-#~ msgid "Enter your e-mail address and click Submit to recover your username."
-#~ msgstr ""
-#~ "Escribe tu dirección de correo-e y haz clic en «Enviar» para recuperar tu "
-#~ "nombre de usuario."
-
-#~ msgid "Go to admin main page"
-#~ msgstr "Ir a la sección de administración"
-
-#~ msgid "The CMS for journalism"
-#~ msgstr "El CMS para periodismo"
-
-#~ msgid "Enter"
-#~ msgstr "Entrar"
-
-#~ msgid "Articles synchronization"
-#~ msgstr "Sincronización de artículos"
-
-#~ msgid "Advanced frontpage managers"
-#~ msgstr "Gestor de portadas avanzado"
-
-#~ msgid "Forms"
-#~ msgstr "Formularios"
-
-#~ msgid "Frontpages layout"
-#~ msgstr "Disposición de Portadas"
-
-#~ msgid "Frontpage advanced personalization"
-#~ msgstr "Personalización avanzada de portada"
-
-#~ msgid "Opennemas Contact"
-#~ msgstr "Opennemas Contact"
-
-#~ msgid "Frontpages layouts & custom layouts"
-#~ msgstr "Disposición personalizadas de portadas"
-
-#~ msgid "Unable to copy default assets for the instance"
-#~ msgstr "No se pudieron copiar los estáticos por omisión de la instancia"
-
-#~ msgid "Module to manage reviews with blog format"
-#~ msgstr "Módulo para gestionar revisiones con formato blog"
-
-#~ msgid "Allows to create to new custom forms"
-#~ msgstr "Te permite crear formularios personalizados"
-
-#~ msgid "Opennemas Connect"
-#~ msgstr "Opennemas Connect"
-
-#~ msgid "Allows user to publish letters sent to the director"
-#~ msgstr "Permite al usuario publicar cartas de usuarios"
-
-#~ msgid "%2 from instance \"%1\" has requested a purchase:"
-#~ msgstr "%2 de la instancia \"%1\" ha solicitado una compra:"
-
-#~ msgid "Paper import"
-#~ msgstr "Importador desde papel"
-
-#~ msgid "Features the basic functionality for your newspaper for free."
-#~ msgstr "Características da funcionalidade base para tu periódico gratuíto."
-
-#~ msgid ""
-#~ "<p>This offer gives you more than 40% discount (if purchased separately "
-#~ "modules\n"
-#~ "                    have a value of 85EUR/month)</p>\n"
-#~ "                    <p>This pack includes:</p>\n"
-#~ "                    <ul>\n"
-#~ "                        <li>Frontpage manager</li>\n"
-#~ "                        <li>Widget manager</li>\n"
-#~ "                        <li>Opinion articles manager</li>\n"
-#~ "                        <li>Comments manager</li>\n"
-#~ "                        <li>Images and files uploading</li>\n"
-#~ "                        <li>Utilities: Trash, Search Advanced...</li>\n"
-#~ "                        <li>Advertisement manager</li>\n"
-#~ "                        <li>Polls manager</li>\n"
-#~ "                        <li>Galleries manager</li>\n"
-#~ "                        <li>Video manager</li>\n"
-#~ "                        <li>1 user license</li>\n"
-#~ "                        <li>Support via tickets</li>\n"
-#~ "                        <li>Media storage: 1GB</li>\n"
-#~ "                        <li>Page views: 100.000</li>\n"
-#~ "                    </ul>"
-#~ msgstr ""
-#~ "<p>Esta oferta te proporciona un 40% de descuento (frente a los 85€/mes "
-#~ "si compras los módulos de forma independiente)</p>\n"
-#~ "                    <p>Este pack incluye:</p>\n"
-#~ "                    <ul>\n"
-#~ "                        <li>Gestor de portadas</li>\n"
-#~ "                        <li>Gestor de widgets</li>\n"
-#~ "                        <li>Gestor de artículos de opinión</li>\n"
-#~ "                        <li>Gestor de comentarios</li>\n"
-#~ "                        <li>Subida de imagenes y archivos</li>\n"
-#~ "                        <li>Utilidades: papelera, búsqueda avanzada...</"
-#~ "li>\n"
-#~ "                        <li>Gestor de publicidad</li>\n"
-#~ "                        <li>Gestor de encuestas</li>\n"
-#~ "                        <li>Gestor de galerías</li>\n"
-#~ "                        <li>Gestor de vídeo</li>\n"
-#~ "                        <li>1 licencia de usuario</li>\n"
-#~ "                        <li>Asistencia técnica mediante tickets</li>\n"
-#~ "                        <li>Almacenamiento multimedia: 1GB</li>\n"
-#~ "                        <li>Páginas vistas: 100.000</li>\n"
-#~ "                    </ul>"
-
-#~ msgid ""
-#~ "Provides advanced features to personalize your site and add more kind of "
-#~ "contents."
-#~ msgstr ""
-#~ "Proporciona características avanzadas para personalizar tu sitio y añade "
-#~ "nuevos tipos de contenido."
-
-#~ msgid ""
-#~ "<p>Personalize your frontpages and start sending newsletters\n"
-#~ "                    to your readers and let them know what they have "
-#~ "missed!</p>\n"
-#~ "                    <p>This offer gives you more than 30% discount on "
-#~ "modules (if purchased\n"
-#~ "                    separately modules have a value of 145EUR/month).</"
-#~ "p>\n"
-#~ "                    This pack includes:\n"
-#~ "                    <ul>\n"
-#~ "                        <li>Frontpage manager</li>\n"
-#~ "                        <li>Widget manager</li>\n"
-#~ "                        <li>Opinion articles manager</li>\n"
-#~ "                        <li>Comments manager</li>\n"
-#~ "                        <li>Images and files uploading</li>\n"
-#~ "                        <li>Utilities: Trash, Search Advanced...</li>\n"
-#~ "                        <li>Advertisement manager</li>\n"
-#~ "                        <li>Polls manager</li>\n"
-#~ "                        <li>Galleries manager</li>\n"
-#~ "                        <li>Video manager</li>\n"
-#~ "                        <li>Frontpage customization</li>\n"
-#~ "                        <li>Newsletter manager (*)</li>\n"
-#~ "                        <li>2 user license</li>\n"
-#~ "                        <li>Support via tickets</li>\n"
-#~ "                        <li>Support via phone: 4h (10am-2pm M-F)</li>\n"
-#~ "                        <li>Media storage: 1.5GB</li>\n"
-#~ "                        <li>Page views: 250.000</li>\n"
-#~ "                    </ul>\n"
-#~ "                    <p><small>*  Newsletter manager: email sendings are "
-#~ "charged with\n"
-#~ "                        0.3€ each block of 1000 sent emails</small></p>"
-#~ msgstr ""
-#~ "<p>Personaliza tus portadas, envía boletines de noticias a tus lectores y "
-#~ "haz que conozcan lo que se han perdido.</p>\n"
-#~ "<p>Esta oferta te proporciona un descuento del 30% en los módulos  "
-#~ "(frente a los 145€/mes si compras los módulos de forma independiente)</"
-#~ "p>\n"
-#~ "                    <p>Este pack incluye:</p>\n"
-#~ "                    <ul>\n"
-#~ "                        <li>Gestor de portadas</li>\n"
-#~ "                        <li>Gestor de widgets</li>\n"
-#~ "                        <li>Gestor de artículos de opinión</li>\n"
-#~ "                        <li>Gestor de comentarios</li>\n"
-#~ "                        <li>Subida de imagenes y archivos</li>\n"
-#~ "                        <li>Utilidades: papelera, búsqueda avanzada...</"
-#~ "li>\n"
-#~ "                        <li>Gestor de publicidad</li>\n"
-#~ "                        <li>Gestor de encuestas</li>\n"
-#~ "                        <li>Gestor de galerías</li>\n"
-#~ "                        <li>Gestor de vídeo</li>\n"
-#~ "                        <li>Personalización de portadas</li>\n"
-#~ "                        <li>Gestor de boletines de noticias(*)</li>\n"
-#~ "                        <li>2 licencias de usuario</li>\n"
-#~ "                        <li>Asistencia técnica mediante tickets</li>\n"
-#~ "                        <li>Almacenamiento multimedia: 1GB</li>\n"
-#~ "                        <li>Páginas vistas: 250.000</li>\n"
-#~ "                    </ul>\n"
-#~ "<p><small>*  Gestor de portadas: el envío de correos electrónicos se "
-#~ "cobrará a 0.3€ cada bloque de 1000 correos enviados</small></p>"
-
-#~ msgid "Contains all the major features of Opennemas."
-#~ msgstr "Contiene todas las funcionalidades principales de Opennemas."
-
-#~ msgid ""
-#~ "Newspaper web site template developed by Opennemas team. Customizable to "
-#~ "make a better git to customer brand guidelines and image"
-#~ msgstr ""
-#~ "Pide un sitio Web del periódico personalizado, con widgets incluidos, por "
-#~ "lo que todo el mundo reconocerá tu marca e imagen."
-
-#~ msgid ""
-#~ "Newspaper Web Site Template that can be customized to reflect better "
-#~ "brand guidelines and customer preferences"
-#~ msgstr ""
-#~ "Templates con multitud de widgets donde el cliente SI podrá personalizar "
-#~ "el tema y además esta plantilla solo será usada por un cliente  por lo "
-#~ "que será completamente exclusivo."
-
-#~ msgid "Module for managing articles"
-#~ msgstr "Módulo para gestionar artículos"
-
-#~ msgid "Module for managing comments"
-#~ msgstr "Módulo para gestionar comentarios"
-
-#~ msgid "Allows the user to upload files"
-#~ msgstr "Permite al usuario subir archivos"
-
-#~ msgid "Module for managing elements in frontpages"
-#~ msgstr "Módulo para gestionar elementos en portadas"
-
-#~ msgid ""
-#~ "Allows user to define keywords associated with url, mails and internal "
-#~ "searches"
-#~ msgstr ""
-#~ "Permite al usuario definir palabras clave asociadas con un url, correos "
-#~ "electrónicos o búsquedas internas"
-
-#~ msgid ""
-#~ "Create and manage your polls, <strong>engage</strong> your audience and "
-#~ "<strong>collect</strong> useful information."
-#~ msgstr ""
-#~ "Crea y gestiona tus encuestas, <strong>atrae</strong> a tu audiencia y "
-#~ "<strong>obtén información útil</strong>."
-
-#~ msgid "Make money while doing what you love."
-#~ msgstr "Gana dinero haciendo lo que te gusta."
-
-#~ msgid "Save for later"
-#~ msgstr "Guardar para despues"
-
-#~ msgid "No items purchased"
-#~ msgstr "No hay elementos comprados"

@@ -326,14 +326,15 @@ class BlogsController extends Controller
     private function getAds($context = '')
     {
         // Get opinion positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         if ($context == 'inner') {
             $positions = $positionManager->getPositionsForGroup('opinion_inner', [ 7 ]);
         } else {
             $positions = $positionManager->getPositionsForGroup('opinion_frontpage', [ 7, 9 ]);
         }
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, '4');
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 4);
 
         return [ $positions, $advertisements ];
     }

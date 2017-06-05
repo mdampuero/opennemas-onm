@@ -300,4 +300,38 @@ class AssetController extends Controller
             'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',
         ]);
     }
+
+    /**
+     * Redirect requests to apple-touch-icon.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function favicoAction(Request $request)
+    {
+        // Default favico
+        $favicoUrl = '/assets/images/favicon.png';
+
+        // Check if favico is defined on site
+        $favicoFileName  = getService('setting_repository')->get('favico');
+        $sectionSettings = getService('setting_repository')->get('section_settings');
+
+        $allowLogo = false;
+        if (is_array($sectionSettings) && array_key_exists('allowLogo', $sectionSettings)) {
+            $allowLogo = $sectionSettings['allowLogo'];
+        }
+
+        if ($allowLogo && $favicoFileName) {
+            $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($favicoFileName);
+        }
+
+        $favicoUrl =  realpath(SITE_PATH . '/' . $favicoUrl);
+
+        return new Response(
+            file_get_contents($favicoUrl),
+            200,
+            [ 'Content-Type' => 'image/' . pathinfo($favicoFileName, PATHINFO_EXTENSION) ]
+        );
+    }
 }

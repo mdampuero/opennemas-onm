@@ -335,20 +335,6 @@ class RssController extends Controller
     }
 
     /**
-     * Fetches advertisements for Instant article.
-     *
-     * @param string category The category identifier.
-     *
-     * @return array The list of advertisements for this page.
-     */
-    public static function getAds($category = 'home')
-    {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
-
-        return \Advertisement::findForPositionIdsAndCategory([1075, 1076, 1077], $category);
-    }
-
-    /**
      * Get latest contents given a type of content.
      *
      * @param int $contentType The type of the contents to fetch.
@@ -390,6 +376,21 @@ class RssController extends Controller
         $contents = $em->findBy($filters, $order, $total, 1);
 
         return $contents;
+    }
+
+    /**
+     * Fetches advertisements for Instant article.
+     *
+     * @param string category The category identifier.
+     *
+     * @return array The list of advertisements for this page.
+     */
+    public static function getAds($category = 'home')
+    {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
+        return getService('advertisement_repository')
+            ->findByPositionsAndCategory([1075, 1076, 1077], $category);
     }
 
     /**

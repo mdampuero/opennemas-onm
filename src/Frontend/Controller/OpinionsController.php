@@ -830,14 +830,15 @@ class OpinionsController extends Controller
     public static function getAds($context = '')
     {
         // TODO: Use $this->get when the function changes to non-static
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         if ($context == 'inner') {
             $positions = $positionManager->getPositionsForGroup('opinion_inner', [ 7 ]);
         } else {
             $positions = $positionManager->getPositionsForGroup('opinion_frontpage', [ 7, 9 ]);
         }
 
-        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, '4');
+        $advertisements = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 4);
 
         return [ $positions, $advertisements ];
     }

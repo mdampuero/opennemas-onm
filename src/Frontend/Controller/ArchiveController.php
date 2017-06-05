@@ -48,7 +48,7 @@ class ArchiveController extends Controller
         $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
         $page  = $request->query->getDigits('page', 1);
-        $date  = "{$year}-{$month}-{$day}";
+        $date = "{$year}-{$month}-{$day}";
         $itemsPerPage = 20;
 
         // Setup templating cache layer
@@ -179,10 +179,13 @@ class ArchiveController extends Controller
      **/
     public function getAds()
     {
+        $category = 0;
+
         // Get letter positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
-        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, $category = 0);
+        $advertisements  = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
     }

@@ -171,9 +171,10 @@ class FormController extends Controller
     public function getAds()
     {
         // Get letter positions
-        $positionManager = $this->get('core.manager.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
-        $advertisements  = \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        $advertisements  = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 0);
 
         return [ $positions, $advertisements ];
     }

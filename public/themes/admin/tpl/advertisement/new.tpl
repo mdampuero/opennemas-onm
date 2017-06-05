@@ -10,7 +10,8 @@
 
         $('#starttime, #endtime').datetimepicker({
           format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false
+          useCurrent: false,
+          minDate: '{$advertisement->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
         });
 
         $("#starttime").on("dp.change",function (e) {
@@ -169,6 +170,74 @@
                   </label>
                 </div>
               </div>
+              <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.mark }" ng-click="expanded.mark = !expanded.mark">
+                <i class="fa fa-tags m-r-5"></i> {t}Mark{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.mark }"></i>
+                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!expanded.mark">
+                  <span ng-if="params.orientation === 'top'">{t}Top{/t}</span>
+                  <span ng-if="params.orientation === 'right'">{t}Right{/t}</span>
+                  <span ng-if="params.orientation === 'bottom'">{t}Bottom{/t}</span>
+                  <span ng-if="params.orientation === 'left'">{t}Left{/t}</span>
+                </span>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.mark }">
+                <div class="row">
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-top" name="orientation" ng-model="params.orientation" type="radio" value="top">
+                      <label for="mark-top">
+                        {t}Top{/t}
+                      </label>
+                    </div>
+                    <label class="pointer" for="mark-top" style="padding-left: 25px; position: relative;">
+                      <small style="display: block; height: 20px; text-align: center; width: 80px;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
+                  </div>
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-right" name="orientation" ng-model="params.orientation" type="radio" value="right">
+                      <label for="mark-right">
+                        {t}Right{/t}
+                      </label>
+                    </div>
+                    <label class="pointer" for="mark-right" style="padding-right: 25px; padding-top: 20px; position: relative; width: 80px;">
+                      <small style="height: 20px; margin-bottom: -50px; position: absolute; right: 0; margin-right: -50px; text-align: center; transform: rotate(90deg); top: 50%; width: 80px; -webkit-backface-visibility: hidden;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
+                  </div>
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-left" name="orientation" ng-model="params.orientation" type="radio" value="left">
+                      <label for="mark-left">
+                        {t}Left{/t}
+                      </label>
+                    </div>
+                    <label class="pointer" for="mark-left" style="padding-left: 25px; padding-top: 20px; position: relative;">
+                      <small style="height: 20px; margin-left: -50px; position: absolute; text-align: center; transform: rotate(-90deg); top: 50%; width: 80px; -webkit-backface-visibility: hidden;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
+                  </div>
+                  <div class="col-xs-6 form-group">
+                    <div class="radio">
+                      <input id="mark-bottom" name="orientation" ng-model="params.orientation" type="radio" value="bottom">
+                      <label for="mark-bottom">
+                        {t}Bottom{/t}
+                      </label>
+                    </div>
+                    <label class="pointer" for="mark-bottom" style="padding-bottom: 20px; padding-top: 20px; position: relative;">
+                      <small style="bottom: 0;display: block; height: 20px; position: absolute; text-align: center; width: 80px;">{t}Advertisement{/t}</small>
+                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <small class="help">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Defines the orientation for the word that marks the advertisement position{/t}
+                  </small>
+                </div>
+              </div>
               <div class="grid-collapse-title pointer" ng-click="expanded.devices = !expanded.devices">
                 <i class="fa fa-desktop m-r-5"></i> {t}Devices{/t}
                 <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.devices }"></i>
@@ -273,74 +342,6 @@
                   </div>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.mark }" ng-click="expanded.mark = !expanded.mark">
-                <i class="fa fa-tags m-r-5"></i> {t}Mark{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.mark }"></i>
-                <span class="badge badge-default m-r-10 ng-cloak pull-right text-uppercase" ng-if="!expanded.mark">
-                  <span ng-if="params.orientation === 'top'">{t}Top{/t}</span>
-                  <span ng-if="params.orientation === 'right'">{t}Left{/t}</span>
-                  <span ng-if="params.orientation === 'bottom'">{t}Left{/t}</span>
-                  <span ng-if="params.orientation === 'left'">{t}Left{/t}</span>
-                </span>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.mark }">
-                <div class="row">
-                  <div class="col-xs-6 form-group">
-                    <div class="radio">
-                      <input id="mark-top" name="orientation" ng-model="params.orientation" type="radio" value="top">
-                      <label for="mark-top">
-                        {t}Top{/t}
-                      </label>
-                    </div>
-                    <label class="pointer" for="mark-top" style="padding-left: 25px; position: relative;">
-                      <small style="display: block; height: 20px; text-align: center; width: 80px;">{t}Advertisement{/t}</small>
-                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
-                    </label>
-                  </div>
-                  <div class="col-xs-6 form-group">
-                    <div class="radio">
-                      <input id="mark-right" name="orientation" ng-model="params.orientation" type="radio" value="right">
-                      <label for="mark-right">
-                        {t}Right{/t}
-                      </label>
-                    </div>
-                    <label class="pointer" for="mark-right" style="padding-right: 25px; padding-top: 20px; position: relative; width: 80px;">
-                      <small style="height: 20px; margin-bottom: -50px; position: absolute; right: 0; margin-right: -50px; text-align: center; transform: rotate(90deg); top: 50%; width: 80px; -webkit-backface-visibility: hidden;">{t}Advertisement{/t}</small>
-                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
-                    </label>
-                  </div>
-                  <div class="col-xs-6 form-group">
-                    <div class="radio">
-                      <input id="mark-left" name="orientation" ng-model="params.orientation" type="radio" value="left">
-                      <label for="mark-left">
-                        {t}Left{/t}
-                      </label>
-                    </div>
-                    <label class="pointer" for="mark-left" style="padding-left: 25px; padding-top: 20px; position: relative;">
-                      <small style="height: 20px; margin-left: -50px; position: absolute; text-align: center; transform: rotate(-90deg); top: 50%; width: 80px; -webkit-backface-visibility: hidden;">{t}Advertisement{/t}</small>
-                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
-                    </label>
-                  </div>
-                  <div class="col-xs-6 form-group">
-                    <div class="radio">
-                      <input id="mark-bottom" name="orientation" ng-model="params.orientation" type="radio" value="bottom">
-                      <label for="mark-bottom">
-                        {t}Bottom{/t}
-                      </label>
-                    </div>
-                    <label class="pointer" for="mark-bottom" style="padding-bottom: 20px; padding-top: 20px; position: relative;">
-                      <small style="bottom: 0;display: block; height: 20px; position: absolute; text-align: center; width: 80px;">{t}Advertisement{/t}</small>
-                      <div style="background: rgba(0, 0, 0, .25); height: 80px; width: 80px;"></div>
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <small class="help">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Defines the orientation for the word that marks the advertisement position{/t}
-                  </small>
-                </div>
-              </div>
               <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.dates }" ng-click="expanded.dates = !expanded.dates">
                 <i class="fa fa-calendar-check-o m-r-5"></i> {t}Date range{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.dates }"></i>
@@ -379,75 +380,42 @@
                   </small>
                 </div>
               </div>
-              <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.user_groups = !expanded.user_groups" ng-hide="!extra.user_groups || extra.user_groups.length === 0">
-                <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
-                <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups">
-                  <span ng-show="ui.user_groups.length === 0">{t}All{/t}</span>
-                  <span ng-show="ui.user_groups.length != 0">
-                    <strong>[% ui.user_groups.length %]</strong>
-                    {t}selected{/t}
+              {if $safeFrame}
+                <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.user_groups = !expanded.user_groups" ng-hide="!extra.user_groups || extra.user_groups.length === 0">
+                  <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
+                  <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups">
+                    <span ng-show="ui.user_groups.length === 0">{t}All{/t}</span>
+                    <span ng-show="ui.user_groups.length != 0">
+                      <strong>[% ui.user_groups.length %]</strong>
+                      {t}selected{/t}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
-                <input name="user_groups" ng-value="user_groups" type="hidden">
-                <div class="checkbox p-b-5">
-                  <input id="group-all" name="group-all" ng-change="areAllUserGroupsSelected()" ng-model="selected.all.user_groups" type="checkbox">
-                  <label class="form-label" for="group-all">
-                    {t}Select all{/t}
-                  </label>
                 </div>
-                <div class="checkbox-list checkbox-list-user-groups">
-                  <div class="checkbox p-b-5" ng-repeat="group in extra.user_groups">
-                    <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="ui.user_groups" checklist-value="group.id" type="checkbox">
-                    <label class="form-label" for="group-[% $index %]">
-                      [% group.name %]
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
+                  <input name="user_groups" ng-value="user_groups" type="hidden">
+                  <div class="checkbox p-b-5">
+                    <input id="group-all" name="group-all" ng-change="areAllUserGroupsSelected()" ng-model="selected.all.user_groups" type="checkbox">
+                    <label class="form-label" for="group-all">
+                      {t}Select all{/t}
                     </label>
                   </div>
-                </div>
-                <div class="m-t-5">
-                  <small class="help">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Display the advertisement if user belongs to one or more of the selected user groups{/t}
-                  </small>
-                </div>
-              </div>
-              <div class="grid-collapse-title pointer" ng-click="expanded.category = !expanded.category">
-                <input name="categories" ng-value="categories" type="hidden">
-                <i class="fa fa-bookmark m-r-5"></i>
-                {t}Categories{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
-                  <span ng-show="ui.categories.length === 0">{t}All{/t}</span>
-                  <span ng-show="ui.categories.length != 0">
-                    <strong>[% ui.categories.length %]</strong>
-                    {t}selected{/t}
-                  </span>
-                </span>
-              </div>
-              <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category }">
-                <div class="checkbox p-b-5">
-                  <input id="category-all" name="category-all" ng-change="areAllCategoriesSelected()" ng-model="selected.all.categories" type="checkbox">
-                  <label class="form-label" for="category-all">
-                    {t}Select all{/t}
-                  </label>
-                </div>
-                <div class="checkbox-list checkbox-list-user-groups">
-                  <div class="checkbox p-b-5" ng-repeat="category in extra.categories">
-                    <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
-                    <label class="form-label" for="category-[% $index %]">
-                      [% category.name %]
-                    </label>
+                  <div class="checkbox-list checkbox-list-user-groups">
+                    <div class="checkbox p-b-5" ng-repeat="group in extra.user_groups">
+                      <input id="group-[% $index %]" name="group-[% $index %]" checklist-model="ui.user_groups" checklist-value="group.id" type="checkbox">
+                      <label class="form-label" for="group-[% $index %]">
+                        [% group.name %]
+                      </label>
+                    </div>
+                  </div>
+                  <div class="m-t-5">
+                    <small class="help">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}Display the advertisement if user belongs to one or more of the selected user groups{/t}
+                    </small>
                   </div>
                 </div>
-                <div class="m-t-5">
-                  <small class="help">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Display the advertisement only in the selected categories{/t}
-                  </small>
-                </div>
-              </div>
+              {/if}
               <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.duration = !expanded.duration" ng-show="isInterstitial()">
                 <i class="fa fa-clock-o m-r-5"></i>
                 {t}Duration{/t}
@@ -468,6 +436,54 @@
                   </small>
                 </div>
               </div>
+              <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">
+                <input name="categories" ng-value="categories" type="hidden">
+                <i class="fa fa-bookmark m-r-5"></i>
+                {t}Categories{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
+                  <span ng-show="ui.categories.length === 0 || ui.categories_all == true">{t}All{/t}</span>
+                  <span ng-show="ui.categories.length != 0 && ui.categories_all == false">
+                    <strong>[% ui.categories.length %]</strong> {t}selected{/t}
+                  </span>
+                </span>
+              </div>
+              <div class="grid-collapse-body" ng-class="{ 'expanded': expanded.category, 'no-animate': ui.categories_all }">
+                <div class="checkbox">
+                  <input id="category-all" name="category-all" ng-model="ui.categories_all" ng-true-value="true" ng-false-value="false" type="checkbox">
+                  <label class="form-label" for="category-all">
+                    {t}Show in all categories{/t}
+                  </label>
+                </div>
+                <div class="m-t-10" ng-show="!ui.categories_all">
+                  <div class="m-b-10">
+                    <small class="help">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}Display the advertisement only in the selected categories{/t}
+                    </small>
+                  </div>
+                  <div class="checkbox p-b-5">
+                    <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected()" ng-model="selected.all.categories" type="checkbox">
+                    <label class="form-label" for="toggle-categories">
+                      {t}Select/deselect all{/t}
+                    </label>
+                  </div>
+                  <div class="checkbox-list checkbox-list-user-groups">
+                    <div class="checkbox p-b-5" ng-repeat="category in extra.categories">
+                      <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
+                      <label class="form-label" for="category-[% $index %]">
+                        [% category.name %]
+                      </label>
+                    </div>
+                  </div>
+                  <div class="m-t-5" ng-if="selected.all.categories">
+                    <small class="help">
+                      <i class="fa fa-exclamation-triangle m-r-5 text-warning"></i>
+                      {t}We recomend you to use the "Show in all categories" mark to avoid unchecked future created categories.{/t}
+                    </small>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -484,31 +500,31 @@
                 <div class="controls">
                   <select name="position" id="position" ng-model="position">
                     <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
-                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Inner article{/t}</option>
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video frontpage{/t}</option>
-                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Inner video{/t}</option>
+                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Article: inner{/t}</option>
+                    {is_module_activated name="ALBUM_MANAGER"}
+                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Gallery: frontpage{/t}</option>
+                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery: inner{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
-                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion frontpage{/t}</option>
-                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Inner opinion{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Galleries{/t}</option>
-                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery Inner{/t}</option>
+                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion: frontpage{/t}</option>
+                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Opinion: inner{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="POLL_MANAGER"}
-                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll{/t}</option>
-                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll Inner{/t}</option>
+                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll: frontpage{/t}</option>
+                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll: inner{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="NEWSLETTER_MANAGER"}
                     <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
                     {/is_module_activated}
+                    {is_module_activated name="VIDEO_MANAGER"}
+                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video: frontpage{/t}</option>
+                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Video: inner{/t}</option>
+                    {/is_module_activated}
                     {is_module_activated name="AMP_MODULE"}
-                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}AMP pages{/t}</option>
+                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}Google AMP{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="FIA_MODULE"}
-                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Instant Articles pages{/t}</option>
+                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Facebook Instant Articles{/t}</option>
                     {/is_module_activated}
                     <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
                   </select>
@@ -626,6 +642,7 @@
                     {/is_module_activated}
                     <div class="ng-cloak" ng-show="position == 'publi-others'">
                       {foreach $themeAds as $adId => $ad}
+                      {if $ad['theme'] == $app['theme']->uuid}
                       <div class="row">
                         <div class="col-md-12">
                           <div class="radio">
@@ -637,6 +654,7 @@
                         </div>
                       </div>
                       <hr>
+                      {/if}
                       {/foreach}
                     </div>
                   </div><!-- /position-adv -->

@@ -25,10 +25,11 @@ class Ads
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get frontpage positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('frontpage');
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl = SITE_URL;
@@ -48,10 +49,11 @@ class Ads
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get article_inner positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl = SITE_URL;
@@ -71,10 +73,11 @@ class Ads
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
         // Get opinion positions
-        $positionManager = getService('core.manager.advertisement');
+        $positionManager = getService('core.helper.advertisement');
         $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = getService('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl = SITE_URL;

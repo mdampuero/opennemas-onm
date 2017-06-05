@@ -10,38 +10,67 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
-    // Don't render any advertisement if module is not activated
-    // Just render default onm ads from file
-    // No DFP nor OpenX allowed
-    if (!is_array($smarty->parent->tpl_vars)
-        || !array_key_exists('ads_positions', $smarty->parent->tpl_vars)
-        || !is_array($smarty->parent->tpl_vars['ads_positions']->value)
+    $ads = $smarty->parent->tpl_vars['advertisements']->value;
+    $app = $smarty->parent->tpl_vars['app']->value;
 
-    ) {
+    if (count($ads) <= 0) {
         return $output;
     }
 
-    $app       = $smarty->parent->tpl_vars['app']->value;
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
+    $positions = [];
     $settings  = getService('setting_repository')->get('ads_settings');
-    $positions = is_object($smarty->parent->tpl_vars['ads_positions']) ?
-        $smarty->parent->tpl_vars['ads_positions']->value : [];
+    $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
 
-    if (count($positions) > 0) {
-        $content = getService('core.template.admin')
-            ->fetch('advertisement/helpers/js.tpl', [
-                'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
-                'category'  => $category,
-                'extension' => $app['extension'],
-                'lifetime'  => $settings['lifetime_cookie'],
-                'positions' => implode(',', $positions),
-                'time'      => time(),
-                'url'       => getService('router')
-                    ->generate('api_v1_advertisements_list')
-            ]);
+    if (!$safeFrameEnabled) {
+        $adsRenderer    = getService('core.renderer.advertisement');
+        $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
+        $content        = $smarty->parent->tpl_vars['content']->value;
 
-        $output = str_replace('</body>', $content.'</body>', $output);
+        $params = [
+            'category'  => $category,
+            'extension' => $app['extension'],
+            'content'   => $content,
+            'x-tags'    => $xtags,
+        ];
+
+        $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads, $params);
+        $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
+        $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
+        $devices      = getService('core.template.admin')
+            ->fetch('advertisement/helpers/inline/js.tpl');
+
+        $devices = "\n" . str_replace("\n", ' ', $devices);
+
+        $output = str_replace('</head>', $reviveOutput . '</head>', $output);
+        $output = str_replace('</head>', $dfpOutput . '</head>', $output);
+        $output = str_replace('</body>', $interstitial . '</body>', $output);
+        $output = str_replace('</body>', $devices . '</body>', $output);
+    } else {
+        // No advertisements
+        if (!array_key_exists('ads_positions', $smarty->parent->tpl_vars)
+            || !is_array($smarty->parent->tpl_vars['ads_positions']->value)
+        ) {
+            return $output;
+        }
+
+        $positions = is_object($smarty->parent->tpl_vars['ads_positions']) ?
+            $smarty->parent->tpl_vars['ads_positions']->value : [];
     }
+
+    $content = getService('core.template.admin')
+        ->fetch('advertisement/helpers/safeframe/js.tpl', [
+            'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
+            'category'  => $category,
+            'extension' => $app['extension'],
+            'lifetime'  => $settings['lifetime_cookie'],
+            'positions' => implode(',', $positions),
+            'time'      => time(),
+            'url'       => getService('router')
+                ->generate('api_v1_advertisements_list')
+        ]);
+
+    $output = str_replace('</head>', $content . '</head>', $output);
 
     return $output;
 }

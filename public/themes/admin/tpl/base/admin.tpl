@@ -382,7 +382,7 @@
                     </li>
                     <li>
                       {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                        <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session._sf2_attributes.user->id}/show" target="_blank">
+                        <a ng-href="{get_parameter name=manager_url}manager#/users/{$smarty.session._sf2_attributes.user->id}" target="_blank">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>
