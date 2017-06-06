@@ -29,10 +29,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->objectCacheHandler = $cache;
         $this->container    = $container;
         $this->logger       = $logger;
-
-        $this->view = $this->container->get('view')->getTemplate();
-        $this->smartyCacheHandler = $this->container->get('template_cache_manager')
-            ->setSmarty($this->view);
     }
 
     /**
@@ -351,6 +347,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheAll()
     {
+        $this->initializeSmartyCacheHandler();
+
         $this->smartyCacheHandler->deleteAll();
     }
 
@@ -366,6 +364,8 @@ class HooksSubscriber implements EventSubscriberInterface
         }
 
         $authorId = $event->getArgument('authorId');
+
+        $this->initializeSmartyCacheHandler();
 
         // Delete caches for opinion frontpage and author frontpages
         $this->smartyCacheHandler
@@ -388,6 +388,8 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $category = $event->getArgument('category');
 
+        $this->initializeSmartyCacheHandler();
+
         // Delete smarty cache for frontpage RSS, manual frontpage
         // and blog frontpage frontpage of category
         $this->smartyCacheHandler
@@ -408,6 +410,8 @@ class HooksSubscriber implements EventSubscriberInterface
         }
 
         $content = $event->getArgument('content');
+
+        $this->initializeSmartyCacheHandler();
 
         // Clean cache for the content
         $this->smartyCacheHandler
@@ -468,6 +472,8 @@ class HooksSubscriber implements EventSubscriberInterface
             $categoryName = $ccm->getName($category);
         }
 
+        $this->initializeSmartyCacheHandler();
+
         $this->smartyCacheHandler
             // Deleting rss cache files
             ->deleteGroup($this->view->getCacheId('rss', 'frontpage', 'home'))
@@ -489,6 +495,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheGlobalCss(Event $event)
     {
+        $this->initializeSmartyCacheHandler();
+
         $this->smartyCacheHandler
             ->deleteGroup($this->view->getCacheId('css', 'global'));
     }
@@ -510,6 +518,8 @@ class HooksSubscriber implements EventSubscriberInterface
         }
 
         $author = $this->container->get('user_repository')->find($content->fk_author);
+
+        $this->initializeSmartyCacheHandler();
 
         $this->smartyCacheHandler
             ->deleteGroup($this->view->getCacheId('content', $content->id))
@@ -669,5 +679,19 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $this->container->get('cache.manager')->getConnection('manager')
             ->removeByPattern('*countries*');
+    }
+
+    /**
+     * Initializes the smartyCacheHandler service from the current view
+     * NOTE: this can only be used if the instance is already initializes, aka
+     * this method can only be called from backend and frontend bundles.
+     *
+     * @return void
+     **/
+    private function initializeSmartyCacheHandler()
+    {
+        $this->view = $this->container->get('view')->getTemplate();
+        $this->smartyCacheHandler = $this->container->get('template_cache_manager')
+            ->setSmarty($this->view);
     }
 }
