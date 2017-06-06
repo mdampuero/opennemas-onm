@@ -63,6 +63,10 @@ class NewStandController extends Controller
         $year      = $request->query->getDigits('year', date('Y'));
         $day       = $request->query->getDigits('day', '01');
 
+        if (empty($this->category_name)) {
+            $this->category_name = 'home';
+        }
+
         // Get settings for frontpage rendering
         $configurations = s::get('kiosko_settings');
         $order          = $configurations['orderFrontpage'];

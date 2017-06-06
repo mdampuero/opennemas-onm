@@ -79,6 +79,10 @@ class MonographsController extends Controller
     {
         $this->page = $request->query->getDigits('page', 1);
 
+        if (empty($this->categoryName)) {
+            $this->categoryName = 'home';
+        }
+
         // Setup templating cache layer
         $this->view->setConfig('specials');
         $cacheID = $this->view->getCacheId('frontpage', 'special', $this->categoryName, $this->page);
