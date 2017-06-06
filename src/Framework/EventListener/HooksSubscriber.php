@@ -472,7 +472,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ->deleteGroup($this->view->getCacheId('rss', 'fia'))
             ->deleteGroup($this->view->getCacheId('rss', $category))
             // Deleting frontpage cache files
-            ->deleteGroup($this->view->getCacheId('frontpage', $category));
+            ->deleteGroup($this->view->getCacheId('frontpage', $categoryName));
 
         $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
