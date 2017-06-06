@@ -36,14 +36,11 @@ class InstanceSyncController extends Controller
      */
     public function listAction()
     {
-        $allSites = s::get('sync_params');
+        $syncParameters = $this->get('setting_repository')->get('sync_params');
 
-        return $this->render(
-            'instance_sync/list.tpl',
-            [
-                'elements' => $allSites
-            ]
-        );
+        return $this->render('instance_sync/list.tpl', [
+            'elements' => $syncParameters
+        ]);
     }
 
     /**
@@ -73,13 +70,13 @@ class InstanceSyncController extends Controller
 
         // Get saved settings if exists (update action)
         $siteData = [];
-        if ($syncParams = s::get('sync_params')) {
+        if ($syncParams = $this->get('setting_repository')->get('sync_params')) {
             $siteData = array_merge($syncParams, [$data['site_url'] => $data]);
         } else {
             $siteData = [$data['site_url'] => $data];
         }
 
-        if (s::set('sync_params', $siteData)) {
+        if ($this->get('setting_repository')->set('sync_params', $siteData)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Configuration saved successfully')
@@ -132,7 +129,7 @@ class InstanceSyncController extends Controller
                 $authError = true;
             }
             // Fetch params from db
-            $syncParams = s::get('sync_params');
+            $syncParams = $this->get('setting_repository')->get('sync_params');
             // Get site values if exists
             if ($syncParams) {
                 foreach ($syncParams as $site => $values) {
@@ -143,14 +140,11 @@ class InstanceSyncController extends Controller
             }
         }
 
-        return $this->render(
-            'instance_sync/partials/_list_categories.tpl',
-            [
-                'site'           => $element,
-                'all_categories' => $result,
-                'has_auth_error' => $authError,
-            ]
-        );
+        return $this->render('instance_sync/partials/_list_categories.tpl', [
+            'site'           => $element,
+            'all_categories' => $result,
+            'has_auth_error' => $authError,
+        ]);
     }
 
     /**
@@ -168,7 +162,7 @@ class InstanceSyncController extends Controller
         $siteUrl = $request->query->filter('site_url', '', FILTER_VALIDATE_URL);
 
         // Fetch params from db
-        $syncParams = s::get('sync_params');
+        $syncParams = $this->get('setting_repository')->get('sync_params');
 
         // Get site values
         $element = $syncParams[$siteUrl];
@@ -218,7 +212,7 @@ class InstanceSyncController extends Controller
         $siteUrl = $request->query->filter('site_url', '');
 
         // Fetch params from db
-        $syncParams = s::get('sync_params');
+        $syncParams = $this->get('setting_repository')->get('sync_params');
 
         // Search the instance by site_url
         $index = false;
@@ -233,7 +227,7 @@ class InstanceSyncController extends Controller
             unset($syncParams[$siteUrl]);
         }
 
-        if (s::set('sync_params', $syncParams)) {
+        if ($this->get('setting_repository')->set('sync_params', $syncParams)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Site configuration deleted successfully')
