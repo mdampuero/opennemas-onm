@@ -81,7 +81,7 @@ class PollsController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('poll-frontpage');
-        $cacheID = $this->view->getCacheId('frontpage', 'poll', $this->page);
+        $cacheID = $this->view->getCacheId('frontpage', 'poll', $this->categoryName, $this->page);
 
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
