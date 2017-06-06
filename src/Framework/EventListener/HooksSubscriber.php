@@ -411,10 +411,10 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Clean cache for the content
         $this->smartyCacheHandler
+            ->deleteGroup($this->view->getCacheId('archive', date('Ymd')))
             ->deleteGroup($this->view->getCacheId('content', $content->pk_content))
             ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name))
-            ->deleteGroup($this->view->getCacheId('rss', $content->content_type_name))
-            ->deleteGroup($this->view->getCacheId('archive', date('Ymd')));
+            ->deleteGroup($this->view->getCacheId('rss', $content->content_type_name));
 
         if ($content->content_type_name == 'article') {
             $this->smartyCacheHandler
@@ -476,7 +476,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheGlobalCss(Event $event)
     {
-        $this->smartyCacheHandler->deleteGroup($this->view->getCacheId('css', 'global'));
+        $this->smartyCacheHandler
+            ->deleteGroup($this->view->getCacheId('css', 'global'));
     }
 
     /**
@@ -541,7 +542,9 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheForAdvertisement(Event $event)
     {
-        if (!$this->container->hasParameter('varnish')) {
+        if (!$this->container->hasParameter('varnish')
+            || !$event->hasArgument('advertisement')
+        ) {
             return false;
         }
 
