@@ -58,15 +58,15 @@ class TagsController extends Controller
             }
 
             $criteria = array(
-                'content_status'  => array(array('value' => 1)),
-                'in_litter'       => array(array('value' => 0)),
-                'fk_content_type' => array(
-                    array('value' => 1),
-                    // array('value' => 4),
-                    // array('value' => 7),
-                    // array('value' => 9),
+                'content_status'  => [['value' => 1]],
+                'in_litter'       => [['value' => 0]],
+                'fk_content_type' => [
+                    ['value' => 1],
+                    // ['value' => 4],
+                    // ['value' => 7],
+                    // ['value' => 9],
                     'union' => 'OR'
-                ),
+                ],
                 'metadata' => array(array('value' => '%' . $tag . '%', 'operator' => 'LIKE'))
             );
 
