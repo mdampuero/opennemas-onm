@@ -66,6 +66,7 @@ class ContentsController extends Controller
         }
 
         // Setup templating cache layer
+        $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $contentID, 'print');
 
         return $this->render('article/article_printer.tpl', [
