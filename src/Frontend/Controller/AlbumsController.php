@@ -87,7 +87,7 @@ class AlbumsController extends Controller
     {
         // Setup templating cache layer
         $this->view->setConfig('gallery-frontpage');
-        $cacheID = $this->view->getCacheId('frontpage', 'album', $this->page);
+        $cacheID = $this->view->getCacheId('frontpage', 'album', $this->categoryName, $this->page);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
