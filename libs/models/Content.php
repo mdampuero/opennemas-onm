@@ -653,7 +653,7 @@ class Content
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'content' => $this ]
             );
 
             return true;
