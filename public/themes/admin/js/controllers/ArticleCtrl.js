@@ -39,7 +39,7 @@
           params: {},
           summary: '',
           created: new Date(),
-          starttime: $window.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+          starttime: new Date()
         };
 
         /**

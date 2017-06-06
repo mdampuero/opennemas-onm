@@ -55,6 +55,11 @@
               $scope.datetimePicker = picker;
             }
 
+            if ($scope.ngModel) {
+              $scope.ngModel = $window.moment($scope.ngModel)
+                .format(config.format);
+            }
+
             element.on('dp.change', function() {
                 $scope.ngModel = null;
 
