@@ -237,8 +237,9 @@ class ContentCategory
         $data['color'] = (isset($data['color'])) ? $data['color'] : $this->color;
 
         $conn = getService('dbal_connection');
-        $conn->beginTransaction();
         try {
+            $conn->beginTransaction();
+
             $rs = $conn->update(
                 'content_categories',
                 [

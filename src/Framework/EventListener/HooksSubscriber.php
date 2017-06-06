@@ -70,12 +70,14 @@ class HooksSubscriber implements EventSubscriberInterface
             'category.update' => [
                 ['removeSmartyCacheGlobalCss', 5],
                 ['removeSmartyCacheCategories', 5],
+                ['removeObjectCacheCategory', 5],
                 ['removeObjectCacheCategoriesArray', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'category.delete' => [
                 ['removeSmartyCacheGlobalCss', 5],
                 ['removeSmartyCacheCategories', 5],
+                ['removeObjectCacheCategory', 5],
                 ['removeObjectCacheCategoriesArray', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
@@ -267,6 +269,23 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Deletes a category from cache when it is updated.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeObjectCacheCategory(Event $event)
+    {
+        if (!$event->hasArgument('category')) {
+            return;
+        }
+
+        $category = $event->getArgument('category');
+
+        // Delete object cache
+        $this->objectCacheHandler->delete('category-' . $category->id);
+    }
+
+    /**
      * Deletes the content metadata from cache after it is updated.
      *
      * @param Event $event The event to handle.
@@ -367,7 +386,7 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $category     = $event->getArgument('category');
+        $category = $event->getArgument('category');
 
         // Delete smarty cache for frontpage RSS, manual frontpage
         // and blog frontpage frontpage of category
@@ -375,9 +394,6 @@ class HooksSubscriber implements EventSubscriberInterface
             ->deleteGroup($this->view->getCacheId('rss', $category->name))
             ->deleteGroup($this->view->getCacheId('frontpage', $category->name))
             ->deleteGroup($this->view->getCacheId('frontpage', 'category', $category->name));
-
-        // Delete object cache
-        $this->objectCacheHandler->delete('category-' . $category->id);
     }
 
     /**
