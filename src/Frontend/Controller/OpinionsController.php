@@ -233,16 +233,9 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
             // Get sync params
-            $wsUrl = '';
-            $syncParams = s::get('sync_params');
-            if ($syncParams) {
-                foreach ($syncParams as $siteUrl => $values) {
-                    if (is_array($values['categories'])
-                        && in_array($categoryName, $values['categories'])
-                    ) {
-                        $wsUrl = $siteUrl;
-                    }
-                }
+            $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+            if (empty($wsUrl)) {
+                throw new ResourceNotFoundException();
             }
 
             $this->cm = new \ContentManager();
@@ -499,16 +492,9 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get sync params
-            $wsUrl = '';
-            $syncParams = s::get('sync_params');
-            if ($syncParams) {
-                foreach ($syncParams as $siteUrl => $values) {
-                    if (is_array($values['categories'])
-                        && in_array($categoryName, $values['categories'])
-                    ) {
-                        $wsUrl = $siteUrl;
-                    }
-                }
+            $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+            if (empty($wsUrl)) {
+                throw new ResourceNotFoundException();
             }
 
             $this->cm = new \ContentManager();
@@ -761,14 +747,9 @@ class OpinionsController extends Controller
         }
 
         // Get sync params
-        $wsUrl = '';
-        $syncParams = s::get('sync_params');
-        if ($syncParams) {
-            foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-                }
-            }
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        if (empty($wsUrl)) {
+            throw new ResourceNotFoundException();
         }
 
         // Setup templating cache layer

@@ -169,14 +169,9 @@ class ArticlesController extends Controller
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Get sync params
-        $wsUrl = '';
-        $syncParams = s::get('sync_params');
-        if ($syncParams) {
-            foreach ($syncParams as $siteUrl => $values) {
-                if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-                }
-            }
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        if (empty($wsUrl)) {
+            throw new ResourceNotFoundException();
         }
 
         $cm = new \ContentManager;

@@ -91,15 +91,10 @@ class ContentsController extends Controller
 
         $cm = new \ContentManager;
 
-        // Getting Synchronize setting params
-        $wsUrl = '';
-        $syncParams = s::get('sync_params');
-        if ($syncParams) {
-            foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-                }
-            }
+        // Get sync params
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        if (empty($wsUrl)) {
+            throw new ResourceNotFoundException();
         }
 
         // Resolve article ID
@@ -153,16 +148,13 @@ class ContentsController extends Controller
             if ($ext == 1) {
                 // Getting Synchronize setting params
                 $categoryName = $request->request->get('category_name', null);
+
                 // Get sync params
-                $wsUrl = '';
-                $syncParams = s::get('sync_params');
-                if ($syncParams) {
-                    foreach ($syncParams as $siteUrl => $values) {
-                        if (in_array($categoryName, $values['categories'])) {
-                            $wsUrl = $siteUrl;
-                        }
-                    }
+                $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+                if (empty($wsUrl)) {
+                    throw new ResourceNotFoundException();
                 }
+
                 $cm = new \ContentManager();
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
@@ -265,16 +257,13 @@ class ContentsController extends Controller
             if ($ext == 1) {
                 // Getting Synchronize setting params
                 $categoryName = $request->query->get('category_name', null);
+
                 // Get sync params
-                $wsUrl = '';
-                $syncParams = s::get('sync_params');
-                if ($syncParams) {
-                    foreach ($syncParams as $siteUrl => $values) {
-                        if (in_array($categoryName, $values['categories'])) {
-                            $wsUrl = $siteUrl;
-                        }
-                    }
+                $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+                if (empty($wsUrl)) {
+                    throw new ResourceNotFoundException();
                 }
+
                 $cm = new \ContentManager();
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
