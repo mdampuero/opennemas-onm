@@ -241,13 +241,19 @@ class HooksSubscriber implements EventSubscriberInterface
             .' AND contents.available=1 and contents.content_status=1',
             'ORDER BY created DESC '
         );
+        $this->initializeSmartyCacheHandler();
 
         if (!empty($opinions)) {
             foreach ($opinions as &$opinion) {
+                if (!in_array('pk_content', $opinion)) {
+                    continue;
+                }
+
                 $this->smartyCacheHandler
                     ->deleteGroup($this->view->getCacheId('content', $opinion->pk_content));
             }
         }
+
         // Delete frontpage caches
         $this->smartyCacheHandler
             ->deleteGroup($this->view->getCacheId('frontpage', 'opinion'))
