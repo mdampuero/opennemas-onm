@@ -12,6 +12,7 @@
 
         $('#closetime').datetimepicker({
           format: 'YYYY-MM-DD HH:mm:ss',
+          useCurrent: false,
           minDate: '{$poll->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
         });
       });
