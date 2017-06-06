@@ -442,30 +442,31 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $category = $event->getArgument('category');
 
-        if (isset($category)) {
-            $ccm = \ContentCategoryManager::get_instance();
-
-            if ($category == '0' || $category == 'home') {
-                $categoryName = 'home';
-            } elseif ($category == 'opinion') {
-                $categoryName = 'opinion';
-            } else {
-                $categoryName = $ccm->getName($category);
-            }
-
-            $this->smartyCacheHandler
-                // Deleting rss cache files
-                ->deleteGroup($this->view->getCacheId('rss', 'frontpage', 'home'))
-                ->deleteGroup($this->view->getCacheId('rss', 'last'))
-                ->deleteGroup($this->view->getCacheId('rss', 'fia'))
-                ->deleteGroup($this->view->getCacheId('rss', $category))
-                // Deleting frontpage cache files
-                ->deleteGroup($this->view->getCacheId('frontpage', $category));
-
-            $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
-
-            $this->cleanOpcode();
+        if (!isset($category)) {
+            return;
         }
+        $ccm = \ContentCategoryManager::get_instance();
+
+        if ($category == '0' || $category == 'home') {
+            $categoryName = 'home';
+        } elseif ($category == 'opinion') {
+            $categoryName = 'opinion';
+        } else {
+            $categoryName = $ccm->getName($category);
+        }
+
+        $this->smartyCacheHandler
+            // Deleting rss cache files
+            ->deleteGroup($this->view->getCacheId('rss', 'frontpage', 'home'))
+            ->deleteGroup($this->view->getCacheId('rss', 'last'))
+            ->deleteGroup($this->view->getCacheId('rss', 'fia'))
+            ->deleteGroup($this->view->getCacheId('rss', $category))
+            // Deleting frontpage cache files
+            ->deleteGroup($this->view->getCacheId('frontpage', $category));
+
+        $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
+
+        $this->cleanOpcode();
     }
 
     /**
