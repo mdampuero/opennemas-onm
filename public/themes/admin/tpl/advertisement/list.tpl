@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement',{ fk_content_categories: 0, type_advertisement: -1, content_status: -1, with_script: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement',{ fk_content_categories: -1, type_advertisement: -1, content_status: -1, with_script: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
