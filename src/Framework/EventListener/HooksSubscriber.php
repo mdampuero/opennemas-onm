@@ -423,11 +423,21 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->deleteGroup($this->view->getCacheId('rss', 'last'))
                 ->deleteGroup($this->view->getCacheId('rss', 'fia'))
                 ->deleteGroup($this->view->getCacheId('rss', $content->category_name))
+                // Deleting sitemap cache files
+                ->deleteGroup($this->view->getCacheId('sitemap', 'image'))
+                ->deleteGroup($this->view->getCacheId('sitemap', 'news'))
+                ->deleteGroup($this->view->getCacheId('sitemap', 'web'))
                 // Deleting frontpage cache files
                 ->deleteGroup($this->view->getCacheId('frontpage', 'home'))
                 ->deleteGroup($this->view->getCacheId('frontpage', 'category', $content->category_name));
+        } elseif ($content->content_type_name == 'video') {
+            $this->smartyCacheHandler
+                ->deleteGroup($this->view->getCacheId('sitemap', 'video'));
         } elseif ($content->content_type_name == 'opinion') {
-            $this->smartyCacheHandler->deleteGroup($this->view->getCacheId('frontpage', 'blog'));
+            $this->smartyCacheHandler
+                ->deleteGroup($this->view->getCacheId('sitemap', 'news'))
+                ->deleteGroup($this->view->getCacheId('sitemap', 'web'))
+                ->deleteGroup($this->view->getCacheId('frontpage', 'blog'));
         }
 
         $this->cleanOpcode();
