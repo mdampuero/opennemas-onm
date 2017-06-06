@@ -413,7 +413,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->smartyCacheHandler
             ->deleteGroup($this->view->getCacheId('content', $content->pk_content))
             ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name))
-            ->deleteGroup($this->view->getCacheId('frontpage', 'category', $content->category_name))
             ->deleteGroup($this->view->getCacheId('rss', $content->content_type_name))
             ->deleteGroup($this->view->getCacheId('archive', date('Ymd')));
 
@@ -425,7 +424,8 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->deleteGroup($this->view->getCacheId('rss', 'fia'))
                 ->deleteGroup($this->view->getCacheId('rss', $content->category_name))
                 // Deleting frontpage cache files
-                ->deleteGroup($this->view->getCacheId('frontpage', 'home'));
+                ->deleteGroup($this->view->getCacheId('frontpage', 'home'))
+                ->deleteGroup($this->view->getCacheId('frontpage', 'category', $content->category_name));
         } elseif ($content->content_type_name == 'opinion') {
             $this->smartyCacheHandler->deleteGroup($this->view->getCacheId('frontpage', 'blog'));
         }
