@@ -38,7 +38,8 @@
           body: '',
           params: {},
           summary: '',
-          created: new Date()
+          created: new Date(),
+          starttime: new Date()
         };
 
         /**

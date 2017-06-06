@@ -34,15 +34,9 @@
             'datetimePickerMax': '=?'
           },
           link: function ($scope, element, $attrs) {
-            var format = 'YYYY-MM-DD HH:mm:ss';
-
-            if ($attrs.datetimePickerFormat) {
-              format = $attrs.datetimePickerFormat;
-            }
-
             var config = {
-              useCurrent: false,
-              format: format
+              format:     $attrs.datetimePickerFormat || 'YYYY-MM-DD HH:mm:ss',
+              useCurrent: $attrs.datetimePickerUseCurrent === 'true'
             };
 
             if ($attrs.datetimePickerMin && $scope.datetimePickerMin) {
@@ -61,29 +55,33 @@
               $scope.datetimePicker = picker;
             }
 
+            if ($scope.ngModel) {
+              $scope.ngModel = $window.moment($scope.ngModel)
+                .format(config.format);
+            }
+
             element.on('dp.change', function() {
                 $scope.ngModel = null;
 
                 if (picker.date()) {
                   $timeout(function() {
                     var date = $window.moment(picker.date());
-                    $scope.ngModel = date.format(format);
+                    $scope.ngModel = date.format(config.format);
                   });
                 }
             });
 
-            // Update min/max values
             $scope.$watch('datetimePickerMin', function (nv) {
-              if ($window.moment(nv, format, true).isValid() &&
+              if ($window.moment(nv, config.format, true).isValid() &&
                   $attrs.datetimePickerMin) {
-                element.data("DateTimePicker").minDate(nv);
+                element.data('DateTimePicker').minDate(nv);
               }
             }, true);
 
             $scope.$watch('datetimePickerMax', function (nv) {
-              if ($window.moment(nv, format, true).isValid() &&
+              if ($window.moment(nv, config.format, true).isValid() &&
                   $attrs.datetimePickerMax) {
-                element.data("DateTimePicker").maxDate(nv);
+                element.data('DateTimePicker').maxDate(nv);
               }
             }, true);
           }
