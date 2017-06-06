@@ -485,18 +485,28 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheOpinion(Event $event)
     {
-        $authorId   = $event->getArgument('authorId');
-        $authorSlug = $event->getArgument('authorSlug');
-        $opinionId  = $event->getArgument('opinionId');
+        if (!$event->hasArgument('content')) {
+            return;
+        }
+
+        $content  = $event->getArgument('content');
+        if (empty($content->fk_author)) {
+            return;
+        }
+
+        $author = $this->container->get('user_repository')->find($content->fk_author);
 
         $this->smartyCacheHandler
-            ->deleteGroup($this->view->getCacheId('content', $opinionId))
+            ->deleteGroup($this->view->getCacheId('content', $content->id))
             ->deleteGroup($this->view->getCacheId('frontpage', 'blog'))
-            ->deleteGroup($this->view->getCacheId('frontpage', 'opinion'))
+            ->deleteGroup($this->view->getCacheId('frontpage', 'opinion'));
 
-            // TODO check this condition not sure if this works as expected
-            ->deleteGroup($this->view->getCacheId('frontpage', 'blog', sprintf('%06d', $authorId)))
-            ->deleteGroup($this->view->getCacheId('frontpage', 'opinion', sprintf('%06d', $authorId)));
+        if (is_object($author)) {
+            $this->smartyCacheHandler
+                ->deleteGroup($this->view->getCacheId('frontpage', 'author', $author->slug))
+                ->deleteGroup($this->view->getCacheId('frontpage', 'blog', $author->id))
+                ->deleteGroup($this->view->getCacheId('frontpage', 'opinion', $author->id));
+        }
 
         $this->cleanOpcode();
     }
@@ -514,7 +524,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $instance = $event->getArgument('instance');
 
-        // Setup cache manager fro the target instance
+        // Setup cache manager from the target instance
         $this->view = $this->container->get('core.template');
         $this->view->addInstance($instance);
         $this->smartyCacheHandler = $this->container->get('template_cache_manager')->setSmarty($this->view);
