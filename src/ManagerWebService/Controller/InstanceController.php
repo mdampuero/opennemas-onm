@@ -51,25 +51,31 @@ class InstanceController extends Controller
 
             $database = $instance->getDatabaseName();
 
-            $em->remove($instance);
-            $msg->add(_('Instance deleted successfully'), 'success');
-
-            $this->get('core.dispatcher')
-                ->dispatch('instance.delete', [ 'instance' => $instance ]);
-
             $creator->setBackupPath($backupPath);
             $creator->backupAssets($assetFolder);
             $creator->backupDatabase($database);
             $creator->backupInstance($instance->id);
             $creator->deleteDatabase($database);
             $creator->deleteAssets($instance->internal_name);
+
+            $em->remove($instance);
+            $msg->add(_('Instance deleted successfully'), 'success');
+
+            $this->get('core.dispatcher')
+                ->dispatch('instance.delete', [ 'instance' => $instance ]);
         } catch (BackupException $e) {
+            error_log($e->getMessage());
+
             $creator->deleteBackup($backupPath);
             $msg->add($e->getMessage(), 'error', 400);
         } catch (DatabaseNotDeletedException $e) {
+            error_log($e->getMessage());
+
             $creator->deleteBackup($backupPath);
             $msg->add($e->getMessage(), 'error', 400);
         } catch (\Exception $e) {
+            error_log($e->getMessage());
+
             $creator->restoreAssets($backupPath);
             $creator->restoreDatabase($backupPath . DS . 'database.sql');
             $creator->deleteBackup($backupPath);
