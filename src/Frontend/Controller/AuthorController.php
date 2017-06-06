@@ -36,6 +36,7 @@ class AuthorController extends Controller
         $itemsPerPage = 12;
 
         // Setup templating cache layer
+        $this->view->setConfig('frontpages');
         $cacheID = $this->view->getCacheId('frontpage', 'author', $slug, $page);
 
         if (($this->view->getCaching() === 0)
@@ -161,6 +162,7 @@ class AuthorController extends Controller
         $itemsPerPage = 16;
 
         // Setup templating cache layer
+        $this->view->setConfig('frontpages');
         $cacheID = $this->view->getCacheId('frontpage', 'authors', $page);
 
         if ($this->view->getCaching() === 0
