@@ -46,7 +46,7 @@ class TagsController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
-        $cacheId = $this->view->getCacheId('tag', $tagName, $page);
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
