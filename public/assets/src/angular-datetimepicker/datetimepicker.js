@@ -35,14 +35,19 @@
           },
           link: function ($scope, element, $attrs) {
             var format = 'YYYY-MM-DD HH:mm:ss';
+            var useCurrent = false;
 
             if ($attrs.datetimePickerFormat) {
               format = $attrs.datetimePickerFormat;
             }
 
+            if ($attrs.datetimePickerUseCurrent) {
+              useCurrent = JSON.parse($attrs.datetimePickerUseCurrent);
+            }
+
             var config = {
-              useCurrent: false,
-              format: format
+              format: format,
+              useCurrent: useCurrent
             };
 
             if ($attrs.datetimePickerMin && $scope.datetimePickerMin) {
