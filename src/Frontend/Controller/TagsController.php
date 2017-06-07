@@ -29,10 +29,14 @@ class TagsController extends Controller
      */
     public function indexAction()
     {
-        $cacheId = $this->view->generateCacheId('frontpage', null, 'tag');
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', 'tag-index');
         $tags    = [ '#' => [], '*' => [] ];
 
-        if (!$this->view->isCached('tag/index.tpl', $cacheId)) {
+        $this->view->setConfig('frontpages');
+
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('tag/index.tpl', $cacheId)
+        ) {
             $fm      = $this->get('core.filter.manager');
             $t       = $this->get('core.manager.tag')->findAll();
             $letters = range('a', 'z');
