@@ -13,28 +13,37 @@ namespace Common\Core\Component\Helper;
 class AdvertisementHelper
 {
     /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * Array with all ads positions.
      *
      * @var array
      */
-    private $positions = [];
+    protected $positions = [];
 
     /**
      * Initializes the AdvertisementHelper.
      *
-     * @param Connection $conn The database connection.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct($conn)
+    public function __construct($container)
     {
-        $this->conn = $conn;
+        $this->container = $container;
+        $this->conn      = $container->get('orm.connection.instance');
     }
 
     /**
      * Add new advertisement position.
      *
      * @param array $positions Positions to add.
+     * @param string $themeName The theme name.
      */
-    public function addPositions($positions)
+    public function addPositions($positions, $themeName)
     {
         if (!is_array($positions)) {
             return $this;
@@ -42,10 +51,23 @@ class AdvertisementHelper
 
         foreach ($positions as $data) {
             $data['custom'] = true;
+            $data['theme'] = $themeName;
             $this->positions[$data['position']] = $data;
         }
 
         return $this;
+    }
+
+    /**
+     * Returns the name for an advertisement given its position.
+     *
+     * @param integer $id The advertisement position.
+     *
+     * @return string The advertisement name.
+     */
+    public function getAdvertisementName($id)
+    {
+        return $this->positions[$id]['name'];
     }
 
     /**
@@ -120,13 +142,21 @@ class AdvertisementHelper
     }
 
     /**
-     * undocumented function
+     * Checks if SafeFrame is enabled.
      *
-     * @return void
-     * @author
-     **/
-    public function getAdvertisementName($id)
+     * @return boolean True if SafeFrame is enabled. False otherwise.
+     */
+    public function isSafeFrameEnabled()
     {
-        return $this->positions[$id]['name'];
+        $settings = $this->container->get('setting_repository')
+            ->get('ads_settings');
+
+        if (array_key_exists('safe_frame', $settings)
+            && $settings['safe_frame']
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

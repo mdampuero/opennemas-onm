@@ -98,7 +98,7 @@ class Loader
             // Load advertisements, layouts and menus for parents
             foreach ($t->parameters as $key => $values) {
                 if (method_exists($this, 'load' . $key)) {
-                    $this->{'load' . $key}($values);
+                    $this->{'load' . $key}($values, $t->uuid);
                 }
             }
         }
@@ -109,7 +109,7 @@ class Loader
 
         foreach ($theme->parameters as $key => $values) {
             if (method_exists($this, 'load' . $key)) {
-                $this->{'load' . $key}($values);
+                $this->{'load' . $key}($values, $theme->uuid);
             }
         }
     }
@@ -340,29 +340,33 @@ class Loader
      * manager.
      *
      * @param array $positions The list of positions.
+     * @param string $themeName The theme name.
      */
-    protected function loadAdvertisements($positions)
+    protected function loadAdvertisements($positions, $themeName)
     {
         $this->container->get('core.helper.advertisement')
-            ->addPositions($positions);
+            ->addPositions($positions, $themeName);
     }
 
     /**
      * Adds layouts defined by theme to the layout manager.
      *
-     * @param array $positions The list of positions.
+     * @param array  $positions The list of positions.
+     * @param string $themeName The theme name.
      */
     protected function loadLayouts($layouts)
     {
-        $this->container->get('core.manager.layout')->addLayouts($layouts);
+        $this->container->get('core.manager.layout')
+            ->addLayouts($layouts);
     }
 
     /**
      * Adds menu positions defined by theme to the menu manager.
      *
-     * @param array $menus The list of menu positions.
+     * @param array  $menus The list of menu positions.
+     * @param string $themeName The theme name
      */
-    protected function loadMenus($menus)
+    protected function loadMenus($menus, $themeName)
     {
         $this->container->get('core.manager.menu')->addMenus($menus);
     }

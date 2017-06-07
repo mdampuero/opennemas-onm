@@ -31,7 +31,7 @@ class SystemSettingsController extends Controller
             'comscore', 'contact_email', 'cookies_hint_enabled',
             'cookies_hint_url', 'facebook', 'facebook_id', 'facebook_page',
             'favico', 'google_analytics', 'google_analytics_others',
-            'google_custom_search_api_key', 'google_maps_api_key',
+            'google_custom_search_api_key', 'google_maps_api_key', 'google_tags_id',
             'google_news_name', 'google_page', 'googleplus_page',
             'instagram_page', 'items_in_blog', 'items_per_page',
             'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',

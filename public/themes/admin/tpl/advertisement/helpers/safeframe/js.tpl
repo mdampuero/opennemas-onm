@@ -1,8 +1,10 @@
-<script>
+<script type="text/javascript">
   var _onmaq = _onmaq || {};
 
+  _onmaq.width          = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   _onmaq.category       = '{{$category}}';
   _onmaq.debug          = {{$debug}};
+  _onmaq.device         = _onmaq.width < 768 ? 'phone' : (_onmaq.width < 992 ? 'tablet' : 'desktop');
   _onmaq.extension      = '{{$extension}}';
   _onmaq.cookieLifetime = {if empty($lifetime)}86400{else}{{$lifetime}}{/if};
   _onmaq.slots          = [ {{$positions}} ];
@@ -14,7 +16,6 @@
   };
 
   (function() {
-
     var am = document.createElement('script');
 
     am.type  = 'text/javascript';

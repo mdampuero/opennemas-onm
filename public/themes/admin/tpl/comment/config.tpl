@@ -64,17 +64,6 @@
           </div>
           <div class="form-group">
             <div class="checkbox">
-              <input id="with_comments" name="configs[with_comments]" type="checkbox" value="1" {if !isset($configs['with_comments']) || $configs['with_comments'] == true}checked="checked"{/if} >
-              <label class="form-label" for="with_comments">
-                {t}Allow comments in contents by default{/t}
-              </label>
-              <span class="help">
-                {t}Whether to allow users to comment in comments by default for all contents (you can change this setting for specific contents){/t}
-              </span>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="checkbox">
               <input id="moderation" name="configs[moderation]" type="checkbox" value="1" {if $configs['moderation'] == true}checked="checked"{/if} >
               <label class="form-label" for="moderation">
                 {t}Before a comment appears{/t}
@@ -86,6 +75,7 @@
           </div>
         </div>
       </div>
+      {include file="comment/partials/_config.tpl"}
     </div>
   </form>
 {/block}

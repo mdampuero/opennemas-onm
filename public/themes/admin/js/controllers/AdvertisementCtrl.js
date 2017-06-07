@@ -62,7 +62,7 @@
        *
        * @type {Object}
        */
-      $scope.ui = { categories: [], user_groups: [] };
+      $scope.ui = { categories: [], user_groups: [], categories_all: true };
 
       /**
        * @function areAllCategoriesSelected
@@ -75,13 +75,15 @@
        *                   otherwise.
        */
       $scope.areAllCategoriesSelected = function() {
-        $scope.ui.categories = [];
-
         if ($scope.selected.all.categories) {
           $scope.ui.categories = $scope.extra.categories.map(function(e) {
             return e.id;
           });
+
+          return;
         }
+
+        $scope.ui.categories = [];
       };
 
       /**
@@ -194,7 +196,13 @@
           $scope.ui.user_groups = $scope.params.user_groups;
         }
 
+        $scope.ui.categories_all = true;
+
         if (categories && angular.isArray(categories)) {
+          if (categories.length > 0) {
+            $scope.ui.categories_all = false;
+          }
+
           $scope.ui.categories = categories.map(function (e) {
             return parseInt(e);
           });
@@ -382,6 +390,11 @@
       });
 
       // Updates selected all flag when categories change
+      $scope.$watch('ui.categories_all', function () {
+        $scope.categories = null;
+      });
+
+      // Updates selected all flag when categories change
       $scope.$watch('ui.categories', function (nv) {
         $scope.selected.all.categories = false;
 
@@ -389,7 +402,9 @@
           $scope.selected.all.categories = true;
         }
 
-        $scope.categories = angular.toJson(nv);
+        if (!$scope.ui.categories_all) {
+          $scope.categories = angular.toJson(nv);
+        }
       }, true);
 
       // Updates selected all flag when groups change
