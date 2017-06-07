@@ -76,6 +76,7 @@ class InstanceController extends Controller
         } catch (\Exception $e) {
             error_log($e->getMessage());
 
+            $creator->restoreInstance($backupPath);
             $creator->restoreAssets($backupPath);
             $creator->restoreDatabase($backupPath . DS . 'database.sql');
             $creator->deleteBackup($backupPath);
