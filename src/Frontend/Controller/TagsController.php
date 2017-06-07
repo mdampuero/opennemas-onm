@@ -10,10 +10,11 @@
 namespace Frontend\Controller;
 
 use Common\Core\Annotation\BotDetector;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Displays a list of tags or a list of contents by tag.
@@ -29,6 +30,12 @@ class TagsController extends Controller
      */
     public function indexAction()
     {
+        if (!$this->get('core.security')
+            ->hasExtension('es.openhost.module.tagIndex')
+        ) {
+            throw new ResourceNotFoundException();
+        }
+
         $cacheId = $this->view->getCacheId('frontpage', 'tag', 'tag-index');
         $tags    = [ '#' => [], '*' => [] ];
 
