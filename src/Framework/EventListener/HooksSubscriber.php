@@ -252,7 +252,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 }
 
                 $this->smartyCacheHandler
-                    ->deleteGroup($this->view->getCacheId('content', $opinion->pk_content));
+                    ->deleteGroup($this->view->getCacheId('content', $opinion['pk_content']));
             }
         }
 
