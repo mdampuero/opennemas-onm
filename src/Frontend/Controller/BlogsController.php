@@ -38,11 +38,10 @@ class BlogsController extends Controller
     {
         $page = $request->query->getDigits('page', 1);
 
-        // Setup view layer
+        // Setup templating cache layer
         $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('frontpage', 'blog', $page);
 
-        // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId('blog', '', $page);
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
@@ -58,10 +57,10 @@ class BlogsController extends Controller
             $order   = array('starttime' => 'DESC');
             $date    = date('Y-m-d H:i:s');
             $filters = array(
-                'content_type_name' => array(array('value' => 'opinion')),
-                'type_opinion'      => array(array('value' => 0)),
-                'content_status'    => array(array('value' => 1)),
-                'blog'              => array(array('value' => 1)),
+                'content_type_name' => [[ 'value' => 'opinion' ]],
+                'type_opinion'      => [[ 'value' => 0 ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'blog'              => [[ 'value' => 1 ]],
                 'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS' ],
@@ -110,14 +109,12 @@ class BlogsController extends Controller
                 }
             }
 
-            $this->view->assign(
-                array(
-                    'opinions'   => $blogs,
-                    'authors'    => $authors,
-                    'pagination' => $pagination,
-                    'page'       => $page
-                )
-            );
+            $this->view->assign([
+                'opinions'   => $blogs,
+                'authors'    => $authors,
+                'pagination' => $pagination,
+                'page'       => $page
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds();
@@ -147,10 +144,10 @@ class BlogsController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
+        // Setup templating cache layer
         $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('frontpage', 'author', $slug, $page);
 
-        // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId('blog', $slug, $page);
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
@@ -228,14 +225,12 @@ class BlogsController extends Controller
                     ],
                 ]);
 
-                $this->view->assign(
-                    array(
-                        'pagination' => $pagination,
-                        'blogs'      => $blogs,
-                        'author'     => $author,
-                        'page'       => $page,
-                    )
-                );
+                $this->view->assign([
+                    'pagination' => $pagination,
+                    'blogs'      => $blogs,
+                    'author'     => $author,
+                    'page'       => $page,
+                ]);
             }
         } // End if isCached
 
@@ -269,19 +264,16 @@ class BlogsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // Setup view
-        $this->view->setConfig('opinion');
-
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($blog);
 
-        // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId('blog', '', $blog->id);
+        // Setup templating cache layer
+        $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('content', $blog->id);
+
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
-            $this->view->assign('contentId', $blog->id);
-
             $author = $this->get('user_repository')->find($blog->fk_author);
             $blog->author = $author;
 
@@ -291,14 +283,11 @@ class BlogsController extends Controller
                 || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)
             ) {
                 return new RedirectResponse(
-                    $this->generateUrl(
-                        'frontend_opinion_show',
-                        array(
-                            'blog_id' => $dirtyID,
-                            'author_name' => $author->username,
-                            'blog_title'  => $blog->slug,
-                        )
-                    )
+                    $this->generateUrl('frontend_opinion_show',[
+                        'blog_id' => $dirtyID,
+                        'author_name' => $author->username,
+                        'blog_title'  => $blog->slug,
+                    ])
                 );
             }
 
@@ -308,17 +297,18 @@ class BlogsController extends Controller
                 $this->view->assign('photo', $photo);
             }
             $this->view->assign(['author' => $author]);
-        } // End if isCached
+        }
 
         list($positions, $advertisements) = $this->getAds('inner');
 
         // Show in Frontpage
         return $this->render('opinion/blog_inner.tpl', [
-            'blog'            => $blog,
-            'content'         => $blog,
-            'cache_id'        => $cacheID,
-            'advertisements'  => $advertisements,
             'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'blog'            => $blog,
+            'cache_id'        => $cacheID,
+            'content'         => $blog,
+            'contentId'       => $blog->id,
             'actual_category' => 'blog', // Used in renderMenu
             'x-tags'          => 'blog-inner,'.$blog->id,
             'x-cache-for'     => '+1 day',

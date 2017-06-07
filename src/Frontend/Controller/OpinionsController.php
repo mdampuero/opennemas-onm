@@ -29,19 +29,6 @@ use Onm\Settings as s;
 class OpinionsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view->setConfig('opinion');
-
-        $this->category_name = $this->request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
-        $this->view->assign('actual_category', 'opinion'); // Used in renderMenu
-    }
-
-    /**
      * Renders the opinion frontpage
      *
      * @return Response the response object
@@ -50,10 +37,10 @@ class OpinionsController extends Controller
     {
         $page = $this->request->query->getDigits('page', 1);
 
-        // Index frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
+        // Setup templating cache layer
+        $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('frontpage', 'opinion', $page);
 
-        // Don't execute the app logic if there are caches available
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
@@ -217,18 +204,15 @@ class OpinionsController extends Controller
         }
 
         list($positions, $advertisements) = $this->getAds();
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
 
-        return $this->render(
-            'opinion/opinion_frontpage.tpl',
-            array(
-                'cache_id'        => $cacheID,
-                'actual_category' => 'opinion',
-                'x-tags'          => 'opinion-frontpage,'.$page,
-                'x-cache-for'     => '+1 day'
-            )
-        );
+        return $this->render('opinion/opinion_frontpage.tpl',[
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'actual_category' => 'opinion',
+            'cache_id'        => $cacheID,
+            'x-tags'          => 'opinion-frontpage,'.$page,
+            'x-cache-for'     => '+1 day',
+        ]);
     }
 
     /**
@@ -238,27 +222,20 @@ class OpinionsController extends Controller
      **/
     public function extFrontpageAction()
     {
-        $page = $this->request->query->getDigits('page', 1);
+        $page         = $this->request->query->getDigits('page', 1);
         $categoryName = 'opinion';
 
-        // Index frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
+        // Setup templating cache layer
+        $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('sync', 'frontpage', 'opinion', $page);
 
-        // Don't execute the app logic if there are caches available
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
             // Get sync params
-            $wsUrl = '';
-            $syncParams = s::get('sync_params');
-            if ($syncParams) {
-                foreach ($syncParams as $siteUrl => $values) {
-                    if (is_array($values['categories'])
-                        && in_array($categoryName, $values['categories'])
-                    ) {
-                        $wsUrl = $siteUrl;
-                    }
-                }
+            $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+            if (empty($wsUrl)) {
+                throw new ResourceNotFoundException();
             }
 
             $this->cm = new \ContentManager();
@@ -329,25 +306,23 @@ class OpinionsController extends Controller
                 'route'       => 'frontend_opinion_external_frontpage'
             ]);
 
-            $this->view->assign(
-                array(
-                    'editorial'  => $editorial,
-                    'opinions'   => $opinions,
-                    'authors'    => $authors,
-                    'pagination' => $pagination,
-                    'page'       => $page,
-                    'ext'        => $externalMediaUrl,
-                )
-            );
+            $this->view->assign([
+                'editorial'  => $editorial,
+                'opinions'   => $opinions,
+                'authors'    => $authors,
+                'pagination' => $pagination,
+                'page'       => $page,
+                'ext'        => $externalMediaUrl,
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('opinion/opinion_frontpage.tpl', [
+            'actual_category' => 'opinion',
             'ads_positions'   => $positions,
             'advertisements'  => $advertisements,
             'cache_id'        => $cacheID,
-            'actual_category' => 'opinion',
             'x-tags'          => 'ext-opinion-frontpage',
             'x-cache-for'     => '+1 day'
         ]);
@@ -363,21 +338,22 @@ class OpinionsController extends Controller
      **/
     public function frontpageAuthorAction(Request $request)
     {
-        // Index author's frontpage
-        $authorID = $request->query->getDigits('author_id', null);
-        $page = $this->request->query->getDigits('page', 1);
+        $authorID = (int) $request->query->getDigits('author_id', null);
+        $page     = $this->request->query->getDigits('page', 1);
 
         if (empty($authorID)) {
             throw new ResourceNotFoundException();
         }
 
-        // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $page);
+        // Setup templating cache layer
+        $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('frontpage', 'opinion', $authorID, $page);
+
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get author info
-            $author = $this->get('user_repository')->find((int)$authorID);
+            $author = $this->get('user_repository')->find($authorID);
             if (is_null($author)) {
                 throw new ResourceNotFoundException();
             }
@@ -414,7 +390,6 @@ class OpinionsController extends Controller
                 // Editorial
                 $filters['type_opinion'] = [['value' => 1]];
                 $author->slug = 'editorial';
-                $this->view->assign('actual_category', 'editorial');
             } elseif ($author->id == 2 && $author->username == 'director') {
                 // Director
                 $filters['type_opinion'] = [['value' => 2]];
@@ -470,24 +445,22 @@ class OpinionsController extends Controller
                 ]
             ]);
 
-            $this->view->assign(
-                array(
-                    'pagination' => $pagination,
-                    'opinions'   => $opinions,
-                    'author'     => $author,
-                    'page'       => $page,
-                )
-            );
+            $this->view->assign([
+                'pagination' => $pagination,
+                'opinions'   => $opinions,
+                'author'     => $author,
+                'page'       => $page,
+            ]);
         }
 
         // Fetch information for Advertisements
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('opinion/opinion_author_index.tpl', [
+            'actual_category' => 'opinion',
             'ads_positions'   => $positions,
             'advertisements'  => $advertisements,
             'cache_id'        => $cacheID,
-            'actual_category' => 'opinion',
             'x-tags'          => 'author-frontpage,'.$authorID.','.$page,
             'x-cache-for'     => '+1 day'
         ]);
@@ -502,33 +475,26 @@ class OpinionsController extends Controller
      **/
     public function extFrontpageAuthorAction(Request $request)
     {
-        // Fetch HTTP params
         $authorID     = $request->query->getDigits('author_id', null);
         $authorSlug   = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
-        $page         = $this->request->query->getDigits('page', 1);
+        $page         = $request->query->getDigits('page', 1);
         $categoryName = 'opinion';
 
         if (empty($authorID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
         }
 
-        // Author frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $page);
-        // Don't execute the app logic if there are caches available
+        // Setup templating cache layer
+        $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('sync', 'frontpage', 'opinion', $authorID, $page);
+
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get sync params
-            $wsUrl = '';
-            $syncParams = s::get('sync_params');
-            if ($syncParams) {
-                foreach ($syncParams as $siteUrl => $values) {
-                    if (is_array($values['categories'])
-                        && in_array($categoryName, $values['categories'])
-                    ) {
-                        $wsUrl = $siteUrl;
-                    }
-                }
+            $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+            if (empty($wsUrl)) {
+                throw new ResourceNotFoundException();
             }
 
             $this->cm = new \ContentManager();
@@ -577,19 +543,19 @@ class OpinionsController extends Controller
 
                     $opinion->uri = $this->generateUrl(
                         'frontend_opinion_external_show_with_author_slug',
-                        array(
+                        [
                             'opinion_id'    => date('YmdHis', strtotime($opinion->created)).$opinion->id,
                             'author_name'   => $author->slug,
                             'opinion_title' => $opinion->slug,
-                        )
+                        ]
                     );
 
                     $opinion->author_uri = $this->generateUrl(
                         'frontend_opinion_external_author_frontpage',
-                        array(
+                        [
                             'author_id' => sprintf('%06d', $author->id),
                             'author_slug' => $author->slug,
-                        )
+                        ]
                     );
 
                     $opinion = (array)$opinion; // template dependency
@@ -616,24 +582,22 @@ class OpinionsController extends Controller
                 ]
             ]);
 
-            $this->view->assign(
-                array(
-                    'pagination' => $pagination,
-                    'opinions'   => $opinions,
-                    'author'     => $author,
-                    'page'       => $page,
-                    'ext'        => $externalMediaUrl,
-                )
-            );
-        } // End if isCached
+            $this->view->assign([
+                'pagination' => $pagination,
+                'opinions'   => $opinions,
+                'author'     => $author,
+                'page'       => $page,
+                'ext'        => $externalMediaUrl,
+            ]);
+        }
 
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('opinion/opinion_author_index.tpl', [
+            'actual_category' => 'opinion',
             'ads_positions'   => $positions,
             'advertisements'  => $advertisements,
             'cache_id'        => $cacheID,
-            'actual_category' => 'opinion',
             'x-tags'          => 'ext-opinion-frontpage-author,page-'.$page.',author-'.$authorID,
             'x-cache-for'     => '+3 hours'
         ]);
@@ -661,8 +625,10 @@ class OpinionsController extends Controller
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($opinion);
 
-        // Don't execute the app logic if there are caches available
-        $cacheId = $this->view->generateCacheId($this->category_name, '', $opinion->id);
+        // Setup templating cache layer
+        $this->view->setConfig('opinion');
+        $cacheId = $this->view->getCacheId('content', $opinion->id);
+
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheId)
         ) {
@@ -674,14 +640,11 @@ class OpinionsController extends Controller
                 && $author->meta['is_blog'] == 1
             ) {
                 return new RedirectResponse(
-                    $this->generateUrl(
-                        'frontend_blog_show',
-                        array(
-                            'blog_id'     => $dirtyID,
-                            'author_name' => $author->username,
-                            'blog_title'  => $opinion->slug,
-                        )
-                    )
+                    $this->generateUrl('frontend_blog_show', [
+                        'blog_id'     => $dirtyID,
+                        'author_name' => $author->username,
+                        'blog_title'  => $opinion->slug,
+                    ])
                 );
             }
 
@@ -748,20 +711,18 @@ class OpinionsController extends Controller
             $this->view->assign(
                 [ 'other_opinions' => $otherOpinions, 'author' => $author]
             );
-        } // End if isCached
+        }
 
-        //Fetch information for Advertisements
         list($positions, $advertisements) = $this->getAds('inner');
 
-        // Show in Frontpage
         return $this->render('opinion/opinion.tpl', [
+            'actual_category' => 'opinion',
             'ads_positions'   => $positions,
             'advertisements'  => $advertisements,
-            'opinion'         => $opinion,
+            'cache_id'        => $cacheId,
             'content'         => $opinion,
             'contentId'       => $opinion->id,
-            'cache_id'        => $cacheId,
-            'actual_category' => 'opinion',
+            'opinion'         => $opinion,
             'x-tags'          => 'opinion,'.$opinion->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable,
@@ -777,8 +738,8 @@ class OpinionsController extends Controller
      **/
     public function extShowAction(Request $request)
     {
-        // Fetch HTTP params
         $dirtyID = $request->query->getDigits('opinion_id');
+        $categoryName = 'opinion';
 
         // Redirect to opinion frontpage if opinion_id wasn't provided
         if (empty($dirtyID)) {
@@ -786,19 +747,16 @@ class OpinionsController extends Controller
         }
 
         // Get sync params
-        $wsUrl = '';
-        $syncParams = s::get('sync_params');
-        if ($syncParams) {
-            foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($this->category_name, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-                }
-            }
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        if (empty($wsUrl)) {
+            throw new ResourceNotFoundException();
         }
 
-        $cacheID = $this->view->generateCacheId('sync'.$this->category_name, null, $dirtyID);
+        // Setup templating cache layer
+        $this->view->setConfig('opinion');
+        $cacheID = $this->view->getCacheId('sync', 'content', $dirtyID);
 
-        if ($this->view->getCaching() === 0
+        if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
             $this->cm = new \ContentManager();
@@ -809,20 +767,16 @@ class OpinionsController extends Controller
             if ($opinion->content_status != 1 || $opinion->in_litter == 1) {
                 throw new ResourceNotFoundException();
             }
-
             // Overload opinion object with category_name (used on ext_print)
             $opinion->category_name = $this->category_name;
+
 
             if (isset($opinion->img2) && ($opinion->img2 > 0)) {
                 $photo = new \Photo($opinion->img2);
                 $this->view->assign('photo', $photo);
             }
 
-            list($positions, $advertisements) = $this->getAds('inner');
-
             $this->view->assign([
-                'ads_positions'   => $positions,
-                'advertisements'  => $advertisements,
                 'other_opinions'  => $opinion->otherOpinions,
                 'suggested'       => $opinion->machineRelated,
                 'opinion'         => $opinion,
@@ -830,13 +784,18 @@ class OpinionsController extends Controller
                 'actual_category' => 'opinion',
                 'media_url'       => $opinion->externalMediaUrl,
                 'contentId'       => $opinion->id,
-                'ext'             => 1 // Used on widgets
+                'ext'             => 1 //Used on widgets
             ]);
         }
 
+        list($positions, $advertisements) = $this->getAds('inner');
+
+        // Show in Frontpage
         return $this->render('opinion/opinion.tpl', [
-            'cache_id'        => $cacheID,
             'actual_category' => 'opinion',
+            'ads_positions'   => $positions,
+            'advertisements'  => $advertisements,
+            'cache_id'        => $cacheID,
             'x-tags'          => 'ext-opinion,'.$opinion->id,
             'x-cache-for'     => '+1 day',
         ]);

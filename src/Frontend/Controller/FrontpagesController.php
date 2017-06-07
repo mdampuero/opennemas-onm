@@ -30,8 +30,6 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $this->view->setConfig('frontpages');
-
         $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $categoryId    = 0;
         $categoryTitle = 0;
@@ -48,9 +46,8 @@ class FrontpagesController extends Controller
             }
         }
 
-        $cacheId = 'frontpage|' . $categoryName . '|' . $this
-            ->get('setting_repository')
-            ->get('frontpage_' . $categoryId . '_last_saved');
+        // Fetch when the frontpage was saved
+        $lastSaved = $this->get('setting_repository')->get('frontpage_' . $categoryId . '_last_saved');
 
         $cm        = new \ContentManager;
         $contents  = $cm->getContentsForHomepageOfCategory($categoryId);
@@ -72,8 +69,9 @@ class FrontpagesController extends Controller
 
         $contents = $cm->getInTime($contents);
 
-        // Fetch ads
-        list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
+        // Setup templating cache layer
+        $this->view->setConfig('frontpages');
+        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
@@ -186,6 +184,8 @@ class FrontpagesController extends Controller
             $this->view->assign('layoutFile', $layoutFile);
         }
 
+        list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
+
         return $this->render('frontpage/frontpage.tpl', [
             'advertisements'  => $advertisements,
             'ads_positions'   => $adsPositions,
@@ -208,30 +208,21 @@ class FrontpagesController extends Controller
     {
         // Fetch HTTP variables
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $this->view->setConfig('frontpages');
-
-        // Setup view
-        $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, 0);
 
         // Get sync params
-        $wsUrl = '';
-        $syncParams = $this->get('setting_repository')->get('sync_params');
-        if ($syncParams) {
-            foreach ($syncParams as $siteUrl => $values) {
-                if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-                }
-            }
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        if (empty($wsUrl)) {
+            throw new ResourceNotFoundException();
         }
 
-        $cm = new \ContentManager;
         // Get category id correspondence
+        $cm = new \ContentManager;
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        // Fetch advertisement information from external
-        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
-        $this->view->assign('advertisements', $ads);
 
-        // Avoid to run the entire app logic if is available a cache for this page
+        // Setup templating cache layer
+        $this->view->setConfig('frontpages');
+        $cacheID = $this->view->getCacheId('sync', 'frontpage', $categoryName);
+
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
@@ -276,14 +267,14 @@ class FrontpagesController extends Controller
             $this->view->assign('layoutFile', $layoutFile);
         }
 
-        return $this->render(
-            'frontpage/frontpage.tpl',
-            [
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'frontpage-page,frontpage-page-external,'.$categoryName,
-                'x-cache-for' => '+3 hour',
-            ]
-        );
+        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
+
+        return $this->render('frontpage/frontpage.tpl', [
+            'advertisements' => $ads,
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'frontpage-page,frontpage-page-external,'.$categoryName,
+            'x-cache-for'    => '+3 hour',
+        ]);
     }
 
     /**

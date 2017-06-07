@@ -44,12 +44,13 @@ class TagsController extends Controller
             $page = 2;
         }
 
-        // Load config
+        // Setup templating cache layer
         $this->view->setConfig('frontpages');
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
 
-        $cacheId = "tag|$tagName|$page";
-
-        if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
+        ) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
             $itemsPerPage = $this->get('setting_repository')->get('items_in_blog');
             if (empty($itemsPerPage)) {
@@ -57,15 +58,15 @@ class TagsController extends Controller
             }
 
             $criteria = array(
-                'content_status'  => array(array('value' => 1)),
-                'in_litter'       => array(array('value' => 0)),
-                'fk_content_type' => array(
-                    array('value' => 1),
-                    // array('value' => 4),
-                    // array('value' => 7),
-                    // array('value' => 9),
+                'content_status'  => [['value' => 1]],
+                'in_litter'       => [['value' => 0]],
+                'fk_content_type' => [
+                    ['value' => 1],
+                    // ['value' => 4],
+                    // ['value' => 7],
+                    // ['value' => 9],
                     'union' => 'OR'
-                ),
+                ],
                 'metadata' => array(array('value' => '%' . $tag . '%', 'operator' => 'LIKE'))
             );
 
@@ -155,7 +156,7 @@ class TagsController extends Controller
     public static function getInnerAds($category = 'home')
     {
         $category       = (!isset($category) || ($category=='home'))? 0: $category;
-        $positions      = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $positions      = [7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193];
         $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 

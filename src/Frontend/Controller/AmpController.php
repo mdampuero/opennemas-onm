@@ -52,11 +52,12 @@ class AmpController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-
         $this->ccm  = \ContentCategoryManager::get_instance();
+
+        $dirtyID          = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $categoryName     = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $urlSlug          = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $actualCategoryId = $this->ccm->get_id($categoryName);
 
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
@@ -75,18 +76,13 @@ class AmpController extends Controller
             newrelic_disable_autorum();
         }
 
-        // Load config
-        $this->view->setConfig('articles');
-
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($article);
 
-        // Advertisements for single article NO CACHE
-        $actualCategoryId = $this->ccm->get_id($categoryName);
-        $ads = $this->getAds($actualCategoryId);
-        $this->view->assign('advertisements', $ads);
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('content', $article->id, 'amp');
 
-        $cacheID = $this->view->generateCacheId($categoryName, null, $article->id);
         if ($this->view->getCaching() === 0
             || !$this->view->isCached("amp/article.tpl", $cacheID)
         ) {
@@ -199,21 +195,21 @@ class AmpController extends Controller
             }
         }
 
-        return $this->render(
-            "amp/article.tpl",
-            [
-                'contentId'       => $article->id,
-                'category_name'   => $categoryName,
-                'article'         => $article,
-                'content'         => $article,
-                'actual_category' => $categoryName,
-                'time'            => '12345',
-                'cache_id'        => $cacheID,
-                'x-tags'          => 'article-amp,article,'.$article->id,
-                'x-cache-for'     => '+1 day',
-                'x-cacheable'     => $cacheable
-            ]
-        );
+        $advertisements = $this->getAds($actualCategoryId);
+
+        return $this->render("amp/article.tpl", [
+            'advertisements'  => $advertisements,
+            'contentId'       => $article->id,
+            'category_name'   => $categoryName,
+            'article'         => $article,
+            'content'         => $article,
+            'actual_category' => $categoryName,
+            'time'            => '12345',
+            'cache_id'        => $cacheID,
+            'x-tags'          => 'article-amp,article,'.$article->id,
+            'x-cache-for'     => '+1 day',
+            'x-cacheable'     => $cacheable
+        ]);
     }
 
     /**

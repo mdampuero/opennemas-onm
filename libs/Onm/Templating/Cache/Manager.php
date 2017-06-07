@@ -61,6 +61,8 @@ class Manager
         $this->smarty = $smarty;
 
         $this->cacheDir = $this->smarty->cache_dir;
+
+        return $this;
     }
 
     /**
@@ -70,9 +72,21 @@ class Manager
      *
      * @return void
      */
-    public function clearGroupCache($cacheGroup)
+    public function deleteGroup($cacheGroup)
     {
         $this->smarty->clearCache(null, $cacheGroup);
+
+        return $this;
+    }
+
+    /**
+     * Deletes all the caches
+     *
+     * @return void
+     */
+    public function deleteAll()
+    {
+        $this->smarty->clearAllCache();
     }
 
     /**
