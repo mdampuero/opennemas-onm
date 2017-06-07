@@ -338,7 +338,7 @@ class OpinionsController extends Controller
      **/
     public function frontpageAuthorAction(Request $request)
     {
-        $authorID = $request->query->getDigits('author_id', null);
+        $authorID = (int) $request->query->getDigits('author_id', null);
         $page     = $this->request->query->getDigits('page', 1);
 
         if (empty($authorID)) {
@@ -353,7 +353,7 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get author info
-            $author = $this->get('user_repository')->find((int)$authorID);
+            $author = $this->get('user_repository')->find($authorID);
             if (is_null($author)) {
                 throw new ResourceNotFoundException();
             }
