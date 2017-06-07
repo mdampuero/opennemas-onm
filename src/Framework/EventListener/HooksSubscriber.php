@@ -53,7 +53,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['mockHookAction', 0],
             ],
             'author.update' => [
-                ['removeMultiCacheAllAuthors', 5],
+                ['removeObjectCacheMultiCacheAllAuthors', 5],
             ],
             'author.delete' => [
                 ['mockHookAction', 0],
@@ -121,17 +121,17 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             // Instance hooks
             'instance.delete' => [
-                ['removeCacheForInstance', 5],
-                ['removeCountries', 5],
+                ['removeObjectCacheForInstance', 5],
+                ['removeObjectCacheCountries', 5],
             ],
             'instance.update' => [
-                ['removeCacheForInstance', 5],
+                ['removeObjectCacheForInstance', 5],
                 ['removeSmartyForInstance', 5],
                 ['removeVarnishInstanceCacheUsingInstance', 5],
-                ['removeCountries', 5],
+                ['removeObjectCacheCountries', 5],
             ],
             'instance.client.update' => [
-                ['removeCacheForInstance', 5],
+                ['removeObjectCacheForInstance', 5],
             ],
             'theme.change' => [
                 ['removeSmartyCacheAll', 5],
@@ -225,11 +225,35 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Removes the list of countries for manager from cache.
+     *
+     * @param Event $event The event object.
+     */
+    public function removeObjectCacheCountries(Event $event)
+    {
+        $this->container->get('cache.manager')->getConnection('manager')
+            ->removeByPattern('*countries*');
+    }
+
+    /**
+     * Removes the instance from cache.
+     *
+     * @param Event $event The event object.
+     */
+    public function removeObjectCacheForInstance(Event $event)
+    {
+        $instance = $event->getArgument('instance');
+
+        $this->container->get('cache.manager')->getConnection('manager')
+            ->remove($instance->domains);
+    }
+
+    /**
      * Deletes the Smarty cache when an author is updated.
      *
      * @param Event $event The event to handle.
      */
-    public function removeMultiCacheAllAuthors(Event $event)
+    public function removeObjectCacheMultiCacheAllAuthors(Event $event)
     {
         $authorId = $event->getArgument('id');
 
@@ -686,30 +710,6 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName));
-    }
-
-    /**
-     * Removes the instance from cache.
-     *
-     * @param Event $event The event object.
-     */
-    public function removeCacheForInstance(Event $event)
-    {
-        $instance = $event->getArgument('instance');
-
-        $this->container->get('cache.manager')->getConnection('manager')
-            ->remove($instance->domains);
-    }
-
-    /**
-     * Removes the list of countries for manager from cache.
-     *
-     * @param Event $event The event object.
-     */
-    public function removeCountries(Event $event)
-    {
-        $this->container->get('cache.manager')->getConnection('manager')
-            ->removeByPattern('*countries*');
     }
 
     /**
