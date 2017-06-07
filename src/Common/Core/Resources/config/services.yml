@@ -59,6 +59,10 @@ services:
         class: Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
 
+    core.helper.instance_sync:
+        class:     Common\Core\Component\Helper\InstanceSyncHelper
+        arguments: [ '@service_container' ]
+
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]

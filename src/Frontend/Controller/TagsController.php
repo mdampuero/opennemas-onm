@@ -82,15 +82,15 @@ class TagsController extends Controller
             $page = 2;
         }
 
-        // Load config
+        // Setup templating cache layer
         $this->view->setConfig('frontpages');
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
 
-        $cacheId = "tag|$tagName|$page";
-
-        if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
+        ) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
-            $epp = $this->get('setting_repository')
-                ->get('items_in_blog', 8);
+            $epp = $this->get('setting_repository')->get('items_in_blog', 8);
 
             $criteria = [
                 'content_status'  => [ [ 'value' => 1 ] ],
@@ -109,7 +109,7 @@ class TagsController extends Controller
 
             $em       = $this->get('entity_repository');
             $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
-            $total    = count($contents)+1;
+            $total    = count($contents) + 1;
 
             // TODO: review this piece of CRAP
             $filteredContents = [];

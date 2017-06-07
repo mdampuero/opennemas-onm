@@ -43,6 +43,10 @@ class StaticPageController extends Controller
         // TODO: Remove when pk_content column renamed to id
         $content->id = $content->pk_content;
 
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('content', $content->id);
+
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('static_pages/statics.tpl', [
@@ -52,6 +56,7 @@ class StaticPageController extends Controller
             'content'            => $content,
             'content_id'         => $content->id,
             'page'               => $content,
+            'cache_id'           => $cacheID,
             'x-tags'             => 'static-page,'.$content->id,
         ]);
     }

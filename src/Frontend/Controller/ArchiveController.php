@@ -48,21 +48,21 @@ class ArchiveController extends Controller
         $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
         $page  = $request->query->getDigits('page', 1);
-
-        $this->view->setConfig('newslibrary');
-
-        $itemsPerPage = 20;
         $date = "{$year}-{$month}-{$day}";
+        $itemsPerPage = 20;
 
-        $cacheID = $this->view->generateCacheId($date, '', $page);
+        // Setup templating cache layer
+        $this->view->setConfig('newslibrary');
+        $cacheID = $this->view->getCacheId('archive', $date, $page);
+
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
-            $er = getService('entity_repository');
-            $order = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
+            $er       = getService('entity_repository');
+            $order    = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
             $criteria = [
                 'in_litter'       => [[ 'value' => 0 ]],
-                'fk_content_type' => [[ 'value' => [1,4,7,9], 'operator' => 'IN' ]],
+                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
                 'DATE(starttime)' => [[ 'value' => '"'.$date.'"', 'field' => true ]]
             ];
 

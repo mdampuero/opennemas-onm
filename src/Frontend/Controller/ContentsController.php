@@ -41,10 +41,12 @@ class ContentsController extends Controller
         $dirtyID = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
-        // Resolve article ID
+        // Resolve content ID, we dont know which type the content is so we have to
+        // perform some calculations
         preg_match("@(?P<date>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
-        $dirtyID = $matches['date'].sprintf('%06d', $matches['id']);
+        $dirtyID   = $matches['date'].sprintf('%06d', $matches['id']);
         $contentID = $matches['id'];
+
         $content = new \Content($contentID);
         $content = $this->get('content_url_matcher')
             ->matchContentUrl($content->content_type_name, $dirtyID, $urlSlug);
@@ -63,17 +65,16 @@ class ContentsController extends Controller
             $this->view->assign('photoInt', $photoInt);
         }
 
-        $cacheID = $this->view->generateCacheId($content->content_type_name, null, $contentID);
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('content', $contentID, 'print');
 
-        return $this->render(
-            'article/article_printer.tpl',
-            array(
-                'cache_id' => $cacheID,
-                'content'  => $content,
-                'article'  => $content,
-                'x-tags'   => 'content-print,'.$contentID
-            )
-        );
+        return $this->render('article/article_printer.tpl', [
+            'cache_id' => $cacheID,
+            'content'  => $content,
+            'article'  => $content,
+            'x-tags'   => 'content-print,'.$contentID
+        ]);
     }
 
     /**
@@ -90,20 +91,14 @@ class ContentsController extends Controller
 
         $cm = new \ContentManager;
 
-        // Getting Synchronize setting params
-        $wsUrl = '';
-        $syncParams = s::get('sync_params');
-        if ($syncParams) {
-            foreach ($syncParams as $siteUrl => $values) {
-                if (in_array($categoryName, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-                }
-            }
+        // Get sync params
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        if (empty($wsUrl)) {
+            throw new ResourceNotFoundException();
         }
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
-        $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         // Fetch content
         $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
@@ -114,15 +109,16 @@ class ContentsController extends Controller
             $this->view->assign('photoInt', $photoInt);
         }
 
-        return $this->render(
-            'article/article_printer.tpl',
-            array(
-                'cache_id' => $cacheID,
-                'content'  => $content,
-                'article'  => $content,
-                'x-tags'   => 'ext-content-print,'.$contentID
-            )
-        );
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('sync', 'content', $contentID, 'print');
+
+        return $this->render('article/article_printer.tpl', [
+            'cache_id' => $cacheID,
+            'content'  => $content,
+            'article'  => $content,
+            'x-tags'   => 'ext-content-print,'.$contentID
+        ]);
     }
 
     /**
@@ -153,16 +149,13 @@ class ContentsController extends Controller
             if ($ext == 1) {
                 // Getting Synchronize setting params
                 $categoryName = $request->request->get('category_name', null);
+
                 // Get sync params
-                $wsUrl = '';
-                $syncParams = s::get('sync_params');
-                if ($syncParams) {
-                    foreach ($syncParams as $siteUrl => $values) {
-                        if (in_array($categoryName, $values['categories'])) {
-                            $wsUrl = $siteUrl;
-                        }
-                    }
+                $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+                if (empty($wsUrl)) {
+                    throw new ResourceNotFoundException();
                 }
+
                 $cm = new \ContentManager();
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
@@ -212,13 +205,11 @@ class ContentsController extends Controller
             }
 
             $this->view->setCaching(0);
-            $this->view->assign(
-                array(
-                    'content'     => $content,
-                    'senderName'  => $senderName,
-                    'senderEmail' => $senderEmail,
-                )
-            );
+            $this->view->assign([
+                'content'     => $content,
+                'senderName'  => $senderName,
+                'senderEmail' => $senderEmail,
+            ]);
 
             $mailBody      = $this->renderView('email/send_to_friend.tpl');
             $mailBodyPlain = $this->renderView('email/send_to_friend_just_text.tpl');
@@ -267,16 +258,13 @@ class ContentsController extends Controller
             if ($ext == 1) {
                 // Getting Synchronize setting params
                 $categoryName = $request->query->get('category_name', null);
+
                 // Get sync params
-                $wsUrl = '';
-                $syncParams = s::get('sync_params');
-                if ($syncParams) {
-                    foreach ($syncParams as $siteUrl => $values) {
-                        if (in_array($categoryName, $values['categories'])) {
-                            $wsUrl = $siteUrl;
-                        }
-                    }
+                $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+                if (empty($wsUrl)) {
+                    throw new ResourceNotFoundException();
                 }
+
                 $cm = new \ContentManager();
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
@@ -365,10 +353,10 @@ class ContentsController extends Controller
                 if (!$hasSubscription) {
                     $newContent = $this->renderView(
                         'paywall/partials/content_only_for_subscribers.tpl',
-                        array(
+                        [
                             'logged' => $isLogged,
                             'id'     => $content->id
-                        )
+                        ]
                     );
                     $content->body = $newContent;
                 }

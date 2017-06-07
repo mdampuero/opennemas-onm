@@ -58,16 +58,14 @@ class MonographsController extends Controller
             $actual_category_id = 0;
         }
 
-        $this->view->assign(
-            array(
-                'category_name'         => $this->categoryName,
-                'category'              => $this->category,
-                'actual_category'       => $this->categoryName,
-                'actual_category_id'    => $actual_category_id,
-                'actual_category_title' => $category_real_name,
-                'category_real_name'    => $category_real_name,
-            )
-        );
+        $this->view->assign([
+            'category_name'         => $this->categoryName,
+            'category'              => $this->category,
+            'actual_category'       => $this->categoryName,
+            'actual_category_id'    => $actual_category_id,
+            'actual_category_title' => $category_real_name,
+            'category_real_name'    => $category_real_name,
+        ]);
     }
 
     /**
@@ -81,9 +79,13 @@ class MonographsController extends Controller
     {
         $this->page = $request->query->getDigits('page', 1);
 
-        // Setup caching system
-        $this->view->setConfig('special_frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
+        if (empty($this->categoryName)) {
+            $this->categoryName = 'home';
+        }
+
+        // Setup templating cache layer
+        $this->view->setConfig('specials');
+        $cacheID = $this->view->getCacheId('frontpage', 'special', $this->categoryName, $this->page);
 
         // Don't execute the action logic if was cached before
         if (($this->view->getCaching() === 0)
@@ -115,22 +117,15 @@ class MonographsController extends Controller
                     $monograph->category_title = $monograph->loadCategoryTitle($monograph->id);
                 }
 
-                $this->view->assign(
-                    array(
-                        'specials' => $monographs
-                    )
-                );
+                $this->view->assign(['specials' => $monographs]);
             }
         }
 
-        return $this->render(
-            'special/frontpage_special.tpl',
-            array(
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'monograph-frontpage',
-                'x-cache-for' => '+1 day',
-            )
-        );
+        return $this->render('special/frontpage_special.tpl', [
+            'cache_id'    => $cacheID,
+            'x-tags'      => 'monograph-frontpage',
+            'x-cache-for' => '+1 day',
+        ]);
     }
 
     /**
@@ -153,7 +148,10 @@ class MonographsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $special->id);
+        // Setup templating cache layer
+        $this->view->setConfig('specials');
+        $cacheID = $this->view->getCacheId('content', $special->id);
+
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
@@ -211,16 +209,13 @@ class MonographsController extends Controller
             $this->view->assign(['columns' => $columns]);
         }
 
-        return $this->render(
-            'special/special.tpl',
-            [
-                'special'   => $special,
-                'content'   => $special,
-                'contentId' => $special->id,
-                'cache_id'  => $cacheID,
-                'x-tags'      => 'monograph,'.$special->id,
-                'x-cache-for' => '+1 day',
-            ]
-        );
+        return $this->render('special/special.tpl', [
+            'special'   => $special,
+            'content'   => $special,
+            'contentId' => $special->id,
+            'cache_id'  => $cacheID,
+            'x-tags'      => 'monograph,'.$special->id,
+            'x-cache-for' => '+1 day',
+        ]);
     }
 }
