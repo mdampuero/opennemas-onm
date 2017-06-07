@@ -175,13 +175,15 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             // User hooks
             'user.create' => [
-                ['mockHookAction', 0],
+                ['removeSmartyCacheAuthor', 5],
             ],
             'user.update' => [
                 ['removeObjectCacheUser', 10],
+                ['removeSmartyCacheAuthor', 5],
             ],
             'user.delete' => [
                 ['mockHookAction', 0],
+                ['removeSmartyCacheAuthor', 5],
             ],
             'user.social.connect' => [
                 ['mockHookAction', 0],
@@ -377,6 +379,29 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->smartyCacheHandler
             ->deleteGroup($this->view->getCacheId('frontpage', 'opinion', sprintf('%06d', $authorId)))
             ->deleteGroup($this->view->getCacheId('frontpage', 'blog', sprintf('%06d', $authorId)));
+
+        $this->cleanOpcode();
+    }
+
+    /**
+     * Deletes Smarty caches for a give author
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeSmartyCacheAuthor(Event $event)
+    {
+        if (!$event->hasArgument('user')) {
+            return;
+        }
+
+        $user = $event->getArgument('user');
+
+        $this->initializeSmartyCacheHandler();
+
+        // Delete caches for opinion frontpage and author frontpages
+        $this->smartyCacheHandler
+            ->deleteGroup($this->view->getCacheId('frontpage', 'author', $user->username))
+            ->deleteGroup($this->view->getCacheId('frontpage', 'authors'));
 
         $this->cleanOpcode();
     }
