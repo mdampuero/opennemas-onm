@@ -39,6 +39,13 @@ class InstanceCreator
     private $conn;
 
     /**
+     * The logger service.
+     *
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * The filesystem manager.
      *
      * @var Filesystem
@@ -46,14 +53,23 @@ class InstanceCreator
     private $fs;
 
     /**
+     * Template for the command log entry.
+     *
+     * @var string
+     */
+    private $tpl = 'Command: %s || Result: %s || Output: %s.';
+
+    /**
      * Initializes the database connection.
      *
-     * @param DbalWrapper $conn The database connection.
+     * @param DbalWrapper $conn   The database connection.
+     * @param Logger      $logger The logger service.
      */
-    public function __construct($conn)
+    public function __construct($conn, $logger)
     {
-        $this->conn = $conn;
-        $this->fs   = new Filesystem();
+        $this->conn   = $conn;
+        $this->fs     = new Filesystem();
+        $this->logger = $logger;
     }
 
     /**
@@ -100,6 +116,7 @@ class InstanceCreator
             . " --databases $database  > $target";
 
         exec($cmd, $output, $result);
+        $this->logCommand($cmd, $output, $result);
 
         if ($result != 0) {
             throw new BackupException("Cannot backup the database $database");
@@ -125,6 +142,7 @@ class InstanceCreator
             . $database . ' instances > ' . $target;
 
         exec($cmd, $output, $result);
+        $this->logCommand($cmd, $output, $result);
 
         if ($result != 0) {
             throw new BackupException("Cannot backup the instance with id $id");
@@ -261,16 +279,17 @@ class InstanceCreator
     {
         $cmd = "mysql -u{$this->conn->user}"
             . " -p{$this->conn->password}"
-            . " -h{$this->conn->host} "
+            . " -h{$this->conn->host}"
             . ($target ? " $target"  : '')
             . " < $source";
 
         exec($cmd, $output, $result);
+        $this->logCommand($cmd, $output, $result);
 
         if ($result != 0) {
             throw new DatabaseNotRestoredException(
-                'Could not import the default database for the instance '
-                . print_r($output)
+                'Could not restore the database for the instance ('
+                . print_r($output) .  ')'
             );
         }
     }
@@ -284,7 +303,7 @@ class InstanceCreator
     {
         if (!$this->fs->exists($path)) {
             throw new InstanceNotRestoredException(
-                'Could not import the default database for the instance'
+                'Could not restore the instance'
             );
         }
 
@@ -295,6 +314,7 @@ class InstanceCreator
             . " < " . $path . DS . "instance.sql";
 
         exec($dump, $output, $result);
+        $this->logCommand($cmd, $output, $result);
 
         if ($result != 0) {
             throw new InstanceNotRestoredException(
@@ -311,5 +331,24 @@ class InstanceCreator
     public function setBackupPath($path)
     {
         $this->backupPath = rtrim($path, DS) . DS;
+    }
+
+    /**
+     * Logs the command execution to the application.log.
+     *
+     * @param string   $cmd    The executed command.
+     * @param array    $output The command output.
+     * @param interger $result The command result.
+     */
+    protected function logCommand($cmd, $output, $result)
+    {
+        $this->logger->info(
+            sprintf(
+                $this->tpl,
+                preg_replace('/-(p|h)[^ ]+/', '-\1<censored>', $cmd),
+                $result,
+                serialize($output)
+            )
+        );
     }
 }

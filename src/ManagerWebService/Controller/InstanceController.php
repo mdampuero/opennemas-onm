@@ -32,7 +32,10 @@ class InstanceController extends Controller
     {
         $em      = $this->get('orm.manager');
         $msg     = $this->get('core.messenger');
-        $creator = new InstanceCreator($em->getConnection('manager'));
+        $creator = new InstanceCreator(
+            $em->getConnection('manager'),
+            $this->get('application.log')
+        );
 
         try {
             $instance = $em->getRepository('Instance')->find($id);
@@ -111,7 +114,10 @@ class InstanceController extends Controller
         }
 
         $em      = $this->get('orm.manager');
-        $creator = new InstanceCreator($em->getConnection('manager'));
+        $creator = new InstanceCreator(
+            $em->getConnection('manager'),
+            $this->get('application.log')
+        );
         $oql     = sprintf('id in [%s]', implode(',', $ids));
 
         $instances = $em->getRepository('Instance')->findBy($oql);
@@ -436,7 +442,10 @@ class InstanceController extends Controller
         $data['internal_name'] = mb_strtolower($data['internal_name']);
 
         $instance = new Instance($data);
-        $creator  = new InstanceCreator($em->getConnection('manager'));
+        $creator  = new InstanceCreator(
+            $em->getConnection('manager'),
+            $this->get('application.log')
+        );
 
         $instance->created = new \DateTime('now');
 

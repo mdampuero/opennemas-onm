@@ -111,7 +111,10 @@ class WebServiceController extends Controller
 
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('User');
-        $creator   = new InstanceCreator($em->getConnection('instance'));
+        $creator   = new InstanceCreator(
+            $em->getConnection('instance'),
+            $this->get('application.log')
+        );
 
         $settings = [
             'site_language' => $request->request->filter('language', '', FILTER_SANITIZE_STRING),
