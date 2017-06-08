@@ -14,7 +14,7 @@ function smarty_function_cookie_hint($params, &$smarty)
                 'This website uses its own and third party cookies to elaborate '
                 .'statistical information and to be able to show you advertising '
                 .'related to your preferences through the analysis of your navigation.'
-                .'<a target="_blank" href="%s"> See details &gt; </a>'
+                .' <a target="_blank" href="%s">See details &gt; </a>'
             ),
             $url
         );
