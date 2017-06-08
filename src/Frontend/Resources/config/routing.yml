@@ -35,14 +35,6 @@ tag_frontpage:
     requirements:
         tag_name: '[^\/]+'
 
-frontend_redirect_content:
-    path: /redirect/content
-    defaults: { _controller: FrontendBundle:Redirectors:content }
-
-frontend_redirect_category:
-    path: /redirect/category
-    defaults: { _controller: FrontendBundle:Redirectors:category }
-
 frontend_frontpage_home:
     path: /home
     defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
@@ -124,6 +116,9 @@ frontend_paywall:
 
 frontend_poll:
     resource: '@FrontendBundle/Resources/config/routing/poll.yml'
+
+frontend_redirect:
+    resource: '@FrontendBundle/Resources/config/routing/redirect.yml'
 
 frontend_rss:
     resource: '@FrontendBundle/Resources/config/routing/rss.yml'
