@@ -1,0 +1,31 @@
+frontend_paywall_showcase:
+    path: /paywall
+    defaults: { _controller: FrontendBundle:Paywall:showcase }
+
+frontend_paywall_prepare_payment:
+    path: /paywall/prepare_payment
+    defaults: { _controller: FrontendBundle:Paywall:preparePayment }
+
+frontend_paywall_success_payment:
+    path: /paywall/success_payment
+    defaults: { _controller: FrontendBundle:Paywall:returnSuccessPayment }
+
+frontend_paywall_success_recurring_payment:
+    path: /paywall/success_recurring_payment
+    defaults: { _controller: FrontendBundle:Paywall:returnSuccessRecurringPayment }
+
+frontend_paywall_cancel_payment:
+    path: /paywall/cancel_payment
+    defaults: { _controller: FrontendBundle:Paywall:returnCancelPayment }
+
+frontend_paywall_cancel_recurring_payment:
+    path: /paywall/cancel_recurring_payment
+    defaults: { _controller: FrontendBundle:Paywall:cancelRecurringPayment }
+
+frontend_paywall_activate_recurring_payment:
+    path: /paywall/activate_recurring_payment
+    defaults: { _controller: FrontendBundle:Paywall:activateRecurringPayment }
+
+frontend_ws_paypal_ipn:
+    path: /ws/paypal/ipn
+    defaults: { _controller: FrontendBundle:PaypalNotifications:paywall }

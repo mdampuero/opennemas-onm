@@ -1,0 +1,20 @@
+frontend_monograph_frontpage:
+    path: /especiales/{page}
+    defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
+    requirements:
+        page: '([0-9]+)?'
+
+frontend_monograph_frontpage_category:
+    path: /especiales/{category_name}/{page}
+    defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        page         : '([0-9]+)?'
+
+frontend_monograph_show:
+    path: /especiales/{category_name}/{slug}/{special_id}.{_format}
+    defaults: { _controller: FrontendBundle:Monographs:show, _format:html, page:1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        special_id   : '([0-9]+)'

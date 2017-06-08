@@ -1,0 +1,46 @@
+frontend_rss_listing:
+    path: /rss/listado
+    defaults: { _controller: FrontendBundle:Rss:index }
+
+frontend_rss_author:
+    path: /rss/author/{author_slug}
+    defaults: { _controller: FrontendBundle:Rss:authorRSS }
+    requirements:
+        author_slug: '[^/]+'
+
+frontend_rss_frontpage:
+    path: /rss/frontpage
+    defaults: { _controller: FrontendBundle:Rss:frontpageRss }
+
+frontend_rss_frontpage_category:
+    path: /rss/frontpage/{category}
+    defaults: { _controller: FrontendBundle:Rss:frontpageRss }
+    requirements:
+        category_name: '[^/]+'
+
+frontend_rss:
+    path: /rss
+    defaults: { _controller: FrontendBundle:Rss:generalRss }
+
+frontend_rss_type:
+    path: /rss/{type}
+    defaults: { _controller: FrontendBundle:Rss:generalRss }
+    requirements:
+        type: '(album|opinion|video)'
+
+frontend_rss_type_category:
+    path: /rss/{type}/{category}
+    defaults: { _controller: FrontendBundle:Rss:generalRss }
+    requirements:
+        type:     '(album|opinion|video)'
+        category: '[^/]*'
+
+frontend_rss_category:
+    path: /rss/{category}
+    defaults: { _controller: FrontendBundle:Rss:generalRss }
+    requirements:
+        category: '(?!album|opinion|video)[^/]+'
+
+frontend_fb_instant_articles:
+    path: /fb/instant-articles
+    defaults: { _controller: FrontendBundle:Rss:facebookInstantArticlesRSS }
