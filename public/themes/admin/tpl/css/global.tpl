@@ -26,10 +26,10 @@
   bottom: 0;
   display: none;
   left: 0;
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
-  z-index: 1000;
+  z-index: 50000;
 }
 
 .interstitial-open {
