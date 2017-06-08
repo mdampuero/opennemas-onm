@@ -96,6 +96,7 @@ class InstanceCreator
         $target = $this->getBackupPath() . '/database.sql';
         $cmd    = "mysqldump -u{$this->conn->user}"
             . " -p{$this->conn->password}"
+            . " -h{$this->conn->host}"
             . " --databases $database  > $target";
 
         exec($cmd, $output, $result);
@@ -117,8 +118,9 @@ class InstanceCreator
         $target   = $this->getBackupPath() . "instance.sql";
         $database = $this->conn->dbname;
 
-        $cmd = 'mysqldump -u' . $this->conn->user
-            . ' -p' . $this->conn->password
+        $cmd = "mysqldump -u{$this->conn->user}"
+            . " -p{$this->conn->password}"
+            . " -h{$this->conn->host}"
             . ' --no-create-info --where \'id=' . $id . '\' '
             . $database . ' instances > ' . $target;
 
@@ -259,7 +261,7 @@ class InstanceCreator
     {
         $cmd = "mysql -u{$this->conn->user}"
             . " -p{$this->conn->password}"
-            . " -h{$this->conn->host}"
+            . " -h{$this->conn->host} "
             . ($target ? " $target"  : '')
             . " < $source";
 
@@ -286,10 +288,11 @@ class InstanceCreator
             );
         }
 
-        $dump = "mysql -u". $this->conn->connectionParams['user'] .
-                " -p" . $this->conn->connectionParams['password'] .
-                " " . $this->conn->connectionParams['dbname'] .
-                " < " . $path . DS . "instance.sql";
+        $dump = "mysql -u{$this->conn->user}"
+            . " -p{$this->conn->password}"
+            . " -h{$this->conn->host}"
+            . " {$this->conn->dbname}"
+            . " < " . $path . DS . "instance.sql";
 
         exec($dump, $output, $result);
 
