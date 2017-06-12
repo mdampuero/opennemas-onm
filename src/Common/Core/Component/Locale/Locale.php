@@ -77,7 +77,7 @@ class Locale
         $locales = [];
 
         foreach ($codes as $code) {
-            $locales[$code] = ucfirst(\Locale::getDisplayLanguage($code));
+            $locales[$code] = ucfirst(\Locale::getDisplayName($code));
         }
 
         return $locales;
