@@ -331,13 +331,19 @@
                       <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
                     </div>
                   </div>
-                  <p ng-show="locale.frontend.length > 0">{t}Main language:{/t}</p>
-                  <div class="radio" ng-repeat="item in locale.frontend">
-                    <input id="radio-[% $index %]" ng-model="locale.main" type="radio" value="[% $index + 1 %]">
-                    <label for="radio-[% $index %]">
-                      [% item.name %] ([% item.code %])
-                      <strong ng-show="locale.main == $index + 1">({t}Main{/t})</strong>
-                    </label>
+                  <div class="form-group" ng-show="locale.frontend.length > 0">
+                    <label class="form-label">{t}Main language{/t}</label>
+                    <span class="help">
+                      <i class="fa fa-circle-info text-info"></i>
+                      {t}When no language in the URL, the main language will be used{/t}
+                    </span>
+                    <div class="radio" ng-repeat="item in locale.frontend">
+                      <input id="radio-[% $index %]" ng-model="locale.main" type="radio" value="[% $index + 1 %]">
+                      <label for="radio-[% $index %]">
+                        [% item.name %] ([% item.code %])
+                        <strong ng-show="locale.main == $index + 1">({t}Main{/t})</strong>
+                      </label>
+                    </div>
                   </div>
                   <h4>
                     <i class="fa fa-refresh m-r-5"></i>
