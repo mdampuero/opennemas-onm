@@ -261,6 +261,93 @@
             </uib-tab>
             <uib-tab>
               <uib-tab-heading>
+                <i class="fa fa-globe"></i>
+                {t}Language & timezone{/t}
+              </uib-tab-heading>
+              <div class="tab-wrapper">
+                <div class="col-md-6">
+                  <h4>
+                    <i class="fa fa-map-marker m-r-5"></i>
+                    {t}Location{/t}
+                  </h4>
+                  <div class="form-group">
+                    <label class="form-label" for="country">{t}Country{/t}</label>
+                    <div class="controls">
+                      <select id="country" name="country">
+                        <option value="">{t}Select a country{/t}...</option>
+                        {foreach from=$countries key=key item=value}
+                        <option{if $country === $key} selected="selected"{/if} value="{{$key}}">{{$value}}</option>
+                        {/foreach}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="time_zone">
+                      {t}Time Zone{/t}
+                    </label>
+                    <span class="help">
+                      {t}Used for all the dates used in your webpage.{/t}
+                    </span>
+                    <div class="controls">
+                      <select name="time_zone">
+                        {foreach from=$timezones item=name key=id}
+                        <option value="{{$name}}" {if $configs['time_zone'] == $id || $configs['time_zone'] == $name}selected="selected"{/if}>{{$name}}</option>
+                        {/foreach}
+                      </select>
+                    </div>
+                  </div>
+                  <h4>
+                    <i class="fa fa-language m-r-5"></i>
+                    {t}Language{/t}
+                  </h4>
+                  <div class="form-group">
+                    <label class="form-label" for="site_language">
+                      {t}Control Panel Language{/t}
+                    </label>
+                    <span class="help">
+                      {t}Used for displayed messages, interface and measures in your page.{/t}
+                    </span>
+                    <div class="controls">
+                      {html_options name=site_language options=$languages selected=$configs['site_language']}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h4>
+                    <i class="fa fa-globe m-r-5"></i>
+                    {t}Translations{/t}
+                  </h4>
+                  <div class="form-group">
+                    <label class="form-label" for="frontend-language">
+                      {t}Newspaper Language{/t}
+                    </label>
+                    <span class="help">
+                      {t}Languages to translate your contents to.{/t}
+                    </span>
+                    <div class="input-group">
+                      <span class="input-group-addon">
+                        <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
+                      </span>
+                      <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
+                    </div>
+                  </div>
+                  <p ng-show="locale.frontend.length > 0">{t}Main language:{/t}</p>
+                  <div class="radio" ng-repeat="item in locale.frontend">
+                    <input id="radio-[% $index %]" ng-model="locale.main" type="radio" value="[% $index + 1 %]">
+                    <label for="radio-[% $index %]">
+                      [% item.name %] ([% item.code %])
+                      <strong ng-show="locale.main == $index + 1">({t}Main{/t})</strong>
+                    </label>
+                  </div>
+                  <h4>
+                    <i class="fa fa-refresh m-r-5"></i>
+                    {t}Automatic Translations{/t}
+                  </h4>
+                </div>
+              </div>
+            </uib-tab>
+            <uib-tab>
+              <uib-tab-heading>
                 <i class="fa fa-line-chart m-r-5"></i>
                 {t}SEO{/t}
               </uib-tab-heading>
@@ -343,44 +430,6 @@
                       </label>
                       <div class="controls">
                         <input class="form-control" id="cookies_hint_url" name="cookies_hint_url" type="text" value="{$configs['cookies_hint_url']|default:""}">
-                      </div>
-                    </div>
-                    <h4>{t}Language & Time{/t}</h4>
-                    <div class="form-group">
-                      <label class="form-label" for="country">{t}Country{/t}</label>
-                      <div class="controls">
-                        <select id="country" name="country">
-                          <option value="">{t}Select a country{/t}...</option>
-                          {foreach from=$countries key=key item=value}
-                            <option{if $country === $key} selected="selected"{/if} value="{{$key}}">{{$value}}</option>
-                          {/foreach}
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="site_language">
-                        {t}Default language{/t}
-                      </label>
-                      <span class="help">
-                        {t}Used for displayed messages, interface and measures in your page.{/t}
-                      </span>
-                      <div class="controls">
-                        {html_options name=site_language options=$languages selected=$configs['site_language']}
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="time_zone">
-                        {t}Time Zone{/t}
-                      </label>
-                      <span class="help">
-                        {t}Used for all the dates used in your webpage.{/t}
-                      </span>
-                      <div class="controls">
-                        <select name="time_zone">
-                          {foreach from=$timezones item=name key=id}
-                            <option value="{{$name}}" {if $configs['time_zone'] == $id || $configs['time_zone'] == $name}selected="selected"{/if}>{{$name}}</option>
-                          {/foreach}
-                        </select>
                       </div>
                     </div>
                   </div>
