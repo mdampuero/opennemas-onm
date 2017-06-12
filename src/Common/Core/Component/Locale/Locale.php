@@ -67,6 +67,23 @@ class Locale
     }
 
     /**
+     * Returns the list of all available locales.
+     *
+     * @return array The list of all available locales.
+     */
+    public function getAvailableLocales()
+    {
+        $codes   = \ResourceBundle::getLocales('');
+        $locales = [];
+
+        foreach ($codes as $code) {
+            $locales[$code] = ucfirst(\Locale::getDisplayLanguage($code));
+        }
+
+        return $locales;
+    }
+
+    /**
      * Returns the current locale.
      *
      * @return string The current locale.
