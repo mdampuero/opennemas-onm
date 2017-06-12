@@ -191,11 +191,16 @@ class ArticlesController extends Controller
 
         // Get full article
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
-        $article = unserialize($article);
+        if (is_string($article)) {
+            $article = @unserialize($article);
+        }
 
-        if ($article->content_status != 1
-            || $article->in_litter == 1
-            || !$article->isStarted()
+        if (is_object($article)
+            && (
+                $article->content_status != 1
+                || $article->in_litter == 1
+                || !$article->isStarted()
+            )
         ) {
             throw new ResourceNotFoundException();
         }
