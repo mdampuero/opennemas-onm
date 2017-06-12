@@ -68,7 +68,11 @@
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">
           <uib-tabset>
-            <uib-tab heading="{t}General{/t}">
+            <uib-tab>
+              <uib-tab-heading>
+                <i class="fa fa-cog m-r-5"></i>
+                {t}General{/t}
+              </uib-tab-heading>
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -109,7 +113,11 @@
                 </div>
               </div>
             </uib-tab>
-            <uib-tab heading="{t}Appearance{/t}">
+            <uib-tab>
+              <uib-tab-heading>
+                <i class="fa fa-magic m-r-5"></i>
+                {t}Appearance{/t}
+              </uib-tab-heading>
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-8">
@@ -251,7 +259,11 @@
                 </div>
               </div>
             </uib-tab>
-            <uib-tab heading="{t}SEO{/t}">
+            <uib-tab>
+              <uib-tab-heading>
+                <i class="fa fa-line-chart m-r-5"></i>
+                {t}SEO{/t}
+              </uib-tab-heading>
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -303,7 +315,11 @@
                 </div>
               </div>
             </uib-tab>
-            <uib-tab heading="{t}Internal{/t}">
+            <uib-tab>
+              <uib-tab-heading>
+                <i class="fa fa-cube m-r-5"></i>
+                {t}Internal{/t}
+              </uib-tab-heading>
               <div class="tab-wrapper">
                 <div class="row">
                   <div class="col-md-6">
@@ -417,7 +433,11 @@
                 </div>
               </div>
             </uib-tab>
-            <uib-tab heading="{t}External services{/t}">
+            <uib-tab>
+              <uib-tab-heading>
+                <i class="fa fa-cloud m-r-5"></i>
+                {t}External services{/t}
+              </uib-tab-heading>
               <div class="tab-wrapper">
                 <div class="col-md-6">
                   <h5>{t}Analytic system integration{/t}</h5>
@@ -1012,87 +1032,90 @@
                 </div>
               </div>
             </uib-tab>
-
             {if $smarty.session._sf2_attributes.user->isMaster()}
-            <uib-tab heading="{t}Only masters{/t}">
-              <div class="tab-wrapper">
-                <div class="row">
-                  <div class="col-md-8">
-                    <h4>Robots.txt</h4>
-                    <div class="form-group">
-                      <label class="form-label" for="robots_txt_rules">
-                        {t}Robots.txt rules{/t}
-                      </label>
-                      <span class="help">
-                        {t escape=off}Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">documentation</a>.{/t}
-                      </span>
-                      <div class="controls">
-                        <textarea class="form-control" id="robots_txt_rules" name="robots_txt_rules" type="text" class="input-xlarge">{$configs['robots_txt_rules']|default:""}</textarea>
-                      </div>
-                    </div>
-                    <h4>Scripts</h4>
-                    <div class="form-group">
-                      <label class="form-label" for="header-script">
-                        {t}Scripts in header{/t}
-                        <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|base64_decode|escape:'html'|default:""}</textarea>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="body-start-script">
-                        {t}Scripts at body start{/t}
-                        <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|base64_decode|escape:'html'|default:""}</textarea>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="body-end-script">
-                        {t}Scripts at body end{/t}
-                        <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|base64_decode|escape:'html'|default:""}</textarea>
-                      </div>
-                    </div>
-                    <h4>CSS</h4>
-                    <div class="form-group">
-                      <label class="form-label" for="custom-css">
-                        {t}Custom CSS{/t}
-                        <span class="help">{t}This sripts will be included in the global.css file.{/t}</span>
-                        <span class="text-danger">Not functional for now</span>
-                      </label>
-                      <div class="controls">
-                        <textarea class="form-control" id="custom-css" name="custom_css" disabled="disabled" readonly="readonly">{$configs['custom_css']|stripslashes|default:""}</textarea>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <h4>RSS</h4>
-                    <div class="form-group">
-                      <label class="form-label" for="items_per_page">
-                        {t}Items in RSS{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="elements_in_rss" name="elements_in_rss" type="number" value="{$configs['elements_in_rss']|default:10}">
-                      </div>
-                    </div>
-                    <h4>{t}Redirection{/t}</h4>
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <input {if $configs['redirection'] eq "1"}checked{/if} id="redirection" name="redirection" type="checkbox" value="1">
-                        <label for="redirection">
-                          {t}Redirect to frontpage non-migrated contents{/t}
+              <uib-tab>
+                <uib-tab-heading>
+                  <i class="fa fa-rebel m-r-5"></i>
+                  {t}Only masters{/t}
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <h4>Robots.txt</h4>
+                      <div class="form-group">
+                        <label class="form-label" for="robots_txt_rules">
+                          {t}Robots.txt rules{/t}
                         </label>
+                        <span class="help">
+                          {t escape=off}Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">documentation</a>.{/t}
+                        </span>
+                        <div class="controls">
+                          <textarea class="form-control" id="robots_txt_rules" name="robots_txt_rules" type="text" class="input-xlarge">{$configs['robots_txt_rules']|default:""}</textarea>
+                        </div>
+                      </div>
+                      <h4>Scripts</h4>
+                      <div class="form-group">
+                        <label class="form-label" for="header-script">
+                          {t}Scripts in header{/t}
+                          <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                        </label>
+                        <div class="controls">
+                          <textarea class="form-control" id="header-script" name="header_script">{$configs['header_script']|base64_decode|escape:'html'|default:""}</textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="body-start-script">
+                          {t}Scripts at body start{/t}
+                          <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                        </label>
+                        <div class="controls">
+                          <textarea class="form-control" id="body-start-script" name="body_start_script">{$configs['body_start_script']|base64_decode|escape:'html'|default:""}</textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="body-end-script">
+                          {t}Scripts at body end{/t}
+                          <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                        </label>
+                        <div class="controls">
+                          <textarea class="form-control" id="body-end-script" name="body_end_script">{$configs['body_end_script']|base64_decode|escape:'html'|default:""}</textarea>
+                        </div>
+                      </div>
+                      <h4>CSS</h4>
+                      <div class="form-group">
+                        <label class="form-label" for="custom-css">
+                          {t}Custom CSS{/t}
+                          <span class="help">{t}This sripts will be included in the global.css file.{/t}</span>
+                          <span class="text-danger">Not functional for now</span>
+                        </label>
+                        <div class="controls">
+                          <textarea class="form-control" id="custom-css" name="custom_css" disabled="disabled" readonly="readonly">{$configs['custom_css']|stripslashes|default:""}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <h4>RSS</h4>
+                      <div class="form-group">
+                        <label class="form-label" for="items_per_page">
+                          {t}Items in RSS{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="elements_in_rss" name="elements_in_rss" type="number" value="{$configs['elements_in_rss']|default:10}">
+                        </div>
+                      </div>
+                      <h4>{t}Redirection{/t}</h4>
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <input {if $configs['redirection'] eq "1"}checked{/if} id="redirection" name="redirection" type="checkbox" value="1">
+                          <label for="redirection">
+                            {t}Redirect to frontpage non-migrated contents{/t}
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </uib-tab>
+              </uib-tab>
             {/if}
           </uib-tabset>
         </div>
