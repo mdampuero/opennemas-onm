@@ -39,8 +39,9 @@
               useCurrent: $attrs.datetimePickerUseCurrent === 'true'
             };
 
-            $window.moment.tz
-              .setDefault($attrs.datetimePickerTimezone || 'Europe/Madrid');
+            if ($attrs.datetimePickerTimezone) {
+              $window.moment.tz.setDefault($attrs.datetimePickerTimezone);
+            }
 
             if ($attrs.datetimePickerMin && $scope.datetimePickerMin) {
               config.minDate = $scope.datetimePickerMin;
