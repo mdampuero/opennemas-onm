@@ -39,6 +39,10 @@
               useCurrent: $attrs.datetimePickerUseCurrent === 'true'
             };
 
+            if ($attrs.datetimePickerTimezone) {
+              $window.moment.tz.setDefault($attrs.datetimePickerTimezone);
+            }
+
             if ($attrs.datetimePickerMin && $scope.datetimePickerMin) {
               config.minDate = $scope.datetimePickerMin;
             }
