@@ -225,7 +225,7 @@ class CategoryController extends Controller
 
         return $this->render('blog/blog.tpl', [
             'ads_positions'  => $positions,
-            'advertisements' => $ads,
+            'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
             'x-cache-for'    => '+3 hour',
             'x-tags'         => 'ext-category,'.$categoryName.','.$page,
