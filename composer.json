@@ -70,7 +70,8 @@
         "rtconner/freshbooks-api": "dev-master",
         "smarty-gettext/smarty-gettext": "@stable",
         "smarty/smarty" : "3.1.21",
-        "symfony/assetic-bundle": "dev-master"
+        "symfony/assetic-bundle": "dev-master",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {
         "hamcrest/hamcrest-php": "@dev",
