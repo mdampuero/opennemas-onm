@@ -31,13 +31,13 @@ categ_sync_frontpage:
 
 tag_frontpage_index:
     path: /{resource}
-    defaults: { _controller: FrontendBundle:Tags:index }
+    defaults: { _controller: FrontendBundle:Tags:index, resource: tags }
     requirements:
         resource: 'tag|tags'
 
 tag_frontpage:
     path: /{resource}/{tag_name}
-    defaults: { _controller: FrontendBundle:Tags:tags }
+    defaults: { _controller: FrontendBundle:Tags:tags, resource: tags }
     requirements:
         resource: 'tag|tags'
         tag_name: '[^\/]+'
