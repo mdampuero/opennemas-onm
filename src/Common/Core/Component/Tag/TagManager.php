@@ -41,8 +41,7 @@ class TagManager
         }
 
         $sql = 'SELECT metadata FROM contents'
-            . ' WHERE content_type_name != "photo"'
-            . ' AND content_type_name != "advertisement"'
+            . ' WHERE fk_content_type = 1'
             . ' AND metadata IS NOT NULL'
             . ' AND metadata != ""';
 
