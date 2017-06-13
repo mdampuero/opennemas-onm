@@ -56,6 +56,7 @@ class OpenTradTranslatorTest extends KernelTestCase
         $this->assertEquals('thud', $this->translator->translator);
 
         $this->assertEmpty($this->translator->frog);
+        $this->assertTrue(empty($this->translator->baz));
     }
 
     /**
@@ -63,12 +64,11 @@ class OpenTradTranslatorTest extends KernelTestCase
      */
     public function testGetRequiredParameters()
     {
-        $this->translator = new OpenTradTranslator('glorp', 'bar', [
-        ]);
+        $translator = new OpenTradTranslator('glorp', 'bar', []);
 
         $this->assertEquals(
             [ 'translator' => _('Translator'), 'url' => 'URL' ],
-            $this->translator->getRequiredParameters()
+            $translator->getRequiredParameters()
         );
     }
 
@@ -84,6 +84,20 @@ class OpenTradTranslatorTest extends KernelTestCase
             'cadena'    => 'bar frog fubar'
         ])->willReturn('glorp norf wobble');
 
+        $this->assertEquals('', $this->translator->translate(null));
+        $this->assertEquals('', $this->translator->translate(''));
         $this->assertEquals('glorp norf wobble', $this->translator->translate('bar frog fubar'));
+    }
+
+    /**
+     * Tests translate with invalid translator configuration.
+     *
+     * @expectedException \RuntimeException
+     */
+    public function testTranslateWithInvalidConfiguration()
+    {
+        $this->translator->translator = null;
+
+        $this->translator->translate('bar');
     }
 }

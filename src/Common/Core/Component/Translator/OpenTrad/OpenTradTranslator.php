@@ -40,7 +40,19 @@ class OpenTradTranslator extends Translator
      */
     public function translate($str)
     {
+        if (empty($str)) {
+            return '';
+        }
+
         $client = $this->getClient();
+
+        if (empty($client)
+            || empty($this->from)
+            || empty($this->to)
+            || empty($this->translator)
+        ) {
+            throw new \RuntimeException();
+        }
 
         return $client->__soapCall('traducir', [
             'traductor' => $this->translator,
@@ -59,7 +71,7 @@ class OpenTradTranslator extends Translator
      */
     protected function getClient()
     {
-        if (empty($this->client)) {
+        if (empty($this->client) && !empty($this->url)) {
             $this->client = new \SoapClient($this->url);
         }
 

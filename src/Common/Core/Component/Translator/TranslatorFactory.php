@@ -29,7 +29,7 @@ class TranslatorFactory
      *
      * @throws InvalidArgumentException If no translator found.
      */
-    public function get($name, $from, $to, $params = [])
+    public function get($name, $from = '', $to = '', $params = [])
     {
         $translators = $this->getTranslators();
 

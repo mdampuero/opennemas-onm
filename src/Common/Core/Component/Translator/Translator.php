@@ -61,7 +61,7 @@ abstract class Translator
      *
      * @return type Description
      */
-    public function __construct($from, $to, $params)
+    public function __construct($from = null, $to = null, $params = [])
     {
         $this->from   = $from;
         $this->params = $params;
@@ -84,6 +84,25 @@ abstract class Translator
         }
 
         return null;
+    }
+
+    /**
+     * Checks if a property exists in class or in the array of parameters.
+     *
+     * @param string $name The property name.
+     *
+     * @return boolean True if the property exists in class or in the array of
+     *                 parameters. False, otherwise.
+     */
+    public function __isset($name)
+    {
+        if (property_exists($this, $name)
+            || array_key_exists($name, $this->params)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
