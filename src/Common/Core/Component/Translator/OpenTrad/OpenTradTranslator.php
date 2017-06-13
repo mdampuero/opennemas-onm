@@ -12,8 +12,8 @@ namespace Common\Core\Component\Translator\OpenTrad;
 use Common\Core\Component\Translator\Translator;
 
 /**
- * The `OpenTradTranslator` defines methods to translate strings by using the
- * OpenTrad translation service.
+ * The `OpenTradTranslator` class defines methods to translate strings by using
+ * the OpenTrad translation service.
  */
 class OpenTradTranslator extends Translator
 {

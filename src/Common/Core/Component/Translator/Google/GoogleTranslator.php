@@ -1,0 +1,86 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Common\Core\Component\Translator\Google;
+
+use Common\Core\Component\Translator\Translator;
+use GuzzleHttp\Client;
+
+/**
+ * The `GoogleTranslator` class defines methods to translate strings by using
+ * the Google Translate service.
+ */
+class GoogleTranslator extends Translator
+{
+    /**
+     * description
+     *
+     * @var string
+     */
+    protected $url = 'https://translation.googleapis.com/language/translate/v2'
+        . '?format=html&key=%s&q=%s&source=%s&target=%s';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredParameters()
+    {
+        return [ 'key' => _('API key') ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function translate($str)
+    {
+        if (empty($str)) {
+            return '';
+        }
+
+        $url    = sprintf($this->url, $this->key, $str, $this->from, $this->to);
+        $client = $this->getClient();
+
+        if (empty($client)
+            || empty($this->from)
+            || empty($this->to)
+        ) {
+            throw new \RuntimeException();
+        }
+
+        $response = $client->get($url);
+        $body     = $response->getBody();
+        $body     = json_decode($body, true);
+
+        if (empty($body)
+            || !array_key_exists('data', $body)
+            || !array_key_exists('translations', $body['data'])
+            || count($body['data']['translations']) === 0
+        ) {
+            return '';
+        }
+
+        $translated = array_shift($body['data']['translations']);
+
+        return $translated['translatedText'];
+    }
+
+    /**
+     * Returns a new Guzzle client.
+     *
+     * @return Client The new Guzzle client.
+     */
+    protected function getClient()
+    {
+        if (empty($this->client)) {
+            $this->client = new Client();
+        }
+
+        return $this->client;
+    }
+}
