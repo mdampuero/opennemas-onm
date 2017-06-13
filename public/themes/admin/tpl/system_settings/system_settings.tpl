@@ -458,7 +458,6 @@
                                 <div class="form-group">
                                   <label class="form-label">
                                     {t}Category targeting{/t}
-                                    [% gaCodes[0] %]
                                   </label>
                                   <div class="row">
                                     <div class="col-md-4">
