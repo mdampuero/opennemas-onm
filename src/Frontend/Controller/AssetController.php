@@ -113,24 +113,26 @@ class AssetController extends Controller
                 case 'clean':
                     # do nothing
                     break;
-
                 default:
-                    $width  = $parameters[0];
-                    $height = $parameters[1];
+                    // Only resize the original image if the parameters needed
+                    // are passed or they are valid
+                    if (array_key_exists(0, $parameters)
+                        && array_key_exists(1, $parameters)
+                    ) {
+                        $width  = $parameters[0];
+                        $height = $parameters[1];
 
-                    $image->resize(new \Imagine\Image\Box($width, $height));
+                        $image->resize(new \Imagine\Image\Box($width, $height));
+                    }
                     break;
             }
 
-            $contents = $image->get(
-                $imageFormat,
-                array(
-                    'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
-                    'resolution-x'     => 72,
-                    'resolution-y'     => 72,
-                    'quality'          => 85,
-                )
-            );
+            $contents = $image->get($imageFormat, [
+                'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
+                'resolution-x'     => 72,
+                'resolution-y'     => 72,
+                'quality'          => 85,
+            ]);
 
             return new Response($contents, 200, ['Content-Type' => $imageFormat]);
         } else {
