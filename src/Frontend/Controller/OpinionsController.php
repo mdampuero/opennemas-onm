@@ -804,9 +804,14 @@ class OpinionsController extends Controller
             $this->cm = new \ContentManager();
 
             $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
-            $opinion = unserialize($opinion);
+            if (is_string($opinion)) {
+                $opinion = @unserialize($opinion);
+            }
 
-            if ($opinion->content_status != 1 || $opinion->in_litter == 1) {
+            if (!is_object($opinion)
+                || $opinion->content_status != 1
+                || $opinion->in_litter == 1
+            ) {
                 throw new ResourceNotFoundException();
             }
 
