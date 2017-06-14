@@ -470,9 +470,10 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Clean cache for the content
         $this->smartyCacheHandler
-            ->deleteGroup($this->view->getCacheId('archive', date('Ymd')))
             ->deleteGroup($this->view->getCacheId('content', $content->pk_content))
-            ->deleteGroup($this->view->getCacheId('rss', $content->content_type_name));
+            ->deleteGroup($this->view->getCacheId('archive', date('Ymd')))
+            ->deleteGroup($this->view->getCacheId('rss', $content->content_type_name))
+            ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name));
 
         if ($content->content_type_name == 'article') {
             $this->smartyCacheHandler
@@ -494,15 +495,11 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->deleteGroup($this->view->getCacheId('sitemap', 'video'));
         } elseif ($content->content_type_name == 'opinion') {
             $this->smartyCacheHandler
+                // Deleting frontpage cache files
+                ->deleteGroup($this->view->getCacheId('frontpage', 'blog'))
                 // Deleting sitemap cache files
                 ->deleteGroup($this->view->getCacheId('sitemap', 'news'))
-                ->deleteGroup($this->view->getCacheId('sitemap', 'web'))
-                // Deleting frontpage cache files
-                ->deleteGroup($this->view->getCacheId('frontpage', 'blog'));
-        } else {
-            $this->smartyCacheHandler
-                // Deleting frontpage cache files
-                ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name));
+                ->deleteGroup($this->view->getCacheId('sitemap', 'web'));
         }
 
         $this->cleanOpcode();
