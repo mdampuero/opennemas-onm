@@ -178,7 +178,9 @@ class ArticlesController extends Controller
 
         // Get full article
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
-        $article = unserialize($article);
+        if (is_string($article)) {
+            $article = @unserialize($article);
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
