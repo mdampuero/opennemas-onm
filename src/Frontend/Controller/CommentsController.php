@@ -61,18 +61,15 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
-            return $this->render(
-                'comments/loader.tpl',
-                array(
-                    'total'          => $total,
-                    'comments'       => $comments,
-                    'contentId'      => $contentID,
-                    'elems_per_page' => $elemsByPage,
-                    'offset'         => $offset,
-                    'dark_theme'     => $darkTheme,
-                    'count'          => $total,
-                )
-            );
+            return $this->render('comments/loader.tpl', [
+                'total'          => $total,
+                'comments'       => $comments,
+                'contentId'      => $contentID,
+                'elems_per_page' => $elemsByPage,
+                'offset'         => $offset,
+                'dark_theme'     => $darkTheme,
+                'count'          => $total,
+            ]);
         }
 
         return new Response('', 404);
@@ -108,16 +105,13 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
-            $contents = $this->renderView(
-                'comments/partials/comment_element.tpl',
-                array(
-                    'total'          => $total,
-                    'comments'       => $comments,
-                    'contentId'      => $contentID,
-                    'elems_per_page' => $elemsByPage,
-                    'offset'         => $offset,
-                )
-            );
+            $contents = $this->renderView('comments/partials/comment_element.tpl', [
+                'total'          => $total,
+                'comments'       => $comments,
+                'contentId'      => $contentID,
+                'elems_per_page' => $elemsByPage,
+                'offset'         => $offset,
+            ]);
 
             // Inform the client if there is more elements
             $more = true;
@@ -125,10 +119,10 @@ class CommentsController extends Controller
                 $more = false;
             }
 
-            $output = array(
+            $output = [
                 'contents' => $contents,
                 'more'     => $more,
-            );
+            ];
 
             $response = new Response(json_encode($output), 200);
         } else {
@@ -225,13 +219,13 @@ class CommentsController extends Controller
                     $message = _('Your comment was rejected due insults usage.');
                 } else {
                     try {
-                        $data = array(
+                        $data = [
                             'content_id'   => $contentId,
                             'body'         => $body,
                             'author'       => $authorName,
                             'author_email' => $authorEmail,
                             'author_ip'    => $ip
-                        );
+                        ];
                         $data = array_map('strip_tags', $data);
 
                         $data['body'] = '<p>'.preg_replace('@\\n@', '</p><p>', $data['body']).'</p>';

@@ -42,14 +42,11 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        return $this->render(
-            'ads/advertisement.tpl',
-            [
-                'banner'  => $advertisement,
-                'content' => $advertisement,
-                'x-tags' => 'ad,'.$id
-            ]
-        );
+        return $this->render('ads/advertisement.tpl', [
+            'banner'  => $advertisement,
+            'content' => $advertisement,
+            'x-tags' => 'ad,'.$id
+        ]);
     }
 
     /**

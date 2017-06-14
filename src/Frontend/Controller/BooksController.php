@@ -36,29 +36,30 @@ class BooksController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $this->page = $request->query->getDigits('page', 1);
-        $categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
-        // Setup caching system
-        $this->view->setConfig('article-inner');
-        $cacheID = $this->view->generateCacheId($categoryName, null, $this->page);
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('frontpage', 'book', $categoryName, $page);
 
-        $contentType = \ContentManager::getContentTypeIdFromName('book');
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('books/books_frontpage.tpl', $cacheID)
+        ) {
+            $contentType = \ContentManager::getContentTypeIdFromName('book');
 
-        // Setting up available categories for menu.
-        $contentManager  = new \ContentManager();
-        $this->ccm = \ContentCategoryManager::get_instance();
-        $parentCategories = $this->ccm->getArraysMenu('', $contentType);
+            // Setting up available categories for menu.
+            $contentManager   = new \ContentManager();
+            $this->ccm        = \ContentCategoryManager::get_instance();
+            $parentCategories = $this->ccm->getArraysMenu('', $contentType);
 
-        $bookCategories = array();
-        $i = 0;
-        foreach ($parentCategories[0] as $cat) {
-            // get only books categories
-            if ($cat->internal_category == $contentType) {
-                $bookCategories[$i] = new \stdClass();
-                $bookCategories[$i]->id    = $cat->pk_content_category;
-                $bookCategories[$i]->title = $cat->title;
-                $bookCategories[$i]->books = $contentManager->find_by_category(
+            $categories = array_filter($parentCategories[0], function($item) use ($contentType) {
+                return $item->internal_category == $contentType;
+            });
+
+            foreach ($categories as &$cat) {
+                $cat->id    = $cat->pk_content_category;
+                $cat->books = $contentManager->find_by_category(
                     'Book',
                     $cat->pk_content_category,
                     'content_status=1',
@@ -66,23 +67,21 @@ class BooksController extends Controller
                 );
 
                 // Get books cover image
-                foreach ($bookCategories[$i]->books as &$book) {
-                    $book->cover_img = new \Photo($book->cover_id);
+                foreach ($cat->books as &$book) {
+                    $book->cover_img = $this->get('entity_repository')->find('Photo', $book->cover_id);
                 }
-
-                $i++;
             }
+
+            $this->view->assign([
+                'categoryBooks' => $categories,
+            ]);
         }
 
-        return $this->render(
-            'books/books_frontpage.tpl',
-            array(
-                'categoryBooks' => $bookCategories,
-                'cache_id'      => $cacheID,
-                'page'          => $this->page,
-                'x-tags'        => 'books-frontpage',
-            )
-        );
+        return $this->render('books/books_frontpage.tpl', [
+            'cache_id'      => $cacheID,
+            'page'          => $page,
+            'x-tags'        => 'books-frontpage',
+        ]);
     }
 
     /**
@@ -99,50 +98,49 @@ class BooksController extends Controller
         $dirtyID      = $request->query->get('id', null);
         $urlSlug      = $request->query->get('slug', null);
 
-        $book = $this->get('content_url_matcher')
+        $content = $this->get('content_url_matcher')
             ->matchContentUrl('book', $dirtyID, $urlSlug, $categoryName);
 
-        if (empty($book)) {
+        if (empty($content)) {
             throw new ResourceNotFoundException();
         }
 
-        $this->view->setConfig('article-inner');
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('content', $content->id);
 
-        $cacheID = $this->view->generateCacheId($categoryName, null, $book->id);
         if ($this->view->getCaching() === 0
             || (!$this->view->isCached('books/book_viewer.tpl', $cacheID))
         ) {
-            $book->category_title = $book->loadCategoryTitle($book->id);
+            $content->cover_img = $this->get('entity_repository')->find('Photo', $content->cover_id);
+
+            $content->category_title = $content->loadCategoryTitle($content->id);
 
             $contentManager  = new \ContentManager();
             $books = $contentManager->find_by_category(
                 'Book',
-                $book->category,
+                $content->category,
                 'content_status=1',
                 'ORDER BY position ASC, created DESC LIMIT 5'
             );
 
             // Get books cover image
-            foreach ($books as $key => $value) {
-                $books[$key]->cover_img =
-                    $this->get('entity_repository')->find('Photo', $value->cover_id);
+            foreach ($books as &$book) {
+                $book->cover_img = $this->get('entity_repository')->find('Photo', $book->cover_id);
             }
 
             $this->view->assign(['libros' => $books]);
         }
 
-        return $this->render(
-            'books/book_viewer.tpl',
-            [
-                'book'        => $book,
-                'content'     => $book,
-                'contentId'   => $book->id,
-                'category'    => $book->category,
-                'cache_id'    => $cacheID,
-                'x-tags'      => 'book,'.$book->id,
-                'x-cache-for' => '+1 day',
-            ]
-        );
+        return $this->render('books/book_viewer.tpl', [
+            'book'        => $content,
+            'content'     => $content,
+            'contentId'   => $content->id,
+            'category'    => $content->category,
+            'cache_id'    => $cacheID,
+            'x-tags'      => 'book,'.$content->id,
+            'x-cache-for' => '+1 day',
+        ]);
     }
 
     /**
@@ -187,14 +185,11 @@ class BooksController extends Controller
             $book->cover_img = new \Photo($book->cover_id);
         }
 
-        return $this->render(
-            'books/widget_books.tpl',
-            array(
-                'actualCat' => $category,
-                'page'      => $this->page,
-                'last'      => $last,
-                'libros'    => $books,
-            )
-        );
+        return $this->render('books/widget_books.tpl', [
+            'actualCat' => $category,
+            'page'      => $this->page,
+            'last'      => $last,
+            'libros'    => $books,
+        ]);
     }
 }

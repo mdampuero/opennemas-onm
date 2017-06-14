@@ -59,6 +59,10 @@ services:
         class: Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
 
+    core.helper.instance_sync:
+        class:     Common\Core\Component\Helper\InstanceSyncHelper
+        arguments: [ '@service_container' ]
+
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
@@ -141,8 +145,12 @@ services:
         class:     Common\Core\Component\Locale\Locale
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
 
+    core.manager.tag:
+        class:     Common\Core\Component\Tag\TagManager
+        arguments: [ '@orm.connection.instance', '@cache' ]
+
     core.renderer.advertisement:
-        class: Common\Core\Component\Renderer\AdvertisementRenderer
+        class:     Common\Core\Component\Renderer\AdvertisementRenderer
         arguments: [ '@service_container' ]
 
     core.status.checker:

@@ -134,7 +134,7 @@ class AssetController extends Controller
                 'quality'          => 85,
             ]);
 
-            return new Response($contents, 200, array('Content-Type' => $imageFormat));
+            return new Response($contents, 200, ['Content-Type' => $imageFormat]);
         } else {
             return new Response('', 404);
         }
@@ -220,16 +220,12 @@ class AssetController extends Controller
             $response .= "}\n\n";
         }
 
-        return new Response(
-            $response,
-            200,
-            array(
-                // 'Expire'       => new \DateTime("+5 min"),
-                'Content-Type' => 'text/css',
-                'x-instance'   => $this->get('core.instance')->internal_name,
-                'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',frontpagecss',
-            )
-        );
+        return new Response($response, 200, [
+            // 'Expire'       => new \DateTime("+5 min"),
+            'Content-Type' => 'text/css',
+            'x-instance'   => $this->get('core.instance')->internal_name,
+            'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',frontpagecss',
+        ]);
     }
 
     /**
@@ -241,9 +237,9 @@ class AssetController extends Controller
      **/
     public function globalCssAction(Request $request)
     {
+        // Setup templating cache layer
         $this->view->setConfig('frontpages');
-
-        $cacheID = 'css|global';
+        $cacheID = $this->view->getCacheId('css', 'global');
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
@@ -291,11 +287,16 @@ class AssetController extends Controller
             ]);
         }
 
-        $coreCss   = $this->get('core.template.admin')
-            ->fetch('css/global.tpl');
-        $customCss = $this->renderView('base/custom_css.tpl');
+        $coreCss   = $this->get('core.template.admin')->fetch('css/global.tpl');
 
-        return new Response($coreCss . ' ' . $customCss, 200, [
+        $customCss = $this->renderView(
+            'base/custom_css.tpl',
+            [ 'cache_id' => $cacheID ]
+        );
+
+        $contents = $coreCss . PHP_EOL . $customCss;
+
+        return new Response($contents, 200, [
             'Content-Type' => 'text/css',
             'x-instance'   => $this->get('core.instance')->internal_name,
             'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',

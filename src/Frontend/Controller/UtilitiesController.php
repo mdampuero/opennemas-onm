@@ -123,8 +123,8 @@ class UtilitiesController extends Controller
         curl_setopt_array($ch, $options);
 
         $content = curl_exec($ch);
-        $err = curl_errno($ch);
-        $errmsg = curl_error($ch);
+        $err     = curl_errno($ch);
+        $errmsg  = curl_error($ch);
 
         curl_close($ch);
 

@@ -35,15 +35,13 @@ class VideosController extends Controller
      **/
     public function init()
     {
-        $this->view->setConfig('video');
-
         $this->page          = $this->request->query->getDigits('page', 1);
         $this->category_name = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         if (!empty($this->category_name) && $this->category_name != 'home') {
             $categoryManager = $this->get('category_repository');
             $category = $categoryManager->findBy(
-                array('name' => array(array('value' => $this->category_name))),
+                ['name' => [['value' => $this->category_name]]],
                 'name ASC'
             );
 
@@ -54,16 +52,14 @@ class VideosController extends Controller
             $category         = $category[0];
             $this->category   = $category->pk_content_category;
 
-            $this->view->assign(
-                array(
-                    'category'           => $this->category,
-                    'actual_category_id' => $this->category,
-                    'category_name'      => $this->category_name,
-                    'actual_category'    => $this->category_name,
-                    'category_data'      => $category,
-                    'category_real_name' => $category->title,
-                )
-            );
+            $this->view->assign([
+                'category'           => $this->category,
+                'actual_category_id' => $this->category,
+                'category_name'      => $this->category_name,
+                'actual_category'    => $this->category_name,
+                'category_data'      => $category,
+                'category_real_name' => $category->title,
+            ]);
         } else {
             $this->category = 0;
             $this->view->assign('category_real_name', 'Portada');
@@ -82,22 +78,20 @@ class VideosController extends Controller
      **/
     public function frontpageAction()
     {
-        list($positions, $advertisements) = $this->getAds();
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
+        // Setup templating cache layer
+        $this->view->setConfig('video');
+        $cacheID = $this->view->getCacheId('frontpage', 'video', $this->category_name, $this->page);
 
-        # If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
         if (($this->view->getCaching() === 0)
-                || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
+            || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
-            $videosSettings = s::get('video_settings');
-            $totalVideosFrontpage       = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
-            $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
-            $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
-            $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:0;
-            $totalVideosBlockOther      = isset($videosSettings['block_others'])?$videosSettings['block_others']:6;
+            $videosSettings             = s::get('video_settings');
+            $totalVideosFrontpage       = isset($videosSettings['total_front']) ? $videosSettings['total_front'] : 2;
+            $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more']) ? $videosSettings['total_front_more'] : 12;
+            $totalVideosFrontpageOffset = isset($videosSettings['front_offset']) ? $videosSettings['front_offset'] : 3;
+            $totalVideosBlockInCategory = isset($videosSettings['block_in_category']) ? $videosSettings['block_in_category'] : 0;
+            $totalVideosBlockOther      = isset($videosSettings['block_others']) ? $videosSettings['block_others'] : 6;
 
             if ($this->category_name != 'home') {
                 // Fetch total of videos for this category
@@ -139,10 +133,10 @@ class VideosController extends Controller
                 );
 
                 $order = array('created' => 'DESC');
-                $filters = array(
-                    'content_type_name' => array(array('value' => 'video')),
-                    'content_status'    => array(array('value' => '1')),
-                );
+                $filters = [
+                    'content_type_name' => [['value' => 'video']],
+                    'content_status'    => [['value' => '1']],
+                ];
 
                 $em = $this->get('entity_repository');
                 $othersVideos = $em->findBy(
@@ -175,7 +169,7 @@ class VideosController extends Controller
             $total = count($othersVideos)+1;
             if ($this->category != 0) {
                 $url = [
-                    'name' => 'frontend_video_ajax_paginated',
+                    'name'   => 'frontend_video_ajax_paginated',
                     'params' => [ 'category_name' => $this->category_name ]
                 ];
                 $total = count($allVideos)+1;
@@ -212,34 +206,32 @@ class VideosController extends Controller
                 'route'       => $route
             ]);
 
-            $this->view->assign(
-                array(
-                    'videos'        => $videos,
-                    'others_videos' => $othersVideos,
-                    'page'          => '1',
-                    'pager'         => $pager,
-                    'pagination'    => $pagination,
-                )
-            );
+            $this->view->assign([
+                'videos'        => $videos,
+                'others_videos' => $othersVideos,
+                'page'          => '1',
+                'pager'         => $pager,
+                'pagination'    => $pagination,
+            ]);
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         if ($this->category_name != 'home') {
-            return $this->render(
-                'video/video_frontpage.tpl',
-                array(
-                    'cache_id'     => $cacheID,
-                    'categoryName' => $this->category_name,
-                    'x-tags'       => 'video-frontpage,'.$this->category_name.','.$this->page
-                )
-            );
+            return $this->render('video/video_frontpage.tpl', [
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
+                'cache_id'       => $cacheID,
+                'categoryName'   => $this->category_name,
+                'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
+            ]);
         } else {
-            return $this->render(
-                'video/video_main_frontpage.tpl',
-                array(
-                    'cache_id' => $cacheID,
-                    'x-tags'   => 'video-frontpage,'.$this->category_name.','.$this->page
-                )
-            );
+            return $this->render('video/video_main_frontpage.tpl', [
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
+                'cache_id'       => $cacheID,
+                'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
+            ]);
         }
     }
 
@@ -250,14 +242,12 @@ class VideosController extends Controller
      **/
     public function frontpagePaginatedAction()
     {
-        list($positions, $advertisements) = $this->getAds();
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
+        // Setup templating cache layer
+        $this->view->setConfig('video');
+        $cacheID = $this->view->getCacheId('frontpage', 'video', $this->category_name, $this->page);
 
-        // If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
         if (($this->view->getCaching() === 0)
-                || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
+            || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
             $videosSettings = $this->get('setting_repository')->get('video_settings');
@@ -299,14 +289,15 @@ class VideosController extends Controller
             ]);
         }
 
-        return $this->render(
-            'video/video_frontpage.tpl',
-            [
-                'cache_id'     => $cacheID,
-                'categoryName' => $this->category_name,
-                'x-tags'       => 'video-frontpage,'.$this->category_name.','.$this->page
-            ]
-        );
+        list($positions, $advertisements) = $this->getAds();
+
+        return $this->render('video/video_frontpage.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+            'categoryName'   => $this->category_name,
+            'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
+        ]);
 
     }
 
@@ -329,15 +320,13 @@ class VideosController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        list($positions, $advertisements) = $this->getAds('inner');
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
-
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
         $cacheable = $subscriptionFilter->subscriptionHook($video);
 
-        // If is not cached process this action
-        $cacheID = $this->view->generateCacheId($this->category_name, null, $video->id);
+        // Setup templating cache layer
+        $this->view->setConfig('video-inner');
+        $cacheID = $this->view->getCacheId('content', $video->id);
+
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('video/video_inner.tpl', $video->id)
         ) {
@@ -366,23 +355,24 @@ class VideosController extends Controller
             }
 
             $this->view->assign(['others_videos' => $otherVideos]);
-        } //end iscached
+        }
 
-        return $this->render(
-            'video/video_inner.tpl',
-            [
-                'video'         => $video,
-                'content'       => $video,
-                'category'      => $video->category,
-                'category_name' => $video->category_name,
-                'contentId'     => $video->id,
-                'action'        => 'inner',
-                'cache_id'      => $cacheID,
-                'x-tags'        => 'video,'.$video->id,
-                'x-cache-for'   => '+1 day',
-                'x-cacheable'   => $cacheable,
-            ]
-        );
+        list($positions, $advertisements) = $this->getAds('inner');
+
+        return $this->render('video/video_inner.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'video'         => $video,
+            'content'       => $video,
+            'category'      => $video->category,
+            'category_name' => $video->category_name,
+            'contentId'     => $video->id,
+            'action'        => 'inner',
+            'cache_id'      => $cacheID,
+            'x-tags'        => 'video,'.$video->id,
+            'x-cache-for'   => '+1 day',
+            'x-cacheable'   => $cacheable,
+        ]);
     }
 
     /**
@@ -416,14 +406,11 @@ class VideosController extends Controller
             );
         }
 
-        return $this->render(
-            'video/partials/_widget_video_more_interesting.tpl',
-            array(
-                'others_videos'      => $videos,
-                'actual_category_id' => $this->category,
-                'page'               => $this->page,
-            )
-        );
+        return $this->render('video/partials/_widget_video_more_interesting.tpl', [
+            'others_videos'      => $videos,
+            'actual_category_id' => $this->category,
+            'page'               => $this->page,
+        ]);
     }
 
     /**
@@ -461,15 +448,12 @@ class VideosController extends Controller
             );
         }
 
-        return $this->render(
-            'video/partials/_widget_video_incategory.tpl',
-            array(
-                'videos'             => $videos,
-                'actual_category_id' => $this->category,
-                'page'               => $this->page,
-                // 'total_incategory'   => 9, commented on all templates
-            )
-        );
+        return $this->render('video/partials/_widget_video_incategory.tpl', [
+            'videos'             => $videos,
+            'actual_category_id' => $this->category,
+            'page'               => $this->page,
+            // 'total_incategory'   => 9, commented on all templates
+        ]);
     }
 
     /**
@@ -490,15 +474,15 @@ class VideosController extends Controller
         }
 
         $order = array('created' => 'DESC');
-        $filters = array(
-            'content_type_name' => array(array('value' => 'video')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-        );
+        $filters = [
+            'content_type_name' => [['value' => 'video']],
+            'content_status'    => [['value' => 1]],
+            'in_litter'         => [['value' => 1, 'operator' => '!=']],
+        ];
 
         if ($this->category != 0) {
             $category = $this->get('category_repository')->find($this->category);
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [['value' => $category->name]];
         }
 
         $em = $this->get('entity_repository');
@@ -524,14 +508,11 @@ class VideosController extends Controller
             ]
         ]);
 
-        return $this->render(
-            'video/partials/_widget_more_videos.tpl',
-            array(
-                'others_videos'      => $othersVideos,
-                'page'               => $this->page,
-                'pagination'         => $pagination,
-            )
-        );
+        return $this->render('video/partials/_widget_more_videos.tpl', [
+            'others_videos'      => $othersVideos,
+            'page'               => $this->page,
+            'pagination'         => $pagination,
+        ]);
 
     }
 

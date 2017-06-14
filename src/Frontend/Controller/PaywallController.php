@@ -217,9 +217,7 @@ class PaywallController extends Controller
 
             return $this->render(
                 'paywall/payment_error.tpl',
-                array(
-                    'settings' => $paywallSettings
-                )
+                [ 'settings' => $paywallSettings ]
             );
         }
 
@@ -241,12 +239,9 @@ class PaywallController extends Controller
         if (empty($request->getSession()->get('paywall_transaction'))
             || $token != $request->getSession()->get('paywall_transaction')['token']
         ) {
-            return $this->render(
-                'paywall/payment_error.tpl',
-                array(
-                    'settings' => $paywallSettings
-                )
-            );
+            return $this->render('paywall/payment_error.tpl', [
+                'settings' => $paywallSettings
+            ]);
         }
 
         $getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType($token);
@@ -270,12 +265,9 @@ class PaywallController extends Controller
                 "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
 
-            return $this->render(
-                'paywall/payment_error.tpl',
-                array(
-                    'settings' => $paywallSettings
-                )
-            );
+            return $this->render('paywall/payment_error.tpl', [
+                'settings' => $paywallSettings
+            ]);
         }
 
         // if (isset($getECResponse)) {
@@ -327,12 +319,9 @@ class PaywallController extends Controller
                 "Paywall: Error in DoExpressCheckoutPayment API call. Original errors: ".implode(' ;', $errors)
             );
 
-            return $this->render(
-                'paywall/payment_error.tpl',
-                array(
-                    'settings' => $paywallSettings
-                )
-            );
+            return $this->render('paywall/payment_error.tpl', [
+                'settings' => $paywallSettings
+            ]);
         }
 
         $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
@@ -340,21 +329,18 @@ class PaywallController extends Controller
         // Payment done, let's update some registries in the app
         if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
             $order = new \Order();
-            $order->create(
-                array(
-                    'user_id'        => $this->getUser()->id,
-                    'content_id'     => 0,
-                    'created'        => new \DateTime(),
-                    'payment_id'     => $paymentInfo->TransactionID,
-                    'payment_status' => $paymentInfo->PaymentStatus,
-                    'payment_amount' => (int) $paymentInfo->GrossAmount->value,
-                    'payment_method' => $paymentInfo->TransactionType,
-                    'type'           => 'paywall',
-                    'params'         => array(
-                        ''
-                    ),
-                )
-            );
+            $order->create([
+                'user_id'        => $this->getUser()->id,
+                'content_id'     => 0,
+                'created'        => new \DateTime(),
+                'payment_id'     => $paymentInfo->TransactionID,
+                'payment_status' => $paymentInfo->PaymentStatus,
+                'payment_amount' => (int) $paymentInfo->GrossAmount->value,
+                'payment_method' => $paymentInfo->TransactionType,
+                'type'           => 'paywall',
+                'params'         => [ '' ],
+
+            ]);
 
             $planTime = strtolower($request->getSession()->get('paywall_transaction')['plan']['time']);
 
@@ -372,13 +358,10 @@ class PaywallController extends Controller
             $message = _('Your payment was already registered');
         }
 
-        return $this->render(
-            'paywall/payment_error.tpl',
-            array(
-                'settings' => $paywallSettings,
-                'message'  => $message,
-            )
-        );
+        return $this->render('paywall/payment_error.tpl', [
+            'settings' => $paywallSettings,
+            'message'  => $message,
+        ]);
     }
 
     /**
@@ -397,12 +380,9 @@ class PaywallController extends Controller
         if (empty($request->getSession()->get('paywall_transaction'))
             || $token != $request->getSession()->get('paywall_transaction')['token']
         ) {
-            return $this->render(
-                'paywall/payment_error.tpl',
-                array(
-                    'settings' => $paywallSettings
-                )
-            );
+            return $this->render('paywall/payment_error.tpl', [
+                'settings' => $paywallSettings
+            ]);
         }
 
         $getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType($token);
@@ -426,12 +406,9 @@ class PaywallController extends Controller
                 "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
 
-            return $this->render(
-                'paywall/payment_error.tpl',
-                array(
-                    'settings' => $paywallSettings
-                )
-            );
+            return $this->render('paywall/payment_error.tpl', [
+                'settings' => $paywallSettings
+            ]);
         }
 
         // Some transaction data
@@ -515,12 +492,9 @@ class PaywallController extends Controller
                 "Paywall: Error in CreateRecurringPaymentsProfile API call. Original errors: ".implode(' ;', $errors)
             );
 
-            return $this->render(
-                'paywall/payment_error.tpl',
-                array(
-                    'settings' => $paywallSettings
-                )
-            );
+            return $this->render('paywall/payment_error.tpl', [
+                'settings' => $paywallSettings
+            ]);
         }
 
         // if(isset($createRPProfileResponse)) {
@@ -543,13 +517,10 @@ class PaywallController extends Controller
             $message = _('Your subscription could not been created. Please try again.');
         }
 
-        return $this->render(
-            'paywall/payment_error.tpl',
-            array(
-                'settings' => $paywallSettings,
-                'message'  => $message,
-            )
-        );
+        return $this->render('paywall/payment_error.tpl', [
+            'settings' => $paywallSettings,
+            'message'  => $message,
+        ]);
     }
 
     /**
@@ -606,12 +577,9 @@ class PaywallController extends Controller
             $error = true;
         }
 
-        return $this->render(
-            'paywall/profile_canceled.tpl',
-            array(
-                'error'  => $error,
-            )
-        );
+        return $this->render('paywall/profile_canceled.tpl', [
+            'error'  => $error,
+        ]);
     }
 
     /**
@@ -679,17 +647,17 @@ class PaywallController extends Controller
             $paywallTimeLimit = $user->getMeta('paywall_time_limit');
 
             // Set selectedPlan user when creating the recurring profile
-            $selectedPlan = array(
-                'price' => $price,
-                'description' => $description,
-                'time' => $period,
+            $selectedPlan = [
+                'price'            => $price,
+                'description'      => $description,
+                'time'             => $period,
                 'paywallTimeLimit' => $paywallTimeLimit,
-            );
+            ];
 
             // URL to which the buyer's browser is returned after choosing to pay with PayPal
             $returnUrl = $this->generateUrl(
                 'frontend_paywall_success_recurring_payment',
-                array('user' => $this->getUser()->id, ),
+                [ 'user' => $this->getUser()->id, ],
                 true
             );
             $cancelUrl = $this->generateUrl('frontend_paywall_cancel_payment', array(), true);
@@ -764,20 +732,14 @@ class PaywallController extends Controller
                     "Paywall: Error in SetEC API call. Original errors: ".implode(' ;', $errors)
                 );
 
-                return $this->render(
-                    'paywall/prifile_activated.tpl',
-                    array(
-                        'error' => true,
-                    )
-                );
+                return $this->render('paywall/prifile_activated.tpl', [
+                    'error' => true,
+                ]);
             }
         } else {
-            return $this->render(
-                'paywall/prifile_activated.tpl',
-                array(
-                    'error' => true,
-                )
-            );
+            return $this->render('paywall/prifile_activated.tpl', [
+                'error' => true,
+            ]);
         }
     }
 
@@ -790,12 +752,9 @@ class PaywallController extends Controller
     {
         $paywallSettings = s::get('paywall_settings');
 
-        return $this->render(
-            'paywall/payment_error.tpl',
-            array(
-                'settings' => $paywallSettings
-            )
-        );
+        return $this->render('paywall/payment_error.tpl', [
+            'settings' => $paywallSettings
+        ]);
     }
 
     /**
@@ -819,12 +778,12 @@ class PaywallController extends Controller
         $settings = array();
 
         $databaseSettings = s::get('paywall_settings');
-        $settings = array(
+        $settings = [
             "acct1.UserName"  => $databaseSettings['paypal_username'],
             "acct1.Password"  => $databaseSettings['paypal_password'],
             "acct1.Signature" => $databaseSettings['paypal_signature'],
             "mode"            => ($databaseSettings['developer_mode'] == false) ? 'sandbox' : 'live',
-        );
+        ];
 
         return  new \Onm\Merchant\PaypalWrapper($settings);
     }

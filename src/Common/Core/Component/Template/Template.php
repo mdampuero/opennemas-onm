@@ -169,6 +169,30 @@ class Template extends \Smarty
     }
 
     /**
+     * Returns the cache id basing on all the function params passed
+     *
+     * @return string The cache id.
+     */
+    public function getCacheId()
+    {
+        $params = array_filter(
+            array_map(
+                function ($item) {
+                    return preg_replace('/[^a-zA-Z0-9\s]+/', '', $item);
+                },
+                func_get_args()
+            ),
+            function ($item) {
+                return !empty($item);
+            }
+        );
+
+        $cacheID = implode('|', $params);
+
+        return $cacheID;
+    }
+
+    /**
      * Returns the service container.
      *
      * @return ServiceContainer The service container.

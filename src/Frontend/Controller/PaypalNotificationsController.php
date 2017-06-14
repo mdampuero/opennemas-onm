@@ -36,12 +36,12 @@ class PaypalNotificationsController extends Controller
         // Get paypal developer mode settings
         $databaseSettings = s::get('paywall_settings');
 
-        $config = array(
+        $config = [
             'mode'            => ($databaseSettings['developer_mode'] == false) ? 'sandbox' : 'live',
             "acct1.UserName"  => $databaseSettings['paypal_username'],
             "acct1.Password"  => $databaseSettings['paypal_password'],
             "acct1.Signature" => $databaseSettings['paypal_signature'],
-        );
+        ];
 
         // First param takes ipn data to be validated.
         // If null, raw POST data is read from input stream

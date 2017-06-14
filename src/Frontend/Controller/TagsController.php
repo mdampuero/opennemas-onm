@@ -1,36 +1,85 @@
 <?php
 /**
- * Contains the class Frontend\Controller\TagsController
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Common\Core\Annotation\BotDetector;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
- * Shows a paginated page for contents that share a property
- *
- * @package Backend_Controllers
- **/
+ * Displays a list of tags or a list of contents by tag.
+ */
 class TagsController extends Controller
 {
     /**
-     * Shows a paginated list of contents for a given tag name
+     * Displays a list of tags.
      *
-     * @return Response the response object
+     * @return Response The response object.
+     *
+     * @BotDetector(bot="bingbot", route="frontend_frontpage")
+     */
+    public function indexAction()
+    {
+        if (!$this->get('core.security')
+            ->hasExtension('es.openhost.module.tagsIndex')
+        ) {
+            throw new ResourceNotFoundException();
+        }
+
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', 'tag-index');
+        $tags    = [ '#' => [], '*' => [] ];
+
+        $this->view->setConfig('frontpages');
+
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('tag/index.tpl', $cacheId)
+        ) {
+            $fm      = $this->get('core.filter.manager');
+            $t       = $this->get('core.manager.tag')->findAll();
+            $letters = range('a', 'z');
+
+            foreach ($t as $tag) {
+                if (is_numeric($tag[0])) {
+                    $tags['#'][] = $tag;
+                    continue;
+                }
+
+                $normalized = $fm->filter('normalize', $tag);
+
+                if (in_array($normalized[0], $letters)) {
+                    $tags[$normalized[0]][] = $tag;
+                    continue;
+                }
+
+                $tags['*'][] = $tag;
+            }
+        }
+
+        list($positions, $advertisements) = $this->getInnerAds();
+
+        return $this->render('tag/index.tpl', [
+            'tags'           => $tags,
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheId,
+            'x-tags'         => 'tag-page,tag-index',
+        ]);
+    }
+
+    /**
+     * Shows a paginated list of contents for a given tag name.
+     *
+     * @return Response The response object.
      *
      * @BotDetector(bot="bingbot", route="frontend_frontpage")
      */
@@ -44,37 +93,37 @@ class TagsController extends Controller
             $page = 2;
         }
 
-        // Load config
+        // Setup templating cache layer
         $this->view->setConfig('frontpages');
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
 
-        $cacheId = "tag|$tagName|$page";
-
-        if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
+        ) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
-            $itemsPerPage = $this->get('setting_repository')->get('items_in_blog');
-            if (empty($itemsPerPage)) {
-                $itemsPerPage = 8;
-            }
+            $epp = $this->get('setting_repository')->get('items_in_blog', 8);
 
-            $criteria = array(
-                'content_status'  => array(array('value' => 1)),
-                'in_litter'       => array(array('value' => 0)),
-                'fk_content_type' => array(
-                    array('value' => 1),
-                    // array('value' => 4),
-                    // array('value' => 7),
-                    // array('value' => 9),
+            $criteria = [
+                'content_status'  => [ [ 'value' => 1 ] ],
+                'in_litter'       => [ [ 'value' => 0 ] ],
+                'fk_content_type' => [
+                    [ 'value' => 1 ],
+                    // [ 'value' => 4 ],
+                    // [ 'value' => 7 ],
+                    // [ 'value' => 9 ],
                     'union' => 'OR'
-                ),
-                'metadata' => array(array('value' => '%' . $tag . '%', 'operator' => 'LIKE'))
-            );
+                ],
+                'metadata' => [
+                    [ 'value' => '%' . $tag . '%', 'operator' => 'LIKE' ]
+                ]
+            ];
 
-            $er = $this->get('entity_repository');
-            $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
-            $total = count($contents)+1;
+            $em       = $this->get('entity_repository');
+            $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
+            $total    = count($contents) + 1;
 
             // TODO: review this piece of CRAP
-            $filteredContents = array();
+            $filteredContents = [];
             $tag = strtolower($tag);
             foreach ($contents as &$item) {
                 $arrayMetadatas = explode(',', $item->metadata);
@@ -88,7 +137,7 @@ class TagsController extends Controller
                 if (in_array($tag, $arrayMetadatas)) {
                     $item = $item->get($item->id);
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = $er->find('Photo', $item->img1);
+                        $image = $em->find('Photo', $item->img1);
                         if (is_object($image) && !is_null($image->id)) {
                             $item->img1_path = $image->path_file.$image->name;
                             $item->img1      = $image;
@@ -96,7 +145,7 @@ class TagsController extends Controller
                     }
 
                     if ($item->fk_content_type == 7) {
-                        $image           = $er->find('Photo', $item->cover_id);
+                        $image           = $em->find('Photo', $item->cover_id);
                         $item->img1_path = $image->path_file.$image->name;
                         $item->img1      = $image;
                         $item->summary   = $item->subtitle;
@@ -109,7 +158,7 @@ class TagsController extends Controller
                     }
 
                     if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                        $item->video = $er->find('Video', $item->fk_video2);
+                        $item->video = $em->find('Video', $item->fk_video2);
                     }
 
                     // Add item to final array
@@ -121,17 +170,17 @@ class TagsController extends Controller
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
-                'epp'         => $itemsPerPage,
+                'epp'         => $epp,
                 'maxLinks'    => 0,
                 'page'        => $page,
-                'total'       => $total+1,
+                'total'       => $total + 1,
                 'route'       => [
                     'name'   => 'tag_frontpage',
                     'params' => [ 'tag_name' => $tagName ]
                 ]
             ]);
 
-            $this->view->assign([ 'pagination' => $pagination, ]);
+            $this->view->assign([ 'pagination' => $pagination ]);
         }
 
         list($positions, $advertisements) = $this->getInnerAds();
@@ -146,16 +195,16 @@ class TagsController extends Controller
     }
 
     /**
-     * Fetches advertisements for article inner
+     * Returns a list of advertisement positions and advertisements.
      *
-     * @param string category the category identifier
+     * @param string $category The category id.
      *
-     * @return void
-     **/
+     * @return array A list of advertisement positions and advertisements.
+     */
     public static function getInnerAds($category = 'home')
     {
         $category       = (!isset($category) || ($category=='home'))? 0: $category;
-        $positions      = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $positions      = [ 7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193 ];
         $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
