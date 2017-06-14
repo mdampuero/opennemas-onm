@@ -51,7 +51,7 @@ class FixCommand extends ContainerAwareCommand
                 false,
                 InputOption::VALUE_NONE,
                 'If set, command will NOT execute the post-migration actions'
-            );;
+            );
     }
 
     /**

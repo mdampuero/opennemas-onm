@@ -269,10 +269,14 @@ class CommentsController extends Controller
         $ids  = $ids = $request->query->get('ids', []);
         $ids = array_unique(array_filter(
             array_map(
-                function($id) { return (int) $id; },
+                function ($id) {
+                    return (int) $id;
+                },
                 explode(',', $ids)
             ),
-            function($id){return ((int) $id) > 0; }
+            function ($id) {
+                return ((int) $id) > 0;
+            }
         ));
 
         // Fetch data from database

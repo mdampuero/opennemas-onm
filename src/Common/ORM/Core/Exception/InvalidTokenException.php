@@ -17,7 +17,7 @@ class InvalidTokenException extends \Exception
      * @param string $token  The token.
      * @param string $entity The entity name.
      */
-    public function __construct($token , $entity = '')
+    public function __construct($token, $entity = '')
     {
         $message = sprintf(_("The token '%s' is not valid"), $token);
 

@@ -351,7 +351,6 @@ class AdvertisementRenderer
         $img = $this->container->get('entity_repository')->find('Photo', $ad->img);
 
         if (!empty($img) && strtolower($img->type_img) == 'swf') {
-
             return $this->renderSafeFrameFlash($ad, $img);
         }
 

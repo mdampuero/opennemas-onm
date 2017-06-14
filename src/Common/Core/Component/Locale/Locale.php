@@ -160,7 +160,7 @@ class Locale
 
         // Convert timezone id to timezone name
         if (is_numeric($timezone) && array_key_exists($timezone, $timezones)) {
-           $timezone = $timezones[(int) $timezone];
+            $timezone = $timezones[(int) $timezone];
         }
 
         // Change timezone if name valid

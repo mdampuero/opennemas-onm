@@ -44,7 +44,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      *
      * @return Response The response to return.
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token) {
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    {
         $session  = $request->getSession();
         $attempts = $session->get('failed_login_attempts', 0);
         $user     = $token->getUser();

@@ -298,7 +298,6 @@ class VideosController extends Controller
             'categoryName'   => $this->category_name,
             'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
         ]);
-
     }
 
     /**
@@ -513,7 +512,6 @@ class VideosController extends Controller
             'page'               => $this->page,
             'pagination'         => $pagination,
         ]);
-
     }
 
     /**

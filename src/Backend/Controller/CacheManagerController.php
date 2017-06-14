@@ -39,8 +39,8 @@ class CacheManagerController extends Controller
         $hasRedis = method_exists($this->get('cache'), 'getRedis');
 
         return $this->render('cache_manager/index.tpl', [ 'redis_enabled' => $hasRedis ]);
-
     }
+
     /**
      * Show the configuration form and stores its information
      *

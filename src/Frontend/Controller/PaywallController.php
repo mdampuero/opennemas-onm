@@ -220,7 +220,6 @@ class PaywallController extends Controller
                 [ 'settings' => $paywallSettings ]
             );
         }
-
     }
 
     /**

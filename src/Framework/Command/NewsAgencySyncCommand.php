@@ -120,7 +120,6 @@ EOF
                             $logger->info(count($results[0]) . " files downloaded", array('cron'));
                         }
                     }
-
                 } catch (\Exception $e) {
                     $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>");
                 }

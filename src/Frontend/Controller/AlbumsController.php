@@ -231,7 +231,7 @@ class AlbumsController extends Controller
 
         list($positions, $advertisements) = $this->getAds('inner');
 
-        return $this->render('album/album.tpl',[
+        return $this->render('album/album.tpl', [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'album'          => $album,
@@ -337,7 +337,7 @@ class AlbumsController extends Controller
             ]
         ]);
 
-        return $this->render('album/partials/_widget_more_albums.tpl',[
+        return $this->render('album/partials/_widget_more_albums.tpl', [
             'others_albums'      => $othersAlbums,
             'page'               => $this->page,
            'pagination'         => $pagination,

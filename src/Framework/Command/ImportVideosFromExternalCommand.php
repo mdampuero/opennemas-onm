@@ -151,7 +151,6 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 );
                 break;
         }
-
     }
 
     /**

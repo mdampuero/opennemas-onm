@@ -66,7 +66,7 @@ class UrlGeneratorHelper
         $output = Uri::generate(
             $params['content_type'],
             [
-                'id'       => sprintf('%06d',$params['id']),
+                'id'       => sprintf('%06d', $params['id']),
                 'date'     => date('YmdHis', strtotime($params['date'])),
                 'category' => urlencode($params['category_name']),
                 'slug'     => urlencode($slug),

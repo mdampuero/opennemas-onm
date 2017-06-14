@@ -176,13 +176,13 @@ class ArticleController extends Controller
 
         $relations = $rm->getRelations($id, 'frontpage');
         if (count($relations) > 0) {
-            $params['relatedInFrontpage'] = array_map(function($content) {
+            $params['relatedInFrontpage'] = array_map(function ($content) {
                 return \Onm\StringUtils::convertToUtf8($content);
             }, $this->get('entity_repository')->findMulti($relations));
         }
         $relations = $rm->getRelations($id, 'inner');
         if (count($relations) > 0) {
-            $params['relatedInInner'] = array_map(function($content) {
+            $params['relatedInInner'] = array_map(function ($content) {
                 return \Onm\StringUtils::convertToUtf8($content);
             }, $this->get('entity_repository')->findMulti($relations));
         }
@@ -194,7 +194,7 @@ class ArticleController extends Controller
 
             $relations = $rm->getRelations($id, 'home');
             if (count($relations) > 0) {
-                $params['relatedInHome'] = array_map(function($content) {
+                $params['relatedInHome'] = array_map(function ($content) {
                     return \Onm\StringUtils::convertToUtf8($content);
                 }, $this->get('entity_repository')->findMulti($relations));
             }

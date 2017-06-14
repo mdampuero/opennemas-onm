@@ -53,7 +53,7 @@ class BooksController extends Controller
             $this->ccm        = \ContentCategoryManager::get_instance();
             $parentCategories = $this->ccm->getArraysMenu('', $contentType);
 
-            $categories = array_filter($parentCategories[0], function($item) use ($contentType) {
+            $categories = array_filter($parentCategories[0], function ($item) use ($contentType) {
                 return $item->internal_category == $contentType;
             });
 

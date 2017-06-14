@@ -69,8 +69,7 @@ class LetterController extends ContentController
         $photoIds = $photos = [];
 
         foreach ($results as $letter) {
-
-            if (!is_object($letter->photo) && (int) $letter->photo > 0)  {
+            if (!is_object($letter->photo) && (int) $letter->photo > 0) {
                 $photoIds []= $letter->photo;
             }
         }
@@ -90,7 +89,6 @@ class LetterController extends ContentController
             foreach ($photosRAW as $photo) {
                 $photos [$photo->pk_content] = $photo;
             }
-
         }
 
         return array_merge($data, ['photos' => $photos]);

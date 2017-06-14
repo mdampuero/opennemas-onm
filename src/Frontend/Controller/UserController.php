@@ -494,7 +494,7 @@ class UserController extends Controller
             if ($field['type'] === 'options') {
                 $options = [];
                 $values  = explode(',', $field['values']);
-                $values  = array_map(function($a) {
+                $values  = array_map(function ($a) {
                     return trim($a);
                 }, $values);
 

@@ -73,7 +73,6 @@ class MenusController extends Controller
         );
 
         $this->view->assign('menu_positions', $this->menuPositions);
-
     }
 
     /**

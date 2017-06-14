@@ -205,7 +205,7 @@ class OpinionsController extends Controller
 
         list($positions, $advertisements) = $this->getAds();
 
-        return $this->render('opinion/opinion_frontpage.tpl',[
+        return $this->render('opinion/opinion_frontpage.tpl', [
             'ads_positions'   => $positions,
             'advertisements'  => $advertisements,
             'actual_category' => 'opinion',

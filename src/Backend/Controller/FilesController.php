@@ -229,7 +229,8 @@ class FilesController extends Controller
             || (is_array($files) && array_key_exists('path', $files) && count($files['path']) <= 0)
         ) {
             $this->get('session')->getFlashBag()->add(
-                'error', _('You must pick a file before submitting the form')
+                'error',
+                _('You must pick a file before submitting the form')
             );
 
             return $this->redirect(
@@ -241,10 +242,14 @@ class FilesController extends Controller
 
 
         if (!$uploadedFile->isValid()) {
-            error_log(sprintf('There was a problem uploading %s .Error Code: %s',
-                $uploadedFile->getClientOriginalName(), $uploadedFile->getError()));
+            error_log(sprintf(
+                'There was a problem uploading %s .Error Code: %s',
+                $uploadedFile->getClientOriginalName(),
+                $uploadedFile->getError()
+            ));
             $this->get('session')->getFlashBag()->add(
-                'error', sprintf(_('You must pick a file smaller than %d Mb'), MAX_UPLOAD_FILE/1024/1024)
+                'error',
+                sprintf(_('You must pick a file smaller than %d Mb'), MAX_UPLOAD_FILE/1024/1024)
             );
 
             return $this->redirect(
@@ -286,7 +291,8 @@ class FilesController extends Controller
             $directoryCreated = \Onm\FilesManager::createDirectory($basePath);
             if (!$directoryCreated) {
                 $this->get('session')->getFlashBag()->add(
-                    'error', sprintf(_('Unable to create the directory to save the file'))
+                    'error',
+                    sprintf(_('Unable to create the directory to save the file'))
                 );
 
                 return $this->redirect(
@@ -311,7 +317,8 @@ class FilesController extends Controller
         } catch (\Exception $e) {
             error_log($e->getMessage());
             $this->get('session')->getFlashBag()->add(
-                'error', _('There was an error while uploading the file.')
+                'error',
+                _('There was an error while uploading the file.')
             );
 
             return $this->redirect(
@@ -322,7 +329,8 @@ class FilesController extends Controller
         $attachment = new \Attachment();
         if ($attachment->create($data)) {
             $this->get('session')->getFlashBag()->add(
-                'success', _("File created successfuly.")
+                'success',
+                _("File created successfuly.")
             );
 
             return $this->redirect(

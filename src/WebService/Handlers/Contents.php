@@ -117,7 +117,6 @@ class Contents
             error_log($e->getMessage());
             return false;
         }
-
     }
 
     /*

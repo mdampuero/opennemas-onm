@@ -263,7 +263,7 @@ class InstanceSyncController extends Controller
             CURLOPT_HTTPAUTH       => CURLAUTH_DIGEST,
         ];
         $ch = curl_init();
-        curl_setopt_array( $ch, $options );
+        curl_setopt_array($ch, $options);
 
         $httpCode = '';
         $maxRedirects = 0;
@@ -271,7 +271,7 @@ class InstanceSyncController extends Controller
 
         do {
             try {
-                $content = curl_exec( $ch );
+                $content = curl_exec($ch);
 
                 // validate CURL status
                 if (curl_errno($ch)) {
@@ -291,7 +291,7 @@ class InstanceSyncController extends Controller
                     preg_match('/(Location:|URI:)(.*?)\n/', $response[0], $matches);
                     $url = trim(array_pop($matches));
                 }
-            } catch(\Exception $ex) {
+            } catch (\Exception $ex) {
                 if ($ch != null) {
                     curl_close($ch);
                 }
@@ -299,8 +299,7 @@ class InstanceSyncController extends Controller
             }
 
             $maxRedirects++;
-        } while (
-            $httpCode == 302 ||
+        } while ($httpCode == 302 ||
             $httpCode == 301 ||
             $maxRedirects > $redirectsAllowed
         );

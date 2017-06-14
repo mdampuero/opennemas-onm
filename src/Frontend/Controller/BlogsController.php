@@ -283,7 +283,7 @@ class BlogsController extends Controller
                 || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)
             ) {
                 return new RedirectResponse(
-                    $this->generateUrl('frontend_opinion_show',[
+                    $this->generateUrl('frontend_opinion_show', [
                         'blog_id' => $dirtyID,
                         'author_name' => $author->username,
                         'blog_title'  => $blog->slug,
