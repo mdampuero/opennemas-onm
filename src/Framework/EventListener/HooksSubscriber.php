@@ -482,6 +482,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->deleteGroup($this->view->getCacheId('rss', 'last'))
                 ->deleteGroup($this->view->getCacheId('rss', 'fia'))
                 ->deleteGroup($this->view->getCacheId('rss', $content->category_name))
+                ->deleteGroup($this->view->getCacheId('rss', 'article', $category))
                 // Deleting sitemap cache files
                 ->deleteGroup($this->view->getCacheId('sitemap', 'image'))
                 ->deleteGroup($this->view->getCacheId('sitemap', 'news'))
@@ -491,7 +492,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->deleteGroup($this->view->getCacheId('frontpage', 'category', $content->category_name));
         } elseif ($content->content_type_name == 'video') {
             $this->smartyCacheHandler
-                // Deleting frontpage cache files
+                // Deleting sitemap cache files
                 ->deleteGroup($this->view->getCacheId('sitemap', 'video'));
         } elseif ($content->content_type_name == 'opinion') {
             $this->smartyCacheHandler
@@ -530,14 +531,14 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->initializeSmartyCacheHandler();
 
         $this->smartyCacheHandler
+            // Deleting frontpage cache files
+            ->deleteGroup($this->view->getCacheId('frontpage', $categoryName))
+            ->deleteGroup($this->view->getCacheId('frontpage', 'category', $categoryName))
             // Deleting rss cache files
             ->deleteGroup($this->view->getCacheId('rss', 'frontpage', 'home'))
             ->deleteGroup($this->view->getCacheId('rss', 'last'))
             ->deleteGroup($this->view->getCacheId('rss', 'fia'))
-            ->deleteGroup($this->view->getCacheId('rss', $category))
-            // Deleting frontpage cache files
-            ->deleteGroup($this->view->getCacheId('frontpage', 'category', $categoryName));
-
+            ->deleteGroup($this->view->getCacheId('rss', 'article', $category));
         $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
         $this->cleanOpcode();
