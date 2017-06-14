@@ -54,6 +54,10 @@ class TagManager
         $tags = preg_replace('/\s*,\s*/', ',', $tags);
         $tags = explode(',', $tags);
 
+        $tags = array_filter($tags, function($item) {
+            return !empty($item);
+        });
+
         sort($tags, SORT_STRING);
 
         $tags = array_unique($tags);
