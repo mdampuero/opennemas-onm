@@ -334,7 +334,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" datetime-picker datetime-picker-min="article.created" datetime-picker-max="article.endtime" datetime-picker-use-current="true" id="starttime" name="starttime" ng-model="article.starttime" type="datetime">
+                            <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-min="article.created" datetime-picker-max="article.endtime" datetime-picker-use-current="true" id="starttime" name="starttime" ng-model="article.starttime" type="datetime">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>
@@ -350,7 +350,7 @@
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <input class="form-control" datetime-picker datetime-picker-min="article.starttime" id="endtime" name="endtime" ng-model="article.endtime" type="datetime">
+                            <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-min="article.starttime" id="endtime" name="endtime" ng-model="article.endtime" type="datetime">
                             <span class="input-group-addon add-on">
                               <span class="fa fa-calendar"></span>
                             </span>

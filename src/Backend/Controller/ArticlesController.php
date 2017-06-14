@@ -103,6 +103,9 @@ class ArticlesController extends Controller
                 'authors'        => $authors,
                 'commentsConfig' => $this->get('setting_repository')
                     ->get('comments_config'),
+                'timezone' => $this->container->get('core.locale')
+                    ->getTimeZone()
+                    ->getName(),
             ]
         );
     }

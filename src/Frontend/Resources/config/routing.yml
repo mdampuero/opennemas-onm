@@ -29,10 +29,15 @@ frontend_playground:
     path: /playground/{action}
     defaults: { _controller: FrontendBundle:Playground:default }
 
+tag_frontpage_index:
+    path: /tags
+    defaults: { _controller: FrontendBundle:Tags:index }
+
 tag_frontpage:
-    path: /tag/{tag_name}
-    defaults: { _controller: FrontendBundle:Tags:tags }
+    path: /{resource}/{tag_name}
+    defaults: { _controller: FrontendBundle:Tags:tags, resource: tags }
     requirements:
+        resource: 'tag|tags'
         tag_name: '[^\/]+'
 
 frontend_frontpage_home:
