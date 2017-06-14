@@ -195,12 +195,10 @@ class ArticlesController extends Controller
             $article = @unserialize($article);
         }
 
-        if (is_object($article)
-            && (
-                $article->content_status != 1
-                || $article->in_litter == 1
-                || !$article->isStarted()
-            )
+        if (!is_object($article)
+            || $article->content_status != 1
+            || $article->in_litter == 1
+            || !$article->isStarted()
         ) {
             throw new ResourceNotFoundException();
         }

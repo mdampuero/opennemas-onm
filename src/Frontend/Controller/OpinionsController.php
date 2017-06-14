@@ -808,8 +808,9 @@ class OpinionsController extends Controller
                 $opinion = @unserialize($opinion);
             }
 
-            if (is_object($opinion)
-                && ($opinion->content_status != 1 || $opinion->in_litter == 1)
+            if (!is_object($opinion)
+                || $opinion->content_status != 1
+                || $opinion->in_litter == 1
             ) {
                 throw new ResourceNotFoundException();
             }
