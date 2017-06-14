@@ -31,7 +31,7 @@ class TagsController extends Controller
     public function indexAction()
     {
         if (!$this->get('core.security')
-            ->hasExtension('es.openhost.module.tagIndex')
+            ->hasExtension('es.openhost.module.tagsIndex')
         ) {
             throw new ResourceNotFoundException();
         }
