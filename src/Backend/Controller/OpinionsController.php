@@ -410,19 +410,6 @@ class OpinionsController extends Controller
                 'success',
                 _('Opinion successfully updated.')
             );
-
-            $author = new \User($data['fk_author']);
-
-            // Clear caches
-            dispatchEventWithParams('frontpage.save_position', array('category' => 0));
-            dispatchEventWithParams(
-                'opinion.update',
-                array(
-                    'authorSlug' => $author->username,
-                    'authorId'   => $data['fk_author'],
-                    'opinionId'  => $opinion->id,
-                )
-            );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
