@@ -316,7 +316,6 @@ class OpinionsController extends Controller
 
             // Clear caches
             dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
-            dispatchEventWithParams('frontpage.save_position', array('category' => 0));
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
