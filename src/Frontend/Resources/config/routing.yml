@@ -11,16 +11,6 @@ frontend_robots:
     path: /robots.txt
     defaults: { _controller: FrontendBundle:Robots:index }
 
-frontend_search_internal:
-    path: /search
-    defaults: { _controller: FrontendBundle:Tags:tags }
-    requirements:
-        tag_name: '[A-Za-z0-9\-.]+'
-
-frontend_search_google:
-    path: /search/google
-    defaults: { _controller: FrontendBundle:Search:google }
-
 utilities_sharrre:
     path: /utilities/sharrre
     defaults: { _controller: FrontendBundle:Utilities:sharrre }
@@ -127,6 +117,9 @@ frontend_redirect:
 
 frontend_rss:
     resource: '@FrontendBundle/Resources/config/routing/rss.yml'
+
+frontend_search:
+    resource: '@FrontendBundle/Resources/config/routing/search.yml'
 
 frontend_sitemap:
     resource: '@FrontendBundle/Resources/config/routing/sitemap.yml'
