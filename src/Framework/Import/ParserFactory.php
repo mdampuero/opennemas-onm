@@ -22,16 +22,17 @@ class ParserFactory
      *
      * @return Parser The parser.
      */
-    public function get($xml)
+    public function get($xml, $parent = null)
     {
         $directory = __DIR__ . DS . 'Parser';
         $parsers   = $this->getParsers($directory);
+        $bag       = is_null($parent) ? [] : $parent->getBag();
 
         foreach ($parsers as $name) {
             $class = __NAMESPACE__ . '\\Parser'
                 . str_replace([$directory, DS ], [ '', '\\'], $name);
 
-            $parser = new $class($this);
+            $parser = new $class($this, $bag);
 
             if ($parser->checkFormat($xml)) {
                 return $parser;

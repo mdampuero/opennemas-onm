@@ -20,6 +20,16 @@ class NewsMLComponentPhotoEuropaPress extends NewsMLComponentPhoto
     /**
      * {@inheritdoc}
      */
+    public function __construct($factory, $bag = null)
+    {
+        parent::__construct($factory);
+
+        $this->bag = $bag;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function checkFormat($data)
     {
         if (!is_object($data)) {
@@ -31,7 +41,8 @@ class NewsMLComponentPhotoEuropaPress extends NewsMLComponentPhoto
         );
 
         if (!empty($node) &&
-            preg_match('/europa\s*press/i', $this->getAgencyName($data))
+            (preg_match('/europa\s*press/i', $this->getAgencyName($data)) ||
+            preg_match('/europa\s*press/i', $this->bag['agency_name']))
         ) {
             return true;
         }
