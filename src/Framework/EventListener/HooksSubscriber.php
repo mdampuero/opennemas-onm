@@ -482,7 +482,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->deleteGroup($this->view->getCacheId('rss', 'last'))
                 ->deleteGroup($this->view->getCacheId('rss', 'fia'))
                 ->deleteGroup($this->view->getCacheId('rss', $content->category_name))
-                ->deleteGroup($this->view->getCacheId('rss', 'article', $category))
+                ->deleteGroup($this->view->getCacheId('rss', 'article', $content->category_name))
                 // Deleting sitemap cache files
                 ->deleteGroup($this->view->getCacheId('sitemap', 'image'))
                 ->deleteGroup($this->view->getCacheId('sitemap', 'news'))
