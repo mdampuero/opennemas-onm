@@ -20,16 +20,6 @@ class NewsMLComponentPhotoEuropaPress extends NewsMLComponentPhoto
     /**
      * {@inheritdoc}
      */
-    public function __construct($factory, $bag = null)
-    {
-        parent::__construct($factory);
-
-        $this->bag = $bag;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function checkFormat($data)
     {
         if (!is_object($data)) {

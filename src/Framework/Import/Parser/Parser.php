@@ -19,7 +19,7 @@ abstract class Parser
      *
      * @var array
      */
-    protected $bag = [];
+    protected $bag;
 
     /**
      * The DataSourceFactory object.
@@ -48,10 +48,12 @@ abstract class Parser
      * Initializes the Parser object.
      *
      * @param DataSourceFactory $factory The DataSourceFactory object.
+     * @param array             $bag     The current bag.
      */
-    public function __construct($factory)
+    public function __construct($factory, $bag = [])
     {
         $this->factory = $factory;
+        $this->bag     = $bag;
     }
 
     /**
