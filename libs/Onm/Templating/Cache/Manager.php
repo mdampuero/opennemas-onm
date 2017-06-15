@@ -19,14 +19,6 @@ namespace Onm\Templating\Cache;
  */
 class Manager
 {
-
-    /**
-     * Path to the smarty cache dir
-     *
-     * @var string
-     **/
-    protected $cacheDir = null;
-
     /**
      * Smarty instance used to interact with the cache layer
      *
@@ -59,8 +51,6 @@ class Manager
             throw new \Exception('Please provide an Smarty object instance');
         }
         $this->smarty = $smarty;
-
-        $this->cacheDir = $this->smarty->cache_dir;
 
         return $this;
     }
@@ -103,7 +93,7 @@ class Manager
 
         $allDeleted = true;
         foreach ($cacheFiles as $filename) {
-            $deleted = $this->removeFile($this->cacheDir.$filename);
+            $deleted = $this->removeFile($this->smarty->cache_dir.$filename);
 
             $allDeleted &= $deleted;
         }
@@ -149,7 +139,7 @@ class Manager
     {
         $caches  = array();
         $matches = array();
-        $dirIt   = new \DirectoryIterator($this->cacheDir);
+        $dirIt   = new \DirectoryIterator($this->smarty->cache_dir);
         foreach ($dirIt as $item) {
             if ($item->isDot()) {
                 continue;
