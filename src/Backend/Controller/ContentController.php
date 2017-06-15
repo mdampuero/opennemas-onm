@@ -330,6 +330,12 @@ class ContentController extends Controller
                     }
                 }
 
+                dispatchEventWithParams('content.update', [ 'content' => $this ]);
+                dispatchEventWithParams(
+                    $content->content_type_name . '.update',
+                    [ $content->content_type_name => $this ]
+                );
+
                 $code = 200;
                 $message = "Done {$id}:". serialize($properties)." \n";
             } else {
