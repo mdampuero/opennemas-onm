@@ -287,7 +287,7 @@ class NewsML extends Parser
      */
     public function parseComponent($data)
     {
-        $parser = $this->factory->get($data);
+        $parser = $this->factory->get($data, $this);
         $parser->setBag($this->bag);
 
         $parsed = $parser->parse($data);
