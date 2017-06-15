@@ -19,14 +19,6 @@ namespace Onm\Templating\Cache;
  */
 class Manager
 {
-
-    /**
-     * Path to the smarty cache dir
-     *
-     * @var string
-     **/
-    protected $cacheDir = null;
-
     /**
      * Smarty instance used to interact with the cache layer
      *
@@ -60,8 +52,6 @@ class Manager
         }
         $this->smarty = $smarty;
 
-        $this->cacheDir = $this->smarty->cache_dir;
-
         return $this;
     }
 
@@ -74,7 +64,10 @@ class Manager
      */
     public function deleteGroup($cacheGroup)
     {
-        $this->smarty->clearCache(null, $cacheGroup);
+        $this->delete($cacheGroup);
+
+        // Alternative: use the built in clear cache, less performant
+        // $this->smarty->clearCache(null, $cacheGroup);
 
         return $this;
     }
@@ -97,13 +90,13 @@ class Manager
      *
      * @return boolean Return a boolean information of operation performed
      */
-    public function delete($cachefile, $tplFilename = null)
+    public function delete($cacheId, $tplFilename = null)
     {
-        $cacheFiles = $this->getMatchingCacheFileNames($cachefile, $tplFilename);
+        $cacheFiles = $this->getMatchingCacheFileNames($cacheId, $tplFilename);
 
         $allDeleted = true;
         foreach ($cacheFiles as $filename) {
-            $deleted = $this->removeFile($this->cacheDir.$filename);
+            $deleted = $this->removeFile($this->smarty->cache_dir.$filename);
 
             $allDeleted &= $deleted;
         }
@@ -149,7 +142,7 @@ class Manager
     {
         $caches  = array();
         $matches = array();
-        $dirIt   = new \DirectoryIterator($this->cacheDir);
+        $dirIt   = new \DirectoryIterator($this->smarty->cache_dir);
         foreach ($dirIt as $item) {
             if ($item->isDot()) {
                 continue;

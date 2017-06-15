@@ -18,20 +18,23 @@ class ParserFactory
     /**
      * Returns a parser to parse the given XML object.
      *
-     * @param SimpleXMLObject $xml The XML to parse.
+     * @param SimpleXMLObject $xml     The XML to parse.
+     * @param Parser          $parent  The parent parser when factory is invoked
+     *                                 from another parser.
      *
      * @return Parser The parser.
      */
-    public function get($xml)
+    public function get($xml, $parent = null)
     {
         $directory = __DIR__ . DS . 'Parser';
         $parsers   = $this->getParsers($directory);
+        $bag       = is_null($parent) ? [] : $parent->getBag();
 
         foreach ($parsers as $name) {
             $class = __NAMESPACE__ . '\\Parser'
                 . str_replace([$directory, DS ], [ '', '\\'], $name);
 
-            $parser = new $class($this);
+            $parser = new $class($this, $bag);
 
             if ($parser->checkFormat($xml)) {
                 return $parser;
