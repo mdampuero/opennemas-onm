@@ -1,7 +1,8 @@
 <?php
 
-function smarty_function_schedule_class($params, &$smarty) {
-    if(!isset($params['item'])) {
+function smarty_function_schedule_class($params, &$smarty)
+{
+    if (!isset($params['item'])) {
         $smarty->trigger_error("schedule_class: missing 'item' parameter");
         return;
     }
