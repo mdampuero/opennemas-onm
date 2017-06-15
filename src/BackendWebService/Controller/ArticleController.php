@@ -332,10 +332,6 @@ class ArticleController extends Controller
             $article->dropFromAllHomePages();
         }
 
-        // Clear caches
-        dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
-        dispatchEventWithParams('frontpage.save_position', array('category' => 0));
-
         $msg->add(_('Article successfully updated.'), 'success');
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
