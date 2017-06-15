@@ -325,7 +325,7 @@ class AssetController extends Controller
         }
 
         if ($allowLogo && $favicoFileName) {
-            $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($favicoFileName);
+            $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . $favicoFileName;
         }
 
         $favicoUrl =  realpath(SITE_PATH . '/' . $favicoUrl);
