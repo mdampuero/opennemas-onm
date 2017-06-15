@@ -18,7 +18,9 @@ class ParserFactory
     /**
      * Returns a parser to parse the given XML object.
      *
-     * @param SimpleXMLObject $xml The XML to parse.
+     * @param SimpleXMLObject $xml     The XML to parse.
+     * @param Parser          $parent  The parent parser when factory is invoked
+     *                                 from another parser.
      *
      * @return Parser The parser.
      */
