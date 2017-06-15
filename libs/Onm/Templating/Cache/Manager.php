@@ -64,7 +64,10 @@ class Manager
      */
     public function deleteGroup($cacheGroup)
     {
-        $this->smarty->clearCache(null, $cacheGroup);
+        $this->delete($cacheGroup);
+
+        // Alternative: use the built in clear cache, less performant
+        // $this->smarty->clearCache(null, $cacheGroup);
 
         return $this;
     }
@@ -87,9 +90,9 @@ class Manager
      *
      * @return boolean Return a boolean information of operation performed
      */
-    public function delete($cachefile, $tplFilename = null)
+    public function delete($cacheId, $tplFilename = null)
     {
-        $cacheFiles = $this->getMatchingCacheFileNames($cachefile, $tplFilename);
+        $cacheFiles = $this->getMatchingCacheFileNames($cacheId, $tplFilename);
 
         $allDeleted = true;
         foreach ($cacheFiles as $filename) {
