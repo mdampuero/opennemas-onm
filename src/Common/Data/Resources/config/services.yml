@@ -1,0 +1,4 @@
+services:
+    data.manager.adapter:
+        class:     Common\Data\Core\AdapterManager
+        arguments: [ '@service_container' ]
