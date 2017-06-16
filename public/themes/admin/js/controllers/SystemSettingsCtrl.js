@@ -21,7 +21,7 @@
         $scope.locale = {
           backend: 'en',
           frontend: [],
-          main: 0,
+          main: null,
         };
 
         /**
@@ -58,12 +58,27 @@
           });
         };
 
+        /**
+         * @function addLocale
+         * @memberOf SystemSettingsCtrl
+         *
+         * @description
+         *   Add a new locale to the list of frontend locales.
+         *
+         * @param Object The locale to add.
+         */
         $scope.addLocale = function(item) {
           if ($scope.locale.frontend.length === 0) {
-            $scope.locale.main = 1;
+            $scope.locale.main = item.code;
           }
 
-          $scope.locale.frontend.push(item);
+          var codes = $scope.locale.frontend.map(function (e) {
+            return e.code;
+          });
+
+          if (codes.indexOf(item.code) === -1) {
+            $scope.locale.frontend.push(item);
+          }
         };
 
         /**
@@ -102,6 +117,38 @@
          */
         $scope.removeGanalytics = function(gaCodes, index) {
           $scope.gaCodes.splice(index, 1);
+        };
+
+        /**
+         * @function removeLocale
+         * @memberOf SystemSettingsCtrl
+         *
+         * @description
+         *   Remove a locale from the list of frontend locales.
+         *
+         * @param integer index The index of the locale to remove in the list of
+         *                      locales.
+         */
+        $scope.removeLocale = function(index) {
+          var item = $scope.locale.frontend[index];
+
+          $scope.locale.frontend.splice(index, 1);
+
+          if ($scope.locale.frontend.length === 0) {
+            $scope.locale.main = null;
+
+            return;
+          }
+
+          if (item.code !== $scope.locale.main) {
+            return;
+          }
+
+          if (index >= $scope.locale.frontend.length) {
+            index = $scope.locale.frontend.length - 1;
+          }
+
+          $scope.locale.main = $scope.locale.frontend[index].code;
         };
       }
     ]);

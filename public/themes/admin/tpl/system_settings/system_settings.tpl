@@ -337,18 +337,23 @@
                       <i class="fa fa-circle-info text-info"></i>
                       {t}When no language in the URL, the main language will be used{/t}
                     </span>
-                    <div class="radio" ng-repeat="item in locale.frontend">
-                      <input id="radio-[% $index %]" ng-model="locale.main" type="radio" value="[% $index + 1 %]">
-                      <label for="radio-[% $index %]">
-                        [% item.name %] ([% item.code %])
-                        <strong ng-show="locale.main == $index + 1">({t}Main{/t})</strong>
-                      </label>
+                    <div class="row m-b-5" ng-repeat="item in locale.frontend">
+                      <div class="col-xs-11">
+                        <div class="p-t-10 radio">
+                          <input id="radio-[% $index %]" ng-model="locale.main" type="radio" value="[% item.code %]">
+                          <label for="radio-[% $index %]">
+                            [% item.name %] ([% item.code %])
+                            <strong ng-show="locale.main == item.code">({t}Main{/t})</strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-xs-1">
+                        <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
+                          <i class="fa fa-times text-danger"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <h4>
-                    <i class="fa fa-refresh m-r-5"></i>
-                    {t}Automatic Translations{/t}
-                  </h4>
                 </div>
               </div>
             </uib-tab>
