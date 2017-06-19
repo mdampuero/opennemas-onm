@@ -16,17 +16,10 @@ class UrlGeneratorHelper
      *
      * @var Client
      */
-    protected $client;
+    protected $container;
 
     /**
-     * The current instance.
-     *
-     * @var Instance
-     */
-    protected $instance;
-
-    /**
-     * Initializes the PurchaseManager.
+     * Initializes the UrlGeneratorHelper.
      *
      * @param ServiceContainer $contaienr The service container.
      */
@@ -36,43 +29,175 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns a new purchase or the last incompleted purchase.
+     * Returns a generated uri for a content type given some params
      *
-     * @param integer $id The purchase id.
+     * @param string $content the content to generate the url
+     * @param array  $params the list of params required to generate the url
      *
-     * @return Purchase A new purchase or the last incompleted purchase.
-     */
-    public function get($content = null)
+     * @return string the uri generated
+     **/
+    public function generate($content, $params = [])
     {
-        if (!empty($content)) {
+        $absolute = (is_array($params) && array_key_exists('absolute', $params) && $params['absolute'] === true);
+
+        $url = '';
+        if ($absolute) {
+            $url = $this->container->get('request_stack')
+                ->getCurrentRequest()->getSchemeAndHttpHost();
+        }
+
+        return $url.'/'.$this->getUriForContent($content);
+    }
+
+    /**
+     * Returns the list of configurations for uri generation
+     *
+     * @param array $params parameters for modify function behaviour.
+     *
+     * @return array the array of configurations
+     **/
+    public function getConfig($params = [])
+    {
+        return [
+            'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'opinion'     => 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'blog'        => 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'video'       => 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'album'       => 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'poll'        => 'encuesta/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'static_page' => 'estaticas/_SLUG_.html',
+            'ad'          => 'publicidad/_ID_.html',
+            'kiosko'      => 'portadas-papel/_CATEGORY_/_DATE__ID_.html',
+            'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'special'     => 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'book'        => 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+        ];
+    }
+
+    /**
+     * Returns a generated uri for a content type given some params
+     *
+     * @param string $contentType the content type to generate the url
+     * @param array  $params the list of params required to generate the url
+     *
+     * @return string the uri generated
+     **/
+    private function generateUriFromConfig($contentType, $params = [])
+    {
+        if (!isset($contentType)) {
+            return;
+        }
+
+        // Gets the URL template for the given contentType
+        $config = $this->getConfig();
+        if (!array_key_exists($contentType, $config)) {
             return '';
         }
 
-        if (array_key_exists('content', $params)
-            && is_object($params['content'])
-            && $params['content'] instanceof \Content
-        ) {
-            $content = $params['content'];
-
-            return $content->uri;
+        $keys = $values = [];
+        foreach ($params as $tokenKey => $tokenValue) {
+            $keys[] = "@_" . strtoupper($tokenKey) . "_@";
+            $values[] = $tokenValue;
         }
 
-        if (isset($params['slug'])) {
-            $slug = $params['slug'];
-        } elseif (isset($params['title'])) {
-            $slug = \Onm\StringUtils::generateSlug($params['title']);
+        $uriTemplate = $config[$contentType];
+
+        return preg_replace($keys, $values, $uriTemplate);
+    }
+
+    /**
+     * Returns the Uri for a given content
+     *
+     * @return void
+     * @author
+     **/
+    private function getUriForContent($content)
+    {
+        // If the content has a bodyLink parameter then that it is the final uri.
+        if (isset($content->params['bodyLink']) && !empty($content->params['bodyLink'])) {
+            return '/redirect?to='.urlencode($content->params['bodyLink']);
         }
 
-        $output = Uri::generate(
-            $params['content_type'],
-            [
-                'id'       => sprintf('%06d', $params['id']),
-                'date'     => date('YmdHis', strtotime($params['date'])),
-                'category' => urlencode($params['category_name']),
-                'slug'     => urlencode($slug),
-            ]
-        );
+        // As not all contents use the same template/parameters to generate its
+        // uri we have to separate those that are not conventional and finally
+        // use a common template for the rest.
+        switch ($content->content_type_name) {
+            case 'article':
+                $uri =  $this->generateUriFromConfig('article', [
+                    'id'       => sprintf('%06d', $content->id),
+                    'date'     => date('YmdHis', strtotime($content->created)),
+                    'category' => $content->category_name,
+                    'slug'     => urlencode($content->slug),
+                ]);
+                break;
+            case 'attachment':
+                $uri = implode(DS, ["media", INSTANCE_UNIQUE_NAME, FILE_DIR, $content->path]);
+                break;
+            case 'letter':
+                $uri =  $this->generateUriFromConfig('letter', [
+                    'id'       => sprintf('%06d', $content->id),
+                    'date'     => date('YmdHis', strtotime($content->created)),
+                    'slug'     => urlencode($content->slug),
+                    'category' => urlencode(\Onm\StringUtils::generateSlug($content->author)),
+                ]);
+                break;
+            case 'opinion':
+                $type ='opinion';
 
-        return $output;
+                if (is_object($content->author)
+                    && is_array($content->author->meta) &&
+                    array_key_exists('is_blog', $content->author->meta) &&
+                    $content->author->meta['is_blog'] == 1
+                ) {
+                    $type = 'blog';
+                }
+
+                if ($content->fk_author == 0) {
+                    if ((int) $content->type_opinion == 1) {
+                        $authorName = 'editorial';
+                    } elseif ((int) $content->type_opinion == 2) {
+                        $authorName = 'director';
+                    } else {
+                        $authorName = 'author';
+                    }
+                } else {
+                    if (!is_object($content->author)) {
+                        $content->author = $this->get('user_repository')
+                            ->find($content->fk_author);
+                    }
+
+                    if (is_object($content->author)) {
+                        $authorName = $content->author->name;
+                    } else {
+                        $authorName = 'author';
+                    }
+
+                    $authorName = $content->author->name;
+                }
+
+                $authorName = \Onm\StringUtils::generateSlug($authorName);
+
+                $uri = $this->generateUriFromConfig($type, [
+                    'id'       => sprintf('%06d', $content->id),
+                    'date'     => date('YmdHis', strtotime($content->created)),
+                    'slug'     => urlencode($content->slug),
+                    'category' => urlencode($authorName),
+                ]);
+                break;
+            case 'photo':
+                $uri = implode(DS, ["media", INSTANCE_UNIQUE_NAME, 'images', $content->path_file, $content->name]);
+                break;
+            default:
+                // The rest of content types follow a common pattern
+                $uri =  $this->generateUriFromConfig(strtolower($content->content_type_name), [
+                    'id'       => sprintf('%06d', $content->id),
+                    'date'     => date('YmdHis', strtotime($content->created)),
+                    'category' => urlencode($content->category_name),
+                    'slug'     => urlencode($content->slug),
+                ]);
+                break;
+        }
+
+        return $uri;
     }
 }
