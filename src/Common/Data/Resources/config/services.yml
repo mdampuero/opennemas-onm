@@ -2,3 +2,6 @@ services:
     data.manager.adapter:
         class:     Common\Data\Core\AdapterManager
         arguments: [ '@service_container' ]
+    data.manager.filter:
+        class:     Common\Core\Component\Filter\FilterManager
+        arguments: [ '@service_container' ]

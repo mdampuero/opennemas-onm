@@ -294,7 +294,7 @@ class ImagesController extends Controller
                         }
                     }
 
-                    $fm = $this->get('core.filter.manager');
+                    $fm = $this->get('data.manager.filter');
 
                     $data = array(
                         'local_file'        => $file['tmp_name'],
