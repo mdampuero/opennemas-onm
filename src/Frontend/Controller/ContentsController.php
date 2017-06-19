@@ -365,4 +365,34 @@ class ContentsController extends Controller
             }
         }
     }
+
+    /**
+     * Redirects from a content permalink to a content url
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function permalinkAction(Request $request)
+    {
+        $id = (int) $request->query->getDigits('content_id');
+
+        if ($id <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        // The only way to know which type of content is to query for the entire
+        // content and then do the translation to the entity repository service
+        // Not very proud of this.
+        $content = new \Content($id);
+        $content = $this->get('entity_repository')->find(classify($content->content_type_name), $id);
+
+        if (!is_object($content)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $url = $this->get('core.helper.url_generator')->generate($content);
+
+        return new \Symfony\Component\HttpFoundation\RedirectResponse($url);
+    }
 }
