@@ -451,7 +451,8 @@ CREATE TABLE `contents` (
   KEY `available` (`available`),
   KEY `starttime` (`starttime`,`endtime`),
   KEY `created` (`created`),
-  KEY `metadata` (`metadata`)
+  KEY `metadata` (`metadata`),
+  KEY `fk_author` (`fk_author`)
 ) ENGINE=InnoDB AUTO_INCREMENT=615 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
