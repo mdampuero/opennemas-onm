@@ -59,20 +59,24 @@ class FrontpagesController extends Controller
         list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryId);
         unset($datos_cat);
         foreach ($parentCategories as $key => $category) {
-            $categories[$category->id] = [
-                'id'    => $category->id,
-                'name'  => $category->title,
-                'value' => $category->name,
-                'group' => _('Categories')
-            ];
-
-            foreach ($subcat[$key] as $subcategory) {
-                $categories[$subcategory->id] = [
-                    'id'    => $subcategory->id,
-                    'name'  => $subcategory->title,
-                    'value' => $subcategory->name,
+            if ($category->inmenu == 1) {
+                $categories[$category->id] = [
+                    'id'    => $category->id,
+                    'name'  => $category->title,
+                    'value' => $category->name,
                     'group' => _('Categories')
                 ];
+            }
+
+            foreach ($subcat[$key] as $subcategory) {
+                if ($subcategory->inmenu == 1) {
+                    $categories[$subcategory->id] = [
+                        'id'    => $subcategory->id,
+                        'name'  => $subcategory->title,
+                        'value' => $subcategory->name,
+                        'group' => _('Categories')
+                    ];
+                }
             }
         }
 
