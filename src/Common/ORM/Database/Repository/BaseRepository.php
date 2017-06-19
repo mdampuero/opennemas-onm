@@ -357,12 +357,8 @@ class BaseRepository extends Repository
         $metaValue = $this->metadata->getMetaValueName();
         $metaId    = array_pop($metaKeys);
 
-        foreach ($ids as $id) {
-            $filters[] = $metaId . '=' . $id;
-        }
-
         $sql = 'select * from ' . $this->metadata->getMetaTable()
-            . ' where ' . implode(' or ', $filters);
+            . ' where ' . $metaId . ' in (' . implode($ids) . ')';
 
         $rs = $this->conn->fetchAll($sql);
 
