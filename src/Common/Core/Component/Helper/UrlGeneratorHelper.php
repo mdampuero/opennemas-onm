@@ -162,7 +162,7 @@ class UrlGeneratorHelper
                     }
                 } else {
                     if (!is_object($content->author)) {
-                        $content->author = $this->get('user_repository')
+                        $content->author = $this->container->get('user_repository')
                             ->find($content->fk_author);
                     }
 
