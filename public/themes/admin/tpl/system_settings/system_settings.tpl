@@ -1,17 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  {javascripts}
-    <script type="text/javascript">
-      jQuery(document).ready(function($) {
-        // Logo, mobile and favico image uploader
-        $('.fileinput.favico').fileinput({ name: 'favico', uploadtype:'image' });
-        $('.fileinput.mobile-logo').fileinput({ name: 'mobile_logo', uploadtype:'image' });
-      });
-    </script>
-  {/javascripts}
-{/block}
-
 {block name="content"}
   <form ng-app="BackendApp" ng-controller="SettingsCtrl" ng-init="list()">
     <div class="page-navbar actions-navbar">
@@ -28,8 +16,8 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
-                  <i class="fa fa-save"></i>
+                <button class="btn btn-loading btn-primary" ng-click="save()" type="button">
+                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
@@ -62,14 +50,14 @@
                         {t}General{/t}
                       </h4>
                       <div class="form-group">
-                        <label class="form-label" for="site-title">
+                        <label class="form-label" for="site-name">
                           {t}Site name{/t}
                         </label>
                         <span class="help">
                           {t}This will be displayed as your site name.{/t}
                         </span>
                         <div class="controls">
-                          <input class="form-control" id="site-title" name="site-title" ng-model="settings.site_title" required="required" type="text">
+                          <input class="form-control" id="site-name" name="site-name" ng-model="settings.site_name" required="required" type="text">
                         </div>
                       </div>
                       <div class="form-group">
