@@ -51,6 +51,7 @@
         "drak/native-session": "*",
         "drexarj/disqus-php": "dev-master",
         "frandieguez/panorama-php": "1.0.*",
+        "fergusean/nusoap": "^0.9.5",
         "friendsofsymfony/jsrouting-bundle": "1.6.*",
         "giggsey/libphonenumber-for-php": "^7.2",
         "google/recaptcha": "1.1.2",

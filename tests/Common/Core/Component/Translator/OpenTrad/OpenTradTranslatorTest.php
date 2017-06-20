@@ -23,7 +23,7 @@ class OpenTradTranslatorTest extends KernelTestCase
     public function setUp()
     {
         $this->client = $this->getMockBuilder('SoapClient')
-            ->setMethods([ '__soapCall' ])
+            ->setMethods([ 'call' ])
             ->getMock();
 
         $this->translator = $this->getMockBuilder('Common\Core\Component\Translator\OpenTrad\OpenTradTranslator')
@@ -77,18 +77,18 @@ class OpenTradTranslatorTest extends KernelTestCase
      */
     public function testTranslate()
     {
-        $this->client->expects($this->at(0))->method('__soapCall')->with('traducir', [
-            'traductor' => 'wubble',
+        $this->client->expects($this->at(0))->method('call')->with('traducir', [
+            'tradutor'  => 'wubble',
             'direccion' => "bar-fubar",
             'tipo'      => 'htmlu',
-            'cadena'    => 'bar frog fubar'
+            'cadea'     => 'bar frog fubar'
         ])->willReturn('glorp norf wobble');
 
-        $this->client->expects($this->at(1))->method('__soapCall')->with('traducir', [
-            'traductor' => 'wubble',
+        $this->client->expects($this->at(1))->method('call')->with('traducir', [
+            'tradutor'  => 'wubble',
             'direccion' => "thud-norf",
             'tipo'      => 'htmlu',
-            'cadena'    => 'bar frog fubar'
+            'cadea'     => 'bar frog fubar'
         ])->willReturn('wobble bar wibble');
 
 

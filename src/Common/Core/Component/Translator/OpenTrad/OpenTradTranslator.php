@@ -56,11 +56,11 @@ class OpenTradTranslator extends Translator
             throw new \RuntimeException();
         }
 
-        return $client->__soapCall('traducir', [
-            'traductor' => $this->translator,
+        return $client->call('traducir', [
+            'tradutor'  => $this->translator,
             'direccion' => "{$from}-{$to}",
             'tipo'      => 'htmlu',
-            'cadena'    => $str
+            'cadea'     => $str
         ]);
     }
 
@@ -74,7 +74,7 @@ class OpenTradTranslator extends Translator
     protected function getClient()
     {
         if (empty($this->client) && !empty($this->url)) {
-            $this->client = new \SoapClient($this->url);
+            $this->client = new \nusoap_client($this->url, true);
         }
 
         return $this->client;
