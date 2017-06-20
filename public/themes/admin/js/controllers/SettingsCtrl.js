@@ -13,8 +13,8 @@
      * @description
      *   Handles actions for paywall settings configuration form.
      */
-    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http',
-      function($controller, $rootScope, $scope, http) {
+    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger',
+      function($controller, $rootScope, $scope, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -177,6 +177,28 @@
 
           $scope.locale.main = $scope.locale.frontend[index].code;
         };
+
+        /**
+         * @function save
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Saves settings.
+         */
+        $scope.save = function() {
+          $scope.saving = true;
+
+          var data = { country: $scope.country, settings: $scope.settings };
+
+          http.put('api_v1_backend_settings_save', data)
+            .then(function(response) {
+              $scope.saving = false;
+              messenger.post(response.data);
+            }, function(response) {
+              $scope.saving = false;
+              messenger.post(response.data);
+            });
+        }
       }
     ]);
 })();
