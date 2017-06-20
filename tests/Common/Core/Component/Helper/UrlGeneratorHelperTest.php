@@ -22,13 +22,6 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->urlGenerator = new UrlGeneratorHelper($this->container);
 
-        $this->article = new \Article();
-        $this->article->id = 252;
-        $this->article->category_name = 'actualidad';
-        $this->article->created = '2015-01-14 23:49:40';
-        $this->article->content_type_name = 'article';
-        $this->article->slug = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
-
         // TODO: Do not use constants! Remove it from models when possible
         if (!defined('MEDIA_PATH')) {
             define('MEDIA_PATH', 'media');
@@ -36,36 +29,6 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
         if (!defined('INSTANCE_UNIQUE_NAME')) {
             define('INSTANCE_UNIQUE_NAME', 'opennemas');
         }
-        $this->attachment = new \Attachment();
-        $this->attachment->content_type_name = 'attachment';
-        $this->attachment->id = 252;
-        $this->attachment->path = 'route/to/file.name';
-
-        $this->photo = new \Photo();
-        $this->photo->content_type_name = 'photo';
-        $this->photo->path_file = 'route/to';
-        $this->photo->name = 'photo.file.name';
-
-        $this->video = new \Video();
-        $this->video->id = 252;
-        $this->video->category_name = 'actualidad';
-        $this->video->created = '2015-01-14 23:49:40';
-        $this->video->content_type_name = 'video';
-        $this->video->slug = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
-
-        $this->letter = new \Letter();
-        $this->letter->id = 252;
-        $this->letter->author = 'My author';
-        $this->letter->created = '2015-01-14 23:49:40';
-        $this->letter->content_type_name = 'letter';
-        $this->letter->slug = 'letter-slug';
-
-        $this->opinionEditorial = new \Opinion();
-        $this->opinionEditorial->id = 252;
-        $this->opinionEditorial->author = 'My author';
-        $this->opinionEditorial->created = '2015-01-14 23:49:40';
-        $this->opinionEditorial->content_type_name = 'opinion';
-        $this->opinionEditorial->slug = 'opinion-editorial-slug';
     }
 
     /**
@@ -94,7 +57,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
     {
         // Test relative url generation for article
         $this->assertEquals(
-            $this->urlGenerator->generate($this->article),
+            $this->urlGenerator->generate($this->getFixture('article')),
             '/articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
         );
 
@@ -106,13 +69,16 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->getMockBuilder('Request')
             ->setMethods(['getSchemeAndHttpHost'])->getMock();
 
-        $this->request->expects($this->once())->method('getSchemeAndHttpHost')->willReturn('http://www.example.com');
-        $this->requestStack->expects($this->once())->method('getCurrentRequest')->willReturn($this->request);
-        $this->container->expects($this->once())->method('get')->with('request_stack')->willReturn($this->requestStack);
+        $this->request->expects($this->once())
+            ->method('getSchemeAndHttpHost')->willReturn('http://www.example.com');
+        $this->requestStack->expects($this->once())
+            ->method('getCurrentRequest')->willReturn($this->request);
+        $this->container->expects($this->once())
+            ->method('get')->with('request_stack')->willReturn($this->requestStack);
         $this->urlGenerator = new UrlGeneratorHelper($this->container);
 
         $this->assertEquals(
-            $this->urlGenerator->generate($this->article, ['absolute' => true]),
+            $this->urlGenerator->generate($this->getFixture('article'), ['absolute' => true]),
             'http://www.example.com/articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
         );
 
@@ -126,38 +92,71 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);
 
+        // Test relative url generation for attachment
         $this->assertEquals(
-            $method->invokeArgs($this->urlGenerator, [$this->article]),
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('attachment') ]),
+            'media/opennemas/files/route/to/file.name'
+        );
+
+        $article = $this->getFixture('article');
+        $article->params['bodyLink'] = 'http://www.example.com';
+        $this->assertEquals(
+            $method->invokeArgs($this->urlGenerator, [ $article ]),
+            '/redirect?to=http%3A%2F%2Fwww.example.com'
+        );
+
+        $article = $this->getFixture('article');
+        $this->assertEquals(
+            $method->invokeArgs($this->urlGenerator, [ $article ]),
             'articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
         );
 
-        $this->article->params['bodyLink'] = 'http://www.example.com';
-        $return = $method->invokeArgs($this->urlGenerator, [$this->article]);
-
-        $this->assertEquals($return, '/redirect?to=http%3A%2F%2Fwww.example.com');
-
-        // Test relative url generation for attachment
+        // Test relative url generation for letter
         $this->assertEquals(
-            $method->invokeArgs($this->urlGenerator, [$this->attachment]),
-            'media/opennemas/files/route/to/file.name'
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('letter') ]),
+            'cartas-al-director/my-author/letter-slug/20150114234940000252.html'
+        );
+
+        // Test relative url generation for opinion
+        $this->assertEquals(
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('opinionEditorial') ]),
+            'opinion/editorial/opinion-editorial-slug/20150114234940000252.html'
+        );
+
+        // Test relative url generation for opinion
+        $this->assertEquals(
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('opinionDirector') ]),
+            'opinion/director/opinion-director-slug/20150114234940000252.html'
+        );
+
+        // Test relative url generation for opinion
+        $this->assertEquals(
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('opinionAuthor') ]),
+            'opinion/author/opinion-author-slug/20150114234940000252.html'
+        );
+
+        // Test relative url generation for opinion
+        $this->assertEquals(
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('opinionAuthorWithAuthor') ]),
+            'opinion/name/opinion-author-slug/20150114234940000252.html'
+        );
+
+        // Test relative url generation for opinion
+        $this->assertEquals(
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('opinionAuthorWithAuthorBlog') ]),
+            'blog/name/opinion-author-slug/20150114234940000252.html'
         );
 
         // Test relative url generation for photo
         $this->assertEquals(
-            $method->invokeArgs($this->urlGenerator, [$this->photo ]),
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('photo') ]),
             'media/opennemas/images/route/to/photo.file.name'
         );
 
         // Test relative url generation for video
         $this->assertEquals(
-            $method->invokeArgs($this->urlGenerator, [$this->video ]),
+            $method->invokeArgs($this->urlGenerator, [ $this->getFixture('video') ]),
             'video/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
-        );
-
-        // Test relative url generation for letter
-        $this->assertEquals(
-            $method->invokeArgs($this->urlGenerator, [$this->letter ]),
-            'cartas-al-director/my-author/letter-slug/20150114234940000252.html'
         );
     }
 
@@ -198,5 +197,102 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
             ]]),
             ''
         );
+    }
+
+    private function getFixture($name)
+    {
+        switch ($name) {
+            case 'article':
+                $content = new \Article();
+                $content->id = 252;
+                $content->category_name = 'actualidad';
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'article';
+                $content->slug = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+                break;
+            case 'attachment':
+                $content = new \Attachment();
+                $content->content_type_name = 'attachment';
+                $content->id = 252;
+                $content->path = 'route/to/file.name';
+                break;
+            case 'photo':
+                $content = new \Photo();
+                $content->content_type_name = 'photo';
+                $content->path_file = 'route/to';
+                $content->name = 'photo.file.name';
+                break;
+            case 'video':
+                $content = new \Video();
+                $content->id = 252;
+                $content->category_name = 'actualidad';
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'video';
+                $content->slug = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+                break;
+            case 'letter':
+                $content = new \Letter();
+                $content->id = 252;
+                $content->author = 'My author';
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'letter';
+                $content->slug = 'letter-slug';
+                break;
+            case 'opinionEditorial':
+                $content = new \Opinion();
+                $content->id = 252;
+                $content->fk_author = 0;
+                $content->type_opinion  = 1;
+                $content->author = 'My author';
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'opinion';
+                $content->slug = 'opinion-editorial-slug';
+                break;
+            case 'opinionDirector':
+                $content = new \Opinion();
+                $content->id = 252;
+                $content->fk_author = 0;
+                $content->type_opinion  = 2;
+                $content->author = 'My author';
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'opinion';
+                $content->slug = 'opinion-director-slug';
+                break;
+            case 'opinionAuthor':
+                $content = new \Opinion();
+                $content->id = 252;
+                $content->fk_author = 0;
+                $content->type_opinion  = 0;
+                $content->author = 'My author';
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'opinion';
+                $content->slug = 'opinion-author-slug';
+                break;
+            case 'opinionAuthorWithAuthor':
+                $content = new \Opinion();
+                $content->id = 252;
+                $content->fk_author = 1;
+                $content->type_opinion  = 0;
+                $content->author = new \User();
+                $content->author->name = 'Name';
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'opinion';
+                $content->slug = 'opinion-author-slug';
+                break;
+            case 'opinionAuthorWithAuthorBlog':
+                $content = new \Opinion();
+                $content->id = 252;
+                $content->fk_author = 1;
+                $content->type_opinion  = 0;
+                $content->author = new \User();
+                $content->author->name = 'Name';
+                $content->author->meta = ['is_blog' => 1];
+                $content->created = '2015-01-14 23:49:40';
+                $content->content_type_name = 'opinion';
+                $content->slug = 'opinion-author-slug';
+                break;
+        }
+
+        return $content;
     }
 }
