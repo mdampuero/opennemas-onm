@@ -37,18 +37,20 @@ class GoogleTranslator extends Translator
     /**
      * {@inheritdoc}
      */
-    public function translate($str)
+    public function translate($str, $from = null, $to = null)
     {
         if (empty($str)) {
             return '';
         }
 
-        $url    = sprintf($this->url, $this->key, $str, $this->from, $this->to);
+        $from   = empty($from) ? $this->from : $from;
+        $to     = empty($to) ? $this->to : $to;
+        $url    = sprintf($this->url, $this->key, $str, $from, $to);
         $client = $this->getClient();
 
         if (empty($client)
-            || empty($this->from)
-            || empty($this->to)
+            || empty($from)
+            || empty($to)
         ) {
             throw new \RuntimeException();
         }

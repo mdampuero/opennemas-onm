@@ -77,16 +77,25 @@ class OpenTradTranslatorTest extends KernelTestCase
      */
     public function testTranslate()
     {
-        $this->client->expects($this->once())->method('__soapCall')->with('traducir', [
+        $this->client->expects($this->at(0))->method('__soapCall')->with('traducir', [
             'traductor' => 'wubble',
             'direccion' => "bar-fubar",
             'tipo'      => 'htmlu',
             'cadena'    => 'bar frog fubar'
         ])->willReturn('glorp norf wobble');
 
+        $this->client->expects($this->at(1))->method('__soapCall')->with('traducir', [
+            'traductor' => 'wubble',
+            'direccion' => "thud-norf",
+            'tipo'      => 'htmlu',
+            'cadena'    => 'bar frog fubar'
+        ])->willReturn('wobble bar wibble');
+
+
         $this->assertEquals('', $this->translator->translate(null));
         $this->assertEquals('', $this->translator->translate(''));
         $this->assertEquals('glorp norf wobble', $this->translator->translate('bar frog fubar'));
+        $this->assertEquals('wobble bar wibble', $this->translator->translate('bar frog fubar', 'thud', 'norf'));
     }
 
     /**

@@ -46,11 +46,15 @@ abstract class Translator
     /**
      * Translates a string.
      *
-     * @param string $str The string to translate.
+     * @param string $str  The string to translate.
+     * @param string $from The language to translate from. This parameter
+     *                     overrides the translator configuration.
+     * #param string $to   The language to translate to. This parameter
+     *                     overrides the translator configuration.
      *
      * @return string The translated string.
      */
-    abstract public function translate($str);
+    abstract public function translate($str, $from = null, $to = null);
 
     /**
      * Initializes the Translator.

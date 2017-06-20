@@ -57,15 +57,23 @@ class GoogleTranslatorTest extends KernelTestCase
      */
     public function testTranslate()
     {
-        $this->client->expects($this->once())->method('get')->willReturn($this->response)
+        $this->client->expects($this->at(0))->method('get')->willReturn($this->response)
             ->with('https://translation.googleapis.com/language/translate/v2?format=html&key=barfooglork&q=foobar&source=foo&target=fred');
-        $this->response->expects($this->once())->method('getBody')->willReturn(json_encode([
+        $this->response->expects($this->at(0))->method('getBody')->willReturn(json_encode([
             'data' => [ 'translations' => [ [ 'translatedText' => 'fubar' ] ] ]
         ]));
+
+        $this->client->expects($this->at(1))->method('get')->willReturn($this->response)
+            ->with('https://translation.googleapis.com/language/translate/v2?format=html&key=barfooglork&q=wubble&source=mumble&target=garply');
+        $this->response->expects($this->at(1))->method('getBody')->willReturn(json_encode([
+            'data' => [ 'translations' => [ [ 'translatedText' => 'baz' ] ] ]
+        ]));
+
 
         $this->assertEmpty($this->translator->translate(''));
         $this->assertEmpty($this->translator->translate(null));
         $this->assertEquals('fubar', $this->translator->translate('foobar'));
+        $this->assertEquals('baz', $this->translator->translate('wubble', 'mumble', 'garply'));
     }
 
     /**

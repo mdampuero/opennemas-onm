@@ -38,17 +38,19 @@ class OpenTradTranslator extends Translator
     /**
      * {@inheritdoc}
      */
-    public function translate($str)
+    public function translate($str, $from = null, $to = null)
     {
         if (empty($str)) {
             return '';
         }
 
+        $from   = empty($from) ? $this->from : $from;
+        $to     = empty($to) ? $this->to : $to;
         $client = $this->getClient();
 
         if (empty($client)
-            || empty($this->from)
-            || empty($this->to)
+            || empty($from)
+            || empty($to)
             || empty($this->translator)
         ) {
             throw new \RuntimeException();
@@ -56,7 +58,7 @@ class OpenTradTranslator extends Translator
 
         return $client->__soapCall('traducir', [
             'traductor' => $this->translator,
-            'direccion' => "{$this->from}-{$this->to}",
+            'direccion' => "{$from}-{$to}",
             'tipo'      => 'htmlu',
             'cadena'    => $str
         ]);
