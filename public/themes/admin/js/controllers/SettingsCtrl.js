@@ -4,7 +4,7 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  SystemSettingsCtrl
+     * @name  SettingsCtrl
      *
      * @requires $controller
      * @requires $rootScope
@@ -13,20 +13,23 @@
      * @description
      *   Handles actions for paywall settings configuration form.
      */
-    .controller('SystemSettingsCtrl', ['$controller', '$rootScope', '$scope', 'http',
+    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http',
       function($controller, $rootScope, $scope, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+        $scope.overlay = {};
         $scope.locale = {
-          backend: 'en',
-          frontend: [],
-          main: null,
+          backend:   'en',
+          frontend:  [],
+          time_zone: 'UTC'
         };
+
+        $scope.enabled = {};
 
         /**
          * @function init
-         * @memberOf SystemSettingsCtrl
+         * @memberOf SettingsCtrl
          *
          * @description
          *   Initialize list of other ga account codes.
@@ -34,33 +37,27 @@
          * @param Object gaCodes The list of other ga account codes.
          */
         $scope.init = function(gaCodes) {
+          $scope.gaCodes = [];
+
           if (angular.isArray(gaCodes)) {
             $scope.gaCodes = gaCodes;
-          } else {
-            $scope.gaCodes = [];
           }
         };
 
         /**
          * @function addInput
-         * @memberOf SystemSettingsCtrl
+         * @memberOf SettingsCtrl
          *
          * @description
          *   Add new input for ga tracking code.
-         *
-         * @param integer index The index of the domain to remove.
          */
         $scope.addGanalytics = function() {
-          $scope.gaCodes.push({
-            apiKey:'',
-            baseDomain:'',
-            customVar:''
-          });
+          $scope.gaCodes.push({ apiKey: '', baseDomain: '', customVar: '' });
         };
 
         /**
          * @function addLocale
-         * @memberOf SystemSettingsCtrl
+         * @memberOf SettingsCtrl
          *
          * @description
          *   Add a new locale to the list of frontend locales.
@@ -83,7 +80,7 @@
 
         /**
          * @function getLocales
-         * @memberOf SystemSettingsCtrl
+         * @memberOf SettingsCtrl
          *
          * @description
          *   Returns a list of locales by name.
@@ -107,8 +104,38 @@
         };
 
         /**
+         * @function list
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Lists all settings.
+         */
+        $scope.list = function() {
+          $scope.loading = true;
+
+          http.get('api_v1_backend_settings_list').then(function(response) {
+            $scope.settings = response.data.settings;
+            $scope.country  = response.data.country;
+            $scope.extra    = response.data.extra;
+
+            $scope.backup = {
+              site_color:           $scope.settings.site_color,
+              site_color_secondary: $scope.settings.site_color_secondary
+            };
+
+            $scope.settings.site_logo = '/media/opennemas/sections/' + $scope.settings.site_logo;
+            $scope.settings.mobile_logo = '/media/opennemas/sections/' + $scope.settings.mobile_logo;
+            $scope.settings.favico = '/media/opennemas/sections/' + $scope.settings.favico;
+
+            $scope.loading = false;
+          }, function() {
+            $scope.loading = false;
+          });
+        };
+
+        /**
          * @function removeInput
-         * @memberOf SystemSettingsCtrl
+         * @memberOf SettingsCtrl
          *
          * @description
          *   Removes a ga tracking code input.
@@ -121,7 +148,7 @@
 
         /**
          * @function removeLocale
-         * @memberOf SystemSettingsCtrl
+         * @memberOf SettingsCtrl
          *
          * @description
          *   Remove a locale from the list of frontend locales.
