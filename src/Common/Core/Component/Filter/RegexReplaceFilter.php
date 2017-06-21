@@ -28,7 +28,7 @@ class RegexReplaceFilter extends Filter
         }
 
         return preg_replace(
-            '/' . $pattern . '/',
+            $pattern,
             $replacement,
             $str
         );
