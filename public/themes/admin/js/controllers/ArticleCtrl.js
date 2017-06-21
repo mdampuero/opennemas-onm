@@ -38,6 +38,7 @@
           body: '',
           params: {},
           summary: '',
+          content_status: 0,
           created: new Date(),
           starttime: new Date()
         };
@@ -137,6 +138,8 @@
             if ($scope.article.metadata) {
               $scope.article.metadata = $scope.article.metadata.split(',');
             }
+
+            $scope.backup = { content_status: $scope.article.content_status };
 
             $scope.checkDraft();
             $scope.loading = false;
@@ -280,6 +283,8 @@
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
           };
+
+          $scope.backup.content_status = $scope.article.content_status;
 
           http.put(route, data)
             .then(function(response) {
