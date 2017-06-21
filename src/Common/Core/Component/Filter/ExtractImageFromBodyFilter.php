@@ -12,7 +12,7 @@ namespace Common\Core\Component\Filter;
 class ExtractImageFromBodyFilter extends Filter
 {
     /**
-     * Initializes the SlugFilter.
+     * Initializes the ExtractImageFromBodyFilter.
      *
      * @param ServiceContainer $container The service container.
      * @param array            $params    The filter parameters.
@@ -23,11 +23,11 @@ class ExtractImageFromBodyFilter extends Filter
     }
 
     /**
-     * Converts a string to a comma-separated string of tags.
+     * Import all images from a text
      *
-     * @param string $str    The string to convert.
+     * @param string $str    The text string.
      *
-     * @return string The converted string.
+     * @return int The first image ID.
      */
     public function filter($str)
     {
@@ -40,60 +40,61 @@ class ExtractImageFromBodyFilter extends Filter
 
         list($body, $created) = explode($separator, $str);
 
-        $found = preg_match($imageRegexp, $body, $matches);
+        $found = preg_match_all($imageRegexp, $body, $matches);
 
         // If there are no images in import just skip this
         if (!$found) {
             return null;
         }
 
-        $fileName  = $matches[1];
-
-        return $this->importPhoto($fileName, $created);
+        return $this->importPhotos($matches[1], $created);
     }
 
     /**
-     * Imports a photo into database and returns its id
+     * Imports an array of photos into database and returns the first photo id
      *
-     * If the photo is already imported the function will directly return the
-     * photo id instead of importing it again
-     *
-     * @param  string $fileName The photo filename
+     * @param  string $files The array of photos files
      * @param  string $created The created date
-     * @return int the photo id
+     * @return int the first photo id
      **/
-    public function importPhoto($fileName, $created)
+    public function importPhotos($files, $created)
     {
-        $localFile = $this->getParameter('path').basename($fileName);
+        $path     = $this->getParameter('path');
+        $basename = $this->getParameter('basename', true);
 
-        if (!file_exists($localFile)) {
-            return null;
-        }
+        $ids[0] = null;
+        foreach ($files as $key => $file) {
+            // Get local file path
+            $localFile = $basename ? $path . basename($file) : $path . $file;
+            // Check if file exists and photo is not already imported
+            $photoID = $this->checkPhotoExists($file);
+            if (file_exists($localFile) && is_null($photoID)) {
+                // Import photo
+                $data = [
+                    'local_file'        => $localFile,
+                    'original_filename' => $file,
+                    'title'             => $file,
+                    'description'       => $file,
+                    'created'           => $created,
+                    'fk_category'       => 0,
+                    'category'          => 0,
+                    'category_name'     => '',
+                    'metadata'          => '',
+                ];
 
-        $photoID = $this->checkPhotoExists($fileName);
-
-        if ($photoID !== null) {
-            return $photoID;
-        } else {
-            $data = [
-                'local_file'        => $localFile,
-                'original_filename' => $fileName,
-                'title'             => $fileName,
-                'description'       => $fileName,
-                'created'           => $created,
-                'fk_category'       => 0,
-                'category'          => 0,
-                'category_name'     => '',
-                'metadata'          => '',
-            ];
-
-            try {
-                $photo = new \Photo();
-                return  $photo->createFromLocalFile($data);
-            } catch (\Exception $e) {
-                return null;
+                try {
+                    $photo   = new \Photo();
+                    $photoID = $photo->createFromLocalFile($data);
+                    // Create translation
+                    $this->insertPhotoTranslation($photoID, $file);
+                } catch (\Exception $e) {
+                }
             }
+            // Store new id
+            $ids[$key] = $photoID;
         }
+
+        return $ids[0];
     }
 
     /**
@@ -114,6 +115,33 @@ class ExtractImageFromBodyFilter extends Filter
             );
 
             return $photo['pk_content'];
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Insert photo data in translation_ids table
+     *
+     * @param int $id the photo id
+     * @return bool true if inserted or null if not
+     **/
+    public function insertPhotoTranslation($id, $fileName)
+    {
+        $conn = $this->container->get('dbal_connection');
+
+        try {
+            $conn->insert(
+                'translation_ids',
+                [
+                    'pk_content'     => $id,
+                    'pk_content_old' => 'none',
+                    'type'           => 'photo',
+                    'slug'           => $fileName
+                ]
+            );
+
+            return true;
         } catch (\Exception $e) {
             return null;
         }
