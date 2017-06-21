@@ -38,6 +38,7 @@
           body: '',
           params: {},
           summary: '',
+          content_status: 0,
           created: new Date(),
           starttime: new Date()
         };
@@ -137,6 +138,8 @@
             if ($scope.article.metadata) {
               $scope.article.metadata = $scope.article.metadata.split(',');
             }
+
+            $scope.backup = { content_status: $scope.article.content_status };
 
             $scope.checkDraft();
             $scope.loading = false;
@@ -288,6 +291,7 @@
                   $scope.article.pk_article + '-draft');
               $scope.articleForm.$setPristine(true);
               messenger.post(response.data);
+              $scope.backup.content_status = $scope.article.content_status;
             }, function(response) {
               $scope.saving = false;
               messenger.post(response.data);
