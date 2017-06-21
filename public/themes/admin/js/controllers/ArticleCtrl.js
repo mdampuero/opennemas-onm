@@ -284,8 +284,6 @@
             params: { id: $scope.article.pk_article }
           };
 
-          $scope.backup.content_status = $scope.article.content_status;
-
           http.put(route, data)
             .then(function(response) {
               $scope.saving = false;
@@ -293,6 +291,7 @@
                   $scope.article.pk_article + '-draft');
               $scope.articleForm.$setPristine(true);
               messenger.post(response.data);
+              $scope.backup.content_status = $scope.article.content_status;
             }, function(response) {
               $scope.saving = false;
               messenger.post(response.data);
