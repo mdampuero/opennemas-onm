@@ -18,29 +18,42 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
-        $scope.overlay = {};
-        $scope.locale = {
-          backend:   'en',
-          frontend:  [],
-          time_zone: 'UTC'
-        };
-
-        $scope.enabled = {};
-
         /**
-         * @function init
          * @memberOf SettingsCtrl
          *
          * @description
-         *   Initialize list of other ga account codes.
+         *  The instance properties that can be updated from settings.
          *
-         * @param Object gaCodes The list of other ga account codes.
+         * @type {Object}
          */
-        $scope.init = function(gaCodes) {
-          $scope.gaCodes = [];
+        $scope.instance = { country: null };
 
-          if (angular.isArray(gaCodes)) {
-            $scope.gaCodes = gaCodes;
+        /**
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *  Object for overlay-related flags.
+         *
+         * @type {Object}
+         */
+        $scope.overlay = {};
+
+        /**
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *  The settings object with default values.
+         *
+         * @type {Object}
+         */
+        $scope.settings = {
+          google_analytics: [
+            { api_key: '', base_domain: '', custom_var: '' }
+          ],
+          locale: {
+            backend:   'en',
+            frontend:  [],
+            time_zone: 'UTC'
           }
         };
 
@@ -52,7 +65,8 @@
          *   Add new input for ga tracking code.
          */
         $scope.addGanalytics = function() {
-          $scope.gaCodes.push({ apiKey: '', baseDomain: '', customVar: '' });
+          $scope.settings.google_analytics
+            .push({ api_key: '', base_domain: '', custom_var: '' });
         };
 
         /**
@@ -65,16 +79,20 @@
          * @param Object The locale to add.
          */
         $scope.addLocale = function(item) {
-          if ($scope.locale.frontend.length === 0) {
-            $scope.locale.main = item.code;
+          if (!$scope.settings.locale.frontend) {
+            $scope.settings.locale.frontend = [];
           }
 
-          var codes = $scope.locale.frontend.map(function (e) {
+          if ($scope.settings.locale.frontend.length === 0) {
+            $scope.settings.locale.main = item.code;
+          }
+
+          var codes = $scope.settings.locale.frontend.map(function (e) {
             return e.code;
           });
 
           if (codes.indexOf(item.code) === -1) {
-            $scope.locale.frontend.push(item);
+            $scope.settings.locale.frontend.push(item);
           }
         };
 
@@ -114,18 +132,12 @@
           $scope.loading = true;
 
           http.get('api_v1_backend_settings_list').then(function(response) {
-            $scope.settings = response.data.settings;
-            $scope.country  = response.data.country;
+            $scope.instance = response.data.instance;
             $scope.extra    = response.data.extra;
+            $scope.settings = angular.merge($scope.settings,
+              response.data.settings);
 
-            $scope.backup = {
-              site_color:           $scope.settings.site_color,
-              site_color_secondary: $scope.settings.site_color_secondary
-            };
-
-            $scope.settings.site_logo = '/media/opennemas/sections/' + $scope.settings.site_logo;
-            $scope.settings.mobile_logo = '/media/opennemas/sections/' + $scope.settings.mobile_logo;
-            $scope.settings.favico = '/media/opennemas/sections/' + $scope.settings.favico;
+            $scope.pre();
 
             $scope.loading = false;
           }, function() {
@@ -134,16 +146,29 @@
         };
 
         /**
-         * @function removeInput
+         * @function removeFile
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Removes a file from settings.
+         *
+         * @param {String} name The file name.
+         */
+        $scope.removeFile = function(name) {
+          $scope.settings[name] = null;
+        };
+
+        /**
+         * @function removeGanalytics
          * @memberOf SettingsCtrl
          *
          * @description
          *   Removes a ga tracking code input.
          *
-         * @param integer index The index of the input to remove.
+         * @param {Integer } index The index of the input to remove.
          */
-        $scope.removeGanalytics = function(gaCodes, index) {
-          $scope.gaCodes.splice(index, 1);
+        $scope.removeGanalytics = function(index) {
+          $scope.settings.google_analytics.splice(index, 1);
         };
 
         /**
@@ -157,25 +182,26 @@
          *                      locales.
          */
         $scope.removeLocale = function(index) {
-          var item = $scope.locale.frontend[index];
+          var item = $scope.settings.locale.frontend[index];
 
-          $scope.locale.frontend.splice(index, 1);
+          $scope.settings.locale.frontend.splice(index, 1);
 
-          if ($scope.locale.frontend.length === 0) {
-            $scope.locale.main = null;
+          if ($scope.settings.locale.frontend.length === 0) {
+            $scope.settings.locale.main = null;
 
             return;
           }
 
-          if (item.code !== $scope.locale.main) {
+          if (item.code !== $scope.settings.locale.main) {
             return;
           }
 
-          if (index >= $scope.locale.frontend.length) {
-            index = $scope.locale.frontend.length - 1;
+          if (index >= $scope.settings.locale.frontend.length) {
+            index = $scope.settings.locale.frontend.length - 1;
           }
 
-          $scope.locale.main = $scope.locale.frontend[index].code;
+          $scope.settings.locale.main =
+            $scope.settings.locale.frontend[index].code;
         };
 
         /**
@@ -186,9 +212,9 @@
          *   Saves settings.
          */
         $scope.save = function() {
-          $scope.saving = true;
+          var data = $scope.post();
 
-          var data = { country: $scope.country, settings: $scope.settings };
+          $scope.saving = true;
 
           http.put('api_v1_backend_settings_save', data)
             .then(function(response) {
@@ -198,7 +224,108 @@
               $scope.saving = false;
               messenger.post(response.data);
             });
-        }
+        };
+
+        /**
+         * @function post
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Executes actions to adapt data from template to the webservice.
+         *
+         * @return {Object} Data ready to send to webservice.
+         */
+        $scope.post = function() {
+          var data = {
+            instance: angular.copy($scope.instance),
+            settings: angular.copy($scope.settings)
+          };
+
+          // Save only locale codes
+          if (data.settings.locale.frontend instanceof Array) {
+            var frontend = data.settings.locale.frontend.map(function(e) {
+                return e.code;
+              });
+
+            data.settings.locale.frontend = frontend;
+          }
+
+          if ($scope.settings.site_logo) {
+            data.settings.site_logo = $scope.settings.site_logo;
+
+            if (!(data.settings.site_logo instanceof File)) {
+              data.settings.site_logo = $scope.settings.site_logo
+                .replace($scope.extra.prefix, '');
+            }
+          }
+
+          if ($scope.settings.mobile_logo) {
+            data.settings.mobile_logo = $scope.settings.mobile_logo;
+
+            if (!(data.settings.mobile_logo instanceof File)) {
+              data.settings.mobile_logo = data.settings.mobile_logo
+                .replace($scope.extra.prefix, '');
+            }
+          }
+
+          if (data.settings.favico) {
+            data.settings.favicoo = $scope.settings.favicoo;
+
+            if (!(data.settings.favico instanceof File)) {
+              data.settings.favico = data.settings.favico
+                .replace($scope.extra.prefix, '');
+            }
+          }
+
+          return data;
+        };
+
+        /**
+         * @function pre
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Executes actions to adapt data from webservice to the template.
+         */
+        $scope.pre = function() {
+          // Backup some settings
+          $scope.backup = {
+            favico:               $scope.settings.favico,
+            mobile_logo:          $scope.settings.mobile_logo,
+            site_color:           $scope.settings.site_color,
+            site_color_secondary: $scope.settings.site_color_secondary,
+            site_logo:            $scope.settings.site_log
+          };
+
+          if ($scope.settings.locale.frontend instanceof Array) {
+            var locales = [];
+
+            for (var i = 0; i < $scope.settings.locale.frontend.length; i++) {
+              locales.push({
+                code: $scope.settings.locale.frontend[i],
+                name: $scope.extra.locales
+                .frontend[$scope.settings.locale.frontend[i]],
+              });
+            }
+
+            $scope.settings.locale.frontend = locales;
+          }
+
+          if ($scope.settings.site_logo) {
+            $scope.settings.site_logo =
+              $scope.extra.prefix + $scope.settings.site_logo;
+          }
+
+          if ($scope.settings.mobile_logo) {
+            $scope.settings.mobile_logo =
+              $scope.extra.prefix + $scope.settings.mobile_logo;
+          }
+
+          if ($scope.settings.favico) {
+            $scope.settings.favico =
+              $scope.extra.prefix + $scope.settings.favico;
+          }
+        };
       }
     ]);
 })();

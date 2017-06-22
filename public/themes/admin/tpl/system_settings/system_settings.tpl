@@ -57,7 +57,7 @@
                           {t}This will be displayed as your site name.{/t}
                         </span>
                         <div class="controls">
-                          <input class="form-control" id="site-name" name="site-name" ng-model="settings.site_name" required="required" type="text">
+                          <input class="form-control" id="site-name" name="site-name" ng-model="settings.site_name" type="text">
                         </div>
                       </div>
                       <div class="form-group">
@@ -222,15 +222,15 @@
                           <div class="controls">
                             <input class="hidden" id="site-logo" name="site-logo" file-model="settings.site_logo" type="file"/>
                             <div class="thumbnail-wrapper">
-                              <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.siteLogo }"></div>
-                              <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.siteLogo }">
+                              <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.site_logo }"></div>
+                              <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.site_logo }">
                                 <p>{t}Are you sure?{/t}</p>
                                 <div class="confirm-actions">
-                                  <button class="btn btn-link" ng-click="toggleOverlay('siteLogo')" type="button">
+                                  <button class="btn btn-link" ng-click="toggleOverlay('site_logo')" type="button">
                                     <i class="fa fa-times fa-lg"></i>
                                     {t}No{/t}
                                   </button>
-                                  <button class="btn btn-link" ng-click="removeFile('siteLogo'); toggleOverlay('siteLogo')" type="button">
+                                  <button class="btn btn-link" ng-click="removeFile('site_logo'); toggleOverlay('site_logo')" type="button">
                                     <i class="fa fa-check fa-lg"></i>
                                     {t}Yes{/t}
                                   </button>
@@ -249,7 +249,7 @@
                               <div class="img-thumbnail text-center img-thumbnail-center no-animate" ng-if="settings.site_logo" style="max-width: 100%; height: 100%">
                                 <div class="text-center" ng-if="settings.site_logo" ng-preview="settings.site_logo">
                                   <div class="thumbnail-actions ng-cloak" ng-if="settings.site_logo">
-                                    <div class="thumbnail-action remove-action" ng-click="toggleOverlay('siteLogo')">
+                                    <div class="thumbnail-action remove-action" ng-click="toggleOverlay('site_logo')">
                                       <i class="fa fa-trash-o fa-2x"></i>
                                     </div>
                                     <label class="thumbnail-action" for="site-logo">
@@ -266,15 +266,15 @@
                           <div class="controls">
                             <input class="hidden" id="mobile-logo" name="mobile-logo" file-model="settings.mobile_logo" type="file"/>
                             <div class="thumbnail-wrapper">
-                              <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.mobileLogo }"></div>
-                              <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.mobileLogo }">
+                              <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.mobile_logo }"></div>
+                              <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.mobile_logo }">
                                 <p>{t}Are you sure?{/t}</p>
                                 <div class="confirm-actions">
-                                  <button class="btn btn-link" ng-click="toggleOverlay('mobileLogo')" type="button">
+                                  <button class="btn btn-link" ng-click="toggleOverlay('mobile_logo')" type="button">
                                     <i class="fa fa-times fa-lg"></i>
                                     {t}No{/t}
                                   </button>
-                                  <button class="btn btn-link" ng-click="removeFile('mobileLogo'); toggleOverlay('mobileLogo')" type="button">
+                                  <button class="btn btn-link" ng-click="removeFile('mobile_logo'); toggleOverlay('mobile_logo')" type="button">
                                     <i class="fa fa-check fa-lg"></i>
                                     {t}Yes{/t}
                                   </button>
@@ -293,7 +293,7 @@
                               <div class="img-thumbnail text-center img-thumbnail-center no-animate" ng-if="settings.mobile_logo" style="max-width: 100%; height: 100%">
                                 <div class="text-center" ng-if="settings.mobile_logo" ng-preview="settings.mobile_logo">
                                   <div class="thumbnail-actions ng-cloak" ng-if="settings.mobile_logo">
-                                    <div class="thumbnail-action remove-action" ng-click="toggleOverlay('mobileLogo')">
+                                    <div class="thumbnail-action remove-action" ng-click="toggleOverlay('mobile_logo')">
                                       <i class="fa fa-trash-o fa-2x"></i>
                                     </div>
                                     <label class="thumbnail-action" for="mobile-logo">
@@ -438,9 +438,9 @@
                       <div class="form-group">
                         <label class="form-label" for="country">{t}Country{/t}</label>
                         <div class="controls">
-                          <select id="country" name="country" ng-model="country">
+                          <select id="country" name="country" ng-model="instance.country">
                             <option value="">{t}Select a country{/t}...</option>
-                            <option value="[% code %]" ng-repeat="(code,name) in extra.countries" ng-selected="[% code === country %]">[% name %]</option>
+                            <option value="[% code %]" ng-repeat="(code,name) in extra.countries" ng-selected="[% code === instance.country %]">[% name %]</option>
                           </select>
                         </div>
                       </div>
@@ -470,7 +470,7 @@
                         </span>
                         <div class="controls">
                           <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend">
-                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales" ng-selected="[% code === settings.locale.backend %]">[% name %]</option>
+                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.backend %]">[% name %]</option>
                           </select>
                         </div>
                       </div>
@@ -484,7 +484,7 @@
                       </h4>
                       <div class="form-group">
                         <label class="form-label" for="frontend-language">
-                          {t}Newspaper Language{/t}
+                          {t}Newspaper Lsettings.anguage{/t}
                         </label>
                         <span class="help">
                           {t}Languages to translate your contents to.{/t}
@@ -496,19 +496,19 @@
                           <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
                         </div>
                       </div>
-                      <div class="form-group" ng-show="locale.frontend.length > 0">
+                      <div class="form-group" ng-show="settings.locale.frontend.length > 0">
                         <label class="form-label">{t}Main language{/t}</label>
                         <span class="help">
                           <i class="fa fa-circle-info text-info"></i>
                           {t}When no language in the URL, the main language will be used{/t}
                         </span>
-                        <div class="row m-b-5" ng-repeat="item in locale.frontend">
+                        <div class="row m-b-5" ng-repeat="item in settings.locale.frontend">
                           <div class="col-xs-11">
                             <div class="p-t-10 radio">
-                              <input id="radio-[% $index %]" ng-model="locale.main" type="radio" value="[% item.code %]">
+                              <input id="radio-[% $index %]" ng-model="settings.locale.main" type="radio" value="[% item.code %]">
                               <label for="radio-[% $index %]">
                                 [% item.name %] ([% item.code %])
-                                <strong ng-show="locale.main == item.code">({t}Main{/t})</strong>
+                                <strong ng-show="settings.locale.main == item.code">({t}Main{/t})</strong>
                               </label>
                             </div>
                           </div>
@@ -614,15 +614,15 @@
                         </div>
                         <div class="panel-collapse collapse" id="goggle-analytics">
                           <div class="panel-body">
-                            <div>
-                               <div class="row" ng-if="gaCodes.length <= 1">
+                            <div ng-repeat="code in settings.google_analytics track by $index">
+                              <div class="row" ng-model="settings.google_analytics[$index]">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label class="form-label">
                                       {t}Google Analytics API key{/t}
                                     </label>
                                     <div class="controls">
-                                      <input class="form-control" name="google_analytics[0][api_key]" type="text"  ng-model="gaCodes[0].api_key" value="[% gaCodes[0].api_key %]">
+                                      <input class="form-control" id="google-analytics-[% $index %]-api-key" name="google-analytics-[% $index %]-api-key" ng-model="code.api_key" type="text">
                                     </div>
                                   </div>
                                 </div>
@@ -632,7 +632,7 @@
                                       {t}Google Analytics Base domain{/t}
                                     </label>
                                     <div class="controls">
-                                      <input class="form-control" name="google_analytics[0][base_domain]" type="text"  ng-model="gaCodes[0].base_domain" value="[% gaCodes[0].base_domain %]">
+                                      <input class="form-control" id="google_analytics-[% $index %]-base_domain" name="google_analytics-[% $index %]-base-domain" ng-model="code.base_domain" type="text">
                                     </div>
                                   </div>
                                 </div>
@@ -642,65 +642,31 @@
                                       {t}Google Analytics Custom variables{/t}
                                     </label>
                                     <div class="controls">
-                                        <textarea class="form-control" name="google_analytics[0][custom_var]" type="text" class="input-xlarge" ng-model="gaCodes[0].custom_var" value="[% gaCodes[0].custom_var %]"></textarea>
+                                      <textarea class="form-control" name="google_analytics[[% $index %]][custom_var]" type="text" class="input-xlarge" ng-model="code.custom_var" value="[% code.custom_var %]"></textarea>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div class="form-group other-analytics" ng-if="gaCodes.length > 1" ng-repeat="code in gaCodes track by $index">
-                                <div class="row" ng-model="gaCodes[$index]">
-                                  <div class="col-md-6">
-                                    <div class="form-group">
-                                      <label class="form-label">
-                                        {t}Google Analytics API key{/t}
-                                      </label>
-                                      <div class="controls">
-                                        <input class="form-control" name="google_analytics[[% $index %]][api_key]" type="text" ng-model="code.api_key" ng-value="[% code.api_key %]" required>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6">
-                                    <div class="form-group">
-                                      <label class="form-label">
-                                        {t}Google Analytics Base domain{/t}
-                                      </label>
-                                      <div class="controls">
-                                        <div class="input-group">
-                                          <input class="form-control" name="google_analytics[[% $index %]][base_domain]" type="text" ng-model="code.base_domain" ng-value="[% code.base_domain %]">
-                                          <span class="input-group-btn">
-                                              <button class="btn btn-danger" ng-click="removeGanalytics(gaCodes, $index)" type="button">
-                                                  <i class="fa fa-trash-o"></i>
-                                              </button>
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-12" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
-                                    <div class="form-group">
-                                      <label class="form-label">
-                                        {t}Google Analytics Custom variables{/t}
-                                      </label>
-                                      <div class="controls">
-                                          <textarea class="form-control" name="google_analytics[[% $index %]][custom_var]" type="text" class="input-xlarge" ng-model="code.custom_var" value="[% code.custom_var %]"></textarea>
-                                      </div>
-                                    </div>
-                                  </div>
+                                <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1">
+                                  <button class="btn btn-block btn-danger" ng-click="removeGanalytics($index)" type="button">
+                                    <i class="fa fa-trash-o"></i>
+                                    {t}Delete{/t}
+                                  </button>
                                 </div>
                               </div>
-                              <div class="form-group" ng-if="gaCodes[0].api_key">
-                                <div class="input-group">
-                                  <div class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="addGanalytics();" type="button">{t}Add another{/t}</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" ng-click="$event.stopPropagation();" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
-                              <small class="help">
-                                <i class="fa fa-info-circle m-r-5"></i>
-                                {t}We are not responsible of the stats or of any third party services{/t}
-                              </small>
                             </div>
+                            <div class="row">
+                              <div class="col-xs-12 col-sm-6 col-sm-offset-3 form-group text-center" ng-show="settings.google_analytics.length > 0 && settings.google_analytics[0].api_key">
+                                <button class="btn btn-block btn-white" ng-click="addGanalytics()" type="button">
+                                  <i class="fa fa-plus"></i>
+                                  {t}Add{/t}
+                                </button>
+                              </div>
+                            </div>
+                            <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" ng-click="$event.stopPropagation();" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
+                            <small class="help">
+                              <i class="fa fa-info-circle m-r-5 text-info"></i>
+                              {t}We are not responsible of the stats or of any third party services{/t}
+                            </small>
                           </div>
                         </div>
                       </div>
@@ -779,7 +745,7 @@
                                 {t}Chartbeat Account ID{/t}
                               </label>
                               <div class="controls">
-                                <input class="form-control" id="chartbeat-id" name="chartbeat-id" ng-model="settings.charbeat.id" type="text">
+                                <input class="form-control" id="chartbeat-id" name="chartbeat-id" ng-model="settings.chartbeat.id" type="text">
                                 <div class="help">{t escape=off}If you also have a <strong>Charbeat statistics service</strong>, add your account id{/t}</div>
                               </div>
                             </div>
@@ -788,7 +754,7 @@
                                 {t}Chartbeat Domain{/t}
                               </label>
                               <div class="controls">
-                                <input class="form-control" id="chartbeat-domain" name="chartbeat-domain" ng-model="settings.charbeat.domain" type="text">
+                                <input class="form-control" id="chartbeat-domain" name="chartbeat-domain" ng-model="settings.chartbeat.domain" type="text">
                               </div>
                             </div>
                             <small class="help">
@@ -892,11 +858,11 @@
                         <div class="panel-collapse collapse" id="google-search">
                           <div class="panel-body">
                             <div class="form-group">
-                              <label class="form-label" for="google_custom_search_api_key">
+                              <label class="form-label" for="google-custom-search-api-key">
                                 {t}Google Search API key{/t}
                               </label>
                               <div class="controls">
-                                <input class="form-control" id="google_custom_search_api_key" name="google_custom_search_api_key" type="text" value="{$configs['google_custom_search_api_key']|default:""}">
+                                <input class="form-control" id="google-custom-search-api-key" name="google-custom-search-api-key" ng-model="settings.google_custom_search_api_key" type="text">
                               </div>
                             </div>
                             <small class="help">
