@@ -164,9 +164,15 @@ class BaseDataSet extends DataSet
         }
 
         if (is_array($key)) {
+            $empty = array_filter($key, function ($a) {
+                return is_null($a) || $a === '';
+            });
+
             foreach ($key as $k => $v) {
                 $this->set($k, $v);
             }
+
+            $this->delete(array_keys($empty));
 
             return;
         }
