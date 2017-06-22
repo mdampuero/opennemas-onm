@@ -109,6 +109,13 @@ class SettingController extends Controller
             }
         }
 
+        // Decode scripts
+        foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
+            if (array_key_exists($key, $settings)) {
+                $settings[$key] = base64_decode($settings[$key]);
+            }
+        }
+
         foreach ([ 'locale', 'logo_enabled' ] as $key) {
             $settings[$key] = $this->get('data.manager.adapter')
                 ->adapt($key, $settings[$key]);
@@ -120,13 +127,20 @@ class SettingController extends Controller
         }
 
         return new JsonResponse([
-            'country'   => $this->get('core.instance')->country,
-            'extra'     => [
-                'countries' => $this->get('core.geo')->getCountries(),
-                'timezones' => \DateTimeZone::listIdentifiers(),
-                'locales'   => $this->get('core.locale')->getLocales()
+            'instance' => [
+                'country' => $this->get('core.instance')->country
             ],
-            'settings'  => $settings,
+            'extra'    => [
+                'countries' => $this->get('core.geo')->getCountries(),
+                'locales'   => [
+                    'backend'  => $this->get('core.locale')->getLocales(),
+                    'frontend' => $this->getFrontendLocales($settings)
+                ],
+                'timezones' => \DateTimeZone::listIdentifiers(),
+                'prefix'    => $this->get('core.instance')->getMediaShortPath()
+                    . '/sections/'
+            ],
+            'settings' => $settings,
         ]);
     }
 
@@ -143,14 +157,14 @@ class SettingController extends Controller
     public function saveAction(Request $request)
     {
         $defaults = array_fill_keys($this->keys, null);
-        $country  = $request->get('country');
+        $country  = $request->get('instance');
         $files    = $request->files->get('settings');
         $settings = $request->get('settings');
         $msg      = $this->get('core.messenger');
 
         // Save country for instance
         $instance = $this->get('core.instance');
-        $instance->country = $request->request->get('country', '');
+        $instance->merge($country);
         $this->get('orm.manager')->persist($instance);
 
         // Save files
@@ -212,6 +226,36 @@ class SettingController extends Controller
         $msg->add(_('Settings saved.'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getcode());
+    }
+
+    /**
+     * Returns the list of frontend locales basing on the current locale
+     * configuration.
+     *
+     * @param array $settings The list of settings.
+     *
+     * @return array The list of frontend locales.
+     */
+    protected function getFrontendLocales($settings)
+    {
+        $frontend = [];
+
+        if (empty($settings)
+            || !is_array($settings)
+            || !array_key_exists('locale', $settings)
+            || !array_key_exists('frontend', $settings['locale'])
+            || !is_array($settings['locale']['frontend'])
+        ) {
+            return $frontend;
+        }
+
+        $locales = $this->get('core.locale')->getAvailableLocales();
+
+        foreach ($settings['locale']['frontend'] as $code) {
+            $frontend[$code] = $locales[$code];
+        }
+
+        return $frontend;
     }
 
     /**
