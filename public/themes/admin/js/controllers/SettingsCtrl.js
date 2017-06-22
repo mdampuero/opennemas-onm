@@ -269,7 +269,7 @@
           }
 
           if (data.settings.favico) {
-            data.settings.favicoo = $scope.settings.favicoo;
+            data.settings.favico = $scope.settings.favico;
 
             if (!(data.settings.favico instanceof File)) {
               data.settings.favico = data.settings.favico
