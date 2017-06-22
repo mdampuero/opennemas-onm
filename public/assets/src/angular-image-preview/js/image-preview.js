@@ -46,7 +46,7 @@
               var h = element.parent().height();
               var w = this.width * element.parent().height() / this.height;
 
-              if (element.parent().width()!= 0 && w > element.parent().width()) {
+              if (element.parent().width() > 0 && w > element.parent().width()) {
                 w = element.parent().width();
                 h = this.height * element.parent().width() / this.width;
               }
