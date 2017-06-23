@@ -108,10 +108,8 @@
   OAM.prototype.createInterstitial = function(ad) {
     var div = document.createElement('div');
 
-    // TODO: Remove style from <a> element (again, fuck you, frontenders!!!)
     div.innerHTML = '<div class="interstitial interstitial-visible">' +
       '<div class="interstitial-wrapper">' +
-        '<style>body { height: 100%; overflow: hidden; }</style>' +
         '<div class="interstitial-header">' +
           this.config.strings.entering +
           '<a class="interstitial-close-button" href="#" title="' + this.config.strings.skip + '">' +
@@ -119,7 +117,7 @@
           '</a>' +
         '</div>'+
         '<div class="interstitial-content">' +
-          '<div class="oat oat-visible ad-slot " data-id="' + ad.id + '">' +
+          '<div class="ad-slot oat oat-visible oat-' + ad.orientation + '" data-id="' + ad.id + '">' +
           '</div>' +
         '</div>' +
       '</div>' +
