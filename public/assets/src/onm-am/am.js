@@ -80,9 +80,12 @@
       e.preventDefault();
     }
 
+    var slot = element.getElementsByClassName('oat');
+    var id   = '-' + parseInt(slot[0].getAttribute('data-id'));
+
     if (!this.config.debug) {
-      document.cookie = '__onm_interstitial=' + expires + ';expires=' +
-        expires + ';path=/';
+      document.cookie = '__onm_interstitial' + id + '=' + expires +
+        ';expires=' + expires + ';path=/';
     }
 
     document.body.className = document.body.className
@@ -115,7 +118,10 @@
             '<span>' + this.config.strings.skip + '</span>' +
           '</a>' +
         '</div>'+
-        '<div class="interstitial-content"></div>' +
+        '<div class="interstitial-content">' +
+          '<div class="oat oat-visible ad-slot " data-id="' + ad.id + '">' +
+          '</div>' +
+        '</div>' +
       '</div>' +
     '</div>';
 
@@ -124,7 +130,7 @@
         self.close(div, e);
       };
 
-    var content = div.getElementsByClassName('interstitial-content')[0];
+    var oat = div.getElementsByClassName('oat')[0];
     var wrapper = div.getElementsByClassName('interstitial-wrapper')[0];
     var iframe  = this.createNormal(ad);
     var self    = this;
@@ -140,9 +146,9 @@
     }
 
     wrapper.style.width  = size.width + 'px';
-    content.style.height = size.height + (size.height === 'auto' ? '' : 'px');
+    oat.style.height = size.height + (size.height === 'auto' ? '' : 'px');
 
-    content.appendChild(iframe);
+    oat.appendChild(iframe);
 
     return div;
   };
@@ -218,15 +224,15 @@
       return;
     }
 
+    var ad      = this.getAdvertisement(interstitials);
     var expires = new Date();
     var now     = new Date();
 
-    if (this.getCookie('__onm_interstitial')) {
-      expires = new Date(this.getCookie('__onm_interstitial'));
+    if (this.getCookie('__onm_interstitial-' + ad.id)) {
+      expires = new Date(this.getCookie('__onm_interstitial' + ad.id));
     }
 
     if (expires <= now) {
-      var ad = this.getAdvertisement(interstitials);
       document.body.appendChild(this.createInterstitial(ad));
       document.body.className = document.body.className + ' interstitial-open';
     }
