@@ -128,7 +128,7 @@
         self.close(div, e);
       };
 
-    var oat = div.getElementsByClassName('oat')[0];
+    var oat     = div.getElementsByClassName('oat')[0];
     var wrapper = div.getElementsByClassName('interstitial-wrapper')[0];
     var iframe  = this.createNormal(ad);
     var self    = this;
@@ -143,8 +143,8 @@
       };
     }
 
-    wrapper.style.width  = size.width + 'px';
-    oat.style.height = size.height + (size.height === 'auto' ? '' : 'px');
+    wrapper.style.width = size.width + 'px';
+    oat.style.height    = size.height + (size.height === 'auto' ? '' : 'px');
 
     oat.appendChild(iframe);
 
