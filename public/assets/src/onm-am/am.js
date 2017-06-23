@@ -80,8 +80,10 @@
       e.preventDefault();
     }
 
-    document.cookie = '__onm_interstitial=' + expires + ';expires=' +
-      expires + ';path=/';
+    if (!this.config.debug) {
+      document.cookie = '__onm_interstitial=' + expires + ';expires=' +
+        expires + ';path=/';
+    }
 
     document.body.className = document.body.className
       .replace(' interstitial-open', '');
@@ -205,9 +207,11 @@
    * @param {Array} ads The list of advertisements to display.
    */
   OAM.prototype.displayInterstitial = function (ads) {
+    var self = this;
+
     // Display an interstitial if present
     var interstitials = ads.filter(function(e) {
-      return e.type === 'interstitial';
+      return e.type === 'interstitial' && self.isVisible(e);
     });
 
     if (interstitials.length === 0) {
@@ -524,7 +528,7 @@
       return false;
     }
 
-    if (ad.position.indexOf(type) === -1) {
+    if (type && ad.position.indexOf(type) === -1) {
       return false;
     }
 
