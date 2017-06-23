@@ -369,89 +369,50 @@ function getGoogleAnalyticsCode($params = [])
 
 function generateGAScriptCode($config)
 {
-    $code = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
+    $setAccount    = "_gaq.push(['%s_setAccount', '%s']);\n";
+    $setDomainName = "_gaq.push(['%s_setDomainName', '%s']);\n";
+    $setCustomVar  = "_gaq.push(['%s_setCustomVar', %d, '%s', '%s', %d]);\n";
+
+    $prefix = '';
+    $code   = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
     foreach ($config as $key => $account) {
         if (is_array($account)
             && array_key_exists('api_key', $account)
             && !empty(trim($account['api_key']))
         ) {
-            if ($key == 0) {
-                $code .= "_gaq.push(['_setAccount', '" . trim($account['api_key']) . "']);\n";
-                if (array_key_exists('base_domain', $account)
-                    && !empty(trim($account['base_domain']))
-                ) {
-                    $code .= "_gaq.push(['_setDomainName', '". trim($account['base_domain']) ."']);\n";
-                }
-                if (array_key_exists('custom_var', $account)
-                    && !empty(trim($account['custom_var']))
-                ) {
-                    $code .= base64_decode(trim($account['custom_var'])) . "\n";
-                }
-                // Category targeting
-                if (array_key_exists('category', $account)
-                    && is_array($account['category'])
-                    && array_key_exists('idx', $account['category'])
-                    && !empty($account['category']['idx'])
-                ) {
-                    $code .= "_gaq.push(['_setCustomVar', " .
-                        $account['category']['idx'] . ", '" .
-                        $account['category']['key'] . "', '" .
-                        $config['category'] . "', " .
-                        $account['category']['scp'] . "]);\n";
-                }
-                // Module tageting
-                if (array_key_exists('module', $account)
-                    && is_array($account['module'])
-                    && array_key_exists('idx', $account['module'])
-                    && !empty($account['module']['idx'])
-                ) {
-                    $code .= "_gaq.push(['_setCustomVar', " .
-                        $account['module']['idx'] . ", '" .
-                        $account['module']['key'] . "', '" .
-                        $config['extension'] . "', " .
-                        $account['module']['scp'] . "]);\n";
-                }
-
-                $code .= "_gaq.push(['_trackPageview']);\n";
-            } else {
-                $code .= "_gaq.push(['account{$key}._setAccount', '" . trim($account['api_key']) . "']);\n";
-                if (array_key_exists('base_domain', $account)
-                    && !empty(trim($account['base_domain']))
-                ) {
-                    $code .= "_gaq.push(['account{$key}._setDomainName', '". trim($account['base_domain']) ."']);\n";
-                }
-                if (array_key_exists('custom_var', $account)
-                    && !empty(trim($account['custom_var']))
-                ) {
-                    $code .= base64_decode(trim($account['custom_var'])) . "\n";
-                }
-                // Category targeting
-                if (array_key_exists('category', $account)
-                    && is_array($account['category'])
-                    && array_key_exists('idx', $account['category'])
-                    && !empty($account['category']['idx'])
-                ) {
-                    $code .= "_gaq.push(['account{$key}._setCustomVar', " .
-                        $account['category']['idx'] . ", '" .
-                        $account['category']['key'] . "', '" .
-                        $config['category'] . "', " .
-                        $account['category']['scp'] . "]);\n";
-                }
-                // Module tageting
-                if (array_key_exists('module', $account)
-                    && is_array($account['module'])
-                    && array_key_exists('idx', $account['module'])
-                    && !empty($account['module']['idx'])
-                ) {
-                    $code .= "_gaq.push(['account{$key}._setCustomVar', " .
-                        $account['module']['idx'] . ", '" .
-                        $account['module']['key'] . "', '" .
-                        $config['extension'] . "', " .
-                        $account['module']['scp'] . "]);\n";
-                }
-
-                $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
+            if ($key != 0) {
+                $prefix = "account{$key}.";
             }
+
+            $code .= sprintf($setAccount, $prefix, trim($account['api_key']));
+            if (array_key_exists('base_domain', $account)
+                && !empty(trim($account['base_domain']))
+            ) {
+                $code .= sprintf($setDomainName, $prefix, trim($account['base_domain']));
+            }
+            if (array_key_exists('custom_var', $account)
+                && !empty(trim($account['custom_var']))
+            ) {
+                $code .= base64_decode(trim($account['custom_var'])) . "\n";
+            }
+            // Category targeting
+            if (array_key_exists('category', $account)
+                && is_array($account['category'])
+                && array_key_exists('idx', $account['category'])
+                && !empty($account['category']['idx'])
+            ) {
+                $code .= sprintf($setCustomVar, $prefix, $account['category']['idx'], $account['category']['key'], $config['category'], $account['category']['scp']);
+            }
+            // Module tageting
+            if (array_key_exists('module', $account)
+                && is_array($account['module'])
+                && array_key_exists('idx', $account['module'])
+                && !empty($account['module']['idx'])
+            ) {
+                $code .= sprintf($setCustomVar, $prefix, $account['module']['idx'], $account['module']['key'], $config['extension'], $account['module']['scp']);
+            }
+
+            $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
         }
     }
 
