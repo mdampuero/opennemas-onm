@@ -111,7 +111,7 @@
     div.innerHTML = '<div class="interstitial interstitial-visible">' +
       '<div class="interstitial-wrapper">' +
         '<div class="interstitial-header">' +
-          this.config.strings.entering +
+          '<span class="interstitial-header-title">' + this.config.strings.entering + '</span>' +
           '<a class="interstitial-close-button" href="#" title="' + this.config.strings.skip + '">' +
             '<span>' + this.config.strings.skip + '</span>' +
           '</a>' +
