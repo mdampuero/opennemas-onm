@@ -401,15 +401,29 @@ function generateGAScriptCode($config)
                 && array_key_exists('idx', $account['category'])
                 && !empty($account['category']['idx'])
             ) {
-                $code .= sprintf($setCustomVar, $prefix, $account['category']['idx'], $account['category']['key'], $config['category'], $account['category']['scp']);
+                $code .= sprintf(
+                    $setCustomVar,
+                    $prefix,
+                    $account['category']['idx'],
+                    $account['category']['key'],
+                    $config['category'],
+                    $account['category']['scp']
+                );
             }
-            // Module tageting
-            if (array_key_exists('module', $account)
-                && is_array($account['module'])
-                && array_key_exists('idx', $account['module'])
-                && !empty($account['module']['idx'])
+            // Extension tageting
+            if (array_key_exists('extension', $account)
+                && is_array($account['extension'])
+                && array_key_exists('idx', $account['extension'])
+                && !empty($account['extension']['idx'])
             ) {
-                $code .= sprintf($setCustomVar, $prefix, $account['module']['idx'], $account['module']['key'], $config['extension'], $account['module']['scp']);
+                $code .= sprintf(
+                    $setCustomVar,
+                    $prefix,
+                    $account['extension']['idx'],
+                    $account['extension']['key'],
+                    $config['extension'],
+                    $account['extension']['scp']
+                );
             }
 
             $code .= "_gaq.push(['account{$key}._trackPageview']);\n";

@@ -490,7 +490,7 @@
                               <div class="col-md-6" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
                                 <div class="form-group">
                                   <label class="form-label">
-                                    {t}Module targeting{/t}
+                                    {t}Extension targeting{/t}
                                   </label>
                                   <div class="row">
                                     <div class="col-md-4">
@@ -498,7 +498,7 @@
                                         {t}Index{/t}
                                       </div>
                                       <div class="controls">
-                                        <input class="form-control" name="google_analytics[0][module][idx]" type="text" ng-model="gaCodes[0].module.idx" ng-value="[% gaCodes[0].module[idx] %]">
+                                        <input class="form-control" name="google_analytics[0][extension][idx]" type="text" ng-model="gaCodes[0].extension.idx" ng-value="[% gaCodes[0].extension[idx] %]">
                                       </div>
                                     </div>
                                     <div class="col-md-4">
@@ -506,7 +506,7 @@
                                         {t}Key{/t}
                                       </div>
                                       <div class="controls">
-                                        <input class="form-control" name="google_analytics[0][module][key]" type="text" ng-model="gaCodes[0].module.key" ng-value="[% gaCodes[0].module[key] %]">
+                                        <input class="form-control" name="google_analytics[0][extension][key]" type="text" ng-model="gaCodes[0].extension.key" ng-value="[% gaCodes[0].extension[key] %]">
                                       </div>
                                     </div>
                                     <div class="col-md-4">
@@ -514,7 +514,7 @@
                                         {t}Scope{/t}
                                       </div>
                                       <div class="controls">
-                                        <input class="form-control" name="google_analytics[0][module][scp]" type="text" ng-model="gaCodes[0].module.scp" ng-value="[% gaCodes[0].module[scp] %]">
+                                        <input class="form-control" name="google_analytics[0][extension][scp]" type="text" ng-model="gaCodes[0].extension.scp" ng-value="[% gaCodes[0].extension[scp] %]">
                                       </div>
                                     </div>
                                   </div>
@@ -596,7 +596,7 @@
                                 <div class="col-md-6" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
                                   <div class="form-group">
                                     <label class="form-label">
-                                      {t}Module targeting{/t}
+                                      {t}Extension targeting{/t}
                                     </label>
                                     <div class="row">
                                       <div class="col-md-4">
@@ -604,7 +604,7 @@
                                           {t}Index{/t}
                                         </div>
                                         <div class="controls">
-                                          <input class="form-control" name="google_analytics[[% $index %]][module][idx]" type="text" ng-model="code.module.idx" ng-value="[% code.module.idx %]">
+                                          <input class="form-control" name="google_analytics[[% $index %]][extension][idx]" type="text" ng-model="code.extension.idx" ng-value="[% code.extension.idx %]">
                                         </div>
                                       </div>
                                       <div class="col-md-4">
@@ -612,7 +612,7 @@
                                           {t}Key{/t}
                                         </div>
                                         <div class="controls">
-                                          <input class="form-control" name="google_analytics[[% $index %]][module][key]" type="text" ng-model="code.module.key" ng-value="[% code.module.key %]">
+                                          <input class="form-control" name="google_analytics[[% $index %]][extension][key]" type="text" ng-model="code.extension.key" ng-value="[% code.extension.key %]">
                                         </div>
                                       </div>
                                       <div class="col-md-4">
@@ -620,7 +620,7 @@
                                           {t}Scope{/t}
                                         </div>
                                         <div class="controls">
-                                          <input class="form-control" name="google_analytics[[% $index %]][module][scp]" type="text" ng-model="code.module.scp" ng-value="[% code.module.scp %]">
+                                          <input class="form-control" name="google_analytics[[% $index %]][extension][scp]" type="text" ng-model="code.extension.scp" ng-value="[% code.extension.scp %]">
                                         </div>
                                       </div>
                                     </div>
