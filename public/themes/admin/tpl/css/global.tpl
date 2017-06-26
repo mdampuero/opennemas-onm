@@ -222,13 +222,16 @@
     font-size: .8em;
     line-height: 1.3em;
   }
+
   .interstitial-header-title {
     display: none;
   }
+
   .interstitial-header {
     text-align: center;
   }
+
   .interstitial-close-button {
-    float: none
+    float: none;
   }
 }
