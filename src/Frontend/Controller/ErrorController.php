@@ -96,7 +96,7 @@ class ErrorController extends Controller
                 $headers  = [
                     'x-cache-for' => '1d',
                     'x-cacheable' => true,
-                    'x-instance'  => $instance->internal_name,
+                    'x-instance'  => $this->get('core.instance')->internal_name,
                     'x-tags'      => 'instance-' . $this->get('core.instance')->internal_name . ',' . 'not-found',
                 ];
 
