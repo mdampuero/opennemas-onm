@@ -90,12 +90,17 @@ class ErrorController extends Controller
                         'cache_id'           => $cacheID,
                         'category_real_name' => $page->title,
                         'page'               => $page,
-                        'x-cache-for'        => '+1 day',
-                        'x-tags'             => 'not-found',
                     ]);
                 }
 
-                return new Response($content, 404);
+                $headers  = [
+                    'x-cache-for' => '1d',
+                    'x-cacheable' => true,
+                    'x-instance'  => $this->get('core.instance')->internal_name,
+                    'x-tags'      => 'instance-' . $this->get('core.instance')->internal_name . ',' . 'not-found',
+                ];
+
+                return new Response($content, 404, $headers);
                 break;
             default:
                 // Change this handle to a more generic error template
