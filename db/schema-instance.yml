@@ -624,6 +624,12 @@ contents:
             unique: false
             flags: {  }
         -
+            name: fk_author
+            columns: [fk_author]
+            primary: false
+            unique: false
+            flags: {  }
+        -
             name: available
             columns: [available]
             primary: false
