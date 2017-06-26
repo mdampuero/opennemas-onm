@@ -27,6 +27,10 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
         $content        = $smarty->parent->tpl_vars['content']->value;
 
+        $ads = array_filter($ads, function ($a) {
+            return $a->isInTime();
+        });
+
         $params = [
             'category'  => $category,
             'extension' => $app['extension'],

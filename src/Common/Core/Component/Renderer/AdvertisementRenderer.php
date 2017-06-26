@@ -258,7 +258,7 @@ class AdvertisementRenderer
                 . '</div>'
                 . '<div class="interstitial-content" style="height: %s;">'
                     . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s"'
-                        .  ' data-timeout="%s" data-type="%s" >%s</div>'
+                        . ' data-timeout="%s" data-type="%s">%s</div>'
                 . '</div>'
             . '</div>'
         . '</div>';
