@@ -250,7 +250,9 @@ class AdvertisementRenderer
         $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
                 . '<div class="interstitial-header">'
-                    . _('Entering on the requested page')
+                    . '<span class="interstitial-header-title">'
+                        . _('Entering on the requested page')
+                    . '</span>'
                     . '<a class="interstitial-close-button" href="#" title="'
                         . _('Skip advertisement') . '">'
                         . '<span>' . _('Skip advertisement') . '</span>'
@@ -351,7 +353,6 @@ class AdvertisementRenderer
         $img = $this->container->get('entity_repository')->find('Photo', $ad->img);
 
         if (!empty($img) && strtolower($img->type_img) == 'swf') {
-
             return $this->renderSafeFrameFlash($ad, $img);
         }
 
