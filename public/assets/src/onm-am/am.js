@@ -81,10 +81,10 @@
     }
 
     var slot = element.getElementsByClassName('oat');
-    var id   = '-' + parseInt(slot[0].getAttribute('data-id'));
+    var id   = parseInt(slot[0].getAttribute('data-id'));
 
     if (!this.config.debug) {
-      document.cookie = '__onm_interstitial' + id + '=' + expires +
+      document.cookie = '__onm_interstitial-' + id + '=' + expires +
         ';expires=' + expires + ';path=/';
     }
 
@@ -227,7 +227,7 @@
     var now     = new Date();
 
     if (this.getCookie('__onm_interstitial-' + ad.id)) {
-      expires = new Date(this.getCookie('__onm_interstitial' + ad.id));
+      expires = new Date(this.getCookie('__onm_interstitial-' + ad.id));
     }
 
     if (expires <= now) {
@@ -457,21 +457,24 @@
    */
   OAM.prototype.hideInterstitials = function() {
     var self          = this;
-    var expires       = new Date();
     var now           = new Date();
     var interstitials = document.getElementsByClassName('interstitial');
 
-    if (this.getCookie('__onm_interstitial')) {
-      expires = new Date(this.getCookie('__onm_interstitial'));
-    }
+    for (var i = 0; i < interstitials.length; i++) {
+      var expires = new Date();
+      var slot    = interstitials[i].getElementsByClassName('oat');
+      var id      = parseInt(slot[0].getAttribute('data-id'));
 
-    if (expires > now) {
-      for (var i = 0; i < interstitials.length; i++) {
-        interstitials[i].remove();
+      if (this.getCookie('__onm_interstitial-' + id)) {
+        expires = new Date(this.getCookie('__onm_interstitial-' + id));
       }
 
-      return;
+      if (expires > now) {
+        interstitials[i].remove();
+      }
     }
+
+    interstitials = document.getElementsByClassName('interstitial');
 
     if (interstitials.length > 0) {
       for (var i = 0; i < interstitials.length; i++) {
