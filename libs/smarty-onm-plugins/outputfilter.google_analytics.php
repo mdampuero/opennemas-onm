@@ -25,11 +25,18 @@ function smarty_outputfilter_google_analytics($output, $smarty)
     ) {
         $isAmp = preg_match('@\.amp\.html$@', $uri);
         if ($isAmp) {
-            $code   = getGoogleAnalyticsCode('amp');
+            $code   = getGoogleAnalyticsCode(['type' => 'amp']);
             $output = preg_replace('@(<body.*>)@', '${1}'."\n".$code, $output);
         } else {
-            $code   = getGoogleAnalyticsCode();
-            $output = preg_replace('@(</head>)@', $code.'${1}', $output);
+            $category  = $smarty->parent->tpl_vars['actual_category']->value;
+            $extension = $smarty->parent->tpl_vars['app']->value['extension'];
+
+            $code = getGoogleAnalyticsCode([
+                'category' => $category,
+                'extension' => $extension
+            ]);
+
+            $output   = preg_replace('@(</head>)@', $code.'${1}', $output);
         }
     }
 

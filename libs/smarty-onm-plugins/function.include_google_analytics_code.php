@@ -7,7 +7,7 @@ function smarty_function_include_google_analytics_code($params, &$smarty)
 
     $code = '';
     if (!is_null($onlyImage) && $onlyImage=="true") {
-        $code = getGoogleAnalyticsCode(true);
+        $code = getGoogleAnalyticsCode([ 'type' => 'image']);
     }
 
     return $code;
