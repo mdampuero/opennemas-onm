@@ -7,7 +7,7 @@ function smarty_function_include_piwik_code($params, &$smarty)
 
     $code = '';
     if (!is_null($onlyImage) && $onlyImage=="true") {
-        $code = getPiwikCode(true);
+        $code = getPiwikCode('image');
     }
 
     return $code;
