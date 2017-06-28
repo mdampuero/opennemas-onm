@@ -426,7 +426,7 @@ function generateGAScriptCode($config)
                 );
             }
 
-            $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
+            $code .= sprintf("_gaq.push(['%s_trackPageview']);\n", $prefix);
         }
     }
 
