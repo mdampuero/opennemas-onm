@@ -138,7 +138,7 @@ class AlbumsController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        list($positions, $advertisements) = $this->getAds($this->category);
 
         // Send the response to the user
         return $this->render('album/album_frontpage.tpl', [
@@ -229,7 +229,7 @@ class AlbumsController extends Controller
             ]);
         } // END iscached
 
-        list($positions, $advertisements) = $this->getAds('inner');
+        list($positions, $advertisements) = $this->getAds($this->category, 'inner');
 
         return $this->render('album/album.tpl',[
             'ads_positions'  => $positions,
@@ -345,21 +345,20 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Retrieves the advertisement for the frontpage
+     * Fetches the ads given a category and page
      *
-     * @param string $categoryName the category name where fetch ads from
+     * @param mixed $category the category to fetch ads from
+     * @param string $page the page to fetch ads from
      *
-     * @return void
+     * @return array the list of advertisements for this page
      **/
-    public static function getAds($position = '')
+    private function getAds($category = 'home', $page = '')
     {
-        $ccm = \ContentCategoryManager::get_instance();
-        $categoryName = 'album';
-        $category = $ccm->get_id($categoryName);
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get album_inner positions
         $positionManager = getService('core.helper.advertisement');
-        if ($position == 'inner') {
+        if ($page == 'inner') {
             $positions = $positionManager->getPositionsForGroup('album_inner', [ 7 ]);
         } else {
             $positions = $positionManager->getPositionsForGroup('album_frontpage', [ 7, 9 ]);

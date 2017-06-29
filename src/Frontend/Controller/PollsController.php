@@ -135,7 +135,7 @@ class PollsController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds('frontpage');
+        list($positions, $advertisements) = $this->getAds($this->category, 'frontpage');
 
         return $this->render('poll/poll_frontpage.tpl', [
             'ads_positions'  => $positions,
@@ -215,7 +215,7 @@ class PollsController extends Controller
             }
         }
 
-        list($positions, $advertisements) = $this->getAds('inner');
+        list($positions, $advertisements) = $this->getAds($this->category, 'inner');
 
         return $this->render('poll/poll.tpl', [
             'ads_positions'  => $positions,
@@ -276,25 +276,24 @@ class PollsController extends Controller
     }
 
     /**
-     * Fetches the ads given a context
+     * Fetches the ads given a category and page
      *
-     * @param string $context the context to fetch ads from
+     * @param mixed $category the category to fetch ads from
+     * @param string $page the page to fetch ads from
      *
-     * @return void
+     * @return array the list of advertisements for this page
      **/
-    protected function getAds($context = 'frontpage')
+    private function getAds($category = 'home', $page = '')
     {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
         // Get polls positions
         $positionManager = $this->get('core.helper.advertisement');
-        if ($context == 'inner') {
+        if ($page == 'inner') {
             $positions = $positionManager->getPositionsForGroup('polls_inner', [ 7 ]);
         } else {
             $positions = $positionManager->getPositionsForGroup('polls_frontpage', [ 7, 9 ]);
         }
-
-        // We force category = 0 because we dont support category segmentation
-        // on polls by category. Something to look again in the future.
-        $category = 0;
 
         $advertisements = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);

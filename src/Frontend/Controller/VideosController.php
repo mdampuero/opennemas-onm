@@ -215,7 +215,7 @@ class VideosController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        list($positions, $advertisements) = $this->getAds($this->category);
 
         if ($this->category_name != 'home') {
             return $this->render('video/video_frontpage.tpl', [
@@ -289,7 +289,7 @@ class VideosController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        list($positions, $advertisements) = $this->getAds($this->category);
 
         return $this->render('video/video_frontpage.tpl', [
             'ads_positions'  => $positions,
@@ -357,7 +357,7 @@ class VideosController extends Controller
             $this->view->assign(['others_videos' => $otherVideos]);
         }
 
-        list($positions, $advertisements) = $this->getAds('inner');
+        list($positions, $advertisements) = $this->getAds($this->category, 'inner');
 
         return $this->render('video/video_inner.tpl', [
             'ads_positions'  => $positions,
@@ -517,19 +517,20 @@ class VideosController extends Controller
     }
 
     /**
-     * Render advertisement on videos
+     * Fetches the ads given a category and page
      *
-     * @param string $context the context to fetch ads from
-     */
-    private function getAds($context = 'frontpage')
+     * @param mixed $category the category to fetch ads from
+     * @param string $page the page to fetch ads from
+     *
+     * @return array the list of advertisements for this page
+     **/
+    private function getAds($category = 'home', $page = '')
     {
-        $ccm          = \ContentCategoryManager::get_instance();
-        $categoryName = 'video';
-        $category     = $ccm->get_id($categoryName);
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get video positions
         $positionManager = $this->get('core.helper.advertisement');
-        if ($context == 'inner') {
+        if ($page == 'inner') {
             $positions = $positionManager->getPositionsForGroup('video_inner', [ 7 ]);
         } else {
             $positions = $positionManager->getPositionsForGroup('video_frontpage', [ 7, 9 ]);
