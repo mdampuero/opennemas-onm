@@ -24,10 +24,11 @@ class BodyFilter extends Filter
             "/([\r\n])+/",
             "/([\n]{1,})/",
             "/([\n]{2,})/",
-            "/(\n)+/"
+            "/(\n)+/",
+            "/\[caption.*?\].*?(<img.*?\/?>).*?\[\/caption\]/"
         ];
 
-        $replacement = [ '</p><p>', '</p><p>', '<br>', '<br>' ];
+        $replacement = [ '</p><p>', '</p><p>', '<br>', '<br>', '${1}' ];
 
         return '<p>'. preg_replace($needle, $replacement, $str) . '</p>';
     }
