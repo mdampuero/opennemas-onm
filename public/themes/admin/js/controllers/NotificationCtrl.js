@@ -14,8 +14,8 @@
      * @description
      *   Controller to implement common actions.
      */
-    .controller('NotificationCtrl', [ '$http', '$location', '$scope', '$timeout', '$window', 'routing', 'oqlEncoder', 'queryManager', '$anchorScroll',
-      function ($http, $location, $scope, $timeout, $window, routing, oqlEncoder, queryManager, $anchorScroll) {
+    .controller('NotificationCtrl', [ '$http', '$location', '$scope', '$timeout', '$window', 'routing',
+      function ($http, $location, $scope, $timeout, $window, routing) {
         /**
          * The notifications dropdown status.
          *
@@ -52,13 +52,16 @@
          *   Marks all notifications as open.
          */
         $scope.markAllAsOpen = function() {
-          var url  = routing.generate('backend_ws_notifications_patch');
-          var date = new Date();
-          var ids  = $scope.notifications.map(function(e) { return e.id; });
+          var ids  = $scope.notifications.filter(function(e) {
+            return angular.isNumber(e.id);
+          }).map(function(e) { return e.id; });
 
           if (ids.length === 0) {
             return;
           }
+
+          var url  = routing.generate('backend_ws_notifications_patch');
+          var date = new Date();
 
           var data = {
             ids: ids,
@@ -69,9 +72,9 @@
           $http.patch(url, data);
 
           // Mark non-fixed as read
-          ids = $scope.notifications
-            .filter(function(e) { return !e.fixed; })
-            .map(function(e) { return e.id; });
+          ids = $scope.notifications.filter(function(e) {
+            return angular.isNumber(e.id) && !e.fixed;
+          }).map(function(e) { return e.id; });
 
           if (ids.length === 0) {
             return;
@@ -80,7 +83,7 @@
           data = {
             ids: ids,
             'read_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
-          }
+          };
 
           $http.patch(url, data);
         };
