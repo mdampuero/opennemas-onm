@@ -249,16 +249,16 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param {Integer} index The index of the notification to mark.
      */
     $scope.markAsClicked = function(id) {
-      var date = new Date();
-      var data = {
-        click_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
-      };
-
       // Check for valid id
       if (!angular.isNumber(id)) {
         return;
       }
+
       var url  = routing.generate('backend_ws_notification_patch', { id: id });
+      var date = new Date();
+      var data = {
+        click_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
+      };
 
       // Find notification to remove from list
       var notifications = $scope.notifications;
