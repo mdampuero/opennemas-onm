@@ -450,6 +450,13 @@
           $scope.article.relatedHome = angular.toJson(items);
         }, true);
 
+        // TODO: Remove when no target="_blank" in URI for external
+        $scope.$watch('article.uri', function(nv, ov) {
+          if (nv !== ov) {
+            $scope.article.uri = $scope.article.uri
+              .replace('" target="_blank', '');
+          }
+        }, true);
 
         // Updates the model when galleryForFrontpage changes.
         $scope.$watch('galleryForFrontpage', function(nv) {
