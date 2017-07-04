@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -22,17 +17,13 @@ use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- **/
+ * Displays an album or a list of albums.
+ */
 class VideosController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         $this->page          = $this->request->query->getDigits('page', 1);
@@ -71,11 +62,8 @@ class VideosController extends Controller
     /**
      * Renders the video frontpage
      *
-     * Pagination with ajax use $pagination
-     * Normal pagination use $pager
-     *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function frontpageAction()
     {
         // Setup templating cache layer
@@ -239,7 +227,7 @@ class VideosController extends Controller
      * Renders the video frontpage
      *
      * @return Response the response object
-     **/
+     */
     public function frontpagePaginatedAction()
     {
         // Setup templating cache layer
@@ -457,18 +445,20 @@ class VideosController extends Controller
     }
 
     /**
-     * Returns the
+     * Returns a list of videos.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function ajaxPaginatedAction(Request $request)
     {
-        // Fetch video settings
         $videosSettings = s::get('video_settings');
-        $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
-        $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
+        $epp = isset($videosSettings['total_front_more']) ?
+            $videosSettings['total_front_more'] : 12;
+        $offset = isset($videosSettings['front_offset']) ?
+            $videosSettings['front_offset'] : 3;
+
         if (empty($this->category)) {
             $this->category = $request->query->getDigits('category', 0);
         }
@@ -486,8 +476,9 @@ class VideosController extends Controller
         }
 
         $em = $this->get('entity_repository');
-        $othersVideos = $em->findBy($filters, $order, $totalVideosMoreFrontpage, $this->page, $totalVideosFrontpageOffset);
-        $countVideos = $em->countBy($filters);
+
+        $othersVideos = $em->findBy($filters, $order, $epp, $this->page, $offset);
+        $countVideos  = $em->countBy($filters);
 
         if ($countVideos == 0) {
             return new RedirectResponse(
@@ -499,7 +490,7 @@ class VideosController extends Controller
             'boundary'    => false,
             'directional' => true,
             'maxLinks'    => 0,
-            'epp'         => $totalVideosMoreFrontpage,
+            'epp'         => $epp,
             'page'        => $this->page,
             'total'       => count($othersVideos)+1,
             'route'       => [
@@ -513,23 +504,23 @@ class VideosController extends Controller
             'page'               => $this->page,
             'pagination'         => $pagination,
         ]);
-
     }
 
     /**
-     * Fetches the ads given a category and page
+     * Returns a list of advertisements for a category and page.
      *
-     * @param mixed $category the category to fetch ads from
-     * @param string $page the page to fetch ads from
+     * @param mixed  $category The category id.
+     * @param string $page     The page type.
      *
-     * @return array the list of advertisements for this page
-     **/
+     * @return array The list of advertisements.
+     */
     private function getAds($category = 'home', $page = '')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get video positions
         $positionManager = $this->get('core.helper.advertisement');
+
         if ($page == 'inner') {
             $positions = $positionManager->getPositionsForGroup('video_inner', [ 7 ]);
         } else {
