@@ -50,7 +50,10 @@ class ArticlesController extends Controller
 
         // If external link is set, redirect
         if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
-            return $this->redirect($article->params['bodyLink']);
+            // TODO: Remove when target="_blank"' not included in URI for external
+            $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
+
+            return $this->redirect($url);
         }
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->get('core.user'));
@@ -178,7 +181,9 @@ class ArticlesController extends Controller
 
         // Get full article
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
-        $article = unserialize($article);
+        if (is_string($article)) {
+            $article = @unserialize($article);
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('articles');

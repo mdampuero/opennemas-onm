@@ -497,7 +497,7 @@ class Content
             'description'         => (empty($data['description']) && !isset($data['description'])) ? '' :$data['description'],
             'body'                => (!array_key_exists('body', $data))? '': $data['body'],
             'metadata'            => (!array_key_exists('metadata', $data)) ? '' : $data['metadata'],
-            'starttime'           => $data['starttime'],
+            'starttime'           => ($data['starttime'] < date("Y-m-d H:i:s"))? date("Y-m-d H:i:s") : $data['starttime'],
             'endtime'             => (empty($data['endtime']))? null: $data['endtime'],
             'created'             => (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'],
             'changed'             => date("Y-m-d H:i:s"),
@@ -2042,12 +2042,6 @@ class Content
                 [ $this->id, $property, $value, $value ]
             );
 
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
-            dispatchEventWithParams(
-                $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
-            );
-
             return true;
         } catch (\Exception $e) {
             error_log('Error on Content::setMetadata (ID:'.$this->id.') .'.$property.' => '.$value);
@@ -2069,19 +2063,10 @@ class Content
         }
 
         try {
-            getService('dbal_connection')->delete(
-                'contentmeta',
-                [
-                    'fk_content' => $this->id,
-                    'meta_name' => $property
-                ]
-            );
-
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
-            dispatchEventWithParams(
-                $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
-            );
+            getService('dbal_connection')->delete('contentmeta', [
+                'fk_content' => $this->id,
+                'meta_name' => $property
+            ]);
 
             return true;
         } catch (\Exception $e) {

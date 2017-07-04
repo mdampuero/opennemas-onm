@@ -636,7 +636,77 @@
                                     </div>
                                   </div>
                                 </div>
-                                <div class="col-md-12" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                              </div>
+                              <div class="row" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Category targeting{/t}
+                                    </label>
+                                    <div class="row">
+                                      <div class="col-md-4">
+                                        <div class="help">
+                                          {t}Index{/t}
+                                        </div>
+                                        <div class="controls">
+                                          <input class="form-control" name="google_analytics[% $index %]-category-index" type="text" ng-model="code.category.index">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="help">
+                                          {t}Key{/t}
+                                        </div>
+                                        <div class="controls">
+                                          <input class="form-control" name="google_analytics[% $index %]-category-key" type="text" ng-model="code.category.key">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="help">
+                                          {t}Scope{/t}
+                                        </div>
+                                        <div class="controls">
+                                          <input class="form-control" name="google_analytics[% $index %]-category-scope" type="text" ng-model="code.category.scope">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">
+                                      {t}Extension targeting{/t}
+                                    </label>
+                                    <div class="row">
+                                      <div class="col-md-4">
+                                        <div class="help">
+                                          {t}Index{/t}
+                                        </div>
+                                        <div class="controls">
+                                          <input class="form-control" name="google_analytics[% $index %]-extension-index" type="text" ng-model="code.extension.index">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="help">
+                                          {t}Key{/t}
+                                        </div>
+                                        <div class="controls">
+                                          <input class="form-control" name="google_analytics[% $index %]-extension-key" type="text" ng-model="code.extension.key">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="help">
+                                          {t}Scope{/t}
+                                        </div>
+                                        <div class="controls">
+                                          <input class="form-control" name="google_analytics[% index %]-extension-scope" type="text" ng-model="code.extension.scp">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                                <div class="col-md-12">
                                   <div class="form-group">
                                     <label class="form-label">
                                       {t}Google Analytics Custom variables{/t}
@@ -646,6 +716,8 @@
                                     </div>
                                   </div>
                                 </div>
+                              </div>
+                              <div class="row">
                                 <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1">
                                   <button class="btn btn-block btn-danger" ng-click="removeGanalytics($index)" type="button">
                                     <i class="fa fa-trash-o"></i>

@@ -29,10 +29,15 @@ categ_sync_frontpage:
     requirements:
         category: '[^/]+'
 
+tag_frontpage_index:
+    path: /tags
+    defaults: { _controller: FrontendBundle:Tags:index }
+
 tag_frontpage:
-    path: /tag/{tag_name}
-    defaults: { _controller: FrontendBundle:Tags:tags }
+    path: /{resource}/{tag_name}
+    defaults: { _controller: FrontendBundle:Tags:tags, resource: tags }
     requirements:
+        resource: 'tag|tags'
         tag_name: '[^\/]+'
 
 frontend_paywall_showcase:
@@ -141,7 +146,7 @@ frontend_rss_category:
     path: /rss/{category}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
-        category: '(?!album|opinion|video)[^/]+'
+        category: '[^/]+'
 
 frontend_fb_instant_articles:
     path: /fb/instant-articles

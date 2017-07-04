@@ -313,7 +313,7 @@ class Comment
         // Load new data
         $this->load($data);
 
-        dispatchEventWithParams('comment.update', array('comment' => $this));
+        dispatchEventWithParams('comment.update', array('content' => $this));
 
         return $this;
     }

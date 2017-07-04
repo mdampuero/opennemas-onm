@@ -496,13 +496,24 @@ class AdsController extends Controller
     protected function getCategories()
     {
         $categories = $this->get('orm.manager')
-            ->getRepository('Category')->findBy('internal_category = 1');
+            ->getRepository('Category')
+            ->findBy(
+                'internal_category in [1, 9, 7, 11]'
+                . ' order by internal_category asc, title asc'
+            );
 
         $categories = array_map(function ($a) {
-            return [ 'id' => $a->pk_content_category, 'name' => $a->title ];
+            return [
+                'id' => $a->pk_content_category,
+                'name' => $a->title,
+                'type' => $a->internal_category
+            ];
         }, $categories);
 
-        array_unshift($categories, [ 'id' => 0, 'name' => _('Home') ]);
+        array_unshift(
+            $categories,
+            [ 'id' => 0, 'name' => _('Home'), 'type' => 0 ]
+        );
 
         return array_values($categories);
     }

@@ -8,7 +8,7 @@ orm:
                 name:                string
                 inmenu:              boolean
                 posmenu:             integer
-                internal_category:   boolean
+                internal_category:   integer
                 fk_content_category: integer
                 params:              array
                 logo_path:           string

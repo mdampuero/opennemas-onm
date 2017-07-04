@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -20,20 +15,15 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- **/
+ * Displays a poll or a list of polls.
+ */
 class PollsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         $this->cm   = new \ContentManager();
@@ -53,7 +43,7 @@ class PollsController extends Controller
             $actual_category_id = 0;
         }
 
-        $pollSettings = s::get('poll_settings');
+        $pollSettings = $this->get('setting_repository')->get('poll_settings');
 
         $this->view->assign([
             'category_name'         => $this->categoryName,
@@ -67,10 +57,10 @@ class PollsController extends Controller
     }
 
     /**
-     * Renders the album frontpage
+     * Renders the album frontpage.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function frontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('POLL_MANAGER')) {
@@ -135,7 +125,7 @@ class PollsController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds('frontpage');
+        list($positions, $advertisements) = $this->getAds($this->category, 'frontpage');
 
         return $this->render('poll/poll_frontpage.tpl', [
             'ads_positions'  => $positions,
@@ -145,12 +135,12 @@ class PollsController extends Controller
     }
 
     /**
-     * Shows a poll given its id
+     * Shows a poll given its id.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function showAction(Request $request)
     {
         $dirtyID    = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
@@ -215,7 +205,7 @@ class PollsController extends Controller
             }
         }
 
-        list($positions, $advertisements) = $this->getAds('inner');
+        list($positions, $advertisements) = $this->getAds($this->category, 'inner');
 
         return $this->render('poll/poll.tpl', [
             'ads_positions'  => $positions,
@@ -230,12 +220,12 @@ class PollsController extends Controller
     }
 
     /**
-     * Add vote & show poll result
+     * Add vote & show poll result.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function addVoteAction(Request $request)
     {
         $answer  = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
@@ -276,25 +266,25 @@ class PollsController extends Controller
     }
 
     /**
-     * Fetches the ads given a context
+     * Fetches the ads given a category and page.
      *
-     * @param string $context the context to fetch ads from
+     * @param mixed $category The category id.
+     * @param string $page    The page type.
      *
-     * @return void
-     **/
-    protected function getAds($context = 'frontpage')
+     * @return array The list of advertisements.
+     */
+    protected function getAds($category = 'home', $page = '')
     {
+        $category = !isset($category) || ($category == 'home') ? 0 : $category;
+
         // Get polls positions
         $positionManager = $this->get('core.helper.advertisement');
-        if ($context == 'inner') {
+
+        if ($page == 'inner') {
             $positions = $positionManager->getPositionsForGroup('polls_inner', [ 7 ]);
         } else {
             $positions = $positionManager->getPositionsForGroup('polls_frontpage', [ 7, 9 ]);
         }
-
-        // We force category = 0 because we dont support category segmentation
-        // on polls by category. Something to look again in the future.
-        $category = 0;
 
         $advertisements = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
