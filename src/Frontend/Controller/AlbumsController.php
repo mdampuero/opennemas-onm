@@ -1,17 +1,12 @@
 <?php
 /**
- * Defines the frontend controller for the album content type
- *
- * @package Frontend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -22,17 +17,13 @@ use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for frontend albums
- *
- * @package Frontend_Controllers
- **/
+ * Displays an album or a list of albums.
+ */
 class AlbumsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         if (!$this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
@@ -81,7 +72,7 @@ class AlbumsController extends Controller
     /**
      * Renders the album frontpage.
      *
-     * @return Response          The response object.
+     * @return Response The response object.
      */
     public function frontpageAction()
     {
@@ -138,7 +129,7 @@ class AlbumsController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        list($positions, $advertisements) = $this->getAds($this->category);
 
         // Send the response to the user
         return $this->render('album/album_frontpage.tpl', [
@@ -150,12 +141,12 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Shows an inner album
+     * Shows an inner album.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function showAction(Request $request)
     {
         $this->page   = $request->query->getDigits('page', 1);
@@ -229,9 +220,9 @@ class AlbumsController extends Controller
             ]);
         } // END iscached
 
-        list($positions, $advertisements) = $this->getAds('inner');
+        list($positions, $advertisements) = $this->getAds($this->category, 'inner');
 
-        return $this->render('album/album.tpl',[
+        return $this->render('album/album.tpl', [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'album'          => $album,
@@ -246,12 +237,12 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Returns via ajax the interval photos in album page
+     * Returns via ajax the interval photos in album page.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function ajaxPaginatedAction(Request $request)
     {
         // Items_page refers to the widget
@@ -286,12 +277,12 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Returns via ajax the albums of the category in a page
+     * Returns via ajax the albums of the category in a page.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response The response object.
+     */
     public function ajaxAlbumPaginatedAction(Request $request)
     {
         // Fetch album settings
@@ -337,7 +328,7 @@ class AlbumsController extends Controller
             ]
         ]);
 
-        return $this->render('album/partials/_widget_more_albums.tpl',[
+        return $this->render('album/partials/_widget_more_albums.tpl', [
             'others_albums'      => $othersAlbums,
             'page'               => $this->page,
            'pagination'         => $pagination,
@@ -345,21 +336,21 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Retrieves the advertisement for the frontpage
+     * Returns a list of advertisements for a category and page.
      *
-     * @param string $categoryName the category name where fetch ads from
+     * @param mixed  $category The category id.
+     * @param string $page     The page type.
      *
-     * @return void
-     **/
-    public static function getAds($position = '')
+     * @return array The list of advertisements.
+     */
+    private function getAds($category = 'home', $page = '')
     {
-        $ccm = \ContentCategoryManager::get_instance();
-        $categoryName = 'album';
-        $category = $ccm->get_id($categoryName);
+        $category = !isset($category) || ($category == 'home') ? 0 : $category;
 
         // Get album_inner positions
         $positionManager = getService('core.helper.advertisement');
-        if ($position == 'inner') {
+
+        if ($page == 'inner') {
             $positions = $positionManager->getPositionsForGroup('album_inner', [ 7 ]);
         } else {
             $positions = $positionManager->getPositionsForGroup('album_frontpage', [ 7, 9 ]);
