@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Translator\Google;
 
+use Common\Core\Component\Exception\Translator\InvalidTranslationException;
 use Common\Core\Component\Translator\Translator;
 use GuzzleHttp\Client;
 
@@ -19,7 +20,7 @@ use GuzzleHttp\Client;
 class GoogleTranslator extends Translator
 {
     /**
-     * description
+     * The URL to Google Cloud Translation API
      *
      * @var string
      */
@@ -55,16 +56,21 @@ class GoogleTranslator extends Translator
             throw new \RuntimeException();
         }
 
-        $response = $client->get($url);
-        $body     = $response->getBody();
-        $body     = json_decode($body, true);
+        try {
+            $response = $client->get($url);
+        } catch (\Exception $e) {
+            throw new InvalidTranslationException();
+        }
+
+        $body = $response->getBody();
+        $body = json_decode($body, true);
 
         if (empty($body)
             || !array_key_exists('data', $body)
             || !array_key_exists('translations', $body['data'])
             || count($body['data']['translations']) === 0
         ) {
-            return '';
+            throw new InvalidTranslationException();
         }
 
         $translated = array_shift($body['data']['translations']);

@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Translator\OpenTrad;
 
+use Common\Core\Component\Exception\Translator\InvalidTranslationException;
 use Common\Core\Component\Translator\Translator;
 
 /**
@@ -56,20 +57,28 @@ class OpenTradTranslator extends Translator
             throw new \RuntimeException();
         }
 
-        return $client->call('traducir', [
-            'tradutor'  => $this->translator,
-            'direccion' => "{$from}-{$to}",
-            'tipo'      => 'htmlu',
-            'cadea'     => $str
-        ]);
+        try {
+            $response = $client->call('traducir', [
+                'tradutor'  => $this->translator,
+                'direccion' => "{$from}-{$to}",
+                'tipo'      => 'htmlu',
+                'cadea'     => $str
+            ]);
+        } catch (\Exception $e) {
+            throw new InvalidTranslationException();
+        }
+
+        if (strpos($response, 'lt-proc') === 0 || $response === false) {
+            throw new InvalidTranslationException();
+        }
+
+        return $response;
     }
 
     /**
      * Returns a SOAP client.
      *
      * @return \SoapClient The SOAP client.
-     *
-     * @codeCoverageIgnore
      */
     protected function getClient()
     {

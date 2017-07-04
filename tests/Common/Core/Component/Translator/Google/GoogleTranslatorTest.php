@@ -77,7 +77,9 @@ class GoogleTranslatorTest extends KernelTestCase
     }
 
     /**
-     * Tests translate.
+     * Tests translate with an empty response.
+     *
+     * @expectedException \Common\Core\Component\Exception\Translator\InvalidTranslationException
      */
     public function testTranslateWithEmptyResponse()
     {
@@ -86,10 +88,8 @@ class GoogleTranslatorTest extends KernelTestCase
             'data' => [ 'translations' => [] ]
         ]));
 
-        $this->assertEmpty($this->translator->translate('foobar'));
+        $this->translator->translate('foobar');
     }
-
-
 
     /**
      * Tests translate with invalid translator configuration.
@@ -99,6 +99,19 @@ class GoogleTranslatorTest extends KernelTestCase
     public function testTranslateWithInvalidConfiguration()
     {
         $this->translator->from = null;
+
+        $this->translator->translate('bar');
+    }
+
+    /**
+     * Tests translate when client fails.
+     *
+     * @expectedException \Common\Core\Component\Exception\Translator\InvalidTranslationException
+     */
+    public function testTranslateWhenRequestFails()
+    {
+        $this->client->expects($this->once())->method('get')
+            ->will($this->throwException(new \Exception()));
 
         $this->translator->translate('bar');
     }
