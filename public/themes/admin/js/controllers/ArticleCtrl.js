@@ -458,7 +458,6 @@
           }
         }, true);
 
-
         // Updates the model when galleryForFrontpage changes.
         $scope.$watch('galleryForFrontpage', function(nv) {
           delete $scope.article.withGallery;
