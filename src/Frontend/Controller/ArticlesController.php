@@ -50,7 +50,7 @@ class ArticlesController extends Controller
 
         // If external link is set, redirect
         if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
-            // TODO: Remove when URI d'target="_blank"' not included for external
+            // TODO: Remove when URI target="_blank"' not included for external
             $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
 
             return $this->redirect($url);
