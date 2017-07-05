@@ -476,7 +476,7 @@
                       </div>
                     </div>
                   </div>
-                  {is_module_activated name="es.openhost.module.multiLanguage"}
+                  {is_module_activated name="es.openhost.module.multilanguage"}
                     <div class="col-md-6">
                       <div class="p-l-15">
                         <h4>
