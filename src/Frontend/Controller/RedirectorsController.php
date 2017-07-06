@@ -58,6 +58,9 @@ class RedirectorsController extends Controller
 
         $url = SITE_URL . $content->uri;
 
+        // TODO: Remove when URI target="_blank"' not included for external
+        $url = str_replace('" target="_blank', '', $url);
+
         return new RedirectResponse($url . $fragment, 301);
     }
 
