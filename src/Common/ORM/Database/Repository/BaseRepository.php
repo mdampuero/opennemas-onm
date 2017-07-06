@@ -281,14 +281,17 @@ class BaseRepository extends Repository
      */
     protected function refresh($ids)
     {
-        $oql = [];
-        foreach ($ids as $id) {
-            $filter = [];
-            foreach ($id as $key => $value) {
-                $filter[] = sprintf('%s = "%s"', $key, $value);
-            }
+        $oql    = [];
+        $filter = [];
 
-            $oql[] = '(' . implode(' and ', $filter) . ')';
+        foreach ($ids as $id) {
+            foreach ($id as $key => $value) {
+                $filter[$key][] = $value;
+            }
+        }
+
+        foreach ($filter as $key => $value) {
+            $oql[] = $key . ' in [' . implode(',', $value) . ']';
         }
 
         $oql = implode(' or ', $oql);
@@ -350,7 +353,6 @@ class BaseRepository extends Repository
      */
     protected function getMetas($ids)
     {
-        $filters   = [];
         $metas     = [];
         $metaKeys  = $this->metadata->getMetaKeys();
         $metaKey   = $this->metadata->getMetaKeyName();
@@ -358,7 +360,7 @@ class BaseRepository extends Repository
         $metaId    = array_pop($metaKeys);
 
         $sql = 'select * from ' . $this->metadata->getMetaTable()
-            . ' where ' . $metaId . ' in (' . implode($ids) . ')';
+            . ' where ' . $metaId . ' in (' . implode(',', $ids) . ')';
 
         $rs = $this->conn->fetchAll($sql);
 

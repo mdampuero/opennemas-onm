@@ -144,14 +144,18 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
             [ 'foo' => 1 ],  ['foo' => 2 ]
         ]);
-        $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
-            [ 'foo' => 1, 'bar' => 'glork' ],
-            [ 'foo' => 2, 'bar' => 'thud' ]
-        ]);
-        $this->conn->expects($this->at(2))->method('fetchAll')->willReturn([
-            [ 'foobar_foo' => 1, 'meta_key' => 'wibble', 'meta_value' => 'qux' ],
-            [ 'foobar_foo' => 2, 'meta_key' => 'wibble', 'meta_value' => 'glork' ]
-        ]);
+        $this->conn->expects($this->at(1))->method('fetchAll')
+            ->with('select * from foobar where foo in ( ? , ? )', [ 1, 2 ], [ 1, 1 ])
+            ->willReturn([
+                [ 'foo' => 1, 'bar' => 'glork' ],
+                [ 'foo' => 2, 'bar' => 'thud' ]
+            ]);
+        $this->conn->expects($this->at(2))->method('fetchAll')
+            ->with('select * from foobar_meta where foobar_foo in (1,2)')
+            ->willReturn([
+                [ 'foobar_foo' => 1, 'meta_key' => 'wibble', 'meta_value' => 'qux' ],
+                [ 'foobar_foo' => 2, 'meta_key' => 'wibble', 'meta_value' => 'glork' ]
+            ]);
 
         $entities = $this->repository->findBy('foo in [1,2] limit 10');
 
@@ -164,7 +168,9 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindBySql()
     {
-        $this->cache->expects($this->once())->method('get')->willReturn([]);
+        $this->cache->expects($this->once())->method('get')->willReturn([
+            'foo-1' => '-miss-'
+        ]);
         $this->cache->expects($this->any())->method('set');
         $this->conn->expects($this->at(0))->method('fetchAll')
             ->with('select foo from corge limit 10')
