@@ -413,6 +413,40 @@
                       </div>
                     </div>
                     {/is_module_activated}
+                    {is_module_activated name="es.openhost.module.rtb_media_advertisement"}
+                    <h4>{t}RTB Media Integration{/t}</h4>
+                    <div class="form-group" >
+                      <label class="form-label" for="rtbFiles">{t}RTB Files{/t}</label>
+                      <div class="controls">
+                        <input type="hidden" id="parsedRTBFiles" name="rtb_files" ng-model="parsedRTBFiles" ng-value="parsedRTBFiles"
+                          ng-init="parseRTBFiles({json_encode($configs['rtb_files'])|clear_json})">
+                        <div id="rtbFiles">
+                          <div class="ng-cloak">
+                            <div class="form-group">
+                              <div class="input-group" >
+                                <input class="form-control uib-typeahead" autocomplete="off" name="item[]" type="text" ng-value="rtbFile.name" ng-model="inputRTBFile.name" class="form-control" ng-keyup="mapByKeyPress($event)" uib-typeahead="rtbSuggestedFile.fileName for rtbSuggestedFile in getSuggestions($viewValue)" />
+                                <div class="input-group-btn">
+                                  <button type="button" class="btn btn-success" ng-click="addFile(inputRTBFile.name)" ng-disabled="!isValid() || !inputRTBFile.name">
+                                    <span ng-if="!loading">
+                                      {t}Add{/t}
+                                    </span>
+                                    <div class="sk-three-bounce sk-inline sk-small ng-cloak" ng-if="loading">
+                                      <div class="sk-child sk-bounce1"></div>
+                                      <div class="sk-child sk-bounce2"></div>
+                                      <div class="sk-child sk-bounce3"></div>
+                                    </div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row m-b-15" ng-repeat="rtbFile in rtbFiles track by $index" ><span class="col-md-5">[%rtbFile.name%]</span><span class="col-md-1"><button type="button" title="{t}Remove File{/t}" class="btn btn-danger" ng-click="removeFile($index)"><i class="fa fa-trash-o"></i></button></span>
+                          </div>
+                        </div>
+                        <br>
+                      </div>
+                    </div>
+                    {/is_module_activated}
                   </div>
                 </div>
               </div>

@@ -1,0 +1,6 @@
+
+frontend_rtb_file:
+    path: /ftlocal/{filename}
+    defaults: { _controller: FrontendBundle:RTB:show }
+    requirements:
+        filename: '[^/]+'
