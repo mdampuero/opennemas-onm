@@ -66,7 +66,6 @@
           $scope.gaCodes.splice(index, 1);
         };
 
-
         /**
          * @function addFile
          * @memberOf SystemSettingsCtrl
@@ -98,7 +97,7 @@
 
         /**
          * @function expand
-         * @memberOf DomainCheckoutCtrl
+         * @memberOf SystemSettingsCtrl
          *
          * @description
          *   Creates a suggestion list basing on a file list.
@@ -106,9 +105,8 @@
          * @param {String} domain The input domain.
          */
         $scope.getSuggestions = function(searchName) {
-
-          if(searchName.length < 3) {
-            return [];  
+          if (searchName.length < 3) {
+            return [];
           }
 
           var route = {
@@ -120,61 +118,40 @@
 
           return http.get(route).then(function(response) {
             $scope.loading = false;
-            if(response.data.results)  {
+            if (response.data.results)  {
+              var fileKeys = [];
 
-                var fileKeys = [];
+              for (var index in $scope.rtbFiles)  {
+                fileKeys.push($scope.rtbFiles[index].id);
+              }
 
-                for(var index in $scope.rtbFiles)  {
-                    fileKeys.push($scope.rtbFiles[index].id);
+              var invert = {};
+              var results = [];
+              for (var key in response.data.results){
+                if(!(fileKeys.indexOf(response.data.results[key].id) > -1))  {
+                  invert[response.data.results[key].fileName] = response.data.results[key].id;
+                  results.push(response.data.results[key]);
                 }
+              }
+              $scope.rtbFilesSuggestions = invert;
 
-                var invert = {};
-                var results = [];
-                for(var key in response.data.results){
-                    if(!(fileKeys.indexOf(response.data.results[key].id) > -1))  {
-                        invert[response.data.results[key].fileName] = response.data.results[key].id;
-                        results.push(response.data.results[key]);
-                    }
-
-                }
-                $scope.rtbFilesSuggestions = invert;
-
-                return results;
+              return results;
             }
           });
         };
 
         /**
          * @function map
-         * @memberOf DomainCheckoutCtrl
+         * @memberOf SystemSettingsCtrl
          *
          * @description
          *   Listens for the enter key to add a domain to map
          */
         $scope.mapByKeyPress = function(event) {
-          if ($scope.isValid() && event.keyCode === 13) {
+          if (event.keyCode === 13) {
             $scope.getSuggestions(event.target.value);
           }
         };
-
-
-        /**
-         * @function isValid
-         * @memberOf DomainCheckoutCtrl
-         *
-         * @description
-         *   Checks if the domain is valid.
-         *
-         * @return {Boolean} True if the domain is valid. Otherwise, returns
-         *                   false.
-         */
-        $scope.isValid = function() {
-          
-
-          return true;
-        };
-
-
 
         /**
          * @function removeFile
@@ -192,10 +169,10 @@
         // Updates internal parsedRTBFiles parameter when rtbFiles change.
         $scope.$watch('rtbFiles', function(nv, ov) {
           $scope.parsedRTBFiles = [];
-          if($scope.rtbFiles) {
-              for (var i = $scope.rtbFiles.length - 1; i >= 0; i--) {
-                $scope.parsedRTBFiles.push({id: $scope.rtbFiles[i].id, name: $scope.rtbFiles[i].name});
-              }
+          if ($scope.rtbFiles) {
+            for (var i = $scope.rtbFiles.length - 1; i >= 0; i--) {
+              $scope.parsedRTBFiles.push({id: $scope.rtbFiles[i].id, name: $scope.rtbFiles[i].name});
+            }
           }
           $scope.parsedRTBFiles = JSON.stringify($scope.parsedRTBFiles.reverse());
         }, true);

@@ -25,15 +25,14 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for RTB Module
+ * Handles actions for the RTB Module
  *
  * @package Frontend_Controllers
  **/
 class RTBController extends Controller
 {
-
     /**
-     * Return the file
+     * Returns the file contents
      *
      * @param Request $request the request object
      *
@@ -67,12 +66,11 @@ class RTBController extends Controller
     }
 
     /**
-     *	This method check if the file was added to rtb files
+     *	This method checks if the file was added to rtb files
      *
      *  @param string $fileName the file to check
      *
      *  @return boolean if the file was added
-     *
      **/
     private function checkRTBFileInConfigSettings($fileName)
     {
@@ -95,7 +93,7 @@ class RTBController extends Controller
     }
 
     /**
-     *	This method get in DB the file name
+     *	This method gets from the file path from DB
      *
      *  @param string $fileId the file Id to recover from Database
      *

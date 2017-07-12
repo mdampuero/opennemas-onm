@@ -417,6 +417,9 @@
                     <h4>{t}RTB Media Integration{/t}</h4>
                     <div class="form-group" >
                       <label class="form-label" for="rtbFiles">{t}RTB Files{/t}</label>
+                      <span class="help">
+                        {t}Search files using the input below and click "Add" to integrate them as RTB Ad files{/t}
+                      </span>
                       <div class="controls">
                         <input type="hidden" id="parsedRTBFiles" name="rtb_files" ng-model="parsedRTBFiles" ng-value="parsedRTBFiles"
                           ng-init="parseRTBFiles({json_encode($configs['rtb_files'])|clear_json})">
@@ -426,7 +429,7 @@
                               <div class="input-group" >
                                 <input class="form-control uib-typeahead" autocomplete="off" name="item[]" type="text" ng-value="rtbFile.name" ng-model="inputRTBFile.name" class="form-control" ng-keyup="mapByKeyPress($event)" uib-typeahead="rtbSuggestedFile.fileName for rtbSuggestedFile in getSuggestions($viewValue)" />
                                 <div class="input-group-btn">
-                                  <button type="button" class="btn btn-success" ng-click="addFile(inputRTBFile.name)" ng-disabled="!isValid() || !inputRTBFile.name">
+                                  <button type="button" class="btn btn-success" ng-click="addFile(inputRTBFile.name)" ng-disabled="!inputRTBFile.name">
                                     <span ng-if="!loading">
                                       {t}Add{/t}
                                     </span>
@@ -440,7 +443,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row m-b-15" ng-repeat="rtbFile in rtbFiles track by $index" ><span class="col-md-5">[%rtbFile.name%]</span><span class="col-md-1"><button type="button" title="{t}Remove File{/t}" class="btn btn-danger" ng-click="removeFile($index)"><i class="fa fa-trash-o"></i></button></span>
+                          <div class="row-fluid clearfix m-b-15 thumbnail" ng-repeat="rtbFile in rtbFiles track by $index" ><span class="m-t-10"><strong>{t}File{/t}:</strong> [%rtbFile.name%]</span><span class="pull-right"><button type="button" title="{t}Remove File{/t}" class="btn btn-danger" ng-click="removeFile($index)"><i class="fa fa-trash-o"></i></button></span>
                           </div>
                         </div>
                         <br>

@@ -18,8 +18,6 @@ use Common\Core\Controller\Controller;
  */
 class FileController extends Controller
 {
-
-
     /**
      * Returns a list with the file name and id of files in JSON format.
      *
@@ -29,11 +27,9 @@ class FileController extends Controller
      */
     public function autocompleteAction(Request $request)
     {
-
         $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = 1;
         $search          = $request->query->get('search');
-
+        $page            = 1;
 
         $criteria['content_type_name'] = [['value' => 'attachment', 'operator' => '=']];
         $criteria['in_litter'] = [['value' => 0, 'operator' => '=']];
@@ -52,11 +48,8 @@ class FileController extends Controller
             return ['id' => $file->id, 'fileName' => basename($file->path)];
         }, $results);
 
-        return new JsonResponse(
-            array(
-                'results'           => $results,
-            )
-        );
+        return new JsonResponse([
+            'results' => $results,
+        ]);
     }
-    
 }
