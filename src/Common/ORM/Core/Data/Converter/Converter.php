@@ -241,6 +241,12 @@ class Converter
             if (is_bool($value)) {
                 $data[$key] = $value ? 1 : 0;
             }
+
+            if (is_null($value)
+                && $this->metadata->properties[$key] === 'array'
+            ) {
+                $data[$key] = [];
+            }
         }
 
         return $data;
