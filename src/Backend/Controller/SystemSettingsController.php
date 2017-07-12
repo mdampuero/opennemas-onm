@@ -44,7 +44,7 @@ class SystemSettingsController extends Controller
             'webmastertools_google', 'youtube_page',
             'robots_txt_rules', 'chartbeat',
             'body_end_script', 'body_start_script','header_script',
-            'elements_in_rss', 'redirection'
+            'elements_in_rss', 'redirection', 'rtb_files'
         ];
 
         $configurations = $this->get('setting_repository')->get($keys);
@@ -73,7 +73,7 @@ class SystemSettingsController extends Controller
                 'country'   => $this->get('core.instance')->country,
                 'configs'   => $configurations,
                 'timezones' => \DateTimeZone::listIdentifiers(),
-                'languages' => $this->get('core.locale')->getLocales()
+                'languages' => $this->get('core.locale')->getLocales(),
             )
         );
     }
@@ -180,6 +180,10 @@ class SystemSettingsController extends Controller
                         $element['custom_var'] = base64_encode($element['custom_var']);
                     }
                 }
+            }
+
+            if ($key == 'rtb_files')  {
+                $value = json_decode($value);
             }
 
             // Save settings

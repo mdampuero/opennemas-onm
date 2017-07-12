@@ -5,3 +5,7 @@ api_v1_advertisement:
 api_v1_user:
     resource: '@ApiBundle/Resources/config/routing/v1/user.yml'
     prefix:   /
+
+api_v1_file:
+    resource: '@ApiBundle/Resources/config/routing/v1/file.yml'
+    prefix:   /
