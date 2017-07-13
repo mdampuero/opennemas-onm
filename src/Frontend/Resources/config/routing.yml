@@ -685,6 +685,10 @@ frontend_static_page:
     resource: '@FrontendBundle/Resources/config/routing/static_page.yml'
     prefix: /
 
+frontend_rtb:
+    resource: '@FrontendBundle/Resources/config/routing/rtb.yml'
+    prefix: /
+
 frontend_user:
     resource: '@FrontendBundle/Resources/config/routing/user.yml'
     prefix: /
