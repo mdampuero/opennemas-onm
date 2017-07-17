@@ -63,10 +63,12 @@ class NewsletterManager extends BaseManager
         }
 
         try {
-            $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
+            $sql = 'SELECT * FROM `newsletter_archive`'
+                .' WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
             $rs = $this->dbConn->fetchAll($sql);
 
-            $sql = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
+            $sql = 'SELECT COUNT(`pk_newsletter`) FROM `newsletter_archive` '
+                .'WHERE '.$whereClause. ' ORDER BY '.$order;
             $countNm = $this->dbConn->fetchColumn($sql);
 
             $newsletters = [];
@@ -76,7 +78,7 @@ class NewsletterManager extends BaseManager
 
                 $newsletters[] = $obj;
             }
-            return array($countNm, $newsletters);
+            return [$countNm, $newsletters];
         } catch (\Exception $e) {
             error_log('Error fetching newsletters: '.$e->getMessage());
             return;
@@ -97,7 +99,7 @@ class NewsletterManager extends BaseManager
         $newsletterContent = $contents;
 
         if (empty($newsletterContent)) {
-            $newsletterContent = array();
+            $newsletterContent = [];
         }
 
         $er = getService('entity_repository');
@@ -161,9 +163,9 @@ class NewsletterManager extends BaseManager
 
         $this->tpl->assign('newsletterContent', $newsletterContent);
 
-        // render menu
+        // Fetch and assign the frontpage menu
         $menuManager = new \Menu();
-        $menuFrontpage= $menuManager->getMenu('frontpage');
+        $menuFrontpage = $menuManager->getMenu('frontpage');
         $this->tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         // Fetch and assign newsletter ads
@@ -173,43 +175,39 @@ class NewsletterManager extends BaseManager
             ->findByPositionsAndCategory($positions, 0);
         $this->tpl->assign('advertisements', $ads);
 
-         // VIERNES 4 DE SEPTIEMBRE 2009
-        $days = array(
+        // Format and assign the current date.
+        // CRAP!
+        $days = [
             'Domingo', 'Lunes', 'Martes', 'Miércoles',
             'Jueves', 'Viernes', 'Sábado'
-        );
-        $months = array(
-            '', 'Enero', 'Febrero', 'Marzo',
-            'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'
-        );
+        ];
+        $months = [
+            '', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
 
         $time = new \DateTime();
+        $this->tpl->assign(
+            'current_date',
+            $days[$time->format('w')].' '. $time->format('j').' de '.
+            $months[(int) $time->format('n')].' '.$time->format('Y')
+        );
 
-        $currentDate = $days[$time->format('w')].' '.
-                       $time->format('j').' de '.
-                       $months[(int) $time->format('n')].' '.
-                       $time->format('Y');
-
-        $this->tpl->assign('current_date', $currentDate);
-
+        // Process and assign public URL for images and links
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
             getService('core.instance')->getMainDomain()
         );
-
         $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
+        // Fetch and assign settings
         $configurations = s::get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
         ]);
-
         $this->tpl->assign('conf', $configurations);
-        $htmlContent = $this->tpl->fetch('newsletter/newNewsletter.tpl');
 
-        return $htmlContent;
+        return $this->tpl->fetch('newsletter/newNewsletter.tpl');
     }
 }
