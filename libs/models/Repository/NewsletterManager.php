@@ -34,6 +34,7 @@ class NewsletterManager extends BaseManager
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
         $this->tpl         = $tpl;
+        $this->cm          = new \ContentManager();;
     }
 
     /**
@@ -94,8 +95,6 @@ class NewsletterManager extends BaseManager
      */
     public function render($contents)
     {
-        $cm  = new \ContentManager();
-
         $newsletterContent = $contents;
 
         if (empty($newsletterContent)) {
@@ -105,59 +104,20 @@ class NewsletterManager extends BaseManager
         $er = getService('entity_repository');
         foreach ($newsletterContent as $container) {
             foreach ($container->items as &$item) {
-                if (!empty($item->id) && $item->content_type !='label') {
-                    $content = $er->find($item->content_type, $item->id);
-                    $content = new $item->content_type($item->id);
-
-                    //if is a real content include it in the contents array
-                    if (is_object($content) && !is_null($content->id)) {
-                        $content = $content->get($item->id);
-                        $item->content_type = $content->content_type;
-                        $item->title        = $content->title;
-                        $item->slug         = $content->slug;
-                        $item->uri          = $content->uri;
-                        $item->subtitle     = $content->subtitle;
-                        $item->date         = date(
-                            'Y-m-d',
-                            strtotime(str_replace('/', '-', substr($content->created, 6)))
-                        );
-                        $item->cat          = $content->category_name;
-                        $item->agency       = '';
-                        if (is_array($content->params)
-                            && array_key_exists('agencyBulletin', $content->params)
-                        ) {
-                            $item->agency   = $content->params['agencyBulletin'];
-                        }
-                        $item->name         = (isset($content->name))?$content->name:'';
-                        $item->image        = (isset($content->cover))?$content->cover:'';
-
-                        // Fetch images of articles if exists
-                        if (!empty($content->img1)) {
-                            $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
-                        } elseif (!empty($content->fk_video)) {
-                            $item->video = $er->find('Video', $content->fk_video);
-                        } elseif (!empty($content->img2)) {
-                            $item->photo = $cm->find('Photo', 'pk_content ='.$content->img2);
-                        }
-
-                        if (isset($content->summary)) {
-                            $item->summary  = $content->summary;
-                        } else {
-                            $item->summary = substr(strip_tags($content->body), 0, 250).'...';
-                        }
-                        if (isset($content->description)) {
-                            $item->description  = $content->description;
-                        }
-                        //Fetch opinion author photos
-                        if ($content->content_type == '4') {
-                            $item->author = new \User($content->fk_author);
-                        }
-                        //Fetch video thumbnails
-                        if ($content->content_type == '9') {
-                            $item->thumb = $content->getThumb();
-                        }
-                    }
+                // if current item do not fullfill the required format
+                // then skip it
+                if (empty($item->id) || $item->content_type == 'label') {
+                    continue;
                 }
+
+                $content = $er->find($item->content_type, $item->id);
+
+                // if is not a real content, skip this element
+                if (!is_object($content) || is_null($content->id)) {
+                    continue;
+                }
+
+                $item = $this->hydrateContent($item, $content);
             }
         }
 
@@ -209,5 +169,63 @@ class NewsletterManager extends BaseManager
         $this->tpl->assign('conf', $configurations);
 
         return $this->tpl->fetch('newsletter/newNewsletter.tpl');
+    }
+
+    /**
+     * Completes the content information from an object from repository
+     *
+     * @param Content $item the item to complete
+     * @param Content $content the content from the repository
+     *
+     * @return Content the item completed
+     **/
+    public function hydrateContent($item, $content)
+    {
+        $item->content_type = $content->content_type;
+        $item->title        = $content->title;
+        $item->slug         = $content->slug;
+        $item->uri          = $content->uri;
+        $item->subtitle     = $content->subtitle;
+        $item->date         = date(
+            'Y-m-d',
+            strtotime(str_replace('/', '-', substr($content->created, 6)))
+        );
+        $item->cat          = $content->category_name;
+        $item->agency       = '';
+        if (is_array($content->params)
+            && array_key_exists('agencyBulletin', $content->params)
+        ) {
+            $item->agency   = $content->params['agencyBulletin'];
+        }
+        $item->name  = (isset($content->name))?$content->name:'';
+        $item->image = (isset($content->cover))?$content->cover:'';
+
+        // Fetch images of articles if exists
+        if (!empty($content->img1)) {
+            $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img1);
+        } elseif (!empty($content->fk_video)) {
+            $item->video = $er->find('Video', $content->fk_video);
+        } elseif (!empty($content->img2)) {
+            $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img2);
+        }
+
+        if (isset($content->summary)) {
+            $item->summary  = $content->summary;
+        } else {
+            $item->summary = substr(strip_tags($content->body), 0, 250).'...';
+        }
+        if (isset($content->description)) {
+            $item->description  = $content->description;
+        }
+        //Fetch opinion author photos
+        if ($content->content_type == '4') {
+            $item->author = new \User($content->fk_author);
+        }
+        //Fetch video thumbnails
+        if ($content->content_type == '9') {
+            $item->thumb = $content->getThumb();
+        }
+
+        return $item;
     }
 }
