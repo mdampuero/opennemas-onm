@@ -350,7 +350,7 @@ class ModuleController extends Controller
         $module    = $em->getRepository('Extension')->find($id);
 
         // Convert prices to float
-        if ($module->price) {
+        if (!empty($module->price)) {
             foreach ($module->price as &$price) {
                 $price['value'] = (float) $price['value'];
             }

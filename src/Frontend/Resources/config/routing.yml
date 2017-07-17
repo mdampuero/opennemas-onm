@@ -127,6 +127,9 @@ frontend_sitemap:
 frontend_static_page:
     resource: '@FrontendBundle/Resources/config/routing/static_page.yml'
 
+frontend_rtb:
+    resource: '@FrontendBundle/Resources/config/routing/rtb.yml'
+
 frontend_user:
     resource: '@FrontendBundle/Resources/config/routing/user.yml'
 

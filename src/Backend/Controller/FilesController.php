@@ -240,7 +240,6 @@ class FilesController extends Controller
 
         $uploadedFile = $files['path'];
 
-
         if (!$uploadedFile->isValid()) {
             error_log(sprintf(
                 'There was a problem uploading %s .Error Code: %s',
@@ -257,11 +256,19 @@ class FilesController extends Controller
             );
         }
 
+        $rtbMediaManager = '';
+        if ($this->get('core.security')->hasExtension('es.openhost.module.rtb_media_advertisement')) {
+            $rtbMediaManager = '|js|html';
+        }
         // White list of file types that we allow
-        $regexp = '@(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz'
+        $regexp = sprintf(
+            '@(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz'
             .'|ico|jpeg|jpg|js|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|odp|ods|odw'
             .'|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz'
-            .'|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)$@';
+            .'|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip%s)$@',
+            $rtbMediaManager
+        );
+
         if (!preg_match($regexp, $uploadedFile->getClientOriginalExtension())) {
             error_log(sprintf(
                 'User %s tried to upload a not allowed file type %s (%s).',
@@ -301,11 +308,15 @@ class FilesController extends Controller
             }
         }
 
+        /**
+         *  content_status => If the file extension is html or js this files will be use for sever them directly from a expecific
+         *  url
+         */
         $data = array(
             'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'path'           => $directoryDate.$fileName,
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-            'content_status' => 1,
+            'content_status' => !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
             'description'    => $request->request->get('description', ''),
             'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'fk_publisher'   => $this->getUser()->id,

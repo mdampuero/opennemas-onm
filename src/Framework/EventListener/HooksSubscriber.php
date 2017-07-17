@@ -82,7 +82,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['mockHookAction', 0],
             ],
             'comment.update' => [
-                ['mockHookAction', 0],
+                ['removeObjectCacheForContent', 10],
             ],
             'comment.delete' => [
                 ['mockHookAction', 0],

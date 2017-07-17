@@ -250,7 +250,9 @@ class AdvertisementRenderer
         $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
                 . '<div class="interstitial-header">'
-                    . _('Entering on the requested page')
+                    . '<span class="interstitial-header-title">'
+                        . _('Entering on the requested page')
+                    . '</span>'
                     . '<a class="interstitial-close-button" href="#" title="'
                         . _('Skip advertisement') . '">'
                         . '<span>' . _('Skip advertisement') . '</span>'
@@ -258,7 +260,7 @@ class AdvertisementRenderer
                 . '</div>'
                 . '<div class="interstitial-content" style="height: %s;">'
                     . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s"'
-                        .  ' data-timeout="%s" data-type="%s" >%s</div>'
+                        . ' data-timeout="%s" data-type="%s">%s</div>'
                 . '</div>'
             . '</div>'
         . '</div>';

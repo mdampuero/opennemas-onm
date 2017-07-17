@@ -80,8 +80,13 @@
       e.preventDefault();
     }
 
-    document.cookie = '__onm_interstitial=' + expires + ';expires=' +
-      expires + ';path=/';
+    var slot = element.getElementsByClassName('oat');
+    var id   = parseInt(slot[0].getAttribute('data-id'));
+
+    if (!this.config.debug) {
+      document.cookie = '__onm_interstitial-' + id + '=' + expires +
+        ';expires=' + expires + ';path=/';
+    }
 
     document.body.className = document.body.className
       .replace(' interstitial-open', '');
@@ -103,17 +108,18 @@
   OAM.prototype.createInterstitial = function(ad) {
     var div = document.createElement('div');
 
-    // TODO: Remove style from <a> element (again, fuck you, frontenders!!!)
     div.innerHTML = '<div class="interstitial interstitial-visible">' +
       '<div class="interstitial-wrapper">' +
-        '<style>body { height: 100%; overflow: hidden; }</style>' +
         '<div class="interstitial-header">' +
-          this.config.strings.entering +
+          '<span class="interstitial-header-title">' + this.config.strings.entering + '</span>' +
           '<a class="interstitial-close-button" href="#" title="' + this.config.strings.skip + '">' +
             '<span>' + this.config.strings.skip + '</span>' +
           '</a>' +
         '</div>'+
-        '<div class="interstitial-content"></div>' +
+        '<div class="interstitial-content">' +
+          '<div class="ad-slot oat oat-visible oat-' + ad.orientation + '" data-id="' + ad.id + '">' +
+          '</div>' +
+        '</div>' +
       '</div>' +
     '</div>';
 
@@ -122,7 +128,7 @@
         self.close(div, e);
       };
 
-    var content = div.getElementsByClassName('interstitial-content')[0];
+    var oat     = div.getElementsByClassName('oat')[0];
     var wrapper = div.getElementsByClassName('interstitial-wrapper')[0];
     var iframe  = this.createNormal(ad);
     var self    = this;
@@ -137,10 +143,10 @@
       };
     }
 
-    wrapper.style.width  = size.width + 'px';
-    content.style.height = size.height + (size.height === 'auto' ? '' : 'px');
+    wrapper.style.width = size.width + 'px';
+    oat.style.height    = size.height + (size.height === 'auto' ? '' : 'px');
 
-    content.appendChild(iframe);
+    oat.appendChild(iframe);
 
     return div;
   };
@@ -205,24 +211,26 @@
    * @param {Array} ads The list of advertisements to display.
    */
   OAM.prototype.displayInterstitial = function (ads) {
+    var self = this;
+
     // Display an interstitial if present
     var interstitials = ads.filter(function(e) {
-      return e.type === 'interstitial';
+      return e.type === 'interstitial' && self.isVisible(e);
     });
 
     if (interstitials.length === 0) {
       return;
     }
 
+    var ad      = this.getAdvertisement(interstitials);
     var expires = new Date();
     var now     = new Date();
 
-    if (this.getCookie('__onm_interstitial')) {
-      expires = new Date(this.getCookie('__onm_interstitial'));
+    if (this.getCookie('__onm_interstitial-' + ad.id)) {
+      expires = new Date(this.getCookie('__onm_interstitial-' + ad.id));
     }
 
     if (expires <= now) {
-      var ad = this.getAdvertisement(interstitials);
       document.body.appendChild(this.createInterstitial(ad));
       document.body.className = document.body.className + ' interstitial-open';
     }
@@ -449,21 +457,24 @@
    */
   OAM.prototype.hideInterstitials = function() {
     var self          = this;
-    var expires       = new Date();
     var now           = new Date();
     var interstitials = document.getElementsByClassName('interstitial');
 
-    if (this.getCookie('__onm_interstitial')) {
-      expires = new Date(this.getCookie('__onm_interstitial'));
-    }
+    for (var i = 0; i < interstitials.length; i++) {
+      var expires = new Date();
+      var slot    = interstitials[i].getElementsByClassName('oat');
+      var id      = parseInt(slot[0].getAttribute('data-id'));
 
-    if (expires > now) {
-      for (var i = 0; i < interstitials.length; i++) {
-        interstitials[i].remove();
+      if (this.getCookie('__onm_interstitial-' + id)) {
+        expires = new Date(this.getCookie('__onm_interstitial-' + id));
       }
 
-      return;
+      if (expires > now) {
+        interstitials[i].remove();
+      }
     }
+
+    interstitials = document.getElementsByClassName('interstitial');
 
     if (interstitials.length > 0) {
       for (var i = 0; i < interstitials.length; i++) {
@@ -524,7 +535,7 @@
       return false;
     }
 
-    if (ad.position.indexOf(type) === -1) {
+    if (type && ad.position.indexOf(type) === -1) {
       return false;
     }
 

@@ -249,6 +249,11 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      * @param {Integer} index The index of the notification to mark.
      */
     $scope.markAsClicked = function(id) {
+      // Check for valid id
+      if (!angular.isNumber(id)) {
+        return;
+      }
+
       var url  = routing.generate('backend_ws_notification_patch', { id: id });
       var date = new Date();
       var data = {

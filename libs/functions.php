@@ -245,7 +245,7 @@ function dispatchEventWithParams($eventName, $params = array())
     $eventDispatcher->dispatch($eventName, $event);
 }
 
-function getPiwikCode($useImage = false)
+function getPiwikCode($type = false)
 {
     $config = getService('setting_repository')->get('piwik');
 
@@ -258,9 +258,9 @@ function getPiwikCode($useImage = false)
     }
 
 
-    if ($useImage === 'amp') {
+    if ($type === 'amp') {
         $code = genarateGAAmpCode($config);
-    } elseif ($useImage) {
+    } elseif ($type === 'image') {
         $code = generatePiwikImageCode($config);
     } else {
         $code = generatePiwikScriptCode($config);
@@ -326,7 +326,7 @@ function generatePiwikImageCode($config)
     return $code;
 }
 
-function getGoogleAnalyticsCode($useImage = false)
+function getGoogleAnalyticsCode($params = [])
 {
     $config = getService('setting_repository')->get('google_analytics');
 
@@ -348,11 +348,17 @@ function getGoogleAnalyticsCode($useImage = false)
         $config = [];
     }
 
-    if ($useImage === 'amp') {
+    $type = (is_array($params) && array_key_exists('type', $params))
+        ? $params['type'] : null;
+
+    $config['category']  = (is_array($params) && array_key_exists('category', $params))
+        ? $params['category'] : null;
+    $config['extension'] = (is_array($params) && array_key_exists('extension', $params))
+        ? $params['extension'] : null;
+
+    if ($type === 'amp') {
         $code = genarateGAAmpCode($config);
-    } elseif ($useImage === 'fia') {
-        $code = generateGAScriptCode($config, 'fia');
-    } elseif ($useImage) {
+    } elseif ($type === 'image') {
         $code = genarateGAImageCode($config);
     } else {
         $code = generateGAScriptCode($config);
@@ -363,39 +369,64 @@ function getGoogleAnalyticsCode($useImage = false)
 
 function generateGAScriptCode($config)
 {
-    $code = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
+    $setAccount    = "_gaq.push(['%s_setAccount', '%s']);\n";
+    $setDomainName = "_gaq.push(['%s_setDomainName', '%s']);\n";
+    $setCustomVar  = "_gaq.push(['%s_setCustomVar', %d, '%s', '%s', %d]);\n";
+
+    $prefix = '';
+    $code   = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
     foreach ($config as $key => $account) {
         if (is_array($account)
             && array_key_exists('api_key', $account)
             && !empty(trim($account['api_key']))
         ) {
-            if ($key == 0) {
-                $code .= "_gaq.push(['_setAccount', '" . trim($account['api_key']) . "']);\n";
-                if (array_key_exists('base_domain', $account)
-                    && !empty(trim($account['base_domain']))
-                ) {
-                    $code .= "_gaq.push(['_setDomainName', '". trim($account['base_domain']) ."']);\n";
-                }
-                if (array_key_exists('custom_var', $account)
-                    && !empty(trim($account['custom_var']))
-                ) {
-                    $code .= base64_decode(trim($account['custom_var'])) . "\n";
-                }
-                $code .= "_gaq.push(['_trackPageview']);\n";
-            } else {
-                $code .= "_gaq.push(['account{$key}._setAccount', '" . trim($account['api_key']) . "']);\n";
-                if (array_key_exists('base_domain', $account)
-                    && !empty(trim($account['base_domain']))
-                ) {
-                    $code .= "_gaq.push(['account{$key}._setDomainName', '". trim($account['base_domain']) ."']);\n";
-                }
-                if (array_key_exists('custom_var', $account)
-                    && !empty(trim($account['custom_var']))
-                ) {
-                    $code .= base64_decode(trim($account['custom_var'])) . "\n";
-                }
-                $code .= "_gaq.push(['account{$key}._trackPageview']);\n";
+            if ($key != 0) {
+                $prefix = "account{$key}.";
             }
+
+            $code .= sprintf($setAccount, $prefix, trim($account['api_key']));
+            if (array_key_exists('base_domain', $account)
+                && !empty(trim($account['base_domain']))
+            ) {
+                $code .= sprintf($setDomainName, $prefix, trim($account['base_domain']));
+            }
+            if (array_key_exists('custom_var', $account)
+                && !empty(trim($account['custom_var']))
+            ) {
+                $code .= base64_decode(trim($account['custom_var'])) . "\n";
+            }
+            // Category targeting
+            if (array_key_exists('category', $account)
+                && is_array($account['category'])
+                && array_key_exists('idx', $account['category'])
+                && !empty($account['category']['idx'])
+            ) {
+                $code .= sprintf(
+                    $setCustomVar,
+                    $prefix,
+                    $account['category']['idx'],
+                    $account['category']['key'],
+                    $config['category'],
+                    $account['category']['scp']
+                );
+            }
+            // Extension tageting
+            if (array_key_exists('extension', $account)
+                && is_array($account['extension'])
+                && array_key_exists('idx', $account['extension'])
+                && !empty($account['extension']['idx'])
+            ) {
+                $code .= sprintf(
+                    $setCustomVar,
+                    $prefix,
+                    $account['extension']['idx'],
+                    $account['extension']['key'],
+                    $config['extension'],
+                    $account['extension']['scp']
+                );
+            }
+
+            $code .= sprintf("_gaq.push(['%s_trackPageview']);\n", $prefix);
         }
     }
 
@@ -480,4 +511,3 @@ function genarateGAAmpCode($config)
 
     return $code;
 }
-
