@@ -8,6 +8,8 @@ image: frandieguez/phpunit:php5
 pipelines:
   default:
     - step:
+        caches:
+          - composer
         script: # Modify the commands below to build your repository.
           - composer install -n
           - bin/phpunit

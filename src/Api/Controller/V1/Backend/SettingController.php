@@ -41,7 +41,7 @@ class SettingController extends Controller
         'webmastertools_google', 'youtube_page',
         'robots_txt_rules', 'chartbeat',
         'body_end_script', 'body_start_script','header_script',
-        'elements_in_rss', 'redirection', 'locale'
+        'elements_in_rss', 'redirection', 'locale', 'rtb_files'
     ];
 
     /**
@@ -125,6 +125,10 @@ class SettingController extends Controller
         foreach ($toint as $key) {
             $settings[$key] = (int) $settings[$key];
         }
+
+        $settings = array_filter($settings, function ($a) {
+            return !empty($a);
+        });
 
         return new JsonResponse([
             'instance' => [

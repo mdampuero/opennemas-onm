@@ -4,6 +4,14 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
     locale: en
+
+    logger_file_path: tmp/log/application.log
+    dev_token: 1234
+
+    password_min_level: 1 # Weak(0) | Good(1) | Strong(2)
+
+    disable_robots: false
+
     # environment:       production
     environment:       development
     database:
@@ -77,8 +85,12 @@ parameters:
             server: localhost
             prefix: onm
 
-    logger_file_path: tmp/log/application.log
-    dev_token: 1234
+    varnish:
+        header_name: X-Varnish-Ban
+        servers:
+            server1:
+                host: localhost
+                port: 80
 
     manager_url: https://manager.onm.local/
     manager_webservice:
@@ -92,17 +104,6 @@ parameters:
         end_point:   https://manager.onm.local/managerws/
         base_domain: opennemas.com
         template:    es.openhost.theme.basic
-
-    password_min_level: 1 # Weak(0) | Good(1) | Strong(2)
-
-    disable_robots: false
-
-    varnish:
-        header_name: X-Varnish-Ban
-        servers:
-            server1:
-                host: localhost
-                port: 80
 
     opennemas.backend_force_ssl: false
     opennemas.base_domain: .opennemas.com

@@ -54,6 +54,20 @@
             backend:   'en',
             frontend:  [],
             time_zone: 'UTC'
+          },
+          rtb_files: []
+        };
+
+        /**
+         * @function addRTBFile
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Adds an empty File to the answer list.
+         */
+        $scope.addRTBFile = function(file) {
+          if ($scope.settings.rtb_files.indexOf(file) === -1) {
+            $scope.settings.rtb_files.push(file);
           }
         };
 
@@ -94,6 +108,32 @@
           if (codes.indexOf(item.code) === -1) {
             $scope.settings.locale.frontend.push(item);
           }
+        };
+
+        /**
+         * @function expand
+         * @memberOf SystemSettingsCtrl
+         *
+         * @description
+         *   Creates a suggestion list basing on a file list.
+         *
+         * @param {String} domain The input domain.
+         */
+        $scope.getFiles = function(query) {
+          var route = {
+            name: 'api_v1_backend_files_autocomplete',
+            params: { query: query}
+          };
+
+          $scope.searching = true;
+
+          return http.get(route).then(function(response) {
+            $scope.searching = false;
+
+            return response.data.results;
+          }, function () {
+            $scope.searching = false;
+          });
         };
 
         /**
@@ -156,6 +196,32 @@
          */
         $scope.removeFile = function(name) {
           $scope.settings[name] = null;
+        };
+
+        /**
+         * @function removeile
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Removes a file from settings.
+         *
+         * @param {String} name The file name.
+         */
+        $scope.removeFile = function(name) {
+          $scope.settings[name] = null;
+        };
+
+        /**
+         * @function removeRTBFile
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Removes one files from the file list given its index.
+         *
+         * @param {Integer} index The index of the file to remove.
+         */
+        $scope.removeRTBFile = function (index) {
+          $scope.settings.rtb_files.splice(index, 1);
         };
 
         /**

@@ -586,9 +586,36 @@
                       </div>
                     </div>
                     {/is_module_activated}
-                  </div>
-                  <div class="col-md-6">
-                    <div class="p-l-15"></div>
+                    {is_module_activated name="es.openhost.module.rtb_media_advertisement"}
+                    <h4>{t}RTB Media Integration{/t}</h4>
+                    <div class="form-group">
+                      <label class="form-label" for="rtbFiles">{t}RTB Files{/t}</label>
+                      <span class="help">
+                        {t}Search files using the input below and click "Add" to integrate them as RTB Ad files{/t}
+                      </span>
+                      <div class="controls">
+                        <div class="form-group ng-cloak">
+                          <div class="input-group" >
+                            <span class="input-group-addon">
+                              <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
+                            </span>
+                            <input class="form-control" autocomplete="off" placeholder="{t}Search by name{/t}" ng-model="rtb" typeahead-min-length="3" typeahead-on-select="addRTBFile($item, $model, $label); rtb = ''" uib-typeahead="file.id as file.filename for file in getFiles($viewValue)" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group m-b-16 no-animate" ng-repeat="file in settings.rtb_files">
+                          <label class="form-label">/ftlocal/[% file.filename %]</label>
+                          <div class="input-group">
+                            <input class="form-control" ng-model="file.filename" readonly type="text">
+                            <span class="input-group-btn">
+                              <button class="btn btn-danger" ng-click="removeRTBFile($index)">
+                                <i class="fa fa-trash-o"></i>
+                              </button>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/is_module_activated}
                   </div>
                 </div>
               </div>
