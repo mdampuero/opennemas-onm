@@ -175,7 +175,7 @@ class AdvertisementRenderer
             'url'      => $this->container->get('router')
                 ->generate('frontend_ad_redirect', [
                     'id' => $publicId
-                ]),
+                ], true),
             'width'    => $img->width
         ]);
     }
