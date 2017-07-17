@@ -15,7 +15,9 @@ function smarty_insert_renderbanner($params, $smarty)
     $tpl   = '<div class="ad-slot oat%s">%s</div>';
     $class = '" data-type="' . $params['type'];
 
-    if ($safeFrame) {
+    $forceNotSafeframe = (array_key_exists('format',$params) && $params['format'] !== 'safeframe');
+
+    if ($safeFrame && !$forceNotSafeframe) {
         return sprintf($tpl, $class, '');
     }
 
@@ -40,9 +42,10 @@ function smarty_insert_renderbanner($params, $smarty)
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
 
+        $format = array_key_exists('format',$params) ? $params['format'] : 'inline';
         $deviceClasses = $renderer->getDeviceCSSClases($ad);
         $class   = ' oat-visible oat-' . $orientation . ' ' . $deviceClasses;
-        $content = $renderer->renderInline($ad);
+        $content = $renderer->renderInline($ad, $format);
         $content = sprintf($tpl, $class, $content);
     }
 
