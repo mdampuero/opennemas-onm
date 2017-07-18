@@ -3,7 +3,7 @@
  * Handles UserGroup CRUD actions.
  *
  * @package    Model
- **/
+ */
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -16,28 +16,28 @@
  * Handles UserGroup CRUD actions.
  *
  * @package    Model
- **/
+ */
 class UserGroup
 {
     /**
      * The user group id
      *
      * @var int
-     **/
+     */
     public $id = null;
 
     /**
      * The user group name
      *
      * @var string
-     **/
+     */
     public $name = null;
 
     /**
      * List of privileges for this user group
      *
      * @var array
-     **/
+     */
     public $privileges = null;
 
     /**
@@ -46,7 +46,7 @@ class UserGroup
      * @param int $id the user group id to load
      *
      * @return UserGroup the user group object instance
-     **/
+     */
     public function __construct($id = null)
     {
         if (!is_null($id)) {
@@ -60,7 +60,7 @@ class UserGroup
      * @param array $data the user group data
      *
      * @return boolean true if all went well
-     **/
+     */
     public function create($data)
     {
         $conn = getService('dbal_connection');
@@ -99,7 +99,7 @@ class UserGroup
      * @param int $id the user group id to load
      *
      * @return UserGroup the user group object instance
-     **/
+     */
     public function read($id)
     {
         try {
@@ -137,7 +137,7 @@ class UserGroup
      * @param array $data the data to update the user group
      *
      * @return boolean true if the data was saved
-     **/
+     */
     public function update($data)
     {
         if ((int) $data['id'] <= 0) {
@@ -185,7 +185,7 @@ class UserGroup
      * @param int $id the user group id to delete
      *
      * @return boolean true if the user group was deleted properly
-     **/
+     */
     public function delete($id)
     {
         if ((int) $id <= 0) {
@@ -224,7 +224,7 @@ class UserGroup
      * @param int $id the user group id
      *
      * @return string the name of the group
-     **/
+     */
     public static function getGroupName($id)
     {
         try {
@@ -248,7 +248,7 @@ class UserGroup
      * Returns all the user groups in the system, excluding the Master group
      *
      * @return array a list of UserGroup objects
-     **/
+     */
     public function find()
     {
         $userGroups = [];
@@ -276,7 +276,7 @@ class UserGroup
      * @param int $privilegeID the privilege ID to check for
      *
      * @return boolean true if the group has the privilege
-     **/
+     */
     public function containsPrivilege($privilegeID)
     {
         if (isset($this->privileges)) {
@@ -292,7 +292,7 @@ class UserGroup
      * @param array $privilegeIds a list of privileges to assign to this group
      *
      * @return boolean true if all went well
-     **/
+     */
     private function insertPrivileges($privilegeIds)
     {
         foreach ($privilegeIds as $privilegeId) {
@@ -312,7 +312,7 @@ class UserGroup
      * @param int $id the privilege id to remove
      *
      * @return boolean true if the privilege was removed
-     **/
+     */
     private function deletePrivileges($id)
     {
         if ((int) $id <= 0) {
@@ -338,7 +338,7 @@ class UserGroup
      * @param array $data the data to load into the user group object
      *
      * @return UserGroup the user group object instance with the new information
-     **/
+     */
     public function load($data)
     {
         $this->id   = $data['pk_user_group'];

@@ -3,7 +3,7 @@
  * Defines the frontend controller for the books content type
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -24,7 +24,7 @@ use Onm\Settings as s;
  * Handles the actions for books
  *
  * @package Frontend_Controllers
- **/
+ */
 class BooksController extends Controller
 {
     /**
@@ -33,7 +33,7 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function frontpageAction(Request $request)
     {
         $page         = $request->query->getDigits('page', 1);
@@ -91,7 +91,7 @@ class BooksController extends Controller
      *
      * @return Response the response object
      * @throws ResourceNotFoundException if the book is not available
-     **/
+     */
     public function showAction(Request $request)
     {
         $categoryName = $this->request->query->get('category_name', null);
@@ -149,7 +149,7 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function ajaxPaginationListAction(Request $request)
     {
         $contentManager   = new \ContentManager();

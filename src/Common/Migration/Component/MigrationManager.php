@@ -232,7 +232,7 @@ class MigrationManager
      * @param array $filterparams the current filter params before parsing them
      *
      * @return array the filter params already parsed and translated
-     **/
+     */
     public function translateParams($item, $filterParams)
     {
         if (array_key_exists('input', $filterParams)) {

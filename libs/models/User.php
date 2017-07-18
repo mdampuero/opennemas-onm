@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  *
  * @package    Model
- **/
+ */
 
 use Onm\Exception\UserAlreadyExistsException;
 
@@ -17,112 +17,112 @@ use Onm\Exception\UserAlreadyExistsException;
  * User
  *
  * @package    Model
- **/
+ */
 class User
 {
     /**
      * The user id
      *
      * @var int
-     **/
+     */
     public $id = null;
 
     /**
      * The username
      *
      * @var string
-     **/
+     */
     public $username = null;
 
     /**
      * Encrypted password
      *
      * @var string
-     **/
+     */
     public $password = null;
 
     /**
      * The user email
      *
      * @var
-     **/
+     */
     public $email = null;
 
     /**
      * The user real name
      *
      * @var string
-     **/
+     */
     public $name = null;
 
     /**
      * The user blog/page url
      *
      * @var int
-     **/
+     */
     public $url = null;
 
     /**
      * The user biography
      *
      * @var int
-     **/
+     */
     public $bio = null;
 
     /**
      * The user avatar image id
      *
      * @var string
-     **/
+     */
     public $avatar_img_id = null;
 
     /**
      * The type of user
      *
      * @var string
-     **/
+     */
     public $type = null;
 
     /**
      * The login token, used for restore passwords and more
      *
      * @var string
-     **/
+     */
     public $token = null;
 
     /**
      * Whether the user can login or not
      *
      * @var string
-     **/
+     */
     public $activated = null;
 
     /**
      * The user group id
      *
      * @var id
-     **/
+     */
     public $id_user_group = null;
 
     /**
      * The list of categories this user has access
      *
      * @var string
-     **/
+     */
     public $accesscategories = [];
 
     /**
      * The user group id
      *
      * @var int
-     **/
+     */
     public $fk_user_group = null;
 
     /**
      * Meta information for the user
      *
      * @var string
-     **/
+     */
     public $meta = array();
 
     /**
@@ -145,7 +145,7 @@ class User
      * @param array $data the user data
      *
      * @return boolean true if the user was created
-     **/
+     */
     public function create($data)
     {
         if ($this->checkIfUserExists($data)) {
@@ -194,7 +194,7 @@ class User
      *
      * @return void
      * @author
-     **/
+     */
     public function __get($property)
     {
         switch ($property) {
@@ -210,7 +210,7 @@ class User
      * Hydrates the object from an array of properties
      *
      * @return $this
-     **/
+     */
     public function load($data)
     {
         $this->id               = (int) $data['id'];
@@ -235,7 +235,7 @@ class User
      * @param int $id the user id
      *
      * @return User the user object instance
-     **/
+     */
     public function read($id)
     {
         try {
@@ -268,7 +268,7 @@ class User
      * @param array $data the new user data
      *
      * @return boolean true if the user was updated
-     **/
+     */
     public function update($data)
     {
         if ($this->checkIfUserExists($data)) {
@@ -334,7 +334,7 @@ class User
      * @param int $id the user id
      *
      * @return boolean true if the user was deleted
-     **/
+     */
     public function delete($id)
     {
         try {
@@ -360,7 +360,7 @@ class User
      * Returns the Photo object that represents the user avatar
      *
      * @return Photo the photo object
-     **/
+     */
     public function getPhoto()
     {
         $photo = null;
@@ -383,7 +383,7 @@ class User
      * @param array $data tuple with the username and email params
      *
      * @return boolean true if user exists
-     **/
+     */
     public function checkIfUserExists($data)
     {
         // FIXME: why username and email twice in different order?
@@ -428,7 +428,7 @@ class User
      * @param string $token the token
      *
      * @return user if exists false otherwise
-     **/
+     */
     public function findByToken($token)
     {
         if (empty($token)) {
@@ -569,7 +569,7 @@ class User
      * @param string/array $meta an array or an string with the user meta name
      *
      * @return array/string an 2-dimensional array or an string with the user option values
-     **/
+     */
     public function getMeta($meta = null)
     {
         if (count($this->meta) <= 0) {
@@ -707,7 +707,7 @@ class User
      * @param string $token the new user token
      *
      * @return boolen
-     **/
+     */
     public function updateUserToken($id, $token)
     {
         try {
@@ -733,7 +733,7 @@ class User
      * @param string $pass the new user password
      *
      * @return boolean true if the pass was updated
-     **/
+     */
     public function updateUserPassword($id, $pass)
     {
         try {
@@ -758,7 +758,7 @@ class User
      * @param string $planTime the name of the plan
      *
      * @return void
-     **/
+     */
     public function addSubscriptionLimit($planTime = 0)
     {
         $newTime = $planTime->format('Y-m-d H:i:s');
@@ -792,7 +792,7 @@ class User
      * Returns a list of User objects where the users are only registered not subscribed
      *
      * @return void
-     **/
+     */
     public static function getUsersOnlyRegistered()
     {
         $sql = 'SELECT * FROM `users`'
@@ -828,7 +828,7 @@ class User
      * @param string $userName the user real name
      *
      * @return Response the response object
-     **/
+     */
     public function uploadUserAvatar($file, $userName)
     {
         // Generate image path and upload directory

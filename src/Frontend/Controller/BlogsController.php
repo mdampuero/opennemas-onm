@@ -3,7 +3,7 @@
  * Defines the frontend controller for the opinion-blog content type
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ use Onm\Settings as s;
  * Handles the actions for advertisements
  *
  * @package Frontend_Controllers
- **/
+ */
 class BlogsController extends Controller
 {
     /**
@@ -134,7 +134,7 @@ class BlogsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function frontpageAuthorAction(Request $request)
     {
         $page = $request->query->getDigits('page', 1);
@@ -251,7 +251,7 @@ class BlogsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('blog_id');

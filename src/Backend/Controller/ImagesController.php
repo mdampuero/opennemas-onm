@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
@@ -19,7 +19,7 @@ use Onm\Settings as s;
  * Handles the actions for the images
  *
  * @package Backend_Controllers
- **/
+ */
 class ImagesController extends Controller
 {
     /**

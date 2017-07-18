@@ -103,7 +103,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
  * Get image params for contents
  *
  * @return Array the image data
- **/
+ */
 function getMediaObject($smarty)
 {
     $photo = $video = '';

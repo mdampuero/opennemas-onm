@@ -18,7 +18,7 @@ use Common\Core\Controller\Controller;
  * Handles the actions for managing ads
  *
  * @package Backend_Controllers
- **/
+ */
 class AdsController extends Controller
 {
     /**

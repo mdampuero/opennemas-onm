@@ -202,7 +202,7 @@ class EntityManager extends BaseManager
      * Populates content meta for a given array of content objects
      *
      * @return array the list of contents with populated metadata
-     **/
+     */
     public function populateContentMetasInContents(&$contentMap)
     {
         if (empty($contentMap)) {

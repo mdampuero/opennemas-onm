@@ -20,7 +20,7 @@ use Onm\Settings as s;
  * Handles the actions for letters
  *
  * @package Frontend_Controllers
- **/
+ */
 class LetterController extends Controller
 {
     /**

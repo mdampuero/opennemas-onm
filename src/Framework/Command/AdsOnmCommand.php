@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Onm\StringUtils;
@@ -93,7 +93,7 @@ EOF
     /**
      * Creates ads on a instance
      *
-     **/
+     */
     public function createAds($ads)
     {
         if (is_null($ads) || empty($ads)) {
@@ -144,7 +144,7 @@ EOF
     /**
      * Remove ads on a instance
      *
-     **/
+     */
     public function removeAds($ads)
     {
         if (is_null($ads) || empty($ads)) {
@@ -184,7 +184,7 @@ EOF
     /**
      * Update ads on a instance
      *
-     **/
+     */
     public function updateAds($ads)
     {
         if (is_null($ads) || empty($ads)) {

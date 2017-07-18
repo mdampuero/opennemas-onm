@@ -3,7 +3,7 @@
  * Handles the actions for the redirectors
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Common\Core\Component\Exception\ContentNotMigratedException;
@@ -24,7 +24,7 @@ use Onm\Settings as s;
  * Handles the actions for the redirectors
  *
  * @package Frontend_Controllers
- **/
+ */
 class RedirectorsController extends Controller
 {
     /**
@@ -70,7 +70,7 @@ class RedirectorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function externalLinkAction(Request $request)
     {
         $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
@@ -217,7 +217,7 @@ class RedirectorsController extends Controller
      * @param Request $request the request object
      *
      * @return RedirectResponse the redirection to the proper url
-     **/
+     */
     public function categoryAction(Request $request)
     {
         $contentType = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);

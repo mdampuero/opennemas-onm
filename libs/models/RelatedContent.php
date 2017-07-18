@@ -17,63 +17,63 @@ use Repository\EntityManager;
  * Handles all the CRUD actions over Related contents.
  *
  * @package    Model
- **/
+ */
 class RelatedContent
 {
     /**
      * Content id of the first content
      *
      * @var int
-     **/
+     */
     public $pk_content1  = null;
 
     /**
      * Content id of the second content
      *
      * @var int
-     **/
+     */
     public $pk_content2  = null;
 
     /**
      * Relation type (inner, home, ...)
      *
      * @var string
-     **/
+     */
     public $relationship = null;
 
     /**
      * Information about the relation
      *
      * @var string
-     **/
+     */
     public $text         = null;
 
     /**
      * Position in the list when multiple relations of the same type
      *
      * @var int
-     **/
+     */
     public $position     = null;
 
     /**
      * Position in the list of inner
      *
      * @var int
-     **/
+     */
     public $posinterior  = null;
 
     /**
      * Whether showing this relation in frontpage
      *
      * @var boolean
-     **/
+     */
     public $verportada   = null;
 
     /**
      * Whether showing this relation in inner
      *
      * @var boolean
-     **/
+     */
     public $verinterior  = null;
 
     /**
@@ -108,7 +108,7 @@ class RelatedContent
      * @param string $relation   kind of relation to assign
      *
      * @return boolean true if relation was created sucessfully.
-     **/
+     */
     public function create(
         $contentID,
         $contentID2,
@@ -140,7 +140,7 @@ class RelatedContent
      * Updates relations from an array of elements.
      *
      * @param array $data list of elements with information for relations.
-     **/
+     */
     public function update($data)
     {
         $sql = "UPDATE related_contents SET `pk_content2`=?, `relationship`=?,".
@@ -167,7 +167,7 @@ class RelatedContent
      * @param string $contentID the element id.
      *
      * @return boolean true if the relations were removed
-     **/
+     */
     public function delete($contentID)
     {
         $sql = 'DELETE FROM related_contents WHERE pk_content1=?';
@@ -186,7 +186,7 @@ class RelatedContent
      * @param string $contentID the element id.
      *
      * @return boolean true if all went well
-     **/
+     */
     public function deleteAll($contentID)
     {
         $sql = "DELETE FROM related_contents WHERE pk_content1=? OR pk_content2=?";
@@ -254,7 +254,7 @@ class RelatedContent
      * @param array $relationID the content ID of the other content to relate with
      *
      * @return boolean true if all went well
-     **/
+     */
     public function setRelationPosition($contentID, $position, $relationID)
     {
         $sql = "INSERT INTO related_contents ".
@@ -282,7 +282,7 @@ class RelatedContent
      * @param array $relationID the content ID of the other content to relate with
      *
      * @return boolean true if all went well
-     **/
+     */
     public function setRelationPositionForInner($contentID, $position, $relationID)
     {
         $sql = "INSERT INTO related_contents ".
@@ -310,7 +310,7 @@ class RelatedContent
      *
      *
      * @return boolean true if the relations were saved
-     **/
+     */
     public function setHomeRelations($contentID, $position, $relationID)
     {
         $sql = "INSERT INTO related_contents ".

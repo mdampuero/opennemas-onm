@@ -61,7 +61,7 @@ class ExtractImageFromBodyFilter extends Filter
      * @param  string $fileName The photo filename
      * @param  string $created The created date
      * @return int the photo id
-     **/
+     */
     public function importPhoto($fileName, $created)
     {
         $localFile = $this->getParameter('path').basename($fileName);
@@ -101,7 +101,7 @@ class ExtractImageFromBodyFilter extends Filter
      *
      * @param string $fileName the photo filename
      * @return int the photo id or null if it doesnt exists
-     **/
+     */
     public function checkPhotoExists($fileName)
     {
         $conn = $this->container->get('dbal_connection');

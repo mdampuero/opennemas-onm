@@ -3,7 +3,7 @@
  * Defines the frontend controller for the content archives
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Common\Core\Annotation\BotDetector;
@@ -28,7 +28,7 @@ use Onm\Settings as s;
  * Handles actions for the RTB Module
  *
  * @package Frontend_Controllers
- **/
+ */
 class RTBController extends Controller
 {
     /**
@@ -37,7 +37,7 @@ class RTBController extends Controller
      * @param Request $request the request object
      *
      * @return Response the requested file
-     **/
+     */
     public function showAction(Request $request)
     {
         // Check for the module existence and if it is enabled
@@ -71,7 +71,7 @@ class RTBController extends Controller
      *  @param string $fileName the file to check
      *
      *  @return boolean if the file was added
-     **/
+     */
     private function checkRTBFileInConfigSettings($fileName)
     {
         $configurations = $this->get('setting_repository')->get(['rtb_files']);
@@ -98,7 +98,7 @@ class RTBController extends Controller
      *  @param string $fileId the file Id to recover from Database
      *
      *  @return string path for the file
-     **/
+     */
     private function getFilePath($fileId)
     {
         $file = $this->get('entity_repository')->find('Attachment', $fileId);

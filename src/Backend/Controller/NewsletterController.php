@@ -3,7 +3,7 @@
  * Handles the actions for the newsletter
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
@@ -25,7 +25,7 @@ use Onm\Settings as s;
  * Handles the actions for the newsletter
  *
  * @package Backend_Controllers
- **/
+ */
 class NewsletterController extends Controller
 {
     /**
@@ -518,7 +518,7 @@ class NewsletterController extends Controller
      * Checks if the module is activated, if not redirect to the configuration form
      *
      * @return boolean
-     **/
+     */
     private function checkModuleActivated()
     {
         $type     = s::get('newsletter_subscriptionType');
@@ -556,7 +556,7 @@ class NewsletterController extends Controller
      * Count total mailing sends in current month
      *
      * @return int Total number of mail sent in current mount
-     **/
+     */
     private function getTotalNumberOfNewslettersSend()
     {
         // Get maximum number of allowed sending mails
@@ -600,7 +600,7 @@ class NewsletterController extends Controller
      * @param string $date Date of last invoice
      *
      * @return DateTime Last invoice
-     **/
+     */
     private function updateLastInvoice()
     {
         // Generate last invoice DateTime

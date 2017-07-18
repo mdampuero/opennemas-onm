@@ -21,7 +21,7 @@ class AmpController extends Controller
 {
     /**
      * Load site configuration before executing the action
-     **/
+     */
     public function init()
     {
         if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
@@ -49,7 +49,7 @@ class AmpController extends Controller
      *
      * @return Response the response object
      *
-     **/
+     */
     public function showAction(Request $request)
     {
         $this->ccm  = \ContentCategoryManager::get_instance();
@@ -218,7 +218,7 @@ class AmpController extends Controller
      * @param string category the category identifier
      *
      * @return array the list of advertisements for this page
-     **/
+     */
     public static function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;

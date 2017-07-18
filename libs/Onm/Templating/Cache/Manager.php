@@ -23,7 +23,7 @@ class Manager
      * Smarty instance used to interact with the cache layer
      *
      * @var Smarty
-     **/
+     */
     protected $smarty = null;
 
     /**
@@ -44,7 +44,7 @@ class Manager
      * Sets the smarty object instance in the class
      *
      * @return Manager the object instance
-     **/
+     */
     public function setSmarty($smarty)
     {
         if (!($smarty instanceof \Smarty)) {
@@ -164,7 +164,7 @@ class Manager
      * @param string $filename the path of the file to remove
      *
      * @return boolean true if the file was deleted or it doesn't exists
-     **/
+     */
     protected function removeFile($filename)
     {
         if (file_exists($filename)) {

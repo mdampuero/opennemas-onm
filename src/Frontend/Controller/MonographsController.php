@@ -3,7 +3,7 @@
  * Handles the actions for monographs
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -25,14 +25,14 @@ use Onm\Settings as s;
  * Handles the actions for monographs
  *
  * @package Frontend_Controllers
- **/
+ */
 class MonographsController extends Controller
 {
     /**
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         // Only is used by cronicas, no one has templates to support specials.
@@ -74,7 +74,7 @@ class MonographsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function frontpageAction(Request $request)
     {
         $this->page = $request->query->getDigits('page', 1);
@@ -134,7 +134,7 @@ class MonographsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showAction(Request $request)
     {
         $dirtyID      = $request->query->get('special_id', '');

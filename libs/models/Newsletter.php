@@ -3,7 +3,7 @@
  * Defines the Frontend Advertisement controller
  *
  * @package Model
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 
 /**
  * Handles all the CRUD actions over newsletter.
@@ -24,35 +24,35 @@ class Newsletter
      * The title of the newsletter
      *
      * @var string
-     **/
+     */
     public $title;
 
     /**
      * Serialized data, contents and other params
      *
      * @var string
-     **/
+     */
     public $data;
 
     /**
      * The final HTML of the newsletter_archive
      *
      * @var string
-     **/
+     */
     public $html;
 
     /**
      * The data when the newsletter was created
      *
      * @var string
-     **/
+     */
     public $created;
 
     /**
      * Whether if the newsletter was sent
      *
      * @var string
-     **/
+     */
     public $sent;
 
     /**
@@ -61,7 +61,7 @@ class Newsletter
      * @param string $id the content id to initilize.
      *
      * @return Newsletter the object instance
-     **/
+     */
     public function __construct($id = null)
     {
         if (!is_null($id)) {

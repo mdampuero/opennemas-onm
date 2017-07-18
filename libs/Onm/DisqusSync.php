@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  *
  * @package  Onm
- **/
+ */
 namespace Onm;
 
 /**
@@ -28,7 +28,7 @@ class DisqusSync
      * Sets the configuration required to fetch and save comments
      *
      * @return DisqusSync the same object
-     **/
+     */
     public function setConfig($disqusShortName, $disqusSecretKey)
     {
         $this->disqusSecretKey = $disqusSecretKey;

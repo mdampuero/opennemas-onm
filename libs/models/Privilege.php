@@ -19,35 +19,35 @@ class Privilege
      * The privilege id
      *
      * @var int
-     **/
+     */
     public $pk_privilege      = null;
 
     /**
      * The privilege description
      *
      * @var string
-     **/
+     */
     public $description       = null;
 
     /**
      * The privilege name
      *
      * @var string
-     **/
+     */
     public $name              = null;
 
     /**
      * The privilege module name
      *
      * @var string
-     **/
+     */
     public $module            = null;
 
     /**
      * the list of available privileges
      *
      * @var array
-     **/
+     */
     public static $privileges = null;
 
     /**
@@ -133,7 +133,7 @@ class Privilege
      * Get modules name
      *
      * @return array Array of string
-     **/
+     */
     public function getModuleNames()
     {
         $modules = array();
@@ -151,7 +151,7 @@ class Privilege
      * Returns all the privileges names
      *
      * @return array the list of privilege names
-     **/
+     */
     public static function getPrivilegeNames()
     {
         $privileges = self::loadPrivileges();
@@ -170,7 +170,7 @@ class Privilege
      *
      * @return array modules with each privileges
      *
-     **/
+     */
     public function getPrivilegesByModules()
     {
         $groupedPrivileges = array();
@@ -196,7 +196,7 @@ class Privilege
      *
      * @return array the list of privilege names
      *
-     **/
+     */
     public static function getPrivilegesForUserGroup($userGroupId)
     {
         self::loadPrivileges();
@@ -227,7 +227,7 @@ class Privilege
      * Initializes the internal array of privileges
      *
      * @return void
-     **/
+     */
     private static function loadPrivileges()
     {
         self::$privileges = array(

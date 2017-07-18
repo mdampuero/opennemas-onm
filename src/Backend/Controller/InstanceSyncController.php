@@ -3,7 +3,7 @@
  * Handles the actions for the instance synchronization manager
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Handles the actions for the instance synchronization manager
  *
  * @package Backend_Controllers
- **/
+ */
 class InstanceSyncController extends Controller
 {
     /**
@@ -249,7 +249,7 @@ class InstanceSyncController extends Controller
      *
      * @return $content the content from this url
      *
-     **/
+     */
     private function getContentFromUrlWithDigestAuth($url, $username, $password)
     {
         $options = [

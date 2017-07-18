@@ -3,7 +3,7 @@
  * Defines the frontend controller for the article content type
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -25,7 +25,7 @@ use Onm\Settings as s;
  * Defines the frontend controller for the articles content type
  *
  * @package Frontend_Controllers
- **/
+ */
 class ArticlesController extends Controller
 {
     /**
@@ -34,7 +34,7 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showAction(Request $request)
     {
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
@@ -164,7 +164,7 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function extShowAction(Request $request)
     {
         // Fetch HTTP variables
@@ -225,7 +225,7 @@ class ArticlesController extends Controller
      * @return array the list of advertisements for this page
      *
      * TODO: Make this function non-static
-     **/
+     */
     public static function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;

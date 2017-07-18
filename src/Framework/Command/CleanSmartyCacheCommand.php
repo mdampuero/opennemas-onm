@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -58,7 +58,7 @@ class CleanSmartyCacheCommand extends Command
      * Cleans compile files for a theme
      *
      * @return void
-     **/
+     */
     private function cleanCompileForTheme($output, $baseTmpInstancesPath)
     {
         $fullCompileFolderPath = realpath($baseTmpInstancesPath.'/common/smarty');
@@ -76,7 +76,7 @@ class CleanSmartyCacheCommand extends Command
      * Cleans cache files for a theme
      *
      * @return void
-     **/
+     */
     private function cleanCacheForTheme($output, $themePath)
     {
         $output->write("\t* '".basename($themePath)."' cache files ");

@@ -9,7 +9,7 @@
  * Generate static archive Openemas
  *
  * t
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -65,7 +65,7 @@ EOF
      * Read articles data and insert in new database
      *
      * @return void
-     **/
+     */
     protected function generateStatics($output)
     {
         $request = Request::createFromGlobals();

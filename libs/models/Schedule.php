@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  *
  * @package    Model
- **/
+ */
 // TODO redefine agenda_colectividad adapt to php 5.3
 
 /**
  * Class for handling schedule. //Agenda de la colectividad de cronicas
  *
  * @package    Model
- **/
+ */
 class Schedule extends Content
 {
     /**
@@ -25,7 +25,7 @@ class Schedule extends Content
      * @param int $limit max number of elements to get
      *
      * @return array the list of events
-     **/
+     */
     public function getDataCalendars($limit = 8)
     {
         $calendars = [];
@@ -64,7 +64,7 @@ class Schedule extends Content
      * @param string $where the WHERE clause to filter the events with
      *
      * @return array the list of events
-     **/
+     */
     public function getEventsByWhere($where, $limit = 8)
     {
         $events = [];

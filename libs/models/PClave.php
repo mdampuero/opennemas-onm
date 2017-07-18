@@ -16,42 +16,42 @@ use \Onm\Settings as s;
  * Handles all the CRUD operations over Keywords
  *
  * @package    Model
- **/
+ */
 class PClave
 {
     /**
      * The keyword id
      *
      * @var int
-     **/
+     */
     public $id = null;
 
     /**
      * The keyword name
      *
      * @var string
-     **/
+     */
     public $pclave = null;
 
     /**
      * The keyword value
      *
      * @var string
-     **/
+     */
     public $value  = null;
 
     /**
      * The type of the keyword (url, internal search, ...)
      *
      * @var
-     **/
+     */
     public $tipo   = null;
 
     /**
      * The content type (required by the automated listings)
      *
      * @var
-     **/
+     */
     public $content_type_name = 'pclave';
 
     /**
@@ -63,7 +63,7 @@ class PClave
 
     /**
      * Initializes the Pclave and loads by id if provided
-     **/
+     */
     public function __construct($id = null)
     {
         if (is_numeric($id)) {
@@ -303,7 +303,7 @@ class PClave
      * Returns the available keyword types
      *
      * @return array the list of types
-     **/
+     */
     public static function getTypes()
     {
         $types = array(

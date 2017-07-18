@@ -23,7 +23,7 @@ class ContentManager
      * name (valid for the aplication)
      *
      * @var string
-     **/
+     */
     public $content_type = null;
 
     /**
@@ -38,14 +38,14 @@ class ContentManager
      * that contains that specific content type
      *
      * @var string
-     **/
+     */
     public $table = null;
 
     /**
      * Contains the Pager object instance, usefull for paginate contents
      *
      * @var \Pager
-     **/
+     */
     public $pager = null;
 
     /**
@@ -57,7 +57,7 @@ class ContentManager
      * @param string $contentType the content type to work with
      *
      * @return void
-     **/
+     */
     public function __construct($contentType = null)
     {
         // Lowercase table name and content type with the name of the class
@@ -74,7 +74,7 @@ class ContentManager
      * @param string $contentType the content type name
      *
      * @return void
-     **/
+     */
     public function init($contentType)
     {
         $this->table        = tableize($contentType);
@@ -90,7 +90,7 @@ class ContentManager
      * @param string $contentType the content type name
      *
      * @return array the content objects with all the information completed
-     **/
+     */
     public function loadObject($contentsData, $contentType)
     {
         $items = [];
@@ -114,7 +114,7 @@ class ContentManager
      * @param string $fields the list of fields to fetch
      *
      * @return array an array of contents with the information completed
-     **/
+     */
     public function find(
         $contentType,
         $filter = null,
@@ -157,7 +157,7 @@ class ContentManager
      * @param string $fields      the list of fields to get
      *
      * @return array the list of content objects
-     **/
+     */
     public function findAll(
         $contentType,
         $filter = null,
@@ -1075,7 +1075,7 @@ class ContentManager
      * @param string $currentTime      time to compare with the previous parameters
      *
      * @return boolean
-     **/
+     */
     public static function isInTime2($starttime = null, $endtime = null, $currentTime = null)
     {
         $start       = ($starttime !== '0000-00-00 00:00:00' && !empty($starttime)) ? strtotime($starttime) : null;
@@ -1109,7 +1109,7 @@ class ContentManager
      * @param array $items Array of Content objects
      *
      * @return array Items filtered
-     **/
+     */
     public function getAvailable($items)
     {
         $filtered = array();
@@ -1190,7 +1190,7 @@ class ContentManager
      * @param string $orderBy the ORDER BY sentence to sort the contents
      *
      * @return array a list of objects that matches the search criterias
-     **/
+     */
     public function find_by_category(
         $contentType,
         $categoryID,
@@ -1237,7 +1237,7 @@ class ContentManager
      * Returns title, catName and slugs of last headlines from subcategories of a given category
      *
      * @return array a list of content information (not the object itself)
-     **/
+     */
     public function findHeadlines()
     {
         $sql =
@@ -1285,7 +1285,7 @@ class ContentManager
      * @param boolean $frontIncluded description not available
      *
      * @return array a list of content information (not the object itself)
-     **/
+     */
     public function findHeadlinesWithImage($frontIncluded = false)
     {
         try {
@@ -1354,7 +1354,7 @@ class ContentManager
      * @param string $orderBy the ORDER BY sentence to sort the contents
      *
      * @return the list of opinions
-     **/
+     */
     public function getOpinionArticlesWithAuthorInfo(
         $filter = null,
         $orderBy = 'ORDER BY 1'
@@ -1541,7 +1541,7 @@ class ContentManager
      * @param string $ucfirst whether to apply the ucfirst function
      *
      * @return string the content type name
-     **/
+     */
     public static function getContentTypeNameFromId($id, $ucfirst = false)
     {
         if (empty($id)) {
@@ -1570,7 +1570,7 @@ class ContentManager
      * @param int $contentId the id of the content
      *
      * @return string the category name
-     **/
+     */
     public function getCategoryNameByContentId($contentId)
     {
         try {
@@ -1596,7 +1596,7 @@ class ContentManager
      * @param array $contentIds list of content ids to fetch
      *
      * @return array the list of content objecst
-     **/
+     */
     public function getContents($contentIds)
     {
         $contents = array();
@@ -1623,7 +1623,7 @@ class ContentManager
      * @param array $relatedImagesIDs the list of content ids to fetch
      *
      * @return array the list of images
-     **/
+     */
     public static function getRelatedImagesForContentsWithIDs($relatedImagesIDs)
     {
         // If the given ids is an unique element transform it to an array.
@@ -1652,7 +1652,7 @@ class ContentManager
      * @param int $contentID the id of the content to get its related content
      *
      * @return array list of related content
-     **/
+     */
     public function getRelatedContentFromContentID($contentID)
     {
         $ccm = new ContentCategoryManager();
@@ -1720,7 +1720,7 @@ class ContentManager
      * @param int $count the number of comments to fetch
      *
      * @return array the list of comment objects
-     **/
+     */
     public function getLatestComments($count = 6)
     {
         $contents = [];
@@ -1937,7 +1937,7 @@ class ContentManager
      * @param string $property the property name to fetch
      *
      * @return boolean true if it is in the category
-     **/
+     */
     public static function getMultipleProperties($propertyMap)
     {
         if (empty($propertyMap)) {
@@ -1973,7 +1973,7 @@ class ContentManager
      * @param mixed $value     the value of the property
      *
      * @return boolean true if the property was setted
-     **/
+     */
     public static function setContentMetadata($id, $property, $value)
     {
         if (is_null($id) || empty($property)) {

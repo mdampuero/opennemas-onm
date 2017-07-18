@@ -63,7 +63,7 @@ class Controller extends SymfonyController
      * Returns information about a template
      *
      * @return array
-     **/
+     */
     public function getExpireDate()
     {
         $data = null;

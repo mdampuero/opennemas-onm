@@ -3,7 +3,7 @@
  * Defines the frontend controller for the content archives
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Common\Core\Annotation\BotDetector;
@@ -26,7 +26,7 @@ use Onm\Settings as s;
  * Handles the actions for newslibrary
  *
  * @package Frontend_Controllers
- **/
+ */
 class ArchiveController extends Controller
 {
     /**
@@ -142,7 +142,7 @@ class ArchiveController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function digitalFrontpageAction(Request $request)
     {
         $today = new \DateTime();
@@ -176,7 +176,7 @@ class ArchiveController extends Controller
      * Returns the advertisements for the archive template
      *
      * @return array the list of advertisement objects
-     **/
+     */
     public function getAds()
     {
         $category = 0;

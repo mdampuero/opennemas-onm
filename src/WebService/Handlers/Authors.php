@@ -5,7 +5,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace WebService\Handlers;
 
 use Luracast\Restler\RestException;
@@ -14,7 +14,7 @@ use Luracast\Restler\RestException;
  * Handles REST actions for authors.
  *
  * @package WebService
- **/
+ */
 class Authors
 {
     public $restler;

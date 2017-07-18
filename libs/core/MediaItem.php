@@ -27,70 +27,70 @@ class MediaItem
      * The file name of the item to parse
      *
      * @var string
-     **/
+     */
     public $filename = null;
 
     /**
      * The base path of the file to parse
      *
      * @var string
-     **/
+     */
     public $basename = null;
 
     /**
      * The size of the item
      *
      * @var int
-     **/
+     */
     public $size   = null;
 
     /**
      * The width of the file (image)
      *
      * @var int
-     **/
+     */
     public $width  = null;
 
     /**
      * The height of the file (image)
      *
      * @var int
-     **/
+     */
     public $height = null;
 
     /**
      * Miscelaneous attributes of the file
      *
      * @var string
-     **/
+     */
     public $attrs  = null;
 
     /**
      * The type of the image
      *
      * @var string
-     **/
+     */
     public $type   = null;
 
     /**
      * The media type extracted from the file itself
      *
      * @var string
-     **/
+     */
     public $internalType = null;
 
     /**
      * The last access time of the file
      *
      * @var string
-     **/
+     */
     public $atime = null;
 
     /**
      * The last modification time of the file
      *
      * @var string
-     **/
+     */
     public $mtime = null;
 
     /**
@@ -98,14 +98,14 @@ class MediaItem
      *
      * @var string23
      *
-     **/
+     */
     public $description = null;
 
     /**
      * The tags of the file
      *
      * @var string
-     **/
+     */
     public $tags = null;
 
     /**
@@ -114,7 +114,7 @@ class MediaItem
      * @param string $file the file path
      *
      * @return MediaItem the object initialized
-     **/
+     */
     public function __construct($file)
     {
         $this->filename = realpath($file);
@@ -139,7 +139,7 @@ class MediaItem
      * @param string $filename the absolute path of the file
      *
      * @return array an array with the height and width of the file
-     **/
+     */
     public function getDimensions($filename = null)
     {
         if (is_null($filename)) {
@@ -161,7 +161,7 @@ class MediaItem
      * @param string $filename the absolute path of the file
      *
      * @return string the extension of the file
-     **/
+     */
     public function getExtension($filename = null)
     {
         if (is_null($filename)) {

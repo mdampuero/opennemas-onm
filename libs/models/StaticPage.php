@@ -23,14 +23,14 @@ class StaticPage extends Content
      * The static page id
      *
      * @var int
-     **/
+     */
     public $pk_static_page = null;
 
     /**
      * The content type of the static_page
      *
      * @var string
-     **/
+     */
     public $content_type = 'static_page';
 
     /**
@@ -53,7 +53,7 @@ class StaticPage extends Content
      * @param array $data The data of the new static page
      *
      * @return boolean true if the static page was created
-     **/
+     */
     public function create($data)
     {
         $data['category'] = 0;
@@ -126,7 +126,7 @@ class StaticPage extends Content
      * @param string $title the title of the slug
      *
      * @return string the slug
-     **/
+     */
     public function buildSlug($slug, $id, $title = null)
     {
         if (empty($slug) && !empty($title)) {
@@ -156,7 +156,7 @@ class StaticPage extends Content
      * @param string $filter the WHERE statement to filter the slugs
      *
      * @return array the list of slugs
-     **/
+     */
     public function getSlugs($filter = null)
     {
         try {

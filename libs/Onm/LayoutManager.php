@@ -248,7 +248,7 @@ class LayoutManager
      * @param string $order           the order to sort the rendered contents
      *
      * @return string the final HTML for the rendered contents
-     **/
+     */
     public function renderContentsForPlaceholder($placeholderName, $order)
     {
         if (isset($this->contents) && count($this->contents) > 0) {
@@ -282,7 +282,7 @@ class LayoutManager
      * @param string $order the sort method
      *
      * @return array the sorted array of contents
-     **/
+     */
     public static function orderContents(&$contents, $order)
     {
         if ($order == 'date DESC') {
@@ -301,7 +301,7 @@ class LayoutManager
      * @param Content $content the content instance to render
      *
      * @return string the html for the content
-     **/
+     */
     private function renderContent($content)
     {
         $this->tpl->assign('content', $content);
@@ -322,7 +322,7 @@ class LayoutManager
      * @param array $params the list of params to pass to the template
      *
      * @param array $params the params for rendering the layout
-     **/
+     */
     public function render($params = array())
     {
         if (isset($params['contents'])) {

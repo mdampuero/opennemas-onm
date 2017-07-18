@@ -3,7 +3,7 @@
  * Defines the PaywallController class
  *
  * @package  Backend_Controllers
- **/
+ */
 /**
  *
  * This file is part of the Onm package.
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use PayPal\CoreComponentTypes\BasicAmountType;
@@ -48,7 +48,7 @@ use Onm\Settings as s;
  * Handles the actions for paywall module
  *
  * @package Frontend_Controllers
- **/
+ */
 class PaywallController extends Controller
 {
     /**
@@ -57,7 +57,7 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showcaseAction(Request $request)
     {
         if (empty($this->getUser()) || !is_object($this->getUser())) {
@@ -111,7 +111,7 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function preparePaymentAction(Request $request)
     {
         if (empty($this->getUser()) || empty($this->getUser())) {
@@ -228,7 +228,7 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function returnSuccessPaymentAction(Request $request)
     {
         $token = $request->query->get('token');
@@ -369,7 +369,7 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function returnSuccessRecurringPaymentAction(Request $request)
     {
         $token = $request->query->get('token');
@@ -526,7 +526,7 @@ class PaywallController extends Controller
      * Cancel the active recurring payment for paywall subscription
      *
      * @return Response the response object
-     **/
+     */
     public function cancelRecurringPaymentAction()
     {
         // Get recurring profile ID for this user
@@ -746,7 +746,7 @@ class PaywallController extends Controller
      * Description of the action
      *
      * @return void
-     **/
+     */
     public function returnCancelPaymentAction()
     {
         $paywallSettings = s::get('paywall_settings');
@@ -760,7 +760,7 @@ class PaywallController extends Controller
      * Description of the action
      *
      * @return Response the response object
-     **/
+     */
     public function ipnPaymentAction()
     {
         return $this->redirect($this->generateUrl(''));
@@ -771,7 +771,7 @@ class PaywallController extends Controller
      *
      * @return void
      * @author
-     **/
+     */
     private function getPaypalService()
     {
         $settings = array();

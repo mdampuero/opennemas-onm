@@ -61,7 +61,7 @@ class LetterController extends ContentController
      *
      * @return void
      * @author
-     **/
+     */
     public function loadExtraData($results)
     {
         $data = parent::loadExtraData($results);

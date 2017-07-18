@@ -25,7 +25,7 @@ class ZendData extends AbstractCache
      * @param array $options options to change initialization of the cache layer
      *
      * @return void
-     **/
+     */
     public function __construct()
     {
         // zend data cache format for namespaces ends in ::

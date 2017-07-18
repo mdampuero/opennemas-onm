@@ -35,7 +35,7 @@ class UrlGeneratorHelper
      * @param array  $params the list of params required to generate the url
      *
      * @return string the uri generated
-     **/
+     */
     public function generate($content, $params = [])
     {
         $absolute = (is_array($params) && array_key_exists('absolute', $params) && $params['absolute'] === true);
@@ -55,7 +55,7 @@ class UrlGeneratorHelper
      * @param array $params parameters for modify function behaviour.
      *
      * @return array the array of configurations
-     **/
+     */
     public function getConfig($params = [])
     {
         return [
@@ -81,7 +81,7 @@ class UrlGeneratorHelper
      * @param array  $params the list of params required to generate the url
      *
      * @return string the uri generated
-     **/
+     */
     private function generateUriFromConfig($contentType, $params = [])
     {
         if (!isset($contentType)) {
@@ -110,7 +110,7 @@ class UrlGeneratorHelper
      *
      * @return void
      * @author
-     **/
+     */
     private function getUriForContent($content)
     {
         // If the content has a bodyLink parameter then that it is the final uri.

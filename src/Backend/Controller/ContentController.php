@@ -3,7 +3,7 @@
  * Handles common actions for contents.
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -24,7 +24,7 @@ use Onm\Settings as s;
  * Handles common actions for contents.
  *
  * @package Backend_Controllers
- **/
+ */
 class ContentController extends Controller
 {
     /**
@@ -33,7 +33,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function setAvailableAction(Request $request)
     {
         $id = (int) $request->query->getDigits('id', null);
@@ -66,7 +66,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function setDraftAction(Request $request)
     {
         $id = (int) $request->query->getDigits('id', null);
@@ -103,7 +103,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function toggleAvailableAction(Request $request)
     {
         $id = (int) $request->query->getDigits('id', null);
@@ -143,7 +143,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function setArchivedAction(Request $request)
     {
         $ids = $request->query->get('ids');
@@ -190,7 +190,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function toggleSuggestedAction(Request $request)
     {
         $ids = $request->query->get('ids');
@@ -240,7 +240,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function quickInfoAction(Request $request)
     {
         $id = (int) $request->query->getDigits('id', null);
@@ -273,7 +273,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function sendToTrashAction(Request $request)
     {
         $id = (int) $request->query->getDigits('id', null);
@@ -310,7 +310,7 @@ class ContentController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function updatePropertyAction(Request $request)
     {
         $id          = $request->request->getDigits('id', null);

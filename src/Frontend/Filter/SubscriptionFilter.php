@@ -3,7 +3,7 @@
  * Defines the subscription filter class
  *
  * @package Frontend_Filter
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,12 +11,12 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Filter;
 
 /**
  * Defines the subscription filter class
- **/
+ */
 class SubscriptionFilter
 {
     /**
@@ -26,7 +26,7 @@ class SubscriptionFilter
      * @param User $user the session user object
      *
      * @return void
-     **/
+     */
     public function __construct($template, $user)
     {
         $this->template = $template;
@@ -116,7 +116,7 @@ class SubscriptionFilter
      *
      * @return void
      * @author
-     **/
+     */
     private function replaceContent(&$content, $restrictedContent)
     {
         $content->body = $restrictedContent;

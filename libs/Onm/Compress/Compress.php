@@ -14,7 +14,7 @@ namespace Onm\Compress;
  * class explanation
  *
  * @package Onm\Compress
- **/
+ */
 class Compress
 {
     /**

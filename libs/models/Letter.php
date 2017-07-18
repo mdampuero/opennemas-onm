@@ -14,21 +14,21 @@
  * Handles all the CRUD operations over letters.
  *
  * @package    Model
- **/
+ */
 class Letter extends Content
 {
     /**
      * The letter id
      *
      * @var int
-     **/
+     */
     public $pk_letter = null;
 
     /**
      * The author id
      *
      * @var int
-     **/
+     */
     public $author = null;
 
     /**
@@ -37,7 +37,7 @@ class Letter extends Content
      * @param int $id the letter id
      *
      * @return void
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Letter');
@@ -51,7 +51,7 @@ class Letter extends Content
      * @param string $name the property name
      *
      * @return mixed the property value
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -125,7 +125,7 @@ class Letter extends Content
      * @param int $id the letter id
      *
      * @return Letter the letter instance
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -197,7 +197,7 @@ class Letter extends Content
      * @param array $data the data array
      *
      * @return boolean true if the letter was updated
-     **/
+     */
     public function update($data)
     {
         $data['position'] =  1;
@@ -236,7 +236,7 @@ class Letter extends Content
      * @param integer $id The letter id.
      *
      * @return boolean True if the letter was removed.
-     **/
+     */
     public function remove($id)
     {
         parent::remove($id);

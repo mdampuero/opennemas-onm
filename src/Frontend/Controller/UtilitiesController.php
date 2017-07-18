@@ -3,7 +3,7 @@
  * Handles the actions for advertisements
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,14 +23,14 @@ use Onm\Settings as s;
  * Handles the actions for advertisements
  *
  * @package Frontend_Controllers
- **/
+ */
 class UtilitiesController extends Controller
 {
     /**
      * Integrates the sharrre jQuery plugin into ONM
      *
      * @return Response the response object
-     **/
+     */
     public function sharrreAction(Request $request)
     {
         $json = array(
@@ -94,7 +94,7 @@ class UtilitiesController extends Controller
      * @param string $encUrl the url to fetch
      *
      * @return string the HTML content of the url
-     **/
+     */
     private function createCurlRequest($encUrl, $cacheTimeout = 300)
     {
         $cache = $this->get('cache');
