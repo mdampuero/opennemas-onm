@@ -67,20 +67,21 @@ class AdvertisementRenderer
      * Renders an advertisement.
      *
      * @param Advertisement $ad The advertisement to render.
+     * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string The HTML for the slot.
      */
-    public function renderInline(\Advertisement $ad, $params = null)
+    public function renderInline(\Advertisement $ad, $format = null)
     {
         if ($ad->with_script == 1) {
             return $ad->script;
         } elseif ($ad->with_script == 2) {
-            return $this->renderInlineReviveSlot($ad);
+            return $this->renderInlineReviveSlot($ad, $format);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderInlineDFPSlot($ad);
+            return  $this->renderInlineDFPSlot($ad, $format);
         }
 
-        return $this->renderInlineImage($ad);
+        return $this->renderInlineImage($ad, $format);
     }
 
     /**
@@ -88,7 +89,7 @@ class AdvertisementRenderer
      *
      * @param array $ads    The list of advertisements to generate the header
      *                      from.
-     * @param array $params The list of parameters.
+     * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string the HTML content for the DFP slot.
      */
@@ -131,10 +132,11 @@ class AdvertisementRenderer
      * Renders a DFP advertisement slot.
      *
      * @param Advertisement $ad The advertisement to render.
+     * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string The HTML content for the DFP advertisement slot.
      */
-    public function renderInlineDFPSlot($ad)
+    public function renderInlineDFPSlot($ad, $format = null)
     {
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
             'id' => $ad->pk_advertisement
@@ -145,10 +147,11 @@ class AdvertisementRenderer
      * Renders an image/swf based advertisement.
      *
      * @param string $ad The advertisement to render.
+     * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string The HTML code for the advertisement.
      */
-    public function renderInlineImage($ad)
+    public function renderInlineImage($ad, $format = null)
     {
         try {
             $img = $this->container->get('entity_repository')
@@ -165,6 +168,10 @@ class AdvertisementRenderer
 
         if ($img->type_img === 'swf') {
             $template = 'advertisement/helpers/inline/flash.tpl';
+        }
+
+        if ($format == 'amp') {
+            $template = 'advertisement/helpers/inline/image.amp.tpl';
         }
 
         return $this->tpl->fetch($template, [
@@ -184,6 +191,7 @@ class AdvertisementRenderer
      * Generates the HTML code to include in header for Revive advertisements.
      *
      * @param array The list of advertisements.
+     * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string The HTML code to include in header.
      */
@@ -220,6 +228,7 @@ class AdvertisementRenderer
      * Renders a Revive advertisement.
      *
      * @param Advertisement $ad the ad to render.
+     * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string the HTML content for the DFP slot.
      */
