@@ -360,7 +360,7 @@
             mobile_logo:          $scope.settings.mobile_logo,
             site_color:           $scope.settings.site_color,
             site_color_secondary: $scope.settings.site_color_secondary,
-            site_logo:            $scope.settings.site_log
+            site_logo:            $scope.settings.site_logo
           };
 
           if ($scope.settings.locale.frontend instanceof Array) {

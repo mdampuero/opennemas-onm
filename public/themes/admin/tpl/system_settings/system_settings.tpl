@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form ng-app="BackendApp" ng-controller="SettingsCtrl" ng-init="list()">
+  <form ng-app="BackendApp" ng-controller="SettingsCtrl" ng-init="list()" class="settings">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -217,7 +217,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="form-group col-md-4" ng-show="settings.logo_enabled">
+                        <div class="form-group col-md-12" ng-show="settings.logo_enabled">
                           <label class="form-label" for="site-logo">{t}Large logo{/t}</label>
                           <div class="controls">
                             <input class="hidden" id="site-logo" name="site-logo" file-model="settings.site_logo" type="file"/>
@@ -261,7 +261,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-4 form-group" ng-if="settings.logo_enabled">
+                        <div class="form-group col-md-12" ng-if="settings.logo_enabled">
                           <label class="form-label" for="mobile_logo">{t}Small logo{/t}</label>
                           <div class="controls">
                             <input class="hidden" id="mobile-logo" name="mobile-logo" file-model="settings.mobile_logo" type="file"/>
@@ -305,7 +305,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-4 form-group" ng-if="settings.logo_enabled">
+                        <div class="form-group col-md-12" ng-if="settings.logo_enabled">
                           <label class="form-label" for="favico">{t}Favico{/t}</label>
                           <div class="controls">
                             <input class="hidden" id="favico" name="favico" file-model="settings.favico" type="file"/>
