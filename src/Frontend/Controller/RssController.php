@@ -389,8 +389,11 @@ class RssController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
+        $positions = getService('core.helper.advertisement')
+            ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
+
         return getService('advertisement_repository')
-            ->findByPositionsAndCategory([1075, 1076, 1077], $category);
+            ->findByPositionsAndCategory($positions, $category);
     }
 
     /**
