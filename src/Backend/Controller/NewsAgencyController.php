@@ -342,7 +342,7 @@ class NewsAgencyController extends Controller
         $servers = s::get('news_agency_config');
         $server = $servers[$sourceId];
 
-        $fm = $this->get('core.filter.manager');
+        $fm = $this->get('data.manager.filter');
 
         // If the new has photos import them
         if (count($element->getPhotos()) > 0) {

@@ -41,7 +41,7 @@ class RTBController extends Controller
     public function showAction(Request $request)
     {
         // Check for the module existence and if it is enabled
-        if (!$this->get('core.security') ->hasExtension('es.openhost.module.rtb_media_advertisement')) {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.rtb_media_advertisement')) {
             throw new ResourceNotFoundException();
         }
 
@@ -58,19 +58,19 @@ class RTBController extends Controller
 
         // Return the resopnse object
         return new Response($fileContents, 200, [
-            'x-instance'      => $this->get('core.instance')->internal_name,
-            'x-tags'          => 'rtb,',
-            'x-cache-for'     => '+1 day',
-            'x-cacheable'     => true,
+            'x-instance'  => $this->get('core.instance')->internal_name,
+            'x-tags'      => 'rtb,',
+            'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
         ]);
     }
 
     /**
-     *	This method checks if the file was added to rtb files
+     * This method checks if the file was added to rtb files
      *
-     *  @param string $fileName the file to check
+     * @param string $fileName the file to check
      *
-     *  @return boolean if the file was added
+     * @return boolean if the file was added
      */
     private function checkRTBFileInConfigSettings($fileName)
     {
@@ -84,8 +84,8 @@ class RTBController extends Controller
         }
 
         foreach ($configurations['rtb_files'] as $file) {
-            if ($file->name == $fileName) {
-                return $file->id;
+            if ($file['filename'] == $fileName) {
+                return $file['id'];
             }
         }
 
@@ -93,11 +93,11 @@ class RTBController extends Controller
     }
 
     /**
-     *	This method gets from the file path from DB
+     * This method gets from the file path from DB
      *
-     *  @param string $fileId the file Id to recover from Database
+     * @param string $fileId the file Id to recover from Database
      *
-     *  @return string path for the file
+     * @return string path for the file
      */
     private function getFilePath($fileId)
     {

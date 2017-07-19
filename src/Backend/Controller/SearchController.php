@@ -72,7 +72,7 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
-            $fm     = $this->get('core.filter.manager');
+            $fm     = $this->get('data.manager.filter');
             $tokens = $fm->filter('tags', $searchString);
             $tokens = explode(', ', $tokens);
 

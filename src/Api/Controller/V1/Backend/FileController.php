@@ -27,29 +27,23 @@ class FileController extends Controller
      */
     public function autocompleteAction(Request $request)
     {
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $search          = $request->query->get('search');
-        $page            = 1;
-
-        $criteria['content_type_name'] = [['value' => 'attachment', 'operator' => '=']];
-        $criteria['in_litter'] = [['value' => 0, 'operator' => '=']];
-        $criteria['path'] = [['value' => '%' . $search . '%', 'operator' => 'like']];
-
-        $criteria['join'] = [[
+        $search   = $request->query->get('query');
+        $order    = [ 'path' => 'desc' ];
+        $criteria = [
+            'content_type_name' => [ ['value' => 'attachment', 'operator' => '='] ],
+            'in_litter'         => [ ['value' => 0, 'operator' => '='] ],
+            'path'              => [ ['value' => '%' . $search . '%', 'operator' => 'like'] ],
+            'join'              => [ [
                 'table'      => 'attachments',
                 'pk_content' => [ [ 'value' => 'pk_attachment', 'field' => true ] ]
-            ]
+            ] ]
         ];
 
-        $em = $this->get('entity_repository');
-
-        $results = $em->findBy($criteria, '`path` desc', $elementsPerPage);
+        $results = $this->get('entity_repository')->findBy($criteria, $order, 10);
         $results = array_map(function ($file) {
-            return ['id' => $file->id, 'fileName' => basename($file->path)];
+            return ['id' => $file->id, 'filename' => basename($file->path)];
         }, $results);
 
-        return new JsonResponse([
-            'results' => $results,
-        ]);
+        return new JsonResponse([ 'results' => $results ]);
     }
 }

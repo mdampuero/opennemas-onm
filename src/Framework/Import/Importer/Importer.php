@@ -354,7 +354,7 @@ class Importer
      */
     protected function getData($resource, $category, $author, $enabled, $target)
     {
-        $fm   = getService('core.filter.manager');
+        $fm   = getService('data.manager.filter');
         $data = [
             'category'            => $category,
             'content_status'      => $enabled,

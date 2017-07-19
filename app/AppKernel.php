@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new WebService\WebServiceBundle(),
             new Common\Cache\CacheBundle(),
             new Common\Core\CoreBundle(),
+            new Common\Data\DataBundle(),
             new Common\Migration\MigrationBundle(),
             new Common\ORM\OrmBundle(),
         );

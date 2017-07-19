@@ -205,7 +205,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 $published = new \DateTime((string)$video->published);
                 $date = date_format($published, 'Y-m-d H:i:s');
 
-                $fm = $this->getcontainer()->get('core.filter.manager');
+                $fm = $this->getcontainer()->get('data.manager.filter');
 
                 // Generate data array for creating video in Onm instance
                 $data = [
@@ -280,7 +280,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $fm = $this->getContainer()->get('core.filter.manager');
+            $fm = $this->getContainer()->get('data.manager.filter');
 
             $data = [
                 'author_name'    => 'script',
