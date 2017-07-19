@@ -224,7 +224,10 @@ class AmpController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
+        $positions = getService('core.helper.advertisement')
+            ->getPositionsForGroup('amp_inner', [1051, 1052, 1053]);
+
         return getService('advertisement_repository')
-            ->findByPositionsAndCategory([1051, 1052, 1053], $category);
+            ->findByPositionsAndCategory($positions, $category);
     }
 }
