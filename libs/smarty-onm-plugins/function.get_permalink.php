@@ -6,12 +6,12 @@
  * -------------------------------------------------------------
  */
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 function smarty_function_get_permalink($params)
 {
-    if (!array_key_exists('item', $params) 
-        || !is_object($params['item']) 
+    if (!array_key_exists('item', $params)
+        || !is_object($params['item'])
+        || empty($params['item']->id)
     ) {
        return '';
     }
@@ -25,8 +25,8 @@ function smarty_function_get_permalink($params)
     $content = $params['item'];
 
     return getService('router') ->generate(
-        'frontend_content_permalink', 
-        ['content_id' => $content->id ], 
+        'frontend_content_permalink',
+        ['content_id' => $content->id ],
         $absolute
     );
 }

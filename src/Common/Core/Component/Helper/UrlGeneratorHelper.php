@@ -118,86 +118,144 @@ class UrlGeneratorHelper
             return '/redirect?to='.urlencode($content->params['bodyLink']);
         }
 
-        // As not all contents use the same template/parameters to generate its
-        // uri we have to separate those that are not conventional and finally
-        // use a common template for the rest.
-        switch ($content->content_type_name) {
-            case 'article':
-                $uri =  $this->generateUriFromConfig('article', [
-                    'id'       => sprintf('%06d', $content->id),
-                    'date'     => date('YmdHis', strtotime($content->created)),
-                    'category' => $content->category_name,
-                    'slug'     => urlencode($content->slug),
-                ]);
-                break;
-            case 'attachment':
-                $uri = implode(DS, ["media", INSTANCE_UNIQUE_NAME, FILE_DIR, $content->path]);
-                break;
-            case 'letter':
-                $uri =  $this->generateUriFromConfig('letter', [
-                    'id'       => sprintf('%06d', $content->id),
-                    'date'     => date('YmdHis', strtotime($content->created)),
-                    'slug'     => urlencode($content->slug),
-                    'category' => urlencode(\Onm\StringUtils::generateSlug($content->author)),
-                ]);
-                break;
-            case 'opinion':
-                $type ='opinion';
+        $methodName = 'getUriFor' . ucfirst($content->content_type_name);
 
-                if (is_object($content->author)
-                    && is_array($content->author->meta) &&
-                    array_key_exists('is_blog', $content->author->meta) &&
-                    $content->author->meta['is_blog'] == 1
-                ) {
-                    $type = 'blog';
-                }
-
-                if ($content->fk_author == 0) {
-                    if ((int) $content->type_opinion == 1) {
-                        $authorName = 'editorial';
-                    } elseif ((int) $content->type_opinion == 2) {
-                        $authorName = 'director';
-                    } else {
-                        $authorName = 'author';
-                    }
-                } else {
-                    if (!is_object($content->author)) {
-                        $content->author = $this->container->get('user_repository')
-                            ->find($content->fk_author);
-                    }
-
-                    if (is_object($content->author)) {
-                        $authorName = $content->author->name;
-                    } else {
-                        $authorName = 'author';
-                    }
-
-                    $authorName = $content->author->name;
-                }
-
-                $authorName = \Onm\StringUtils::generateSlug($authorName);
-
-                $uri = $this->generateUriFromConfig($type, [
-                    'id'       => sprintf('%06d', $content->id),
-                    'date'     => date('YmdHis', strtotime($content->created)),
-                    'slug'     => urlencode($content->slug),
-                    'category' => urlencode($authorName),
-                ]);
-                break;
-            case 'photo':
-                $uri = implode(DS, ["media", INSTANCE_UNIQUE_NAME, 'images', $content->path_file, $content->name]);
-                break;
-            default:
-                // The rest of content types follow a common pattern
-                $uri =  $this->generateUriFromConfig(strtolower($content->content_type_name), [
-                    'id'       => sprintf('%06d', $content->id),
-                    'date'     => date('YmdHis', strtotime($content->created)),
-                    'category' => urlencode($content->category_name),
-                    'slug'     => urlencode($content->slug),
-                ]);
-                break;
+        if (method_exists($this, $methodName)) {
+            return $this->{$methodName}($content);
         }
 
-        return $uri;
+        return $this->getUriForGeneralContent($content);
+    }
+
+    /**
+     * Returns the url for an Attachment
+     *
+     * @param Content $content the content
+     *
+     * @return string the content url
+     **/
+    private function getUriForAttachment($content)
+    {
+        $pathFile = trim(rtrim($content->path, DS), DS);
+
+        return implode(DS, ["media", INSTANCE_UNIQUE_NAME, FILE_DIR, $pathFile]);
+    }
+
+    /**
+     * Returns the url for a  content
+     * @param Content $content the content
+     *
+     * @return string the content url
+     **/
+    private function getUriForArticle($content)
+    {
+        return $this->generateUriFromConfig('article', [
+            'id'       => sprintf('%06d', $content->id),
+            'date'     => date('YmdHis', strtotime($content->created)),
+            'category' => $content->category_name,
+            'slug'     => urlencode($content->slug),
+        ]);
+    }
+
+    /**
+     * Returns the url for an opinion
+     *
+     * @param Content $content the content
+     *
+     * @return string the content url
+     **/
+    private function getUriForOpinion($content)
+    {
+        $type ='opinion';
+
+        if (is_object($content->author)
+            && is_array($content->author->meta) &&
+            array_key_exists('is_blog', $content->author->meta) &&
+            $content->author->meta['is_blog'] == 1
+        ) {
+            $type = 'blog';
+        }
+
+        if ($content->fk_author == 0) {
+            if ((int) $content->type_opinion == 1) {
+                $authorName = 'editorial';
+            } elseif ((int) $content->type_opinion == 2) {
+                $authorName = 'director';
+            } else {
+                $authorName = 'author';
+            }
+        } else {
+            if (!is_object($content->author)) {
+                $content->author = $this->container->get('user_repository')
+                    ->find($content->fk_author);
+            }
+
+            if (is_object($content->author)) {
+                $authorName = $content->author->name;
+            } else {
+                $authorName = 'author';
+            }
+
+            $authorName = $content->author->name;
+        }
+
+        $authorName = \Onm\StringUtils::generateSlug($authorName);
+
+        return $this->generateUriFromConfig($type, [
+            'id'       => sprintf('%06d', $content->id),
+            'date'     => date('YmdHis', strtotime($content->created)),
+            'slug'     => urlencode($content->slug),
+            'category' => urlencode($authorName),
+        ]);
+    }
+
+    /**
+     * Returns the url for a letter
+     *
+     * @param Content $content the content
+     *
+     * @return string the content url
+     **/
+    private function getUriForLetter($content)
+    {
+        return $this->generateUriFromConfig('letter', [
+            'id'       => sprintf('%06d', $content->id),
+            'date'     => date('YmdHis', strtotime($content->created)),
+            'slug'     => urlencode($content->slug),
+            'category' => urlencode(\Onm\StringUtils::generateSlug($content->author)),
+        ]);
+    }
+
+    /**
+     * Returns the url for a photo
+     *
+     * @param Content $content the content
+     *
+     * @return string the content url
+     **/
+    private function getUriForPhoto($content)
+    {
+        $pathFile = trim(rtrim($content->path_file, DS), DS);
+        $contentName = trim(rtrim($content->name, DS), DS);
+
+        return implode(DS, ["media", INSTANCE_UNIQUE_NAME, 'images', $pathFile, $contentName]);
+    }
+
+    /**
+     * Returns the url for a content
+     *
+     * @param Content $content the content
+     *
+     * @return string the content url
+     **/
+    private function getUriForGeneralContent($content)
+    {
+        // The rest of content types follow a common pattern
+        return $this->generateUriFromConfig(strtolower($content->content_type_name), [
+            'id'       => sprintf('%06d', $content->id),
+            'date'     => date('YmdHis', strtotime($content->created)),
+            'category' => urlencode($content->category_name),
+            'slug'     => urlencode($content->slug),
+        ]);
     }
 }
