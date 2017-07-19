@@ -70,7 +70,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML for the slot.
      */
-    public function renderInline(\Advertisement $ad)
+    public function renderInline(\Advertisement $ad, $params = null)
     {
         if ($ad->with_script == 1) {
             return $ad->script;

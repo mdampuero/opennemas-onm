@@ -9,15 +9,28 @@ use \Common\Core\Component\Renderer\AdvertisementRenderer;
  */
 function smarty_insert_renderbanner($params, $smarty)
 {
-    $safeFrame = getService('setting_repository')
+    $safeFrameSettingEnabled = getService('setting_repository')
         ->get('ads_settings')['safe_frame'];
 
     $tpl   = '<div class="ad-slot oat%s">%s</div>';
     $class = '" data-type="' . $params['type'];
 
-    $forceNotSafeframe = (array_key_exists('format',$params) && $params['format'] !== 'safeframe');
+    // Allow to force the rendering format != safeframe by passing the
+    // format=XXX parameter to the plugin or by using a template variable
+    // render_params['ads-format']
+    $formatFromParam = array_key_exists('format',$params) ? $params['format'] : null;
+    $formatFromTemplateVar = (
+            array_key_exists('render_params', $smarty->tpl_vars)
+            && array_key_exists('ads-format', $smarty->tpl_vars['render_params']->value)
+            && $smarty->tpl_vars['render_params']->value['ads-format']
+        ) ? $smarty->tpl_vars['render_params']->value['ads-format']
+        : null;
 
-    if ($safeFrame && !$forceNotSafeframe) {
+    $avoidSafeframe = ($formatFromParam !== null && $formatFromTemplateVar !== null)
+        || (!is_null($formatFromParam) && $formatFromParam !== 'safeframe')
+        || (!is_null($formatFromTemplateVar) && $formatFromTemplateVar !== 'safeframe');
+
+    if ($safeFrameSettingEnabled && !$avoidSafeframe) {
         return sprintf($tpl, $class, '');
     }
 
@@ -42,7 +55,14 @@ function smarty_insert_renderbanner($params, $smarty)
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
 
-        $format = array_key_exists('format',$params) ? $params['format'] : 'inline';
+        $format = $formatFromTemplateVar;
+        if ($formatFromParam != $formatFromTemplateVar
+            && $formatFromParam != null
+        ) {
+            $format = $formatFromParam;
+        }
+        $format = empty($format) ? 'inline' : $format;
+
         $deviceClasses = $renderer->getDeviceCSSClases($ad);
         $class   = ' oat-visible oat-' . $orientation . ' ' . $deviceClasses;
         $content = $renderer->renderInline($ad, $format);

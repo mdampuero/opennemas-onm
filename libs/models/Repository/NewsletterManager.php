@@ -167,6 +167,7 @@ class NewsletterManager extends BaseManager
             'newsletter_subscriptionType',
         ]);
         $this->tpl->assign('conf', $configurations);
+        $this->tpl->assign('render_params', ['ads-format' => 'inline']);
 
         return $this->tpl->fetch('newsletter/newNewsletter.tpl');
     }
