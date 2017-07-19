@@ -48,6 +48,12 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$photoInt->path_file.'/'.$photoInt->name;
             $output []= '<meta name="twitter:image:src" content="'.$imageUrl.'">';
         }
+
+        if ($content->content_type_name == 'opinion' && isset($content->author->photo->path_img) && !empty($content->author->photo->path_img)) {
+            $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->author->photo->path_img;
+            $output []= '<meta name="twitter:image:src" content="'.$imageUrl.'">';
+        } 
+        
     }
 
     return implode("\n", $output);
