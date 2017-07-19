@@ -1628,7 +1628,7 @@ class MigrationSaver
      */
     protected function convertToMetadata($string)
     {
-        $fm = getService('core.filter.manager');
+        $fm = getService('data.manager.filter');
 
         return $fm->filter('tags', $string);
     }

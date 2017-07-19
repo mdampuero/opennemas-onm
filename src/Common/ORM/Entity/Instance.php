@@ -61,4 +61,14 @@ class Instance extends Entity
 
         return $this->domains[0];
     }
+
+    /**
+     * Returns the relative path for the instance media files.
+     *
+     * @return string The relative path for the instance media files.
+     */
+    public function getMediaShortPath()
+    {
+        return "/media/{$this->internal_name}";
+    }
 }

@@ -100,7 +100,7 @@ EOF
             throw new \Exception("File content is not valid");
         }
 
-        $fm = $this->getContainer()->get('core.filter.manager');
+        $fm = $this->getContainer()->get('data.manager.filter');
         $am = new \Advertisement();
         foreach ($ads as $ad) {
             $data = [
@@ -225,7 +225,7 @@ EOF
                 $height     = (array_key_exists('height', $ad['new']))
                     ? $ad['new']['height'] : $adv->params['height'];
 
-                $fm   = $this->getContainer()->get('core.filter.manager');
+                $fm   = $this->getContainer()->get('data.manager.filter');
                 $data = [
                     'id'                 => $adv->id,
                     'title'              => $title,

@@ -37,7 +37,7 @@ class UtilsController extends Controller
     {
         $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
 
-        $fm   = $this->get('core.filter.manager');
+        $fm   = $this->get('data.manager.filter');
         $tags = $fm->filter('tags', $tags);
 
         // $tags2 = StringUtils::getTags($tags);

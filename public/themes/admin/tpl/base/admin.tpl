@@ -524,6 +524,7 @@
     {javascripts src="
       @Common/components/angular-bootstrap-multiselect/angular-bootstrap-multiselect.js,
       @Common/components/angular-file-upload/dist/angular-file-upload.min.js,
+      @Common/components/angular-file-model/angular-file-model.js,
       @Common/components/angular-ui-sortable/sortable.min.js,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/components/angulartics/dist/angulartics-ga.min.js,
@@ -541,6 +542,7 @@
       @Common/src/fablock/fablock.js,
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
+      @Common/src/angular-image-preview/js/image-preview.js,
       @Common/src/angular-oql-encoder/oql-encoder.js,
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
