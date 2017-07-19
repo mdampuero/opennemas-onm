@@ -205,6 +205,7 @@ class AmpController extends Controller
             'content'         => $article,
             'actual_category' => $categoryName,
             'time'            => '12345',
+            'render_params'   => ['ads-format' => 'amp'],
             'cache_id'        => $cacheID,
             'x-tags'          => 'article-amp,article,'.$article->id,
             'x-cache-for'     => '+1 day',
