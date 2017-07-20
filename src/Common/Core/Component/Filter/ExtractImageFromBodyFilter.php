@@ -23,11 +23,11 @@ class ExtractImageFromBodyFilter extends Filter
     }
 
     /**
-     * Import all images from a text
+     * Import all images from a text.
      *
-     * @param string $str    The text string.
+     * @param string $str The text string.
      *
-     * @return int The first image ID.
+     * @return integer The first image ID.
      */
     public function filter($str)
     {
@@ -51,12 +51,13 @@ class ExtractImageFromBodyFilter extends Filter
     }
 
     /**
-     * Imports an array of photos into database and returns the first photo id
+     * Imports an array of photos into database and returns the first photo id.
      *
-     * @param  string $files The array of photos files
-     * @param  string $created The created date
-     * @return int the first photo id
-     **/
+     * @param string $files   The array of photos files.
+     * @param string $created The created date.
+     *
+     * @return integer The first photo id.
+     */
     public function importPhotos($files, $created)
     {
         $path     = $this->getParameter('path');
@@ -64,10 +65,9 @@ class ExtractImageFromBodyFilter extends Filter
 
         $ids[0] = null;
         foreach ($files as $key => $file) {
-            // Get local file path
             $localFile = $basename ? $path . basename($file) : $path . $file;
-            // Check if file exists and photo is not already imported
-            $photoID = $this->checkPhotoExists($file);
+            $photoID   = $this->checkPhotoExists($file);
+
             if (file_exists($localFile) && is_null($photoID)) {
                 // Import photo
                 $data = [
@@ -85,12 +85,12 @@ class ExtractImageFromBodyFilter extends Filter
                 try {
                     $photo   = new \Photo();
                     $photoID = $photo->createFromLocalFile($data);
-                    // Create translation
+
                     $this->insertPhotoTranslation($photoID, $file);
                 } catch (\Exception $e) {
                 }
             }
-            // Store new id
+
             $ids[$key] = $photoID;
         }
 
@@ -98,11 +98,12 @@ class ExtractImageFromBodyFilter extends Filter
     }
 
     /**
-     * Checks if exists an image in the database and returns its id if exists
+     * Checks if exists an image in the database and returns its id if exists.
      *
-     * @param string $fileName the photo filename
-     * @return int the photo id or null if it doesnt exists
-     **/
+     * @param string $fileName The photo filename.
+     *
+     * @return integer The photo id or null if it doesnt exists.
+     */
     public function checkPhotoExists($fileName)
     {
         $conn = $this->container->get('dbal_connection');
@@ -121,25 +122,23 @@ class ExtractImageFromBodyFilter extends Filter
     }
 
     /**
-     * Insert photo data in translation_ids table
+     * Insert photo data in translation_ids table.
      *
-     * @param int $id the photo id
-     * @return bool true if inserted or null if not
-     **/
+     * @param integer $id The photo id.
+     *
+     * @return mixed True if inserted or null if not.
+     */
     public function insertPhotoTranslation($id, $fileName)
     {
         $conn = $this->container->get('dbal_connection');
 
         try {
-            $conn->insert(
-                'translation_ids',
-                [
-                    'pk_content'     => $id,
-                    'pk_content_old' => 'none',
-                    'type'           => 'photo',
-                    'slug'           => $fileName
-                ]
-            );
+            $conn->insert('translation_ids', [
+                'pk_content'     => $id,
+                'pk_content_old' => 'none',
+                'type'           => 'photo',
+                'slug'           => $fileName
+            ]);
 
             return true;
         } catch (\Exception $e) {
