@@ -1,0 +1,21 @@
+frontend_frontpage_home:
+    path: /home
+    defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
+
+frontend_frontpage:
+    path: /{category}
+    defaults: { _controller: FrontendBundle:Frontpages:show, category : home }
+    requirements:
+        category: '(^[mobile])'
+
+frontend_frontpage_category:
+    path: /seccion/{category}
+    defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
+    requirements:
+        category: '[^/]+'
+
+frontend_externalfrontpage_category:
+    path: /extseccion/{category}
+    defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
+    requirements:
+        category : '[^/]+'

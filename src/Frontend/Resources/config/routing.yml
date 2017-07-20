@@ -1,12 +1,3 @@
-# Common content management routes
-frontend_ad_get:
-    path: /ads/get/{id}.{_format}
-    defaults: { _controller: FrontendBundle:Advertisement:get, _format:html }
-
-frontend_ad_redirect:
-    path: /ads/{id}.{_format}
-    defaults: { _controller: FrontendBundle:Advertisement:redirect, _format:html }
-
 frontend_robots:
     path: /robots.txt
     defaults: { _controller: FrontendBundle:Robots:index }
@@ -19,38 +10,8 @@ frontend_playground:
     path: /playground/{action}
     defaults: { _controller: FrontendBundle:Playground:default }
 
-tag_frontpage_index:
-    path: /tags
-    defaults: { _controller: FrontendBundle:Tags:index }
-
-tag_frontpage:
-    path: /{resource}/{tag_name}
-    defaults: { _controller: FrontendBundle:Tags:tags, resource: tags }
-    requirements:
-        resource: 'tag|tags'
-        tag_name: '[^\/]+'
-
-frontend_frontpage_home:
-    path: /home
-    defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
-
-frontend_frontpage:
-    path: /{category}
-    defaults: { _controller: FrontendBundle:Frontpages:show, category : home }
-    requirements:
-        category: '(^[mobile])'
-
-frontend_frontpage_category:
-    path: /seccion/{category}
-    defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
-    requirements:
-        category: '[^/]+'
-
-frontend_externalfrontpage_category:
-    path: /extseccion/{category}
-    defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
-    requirements:
-        category : '[^/]+'
+frontend_advertisement:
+    resource: '@FrontendBundle/Resources/config/routing/advertisement.yml'
 
 frontend_album:
     resource: '@FrontendBundle/Resources/config/routing/album.yml'
@@ -91,6 +52,9 @@ frontend_form:
 frontend_framework:
     resource: '@FrontendBundle/Resources/config/routing/framework.yml'
 
+frontend_frontpage:
+    resource: '@FrontendBundle/Resources/config/routing/frontpage.yml'
+
 frontend_letter:
     resource: '@FrontendBundle/Resources/config/routing/letter.yml'
 
@@ -129,6 +93,9 @@ frontend_static_page:
 
 frontend_rtb:
     resource: '@FrontendBundle/Resources/config/routing/rtb.yml'
+
+frontend_tag:
+    resource: '@FrontendBundle/Resources/config/routing/tag.yml'
 
 frontend_user:
     resource: '@FrontendBundle/Resources/config/routing/user.yml'
