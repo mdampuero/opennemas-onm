@@ -309,6 +309,10 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $category = $event->getArgument('category');
 
+        // TODO: Remove when using only new orm for category
+        $this->container->get('cache.manager')->getConnection('instance')
+            ->remove('category-' . $category->id);
+
         // Delete object cache
         $this->objectCacheHandler->delete('category-' . $category->id);
     }
