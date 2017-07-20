@@ -12,16 +12,16 @@ namespace Common\Core\Component\Helper;
 class UrlGeneratorHelper
 {
     /**
-     * The current client.
+     * The service container.
      *
-     * @var Client
+     * @var ServiceContainer
      */
     protected $container;
 
     /**
      * Initializes the UrlGeneratorHelper.
      *
-     * @param ServiceContainer $contaienr The service container.
+     * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
@@ -29,16 +29,18 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns a generated uri for a content type given some params
+     * Returns a generated uri for a content type given some params.
      *
-     * @param string $content the content to generate the url
-     * @param array  $params the list of params required to generate the url
+     * @param string $content The content to generate the url.
+     * @param array  $params  The list of params required to generate the URI.
      *
-     * @return string the uri generated
+     * @return string The generated URI.
      */
     public function generate($content, $params = [])
     {
-        $absolute = (is_array($params) && array_key_exists('absolute', $params) && $params['absolute'] === true);
+        $absolute = (is_array($params)
+            && array_key_exists('absolute', $params)
+            && $params['absolute'] === true);
 
         $url = '';
         if ($absolute) {
@@ -50,13 +52,11 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the list of configurations for uri generation
-     *
-     * @param array $params parameters for modify function behaviour.
+     * Returns the list of configurations for uri generation.
      *
      * @return array the array of configurations
      */
-    public function getConfig($params = [])
+    public function getConfig()
     {
         return [
             'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
@@ -75,12 +75,12 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns a generated uri for a content type given some params
+     * Returns a generated uri for a content type given some params.
      *
-     * @param string $contentType the content type to generate the url
-     * @param array  $params the list of params required to generate the url
+     * @param string $contentType The content type to generate the URL.
+     * @param array  $params      The list of parameters to generate the URL.
      *
-     * @return string the uri generated
+     * @return string The generated URL.
      */
     private function generateUriFromConfig($contentType, $params = [])
     {
@@ -96,7 +96,7 @@ class UrlGeneratorHelper
 
         $keys = $values = [];
         foreach ($params as $tokenKey => $tokenValue) {
-            $keys[] = "@_" . strtoupper($tokenKey) . "_@";
+            $keys[]   = "@_" . strtoupper($tokenKey) . "_@";
             $values[] = $tokenValue;
         }
 
@@ -106,10 +106,11 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the Uri for a given content
+     * Returns the Uri for a given content.
      *
-     * @return void
-     * @author
+     * @param mixed The content to generate URI for.
+     *
+     * @return string The generated URI.
      */
     private function getUriForContent($content)
     {
@@ -128,12 +129,12 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the url for an Attachment
+     * Returns the URI for an attachment.
      *
-     * @param Content $content the content
+     * @param Attachment $content The attachment object.
      *
-     * @return string the content url
-     **/
+     * @return string The attachment URI.
+     */
     private function getUriForAttachment($content)
     {
         $pathFile = trim(rtrim($content->path, DS), DS);
@@ -142,11 +143,12 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the url for a  content
-     * @param Content $content the content
+     * Returns the URI for an article.
      *
-     * @return string the content url
-     **/
+     * @param Article $article The article object.
+     *
+     * @return string The article URI.
+     */
     private function getUriForArticle($content)
     {
         return $this->generateUriFromConfig('article', [
@@ -158,12 +160,12 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the url for an opinion
+     * Returns the URI for an opinion.
      *
-     * @param Content $content the content
+     * @param Opinion $content the content.
      *
-     * @return string the content url
-     **/
+     * @return string The opinion URI.
+     */
     private function getUriForOpinion($content)
     {
         $type ='opinion';
@@ -210,12 +212,12 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the url for a letter
+     * Returns the URI for a letter.
      *
-     * @param Content $content the content
+     * @param Letter $content The letter object.
      *
-     * @return string the content url
-     **/
+     * @return string The letter URI.
+     */
     private function getUriForLetter($content)
     {
         return $this->generateUriFromConfig('letter', [
@@ -227,12 +229,12 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the url for a photo
+     * Returns the url for a photo.
      *
-     * @param Content $content the content
+     * @param Photo $content The photo object.
      *
-     * @return string the content url
-     **/
+     * @return string The photo URI.
+     */
     private function getUriForPhoto($content)
     {
         $pathFile = trim(rtrim($content->path_file, DS), DS);
@@ -242,12 +244,12 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the url for a content
+     * Returns the URI for a content.
      *
-     * @param Content $content the content
+     * @param Content $content The content object.
      *
-     * @return string the content url
-     **/
+     * @return string The content URI.
+     */
     private function getUriForGeneralContent($content)
     {
         // The rest of content types follow a common pattern
