@@ -73,7 +73,11 @@ class RedirectorsController extends Controller
      */
     public function externalLinkAction(Request $request)
     {
+        // Fetch the target url from the request query
+        // or from the request attributes (used on Controller::forward calls)
         $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
+        $urlFromParams = $request->attributes->filter('to', '', FILTER_VALIDATE_URL);
+        $url = !empty($urlFromParams) ? $urlFromParams : $url;
 
         if (empty($url)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();

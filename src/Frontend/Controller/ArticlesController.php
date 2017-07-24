@@ -53,7 +53,9 @@ class ArticlesController extends Controller
             // TODO: Remove when target="_blank"' not included in URI for external
             $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
 
-            return $this->redirect($url);
+            return $this->forward('FrontendBundle:Redirectors:externalLink', [
+                'to'  => $url,
+            ]);
         }
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->get('core.user'));

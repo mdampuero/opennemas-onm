@@ -68,7 +68,9 @@ class AmpController extends Controller
 
         // If external link is set, redirect
         if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
-            return $this->redirect($article->params['bodyLink']);
+            return $this->forward('FrontendBundle:Redirectors:externalLink', [
+                'to'  => $article->params['bodyLink'],
+            ]);
         }
 
         // Avoid NewRelic js script
