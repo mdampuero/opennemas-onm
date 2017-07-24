@@ -476,10 +476,20 @@
                         <h5 ng-if="category.type == 9"><i class="fa fa-play-circle-o m-r-5"></i>{t}Videos{/t}</h5>
                         <h5 ng-if="category.type == 11"><i class="fa fa-pie-chart m-r-5"></i>{t}Polls{/t}</h5>
                       </div>
-                      <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
-                      <label class="form-label" for="category-[% $index %]">
-                        [% category.name %]
-                      </label>
+                      <div ng-if="category.parent == 0">
+                        <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="category.id" type="checkbox">
+                        <label class="form-label" for="category-[% $index %]">
+                          [% category.name %]
+                        </label>
+                      </div>
+                      <div ng-repeat="subcategory in extra.categories">
+                        <div ng-if="subcategory.parent != 0 && subcategory.parent == category.id">
+                          <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="subcategory.id" type="checkbox">
+                          <label class="form-label" for="category-[% $index %]">
+                            &rarr; [% subcategory.name %]
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="m-t-5" ng-if="selected.all.categories">

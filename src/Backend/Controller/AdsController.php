@@ -504,15 +504,16 @@ class AdsController extends Controller
 
         $categories = array_map(function ($a) {
             return [
-                'id' => $a->pk_content_category,
-                'name' => $a->title,
-                'type' => $a->internal_category
+                'id'     => $a->pk_content_category,
+                'name'   => $a->title,
+                'type'   => $a->internal_category,
+                'parent' => $a->fk_content_category
             ];
         }, $categories);
 
         array_unshift(
             $categories,
-            [ 'id' => 0, 'name' => _('Home'), 'type' => 0 ]
+            [ 'id' => 0, 'name' => _('Home'), 'type' => 0, 'parent' => 0 ]
         );
 
         return array_values($categories);
