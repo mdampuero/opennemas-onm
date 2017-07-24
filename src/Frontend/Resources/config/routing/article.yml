@@ -42,7 +42,3 @@ frontend_article_show_amp:
         category_name: '[^/]+'
         slug         : '[^/]+'
         article_id   : '([0-9]+)'
-
-frontend_article_external_link:
-    path: /redirect
-    defaults: { _controller: FrontendBundle:Articles:externalLink }
