@@ -15,91 +15,91 @@
  * Class for handling articles.
  *
  * @package    Model
- **/
+ */
 class Article extends Content
 {
     /**
      * The id of the article
      *
      * @var int
-     **/
+     */
     public $pk_article    = null;
 
     /**
      * The subtitle of the article
      *
      * @var string
-     **/
+     */
     public $subtitle      = null;
 
     /**
      * The agency that authored the article
      *
      * @var string
-     **/
+     */
     public $agency        = null;
 
     /**
      * The summary of the article
      *
      * @var string
-     **/
+     */
     public $summary       = null;
 
     /**
      * The id of the image assigned for frontpage
      *
      * @var int
-     **/
+     */
     public $img1          = null;
 
     /**
      * The footer of the image assigned for frontpage
      *
      * @var string
-     **/
+     */
     public $img1_footer   = null;
 
     /**
      * The id of the image assigned for inner
      *
      * @var int
-     **/
+     */
     public $img2          = null;
 
     /**
      * The footer of the image assigned for inner
      *
      * @var string
-     **/
+     */
     public $img2_footer   = null;
 
     /**
      * The id of the video assigned for frontpage
      *
      * @var int
-     **/
+     */
     public $fk_video      = null;
 
     /**
      * The id of the video assigned for inner
      *
      * @var int
-     **/
+     */
     public $fk_video2     = null;
 
     /**
      * The footer of the video assigned for inner
      *
      * @var string
-     **/
+     */
     public $footer_video2 = null;
 
     /**
      * The inner title of this article
      *
      * @var string
-     **/
+     */
     public $title_int     = null;
 
     /**
@@ -108,7 +108,7 @@ class Article extends Content
      * @param int $id the id of the article we want to initialize
      *
      * @return void
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Article');
@@ -122,7 +122,7 @@ class Article extends Content
      * @param string $name the name of the property to fetch
      *
      * @return mixed the value of the property requested
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -176,7 +176,7 @@ class Article extends Content
      * @param array $properties
      *
      * @return void
-     **/
+     */
     public function load($data)
     {
         parent::load($data);
@@ -200,7 +200,7 @@ class Article extends Content
      * @param int $id the id to get its information
      *
      * @return void
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -235,7 +235,7 @@ class Article extends Content
      *
      * @return null if the article was not created
      * @return int  the id of the article
-     **/
+     */
     public function create($data)
     {
         if (!isset($data['description'])) {
@@ -310,7 +310,7 @@ class Article extends Content
      * @param mixed $data array of properties for the article
      *
      * @return boolean true if the article was properly updated
-     **/
+     */
     public function update($data)
     {
         // Update an article
@@ -402,7 +402,7 @@ class Article extends Content
      * @param int $id the id of the article we want to delete
      *
      * @return void
-     **/
+     */
     public function remove($id)
     {
         if ((int) $id <= 0) {
@@ -444,7 +444,7 @@ class Article extends Content
      * @param Template $tpl the smarty instance
      *
      * @return string the final html for the article
-     **/
+     */
     public function render($params, $tpl = null)
     {
         //  if (!isset($tpl)) {
@@ -473,7 +473,7 @@ class Article extends Content
      * @param string $method the method to bind related contents
      *
      * @return void
-     **/
+     */
     public function saveRelated($data, $id, $method)
     {
         $rel = getService('related_contents');
@@ -489,7 +489,7 @@ class Article extends Content
      * Returns the author object of this article
      *
      * @return array the author data
-     **/
+     */
     public function getAuthor()
     {
         if (empty($this->author)) {

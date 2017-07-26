@@ -21,20 +21,20 @@ class ContentCategoryManager
      * List of available categories
      *
      * @var array
-     **/
+     */
     public $categories = null;
 
     /**
      * The instance of this class, use for the Singleton pattern
      * @var ContentCategoryManager
-     **/
+     */
     private static $instance = null;
 
     /**
      * Cache handler
      *
      * @var MethodCacheManager
-     **/
+     */
     public $cache = null;
 
     /**
@@ -42,7 +42,7 @@ class ContentCategoryManager
      * it was previously created
      *
      * @return ContentCategoryManager
-     **/
+     */
     public function __construct()
     {
         if (is_null(self::$instance)) {
@@ -61,7 +61,7 @@ class ContentCategoryManager
      * Returns an unique instance, Singleton pattern
      *
      * @return ContentCategoryManager the object instance
-     **/
+     */
     public static function get_instance()
     {
         if (is_null(self::$instance)) {
@@ -187,7 +187,7 @@ class ContentCategoryManager
      *
      * @return string the category name
      * @return boolean false if the category doesn't exists
-     **/
+     */
     public function getName($id)
     {
         if (is_null($this->categories)) {
@@ -222,7 +222,7 @@ class ContentCategoryManager
      * @param string $categoryName the category name
      *
      * @return int the category id, 0 if not found
-     **/
+     */
     public function get_id($categoryName)
     {
         if (is_null($this->categories)) {
@@ -259,7 +259,7 @@ class ContentCategoryManager
      * @param string $categoryName the category name
      *
      * @return string the category title
-     **/
+     */
     public function getTitle($categoryName)
     {
         if (is_null($this->categories)) {
@@ -296,7 +296,7 @@ class ContentCategoryManager
      * @param string $categoryName
      *
      * @return string the category object
-     **/
+     */
     public function getByName($categoryName)
     {
         if (is_null($this->categories)) {
@@ -337,7 +337,7 @@ class ContentCategoryManager
      * @param int $id the id of the parent category
      *
      * @return array list of ContentCategory objects
-     **/
+     */
     public function getAllSubcategories($id)
     {
         if (true|| is_null($this->categories)) {
@@ -390,7 +390,7 @@ class ContentCategoryManager
      * @param array $categories the list of categories to sort
      *
      * @return array the sorted list of categories
-     **/
+     */
     public function orderByPosmenu($categories)
     {
         $categories = array_values($categories);
@@ -420,7 +420,7 @@ class ContentCategoryManager
      * @param array $categories the list of categories to sort
      *
      * @return array the sorted list of categories
-     **/
+     */
     public function groupByType($categories)
     {
         $categories = array_values($categories);
@@ -454,7 +454,7 @@ class ContentCategoryManager
      * TODO: To do work recursive for varios nested levels
      *
      * @return array Tree structure
-     **/
+     */
     public function getCategoriesTreeMenu()
     {
         $categories = $this->orderByPosmenu($this->categories);
@@ -491,7 +491,7 @@ class ContentCategoryManager
      * @param int $categoryId the category id
      *
      * @return string the category name
-     **/
+     */
     public function getFirstSubcategory($categoryId)
     {
         if (is_null($this->categories)) {
@@ -533,7 +533,7 @@ class ContentCategoryManager
      * @param string $category_name the category name
      *
      * @return string the parent category name
-     **/
+     */
     public function getFather($categoryName)
     {
         if (is_null($this->categories)) {
@@ -582,7 +582,7 @@ class ContentCategoryManager
      * @param string $category_name the name of the category
      *
      * @return boolean true if the category exists
-     **/
+     */
     public function exists($categoryName)
     {
         if (is_null($this->categories)) {
@@ -616,7 +616,7 @@ class ContentCategoryManager
      * @param string $categoryName the category name
      *
      * @return boolean true if the category has no contents
-     **/
+     */
     public function isEmpty($categoryName)
     {
         $pkCategory = $this->get_id($categoryName);
@@ -647,7 +647,7 @@ class ContentCategoryManager
      * @param int $category the category id
      *
      * @return boolean
-     **/
+     */
     public static function isEmptyByCategoryId($category)
     {
         try {
@@ -674,7 +674,7 @@ class ContentCategoryManager
      * @param string $type the group type where to search from
      *
      * @return array the counters for a category
-     **/
+     */
     public function countContentByType($category, $type)
     {
         try {
@@ -705,7 +705,7 @@ class ContentCategoryManager
      * @return array the counters for all the group types
      *
      * @see ContentCategoryManager::countContentByType
-     **/
+     */
     public static function countContentsByGroupType($type, $filter = null)
     {
         $where= '';

@@ -3,7 +3,7 @@
  * Handles all the request for Welcome actions
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -24,7 +24,7 @@ use Onm\Settings as s;
  * Handles all the request for Welcome actions
  *
  * @package Backend_Controllers
- **/
+ */
 class WelcomeController extends Controller
 {
     /**
@@ -33,7 +33,7 @@ class WelcomeController extends Controller
      * @param Request $request the request object
      *
      * @return void
-     **/
+     */
     public function defaultAction()
     {
         $user = $this->get('core.user');
@@ -57,7 +57,7 @@ class WelcomeController extends Controller
      * Fetches the Youtube video ids to print in the welcome page
      *
      * @return void
-     **/
+     */
     public function getYoutubeVideoIds()
     {
         $cm = new \ContentManager();

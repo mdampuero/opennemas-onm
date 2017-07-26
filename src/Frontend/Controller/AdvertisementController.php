@@ -3,7 +3,7 @@
  * Defines the frontend controller for the advertisement content type
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Common\Core\Controller\Controller;
  * Defines the frontend controller for the advertisement content type
  *
  * @package Frontend_Controllers
- **/
+ */
 class AdvertisementController extends Controller
 {
     /**
@@ -32,7 +32,7 @@ class AdvertisementController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function getAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
@@ -55,7 +55,7 @@ class AdvertisementController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function redirectAction(Request $request)
     {
         $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);

@@ -206,7 +206,9 @@ class Advertisement extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -535,7 +537,9 @@ class Advertisement extends Content
     public static function setNumClics($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             // Fetch data for the ad from the database

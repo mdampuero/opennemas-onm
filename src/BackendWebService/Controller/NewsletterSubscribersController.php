@@ -3,7 +3,7 @@
  * Handles the actions for the newsletters
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace BackendWebService\Controller;
 
 use Common\Core\Annotation\Security;
@@ -23,7 +23,7 @@ use Common\Core\Controller\Controller;
  * Handles the actions for the newsletters
  *
  * @package Backend_Controllers
- **/
+ */
 class NewsletterSubscribersController extends Controller
 {
     /**
@@ -329,7 +329,7 @@ class NewsletterSubscribersController extends Controller
      * @param array $filters the list of filters to take in place
      *
      * @return array a tuple with the where and the orderby SQL clause
-     **/
+     */
     private function buildFilter($filters)
     {
         $orderBy = 'name, email';

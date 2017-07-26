@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Onm\Merchant;
 
 use PayPal\Service\PayPalAPIInterfaceServiceService;
@@ -22,7 +22,7 @@ class PaypalWrapper
      *
      * @return void
      * @author
-     **/
+     */
     public function __construct($settings)
     {
         $defaultSettings = array(
@@ -42,7 +42,7 @@ class PaypalWrapper
      *
      * @return void
      * @author
-     **/
+     */
     public function getMerchantService()
     {
         return new PayPalAPIInterfaceServiceService($this->settings);
@@ -52,7 +52,7 @@ class PaypalWrapper
      * undocumented function
      *
      * @return void
-     **/
+     */
     public function getServiceUrl()
     {
         if ($this->settings['mode'] == 'live') {

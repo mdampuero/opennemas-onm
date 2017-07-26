@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -68,7 +68,7 @@ EOF
      * Extract translations from a list of modules
      *
      * @return void
-     **/
+     */
     private function extractTrans($output)
     {
         $output->writeln(" * Extracting strings");
@@ -124,7 +124,7 @@ EOF
      * Updates the translation files
      *
      * @return void
-     **/
+     */
     private function updateTrans($output)
     {
         $output->writeln(" * Updating translation files");
@@ -150,7 +150,7 @@ EOF
      * Compiles the translation files
      *
      * @return void
-     **/
+     */
     private function compileTrans($output)
     {
         $output->writeln(" * Compiling translation databases");

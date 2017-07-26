@@ -3,7 +3,7 @@
  * Handles the actions for newsletter subscriptions
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,14 +23,14 @@ use Common\Core\Controller\Controller;
  * Handles the actions for newsletter subscriptions
  *
  * @package Frontend_Controllers
- **/
+ */
 class SubscribersController extends Controller
 {
     /**
      * Shows the subscription form
      *
      * @return void
-     **/
+     */
     public function showAction()
     {
         list($positions, $advertisements) = $this->getAds();
@@ -51,7 +51,7 @@ class SubscribersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
@@ -117,7 +117,7 @@ class SubscribersController extends Controller
      * @param Array $data Data for subscription
      *
      * @return Array Message and class to show the user
-     **/
+     */
     public function sendSubscriptionMail($request, $data)
     {
         // Get extra parameters
@@ -200,7 +200,7 @@ class SubscribersController extends Controller
      * @param Array $data Data for subscription
      *
      * @return Array Message and class to show the user
-     **/
+     */
     public function createSubscription($data)
     {
         $user = new \Subscriber();
@@ -271,7 +271,7 @@ class SubscribersController extends Controller
      * Returns the advertisements for the subscription page
      *
      * @return void
-     **/
+     */
     public function getAds()
     {
         // Get letter positions

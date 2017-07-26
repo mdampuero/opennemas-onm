@@ -3,7 +3,7 @@
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -24,14 +24,14 @@ use Onm\StringUtils;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 class BooksController extends Controller
 {
     /**
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         // Take out this crap from this PLEASE ---------------------------------

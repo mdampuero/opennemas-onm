@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -89,7 +89,7 @@ EOF
      *
      * @return string the instance database name
      * @throws InvalidArgumentException if instance not found
-     **/
+     */
     public function getDatabaseName($instanceName, $instanceId)
     {
         $dbConn = $this->getContainer()->get('orm.manager')->getConnection('instance');
@@ -121,7 +121,7 @@ EOF
      * Returns the mysqldump command with all its parameters
      *
      * @return void
-     **/
+     */
     public function getMysqlDumpCommand($databaseName, $outputFile)
     {
         $dbConfigurations = $this->getContainer()->getParameter('database');
@@ -136,7 +136,7 @@ EOF
      *
      * @return void
      * @author
-     **/
+     */
     public function executeDatabaseDump($dumpCommand, $output)
     {
         $process = new Process($dumpCommand);

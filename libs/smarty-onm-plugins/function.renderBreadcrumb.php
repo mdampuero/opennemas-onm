@@ -4,7 +4,7 @@
  * File:        function.Breadcrumb.php
  * Check type of menu element and prepare link
  *
- **/
+ */
 
 function smarty_function_renderBreadcrumb($params, &$smarty)
 {

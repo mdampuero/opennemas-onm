@@ -96,7 +96,6 @@ abstract class MigrationProvider
         }
 
         $this->loadTranslations();
-
     }
 
     /**

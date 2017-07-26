@@ -5,21 +5,21 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace WebService\Handlers;
 
 /**
  * Handles REST actions for instances.
  *
  * @package WebService
- **/
+ */
 class Instances
 {
     public $restler;
 
     /**
      * @url GET /instances/name/
-     **/
+     */
     public function name()
     {
         return INSTANCE_UNIQUE_NAME;
@@ -27,7 +27,7 @@ class Instances
 
     /**
      * @url GET /instances/mediaurl/
-     **/
+     */
     public function mediaUrl()
     {
         return MEDIA_IMG_PATH_WEB;
@@ -35,7 +35,7 @@ class Instances
 
     /**
      * @url GET /instances/siteurl/
-     **/
+     */
     public function siteUrl()
     {
         return SITE_URL;
@@ -43,7 +43,7 @@ class Instances
 
     /**
      * @url GET /instances/mediaimgpath/
-     **/
+     */
     public function mediaImgPath()
     {
         return MEDIA_IMG_PATH;
@@ -51,7 +51,7 @@ class Instances
 
     /**
      * @url GET /instances/instancemedia/
-     **/
+     */
     public function instanceMedia()
     {
         return INSTANCE_MEDIA;

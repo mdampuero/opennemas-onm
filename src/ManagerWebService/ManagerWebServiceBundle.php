@@ -3,7 +3,7 @@
  * Defines the manager web service bundle
  *
  * @package ManagerWebService
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace ManagerWebService;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * Initializes the FrontendBundle
  *
  * @package ManagerWebService
- **/
+ */
 class ManagerWebServiceBundle extends Bundle
 {
 }

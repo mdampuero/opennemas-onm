@@ -27,7 +27,7 @@ class GoogleTagsManagerTest extends KernelTestCase
      * Generates Google Tags Manager head code
      *
      * @return String the generated code
-     **/
+     */
     public function testGetGoogleTagsManagerHeadCode()
     {
         $code = "<!-- Google Tag Manager -->
@@ -45,7 +45,7 @@ class GoogleTagsManagerTest extends KernelTestCase
      * Generates Google Tags Manager body code
      *
      * @return String the generated code
-     **/
+     */
     public function testGetGoogleTagsManagerBodyCode()
     {
         $code = '<!-- Google Tag Manager (noscript) -->

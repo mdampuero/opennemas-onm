@@ -63,6 +63,10 @@ services:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
 
+    core.helper.url_generator:
+        class:     Common\Core\Component\Helper\UrlGeneratorHelper
+        arguments: [ '@service_container' ]
+
     core.instance:
         class:     Common\ORM\Entity\Instance
         factory:   [ '@core.loader', 'getInstance' ]

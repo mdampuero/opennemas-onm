@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- **/
+ */
 namespace Onm\Restler;
 
 use Onm\Settings as s;
@@ -16,7 +16,7 @@ use Onm\Settings as s;
 /**
  * Handles the authentication protocol for the Onm News Agency
  *
- **/
+ */
 class OnmAuth implements \Luracast\Restler\iAuthenticate
 {
     public function __isAllowed()

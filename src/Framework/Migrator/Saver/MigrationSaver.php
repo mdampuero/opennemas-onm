@@ -2080,7 +2080,6 @@ class MigrationSaver
         if (!$rss) {
             $this->output->writeln('Insert - updateRelated: check error log');
         }
-
     }
 
 

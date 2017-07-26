@@ -1,0 +1,27 @@
+frontend_css_global:
+    path: dynamic/css/global.{cb}.css
+    defaults: { _controller: FrontendBundle:Asset:globalCss }
+    requirements:
+        cb : '[0-9]+'
+
+frontend_css_frontpage_category:
+    path: dynamic/css/frontpage/{category}.{cb}.css
+    defaults: { _controller: FrontendBundle:Asset:customCssFrontpage, category: home, cb:12345 }
+    requirements:
+        category : '[^/]+'
+        cb : '[0-9]+'
+
+asset_image:
+    path: /asset/{parameters}/{real_path}
+    defaults: { _controller: FrontendBundle:Asset:image }
+    requirements:
+        parameters : '[^/]+'
+        real_path : '.+'
+    options:
+        expose: true
+
+asset_favico:
+    path: /apple-touch-icon{type}.png
+    defaults: { _controller: FrontendBundle:Asset:favico }
+    requirements:
+        type : '[A-Za-z0-9\-]*'

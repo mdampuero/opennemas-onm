@@ -3,7 +3,7 @@
  * Defines the frontend controller for the kiosko content type
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -25,14 +25,14 @@ use Onm\Settings as s;
  * Handles the actions for kiosko content type
  *
  * @package Frontend_Controllers
- **/
+ */
 class NewStandController extends Controller
 {
     /**
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         $this->cm = new \ContentManager();
@@ -56,7 +56,7 @@ class NewStandController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function frontpageAction(Request $request)
     {
         $month     = $request->query->getDigits('month', date('m'));
@@ -184,7 +184,7 @@ class NewStandController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('id', null);
@@ -248,7 +248,7 @@ class NewStandController extends Controller
      * calculates the months of the covers existing
      *
      * @return
-     **/
+     */
     public function widgetNewsstandDates()
     {
         //for widget_newsstand_dates
@@ -262,7 +262,7 @@ class NewStandController extends Controller
      * Fetches the advertisement
      *
      * @return array of advertisements
-     **/
+     */
     private function getAds()
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;

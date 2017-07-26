@@ -3,7 +3,7 @@
  * Defintes the Video class
  *
  * @package    Model
- **/
+ */
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -16,35 +16,35 @@
  * Handles video CRUD actions.
  *
  * @package    Model
- **/
+ */
 class Video extends Content
 {
     /**
      * The video id
      *
      * @var  int
-     **/
+     */
     public $pk_video = null;
 
     /**
      * Serialized array with the video information
      *
      * @var string
-     **/
+     */
     public $information  = null;
 
     /**
      * The original video url, if it comes from an external source
      *
      * @var string
-     **/
+     */
     public $video_url  = null;
 
     /**
      * The video author name
      *
      * @var string
-     **/
+     */
     public $author_name = null;
 
     /**
@@ -53,7 +53,7 @@ class Video extends Content
      * @param int $id the video id to load
      *
      * @return Video the video object instance
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Video');
@@ -67,7 +67,7 @@ class Video extends Content
      * @param string $name the name of the property to get.
      *
      * @return mixed the value for the property
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -96,7 +96,7 @@ class Video extends Content
      * @param int $id the video id to load
      *
      * @return Video the video object instance
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -146,7 +146,7 @@ class Video extends Content
      * @param array $data the video data
      *
      * @return boolean true if the videos was created
-     **/
+     */
     public function create($data)
     {
         try {
@@ -179,7 +179,7 @@ class Video extends Content
      * @param array $data the new video data
      *
      * @return boolean true if the video was updated
-     **/
+     */
     public function update($data)
     {
         try {
@@ -210,7 +210,7 @@ class Video extends Content
      * @param int $id the video id
      *
      * @return boolean true if the video was removed
-     **/
+     */
     public function remove($id)
     {
         if ((int) $id <= 0) return false;
@@ -241,7 +241,7 @@ class Video extends Content
      * @param array $arrayId the video ids to delete
      *
      * @return boolean true if the videos was deleted
-     **/
+     */
     public static function batchDelete($arrayIds)
     {
         if (!is_array($arrayIds)) {
@@ -297,7 +297,7 @@ class Video extends Content
      *
      * @return true
      * @throws Exception, if something goes wrong
-     **/
+     */
     public function createFromLocalFile($videoFileData = array())
     {
         $pathUpload = MEDIA_PATH.DS;
@@ -334,7 +334,7 @@ class Video extends Content
      * @param string $baseUploadpath the path where to save the video
      *
      * @return string the video uri
-     **/
+     */
     public function upload($file, $baseUploadpath)
     {
         $videoInformation = array();
@@ -377,7 +377,7 @@ class Video extends Content
      * @param string $baseUploadpath the target directory where upload the video file
      *
      * @return string the converted file path
-     **/
+     */
     public function convertVideotoFLV($originalVideo, $baseUploadpath)
     {
         $return = array();
@@ -486,7 +486,7 @@ class Video extends Content
      * Returns the uri for this video
      *
      * @return string the video uri
-     **/
+     */
     public function getUri()
     {
         if (empty($this->category_name)) {
@@ -509,7 +509,7 @@ class Video extends Content
      * Returns the thumb url of this video
      *
      * @return string the thumb url
-     **/
+     */
     public function getThumb()
     {
         if (!is_array($this->information)) {
@@ -548,7 +548,7 @@ class Video extends Content
      * @param array $params the parameters for changing the rendering behaviour
      *
      * @return string the final HTML for this video
-     **/
+     */
     public function render($params)
     {
         $tpl = getService('core.template');

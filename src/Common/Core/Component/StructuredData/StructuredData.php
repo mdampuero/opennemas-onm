@@ -30,7 +30,7 @@ class StructuredData
      * Generates json-ld for Images
      *
      * @return String the generated json-ld code
-     **/
+     */
     public function generateImageJsonLDCode($data)
     {
         $code = ',{
@@ -52,7 +52,7 @@ class StructuredData
      * Generates json-ld for Images
      *
      * @return String the generated json-ld code
-     **/
+     */
     public function generateVideoJsonLDCode($data)
     {
         $code = '{
@@ -85,7 +85,7 @@ class StructuredData
      * Generates json-ld for Image galleries
      *
      * @return String the generated json-ld code
-     **/
+     */
     public function generateImageGalleryJsonLDCode($data)
     {
         $code = '{
@@ -145,7 +145,7 @@ class StructuredData
      * Generates json-ld for NewsArticles
      *
      * @return String the generated json-ld code
-     **/
+     */
     public function generateNewsArticleJsonLDCode($data)
     {
         $code = '{

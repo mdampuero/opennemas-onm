@@ -1,0 +1,19 @@
+frontend_comments_get:
+    path: /comments/get
+    defaults: { _controller: FrontendBundle:Comments:get }
+
+frontend_comments_ajax:
+    path: /comments/ajax
+    defaults: { _controller: FrontendBundle:Comments:ajax }
+
+frontend_comments_vote:
+    path: /comments/vote
+    defaults: { _controller: FrontendBundle:Comments:vote }
+
+frontend_comments_save:
+    path: /comments/save
+    defaults: { _controller: FrontendBundle:Comments:save }
+
+frontend_comments_count:
+    path: /comments/count/{ids}
+    defaults: { _controller: FrontendBundle:Comments:getCommentsCount }

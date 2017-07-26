@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Handles the actions for the news agency module
  *
  * @package Backend_Controllers
- **/
+ */
 class NewsAgencyServerController extends Controller
 {
     /**

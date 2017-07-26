@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -120,7 +120,6 @@ EOF
                             $logger->info(count($results[0]) . " files downloaded", array('cron'));
                         }
                     }
-
                 } catch (\Exception $e) {
                     $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>");
                 }

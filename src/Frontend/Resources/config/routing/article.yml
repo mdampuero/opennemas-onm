@@ -1,0 +1,44 @@
+# Articles routes
+frontend_external_article_show:
+    path: /extarticulo/{category_name}/{slug}/{article_id}.{_format}
+    defaults: { _controller: FrontendBundle:Articles:extShow, _format: html, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
+
+frontend_article_show_gl:
+    path: /artigo/{category_name}/{slug}/{article_id}.{_format}
+    defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
+
+frontend_article_show_old_with_date:
+    path: /articulo/{category_name}/{date}/{slug}/{article_id}.{_format}
+    defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
+        date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
+frontend_article_show:
+    path: /articulo/{category_name}/{slug}/{article_id}.{_format}
+    defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        article_id   : '([0-9]+)'
+        _format      : 'html|htm'
+
+frontend_article_show_amp:
+    path: /articulo/{category_name}/{slug}/{article_id}.amp.html
+    defaults: { _controller: FrontendBundle:Amp:show, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        article_id   : '([0-9]+)'

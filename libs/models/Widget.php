@@ -10,35 +10,35 @@
  *
  * @package    Model
  *
- **/
+ */
 
 /**
  * Handles all the CRUD actions over widgets.
  *
  * @package    Model
  *
- **/
+ */
 class Widget extends Content
 {
     /**
      * The widget id
      *
      * @var int
-     **/
+     */
     public $pk_widget = null;
 
     /**
      * The content of the widget
      *
      * @var string
-     **/
+     */
     public $content = null;
 
     /**
      * The type of widget
      *
      * @var
-     **/
+     */
     public $renderlet = null;
 
     /**
@@ -59,7 +59,7 @@ class Widget extends Content
      * @param array $data the widget data
      *
      * @return boolean true if the widget was created
-     **/
+     */
     public function create($data)
     {
         $data['category'] = 0;
@@ -193,7 +193,7 @@ class Widget extends Content
      * @param array $params a list of params to pass to the widget rendering
      *
      * @return string the generated HTML
-     **/
+     */
     public function render($params = null)
     {
         switch ($this->renderlet) {
@@ -245,7 +245,7 @@ class Widget extends Content
      * @param array $params parameters for rendering the widget
      *
      * @return string the generated HTML
-     **/
+     */
     private function renderletIntelligentWidget($params = null)
     {
         $class = $this->factoryWidget($params);
@@ -263,7 +263,7 @@ class Widget extends Content
      * @param array $params parameters for rendering the widget
      *
      * @return Object the widget instance
-     **/
+     */
     public function factoryWidget($params = null)
     {
         getService('widget_repository')->loadWidget($this->content);

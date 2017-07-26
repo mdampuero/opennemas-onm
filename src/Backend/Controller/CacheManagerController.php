@@ -3,7 +3,7 @@
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
@@ -24,7 +24,7 @@ use Onm\Settings as s;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 class CacheManagerController extends Controller
 {
 
@@ -33,14 +33,14 @@ class CacheManagerController extends Controller
      *
      * @return void
      * @author
-     **/
+     */
     public function indexAction(Request $request)
     {
         $hasRedis = method_exists($this->get('cache'), 'getRedis');
 
         return $this->render('cache_manager/index.tpl', [ 'redis_enabled' => $hasRedis ]);
-
     }
+
     /**
      * Show the configuration form and stores its information
      *
@@ -103,7 +103,7 @@ class CacheManagerController extends Controller
      *
      * @return void
      * @author
-     **/
+     */
     public function clearAllCacheAction()
     {
         $this->clearSmartyCache();
@@ -183,7 +183,7 @@ class CacheManagerController extends Controller
      *
      * @return void
      * @author
-     **/
+     */
     public function clearRedisCacheForInstanceAction()
     {
         $this->clearRedis();
@@ -197,7 +197,7 @@ class CacheManagerController extends Controller
      * Removes the redis cache for the current instance
      *
      * @return void
-     **/
+     */
     private function clearRedis()
     {
         $cache = $this->get('cache');
@@ -213,7 +213,7 @@ class CacheManagerController extends Controller
      * Sends a BAN to varnish to purge all the cache for the current instance
      *
      * @return void
-     **/
+     */
     private function clearVarnishCache()
     {
         $instanceName = $this->get('core.instance')->internal_name;
@@ -226,7 +226,7 @@ class CacheManagerController extends Controller
      * Removes all the smarty cache for the current instance
      *
      * @return void
-     **/
+     */
     public function clearSmartyCache()
     {
         $frontpageTemplate = $this->get('view')->getTemplate();
@@ -237,7 +237,7 @@ class CacheManagerController extends Controller
      * Removes all the smarty compiles for the current instance
      *
      * @return void
-     **/
+     */
     public function clearSmartyCompiles()
     {
         $frontpageTemplate = $this->get('view')->getTemplate();

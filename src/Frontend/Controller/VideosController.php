@@ -286,7 +286,6 @@ class VideosController extends Controller
             'categoryName'   => $this->category_name,
             'x-tags'         => 'video-frontpage,'.$this->category_name.','.$this->page
         ]);
-
     }
 
     /**
@@ -295,7 +294,7 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->filter('video_id', '', FILTER_SANITIZE_STRING);
@@ -367,7 +366,7 @@ class VideosController extends Controller
      * Return via ajax more videos of a category
      *
      * @return Response the response object
-     **/
+     */
     public function ajaxMoreAction()
     {
         // Fetch video settings
@@ -405,7 +404,7 @@ class VideosController extends Controller
      * Return via ajax videos of a category
      *
      * @return Response the response object
-     **/
+     */
     public function ajaxInCategoryAction(Request $request)
     {
         // Fetch video settings

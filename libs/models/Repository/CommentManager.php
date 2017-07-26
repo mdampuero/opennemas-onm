@@ -206,7 +206,7 @@ class CommentManager extends BaseManager
      * @param int $limit The max number of comments to return
      *
      * @return array The list of comment objects
-     **/
+     */
     public function getMostVotedCommentsforContentID($contentId, $limit = 1)
     {
         $orderBySQL  = '`value_pos` DESC';
@@ -337,7 +337,7 @@ class CommentManager extends BaseManager
      * Deletes comments given a SQL filter
      *
      * @return void
-     **/
+     */
     public function deleteFromFilter($filter)
     {
         try {

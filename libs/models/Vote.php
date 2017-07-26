@@ -9,47 +9,47 @@
  * file that was distributed with this source code.
  *
  * @package    Model
- **/
+ */
 /**
  * Handles all the vote system.
  *
  * @package    Model
- **/
+ */
 class Vote
 {
     /**
      * The content id that this vote references
      *
      * @var int
-     **/
+     */
     public $pk_vote        = null;
 
     /**
      * Summary of positive votes
      *
      * @var int
-     **/
+     */
     public $value_pos      = null;
 
     /**
      * Summary of negative votes
      *
      * @var int
-     **/
+     */
     public $value_neg      = null;
 
     /**
      * Final karma for the content
      *
      * @var
-     **/
+     */
     public $karma          = null;
 
     /**
      * Serialized array of ips that voted
      *
      * @var
-     **/
+     */
     public $ips_count_vote = null;
 
     /**
@@ -81,7 +81,7 @@ class Vote
      * @param string $ip     the IP that performs the vote
      *
      * @return boolean true if all went well
-     **/
+     */
     public function create($votePK, $vote, $ip)
     {
         // En contra
@@ -124,7 +124,7 @@ class Vote
      * @param int $votePK the content id
      *
      * @return Vote the object instance
-     **/
+     */
     public function read($votePK)
     {
         try {
@@ -179,7 +179,7 @@ class Vote
      * @param string $ip   the ip that performs the vote
      *
      * @return boolean true if all went well
-     **/
+     */
     public function update($vote, $ip)
     {
         $this->ips_count_vote = $this->addCount($this->ips_count_vote, $ip);
@@ -224,7 +224,7 @@ class Vote
      * @param string $ajax whether the votes is from an ajax request
      *
      * @return string the HTML generated
-     **/
+     */
     public function render($page, $type, $ajax = 0)
     {
         if (isset($_COOKIE["vote" . $this->pk_vote])) {
@@ -270,7 +270,7 @@ class Vote
      * @param string $ip       the ip that performs the vote
      *
      * @return array the new list of ips and vote counts
-     **/
+     */
     public function addCount($countIPs, $ip)
     {
         $ips = array();
@@ -301,7 +301,7 @@ class Vote
      *
      * @return string the HTML for the vote image
      *
-     **/
+     */
     private function renderImg($i)
     {
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";
@@ -333,7 +333,7 @@ class Vote
      *
      * @return string the HTML for the vote link
      *
-     **/
+     */
     private function renderLink($i, $votePK)
     {
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";

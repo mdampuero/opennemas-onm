@@ -14,7 +14,7 @@
  * @package    Core
  * @subpackage Cache
  * @author     Fran Dieguez <fran@openhost.es>
- **/
+ */
 
 class MethodCacheManager
 {
@@ -22,35 +22,35 @@ class MethodCacheManager
      * How much time the cache will be valid
      *
      * @var int
-     **/
+     */
     private $ttl       = 300;
 
     /**
      * The object to interact with
      *
      * @var mixed
-     **/
+     */
     private $object    = null;
 
     /**
      * The object with cache service
      *
      * @var mixed
-     **/
+     */
     private $cache    = null;
 
     /**
      * A list of methods that the object has
      *
      * @var array
-     **/
+     */
     private $methods   = null;
 
     /**
      * The class name of the referenced object
      *
      * @var string
-     **/
+     */
     private $classname = null;
 
     /**
@@ -61,7 +61,7 @@ class MethodCacheManager
      *                       like ttl, ...
      *
      * @return MethodCacheManager
-     **/
+     */
     public function __construct($object, $options = array())
     {
         global $kernel;
@@ -82,7 +82,7 @@ class MethodCacheManager
      * @param array  $args   the arguments to pass to the method
      *
      * @return mixed the result of the called
-     **/
+     */
     public function __call($method, $args)
     {
         $class_methods = $this->getInternalObjectMethods();
@@ -114,7 +114,7 @@ class MethodCacheManager
      * @param int $ttl the amount of seconds the cache will be valid
      *
      * @return MethodCacheManager
-     **/
+     */
     public function setCacheLife($ttl)
     {
         $this->ttl = $ttl;
@@ -128,7 +128,7 @@ class MethodCacheManager
      * @param string $key the name of the cache to delete
      *
      * @return MethodCacheManager
-     **/
+     */
     public function clearCache($key)
     {
         $this->cache->delete($key);
@@ -140,7 +140,7 @@ class MethodCacheManager
      * Deletes all the APC caches.
      *
      * @return MethodCacheManager
-     **/
+     */
     public function clearAllCaches()
     {
         $this->cache->deleteAll();
@@ -153,7 +153,7 @@ class MethodCacheManager
      * interacting with
      *
      * @return array
-     **/
+     */
     protected function getInternalObjectMethods()
     {
         if ($this->methods === null && $this->object !== null) {

@@ -84,8 +84,8 @@ class Importer
         $criteria = [ 'source' => $this->config['id'] ];
 
         if (!array_key_exists('filters', $this->config)
-            || empty($this->config['filters'])) {
-
+            || empty($this->config['filters'])
+        ) {
             return $this->repository->findBy($criteria);
         }
 

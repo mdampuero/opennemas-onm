@@ -48,7 +48,6 @@ class SmartyCleanerListener implements EventSubscriberInterface
         //  elseif (!preg_match('@media@', $_SERVER['REQUEST_URI'])) {
         //     $logger->notice('TerminateEVent: varnish_cleaner do not have requests'.$_SERVER['REQUEST_URI']);
         // }
-
     }
 
     public static function getSubscribedEvents()

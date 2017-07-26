@@ -76,7 +76,7 @@ class TagsFilter extends Filter
      * Returns a list of words tokenized for Hiragana and Katagana
      *
      * @return array
-     **/
+     */
     private function tokenizeJapannese($string)
     {
         $hiraganaTokens = [

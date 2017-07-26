@@ -3,7 +3,7 @@
  * Defines the frontend error handler
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,7 +24,7 @@ use Onm\Settings as s;
  * Handlers errors in frontend
  *
  * @package Frontend_Controllers
- **/
+ */
 class ErrorController extends Controller
 {
     /**
@@ -33,7 +33,7 @@ class ErrorController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function defaultAction(Request $request)
     {
         if ($this->container->hasParameter('environment')) {

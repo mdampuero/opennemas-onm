@@ -15,56 +15,56 @@
  * Handles newspaper library
  *
  * @package    Model
- **/
+ */
 class Frontpage
 {
     /**
      * The frontpage id
      *
      * @var int
-     **/
+     */
     public $pk_frontpage = null;
 
     /**
      * The frontpage date
      *
      * @var string
-     **/
+     */
     public $date = null;
 
     /**
      * The frontpage version
      *
      * @var int
-     **/
+     */
     public $version = null;
 
     /**
      * The list of the frontpage contents
      *
      * @var array
-     **/
+     */
     public $content_positions = [];
 
     /**
      * Whether this frontpage is promoted
      *
      * @var boolean
-     **/
+     */
     public $promoted = 0;
 
     /**
      * Whether the frontpage is a frontpage day
      *
      * @var boolean
-     **/
+     */
     public $day_frontpage = 0;
 
     /**
      * Miscelanous params of this frontpage
      *
      * @var array
-     **/
+     */
     public $params = null;
 
     /**
@@ -191,7 +191,7 @@ class Frontpage
      *
      * @return void
      * @author
-     **/
+     */
     public function update($data)
     {
         $contents     = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);

@@ -3,7 +3,7 @@
  * Handles the generic actions for contents
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Common\Core\Annotation\BotDetector;
@@ -26,7 +26,7 @@ use Onm\Settings as s;
  * Handles the generic actions for contents
  *
  * @package Frontend_Controllers
- **/
+ */
 class ContentsController extends Controller
 {
     /**
@@ -35,7 +35,7 @@ class ContentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function printAction(Request $request)
     {
         $dirtyID = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
@@ -83,7 +83,7 @@ class ContentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function extPrintAction(Request $request)
     {
         $dirtyID      = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
@@ -127,7 +127,7 @@ class ContentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -319,7 +319,7 @@ class ContentsController extends Controller
      * Alteres the article given the paywall module status
      *
      * @return Article the article
-     **/
+     */
     public function paywallHook(&$content)
     {
         $paywallActivated = $this->get('core.security')->hasExtension('PAYWALL');
@@ -364,5 +364,35 @@ class ContentsController extends Controller
                 $content->body = $newContent;
             }
         }
+    }
+
+    /**
+     * Redirects from a content permalink to a content url
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     */
+    public function permalinkAction(Request $request)
+    {
+        $id = (int) $request->query->getDigits('content_id');
+
+        if ($id <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        // The only way to know which type of content is to query for the entire
+        // content and then do the translation to the entity repository service
+        // Not very proud of this.
+        $content = new \Content($id);
+        $content = $this->get('entity_repository')->find(classify($content->content_type_name), $id);
+
+        if (!is_object($content)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $url = $this->get('core.helper.url_generator')->generate($content);
+
+        return new \Symfony\Component\HttpFoundation\RedirectResponse($url);
     }
 }

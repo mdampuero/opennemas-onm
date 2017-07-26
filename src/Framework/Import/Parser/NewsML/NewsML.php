@@ -132,7 +132,7 @@ class NewsML extends Parser
      * @param SimpleXMLObject The parsed data.
      *
      * @return string The pretitle.
-     **/
+     */
     public function getPretitle($data)
     {
         $pretitle = $data->xpath('//SubHeadLine');

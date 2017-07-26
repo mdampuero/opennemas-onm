@@ -80,7 +80,7 @@ class FrameworkStatusController extends Controller
      *
      * @return void
      * @author
-     **/
+     */
     public function getStatus($status)
     {
         $statusKeyValues = array();
@@ -149,7 +149,7 @@ class FrameworkStatusController extends Controller
      * @param  array $config the opcache configuration values
      *
      * @return array
-     **/
+     */
     public function getDirectives($config)
     {
         $directivesKeyValues = array();
@@ -178,7 +178,7 @@ class FrameworkStatusController extends Controller
      * @param array $data scripts related opcache data
      *
      * @return array the list of cached binaries
-     **/
+     */
     public function getNewDirs($scripts, $data)
     {
         $dirs = array();

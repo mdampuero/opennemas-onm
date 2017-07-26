@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace WebService\Controller;
 
 use Luracast\Restler\Restler;
@@ -19,14 +19,14 @@ use Onm\Restler\OnmAuth;
  * Handles the actions for the web service
  *
  * @package Backend_Controllers
- **/
+ */
 class WebServiceController extends Controller
 {
     /**
      * Forwards all the web service requests to Restler
      *
      * @return Response the response object
-     **/
+     */
     public function defaultAction()
     {
         // Change the request uri to trick Restler

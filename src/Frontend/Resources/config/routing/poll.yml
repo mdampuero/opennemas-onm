@@ -1,0 +1,29 @@
+frontend_poll_frontpage:
+    path: /{component}/{page}
+    defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
+    requirements:
+        page     : '([0-9]+)?'
+        component: 'encuesta|poll|enquerito|enquisa|encuestas|polls'
+
+frontend_poll_vote:
+    path: /poll/addvote/{id}
+    defaults: { _controller: FrontendBundle:Polls:addVote }
+    requirements:
+        id           : '([0-9]+)'
+
+frontend_poll_frontpage_category:
+    path: /{component}/{category_name}/{page}
+    defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        page         : '([0-9]+)?'
+        component    : 'encuesta|poll|enquerito|enquisa'
+
+frontend_poll_show:
+    path: /{component}/{category_name}/{slug}/{id}.{_format}
+    defaults: { _controller: FrontendBundle:Polls:show, _format: html, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        id           : '([0-9]+)'
+        component: 'encuesta|poll|enquerito|enquisa'

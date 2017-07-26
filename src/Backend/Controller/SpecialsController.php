@@ -3,7 +3,7 @@
  * Handles the actions for the specials
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
@@ -24,14 +24,14 @@ use Symfony\Component\HttpFoundation\Response;
  * Handles the actions for the specials
  *
  * @package Backend_Controllers
- **/
+ */
 class SpecialsController extends Controller
 {
     /**
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         $this->contentType = \ContentManager::getContentTypeIdFromName('special');

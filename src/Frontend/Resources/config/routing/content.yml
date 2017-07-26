@@ -1,0 +1,28 @@
+frontend_content_print:
+    path: /content/print/{slug}/{content_id}.{_format}
+    defaults: { _controller: FrontendBundle:Contents:print, _format: html,  page: 1 }
+    requirements:
+        slug         : '[^/]+'
+        content_id   : '([0-9]+)'
+
+frontend_external_content_print:
+    path: /content/extprint/{category_name}/{slug}/{content_id}.{_format}
+    defaults: { _controller: FrontendBundle:Contents:extPrint, _format: html, page: 1 }
+    requirements:
+        category_name: '[^/]+'
+        slug         : '[^/]+'
+        content_id   : '([0-9]+)'
+
+frontend_content_share_by_mail:
+    path: /content/share-by-email/{content_id}
+    defaults: { _controller: FrontendBundle:Contents:shareByEmail }
+
+frontend_content_stats:
+    path: /content/stats
+    defaults: { _controller: FrontendBundle:Contents:stats }
+
+frontend_content_permalink:
+    path: /content/{content_id}
+    defaults: { _controller: FrontendBundle:Contents:permalink }
+    requirements:
+        content_id   : '([0-9]+)'

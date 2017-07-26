@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 /**
  * This file stores shared function that could be used by the framework
  */
@@ -53,7 +53,7 @@ function clearslash($string)
  * Register in the log one event in the content
  *
  * @return void
- **/
+ */
 function logContentEvent($action = null, $content = null)
 {
     $logger = getService('application.log');
@@ -71,7 +71,7 @@ function logContentEvent($action = null, $content = null)
  * Register in the log all user actions
  *
  * @return void
- **/
+ */
 function logUserEvent($action = null, $id = null, $data = null)
 {
     $logger = getService('application.log');
@@ -104,7 +104,7 @@ function logUserEvent($action = null, $id = null, $data = null)
  * @param boolean  $absolute whether generate an absolute url
  *
  * @return string  the url
- **/
+ */
 function url($urlName, $params = array(), $absolute = false)
 {
     if ($absolute) {
@@ -135,7 +135,7 @@ function forward301($url)
  * Try to get the real IP of the client
  *
  * @return string the client ip
- **/
+ */
 function getUserRealIP()
 {
     // REMOTE_ADDR: dirección ip del cliente
@@ -218,7 +218,7 @@ function getContainerParameter($paramName)
  * @param string $string the string to clean
  *
  * @return string $string the cleaned string
- **/
+ */
 function html_attribute($string)
 {
     return \Onm\StringUtils::htmlAttribute($string);
@@ -229,7 +229,7 @@ function html_attribute($string)
  *
  * @return void
  * @author
- **/
+ */
 function dispatchEventWithParams($eventName, $params = array())
 {
     if (php_sapi_name() == 'cli') {

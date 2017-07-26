@@ -57,49 +57,49 @@ class Menu
      * The menu id
      *
      * @var int
-     **/
+     */
     public $pk_menu = null;
 
     /**
      * The menu id
      *
      * @var int
-     **/
+     */
     public $id = null;
 
     /**
      * The name of the menu
      *
      * @var string
-     **/
+     */
     public $name = null;
 
     /**
      * The name of the menu
      *
      * @var string
-     **/
+     */
     public $title = null;
 
     /**
      * Menu type. internal, external...
      *
      * @var string
-     **/
+     */
     public $type = null;
 
     /**
      * Misc params for this menu
      *
      * @var string
-     **/
+     */
     public $params = null;
 
     /**
      * Unused variable
      *
      * @var string
-     **/
+     */
     public $config = "default_config";
 
     /**

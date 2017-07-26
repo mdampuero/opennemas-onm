@@ -146,7 +146,7 @@ class AssetController extends Controller
      * @param Request $request The request object
      *
      * @return Response the response object
-     **/
+     */
     public function customCssFrontpageAction(Request $request)
     {
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
@@ -234,7 +234,7 @@ class AssetController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function globalCssAction(Request $request)
     {
         // Setup templating cache layer

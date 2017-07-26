@@ -193,7 +193,6 @@ class Metadata extends DataObject implements Validable
         $keys = [];
         foreach ($this->getIdKeys() as $key) {
             $keys[$key] = $this->getTable() . '_' . $key;
-
         }
 
         return $keys;

@@ -14,42 +14,42 @@
  * Handles all the CRUD operations over opinions.
  *
  * @package    Model
- **/
+ */
 class Opinion extends Content
 {
     /**
      * The opinion id
      *
      * @var int
-     **/
+     */
     public $pk_opinion            = null;
 
     /**
      * The categories this opinion belongs to
      *
      * @var string
-     **/
+     */
     public $fk_content_categories = null;
 
     /**
      * The author id of this opinion
      *
      * @var int
-     **/
+     */
     public $fk_author             = null;
 
     /**
      * The author img id
      *
      * @var int
-     **/
+     */
     public $fk_author_img         = null;
 
     /**
      * The type of the opinion (0,1,2)
      *
      * @var int
-     **/
+     */
     public $type_opinion          = null;
 
     /**
@@ -58,7 +58,7 @@ class Opinion extends Content
      * @param int $id the opinion id to load
      *
      * @return Opinion the opinion object
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Opinion');
@@ -72,7 +72,7 @@ class Opinion extends Content
      * @param string $name the property name
      *
      * @return mixed the value of the property
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -163,7 +163,7 @@ class Opinion extends Content
      *
      * @return int the id of the opinion article created
      * @return boolean false if the
-     **/
+     */
     public function create($data)
     {
         $data['position'] =  1;
@@ -227,7 +227,7 @@ class Opinion extends Content
      * @param int $id the opinion id
      *
      * @return Opinion the opinion object
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -271,7 +271,7 @@ class Opinion extends Content
      * @param array $data the new opinion data
      *
      * @return boolean true if the opinion was updated
-     **/
+     */
     public function update($data)
     {
         if (!isset($data['fk_author'])) {
@@ -333,7 +333,7 @@ class Opinion extends Content
      * @param int $id the opinion article id
      *
      * @return boolean true if the action was performed
-     **/
+     */
     public function remove($id)
     {
         if ((int) $id <= 0) return false;
@@ -361,7 +361,7 @@ class Opinion extends Content
      * Renders the opinion article
      *
      * @return string the generated HTML for the opinion
-     **/
+     */
     public function render($params)
     {
         $tpl = getService('core.template');

@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -144,7 +144,7 @@ EOF
      * Generates a dummy  menu
      *
      * @return Menu the object menu with elements
-     **/
+     */
     public function generateMenu()
     {
         $menu = new \Menu();

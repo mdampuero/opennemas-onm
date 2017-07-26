@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  * @package    Model
- **/
+ */
 
 /**
  * Handles all the CRUD actions over albums.
  *
  * @package    Model
- **/
+ */
 class Special extends Content
 {
     /**
@@ -51,7 +51,7 @@ class Special extends Content
      * @param string $id the id of the album.
      *
      * @return void
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Special');
@@ -65,7 +65,7 @@ class Special extends Content
      * @param string $name the name of the property to get.
      *
      * @return mixed the value for the property
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -150,7 +150,7 @@ class Special extends Content
      * @param array $properties the list of properties to load
      *
      * @return void
-     **/
+     */
     public function load($properties)
     {
         parent::load($properties);
@@ -373,7 +373,7 @@ class Special extends Content
      * @param string $typeContent
      *
      * @return boolean true if all went well
-     **/
+     */
     public function setContents($id, $pkContent, $position, $name, $typeContent)
     {
         if (empty($id)) {
@@ -407,7 +407,7 @@ class Special extends Content
      * @param int $contentId the content to delete from the special
      *
      * @return boolean true if all went well
-     **/
+     */
     public function deleteContents($id, $contentId)
     {
         if (is_null($id)) {
@@ -435,7 +435,7 @@ class Special extends Content
      * @param int $id the special id
      *
      * @return boolean true if all went well
-     **/
+     */
     public function deleteAllContents($id)
     {
         if (is_null($id)) {

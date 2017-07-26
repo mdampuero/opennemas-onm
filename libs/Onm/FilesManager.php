@@ -16,7 +16,7 @@ namespace Onm;
  * Files Manager
  *
  * @package    Onm_Utils
- **/
+ */
 class FilesManager
 {
     /**

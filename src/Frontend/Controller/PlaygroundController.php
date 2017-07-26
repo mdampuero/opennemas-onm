@@ -14,7 +14,7 @@ class PlaygroundController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function defaultAction(Request $request)
     {
         $action = $request->query->get('action', null);
@@ -31,7 +31,7 @@ class PlaygroundController extends Controller
      * Tests for session in container
      *
      * @return Response the response object
-     **/
+     */
     public function session()
     {
         $this->get('session')->getFlashBag()->add(

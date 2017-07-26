@@ -19,7 +19,7 @@ class Uri
      * List of all default uri settings
      *
      * @var array
-     **/
+     */
     private static $urlConfigurations = array(
        'article'                  => [ 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
        'opinion'                  => [ 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
@@ -42,7 +42,7 @@ class Uri
     /**
      * Initializes the Uri object.
      *
-     **/
+     */
     public function __construct()
     {
         Uri::getConfig();
@@ -54,7 +54,7 @@ class Uri
      * @param array $params parameters for modify function behaviour.
      *
      * @return array the array of configurations
-     **/
+     */
     public static function getConfig($params = [])
     {
         return self::$urlConfigurations;
@@ -67,7 +67,7 @@ class Uri
      * @param array  $params the list of params required to generate the url
      *
      * @return string the uri generated
-     **/
+     */
     public static function generate($contentType, $params = [])
     {
 

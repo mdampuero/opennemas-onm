@@ -5,14 +5,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace WebService\Handlers;
 
 /**
  * Handles REST actions for advertisements.
  *
  * @package WebService
- **/
+ */
 class Ads
 {
     public $restler;

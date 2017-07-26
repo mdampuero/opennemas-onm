@@ -16,42 +16,42 @@
  * Class to manage privileges
  *
  * @package    Model
- **/
+ */
 class Subscriber
 {
     /**
      * The subscriber id
      *
      * @var int
-     **/
+     */
     public $id        = null;
 
     /**
      * The email of the subscriber
      *
      * @var string
-     **/
+     */
     public $email     = null;
 
     /**
      * The name of the subscriber
      *
      * @var string
-     **/
+     */
     public $name      = null;
 
     /**
      * The firstname of the user
      *
      * @var string
-     **/
+     */
     public $firstname = null;
 
     /**
      * The last name of the user
      *
      * @var string
-     **/
+     */
     public $lastname  = null;
 
     /**
@@ -59,12 +59,12 @@ class Subscriber
      * status=1 - (tras recibir el mail, el usuario ha clicado en el link y se ha aceptado)
      * status=2 - (El administrador ha aceptado la solicitud)
      * status=3 - (El administrador ha deshabilitado el usuario)
-     **/
+     */
     public $status = null;
 
     /**
      * Flag to check if user will receive the newsletter
-     **/
+     */
     public $subscription = null;
 
     /**
@@ -73,7 +73,7 @@ class Subscriber
      * @param int $id the subscriptor id
      *
      * @return void
-     **/
+     */
     public function __construct($id = null)
     {
         if (!is_null($id)) {
@@ -87,7 +87,7 @@ class Subscriber
      * @param array $properties the list of properties to overload
      *
      * @return Subscriber
-     **/
+     */
     public function load($properties)
     {
         if (is_array($properties)) {
@@ -119,7 +119,7 @@ class Subscriber
      * @param int $id the subscriber id
      *
      * @return Subscriber the object instance
-     **/
+     */
     public function read($id)
     {
         try {
@@ -143,7 +143,7 @@ class Subscriber
      * @param array $data the array of data
      *
      * @return boolean true if the subscriber was created
-     **/
+     */
     public function create($data)
     {
         $data['status']       = (!isset($data['status']))? 0: $data['status'];
@@ -182,7 +182,7 @@ class Subscriber
      * @param boolean $isBackend whether this action is called from backend
      *
      * @return boolean true if the subscriber was updated
-     **/
+     */
     public function update($data, $isBackend = false)
     {
         $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
@@ -223,7 +223,7 @@ class Subscriber
      * @param int $id the subscriber id to delete
      *
      * @return boolean true if the subscriber was deleted
-     **/
+     */
     public function delete($id)
     {
         if ((int) $id <= 0) {
@@ -256,7 +256,7 @@ class Subscriber
      * @param string $email the user email
      *
      * @return Subscriber the object instance
-     **/
+     */
     public function getUserByEmail($email)
     {
         try {
@@ -282,7 +282,7 @@ class Subscriber
      * @param string $_order_by the ORDER BY clause
      *
      * @return boolean true if the subscriber was created
-     **/
+     */
     public function getUsers($filter = null, $limit = null, $orderBy = 'name')
     {
         $items = [];
@@ -320,7 +320,7 @@ class Subscriber
      * @param int $status the status value
      *
      * @return boolean true if the subscriber status property was changed
-     **/
+     */
     public function setStatus($id, $status)
     {
         try {
@@ -347,7 +347,7 @@ class Subscriber
      * @param int $status the status value
      *
      * @return boolean true if the subscriber status property was changed
-     **/
+     */
     public function setSubscriptionStatus($id, $status)
     {
         try {
@@ -373,7 +373,7 @@ class Subscriber
      * @param string $email the email address
      *
      * @return boolean true if the subscriber is already registered
-     **/
+     */
     public function existsEmail($email)
     {
         try {
@@ -395,7 +395,7 @@ class Subscriber
      * @param string $where the WHERE clause
      *
      * @return int
-     **/
+     */
     public function countUsers($where = null)
     {
         $sql = 'SELECT count(*) as num FROM pc_users';

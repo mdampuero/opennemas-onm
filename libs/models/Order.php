@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  *
  * @package Model
- **/
+ */
 
 /**
  * Handles all CRUD actions over Orders.
  *
  * @package Model
- **/
+ */
 class Order
 {
     /**
@@ -23,7 +23,7 @@ class Order
      *
      * @return void
      * @author
-     **/
+     */
     public function __construct($id = null)
     {
         if (!is_null($id)) {
@@ -36,7 +36,7 @@ class Order
      * @param int $id the order id
      *
      * @return order the order object instance
-     **/
+     */
     public function read($id)
     {
         try {
@@ -73,7 +73,7 @@ class Order
      * @param array $data The data to save to the database
      *
      * @return boolean true if the order was saved
-     **/
+     */
     public function create($data)
     {
         try {
@@ -106,7 +106,7 @@ class Order
      * Fills the user attribute from the user information
      *
      * @return void
-     **/
+     */
     public function getUser()
     {
         $this->user = new \User($this->user_id);
@@ -116,7 +116,7 @@ class Order
      * Returns the list of orders
      *
      * @return array
-     **/
+     */
     public static function find($filter = '', $config = array())
     {
         $defaultParams = array(
@@ -183,7 +183,7 @@ class Order
      * Returns the list of orders
      *
      * @return array
-     **/
+     */
     public static function count($filter = '')
     {
         try {
