@@ -1,18 +1,10 @@
 imports:
+    - { resource: services/cache.yml }
     - { resource: services/kernel.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
 
 services:
-
-    cache:
-        class: %cache_handler%
-        arguments: [ %cache_handler_params% ]
-
-    cache_manager:
-        class: %cache_handler%
-        arguments: [ %cache_handler_params% ]
-
     collector.database:
         class: Framework\DataCollector\DatabaseCollector
         public: false
@@ -22,17 +14,6 @@ services:
                 name:     data_collector
                 id:       'database_collector'
                 template: '@OnmFramework/collector/database.html.twig'
-                priority: 100
-
-    collector.cache:
-        class: Framework\DataCollector\CacheCollector
-        public: false
-        arguments: [ '@service_container' ]
-        tags:
-            -
-                name:     data_collector
-                id:       'cache_collector'
-                template: '@OnmFramework/collector/cache.html.twig'
                 priority: 100
 
     dbal_connection:
