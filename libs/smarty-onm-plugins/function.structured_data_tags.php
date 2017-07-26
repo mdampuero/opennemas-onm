@@ -18,12 +18,12 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $summary = $content->summary;
         if (empty($summary)) {
             if (empty($content->body)) {
-                $summary = mb_substr($content->description, 0, 120)."...";
+                $summary = mb_substr($content->description, 0, 120) . "...";
             } else {
-                $summary = mb_substr($content->body, 0, 120)."...";
+                $summary = mb_substr($content->body, 0, 120) . "...";
             }
         }
-        $url = SITE_URL.$content->uri;
+        $url = SITE_URL . $content->uri;
 
         $category = getService('category_repository')->find($content->category);
         $user = getService('user_repository')->find($content->fk_author);
@@ -43,15 +43,15 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $logo = getService('setting_repository')->get('site_logo');
         if (!empty($logo)) {
             $logo = [
-                'url'    => SITE_URL.
+                'url'    => SITE_URL .
                        'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter/'.
-                       MEDIA_DIR_URL.'sections/'.$logo,
+                       MEDIA_DIR_URL . 'sections/' . $logo,
                 'width'  => '260',
                 'height' => '60'
             ];
         } else {
             $logo = [
-                'url'    => SITE_URL.
+                'url'    => SITE_URL .
                        'assets/images/logos/opennemas-powered-horizontal.png',
                 'width'  => '350',
                 'height' => '60'

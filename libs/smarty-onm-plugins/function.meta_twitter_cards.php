@@ -20,7 +20,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
         $content = $smarty->tpl_vars['content']->value;
 
         // Preparing content data for the twitter card
-        $url     = SITE_URL.$content->uri;
+        $url     = SITE_URL . $content->uri;
         $summary = $content->summary;
         $summary = trim(\Onm\StringUtils::htmlAttribute($summary));
         if (empty($summary)) {
@@ -41,10 +41,10 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
 
         // Writing Twitter card info
         $output[] = '<meta name="twitter:card" content="summary_large_image">';
-        $output[] = '<meta name="twitter:title" content="'.$title.'">';
-        $output[] = '<meta name="twitter:description" content="'.$summary.'">';
-        $output[] = '<meta name="twitter:site" content="@'.$twitterUser.'">';
-        $output[] = '<meta name="twitter:domain" content="'.$url.'">';
+        $output[] = '<meta name="twitter:title" content="' . $title . '">';
+        $output[] = '<meta name="twitter:description" content="' . $summary . '">';
+        $output[] = '<meta name="twitter:site" content="@' . $twitterUser . '">';
+        $output[] = '<meta name="twitter:domain" content="' . $url . '">';
 
         // Get image url if exists
         $imgHelper = new ContentMediaHelper($sm);

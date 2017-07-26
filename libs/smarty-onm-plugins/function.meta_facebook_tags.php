@@ -4,7 +4,7 @@ use \Common\Core\Component\Helper\ContentMediaHelper;
 
 function smarty_function_meta_facebook_tags($params, &$smarty)
 {
-    $output = array();
+    $output = [];
 
     // Only generate tags if is a content page
     if (array_key_exists('content', $smarty->tpl_vars)) {
@@ -33,8 +33,6 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         $output[] = '<meta property="og:description" content="' . $summary . '" />';
         $output[] = '<meta property="og:url" content="' . $url . '" />';
         $output[] = '<meta property="og:site_name" content="' . $sm->get('site_name') . '" />';
-
-
 
         // Get image url if exists
         $imgHelper = new ContentMediaHelper($sm);
