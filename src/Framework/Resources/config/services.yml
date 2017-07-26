@@ -1,25 +1,11 @@
 imports:
     - { resource: services/cache.yml }
+    - { resource: services/dbal.yml }
     - { resource: services/kernel.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
 
 services:
-    collector.database:
-        class: Framework\DataCollector\DatabaseCollector
-        public: false
-        arguments: [ '@service_container' ]
-        tags:
-            -
-                name:     data_collector
-                id:       'database_collector'
-                template: '@OnmFramework/collector/database.html.twig'
-                priority: 100
-
-    dbal_connection:
-        class: Onm\Database\DbalWrapper
-        arguments: [ %database%, %kernel.environment% ]
-
     category_repository:
         class: Repository\CategoryManager
         arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
