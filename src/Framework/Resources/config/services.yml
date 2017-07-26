@@ -5,6 +5,7 @@ imports:
     - { resource: services/orm_repositories.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
+    - { resource: services/templating.yml }
 
 services:
     automatic_contents:
@@ -21,25 +22,12 @@ services:
     varnish_ban_message_exchanger:
         class: Onm\Varnish\MessageExchanger
 
-    onm_templating:
-        class: Onm\Templating\Templating
-        arguments: [ '@service_container' ]
-
-    template_cache_manager:
-        class: Onm\Templating\Cache\Manager
-
-    template_cache_config_manager:
-        class: Onm\Templating\Cache\Config
-
     content_url_matcher:
         class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ '@entity_repository' ]
 
     content_cache:
         class: Framework\Cache\ContentCache
-
-    view:
-        alias: onm_templating
 
     onm.event.authentication_success_listener:
         class: Framework\EventListener\AuthenticationSuccessListener
@@ -63,10 +51,6 @@ services:
 
     core.messenger:
         class: Framework\Messenger\Messenger
-
-    core.manager.layout:
-        class:     Onm\LayoutManager
-        arguments: [ '@onm_templating' ]
 
     news_agency.importer:
         class:     Framework\Import\Importer\Importer
