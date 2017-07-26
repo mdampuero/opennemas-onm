@@ -469,7 +469,7 @@
                     </label>
                   </div>
                   <div class="checkbox-list checkbox-list-user-groups">
-                    <div class="checkbox p-b-5" ng-repeat="category in extra.categories">
+                    <div class="checkbox p-b-5" ng-repeat="category in extra.categories | filter : { parent: 0 }">
                       <div class="m-t-15" ng-if="$index > 0 && category.type != extra.categories[$index - 1].type">
                         <h5 ng-if="category.type == 1"><i class="fa fa-sticky-note m-r-5"></i>{t}Contents{/t}</h5>
                         <h5 ng-if="category.type == 7"><i class="fa fa-camera m-r-5"></i>{t}Albums{/t}</h5>
@@ -482,8 +482,8 @@
                           [% category.name %]
                         </label>
                       </div>
-                      <div ng-repeat="subcategory in extra.categories">
-                        <div ng-if="subcategory.parent != 0 && subcategory.parent == category.id">
+                      <div ng-if="category.id != 0">
+                        <div ng-repeat="subcategory in extra.categories | filter : { parent: category.id }">
                           <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="subcategory.id" type="checkbox">
                           <label class="form-label" for="category-[% $index %]">
                             &rarr; [% subcategory.name %]
