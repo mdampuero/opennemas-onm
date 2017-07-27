@@ -205,6 +205,7 @@ class AmpController extends Controller
             'content'         => $article,
             'actual_category' => $categoryName,
             'time'            => '12345',
+            'render_params'   => ['ads-format' => 'amp'],
             'cache_id'        => $cacheID,
             'x-tags'          => 'article-amp,article,'.$article->id,
             'x-cache-for'     => '+1 day',
@@ -223,7 +224,10 @@ class AmpController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
+        $positions = getService('core.helper.advertisement')
+            ->getPositionsForGroup('amp_inner', [1051, 1052, 1053]);
+
         return getService('advertisement_repository')
-            ->findByPositionsAndCategory([1051, 1052, 1053], $category);
+            ->findByPositionsAndCategory($positions, $category);
     }
 }

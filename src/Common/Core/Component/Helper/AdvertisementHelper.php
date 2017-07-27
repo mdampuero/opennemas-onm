@@ -122,7 +122,7 @@ class AdvertisementHelper
             }
         }
 
-        return $groupPositions;
+        return array_unique($groupPositions);
     }
 
     /**
