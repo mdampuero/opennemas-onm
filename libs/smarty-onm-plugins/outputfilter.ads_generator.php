@@ -17,6 +17,18 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         return $output;
     }
 
+    // Do not render the ads headers for AMP pages.
+    $formatFromTemplateVar = (
+            array_key_exists('render_params', $smarty->tpl_vars)
+            && array_key_exists('ads-format', $smarty->tpl_vars['render_params']->value)
+            && $smarty->tpl_vars['render_params']->value['ads-format']
+        ) ? $smarty->tpl_vars['render_params']->value['ads-format']
+        : null;
+
+    if ($formatFromTemplateVar == 'amp') {
+        return $output;
+    }
+
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
     $positions = [];
     $settings  = getService('setting_repository')->get('ads_settings');
