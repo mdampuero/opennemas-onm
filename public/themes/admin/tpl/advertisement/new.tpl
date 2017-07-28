@@ -484,8 +484,8 @@
                       </div>
                       <div ng-if="category.id != 0">
                         <div ng-repeat="subcategory in extra.categories | filter : { parent: category.id }">
-                          <input id="category-[% $index %]" name="category-[% $index %]" checklist-model="ui.categories" checklist-value="subcategory.id" type="checkbox">
-                          <label class="form-label" for="category-[% $index %]">
+                          <input id="category-[% category.id %][% $index %]" name="category-[% category.id %][% $index %]" checklist-model="ui.categories" checklist-value="subcategory.id" type="checkbox">
+                          <label class="form-label" for="category-[% category.id %][% $index %]">
                             &rarr; [% subcategory.name %]
                           </label>
                         </div>
