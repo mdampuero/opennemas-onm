@@ -61,13 +61,13 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $sm = getService('setting_repository');
         $structData = new StructuredData($sm);
 
-        // Get media element
-        $mediaHelper = new ContentMediaHelper($sm);
-        $mediaObject = $mediaHelper->getContentMediaObject($content);
+        // Populate the media element if exists
+        $mediaObject = getService('core.helper.content_media')
+            ->getContentMediaObject($content, $params);
 
         $media = [
-            'image' => get_class($mediaObject) == 'Photo' ? $mediaObject : '',
-            'video' => get_class($mediaObject) == 'Video' ? $mediaObject : ''
+            'image' => get_class($mediaObject) == 'Photo' ? $mediaObject : null,
+            'video' => get_class($mediaObject) == 'Video' ? $mediaObject : null,
         ];
 
         // Complete array of Data

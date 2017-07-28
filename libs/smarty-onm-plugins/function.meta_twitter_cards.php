@@ -46,9 +46,8 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
         $output[] = '<meta name="twitter:site" content="@' . $twitterUser . '">';
         $output[] = '<meta name="twitter:domain" content="' . $url . '">';
 
-        // Get image url if exists
-        $imgHelper = new ContentMediaHelper($sm);
-        $image     = $imgHelper->getContentMediaObject($content);
+        // Populate the media element if exists
+        $image = getService('core.helper.content_media')->getContentMediaObject($content, $params);
         if (isset($image->url) && !empty($image->url)) {
             $output[] = '<meta name="twitter:image" content="' . $image->url . '">';
         }

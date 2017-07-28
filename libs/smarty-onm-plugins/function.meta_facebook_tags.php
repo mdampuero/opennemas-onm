@@ -34,9 +34,8 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         $output[] = '<meta property="og:url" content="' . $url . '" />';
         $output[] = '<meta property="og:site_name" content="' . $sm->get('site_name') . '" />';
 
-        // Get image url if exists
-        $imgHelper = new ContentMediaHelper($sm);
-        $image     = $imgHelper->getContentMediaObject($content, $params);
+        // Populate the media element if exists
+        $image = getService('core.helper.content_media')->getContentMediaObject($content, $params);
         if (isset($image->url) && !empty($image->url)) {
             $output[] = '<meta property="og:image" content="' . $image->url . '" />';
             $output[] = '<meta property="og:image:width" content="' . $image->width . '"/>';

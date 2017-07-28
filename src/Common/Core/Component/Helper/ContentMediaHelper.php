@@ -16,10 +16,12 @@ class ContentMediaHelper
      * Initializes ContentMedia
      *
      * @param SettingManager $sm The setting service.
+     * @param EntityManager  $er The entity repository service.
      */
-    public function __construct($sm)
+    public function __construct($sm, $er)
     {
         $this->sm  = $sm;
+        $this->er  = $er;
     }
 
     /**
@@ -28,12 +30,10 @@ class ContentMediaHelper
      * @param Object $content The content object.
      * @param String $params An image url passed from template.
      *
-     * @return Object $obj An object with image/video information
+     * @return Object $mediaObject An object with image/video information
      */
     public function getContentMediaObject($content, $params = null)
     {
-        $er       = getService('entity_repository');
-        $obj      = new \stdClass();
         $mediaUrl = MEDIA_IMG_ABSOLUTE_URL;
 
         switch ($content->content_type_name) {
@@ -41,37 +41,39 @@ class ContentMediaHelper
             case 'opinion':
                 if (isset($content->img2) && ($content->img2 > 0)) {
                     // Articles/Opinion with inner photo
-                    $obj = $er->find('Photo', $content->img2);
-                    if (!empty($obj)) {
-                        $obj->url = $mediaUrl . $obj->path_file . $obj->name;
+                    $mediaObject = $this->er->find('Photo', $content->img2);
+                    if (!empty($mediaObject)) {
+                        $mediaObject->url = $mediaUrl . $mediaObject->path_file . $mediaObject->name;
                     }
                 } elseif (isset($content->fk_video2) && ($content->fk_video2 > 0)) {
                     // Articles with inner video
-                    $obj = $er->find('Video', $content->fk_video2);
-                    if (!empty($obj)
-                        && strpos($obj->thumb, 'http')  === false
+                    $mediaObject = $this->er->find('Video', $content->fk_video2);
+                    if (!empty($mediaObject)
+                        && strpos($mediaObject->thumb, 'http')  === false
                     ) {
-                        $obj->thumb = SITE_URL . $obj->thumb;
+                        $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
                     }
-                    $obj->url = $obj->thumb;
+                    $mediaObject->url = $mediaObject->thumb;
                 } elseif (isset($content->img1) && ($content->img1 > 0)) {
                     // Articles/Opinion with front photo
-                    $obj = $er->find('Photo', $content->img1);
-                    if (!empty($obj)) {
-                        $obj->url = $mediaUrl . $obj->path_file . $obj->name;
+                    $mediaObject = $this->er->find('Photo', $content->img1);
+                    if (!empty($mediaObject)) {
+                        $mediaObject->url = $mediaUrl . $mediaObject->path_file . $mediaObject->name;
                     }
                 } elseif (is_object($content->author->photo)) {
-                    //Photo author
-                    $obj = $content->author->photo;
-                    $obj->url = $mediaUrl . '/' . $obj->path_img;
+                    // Photo author
+                    $mediaObject = $content->author->photo;
+                    $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
+
                 break;
 
             case 'album':
                 if (isset($content->cover_image) && !empty($content->cover_image)) {
-                    $obj = $content->cover_image;
-                    $obj->url = $mediaUrl . '/' . $obj->path_img;
+                    $mediaObject = $content->cover_image;
+                    $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
+
                 break;
 
             case 'video':
@@ -79,32 +81,35 @@ class ContentMediaHelper
                     if (strpos($content->thumb, 'http')  === false) {
                         $content->thumb = SITE_URL.$content->thumb;
                     }
-                    $obj = $content;
-                    $obj->url = $content->thumb;
+                    $mediaObject = $content;
+                    $mediaObject->url = $content->thumb;
                 }
+                break;
+            default:
+                $mediaObject = new \stdClass();
                 break;
         }
 
-        if (!isset($obj->url)) {
+        if (!isset($mediaObject->url)) {
             $baseUrl = SITE_URL . 'media/' . MEDIA_DIR . '/sections/';
             if (!is_null($params) && array_key_exists('default_image', $params)) {
                 // Default on template
-                $obj->url = $params['default_image'];
+                $mediaObject->url = $params['default_image'];
             } elseif ($this->sm->get('mobile_logo')) {
                 // Mobile logo
-                $obj->url = $baseUrl . $this->sm->get('mobile_logo');
+                $mediaObject->url = $baseUrl . $this->sm->get('mobile_logo');
             } elseif ($this->sm->get('site_logo')) {
                 // Logo
-                $obj->url = $baseUrl . $this->sm->get('site_logo');
+                $mediaObject->url = $baseUrl . $this->sm->get('site_logo');
             }
         }
 
         // Overload object image size
-        $obj->width = (isset($obj->width) && !empty($obj->width))
-            ? $obj->width : 700;
-        $obj->height = (isset($obj->height) && !empty($obj->height))
-            ? $obj->height : 450;
+        $mediaObject->width = (isset($mediaObject->width) && !empty($mediaObject->width))
+            ? $mediaObject->width : 700;
+        $mediaObject->height = (isset($mediaObject->height) && !empty($mediaObject->height))
+            ? $mediaObject->height : 450;
 
-        return $obj;
+        return $mediaObject;
     }
 }
