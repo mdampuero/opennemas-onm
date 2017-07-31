@@ -1,7 +1,5 @@
 <?php
 
-use \Common\Core\Component\Helper\ContentMediaHelper;
-
 function smarty_function_meta_facebook_tags($params, &$smarty)
 {
     $output = [];

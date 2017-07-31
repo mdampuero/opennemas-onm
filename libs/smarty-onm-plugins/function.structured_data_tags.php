@@ -1,6 +1,5 @@
 <?php
 
-use \Common\Core\Component\Helper\ContentMediaHelper;
 use \Common\Core\Component\StructuredData\StructuredData;
 
 function smarty_function_structured_data_tags($params, &$smarty)
