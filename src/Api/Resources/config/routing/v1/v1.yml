@@ -1,9 +1,9 @@
-api_v1_backend_setting:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/setting.yml'
-    prefix:   /backend
-
 api_v1_backend_file:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/file.yml'
+    prefix:   /backend
+
+api_v1_backend_setting:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/setting.yml'
     prefix:   /backend
 
 api_v1_backend_user:
