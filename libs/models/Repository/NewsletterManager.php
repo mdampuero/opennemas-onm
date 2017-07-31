@@ -28,15 +28,9 @@ class NewsletterManager extends BaseManager
      * @param string         $cachePrefix The cache prefix.
      * @pram  Template       $template    The template service.
      */
-    public function __construct(
-        DbalWrapper $dbConn,
-        EntityManager $entityManager,
-        CacheInterface $cache,
-        $cachePrefix,
-        $tpl
-    ) {
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix, $tpl)
+    {
         $this->dbConn      = $dbConn;
-        $this->er          = $entityManager;
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
         $this->tpl         = $tpl;
@@ -107,6 +101,7 @@ class NewsletterManager extends BaseManager
             $newsletterContent = [];
         }
 
+        $er = getService('entity_repository');
         foreach ($newsletterContent as $container) {
             foreach ($container->items as &$item) {
                 // if current item do not fullfill the required format
@@ -115,7 +110,7 @@ class NewsletterManager extends BaseManager
                     continue;
                 }
 
-                $content = $this->er->find($item->content_type, $item->id);
+                $content = $er->find($item->content_type, $item->id);
 
                 // if is not a real content, skip this element
                 if (!is_object($content) || is_null($content->id)) {
@@ -207,10 +202,11 @@ class NewsletterManager extends BaseManager
         $item->image = (isset($content->cover))?$content->cover:'';
 
         // Fetch images of articles if exists
+        $er = getService('entity_repository');
         if (!empty($content->img1)) {
             $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img1);
         } elseif (!empty($content->fk_video)) {
-            $item->video = $this->er->find('Video', $content->fk_video);
+            $item->video = $er->find('Video', $content->fk_video);
         } elseif (!empty($content->img2)) {
             $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img2);
         }
