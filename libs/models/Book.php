@@ -22,28 +22,28 @@ class Book extends Content
      * The id of the group
      *
      * @var int
-     **/
+     */
     public $pk_book  = null;
 
     /**
      * The author id that created this book
      *
      * @var int
-     **/
+     */
     public $author  = null;
 
     /**
      * The id of the cover image
      *
      * @var string
-     **/
+     */
     public $cover_id  = null;
 
     /**
      * The editorial of the book
      *
      * @var string
-     **/
+     */
     public $editorial  = null;
 
     /**
@@ -52,7 +52,7 @@ class Book extends Content
      * @param int $id the book id to load
      *
      * @return Book The book object instance
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Book');
@@ -66,7 +66,7 @@ class Book extends Content
      * @param string $name the property name to fetch
      *
      * @return mixed the property value
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -100,7 +100,7 @@ class Book extends Content
      * @param array $properties the list of properties to load
      *
      * @return void
-     **/
+     */
     public function load($properties)
     {
         parent::load($properties);
@@ -120,7 +120,7 @@ class Book extends Content
      * @param int $id the book id to load
      *
      * @return Book the Book object instance
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -153,7 +153,7 @@ class Book extends Content
      *
      * @return int the book id
      * @return boolean false if the book was not created
-     **/
+     */
     public function create($data)
     {
         parent::create($data);
@@ -186,7 +186,7 @@ class Book extends Content
      * @param array $data the new book data
      *
      * @return int the book id
-     **/
+     */
     public function update($data)
     {
         parent::update($data);
@@ -222,7 +222,7 @@ class Book extends Content
      * @param int $id the book id to remove
      *
      * @return boolean  true if the book was removed
-     **/
+     */
     public function remove($id = null)
     {
         if (is_null($id)) {

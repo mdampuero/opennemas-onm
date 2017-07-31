@@ -136,7 +136,6 @@ class CoreListener implements EventSubscriberInterface
 
             $host = $instance->internal_name .
                 $this->container->getParameter('opennemas.base_domain');
-
         } elseif ($this->container->getParameter('opennemas.redirect_frontend')) {
             if (!empty($instance->domains)) {
                 $host = $instance->getMainDomain();

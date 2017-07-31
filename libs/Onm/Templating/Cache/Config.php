@@ -101,7 +101,7 @@ class Config
      * @param string $configDir the config dir where the config.ini file is located in
      *
      * @return void
-     **/
+     */
     public function __construct($configDir = '')
     {
         $this->setConfigDir($configDir);
@@ -113,7 +113,7 @@ class Config
      * @param string $configDir the directory
      *
      * @return Config the clas
-     **/
+     */
     public function setConfigDir($configDir = '')
     {
         $this->configDir = $configDir;
@@ -125,7 +125,7 @@ class Config
      * Returns the parsed cache configuration file
      *
      * @return array the smarty cache configuration
-     **/
+     */
     public function load()
     {
         $filename = $this->configDir . 'cache.conf';
@@ -219,7 +219,7 @@ class Config
      * @param array $config the configuration to save
      *
      * @return void
-     **/
+     */
     public function save($config)
     {
         $filename = $this->configDir . '/cache.conf';

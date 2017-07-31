@@ -17,7 +17,7 @@ use Common\Core\Controller\Controller;
  * Handles the actions for searches
  *
  * @package Frontend_Controllers
- **/
+ */
 class SearchController extends Controller
 {
     /**

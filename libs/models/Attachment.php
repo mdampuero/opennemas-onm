@@ -24,33 +24,33 @@ class Attachment extends Content
      * The attachment id
      *
      * @var int
-     **/
+     */
     public $pk_attachment   = null;
 
     /**
      * The attachemnt title
      *
      * @var
-     **/
+     */
     public $title           = null;
 
     /**
      * The relative path to the file
      *
      * @var
-     **/
+     */
     public $path            = null;
 
     /**
      * The category Id
-     **/
+     */
     public $category        = null;
 
     /**
      * Proxy handler for the object cache
      *
      * @var MethodCacheManager
-     **/
+     */
     public $cache = null;
 
     /**
@@ -59,7 +59,7 @@ class Attachment extends Content
      * @param  integer $id the id of the Attachment
      *
      * @return void
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('File');
@@ -74,7 +74,7 @@ class Attachment extends Content
      * @param string $name the name of the property to get.
      *
      * @return mixed the value for the property
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -196,7 +196,7 @@ class Attachment extends Content
      * @param array $data the array of data for the attachment
      *
      * @return void
-     **/
+     */
     public function update($data)
     {
         parent::update($data);
@@ -224,7 +224,7 @@ class Attachment extends Content
      * @param int $id the attachement id for delete
      *
      * @return boolean
-     **/
+     */
     public function remove($id)
     {
         // If no valid id then return
@@ -281,7 +281,7 @@ class Attachment extends Content
      * @param array $arrayId the photo ids to delete
      *
      * @return boolean true if the photo was deleted
-     **/
+     */
     public static function batchDelete($arrayIds)
     {
         try {
@@ -319,7 +319,7 @@ class Attachment extends Content
      * @param Template $tpl the Template instance
      *
      * @return string the final html for the article
-     **/
+     */
     public function render($params, $tpl = null)
     {
         $tpl = getService('core.template');

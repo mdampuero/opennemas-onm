@@ -1,0 +1,6 @@
+frontend_widget_execute:
+    path:     /widget/{id}/{action}
+    defaults: { _controller: FrontendBundle:Widget:execute }
+    requirements:
+        action: '[a-z]+'
+        id:     '[0-9]+'

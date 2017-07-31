@@ -23,7 +23,7 @@ use Onm\Exception\DatabaseNotRestoredException;
  * Handles the actions for the manager web service
  *
  * @package ManagerWebService_Controller
- **/
+ */
 class WebServiceController extends Controller
 {
     /**

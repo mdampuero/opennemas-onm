@@ -15,42 +15,42 @@
  * Handles all CRUD operations over Polls.
  *
  * @package    Model
- **/
+ */
 class Poll extends Content
 {
     /**
      * The poll id
      *
      * @var int
-     **/
+     */
     public $pk_poll       = null;
 
     /**
      * The poll subtitle
      *
      * @var string
-     **/
+     */
     public $subtitle      = null;
 
     /**
      * The total amount of votes for this poll
      *
      * @var int
-     **/
+     */
     public $total_votes   = null;
 
     /**
      * Ips that have voted this poll
      *
      * @var array
-     **/
+     */
     public $used_ips      = null;
 
     /**
      * Type of visualization (bars, pie, ...)
      *
      * @var string
-     **/
+     */
     public $visualization = null;
 
     /**
@@ -59,7 +59,7 @@ class Poll extends Content
      * @param int $id the poll id
      *
      * @return Poll the object instance
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Poll');
@@ -73,7 +73,7 @@ class Poll extends Content
      * @param string $name the property name
      *
      * @return mixed the property value
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -107,7 +107,7 @@ class Poll extends Content
      * @param int $id the poll id
      *
      * @return Poll the poll instance
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -140,7 +140,7 @@ class Poll extends Content
      * @param array $properties the list of properties to load
      *
      * @return void
-     **/
+     */
     public function load($properties)
     {
         parent::load($properties);
@@ -181,7 +181,7 @@ class Poll extends Content
      * @param array $data the data for the new poll
      *
      * @return boolean true if the poll was created
-     **/
+     */
     public function create($data)
     {
         parent::create($data);
@@ -224,7 +224,7 @@ class Poll extends Content
      * @param array $data the array of data
      *
      * @return Poll the object instance
-     **/
+     */
     public function update($data)
     {
         parent::update($data);
@@ -286,7 +286,7 @@ class Poll extends Content
      * @param int $id the poll id
      *
      * @return boolean true if the poll was removed
-     **/
+     */
     public function remove($id)
     {
         parent::remove($id);
@@ -314,7 +314,7 @@ class Poll extends Content
      * @param int $pkPoll the poll id
      *
      * @return array the list of poll answers
-     **/
+     */
 
     public function getItems($pkPoll)
     {
@@ -362,7 +362,7 @@ class Poll extends Content
      * @param string $ip     the ip that votes
      *
      * @return boolean true if the vote was registered
-     **/
+     */
     public function vote($pkItem, $ip)
     {
         $this->used_ips = $this->addCount($this->used_ips, $ip);
@@ -402,7 +402,7 @@ class Poll extends Content
      * @param string $ip
      *
      * @return array
-     **/
+     */
     public function addCount($ips_count, $ip)
     {
         $ips = array();
@@ -433,7 +433,7 @@ class Poll extends Content
      * @param arrray $params parameters for rendering the content
      *
      * @return string the generated HTML
-     **/
+     */
     public function render($params)
     {
         $tpl = getService('core.template');

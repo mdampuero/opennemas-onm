@@ -6,7 +6,7 @@
 *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Controller;
 
 use Common\Core\Controller\Controller;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  *
  * @package Backend_Controllers
  * @author
- **/
+ */
 class ErrorController extends Controller
 {
     // TODO: find a way to render a simple file with smarty without initializing
@@ -26,7 +26,7 @@ class ErrorController extends Controller
      * Shows the login form
      *
      * @return string the response string
-     **/
+     */
     public function defaultAction()
     {
         global $error;

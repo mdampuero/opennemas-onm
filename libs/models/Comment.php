@@ -9,111 +9,111 @@
  * file that was distributed with this source code.
  *
  * @package    Model
- **/
+ */
 
 /**
  * Handles all the CRUD actions of Comments
  *
  * @package    Model
- **/
+ */
 class Comment
 {
     /**
      * The id of the comment
      *
      * @var int
-     **/
+     */
     public $id           = null;
 
     /**
      * Content id that is referencing this comment
      *
      * @var int
-     **/
+     */
     public $content_id   = 0;
 
     /**
      * The name of the author that sent this comment
      *
      * @var int
-     **/
+     */
     public $author       = '';
 
      /**
      * The email of the author that sent the comment
      *
      * @var string
-     **/
+     */
     public $author_email = '';
 
     /**
      * The url of the author that sent the comment
      *
      * @var string
-     **/
+     */
     public $author_url   = null;
 
     /**
      * The IP of the author that sent the comment
      *
      * @var string
-     **/
+     */
     public $author_ip    = '';
 
     /**
      * The date when was created this content
      *
      * @var string
-     **/
+     */
     public $date         = null;
 
     /**
      * The content body
      *
      * @var string
-     **/
+     */
     public $body         = '';
 
     /**
      * Whether this comment is published or not
      *
      * @var string
-     **/
+     */
     public $status       = '';
 
      /**
      * The type of comment
      *
      * @var string
-     **/
+     */
     public $type       = '';
 
     /**
      * The agent that sent this comment
      *
      * @var string
-     **/
+     */
     public $agent       = '';
 
     /**
      * The id of the comment that references this element
      *
      * @var int
-     **/
+     */
     public $parent_id       = 0;
 
     /**
      * The user id that sent this comment
      *
      * @var int
-     **/
+     */
     public $user_id       = 0;
 
     /**
      * The content type name that is referenced by the comment
      *
      * @var int
-     **/
+     */
     public $content_type_referenced = '';
 
     const STATUS_ACCEPTED = 'accepted';
@@ -126,7 +126,7 @@ class Comment
      * @param int $id the comment id to load
      *
      * @return Comment the comment object instance
-     **/
+     */
     public function __construct($id = null)
     {
         if (!is_null($id)) {
@@ -142,7 +142,7 @@ class Comment
      * @param array $data list of properties and values to get info from
      *
      * @return Comment the object with data filled
-     **/
+     */
     public function load($data)
     {
         if (empty($data)) {
@@ -177,7 +177,7 @@ class Comment
      * @param  array $params the params to change function behaviour
      *
      * @return bool  if it is true the comment was created
-     **/
+     */
     public function create($params)
     {
         $currentDate = new \DateTime('', new \DateTimeZone('UTC'));
@@ -247,7 +247,7 @@ class Comment
      * @param integer $id the id of the comment
      *
      * @return Comment the comment object instance
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -281,7 +281,7 @@ class Comment
      *
      * @return boolean true if the comment was updated
      * @throws Exception If id not valid, status not valid, passed field not valid
-     **/
+     */
     public function update($data)
     {
         // Check id
@@ -352,7 +352,7 @@ class Comment
      *
      * @return Comment the comment object instance
      * @throws Exception If status name not valid
-     **/
+     */
     public function setStatus($statusName)
     {
         try {
@@ -377,7 +377,7 @@ class Comment
      * Returns a list of valid properties of this object
      *
      * @return array the list of properties
-     **/
+     */
     protected function getValidProperties()
     {
         return array_keys(get_class_vars(__CLASS__));
@@ -387,7 +387,7 @@ class Comment
      * Returns a list of valid statuses
      *
      * @return array the list of valid statuses
-     **/
+     */
     protected function getValidStatuses()
     {
         return [ self::STATUS_ACCEPTED, self::STATUS_REJECTED, self::STATUS_PENDING, ];
@@ -399,7 +399,7 @@ class Comment
      * @param string $statusName the name of the status to check
      *
      * @return boolean true if the status name provided is valid
-     **/
+     */
     protected function isValidStatus($statusName)
     {
         return in_array($statusName, $this->getValidStatuses());
@@ -411,7 +411,7 @@ class Comment
      * @param string $property the property name to fetch
      *
      * @return boolean true if it is in the category
-     **/
+     */
     public function getProperty($property)
     {
         if ((int) $this->id <= 0) return false;
@@ -439,7 +439,7 @@ class Comment
      * @param string $property the property name to fetch
      *
      * @return int $commentId if it is in the category, 0 otherwise
-     **/
+     */
     public function getCommentIdFromPropertyAndValue($property, $value)
     {
         try {
@@ -464,7 +464,7 @@ class Comment
      * @param mixed $value     the value of the property
      *
      * @return boolean true if the property was setted
-     **/
+     */
     public function setMetadata($property, $value)
     {
         if ($this->id == null || empty($property)) {
@@ -493,7 +493,7 @@ class Comment
      * @param string $parentId the id of the parent comment
      *
      * @return boolean true if the parent_id was updated
-     **/
+     */
     public function updateParentId($parentId = null)
     {
         if (is_null($parentId)) return false;
@@ -517,7 +517,7 @@ class Comment
      * Get the datetime of last comment
      *
      * @return string $date datetime of last comment false otherwise
-     **/
+     */
     public function getLastCommentDate()
     {
         try {
@@ -536,7 +536,7 @@ class Comment
      * Update a content comments total number
      *
      * @return boolean true if the number of comments was updated
-     **/
+     */
     public function updateContentTotalComments($id)
     {
         try {

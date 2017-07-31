@@ -84,8 +84,8 @@ class Importer
         $criteria = [ 'source' => $this->config['id'] ];
 
         if (!array_key_exists('filters', $this->config)
-            || empty($this->config['filters'])) {
-
+            || empty($this->config['filters'])
+        ) {
             return $this->repository->findBy($criteria);
         }
 
@@ -354,7 +354,7 @@ class Importer
      */
     protected function getData($resource, $category, $author, $enabled, $target)
     {
-        $fm   = getService('core.filter.manager');
+        $fm   = getService('data.manager.filter');
         $data = [
             'category'            => $category,
             'content_status'      => $enabled,

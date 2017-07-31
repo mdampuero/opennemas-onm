@@ -1,0 +1,6 @@
+api_v1_backend_files_autocomplete:
+    path:     /files/autocomplete
+    defaults: { _controller  : ApiBundle:V1/Backend/File:autocomplete }
+    methods:  [ GET ]
+    options:
+        expose: true

@@ -293,7 +293,7 @@ class Loader
 
         /**
          * Media paths and urls configurations
-         **/
+         */
         //TODO: All the MEDIA_* should be ported to use this constant
         define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
         define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);

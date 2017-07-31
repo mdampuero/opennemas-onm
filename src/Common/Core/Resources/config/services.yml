@@ -47,10 +47,6 @@ services:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
 
-    core.filter.manager:
-        class:     Common\Core\Component\Filter\FilterManager
-        arguments: [ '@service_container' ]
-
     core.geo:
         class:     Common\Core\Component\Geo\Geo
         arguments: [ '@core.locale' ]
@@ -65,6 +61,14 @@ services:
 
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
+        arguments: [ '@service_container' ]
+
+    core.helper.content_media:
+        class:     Common\Core\Component\Helper\ContentMediaHelper
+        arguments: [ '@setting_repository', '@entity_repository' ]
+
+    core.helper.url_generator:
+        class:     Common\Core\Component\Helper\UrlGeneratorHelper
         arguments: [ '@service_container' ]
 
     core.instance:

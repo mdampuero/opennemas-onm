@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  *
  * @package Model
- **/
+ */
 
 /**
  * Handles all CRUD actions over Action.
  *
  * @package Model
- **/
+ */
 class Action
 {
     /**
@@ -24,7 +24,7 @@ class Action
      * @param int $id the order id
      *
      * @return order the order object instance
-     **/
+     */
     public function get($id)
     {
         try {
@@ -54,7 +54,7 @@ class Action
      * @param array $data The data to save to the database
      *
      * @return boolean true if the order was saved
-     **/
+     */
     public function set($data)
     {
         try {
@@ -81,7 +81,7 @@ class Action
      * Returns the list of action_counters
      *
      * @return array
-     **/
+     */
     public static function find($filter = '', $config = array())
     {
         $config = array_merge(['order' => 'date DESC'], $config);
@@ -127,7 +127,7 @@ class Action
      * Returns the total of counters
      *
      * @return int
-     **/
+     */
     public static function sum($filter = '')
     {
         $where = '';

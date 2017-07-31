@@ -19,7 +19,7 @@ class GoogleTagsManager
      * Generates Google Tags Manager head code
      *
      * @return String the generated code
-     **/
+     */
     public function getGoogleTagsManagerHeadCode($id)
     {
         $code = "<!-- Google Tag Manager -->
@@ -37,7 +37,7 @@ class GoogleTagsManager
      * Generates Google Tags Manager body code
      *
      * @return String the generated code
-     **/
+     */
     public function getGoogleTagsManagerBodyCode($id)
     {
         $code = '<!-- Google Tag Manager (noscript) -->

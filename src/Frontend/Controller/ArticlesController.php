@@ -3,7 +3,7 @@
  * Defines the frontend controller for the article content type
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -25,7 +25,7 @@ use Onm\Settings as s;
  * Defines the frontend controller for the articles content type
  *
  * @package Frontend_Controllers
- **/
+ */
 class ArticlesController extends Controller
 {
     /**
@@ -34,7 +34,7 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showAction(Request $request)
     {
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
@@ -53,7 +53,9 @@ class ArticlesController extends Controller
             // TODO: Remove when target="_blank"' not included in URI for external
             $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
 
-            return $this->redirect($url);
+            return $this->forward('FrontendBundle:Redirectors:externalLink', [
+                'to'  => $url,
+            ]);
         }
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->get('core.user'));
@@ -164,7 +166,7 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function extShowAction(Request $request)
     {
         // Fetch HTTP variables
@@ -218,24 +220,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Redirects the article given its external link url
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function externalLinkAction(Request $request)
-    {
-        $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
-
-        if (empty($url)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-        }
-
-        return $this->redirect($url);
-    }
-
-    /**
      * Fetches advertisements for article inner
      *
      * @param string category the category identifier
@@ -243,7 +227,7 @@ class ArticlesController extends Controller
      * @return array the list of advertisements for this page
      *
      * TODO: Make this function non-static
-     **/
+     */
     public static function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;

@@ -15,63 +15,63 @@
  * Handles all the categories CRUD actions.
  *
  * @package    Model
- **/
+ */
 class ContentCategory
 {
     /**
      * Category id
      *
      * @var int
-     **/
+     */
     public $pk_content_category = null;
 
     /**
      * The parent category id
      *
      * @var int
-     **/
+     */
     public $fk_content_category = null;
 
     /**
      * The path to the category logo/image
      *
      * @var string
-     **/
+     */
     public $img_path            = null;
 
     /**
      * The color of the category
      *
      * @var string
-     **/
+     */
     public $color               = null;
 
     /**
      * The name of the category
      *
      * @var string
-     **/
+     */
     public $name                = null;
 
     /**
      * The human readable category name
      *
      * @var string
-     **/
+     */
     public $title               = null;
 
     /**
      * Whether if this category is in menu
      *
      * @var boolean
-     **/
+     */
     public $inmenu              = null;
 
     /**
      * Position in menu
      *
      * @var int
-     **/
+     */
     public $posmenu             = null;
 
     /**
@@ -84,21 +84,21 @@ class ContentCategory
      * $internal_category = n corresponde con el content_type
      *
      * @var int
-     **/
+     */
     public $internal_category   = null;
 
     /**
      * Misc params for this category
      *
      * @var array
-     **/
+     */
     public $params              = null;
 
     /**
      * Initializes the Category class.
      *
      * @param string $id the id of the category.
-     **/
+     */
     public function __construct($id = null)
     {
         if (!empty($id) && is_numeric($id)) {
@@ -110,7 +110,7 @@ class ContentCategory
      * Loads properties to object from one array of property names.
      *
      * @param array $properties the list of the properties to load.
-     **/
+     */
     public function load($properties)
     {
         if (is_array($properties)) {
@@ -146,7 +146,7 @@ class ContentCategory
      * Fetches all the information of a category into the object.
      *
      * @param string $id the category id.
-     **/
+     */
     public function read($id)
     {
         try {
@@ -174,7 +174,7 @@ class ContentCategory
      * @param array $data the data for the category.
      *
      * @return boolean true if all went well
-     **/
+     */
     public function create($data)
     {
         // Generate slug for category
@@ -227,7 +227,7 @@ class ContentCategory
      * @param array $data the information to update the category.
      *
      * @return boolean true if all went well
-     **/
+     */
     public function update($data)
     {
         $data['params'] = serialize($data['params']);
@@ -286,7 +286,7 @@ class ContentCategory
      * @param string $id the id of the category.
      *
      * @return boolean true if the category was deleted successfully
-     **/
+     */
     public function delete($id)
     {
         if (!ContentCategoryManager::isEmptyByCategoryId($id)) {
@@ -316,7 +316,7 @@ class ContentCategory
      * Deletes all the contents for one category given the category id.
      *
      * @return boolean true if all the contents was deleted sucessfully
-     **/
+     */
     public function deleteContents()
     {
         $conn = getService('dbal_connection');
@@ -385,7 +385,7 @@ class ContentCategory
      * Changes the menu status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category.
-     **/
+     */
     public function setAvailable($status)
     {
         if ($this->pk_content_category == null) {
@@ -415,7 +415,7 @@ class ContentCategory
      * Changes the rss status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category rss.
-     **/
+     */
     public function setInRss($status)
     {
         if ($this->pk_content_category == null) {

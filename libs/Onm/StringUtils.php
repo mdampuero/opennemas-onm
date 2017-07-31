@@ -15,7 +15,7 @@ namespace Onm;
  * Library for handling unusual string operations.
  *
  * @package    Onm
- **/
+ */
 class StringUtils
 {
     static protected $trade = [
@@ -55,7 +55,7 @@ class StringUtils
      * @param  string  $name the string to clean
      *
      * @return string the string cleaned
-     **/
+     */
     public static function cleanFileName($name)
     {
         $name = trim($name);
@@ -73,7 +73,7 @@ class StringUtils
      * @param string $string the string to clean
      *
      * @return string the cleaned string
-     **/
+     */
     public static function clearBadChars($string)
     {
         $string = preg_replace('/'.chr(226).chr(128).chr(169).'/', '', $string);
@@ -87,7 +87,7 @@ class StringUtils
      * @param  string  $text the string to transform
      *
      * @return string the string cleaned
-     **/
+     */
     public static function clearQuotes($text)
     {
         $text = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $text);
@@ -109,7 +109,7 @@ class StringUtils
      * @param  string  $str the string to clen
      *
      * @return string the string cleaned
-     **/
+     */
     public static function clearSpecialChars($str)
     {
         $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
@@ -125,7 +125,7 @@ class StringUtils
      * @param string $str the string to convert
      *
      * @return string the UTF-8 converted string
-     **/
+     */
     public static function convertToUTF8AndStrToLower($str)
     {
         // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
@@ -148,7 +148,7 @@ class StringUtils
      * @param string $subject     the text to change
      *
      * @return string the new string
-     **/
+     */
     public static function extStrIreplace($findme, $replacewith, $subject)
     {
         $rest = $subject;
@@ -180,7 +180,7 @@ class StringUtils
      * @param string $replaceStr the replacement string for the bad words
      *
      * @return string the cleaned string
-     **/
+     */
     public static function filterBadWords($text, $weight = 0, $replaceStr = ' ')
     {
         $words = self::loadBadWords();
@@ -210,7 +210,7 @@ class StringUtils
      * @param int $length the length of the password
      *
      * @return string the password string
-     **/
+     */
     public static function generatePassword($length = 8)
     {
         $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -231,7 +231,7 @@ class StringUtils
      * @param int $length the length in chars of the generated string
      *
      * @return string the random string
-     **/
+     */
     public static function generateRandomString($length = 10)
     {
         $validCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -249,7 +249,7 @@ class StringUtils
      *
      * @return void
      * @author
-     **/
+     */
     public static function removeAccents($string)
     {
         $chars = [
@@ -439,7 +439,7 @@ class StringUtils
      * @param  string  $string the string to transform
      *
      * @return string the string cleaned
-     **/
+     */
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
         $string = strip_tags($string);
@@ -514,7 +514,7 @@ class StringUtils
      * @param  string  $delimiter
      *
      * @return string
-     **/
+     */
     public static function getTitle($origString, $useStopList = true, $delimiter = '-')
     {
         return self::generateSlug($origString, $useStopList = true, $delimiter);
@@ -529,7 +529,7 @@ class StringUtils
      * @param  integer $numWords
      *
      * @return string
-     **/
+     */
     public static function getNumWords($text, $numWords)
     {
         $noHtml      = strip_tags($text);
@@ -546,7 +546,7 @@ class StringUtils
      * @param  string $text the text where extract keywords from
      *
      * @return string the string of keywords separated by commas
-     **/
+     */
     public static function getTags($text)
     {
         // $text = self::clearSpecialChars($text);
@@ -570,7 +570,7 @@ class StringUtils
      * @param string $text the text to work with
      *
      * @return int the weight of the text
-     **/
+     */
     public static function getWeightBadWords($text)
     {
         $words = self::loadBadWords();
@@ -593,7 +593,7 @@ class StringUtils
      * @param string $string the string to clean
      *
      * @return string $string the cleaned string
-     **/
+     */
     public static function htmlAttribute($string)
     {
         $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
@@ -605,7 +605,7 @@ class StringUtils
      * Retuns a list of bad words with their weigth
      *
      * @return array the list of words
-     **/
+     */
     public static function loadBadWords()
     {
         $badWords = array(
@@ -652,7 +652,7 @@ class StringUtils
      * @param  string  $name the string to clean
      *
      * @return string the string cleaned
-     **/
+     */
     public static function normalize($name)
     {
         $newname = mb_strtolower($name, 'UTF-8');
@@ -668,7 +668,7 @@ class StringUtils
      * @param  string  $name the string to clean
      *
      * @return string the string cleaned
-     **/
+     */
     public static function normalizeTag($name)
     {
         $newname = mb_strtolower($name, 'UTF-8');
@@ -691,7 +691,7 @@ class StringUtils
      *                          By default ','
      *
      * @return string the cleaned metadata string
-     **/
+     */
     public static function normalizeMetadata($metadata)
     {
         $items = explode(',', $metadata);
@@ -714,7 +714,7 @@ class StringUtils
      * @param  string  $name the string to clean
      *
      * @return string the string cleaned
-     **/
+     */
     public static function normalizeName($name)
     {
         $name = self::normalize($name);
@@ -728,7 +728,7 @@ class StringUtils
      *
      * @param string $url the url to normalize
      * @return string the normalized url
-     **/
+     */
     public static function normalizeUrl($url)
     {
         $urlParts = explode('?', $url);
@@ -761,7 +761,7 @@ class StringUtils
      * @param string $string the string to clean
      *
      * @return string the cleaned string
-     **/
+     */
     public static function removeShorts($string)
     {
         $shorts = <<<EOF
@@ -889,7 +889,7 @@ EOF;
      * @param string $separator the separator chapter to use
      *
      * @return string the string cleaned
-     **/
+     */
     public static function setSeparator($str, $separator = '-')
     {
         $str = trim($str);
@@ -907,7 +907,7 @@ EOF;
      * @param string $suffix the text to append at the end of the trimmed string
      *
      * @return string the trimmed string
-     **/
+     */
     public static function strStop($string, $maxLength = 30, $suffix = '...')
     {
         if (strlen($string) > $maxLength) {
@@ -927,7 +927,7 @@ EOF;
      * Converts an string to ascii code
      *
      * @return string the ascii encoded string
-     **/
+     */
     public static function toAscii($string)
     {
         $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
@@ -941,7 +941,7 @@ EOF;
      * @param Array $httpParams an array of http parameters
      *
      * @return string the url compatible list of params
-     **/
+     */
     public static function toHttpParams(array $httpParams)
     {
         $result = array();
@@ -965,7 +965,7 @@ EOF;
      * @param string $string the string to operate with
      *
      * @return string the string without HTML entities
-     **/
+     */
     public static function unhtmlentities($string)
     {
         // replace numeric entities

@@ -1,11 +1,11 @@
 api_v1_advertisement:
-    resource: '@ApiBundle/Resources/config/routing/v1/advertisement.yml'
+    resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
     prefix:   /
 
 api_v1_user:
-    resource: '@ApiBundle/Resources/config/routing/v1/user.yml'
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/user.yml'
     prefix:   /
 
 api_v1_file:
-    resource: '@ApiBundle/Resources/config/routing/v1/file.yml'
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/file.yml'
     prefix:   /

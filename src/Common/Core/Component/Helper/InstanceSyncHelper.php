@@ -16,7 +16,7 @@ class InstanceSyncHelper
      * The application service container
      *
      * @var string
-     **/
+     */
     private $container;
 
     /**
@@ -35,7 +35,7 @@ class InstanceSyncHelper
      * @param string $categoryName the name of the category
      *
      * @return string the URL to sync from
-     **/
+     */
     public function getSyncURL($categoryName)
     {
         $wsUrl = '';

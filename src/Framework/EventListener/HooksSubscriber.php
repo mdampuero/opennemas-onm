@@ -321,7 +321,7 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes the content metadata from cache after it is updated.
      *
      * @param Event $event The event to handle.
-     **/
+     */
     public function removeObjectCacheContentMeta(Event $event)
     {
         $content = $event->getArgument('content');
@@ -662,7 +662,7 @@ class HooksSubscriber implements EventSubscriberInterface
      * Queues a varnish ban request to delete the frontpage
      *
      * @param Event $event The event to handle.
-     **/
+     */
     public function removeVarnishCacheFrontpage(Event $event)
     {
         // Clean varnish cache for frontpage
@@ -672,7 +672,6 @@ class HooksSubscriber implements EventSubscriberInterface
             $this->container->get('varnish_ban_message_exchanger')
                 ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName))
                 ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*rss.*', $instanceName));
-
         }
     }
 
@@ -716,7 +715,7 @@ class HooksSubscriber implements EventSubscriberInterface
      * this method can only be called from backend and frontend bundles.
      *
      * @return void
-     **/
+     */
     private function initializeSmartyCacheHandler()
     {
         $this->view = $this->container->get('view')->getTemplate();

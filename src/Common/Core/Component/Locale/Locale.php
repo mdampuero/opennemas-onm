@@ -67,6 +67,23 @@ class Locale
     }
 
     /**
+     * Returns the list of all available locales.
+     *
+     * @return array The list of all available locales.
+     */
+    public function getAvailableLocales()
+    {
+        $codes   = \ResourceBundle::getLocales('');
+        $locales = [];
+
+        foreach ($codes as $code) {
+            $locales[$code] = ucfirst(\Locale::getDisplayName($code));
+        }
+
+        return $locales;
+    }
+
+    /**
      * Returns the current locale.
      *
      * @return string The current locale.
@@ -160,7 +177,7 @@ class Locale
 
         // Convert timezone id to timezone name
         if (is_numeric($timezone) && array_key_exists($timezone, $timezones)) {
-           $timezone = $timezones[(int) $timezone];
+            $timezone = $timezones[(int) $timezone];
         }
 
         // Change timezone if name valid

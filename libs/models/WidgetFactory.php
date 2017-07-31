@@ -27,7 +27,7 @@ class WidgetFactory
      * Wether preload CM and CCM in the widget
      *
      * @var boolean
-     **/
+     */
     protected $useDB = true;
 
     /**

@@ -5,7 +5,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace WebService\Handlers;
 
 use Onm\Settings as s;
@@ -15,7 +15,7 @@ use Luracast\Restler\RestException;
  * Handles REST actions for frontpages.
  *
  * @package WebService
- **/
+ */
 class Frontpages
 {
     public $restler;

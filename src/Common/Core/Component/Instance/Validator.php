@@ -253,7 +253,7 @@ class Validator
         foreach ($badWords as $word) {
             similar_text($value, $word, $percent);
 
-            if ($percent > 80 ) {
+            if ($percent > 80) {
                 return false;
             }
         }

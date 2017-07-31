@@ -1,0 +1,7 @@
+services:
+    data.manager.adapter:
+        class:     Common\Data\Core\AdapterManager
+        arguments: [ '@service_container' ]
+    data.manager.filter:
+        class:     Common\Data\Core\FilterManager
+        arguments: [ '@service_container' ]

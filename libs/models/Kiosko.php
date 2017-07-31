@@ -15,63 +15,63 @@
  * Handles all the CRUD actions over kioko.
  *
  * @package    Model
- **/
+ */
 class Kiosko extends Content
 {
     /**
      * The kiosko id
      *
      * @var int
-     **/
+     */
     public $pk_kiosko   = null;
 
     /**
      * The name of the kiosko
      *
      * @var string
-     **/
+     */
     public $name        = null;
 
     /**
      * The path to the kiosko file
      *
      * @var string
-     **/
+     */
     public $path        = null;
 
     /**
      * The publishing date of the kiosko
      *
      * @var string
-     **/
+     */
     public $date        = null;
 
     /**
      * Whether if this kiosko is marked as favorite or not
      *
      * @var boolean
-     **/
+     */
     public $favorite    = 0;
 
     /**
      * The price of this kiosko
      *
      * @var int
-     **/
+     */
     public $price       = 0;
 
     /**
      * The type of kiosko
      *
      * @var string
-     **/
+     */
     public $type        = 0;
 
     /**
      * The path to the kiosko
      *
      * @var string
-     **/
+     */
     public $kiosko_path = null;
 
     /**

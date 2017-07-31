@@ -41,7 +41,6 @@ class StaticPageController extends Controller
             try {
                 $page = new \StaticPage();
                 $output = $page->buildSlug($data['slug'], $data['id'], $data['title']);
-
             } catch (\Exception $e) {
                 $output = _("Can't get static page title. Check the title");
             }

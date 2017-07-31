@@ -3,7 +3,7 @@
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 class SearchController extends Controller
 {
     /**
@@ -72,7 +72,7 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
-            $fm     = $this->get('core.filter.manager');
+            $fm     = $this->get('data.manager.filter');
             $tokens = $fm->filter('tags', $searchString);
             $tokens = explode(', ', $tokens);
 
@@ -157,7 +157,7 @@ class SearchController extends Controller
      * Returns the list of content types for the modules activated
      *
      * @return array the list of content types
-     **/
+     */
     private function getContentTypesFiltered()
     {
         $contentTypes = \ContentManager::getContentTypes();

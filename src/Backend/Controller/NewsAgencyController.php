@@ -22,14 +22,14 @@ use Onm\Settings as s;
  * Handles the actions for the news agency module
  *
  * @package Backend_Controllers
- **/
+ */
 class NewsAgencyController extends Controller
 {
     /**
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         $this->syncFrom = array(
@@ -298,7 +298,7 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     private function importElements($id = '', $sourceId = '', $category = null)
     {
         if (empty($id) || empty($sourceId)) {
@@ -342,7 +342,7 @@ class NewsAgencyController extends Controller
         $servers = s::get('news_agency_config');
         $server = $servers[$sourceId];
 
-        $fm = $this->get('core.filter.manager');
+        $fm = $this->get('data.manager.filter');
 
         // If the new has photos import them
         if (count($element->getPhotos()) > 0) {

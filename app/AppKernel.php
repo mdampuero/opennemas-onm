@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new WebService\WebServiceBundle(),
             new Common\Cache\CacheBundle(),
             new Common\Core\CoreBundle(),
+            new Common\Data\DataBundle(),
             new Common\Migration\MigrationBundle(),
             new Common\ORM\OrmBundle(),
         );

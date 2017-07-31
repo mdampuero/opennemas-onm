@@ -25,49 +25,49 @@ class Photo extends Content
      * Photo id
      *
      * @var int
-     **/
+     */
     public $pk_photo    = null;
 
     /**
      * File name of the photo
      *
      * @var string
-     **/
+     */
     public $name        = null;
 
     /**
      * Full path to the photo file
      *
      * @var string
-     **/
+     */
     public $path_file   = null;
 
     /**
      * The size of the image
      *
      * @var int
-     **/
+     */
     public $size        = null;
 
     /**
      * The width of the image
      *
      * @var int
-     **/
+     */
     public $width       = null;
 
     /**
      * The height of the image
      *
      * @var int
-     **/
+     */
     public $height      = null;
 
     /**
      * The copyright of the image
      *
      * @var string
-     **/
+     */
     public $author_name = null;
 
     /**
@@ -76,7 +76,7 @@ class Photo extends Content
      * @param int $id the photo id to load
      *
      * @return Photo the photo object instance
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Image');
@@ -90,7 +90,7 @@ class Photo extends Content
      * @param array $properties the list of properties to load
      *
      * @return void
-     **/
+     */
     public function load($properties)
     {
         parent::load($properties);
@@ -130,7 +130,7 @@ class Photo extends Content
      * @param int $id the photo id to load
      *
      * @return Photo the photo object
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -162,7 +162,7 @@ class Photo extends Content
      *
      * @return int the photo id
      * @return boolean false if the photo was not created
-     **/
+     */
     public function create($data)
     {
         $data['content_status'] = 1;
@@ -198,7 +198,7 @@ class Photo extends Content
      *
      * @return int the id of the photo created
      * @return boolean false if the photo was not created
-     **/
+     */
     public function createFromLocalFile($data, $dateForDirectory = null, $uploadPath = null)
     {
         $filePath         = $data["local_file"];
@@ -367,7 +367,7 @@ class Photo extends Content
      * @param array $data the new photo information
      *
      * @return boolean true if the photo was updated properly
-     **/
+     */
     public function update($data)
     {
         try {
@@ -400,7 +400,7 @@ class Photo extends Content
      * @param int $id the photo id to delete
      *
      * @return boolean true if the photo was deleted
-     **/
+     */
     public function remove($id)
     {
         if ((int) $id <= 0) return false;
@@ -434,7 +434,7 @@ class Photo extends Content
      * Completes the EXIF, IPTC information for the current Photo object
      *
      * @return Photo the Photo object with all the information
-     **/
+     */
     public function getPhotoMetaData()
     {
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
@@ -602,7 +602,7 @@ class Photo extends Content
      * @param array $arrayId the photo ids to delete
      *
      * @return boolean true if the photo was deleted
-     **/
+     */
     public static function batchDelete($arrayIds)
     {
         $conn = getService('dbal_connection');

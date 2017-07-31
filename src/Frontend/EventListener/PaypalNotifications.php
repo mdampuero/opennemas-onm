@@ -17,14 +17,14 @@ use Onm\Settings as s;
  * Handles all the events after content updates
  *
  * @package Backend_EventListeners
- **/
+ */
 class PaypalNotifications implements EventSubscriberInterface
 {
     /**
      * Register the content event handler
      *
      * @return void
-     **/
+     */
     public static function getSubscribedEvents()
     {
         return array(
@@ -40,7 +40,7 @@ class PaypalNotifications implements EventSubscriberInterface
      * @param Event $event The event to handle
      *
      * @return void
-     **/
+     */
     public function paywallRecurring(Event $event)
     {
         $ipnData = $event->getArgument('ipnData');

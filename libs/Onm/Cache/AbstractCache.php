@@ -23,7 +23,7 @@ abstract class AbstractCache implements CacheInterface
     /**
      * The namespace to prefix all cache ids with
      * @var string
-     **/
+     */
     private $namespace = '';
 
     /**
@@ -65,7 +65,7 @@ abstract class AbstractCache implements CacheInterface
      * Returns the current namespace
      *
      * @return string the namespace
-     **/
+     */
     public function getNamespace()
     {
         return $this->namespace;

@@ -23,14 +23,14 @@ class SimpleMenu
      * The menu to render
      *
      * @var array
-     **/
+     */
     private $menu         = null;
 
     /**
      * The nesting level when traversing the menu
      *
      * @var int
-     **/
+     */
     private $nestingLevel = 0;
 
     /**
@@ -57,7 +57,7 @@ class SimpleMenu
      * @param array $params the list of params used to render the menu
      *
      * @return string the final html content for the menu
-     **/
+     */
     public function render($params = array())
     {
         if (isset($params['contents'])) {
@@ -173,7 +173,7 @@ class SimpleMenu
      * @param boolean $dropdown whether if the element is a dropdown element
      *
      * @return string the HTML generated
-     **/
+     */
     private function getClass($class, $dropdown = false)
     {
         if (isset($class) && !empty($class) || $dropdown) {
@@ -199,7 +199,7 @@ class SimpleMenu
      * @param boolean $toggle whether if it is a toggle element
      *
      * @return string the HTML generated
-     **/
+     */
     private function getHref($element, $hasArrow, $isOpen)
     {
         $id       = 'submenu_'.$element['id'];
@@ -258,7 +258,7 @@ class SimpleMenu
      * @param string $privilege the menu element privilege
      *
      * @return boolean true if the user has access
-     **/
+     */
     private function checkPermission($privilege)
     {
         if (empty($privilege)) {
@@ -280,7 +280,7 @@ class SimpleMenu
      *
      * @return void
      * @author
-     **/
+     */
     public function renderSeparator()
     {
         return '<span class="separator"></span>';

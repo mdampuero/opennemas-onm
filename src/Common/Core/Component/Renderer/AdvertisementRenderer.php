@@ -491,7 +491,7 @@ class AdvertisementRenderer
      * @param Advertisement $ad the advertisement to get restrictions from
      *
      * @return string the css classes to apply
-     **/
+     */
     public function getDeviceCSSClases(\Advertisement $ad)
     {
         if (!array_key_exists('devices', $ad->params)) {

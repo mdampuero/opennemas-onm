@@ -3,7 +3,7 @@
  * Handles the actions for sitemaps
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Onm\Settings as s;
  * Handles the actions for sitemaps
  *
  * @package Frontend_Controllers
- **/
+ */
 class SitemapController extends Controller
 {
     /**
@@ -32,7 +32,7 @@ class SitemapController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function indexAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
@@ -50,7 +50,7 @@ class SitemapController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function webAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
@@ -84,7 +84,7 @@ class SitemapController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function newsAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
@@ -136,7 +136,7 @@ class SitemapController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function imageAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
@@ -185,7 +185,7 @@ class SitemapController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function videoAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
@@ -216,7 +216,7 @@ class SitemapController extends Controller
      * @param string $action the type of sitemap: news, web, image or video
      *
      * @return Response the response object
-     **/
+     */
     public function buildResponse($format, $cacheID, $action)
     {
         $contents = $this->renderView('sitemap/sitemap.tpl', [
@@ -258,7 +258,7 @@ class SitemapController extends Controller
      * @param int Max number of contents
      *
      * @return Array all contents
-     **/
+     */
     public function fetchContents($criteria = array(), $limit = 100)
     {
         // Set search filters

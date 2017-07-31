@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  *
  * @package Frontend_Controllers
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Cookie;
@@ -23,7 +23,7 @@ use Onm\Settings as s;
  * Handles the actions for comments
  *
  * @package Frontend_Controllers
- **/
+ */
 class CommentsController extends Controller
 {
     /**
@@ -32,7 +32,7 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function getAction(Request $request)
     {
         $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
@@ -81,7 +81,7 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function ajaxAction(Request $request)
     {
         $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
@@ -137,7 +137,7 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function voteAction(Request $request)
     {
         // Retrieve request data
@@ -193,7 +193,7 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function saveAction(Request $request)
     {
         $body         = $request->request->filter('body', '', FILTER_SANITIZE_STRING);
@@ -262,17 +262,21 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return JsonResponse
-     **/
+     */
     public function getCommentsCountAction(Request $request)
     {
         // Fetch the list of content ids, clean and filter them
         $ids  = $ids = $request->query->get('ids', []);
         $ids = array_unique(array_filter(
             array_map(
-                function($id) { return (int) $id; },
+                function ($id) {
+                    return (int) $id;
+                },
                 explode(',', $ids)
             ),
-            function($id){return ((int) $id) > 0; }
+            function ($id) {
+                return ((int) $id) > 0;
+            }
         ));
 
         // Fetch data from database

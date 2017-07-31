@@ -3,7 +3,7 @@
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Onm\Settings as s;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 class ErrorController extends Controller
 {
     /**
@@ -32,7 +32,7 @@ class ErrorController extends Controller
      * @param Request $request the request object
      *
      * @return void
-     **/
+     */
     public function defaultAction(Request $request)
     {
         if ($this->container->hasParameter('environment')) {
@@ -186,7 +186,7 @@ class ErrorController extends Controller
      * @param int    $showLines The number of lines to show before and after the error line
      *
      * @return strin The HTML with the highlighted source.
-     **/
+     */
     public static function highlightSource($fileName, $lineNumber, $showLines)
     {
 

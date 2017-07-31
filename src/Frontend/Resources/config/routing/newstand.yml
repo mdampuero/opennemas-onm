@@ -1,0 +1,26 @@
+frontend_newstand_frontpage:
+    path: /portadas-papel
+    defaults: { _controller: FrontendBundle:NewStand:frontpage }
+
+frontend_newstand_frontpage_date:
+    path: /portadas-papel/{year}/{month}/{day}
+    defaults: { _controller: FrontendBundle:NewStand:frontpage, month: 0, day: 1 }
+    requirements:
+        year  : '[0-9]{4}'
+        month : '[0-9]{1,2}'
+        day   : '[0-3][0-9]'
+
+frontend_newstand_frontpage_category:
+    path: /portadas-papel/{category_name}/{year}/{month}
+    defaults: { _controller: FrontendBundle:NewStand:frontpage }
+    requirements:
+        category_name : '[^/]+'
+        year          : '([0-9]{4})'
+        month         : '([0-9]{1,2})'
+
+frontend_newstand_show:
+    path: /portadas-papel/{category_name}/{id}.{_format}
+    defaults: { _controller: FrontendBundle:NewStand:show, _format: html }
+    requirements:
+        category_name : '[^/]+'
+        id            : '([0-9]+)'

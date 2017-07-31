@@ -15,12 +15,12 @@
  * Handles all the CRUD actions over albums.
  *
  * @package    Model
- **/
+ */
 class Album extends Content
 {
     /**
      * the album id
-     **/
+     */
     public $pk_album = null;
 
     /**
@@ -30,7 +30,7 @@ class Album extends Content
 
     /**
      * the agency which created this album originaly
-     **/
+     */
     public $agency = null;
 
     /**
@@ -44,7 +44,7 @@ class Album extends Content
      * @param string $id the id of the album
      *
      * @return void
-     **/
+     */
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Album');
@@ -58,7 +58,7 @@ class Album extends Content
      * @param string $name the name of the property to get.
      *
      * @return mixed the value for the property
-     **/
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -105,7 +105,7 @@ class Album extends Content
      * @param array $properties the list of properties to load
      *
      * @return Album
-     **/
+     */
     public function load($properties)
     {
         parent::load($properties);
@@ -132,7 +132,7 @@ class Album extends Content
      * @param string $id the album id to get info from.
      *
      * @return Album the object instance
-     **/
+     */
     public function read($id)
     {
         // If no valid id then return
@@ -202,7 +202,7 @@ class Album extends Content
      * @param array $data the new data to update the album
      *
      * @return Album the object instance
-     **/
+     */
     public function update($data)
     {
         parent::update($data);
@@ -238,7 +238,7 @@ class Album extends Content
      * @param string $id the album id
      *
      * @return boolean
-     **/
+     */
     public function remove($id)
     {
         parent::remove($id);
@@ -353,7 +353,7 @@ class Album extends Content
      * @param arrray $data the new photos data
      *
      * @return Album the object instance
-     **/
+     */
     public function saveAttachedPhotos($data)
     {
         if (!array_key_exists('album_photos_id', $data)
@@ -392,7 +392,7 @@ class Album extends Content
      *
      * @param  int      $albumID the foreighn key for the album
      * @return boolean true if the album was deleted, false if it wasn't
-     **/
+     */
     public function removeAttachedImages($albumID)
     {
         try {
@@ -419,7 +419,7 @@ class Album extends Content
      * @param Template $tpl the Template object instance
      *
      * @return string the generated HTML
-     **/
+     */
     public function render($params, $tpl = null)
     {
         $tpl = getService('core.template');

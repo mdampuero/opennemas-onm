@@ -3,7 +3,7 @@
  * Handles the actions for advertisements
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ use Onm\Settings as s;
  * Handles the actions for advertisements
  *
  * @package Frontend_Controllers
- **/
+ */
 class OpinionsController extends Controller
 {
     /**
@@ -205,7 +205,7 @@ class OpinionsController extends Controller
 
         list($positions, $advertisements) = $this->getAds();
 
-        return $this->render('opinion/opinion_frontpage.tpl',[
+        return $this->render('opinion/opinion_frontpage.tpl', [
             'ads_positions'   => $positions,
             'advertisements'  => $advertisements,
             'actual_category' => 'opinion',
@@ -219,7 +219,7 @@ class OpinionsController extends Controller
      * Renders the opinion frontpage
      *
      * @return Response the response object
-     **/
+     */
     public function extFrontpageAction()
     {
         $page         = $this->request->query->getDigits('page', 1);
@@ -335,7 +335,7 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function frontpageAuthorAction(Request $request)
     {
         $authorID = (int) $request->query->getDigits('author_id', null);
@@ -472,7 +472,7 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function extFrontpageAuthorAction(Request $request)
     {
         $authorID     = $request->query->getDigits('author_id', null);
@@ -609,7 +609,7 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
@@ -735,7 +735,7 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function extShowAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('opinion_id');

@@ -3,7 +3,7 @@
  * Handles the common actions for misc purposes
  *
  * @package Backend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Onm\StringUtils;
  * Handles the common actions for misc purposes
  *
  * @package Backend_Controllers
- **/
+ */
 class UtilsController extends Controller
 {
     /**
@@ -32,12 +32,12 @@ class UtilsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     **/
+     */
     public function calculateTagsAction(Request $request)
     {
         $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
 
-        $fm   = $this->get('core.filter.manager');
+        $fm   = $this->get('data.manager.filter');
         $tags = $fm->filter('tags', $tags);
 
         // $tags2 = StringUtils::getTags($tags);

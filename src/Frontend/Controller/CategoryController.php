@@ -3,7 +3,7 @@
  * Contains the class Frontend\Controller\CategoryController
  *
  * @package Frontend_Controllers
- **/
+ */
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +11,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ use Common\Core\Controller\Controller;
  * Shows a paginated page for contents that share a property
  *
  * @package Backend_Controllers
- **/
+ */
 class CategoryController extends Controller
 {
     /**
@@ -30,7 +30,7 @@ class CategoryController extends Controller
      *
      * @return Response the response object
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the category is not available
-     **/
+     */
     public function categoryAction(Request $request)
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
@@ -166,7 +166,7 @@ class CategoryController extends Controller
      * Action for synchronized blog frontpage
      *
      * @return Response the response object
-     **/
+     */
     public function extCategoryAction(Request $request)
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
@@ -233,7 +233,7 @@ class CategoryController extends Controller
      * @param string category the category identifier
      *
      * @return void
-     **/
+     */
     public function getInnerAds($category = 'home')
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;

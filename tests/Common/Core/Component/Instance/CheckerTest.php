@@ -39,7 +39,7 @@ class CheckerTest extends KernelTestCase
 
     /**
      * undocumented function
-     **/
+     */
     public function testCheck()
     {
         $instance = new \Common\ORM\Entity\Instance();

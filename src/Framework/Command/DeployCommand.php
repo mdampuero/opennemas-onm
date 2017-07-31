@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -90,7 +90,7 @@ EOF
      * Saves a file with a deploy version with the actual timestamp
      *
      * @return void
-     **/
+     */
     public function generateDeployFile($time = null)
     {
         if (empty($time)) {
@@ -105,7 +105,7 @@ EOF
      * Enables or disables the maintenance mode
      *
      * @param string $action enable or disable
-     **/
+     */
     public function executeMaintenance($action)
     {
         $command = $this->getApplication()->find('app:maintenance');
@@ -120,7 +120,7 @@ EOF
 
     /**
      * Updates the core application code
-     **/
+     */
     public function updateCoreCode()
     {
         $phpBinPath = exec('which php');
@@ -141,7 +141,7 @@ EOF
 
     /**
      * Compiles the onm core translations
-     **/
+     */
     public function compileTranslations()
     {
         $command = $this->getApplication()->find('translation:core');
@@ -156,7 +156,7 @@ EOF
 
     /**
      * Updates the public themes
-     **/
+     */
     public function updateThemes()
     {
         $this->output->writeln("<info>Updating public themes</info>");
@@ -176,7 +176,7 @@ EOF
 
     /**
      * Executes the clean cache action
-     **/
+     */
     public function cleanCache()
     {
         try {
@@ -194,7 +194,7 @@ EOF
     /**
      * Executes the cache:clear
      *
-     **/
+     */
     public function cleanSymfonyCache()
     {
         $command = $this->getApplication()->find('cache:clear');
@@ -210,7 +210,7 @@ EOF
      * Cleans the Zend Opcode Cache
      *
      * @return void
-     **/
+     */
     public function cleanOpcodeCache()
     {
         $command = $this->getApplication()->find('cache:clean:opcode');
@@ -226,7 +226,7 @@ EOF
      * Executes in a shell the provided command line
      *
      * @return void
-     **/
+     */
     public function execProcess($processLine)
     {
         $output = $this->output;
@@ -244,7 +244,7 @@ EOF
      * Installs npm and grunt dependencies
      *
      * @return void
-     **/
+     */
     public function installNpmAndBowerDeps()
     {
         $this->execProcess('npm install');

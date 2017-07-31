@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Framework\Command;
 
 use Onm\StringUtils;
@@ -93,14 +93,14 @@ EOF
     /**
      * Creates ads on a instance
      *
-     **/
+     */
     public function createAds($ads)
     {
         if (is_null($ads) || empty($ads)) {
             throw new \Exception("File content is not valid");
         }
 
-        $fm = $this->getContainer()->get('core.filter.manager');
+        $fm = $this->getContainer()->get('data.manager.filter');
         $am = new \Advertisement();
         foreach ($ads as $ad) {
             $data = [
@@ -144,7 +144,7 @@ EOF
     /**
      * Remove ads on a instance
      *
-     **/
+     */
     public function removeAds($ads)
     {
         if (is_null($ads) || empty($ads)) {
@@ -184,7 +184,7 @@ EOF
     /**
      * Update ads on a instance
      *
-     **/
+     */
     public function updateAds($ads)
     {
         if (is_null($ads) || empty($ads)) {
@@ -225,7 +225,7 @@ EOF
                 $height     = (array_key_exists('height', $ad['new']))
                     ? $ad['new']['height'] : $adv->params['height'];
 
-                $fm   = $this->getContainer()->get('core.filter.manager');
+                $fm   = $this->getContainer()->get('data.manager.filter');
                 $data = [
                     'id'                 => $adv->id,
                     'title'              => $title,

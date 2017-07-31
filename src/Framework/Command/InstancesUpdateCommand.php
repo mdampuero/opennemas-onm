@@ -250,7 +250,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * @param Instance $i The instance to get stats from
      *
      * @return void
-     **/
+     */
     public function getInstanceStats(&$i)
     {
         $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
@@ -352,7 +352,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      *
      * @param Instance $i The instance to get stats from
      * @return void
-     **/
+     */
     public function getCreatedDate(&$i)
     {
         $sql  = 'SELECT * FROM settings WHERE name=\'site_created\'';
@@ -373,7 +373,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * @param Instance $i The instance to get stats from
      *
      * @return void
-     **/
+     */
     public function getMediaSize(&$i)
     {
         $size = 0;

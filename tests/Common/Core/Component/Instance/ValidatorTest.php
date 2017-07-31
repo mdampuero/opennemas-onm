@@ -39,7 +39,7 @@ class ValidatorTest extends KernelTestCase
 
     /**
      * Check the getBadWords method
-     **/
+     */
     public function testGetBadWords()
     {
         $method = new \ReflectionMethod($this->validator, 'getBadWords');
@@ -52,7 +52,7 @@ class ValidatorTest extends KernelTestCase
 
     /**
      * Checks the validateEmail method
-     **/
+     */
     public function testValidateEmail()
     {
         $method = new \ReflectionMethod($this->validator, 'validateEmail');
@@ -70,7 +70,7 @@ class ValidatorTest extends KernelTestCase
 
     /**
      * Check the validateDomains method
-     **/
+     */
     public function testValidateDomains()
     {
         $method = new \ReflectionMethod($this->validator, 'validateDomains');
@@ -88,7 +88,7 @@ class ValidatorTest extends KernelTestCase
 
     /**
      * Check the validateDomains method
-     **/
+     */
     public function testValidateInternalName()
     {
         $method = new \ReflectionMethod($this->validator, 'validateInternalName');
@@ -119,7 +119,7 @@ class ValidatorTest extends KernelTestCase
 
     /**
      * Check the validateBadWords method
-     **/
+     */
     public function testValidateBadWords()
     {
         $method = new \ReflectionMethod($this->validator, 'validateBadWords');
@@ -144,7 +144,7 @@ class ValidatorTest extends KernelTestCase
 
     /**
      * Check the getErrors method
-     **/
+     */
     public function testGetErrors()
     {
         $this->assertTrue(is_array($this->validator->getErrors()));
@@ -152,7 +152,7 @@ class ValidatorTest extends KernelTestCase
 
     /**
      * Check the validate method
-     **/
+     */
     public function testValidate()
     {
         $instance = new \Common\ORM\Entity\Instance();

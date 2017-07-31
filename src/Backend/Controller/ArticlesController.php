@@ -477,7 +477,7 @@ class ArticlesController extends Controller
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function loadCategories(Request $request)
     {
         $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
