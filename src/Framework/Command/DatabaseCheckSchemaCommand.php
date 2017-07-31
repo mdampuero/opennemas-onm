@@ -91,7 +91,17 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
 
         if (count($sql) > 0) {
             $output->writeln("use `$database`;");
+            $foreign_keys = [];
             foreach ($sql as $value) {
+                if (preg_match('/^ALTER TABLE .* ADD CONSTRAINT .* FOREIGN KEY .*/', $value)) {
+                    $foreign_keys[] = $value;
+                } else {
+                    $output->writeln($value.';');
+                }
+            }
+            $delete_sqls = $this->prepareForeignKeys($foreign_keys);
+            $foreign_keys_aux = array_merge($delete_sqls, $foreign_keys);
+            foreach ($foreign_keys_aux as $value) {
                 $output->writeln($value.';');
             }
         }
@@ -268,5 +278,45 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
         $sm = $conn->getSchemaManager();
 
         return $sm->createSchema();
+    }
+
+    /**
+     * Create the deletes sqls for values of foreign table that fails the constrain
+     */
+    private function prepareForeignKeys(array $foreign_keys)
+    {
+        $matches = null;
+        $foreign_table = null;
+        $foreign_field = null;
+        $primary_table = null;
+        $primary_field = null;
+        $delete_sqls = [];
+
+        foreach ($foreign_keys as $field => $foreign) {
+
+            if (preg_match('/^ALTER TABLE [A-Za-z,0-9,_]*/', $foreign, $matches) == 0) {
+                break;
+            }
+            $foreign_table = substr($matches[0], 12);
+
+            if (preg_match('/FOREIGN KEY \([A-Za-z,0-9,_]*/', $foreign, $matches) == 0) {
+                break;
+            }
+            $foreign_field = substr($matches[0], 13);
+
+            if (preg_match('/REFERENCES [A-Za-z0-9_()]* \([A-Za-z0-9_]*/', $foreign, $matches) == 0) {
+                break;
+            }
+            $aux_arr = explode(" ", $matches[0]);
+            if (count($aux_arr) != 3) {
+                break;
+            }
+            $primary_table = $aux_arr[1];
+            $primary_field = substr($aux_arr[2], 1);
+
+            $delete_sqls[] = 'DELETE FROM ' . $foreign_table . ' WHERE NOT EXISTS(SELECT 1 FROM ' . $primary_table .
+                ' WHERE ' . $foreign_table . '.' . $foreign_field .' = ' . $primary_table . '.' . $primary_field . ')';
+        }
+        return $delete_sqls;
     }
 }
