@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-01 15:57+0200\n"
-"PO-Revision-Date: 2017-08-01 16:02+0200\n"
+"PO-Revision-Date: 2017-08-01 16:10+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -5677,7 +5677,6 @@ msgstr "Opciones de Paypal"
 msgid "Account email:"
 msgstr "Correo del usuario de la cuenta"
 
-#, fuzzy
 msgid ""
 "You can get your PayPal account email from <a class=\"external-link\" ng-"
 "click=\"$event.stopPropagation();\" href=\"https://www.paypal.com/us/cgi-bin/"
@@ -5695,7 +5694,6 @@ msgstr "Búsqueda de Google"
 msgid "Google Search API key"
 msgstr "Llave de la API de Google Search"
 
-#, fuzzy
 msgid ""
 "You can get your Google <strong>Search</strong> API Key from <a class="
 "\"external-link\" ng-click=\"$event.stopPropagation();\" href=\"http://www."
@@ -5719,7 +5717,6 @@ msgstr "Google Maps"
 msgid "Google Maps API key"
 msgstr "Llave de la API de Google Maps"
 
-#, fuzzy
 msgid ""
 "You can get your Google <strong>Maps</strong> API Key from <a class="
 "\"external-link\" ng-click=\"$event.stopPropagation();\" href=\"http://code."
@@ -5790,7 +5787,6 @@ msgstr "Id de Facebook"
 msgid "APP key"
 msgstr "Llave de la aplicación"
 
-#, fuzzy
 msgid ""
 "You can get your Facebook App Keys from <a class=\"external-link\" ng-click="
 "\"$event.stopPropagation();\"  href=\"https://developers.facebook.com/apps\" "
@@ -5878,7 +5874,6 @@ msgstr "Solo masters"
 msgid "Robots.txt rules"
 msgstr "Reglas de robots.txt"
 
-#, fuzzy
 msgid ""
 "Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a ng-click="
 "\"$event.stopPropagation();\" href=\"http://www.robotstxt.org/robotstxt.html"
