@@ -16,8 +16,6 @@
 <rule ref="Generic.Formatting.MultipleStatementAlignment">
     <properties>
         <property name="error" value="false"/>
-        <property name="ignoreMultiLine" value="true"/>
-        <property name="error" value="false"/>
     </properties>
 </rule>
 <rule ref="Generic.Formatting.SpaceAfterCast"/>
