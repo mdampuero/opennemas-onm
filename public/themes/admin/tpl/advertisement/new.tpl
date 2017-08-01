@@ -469,8 +469,8 @@
                     </label>
                   </div>
                   <div class="checkbox-list checkbox-list-user-groups">
-                    <div class="checkbox p-b-5" ng-repeat="category in extra.categories | filter : { parent: 0 }">
-                      <div class="m-t-15" ng-if="$index > 0 && category.type != extra.categories[$index - 1].type">
+                    <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (extra.categories | filter : { parent: 0 }))">
+                      <div class="m-t-15" ng-if="$index > 0 && category.type != filteredCategories[$index - 1].type">
                         <h5 ng-if="category.type == 1"><i class="fa fa-sticky-note m-r-5"></i>{t}Contents{/t}</h5>
                         <h5 ng-if="category.type == 7"><i class="fa fa-camera m-r-5"></i>{t}Albums{/t}</h5>
                         <h5 ng-if="category.type == 9"><i class="fa fa-play-circle-o m-r-5"></i>{t}Videos{/t}</h5>
