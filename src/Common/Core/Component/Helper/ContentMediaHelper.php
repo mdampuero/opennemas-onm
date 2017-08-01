@@ -88,21 +88,19 @@ class ContentMediaHelper
         }
 
         # The content doesnt have a media associated so return null.
-        if (!is_object($mediaObject)) {
-            return null;
-        }
+        $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
 
         if (!isset($mediaObject->url)) {
             $baseUrl = SITE_URL . 'media/' . MEDIA_DIR . '/sections/';
             if (!is_null($params) && array_key_exists('default_image', $params)) {
                 // Default on template
                 $mediaObject->url = $params['default_image'];
-            } elseif ($this->sm->get('mobile_logo')) {
+            } elseif ($mobileLogo = $this->sm->get('mobile_logo')) {
                 // Mobile logo
-                $mediaObject->url = $baseUrl . $this->sm->get('mobile_logo');
-            } elseif ($this->sm->get('site_logo')) {
+                $mediaObject->url = $baseUrl . $mobileLogo;
+            } elseif ($siteLogo = $this->sm->get('site_logo')) {
                 // Logo
-                $mediaObject->url = $baseUrl . $this->sm->get('site_logo');
+                $mediaObject->url = $baseUrl . $siteLogo;
             }
         }
 
