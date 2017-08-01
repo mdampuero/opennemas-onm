@@ -88,9 +88,7 @@ class ContentMediaHelper
         }
 
         # The content doesnt have a media associated so return null.
-        if (!is_object($mediaObject)) {
-            return null;
-        }
+        $mediaObject = (is_object($mediaObject)) ? $mediaObject : new stdClass();
 
         if (!isset($mediaObject->url)) {
             $baseUrl = SITE_URL . 'media/' . MEDIA_DIR . '/sections/';
