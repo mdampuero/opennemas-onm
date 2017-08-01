@@ -28,12 +28,19 @@ class NewsletterManager extends BaseManager
      * @param string         $cachePrefix The cache prefix.
      * @pram  Template       $template    The template service.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix, $tpl)
-    {
+    public function __construct(
+        DbalWrapper $dbConn,
+        CacheInterface $cache,
+        $cachePrefix,
+        $tpl,
+        EntityManager $entityManager
+    ) {
         $this->dbConn      = $dbConn;
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
         $this->tpl         = $tpl;
+        $this->er          = $entityManager;
+        $this->cm          = new \ContentManager();
     }
 
     /**
@@ -63,10 +70,12 @@ class NewsletterManager extends BaseManager
         }
 
         try {
-            $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
+            $sql = 'SELECT * FROM `newsletter_archive`'
+                .' WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
             $rs = $this->dbConn->fetchAll($sql);
 
-            $sql = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
+            $sql = 'SELECT COUNT(`pk_newsletter`) FROM `newsletter_archive` '
+                .'WHERE '.$whereClause. ' ORDER BY '.$order;
             $countNm = $this->dbConn->fetchColumn($sql);
 
             $newsletters = [];
@@ -76,7 +85,7 @@ class NewsletterManager extends BaseManager
 
                 $newsletters[] = $obj;
             }
-            return array($countNm, $newsletters);
+            return [$countNm, $newsletters];
         } catch (\Exception $e) {
             error_log('Error fetching newsletters: '.$e->getMessage());
             return;
@@ -92,122 +101,137 @@ class NewsletterManager extends BaseManager
      */
     public function render($contents)
     {
-        $cm  = new \ContentManager();
-
         $newsletterContent = $contents;
 
         if (empty($newsletterContent)) {
-            $newsletterContent = array();
+            $newsletterContent = [];
         }
 
-        $er = getService('entity_repository');
         foreach ($newsletterContent as $container) {
             foreach ($container->items as &$item) {
-                if (!empty($item->id) && $item->content_type !='label') {
-                    $content = $er->find($item->content_type, $item->id);
-                    $content = new $item->content_type($item->id);
-
-                    //if is a real content include it in the contents array
-                    if (is_object($content) && !is_null($content->id)) {
-                        $content = $content->get($item->id);
-                        $item->content_type = $content->content_type;
-                        $item->title        = $content->title;
-                        $item->slug         = $content->slug;
-                        $item->uri          = $content->uri;
-                        $item->subtitle     = $content->subtitle;
-                        $item->date         = date(
-                            'Y-m-d',
-                            strtotime(str_replace('/', '-', substr($content->created, 6)))
-                        );
-                        $item->cat          = $content->category_name;
-                        $item->agency       = '';
-                        if (is_array($content->params)
-                            && array_key_exists('agencyBulletin', $content->params)
-                        ) {
-                            $item->agency   = $content->params['agencyBulletin'];
-                        }
-                        $item->name         = (isset($content->name))?$content->name:'';
-                        $item->image        = (isset($content->cover))?$content->cover:'';
-
-                        // Fetch images of articles if exists
-                        if (!empty($content->img1)) {
-                            $item->photo = $cm->find('Photo', 'pk_content ='.$content->img1);
-                        } elseif (!empty($content->fk_video)) {
-                            $item->video = $er->find('Video', $content->fk_video);
-                        } elseif (!empty($content->img2)) {
-                            $item->photo = $cm->find('Photo', 'pk_content ='.$content->img2);
-                        }
-
-                        if (isset($content->summary)) {
-                            $item->summary  = $content->summary;
-                        } else {
-                            $item->summary = substr(strip_tags($content->body), 0, 250).'...';
-                        }
-                        if (isset($content->description)) {
-                            $item->description  = $content->description;
-                        }
-                        //Fetch opinion author photos
-                        if ($content->content_type == '4') {
-                            $item->author = new \User($content->fk_author);
-                        }
-                        //Fetch video thumbnails
-                        if ($content->content_type == '9') {
-                            $item->thumb = $content->getThumb();
-                        }
-                    }
+                // if current item do not fullfill the required format
+                // then skip it
+                if (empty($item->id) || $item->content_type == 'label') {
+                    continue;
                 }
+
+                $content = $this->er->find($item->content_type, $item->id);
+
+                // if is not a real content, skip this element
+                if (!is_object($content) || is_null($content->id)) {
+                    continue;
+                }
+
+                $item = $this->hydrateContent($item, $content);
             }
         }
 
         $this->tpl->assign('newsletterContent', $newsletterContent);
 
-        // render menu
+        // Fetch and assign the frontpage menu
         $menuManager = new \Menu();
-        $menuFrontpage= $menuManager->getMenu('frontpage');
+        $menuFrontpage = $menuManager->getMenu('frontpage');
         $this->tpl->assign('menuFrontpage', $menuFrontpage->items);
 
-        // Render ads
+        // Fetch and assign newsletter ads
+        $positions = getService('core.helper.advertisement')
+            ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
         $ads = getService('advertisement_repository')
-            ->findByPositionsAndCategory([ 1001, 1009 ], 0);
+            ->findByPositionsAndCategory($positions, 0);
         $this->tpl->assign('advertisements', $ads);
 
-         // VIERNES 4 DE SEPTIEMBRE 2009
-        $days = array(
+        // Format and assign the current date.
+        // CRAP!
+        $days = [
             'Domingo', 'Lunes', 'Martes', 'Miércoles',
             'Jueves', 'Viernes', 'Sábado'
-        );
-        $months = array(
-            '', 'Enero', 'Febrero', 'Marzo',
-            'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'
-        );
+        ];
+        $months = [
+            '', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
 
         $time = new \DateTime();
+        $this->tpl->assign(
+            'current_date',
+            $days[$time->format('w')].' '. $time->format('j').' de '.
+            $months[(int) $time->format('n')].' '.$time->format('Y')
+        );
 
-        $currentDate = $days[$time->format('w')].' '.
-                       $time->format('j').' de '.
-                       $months[(int) $time->format('n')].' '.
-                       $time->format('Y');
-
-        $this->tpl->assign('current_date', $currentDate);
-
+        // Process and assign public URL for images and links
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
             getService('core.instance')->getMainDomain()
         );
-
         $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
+        // Fetch and assign settings
         $configurations = s::get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
         ]);
-
         $this->tpl->assign('conf', $configurations);
-        $htmlContent = $this->tpl->fetch('newsletter/newNewsletter.tpl');
+        $this->tpl->assign('render_params', ['ads-format' => 'inline']);
 
-        return $htmlContent;
+        return $this->tpl->fetch('newsletter/newNewsletter.tpl');
+    }
+
+    /**
+     * Completes the content information from an object from repository
+     *
+     * @param Content $item the item to complete
+     * @param Content $content the content from the repository
+     *
+     * @return Content the item completed
+     **/
+    public function hydrateContent($item, $content)
+    {
+        $item->content_type = $content->content_type;
+        $item->title        = $content->title;
+        $item->slug         = $content->slug;
+        $item->uri          = $content->uri;
+        $item->subtitle     = $content->subtitle;
+        $item->date         = date(
+            'Y-m-d',
+            strtotime(str_replace('/', '-', substr($content->created, 6)))
+        );
+        $item->cat          = $content->category_name;
+        $item->agency       = '';
+        if (is_array($content->params)
+            && array_key_exists('agencyBulletin', $content->params)
+        ) {
+            $item->agency   = $content->params['agencyBulletin'];
+        }
+        $item->name  = (isset($content->name))?$content->name:'';
+        $item->image = (isset($content->cover))?$content->cover:'';
+
+        // Fetch images of articles if exists
+        if (!empty($content->img1)) {
+            $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img1);
+        } elseif (!empty($content->fk_video)) {
+            $item->video = $this->er->find('Video', $content->fk_video);
+        } elseif (!empty($content->img2)) {
+            $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img2);
+        }
+
+        if (isset($content->summary)) {
+            $item->summary  = $content->summary;
+        } else {
+            $item->summary = substr(strip_tags($content->body), 0, 250).'...';
+        }
+        if (isset($content->description)) {
+            $item->description  = $content->description;
+        }
+        //Fetch opinion author photos
+        if ($content->content_type == '4') {
+            $item->author = new \User($content->fk_author);
+        }
+        //Fetch video thumbnails
+        if ($content->content_type == '9') {
+            $item->thumb = $content->getThumb();
+        }
+
+        return $item;
     }
 }
