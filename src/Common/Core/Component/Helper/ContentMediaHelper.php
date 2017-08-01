@@ -95,12 +95,12 @@ class ContentMediaHelper
             if (!is_null($params) && array_key_exists('default_image', $params)) {
                 // Default on template
                 $mediaObject->url = $params['default_image'];
-            } elseif ($this->sm->get('mobile_logo')) {
+            } elseif ($mobileLogo = $this->sm->get('mobile_logo')) {
                 // Mobile logo
-                $mediaObject->url = $baseUrl . $this->sm->get('mobile_logo');
-            } elseif ($this->sm->get('site_logo')) {
+                $mediaObject->url = $baseUrl . $mobileLogo;
+            } elseif ($siteLogo = $this->sm->get('site_logo')) {
                 // Logo
-                $mediaObject->url = $baseUrl . $this->sm->get('site_logo');
+                $mediaObject->url = $baseUrl . $siteLogo;
             }
         }
 
