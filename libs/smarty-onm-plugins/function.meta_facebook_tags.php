@@ -34,7 +34,10 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
 
         // Populate the media element if exists
         $image = getService('core.helper.content_media')->getContentMediaObject($content, $params);
-        if (isset($image->url) && !empty($image->url)) {
+        if (is_object($image)
+            && isset($image->url)
+            && !empty($image->url)
+        ) {
             $output[] = '<meta property="og:image" content="' . $image->url . '" />';
             $output[] = '<meta property="og:image:width" content="' . $image->width . '"/>';
             $output[] = '<meta property="og:image:height" content="' . $image->height . '"/>';

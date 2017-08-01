@@ -67,8 +67,10 @@ function smarty_function_structured_data_tags($params, &$smarty)
             ->getContentMediaObject($content, $params);
 
         $media = [
-            'image' => get_class($mediaObject) == 'Photo' ? $mediaObject : null,
-            'video' => get_class($mediaObject) == 'Video' ? $mediaObject : null,
+            'image' =>
+                (is_object($mediaObject) && get_class($mediaObject) == 'Photo') ? $mediaObject : null,
+            'video' =>
+                (is_object($mediaObject) && get_class($mediaObject) == 'Video') ? $mediaObject : null,
         ];
 
         // Complete array of Data
