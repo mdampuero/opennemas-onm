@@ -425,7 +425,7 @@
             <uib-tab>
               <uib-tab-heading>
                 <i class="fa fa-globe"></i>
-                {t}Language & timezone{/t}
+                {t}Language & time{/t}
               </uib-tab-heading>
               <div class="tab-wrapper">
                 <div class="row">
