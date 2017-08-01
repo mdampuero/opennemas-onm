@@ -85,9 +85,11 @@ class ContentMediaHelper
                     $mediaObject->url = $content->thumb;
                 }
                 break;
-            default:
-                $mediaObject = new \stdClass();
-                break;
+        }
+
+        # The content doesnt have a media associated so return null.
+        if (!is_object($mediaObject)) {
+            return null;
         }
 
         if (!isset($mediaObject->url)) {
