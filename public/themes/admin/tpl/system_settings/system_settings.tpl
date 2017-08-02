@@ -425,7 +425,7 @@
             <uib-tab>
               <uib-tab-heading>
                 <i class="fa fa-globe"></i>
-                {t}Language & timezone{/t}
+                {t}Language & time{/t}
               </uib-tab-heading>
               <div class="tab-wrapper">
                 <div class="row">
@@ -763,7 +763,7 @@
                                 </button>
                               </div>
                             </div>
-                            <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" ng-click="$event.stopPropagation();" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
+                            <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank" ng-click="$event.stopPropagation();">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
                             <small class="help">
                               <i class="fa fa-info-circle m-r-5 text-info"></i>
                               {t}We are not responsible of the stats or of any third party services{/t}
@@ -907,7 +907,7 @@
                               </div>
                               <small class="help">
                                 <i class="fa fa-info-circle m-r-5 text-info"></i>
-                                {t escape=off}Get your reCaptcha key from <a class="external-link" href="https://www.google.com/recaptcha/admin#whyrecaptcha" ng-click="$event.stopPropagation();" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
+                                {t escape=off}Get your reCaptcha key from <a class="external-link" href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank" ng-click="$event.stopPropagation();">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
                               </small>
                             </div>
                           </div>
@@ -939,7 +939,7 @@
                               </div>
                               <small class="help">
                                 <i class="fa fa-info-circle m-r-5 text-info"></i>
-                                {t escape=off}You can get your PayPal account email from <a class="external-link" href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" ng-click="$event.stopPropagation();" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
+                                {t escape=off}You can get your PayPal account email from <a class="external-link" href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank" ng-click="$event.stopPropagation();">PayPal site</a>. This must be a business account for receiving payments{/t}
                               </small>
                             </div>
                           </div>
@@ -968,7 +968,7 @@
                             </div>
                             <small class="help">
                               <i class="fa fa-info-circle m-r-5 text-info"></i>
-                              {t escape=off}You can get your Google <strong>Search</strong> API Key from <a class="external-link" href="http://www.google.com/cse/manage/create" ng-click="$event.stopPropagation();" target="_blank">Google Search sign up website</a>.{/t}
+                              {t escape=off}You can get your Google <strong>Search</strong> API Key from <a class="external-link" href="http://www.google.com/cse/manage/create" target="_blank" ng-click="$event.stopPropagation();">Google Search sign up website</a>.{/t}
                             </small>
                           </div>
                         </div>
@@ -996,7 +996,7 @@
                             </div>
                             <small class="help">
                               <i class="fa fa-info-circle m-r-5 text-info"></i>
-                              {t escape=off}You can get your Publication name in <a class="external-link" href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank">Google News search</a> for your site.{/t}
+                              {t escape=off}You can get your Publication name in <a class="external-link" href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank" ng-click="$event.stopPropagation();">Google News search</a> for your site.{/t}
                             </small>
                           </div>
                         </div>
@@ -1024,7 +1024,7 @@
                             </div>
                             <small class="help">
                               <i class="fa fa-info-circle m-r-5 text-info"></i>
-                              {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a class="external-link" href="http://code.google.com/apis/maps/signup.html" target="_blank">Google maps sign up website</a>.{/t}
+                              {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a class="external-link" href="http://code.google.com/apis/maps/signup.html" target="_blank" ng-click="$event.stopPropagation();">Google maps sign up website</a>.{/t}
                             </small>
                           </div>
                         </div>
@@ -1052,7 +1052,7 @@
                             </div>
                             <small class="help">
                               <i class="fa fa-info-circle m-r-5 text-info"></i>
-                              {t escape=off}You can get your Google <strong>Tags</strong> container Id from <a class="external-link" href="https://tagmanager.google.com/#/home" target="_blank">Google tags sign up website</a>.{/t}
+                              {t escape=off}You can get your Google <strong>Tags</strong> container Id from <a class="external-link" href="https://tagmanager.google.com/#/home" target="_blank" ng-click="$event.stopPropagation();">Google tags sign up website</a>.{/t}
                             </small>
                           </div>
                         </div>
@@ -1157,7 +1157,7 @@
                               <div class="controls">
                                 <input class="form-control" id="facebook-api_key" name="facebook-api-key" ng-model="settings.facebook.api_key" type="text">
                                 <span class="help">
-                                  {t escape=off}You can get your Facebook App Keys from <a class="external-link" href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}
+                                  {t escape=off}You can get your Facebook App Keys from <a class="external-link" href="https://developers.facebook.com/apps" target="_blank" ng-click="$event.stopPropagation();">Facebook Developers website</a>.{/t}
                                 </span>
                               </div>
                             </div>
@@ -1337,7 +1337,7 @@
                               {t}Robots.txt rules{/t}
                             </label>
                             <span class="help">
-                              {t escape=off}Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="http://www.robotstxt.org/robotstxt.html" target="_blank">documentation</a>.{/t}
+                              {t escape=off}Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="http://www.robotstxt.org/robotstxt.html" target="_blank" ng-click="$event.stopPropagation();">documentation</a>.{/t}
                             </span>
                             <div class="controls">
                               <textarea class="form-control" id="robots-txt-rules" name="robots-txt-rules" ng-model="settings.robots_txt_rules" rows="6"></textarea>
