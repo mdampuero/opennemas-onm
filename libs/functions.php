@@ -301,11 +301,11 @@ function generatePiwikScriptCode($config)
 
 function generatePiwikAmpCode($config)
 {
-    $imgCode = '<amp-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=AMP"></amp-pixel>';
+    $imgCode = '<amp-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=AMP" layout="nodisplay"></amp-pixel>';
 
     $code .= sprintf(
         $imgCode,
-        $config['server_url'],
+        preg_replace("(^https?:)", "", $config['server_url']),
         $config['page_id']
     );
 
