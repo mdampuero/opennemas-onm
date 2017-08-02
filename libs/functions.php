@@ -257,6 +257,7 @@ function getPiwikCode($type = false)
         return '';
     }
 
+    $config['server_url'] = rtrim($config['server_url'], DS) . DS;
 
     if ($type === 'amp') {
         $code = generateGAAmpCode($config);
