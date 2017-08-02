@@ -734,40 +734,40 @@ class StringUtils
      */
     public static function loadBadWords()
     {
-        $badWords = array(
-            array(
+        $badWords = [
+            [
                 'weight' => 5,
                 'text'   => 'm[i]?erda',
-            ),
-            array(
+            ],
+            [
                 'weight' => 5,
                 'text'   => 'marica',
-            ),
-            array(
+            ],
+            [
                 'weight' => 5,
                 'text'   => 'carallo',
-            ),
-            array(
+            ],
+            [
                 'weight' => 10,
                 'text'   => '[h]?ostia',
-            ),
-            array(
+            ],
+            [
                 'weight' => 20,
                 'text'   => 'puta[s]?',
-            ),
-            array(
+            ],
+            [
                 'weight' => 30,
                 'text'   => 'cabr[oó]n[a]?',
-            ),
-            array(
+            ],
+            [
                 'weight' => 50,
                 'text'   => 'fill[ao] d[ae] puta',
-            ),
-            array(
+            ],
+            [
                 'weight' => 50,
                 'text'   => 'hij[ao] de puta',
-            ),
-        );
+            ],
+        ];
 
         return $badWords;
     }
@@ -970,7 +970,7 @@ class StringUtils
      */
     public static function toHttpParams(array $httpParams)
     {
-        $result = array();
+        $result = [];
 
         // Implode each key => value parameter into key-value
         foreach ($httpParams as $param) {
