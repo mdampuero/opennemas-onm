@@ -49,10 +49,11 @@ class ContentMediaHelper
                     // Articles with inner video
                     $mediaObject = $this->er->find('Video', $content->fk_video2);
                     if (!empty($mediaObject)
-                        && strpos($mediaObject->thumb, 'http')  === false
+                        && strpos($mediaObject->thumb, 'http') === false
                     ) {
                         $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
                     }
+
                     $mediaObject->url = $mediaObject->thumb;
                 } elseif (isset($content->img1) && ($content->img1 > 0)) {
                     // Articles/Opinion with front photo
@@ -67,7 +68,6 @@ class ContentMediaHelper
                     $mediaObject = $content->author->photo;
                     $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
-
                 break;
 
             case 'album':
@@ -75,21 +75,21 @@ class ContentMediaHelper
                     $mediaObject = $content->cover_image;
                     $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
-
                 break;
 
             case 'video':
                 if (isset($content->thumb) && !empty($content->thumb)) {
-                    if (strpos($content->thumb, 'http')  === false) {
-                        $content->thumb = SITE_URL.$content->thumb;
+                    if (strpos($content->thumb, 'http') === false) {
+                        $content->thumb = SITE_URL . $content->thumb;
                     }
+
                     $mediaObject = $content;
                     $mediaObject->url = $content->thumb;
                 }
                 break;
         }
 
-        # The content doesnt have a media associated so return null.
+        // The content doesnt have a media associated so return null.
         $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
 
         if (!isset($mediaObject->url)) {
