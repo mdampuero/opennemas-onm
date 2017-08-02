@@ -44,7 +44,7 @@ class TagsController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('tag/index.tpl', $cacheId)
         ) {
-            $fm      = $this->get('core.filter.manager');
+            $fm      = $this->get('data.manager.filter');
             $t       = $this->get('core.manager.tag')->findAll();
             $letters = range('a', 'z');
 
@@ -87,7 +87,7 @@ class TagsController extends Controller
     {
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $tagName = \Onm\StringUtils::normalize($tagName);
-        $page    =  $request->query->getDigits('page', 1);
+        $page    = $request->query->getDigits('page', 1);
 
         if ($page > 1) {
             $page = 2;
@@ -124,7 +124,7 @@ class TagsController extends Controller
 
             // TODO: review this piece of CRAP
             $filteredContents = [];
-            $tag = strtolower($tag);
+            $tag              = strtolower($tag);
             foreach ($contents as &$item) {
                 $arrayMetadatas = explode(',', $item->metadata);
 
@@ -139,14 +139,14 @@ class TagsController extends Controller
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $image = $em->find('Photo', $item->img1);
                         if (is_object($image) && !is_null($image->id)) {
-                            $item->img1_path = $image->path_file.$image->name;
+                            $item->img1_path = $image->path_file . $image->name;
                             $item->img1      = $image;
                         }
                     }
 
                     if ($item->fk_content_type == 7) {
                         $image           = $em->find('Photo', $item->cover_id);
-                        $item->img1_path = $image->path_file.$image->name;
+                        $item->img1_path = $image->path_file . $image->name;
                         $item->img1      = $image;
                         $item->summary   = $item->subtitle;
                         $item->subtitle  = '';
@@ -203,7 +203,7 @@ class TagsController extends Controller
      */
     public static function getInnerAds($category = 'home')
     {
-        $category       = (!isset($category) || ($category=='home'))? 0: $category;
+        $category       = !isset($category) || ($category == 'home') ? 0 : $category;
         $positions      = [ 7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193 ];
         $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
