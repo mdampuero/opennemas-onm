@@ -60,7 +60,9 @@ class ContentMediaHelper
                     if (!empty($mediaObject)) {
                         $mediaObject->url = $mediaUrl . $mediaObject->path_file . $mediaObject->name;
                     }
-                } elseif (is_object($content->author->photo)) {
+                } elseif (is_object($content->author->photo)
+                    && $content->content_type_name == 'opinion'
+                ) {
                     // Photo author
                     $mediaObject = $content->author->photo;
                     $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
