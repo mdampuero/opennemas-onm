@@ -260,7 +260,7 @@ function getPiwikCode($type = false)
     $config['server_url'] = rtrim($config['server_url'], DS) . DS;
 
     if ($type === 'amp') {
-        $code = generateGAAmpCode($config);
+        $code = generatePiwikAmpCode($config);
     } elseif ($type === 'image') {
         $code = generatePiwikImageCode($config);
     } else {
@@ -301,13 +301,12 @@ function generatePiwikScriptCode($config)
 
 function generatePiwikAmpCode($config)
 {
-    $imgCode = '<img-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s"></amp-pixel>';
+    $imgCode = '<amp-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=AMP"></amp-pixel>';
 
     $code .= sprintf(
         $imgCode,
         $config['server_url'],
-        $config['page_id'],
-        urlencode(SITE_URL.'newsletter/'.date("YmdHis"))
+        $config['page_id']
     );
 
     return $code;
