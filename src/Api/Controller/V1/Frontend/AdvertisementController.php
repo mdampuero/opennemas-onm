@@ -259,7 +259,7 @@ class AdvertisementController extends Controller
         $object->type        = ((($element->type_advertisement + 50) % 100) == 0) ?
             'interstitial' : 'normal'; // Types: normal, interstitial
         $object->position    = array_map('intval', explode(',', $element->type_advertisement));
-        $object->publicId    = date('YmdHis', strtotime($element->created)).
+        $object->publicId    = date('YmdHis', strtotime($element->created)) .
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;
         $object->starttime   = $element->starttime;
@@ -272,7 +272,7 @@ class AdvertisementController extends Controller
         $object->orientation = array_key_exists('orientation', $element->params) ?
             $element->params['orientation'] : 'top';
 
-        $object->target_url = ($object->format == 'image') ? $element->url: '';
+        $object->target_url = ($object->format == 'image') ? $element->url : '';
 
         return $object;
     }

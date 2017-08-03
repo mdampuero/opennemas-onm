@@ -157,8 +157,10 @@ class AdsController extends Controller
         }
 
         $data = [
-            'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              =>
+                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'           =>
+                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -244,6 +246,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
+
         if ($ad->fk_publisher != $this->getUser()->id
             && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
@@ -305,6 +308,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
+
         if (!$ad->isOwner($this->getUser()->id)
             && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
@@ -324,8 +328,10 @@ class AdsController extends Controller
 
         $data = [
             'id'                 => $ad->id,
-            'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              =>
+                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'           =>
+                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
