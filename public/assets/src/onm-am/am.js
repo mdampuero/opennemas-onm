@@ -173,7 +173,9 @@
 
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
-    item.src += 'category=' + this.config.category + '&module=' + this.config.extension;
+    item.src += 'category=' + this.config.category +
+      '&module=' + this.config.extension +
+      '&dirtyId=' + this.config.dirtyId;
 
     // Dispatch event when iframe loaded
     item.onload = function () {
