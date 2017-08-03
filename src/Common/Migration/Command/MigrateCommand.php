@@ -131,6 +131,8 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function getReport()
     {
+        date_default_timezone_set('UTC');
+
         $this->end = time();
 
         $diff = $this->end - $this->start;
