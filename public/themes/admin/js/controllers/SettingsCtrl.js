@@ -55,7 +55,8 @@
             frontend:  [],
             time_zone: 'UTC'
           },
-          rtb_files: []
+          rtb_files: [],
+          automatic_translators: []
         };
 
         /**
@@ -147,16 +148,16 @@
          *
          * @return {Array} The list of locales.
          */
-        $scope.getLocales = function(query) {
+        $scope.getLocales = function(query, spinning) {
+          var spinning = (typeof spinning !== 'undefined') ?  spinning : 'searching';
           var route = {
               name: 'api_v1_backend_settings_locale_list',
               params: { q: query }
           };
-
-          $scope.searching = true;
+          $scope[spinning] = true;
 
           return http.get(route).then(function(response) {
-            $scope.searching = false;
+            $scope[spinning] = false;
             return response.data;
           });
         };
@@ -282,6 +283,8 @@
 
           $scope.saving = true;
 
+
+
           http.put('api_v1_backend_settings_save', data)
             .then(function(response) {
               $scope.saving = false;
@@ -392,6 +395,85 @@
               $scope.extra.prefix + $scope.settings.favico;
           }
         };
+
+        /**
+         * @function addAddAutomaticTranslation to the list
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Add new input for automatic translation tracking code.
+         */
+        $scope.addAutomaticTranslation = function() {
+          $scope.settings.automatic_translators
+            .push({ from: '', to: '', translator: '' });
+        };
+
+        /**
+         * @function removeAutomaticTranslation from the list
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Removes a automatic translation.
+         *
+         * @param {Integer } index The index of the input to remove.
+         */
+        $scope.removeAutomaticTranslation = function(index) {
+          $scope.settings.automatic_translators.splice(index, 1);
+        };
+
+        /**
+         * @function getExtraParams
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Get all extra params for a translation service
+         *
+         * @param {Integer } index The index of the translation service
+         */
+        $scope.getExtraParams = function(index)  {
+          let extraParams = [];
+          if((0 != index && !index) || !$scope.extra.translation_services)  {
+            return extraParams;
+          }
+          let translator = $scope.settings.automatic_translators[index].translator
+          for(let i = 0; i < $scope.extra.translation_services.length; i++)  {
+            if($scope.extra.translation_services[i].translator == translator)  {
+              extraParams = $scope.extra.translation_services[i].required_parameters;
+              i = $scope.extra.translation_services.length;
+            }
+          }
+          return extraParams
+        };
+
+        /**
+         * @function filterFromLanguagues
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Filter Filter all selected languages
+         *
+         * @param {Integer } element to filter
+         */
+        $scope.filterFromLanguagues = function(index)  {
+          if(!$scope.settings.automatic_translators[index].from) {
+            return [];
+          }
+          let languagueFromCode = $scope.settings.automatic_translators[index].from;
+          return $scope.settings.locale.frontend.filter(function (locale)  {
+            if(locale.code == languagueFromCode) {
+              return false;
+            }
+            for(let i = 0;i < $scope.settings.automatic_translators.length ;i++)  {
+              if(i != index &&
+                  $scope.settings.automatic_translators[i].from == $scope.settings.automatic_translators[index].from &&
+                  $scope.settings.automatic_translators[i].to == locale.code)  {
+                return false;
+              }
+            }
+            return true;
+          });
+        };
+
       }
     ]);
 })();

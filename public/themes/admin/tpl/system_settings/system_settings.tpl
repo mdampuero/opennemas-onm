@@ -522,7 +522,103 @@
                         </div>
                       </div>
                     </div>
-                  {/is_module_activated}
+                  {is_module_activated name="es.openhost.module.translation"}
+                    <div class="col-md-6">
+                      <div class="p-l-15">
+                        <h4>
+                          <i class="fa fa-globe m-r-5"></i>
+                          {t}Automatic translations{/t}
+                        </h4>
+                        <div class="form-group">
+                          <label class="form-label" for="frontend-language">
+                            {t}Services for automatic translations{/t}
+                          </label>
+                          <span class="help">
+                            {t}Services to translate your contents to a especific language.{/t}
+                          </span>
+                          <div ng-repeat="code in settings.automatic_translators track by $index">
+                            <div class="row" >
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Languague from translate{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <select ng-model="settings.automatic_translators[$index].from">
+                                      <option value="">{t}Select from language{/t}</option>
+                                      <option value="[% item.code %]" ng-repeat="item in settings.locale.frontend">[% item.name %]</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Languague to translate{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <select ng-model="settings.automatic_translators[$index].to" ng-disabled="!settings.automatic_translators[$index].from">
+                                      <option value="">{t}Select to language{/t}</option>
+                                      <option value="[% item.code %]" ng-repeat="item in filterFromLanguagues($index)">[% item.name %]</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Translation service{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <select ng-model="settings.automatic_translators[$index].translator" >
+                                      <option value="[% service.translator %]" ng-repeat="service in extra.translation_services" >[% service.translator %]</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row" ng-show="settings.automatic_translators[$index].translator && getExtraParams($index).length > 0">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    {t}Required params for Service{/t}
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row" ng-show="settings.automatic_translators[$index].translator">
+                              <div class="col-md-4" ng-repeat="(translationParam, text) in getExtraParams($index)">
+                                <div class="form-group">
+                                  <label class="form-label">
+                                    [% text %]
+                                  </label>
+                                  <div class="controls">
+                                    <input  ng-model="settings.automatic_translators[$index].extra[translationParam]" type="text" >
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" >
+                                <button class="btn btn-block btn-danger" ng-click="removeAutomaticTranslation($index)" type="button">
+                                  <i class="fa fa-trash-o"></i>
+                                  {t}Delete{/t}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 form-group text-center" ng-show="settings.locale.frontend && settings.locale.frontend.length > 1">
+                              <button class="btn btn-block btn-white" ng-click="addAutomaticTranslation()" type="button">
+                                <i class="fa fa-plus"></i>
+                                {t}Add{/t}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {/is_module_activated}{/is_module_activated}
                 </div>
               </div>
             </uib-tab>

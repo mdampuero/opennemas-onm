@@ -25,23 +25,22 @@ class SettingController extends Controller
      * @var array
      */
     protected $keys = [
-        'comscore', 'contact_email', 'cookies_hint_enabled',
-        'cookies_hint_url', 'facebook', 'facebook_id', 'facebook_page',
-        'favico', 'google_analytics', 'google_analytics_others',
-        'google_custom_search_api_key', 'google_maps_api_key', 'google_tags_id',
-        'google_news_name', 'google_page', 'googleplus_page',
-        'instagram_page', 'items_in_blog', 'items_per_page',
-        'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',
-        'onm_digest_pass', 'onm_digest_user', 'paypal_mail',
-        'pinterest_page', 'piwik', 'recaptcha', 'refresh_interval',
-        'logo_enabled', 'site_agency', 'site_color', 'site_color_secondary',
-        'site_description', 'site_footer', 'site_footer', 'site_keywords',
-        'site_language', 'site_logo', 'site_name', 'site_title',
-        'twitter_page', 'vimeo_page', 'webmastertools_bing',
-        'webmastertools_google', 'youtube_page',
-        'robots_txt_rules', 'chartbeat',
-        'body_end_script', 'body_start_script','header_script',
-        'elements_in_rss', 'redirection', 'locale', 'rtb_files'
+        'automatic_translators', 'comscore', 'contact_email',
+        'cookies_hint_enabled', 'cookies_hint_url', 'facebook', 'facebook_id',
+        'facebook_page', 'favico', 'google_analytics',
+        'google_analytics_others', 'google_custom_search_api_key',
+        'google_maps_api_key', 'google_tags_id', 'google_news_name',
+        'google_page', 'googleplus_page', 'instagram_page', 'items_in_blog',
+        'items_per_page', 'linkedin_page', 'max_session_lifetime',
+        'mobile_logo', 'ojd', 'onm_digest_pass', 'onm_digest_user',
+        'paypal_mail', 'pinterest_page', 'piwik', 'recaptcha',
+        'refresh_interval', 'rtb_files', 'logo_enabled', 'site_agency',
+        'site_color', 'site_color_secondary', 'site_description', 'site_footer',
+        'site_footer', 'site_keywords', 'site_language', 'site_logo',
+        'site_name', 'site_title', 'twitter_page', 'vimeo_page',
+        'webmastertools_bing', 'webmastertools_google', 'youtube_page',
+        'robots_txt_rules', 'chartbeat', 'body_end_script', 'body_start_script',
+        'header_script', 'elements_in_rss', 'redirection', 'locale'
     ];
 
     /**
@@ -142,7 +141,8 @@ class SettingController extends Controller
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
-                    . '/sections/'
+                    . '/sections/',
+                'translation_services' => $this->get('core.translate')->getTranslatorsData()
             ],
             'settings' => $settings,
         ]);
