@@ -10,6 +10,10 @@ api_v1_backend_user:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/user.yml'
     prefix:   /backend
 
+api_v1_backend_translation:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/translation.yml'
+    prefix:   /backend
+
 api_v1_frontend_advertisement:
     resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
     prefix:   /
