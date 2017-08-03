@@ -66,8 +66,8 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        $user        = $this->context->getToken()->getUser();
-        $instances   = $this->getInstances($user);
+        $user      = $this->context->getToken()->getUser();
+        $instances = $this->getInstances($user);
         // TODO: Uncomment when checking by category name
         //$categories  = $this->getCategories($user);
         $permissions = $this->getPermissions($user);
@@ -169,7 +169,7 @@ class SecurityListener implements EventSubscriberInterface
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 
-        $p = new \Privilege();
+        $p           = new \Privilege();
         $permissions = array_filter(
             $p::$privileges,
             function ($a) use ($permissions) {

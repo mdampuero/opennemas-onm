@@ -127,7 +127,7 @@ class CoreListener implements EventSubscriberInterface
         $scheme = 'http://';
         $uri    = $request->getRequestUri();
 
-        $port = in_array($port, [ 80, 443 ]) ?  '' : ':' . $port;
+        $port = in_array($port, [ 80, 443 ]) ? '' : ':' . $port;
 
         if (strpos($uri, '/admin') === 0) {
             if ($this->container->getParameter('opennemas.backend_force_ssl')) {
@@ -159,7 +159,7 @@ class CoreListener implements EventSubscriberInterface
         $scheme = $request->getScheme();
         $uri    = $request->getRequestUri();
 
-        $port = in_array($port, [ 80, 443 ]) ?  '' : ':' . $port;
+        $port = in_array($port, [ 80, 443 ]) ? '' : ':' . $port;
         $uri  = $scheme . '://' . $host . $port . $uri;
 
         if (!empty($request->headers->get('x-forwarded-proto'))) {
