@@ -78,7 +78,7 @@ class AdvertisementRenderer
         } elseif ($ad->with_script == 2) {
             return $this->renderInlineReviveSlot($ad, $format);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderInlineDFPSlot($ad, $format);
+            return $this->renderInlineDFPSlot($ad, $format);
         }
 
         return $this->renderInlineImage($ad, $format);
@@ -113,6 +113,7 @@ class AdvertisementRenderer
                 'sizes' => $advertisement->getSizes()
             ];
         }
+
         $targetingCode = $this->getDFPTargeting(
             $params['category'],
             $params['extension'],
@@ -183,10 +184,11 @@ class AdvertisementRenderer
             'mediaUrl' => $img->path_img . $img->path_file,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->container->get('router')
-                ->generate('frontend_ad_redirect', [
-                    'id' => $publicId
-                ], true),
+            'url'      => $this->container->get('router')->generate(
+                'frontend_ad_redirect',
+                [ 'id' => $publicId ],
+                true
+            ),
             'width'    => $img->width
         ]);
     }
@@ -215,7 +217,7 @@ class AdvertisementRenderer
         $zones  = [];
 
         foreach ($ads as $ad) {
-            $zones =  [
+            $zones = [
                 'id'      => $ad->id,
                 'openXId' => (int) $ad->params['openx_zone_id']
             ];
@@ -483,10 +485,10 @@ class AdvertisementRenderer
             'height'   => $img->height,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->container->get('router')
-                ->generate('frontend_ad_redirect', [
-                    'id' => $publicId
-                ]),
+            'url'      => $this->container->get('router')->generate(
+                'frontend_ad_redirect',
+                [ 'id' => $publicId ]
+            ),
         ];
 
         return $this->container->get('core.template.admin')
@@ -506,7 +508,7 @@ class AdvertisementRenderer
             return '';
         }
 
-        $cssClasses= [];
+        $cssClasses = [];
         foreach ($ad->params['devices'] as $device => $status) {
             if ($status === 0) {
                 $cssClasses[] = 'hidden-' . $device;
