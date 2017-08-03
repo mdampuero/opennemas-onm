@@ -113,7 +113,11 @@ class AdvertisementRenderer
                 'sizes' => $advertisement->getSizes()
             ];
         }
-        $targetingCode = $this->getDFPTargeting($params['category'], $params['extension']);
+        $targetingCode = $this->getDFPTargeting(
+            $params['category'],
+            $params['extension'],
+            $params['dirtyId']
+        );
 
         $options    = $this->sm->get('dfp_options');
         $customCode = $this->getDFPCustomCode();
@@ -356,7 +360,7 @@ class AdvertisementRenderer
         } elseif ($ad->with_script == 2) {
             return $this->renderSafeFrameRevive($ad, $params);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderSafeFrameDFP($ad, $params);
+            return $this->renderSafeFrameDFP($ad, $params);
         }
 
         $img = $this->container->get('entity_repository')->find('Photo', $ad->img);
@@ -402,11 +406,15 @@ class AdvertisementRenderer
     protected function renderSafeFrameDFP($ad, $params)
     {
         $params = [
-            'id'        => $ad->id,
-            'dfpId'     => $ad->params['googledfp_unit_id'],
-            'sizes'     => $ad->getSizes($ad->normalizeSizes($ad->params)),
-            'targetingCode' => $this->getDFPTargeting($params['category'], $params['extension']),
-            'customCode'    => $this->getDFPCustomCode()
+            'id'            => $ad->id,
+            'dfpId'         => $ad->params['googledfp_unit_id'],
+            'sizes'         => $ad->getSizes($ad->normalizeSizes($ad->params)),
+            'customCode'    => $this->getDFPCustomCode(),
+            'targetingCode' => $this->getDFPTargeting(
+                $params['category'],
+                $params['extension'],
+                $params['dirtyId']
+            )
         ];
 
         return $this->tpl->fetch('advertisement/helpers/safeframe/dfp.tpl', $params);
@@ -531,7 +539,7 @@ class AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getDFPTargeting($category, $module)
+    protected function getDFPTargeting($category, $module, $dirtyId)
     {
         $options = $this->container->get('setting_repository')->get('dfp_options');
 
@@ -550,6 +558,14 @@ class AdvertisementRenderer
         if (array_key_exists('module', $options) && !empty($options['module'])) {
             $targetingCode .=
                 "googletag.pubads().setTargeting('{$options['module']}', ['{$module}']);\n";
+        }
+
+        if (array_key_exists('content_id', $options)
+            && !empty($options['content_id'])
+            && !empty($dirtyId)
+        ) {
+            $targetingCode .=
+                "googletag.pubads().setTargeting('{$options['content_id']}', ['{$dirtyId}']);\n";
         }
 
         return $targetingCode;
