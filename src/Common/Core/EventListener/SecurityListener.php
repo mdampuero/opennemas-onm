@@ -60,8 +60,6 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        $this->security->setInstance($instance);
-
         if (!$this->hasSecurity($uri)) {
             return;
         }

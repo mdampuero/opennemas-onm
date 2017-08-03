@@ -38,6 +38,7 @@ class CoreListener implements EventSubscriberInterface
     public function __construct($container)
     {
         $this->container = $container;
+        $this->security  = $container->get('core.security');
 
         $container->get('cache_manager')->setNamespace('manager');
     }
@@ -68,6 +69,8 @@ class CoreListener implements EventSubscriberInterface
         if (!$instance->activated) {
             throw new InstanceNotActivatedException($instance->internal_name);
         }
+
+        $this->security->setInstance($instance);
 
         $loader->init();
 
