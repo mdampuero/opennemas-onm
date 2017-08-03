@@ -90,6 +90,14 @@
             <div class="help">{t}Set a key for targeting your ads by module. Note that the value for targeting will always be the current module name{/t}</div>
           </div>
         </div>
+        <h4>{t}DFP content ID targeting{/t}</h4>
+        <div class="form-group">
+          <label for="dfp_options_content_id" class="form-label">{t}Key for setTargeting function{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="text" name="dfp_options_content_id" value="{$configs['dfp_options']['content_id']}">
+            <div class="help">{t}Set a key for targeting your ads by content ID. Note that the value for targeting will always be the current content ID{/t}</div>
+          </div>
+        </div>
         {if $smarty.session._sf2_attributes.user->isMaster()}
         <h4>{t}DFP custom code{/t}</h4>
         <div class="form-group">

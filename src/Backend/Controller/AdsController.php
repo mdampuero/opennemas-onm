@@ -448,8 +448,9 @@ class AdsController extends Controller
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
                 ],
                 'dfp_options' => [
-                    'target'  => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
-                    'module'  => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),
+                    'target'     => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
+                    'module'     => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),
+                    'content_id' => $formValues->filter('dfp_options_content_id', '', FILTER_SANITIZE_STRING),
                 ],
                 'tradedoubler_id'   => $formValues->getDigits('tradedoubler_id'),
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),

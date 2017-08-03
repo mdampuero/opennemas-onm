@@ -72,6 +72,7 @@ class AdvertisementController extends Controller
     {
         $category = $request->query->get('category', 'home');
         $module   = $request->query->get('module', 'frontpage');
+        $dirtyId  = $request->query->get('dirtyId', '');
 
         $ad = $this->getAdvertisement($id);
 
@@ -89,8 +90,9 @@ class AdvertisementController extends Controller
 
         $contents = $this->get('core.renderer.advertisement')
             ->renderSafeFrame($ad, [
-                'category' => $category,
+                'category'  => $category,
                 'extension' => $module,
+                'dirtyId'   => $dirtyId,
             ]);
 
         return new Response($contents, 200, $headers);
