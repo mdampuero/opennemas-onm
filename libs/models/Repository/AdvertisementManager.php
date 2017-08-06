@@ -32,10 +32,8 @@ class AdvertisementManager extends EntityManager
      */
     public function countBy($criteria)
     {
-        // Building the SQL filter
         $filterSQL = $this->getFilterSQL($criteria);
 
-        // Executing the SQL
         $sql = "SELECT COUNT(pk_content) FROM `contents`, `advertisements`"
             . " WHERE $filterSQL AND pk_content=pk_advertisement";
 
@@ -60,15 +58,13 @@ class AdvertisementManager extends EntityManager
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
     {
-        // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
         $orderBySQL = '`pk_content` DESC';
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-
-        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
         $sql = "SELECT " . (($count) ? "SQL_CALC_FOUND_ROWS  " : "") .
@@ -76,18 +72,18 @@ class AdvertisementManager extends EntityManager
             WHERE $filterSQL AND pk_content=pk_advertisement
             ORDER BY $orderBySQL $limitSQL";
 
-        $rs = $this->dbConn->fetchAll($sql);
+        $rs  = $this->dbConn->fetchAll($sql);
 
         if ($count) {
             $count = $this->getSqlCount();
         }
 
-        $contentIdentifiers = [];
-        foreach ($rs as $resultElement) {
-            $contentIdentifiers[] = [ $resultElement['content_type_name'], $resultElement['pk_content'] ];
+        $ids = [];
+        foreach ($rs as $item) {
+            $ids[] = [ $item['content_type_name'], $item['pk_content'] ];
         }
 
-        $contents = $this->findMulti($contentIdentifiers);
+        $contents = $this->findMulti($ids);
 
         return $contents;
     }
@@ -209,8 +205,10 @@ class AdvertisementManager extends EntityManager
      */
     protected function findAdvertisements($types, $category, $generics)
     {
+        $types = '((^|,)' . implode('(,|$))|((^|,)', $types) . '($|,))';
+
         $sql = 'SELECT pk_advertisement as id FROM advertisements'
-            . ' WHERE type_advertisement IN (%s)'
+            . ' WHERE type_advertisement REGEXP "%s"'
             . ' AND (fk_content_categories IS NULL OR %s)'
             . ' ORDER BY id';
 
@@ -228,7 +226,7 @@ class AdvertisementManager extends EntityManager
             $category
         );
 
-        $sql = sprintf($sql, implode(',', $types), $categories);
+        $sql = sprintf($sql, $types, $categories);
 
         try {
             $result = $this->dbConn->fetchAll($sql);

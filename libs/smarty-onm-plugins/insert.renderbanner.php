@@ -33,11 +33,12 @@ function smarty_insert_renderbanner($params, $smarty)
     $type = $params['type'];
 
     if (!is_array($ads)) {
-        return '';
+        $ads = [];
     }
 
     $ads = array_filter($ads, function ($ad) use ($type) {
-        return $ad->type_advertisement == $type && $ad->isInTime();
+        return preg_match('/(^|,)' . $type . '($|,)/', $ad->type_advertisement)
+            && $ad->isInTime();
     });
 
     if (empty($ads)) {
