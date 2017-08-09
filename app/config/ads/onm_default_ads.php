@@ -109,14 +109,10 @@ return array_map(function ($ad) use (&$i, $default) {
     2 => [
         'type_advertisement' => '2',
         'fk_content_categories' => [ '0' ],
-        'img' => '126',
-        'path' => '126',
-        'url' => 'http://www.opennemas.com',
         'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
             . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
             . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
             . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'with_script' => '0',
         'params' => [
             'sizes' => [
                 '0' => [
@@ -536,14 +532,10 @@ return array_map(function ($ad) use (&$i, $default) {
     110 => [
         'type_advertisement' => '110',
         'fk_content_categories' => [ '0' ],
-        'img' => '126',
-        'path' => '126',
-        'url' => 'http://www.opennemas.com',
         'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
             . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
             . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
             . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'with_script' => '0',
         'params' => [
             'sizes' => [
                 '0' => [
@@ -658,14 +650,10 @@ return array_map(function ($ad) use (&$i, $default) {
     602 => [
         'type_advertisement' => '602',
         'fk_content_categories' => [ '0' ],
-        'img' => '126',
-        'path' => '126',
-        'url' => 'http://www.opennemas.com',
         'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
             . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
             . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
             . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'with_script' => '0',
         'params' => [
             'sizes' => [
                 '0' => [
