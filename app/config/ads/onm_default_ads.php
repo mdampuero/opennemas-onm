@@ -893,6 +893,65 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
+    709 => [
+        'type_advertisement' => '709',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm-728x90 Leaderboard -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:728px;height:90px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="2721775077"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
+        ],
+    ],
+    710 => [
+        'type_advertisement' => '710',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
+            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
+            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
+            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
     793 => [
         'type_advertisement' => '793',
         'fk_content_categories' => [ '0' ],
