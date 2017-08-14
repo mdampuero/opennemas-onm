@@ -41,7 +41,10 @@ class RobotsController extends Controller
 
         $content .= "Disallow: /harming/humans\n"
             . "Disallow: /ignoring/human/orders\n"
-            . "Disallow: /harm/to/self\n"
+            . "Disallow: /harm/to/self\n\n"
+            . "Disallow: /content/print\n"
+            . "Disallow: /content/share-by-email\n"
+            . "Disallow: /api\n"
             . $customRules . "\n"
             . "Sitemap: " . SITE_URL . "sitemapnews.xml.gz\n"
             . "Sitemap: " . SITE_URL . "sitemapweb.xml.gz\n"
