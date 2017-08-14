@@ -48,13 +48,13 @@ class ContentMediaHelper
                 } elseif (isset($content->fk_video2) && ($content->fk_video2 > 0)) {
                     // Articles with inner video
                     $mediaObject = $this->er->find('Video', $content->fk_video2);
-                    if (!empty($mediaObject)
-                        && strpos($mediaObject->thumb, 'http') === false
-                    ) {
-                        $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
-                    }
+                    if (!empty($mediaObject)) {
+                        if (strpos($mediaObject->thumb, 'http') === false) {
+                            $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
+                        }
 
-                    $mediaObject->url = $mediaObject->thumb;
+                        $mediaObject->url = $mediaObject->thumb;
+                    }
                 } elseif (isset($content->img1) && ($content->img1 > 0)) {
                     // Articles/Opinion with front photo
                     $mediaObject = $this->er->find('Photo', $content->img1);
