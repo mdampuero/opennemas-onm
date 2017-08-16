@@ -181,9 +181,9 @@
                   </div>
                 </th>
                 <th>{t}Title{/t}</th>
-                <th class="hidden-xs hidden-sm" style="width:250px">{t}Type{/t}</th>
-                <th class="hidden-xs text-center" width="100">{t}Permanence{/t}</th>
-                <th class="hidden-xs text-center" width="100"><i class="fa fa-mouse-pointer"></i></th>
+                <th class="hidden-xs text-center" width="100">{t}Position{/t}</th>
+                <th class="hidden-xs hidden-sm text-center" width="50">{t}Type{/t}</th>
+                <th class="hidden-xs text-center" width="50"><i class="fa fa-mouse-pointer"></i></th>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                 <th class="text-center" width="100">{t}Published{/t}</th>
                 {/acl}
@@ -207,6 +207,15 @@
                     [% map[content.type_advertisement].name %]
                   </span>
                   [% content.title %]
+                  <div class="small-text">
+                    <span ng-if="content.starttime && content.starttime != '0000-00-00 00:00:00'">
+                      <strong>{t}Available from{/t} </strong>
+                      [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </span>
+                    <span ng-if="content.endtime && content.endtime != '0000-00-00 00:00:00'">
+                      <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </span>
+                  </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ADVERTISEMENT_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
@@ -220,25 +229,21 @@
                     {/acl}
                   </div>
                 </td>
-                <td class="hidden-xs hidden-sm">
+                <td class="hidden-xs text-center">
+                  [% map[content.type_advertisement].name %]
+                </td>
+                <td class="hidden-xs hidden-sm text-center">
                   <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script == 0 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
                   <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script == 0 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
                   <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
                   <i class="fa fa-gg fa-lg m-r-5 text-info" ng-if="content.with_script == 2" title="OpenX"></i>
                   <i class="fa fa-google fa-lg m-r-5 text-danger" ng-if="content.with_script == 3" title="Google DFP"></i>
-                  [% map[content.type_advertisement].name %]
-                </td>
-                <td class="hidden-xs text-center">
-                  <span ng-if="content.type_medida == 'NULL'">{t}Not defined{/t}</span>
-                  <span ng-if="content.type_medida == 'CLICK'">{t}Clicks:{/t} [% content.num_clic %]</span>
-                  <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% content.num_view %]</span>
-                  <span ng-if="content.type_medida == 'DATE'">{t}Date:{/t} [% content.startime %]-[% content.endtime %]</span>
                 </td>
                 <td class="hidden-xs text-center">
                   [% content.num_clic_count %]
                 </td>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
-                <td class="text-centerk">
+                <td class="text-center">
                   <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.content_status == '1', 'fa-times text-error': !content.loading && content.content_status == '0' }"></i>
                   </button>
