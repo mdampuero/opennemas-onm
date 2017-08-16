@@ -91,7 +91,9 @@
     document.body.className = document.body.className
       .replace(' interstitial-open', '');
 
-    element.remove();
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
   };
 
   /**
