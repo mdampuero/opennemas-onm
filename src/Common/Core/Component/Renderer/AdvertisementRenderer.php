@@ -9,6 +9,8 @@
  */
 namespace Common\Core\Component\Renderer;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 /**
  * The AdvertisementRenderer service provides methods to generate the HTML code
  * for advertisements basing on the advertisements information.
@@ -182,7 +184,7 @@ class AdvertisementRenderer
             'url'      => $this->container->get('router')
                 ->generate('frontend_ad_redirect', [
                     'id' => $publicId
-                ], true),
+                ], UrlGeneratorInterface::ABSOLUTE_URL),
             'width'    => $img->width
         ]);
     }
@@ -211,7 +213,7 @@ class AdvertisementRenderer
         $zones  = [];
 
         foreach ($ads as $ad) {
-            $zones =  [
+            $zones = [
                 'id'      => $ad->id,
                 'openXId' => (int) $ad->params['openx_zone_id']
             ];
@@ -356,7 +358,7 @@ class AdvertisementRenderer
         } elseif ($ad->with_script == 2) {
             return $this->renderSafeFrameRevive($ad, $params);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderSafeFrameDFP($ad, $params);
+            return $this->renderSafeFrameDFP($ad, $params);
         }
 
         $img = $this->container->get('entity_repository')->find('Photo', $ad->img);
@@ -498,7 +500,7 @@ class AdvertisementRenderer
             return '';
         }
 
-        $cssClasses= [];
+        $cssClasses = [];
         foreach ($ad->params['devices'] as $device => $status) {
             if ($status === 0) {
                 $cssClasses[] = 'hidden-' . $device;

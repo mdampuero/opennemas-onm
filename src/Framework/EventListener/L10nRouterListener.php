@@ -50,9 +50,10 @@ class L10nRouterListener implements EventSubscriberInterface
      * RequestStack will become required in 3.0.
      *
      * @param UrlMatcherInterface|RequestMatcherInterface $matcher      The Url or Request matcher
-     * @param RequestStack                                $requestStack A RequestStack instance
-     * @param RequestContext|null                         $context      The RequestContext (can be null when $matcher implements RequestContextAwareInterface)
-     * @param LoggerInterface|null                        $logger       The logger
+     * @param RequestStack $requestStack A RequestStack instance
+     * @param RequestContext|null $context The RequestContext
+     *                                     (can be null when $matcher implements RequestContextAwareInterface)
+     * @param LoggerInterface|null $logger The logger
      *
      * @throws \InvalidArgumentException
      */
@@ -149,7 +150,7 @@ class L10nRouterListener implements EventSubscriberInterface
             return;
         }
 
-        // If The instance has
+        // If the instance has defined language
         $hasModule = $this->container->get('core.security')
             ->hasExtension('es.openhost.module.multilanguage');
         if (!$hasModule) {
@@ -218,10 +219,14 @@ class L10nRouterListener implements EventSubscriberInterface
         $locale = '';
         if ($existsLocale) {
             $oldServerparams = $request->server->all();
-            $locale = $matches['locale'];
+            $locale          = $matches['locale'];
 
             $serverParams = array_merge($request->server->all(), [
-                'DOCUMENT_URI'    => str_replace('/' . $locale . '/', $oldServerparams['SCRIPT_NAME'] . '/', $oldServerparams['DOCUMENT_URI']),
+                'DOCUMENT_URI'    => str_replace(
+                    '/' . $locale . '/',
+                    $oldServerparams['SCRIPT_NAME'] . '/',
+                    $oldServerparams['DOCUMENT_URI']
+                ),
                 'REQUEST_URI'     => preg_replace('@^/' . $locale . '@', '', $oldServerparams['REQUEST_URI']),
                 'LOCALE_FROM_URI' => $locale,
             ]);
