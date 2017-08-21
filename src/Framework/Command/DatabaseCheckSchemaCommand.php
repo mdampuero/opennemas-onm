@@ -301,7 +301,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
         $primaryField = null;
         $deleteSqls   = [];
 
-        foreach ($foreign_keys as $field => $foreign) {
+        foreach ($foreignKeys as $field => $foreign) {
             if (preg_match('/^ALTER TABLE [A-Za-z,0-9,_]*/', $foreign, $matches) == 0) {
                 break;
             }
@@ -316,11 +316,12 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
                 break;
             }
             $auxArr = explode(" ", $matches[0]);
-            if (count($aux_arr) != 3) {
+            if (count($auxArr) != 3) {
                 break;
             }
-            $primaryTable = $aux_arr[1];
-            $primaryField = substr($aux_arr[2], 1);
+
+            $primaryTable = $auxArr[1];
+            $primaryField = substr($auxArr[2], 1);
             $deleteSqls[] = '--DELETE FROM ' . $foreignTable . ' WHERE NOT EXISTS(SELECT 1 FROM ' . $primaryTable .
                 ' WHERE ' . $foreignTable . '.' . $foreignField .' = ' . $primaryTable . '.' . $primaryField . ')';
         }
