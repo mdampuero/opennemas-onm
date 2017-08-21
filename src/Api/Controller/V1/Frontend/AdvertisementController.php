@@ -133,7 +133,7 @@ class AdvertisementController extends Controller
      */
     protected function getAdvertisements($places, $category)
     {
-        $id = 0;
+        $id       = 0;
         $excluded = [ 'home', 'opinion', 'blog', 'newsletter' ];
 
         if (!empty($category) && !in_array($category, $excluded)) {
