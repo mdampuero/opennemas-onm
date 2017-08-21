@@ -181,9 +181,9 @@
                   </div>
                 </th>
                 <th>{t}Title{/t}</th>
-                <th class="hidden-xs text-center" width="100">{t}Position{/t}</th>
+                <th class="hidden-xs hidden-sm " width="100">{t}Position{/t}</th>
+                <th class="hidden-xs text-center" width="10"><i class="fa fa-mouse-pointer"></i></th>
                 <th class="hidden-xs hidden-sm text-center" width="50">{t}Type{/t}</th>
-                <th class="hidden-xs text-center" width="50"><i class="fa fa-mouse-pointer"></i></th>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                 <th class="text-center" width="100">{t}Published{/t}</th>
                 {/acl}
@@ -197,7 +197,7 @@
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
-                <td style="">
+                <td>
                   <span class="visible-xs-inline-block visible-sm-inline-block">
                     <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script == 0 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
                     <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script == 0 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
@@ -216,6 +216,12 @@
                       <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </span>
                   </div>
+                  <div class="small-text">
+                    <span class="hidden-lg">
+                      <strong>{t}Position{/t}:</strong>
+                        <div ng-repeat="position in content.type_advertisement.split(',')"> [% map[position].name %] </div>
+                    </span>
+                  </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ADVERTISEMENT_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
@@ -229,8 +235,13 @@
                     {/acl}
                   </div>
                 </td>
+                <td class="hidden-xs hidden-sm">
+                  <div ng-repeat="position in content.type_advertisement.split(',')">
+                    [% map[position].name %]
+                  </div>
+                </td>
                 <td class="hidden-xs text-center">
-                  [% map[content.type_advertisement].name %]
+                  [% content.num_clic_count %]
                 </td>
                 <td class="hidden-xs hidden-sm text-center">
                   <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script == 0 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
@@ -238,9 +249,6 @@
                   <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
                   <i class="fa fa-gg fa-lg m-r-5 text-info" ng-if="content.with_script == 2" title="OpenX"></i>
                   <i class="fa fa-google fa-lg m-r-5 text-danger" ng-if="content.with_script == 3" title="Google DFP"></i>
-                </td>
-                <td class="hidden-xs text-center">
-                  [% content.num_clic_count %]
                 </td>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                 <td class="text-center">
