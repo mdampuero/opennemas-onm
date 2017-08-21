@@ -20,8 +20,8 @@ class ContentMediaHelper
      */
     public function __construct($sm, $er)
     {
-        $this->sm  = $sm;
-        $this->er  = $er;
+        $this->sm = $sm;
+        $this->er = $er;
     }
 
     /**
@@ -65,14 +65,14 @@ class ContentMediaHelper
                     && $content->content_type_name == 'opinion'
                 ) {
                     // Photo author
-                    $mediaObject = $content->author->photo;
+                    $mediaObject      = $content->author->photo;
                     $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
                 break;
 
             case 'album':
                 if (isset($content->cover_image) && !empty($content->cover_image)) {
-                    $mediaObject = $content->cover_image;
+                    $mediaObject      = $content->cover_image;
                     $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
                 break;
@@ -83,7 +83,7 @@ class ContentMediaHelper
                         $content->thumb = SITE_URL . $content->thumb;
                     }
 
-                    $mediaObject = $content;
+                    $mediaObject      = $content;
                     $mediaObject->url = $content->thumb;
                 }
                 break;
@@ -107,7 +107,7 @@ class ContentMediaHelper
         }
 
         // Overload object image size
-        $mediaObject->width = (isset($mediaObject->width) && !empty($mediaObject->width))
+        $mediaObject->width  = (isset($mediaObject->width) && !empty($mediaObject->width))
             ? $mediaObject->width : 700;
         $mediaObject->height = (isset($mediaObject->height) && !empty($mediaObject->height))
             ? $mediaObject->height : 450;
