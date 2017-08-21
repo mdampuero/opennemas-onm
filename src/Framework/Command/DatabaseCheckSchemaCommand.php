@@ -95,10 +95,11 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
             foreach ($sql as $value) {
                 if (preg_match('/^ALTER TABLE .* ADD CONSTRAINT .* FOREIGN KEY .*/', $value)) {
                     $foreign_keys[] = $value;
-                } else {
-                    $output->writeln($value.';');
                 }
+
+                $output->writeln($value.';');
             }
+
             $deleteSqls = $this->prepareForeignKeys($foreignKeys);
             $foreignKeysAux = array_merge($deleteSqls, $foreignKeys);
             foreach ($foreignKeysAux as $value) {
@@ -281,9 +282,9 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
         $conn = getService('dbal_connection');
         $conn = $conn->selectDatabase($database);
 
-        $sm = $conn->getSchemaManager();
+        $schemaManager = $conn->getSchemaManager();
 
-        return $sm->createSchema();
+        return $schemaManager->createSchema();
     }
 
     /**
