@@ -94,10 +94,10 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
             $foreignKeys = [];
             foreach ($sql as $value) {
                 if (preg_match('/^ALTER TABLE .* ADD CONSTRAINT .* FOREIGN KEY .*/', $value)) {
-                    $foreign_keys[] = $value;
+                    $foreignKeys[] = $value;
+                } else {
+                    $output->writeln($value.';');
                 }
-
-                $output->writeln($value.';');
             }
 
             $deleteSqls = $this->prepareForeignKeys($foreignKeys);
