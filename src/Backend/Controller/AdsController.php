@@ -34,7 +34,8 @@ class AdsController extends Controller
 
         // Fetch categories to all internal categories
         $contentTypes = [$contentType, 7, 9, 11, 14];
-        $ccm = \ContentCategoryManager::get_instance();
+        $ccm          = \ContentCategoryManager::get_instance();
+
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentTypes);
 
@@ -194,11 +195,11 @@ class AdsController extends Controller
             ]
         ];
 
-        $level = 'error';
+        $level   = 'error';
         $message = _('Unable to create the new advertisement.');
 
         if ($advertisement->create($data)) {
-            $level = 'success';
+            $level   = 'success';
             $message = _('Advertisement successfully created.');
         }
 
@@ -232,7 +233,7 @@ class AdsController extends Controller
         $page   = $request->query->getDigits('page', 1);
 
         $adsPositions = $this->container->get('core.helper.advertisement');
-        $serverUrl = '';
+        $serverUrl    = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
         }
@@ -398,13 +399,13 @@ class AdsController extends Controller
         $itemsPerPage = 8;
 
         $filters = array(
-            'type_advertisement' => array(array('value' => 37)),
-            'content_type_name'  => array(array('value' => 'advertisement')),
-            'in_litter'          => array(array('value' => 1, 'operator' => '!='))
+            'type_advertisement' => [[ 'value' => 37 ]],
+            'content_type_name'  => [[ 'value' => 'advertisement' ]],
+            'in_litter'          => [[ 'value' => 1, 'operator' => '!=' ]]
         );
 
-        $em       = $this->get('advertisement_repository');
-        $ads      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $em  = $this->get('advertisement_repository');
+        $ads = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
 
         $countAds = $em->countBy($filters);
 

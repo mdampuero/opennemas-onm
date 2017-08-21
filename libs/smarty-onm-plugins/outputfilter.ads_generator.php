@@ -34,11 +34,12 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $dirtyId   = rtrim(basename($content->uri), '.html');
     $positions = [];
     $settings  = getService('setting_repository')->get('ads_settings');
+
     $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
 
     if (!$safeFrameEnabled) {
-        $adsRenderer    = getService('core.renderer.advertisement');
-        $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
+        $adsRenderer = getService('core.renderer.advertisement');
+        $xtags       = $smarty->smarty->tpl_vars['x-tags']->value;
 
         $ads = array_filter($ads, function ($a) {
             return $a->isInTime();
