@@ -33,7 +33,7 @@ function smarty_insert_renderbanner($params, $smarty)
     $type = $params['type'];
 
     if (!is_array($ads)) {
-        $ads = [];
+        return '';
     }
 
     $ads = array_filter($ads, function ($ad) use ($type) {

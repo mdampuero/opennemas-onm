@@ -32,8 +32,10 @@ class AdvertisementManager extends EntityManager
      */
     public function countBy($criteria)
     {
+        // Building the SQL filter
         $filterSQL = $this->getFilterSQL($criteria);
 
+        // Executing the SQL
         $sql = "SELECT COUNT(pk_content) FROM `contents`, `advertisements`"
             . " WHERE $filterSQL AND pk_content=pk_advertisement";
 
@@ -58,13 +60,15 @@ class AdvertisementManager extends EntityManager
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
     {
+        // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
         $orderBySQL = '`pk_content` DESC';
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
+
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
         $sql = "SELECT " . (($count) ? "SQL_CALC_FOUND_ROWS  " : "") .
@@ -72,18 +76,18 @@ class AdvertisementManager extends EntityManager
             WHERE $filterSQL AND pk_content=pk_advertisement
             ORDER BY $orderBySQL $limitSQL";
 
-        $rs  = $this->dbConn->fetchAll($sql);
+        $rs = $this->dbConn->fetchAll($sql);
 
         if ($count) {
             $count = $this->getSqlCount();
         }
 
-        $ids = [];
-        foreach ($rs as $item) {
-            $ids[] = [ $item['content_type_name'], $item['pk_content'] ];
+        $contentIdentifiers = [];
+        foreach ($rs as $resultElement) {
+            $contentIdentifiers[] = [ $resultElement['content_type_name'], $resultElement['pk_content'] ];
         }
 
-        $contents = $this->findMulti($ids);
+        $contents = $this->findMulti($contentIdentifiers);
 
         return $contents;
     }
