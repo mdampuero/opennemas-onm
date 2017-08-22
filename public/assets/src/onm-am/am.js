@@ -91,7 +91,9 @@
     document.body.className = document.body.className
       .replace(' interstitial-open', '');
 
-    element.remove();
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
   };
 
   /**
@@ -107,6 +109,7 @@
    */
   OAM.prototype.createInterstitial = function(ad) {
     var div = document.createElement('div');
+    var self = this;
 
     div.innerHTML = '<div class="interstitial interstitial-visible">' +
       '<div class="interstitial-wrapper">' +
@@ -131,7 +134,6 @@
     var oat     = div.getElementsByClassName('oat')[0];
     var wrapper = div.getElementsByClassName('interstitial-wrapper')[0];
     var iframe  = this.createNormal(ad);
-    var self    = this;
     var size    = this.getSize(ad);
 
     // Hide interstitial after X seconds
@@ -173,7 +175,9 @@
 
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
-    item.src += 'category=' + this.config.category + '&module=' + this.config.extension;
+    item.src += 'category=' + this.config.category +
+      '&module=' + this.config.extension +
+      '&dirtyId=' + this.config.dirtyId;
 
     // Dispatch event when iframe loaded
     item.onload = function () {
