@@ -67,7 +67,7 @@
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" required="required" class="form-control"
+                  <input type="text" id="title" name="title" required class="form-control"
                   value="{$special->title|clearslash|escape:"html"}"/>
                 </div>
               </div>
@@ -108,7 +108,7 @@
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <span class="help">{t}List of words separated by commas.{/t}</span>
                 <div class="controls">
-                  <input  data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$special->metadata|clearslash|escape:"html"}"/>
+                  <input  data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$special->metadata|clearslash|escape:"html"}"/>
                 </div>
               </div>
               <div class="form-group">

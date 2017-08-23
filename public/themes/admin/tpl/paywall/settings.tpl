@@ -259,11 +259,11 @@
         </select>
       </div>
       <div class="form-group">
-        <input type="text" ng-model="item.description" placeholder="{t}Description{/t}" required="required">
+        <input type="text" ng-model="item.description" placeholder="{t}Description{/t}" required>
       </div>
       <div class="form-group">
         <div class="input-group">
-          <input ng-model="item.price" min="0" placeholder="{t}Set a price{/t}" required="required" type="number"/>
+          <input ng-model="item.price" min="0" placeholder="{t}Set a price{/t}" required type="number"/>
           <div class="input-group-addon">
             <i class="fa" ng-class="{ 'fa-euro': settings.money_unit == 'EUR', 'fa-dollar': settings.money_unit == 'USD'}"></i>
           </div>

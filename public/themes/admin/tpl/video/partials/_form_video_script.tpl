@@ -1,14 +1,14 @@
 <div class="form-controlgroup">
   <label for="title" class="form-label">{t}Title{/t}</label>
   <div class="controls">
-    <input type="text" id="title" name="title" value="{$video->title|clearslash|escape:"html"|default:""}" required="required" class="form-control"/>
+    <input type="text" id="title" name="title" value="{$video->title|clearslash|escape:"html"|default:""}" required class="form-control"/>
   </div>
 </div>
 
 <div class="form-controlgroup">
   <label for="description" class="form-label">{t}Description{/t}</label>
   <div class="controls">
-    <textarea onm-editor onm-editor-preset="simple" ng-model="description" name="description" id="description" required="required" rows="4" class="form-control onm-editor" data-preset="simple">{$video->description|clearslash|default:""}</textarea>
+    <textarea onm-editor onm-editor-preset="simple" ng-model="description" name="description" id="description" required rows="4" class="form-control onm-editor" data-preset="simple">{$video->description|clearslash|default:""}</textarea>
   </div>
 </div>
 
