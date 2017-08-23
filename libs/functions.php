@@ -118,20 +118,6 @@ function url($urlName, $params = array(), $absolute = false)
 }
 
 /**
-* Perform a permanently redirection (301)
-*
-* Use the header PHP function to redirect browser to another page
-*
-* @param string $url the url to redirect to
-*/
-function forward301($url)
-{
-    header('HTTP/1.1 301 Moved Permanently');
-    header('Location: ' . $url);
-    exit(0);
-}
-
-/**
  * Try to get the real IP of the client
  *
  * @return string the client ip
@@ -236,8 +222,8 @@ function dispatchEventWithParams($eventName, $params = array())
         return;
     }
 
+    $event           = new \Symfony\Component\EventDispatcher\GenericEvent();
     $eventDispatcher = getService('event_dispatcher');
-    $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {
         $event->setArgument($paramName, $paramValue);
     }
@@ -315,7 +301,7 @@ function generatePiwikAmpCode($config)
 function generatePiwikImageCode($config)
 {
     $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;'
-                . 'action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
+        . 'action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
 
     $code .= sprintf(
         $imgCode,
@@ -459,7 +445,7 @@ function generateGAImageCode($config)
         . ' [%s]&utmhn=%s&utmr=%s&utmp=%s&utmac=%s&utmcc=%s" style="border:0" alt="" />' . "\n";
 
     $code = '';
-    foreach ($config as $key => $account) {
+    foreach ($config as $account) {
         if (is_array($account)
             && array_key_exists('api_key', $account)
             && !empty(trim($account['api_key']))
