@@ -93,7 +93,16 @@
                     </abstract>
                   </body.head>
                   <body.content>
-                    <![CDATA[{$article->body|replace:'<br />':"</p><p>"|unescape:"htmlall"|htmlspecialchars}]]>
+                    <![CDATA[{$article->body|replace:'<br />':"</p><p>"|htmlspecialchars}]]>
+                    {if isset($article->related) && !empty($article->related)}
+                    <block class="related-contents">
+                      {foreach $article->related as $related}
+                      <p>
+                        <a href="/{$related->uri}">{$related->title}</a>
+                      </p>
+                      {/foreach}
+                    </block>
+                    {/if}
                   </body.content>
                 </body>
               </nitf>

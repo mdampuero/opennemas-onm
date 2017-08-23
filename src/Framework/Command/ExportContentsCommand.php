@@ -26,12 +26,19 @@ class ExportContentsCommand extends ContainerAwareCommand
                     new InputOption('instance', 'i', InputOption::VALUE_REQUIRED, 'Instance to get contents from', '*'),
                     new InputOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Number of contents to export', '*'),
                     new InputOption('from', 'f', InputOption::VALUE_OPTIONAL, 'Created Date from when to export', '*'),
-                    new InputOption('target-dir', 't', InputOption::VALUE_REQUIRED, 'The folder where store backups', './backups'),
+                    new InputOption(
+                        'target-dir',
+                        't',
+                        InputOption::VALUE_REQUIRED,
+                        'The folder where store backups',
+                        './backups'
+                    ),
                 )
             )
             ->setName('export:contents')
             ->setDescription('Exports contents from one instance to a given folder path')
-            ->setHelp(<<<EOF
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> exports contents from an instance:
 
   <info>%command.full_name%</info>
@@ -54,12 +61,12 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Get arguments
-        $this->limit = $input->getOption('limit');
-        $instance = $input->getOption('instance');
-        $this->from = $input->getOption('from');
+        $this->limit     = $input->getOption('limit');
+        $instance        = $input->getOption('instance');
+        $this->from      = $input->getOption('from');
         $this->targetDir = $input->getOption('target-dir');
 
-        $this->input = $input;
+        $this->input  = $input;
         $this->output = $output;
 
         // Initialize application
@@ -98,8 +105,8 @@ EOF
             $instance = $dialog->askHiddenResponseAndValidate(
                 $output,
                 'From what instance do you want to create the backup ('
-                .implode(', ', $instanceNames)
-                .'): ',
+                . implode(', ', $instanceNames)
+                . '): ',
                 $validator,
                 5,
                 true
@@ -126,7 +133,7 @@ EOF
         // Initialize the template system
         define('CACHE_PREFIX', '');
 
-        $commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
+        $commonCachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . 'common';
         if (!file_exists($commonCachepath)) {
             mkdir($commonCachepath, 0755, true);
         }
@@ -134,8 +141,8 @@ EOF
         $this->tpl = $this->getContainer()->get('view')->getBackendTemplate();
 
         // Set media
-        $this->mediaPath = APPLICATION_PATH.DS.'public'.DS.'media'.DS.$instance;
-        define('MEDIA_IMG_PATH_WEB', 'media/'.$instance.'/'.'images');
+        $this->mediaPath = APPLICATION_PATH . DS . 'public' . DS . 'media' . DS . $instance;
+        define('MEDIA_IMG_PATH_WEB', 'media/' . $instance . '/' . 'images');
 
         $this->exportContents();
     }
@@ -192,7 +199,7 @@ EOF
             mkdir($dest, 0777, true);
         }
 
-        $isCopied = @copy($source, $dest.$file);
+        $isCopied = @copy($source, $dest . $file);
 
         return $isCopied;
     }
@@ -210,7 +217,7 @@ EOF
             mkdir($folder, 0777);
         }
 
-        $filename = $folder.DIRECTORY_SEPARATOR.$content->content_type_name.$content->id.'.xml';
+        $filename = $folder . DS . $content->content_type_name . $content->id . '.xml';
         file_put_contents($filename, $newsMLString);
     }
 
@@ -245,11 +252,11 @@ EOF
         $perPage = 100;
 
         // Initialize counters
-        $this->imagesCounter = 0;
+        $this->imagesCounter   = 0;
         $this->articlesCounter = 0;
         $this->opinionsCounter = 0;
-        $this->albumsCounter = 0;
-        $this->videosCounter = 0;
+        $this->albumsCounter   = 0;
+        $this->videosCounter   = 0;
 
         // Set contents type array
         $types = [
@@ -276,8 +283,8 @@ EOF
             } else {
                 // Count contents
                 $countContents = $this->er->countBy($filters);
-                $this->total = $countContents;
-                $iterations = (int) ($countContents/$perPage)+1;
+                $this->total   = $countContents;
+                $iterations    = (int) ($countContents / $perPage) + 1;
                 // Fetch contents paginated
                 $i = 1;
                 while ($i <= $iterations) {
@@ -291,11 +298,11 @@ EOF
         }
 
         $this->output->writeln(
-            "\n\nSaved contents with <info>$this->imagesCounter</info> images".
-            " into '$this->targetDir'\n".
-            "\tArticles -> <info>$this->articlesCounter</info>\n".
-            "\tOpinions -> <info>$this->opinionsCounter</info>\n".
-            "\tAlbums -> <info>$this->albumsCounter</info>\n".
+            "\n\nSaved contents with <info>$this->imagesCounter</info> images" .
+            " into '$this->targetDir'\n" .
+            "\tArticles -> <info>$this->articlesCounter</info>\n" .
+            "\tOpinions -> <info>$this->opinionsCounter</info>\n" .
+            "\tAlbums -> <info>$this->albumsCounter</info>\n" .
             "\tVideos -> <info>$this->videosCounter</info>\n"
         );
     }
@@ -309,7 +316,7 @@ EOF
     public function processContents($contents)
     {
         foreach ($contents as $content) {
-            $this->output->write('Processing '.$content->content_type_name.' ');
+            $this->output->write('Processing ' . $content->content_type_name . ' ');
             // Load category related information
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
@@ -328,7 +335,9 @@ EOF
             switch ($content->content_type_name) {
                 case 'album':
                     $this->albumsCounter++;
-                    $this->output->writeln($this->albumsCounter. " of ".$this->total. '(id: '.$content->id.')');
+                    $this->output->writeln(
+                        $this->albumsCounter . " of " . $this->total . '(id: ' . $content->id . ')'
+                    );
                     $photos = array();
                     $photos = $content->_getAttachedPhotos($content->id);
 
@@ -347,16 +356,15 @@ EOF
                             );
 
                         $value['photo']->img_source =
-                            $this->mediaPath.DS.'images'.
-                            $value['photo']->path_file.
+                            $this->mediaPath . DS . 'images' .
+                            $value['photo']->path_file .
                             $value['photo']->name;
-
 
                         $content->all_photos[] = $value['photo'];
 
                         $isCopied = $this->copyImage(
                             $value['photo']->img_source,
-                            $this->targetDir.DS.'images'.$value['photo']->path_file,
+                            $this->targetDir . DS . 'images' . $value['photo']->path_file,
                             $value['photo']->name
                         );
 
@@ -365,8 +373,8 @@ EOF
                         if (!$isCopied) {
                             $this->imagesCounter--;
                             $this->output->writeln(
-                                "\tImage <info>".$value['photo']->name.
-                                "</info> from album <info>".$content->id.
+                                "\tImage <info>" . $value['photo']->name .
+                                "</info> from album <info>" . $content->id .
                                 "</info> not copied'"
                             );
                         }
@@ -376,13 +384,22 @@ EOF
                 case 'article':
                 case 'opinion':
                     if ($content->content_type_name == 'article') {
+                        // Get related
+                        $relations = getService('related_contents')->getRelations($content->id, 'inner');
+                        if (count($relations) > 0) {
+                            $content->related = $this->er->findMulti($relations);
+                        }
+
                         $this->articlesCounter++;
-                        $this->output->writeln($this->articlesCounter. " of ".$this->total. '(id: '.$content->id.')');
+                        $this->output->writeln(
+                            $this->articlesCounter . " of " . $this->total . '(id: ' . $content->id . ')');
                     } else {
                         $this->opinionsCounter++;
-                        $this->output->writeln($this->opinionsCounter. " of ".$this->total. '(id: '.$content->id.')');
+                        $this->output->writeln(
+                            $this->opinionsCounter . " of " . $this->total . '(id: ' . $content->id . ')');
                     }
-                    $imageId = $content->img1;
+
+                    $imageId      = $content->img1;
                     $imageInnerId = $content->img2;
 
                     if (!empty($imageId)) {
@@ -390,7 +407,7 @@ EOF
 
                         if (is_null($image)) {
                             $this->output->write(
-                                "\t<error>Image ".$content->img1." not found</error>"
+                                "\t<error>Image " . $content->img1 . " not found</error>"
                             );
                             $content->img1 = 0;
                         } else {
@@ -410,11 +427,12 @@ EOF
                             if (!mb_check_encoding($content->img1->description)) {
                                 $content->img1->description = utf8_encode($content->img1->description);
                             }
-                            $content->img1_source = $this->mediaPath.DS.'images'.$content->img1_path;
+
+                            $content->img1_source = $this->mediaPath . DS . 'images' . $content->img1_path;
 
                             $isCopied = $this->copyImage(
                                 $content->img1_source,
-                                $this->targetDir.DS.'images'.$content->img1->path_file,
+                                $this->targetDir . DS . 'images' . $content->img1->path_file,
                                 $content->img1->name
                             );
 
@@ -423,8 +441,8 @@ EOF
                             if (!$isCopied) {
                                 $this->imagesCounter--;
                                 $this->output->writeln(
-                                    "\tImage <info>".$content->img1->name.
-                                    "</info> from ".$content->content_type_name." <info>".$content->id.
+                                    "\tImage <info>" . $content->img1->name .
+                                    "</info> from " . $content->content_type_name . " <info>" . $content->id .
                                     "</info> not copied'"
                                 );
                             }
@@ -436,7 +454,7 @@ EOF
 
                         if (is_null($image)) {
                             $this->output->writeln(
-                                "\t<error>Image ".$content->img2." not found</error>"
+                                "\t<error>Image " . $content->img2 . " not found</error>"
                             );
                             $content->img2 = 0;
                         } else {
@@ -456,11 +474,12 @@ EOF
                             if (!mb_check_encoding($content->img2->description)) {
                                 $content->img2->description = utf8_encode($content->img2->description);
                             }
-                            $content->img2_source = $this->mediaPath.DS.'images'.$content->img2_path;
+
+                            $content->img2_source = $this->mediaPath . DS . 'images' . $content->img2_path;
 
                             $isCopied = $this->copyImage(
                                 $content->img2_source,
-                                $this->targetDir.DS.'images'.$content->img2->path_file,
+                                $this->targetDir . DS . 'images' . $content->img2->path_file,
                                 $content->img2->name
                             );
 
@@ -469,8 +488,8 @@ EOF
                             if (!$isCopied) {
                                 $this->imagesCounter--;
                                 $this->output->writeln(
-                                    "\tImage <info>".$content->img2->name.
-                                    "</info> from ".$content->content_type_name." <info>".$content->id.
+                                    "\tImage <info>" . $content->img2->name .
+                                    "</info> from " . $content->content_type_name . " <info>" . $content->id .
                                     "</info> not copied'"
                                 );
                             }
@@ -481,6 +500,7 @@ EOF
 
             // Get author obj
             $ur = getService('user_repository');
+
             $content->author = $ur->find($content->fk_author);
             if (isset($content->author->name)) {
                 $content->author = $content->author->name;
@@ -491,7 +511,8 @@ EOF
             // Convert content to NewsML
             if ($content->content_type_name == 'video') {
                 $this->videosCounter++;
-                $this->output->writeln($this->videosCounter. " of ".$this->total. '(id: '.$content->id.')');
+                $this->output->writeln(
+                    $this->videosCounter . " of " . $this->total . '(id: ' . $content->id . ')');
                 $newsMLString = $this->convertVideoToNewsML($content);
             } else {
                 $newsMLString = $this->convertToNewsML($content);
