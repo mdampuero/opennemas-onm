@@ -29,26 +29,24 @@ class RobotsController extends Controller
     public function indexAction()
     {
         $disableRobots = $this->container->getParameter('disable_robots');
+        $rules         = $this->get('setting_repository')->get('robots_txt_rules');
+        $customRules   = (is_string($rules)) ? $rules : '';
+        $instanceName  = getService('core.instance')->internal_name;
 
-        $rules       = $this->get('setting_repository')->get('robots_txt_rules');
-        $customRules = (is_string($rules)) ? $rules : '';
-
-        $content = "User-Agent: *\nDisallow: /admin\n";
-
-        if ($disableRobots) {
-            $content = "User-Agent: *\nDisallow: /\n";
-        }
-
-        $content .= "Disallow: /harming/humans\n"
+        $content = "User-Agent: *\n"
+            . "Disallow: /harming/humans\n"
             . "Disallow: /ignoring/human/orders\n"
             . "Disallow: /harm/to/self\n"
-            . $customRules . "\n"
+            . "Disallow: /content/print\n"
+            . "Disallow: /content/share-by-email\n"
+            . "Disallow: /api\n"
+            . "Disallow: " . ($disableRobots ? "/" : "/admin") . "\n"
+            . (!empty($customRules) ? "\n" . $customRules : "") . "\n"
+            . "\n"
             . "Sitemap: " . SITE_URL . "sitemapnews.xml.gz\n"
             . "Sitemap: " . SITE_URL . "sitemapweb.xml.gz\n"
             . "Sitemap: " . SITE_URL . "sitemapvideo.xml.gz\n"
             . "Sitemap: " . SITE_URL . "sitemapimage.xml.gz";
-
-        $instanceName = getService('core.instance')->internal_name;
 
         return new Response($content, 200, [
             'Content-Type' => 'text/plain',
