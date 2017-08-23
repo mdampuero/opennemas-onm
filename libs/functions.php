@@ -291,7 +291,7 @@ function generatePiwikAmpCode($config)
 
     $code .= sprintf(
         $imgCode,
-        preg_replace("(^https?:)", "", $config['server_url']),
+        preg_replace("/^https?:/", "", $config['server_url']),
         $config['page_id']
     );
 
