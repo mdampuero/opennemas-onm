@@ -57,11 +57,11 @@ function clearslash($string)
 function logContentEvent($action = null, $content = null)
 {
     $logger = getService('application.log');
-    $user = getService('session')->get('user');
+    $user   = getService('session')->get('user');
 
     $msg = "User {$user->username} ({$user->id}) has executed the action {$action}";
     if (!empty($content)) {
-        $msg.=" at ".get_class($content)." (ID:{$content->id})";
+        $msg .= " at " . get_class($content) . " (ID:{$content->id})";
     }
 
     $logger->info($msg);
@@ -83,13 +83,13 @@ function logUserEvent($action = null, $id = null, $data = null)
     ) {
         $currentUser = $security->getToken()->getUser();
 
-        $message =  'User '.$currentUser->username.'(ID:'.$currentUser->id.') '.
-                    'exectuted action '.$action.': user ID '.$id;
+        $message = 'User ' . $currentUser->username . '(ID:' . $currentUser->id . ') '
+                . 'exectuted action ' . $action . ': user ID ' . $id;
 
         if (!is_null($data)) {
-            $message .= ' - username ('.$data['username'].')'.
-                        ' - user group ('.$data['id_user_group'].')'.
-                        ' - activated flag ('.$data['activated'].')';
+            $message .= ' - username (' . $data['username'] . ')' .
+                        ' - user group (' . $data['id_user_group'] . ')' .
+                        ' - activated flag (' . $data['activated'] . ')';
         }
 
         $logger->info($message);
@@ -115,20 +115,6 @@ function url($urlName, $params = array(), $absolute = false)
 
     global $kernel;
     return $kernel->getContainer()->get('router')->generate($urlName, $params, $absolute);
-}
-
-/**
-* Perform a permanently redirection (301)
-*
-* Use the header PHP function to redirect browser to another page
-*
-* @param string $url the url to redirect to
-*/
-function forward301($url)
-{
-    header('HTTP/1.1 301 Moved Permanently');
-    header('Location: ' . $url);
-    exit(0);
 }
 
 /**
@@ -236,8 +222,8 @@ function dispatchEventWithParams($eventName, $params = array())
         return;
     }
 
+    $event           = new \Symfony\Component\EventDispatcher\GenericEvent();
     $eventDispatcher = getService('event_dispatcher');
-    $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {
         $event->setArgument($paramName, $paramValue);
     }
@@ -257,9 +243,10 @@ function getPiwikCode($type = false)
         return '';
     }
 
+    $config['server_url'] = rtrim($config['server_url'], DS) . DS;
 
     if ($type === 'amp') {
-        $code = generateGAAmpCode($config);
+        $code = generatePiwikAmpCode($config);
     } elseif ($type === 'image') {
         $code = generatePiwikImageCode($config);
     } else {
@@ -279,10 +266,10 @@ function generatePiwikScriptCode($config)
         _paq.push([\'trackPageView\']);
         _paq.push([\'enableLinkTracking\']);
         (function() {
-            var u = (("https:" == document.location.protocol) ? "'.
-            $httpsHost . '" : "' . $config['server_url'] .'");
+            var u = (("https:" == document.location.protocol) ? "' .
+            $httpsHost . '" : "' . $config['server_url'] . '");
             _paq.push([\'setTrackerUrl\', u+\'piwik.php\']);
-            _paq.push([\'setSiteId\', ' . $config['page_id'].']);
+            _paq.push([\'setSiteId\', ' . $config['page_id'] . ']);
             var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];
             g.type=\'text/javascript\';
             g.async=true; g.defer=true;
@@ -290,8 +277,8 @@ function generatePiwikScriptCode($config)
         })();
         </script>
         <noscript>
-            <img src="'. $config['server_url'] .'piwik.php?idsite='.
-            $config['page_id'] .'" style="border:0" alt="" />
+            <img src="' . $config['server_url'] . 'piwik.php?idsite=' .
+            $config['page_id'] . '" style="border:0" alt="" />
         </noscript>
         <!-- End Piwik Tracking Code -->';
 
@@ -300,13 +287,12 @@ function generatePiwikScriptCode($config)
 
 function generatePiwikAmpCode($config)
 {
-    $imgCode = '<img-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s"></amp-pixel>';
+    $imgCode = '<amp-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=AMP" layout="nodisplay"></amp-pixel>';
 
     $code .= sprintf(
         $imgCode,
-        $config['server_url'],
-        $config['page_id'],
-        urlencode(SITE_URL.'newsletter/'.date("YmdHis"))
+        preg_replace("/^https?:/", "", $config['server_url']),
+        $config['page_id']
     );
 
     return $code;
@@ -314,13 +300,14 @@ function generatePiwikAmpCode($config)
 
 function generatePiwikImageCode($config)
 {
-    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
+    $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;'
+        . 'action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
 
     $code .= sprintf(
         $imgCode,
         $config['server_url'],
         $config['page_id'],
-        urlencode(SITE_URL.'newsletter/'.date("YmdHis"))
+        urlencode(SITE_URL . 'newsletter/' . date("YmdHis"))
     );
 
     return $code;
@@ -335,8 +322,8 @@ function getGoogleAnalyticsCode($params = [])
         && array_key_exists('api_key', $config)
     ) {
         $oldConfig = $config;
-        $config = [];
-        $config[]= $oldConfig;
+        $config    = [];
+        $config[]  = $oldConfig;
     }
 
     if (!is_array($config)
@@ -443,7 +430,8 @@ function generateGAScriptCode($config)
     // Load ga.js script
     $code .= "(function() {\n"
         . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
-        . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';\n"
+        . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://')"
+        . " + 'stats.g.doubleclick.net/dc.js';\n"
         . "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);\n"
         . "})();\n"
         . "</script>\n";
@@ -453,10 +441,11 @@ function generateGAScriptCode($config)
 
 function generateGAImageCode($config)
 {
-    $imgCode = '<img src="http://www.google-analytics.com/__utm.gif?utmwv=4&utmn=%s&utmdt=Newsletter [%s]&utmhn=%s&utmr=%s&utmp=%s&utmac=%s&utmcc=%s" style="border:0" alt="" />'."\n";
+    $imgCode = '<img src="http://www.google-analytics.com/__utm.gif?utmwv=4&utmn=%s&utmdt=Newsletter'
+        . ' [%s]&utmhn=%s&utmr=%s&utmp=%s&utmac=%s&utmcc=%s" style="border:0" alt="" />' . "\n";
 
     $code = '';
-    foreach ($config as $key => $account) {
+    foreach ($config as $account) {
         if (is_array($account)
             && array_key_exists('api_key', $account)
             && !empty(trim($account['api_key']))
@@ -466,8 +455,8 @@ function generateGAImageCode($config)
                 rand(0, 0x7fffffff),
                 date('d/m/Y'),
                 urlencode(SITE_URL),
-                urlencode(SITE_URL.'newsletter/'.date("Ymd")),
-                urlencode('newsletter/'.date("Ymd")),
+                urlencode(SITE_URL . 'newsletter/' . date("Ymd")),
+                urlencode('newsletter/' . date("Ymd")),
                 trim($account['api_key']),
                 '__utma%3D999.999.999.999.999.1%3B'
             );
@@ -480,8 +469,8 @@ function generateGAImageCode($config)
         rand(0, 0x7fffffff),
         date('d/m/Y'),
         urlencode(SITE_URL),
-        urlencode(SITE_URL.'newsletter/'.date("Ymd")),
-        urlencode('newsletter/'.date("Ymd")),
+        urlencode(SITE_URL . 'newsletter/' . date("Ymd")),
+        urlencode('newsletter/' . date("Ymd")),
         trim('UA-40838799-5'),
         '__utma%3D999.999.999.999.999.1%3B'
     );
@@ -497,11 +486,11 @@ function generateGAAmpCode($config)
             && array_key_exists('api_key', $account)
             && !empty(trim($account['api_key']))
         ) {
-            $code .= '<amp-analytics type="googleanalytics" id="analytics'.$key.'">
+            $code .= '<amp-analytics type="googleanalytics" id="analytics' . $key . '">
 <script type="application/json">
 {
   "vars": {
-    "account": "'.trim($account['api_key']).'"
+    "account": "' . trim($account['api_key']) . '"
   },
   "triggers": {
     "trackPageview": {
@@ -511,7 +500,7 @@ function generateGAAmpCode($config)
   }
 }
 </script>
-</amp-analytics>'."\n";
+</amp-analytics>' . "\n";
         }
     }
 
