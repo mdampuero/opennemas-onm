@@ -18,25 +18,38 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
 
     // Clean empty paragraphs
     $paragraphs = array_filter($matches[0], function ($a) {
-        return !in_array($a, ['<p>&nbsp;</p>', '<p></p>']);
+        return !in_array(trim($a), ['<p>&nbsp;</p>', '<p></p>']);
     });
 
     $id  = $contentType === 'opinion' ? 3200 : 2200;
     $ads = getService('core.template')->getSmarty()
         ->tpl_vars['advertisements']->value;
 
-    $bodyWithAds = [];
-    $safeFrame   = getService('core.helper.advertisement')->isSafeFrameEnabled();
-    $renderer    = getService('core.renderer.advertisement');
-    $html        = '<div class="ad-slot oat" data-type="%s"></div>';
+    $adsInsideBody = array_filter($ads, function ($a) use ($id) {
+        $type = (int) $a->type_advertisement;
+        return $type > $id && $type < $id + 100;
+    });
 
-    foreach ($paragraphs as $key => $paragraph) {
-        $slotId        = $id + 1 + $key;
-        $bodyWithAds[] = $paragraph;
-        $ad            = sprintf($html, $slotId);
+    $safeFrame = getService('core.helper.advertisement')->isSafeFrameEnabled();
+    $renderer  = getService('core.renderer.advertisement');
+    $html      = '<div class="ad-slot oat" data-type="%s"></div>';
+
+    // Reset array keys and get total paragraphs
+    $adsInsideBody   = array_values($adsInsideBody);
+    $totalParagraphs = count($paragraphs);
+
+    $usedSlots = [];
+    foreach ($adsInsideBody as $key => $ad) {
+        $slotId = $ad->type_advertisement;
+        $ad     = sprintf($html, $slotId);
+        $pos    = $slotId - $id;
+
+        if (in_array($slotId, $usedSlots)) {
+            continue;
+        }
 
         if (!$safeFrame) {
-            $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
+            $adsForPosition = array_filter($adsInsideBody, function ($a) use ($slotId) {
                 return (int) $a->type_advertisement == $slotId;
             });
 
@@ -48,8 +61,14 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
             $ad = $renderer->render($ad);
         }
 
-        $bodyWithAds[] = $ad;
+        if ($pos <= $totalParagraphs) {
+            array_splice($paragraphs, $pos, 0, $ad);
+        } else {
+            array_push($paragraphs, $ad);
+        }
+
+        array_push($usedSlots, $slotId);
     }
 
-    return implode('', $bodyWithAds);
+    return implode('', $paragraphs);
 }
