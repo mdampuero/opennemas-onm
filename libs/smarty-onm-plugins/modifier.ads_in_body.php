@@ -25,31 +25,26 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     $ads = getService('core.template')->getSmarty()
         ->tpl_vars['advertisements']->value;
 
-    $adsInsideBody = array_filter($ads, function ($a) use ($id) {
-        $type = (int) $a->type_advertisement;
-        return $type > $id && $type < $id + 100;
-    });
+    $slots = array_map(function ($a) {
+        return (int) $a->type_advertisement;
+    }, $ads);
+
+    $slots = array_unique(array_filter($slots, function ($a) use ($id) {
+        return $a > $id && $a < $id + 100;
+    }));
+
+    sort($slots);
 
     $safeFrame = getService('core.helper.advertisement')->isSafeFrameEnabled();
     $renderer  = getService('core.renderer.advertisement');
     $html      = '<div class="ad-slot oat" data-type="%s"></div>';
 
-    // Reset array keys and get total paragraphs
-    $adsInsideBody   = array_values($adsInsideBody);
-    $totalParagraphs = count($paragraphs);
-
-    $usedSlots = [];
-    foreach ($adsInsideBody as $key => $ad) {
-        $slotId = $ad->type_advertisement;
-        $ad     = sprintf($html, $slotId);
-        $pos    = $slotId - $id;
-
-        if (in_array($slotId, $usedSlots)) {
-            continue;
-        }
+    foreach ($slots as $key => $slotId) {
+        $ad  = sprintf($html, $slotId);
+        $pos = $slotId - $id;
 
         if (!$safeFrame) {
-            $adsForPosition = array_filter($adsInsideBody, function ($a) use ($slotId) {
+            $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
                 return (int) $a->type_advertisement == $slotId;
             });
 
@@ -61,13 +56,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
             $ad = $renderer->render($ad);
         }
 
-        if ($pos <= $totalParagraphs) {
-            array_splice($paragraphs, $pos, 0, $ad);
-        } else {
-            array_push($paragraphs, $ad);
-        }
-
-        array_push($usedSlots, $slotId);
+        array_splice($paragraphs, $pos + $key, 0, $ad);
     }
 
     return implode('', $paragraphs);
