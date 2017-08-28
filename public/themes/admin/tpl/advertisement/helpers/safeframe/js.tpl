@@ -3,6 +3,7 @@
 
   _onmaq.width          = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   _onmaq.category       = '{{$category}}';
+  _onmaq.contentId      = '{{$contentId}}';
   _onmaq.debug          = {{$debug}};
   _onmaq.device         = _onmaq.width < 768 ? 'phone' : (_onmaq.width < 992 ? 'tablet' : 'desktop');
   _onmaq.extension      = '{{$extension}}';
