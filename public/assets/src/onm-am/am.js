@@ -177,7 +177,7 @@
 
     item.src += 'category=' + this.config.category +
       '&module=' + this.config.extension +
-      '&dirtyId=' + this.config.dirtyId;
+      '&contentId=' + this.config.contentId;
 
     // Dispatch event when iframe loaded
     item.onload = function () {
