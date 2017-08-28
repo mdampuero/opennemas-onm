@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for newslibrary
@@ -43,12 +42,12 @@ class ArchiveController extends Controller
         $today = new \DateTime();
         $today->modify('-1 day');
 
-        $categoryName  = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $year  = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
-        $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
-        $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $page  = $request->query->getDigits('page', 1);
-        $date = "{$year}-{$month}-{$day}";
+        $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
+        $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
+        $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $date         = "{$year}-{$month}-{$day}";
         $itemsPerPage = 20;
 
         // Setup templating cache layer
@@ -58,12 +57,13 @@ class ArchiveController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
-            $er       = getService('entity_repository');
+            $er       = $this->get('entity_repository');
             $order    = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
             $criteria = [
                 'in_litter'       => [[ 'value' => 0 ]],
+                'content_status'  => [[ 'value' => 1 ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
-                'DATE(starttime)' => [[ 'value' => '"'.$date.'"', 'field' => true ]]
+                'DATE(starttime)' => [[ 'value' => '"' . $date . '"', 'field' => true ]]
             ];
 
             if ($categoryName != 'home') {
@@ -71,25 +71,25 @@ class ArchiveController extends Controller
             }
 
             $contents = $er->findBy($criteria, $order, $itemsPerPage, $page);
-            $total = $er->countBy($criteria);
-
+            $total    = $er->countBy($criteria);
             $library  = [];
-            if (!empty($contents)) {
-                $cr = getService('category_repository');
-                foreach ($contents as $content) {
-                    // Create category group
-                    if (!isset($library[$content->category])) {
-                        $library[$content->category] = $cr->find($content->category);
-                    }
-                    // Fetch video or image for article and opinions
-                    if (!empty($content->fk_video)) {
-                        $content->video = $er->find('Video', $content->fk_video);
-                    } elseif (!empty($content->img1)) {
-                        $content->image = $er->find('Photo', $content->img1);
-                    }
-                    // Add contents to category group
-                    $library[$content->category]->contents[] = $content;
+
+            $cr = $this->get('category_repository');
+            foreach ($contents as $content) {
+                // Create category group
+                if (!isset($library[$content->category])) {
+                    $library[$content->category] = $cr->find($content->category);
                 }
+
+                // Fetch video or image for article and opinions
+                if (!empty($content->fk_video)) {
+                    $content->video = $er->find('Video', $content->fk_video);
+                } elseif (!empty($content->img1)) {
+                    $content->image = $er->find('Photo', $content->img1);
+                }
+
+                // Add contents to category group
+                $library[$content->category]->contents[] = $content;
             }
 
             // Pagination for block more videos
@@ -110,7 +110,7 @@ class ArchiveController extends Controller
                 ]
             ]);
 
-            # Only allow user to see 2 pages of archive
+            // Only allow user to see 2 pages of archive
             if ($page > 1) {
                 $pagination = null;
             }
@@ -129,7 +129,7 @@ class ArchiveController extends Controller
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
             'actual_category' => 'archive',
-            'x-tags'          => 'archive-page,'.$date.','.$page.','.$categoryName,
+            'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categoryName,
         ]);
     }
 
@@ -147,20 +147,19 @@ class ArchiveController extends Controller
     {
         $today = new \DateTime();
         $today->modify('-1 day');
-        $year  = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
-        $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
-        $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName  = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
+        $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
+        $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $path         = "{$year}/{$month}/{$day}";
+        $html         = '';
+        $file         = MEDIA_PATH . "/library/{$path}/{$categoryName}.html";
+        $url          = "/archive/content/{$path}/";
 
-        $path = "{$year}/{$month}/{$day}";
-        $html = '';
-        $file = MEDIA_PATH."/library/{$path}/{$categoryName}.html";
-        $url = "/archive/content/{$path}/";
         if (file_exists($file) && is_readable($file)) {
             $html = file_get_contents($file);
         } else {
             return new RedirectResponse($url, 301);
-            //throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
         if (empty($html)) {
