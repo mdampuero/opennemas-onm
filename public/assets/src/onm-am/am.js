@@ -543,6 +543,17 @@
       return false;
     }
 
+    // Change date format to work with all browsers:
+    // Before: 2017-08-23 13:38:00
+    // After:  2017-08-23T13:38:00
+    if (ad.starttime) {
+      ad.starttime = ad.starttime.replace(/\s+/g, 'T');
+    }
+
+    if (ad.endtime) {
+      ad.endtime = ad.endtime.replace(/\s+/g, 'T');
+    }
+
     var groups    = [];
     var now       = new Date();
     var endtime   = new Date(ad.endtime);
