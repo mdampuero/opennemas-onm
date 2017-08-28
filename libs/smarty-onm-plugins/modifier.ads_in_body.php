@@ -18,22 +18,30 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
 
     // Clean empty paragraphs
     $paragraphs = array_filter($matches[0], function ($a) {
-        return !in_array($a, ['<p>&nbsp;</p>', '<p></p>']);
+        return !in_array(trim($a), ['<p>&nbsp;</p>', '<p></p>']);
     });
 
     $id  = $contentType === 'opinion' ? 3200 : 2200;
     $ads = getService('core.template')->getSmarty()
         ->tpl_vars['advertisements']->value;
 
-    $bodyWithAds = [];
-    $safeFrame   = getService('core.helper.advertisement')->isSafeFrameEnabled();
-    $renderer    = getService('core.renderer.advertisement');
-    $html        = '<div class="ad-slot oat" data-type="%s"></div>';
+    $slots = array_map(function ($a) {
+        return (int) $a->type_advertisement;
+    }, $ads);
 
-    foreach ($paragraphs as $key => $paragraph) {
-        $slotId        = $id + 1 + $key;
-        $bodyWithAds[] = $paragraph;
-        $ad            = sprintf($html, $slotId);
+    $slots = array_unique(array_filter($slots, function ($a) use ($id) {
+        return $a > $id && $a < $id + 100;
+    }));
+
+    sort($slots);
+
+    $safeFrame = getService('core.helper.advertisement')->isSafeFrameEnabled();
+    $renderer  = getService('core.renderer.advertisement');
+    $html      = '<div class="ad-slot oat" data-type="%s"></div>';
+
+    foreach ($slots as $key => $slotId) {
+        $ad  = sprintf($html, $slotId);
+        $pos = $slotId - $id;
 
         if (!$safeFrame) {
             $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
@@ -48,8 +56,8 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
             $ad = $renderer->render($ad);
         }
 
-        $bodyWithAds[] = $ad;
+        array_splice($paragraphs, $pos + $key, 0, $ad);
     }
 
-    return implode('', $bodyWithAds);
+    return implode('', $paragraphs);
 }
