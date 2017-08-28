@@ -31,7 +31,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
     $content   = $smarty->parent->tpl_vars['content']->value;
-    $dirtyId   = rtrim(basename($content->uri), '.html');
     $positions = [];
     $settings  = getService('setting_repository')->get('ads_settings');
 
@@ -48,12 +47,11 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $params = [
             'category'  => $category,
             'extension' => $app['extension'],
-            'dirtyId'   => $dirtyId,
             'content'   => $content,
             'x-tags'    => $xtags,
         ];
 
-        $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads, $params);
+        $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads);
         $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
         $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
         $devices      = getService('core.template.admin')
@@ -82,7 +80,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
             'category'  => $category,
             'extension' => $app['extension'],
-            'dirtyId'   => $dirtyId,
+            'contentId' => $content->id,
             'lifetime'  => $settings['lifetime_cookie'],
             'positions' => implode(',', $positions),
             'time'      => time(),

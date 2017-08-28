@@ -76,9 +76,9 @@ class AdvertisementRenderer
         if ($ad->with_script == 1) {
             return $ad->script;
         } elseif ($ad->with_script == 2) {
-            return $this->renderInlineReviveSlot($ad, $format);
+            return $this->renderInlineReviveSlot($ad);
         } elseif ($ad->with_script == 3) {
-            return $this->renderInlineDFPSlot($ad, $format);
+            return $this->renderInlineDFPSlot($ad);
         }
 
         return $this->renderInlineImage($ad, $format);
@@ -117,7 +117,7 @@ class AdvertisementRenderer
         $targetingCode = $this->getDFPTargeting(
             $params['category'],
             $params['extension'],
-            $params['dirtyId']
+            $params['content']->id
         );
 
         $options    = $this->sm->get('dfp_options');
@@ -141,7 +141,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML content for the DFP advertisement slot.
      */
-    public function renderInlineDFPSlot($ad, $format = null)
+    public function renderInlineDFPSlot($ad)
     {
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
             'id' => $ad->pk_advertisement
@@ -260,7 +260,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML code for
      */
-    public function renderInlineInterstitial($ads, $params)
+    public function renderInlineInterstitial($ads)
     {
         $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
@@ -415,7 +415,7 @@ class AdvertisementRenderer
             'targetingCode' => $this->getDFPTargeting(
                 $params['category'],
                 $params['extension'],
-                $params['dirtyId']
+                $params['contentId']
             )
         ];
 
@@ -541,7 +541,7 @@ class AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getDFPTargeting($category, $module, $dirtyId)
+    protected function getDFPTargeting($category, $module, $contentId)
     {
         $options = $this->container->get('setting_repository')->get('dfp_options');
 
@@ -564,10 +564,10 @@ class AdvertisementRenderer
 
         if (array_key_exists('content_id', $options)
             && !empty($options['content_id'])
-            && !empty($dirtyId)
+            && !empty($contentId)
         ) {
             $targetingCode .=
-                "googletag.pubads().setTargeting('{$options['content_id']}', ['{$dirtyId}']);\n";
+                "googletag.pubads().setTargeting('{$options['content_id']}', ['{$contentId}']);\n";
         }
 
         return $targetingCode;

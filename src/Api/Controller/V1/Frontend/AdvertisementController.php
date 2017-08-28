@@ -70,9 +70,9 @@ class AdvertisementController extends Controller
      */
     public function showAction(Request $request, $id)
     {
-        $category = $request->query->get('category', 'home');
-        $module   = $request->query->get('module', 'frontpage');
-        $dirtyId  = $request->query->get('dirtyId', '');
+        $category  = $request->query->get('category', 'home');
+        $module    = $request->query->get('module', 'frontpage');
+        $contentId = $request->query->get('contentId', '');
 
         $ad = $this->getAdvertisement($id);
 
@@ -92,7 +92,7 @@ class AdvertisementController extends Controller
             ->renderSafeFrame($ad, [
                 'category'  => $category,
                 'extension' => $module,
-                'dirtyId'   => $dirtyId,
+                'contentId' => $contentId,
             ]);
 
         return new Response($contents, 200, $headers);
