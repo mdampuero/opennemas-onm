@@ -6,7 +6,7 @@
  *   {setting name=key [field=subkey]}
  *
 */
-function smarty_function_setting($params)
+function smarty_function_setting($params, &$smarty)
 {
     if (!array_key_exists('name', $params)) {
         return '';
@@ -14,7 +14,7 @@ function smarty_function_setting($params)
 
     $output = '';
     $key    = $params['name'];
-    $sr     = getService('setting_repository');
+    $sr     = $smarty->getContainer()->get('setting_repository');
 
     if (!array_key_exists('field', $params)) {
         return $sr->get($key);
