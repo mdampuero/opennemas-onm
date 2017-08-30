@@ -33,9 +33,16 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <select id="language" name="language" ng-model="languages">
-                <option value="">Gallego</option>
-              </select>
+              <div class="btn-group">
+                <button type="button" class="form-control btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-transfer"></span>Gallego<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>small</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>medium</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>large</a></li>
+                </ul>
+              </div>
             </li>
           </ul>
           <div class="all-actions pull-right">
