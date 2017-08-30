@@ -42,7 +42,7 @@ class CategoryController extends Controller
         }
 
         $categoryManager = $this->get('category_repository');
-        $category = $categoryManager->findOneBy(
+        $category        = $categoryManager->findOneBy(
             [ 'name' => [ [ 'value' => $categoryName ] ] ],
             [ 'name' => 'ASC' ]
         );
@@ -51,8 +51,8 @@ class CategoryController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $em = $this->get('entity_repository');
-        $order = [ 'starttime' => 'DESC' ];
+        $em      = $this->get('entity_repository');
+        $order   = [ 'starttime' => 'DESC' ];
         $filters = [
             'category_name'     => [ [ 'value' => $category->name ] ],
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -61,7 +61,7 @@ class CategoryController extends Controller
         ];
 
         $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
-        $total = count($articles)+1;
+        $total    = count($articles) + 1;
 
         $starttime = \ContentManager::getEarlierStarttimeOfScheduledContents($articles);
         $endtime   = \ContentManager::getEarlierEndtimeOfScheduledContents($articles);
@@ -79,7 +79,7 @@ class CategoryController extends Controller
             }
         }
 
-        $cm = new \ContentManager();
+        $cm       = new \ContentManager();
         $articles = $cm->getInTime($articles);
 
         // Setup templating cache layer
@@ -92,7 +92,7 @@ class CategoryController extends Controller
             $imageIdsList = [];
             foreach ($articles as &$content) {
                 if (isset($content->img1) && !empty($content->img1)) {
-                    $imageIdsList []= $content->img1;
+                    $imageIdsList[] = $content->img1;
                 } elseif (!empty($content->fk_video)) {
                     $content->video = $em->find('Video', $content->fk_video);
                 }
@@ -123,8 +123,8 @@ class CategoryController extends Controller
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
-                        ->loadAttachedVideo()
-                        ->loadRelatedContents($categoryName);
+                    ->loadAttachedVideo()
+                    ->loadRelatedContents($categoryName);
             }
 
             $pagination = $this->get('paginator')->get([
@@ -132,7 +132,7 @@ class CategoryController extends Controller
                 'epp'         => $itemsPerPage,
                 'maxLinks'    => 0,
                 'page'        => $page,
-                'total'       => $total+1,
+                'total'       => $total + 1,
                 'route'       => [
                     'name'   => 'category_frontpage',
                     'params' => [ 'category_name' => $categoryName ]
@@ -157,7 +157,7 @@ class CategoryController extends Controller
             'cache_id'        => $cacheId,
             'category_name'   => $categoryName,
             'x-cache-for'     => $expires,
-            'x-tags'          => 'category-frontpage,'.$categoryName.','.$page,
+            'x-tags'          => 'category-frontpage,' . $categoryName . ',' . $page,
         ]);
     }
 
@@ -178,7 +178,7 @@ class CategoryController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $cm  = new \ContentManager();
+        $cm = new \ContentManager();
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
@@ -192,7 +192,7 @@ class CategoryController extends Controller
             // Get category object
             $category = unserialize(
                 $cm->getUrlContent(
-                    $wsUrl.'/ws/categories/object/'.$categoryName,
+                    $wsUrl . '/ws/categories/object/' . $categoryName,
                     true
                 )
             );
@@ -201,7 +201,7 @@ class CategoryController extends Controller
             list($pagination, $articles) = unserialize(
                 utf8_decode(
                     $cm->getUrlContent(
-                        $wsUrl.'/ws/frontpages/allcontentblog/'.$categoryName.'/'.$page,
+                        $wsUrl . '/ws/frontpages/allcontentblog/' . $categoryName . '/' . $page,
                         true
                     )
                 )
@@ -223,7 +223,7 @@ class CategoryController extends Controller
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
             'x-cache-for'    => '+3 hour',
-            'x-tags'         => 'ext-category,'.$categoryName.','.$page,
+            'x-tags'         => 'ext-category,' . $categoryName . ',' . $page,
         ]);
     }
 
@@ -236,12 +236,16 @@ class CategoryController extends Controller
      */
     public function getInnerAds($category = 'home')
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
-        // Get article_inner positions
+        // Get article_inner and category_frontpage positions
         $positionManager = $this->get('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
-        $advertisements  = $this->get('advertisement_repository')
+        $positions       = array_merge(
+            $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]),
+            $positionManager->getPositionsForGroup('category_frontpage')
+        );
+
+        $advertisements = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
