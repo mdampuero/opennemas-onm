@@ -31,6 +31,12 @@
             <li class="quicklinks hidden-xs">
               <h5>{if $category->pk_content_category}{t}Editing category{/t}{else}{t}Creating category{/t}{/if}</h5>
             </li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs">
+              <select id="language" name="language" ng-model="languages">
+                <option value="">Gallego</option>
+              </select>
+            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
