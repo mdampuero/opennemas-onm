@@ -113,6 +113,13 @@ class L10nRouterListener implements EventSubscriberInterface
         $this->container    = $container;
     }
 
+    /**
+     * Sets the current request in the context
+     *
+     * @param Request $request the request to set
+     *
+     * @return void
+     **/
     private function setCurrentRequest(Request $request = null)
     {
         if (null !== $request && $this->request !== $request) {
@@ -122,6 +129,13 @@ class L10nRouterListener implements EventSubscriberInterface
         $this->request = $request;
     }
 
+    /**
+     * Action dispatched on kernel.finish event
+     *
+     * @param FinishRequestEvent $event the event object
+     *
+     * @return void
+     **/
     public function onKernelFinishRequest(FinishRequestEvent $event)
     {
         if (null === $this->requestStack) {
@@ -131,6 +145,12 @@ class L10nRouterListener implements EventSubscriberInterface
         $this->setCurrentRequest($this->requestStack->getParentRequest());
     }
 
+    /**
+     * Action dispatched on kernel.request event
+     *
+     * @param GetResponseEvent $event the event object
+     * @return void
+     **/
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
@@ -204,10 +224,9 @@ class L10nRouterListener implements EventSubscriberInterface
     }
 
     /**
-     * undocumented function
+     * Creates a new request object removing the language part if available
      *
-     * @return void
-     * @author
+     * @return array an array containing the new request and the locale from the uri
      **/
     public function removeLanguageFromRequest()
     {
