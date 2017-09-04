@@ -162,14 +162,20 @@ class CategoriesController extends Controller
                     $categories[] = $categoryItem;
                 }
             }
+            $jsonData = json_encode(
+                array(
+                    'categories'            => $categories,
+                    'configurations'        => s::get('section_settings'),
+                    'category'              => $category,
+                    'subcategories'         => $subcategorys,
+                    'internalCategories'    => \ContentManager::getContentTypes()
+                )
+            );
 
             return $this->render(
                 'category/new.tpl',
                 array(
-                    'allcategorys'   => $categories,
-                    'configurations' => s::get('section_settings'),
-                    'category'       => $category,
-                    'subcategorys'   => $subcategorys
+                    'categoryData'   => $jsonData
                 )
             );
         } else {
@@ -446,5 +452,47 @@ class CategoriesController extends Controller
                 array('configs'   => $configurations,)
             );
         }
+    }
+
+    /**
+     *  Handles the configuration for the categories manager
+     *
+     *  @param Request $request the request object
+     *
+     *  @return Response the response object
+     */
+    private function getInternalCategories()
+    {
+        $internalCategories = [1,7,9,10,11,14,15];
+        $allowedCategories = [0,1];
+
+        $security = $this->get('core.security');
+
+        if ($security->hasExtension('ALBUM_MANAGER')) {
+            $allowedCategories[] = 7;
+        }
+        if ($security->hasExtension('VIDEO_MANAGER')) {
+            $allowedCategories[] = 9;
+        }
+        if ($security->hasExtension('POLL_MANAGER')) {
+            $allowedCategories[] = 11;
+        }
+        if ($security->hasExtension('KIOSKO_MANAGER')) {
+            $allowedCategories[] = 14;
+        }
+        if ($security->hasExtension('SPECIAL_MANAGER')) {
+            $allowedCategories[] = 10;
+        }
+        if ($security->hasExtension('BOOK_MANAGER')) {
+            $allowedCategories[] = 15;
+        }
+        if ($security->hasPermission('MASTER')) {
+            $allowedCategories[] = 0;
+        }
+
+        return {
+            'internalCategories': $internalCategories
+            'allowedCategories':
+        };
     }
 }

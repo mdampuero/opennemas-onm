@@ -3,20 +3,13 @@
 {block name="footer-js" append}
   {javascripts}
     <script>
-      $(document).ready(function($) {
-        var btn   = $('.onm-button');
-
-        $('.fileinput').fileinput({
-          name: 'logo_path',
-          uploadtype:'image'
-        });
-      });
+      var categoryData = {$categoryData};
     </script>
   {/javascripts}
 {/block}
 
 {block name="content"}
-  <form action="{if $category->pk_content_category}{url name=admin_category_update id=$category->pk_content_category}{else}{url name=admin_category_create}{/if}" method="POST" name="formulario" id="formulario" enctype="multipart/form-data">
+  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="show(categoryData)" class="settings">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -29,18 +22,18 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <h5>{if $category->pk_content_category}{t}Editing category{/t}{else}{t}Creating category{/t}{/if}</h5>
+              <h5> [% (category.pk_content_category)?"{t}Editing category{/t}":"{t}Creating category{/t}" %]</h5>
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
               <div class="btn-group">
                 <button type="button" class="form-control btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-transfer"></span>Gallego<span class="caret"></span>
+                    <span class="fa fa-exchange"></span>Galician<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="#"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>small</a></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>medium</a></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>large</a></li>
+                  <li><a href="#"><span class="fa fa-pencil" aria-hidden="true"></span>French</a></li>
+                  <li><a href="#"><span class="fa fa-globe" aria-hidden="true"></span>English</a></li>
+                  <li><a href="#" class="text-muted"><span class="fa fa-exchange" aria-hidden="true"></span>Galician</a></li>
                 </ul>
               </div>
             </li>
@@ -54,8 +47,8 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button type="submit" class="btn btn-primary" data-text="{t}Saving{/t}..." id="save-button">
-                  <span class="fa fa-save"></span>
+                <button class="btn btn-loading btn-primary" ng-click="save()" type="button">
+                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
               </li>
@@ -74,32 +67,33 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$category->title|default:""}" required class="form-control"/>
+                  <input class="form-control" id="title" name="title" ng-model="category.title" type="text" required>
                 </div>
               </div>
-              {if isset($category) && !empty($category->name)}
-              <div class="form-group">
+              <div class="form-group" ng-if="category.name">
                 <label for="name" class="form-label">{t}Slug{/t}</label>
                 <div class="controls">
-                  <input type="text" id="name" name="name" readonly value="{$category->name|clearslash|default:""}"  required class="form-control"/>
+                  <input class="form-control" id="name" name="name" ng-model="category.name" type="text" readonly>
                 </div>
               </div>
-              {/if}
               <div class="form-group">
                 <label for="subcategory" class="form-label">
                   {t}Subsection of{/t}
                 </label>
                 <div class="controls">
-                  <select name="subcategory" required>
-                    <option value="0" {if !isset($category) || (!empty($category->fk_content_category) || $category->fk_content_category eq '0')}selected{/if}> -- </option>
-                    {section name=as loop=$allcategorys}
-                    <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category->fk_content_category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
-                    {/section}
+                  <select name="subcategory" ng-model="category.subcategory">
+                    <option value="0">--</option>
+                    <option
+                        value="[% auxCategory.pk_content_category %]"
+                        ng-repeat="auxCategory in categories"
+                        ng-selected="[% auxCategory.pk_content_category === category.subcategory %]"
+                        ng-if="auxCategory.pk_content_category != category.pk_content_category">
+                      [% category.title %]
+                    </option>
                   </select>
                 </div>
               </div>
-              {if !empty($subcategorys)}
-              <div class="form-group">
+              <div class="form-group" ng-if="subcategories">
                 <label class="form-label">
                   {t}Subsections{/t}
                 </label>
@@ -114,16 +108,16 @@
                         <th class="right">{t}Actions{/t}</th>
                       </tr>
                     </thead>
-                    {section name=s loop=$subcategorys}
-                    <tr>
+                    <tr ng-repeat="subcategory in subcategories">
                       <td class="left">
-                        {$subcategorys[s]->title}
+                        [% subcategory.title %]
                       </td>
                       <td class="left">
-                        {$subcategorys[s]->name}
+                        [% subcategory.name %]
                       </td>
                       <td class="left">
-                        {if $subcategorys[s]->internal_category eq 7}
+
+                        {/*if $subcategorys[s]->internal_category eq 7}
                           <i class="fa fa-stack-overflow" uib-tooltip="{t}Albums{/t}"></i>
                         {elseif $subcategorys[s]->internal_category eq 9}
                           <i class="fa fa-film" uib-tooltip="{t}Videos{/t}"></i>
@@ -135,24 +129,23 @@
                           <i class="fa fa-newspaper-o" uib-tooltip="{t}News Stand{/t}"></i>
                         {elseif $subcategorys[s]->internal_category eq 15}
                           <i class="fa fa-book" uib-tooltip="{t}Books{/t}"></i>
-                        {/if}
+                        {/if */}
                       </td>
                       <td class="left">
-                        {if $subcategorys[s]->inmenu==1} {t}Yes{/t} {else}{t}No{/t}{/if}
+                        [% (subcategory.inmenu)?"{t}Yes{/t}":"{t}No{/t}" %]
                       </td>
                       <td class="right">
                         <div class="btn-group">
-                          <a class="btn btn-mini" href="{url name=admin_category_show id=$subcategorys[s]->pk_content_category}" title="Modificar">
+                          <a class="btn btn-mini" href="[% createShowCategoryUrl(subcategory.pkContentCategory) %]"
+                              title="Modificar">
                             <i class="fa fa-pencil"></i>
                           </a>
                         </div>
                       </td>
                     </tr>
-                    {/section}
                   </table>
                 </div>
               </div>
-              {/if}
             </div>
           </div>
         </div>
@@ -163,6 +156,11 @@
                 <div class="controls">
                   <div class="checkbox">
                     <input type="checkbox" id="inmenu" name="inmenu" value="1" {if $category->inmenu eq 1} checked="checked"{/if}>
+                    <input type="checkbox"
+                       ng-model="category.inmenu"
+                       id="category.inmenu"
+                       name="category.inmenu"
+                       ng-true-value="1">
                     <label for="inmenu" class="form-label">
                       {t}Available{/t}
                     </label>
@@ -172,8 +170,11 @@
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox" id="params[inrss]" name="params[inrss]" value="1"
-                    {if isset($category->params['inrss']) && $category->params['inrss'] == true}checked="checked"{/if}>
+                    <input type="checkbox"
+                       ng-model="category.params.inrss"
+                       id="category.params.inrss"
+                       name="category.params.inrss"
+                       ng-true-value="1">
                     <label for="params[inrss]" class="form-label">{t}Show in RSS{/t}</label>
                   </div>
                 </div>
@@ -183,7 +184,13 @@
                   {t}Category available for{/t}
                 </label>
                 <div class="controls">
-                  <select name="internal_category" id="internal_category"  required>
+                  <select name="category.internal_category" id="internal_category" ng-model="category.internal_category"  required>
+                    <option
+                        value="[% internalCategory.pk_content_type %]"
+                        ng-repeat="internalCategory in internalCategories"
+                        ng-selected="[% internalCategory.pk_content_type === category.internal_category %]">
+                      [% internalCategory.title %]
+                    </option>
                     <option value="1"
                     {if  (empty($category->internal_category) || $category->internal_category eq 1)} selected="selected"{/if}>{t}All contents{/t}</option>
                     {is_module_activated name="ALBUM_MANAGER"}
@@ -218,38 +225,32 @@
                 </div>
               </div>
               <div class="form-group">
-                {capture "websiteColor"}
-                {setting name="site_color"}
-                {/capture}
                 <label for="color" class="form-label">
                   {t}Color{/t}
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <span class="input-group-addon" ng-if="color.indexOf('#') > -1" ng-style="{ 'background-color': color }">
+                    <span class="input-group-addon" ng-if="category.color.indexOf('#') > -1" ng-style="{ 'background-color': category.color }">
                       &nbsp;&nbsp;&nbsp;&nbsp;
                     </span>
-                    <span class="input-group-addon" ng-if="color.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + color }">
+                    <span class="input-group-addon" ng-if="category.color.indexOf('#') <= -1" ng-style="{ 'background-color': '#' + category.color }">
                       &nbsp;&nbsp;&nbsp;&nbsp;
                     </span>
-                    <input class="form-control" colorpicker="hex" id="color" name="color" ng-init="color='{$category->color|default:$smarty.capture.websiteColor|trim}'" ng-model="color" type="text">
+                    <input class="form-control" colorpicker="hex" id="color" name="color" ng-model="category.color" type="text">
                     <div class="input-group-btn">
-                      <button class="btn btn-default" ng-click="color='{$category->color|default:$smarty.capture.websiteColor|trim}'" type="button">{t}Reset{/t}</button>
+                      <button class="btn btn-default" ng-click="category.color = oldColor" ng-disable="category.color == oldColor" type="button">{t}Reset{/t}</button>
                     </div>
                   </div>
                 </div>
               </div>
-              {if isset($configurations) && !empty($configurations['allowLogo'])}
-              <div class="form-group">
+              <div class="form-group" ng-if="configurations.allowLogo">
                 <label for="logo_path" class="form-label">{t}Category logo{/t}</label>
                 <div class="controls">
-                  <div class="fileinput {if $category->logo_path}fileinput-exists{else}fileinput-new{/if}" data-trigger="fileinput">
+                  <div class="fileinput [%(categoryUrl)?'fileinput-exists':'fileinput-new'%]" data-trigger="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
-                    <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
-                      {if $category->logo_path}
-                        <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$category->logo_path}" style="max-width:200px;" >
-                      {/if}
+                    <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" ng-if="categoryUrl">
+                        <img src="categoryUrl" style="max-width:200px;" >
                     </div>
                     <div>
                       <span class="btn btn-file">
@@ -266,7 +267,6 @@
                   </div>
                 </div>
               </div>
-              {/if}
             </div>
           </div>
         </div>
