@@ -8915,7 +8915,7 @@ msgstr "Servicios para la traducción automática"
 msgid "Select from language"
 msgstr "Lenguaje de origen"
 
-msgid "Languague to translate"
+msgid "Language to translate"
 msgstr "Lenguaje de destino"
 
 msgid "Translation service"

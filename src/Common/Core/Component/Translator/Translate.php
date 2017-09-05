@@ -20,7 +20,7 @@ class Translate
      */
     public function __construct()
     {
-        $this->translatorFactory   = new TranslatorFactory();
+        $this->translatorFactory = new TranslatorFactory();
     }
 
     /**
@@ -31,21 +31,5 @@ class Translate
     public function getAvailableTranslators()
     {
         return $this->translatorFactory->getAvailableTranslators();
-    }
-
-    /**
-     * Returns a list with all translator data.
-     *
-     * @return array A list of translator data
-     */
-    public function getTranslatorsData()
-    {
-        $translationDataArr = array_map(function ($translator) {
-            return [
-                'translator' => $translator,
-                'required_parameters' => $this->translatorFactory->
-                    get($translator)->getRequiredParameters()];
-        }, $this->getAvailableTranslators());
-        return $translationDataArr;
     }
 }

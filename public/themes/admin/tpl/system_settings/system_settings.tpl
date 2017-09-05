@@ -474,55 +474,52 @@
                           </select>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  {is_module_activated name="es.openhost.module.multilanguage"}
-                    <div class="col-md-6">
-                      <div class="p-l-15">
-                        <h4>
+                    {is_module_activated name="es.openhost.module.multilanguage"}
+                      <h4>
                           <i class="fa fa-globe m-r-5"></i>
                           {t}Translations{/t}
-                        </h4>
-                        <div class="form-group">
-                          <label class="form-label" for="frontend-language">
-                            {t}Newspaper Language{/t}
-                          </label>
-                          <span class="help">
-                            {t}Languages to translate your contents to.{/t}
+                      </h4>
+                      <div class="form-group">
+                        <label class="form-label" for="frontend-language">
+                          {t}Newspaper Language{/t}
+                        </label>
+                        <span class="help">
+                          {t}Languages to translate your contents to.{/t}
+                        </span>
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
                           </span>
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
-                            </span>
-                            <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
-                          </div>
+                          <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
                         </div>
-                        <div class="form-group" ng-show="settings.locale.frontend.length > 0">
-                          <label class="form-label">{t}Main language{/t}</label>
-                          <span class="help">
-                            <i class="fa fa-circle-info text-info"></i>
-                            {t}When no language in the URL, the main language will be used{/t}
-                          </span>
-                          <div class="row m-b-5" ng-repeat="item in settings.locale.frontend">
-                            <div class="col-xs-11">
-                              <div class="p-t-10 radio">
-                                <input id="radio-[% $index %]" ng-model="settings.locale.main" type="radio" value="[% item.code %]">
-                                <label for="radio-[% $index %]">
-                                  [% item.name %] ([% item.code %])
-                                  <strong ng-show="settings.locale.main == item.code">({t}Main{/t})</strong>
-                                </label>
-                              </div>
+                      </div>
+                      <div class="form-group" ng-show="settings.locale.frontend.length > 0">
+                        <label class="form-label">{t}Main language{/t}</label>
+                        <span class="help">
+                          <i class="fa fa-circle-info text-info"></i>
+                          {t}When no language in the URL, the main language will be used{/t}
+                        </span>
+                        <div class="row m-b-5" ng-repeat="item in settings.locale.frontend">
+                          <div class="col-xs-11">
+                            <div class="p-t-10 radio">
+                              <input id="radio-[% $index %]" ng-model="settings.locale.main" type="radio" value="[% item.code %]">
+                              <label for="radio-[% $index %]">
+                                [% item.name %] ([% item.code %])
+                                <strong ng-show="settings.locale.main == item.code">({t}Main{/t})</strong>
+                              </label>
                             </div>
-                            <div class="col-xs-1">
-                              <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
-                                <i class="fa fa-times text-danger"></i>
-                              </button>
-                            </div>
+                          </div>
+                          <div class="col-xs-1">
+                            <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
+                              <i class="fa fa-times text-danger"></i>
+                            </button>
                           </div>
                         </div>
                       </div>
+                    {/is_module_activated}
                     </div>
-                  {is_module_activated name="es.openhost.module.translation"}
+                  </div>
+                  {is_module_activated name="es.openhost.module.multilanguage"}{is_module_activated name="es.openhost.module.translation"}
                     <div class="col-md-6">
                       <div class="p-l-15">
                         <h4>
@@ -541,10 +538,10 @@
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label">
-                                    {t}Languague from translate{/t}
+                                    {t}Language from translate{/t}
                                   </label>
                                   <div class="controls">
-                                    <select ng-model="settings.automatic_translators[$index].from">
+                                    <select class="adaptative" ng-model="settings.automatic_translators[$index].from">
                                       <option value="">{t}Select from language{/t}</option>
                                       <option value="[% item.code %]" ng-repeat="item in settings.locale.frontend">[% item.name %]</option>
                                     </select>
@@ -554,12 +551,12 @@
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label">
-                                    {t}Languague to translate{/t}
+                                    {t}Language to translate{/t}
                                   </label>
                                   <div class="controls">
-                                    <select ng-model="settings.automatic_translators[$index].to" ng-disabled="!settings.automatic_translators[$index].from">
+                                    <select class="adaptative" ng-model="settings.automatic_translators[$index].to" ng-disabled="!settings.automatic_translators[$index].from">
                                       <option value="">{t}Select to language{/t}</option>
-                                      <option value="[% item.code %]" ng-repeat="item in filterFromLanguagues($index)">[% item.name %]</option>
+                                      <option value="[% item.code %]" ng-repeat="item in filterFromLanguages($index)">[% item.name %]</option>
                                     </select>
                                   </div>
                                 </div>
@@ -570,7 +567,7 @@
                                     {t}Translation service{/t}
                                   </label>
                                   <div class="controls">
-                                    <select ng-model="settings.automatic_translators[$index].translator" >
+                                    <select class="adaptative" ng-model="settings.automatic_translators[$index].translator" >
                                       <option value="[% service.translator %]" ng-repeat="service in extra.translation_services" >[% service.translator %]</option>
                                     </select>
                                   </div>
@@ -613,6 +610,11 @@
                                 <i class="fa fa-plus"></i>
                                 {t}Add{/t}
                               </button>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 form-group text-center" ng-show="settings.locale.frontend && settings.locale.frontend.length == 1">
+                              <label class="form-label">
+                                {t}Must have at least 2 languages to configure the translation system{/t}
+                              </label>
                             </div>
                           </div>
                         </div>

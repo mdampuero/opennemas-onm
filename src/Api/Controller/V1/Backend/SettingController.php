@@ -142,7 +142,7 @@ class SettingController extends Controller
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
                     . '/sections/',
-                'translation_services' => $this->get('core.translate')->getTranslatorsData()
+                'translation_services' => $this->get('core.factory.translator')->getTranslatorsData()
             ],
             'settings' => $settings,
         ]);
@@ -217,7 +217,6 @@ class SettingController extends Controller
             ->getDataSet('Settings', 'instance')
             ->set($settings);
 
-
         // Delete caches for custom_css and frontpages
         $this->get('core.dispatcher')->dispatch('setting.update');
 
@@ -289,17 +288,13 @@ class SettingController extends Controller
                     'error',
                     400
                 );
-
                 continue;
             }
 
             $name = $file->getClientOriginalName();
-
             $file->move($dir, $name);
-
             $settings[$key] = $name;
         }
-
 
         return $settings;
     }

@@ -446,7 +446,7 @@
         };
 
         /**
-         * @function filterFromLanguagues
+         * @function filterFromLanguages
          * @memberOf SettingsCtrl
          *
          * @description
@@ -454,13 +454,13 @@
          *
          * @param {Integer } element to filter
          */
-        $scope.filterFromLanguagues = function(index)  {
+        $scope.filterFromLanguages = function(index)  {
           if(!$scope.settings.automatic_translators[index].from) {
             return [];
           }
-          let languagueFromCode = $scope.settings.automatic_translators[index].from;
+          var languageFromCode = $scope.settings.automatic_translators[index].from;
           return $scope.settings.locale.frontend.filter(function (locale)  {
-            if(locale.code == languagueFromCode) {
+            if(locale.code == languageFromCode) {
               return false;
             }
             for(let i = 0;i < $scope.settings.automatic_translators.length ;i++)  {

@@ -88,4 +88,19 @@ class TranslatorFactory
 
         return $translators;
     }
+
+    /**
+     * Returns a list with all translator data.
+     *
+     * @return array A list of translator data
+     */
+    public function getTranslatorsData()
+    {
+        $translationDataArr = array_map(function ($translator) {
+            return [
+                'translator' => $translator,
+                'required_parameters' => $this->get($translator)->getRequiredParameters()];
+        }, $this->getAvailableTranslators());
+        return $translationDataArr;
+    }
 }
