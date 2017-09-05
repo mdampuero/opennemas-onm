@@ -8820,10 +8820,10 @@ msgstr "Non tes permiso para acceder a este recurso."
 #~ msgstr "Google+ e YouTube"
 
 msgid "Automatic translations"
-msgstr "Traduccións automáticas"
+msgstr "Traducións automáticas"
 
 msgid "Services for automatic translations"
-msgstr "Servizo para a traducción automática"
+msgstr "Servizo para a tradución automática"
 
 msgid "Select from language"
 msgstr "Linguaxe de orixe"
@@ -8832,7 +8832,7 @@ msgid "Language to translate"
 msgstr "Linguaxe de destino"
 
 msgid "Translation service"
-msgstr "Servizo de traducción"
+msgstr "Servizo de tradución"
 
 msgid "Required params for Service"
 msgstr "Parámetros requeridos para o servizo"

@@ -148,16 +148,15 @@
          *
          * @return {Array} The list of locales.
          */
-        $scope.getLocales = function(query, spinning) {
-          var spinning = (typeof spinning !== 'undefined') ?  spinning : 'searching';
+        $scope.getLocales = function(query) {
+          $scope.searching = true;
           var route = {
               name: 'api_v1_backend_settings_locale_list',
               params: { q: query }
           };
-          $scope[spinning] = true;
 
           return http.get(route).then(function(response) {
-            $scope[spinning] = false;
+            $scope.searching = false;
             return response.data;
           });
         };
@@ -397,7 +396,7 @@
         };
 
         /**
-         * @function addAddAutomaticTranslation to the list
+         * @function addAddAutomaticTranslation
          * @memberOf SettingsCtrl
          *
          * @description
@@ -409,13 +408,13 @@
         };
 
         /**
-         * @function removeAutomaticTranslation from the list
+         * @function removeAutomaticTranslation
          * @memberOf SettingsCtrl
          *
          * @description
          *   Removes a automatic translation.
          *
-         * @param {Integer } index The index of the input to remove.
+         * @param {Integer} index The index of the input to remove.
          */
         $scope.removeAutomaticTranslation = function(index) {
           $scope.settings.automatic_translators.splice(index, 1);
@@ -428,7 +427,7 @@
          * @description
          *   Get all extra params for a translation service
          *
-         * @param {Integer } index The index of the translation service
+         * @param {Integer} index The index of the translation service
          */
         $scope.getExtraParams = function(index)  {
           let extraParams = [];
