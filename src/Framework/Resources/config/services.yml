@@ -1,143 +1,13 @@
 imports:
+    - { resource: services/cache.yml }
+    - { resource: services/dbal.yml }
+    - { resource: services/kernel.yml }
+    - { resource: services/orm_repositories.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
+    - { resource: services/templating.yml }
 
 services:
-    kernel.listener.application_listener:
-        class: Framework\EventListener\ApplicationListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
-
-    kernel.listener.controller:
-        class: Framework\EventListener\ControllerListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
-
-    kernel.listener.varnish_cleaner:
-        class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 100 }
-
-    kernel.listener.instance_exceptions:
-        class: Framework\EventListener\InstanceExceptionsListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
-
-    kernel.listener.webservice_exceptions:
-        class: Framework\EventListener\WebServiceExceptionsListener
-        arguments: [ '@core.messenger' ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
-
-    kernel.listener.access_denied_exceptions:
-        class: Framework\EventListener\AccessDeniedExceptionsListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
-
-    kernel.listener.general_exceptions:
-        class: Framework\EventListener\GeneralExceptionsListener
-        arguments: [ %kernel.environment% ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 98 }
-
-    kernel.listener.hooks_subscriber:
-        class: Framework\EventListener\HooksSubscriber
-        arguments: [ '@service_container', '@cache', '@logger' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    kernel.listener.cron_actions:
-        class: Framework\EventListener\CronActionSubscriber
-        tags:
-            - {name: kernel.event_subscriber}
-
-    cache:
-        class: %cache_handler%
-        arguments: [ %cache_handler_params% ]
-
-    cache_manager:
-        class: %cache_handler%
-        arguments: [ %cache_handler_params% ]
-
-    collector.database:
-        class: Framework\DataCollector\DatabaseCollector
-        public: false
-        arguments: [ '@service_container' ]
-        tags:
-            -
-                name:     data_collector
-                id:       'database_collector'
-                template: '@OnmFramework/collector/database.html.twig'
-                priority: 100
-
-    collector.cache:
-        class: Framework\DataCollector\CacheCollector
-        public: false
-        arguments: [ '@service_container' ]
-        tags:
-            -
-                name:     data_collector
-                id:       'cache_collector'
-                template: '@OnmFramework/collector/cache.html.twig'
-                priority: 100
-
-    dbal_connection:
-        class: Onm\Database\DbalWrapper
-        arguments: [ %database%, %kernel.environment% ]
-
-    category_repository:
-        class: Repository\CategoryManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    comment_repository:
-        class: Repository\CommentManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    content_views_repository:
-        class: Repository\ContentViewsManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    entity_repository:
-        class: Repository\EntityManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    frontpage_repository:
-        class: Repository\FrontpageManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    user_repository:
-        class: Repository\UserManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    menu_repository:
-        class: Repository\MenuManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    advertisement_repository:
-        class: Repository\AdvertisementManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    opinion_repository:
-        class: Repository\OpinionManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    widget_repository:
-        class: Repository\WidgetManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    usergroup_repository:
-        class: Repository\UserGroupManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    setting_repository:
-        class: Repository\SettingManager
-        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
-
-    newsletter_manager:
-        class: Repository\NewsletterManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, '@core.template', '@entity_repository' ]
-
     automatic_contents:
         class: Onm\MachineSearcher
         arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', %cache_prefix% ]
@@ -152,25 +22,12 @@ services:
     varnish_ban_message_exchanger:
         class: Onm\Varnish\MessageExchanger
 
-    onm_templating:
-        class: Onm\Templating\Templating
-        arguments: [ '@service_container' ]
-
-    template_cache_manager:
-        class: Onm\Templating\Cache\Manager
-
-    template_cache_config_manager:
-        class: Onm\Templating\Cache\Config
-
     content_url_matcher:
         class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ '@entity_repository' ]
 
     content_cache:
         class: Framework\Cache\ContentCache
-
-    view:
-        alias: onm_templating
 
     onm.event.authentication_success_listener:
         class: Framework\EventListener\AuthenticationSuccessListener
@@ -194,15 +51,6 @@ services:
 
     core.messenger:
         class: Framework\Messenger\Messenger
-
-    core.manager.layout:
-        class:     Onm\LayoutManager
-        arguments: [ '@onm_templating' ]
-
-    # TODO: Remove arguments when new ORM repositories replace search features
-    core.manager.menu:
-        class: Repository\MenuManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]
 
     news_agency.importer:
         class:     Framework\Import\Importer\Importer

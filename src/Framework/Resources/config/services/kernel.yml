@@ -1,0 +1,55 @@
+services:
+    kernel.listener.application_listener:
+        class: Framework\EventListener\ApplicationListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
+    kernel.listener.controller:
+        class: Framework\EventListener\ControllerListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    kernel.listener.instance_exceptions:
+        class: Framework\EventListener\InstanceExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
+    kernel.listener.webservice_exceptions:
+        class: Framework\EventListener\WebServiceExceptionsListener
+        arguments: [ '@core.messenger' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
+    kernel.listener.access_denied_exceptions:
+        class: Framework\EventListener\AccessDeniedExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
+    kernel.listener.general_exceptions:
+        class: Framework\EventListener\GeneralExceptionsListener
+        arguments: [ %kernel.environment% ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 98 }
+
+    kernel.listener.varnish_cleaner:
+        class: Framework\EventListener\VarnishCleanerListener
+        arguments: [ %varnish%, '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 100 }
+
+    kernel.listener.hooks_subscriber:
+        class: Framework\EventListener\HooksSubscriber
+        arguments: [ '@service_container', '@cache', '@logger' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    kernel.listener.cron_actions:
+        class: Framework\EventListener\CronActionSubscriber
+        tags:
+            - {name: kernel.event_subscriber}
+
+    kernel.subscriber.l10n_routing:
+        class: Framework\EventListener\L10nRouterListener
+        arguments: [ '@router', '@request_stack', '@router.request_context', '@logger', '@service_container']
+        tags:
+            - { name: kernel.event_subscriber, logger: request }

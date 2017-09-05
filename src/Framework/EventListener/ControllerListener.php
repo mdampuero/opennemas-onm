@@ -31,6 +31,7 @@ class ControllerListener implements EventSubscriberInterface
     {
         // Assign request attributes to query parameters
         $request = $event->getRequest();
+
         if (is_array($request->attributes->get('_route_params'))) {
             foreach ($request->attributes->get('_route_params') as $key => $value) {
                 $request->query->set($key, $value);
