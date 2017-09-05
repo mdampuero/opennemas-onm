@@ -123,11 +123,12 @@ class CategoriesController extends Controller
                 }
             }
 
+
             return $this->render(
                 'category/new.tpl',
                 array(
-                    'configurations' => $configurations,
-                    'allcategorys'   => $categories,
+                    'configurations'        => $configurations,
+                    'allcategorys'          => $categories
                 )
             );
         }
@@ -147,28 +148,30 @@ class CategoriesController extends Controller
     {
         $id = $request->query->getDigits('id');
 
-        $ccm = \ContentCategoryManager::get_instance();
-
         $category = new \ContentCategory($id);
         if ($category->pk_content_category != null) {
+            $ccm = \ContentCategoryManager::get_instance();
             $allcategorys = $ccm->categories;
             $subcategorys = $ccm->getSubcategories($id);
 
-            $categories = array();
-            foreach ($allcategorys as $categoryItem) {
-                if ($categoryItem->pk_content_category != $id
-                    && ($categoryItem->internal_category != 0 && $categoryItem->fk_content_category == 0)
-                ) {
-                    $categories[] = $categoryItem;
-                }
-            }
+
+            $locale = $request->request->filter('locale', '', FILTER_SANITIZE_STRING);
+            $localeSettings = $this->get('setting_repository')->get('locale');
+            $localeList = $this->get('core.locale')->getLocales();
+
             $jsonData = json_encode(
                 array(
-                    'categories'            => $categories,
+                    'categories'            => $allcategorys,
                     'configurations'        => s::get('section_settings'),
                     'category'              => $category,
                     'subcategories'         => $subcategorys,
-                    'internalCategories'    => \ContentManager::getContentTypes()
+                    'internal_categories'   => $this->getInternalCategories(),
+                    'image_path'            => MEDIA_URL . MEDIA_DIR,
+                    'language_data'         => array(
+                        'locale'            => $locale,
+                        'default_locale'    => $localeSettings['main'],
+                        'locale_list'       => $this->get('core.locale')->getAvailableLocales()
+                    )
                 )
             );
 
@@ -455,16 +458,14 @@ class CategoriesController extends Controller
     }
 
     /**
-     *  Handles the configuration for the categories manager
+     *  Handles the list of internalCategories needed for the view
      *
-     *  @param Request $request the request object
-     *
-     *  @return Response the response object
+     *  @return Response the list of internal categories and the permissions for them
      */
     private function getInternalCategories()
     {
         $internalCategories = [1,7,9,10,11,14,15];
-        $allowedCategories = [0,1];
+        $allowedCategories = [1];
 
         $security = $this->get('core.security');
 
@@ -490,9 +491,15 @@ class CategoriesController extends Controller
             $allowedCategories[] = 0;
         }
 
-        return {
-            'internalCategories': $internalCategories
-            'allowedCategories':
-        };
+        $internalCategoriesList = [];
+        foreach (\ContentManager::getContentTypes() as $internalCategory) {
+            if (in_array($internalCategory['pk_content_type'], $internalCategories)) {
+                $internalCategoriesList[$internalCategory['pk_content_type']] = $internalCategory;
+            }
+        }
+        return [
+            'internalCategories'    => $internalCategoriesList,
+            'allowedCategories'     => $allowedCategories
+        ];
     }
 }

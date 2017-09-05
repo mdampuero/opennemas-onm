@@ -1,16 +1,11 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  {javascripts}
-    <script>
-      var categoryData = {$categoryData};
-    </script>
-  {/javascripts}
-{/block}
-
 {block name="content"}
-  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="show(categoryData)" class="settings">
-    <div class="page-navbar actions-navbar">
+  <script>
+      var categoryData = {$categoryData};
+  </script>
+  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="init()" class="settings">
+    <div class="page-navbar actions-navbar ng-cloak" ng-if="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -57,7 +52,13 @@
         </div>
       </div>
     </div>
-    <div class="content">
+    <div class="content ng-cloak no-animate" ng-if="loading">
+      <div class="spinner-wrapper">
+        <div class="loading-spinner"></div>
+        <div class="spinner-text">{t}Loading{/t}...</div>
+      </div>
+    </div>
+    <div class="content ng-cloak" ng-if="!loading">
       <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
@@ -81,19 +82,14 @@
                   {t}Subsection of{/t}
                 </label>
                 <div class="controls">
-                  <select name="subcategory" ng-model="category.subcategory">
-                    <option value="0">--</option>
-                    <option
-                        value="[% auxCategory.pk_content_category %]"
-                        ng-repeat="auxCategory in categories"
-                        ng-selected="[% auxCategory.pk_content_category === category.subcategory %]"
-                        ng-if="auxCategory.pk_content_category != category.pk_content_category">
-                      [% category.title %]
-                    </option>
+                  <select name="subcategory"
+                      ng-model="category.subcategory"
+                      ng-options="auxCategory.pk_content_category as auxCategory.title for auxCategory in categories"
+                  >
                   </select>
                 </div>
               </div>
-              <div class="form-group" ng-if="subcategories">
+              <div class="form-group" ng-if="subcategories && subcategories.length">
                 <label class="form-label">
                   {t}Subsections{/t}
                 </label>
@@ -116,20 +112,7 @@
                         [% subcategory.name %]
                       </td>
                       <td class="left">
-
-                        {/*if $subcategorys[s]->internal_category eq 7}
-                          <i class="fa fa-stack-overflow" uib-tooltip="{t}Albums{/t}"></i>
-                        {elseif $subcategorys[s]->internal_category eq 9}
-                          <i class="fa fa-film" uib-tooltip="{t}Videos{/t}"></i>
-                        {elseif $subcategorys[s]->internal_category eq 11}
-                          <i class="fa fa-pie-chart" uib-tooltip="{t}Polls{/t}"></i>
-                        {elseif $subcategorys[s]->internal_category eq 10}
-                          <i class="fa fa-star" uib-tooltip="{t}Specials{/t}"></i>
-                        {elseif $subcategorys[s]->internal_category eq 14}
-                          <i class="fa fa-newspaper-o" uib-tooltip="{t}News Stand{/t}"></i>
-                        {elseif $subcategorys[s]->internal_category eq 15}
-                          <i class="fa fa-book" uib-tooltip="{t}Books{/t}"></i>
-                        {/if */}
+                          <i class="fa [% internalCategoriesImgs[subcategory.internal_category] %]" uib-tooltip="[% internalCategories[subcategory.internal_category] %]"></i>
                       </td>
                       <td class="left">
                         [% (subcategory.inmenu)?"{t}Yes{/t}":"{t}No{/t}" %]
@@ -184,43 +167,11 @@
                   {t}Category available for{/t}
                 </label>
                 <div class="controls">
-                  <select name="category.internal_category" id="internal_category" ng-model="category.internal_category"  required>
-                    <option
-                        value="[% internalCategory.pk_content_type %]"
-                        ng-repeat="internalCategory in internalCategories"
-                        ng-selected="[% internalCategory.pk_content_type === category.internal_category %]">
-                      [% internalCategory.title %]
-                    </option>
-                    <option value="1"
-                    {if  (empty($category->internal_category) || $category->internal_category eq 1)} selected="selected"{/if}>{t}All contents{/t}</option>
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <option value="7"
-                    {if isset($category) && ($category->internal_category eq 7)} selected="selected"{/if}>{t}Albums{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <option value="9"
-                    {if isset($category) && ($category->internal_category eq 9)} selected="selected"{/if}>{t}Video{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <option value="11"
-                    {if isset($category) && ($category->internal_category eq 11)} selected="selected"{/if}>{t}Poll{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="KIOSKO_MANAGER"}
-                    <option value="14"
-                    {if isset($category) && ($category->internal_category eq 14)} selected="selected"{/if}>{t}ePaper{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="SPECIAL_MANAGER"}
-                    <option value="10"
-                    {if isset($category) && ($category->internal_category eq 10)} selected="selected"{/if}>{t}Special{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="BOOK_MANAGER"}
-                    <option value="15"
-                    {if isset($category) && ($category->internal_category eq 15)} selected="selected"{/if}>{t}Book{/t}</option>
-                    {/is_module_activated}
-                    {acl isAllowed="MASTER"}
-                    <option value="0"
-                    {if isset($category) && ($category->internal_category eq 0)} selected="selected"{/if}>{t}Internal{/t}</option>
-                    {/acl}
+                  <select name="category.internal_category"
+                      id="internal_category"
+                      ng-model="category.internal_category"
+                      ng-options="internalCategoryKey as (internalCategoryKey == 0)?'{t}Internal{/t}':internalCategories.internalCategories[internalCategoryKey].title for internalCategoryKey in internalCategories.allowedCategories"
+                  >
                   </select>
                 </div>
               </div>
@@ -246,11 +197,11 @@
               <div class="form-group" ng-if="configurations.allowLogo">
                 <label for="logo_path" class="form-label">{t}Category logo{/t}</label>
                 <div class="controls">
-                  <div class="fileinput [%(categoryUrl)?'fileinput-exists':'fileinput-new'%]" data-trigger="fileinput">
+                  <div class="fileinput [%(category.logo_path)?'fileinput-exists':'fileinput-new'%]" data-trigger="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
-                    <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" ng-if="categoryUrl">
-                        <img src="categoryUrl" style="max-width:200px;" >
+                    <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" ng-if="category.logo_path">
+                        <img src="[% categoryUrl + category.logo_path %]" style="max-width:200px;" >
                     </div>
                     <div>
                       <span class="btn btn-file">

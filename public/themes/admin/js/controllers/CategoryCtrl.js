@@ -82,21 +82,23 @@
          * @description
          *   Lists all settings.
          */
-        $scope.list = function(categoryData) {
+        $scope.init = function() {
+          $scope.loading = true;
 
-                              'allcategorys'          => $categories,
-                    'configurations'        => s::get('section_settings'),
-                    'category'              => $category,
-                    'subcategories'         => $subcategorys,
-                    'internalCategories'    => \ContentManager::getContentTypes()
-
-          if(category) {
+          if(categoryData) {
             $scope.category = categoryData.category;
             $scope.subcategories = categoryData.subcategories;
-            $scope.allcategorys = categoryData.allcategorys;
+            $scope.categories = categoryData.categories;
             $scope.configurations = categoryData.configurations;
             $scope.internalCategories = categoryData.internalCategories;
+            $scope.categoryUrl = categoryData.imagePath + '/sections/';
+            $scope.loading = false;
+            return;
           }
+          $scope.loading = false;
+
+          // TODO implement the ajax request for caregory info
+          /*
           $scope.loading = true;
 
           http.get('api_v1_backend_category_show').then(function(response) {
@@ -107,7 +109,17 @@
           }, function() {
             $scope.loading = false;
           });
+          */
         };
+
+        $scope.internalCategoriesImgs = {
+          7: 'fa-stack-overflow',
+          9: 'fa-film',
+          11: 'fa-pie-chart',
+          10: 'fa-star',
+          14: 'fa-newspaper-o',
+          15: 'fa-book',
+        }
 
 
 
