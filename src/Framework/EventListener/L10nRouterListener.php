@@ -171,11 +171,11 @@ class L10nRouterListener implements EventSubscriberInterface
         }
 
         // If the instance has defined language
-        $hasModule = $this->container->get('core.security')
-            ->hasExtension('es.openhost.module.multilanguage');
-        if (!$hasModule) {
-            list($newRequest, $locale) = [$request, 'es'];
-        } else {
+        $locale     = '';
+        $newRequest = $request;
+        if ($this->container->get('core.security')
+            ->hasExtension('es.openhost.module.multilanguage')
+        ) {
             list($newRequest, $locale) = $this->removeLanguageFromRequest();
         }
 
@@ -194,7 +194,7 @@ class L10nRouterListener implements EventSubscriberInterface
                     sprintf('Matched route "%s".', isset($parameters['_route']) ? $parameters['_route'] : 'n/a'),
                     [
                         'route_parameters' => $parameters,
-                        'request_uri' => $request->getUri(),
+                        'request_uri' => $newRequest->getUri(),
                     ]
                 );
             }
@@ -233,7 +233,11 @@ class L10nRouterListener implements EventSubscriberInterface
         $request = $this->requestStack->getCurrentRequest();
 
         // Support for l10n urls;
-        $existsLocale = preg_match("@^/(?<locale>(?![\/])[a-z]{2})\b(/)?@", $request->getRequestUri(), $matches);
+        $existsLocale = preg_match(
+            "@^/(?<locale>(?![\/])[a-z]{2})\b(/)?@",
+            $request->getRequestUri(),
+            $matches
+        );
 
         $locale = '';
         if ($existsLocale) {
