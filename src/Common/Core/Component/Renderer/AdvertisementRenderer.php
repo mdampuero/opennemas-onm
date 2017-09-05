@@ -9,8 +9,6 @@
  */
 namespace Common\Core\Component\Renderer;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 /**
  * The AdvertisementRenderer service provides methods to generate the HTML code
  * for advertisements basing on the advertisements information.
