@@ -79,6 +79,10 @@ services:
         class:     Common\Core\Component\Security\Recaptcha\Recaptcha
         arguments: [ '@service_container' ]
 
+    core.redirector:
+        class:     Common\Core\Component\Routing\Redirector
+        arguments: [ '@service_container' ]
+
     core.instance.checker:
         class:     Common\Core\Component\Instance\Checker
         arguments: [ '@orm.manager' ]
