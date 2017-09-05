@@ -215,7 +215,7 @@ class RedirectorsController extends Controller
      *
      * @param string $type The content type.
      *
-     * @return RedirectReponse The redirection response object to frontpages
+     * @return RedirectResponse The redirection response object to frontpages
      *                         when the instance has redirection to frontpages
      *                         enabled.
      *
