@@ -38,10 +38,15 @@ function smarty_function_url($params, &$smarty)
         $url = '#not-found';
     }
 
-    // L10n urls
+    // L10n for urls
     $requestedLocale = $smarty->getContainer()
         ->get('request_stack')->getCurrentRequest()
         ->attributes->get('_locale', '');
+
+    // If no locale the skip the l10n setting
+    if (empty($requestedLocale)) {
+        return $url;
+    }
 
     $localeSettings = $smarty->getContainer()
         ->get('orm.manager')
@@ -58,6 +63,7 @@ function smarty_function_url($params, &$smarty)
         $localeForUri = $requestedLocale;
     }
 
+    // List of excluded url names from l10n
     $excludedUrlFromL10n = [
         'frontend_css_global',
         'frontend_css_frontpage_category',
@@ -88,7 +94,14 @@ function smarty_function_url($params, &$smarty)
         && strpos($name, 'frontend') === 0 // Only localize for frontend urls
         && !in_array($name, $excludedUrlFromL10n) // Exclude some url names
     ) {
-        $url = '/' . $localeForUri . $url;
+        // Append the locale for uri to the url path part
+        if ($forceAbsolute) {
+            $parts = parse_url($url);
+            $parts['path'] =  $localeForUri . $parts['path'];
+            $url = implode('/', $parts);
+        } else {
+            $url = '/' . $localeForUri . $url;
+        }
     }
 
     return $url;
