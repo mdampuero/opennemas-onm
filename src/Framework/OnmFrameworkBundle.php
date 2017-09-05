@@ -14,10 +14,10 @@
  */
 namespace Framework;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Framework\DependencyInjection\Compiler\RemoveSymfonyRouterListenerServicePass;
 use Framework\DependencyInjection\OpennemasExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Framework\DependencyInjection\Compiler\RemoveSymfonyRouterListenerServicePass;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Initializes the OnmFrameworkBundle
