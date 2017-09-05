@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the redirectors
- *
- * @package Frontend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,15 +10,13 @@
 namespace Frontend\Controller;
 
 use Common\Core\Component\Exception\ContentNotMigratedException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
- * Handles the actions for the redirectors
- *
- * @package Frontend_Controllers
+ * Redirects unofficial URLs to real contents.
  */
 class RedirectorsController extends Controller
 {
@@ -42,11 +35,20 @@ class RedirectorsController extends Controller
         $fragment = '';
         $content  = null;
 
-        list($type, $id) = $this->getTranslation($slug, $type, $id);
+        $translation = $this->get('core.redirector')
+            ->getTranslation($slug, $type, $id);
 
-        if (!empty($type) && !empty($id)) {
-            $content = $this->getContent($type, $id);
+        // Redirect content migrated to another domain
+        if (array_key_exists('domain', $translation)
+            && !empty($translation['domain'])
+        ) {
+            return $this->redirect($translation['domain'] . $this->generateUrl(
+                'frontend_redirect_content',
+                [ 'content_id' => $id ]
+            ));
         }
+
+        $content = $this->getContent($translation['type'], $translation['pk_content_old']);
 
         if (empty($content) || is_null($content->id)) {
             return $this->redirectNotMigratedContent($type);
@@ -65,119 +67,146 @@ class RedirectorsController extends Controller
     }
 
     /**
-     * Redirects the article given its external link url
+     * Redirects the article given an external link as query parameter or
+     * request attribute.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      */
     public function externalLinkAction(Request $request)
     {
-        // Fetch the target url from the request query
-        // or from the request attributes (used on Controller::forward calls)
         $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
-        $urlFromParams = $request->attributes->filter('to', '', FILTER_VALIDATE_URL);
-        $url = !empty($urlFromParams) ? $urlFromParams : $url;
+
+        if ($request->attributes->has('to')) {
+            $url = $request->attributes->filter('to', '', FILTER_VALIDATE_URL);
+        }
 
         if (empty($url)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         return $this->redirect($url);
     }
 
     /**
-     * Returns a content from a content type and content id.
+     * Returns an article by id.
      *
-     * @param string $type The content type.
-     * @param string $id   The content id.
+     * @param integer $id The article id.
      *
-     * @return Content The content.
+     * @return Article The article.
      */
-    protected function getContent($type, $id)
+    protected function getArticle($id)
     {
-        $fixTypes = [ 'photo-inline' => 'photo' ];
-        $type     = array_key_exists($type, $fixTypes) ? $fixTypes[$type] : $type;
+        $content = $this->get('entity_repository')->find('Article', $id);
 
-        switch ($type) {
-            case 'article':
-                $content = $this->get('entity_repository')->find('Article', $id);
-
-                if (!is_null($content)) {
-                    $content->category_name = $content->catName;
-                }
-
-                return $content;
-
-            case 'attachment':
-                return new \Attachment($id);
-
-            case 'category':
-                $content = $this->get('category_repository')->find($id);
-                $content->content_type_name = 'category';
-                $content->id = $content->pk_content_category;
-
-                $content->uri = mb_ereg_replace('^/', '', $this->generateUrl(
-                    'category_frontpage',
-                    [ 'category_name' => $content->name ]
-                ));
-
-                return $content;
-
-            case 'comment':
-                $comment = new \Comment($id);
-
-                if (empty($comment->content_id)) {
-                    return null;
-                }
-
-                return new \Content($comment->content_id);
-
-            case 'opinion':
-                return $this->get('opinion_repository')->find('Opinion', $id);
-
-            case 'photo':
-                $content = $this->get('entity_repository')->find('Photo', $id);
-
-                $content->uri = '/media/'
-                    . $this->get('core.instance')->internal_name
-                    . '/images' . $content->path_img;
-
-                return $content;
-
-            default:
-                return new \Content($id);
+        if (!empty($content)) {
+            $content->category_name = $content->catName;
         }
+
+        return $content;
     }
 
     /**
-     * Returns the type and id for contents basing on redirection parameters.
+     * Returns an attachment by id.
      *
-     * @param string $slug The content slug.
-     * @param string $type The content type.
-     * @param string $id   The old content id.
+     * @param integer $id The attachment id.
      *
-     * @return array An array with the type and content id.
+     * @return Attachment The attachment.
      */
-    protected function getTranslation($slug = null, $type = null, $id = null)
+    protected function getAttachment($id)
     {
-        if (!empty($slug)) {
-            if (!empty($type)) {
-                $id  = \ContentManager::getOriginalIdFromSlugAndType($slug, $type);
+        return $this->get('entity_repository')->find('Attachment', $id);
+    }
 
-                return [ $type, $id ];
-            }
+    /**
+     * Returns an category by id.
+     *
+     * @param integer $id The category id.
+     *
+     * @return Category The category.
+     */
+    protected function getCategory($id)
+    {
+        $content      = $this->get('category_repository')->find($id);
+        $content->uri = mb_ereg_replace('^/', '', $this->generateUrl(
+            'category_frontpage',
+            [ 'category_name' => $content->name ]
+        ));
 
-            return \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
+        return $content;
+    }
+
+    /**
+     * Returns an comment by id.
+     *
+     * @param integer $id The comment id.
+     *
+     * @return Comment The comment.
+     */
+    protected function getComment($id)
+    {
+        $comment = new \Comment($id);
+
+        if (empty($comment->content_id)) {
+            return null;
         }
 
-        if (!empty($type) && !(empty($id))) {
-            $id  = \ContentManager::getOriginalIDForContentTypeAndID($type, $id);
+        return new \Content($comment->content_id);
+    }
 
-            return [ $type, $id ];
-        } else {
-            return \ContentManager::getOriginalIdAndContentTypeFromID($id);
+    /**
+     * Returns a content from a translation value.
+     *
+     * @param array $translation The translation value.
+     *
+     * @return Content The content.
+     */
+    protected function getContent($translation)
+    {
+        $fixTypes = [ 'photo-inline' => 'photo' ];
+
+        if (array_key_exists($translation['type'], $fixTypes)) {
+            $translation['type'] = $fixTypes[$translation['type']];
         }
+
+        $method = 'get' . \classify($translation['type']);
+
+        if (method_exists($this, $method)) {
+            return $this->{$method}($translation['pk_content']);
+        }
+
+        return new \Content($translation['pk_content']);
+    }
+
+    /**
+     * Returns an opinion by id.
+     *
+     * @param integer $id The opinion id.
+     *
+     * @return Opinion The opinion.
+     */
+    protected function getOpinion($id)
+    {
+        return $this->get('opinion_repository')->find('Opinion', $id);
+    }
+
+    /**
+     * Returns an photo by id.
+     *
+     * @param integer $id The photo id.
+     *
+     * @return Photo The photo.
+     */
+    protected function getPhoto($id)
+    {
+        $content = $this->get('entity_repository')->find('Photo', $id);
+
+        $content->uri = '/media/'
+            . $this->get('core.instance')->internal_name
+            . '/images' . $content->path_img;
+
+        return $content;
     }
 
     /**
@@ -211,38 +240,6 @@ class RedirectorsController extends Controller
         ) {
             $url = $router->generate($route);
         }
-
-        return new RedirectResponse($url, 301);
-    }
-
-    /**
-     * Redirects to a category frontpage
-     *
-     * @param Request $request the request object
-     *
-     * @return RedirectResponse the redirection to the proper url
-     */
-    public function categoryAction(Request $request)
-    {
-        $contentType = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
-        $slug        = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
-        $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
-
-        if (empty($slug)) {
-            $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($contentType, $contentId);
-        } else {
-            list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
-            // Unused var $type
-            unset($type);
-        }
-
-        $category = new \ContentCategory($newContentID);
-
-        if (!isset($category) || is_null($category->pk_content_category)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-        }
-
-        $url = SITE_URL . \Uri::generate('section', array('id' => $category->name));
 
         return new RedirectResponse($url, 301);
     }
