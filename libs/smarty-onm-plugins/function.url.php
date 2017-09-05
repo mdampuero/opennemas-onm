@@ -18,22 +18,23 @@ function smarty_function_url($params, &$smarty)
         return $url;
     }
 
-    $name = $params['name'];
+    $name          = $params['name'];
     $forceAbsolute = array_key_exists('absolute', $params) && $params['absolute'];
     if ($forceAbsolute) {
         $absolute = UrlGeneratorInterface::ABSOLUTE_URL;
     } else {
         $absolute = UrlGeneratorInterface::ABSOLUTE_PATH;
     }
+
     unset($params['name'], $params['absolute']);
     try {
         $url = $smarty->getContainer()
             ->get('router')
             ->generate($name, $params, $absolute);
     } catch (RouteNotFoundException $e) {
-        $url = '#not-found-'.$params['name'];
+        $url = '#not-found-' . $params['name'];
     } catch (RouteNotFoundException $e) {
-        $url = '#not-found-'.$params['name'];
+        $url = '#not-found-' . $params['name'];
     } catch (\Exception $e) {
         $url = '#not-found';
     }
@@ -96,9 +97,9 @@ function smarty_function_url($params, &$smarty)
     ) {
         // Append the locale for uri to the url path part
         if ($forceAbsolute) {
-            $parts = parse_url($url);
-            $parts['path'] =  $localeForUri . $parts['path'];
-            $url = implode('/', $parts);
+            $parts         = parse_url($url);
+            $parts['path'] = $localeForUri . $parts['path'];
+            $url           = implode('/', $parts);
         } else {
             $url = '/' . $localeForUri . $url;
         }
