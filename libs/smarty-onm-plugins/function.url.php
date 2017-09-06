@@ -63,6 +63,8 @@ function smarty_function_url($params, &$smarty)
     }
 
     // List of excluded url names from l10n
+    // TODO: Search a way to mark these routes and
+    // not having to maintain this list manually
     $excludedUrlFromL10n = [
         'frontend_css_global',
         'frontend_css_frontpage_category',
@@ -98,9 +100,11 @@ function smarty_function_url($params, &$smarty)
             $parts         = parse_url($url);
             $parts['path'] = $localeForUri . $parts['path'];
             $url           = implode('/', $parts);
-        } else {
-            $url = '/' . $localeForUri . $url;
+
+            return $url;
         }
+
+        $url = '/' . $localeForUri . $url;
     }
 
     return $url;
