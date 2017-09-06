@@ -32,9 +32,7 @@ function smarty_function_url($params, &$smarty)
             ->get('router')
             ->generate($name, $params, $absolute);
     } catch (RouteNotFoundException $e) {
-        $url = '#not-found-' . $params['name'];
-    } catch (RouteNotFoundException $e) {
-        $url = '#not-found-' . $params['name'];
+        $url = '#not-found-' . $name;
     } catch (\Exception $e) {
         $url = '#not-found';
     }
