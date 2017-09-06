@@ -1,7 +1,6 @@
 <?php
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /*
  * Returns the url given a set of params
@@ -20,17 +19,15 @@ function smarty_function_url($params, &$smarty)
 
     $name          = $params['name'];
     $forceAbsolute = array_key_exists('absolute', $params) && $params['absolute'];
-    if ($forceAbsolute) {
-        $absolute = UrlGeneratorInterface::ABSOLUTE_URL;
-    } else {
-        $absolute = UrlGeneratorInterface::ABSOLUTE_PATH;
-    }
+    $absoluteUrl   = ($forceAbsolute)
+        ? UrlGeneratorInterface::ABSOLUTE_URL
+        : UrlGeneratorInterface::ABSOLUTE_PATH;
 
     unset($params['name'], $params['absolute']);
     try {
         $url = $smarty->getContainer()
             ->get('router')
-            ->generate($name, $params, $absolute);
+            ->generate($name, $params, $absoluteUrl);
     } catch (RouteNotFoundException $e) {
         $url = '#not-found-' . $name;
     } catch (\Exception $e) {
@@ -42,7 +39,7 @@ function smarty_function_url($params, &$smarty)
         ->get('request_stack')->getCurrentRequest()
         ->attributes->get('_locale', '');
 
-    // If no locale the skip the l10n setting
+    // If no locale skip the l10n setting
     if (empty($requestedLocale)) {
         return $url;
     }
