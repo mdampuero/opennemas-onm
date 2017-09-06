@@ -19,7 +19,7 @@ function smarty_function_url($params, &$smarty)
 
     $name          = $params['name'];
     $forceAbsolute = array_key_exists('absolute', $params) && $params['absolute'];
-    $absoluteUrl   = ($forceAbsolute)
+    $absoluteUrl   = $forceAbsolute
         ? UrlGeneratorInterface::ABSOLUTE_URL
         : UrlGeneratorInterface::ABSOLUTE_PATH;
 
@@ -59,38 +59,21 @@ function smarty_function_url($params, &$smarty)
         $localeForUri = $requestedLocale;
     }
 
-    // List of excluded url names from l10n
-    // TODO: Search a way to mark these routes and
-    // not having to maintain this list manually
-    $excludedUrlFromL10n = [
-        'frontend_css_global',
-        'frontend_css_frontpage_category',
-        'frontend_ad_get',
-        'frontend_ad_redirect',
-        'frontend_auth_login',
-        'frontend_auth_check',
-        'frontend_auth_logout',
-        'frontend_comments_get',
-        'frontend_comments_ajax',
-        'frontend_comments_vote',
-        'frontend_comments_save',
-        'frontend_comments_count',
-        'frontend_content_stats',
-        'frontend_content_share_by_mail',
-        'frontend_content_permalink',
-        'frontend_letter_save',
-        'frontend_paywall_showcase',
-        'frontend_poll_vote',
-        'frontend_redirect_content',
-        'frontend_redirect_category',
-        'frontend_rtb_file',
-        'frontend_rss_author',
-        'frontend_ws_paypal_ipn'
-    ];
+    // Get the list of routes that could be localized
+    $routes = array_filter(
+        $smarty->getContainer()->get('router')->getRouteCollection()->all(),
+        function ($route) {
+            // return !$route->hasOption('l10n');
+            return true === $route->getOption('l10n')
+                || 'true' === $route->getOption('l10n');
+        }
+    );
+    $routes = array_keys($routes);
 
-    if (!empty($localeForUri) // Only localize if locale is defined
-        && strpos($name, 'frontend') === 0 // Only localize for frontend urls
-        && !in_array($name, $excludedUrlFromL10n) // Exclude some url names
+    // Only localize urls if the user comes from a localized site
+    // and if the url can be localized
+    if (!empty($localeForUri)
+        && in_array($name, $routes)
     ) {
         // Append the locale for uri to the url path part
         if ($forceAbsolute) {

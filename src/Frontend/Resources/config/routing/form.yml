@@ -1,10 +1,14 @@
 frontend_participa_frontpage:
     path: /participa
     defaults: { _controller: FrontendBundle:Form:frontpage }
+    options:
+        l10n: true
 
 frontend_participa_form:
     path: /participa/envia
     defaults: { _controller: FrontendBundle:Form:frontpage }
+    options:
+        l10n: true
 
 frontend_participa_send:
     path: /participa/send
