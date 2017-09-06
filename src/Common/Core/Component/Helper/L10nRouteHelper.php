@@ -19,7 +19,7 @@ class L10nRouteHelper
     protected $container;
 
     /**
-     * Initializes the UrlGeneratorHelper.
+     * Initializes the L10nRouteHelper.
      *
      * @param ServiceContainer $container The service container.
      */
@@ -31,8 +31,8 @@ class L10nRouteHelper
     /**
      * Returns a localized url
      *
-     * @param string $content The content to generate the url.
-     * @param array  $params  The list of params required to generate the URI.
+     * @param string $url The url to localize.
+     * @param array  $routeName Route name to know if the route should be localized or not.
      *
      * @return string The generated URI.
      */
@@ -91,6 +91,11 @@ class L10nRouteHelper
         return $url;
     }
 
+    /**
+     * Returns the list of localizable routes
+     *
+     * @return array the list of localizable routes
+     */
     private function getLocalizableRoutes()
     {
         // Get the list of routes that could be localized
