@@ -173,9 +173,9 @@ class L10nRouterListener implements EventSubscriberInterface
         // If the instance has defined language
         $locale     = '';
         $newRequest = $request;
-        if ($this->container->get('core.security')
-            ->hasExtension('es.openhost.module.multilanguage')
-        ) {
+        $hasModule  = $this->container->get('core.security')
+            ->hasExtension('es.openhost.module.multilanguage');
+        if ($hasModule)) {
             list($newRequest, $locale) = $this->removeLanguageFromRequest();
         }
 
@@ -189,10 +189,14 @@ class L10nRouterListener implements EventSubscriberInterface
                 $parameters = $this->matcher->match($newRequest->getPathInfo());
             }
 
-            $routes = $this->container->get('core.helper.l10n_route')
-                ->getLocalizableRoutes();
-
-            if (!empty($locale) && !in_array($parameters['_route'], $routes)) {
+            // Raise na error if the url came localized and it's not localizable
+            if ($hasModule &&
+                !empty($locale)
+                && !in_array(
+                    $parameters['_route'],
+                    this->container->get('core.helper.l10n_route')->getLocalizableRoutes()
+                )
+            ) {
                 throw new ResourceNotFoundException();
             }
 

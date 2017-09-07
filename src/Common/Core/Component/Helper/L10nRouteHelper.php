@@ -19,6 +19,13 @@ class L10nRouteHelper
     protected $container;
 
     /**
+     * The list of routes that can be localized.
+     *
+     * @var array
+     */
+    protected $routes = [];
+
+    /**
      * Initializes the L10nRouteHelper.
      *
      * @param ServiceContainer $container The service container.
@@ -99,14 +106,18 @@ class L10nRouteHelper
     public function getLocalizableRoutes()
     {
         // Get the list of routes that could be localized
-        $routes = array_filter(
-            $this->container->get('router')->getRouteCollection()->all(),
-            function ($route) {
-                return true === $route->getOption('l10n')
-                    || 'true' === $route->getOption('l10n');
-            }
-        );
+        if (empty($this->routes)) {
+            $routes = array_filter(
+                $this->container->get('router')->getRouteCollection()->all(),
+                function ($route) {
+                    return true === $route->getOption('l10n')
+                        || 'true' === $route->getOption('l10n');
+                }
+            );
 
-        return array_keys($routes);
+            $this->routes = array_keys($routes);
+        }
+
+        return $this->routes;
     }
 }
