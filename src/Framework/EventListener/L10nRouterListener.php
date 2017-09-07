@@ -194,7 +194,7 @@ class L10nRouterListener implements EventSubscriberInterface
                 !empty($locale)
                 && !in_array(
                     $parameters['_route'],
-                    this->container->get('core.helper.l10n_route')->getLocalizableRoutes()
+                    $this->container->get('core.helper.l10n_route')->getLocalizableRoutes()
                 )
             ) {
                 throw new ResourceNotFoundException();
