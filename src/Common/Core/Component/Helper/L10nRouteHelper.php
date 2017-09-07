@@ -96,7 +96,7 @@ class L10nRouteHelper
      *
      * @return array the list of localizable routes
      */
-    private function getLocalizableRoutes()
+    public function getLocalizableRoutes()
     {
         // Get the list of routes that could be localized
         $routes = array_filter(

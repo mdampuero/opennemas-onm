@@ -189,6 +189,13 @@ class L10nRouterListener implements EventSubscriberInterface
                 $parameters = $this->matcher->match($newRequest->getPathInfo());
             }
 
+            $routes = $this->container->get('core.helper.l10n_route')
+                ->getLocalizableRoutes();
+
+            if (!empty($locale) && !in_array($parameters['_route'], $routes)) {
+                throw new ResourceNotFoundException();
+            }
+
             if (null !== $this->logger) {
                 $this->logger->info(
                     sprintf('Matched route "%s".', isset($parameters['_route']) ? $parameters['_route'] : 'n/a'),
