@@ -175,7 +175,7 @@ class L10nRouterListener implements EventSubscriberInterface
         $newRequest = $request;
         $hasModule  = $this->container->get('core.security')
             ->hasExtension('es.openhost.module.multilanguage');
-        if ($hasModule)) {
+        if ($hasModule) {
             list($newRequest, $locale) = $this->removeLanguageFromRequest();
         }
 
