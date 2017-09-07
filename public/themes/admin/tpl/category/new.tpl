@@ -21,16 +21,7 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <div class="btn-group">
-                <button type="button" class="form-control btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <span class="fa fa-exchange"></span>Galician<span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#"><span class="fa fa-pencil" aria-hidden="true"></span>French</a></li>
-                  <li><a href="#"><span class="fa fa-globe" aria-hidden="true"></span>English</a></li>
-                  <li><a href="#" class="text-muted"><span class="fa fa-exchange" aria-hidden="true"></span>Galician</a></li>
-                </ul>
-              </div>
+              <translator language-data="[% languageData %]" change-language="changeLanguage" />
             </li>
           </ul>
           <div class="all-actions pull-right">

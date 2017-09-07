@@ -120,7 +120,8 @@ class Controller extends SymfonyController
 
             $response->headers->set('x-instance', $instance);
             $response->headers->set(
-                'x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']
+                'x-tags',
+                'instance-' . $instance . ',' . $parameters['x-tags']
             );
 
             if (array_key_exists('x-cache-for', $parameters)
@@ -132,5 +133,33 @@ class Controller extends SymfonyController
         }
 
         return $response;
+    }
+
+    /**
+     * Get the locale info needed for multiLanguage.
+     *
+     * @param Request           $request    User request.
+     * @param SettingManager    $sm         The instance settingManager class
+     *
+     * @return Array all info related with locale information for the instance and request
+     *
+     */
+    protected function getLocaleData(Request $request = null, $sm = null)
+    {
+
+        $locale = null;
+        if ($request != null) {
+            $locale = $request->request->filter('locale', null, FILTER_SANITIZE_STRING);
+        }
+        $smAux = $sm;
+        if ($sm == null) {
+            $smAux = $this->get('setting_repository');
+        }
+        $localeSettings = $smAux->get('locale');
+        return array(
+            'locale'            => $locale,
+            'default'           => $localeSettings['main'],
+            'all'               => $localeSettings['frontend']
+        );
     }
 }

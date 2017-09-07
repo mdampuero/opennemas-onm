@@ -34,6 +34,7 @@ angular.module(
     'onm.resizable',
     'onm.serializer',
     'onm.sidebar',
+    'onm.translator',
     'pascalprecht.translate',
     'sun.scrollable',
     'swfobject',

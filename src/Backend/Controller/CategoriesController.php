@@ -35,16 +35,18 @@ class CategoriesController extends Controller
      * @Security("hasExtension('CATEGORY_MANAGER')
      *     and hasPermission('CATEGORY_ADMIN')")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
         $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
 
+
         return $this->render(
             'category/list.tpl',
             array(
-                'categories'    => $categories,
-                'contents_count' => $contentsCount,
+                'categories'        => $categories,
+                'contents_count'    => $contentsCount,
+                'language_data'     => $this->getLocaleData($request)
             )
         );
     }
@@ -154,11 +156,6 @@ class CategoriesController extends Controller
             $allcategorys = $ccm->categories;
             $subcategorys = $ccm->getSubcategories($id);
 
-
-            $locale = $request->request->filter('locale', '', FILTER_SANITIZE_STRING);
-            $localeSettings = $this->get('setting_repository')->get('locale');
-            $localeList = $this->get('core.locale')->getLocales();
-
             $jsonData = json_encode(
                 array(
                     'categories'            => $allcategorys,
@@ -167,11 +164,7 @@ class CategoriesController extends Controller
                     'subcategories'         => $subcategorys,
                     'internal_categories'   => $this->getInternalCategories(),
                     'image_path'            => MEDIA_URL . MEDIA_DIR,
-                    'language_data'         => array(
-                        'locale'            => $locale,
-                        'default_locale'    => $localeSettings['main'],
-                        'locale_list'       => $this->get('core.locale')->getAvailableLocales()
-                    )
+                    'language_data'         => $this->getLocaleData($request)
                 )
             );
 

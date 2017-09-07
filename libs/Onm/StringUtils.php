@@ -11,6 +11,8 @@
  */
 namespace Onm;
 
+use Framework\Component\Data\DataObject;
+
 /**
  * Library for handling unusual string operations.
  *
@@ -436,12 +438,21 @@ class StringUtils
      /**
      * Clean the special chars and add - for separate words
      *
-     * @param  string  $string the string to transform
+     * @param  mixed  $string the string to transform
      *
-     * @return string the string cleaned
+     * @return mixed the string cleaned
      */
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
+        if (!is_string($string) && is_object($string) && 'DataObject' === get_class($string)) {
+
+            $slugArray = [];
+            foreach ($string->getData() as $key => $value) {
+                $slugArray[$key] = StringUtils.generateSlug($value, $useStopList, $delimiter);
+            }
+            return new DataObject($slugArray);
+        }
+
         $string = strip_tags($string);
         // Remove UTF-8 C0 controls chars encoded in HTML entities
         // http://www.w3schools.com/charsets/ref_utf_basic_latin.asp
@@ -464,13 +475,12 @@ class StringUtils
         $string = trim(strtr($string, self::$trade));
 
         // Convert nbsp, ndash and mdash to hyphens
-        $string = str_replace( array( '%c2%a0', '%e2%80%93', '%e2%80%94' ), '-', $string );
+        $string = str_replace(array('%c2%a0', '%e2%80%93', '%e2%80%94' ), '-', $string);
         // Convert nbsp, ndash and mdash HTML entities to hyphens
-        $string = str_replace( array( '&nbsp;', '&#160;', '&ndash;', '&#8211;', '&mdash;', '&#8212;' ), '-', $string );
+        $string = str_replace(array('&nbsp;', '&#160;', '&ndash;', '&#8211;', '&mdash;', '&#8212;' ), '-', $string);
 
         // Strip these characters entirely
-        $string = str_replace( array(
-            // iexcl and iquest
+        $string = str_replace(array(// iexcl and iquest
             '%c2%a1', '%c2%bf',
             // angle quotes
             '%c2%ab', '%c2%bb', '%e2%80%b9', '%e2%80%ba',
@@ -486,7 +496,7 @@ class StringUtils
         ), '', $string );
 
         // Convert times to x
-        $string = str_replace( '%c3%97', 'x', $string );
+        $string = str_replace('%c3%97', 'x', $string);
         // Remove punctuation marks
         $string = str_replace(
             ['"', "'", "…", ".", ",", "“", "”", ",", ".", ":", ";", "?", "¿", "!", "¡", "'", ")", ")"],

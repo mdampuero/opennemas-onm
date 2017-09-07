@@ -1,10 +1,16 @@
 {if $category->fk_content_category == 0}
+  <script>
+      var languageData = {$language_data|@json_encode};
+  </script>
   <tr>
       <td>
           <a href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
-              {$category->title|clearslash|escape:"html"}
+              {$category->title->en|clearslash|escape:"html"}
           </a>
           <div class="listing-inline-actions">
+              {is_module_activated name="es.openhost.module.multilanguage"}
+                <translator language-data="[% languageData %]" link="{url name=admin_category_show id=$category->pk_content_category}" />
+              {/is_module_activated}
               {acl isAllowed="CATEGORY_UPDATE"}
                   {if $category->internal_category != 0 && $category->internal_category != 2}
                   <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
@@ -17,7 +23,7 @@
                   <a class="link link-danger del-category"
                       href="{url name=admin_category_delete id=$category->pk_content_category}"
                       data-url="{url name=admin_category_delete id=$category->pk_content_category}"
-                      data-title="{$category->title}"
+                      data-title="{$category->title->{$language_data['default']}}"
                       title="Eliminar">
                       <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                   </a>
@@ -26,7 +32,7 @@
                   <a class="link empty-category"
                       href="{url name=admin_category_empty id=$category->pk_content_category}"
                       data-url="{url name=admin_category_empty id=$category->pk_content_category}"
-                      data-title="{$category->title}"
+                      data-title="{$category->title->{$language_data['default']}}"
                       title="Vaciar">
                       <i class="fa fa-fire m-r-5"></i>{t}Empty{/t}
                   </a>
@@ -35,7 +41,7 @@
           </div>
       </td>
       <td>
-          {$category->name}
+          {$category->name->{$language_data['default']}}
       </td>
       <td class="hidden-xs text-center">
           {$contents_count['articles'][$category->id]|default:0}
@@ -93,7 +99,7 @@
                           <a class="link empty-category"
                               href="{url name=admin_category_empty id=$subcategory->pk_content_category}"
                               data-url="{url name=admin_category_empty id=$subcategory->pk_content_category}"
-                              data-title="{$subcategory->title}"
+                              data-title="{$subcategory->title->{$language_data['default']}}"
                               title="{t}Delete all the contents in this category{/t}">
                             <i class="fa fa-fire m-r-5"></i>{t}Empty{/t}
                           </a>
@@ -101,7 +107,7 @@
                           <a class="link link-danger del-category"
                               href="{url name=admin_category_delete id=$subcategory->pk_content_category}"
                               data-url="{url name=admin_category_delete id=$subcategory->pk_content_category}"
-                              data-title="{$subcategory->title}"
+                              data-title="{$subcategory->title->{$language_data['default']}}"
                               title="{t}Delete category{/t}">
                               <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                           </a>
@@ -111,7 +117,7 @@
           </div>
       </td>
       <td>
-          {$subcategory->name}
+          {$subcategory->name->{$language_data['default']}}
       </td>
       <td class="center hidden-xs">
           {$contents_count['articles'][$subcategory->id]|default:0}

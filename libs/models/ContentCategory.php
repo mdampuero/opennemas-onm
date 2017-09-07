@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Defines the ContentCategory class
  *
@@ -11,6 +12,8 @@
  * @package    Model
  */
 
+use Framework\Component\Data\LanguageObject;
+
 /**
  * Handles all the categories CRUD actions.
  *
@@ -18,6 +21,8 @@
  */
 class ContentCategory
 {
+    const MULTI_LANGUAGE_FIELDS = ['title', 'name'];
+
     /**
      * Category id
      *
@@ -113,28 +118,24 @@ class ContentCategory
      */
     public function load($properties)
     {
-        if (is_array($properties)) {
-            if (array_key_exists('pk_content_category', $properties)) {
-                $this->id = (int) $properties['pk_content_category'];
-            }
+        $propertiesAux = $properties;
+        if (is_object($properties)) {
+            $propertiesAux = get_object_vars($properties);
+        }
+        if (array_key_exists('pk_content_category', $propertiesAux)) {
+            $this->id = (int) $properties['pk_content_category'];
+        }
 
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
+        foreach ($properties as $k => $v) {
+            if (is_numeric($k)) {
+                continue;
             }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-
-            if (array_key_exists('pk_content_category', $properties)) {
-                $this->id = (int) $properties['pk_content_category'];
+            if (in_array($k, self::MULTI_LANGUAGE_FIELDS)) {
+                $aux = @unserialize($value);
+                $this->{$k} = (is_bool($aux))?new LanguageObject($v):new LanguageObject($aux);
+                continue;
             }
-
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
+            $this->{$k} = $v;
         }
 
         if (!empty($this->params) && is_string($this->params)) {
@@ -180,7 +181,13 @@ class ContentCategory
         // Generate slug for category
         $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
 
-        // Unserialize params
+        // Serialize params
+        $data['params'] = serialize($data['params']);
+
+        // Serialize language fields
+        array_map(function ($field) {
+            $data[$field] = serialize($data[$field]->getData());
+        }, MULTI_LANGUAGE_FIELDS);
         $data['params'] = serialize($data['params']);
 
         // Check if slug already exists and add number
@@ -231,6 +238,11 @@ class ContentCategory
     public function update($data)
     {
         $data['params'] = serialize($data['params']);
+        // Serialize language fields
+        array_map(function ($field) {
+            $data[$field] = serialize($data[$field]->getData());
+        }, MULTI_LANGUAGE_FIELDS);
+
         if ($data['logo_path'] == '1') {
             $data['logo_path'] = $this->logo_path;
         }
@@ -328,7 +340,7 @@ class ContentCategory
                 [ $this->pk_content_category ]
             );
 
-            $contentsArray = array_map(function($item) {
+            $contentsArray = array_map(function ($item) {
                 return $item['pk_fk_content'];
             }, $rs);
         } catch (\Exception $e) {

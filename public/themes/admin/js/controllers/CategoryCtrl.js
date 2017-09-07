@@ -92,6 +92,7 @@
             $scope.configurations = categoryData.configurations;
             $scope.internalCategories = categoryData.internalCategories;
             $scope.categoryUrl = categoryData.imagePath + '/sections/';
+            $scope.languageData = categoryData.language_data;
             $scope.loading = false;
             return;
           }
@@ -121,7 +122,9 @@
           15: 'fa-book',
         }
 
-
+        $scope.changeLanguage = function(language) {
+          alert(language);
+        }
 
 
 
