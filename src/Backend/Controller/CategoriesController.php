@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Common\Data\Adapter\MultiOptionAdapter;
 
 /**
  * Handles the actions for categories
@@ -37,7 +38,19 @@ class CategoriesController extends Controller
      */
     public function listAction(Request $request)
     {
-        $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
+        $categories = $this->get('category_repository')->findBy(null, 'name ASC');
+        $languageData = $this->getLocaleData($request);
+        $adaptParams = [
+            MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS           => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE            => $languageData['default'],
+        ];
+
+        $categories = array_map(
+            function ($category) use ($adaptParams) {
+                return $this->get('data.manager.adapter')->adapt('multi_option', $category, $adaptParams);
+            },
+            $categories
+        );
         $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
 
 
@@ -46,7 +59,7 @@ class CategoriesController extends Controller
             array(
                 'categories'        => $categories,
                 'contents_count'    => $contentsCount,
-                'language_data'     => $this->getLocaleData($request)
+                'language_data'     => $languageData
             )
         );
     }

@@ -12,8 +12,6 @@
  * @package    Model
  */
 
-use Framework\Component\Data\LanguageObject;
-
 /**
  * Handles all the categories CRUD actions.
  *
@@ -132,7 +130,7 @@ class ContentCategory
             }
             if (in_array($k, self::MULTI_LANGUAGE_FIELDS)) {
                 $aux = @unserialize($value);
-                $this->{$k} = (is_bool($aux))?new LanguageObject($v):new LanguageObject($aux);
+                $this->{$k} = (is_bool($aux))?$v:$aux;
                 continue;
             }
             $this->{$k} = $v;

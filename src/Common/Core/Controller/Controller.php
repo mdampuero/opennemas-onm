@@ -146,10 +146,9 @@ class Controller extends SymfonyController
      */
     protected function getLocaleData(Request $request = null, $sm = null)
     {
-
         $locale = null;
         if ($request != null) {
-            $locale = $request->request->filter('locale', null, FILTER_SANITIZE_STRING);
+            $locale = $request->query->filter('locale', null, FILTER_SANITIZE_STRING);
         }
         $smAux = $sm;
         if ($sm == null) {

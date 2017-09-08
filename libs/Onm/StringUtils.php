@@ -448,7 +448,7 @@ class StringUtils
 
             $slugArray = [];
             foreach ($string->getData() as $key => $value) {
-                $slugArray[$key] = StringUtils.generateSlug($value, $useStopList, $delimiter);
+                $slugArray[$key] = self::generateSlug($value, $useStopList, $delimiter);
             }
             return new DataObject($slugArray);
         }

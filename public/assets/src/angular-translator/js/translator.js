@@ -25,7 +25,7 @@ angular.module('onm.translator', [])
         },
         template: function(elem, attrs) {
           if(attrs.link) {
-            return '<a ng-repeat="language in languages" href="{{language.link}}"><span class="fa {{language.icon}}"></span>{{language.language}}</a>'
+            return '<a ng-repeat="language in languages" href="{{language.link}}" class="{{language.btnClass}}"><span class="fa {{language.icon}}"></span>{{language.language}}</a>'
           }
           return '<div class="btn-group"><button type="button" class="form-control btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="fa {{selected.icon}}"></span>{{selected.language}}<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li ng-repeat="language in languages" ng-if="language.language != selected.language"><a href="#" data-ng-click="changeSelected(language.language)"><span class="fa {{language.icon}}" ></span>{{language.language}}</a></li></ul></div>';
         },
@@ -63,6 +63,10 @@ angular.module('onm.translator', [])
         })($scope);
       };
 
+      $scope.getImg = function (link, language, data) {
+        return (!link && language == data.default)?'fa-exchange':'';
+      }
+
       $scope.initDirective = function ($attrs) {
         var data = $window.languageData || JSON.parse($attrs.languageData);
         var link = $attrs.link || null;
@@ -70,10 +74,11 @@ angular.module('onm.translator', [])
         $scope.languages = {};
         if(data.all) {
           data.all.map(function(language) {
-            var icon = (language == data.default)?'fa-exchange':'';
+            var icon = $scope.getImg(link, language, data)
             $scope.languages[language] = {'icon': icon, 'language': language};
             if(link) {
               $scope.languages[language].link = $attrs.link + '?locale=' + language;
+              $scope.languages[language].btnClass = 'btn ';
             }
             if(language == selected) {
               $scope.selected = $scope.languages[language];
@@ -81,6 +86,6 @@ angular.module('onm.translator', [])
           });
         }
         $scope.changeLanguage = $attrs.changeLanguage;
-      }
+      };
     }
   ]);
