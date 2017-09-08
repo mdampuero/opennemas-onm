@@ -3,6 +3,22 @@
 {block name="quick-create"}{/block}
 {block name="sidebar"}{/block}
 
+{block name="header"}
+<header class="header navbar navbar-inverse">
+  <div class="navbar-inner">
+    <div class="header-seperation">
+      <a class="header-logo pull-left" href="{url name=admin_welcome}">
+        <h1>
+          open<strong>nemas</strong>
+        </h1>
+      </a>
+    </div>
+    <div class="header-quick-nav">
+    </div>
+  </div>
+</header>
+{/block}
+
 {block name="page_container"}
   {if $environment == 'development'}
     <div class="error-container env-{$environment} p-t-50 p-l-30 p-r-30 p-b-30">

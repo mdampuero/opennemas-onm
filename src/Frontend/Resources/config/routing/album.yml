@@ -1,22 +1,30 @@
 frontend_album_ajax:
     path: /album/ajax
     defaults: { _controller: FrontendBundle:Albums:ajaxPaginated }
+    options:
+        l10n: true
 
 frontend_album_ajax_paginated:
     path: /album/more
     defaults: { _controller: FrontendBundle:Albums:ajaxAlbumPaginated }
+    options:
+        l10n: true
 
 frontend_album_frontpage:
     path: /album/{page}
     defaults: { _controller: FrontendBundle:Albums:frontpage, page : 1 }
     requirements:
         page: '([0-9]+)?'
+    options:
+        l10n: true
 
 frontend_album_frontpage_category:
     path: /album/{category_name}
     defaults: { _controller: FrontendBundle:Albums:frontpage }
     requirements:
         category_name: '[^/]+'
+    options:
+        l10n: true
 
 frontend_album_show_with_date_slug:
     path: /album/{category_name}/{date}/{slug}/{album_id}.{_format}
@@ -26,6 +34,8 @@ frontend_album_show_with_date_slug:
         date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
         slug         : '[^/]+'
         album_id     : '([0-9]+)'
+    options:
+        l10n: true
 
 frontend_album_show:
     path: /album/{category_name}/{slug}/{album_id}.{_format}
@@ -34,3 +44,5 @@ frontend_album_show:
         category_name: '[^/]+'
         slug         : '[^/]+'
         album_id     : '([0-9]+)'
+    options:
+        l10n: true
