@@ -28,7 +28,14 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class GeneralExceptionsListener implements EventSubscriberInterface
 {
-
+    /**
+     * Initializes the object with the current environment
+     *
+     * @param string $environment The current app environment name
+     *                            (normally between development, production or test)
+     *
+     * @return void
+     */
     public function __construct($environment)
     {
         $this->environment = $environment;
@@ -37,7 +44,9 @@ class GeneralExceptionsListener implements EventSubscriberInterface
     /**
      * Checks and handles exceptions that are not handled by any other listener.
      *
-     * @param GetResponseForExceptionEvent $event The event object.
+     * @param GetResponseForExceptionEvent $event The event object
+     *
+     * @return false|Response false if the exception was already handled, Response otherwise
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
@@ -53,28 +62,28 @@ class GeneralExceptionsListener implements EventSubscriberInterface
 
         $handling = true;
 
-        $exception = $event->getException();
-        $request = $event->getRequest();
-
-        $uri = $event->getRequest()->getRequestUri();
-
         if (!($exception instanceof AuthenticationException)) {
-            if (strpos($uri, '/admin') !== false) {
+            $exception = $event->getException();
+            $request   = $event->getRequest();
+            $uri       = $event->getRequest()->getRequestUri();
+
+            // Know the proper error controller depending on the "aplication"
+            if (strpos($uri, '/admin') === 0) {
                 $controller = 'BackendBundle:Error:default';
-            } elseif (strpos($uri, '/manager') !== false) {
+            } elseif (strpos($uri, '/manager') === 0) {
                 $controller = 'ManagerBundle:Error:default';
             } else {
                 $controller = 'FrontendBundle:Error:default';
             }
 
-            $attributes = array(
-                '_controller' => $controller, //$this->controller,
+            $attributes = [
+                '_controller' => $controller, // $this->controller,
                 'exception'   => FlattenException::create($exception),
                 // keep for BC -- as $format can be an argument of the controller callable
                 // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
                 // @deprecated in 2.4, to be removed in 3.0
                 'format'      => $request->getRequestFormat(),
-            );
+            ];
 
             $request = $request->duplicate(null, null, $attributes);
             $request->setMethod('GET');
@@ -83,6 +92,8 @@ class GeneralExceptionsListener implements EventSubscriberInterface
                 $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
                 $event->setResponse($response);
             } catch (\Exception $e) {
+                // Inserted this duplicated instruction to avoid phpcs to mark this empty catch as error
+                $handling = false;
             }
 
             $handling = false;
@@ -96,8 +107,8 @@ class GeneralExceptionsListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::EXCEPTION => array('onKernelException', 0),
-        );
+        return [
+            KernelEvents::EXCEPTION => ['onKernelException', 0],
+        ];
     }
 }
