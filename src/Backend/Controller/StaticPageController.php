@@ -30,17 +30,19 @@ class StaticPageController extends Controller
      */
     public function buildSlugAction(Request $request)
     {
+        $req = $request->request;
+
         // If the action is an Ajax request handle it, if not redirect to list
         $data = array(
-            'title'    => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-            'slug'     => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
-            'metadata' => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', null, FILTER_SANITIZE_STRING)),
-            'id'       => $request->request->filter('id', 0, FILTER_SANITIZE_STRING),
+            'title'    => $req->filter('title', null, FILTER_SANITIZE_STRING),
+            'slug'     => $req->filter('slug', null, FILTER_SANITIZE_STRING),
+            'metadata' => \Onm\StringUtils::normalizeMetadata($req->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'id'       => $req->filter('id', 0, FILTER_SANITIZE_STRING),
         );
 
         if ($request->isXmlHttpRequest()) {
             try {
-                $page = new \StaticPage();
+                $page   = new \StaticPage();
                 $output = $page->buildSlug($data['slug'], $data['id'], $data['title']);
             } catch (\Exception $e) {
                 $output = _("Can't get static page title. Check the title");
@@ -92,6 +94,7 @@ class StaticPageController extends Controller
         $converter = $em->getConverter('Content');
 
         $entity = new Content($converter->objectify($request->request->all()));
+
         $entity->contentTypeName     = 'static_page';
         $entity->fk_content_type     = 13;
         $entity->fk_author           = $this->get('core.user')->id;

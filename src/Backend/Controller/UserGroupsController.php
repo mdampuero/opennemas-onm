@@ -129,10 +129,10 @@ class UserGroupsController extends Controller
         try {
             $em->persist($userGroup);
 
-            $level = 'success';
+            $level   = 'success';
             $message = _('User group created successfully.');
         } catch (\Exception $e) {
-            $level = 'error';
+            $level   = 'error';
             $message = _('Unable to create the new user group');
         }
 
@@ -176,10 +176,10 @@ class UserGroupsController extends Controller
         try {
             $em->persist($userGroup);
 
-            $level = 'success';
+            $level   = 'success';
             $message = _('User group updated successfully.');
         } catch (\Exception $e) {
-            $level = 'error';
+            $level   = 'error';
             $message = sprintf(_('Unable to update the user group with id "%d"'), $data['id']);
         }
 

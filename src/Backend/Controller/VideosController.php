@@ -34,13 +34,15 @@ class VideosController extends Controller
     {
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');
 
-        $this->category = $this->get('request_stack')->getCurrentRequest()->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
+
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
         if (empty($this->category)) {
-            $this->category ='widget';
+            $this->category = 'widget';
         }
 
         $this->view->assign([
@@ -122,7 +124,7 @@ class VideosController extends Controller
                 return $this->render('video/selecttype.tpl');
             } else {
                 $authorsComplete = \User::getAllUsersAuthors();
-                $authors = array('0' => _(' - Select one author - '));
+                $authors         = array('0' => _(' - Select one author - '));
                 foreach ($authorsComplete as $author) {
                     $authors[$author->id] = $author->name;
                 }
@@ -138,7 +140,7 @@ class VideosController extends Controller
             }
         }
 
-        $requestPost  = $request->request;
+        $requestPost = $request->request;
 
         $type     = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
         $page     = $requestPost->getDigits('page', 1);
@@ -151,18 +153,22 @@ class VideosController extends Controller
             'content_status' => (int) $requestPost->getDigits('content_status', 0),
             'fk_author'      => $requestPost->getDigits('fk_author', 0),
             'information'    => json_decode($requestPost->get('information', ''), true),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'metadata'       =>
+                \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'params'         => $request->request->get('params', []),
             'description'    => $requestPost->get('description', ''),
-            'endtime'        => $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      => $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'endtime'        =>
+                $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'starttime'      =>
+                $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'          =>
+                $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'video_url'      => $requestPost->filter('video_url', ''),
             'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
         ];
 
         if ($type == 'external' || $type == 'script') {
-            $videoData['information'] = $requestPost->get('infor', '');
+            $videoData['information']              = $requestPost->get('infor', '');
             $videoData['information']['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
         }
 
@@ -202,9 +208,9 @@ class VideosController extends Controller
     {
         $id = $request->query->getDigits('id');
 
-        $requestPost  = $request->request;
-        $category = $requestPost->getDigits('category');
-        $video = new \Video($id);
+        $requestPost = $request->request;
+        $category    = $requestPost->getDigits('category');
+        $video       = new \Video($id);
 
         if (is_null($video->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -231,21 +237,26 @@ class VideosController extends Controller
             'category'       => (int) $category,
             'content_status' => (int) $requestPost->getDigits('content_status', 0),
             'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
-            'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'          =>
+                $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'body'           => $requestPost->filter('body', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'metadata'       =>
+                \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'description'    => $requestPost->get('description', ''),
             'fk_author'      => $requestPost->getDigits('fk_author', 0),
-            'starttime'      => $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'endtime'        => $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+            'starttime'      =>
+                $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'endtime'        =>
+                $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'author_name'    =>
+                $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
             'information'    => json_decode($requestPost->get('information', ''), true),
             'video_url'      => $requestPost->filter('video_url', ''),
             'params'         => $request->request->get('params', []),
         ];
 
         if ($video->author_name == 'external' || $video->author_name == 'script') {
-            $videoData['information'] = $requestPost->get('infor', '');
+            $videoData['information']              = $requestPost->get('infor', '');
             $videoData['information']['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
         }
 
@@ -272,7 +283,7 @@ class VideosController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $id =  $request->query->getDigits('id');
+        $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
@@ -355,8 +366,9 @@ class VideosController extends Controller
                 $video->thumb = $video->getThumb();
             }
         }
+
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array('0' => _(' - Select one author - '));
+        $authors         = array('0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
@@ -383,13 +395,13 @@ class VideosController extends Controller
      */
     public function videoInformationAction(Request $request)
     {
-        $url = $request->query->get('url', null, FILTER_DEFAULT);
-        $url = rawurldecode($url);
+        $url    = $request->query->get('url', null, FILTER_DEFAULT);
+        $url    = rawurldecode($url);
         $params = $this->container->getParameter('panorama');
 
         if ($url) {
             try {
-                $videoP = new \Panorama\Video($url, $params);
+                $videoP      = new \Panorama\Video($url, $params);
                 $information = $videoP->getVideoDetails();
 
                 $output = $this->renderView(
@@ -454,7 +466,7 @@ class VideosController extends Controller
     public function savePositionsAction(Request $request)
     {
         $positions = $request->request->get('positions');
-        $result = true;
+        $result    = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
@@ -462,7 +474,7 @@ class VideosController extends Controller
             $pos = 1;
 
             foreach ($positions as $id) {
-                $video = new \Video($id);
+                $video  = new \Video($id);
                 $result = $result && $video->setPosition($pos);
                 $pos++;
             }
@@ -476,12 +488,12 @@ class VideosController extends Controller
 
         if ($msg) {
             $msg = "<div class='alert alert-success'>"
-                ._("Positions saved successfully.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+                . _("Positions saved successfully.")
+                . '<button data-dismiss="alert" class="close">×</button></div>';
         } else {
             $msg = "<div class='alert alert-error'>"
-                ._("Unable to save the new positions. Please contact with your system administrator.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+                . _("Unable to save the new positions. Please contact with your system administrator.")
+                . '<button data-dismiss="alert" class="close">×</button></div>';
         }
 
         return new Response($msg);
@@ -502,7 +514,7 @@ class VideosController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int)$categoryId);
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int) $categoryId);
 
         $filters = array(
             'content_type_name' => array(array('value' => 'video')),

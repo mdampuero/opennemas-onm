@@ -53,8 +53,7 @@ class UserController extends Controller
         // Get minimum password level
         $defaultLevel  = $this->container->getParameter('password_min_level');
         $instanceLevel = $this->get('setting_repository')->get('pass_level');
-        $minPassLevel  = ($instanceLevel)? $instanceLevel: $defaultLevel;
-
+        $minPassLevel  = ($instanceLevel) ? $instanceLevel : $defaultLevel;
 
         $id = $this->get('core.instance')->getClient();
 
@@ -63,6 +62,7 @@ class UserController extends Controller
                 $extra['client'] = $em->getRepository('Client')
                     ->find($id)->getData();
             } catch (\Exception $e) {
+                $extra['client'] = null;
             }
         }
 
@@ -159,14 +159,14 @@ class UserController extends Controller
         } else {
             $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
             $token = '';
+            $em    = $this->get('orm.manager');
+
             // Get user by email
-            $em   = $this->get('orm.manager');
             try {
                 $user = $em->getRepository('User')->findOneBy("email = '$email'");
             } catch (EntityNotFoundException $e) {
                 $user = new \User();
             }
-
 
             // If e-mail exists in DB
             if (!is_null($user->id)) {
@@ -207,7 +207,7 @@ class UserController extends Controller
                     $mailer->send($message);
 
                     $this->get('application.log')->notice(
-                        "Email sent. Backend restore user password (to: ".$user->email.")"
+                        "Email sent. Backend restore user password (to: " . $user->email . ")"
                     );
 
                     $this->view->assign([
@@ -218,7 +218,7 @@ class UserController extends Controller
                     // Log this error
                     $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
-                        ."user {$user->id}: ".$e->getMessage()
+                        . "user {$user->id}: " . $e->getMessage()
                     );
 
                     $request->getSession()->getFlashBag()->add(
@@ -332,17 +332,18 @@ class UserController extends Controller
 
         // TODO: Remove when data supports empty values (when using SPA)
         $user->type = empty($user->type) ? 0 : $user->type;
-        $user->url = empty($user->url) ? ' ' : $user->url;
-        $user->bio = empty($user->bio) ? ' ' : $user->bio;
+        $user->url  = empty($user->url) ? ' ' : $user->url;
+        $user->bio  = empty($user->bio) ? ' ' : $user->bio;
 
         try {
             // Check if the user is already registered
             $em->getRepository('User')->findOneBy(
-                'name ~ "'.$data['username'].'" or email ~ "'.$data['email'].'"'
+                'name ~ "' . $data['username'] . '" or email ~ "' . $data['email'] . '"'
             );
 
             throw new \Exception(_('The email address or user name is already in use.'));
         } catch (\Exception $e) {
+            $userExists = true;
         }
 
         try {
@@ -415,7 +416,6 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
-
         if (!empty($user->paywall_time_limit)
             && is_object($user->paywall_time_limit)
         ) {
@@ -473,6 +473,7 @@ class UserController extends Controller
                 $extra['client'] = $em->getRepository('Client')
                     ->find($id)->getData();
             } catch (\Exception $e) {
+                $extra['client'] = null;
             }
         }
 
@@ -536,7 +537,7 @@ class UserController extends Controller
                 ->find($id);
         }
 
-        $session  = $request->getSession();
+        $session = $request->getSession();
 
         $session->set(
             '_security.backend.target_path',
@@ -628,7 +629,7 @@ class UserController extends Controller
         try {
             // Check if the user is already registered
             $users = array_filter($em->getRepository('User')->findBy(
-                'name ~ "'.$data['username'].'" or email ~ "'.$data['email'].'"'
+                'name ~ "' . $data['username'] . '" or email ~ "' . $data['email'] . '"'
             ), function ($element) use ($user) {
                 return $user->id !== $element->id;
             });
@@ -675,8 +676,8 @@ class UserController extends Controller
     protected function createAvatar($file, $username)
     {
         // Generate image path and upload directory
-        $relativeAuthorImagePath ="/authors/".$username;
-        $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
+        $relativeAuthorImagePath = "/authors/" . $username;
+        $uploadDirectory         = MEDIA_IMG_PATH . $relativeAuthorImagePath;
 
         // Get original information of the uploaded/local image
         $originalFileName = $file->getBaseName();
@@ -685,7 +686,7 @@ class UserController extends Controller
         // Generate new file name
         $currentTime = gettimeofday();
         $microTime   = intval(substr($currentTime['usec'], 0, 5));
-        $newFileName = date("YmdHis").$microTime.".".$fileExtension;
+        $newFileName = date("YmdHis") . $microTime . "." . $fileExtension;
 
         // Check upload directory
         if (!is_dir($uploadDirectory)) {
@@ -696,8 +697,8 @@ class UserController extends Controller
         $file->move($uploadDirectory, $newFileName);
 
         // Get all necessary data for the photo
-        $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
-        $data = array(
+        $infor = new \MediaItem($uploadDirectory . '/' . $newFileName);
+        $data  = array(
             'title'       => $originalFileName,
             'name'        => $newFileName,
             'user_name'   => $newFileName,
@@ -706,7 +707,7 @@ class UserController extends Controller
             'category'    => '',
             'created'     => $infor->atime,
             'changed'     => $infor->mtime,
-            'size'        => round($infor->size/1024, 2),
+            'size'        => round($infor->size / 1024, 2),
             'width'       => $infor->width,
             'height'      => $infor->height,
             'type'        => $infor->type,
@@ -714,7 +715,7 @@ class UserController extends Controller
         );
 
         // Create new photo
-        $photo = new \Photo();
+        $photo   = new \Photo();
         $photoId = $photo->create($data);
 
         return $photoId;

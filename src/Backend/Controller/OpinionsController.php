@@ -54,8 +54,8 @@ class OpinionsController extends Controller
                 array_key_exists('is_blog', $author->params) &&
                 $author->params['is_blog'] == 1
             ) {
-                $blog = 1;
-                $author->name = $author->name.' (Blog)';
+                $blog         = 1;
+                $author->name = $author->name . ' (Blog)';
             }
 
             $authors[] = [
@@ -64,14 +64,11 @@ class OpinionsController extends Controller
             ];
         }
 
-        return $this->render(
-            'opinion/list.tpl',
-            array(
-                'authors' => $authors,
-                'blog'    => $blog,
-                'home'    => false,
-            )
-        );
+        return $this->render('opinion/list.tpl', [
+            'authors' => $authors,
+            'blog'    => $blog,
+            'home'    => false,
+        ]);
     }
 
     /**
@@ -87,7 +84,7 @@ class OpinionsController extends Controller
     {
         $this->loadCategories();
 
-        $page =  $request->query->getDigits('page', 1);
+        $page           = $request->query->getDigits('page', 1);
         $configurations = s::get('opinion_settings');
 
         $numEditorial = $configurations['total_editorial'];
@@ -97,40 +94,42 @@ class OpinionsController extends Controller
             $numOpinions = $configurations['total_opinions'];
         }
 
-        $cm = new \ContentManager();
+        $cm         = new \ContentManager();
         $allAuthors = \User::getAllUsersAuthors();
 
-        $authorsBlog = array();
+        $authorsBlog = [];
         foreach ($allAuthors as $authorData) {
             if ($authorData->is_blog == 1) {
                 $authorsBlog[$authorData->id] = $authorData;
             }
         }
-        $where ='';
+
+        $where = '';
         if (!empty($authorsBlog)) {
-            $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+            $where .= ' AND opinions.fk_author NOT IN (' . implode(', ', array_keys($authorsBlog)) . ") ";
         }
 
         $opinions = $cm->find(
             'Opinion',
-            'in_home=1 and content_status=1 and type_opinion=0 '.$where,
+            'in_home=1 and content_status=1 and type_opinion=0 ' . $where,
             'ORDER BY position ASC , created DESC LIMIT ' . $numOpinions
         );
 
-        $editorial = array();
+        $editorial = [];
         if ($numEditorial > 0) {
             $editorial = $cm->find(
                 'Opinion',
                 'in_home=1 and content_status=1 and type_opinion=1',
-                'ORDER BY position ASC, created DESC LIMIT '.$numEditorial
+                'ORDER BY position ASC, created DESC LIMIT ' . $numEditorial
             );
         }
-        $director = array();
-        if ($numDirector >0) {
+
+        $director = [];
+        if ($numDirector > 0) {
             $director = $cm->find(
                 'Opinion',
                 'in_home=1 and content_status=1 and type_opinion=2',
-                'ORDER BY position ASC , created DESC LIMIT '.$numDirector
+                'ORDER BY position ASC , created DESC LIMIT ' . $numDirector
             );
         }
 
@@ -147,7 +146,8 @@ class OpinionsController extends Controller
                 sprintf(_("You must put %d opinions %s in the frontpage "), $numEditorial, 'editorial')
             );
         }
-        if (($numDirector>0) && (count($director) != $numDirector)) {
+
+        if (($numDirector > 0) && (count($director) != $numDirector)) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 sprintf(_("You must put %d opinions %s in the frontpage "), $numDirector, 'opinion del director')
@@ -159,24 +159,21 @@ class OpinionsController extends Controller
                 $opinion->author = new \User($opinion->fk_author);
             }
         } else {
-            $opinions = array();
+            $opinions = [];
         }
 
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
 
-        return $this->render(
-            'opinion/list.tpl',
-            array(
-                'autores'    => $allAuthors,
-                'opinions'   => \Onm\StringUtils::convertToUtf8($opinions),
-                'director'   => \Onm\StringUtils::convertToUtf8($director),
-                'editorial'  => \Onm\StringUtils::convertToUtf8($editorial),
-                'type'       => 'frontpage',
-                'page'       => $page,
-                'home'       => true,
-            )
-        );
+        return $this->render('opinion/list.tpl', [
+            'autores'    => $allAuthors,
+            'opinions'   => \Onm\StringUtils::convertToUtf8($opinions),
+            'director'   => \Onm\StringUtils::convertToUtf8($director),
+            'editorial'  => \Onm\StringUtils::convertToUtf8($editorial),
+            'type'       => 'frontpage',
+            'page'       => $page,
+            'home'       => true,
+        ]);
     }
 
     /**
@@ -220,7 +217,7 @@ class OpinionsController extends Controller
         $this->loadCategories();
 
         // Fetch author data and allAuthors
-        $author = $this->get('user_repository')->find($opinion->fk_author);
+        $author     = $this->get('user_repository')->find($opinion->fk_author);
         $allAuthors = \User::getAllUsersAuthors();
 
         // Fetch associated photos with opinion
@@ -239,15 +236,12 @@ class OpinionsController extends Controller
             $this->view->assign('photo2', $photo2);
         }
 
-        return $this->render(
-            'opinion/new.tpl',
-            array(
-                'opinion'        => $opinion,
-                'all_authors'    => $allAuthors,
-                'author'         => $author,
-                'commentsConfig' => s::get('comments_config'),
-            )
-        );
+        return $this->render('opinion/new.tpl', [
+            'opinion'        => $opinion,
+            'all_authors'    => $allAuthors,
+            'author'         => $author,
+            'commentsConfig' => s::get('comments_config'),
+        ]);
     }
 
     /**
@@ -268,16 +262,13 @@ class OpinionsController extends Controller
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
-            return $this->render(
-                'opinion/new.tpl',
-                array(
-                    'all_authors'    => $allAuthors,
-                    'commentsConfig' => s::get('comments_config'),
-                )
-            );
+            return $this->render('opinion/new.tpl', [
+                'all_authors'    => $allAuthors,
+                'commentsConfig' => s::get('comments_config'),
+            ]);
         }
 
-        $params = $request->request->get('params', []);
+        $params  = $request->request->get('params', []);
         $opinion = new \Opinion();
 
         $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
@@ -293,14 +284,18 @@ class OpinionsController extends Controller
             'fk_publisher'        => $this->getUser()->id,
             'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
             'img1'                => $request->request->getDigits('img1', ''),
-            'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img1_footer'         =>
+                $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'img2'                => $request->request->getDigits('img2', ''),
-            'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img2_footer'         =>
+                $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'in_home'             => (empty($inhome)) ? 0 : 1,
-            'metadata'            => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'metadata'            =>
+                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'           => $request->request->get('starttime', ''),
             'summary'             => $request->request->get('summary', ''),
-            'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'               =>
+                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
             'params'              => [
@@ -339,7 +334,7 @@ class OpinionsController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id     = $request->query->getDigits('id');
         $params = $request->request->get('params', []);
 
         $opinion = new \Opinion($id);
@@ -365,8 +360,8 @@ class OpinionsController extends Controller
         }
 
         $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome      = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-        $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
+        $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
+        $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
         // Check empty data
         if (count($request->request) < 1) {
@@ -378,7 +373,7 @@ class OpinionsController extends Controller
             return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
         }
 
-        $data = array(
+        $data = [
             'body'                => $request->request->get('body', ''),
             'category'            => 'opinion',
             'content_status'      => (empty($contentStatus)) ? 0 : 1,
@@ -389,20 +384,24 @@ class OpinionsController extends Controller
             'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
             'id'                  => $id,
             'img1'                => $request->request->getDigits('img1', ''),
-            'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img1_footer'         =>
+                $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'img2'                => $request->request->getDigits('img2', ''),
-            'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'img2_footer'         =>
+                $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'in_home'             => (empty($inhome)) ? 0 : 1,
-            'metadata'            => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'metadata'            =>
+                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'           => $request->request->get('starttime', ''),
             'summary'             => $request->request->get('summary', ''),
-            'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'               =>
+                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
             'params'              => [
                 'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
-        );
+        ];
 
         if ($opinion->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -483,7 +482,7 @@ class OpinionsController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int)$categoryId);
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int) $categoryId);
 
         $filters = array(
             'content_type_name' => array(array('value' => 'opinion')),
@@ -614,8 +613,8 @@ class OpinionsController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $opinion = new \Opinion();
-        $cm = new  \ContentManager();
+        $opinion    = new \Opinion();
+        $cm         = new \ContentManager();
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
 
@@ -631,14 +630,14 @@ class OpinionsController extends Controller
         // Set a dummy Id for the opinion if doesn't exists
         if (empty($opinion->pk_article) && empty($opinion->id)) {
             $opinion->pk_article = '-1';
-            $opinion->id = '-1';
+            $opinion->id         = '-1';
         }
 
         // Fetch information for Advertisements
         list($positions, $advertisements) =
             \Frontend\Controller\OpinionsController::getAds('inner');
 
-        $author = new \User($opinion->fk_author);
+        $author          = new \User($opinion->fk_author);
         $opinion->author = $author;
 
         // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
@@ -647,7 +646,7 @@ class OpinionsController extends Controller
         // Machine suggested contents code -----------------------------
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
             'opinion',
-            " pk_content <>".$opinion->id,
+            " pk_content <>" . $opinion->id,
             4
         );
 
@@ -655,11 +654,12 @@ class OpinionsController extends Controller
         foreach ($machineSuggestedContents as &$suggest) {
             $element = new \Opinion($suggest['pk_content']);
             if (!empty($element->author)) {
-                $suggest['author_name'] = $element->author;
+                $suggest['author_name']      = $element->author;
                 $suggest['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
             } else {
                 $suggest['author_name_slug'] = "author";
             }
+
             $suggest['uri'] = $element->uri;
         }
 
@@ -671,19 +671,19 @@ class OpinionsController extends Controller
 
         // Fetch the other opinions for this author
         if ($opinion->type_opinion == 1) {
-            $where =' opinions.type_opinion = 1';
+            $where         = ' opinions.type_opinion = 1';
             $opinion->name = 'Editorial';
             $this->view->assign('actual_category', 'editorial');
         } elseif ($opinion->type_opinion == 2) {
-            $where =' opinions.type_opinion = 2';
+            $where         = ' opinions.type_opinion = 2';
             $opinion->name = 'Director';
         } else {
-            $where =' opinions.fk_author='.($opinion->fk_author);
+            $where = ' opinions.fk_author=' . ($opinion->fk_author);
         }
 
         $otherOpinions = $cm->find(
             'Opinion',
-            $where.' AND `pk_opinion` <>' .$opinion->id.' AND content_status=1',
+            $where . ' AND `pk_opinion` <>' . $opinion->id . ' AND content_status=1',
             ' ORDER BY created DESC LIMIT 0,9'
         );
 
@@ -738,7 +738,7 @@ class OpinionsController extends Controller
      */
     public function loadCategories()
     {
-        $this->ccm  = \ContentCategoryManager::get_instance();
+        $this->ccm = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData)
             = $this->ccm->getArraysMenu();

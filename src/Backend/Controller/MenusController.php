@@ -34,37 +34,46 @@ class MenusController extends Controller
      */
     public function init()
     {
-        $this->pages = array(array('title'=>_("Frontpage"),'link'=>"/"));
+        $this->pages = array(array('title' => _("Frontpage"),'link' => "/"));
 
         if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Opinion"),'link'=>"opinion/"));
+            array_push($this->pages, array('title' => _("Opinion"),'link' => "opinion/"));
         }
+
         if ($this->get('core.security')->hasExtension('BLOG_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Bloggers"),'link'=>"blog/"));
+            array_push($this->pages, array('title' => _("Bloggers"),'link' => "blog/"));
         }
+
         if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Album"),'link'=>"album/"));
+            array_push($this->pages, array('title' => _("Album"),'link' => "album/"));
         }
+
         if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Video"),'link'=>"video/"));
+            array_push($this->pages, array('title' => _("Video"),'link' => "video/"));
         }
+
         if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Poll"),'link'=>"poll/"));
+            array_push($this->pages, array('title' => _("Poll"),'link' => "poll/"));
         }
+
         if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Letters to the Editor"),'link'=>"cartas-al-director/"));
+            array_push($this->pages, array('title' => _("Letters to the Editor"),'link' => "cartas-al-director/"));
         }
+
         if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
-            array_push($this->pages, array('title'=>_("News Stand"),'link'=>"portadas-papel/"));
+            array_push($this->pages, array('title' => _("News Stand"),'link' => "portadas-papel/"));
         }
+
         if ($this->get('core.security')->hasExtension('FORM_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Form"),'link'=>"participa/"));
+            array_push($this->pages, array('title' => _("Form"),'link' => "participa/"));
         }
+
         if ($this->get('core.security')->hasExtension('NEWSLETTER_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Newsletter"),'link'=>"newsletter/"));
+            array_push($this->pages, array('title' => _("Newsletter"),'link' => "newsletter/"));
         }
+
         if ($this->get('core.security')->hasExtension('LIBRARY_MANAGER')) {
-            array_push($this->pages, array('title'=>_("Archive"),'link'=>"archive/content/"));
+            array_push($this->pages, array('title' => _("Archive"),'link' => "archive/content/"));
         }
 
         $this->menuPositions = array_merge(
@@ -102,7 +111,7 @@ class MenusController extends Controller
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
-        $menu = new \Menu($id);
+        $menu        = new \Menu($id);
         $menu->items = array_values($menu->items); // Get categories from menu
 
         if (is_null($menu->id)) {
@@ -115,7 +124,7 @@ class MenusController extends Controller
         }
 
         $ccm = \ContentCategoryManager::get_instance();
-        $cm = new \ContentManager();
+        $cm  = new \ContentManager();
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
         // Unused var  $categoryData
@@ -159,20 +168,17 @@ class MenusController extends Controller
             $syncSites = $syncParams;
         }
 
-        return $this->render(
-            'menues/new.tpl',
-            array(
-                'categories'      => $parentCategories,
-                'albumCategories' => $albumCategories,
-                'videoCategories' => $videoCategories,
-                'pollCategories'  => $pollCategories,
-                'staticPages'     => $statics,
-                'pages'           => $this->pages,
-                'menu'            => $menu,
-                'menu_positions'  => $this->menuPositions,
-                'elements'        => $syncSites,
-            )
-        );
+        return $this->render('menues/new.tpl', [
+            'categories'      => $parentCategories,
+            'albumCategories' => $albumCategories,
+            'videoCategories' => $videoCategories,
+            'pollCategories'  => $pollCategories,
+            'staticPages'     => $statics,
+            'pages'           => $this->pages,
+            'menu'            => $menu,
+            'menu_positions'  => $this->menuPositions,
+            'elements'        => $syncSites,
+        ]);
     }
 
     /**
@@ -188,16 +194,14 @@ class MenusController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $data = array(
+            $data = [
                 'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-                'params'    => serialize(
-                    array(
-                        'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
-                    )
-                ),
+                'params'    => serialize([
+                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
+                ]),
                 'items'     => json_decode($request->request->get('items')),
                 'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
-            );
+            ];
 
             $menu = new \Menu();
             if ($menu->create($data)) {
@@ -213,10 +217,7 @@ class MenusController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_menu_show',
-                    array('id' => $menu->pk_menu)
-                )
+                $this->generateUrl('admin_menu_show', ['id' => $menu->pk_menu])
             );
         } else {
             $cm  = new \ContentManager();
@@ -229,7 +230,8 @@ class MenusController extends Controller
             foreach ($subcat as $subcategory) {
                 $parentCategories = array_merge($parentCategories, $subcategory);
             }
-            $albumCategories = $videoCategories = $pollCategories = array();
+
+            $albumCategories = $videoCategories = $pollCategories = [];
             foreach ($ccm->categories as $category) {
                 if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
                     $albumCategories[] = $category;
@@ -263,20 +265,17 @@ class MenusController extends Controller
                 $syncSites = $syncParams;
             }
 
-            return $this->render(
-                'menues/new.tpl',
-                array(
-                    'categories'      => $parentCategories,
-                    'subcat'          => $subcat,
-                    'albumCategories' => $albumCategories,
-                    'videoCategories' => $videoCategories,
-                    'pollCategories'  => $pollCategories,
-                    'staticPages'     => $statics,
-                    'pages'           => $this->pages,
-                    'menu_positions'  => $this->menuPositions,
-                    'elements'        => $syncSites,
-                )
-            );
+            return $this->render('menues/new.tpl', [
+                'categories'      => $parentCategories,
+                'subcat'          => $subcat,
+                'albumCategories' => $albumCategories,
+                'videoCategories' => $videoCategories,
+                'pollCategories'  => $pollCategories,
+                'staticPages'     => $statics,
+                'pages'           => $this->pages,
+                'menu_positions'  => $this->menuPositions,
+                'elements'        => $syncSites,
+            ]);
         }
     }
 
@@ -292,7 +291,7 @@ class MenusController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id = $this->request->query->getDigits('id');
+        $id   = $this->request->query->getDigits('id');
         $menu = new \Menu($id);
 
         if ($menu->pk_menu == null) {
@@ -307,21 +306,19 @@ class MenusController extends Controller
             if (count($request->request) < 1) {
                 $this->get('session')->getFlashBag()->add('error', _("Menu data sent not valid."));
 
-                return $this->redirect($this->generateUrl('admin_menu_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('admin_menu_show', ['id' => $id]));
             }
 
-            $data = array(
+            $data = [
                 'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-                'params'    => serialize(
-                    array(
-                        'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
-                    )
-                ),
+                'params'    => serialize([
+                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
+                ]),
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode($request->request->get('items')),
                 'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
-            );
+            ];
 
             if ($menu->update($data)) {
                 $this->get('session')->getFlashBag()->add(
@@ -336,10 +333,7 @@ class MenusController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_menu_show',
-                    array('id' => $menu->pk_menu)
-                )
+                $this->generateUrl('admin_menu_show', ['id' => $menu->pk_menu])
             );
         }
     }
