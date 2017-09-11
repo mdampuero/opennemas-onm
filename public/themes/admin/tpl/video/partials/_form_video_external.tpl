@@ -1,14 +1,14 @@
 <div class="form-group">
     <label for="title" class="form-label">{t}Title{/t}</label>
     <div class="controls">
-        <input type="text" id="title" name="title" value="{$video->title|clearslash|escape:"html"|default:""}" required="required" class="form-control"/>
+        <input type="text" id="title" name="title" value="{$video->title|clearslash|escape:"html"|default:""}" required class="form-control"/>
     </div>
 </div>
 
 <div class="form-group">
     <label for="description" class="form-label">{t}Description{/t}</label>
     <div class="controls">
-        <textarea name="description" id="description" required="required" rows="3" class="form-control">{$video->description|clearslash|default:""}</textarea>
+        <textarea name="description" id="description" required rows="3" class="form-control">{$video->description|clearslash|default:""}</textarea>
     </div>
 </div>
 
@@ -22,7 +22,7 @@
 <div class="form-group">
     <label for="typ_medida" class="form-label">{t}Video type and file URLs{/t}</label>
     <div class="controls">
-        <select name="file_type" id="file_type" ng-model="file_type" required="required">
+        <select name="file_type" id="file_type" ng-model="file_type" required>
           <option value="html5" {if !empty($video->id) && $video->type == 'html5'}selected="selected"{/if}>{t}HTML5 video{/t}</option>
           <option value="flv" {if !empty($video->id) && $video->type == 'flv'}selected="selected"{/if}>{t}Flash video{/t}</option>
         </select>

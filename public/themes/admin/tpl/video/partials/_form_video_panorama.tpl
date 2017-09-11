@@ -3,7 +3,7 @@
     <label for="video_url" class="form-label">{t}Video URL{/t}</label>
     <div class="controls">
       <div class="input-group">
-        <input type="text" id="video_url" name="video_url" value="{$video->video_url|default:""}" required="required" class="form-control" />
+        <input type="text" id="video_url" name="video_url" value="{$video->video_url|default:""}" required class="form-control" />
         <span class="input-group-btn">
           <button class="btn btn-primary" id="video_url_button" type="button">
             <span class="fa fa-refresh"></span>
@@ -16,7 +16,7 @@
         {javascripts}
           <script type="text/javascript" defer="defer">
             jQuery(document).ready(function($) {
-              jQuery('#video_url').popover({
+              $('#video_url').popover({
                 placement: 'bottom',
                 trigger: 'hover',
                 animation: true,

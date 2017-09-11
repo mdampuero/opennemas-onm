@@ -62,7 +62,7 @@
               <label for="name" class="form-label">{t}Name{/t}</label>
               <div class="controls">
                 <input type="text" id="name" name="name" value="{$menu->name|default:""}"
-                maxlength="120" tabindex="1" required="required" class="form-control"
+                maxlength="120" tabindex="1" required class="form-control"
                 {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
               </div>
             </div>

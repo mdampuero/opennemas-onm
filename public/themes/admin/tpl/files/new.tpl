@@ -68,14 +68,13 @@
               <div class="form-group">
                 <label for="" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$attaches->title|clearslash}"
-                                                             class="form-control" required="required">
+                  <input type="text" id="title" name="title" value="{$attaches->title|clearslash}" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="description" class="form-label">{t}Description{/t}</label>
                 <div class="controls">
-                  <textarea id="description" name="description" class="form-control" ng-model="description" required="required" class="required" onm-editor onm-editor-preset="simple">{$attaches->description|clearslash}</textarea>
+                  <textarea id="description" name="description" class="form-control" ng-model="description" required class="required" onm-editor onm-editor-preset="simple">{$attaches->description|clearslash}</textarea>
                 </div>
               </div>
             </div>
@@ -93,7 +92,7 @@
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$attaches->metadata|clearslash}">
+                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$attaches->metadata|clearslash}">
                 </div>
               </div>
               <div class="form-group">
@@ -103,7 +102,7 @@
                     <a class="btn btn-white thumbnail center" target="_blank" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}">
                       <span class="fa fa-download fa-2x"></span> <br>{t}Download{/t}
                     </a>
-                    <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required="required" readonly="readonly">
+                    <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required readonly="readonly">
                   {else}
                     <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                       <div class="form-control" data-trigger="fileinput" style="height: 37px;">

@@ -66,14 +66,14 @@
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$cover->title|default:""}" required="required" class="form-control"/>
+                  <input type="text" id="title" name="title" value="{$cover->title|default:""}" required class="form-control"/>
                 </div>
               </div>
               <div class="form-group">
                 <label for="date" class="form-label">{t}Date{/t}</label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" type="text" id="date" name="date" value="{$cover->date}" required="required" placeholder="{t}Click here to pick a date{/t}" aria-describedby="basic-addon2">
+                    <input class="form-control" type="text" id="date" name="date" value="{$cover->date}" required placeholder="{t}Click here to pick a date{/t}" aria-describedby="basic-addon2">
                     <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
                   </div>
                 </div>
@@ -82,13 +82,13 @@
                 <label for="price" class="form-label">{t}Price{/t}</label>
                 <span class="help">{t}Split decimals with a dot{/t}.</span>
                 <div class="controls">
-                  <input type="number" step="any" id="price" name="price" value="{$cover->price|number_format:2:".":","|default:"0"}" required="required" />
+                  <input type="number" step="any" id="price" name="price" value="{$cover->price|number_format:2:".":","|default:"0"}" required />
                 </div>
               </div>
               <div class="form-group">
                 <label for="type" class="form-label">{t}Type{/t}</label>
                 <div class="controls">
-                  <select name="type" id="type" required="required">
+                  <select name="type" id="type" required>
                     <option value="0" {if empty($cover) || $cover->type==0}selected{/if}>{t}Item{/t}</option>
                     <option value="1" {if $cover->type==1}selected{/if}>{t}Subscription{/t}</option>
                   </select>
@@ -144,7 +144,7 @@
               <div class="form-group">
                 <label for="category" class="form-label">{t}Category{/t}</label>
                 <div class="controls">
-                  <select name="category" id="category" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
+                  <select name="category" id="category" required {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                     {section name=as loop=$allcategorys}
                       {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
@@ -162,7 +162,7 @@
                 <label for="metadata" class="form-label">{t}Keywords{/t}</label>
                 <span class="help">{t}List of words separated by commas{/t}.</span>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$cover->metadata|default:""}"/>
+                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$cover->metadata|default:""}"/>
                 </div>
               </div>
             </div>

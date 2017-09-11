@@ -3,10 +3,14 @@ frontend_author_frontpage:
     defaults: { _controller: FrontendBundle:Author:authorFrontpage }
     requirements:
         slug: '[^/]+'
+    options:
+        l10n: true
 
 frontend_frontpage_authors:
     path: /authors
     defaults: { _controller: FrontendBundle:Author:frontpageAuthors }
+    options:
+        l10n: true
 
 frontend_external_author_frontpage:
     path: /extauthor/{slug}

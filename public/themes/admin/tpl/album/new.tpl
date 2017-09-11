@@ -106,7 +106,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" required="required" type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
+                  <input class="form-control" id="title" name="title" required type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
                 </div>
               </div>
               <div class="form-group">
@@ -178,7 +178,7 @@
                   {t}Tags{/t}
                 </label>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$album->metadata}"/>
+                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$album->metadata}"/>
                 </div>
               </div>
             </div>

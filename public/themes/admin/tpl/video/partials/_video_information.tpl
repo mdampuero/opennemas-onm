@@ -1,13 +1,13 @@
 <div class="form-group">
   <label for="title" class="form-label">{t}Title{/t}</label>
   <div class="controls">
-    <input  type="text" id="title" name="title" value="{$video->title|clearslash|escape:"html"|default:$information['title']}" required="required" class="form-control"/>
+    <input  type="text" id="title" name="title" value="{$video->title|clearslash|escape:"html"|default:$information['title']}" required class="form-control"/>
   </div>
 </div>
 <div class="form-group">
   <label for="description" class="form-label">{t}Description{/t}</label>
   <div class="controls">
-    <textarea onm-editor onm-editor-preset="simple" ng-model="description" name="description" id="description" required="required" rows="6" class="form-control">{$video->description|clearslash|default:''}</textarea>
+    <textarea onm-editor onm-editor-preset="simple" ng-model="description" name="description" id="description" required rows="6" class="form-control">{$video->description|clearslash|default:''}</textarea>
   </div>
 </div>
 {if (!empty($video->uri))}
@@ -60,6 +60,6 @@
     </table>
   </div>
 </div>
-<input type="hidden" id="author_name" name="author_name" title="author_name" required="required"
+<input type="hidden" id="author_name" name="author_name" title="author_name" required
 {if (!empty($video->author_name))} value="{$video->author_name|clearslash|escape:"html"|default:""}"
 {else} value="{$information['service']|clearslash|escape:"html"|default:""}" {/if} />

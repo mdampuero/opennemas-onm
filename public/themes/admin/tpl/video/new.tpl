@@ -5,8 +5,8 @@
     <style type="text/css">
       .utilities-conf {
         position:absolute;
-        top:0;
         right:0;
+        top:0;
       }
     </style>
   {/stylesheets}
@@ -153,7 +153,7 @@
             <div class="form-group">
               <label for="metadata" class="form-label">{t}Tags{/t}</label>
               <div class="controls">
-                <input data-role="tagsinput" type="text" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" value="{$video->metadata}" class="form-control" />
+                <input data-role="tagsinput" type="text" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required value="{$video->metadata}" class="form-control" />
               </div>
             </div>
             {if isset($video)}
