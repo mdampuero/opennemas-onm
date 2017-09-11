@@ -210,6 +210,12 @@ class RouterListener implements EventSubscriberInterface
                 );
             }
 
+            // As we have replaced the standard symfony router we have to
+            // identify requests manually into new relic agent
+            if (extension_loaded ('newrelic')) {
+                newrelic_name_transaction($parameters['_route']);
+            }
+
             $request->attributes->add($parameters);
             unset($parameters['_route'], $parameters['_controller']);
             $request->attributes->set('_route_params', $parameters);
