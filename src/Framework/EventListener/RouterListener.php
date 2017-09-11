@@ -36,7 +36,7 @@ use Symfony\Component\Routing\RequestContextAwareInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class L10nRouterListener implements EventSubscriberInterface
+class RouterListener implements EventSubscriberInterface
 {
     private $matcher;
     private $context;
