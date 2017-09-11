@@ -73,7 +73,7 @@ class SearchController extends Controller
 
         if (!empty($searchString)) {
             $fm     = $this->get('data.manager.filter');
-            $tokens = $fm->filter('tags', $searchString);
+            $tokens = $fm->set($searchString)->filter('tags')->get();
             $tokens = explode(', ', $tokens);
 
             $er = $this->get('entity_repository');
@@ -84,28 +84,28 @@ class SearchController extends Controller
             foreach ($fields as $field) {
                 $searchChunk = [];
                 foreach ($tokens as $token) {
-                    $searchChunk []= $field." LIKE '%".trim($token)."%'";
+                    $searchChunk[] = $field . " LIKE '%" . trim($token) . "%'";
                 }
-                $search []= "(".implode(' AND ', $searchChunk).") ";
+
+                $search[] = "(" . implode(' AND ', $searchChunk) . ") ";
             }
 
             // Final search
-            $search = "(".implode(' OR ', $search).")";
+            $search = "(" . implode(' OR ', $search) . ")";
 
             // Complete where clause
-            $criteria = ' in_litter = 0 AND content_status = 1 '.
-                        ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'.
-                        ' AND '.$search;
+            $criteria = ' in_litter = 0 AND content_status = 1 '
+                . ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'
+                . ' AND ' . $search;
 
-            $order    = [ 'starttime' => 'desc' ];
-
+            $order   = [ 'starttime' => 'desc' ];
             $results = $er->findBy($criteria, $order, 8, $page);
-            $total = $er->countBy($criteria);
+            $total   = $er->countBy($criteria);
 
             foreach ($results as $content) {
                 $content->content_partial_path =
-                    $content->content_type_name.'/content-provider/'.
-                    $content->content_type_name.'.tpl';
+                    $content->content_type_name . '/content-provider/'
+                    . $content->content_type_name . '.tpl';
             }
 
             // Build the pagination
@@ -160,7 +160,7 @@ class SearchController extends Controller
      */
     private function getContentTypesFiltered()
     {
-        $contentTypes = \ContentManager::getContentTypes();
+        $contentTypes         = \ContentManager::getContentTypes();
         $contentTypesFiltered = array();
 
         foreach ($contentTypes as $contentType) {
@@ -182,7 +182,7 @@ class SearchController extends Controller
                     break;
             }
 
-            $moduleName = strtoupper($moduleName.'_MANAGER');
+            $moduleName = strtoupper($moduleName . '_MANAGER');
 
             if ($this->get('core.security')->hasExtension($moduleName)) {
                 $contentTypesFiltered[$contentType['name']] = $contentType['title'];
