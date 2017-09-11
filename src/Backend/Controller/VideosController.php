@@ -335,17 +335,17 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
-        if (is_object($video->information)) {
-            $video->information = get_object_vars($video->information);
-        }
-
-        if (is_null($video->id)) {
+        if (!is_object($video) || is_null($video->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('Unable to find the video with the id "%d"'), $id)
             );
 
             return $this->redirect($this->generateUrl('admin_videos'));
+        }
+
+        if (is_object($video->information)) {
+            $video->information = get_object_vars($video->information);
         }
 
         if (($video->author_name == 'external' || $video->author_name == 'script')

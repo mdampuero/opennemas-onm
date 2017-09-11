@@ -102,6 +102,18 @@ class MenusController extends Controller
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
+        $menu = new \Menu($id);
+        $menu->items = array_values($menu->items); // Get categories from menu
+
+        if (is_null($menu->id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the menu with the id "%d"'), $id)
+            );
+
+            return $this->redirect($this->generateUrl('admin_menus'));
+        }
+
         $ccm = \ContentCategoryManager::get_instance();
         $cm = new \ContentManager();
 
@@ -141,16 +153,11 @@ class MenusController extends Controller
             ];
         }
 
-        $menu = new \Menu($id);
-
         // Fetch synchronized elements if exists
         $syncSites = [];
         if ($syncParams = s::get('sync_params')) {
             $syncSites = $syncParams;
         }
-
-        // Get categories from menu
-        $menu->items = array_values($menu->items);
 
         return $this->render(
             'menues/new.tpl',

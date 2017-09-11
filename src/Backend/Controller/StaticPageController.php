@@ -10,8 +10,9 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\Content;
 use Common\Core\Controller\Controller;
+use Common\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Entity\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -132,13 +133,22 @@ class StaticPageController extends Controller
      * @Security("hasExtension('STATIC_PAGES_MANAGER')
      *     and hasPermission('STATIC_PAGE_UPDATE')")
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
-        $entity = $this->get('orm.manager')
-            ->getRepository('content')
-            ->find($id);
+        $id = $request->query->getInt('id');
+        try {
+            $entity = $this->get('orm.manager')
+                ->getRepository('content')
+                ->find($id);
 
-        $entity->id = $entity->pk_content;
+            $entity->id = $entity->pk_content;
+        } catch (EntityNotFoundException $e) {
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the static page with the id "%d"'), $id)
+            );
+            return $this->redirect($this->generateUrl('backend_static_pages_list'));
+        }
 
         return $this->render('static_pages/new.tpl', [ 'page' => $entity ]);
     }

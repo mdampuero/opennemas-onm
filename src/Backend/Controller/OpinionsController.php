@@ -195,7 +195,7 @@ class OpinionsController extends Controller
         $opinion = $this->get('entity_repository')->find('Opinion', $id);
 
         // Check if opinion id exists
-        if (is_null($opinion->id)) {
+        if (!is_object($opinion) || is_null($opinion->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('Unable to find the opinion with the id "%d"'), $id)

@@ -10,14 +10,14 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\User;
 use Common\Core\Controller\Controller;
+use Common\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Entity\User;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class UserController extends Controller
 {
@@ -388,10 +388,11 @@ class UserController extends Controller
      *
      * @return Response The response object.
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('User');
+        $id        = $request->query->getInt('id');
 
         if ($id === 'me') {
             $id = $this->getUser()->id;
@@ -403,8 +404,17 @@ class UserController extends Controller
             throw new AccessDeniedException();
         }
 
-        $user = $em->getRepository('User')->find($id);
-        $user->eraseCredentials();
+        try {
+            $user = $em->getRepository('User')->find($id);
+            $user->eraseCredentials();
+        } catch (EntityNotFoundException $e) {
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the user with the id "%d"'), $id)
+            );
+            return $this->redirect($this->generateUrl('admin_acl_user'));
+        }
+
 
         if (!empty($user->paywall_time_limit)
             && is_object($user->paywall_time_limit)

@@ -121,7 +121,9 @@ class ImagesController extends Controller
                 $photo = new \Photo($id);
                 $photo->getPhotoMetaData();
 
-                $photos []= $photo;
+                if (!is_null($photo->pk_photo)) {
+                    $photos []= $photo;
+                }
             }
         }
 
@@ -130,13 +132,7 @@ class ImagesController extends Controller
             $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
 
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_images',
-                    array(
-                        'category' => $category,
-                        'page'     => $page,
-                    )
-                )
+                $this->generateUrl('admin_images', [ 'page' => $page ])
             );
         }
 
