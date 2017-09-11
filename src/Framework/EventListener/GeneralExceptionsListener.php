@@ -56,6 +56,9 @@ class GeneralExceptionsListener implements EventSubscriberInterface
             return false;
         }
 
+        $exception = $event->getException();
+        $request   = $event->getRequest();
+
         if ($this->environment !== 'prod') {
             return false;
         }
@@ -63,8 +66,6 @@ class GeneralExceptionsListener implements EventSubscriberInterface
         $handling = true;
 
         if (!($exception instanceof AuthenticationException)) {
-            $exception = $event->getException();
-            $request   = $event->getRequest();
             $uri       = $event->getRequest()->getRequestUri();
 
             // Know the proper error controller depending on the "aplication"
