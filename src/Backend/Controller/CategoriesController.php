@@ -128,9 +128,9 @@ class CategoriesController extends Controller
                 )
             );
         } else {
-            $allcategorys  = $ccm->categories;
+            $allcategories  = $ccm->categories;
             $categories = array();
-            foreach ($allcategorys as $category) {
+            foreach ($allcategories as $category) {
                 if ($category->internal_category != 0
                     && $category->fk_content_category == 0
                 ) {
@@ -139,11 +139,21 @@ class CategoriesController extends Controller
             }
 
 
+            $jsonData = json_encode(
+                array(
+                    'categories'            => $allcategories,
+                    'configurations'        => s::get('section_settings'),
+                    'subcategories'         => [],
+                    'internal_categories'   => $this->getInternalCategories(),
+                    'image_path'            => MEDIA_URL . MEDIA_DIR,
+                    'language_data'         => $this->getLocaleData($request)
+                )
+            );
+
             return $this->render(
                 'category/new.tpl',
                 array(
-                    'configurations'        => $configurations,
-                    'allcategorys'          => $categories
+                    'categoryData'  => $jsonData
                 )
             );
         }
@@ -167,14 +177,14 @@ class CategoriesController extends Controller
         if ($category->pk_content_category != null) {
             $ccm = \ContentCategoryManager::get_instance();
             $allcategorys = $ccm->categories;
-            $subcategorys = $ccm->getSubcategories($id);
+            $subcategories = $ccm->getSubcategories($id);
 
             $jsonData = json_encode(
                 array(
                     'categories'            => $allcategorys,
                     'configurations'        => s::get('section_settings'),
                     'category'              => $category,
-                    'subcategories'         => $subcategorys,
+                    'subcategories'         => $subcategories,
                     'internal_categories'   => $this->getInternalCategories(),
                     'image_path'            => MEDIA_URL . MEDIA_DIR,
                     'language_data'         => $this->getLocaleData($request)

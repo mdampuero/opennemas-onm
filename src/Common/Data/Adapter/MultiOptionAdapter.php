@@ -97,7 +97,6 @@ class MultiOptionAdapter extends Adapter
         }
         $defaultValue = $params[self::PARAM_DEFAULT_KEY_VALUE];
         if (isset($params[self::PARAM_KEY_FOR_MULTIVALUED_FIELDS])) {
-
             if (!is_array($field) || sizeOf($field) == 0) {
                 return $field;
             }

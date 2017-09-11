@@ -4,7 +4,7 @@
   <script>
       var categoryData = {$categoryData};
   </script>
-  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="init()" class="settings">
+  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar ng-cloak" ng-if="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -129,12 +129,10 @@
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox" id="inmenu" name="inmenu" value="1" {if $category->inmenu eq 1} checked="checked"{/if}>
                     <input type="checkbox"
                        ng-model="category.inmenu"
-                       id="category.inmenu"
-                       name="category.inmenu"
-                       ng-true-value="1">
+                       ng-true-value="1"
+                       ng-false-value="'0'">
                     <label for="inmenu" class="form-label">
                       {t}Available{/t}
                     </label>
@@ -146,8 +144,8 @@
                   <div class="checkbox">
                     <input type="checkbox"
                        ng-model="category.params.inrss"
-                       id="category.params.inrss"
-                       name="category.params.inrss"
+                       id="inrss"
+                       name="inrss"
                        ng-true-value="1">
                     <label for="params[inrss]" class="form-label">{t}Show in RSS{/t}</label>
                   </div>

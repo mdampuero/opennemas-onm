@@ -22,54 +22,11 @@
          * @memberOf SettingsCtrl
          *
          * @description
-         *  The instance properties that can be updated from settings.
-         *
-         * @type {Object}
-         */
-        $scope.instance = { country: null };
-
-        /**
-         * @memberOf SettingsCtrl
-         *
-         * @description
-         *  Object for overlay-related flags.
-         *
-         * @type {Object}
-         */
-        $scope.overlay = {};
-
-        /**
-         * @memberOf SettingsCtrl
-         *
-         * @description
          *  The settings object with default values.
          *
          * @type {Object}
          */
-        $scope.category = {
-          /*
-          pk_content_category: integer
-          title:               string
-          name:                string
-          inmenu:              boolean
-          posmenu:             integer
-          internal_category:   integer
-          fk_content_category: integer
-          params:              array
-          logo_path:           string
-          color:               string
-
-          google_analytics: [
-            { api_key: '', base_domain: '', custom_var: '' }
-          ],
-          locale: {
-            backend:   'en',
-            frontend:  [],
-            time_zone: 'UTC'
-          },
-          rtb_files: []
-          */
-        };
+        $scope.category = {};
 
         $scope.subcategories = [];
 
@@ -84,7 +41,7 @@
          */
         $scope.init = function() {
           $scope.loading = true;
-
+          $scope.inmenu = false;
           if(categoryData) {
             $scope.category = categoryData.category;
             $scope.subcategories = categoryData.subcategories;
@@ -99,17 +56,39 @@
           $scope.loading = false;
 
           // TODO implement the ajax request for caregory info
-          /*
-          $scope.loading = true;
+        };
 
-          http.get('api_v1_backend_category_show').then(function(response) {
-            $scope.category = response.data.category;
-            $scope.subcategories = response.data.subcategories;
+        $scope.changeLanguage = function(language) {
+          alert(language);
+        };
 
-            $scope.loading = false;
-          }, function() {
-            $scope.loading = false;
-          });
+        $scope.test = function() {
+          alert('$scope.category.inmenu');
+        };
+
+        /**
+         * @function save
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Saves settings.
+         */
+        $scope.save = function() {
+          alert($scope.category.inmenu);
+          $scope.category.inmenu = ($scope.category.inmenu == 1)?0:1;
+          /**
+          var data = $scope.post();
+
+          $scope.saving = true;
+
+          http.put('api_v1_backend_settings_save', data)
+            .then(function(response) {
+              $scope.saving = false;
+              messenger.post(response.data);
+            }, function(response) {
+              $scope.saving = false;
+              messenger.post(response.data);
+            });
           */
         };
 
@@ -120,14 +99,7 @@
           10: 'fa-star',
           14: 'fa-newspaper-o',
           15: 'fa-book',
-        }
-
-        $scope.changeLanguage = function(language) {
-          alert(language);
-        }
-
-
-
+        };
       }
     ]);
 })();
