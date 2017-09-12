@@ -14,21 +14,26 @@ class LocalizeFilter extends Filter
     /**
      * {@inheritdoc}
      */
-    public function filter($items, $params = [])
+    public function filter($items)
     {
-        if (empty($items) || empty($params)) {
-            return;
+        if (empty($items)
+            || empty($this->getParameter('keys'))
+            || empty($this->getParameter('locale'))
+        ) {
+            return $items;
         }
 
         if (is_array($items)) {
             foreach ($items as $item) {
-                $this->filterItem($item, $params);
+                $this->filterItem($item);
             }
 
-            return;
+            return $items;
         }
 
-        $this->filterItem($items, $params);
+        $this->filterItem($items);
+
+        return $items;
     }
 
     /**
@@ -39,23 +44,15 @@ class LocalizeFilter extends Filter
      *
      * @return Object Filtered object.
      */
-    protected function filterItem($item, $params = [])
+    protected function filterItem($item)
     {
-        if ((!is_array($item)
-            && !is_object($item))
-            || !array_key_exists('keys', $params)
-            || !array_key_exists('locale', $params)
-        ) {
+        if ((!is_array($item) && !is_object($item))) {
             return;
         }
 
-        $locale  = $params['locale'];
-        $default = array_key_exists('default', $params) ?
-            $params['default'] : 'en_US';
-
-        foreach ($params['keys'] as $key) {
+        foreach ($this->getParameter('keys') as $key) {
             if (isset($item->{$key})) {
-                $item->$key = $this->filterValue($item->$key, $locale, $default);
+                $item->$key = $this->filterValue($item->$key);
             }
         }
     }
@@ -63,17 +60,18 @@ class LocalizeFilter extends Filter
     /**
      * Filters an array of values and returns a value basing on a locale.
      *
-     * @param mixed  $value   The value to filter.
-     * @param string $locale  The locale to base on.
-     * @param string $default The default locale.
+     * @param mixed $value The value to filter.
      *
      * @return mixed The value for the locale.
      */
-    protected function filterValue($value, $locale, $default = null)
+    protected function filterValue($value)
     {
         if (!is_array($value)) {
             return $value;
         }
+
+        $locale  = $this->getParameter('locale');
+        $default = $this->getParameter('default');
 
         if (array_key_exists($locale, $value)) {
             return $value[$locale];

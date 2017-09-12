@@ -24,10 +24,15 @@ class LocalizeFilterTest extends KernelTestCase
     public function setUp()
     {
         $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'hasParameter' ])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filter = new LocalizeFilter($this->container);
+        $this->filter = new LocalizeFilter($this->container, [
+            'keys'    => [ 'xyzzy' ],
+            'locale'  => 'es',
+            'default' => 'en'
+        ]);
     }
 
     /**
@@ -59,9 +64,11 @@ class LocalizeFilterTest extends KernelTestCase
             ])
         ];
 
-        $this->assertEmpty($this->filter->filter('wobble'));
+        $this->assertEmpty($this->filter->filter([]));
+        $this->assertEmpty($this->filter->filter(null));
+        $this->assertEquals('wobble', $this->filter->filter('wobble'));
 
-        $this->filter->filter($entities, [ 'keys' => [ 'xyzzy' ], 'locale' => 'es', 'default' => 'en' ]);
+        $this->filter->filter($entities);
         $this->assertEquals('frog', $entities[0]->xyzzy);
         $this->assertEmpty($entities[1]->xyzzy);
         $this->assertEquals('quux', $entities[2]->xyzzy);
@@ -90,13 +97,10 @@ class LocalizeFilterTest extends KernelTestCase
         $method->invokeArgs($this->filter, [ $item, [ 'keys' => [ 0 ] ] ]);
         $this->assertEquals([ 'fubar', 'glorp' ], $item);
 
-        $method->invokeArgs(
-            $this->filter,
-            [ $entity, [ 'keys' => [ 'xyzzy' ], 'locale' => 'gl' ] ]
-        );
+        $method->invokeArgs($this->filter, [ $entity ]);
 
         $this->assertEquals('norf', $entity->flob);
-        $this->assertEquals('corge', $entity->xyzzy);
+        $this->assertEquals('frog', $entity->xyzzy);
     }
 
     /**
@@ -107,21 +111,17 @@ class LocalizeFilterTest extends KernelTestCase
         $method = new \ReflectionMethod($this->filter, 'filterValue');
         $method->setAccessible(true);
 
-        $this->assertEquals('fred', $method->invokeArgs($this->filter, [ 'fred', 'es' ]));
-        $this->assertEquals(null, $method->invokeArgs($this->filter, [ null, 'es' ]));
-        $this->assertEquals(124, $method->invokeArgs($this->filter, [ 124, 'es' ]));
+        $this->assertEquals('fred', $method->invokeArgs($this->filter, [ 'fred' ]));
+        $this->assertEquals(null, $method->invokeArgs($this->filter, [ null ]));
+        $this->assertEquals(124, $method->invokeArgs($this->filter, [ 124 ]));
         $this->assertEquals('mumble', $method->invokeArgs($this->filter, [
-            [ 'es' => 'mumble', 'en' => 'glork' ],
-            'es'
+            [ 'es' => 'mumble', 'en' => 'glork' ]
         ]));
         $this->assertEmpty($method->invokeArgs($this->filter, [
-            [ 'es' => 'mumble', 'en' => 'glork' ],
-            'gl'
+            [ 'gl' => 'mumble' ]
         ]));
         $this->assertEquals('glork', $method->invokeArgs($this->filter, [
-            [ 'es' => 'mumble', 'en' => 'glork' ],
-            'gl',
-            'en'
+            [ 'gl' => 'mumble', 'en' => 'glork' ]
         ]));
     }
 }
