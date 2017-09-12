@@ -42,21 +42,21 @@ class ContentController extends Controller
             $content = new \Content($id);
             if ($content->id != null) {
                 $content->setAvailable();
-                $code = 200;
+                $code    = 200;
                 $message = 'Done';
             } else {
-                $code = 404;
+                $code    = 404;
                 $message = 'Content not available';
             }
         } else {
-            $code = 400;
+            $code    = 400;
             $message = 'Please specify an content id';
         }
 
         return new Response(
             $message,
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 
@@ -79,21 +79,21 @@ class ContentController extends Controller
                 // Drop from any frontpage
                 $content->dropFromAllHomePages();
 
-                $code = 200;
+                $code    = 200;
                 $message = 'Done';
             } else {
-                $code = 404;
+                $code    = 404;
                 $message = 'Content not available';
             }
         } else {
-            $code = 400;
+            $code    = 400;
             $message = 'Please specify an content id';
         }
 
         return new Response(
             $message,
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 
@@ -119,21 +119,21 @@ class ContentController extends Controller
                     $content->dropFromAllHomePages();
                 }
 
-                $code = 200;
+                $code    = 200;
                 $message = 'Done';
             } else {
-                $code = 404;
+                $code    = 404;
                 $message = 'Content not available';
             }
         } else {
-            $code = 400;
+            $code    = 400;
             $message = 'Please specify an content id';
         }
 
         return new Response(
             $message,
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 
@@ -148,27 +148,32 @@ class ContentController extends Controller
     {
         $ids = $request->query->get('ids');
 
-        $code = 200;
-        $error = array();
+        $code  = 200;
+        $error = [];
 
         if (is_array($ids)) {
             foreach ($ids as $id) {
-                $id = (int) $id;
+                $id      = (int) $id;
                 $content = new \Content($id);
 
                 if ($content->id !== null) {
                     try {
                         $content->setArchived();
                     } catch (\Exception $e) {
-                        $error []= sprintf(_('Unable to arquive content with id %s: %s'), $id, $e->getMessage());
+                        $error[] = sprintf(
+                            _('Unable to arquive content with id %s: %s'),
+                            $id,
+                            $e->getMessage()
+                        );
                     }
+
                     $content->dropFromAllHomePages();
                 } else {
-                    $error []= sprintf('Content with id %s no valid', $id);
+                    $error[] = sprintf('Content with id %s no valid', $id);
                 }
             }
         } else {
-            $error []= 'Please specify the ids to set the archive flag on.';
+            $error[] = 'Please specify the ids to set the archive flag on.';
         }
 
         if (count($error) > 0) {
@@ -180,7 +185,7 @@ class ContentController extends Controller
         return new Response(
             json_encode($error),
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 
@@ -195,30 +200,30 @@ class ContentController extends Controller
     {
         $ids = $request->query->get('ids');
 
-        $code = 200;
-        $error = array();
+        $code  = 200;
+        $error = [];
 
         if (is_array($ids)) {
             foreach ($ids as $id) {
-                $id = (int) $id;
+                $id      = (int) $id;
                 $content = new \Content($id);
 
                 if ($content->id !== null) {
                     try {
                         $content->toggleSuggested();
                     } catch (\Exception $e) {
-                        $error []= sprintf(
+                        $error[] = sprintf(
                             _('Unable to set suggested to frontpage state to content with id %s: %s'),
                             $id,
                             $e->getMessage()
                         );
                     }
                 } else {
-                    $error []= sprintf('Content id «%s» is no valid', $id);
+                    $error[] = sprintf('Content id «%s» is no valid', $id);
                 }
             }
         } else {
-            $error []= 'Please specify the ids to set the archive flag on.';
+            $error[] = 'Please specify the ids to set the archive flag on.';
         }
 
         if (count($error) > 0) {
@@ -230,7 +235,7 @@ class ContentController extends Controller
         return new Response(
             json_encode($error),
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 
@@ -248,22 +253,22 @@ class ContentController extends Controller
         if ($id > 0) {
             $content = new \Content($id);
             if ($content->id != null) {
-                $code = 200;
+                $code    = 200;
                 $message = $content->getQuickInfo();
             } else {
-                $code = 404;
-                $error = 'Content does not exists';
-                $message = array('error' => $error);
+                $code    = 404;
+                $error   = 'Content does not exists';
+                $message = [ 'error' => $error ];
             }
         } else {
-            $code = 400;
+            $code    = 400;
             $message = 'Please specify an content id';
         }
 
         return new Response(
             json_encode($message),
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 
@@ -289,18 +294,18 @@ class ContentController extends Controller
                     $message = sprintf('Unable to set trashed state to content with id %s', $id);
                 }
             } else {
-                $code = 404;
+                $code    = 404;
                 $message = sprintf(_('Content not available'), $id);
             }
         } else {
-            $code = 400;
+            $code    = 400;
             $message = 'Please specify an content id';
         }
 
         return new Response(
             json_encode($message),
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 
@@ -336,21 +341,21 @@ class ContentController extends Controller
                     [ $content->content_type_name => $this ]
                 );
 
-                $code = 200;
-                $message = "Done {$id}:". serialize($properties)." \n";
+                $code    = 200;
+                $message = "Done {$id}:" . serialize($properties) . " \n";
             } else {
-                $code = 404;
+                $code    = 404;
                 $message = sprintf(_('Content or property not valid'), $id);
             }
         } else {
-            $code = 400;
+            $code    = 400;
             $message = 'Please specify an content id';
         }
 
         return new Response(
             json_encode($message),
             $code,
-            array('Content-Type' => 'application/json')
+            [ 'Content-Type' => 'application/json' ]
         );
     }
 }
