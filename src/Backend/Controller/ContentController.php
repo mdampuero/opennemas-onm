@@ -335,10 +335,10 @@ class ContentController extends Controller
                     }
                 }
 
-                dispatchEventWithParams('content.update', [ 'content' => $this ]);
+                dispatchEventWithParams('content.update', [ 'content' => $content ]);
                 dispatchEventWithParams(
                     $content->content_type_name . '.update',
-                    [ $content->content_type_name => $this ]
+                    [ $content->content_type_name => $content ]
                 );
 
                 $code    = 200;
