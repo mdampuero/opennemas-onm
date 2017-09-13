@@ -10,8 +10,9 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\Content;
 use Common\Core\Controller\Controller;
+use Common\ORM\Core\Exception\EntityNotFoundException;
+use Common\ORM\Entity\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,17 +30,19 @@ class StaticPageController extends Controller
      */
     public function buildSlugAction(Request $request)
     {
+        $req = $request->request;
+
         // If the action is an Ajax request handle it, if not redirect to list
         $data = array(
-            'title'    => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-            'slug'     => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
-            'metadata' => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', null, FILTER_SANITIZE_STRING)),
-            'id'       => $request->request->filter('id', 0, FILTER_SANITIZE_STRING),
+            'title'    => $req->filter('title', null, FILTER_SANITIZE_STRING),
+            'slug'     => $req->filter('slug', null, FILTER_SANITIZE_STRING),
+            'metadata' => \Onm\StringUtils::normalizeMetadata($req->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'id'       => $req->filter('id', 0, FILTER_SANITIZE_STRING),
         );
 
         if ($request->isXmlHttpRequest()) {
             try {
-                $page = new \StaticPage();
+                $page   = new \StaticPage();
                 $output = $page->buildSlug($data['slug'], $data['id'], $data['title']);
             } catch (\Exception $e) {
                 $output = _("Can't get static page title. Check the title");
@@ -91,6 +94,7 @@ class StaticPageController extends Controller
         $converter = $em->getConverter('Content');
 
         $entity = new Content($converter->objectify($request->request->all()));
+
         $entity->contentTypeName     = 'static_page';
         $entity->fk_content_type     = 13;
         $entity->fk_author           = $this->get('core.user')->id;
@@ -132,13 +136,22 @@ class StaticPageController extends Controller
      * @Security("hasExtension('STATIC_PAGES_MANAGER')
      *     and hasPermission('STATIC_PAGE_UPDATE')")
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
-        $entity = $this->get('orm.manager')
-            ->getRepository('content')
-            ->find($id);
+        $id = $request->query->getInt('id');
+        try {
+            $entity = $this->get('orm.manager')
+                ->getRepository('content')
+                ->find($id);
 
-        $entity->id = $entity->pk_content;
+            $entity->id = $entity->pk_content;
+        } catch (EntityNotFoundException $e) {
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the static page with the id "%d"'), $id)
+            );
+            return $this->redirect($this->generateUrl('backend_static_pages_list'));
+        }
 
         return $this->render('static_pages/new.tpl', [ 'page' => $entity ]);
     }
@@ -180,6 +193,7 @@ class StaticPageController extends Controller
 
         // TODO:Remove when data supports empty values (when using SPA)
         $status = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
+
         $entity->content_status = (empty($status)) ? 0 : 1;
 
         try {
