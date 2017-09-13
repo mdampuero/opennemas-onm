@@ -39,7 +39,8 @@ class RedirectorsController extends Controller
             ->getTranslation($slug, $type, $id);
 
         // Redirect content migrated to another domain
-        if (array_key_exists('domain', $translation)
+        if (!empty($translation)
+            && array_key_exists('domain', $translation)
             && !empty($translation['domain'])
         ) {
             return $this->redirect($translation['domain'] . $this->generateUrl(
@@ -164,6 +165,10 @@ class RedirectorsController extends Controller
      */
     protected function getContent($translation)
     {
+        if (empty($translation)) {
+            return null;
+        }
+
         $fixTypes = [ 'photo-inline' => 'photo' ];
 
         if (array_key_exists($translation['type'], $fixTypes)) {
