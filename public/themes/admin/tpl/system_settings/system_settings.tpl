@@ -1351,7 +1351,7 @@
                           </h4>
                           <div class="form-group">
                             <div class="checkbox">
-                              <input {if $configs['redirection'] eq "1"}checked{/if} id="redirection" name="redirection" ng-model="settings.redirection" ng-true-value="'1'" type="checkbox">
+                              <input {if $configs['redirection'] eq "1"}checked{/if} id="redirection" name="redirection" ng-false-value="0" ng-model="settings.redirection" ng-true-value="'1'" type="checkbox">
                               <label for="redirection">
                                 {t}Redirect to frontpage non-migrated contents{/t}
                               </label>
