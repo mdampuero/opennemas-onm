@@ -181,7 +181,8 @@ class RedirectorsController extends Controller
             return $this->{$method}($translation['pk_content']);
         }
 
-        return new \Content($translation['pk_content']);
+        return $this->get('entity_repository')
+            ->find($translation['type'], $translation['pk_content']);
     }
 
     /**
