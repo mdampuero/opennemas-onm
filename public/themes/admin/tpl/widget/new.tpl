@@ -54,7 +54,7 @@
           <div class="form-group">
             <label for="title" class="form-label">{t}Widget name{/t}</label>
             <div class="controls">
-              <input type="text" id="title" name="title" value="{$widget->title|default:""}" required="required" class="form-control"/>
+              <input type="text" id="title" name="title" value="{$widget->title|default:""}" required class="form-control"/>
             </div>
           </div>
           <div class="form-group">

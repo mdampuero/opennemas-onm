@@ -57,7 +57,7 @@
             <div class="form-group">
               <label for="name" class="form-label">{t}Source name{/t}</label>
               <div class="controls">
-                <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required="required"/>
+                <input type="text" id="server" name="name" value="{$server['name']}" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
@@ -110,12 +110,12 @@
               <label for="url" class="form-label">{t}Url{/t}</label>
               <span class="help m-l-5">{t}The server url for this source. Example: ftp://server.com/path{/t}</span>
               <div class="controls">
-                <input class="form-control no-animate" id="url" name="url" ng-show="!type" ng-model="url" required="required" type="text">
+                <input class="form-control no-animate" id="url" name="url" ng-show="!type" ng-model="url" required type="text">
                 <div class="input-group no-animate ng-cloak" ng-show="type">
                   <span class="input-group-addon">
                     https://
                   </span>
-                  <input class="form-control no-animate" id=instance" name="instance" ng-disabled="!type" ng-model="instance" required="required" type="text">
+                  <input class="form-control no-animate" id=instance" name="instance" ng-disabled="!type" ng-model="instance" required type="text">
                   <span class="input-group-addon">
                     .opennemas.com/ws/agency
                   </span>
@@ -169,7 +169,7 @@
               <label for="agency_string" class="form-label">{t}Agency{/t}</label>
               <span class="help m-l-5">{t}When importing elements this will be the signature{/t}</span>
               <div class="controls">
-                <input class="form-control" id="agency_string" name="agency_string" required="required" type="text" value="{$server['agency_string']}">
+                <input class="form-control" id="agency_string" name="agency_string" required type="text" value="{$server['agency_string']}">
               </div>
             </div>
             <div class="form-group">
@@ -178,7 +178,7 @@
                 {t escape=off}Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.{/t}
               </span>
               <div class="controls">
-                <select name="sync_from" required="required">
+                <select name="sync_from" required>
                   {html_options options=$sync_from selected={$server['sync_from']}}
                 </select>
               </div>

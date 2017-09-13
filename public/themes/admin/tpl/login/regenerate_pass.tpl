@@ -47,13 +47,13 @@
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-lock"></span></span>
-                        <input autofocus class="form-control" name="password" placeholder="{t}Password{/t}" required="required" tabindex="1" type="password">
+                        <input autofocus class="form-control" name="password" placeholder="{t}Password{/t}" required tabindex="1" type="password">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-lock"></span></span>
-                        <input class="form-control" name="password-verify" placeholder="{t}Password confirmation{/t}" required="required" tabindex="2" type="password">
+                        <input class="form-control" name="password-verify" placeholder="{t}Password confirmation{/t}" required tabindex="2" type="password">
                       </div>
                     </div>
                     <div class="form-group text-right">

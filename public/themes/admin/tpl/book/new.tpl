@@ -78,7 +78,7 @@
             <div class="form-group">
               <label for="title" class="form-label">{t}Title{/t}</label>
               <div class="controls">
-                <input type="text" id="title" name="title" value="{$book->title|default:""}" required="required" class="form-control"/>
+                <input type="text" id="title" name="title" value="{$book->title|default:""}" required class="form-control"/>
               </div>
             </div>
 
@@ -143,7 +143,7 @@
               <label for="metadata" class="form-label">{t}Keywords{/t}</label>
               <span class="help">{t}Separated by comas{/t}</span>
               <div class="controls">
-                <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$book->metadata|default:""}" />
+                <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$book->metadata|default:""}" />
 
               </div>
             </div>
@@ -151,7 +151,7 @@
             <div class="form-group">
               <label for="author" class="form-label">{t}Author{/t}</label>
               <div class="controls">
-                <input type="text" id="author" name="author" value="{$book->author|default:""}" required="required" class="form-control"/>
+                <input type="text" id="author" name="author" value="{$book->author|default:""}" required class="form-control"/>
               </div>
             </div>
 
@@ -177,7 +177,7 @@
             <div class="form-group">
               <label for="editorial" class="form-label">{t}Editorial{/t}</label>
               <div class="controls">
-                <input type="text" id="editorial" name="editorial" value="{$book->editorial|default:""}" required="required" class="form-control"/>
+                <input type="text" id="editorial" name="editorial" value="{$book->editorial|default:""}" required class="form-control"/>
               </div>
             </div>
 

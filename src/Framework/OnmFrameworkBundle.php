@@ -14,8 +14,10 @@
  */
 namespace Framework;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Framework\DependencyInjection\Compiler\RemoveSymfonyRouterListenerServicePass;
 use Framework\DependencyInjection\OpennemasExtension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Initializes the OnmFrameworkBundle
@@ -30,5 +32,15 @@ class OnmFrameworkBundle extends Bundle
     public function getContainerExtension()
     {
         return new OpennemasExtension();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new RemoveSymfonyRouterListenerServicePass());
     }
 }

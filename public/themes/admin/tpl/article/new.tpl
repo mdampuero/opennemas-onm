@@ -116,7 +116,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required="required" type="text">
+                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required type="text">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
                         [% article.title ? article.title.length : 0 %]
@@ -131,7 +131,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title_int">
-                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required="required">
+                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required>
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
@@ -268,7 +268,7 @@
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select class="form-control" id="category" name="category" ng-model="article.category" required="required">
+                      <select class="form-control" id="category" name="category" ng-model="article.category" required>
                         <option value="" >{t}- Select a category -{/t}</option>
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
