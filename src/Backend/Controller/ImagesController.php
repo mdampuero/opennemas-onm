@@ -262,7 +262,6 @@ class ImagesController extends Controller
             case 'HEAD':
             case 'GET':
                 return $response->setContent(json_encode([]));
-                break;
             case 'POST':
                 // check if category, and filesizes are properly setted and category_name is valid
                 $category = $request->request->getDigits('category', 0);
@@ -340,7 +339,6 @@ class ImagesController extends Controller
                     $response->headers->add(array('Content-type' => 'text/plain'));
                 }
                 return $response;
-                break;
             case 'DELETE':
                 break;
             default:
