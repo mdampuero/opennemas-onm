@@ -1402,13 +1402,6 @@ translation_ids:
             primary: false
             unique: false
             flags: {  }
-    foreign_keys:
-        -
-            name: translationids_contentid_contents_id
-            source_field: [ pk_content ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 user_groups:
     columns:
         pk_user_group:
