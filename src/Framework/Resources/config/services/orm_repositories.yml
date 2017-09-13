@@ -1,0 +1,57 @@
+services:
+    category_repository:
+        class: Repository\CategoryManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    comment_repository:
+        class: Repository\CommentManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    content_views_repository:
+        class: Repository\ContentViewsManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    entity_repository:
+        class: Repository\EntityManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    frontpage_repository:
+        class: Repository\FrontpageManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    user_repository:
+        class: Repository\UserManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    menu_repository:
+        class: Repository\MenuManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    advertisement_repository:
+        class: Repository\AdvertisementManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    opinion_repository:
+        class: Repository\OpinionManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    widget_repository:
+        class: Repository\WidgetManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    usergroup_repository:
+        class: Repository\UserGroupManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    setting_repository:
+        class: Repository\SettingManager
+        arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
+
+    newsletter_manager:
+        class: Repository\NewsletterManager
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, '@core.template', '@entity_repository' ]
+
+    # TODO: Remove arguments when new ORM repositories replace search features
+    core.manager.menu:
+        class: Repository\MenuManager
+        arguments: [ '@dbal_connection', '@cache', %cache_prefix% ]

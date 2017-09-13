@@ -3,6 +3,8 @@ frontend_search_internal:
     defaults: { _controller: FrontendBundle:Tags:tags }
     requirements:
         tag_name: '[A-Za-z0-9\-.]+'
+    options:
+        l10n: true
 
 frontend_search_google:
     path: /search/google

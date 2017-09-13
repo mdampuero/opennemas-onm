@@ -1,0 +1,19 @@
+services:
+    cache:
+        class: %cache_handler%
+        arguments: [ %cache_handler_params% ]
+
+    cache_manager:
+        class: %cache_handler%
+        arguments: [ %cache_handler_params% ]
+
+    collector.cache:
+        class: Framework\DataCollector\CacheCollector
+        public: false
+        arguments: [ '@service_container' ]
+        tags:
+            -
+                name:     data_collector
+                id:       'cache_collector'
+                template: '@OnmFramework/collector/cache.html.twig'
+                priority: 100

@@ -4,3 +4,5 @@ frontend_static_page:
     requirements:
         format : html|htm
         slug    : '[^/.]+'
+    options:
+        l10n: true

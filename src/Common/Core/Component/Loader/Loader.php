@@ -281,44 +281,46 @@ class Loader
 
         $mainDomain = $this->instance->getMainDomain();
         if (!is_null($mainDomain)) {
-            define('INSTANCE_MAIN_DOMAIN', 'http://'.$mainDomain);
+            define('INSTANCE_MAIN_DOMAIN', 'http://' . $mainDomain);
         }
+
         define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 
         $cachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . INSTANCE_UNIQUE_NAME;
         if (!file_exists($cachepath)) {
             mkdir($cachepath, 0755, true);
         }
+
         define('CACHE_PATH', realpath($cachepath));
 
         /**
          * Media paths and urls configurations
          */
         //TODO: All the MEDIA_* should be ported to use this constant
-        define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
-        define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
+        define('INSTANCE_MEDIA', MEDIA_URL . INSTANCE_UNIQUE_NAME . DS);
+        define('INSTANCE_MEDIA_PATH', SITE_PATH . DS . "media" . DS . INSTANCE_UNIQUE_NAME . DS);
 
         // External server or a local dir
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);
         // Full path to the instance media files
-        define('MEDIA_DIR_URL', MEDIA_URL.MEDIA_DIR.'/');
+        define('MEDIA_DIR_URL', MEDIA_URL . MEDIA_DIR . '/');
 
         // local path to write media (/path/to/media)
-        define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
+        define('MEDIA_PATH', SITE_PATH . "media" . DS . INSTANCE_UNIQUE_NAME);
 
-        define('MEDIA_IMG_PATH_URL', MEDIA_URL.MEDIA_DIR.'/'.IMG_DIR);
-        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL."media".'/'.MEDIA_DIR.'/'.IMG_DIR);
+        define('MEDIA_IMG_PATH_URL', MEDIA_URL . MEDIA_DIR . '/' . IMG_DIR);
+        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL . "media" . '/' . MEDIA_DIR . '/' . IMG_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
-        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR);
+        define('MEDIA_IMG_PATH', MEDIA_PATH . DS . IMG_DIR);
         // TODO: delete from application
-        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.MEDIA_DIR.'/'.IMG_DIR);
+        define('MEDIA_IMG_PATH_WEB', MEDIA_URL . MEDIA_DIR . '/' . IMG_DIR);
 
         define('KIOSKO_DIR', 'kiosko' . DS);
 
         // Template settings
-        define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-        define('TEMPLATE_USER_URL', "/themes".'/'.TEMPLATE_USER.'/');
+        define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
+        define('TEMPLATE_USER_URL', "/themes" . '/' . TEMPLATE_USER . '/');
     }
 
     /**
@@ -382,7 +384,8 @@ class Loader
             'settings'      => [
                 'BD_DATABASE'   => 'onm-instances',
                 'TEMPLATE_USER' => 'manager'
-            ]
+            ],
+            'activated_modules' => [],
         ]);
     }
 
