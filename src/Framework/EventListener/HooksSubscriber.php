@@ -27,8 +27,8 @@ class HooksSubscriber implements EventSubscriberInterface
     public function __construct($container, $cache, $logger)
     {
         $this->objectCacheHandler = $cache;
-        $this->container    = $container;
-        $this->logger       = $logger;
+        $this->container          = $container;
+        $this->logger             = $logger;
     }
 
     /**
@@ -229,7 +229,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event object.
      */
-    public function removeObjectCacheCountries(Event $event)
+    public function removeObjectCacheCountries()
     {
         $this->container->get('cache.manager')->getConnection('manager')
             ->removeByPattern('*countries*');
@@ -261,10 +261,10 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->objectCacheHandler->delete('user-' . $authorId);
 
         // Get the list articles for this author
-        $cm = new \ContentManager();
+        $cm       = new \ContentManager();
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.type_opinion=0 AND opinions.fk_author='.$authorId
-            .' AND contents.available=1 and contents.content_status=1',
+            'opinions.type_opinion=0 AND opinions.fk_author=' . $authorId
+            . ' AND contents.available=1 and contents.content_status=1',
             'ORDER BY created DESC '
         );
         $this->initializeSmartyCacheHandler();
@@ -358,7 +358,7 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $category = $event->getArgument('category');
 
-        $this->objectCacheHandler->delete('frontpage_elements_map_'.$category);
+        $this->objectCacheHandler->delete('frontpage_elements_map_' . $category);
     }
 
     /**
@@ -375,7 +375,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ->remove('user-' . $user->id);
 
         $this->objectCacheHandler->delete('user-' . $user->id);
-        $this->objectCacheHandler->delete('categories_for_user_'.$user->id);
+        $this->objectCacheHandler->delete('categories_for_user_' . $user->id);
     }
 
     /**
@@ -521,6 +521,7 @@ class HooksSubscriber implements EventSubscriberInterface
         if (!isset($category)) {
             return;
         }
+
         $ccm = \ContentCategoryManager::get_instance();
 
         if ($category == '0' || $category == 'home') {
@@ -551,7 +552,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeSmartyCacheGlobalCss(Event $event)
+    public function removeSmartyCacheGlobalCss()
     {
         $this->initializeSmartyCacheHandler();
 
@@ -570,7 +571,7 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $content  = $event->getArgument('content');
+        $content = $event->getArgument('content');
         if (empty($content->fk_author)) {
             return;
         }
@@ -644,7 +645,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeVarnishCacheCurrentInstance(Event $event)
+    public function removeVarnishCacheCurrentInstance()
     {
         if (!$this->container->hasParameter('varnish')) {
             return false;
@@ -663,7 +664,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeVarnishCacheFrontpage(Event $event)
+    public function removeVarnishCacheFrontpage()
     {
         // Clean varnish cache for frontpage
         if ($this->container->hasParameter('varnish')) {
@@ -680,7 +681,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeVarnishCacheFrontpageCSS(Event $event)
+    public function removeVarnishCacheFrontpageCSS()
     {
         if (!$this->container->hasParameter('varnish')) {
             return false;
@@ -719,6 +720,7 @@ class HooksSubscriber implements EventSubscriberInterface
     private function initializeSmartyCacheHandler()
     {
         $this->view = $this->container->get('view')->getTemplate();
+
         $this->smartyCacheHandler = $this->container->get('template_cache_manager')
             ->setSmarty($this->view);
     }
