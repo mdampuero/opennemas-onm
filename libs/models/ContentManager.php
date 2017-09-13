@@ -1672,6 +1672,7 @@ class ContentManager
     */
     public function getUrlContent($url, $decodeJson = false)
     {
+        // TODO: Replace by getService function call
         global $kernel;
         $cache = $kernel->getContainer()->get('cache');
 
