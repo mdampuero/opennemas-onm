@@ -85,14 +85,12 @@ class UserGroupsController extends Controller
     /**
      * Handles the action of show creation form for user group and save it
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("hasExtension('USER_GROUP_MANAGER')
      *     and hasPermission('GROUP_CREATE')")
      */
-    public function createAction(Request $request)
+    public function createAction()
     {
         $privilege = new \Privilege();
 
