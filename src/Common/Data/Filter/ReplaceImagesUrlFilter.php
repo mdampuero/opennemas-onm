@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Component\Filter;
+namespace Common\Data\Filter;
 
 class ReplaceImagesUrlFilter extends Filter
 {
@@ -20,19 +20,19 @@ class ReplaceImagesUrlFilter extends Filter
      */
     public function filter($str)
     {
-        $imgPattern = $this->getParameter('img_pattern');
-        $mediaPath  = $this->getParameter('media_path');
+        $pattern = $this->getParameter('pattern');
+        $path    = $this->getParameter('path');
 
-        preg_match_all($imgPattern, $str, $matches);
+        preg_match_all($pattern, $str, $matches);
 
-        foreach ($matches[1] as $value) {
-            $filename = $value;
-            list($type, $id) =
-                \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
+        foreach ($matches['slug'] as $slug) {
+            $translation = $this->container->get('core.redirector')
+                ->getTranslationBySlug($slug);
 
-            $photo = new \Photo($id);
-            $photoUri = $mediaPath . $photo->path_img;
-            $str = str_replace($value, $photoUri, $str);
+            $photo = $this->container->get('entity_repository')
+                ->find('photo', $translation['pk_content']);
+
+            $str = str_replace($slug, $path . $photo->path_img, $str);
         }
 
         return $str;

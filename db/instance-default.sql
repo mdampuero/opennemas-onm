@@ -1046,6 +1046,7 @@ CREATE TABLE `translation_ids` (
   `pk_content` bigint(20) unsigned NOT NULL,
   `type` varchar(100) NOT NULL,
   `slug` text,
+  `domain` varchar(255) NOT NULL,
   PRIMARY KEY (`pk_content_old`,`pk_content`,`type`),
   KEY `pk_content` (`pk_content`),
   KEY `slug` (`slug`(255)),

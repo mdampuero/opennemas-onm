@@ -1383,6 +1383,9 @@ translation_ids:
         slug:
             type: text
             options: { default: '', notnull: false, length: 65535 }
+        domain:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
     index:
         -
             name: PRIMARY
