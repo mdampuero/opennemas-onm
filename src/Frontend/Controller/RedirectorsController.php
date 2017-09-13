@@ -239,7 +239,7 @@ class RedirectorsController extends Controller
 
         $router = $this->get('router');
         $route  = preg_replace('/_+/', '_', 'frontend_' . $type . '_frontpage');
-        $url    = $this->get('router')->generate('frontend_frontpage');
+        $url    = $router->generate('frontend_frontpage');
 
         if (!in_array($type, $ignored)
             && $router->getRouteCollection()->get($route)
