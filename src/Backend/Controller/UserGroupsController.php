@@ -15,6 +15,7 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Entity\UserGroup;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,10 +52,20 @@ class UserGroupsController extends Controller
      * @Security("hasExtension('USER_GROUP_MANAGER')
      *     and hasPermission('GROUP_UPDATE')")
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
-        $userGroup = $this->get('orm.manager')->getRepository('UserGroup')
-            ->find($id);
+        $id = $request->query->getInt('id');
+
+        try {
+            $userGroup = $this->get('orm.manager')->getRepository('UserGroup')
+                ->find($id);
+        } catch (EntityNotFoundException $e) {
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the user group with the id "%d"'), $id)
+            );
+            return $this->redirect($this->generateUrl('admin_acl_usergroups'));
+        }
 
         $privilege  = new \Privilege();
         $privileges = $privilege->getPrivilegesByModules();
@@ -74,14 +85,12 @@ class UserGroupsController extends Controller
     /**
      * Handles the action of show creation form for user group and save it
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("hasExtension('USER_GROUP_MANAGER')
      *     and hasPermission('GROUP_CREATE')")
      */
-    public function createAction(Request $request)
+    public function createAction()
     {
         $privilege = new \Privilege();
 
@@ -118,10 +127,10 @@ class UserGroupsController extends Controller
         try {
             $em->persist($userGroup);
 
-            $level = 'success';
+            $level   = 'success';
             $message = _('User group created successfully.');
         } catch (\Exception $e) {
-            $level = 'error';
+            $level   = 'error';
             $message = _('Unable to create the new user group');
         }
 
@@ -165,10 +174,10 @@ class UserGroupsController extends Controller
         try {
             $em->persist($userGroup);
 
-            $level = 'success';
+            $level   = 'success';
             $message = _('User group updated successfully.');
         } catch (\Exception $e) {
-            $level = 'error';
+            $level   = 'error';
             $message = sprintf(_('Unable to update the user group with id "%d"'), $data['id']);
         }
 
