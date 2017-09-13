@@ -310,10 +310,11 @@
           };
 
           // Save only locale codes
-          if (data.settings.locale.frontend instanceof Array) {
-            var frontend = data.settings.locale.frontend.map(function(e) {
-                return e.code;
-              });
+          if (data.settings.locale.frontend instanceof Object) {
+            var frontend = {};
+            data.settings.locale.frontend.map(function(e) {
+                frontend[e.urlLocale] = e.code;
+            });
 
             data.settings.locale.frontend = frontend;
           }
@@ -365,14 +366,15 @@
             site_logo:            $scope.settings.site_logo
           };
 
-          if ($scope.settings.locale.frontend instanceof Array) {
+          if ($scope.settings.locale.frontend instanceof Object) {
             var locales = [];
 
-            for (var i = 0; i < $scope.settings.locale.frontend.length; i++) {
+            for (var localeAux in $scope.settings.locale.frontend) {
+              var codeAux = $scope.settings.locale.frontend[localeAux];
               locales.push({
-                code: $scope.settings.locale.frontend[i],
+                code: codeAux,
                 name: $scope.extra.locales
-                .frontend[$scope.settings.locale.frontend[i]],
+                .frontend[codeAux],
               });
             }
 

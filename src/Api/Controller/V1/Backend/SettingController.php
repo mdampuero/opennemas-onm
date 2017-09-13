@@ -34,10 +34,10 @@ class SettingController extends Controller
         'items_per_page', 'linkedin_page', 'max_session_lifetime',
         'mobile_logo', 'ojd', 'onm_digest_pass', 'onm_digest_user',
         'paypal_mail', 'pinterest_page', 'piwik', 'recaptcha',
-        'refresh_interval', 'rtb_files', 'logo_enabled', 'site_agency',
-        'site_color', 'site_color_secondary', 'site_description', 'site_footer',
+        'refresh_interval', 'rtb_files', 'logo_enabled', 'section_settings',
+        'site_agency', 'site_color', 'site_color_secondary', 'site_description',
         'site_footer', 'site_keywords', 'site_language', 'site_logo',
-        'site_name', 'site_title', 'twitter_page', 'vimeo_page',
+        'site_name', 'site_title', 'twitter_page', 'time_zone', 'vimeo_page',
         'webmastertools_bing', 'webmastertools_google', 'youtube_page',
         'robots_txt_rules', 'chartbeat', 'body_end_script', 'body_start_script',
         'header_script', 'elements_in_rss', 'redirection', 'locale'
@@ -63,22 +63,10 @@ class SettingController extends Controller
     public function listLocaleAction(Request $request)
     {
         $query   = $request->get('q');
-        $locales = $this->get('core.locale')->getAvailableLocales();
-
-        if (!empty($query)) {
-            $locales = array_filter($locales, function ($a) use ($query) {
-                return strpos(strtolower($a), strtolower($query)) !== false;
-            });
-        }
-
-        $keys    = array_keys($locales);
-        $values  = array_values($locales);
         $locales = [];
-
-        for ($i = 0; $i < count($keys); $i++) {
-            $locales[] = [ 'code' => $keys[$i], 'name' => $values[$i] ];
+        foreach ($this->get('core.locale')->getAvailableLocales($query) as $locale => $obj) {
+            $locales[] = ['code' => $obj['locale'], 'name' => $obj['name'], 'urlLocale' => $locale];
         }
-
         return new JsonResponse($locales);
     }
 
@@ -212,6 +200,9 @@ class SettingController extends Controller
             }
         }
 
+        // TODO: Remove this hack when frontend settings name are updated
+        $settings = $this->updateOldSettingsName($settings);
+
         // Save settings
         $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -253,9 +244,8 @@ class SettingController extends Controller
         }
 
         $locales = $this->get('core.locale')->getAvailableLocales();
-
-        foreach ($settings['locale']['frontend'] as $code) {
-            $frontend[$code] = $locales[$code];
+        foreach ($settings['locale']['frontend'] as $key => $code) {
+            $frontend[$code] = $locales[$key]['name'];
         }
 
         return $frontend;
@@ -295,7 +285,45 @@ class SettingController extends Controller
             $file->move($dir, $name);
             $settings[$key] = $name;
         }
+        return $settings;
+    }
 
+    /**
+     * Update old settings name with new values
+     *
+     * @param array $settings The list of settings.
+     *
+     * @return array $settings The list of settings with old name updated.
+     */
+    protected function updateOldSettingsName($settings)
+    {
+        if (array_key_exists('facebook', $settings)
+            && is_array($settings['facebook'])
+        ) {
+            if (array_key_exists('page', $settings['facebook'])) {
+                $settings['facebook_page'] = $settings['facebook']['page'];
+            }
+
+            if (array_key_exists('id', $settings['facebook'])) {
+                $settings['facebook_id'] = $settings['facebook']['id'];
+            }
+        }
+
+        if (array_key_exists('logo_enabled', $settings)) {
+            $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
+        }
+
+        if (array_key_exists('locale', $settings)
+            && is_array($settings['locale'])
+        ) {
+            if (array_key_exists('backend', $settings['locale'])) {
+                $settings['site_language'] = $settings['locale']['backend'];
+            }
+
+            if (array_key_exists('timezone', $settings['locale'])) {
+                $settings['time_zone'] = $settings['locale']['timezone'];
+            }
+        }
         return $settings;
     }
 }
