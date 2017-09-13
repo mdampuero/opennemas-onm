@@ -591,7 +591,7 @@
                                       [% text %]
                                     </label>
                                     <div class="controls">
-                                      <input  ng-model="settings.automatic_translators[$index].extra[translationParam]" type="text" >
+                                      <input  ng-model="settings.automatic_translators[$parent.$index].extra[translationParam]" type="text" >
                                     </div>
                                   </div>
                                 </div>

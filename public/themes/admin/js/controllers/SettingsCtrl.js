@@ -375,6 +375,7 @@
                 code: codeAux,
                 name: $scope.extra.locales
                 .frontend[codeAux],
+                urlLocale: localeAux,
               });
             }
 
