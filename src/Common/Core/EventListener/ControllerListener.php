@@ -55,9 +55,7 @@ class ControllerListener
         $namespace  = get_class($controller[0]);
 
         $this->globals->setAction($this->getAction($controller[1]));
-        $this->globals->setEndpoint($this->getEndpoint($namespace));
         $this->globals->setExtension($this->getExtension($namespace));
-        $this->locale->setContext($this->globals->getEndpoint());
     }
 
     /**
@@ -70,18 +68,6 @@ class ControllerListener
     protected function getAction($action)
     {
         return strtolower(str_replace('Action', '', $action));
-    }
-
-    /**
-     * Returns the endpoint from the controller namespace.
-     *
-     * @param string $namespace The controller namespace.
-     *
-     * @return string The endpoint.
-     */
-    protected function getEndpoint($namespace)
-    {
-        return strtolower(substr($namespace, 0, strpos($namespace, '\\')));
     }
 
     /**
