@@ -92,19 +92,23 @@ class LocaleTest extends KernelTestCase
     public function testGetAndSetContext()
     {
         $this->assertEquals('backend', $this->locale->getContext());
+        $this->assertEquals('frontend', $this->locale->setContext('frontend')->getContext());
+        $this->assertEquals('backend', $this->locale->setContext('grault')->getContext());
 
-        $this->locale->setContext('grault');
-        $this->assertEquals('grault', $this->locale->getContext());
-
-        $default = new \ReflectionProperty($this->locale, 'default');
         $config  = new \ReflectionProperty($this->locale, 'config');
+        $default = new \ReflectionProperty($this->locale, 'default');
 
-        $default->setAccessible(true);
         $config->setAccessible(true);
+        $default->setAccessible(true);
 
+        $value = $config->getValue($this->locale);
+        unset($value['frontend']);
+        $config->setValue($this->locale, $value);
+
+        $this->assertEquals('frontend', $this->locale->setContext('frontend')->getContext());
         $this->assertEquals(
             $default->getValue($this->locale),
-            $config->getValue($this->locale)['grault']
+            $config->getValue($this->locale)['frontend']
         );
     }
 
