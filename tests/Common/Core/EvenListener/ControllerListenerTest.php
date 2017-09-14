@@ -9,6 +9,7 @@
  */
 namespace Tests\Common\Core\EventListener;
 
+use Common\Core\Component\Locale\Locale;
 use Common\Core\Component\Template\GlobalVariables;
 use Common\Core\EventListener\ControllerListener;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -25,8 +26,9 @@ class ControllerListenerTest extends KernelTestCase
     {
         $container = $this->getMockBuilder('ServiceContainer')->getMock();
 
+        $this->locale   = new Locale([ 'en_US' ], '/foobar/wibble');
         $this->globals  = new GlobalVariables($container);
-        $this->listener = new ControllerListener($this->globals);
+        $this->listener = new ControllerListener($this->globals, $this->locale);
     }
 
     public function testOnKernelController()
@@ -44,7 +46,8 @@ class ControllerListenerTest extends KernelTestCase
         $this->listener->onKernelController($event);
 
         $this->assertEquals('list', $this->globals->getAction());
-        $this->assertEquals('Backend', $this->globals->getEndpoint());
+        $this->assertEquals('backend', $this->globals->getEndpoint());
         $this->assertEquals('articles', $this->globals->getExtension());
+        $this->assertEquals('backend', $this->locale->getContext());
     }
 }
