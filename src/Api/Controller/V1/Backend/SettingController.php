@@ -136,7 +136,7 @@ class SettingController extends Controller
             'extra'    => [
                 'countries' => $this->get('core.geo')->getCountries(),
                 'locales'   => [
-                    'backend'  => $this->get('core.locale')->getLocales(),
+                    'backend'  => $this->get('core.locale')->getAvailableLocales(),
                     'frontend' => $this->getFrontendLocales($settings)
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
