@@ -31,6 +31,7 @@ class Image
         if (!is_callable([$this, $method])) {
             $method = 'resize';
         }
+
         return $this->{$method}($image, $parameters);
     }
 
@@ -44,8 +45,8 @@ class Image
      */
     public function crop($image, array $parameters)
     {
-        $topX = $parameters[0];
-        $topY = $parameters[1];
+        $topX   = $parameters[0];
+        $topY   = $parameters[1];
         $width  = $parameters[2];
         $height = $parameters[3];
 
@@ -90,28 +91,29 @@ class Image
      */
     public function zoomCrop($image, array $parameters)
     {
-        $width         = $parameters[0];
-        $height        = $parameters[1];
+        $width  = $parameters[0];
+        $height = $parameters[1];
 
         $imageSize   = $image->getSize();
         $imageWidth  = $imageSize->getWidth();
         $imageHeight = $imageSize->getHeight();
 
-
         if ($imageWidth >= $imageHeight) {
-            $widthResize = $height*$imageWidth/$imageHeight;
+            $widthResize  = $height * $imageWidth / $imageHeight;
             $heightResize = $height;
-            $topX = $widthResize/2 - $width/2;
-            $topY = 0;
+            $topX         = $widthResize / 2 - $width / 2;
+            $topY         = 0;
         } else {
-            $widthResize = $width;
-            $heightResize = $width*$imageHeight/$imageWidth;
-            $topX = 0;
-            $topY = $heightResize/2 - $height/2;
+            $widthResize  = $width;
+            $heightResize = $width * $imageHeight / $imageWidth;
+            $topX         = 0;
+            $topY         = $heightResize / 2 - $height / 2;
         }
+
         if ($topX < 0) {
             $topX = 0;
         }
+
         if ($topY < 0) {
             $topY = 0;
         }
@@ -175,6 +177,7 @@ class Image
         if (gettype($image) != 'string') {
             return null;
         }
+
         if (file_exists($image) && is_file($image)) {
             $imagine = new \Imagine\Imagick\Imagine();
             return $imagine->open($image);

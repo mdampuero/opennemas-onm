@@ -35,6 +35,7 @@ class AssetController extends Controller
                 if ($text == $decodeText) {
                     return null;
                 }
+
                 return $parametersParser($decodeText);
             } else {
                 return $text;
@@ -44,11 +45,10 @@ class AssetController extends Controller
         $parameters = $parametersParser($parameters);
 
         $parameters = explode(',', urldecode($parameters));
-        $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
+        $path       = realpath(SITE_PATH . '/' . $request->query->get('real_path'));
         $method     = array_shift($parameters);
 
         if (file_exists($path) && is_file($path)) {
-
             $imageService = $this->get('core.image.image');
 
             $image = $imageService->getImage($path);
@@ -61,6 +61,7 @@ class AssetController extends Controller
                     array('Content-Type' => $imageFormat)
                 );
             }
+
             $imageService->strip($image);
             $image = $imageService->process($method, $image, $parameters);
 
@@ -88,34 +89,38 @@ class AssetController extends Controller
     {
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
-        $ccm                = \ContentCategoryManager::get_instance();
-        $currentCategoryId  = $ccm->get_id($categoryName);
+        $ccm               = \ContentCategoryManager::get_instance();
+        $currentCategoryId = $ccm->get_id($categoryName);
 
         $cm                 = new \ContentManager;
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($currentCategoryId);
         //content_id | title_catID | serialize(font-family:;font-size:;color:)
-        if (is_array($contentsInHomepage)) {
-            $bgColor = 'bgcolor_'.$currentCategoryId;
-            $titleColor = "title_".$currentCategoryId;
+        if (!is_array($contentsInHomepage)) {
+            $bgColor    = 'bgcolor_' . $currentCategoryId;
+            $titleColor = "title_" . $currentCategoryId;
 
             $properties = [];
             foreach ($contentsInHomepage as &$content) {
-                $properties []= [$content->id, $bgColor];
-                $properties []= [$content->id, $titleColor];
+                $properties[] = [$content->id, $bgColor];
+                $properties[] = [$content->id, $titleColor];
             }
+
             $properties = \ContentManager::getMultipleProperties($properties);
 
             foreach ($contentsInHomepage as &$content) {
                 foreach ($properties as $property) {
-                    if ($property['fk_content'] == $content->id) {
-                        if ($property['meta_name'] == $bgColor) {
-                            $content->bgcolor = $property['meta_value'];
-                        }
-                        if ($property['meta_name'] == $titleColor) {
-                            $content->title_props = $property['meta_value'];
-                            if (!empty($content->title_props)) {
-                                $content->title_props = json_decode($content->title_props);
-                            }
+                    if ($property['fk_content'] != $content->id) {
+                        continue;
+                    }
+
+                    if ($property['meta_name'] == $bgColor) {
+                        $content->bgcolor = $property['meta_value'];
+                    }
+
+                    if ($property['meta_name'] == $titleColor) {
+                        $content->title_props = $property['meta_value'];
+                        if (!empty($content->title_props)) {
+                            $content->title_props = json_decode($content->title_props);
                         }
                     }
                 }
@@ -127,23 +132,24 @@ class AssetController extends Controller
         // render
         if (count($contentsInHomepage) > 0) {
             $response .= "/**********************************************************\n"
-                      ."   CSS for contents in frontpage of category $categoryName\n"
-                      ." **********************************************************/\n";
+                      . "   CSS for contents in frontpage of category $categoryName\n"
+                      . " **********************************************************/\n";
 
             $response .= "@media(min-width:768px) {\n";
             foreach ($contentsInHomepage as $item) {
                 // Background color
                 if (!empty($item->bgcolor)) {
                     $response .= "#content-{$item->pk_content}.onm-new { "
-                            ."background-color:{$item->bgcolor} !important; }\n";
+                            . "background-color:{$item->bgcolor} !important; }\n";
 
                     $response .= "#content-{$item->pk_content}.colorize { "
-                            ."padding:10px !important; border-radius:5px; }\n";
+                            . "padding:10px !important; border-radius:5px; }\n";
                 }
+
                 if (!empty($item->title_props)) {
                     $response .= "#content-{$item->pk_content} .custom-text, "
-                                ."#content-{$item->pk_content} .title a, "
-                                ."#content-{$item->pk_content} .nw-title a { ";
+                                . "#content-{$item->pk_content} .title a, "
+                                . "#content-{$item->pk_content} .nw-title a { ";
 
                     foreach ($item->title_props as $property => $value) {
                         if (!empty($value)) {
@@ -154,6 +160,7 @@ class AssetController extends Controller
                     $response .= "}\n";
                 }
             }
+
             $response .= "}\n\n";
         }
 
@@ -161,7 +168,7 @@ class AssetController extends Controller
             // 'Expire'       => new \DateTime("+5 min"),
             'Content-Type' => 'text/css',
             'x-instance'   => $this->get('core.instance')->internal_name,
-            'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',frontpagecss',
+            'x-tags'       => 'instance-' . $this->get('core.instance')->internal_name . ',frontpagecss',
         ]);
     }
 
@@ -172,7 +179,7 @@ class AssetController extends Controller
      *
      * @return Response the response object
      */
-    public function globalCssAction(Request $request)
+    public function globalCssAction()
     {
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
@@ -184,11 +191,11 @@ class AssetController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
 
             // RenderColorMenu
-            $siteColor = '#005689';
+            $siteColor   = '#005689';
             $configColor = s::get('site_color');
             if (!empty($configColor)) {
                 if (!preg_match('@^#@', $configColor)) {
-                    $siteColor = '#'.$configColor;
+                    $siteColor = '#' . $configColor;
                 } else {
                     $siteColor = $configColor;
                 }
@@ -210,11 +217,11 @@ class AssetController extends Controller
                         $category->color = $siteColor;
                     } else {
                         if (!preg_match('@^#@', $category->color)) {
-                            $category->color = '#'.$category->color;
+                            $category->color = '#' . $category->color;
                         }
                     }
 
-                    $selectedCategories []= $category;
+                    $selectedCategories[] = $category;
                 }
             }
 
@@ -225,7 +232,6 @@ class AssetController extends Controller
         }
 
         $coreCss   = $this->get('core.template.admin')->fetch('css/global.tpl');
-
         $customCss = $this->renderView(
             'base/custom_css.tpl',
             [ 'cache_id' => $cacheID ]
@@ -234,9 +240,9 @@ class AssetController extends Controller
         $contents = $coreCss . PHP_EOL . $customCss;
 
         return new Response($contents, 200, [
-            'Content-Type' => 'text/css',
-            'x-instance'   => $this->get('core.instance')->internal_name,
-            'x-tags'       => 'instance-'.$this->get('core.instance')->internal_name.',customcss',
+            'Content-Type'  => 'text/css',
+            'x-instance'    => $this->get('core.instance')->internal_name,
+            'x-tags'        => 'instance-' . $this->get('core.instance')->internal_name . ',customcss',
         ]);
     }
 
@@ -247,7 +253,7 @@ class AssetController extends Controller
      *
      * @return Response The response object.
      */
-    public function favicoAction(Request $request)
+    public function favicoAction()
     {
         // Default favico
         $favicoUrl = '/assets/images/favicon.png';
@@ -265,7 +271,7 @@ class AssetController extends Controller
             $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . $favicoFileName;
         }
 
-        $favicoUrl =  realpath(SITE_PATH . '/' . $favicoUrl);
+        $favicoUrl = realpath(SITE_PATH . '/' . $favicoUrl);
 
         return new Response(
             file_get_contents($favicoUrl),

@@ -24,7 +24,7 @@ class ImageTest extends KernelTestCase
     public function setUp()
     {
         $this->imagine = new Imagine();
-        $this->image = new Image();
+        $this->image   = new Image();
     }
 
     /**
@@ -32,7 +32,7 @@ class ImageTest extends KernelTestCase
      */
     private function createTestImage()
     {
-        $size  = new Box(1200, 1000);
+        $size = new Box(1200, 1000);
         return $this->imagine->create($size);
     }
 
@@ -44,29 +44,29 @@ class ImageTest extends KernelTestCase
      */
     public function testProcess()
     {
-        $parameters = [50, 100];
+        $parameters   = [50, 100];
         $imageProcess = $this->image->process('fdasfdsa', $this->createTestImage(), $parameters);
-        $resize = $this->image->resize($this->createTestImage(), $parameters);
+        $resize       = $this->image->resize($this->createTestImage(), $parameters);
         $this->assertEquals($resize->getImagick()->compareImages($imageProcess->getImagick(), 1)[1], 0);
 
-        $parameters = [50, 100];
+        $parameters   = [50, 100];
         $imageProcess = $this->image->process('resize', $this->createTestImage(), $parameters);
-        $resize = $this->image->resize($this->createTestImage(), $parameters);
+        $resize       = $this->image->resize($this->createTestImage(), $parameters);
         $this->assertEquals($resize->getImagick()->compareImages($imageProcess->getImagick(), 1)[1], 0);
 
-        $parameters = [10, 10, 50, 100];
+        $parameters   = [10, 10, 50, 100];
         $imageProcess = $this->image->process('crop', $this->createTestImage(), $parameters);
-        $resize = $this->image->crop($this->createTestImage(), $parameters);
+        $resize       = $this->image->crop($this->createTestImage(), $parameters);
         $this->assertEquals($resize->getImagick()->compareImages($imageProcess->getImagick(), 1)[1], 0);
 
-        $parameters = [50, 100, 'out'];
+        $parameters   = [50, 100, 'out'];
         $imageProcess = $this->image->process('thumbnail', $this->createTestImage(), $parameters);
-        $resize = $this->image->thumbnail($this->createTestImage(), $parameters);
+        $resize       = $this->image->thumbnail($this->createTestImage(), $parameters);
         $this->assertEquals($resize->getImagick()->compareImages($imageProcess->getImagick(), 1)[1], 0);
 
-        $parameters = [50, 100];
+        $parameters   = [50, 100];
         $imageProcess = $this->image->process('zoomCrop', $this->createTestImage(), $parameters);
-        $resize = $this->image->zoomCrop($this->createTestImage(), $parameters);
+        $resize       = $this->image->zoomCrop($this->createTestImage(), $parameters);
         $this->assertEquals($resize->getImagick()->compareImages($imageProcess->getImagick(), 1)[1], 0);
     }
 
@@ -79,7 +79,7 @@ class ImageTest extends KernelTestCase
     {
         // topX, topY, width, height
         $parameters = [10, 10, 50, 100];
-        $picture = $this->image->crop($this->createTestImage(), $parameters);
+        $picture    = $this->image->crop($this->createTestImage(), $parameters);
         $this->assertEquals($picture->getSize()->getWidth(), 50);
         $this->assertEquals($picture->getSize()->getHeight(), 100);
     }
@@ -93,13 +93,13 @@ class ImageTest extends KernelTestCase
     {
         // width, height, type
         $parameters = [50, 100];
-        $picture = $this->image->thumbnail($this->createTestImage(), $parameters);
+        $picture    = $this->image->thumbnail($this->createTestImage(), $parameters);
         $this->assertEquals($picture->getSize()->getWidth(), 50);
         $this->assertEquals($picture->getSize()->getHeight(), 42);
 
         // width, height, type
         $parameters = [50, 100, 'out'];
-        $picture = $this->image->thumbnail($this->createTestImage(), $parameters);
+        $picture    = $this->image->thumbnail($this->createTestImage(), $parameters);
         $this->assertEquals($picture->getSize()->getWidth(), 50);
         $this->assertEquals($picture->getSize()->getHeight(), 42);
     }
@@ -113,7 +113,7 @@ class ImageTest extends KernelTestCase
     {
         // width, height
         $parameters = [50, 100];
-        $picture = $this->image->zoomCrop($this->createTestImage(), $parameters);
+        $picture    = $this->image->zoomCrop($this->createTestImage(), $parameters);
         $this->assertEquals($picture->getSize()->getWidth(), 50);
         $this->assertEquals($picture->getSize()->getHeight(), 100);
     }
@@ -127,7 +127,7 @@ class ImageTest extends KernelTestCase
     {
         // width, height
         $parameters = [50, 100];
-        $picture = $this->image->resize($this->createTestImage(), $parameters);
+        $picture    = $this->image->resize($this->createTestImage(), $parameters);
         $this->assertEquals($picture->getSize()->getWidth(), 50);
         $this->assertEquals($picture->getSize()->getHeight(), 100);
     }
