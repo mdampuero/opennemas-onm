@@ -50,12 +50,10 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        // Get locale from instance settings
-        $settings = $this->container->get('setting_repository')
-            ->get([ 'time_zone', 'site_language' ], [ 'UTC', 'en_US' ]);
+        $locale = $this->container->get('core.locale');
+        $config = $this->container->get('setting_repository')->get('locale');
 
-        $locale   = $settings['site_language'];
-        $timezone = $settings['time_zone'];
+        $locale->configure($config);
 
         // Get locale from user
         if ($this->container->has('core.user')) {
@@ -64,38 +62,35 @@ class LocaleListener implements EventSubscriberInterface
             if (!empty($user->user_language)
                 && $user->user_language !== 'default'
             ) {
-                $locale = $user->user_language;
+                $locale->setLocale($user->user_language);
             }
 
             if (!empty($user->time_zone)) {
-                $timezone = $user->time_zone;
+                $locale->setTimeZone($user->time_zone);
             }
         }
 
-        // Get locale from request
+        // Get locale from request parameters
         if (!empty($event->getRequest()->query->get('language'))) {
-            $locale = $event->getRequest()->query->get('language');
+            $locale->setLocale($event->getRequest()->query->get('language'));
         }
-
-        $lm = $this->container->get('core.locale');
-
-        $lm->setTimeZone($timezone);
-        $lm->setLocale($locale);
 
         // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE_LONG')) {
-            define('CURRENT_LANGUAGE_LONG', $lm->getLocale());
+            define('CURRENT_LANGUAGE_LONG', $locale->getLocale());
         }
 
         // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE')) {
-            define('CURRENT_LANGUAGE', $lm->getLocale());
+            define('CURRENT_LANGUAGE', $locale->getLocale());
         }
 
         // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE_SHORT')) {
-            define('CURRENT_LANGUAGE_SHORT', $lm->getLocaleShort());
+            define('CURRENT_LANGUAGE_SHORT', $locale->getLocaleShort());
         }
+
+        $locale->apply();
     }
 
     /**
