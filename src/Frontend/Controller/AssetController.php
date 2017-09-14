@@ -28,19 +28,32 @@ class AssetController extends Controller
     public function imageAction(Request $request)
     {
         $parameters = $request->query->get('parameters');
+
+        $parametersParser = function ($text) use (&$parametersParser) {
+            if (strpos($text, ',') === false) {
+                $decodeText = urldecode($text);
+                if ($text == $decodeText) {
+                    return null;
+                }
+                return $parametersParser($decodeText);
+            } else {
+                return $text;
+            }
+        };
+
+        $parameters = $parametersParser($parameters);
+
         $parameters = explode(',', urldecode($parameters));
         $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
         $method     = array_shift($parameters);
 
         if (file_exists($path) && is_file($path)) {
-            $imagine = new \Imagine\Imagick\Imagine();
-            $image   = $imagine->open($path);
 
-            $imageFormat = strtolower($image->getImagick()->getImageFormat());
-            $imageSize   = $image->getSize();
-            $imageWidth  = $imageSize->getWidth();
-            $imageHeight = $imageSize->getHeight();
+            $imageService = $this->get('core.image.image');
 
+            $image = $imageService->getImage($path);
+
+            $imageFormat = $imageService->getImageFormat($image);
             if ($imageFormat == 'gif') {
                 return new Response(
                     file_get_contents($path),
@@ -48,84 +61,8 @@ class AssetController extends Controller
                     array('Content-Type' => $imageFormat)
                 );
             }
-
-            $image->strip();
-
-            switch ($method) {
-                case 'crop':
-                    $topX = $parameters[0];
-                    $topY = $parameters[1];
-
-                    $width  = $parameters[2];
-                    $height = $parameters[3];
-
-                    $image->crop(
-                        new \Imagine\Image\Point($topX, $topY),
-                        new \Imagine\Image\Box($width, $height)
-                    );
-                    break;
-                case 'thumbnail':
-                    $width  = $parameters[0];
-                    $height = $parameters[1];
-
-                    if (isset($parameters[3]) && $parameters[3] == 'in') {
-                        $mode = ImageInterface::THUMBNAIL_INSET;
-                    } else {
-                        $mode = ImageInterface::THUMBNAIL_OUTBOUND;
-                    }
-
-                    $image = $image->thumbnail(
-                        new \Imagine\Image\Box($width, $height, $mode)
-                    );
-                    break;
-                case 'zoomcrop':
-                    $width         = $parameters[0];
-                    $height        = $parameters[1];
-                    // $verticalPos   = $parameters[2];
-                    // $horizontalPos = $parameters[3];
-                    $mode = ImageInterface::THUMBNAIL_OUTBOUND;
-
-                    if ($imageWidth >= $imageHeight) {
-                        $widthResize = $height*$imageWidth/$imageHeight;
-                        $heightResize = $height;
-                        $topX = $widthResize/2 - $width/2;
-                        $topY = 0;
-                    } else {
-                        $widthResize = $width;
-                        $heightResize = $width*$imageHeight/$imageWidth;
-                        $topX = 0;
-                        $topY = $heightResize/2 - $height/2;
-                    }
-                    if ($topX < 0) {
-                        $topX = 0;
-                    }
-                    if ($topY < 0) {
-                        $topY = 0;
-                    }
-
-                    $image = $image->resize(
-                        new \Imagine\Image\Box($widthResize, $heightResize, $mode)
-                    )->crop(
-                        new \Imagine\Image\Point($topX, $topY),
-                        new \Imagine\Image\Box($width, $height)
-                    );
-                    break;
-                case 'clean':
-                    # do nothing
-                    break;
-                default:
-                    // Only resize the original image if the parameters needed
-                    // are passed or they are valid
-                    if (array_key_exists(0, $parameters)
-                        && array_key_exists(1, $parameters)
-                    ) {
-                        $width  = $parameters[0];
-                        $height = $parameters[1];
-
-                        $image->resize(new \Imagine\Image\Box($width, $height));
-                    }
-                    break;
-            }
+            $imageService->strip($image);
+            $image = $imageService->process($method, $image, $parameters);
 
             $contents = $image->get($imageFormat, [
                 'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,

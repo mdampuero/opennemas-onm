@@ -75,6 +75,9 @@ services:
         class:     Common\Core\Component\Helper\UrlGeneratorHelper
         arguments: [ '@service_container' ]
 
+    core.image.image:
+        class:     Common\Core\Component\Image\Image
+
     core.instance:
         class:     Common\ORM\Entity\Instance
         factory:   [ '@core.loader', 'getInstance' ]
