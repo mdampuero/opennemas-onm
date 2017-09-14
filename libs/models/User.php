@@ -123,7 +123,7 @@ class User
      *
      * @var string
      */
-    public $meta = array();
+    public $meta = [];
 
     /**
      * Initializes the object instance
@@ -177,14 +177,14 @@ class User
 
             $this->id = $conn->lastInsertId();
         } catch (\Exception $e) {
-            error_log('Unable to create the user with the provided info: '.json_encode($values));
+            error_log('Unable to create the user with the provided info: ' . json_encode($values));
             return false;
         }
 
         /* Notice log of this action */
         logUserEvent(__METHOD__, $this->id, $data);
 
-        dispatchEventWithParams('user.create', array('user' => $this));
+        dispatchEventWithParams('user.create', ['user' => $this]);
 
         return true;
     }
@@ -215,18 +215,18 @@ class User
      */
     public function load($data)
     {
-        $this->id               = (int) $data['id'];
-        $this->username         = $data['username'];
-        $this->password         = $data['password'];
-        $this->url              = $data['url'];
-        $this->bio              = $data['bio'];
-        $this->avatar_img_id    = (int) $data['avatar_img_id'];
-        $this->email            = $data['email'];
-        $this->name             = $data['name'];
-        $this->type             = (int) $data['type'];
-        $this->token            = $data['token'];
-        $this->activated        = (int) $data['activated'];
-        $this->id_user_group    = explode(',', $data['fk_user_group']);
+        $this->id            = (int) $data['id'];
+        $this->username      = $data['username'];
+        $this->password      = $data['password'];
+        $this->url           = $data['url'];
+        $this->bio           = $data['bio'];
+        $this->avatar_img_id = (int) $data['avatar_img_id'];
+        $this->email         = $data['email'];
+        $this->name          = $data['name'];
+        $this->type          = (int) $data['type'];
+        $this->token         = $data['token'];
+        $this->activated     = (int) $data['activated'];
+        $this->id_user_group = explode(',', $data['fk_user_group']);
 
         return $this;
     }
@@ -242,7 +242,7 @@ class User
     {
         try {
             $conn = getService('orm.manager')->getConnection('instance');
-            $rs = $conn->fetchAll(
+            $rs   = $conn->fetchAll(
                 'SELECT * FROM users WHERE id = ?',
                 [ intval($id) ]
             );
@@ -252,7 +252,6 @@ class User
             }
 
             $this->load($rs[0]);
-
 
             // Get user meta information
             $this->meta = $this->getMeta();
@@ -325,7 +324,7 @@ class User
         /* Notice log of this action */
         logUserEvent(__METHOD__, $this->id, $data);
 
-        dispatchEventWithParams('user.update', array('user' => $this));
+        dispatchEventWithParams('user.update', ['user' => $this]);
 
         return true;
     }
@@ -353,7 +352,7 @@ class User
         /* Notice log of this action */
         logUserEvent(__METHOD__, $id);
 
-        dispatchEventWithParams('user.delete', array('user' => $this));
+        dispatchEventWithParams('user.delete', ['user' => $this]);
 
         return true;
     }
@@ -458,7 +457,7 @@ class User
     public static function getAllUsersAuthors($filter = '')
     {
         if (!empty($filter)) {
-            $filter = ' '.$filter.' AND ';
+            $filter = ' ' . $filter . ' AND ';
         }
 
         // Fetch authors info from users table
@@ -475,7 +474,7 @@ class User
         $authorMetas = [];
         if (count($authorIDs) > 0) {
             $authorMetas = getService('orm.manager')->getConnection('instance')->fetchAll(
-                'SELECT * FROM usermeta WHERE user_id IN ('.implode(',', $authorIDs).')'
+                'SELECT * FROM usermeta WHERE user_id IN (' . implode(',', $authorIDs) . ')'
             );
         }
 
@@ -485,16 +484,17 @@ class User
             $authorObject = new \User();
             $authorObject->load($authorData);
 
-            $metas = array_filter($authorMetas, function($item) use ($authorData) {
+            $metas = array_filter($authorMetas, function ($item) use ($authorData) {
                 return $item['user_id'] == $authorData['id'];
             });
             $userMetas = [];
             foreach ($metas as $meta) {
                 $userMetas[$meta['meta_key']] = $meta['meta_value'];
             }
+
             $authorObject->meta = $userMetas;
 
-            $authorObject->params  = $authorObject->meta;
+            $authorObject->params = $authorObject->meta;
             if (array_key_exists('is_blog', $authorObject->params)) {
                 $authorObject->is_blog = $authorObject->meta['is_blog'];
             }
@@ -504,13 +504,14 @@ class User
 
         // Order names with accents
         uasort($authors, function ($a, $b) {
-            $patterns = array(
+            $patterns = [
                 'a' => '(á|à|â|ä|Á|À|Â|Ä)',
                 'e' => '(é|è|ê|ë|É|È|Ê|Ë)',
                 'i' => '(í|ì|î|ï|Í|Ì|Î|Ï)',
                 'o' => '(ó|ò|ô|ö|Ó|Ò|Ô|Ö)',
                 'u' => '(ú|ù|û|ü|Ú|Ù|Û|Ü)'
-            );
+            ];
+
             $name1 = preg_replace(array_values($patterns), array_keys($patterns), $a->name);
             $name2 = preg_replace(array_values($patterns), array_keys($patterns), $b->name);
             return strcasecmp($name1, $name2);
@@ -799,7 +800,7 @@ class User
     {
         $sql = 'SELECT * FROM `users`'
             . ' WHERE type = 1 AND id NOT IN '
-            .  '(SELECT user_id FROM usermeta WHERE meta_key = "paywall_time_limit")';
+            . '(SELECT user_id FROM usermeta WHERE meta_key = "paywall_time_limit")';
 
         return getService('orm.manager')
             ->getRepository('User', 'instance')
@@ -834,8 +835,8 @@ class User
     public function uploadUserAvatar($file, $userName)
     {
         // Generate image path and upload directory
-        $relativeAuthorImagePath ="/authors/".$userName;
-        $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
+        $relativeAuthorImagePath = "/authors/" . $userName;
+        $uploadDirectory         = MEDIA_IMG_PATH . $relativeAuthorImagePath;
 
         // Get original information of the uploaded/local image
         $originalFileName = $file->getBaseName();
@@ -844,7 +845,7 @@ class User
         // Generate new file name
         $currentTime = gettimeofday();
         $microTime   = intval(substr($currentTime['usec'], 0, 5));
-        $newFileName = date("YmdHis").$microTime.".".$fileExtension;
+        $newFileName = date("YmdHis") . $microTime . "." . $fileExtension;
 
         // Check upload directory
         if (!is_dir($uploadDirectory)) {
@@ -855,8 +856,8 @@ class User
         $file->move($uploadDirectory, $newFileName);
 
         // Get all necessary data for the photo
-        $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
-        $data = [
+        $infor = new \MediaItem($uploadDirectory . '/' . $newFileName);
+        $data  = [
             'title'       => $originalFileName,
             'name'        => $newFileName,
             'user_name'   => $newFileName,
@@ -865,7 +866,7 @@ class User
             'category'    => '',
             'created'     => $infor->atime,
             'changed'     => $infor->mtime,
-            'size'        => round($infor->size/1024, 2),
+            'size'        => round($infor->size / 1024, 2),
             'width'       => $infor->width,
             'height'      => $infor->height,
             'type'        => $infor->type,
@@ -873,7 +874,7 @@ class User
         ];
 
         // Create new photo
-        $photo = new \Photo();
+        $photo   = new \Photo();
         $photoId = $photo->create($data);
 
         return $photoId;
