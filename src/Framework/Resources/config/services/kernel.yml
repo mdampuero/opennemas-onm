@@ -48,8 +48,8 @@ services:
         tags:
             - {name: kernel.event_subscriber}
 
-    kernel.subscriber.l10n_routing:
-        class: Framework\EventListener\L10nRouterListener
+    kernel.subscriber.routing:
+        class: Framework\EventListener\RouterListener
         arguments: [ '@router', '@request_stack', '@router.request_context', '@logger', '@service_container']
         tags:
             - { name: kernel.event_subscriber, logger: request }

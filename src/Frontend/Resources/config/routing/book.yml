@@ -1,12 +1,16 @@
 frontend_books:
     path: /libros
     defaults: { _controller: FrontendBundle:Books:frontpage }
+    options:
+        l10n: true
 
 frontend_book_show:
     path: /libro/{id}.{_format}
     defaults: { _controller: FrontendBundle:Books:show, _format: html }
     requirements:
         id : '([0-9]+)'
+    options:
+        l10n: true
 
 frontend_book_show_with_slug:
     path: /libro/{category_name}/{slug}/{id}.{_format}
@@ -15,6 +19,8 @@ frontend_book_show_with_slug:
         category_name: '[^/]+'
         slug         : '([^/]+)?'
         id           : '([0-9]+)'
+    options:
+        l10n: true
 
 frontend_books_widget:
     path: /libros/widget

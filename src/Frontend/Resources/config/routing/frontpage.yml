@@ -1,16 +1,22 @@
 frontend_frontpage_home:
     path: /home
     defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
+    options:
+        l10n: true
 
 frontend_frontpage:
     path: /{category}
     defaults: { _controller: FrontendBundle:Frontpages:show, category : home }
+    options:
+        l10n: true
     requirements:
         category: '(^[mobile])'
 
 frontend_frontpage_category:
     path: /seccion/{category}
     defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
+    options:
+        l10n: true
     requirements:
         category: '[^/]+'
 

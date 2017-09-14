@@ -219,8 +219,7 @@ class MigrationSaver
 
                 if (is_array($values['photo'])) {
                     foreach ($values['photo'] as $id) {
-                        $albums[$values['album']]['album_photos_id'][] = $id;
-
+                        $albums[$values['album']]['album_photos_id'][]     = $id;
                         $albums[$values['album']]['album_photos_footer'][] =
                             $values['footer'];
                     }
@@ -1013,11 +1012,12 @@ class MigrationSaver
                         }
 
                         if (is_file($i['local_file'])) {
-                            $id   = $photo->createFromLocalFile(
+                            $id = $photo->createFromLocalFile(
                                 $i,
                                 $i['directory'],
                                 $uploadPath
                             );
+
                             $slug = array_key_exists('slug', $schema['translation'])
                                 ? $i[$schema['translation']['slug']] : '';
 
@@ -1213,6 +1213,7 @@ class MigrationSaver
                 ) {
                     $group = new \UserGroup();
                     $group->create($values);
+
                     $slug = array_key_exists('slug', $schema['translation']) ?
                         $values[$schema['translation']['slug']] : '';
 
@@ -1569,6 +1570,8 @@ class MigrationSaver
                 . INSTANCE_UNIQUE_NAME . DIRECTORY_SEPARATOR);
         }
 
+        $this->redirector = getService('core.redirector');
+
         $this->conn = getService('orm.manager')->getConnection('instance');
         $this->conn->selectDatabase($this->settings['migration']['target']);
 
@@ -1681,8 +1684,9 @@ class MigrationSaver
      */
     protected function createTranslation($old, $new, $type, $slug = null)
     {
-        $sql    = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
+        $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
             . '`type`, `slug`) VALUES (?,?,?,?)';
+
         $values = array($old, $new, $type, $slug);
 
         $rss = $this->conn->executeQuery($sql, $values);
@@ -1873,8 +1877,10 @@ class MigrationSaver
                     break;
                 case 'translation_from_slug':
                     if (!empty($field)) {
-                        list($type, $field) =
-                            \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
+                        $translation = $this->redirector->getTranslationBySlug($field);
+
+                        $type  = $translation['type'];
+                        $field = $translation['pk_content'];
                     }
                     break;
                 case 'replace_body_images':
@@ -1886,8 +1892,10 @@ class MigrationSaver
                             $filename = pathinfo($value)['basename'];
                         }
 
-                        list($type, $id) =
-                            \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
+                        $translation = $this->redirector->getTranslationBySlug($filename);
+
+                        $type = $translation['type'];
+                        $id   = $translation['pk_content'];
 
                         $photo    = new \Photo($id);
                         $photoUri = $params['media_path'] . $photo->path_img;
@@ -1899,12 +1907,15 @@ class MigrationSaver
 
                     foreach ($matches[1] as $value) {
                         $filename = $value;
+
                         if ($params['file_basename'] == true) {
                             $filename = pathinfo($value)['basename'];
                         }
 
-                        list($type, $id) =
-                            \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
+                        $translation = $this->redirector->getTranslationBySlug($filename);
+
+                        $type = $translation['type'];
+                        $id   = $translation['pk_content'];
 
                         $file  = new \Attachment($id);
                         $field = str_replace($value, $file->uri, $field);
@@ -2019,14 +2030,16 @@ class MigrationSaver
      */
     protected function updateOpinionFrontpagePhoto($id, $photo, $footer)
     {
-        $sql    = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img1', $photo, $photo);
 
         $this->conn->executeQuery($sql, $values);
 
-        $sql    = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img1_footer', $footer, $footer);
 
         $this->conn->executeQuery($sql, $values);
@@ -2041,14 +2054,16 @@ class MigrationSaver
      */
     protected function updateOpinionPhoto($id, $photo, $footer)
     {
-        $sql    = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img2', $photo, $photo);
 
         $this->conn->executeQuery($sql, $values);
 
-        $sql    = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img2_footer', $footer, $footer);
 
         $this->conn->executeQuery($sql, $values);

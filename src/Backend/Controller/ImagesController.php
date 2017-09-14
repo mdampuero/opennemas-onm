@@ -27,7 +27,8 @@ class ImagesController extends Controller
      */
     public function init()
     {
-        $this->ccm         = \ContentCategoryManager::get_instance();
+        $this->ccm = \ContentCategoryManager::get_instance();
+
         $this->category    = $this->get('request_stack')->getCurrentRequest()
             ->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
         $this->contentType = \ContentManager::getContentTypeIdFromName('album');
@@ -123,7 +124,9 @@ class ImagesController extends Controller
                 $photo = new \Photo($id);
                 $photo->getPhotoMetaData();
 
-                $photos[] = $photo;
+                if (!is_null($photo->pk_photo)) {
+                    $photos [] = $photo;
+                }
             }
         }
 
@@ -132,13 +135,7 @@ class ImagesController extends Controller
             $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
 
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_images',
-                    array(
-                        'category' => $category,
-                        'page'     => $page,
-                    )
-                )
+                $this->generateUrl('admin_images', [ 'page' => $page ])
             );
         }
 
@@ -162,10 +159,10 @@ class ImagesController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $photosRAW = $request->request->get('description');
-
+        $photosRAW   = $request->request->get('description');
         $ids         = [];
         $photosSaved = 0;
+
         foreach (array_keys($photosRAW) as $id) {
             $photoData = array(
                 'id'             => filter_var($id, FILTER_SANITIZE_STRING),
@@ -278,7 +275,7 @@ class ImagesController extends Controller
                 }
 
                 $files = isset($_FILES) ? $_FILES : null;
-                $info  = array();
+                $info  = [];
 
                 foreach ($files as $file) {
                     $photo = new \Photo();
@@ -331,20 +328,23 @@ class ImagesController extends Controller
                 $json = json_encode($info);
                 $response->setContent($json);
 
-                $response->headers->add(array('Vary' => 'Accept'));
+                $response->headers->add([ 'Vary' => 'Accept' ]);
 
                 $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
                 if (!empty($redirect)) {
                     return $this->redirect(sprintf($redirect, rawurlencode($json)));
                 }
 
-                if (isset($_SERVER['HTTP_ACCEPT']) &&
-                    (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
+                if (isset($_SERVER['HTTP_ACCEPT'])
+                    && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+                ) {
                     $response->headers->add(array('Content-type' => 'application/json'));
                 } else {
                     $response->headers->add(array('Content-type' => 'text/plain'));
                 }
+
                 return $response;
+
             case 'DELETE':
                 break;
             default:

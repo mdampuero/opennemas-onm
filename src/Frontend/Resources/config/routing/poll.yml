@@ -4,6 +4,8 @@ frontend_poll_frontpage:
     requirements:
         page     : '([0-9]+)?'
         component: 'encuesta|poll|enquerito|enquisa|encuestas|polls'
+    options:
+        l10n: true
 
 frontend_poll_vote:
     path: /poll/addvote/{id}
@@ -18,6 +20,8 @@ frontend_poll_frontpage_category:
         category_name: '[^/]+'
         page         : '([0-9]+)?'
         component    : 'encuesta|poll|enquerito|enquisa'
+    options:
+        l10n: true
 
 frontend_poll_show:
     path: /{component}/{category_name}/{slug}/{id}.{_format}
@@ -27,3 +31,5 @@ frontend_poll_show:
         slug         : '[^/]+'
         id           : '([0-9]+)'
         component: 'encuesta|poll|enquerito|enquisa'
+    options:
+        l10n: true

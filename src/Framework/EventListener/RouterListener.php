@@ -36,7 +36,7 @@ use Symfony\Component\Routing\RequestContextAwareInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class L10nRouterListener implements EventSubscriberInterface
+class RouterListener implements EventSubscriberInterface
 {
     private $matcher;
     private $context;
@@ -173,9 +173,10 @@ class L10nRouterListener implements EventSubscriberInterface
         // If the instance has defined language
         $locale     = '';
         $newRequest = $request;
-        if ($this->container->get('core.security')
-            ->hasExtension('es.openhost.module.multilanguage')
-        ) {
+        $hasModule  = $this->container->get('core.security')
+            ->hasExtension('es.openhost.module.multilanguage');
+
+        if ($hasModule) {
             list($newRequest, $locale) = $this->removeLanguageFromRequest();
         }
 
@@ -189,6 +190,17 @@ class L10nRouterListener implements EventSubscriberInterface
                 $parameters = $this->matcher->match($newRequest->getPathInfo());
             }
 
+            // Raise na error if the url came localized and it's not localizable
+            if ($hasModule &&
+                !empty($locale)
+                && !in_array(
+                    $parameters['_route'],
+                    $this->container->get('core.helper.l10n_route')->getLocalizableRoutes()
+                )
+            ) {
+                throw new ResourceNotFoundException();
+            }
+
             if (null !== $this->logger) {
                 $this->logger->info(
                     sprintf('Matched route "%s".', isset($parameters['_route']) ? $parameters['_route'] : 'n/a'),
@@ -197,6 +209,12 @@ class L10nRouterListener implements EventSubscriberInterface
                         'request_uri' => $newRequest->getUri(),
                     ]
                 );
+            }
+
+            // As we have replaced the standard symfony router we have to
+            // identify requests manually into new relic agent
+            if (extension_loaded ('newrelic')) {
+                newrelic_name_transaction($parameters['_route']);
             }
 
             $request->attributes->add($parameters);

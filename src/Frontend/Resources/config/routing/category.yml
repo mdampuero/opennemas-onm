@@ -3,6 +3,8 @@ category_frontpage:
     defaults: { _controller: FrontendBundle:Category:category }
     requirements:
         category: '[^/]+'
+    options:
+        l10n: true
 
 categ_sync_frontpage:
     path: /extseccion/blog/{category_name}
