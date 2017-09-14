@@ -11,7 +11,6 @@ namespace Common\Core\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -35,6 +34,7 @@ class LocaleListener implements EventSubscriberInterface
     public function __construct($container)
     {
         $this->container = $container;
+        $this->locale    = $container->get('core.locale');
     }
 
     /**
@@ -50,47 +50,76 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        $locale = $this->container->get('core.locale');
         $config = $this->container->get('setting_repository')->get('locale');
 
-        $locale->configure($config);
+        $this->locale->setContext(
+            $this->container->get('core.globals')->getEndpoint()
+        )->configure($config);
 
-        // Get locale from user
-        if ($this->container->has('core.user')) {
-            $user = $this->container->get('core.user');
+        $this->configureRequestLocale($event->getRequest());
+        $this->configureUserLocale();
+        $this->defineLanguageConstants();
 
-            if (!empty($user->user_language)
-                && $user->user_language !== 'default'
-            ) {
-                $locale->setLocale($user->user_language);
-            }
+        $this->locale->apply();
+    }
 
-            if (!empty($user->time_zone)) {
-                $locale->setTimeZone($user->time_zone);
-            }
+    /**
+     * Configures the Locale service basing on the current request.
+     */
+    protected function configureRequestLocale($request)
+    {
+        // Get locale from request attributes
+        if (!empty($request->attributes->get('_locale'))) {
+            $this->locale->setLocale($request->attributes->get('_locale'));
         }
 
         // Get locale from request parameters
-        if (!empty($event->getRequest()->query->get('language'))) {
-            $locale->setLocale($event->getRequest()->query->get('language'));
+        if (!empty($request->query->get('language'))) {
+            $this->locale->setLocale($request->query->get('language'));
+        }
+    }
+
+    /**
+     * Configures the Locale service basing on the current user.
+     */
+    protected function configureUserLocale()
+    {
+        if (!$this->container->has('core.user')) {
+            return;
         }
 
-        // TODO: Replace usage by Locale methods
+        $user = $this->container->get('core.user');
+
+        if (!empty($user->user_language)
+            && $user->user_language !== 'default'
+        ) {
+            $this->locale->setLocale($user->user_language);
+        }
+
+        if (!empty($user->time_zone)) {
+            $this->locale->setTimeZone($user->time_zone);
+        }
+    }
+
+    /**
+     * TODO: Remove when no usage in frontend
+     *
+     * Defines language related constants.
+     */
+    protected function defineLanguageConstants()
+    {
         if (!defined('CURRENT_LANGUAGE_LONG')) {
-            define('CURRENT_LANGUAGE_LONG', $locale->getLocale());
+            define('CURRENT_LANGUAGE_LONG', $this->locale->getLocale());
         }
 
-        // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE')) {
-            define('CURRENT_LANGUAGE', $locale->getLocale());
+            define('CURRENT_LANGUAGE', $this->locale->getLocale());
         }
 
-        // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE_SHORT')) {
-            define('CURRENT_LANGUAGE_SHORT', $locale->getLocaleShort());
+            define('CURRENT_LANGUAGE_SHORT', $this->locale->getLocaleShort());
         }
 
-        $locale->apply();
     }
 
     /**
