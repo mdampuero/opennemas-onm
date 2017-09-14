@@ -230,10 +230,11 @@ class Locale
      */
     public function setContext($context)
     {
-        $this->context = $context;
+        // TODO: Remove replace when backend routes start by 'backend'
+        $this->context = str_replace('admin', 'backend', $context);
 
-        if (!array_key_exists($context, $this->config)) {
-            $this->config[$context] = $this->default;
+        if (!array_key_exists($this->context, $this->config)) {
+            $this->config[$this->context] = $this->default;
         }
 
         return $this;

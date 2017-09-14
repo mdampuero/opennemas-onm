@@ -82,6 +82,7 @@ class LocaleTest extends KernelTestCase
     {
         $this->assertNotEmpty($this->locale->getAvailableLocales());
         $this->assertTrue(array_key_exists('en_US', $this->locale->getAvailableLocales()));
+        $this->assertTrue(array_key_exists('en_US', $this->locale->setContext('admin')->getAvailableLocales()));
         $this->assertEmpty($this->locale->setContext('frontend')->getAvailableLocales());
     }
 
