@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\EventListener;
 
 use Common\Core\Component\Locale\Locale;
-use Common\Core\Component\Template\GlobalVariables;
+use Common\Core\Component\Core\GlobalVariables;
 use Common\Core\EventListener\ControllerListener;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -46,8 +46,8 @@ class ControllerListenerTest extends KernelTestCase
         $this->listener->onKernelController($event);
 
         $this->assertEquals('list', $this->globals->getAction());
-        $this->assertEquals('backend', $this->globals->getEndpoint());
         $this->assertEquals('articles', $this->globals->getExtension());
         $this->assertEquals('backend', $this->locale->getContext());
+        $this->assertEmpty($this->globals->getEndpoint());
     }
 }

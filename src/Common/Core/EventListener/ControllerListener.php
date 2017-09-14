@@ -10,7 +10,7 @@
 namespace Common\Core\EventListener;
 
 use Common\Core\Component\Locale\Locale;
-use Common\Core\Component\Template\GlobalVariables;
+use Common\Core\Component\Core\GlobalVariables;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
