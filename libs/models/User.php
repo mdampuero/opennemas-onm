@@ -190,17 +190,19 @@ class User
     }
 
     /**
-     * undocumented function
+     * Calculates dynamic properties for the object
      *
-     * @return void
-     * @author
+     * @param string $property The property name
+     *
+     * @return mixed the property value
      */
     public function __get($property)
     {
         switch ($property) {
             case 'photo':
                 return $this->getPhoto();
-                break;
+            case 'slug':
+                return \Onm\StringUtils::generateSlug($this->name);
             default:
                 break;
         }
