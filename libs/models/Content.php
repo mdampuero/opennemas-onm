@@ -1619,7 +1619,7 @@ class Content
      */
     public function isOwner($userId)
     {
-        if ($this->fk_publisher == $userId) {
+        if ($this->fk_author == $userId) {
             return true;
         }
 

@@ -444,7 +444,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $content = new \Content();
         $content->load([
-            'fk_publisher' => 4,
+            'fk_author' => 4,
         ]);
 
         $this->assertTrue($content->isOwner(4));
