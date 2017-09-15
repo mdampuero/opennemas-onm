@@ -97,6 +97,7 @@ class SettingController extends Controller
     public function listAction()
     {
         $settings = $this->get('setting_repository')->get($this->keys);
+        $locale   = $this->get('core.locale');
 
         if (array_key_exists('google_analytics', $settings)) {
             $settings['google_analytics'] = $this->get('data.manager.adapter')
@@ -140,7 +141,8 @@ class SettingController extends Controller
             'extra'    => [
                 'countries' => $this->get('core.geo')->getCountries(),
                 'locales'   => [
-                    'backend' => $this->get('core.locale')->getAvailableLocales()
+                    'backend'  => $locale->getAvailableLocales(),
+                    'frontend' => $locale->setContext('frontend')->getAvailableLocales()
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
