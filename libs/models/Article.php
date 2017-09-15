@@ -237,6 +237,10 @@ class Article extends Content
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
 
+        if ($data['content_status'] == 0) {
+            $data['starttime'] = null;
+        }
+
         try {
             // Start transaction
             $conn = getService('dbal_connection');
