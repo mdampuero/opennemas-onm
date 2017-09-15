@@ -126,15 +126,15 @@ class FixCommand extends ContainerAwareCommand
             }
         }
 
+        if (!empty($progress)) {
+            $progress->finish();
+            $output->writeln('');
+        }
+
         $this->postFix();
 
         if (!$end) {
             $tracker->end();
-        }
-
-        if (!empty($progress)) {
-            $progress->finish();
-            $output->writeln('');
         }
 
         $this->getReport();

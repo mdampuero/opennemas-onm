@@ -67,6 +67,10 @@ services:
         class:     Common\Core\Component\Helper\ContentMediaHelper
         arguments: [ '@setting_repository', '@entity_repository' ]
 
+    core.helper.l10n_route:
+        class:     Common\Core\Component\Helper\L10nRouteHelper
+        arguments: [ '@service_container' ]
+
     core.helper.url_generator:
         class:     Common\Core\Component\Helper\UrlGeneratorHelper
         arguments: [ '@service_container' ]
@@ -77,6 +81,10 @@ services:
 
     core.recaptcha:
         class:     Common\Core\Component\Security\Recaptcha\Recaptcha
+        arguments: [ '@service_container' ]
+
+    core.redirector:
+        class:     Common\Core\Component\Routing\Redirector
         arguments: [ '@service_container' ]
 
     core.instance.checker:

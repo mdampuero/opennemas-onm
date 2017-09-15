@@ -1,10 +1,14 @@
 frontend_letter_frontpage:
     path: /cartas-al-director
     defaults: { _controller: FrontendBundle:Letter:frontpage }
+    options:
+        l10n: true
 
 frontend_letter_form:
     path: /cartas-al-director/form
     defaults: { _controller: FrontendBundle:Letter:showForm }
+    options:
+        l10n: true
 
 frontend_letter_show:
     path: /cartas-al-director/{author}/{slug}/{id}.{_format}
@@ -13,6 +17,8 @@ frontend_letter_show:
         author  : '([^/]+)'
         slug    : '[^/]+'
         video_id: '([0-9]+)'
+    options:
+        l10n: true
 
 frontend_letter_save:
     path: /cartas-al-director/save

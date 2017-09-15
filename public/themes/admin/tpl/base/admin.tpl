@@ -73,6 +73,7 @@
 <body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
   {block name="body"}
     <div class="overlay"></div>
+    {block name="header"}
     <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl" ng-init="{block name="ng-init"}{/block}getLatest()">
       <div class="navbar-inner">
         <div class="header-seperation">
@@ -416,6 +417,7 @@
         </div>
       </div>
     </header>
+    {/block}
     {block name="sidebar"}
       {include file="base/sidebar.tpl"}
       <div class="sidebar-border" ng-click="sidebar.pin()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" title="{t}Show/hide sidebar{/t}"></div>

@@ -1,6 +1,8 @@
 frontend_newstand_frontpage:
     path: /portadas-papel
     defaults: { _controller: FrontendBundle:NewStand:frontpage }
+    options:
+        l10n: true
 
 frontend_newstand_frontpage_date:
     path: /portadas-papel/{year}/{month}/{day}
@@ -9,6 +11,8 @@ frontend_newstand_frontpage_date:
         year  : '[0-9]{4}'
         month : '[0-9]{1,2}'
         day   : '[0-3][0-9]'
+    options:
+        l10n: true
 
 frontend_newstand_frontpage_category:
     path: /portadas-papel/{category_name}/{year}/{month}
@@ -17,6 +21,8 @@ frontend_newstand_frontpage_category:
         category_name : '[^/]+'
         year          : '([0-9]{4})'
         month         : '([0-9]{1,2})'
+    options:
+        l10n: true
 
 frontend_newstand_show:
     path: /portadas-papel/{category_name}/{id}.{_format}
@@ -24,3 +30,5 @@ frontend_newstand_show:
     requirements:
         category_name : '[^/]+'
         id            : '([0-9]+)'
+    options:
+        l10n: true

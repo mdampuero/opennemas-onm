@@ -1046,10 +1046,10 @@ CREATE TABLE `translation_ids` (
   `pk_content` bigint(20) unsigned NOT NULL,
   `type` varchar(100) NOT NULL,
   `slug` text,
+  `domain` varchar(255) NOT NULL,
   PRIMARY KEY (`pk_content_old`,`pk_content`,`type`),
   KEY `pk_content` (`pk_content`),
-  KEY `slug` (`slug`(255)),
-  CONSTRAINT `translationids_contentid_contents_id` FOREIGN KEY (`pk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `slug` (`slug`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

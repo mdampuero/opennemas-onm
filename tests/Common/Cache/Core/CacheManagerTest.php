@@ -29,7 +29,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $defaults = [ 'type' => 'redis' ];
-        $config = [
+        $config   = [
             'foo' => [
                 'name'      => 'foo',
                 'namespace' => 'foo',
@@ -65,5 +65,14 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetConnectionValid()
     {
         $this->assertNotEmpty($this->cm->getConnection('foo'));
+    }
+
+    /**
+     * Tests hasConnection for existing and unexisting cache connections.
+     */
+    public function testHasConnection()
+    {
+        $this->assertFalse($this->cm->hasConnection('Foobar'));
+        $this->assertTrue($this->cm->hasConnection('foo'));
     }
 }

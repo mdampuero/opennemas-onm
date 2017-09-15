@@ -34,12 +34,11 @@ class SettingController extends Controller
         'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',
         'onm_digest_pass', 'onm_digest_user', 'paypal_mail',
         'pinterest_page', 'piwik', 'recaptcha', 'refresh_interval',
-        'logo_enabled', 'site_agency', 'site_color', 'site_color_secondary',
-        'site_description', 'site_footer', 'site_footer', 'site_keywords',
-        'site_language', 'site_logo', 'site_name', 'site_title',
-        'twitter_page', 'vimeo_page', 'webmastertools_bing',
-        'webmastertools_google', 'youtube_page',
-        'robots_txt_rules', 'chartbeat',
+        'logo_enabled', 'section_settings', 'site_agency', 'site_color',
+        'site_color_secondary', 'site_description', 'site_footer', 'site_footer',
+        'site_keywords', 'site_language', 'site_logo', 'site_name', 'site_title',
+        'twitter_page', 'time_zone', 'vimeo_page', 'webmastertools_bing',
+        'webmastertools_google', 'youtube_page', 'robots_txt_rules', 'chartbeat',
         'body_end_script', 'body_start_script','header_script',
         'elements_in_rss', 'redirection', 'locale', 'rtb_files'
     ];
@@ -212,11 +211,13 @@ class SettingController extends Controller
             }
         }
 
+        // TODO: Remove this hack when frontend settings name are updated
+        $settings = $this->updateOldSettingsName($settings);
+
         // Save settings
         $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->set($settings);
-
 
         // Delete caches for custom_css and frontpages
         $this->get('core.dispatcher')->dispatch('setting.update');
@@ -300,6 +301,45 @@ class SettingController extends Controller
             $settings[$key] = $name;
         }
 
+        return $settings;
+    }
+
+    /**
+     * Update old settings name with new values
+     *
+     * @param array $settings The list of settings.
+     *
+     * @return array $settings The list of settings with old name updated.
+     */
+    protected function updateOldSettingsName($settings)
+    {
+        if (array_key_exists('facebook', $settings)
+            && is_array($settings['facebook'])
+        ) {
+            if (array_key_exists('page', $settings['facebook'])) {
+                $settings['facebook_page'] = $settings['facebook']['page'];
+            }
+
+            if (array_key_exists('id', $settings['facebook'])) {
+                $settings['facebook_id'] = $settings['facebook']['id'];
+            }
+        }
+
+        if (array_key_exists('logo_enabled', $settings)) {
+            $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
+        }
+
+        if (array_key_exists('locale', $settings)
+            && is_array($settings['locale'])
+        ) {
+            if (array_key_exists('backend', $settings['locale'])) {
+                $settings['site_language'] = $settings['locale']['backend'];
+            }
+
+            if (array_key_exists('timezone', $settings['locale'])) {
+                $settings['time_zone'] = $settings['locale']['timezone'];
+            }
+        }
 
         return $settings;
     }
