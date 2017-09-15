@@ -47,7 +47,7 @@ class UserController extends Controller
         // Get available languages
         $languages = array_merge(
             [ 'default' => _('Default system language') ],
-            $this->container->get('core.locale')->getLocales()
+            $this->container->get('core.locale')->getAvailableLocales()
         );
 
         // Get minimum password level
@@ -151,7 +151,7 @@ class UserController extends Controller
     public function recoverPasswordAction(Request $request)
     {
         // Setup view
-        $this->view->assign('locales', $this->get('core.locale')->getLocales());
+        $this->view->assign('locales', $this->get('core.locale')->getAvailableLocales());
         $this->view->assign('locale', $this->get('core.locale')->getLocale());
 
         if ('POST' != $request->getMethod()) {
@@ -248,7 +248,7 @@ class UserController extends Controller
     public function regeneratePasswordAction(Request $request)
     {
         // Setup view
-        $this->view->assign('locales', $this->get('core.locale')->getLocales());
+        $this->view->assign('locales', $this->get('core.locale')->getAvailableLocales());
         $this->view->assign('locale', $this->get('core.locale')->getLocale());
 
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
@@ -458,7 +458,7 @@ class UserController extends Controller
         // Get available languages
         $languages = array_merge(
             [ 'default' => _('Default system language') ],
-            $this->container->get('core.locale')->getLocales()
+            $this->container->get('core.locale')->getAvailableLocales()
         );
 
         // Get minimum password level

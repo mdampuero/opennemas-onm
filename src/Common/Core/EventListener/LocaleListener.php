@@ -11,7 +11,6 @@ namespace Common\Core\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -35,6 +34,7 @@ class LocaleListener implements EventSubscriberInterface
     public function __construct($container)
     {
         $this->container = $container;
+        $this->locale    = $container->get('core.locale');
     }
 
     /**
@@ -50,52 +50,76 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        // Get locale from instance settings
-        $settings = $this->container->get('setting_repository')
-            ->get([ 'time_zone', 'site_language' ], [ 'UTC', 'en_US' ]);
+        $config = $this->container->get('setting_repository')->get('locale');
 
-        $locale   = $settings['site_language'];
-        $timezone = $settings['time_zone'];
+        $this->locale->setContext(
+            $this->container->get('core.globals')->getEndpoint()
+        )->configure($config);
 
-        // Get locale from user
-        if ($this->container->has('core.user')) {
-            $user = $this->container->get('core.user');
+        $this->configureRequestLocale($event->getRequest());
+        $this->configureUserLocale();
+        $this->defineLanguageConstants();
 
-            if (!empty($user->user_language)
-                && $user->user_language !== 'default'
-            ) {
-                $locale = $user->user_language;
-            }
+        $this->locale->apply();
+    }
 
-            if (!empty($user->time_zone)) {
-                $timezone = $user->time_zone;
-            }
+    /**
+     * Configures the Locale service basing on the current request.
+     */
+    protected function configureRequestLocale($request)
+    {
+        // Get locale from request attributes
+        if (!empty($request->attributes->get('_locale'))) {
+            $this->locale->setLocale($request->attributes->get('_locale'));
         }
 
-        // Get locale from request
-        if (!empty($event->getRequest()->query->get('language'))) {
-            $locale = $event->getRequest()->query->get('language');
+        // Get locale from request parameters
+        if (!empty($request->query->get('language'))) {
+            $this->locale->setLocale($request->query->get('language'));
+        }
+    }
+
+    /**
+     * Configures the Locale service basing on the current user.
+     */
+    protected function configureUserLocale()
+    {
+        if (!$this->container->has('core.user')) {
+            return;
         }
 
-        $lm = $this->container->get('core.locale');
+        $user = $this->container->get('core.user');
 
-        $lm->setTimeZone($timezone);
-        $lm->setLocale($locale);
+        if (!empty($user->user_language)
+            && $user->user_language !== 'default'
+        ) {
+            $this->locale->setLocale($user->user_language);
+        }
 
-        // TODO: Replace usage by Locale methods
+        if (!empty($user->time_zone)) {
+            $this->locale->setTimeZone($user->time_zone);
+        }
+    }
+
+    /**
+     * TODO: Remove when no usage in frontend
+     *
+     * Defines language related constants.
+     */
+    protected function defineLanguageConstants()
+    {
         if (!defined('CURRENT_LANGUAGE_LONG')) {
-            define('CURRENT_LANGUAGE_LONG', $lm->getLocale());
+            define('CURRENT_LANGUAGE_LONG', $this->locale->getLocale());
         }
 
-        // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE')) {
-            define('CURRENT_LANGUAGE', $lm->getLocale());
+            define('CURRENT_LANGUAGE', $this->locale->getLocale());
         }
 
-        // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE_SHORT')) {
-            define('CURRENT_LANGUAGE_SHORT', $lm->getLocaleShort());
+            define('CURRENT_LANGUAGE_SHORT', $this->locale->getLocaleShort());
         }
+
     }
 
     /**

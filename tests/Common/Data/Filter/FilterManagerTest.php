@@ -33,7 +33,7 @@ class FilterManagerTest extends KernelTestCase
      */
     public function testFilter()
     {
-        $this->fm->filter('youtube_id', 'frog');
+        $this->assertEquals($this->fm, $this->fm->filter('youtube_id'));
     }
 
     /**
@@ -43,6 +43,15 @@ class FilterManagerTest extends KernelTestCase
      */
     public function testFilterWhenInvalidFilter()
     {
-        $this->fm->filter('gorp', 'frog');
+        $this->fm->set('frog')->filter('gorp');
+    }
+
+    /**
+     * Tests get and set methods.
+     */
+    public function testSetAndGet()
+    {
+        $this->assertEmpty($this->fm->get());
+        $this->assertEquals('flob', $this->fm->set('flob')->get());
     }
 }

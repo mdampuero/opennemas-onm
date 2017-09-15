@@ -452,8 +452,8 @@
                           {t}Used for all the dates used in your webpage.{/t}
                         </span>
                         <div class="controls">
-                          <select name="timezone" ng-model="settings.locale.timezone">
-                            <option value="[% timezone %]" ng-repeat="timezone in extra.timezones" ng-selected="[% timezone === settings.locale.timezone %]">[% timezone %]</option>
+                          <select name="timezone" ng-model="settings.locale.backend.timezone">
+                            <option value="[% timezone %]" ng-repeat="timezone in extra.timezones" ng-selected="[% timezone === settings.locale.backend.timezone %]">[% timezone %]</option>
                           </select>
                         </div>
                       </div>
@@ -469,8 +469,8 @@
                           {t}Used for displayed messages, interface and measures in your page.{/t}
                         </span>
                         <div class="controls">
-                          <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend">
-                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.backend %]">[% name %]</option>
+                          <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend.language.selected">
+                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.backend.language.selected %]">[% name %]</option>
                           </select>
                         </div>
                       </div>
@@ -497,26 +497,28 @@
                             <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
                           </div>
                         </div>
-                        <div class="form-group" ng-show="settings.locale.frontend.length > 0">
+                        <div class="form-group" ng-show="settings.locale.frontend.language.available.length > 0">
                           <label class="form-label">{t}Main language{/t}</label>
                           <span class="help">
                             <i class="fa fa-circle-info text-info"></i>
                             {t}When no language in the URL, the main language will be used{/t}
                           </span>
-                          <div class="row m-b-5" ng-repeat="item in settings.locale.frontend">
-                            <div class="col-xs-11">
-                              <div class="p-t-10 radio">
-                                <input id="radio-[% $index %]" ng-model="settings.locale.main" type="radio" value="[% item.code %]">
-                                <label for="radio-[% $index %]">
-                                  [% item.name %] ([% item.code %])
-                                  <strong ng-show="settings.locale.main == item.code">({t}Main{/t})</strong>
-                                </label>
+                          <div class="col-md-12">
+                            <div class="row m-b-5" ng-repeat="item in settings.locale.frontend.language.available">
+                              <div class="col-xs-11">
+                                <div class="p-t-10 radio">
+                                  <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
+                                  <label for="radio-[% $index %]">
+                                    [% item.name %]
+                                    <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                            <div class="col-xs-1">
-                              <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
-                                <i class="fa fa-times text-danger"></i>
-                              </button>
+                              <div class="col-xs-1">
+                                <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
+                                  <i class="fa fa-times text-danger"></i>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>

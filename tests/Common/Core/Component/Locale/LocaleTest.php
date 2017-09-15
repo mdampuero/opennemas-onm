@@ -22,7 +22,94 @@ class LocaleTest extends KernelTestCase
      */
     public function setUp()
     {
-        $this->locale = new Locale([ 'en_US' ], '/foo/bar');
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->setMethods([ 'addTextDomain', 'changeLocale', 'changeTimeZone'])
+            ->setConstructorArgs([ [ 'en_US' ], '/foo/bar' ])
+            ->getMock();
+    }
+
+    /**
+     * Tests the constructor.
+     */
+    public function testConstructor()
+    {
+        $path   = new \ReflectionProperty($this->locale, 'path');
+        $config = new \ReflectionProperty($this->locale, 'config');
+
+        $path->setAccessible(true);
+        $config->setAccessible(true);
+
+        $this->assertEquals('/foo/bar', $path->getValue($this->locale));
+        $this->assertEquals([ 'en_US' ], $config->getValue($this->locale)['backend']['language']['available']);
+    }
+
+    /**
+     * Tests apply.
+     */
+    public function testApply()
+    {
+        $this->locale->expects($this->once())->method('changeLocale');
+        $this->locale->expects($this->once())->method('changeTimeZone');
+
+        $this->locale->apply();
+    }
+
+    /**
+     * Tests configure with empty and non-empty values.
+     */
+    public function testConfigure()
+    {
+        $config = new \ReflectionProperty($this->locale, 'config');
+        $config->setAccessible(true);
+        $original = $config->getValue($this->locale);
+
+        $this->locale->configure([]);
+
+        $this->assertEquals($original, $config->getValue($this->locale));
+
+        $this->locale->configure([ 'backend' => [
+            'language' => [ 'selected' => 'fr' ],
+            'timezone' => 'Europe/Madrid'
+        ] ]);
+
+        $this->assertNotEquals($original, $config->getValue($this->locale));
+    }
+
+    /**
+     * Tests getAvailableLocales for backend and frontend contexts.
+     */
+    public function testGetAvailableLocales()
+    {
+        $this->assertNotEmpty($this->locale->getAvailableLocales());
+        $this->assertTrue(array_key_exists('en_US', $this->locale->getAvailableLocales()));
+        $this->assertTrue(array_key_exists('en_US', $this->locale->setContext('admin')->getAvailableLocales()));
+        $this->assertEmpty($this->locale->setContext('frontend')->getAvailableLocales());
+    }
+
+    /**
+     * Tests getContext and setContext methods.
+     */
+    public function testGetAndSetContext()
+    {
+        $this->assertEquals('backend', $this->locale->getContext());
+        $this->assertEquals('frontend', $this->locale->setContext('frontend')->getContext());
+        $this->assertEquals('backend', $this->locale->setContext('grault')->getContext());
+
+        $config  = new \ReflectionProperty($this->locale, 'config');
+        $default = new \ReflectionProperty($this->locale, 'default');
+
+        $config->setAccessible(true);
+        $default->setAccessible(true);
+
+        $value = $config->getValue($this->locale);
+        unset($value['frontend']);
+        $config->setValue($this->locale, $value);
+
+        $this->assertEquals('frontend', $this->locale->setContext('frontend')->getContext());
+        $this->assertEquals(
+            $default->getValue($this->locale),
+            $config->getValue($this->locale)['frontend']
+        );
     }
 
     /**
@@ -34,23 +121,12 @@ class LocaleTest extends KernelTestCase
     }
 
     /**
-     * Tests getLocales.
-     */
-    public function testGetLocales()
-    {
-        $this->assertEquals(
-            [ 'en_US' => ucfirst(\Locale::getDisplayLanguage('en_US')) ],
-            $this->locale->getLocales()
-        );
-    }
-
-    /**
      * Tests getLocaleName.
      */
     public function testGetLocaleName()
     {
         $this->assertEquals(
-            ucfirst(\Locale::getDisplayLanguage('en_US')),
+            ucfirst(\Locale::getDisplayName('en_US')),
             $this->locale->getLocaleName()
         );
     }
@@ -62,11 +138,29 @@ class LocaleTest extends KernelTestCase
     {
         $this->assertEquals('en', $this->locale->getLocaleShort());
 
-        $property = new \ReflectionProperty($this->locale, 'locale');
+        $property = new \ReflectionProperty($this->locale, 'config');
         $property->setAccessible(true);
-        $property->setValue($this->locale, 'es');
+        $property->setValue($this->locale, [ 'backend' => [
+            'language' => [ 'selected' => 'es_ES' ]
+        ]]);
 
-        $this->assertEquals('es', $this->locale->getLocale());
+        $this->assertEquals('es', $this->locale->getLocaleShort());
+    }
+
+    /**
+     * Tests getSupportedLocales.
+     */
+    public function testGetSupportedLocales()
+    {
+        $this->assertEquals(
+            [ 'en_US' => ucfirst(\Locale::getDisplayName('en_US')) ],
+            $this->locale->getSupportedLocales()
+        );
+
+        $this->assertNotEquals(
+            count($this->locale->getSupportedLocales()),
+            count($this->locale->setContext('frontend')->getSupportedLocales())
+        );
     }
 
     /**
@@ -107,5 +201,24 @@ class LocaleTest extends KernelTestCase
 
         $this->locale->setTimeZone('Europe/Lisbon');
         $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone()->getName());
+    }
+
+    /**
+     * Tests getTimeZoneName with multiple valid and invalid values.
+     */
+    public function testGetTimeZoneName()
+    {
+        $method = new \ReflectionMethod($this->locale, 'getTimeZoneName');
+        $method->setAccessible(true);
+
+        $timezones = \DateTimeZone::listIdentifiers();
+
+        $this->assertEmpty($method->invokeArgs($this->locale, [ null ]));
+        $this->assertEmpty($method->invokeArgs($this->locale, [ 'mumble' ]));
+        $this->assertEquals('Europe/Madrid', $method->invokeArgs($this->locale, [ 'Europe/Madrid' ]));
+
+        $index = array_rand(array_keys($timezones));
+
+        $this->assertEquals($timezones[$index], $method->invokeArgs($this->locale, [ $index ]));
     }
 }

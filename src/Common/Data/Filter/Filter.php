@@ -32,8 +32,6 @@ abstract class Filter
      */
     public function __construct($container, $params = [])
     {
-        $this->container = $container;
-
         if (!is_array($params)) {
             $message = 'Filter expects an argument of type array. '
                 . gettype($params) . ' given.';
@@ -41,7 +39,8 @@ abstract class Filter
             throw new \InvalidArgumentException($message);
         }
 
-        $this->params = $params;
+        $this->container = $container;
+        $this->params    = $params;
     }
 
     /**
