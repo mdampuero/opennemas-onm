@@ -23,70 +23,70 @@ class Article extends Content
      *
      * @var int
      */
-    public $pk_article    = null;
+    public $pk_article = null;
 
     /**
      * The subtitle of the article
      *
      * @var string
      */
-    public $subtitle      = null;
+    public $subtitle = null;
 
     /**
      * The agency that authored the article
      *
      * @var string
      */
-    public $agency        = null;
+    public $agency = null;
 
     /**
      * The summary of the article
      *
      * @var string
      */
-    public $summary       = null;
+    public $summary = null;
 
     /**
      * The id of the image assigned for frontpage
      *
      * @var int
      */
-    public $img1          = null;
+    public $img1 = null;
 
     /**
      * The footer of the image assigned for frontpage
      *
      * @var string
      */
-    public $img1_footer   = null;
+    public $img1_footer = null;
 
     /**
      * The id of the image assigned for inner
      *
      * @var int
      */
-    public $img2          = null;
+    public $img2 = null;
 
     /**
      * The footer of the image assigned for inner
      *
      * @var string
      */
-    public $img2_footer   = null;
+    public $img2_footer = null;
 
     /**
      * The id of the video assigned for frontpage
      *
      * @var int
      */
-    public $fk_video      = null;
+    public $fk_video = null;
 
     /**
      * The id of the video assigned for inner
      *
      * @var int
      */
-    public $fk_video2     = null;
+    public $fk_video2 = null;
 
     /**
      * The footer of the video assigned for inner
@@ -100,7 +100,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $title_int     = null;
+    public $title_int = null;
 
     /**
      * Initializes the Article object from an ID
@@ -132,9 +132,9 @@ class Article extends Content
                 }
 
                 if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-                    $uri = 'redirect?to='.urlencode($this->params['bodyLink']).'" target="_blank';
+                    $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
                 } else {
-                    $uri =  Uri::generate(
+                    $uri = Uri::generate(
                         'article',
                         array(
                             'id'       => sprintf('%06d', $this->id),
@@ -144,10 +144,7 @@ class Article extends Content
                         )
                     );
                 }
-
                 return $uri;
-
-                break;
             case 'slug':
                 if (!empty($this->slug)) {
                     return $this->slug;
@@ -158,11 +155,9 @@ class Article extends Content
             case 'author':
                 return $this->getAuthor();
 
-                break;
             case 'content_type_name':
                 return 'Article';
 
-                break;
             default:
                 break;
         }
@@ -211,7 +206,7 @@ class Article extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
+                . 'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
                 [ $id ]
             );
 
@@ -223,7 +218,7 @@ class Article extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error fetching article (ID:'.$id.'): '.$e->getMessage());
+            error_log('Error fetching article (ID:' . $id . '): ' . $e->getMessage());
             return false;
         }
     }
@@ -241,8 +236,6 @@ class Article extends Content
         if (!isset($data['description'])) {
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
-
-        $data['subtitle']= $data['subtitle'];
 
         try {
             // Start transaction
@@ -288,6 +281,7 @@ class Article extends Content
             if (!empty($data['relatedFront'])) {
                 $this->saveRelated($data['relatedFront'], $this->id, 'setRelationPosition');
             }
+
             if (!empty($data['relatedInner'])) {
                 $this->saveRelated($data['relatedInner'], $this->id, 'setRelationPositionForInner');
             }
@@ -299,7 +293,7 @@ class Article extends Content
             return $this->id;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error creating article: '.$e->getMessage());
+            error_log('Error creating article: ' . $e->getMessage());
             return false;
         }
     }
@@ -371,6 +365,7 @@ class Article extends Content
                     'setRelationPosition'
                 );
             }
+
             if (!empty($data['relatedInner'])) {
                 $this->saveRelated(
                     $data['relatedInner'],
@@ -386,12 +381,13 @@ class Article extends Content
                     'setHomeRelations'
                 );
             }
+
             $this->category_name = $this->loadCategoryName($this->id);
 
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error updating article (ID:'.$data['id'].': '.$e->getMessage());
+            error_log('Error updating article (ID:' . $data['id'] . ': ' . $e->getMessage());
             return false;
         }
     }
@@ -430,7 +426,7 @@ class Article extends Content
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error deleting article (ID:'.$id.'): '.$e->getMessage());
+            error_log('Error deleting article (ID:' . $id . '): ' . $e->getMessage());
             return false;
         }
 
@@ -447,14 +443,9 @@ class Article extends Content
      */
     public function render($params, $tpl = null)
     {
-        //  if (!isset($tpl)) {
-            $tpl = getService('core.template');
-        //}
+        $tpl = getService('core.template');
 
         $params['item'] = $this;
-        // $params'cssclass', $params['cssclass']);
-        // $tpl->assign('categoryId', $params['categoryId']);
-
 
         try {
             $html = $tpl->fetch($params['tpl'], $params);
@@ -493,7 +484,7 @@ class Article extends Content
     public function getAuthor()
     {
         if (empty($this->author)) {
-            $this->author= getService('user_repository')->find($this->fk_author);
+            $this->author = getService('user_repository')->find($this->fk_author);
         }
 
         return $this->author;
