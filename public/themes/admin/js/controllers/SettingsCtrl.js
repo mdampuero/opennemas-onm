@@ -314,12 +314,13 @@
           };
 
           // Save only locale codes
-          if (data.settings.locale.frontend instanceof Array) {
-            var frontend = data.settings.locale.frontend.map(function(e) {
+          if (data.settings.locale.frontend.language.available instanceof Array) {
+            var frontend = data.settings.locale.frontend.language.available
+              .map(function(e) {
                 return e.code;
               });
 
-            data.settings.locale.frontend = frontend;
+            data.settings.locale.frontend.language.available = frontend;
           }
 
           if ($scope.settings.site_logo) {
