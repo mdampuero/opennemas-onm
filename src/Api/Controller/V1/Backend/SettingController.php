@@ -63,7 +63,8 @@ class SettingController extends Controller
     public function listLocaleAction(Request $request)
     {
         $query   = $request->get('q');
-        $locales = $this->get('core.locale')->getAvailableLocales();
+        $locales = $this->get('core.locale')->setContext('frontend')
+            ->getSupportedLocales();
 
         if (!empty($query)) {
             $locales = array_filter($locales, function ($a) use ($query) {
@@ -76,7 +77,10 @@ class SettingController extends Controller
         $locales = [];
 
         for ($i = 0; $i < count($keys); $i++) {
-            $locales[] = [ 'code' => $keys[$i], 'name' => $values[$i] ];
+            $locales[] = [
+                'code' => $keys[$i],
+                'name' => "$values[$i] ($keys[$i])"
+            ];
         }
 
         return new JsonResponse($locales);
