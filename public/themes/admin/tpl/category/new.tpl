@@ -130,6 +130,7 @@
                 <div class="controls">
                   <div class="checkbox">
                     <input type="checkbox"
+                       id="inmenu"
                        ng-model="category.inmenu"
                        ng-true-value="1"
                        ng-false-value="'0'">
@@ -147,7 +148,7 @@
                        id="inrss"
                        name="inrss"
                        ng-true-value="1">
-                    <label for="params[inrss]" class="form-label">{t}Show in RSS{/t}</label>
+                    <label for="inrss" class="form-label">{t}Show in RSS{/t}</label>
                   </div>
                 </div>
               </div>
