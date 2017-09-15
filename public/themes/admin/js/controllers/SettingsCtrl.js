@@ -51,9 +51,14 @@
             { api_key: '', base_domain: '', custom_var: '' }
           ],
           locale: {
-            backend:   'en',
-            frontend:  [],
-            time_zone: 'UTC'
+            backend: {
+              language: { selected: 'en' },
+              timezone: 'UTC'
+            },
+            frontend: {
+              language: { available: [], selected: null },
+              timezone: 'UTC'
+            }
           },
           rtb_files: []
         };
@@ -93,20 +98,21 @@
          * @param Object The locale to add.
          */
         $scope.addLocale = function(item) {
-          if (!$scope.settings.locale.frontend) {
-            $scope.settings.locale.frontend = [];
+          if (!$scope.settings.locale.frontend.language) {
+            $scope.settings.locale.frontend.language = [];
           }
 
-          if ($scope.settings.locale.frontend.length === 0) {
-            $scope.settings.locale.main = item.code;
+          if ($scope.settings.locale.frontend.language.available.length === 0) {
+            $scope.settings.locale.frontend.language.selected = item.code;
           }
 
-          var codes = $scope.settings.locale.frontend.map(function (e) {
-            return e.code;
-          });
+          var codes = $scope.settings.locale.frontend.language.available
+            .map(function (e) {
+              return e.code;
+            });
 
           if (codes.indexOf(item.code) === -1) {
-            $scope.settings.locale.frontend.push(item);
+            $scope.settings.locale.frontend.language.available.push(item);
           }
         };
 
@@ -250,7 +256,7 @@
         $scope.removeLocale = function(index) {
           var item = $scope.settings.locale.frontend[index];
 
-          $scope.settings.locale.frontend.splice(index, 1);
+          $scope.settings.locale.frontend.language.available.splice(index, 1);
 
           if ($scope.settings.locale.frontend.length === 0) {
             $scope.settings.locale.main = null;
