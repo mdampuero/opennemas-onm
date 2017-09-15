@@ -48,8 +48,9 @@ class UnlocalizeFilter extends LocalizeFilter
     public function filterValue($value)
     {
         $locales = $this->getParameter('locales');
+        $locale  = $this->getParameter('locale');
 
-        if (empty($locales)) {
+        if (empty($locales) || empty($locale)) {
             return $value;
         }
 
@@ -60,6 +61,6 @@ class UnlocalizeFilter extends LocalizeFilter
             return $value;
         }
 
-        return array_fill_keys($locales, $value);
+        return array_fill_keys([ $locale ], $value);
     }
 }
