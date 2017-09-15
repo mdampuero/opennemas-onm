@@ -126,7 +126,7 @@ class LocaleTest extends KernelTestCase
     public function testGetLocaleName()
     {
         $this->assertEquals(
-            ucfirst(\Locale::getDisplayLanguage('en_US')),
+            ucfirst(\Locale::getDisplayName('en_US')),
             $this->locale->getLocaleName()
         );
     }
@@ -153,7 +153,7 @@ class LocaleTest extends KernelTestCase
     public function testGetSupportedLocales()
     {
         $this->assertEquals(
-            [ 'en_US' => ucfirst(\Locale::getDisplayLanguage('en_US')) ],
+            [ 'en_US' => ucfirst(\Locale::getDisplayName('en_US')) ],
             $this->locale->getSupportedLocales()
         );
 

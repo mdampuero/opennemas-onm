@@ -144,7 +144,7 @@ class Locale
         $locales = [];
 
         foreach ($this->config[$this->context]['language']['available'] as $locale) {
-            $locales[$locale] = ucfirst(\Locale::getDisplayLanguage($locale));
+            $locales[$locale] = ucfirst(\Locale::getDisplayName($locale));
         }
 
         return $locales;
@@ -177,7 +177,7 @@ class Locale
      */
     public function getLocaleName()
     {
-        return ucfirst(\Locale::getDisplayLanguage($this->getLocale()));
+        return ucfirst(\Locale::getDisplayName($this->getLocale()));
     }
 
     /**
@@ -205,7 +205,7 @@ class Locale
         }
 
         foreach ($codes as $code) {
-            $locales[$code] = ucfirst(\Locale::getDisplayLanguage($code));
+            $locales[$code] = ucfirst(\Locale::getDisplayName($code));
         }
 
         return $locales;
