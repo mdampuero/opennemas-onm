@@ -133,4 +133,32 @@ class Controller extends SymfonyController
 
         return $response;
     }
+
+    /**
+     * Get the locale info needed for multiLanguage.
+     *
+     * @param String    $context    Locale context
+     * @param Request   $request    User request.
+     *
+     * @return Array all info related with locale information for the instance and request
+     */
+    protected function getLocaleData($context, Request $request = null)
+    {
+        $locale = null;
+        if ($request != null) {
+            $locale = $request->query->filter('locale', null, FILTER_SANITIZE_STRING);
+        }
+
+        if ($this->get('core.security')->hasPermission('es.openhost.module.translation')) {
+            $translators = $this->get('setting_repository')->get('automatic_translators');
+        }
+
+        $ls = $this->get('core.locale')->setContext('frontend');
+
+        return array(
+            'locale'            => $locale,
+            'default'           => $ls->getLocale(),
+            'all'               => $ls->getAvailableLocales(),
+        );
+    }
 }
