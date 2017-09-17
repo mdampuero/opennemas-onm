@@ -38,21 +38,16 @@ class CategoriesController extends Controller
      */
     public function listAction(Request $request)
     {
-        $categories = $this->get('category_repository')->findBy(null, 'name ASC');
-        $languageData = $this->getLocaleData($request);
-        $adaptParams = [
-            MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS           => \ContentCategory::MULTI_LANGUAGE_FIELDS,
-            MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE            => $languageData['default'],
-        ];
+        $categories   = $this->get('category_repository')->findBy(null, 'name ASC');
+        $languageData = $this->getLocaleData('frontend');
 
         $categories = array_map(
-            function ($category) use ($adaptParams) {
-                return $this->get('data.manager.adapter')->adapt('multi_option', $category, $adaptParams);
+            function ($category) use ($languageData) {
+                return $this->get('data.manager.adapter')->adapt('multi_option', $category, $languageData);
             },
             $categories
         );
         $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
-
 
         return $this->render(
             'category/list.tpl',
@@ -82,8 +77,8 @@ class CategoriesController extends Controller
         if ('POST' == $request->getMethod()) {
             $logoPath = '';
             if (!empty($_FILES) && isset($_FILES['logo_path'])) {
-                $nameFile = $_FILES['logo_path']['name'];
-                $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
+                $nameFile   = $_FILES['logo_path']['name'];
+                $uploaddir  = MEDIA_PATH.'/sections/'.$nameFile;
 
                 if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
                     $logoPath = $nameFile;
@@ -128,8 +123,8 @@ class CategoriesController extends Controller
                 )
             );
         } else {
-            $allcategories  = $ccm->categories;
-            $categories = array();
+            $allcategories = $ccm->categories;
+            $categories    = array();
             foreach ($allcategories as $category) {
                 if ($category->internal_category != 0
                     && $category->fk_content_category == 0
@@ -138,15 +133,15 @@ class CategoriesController extends Controller
                 }
             }
 
-
-            $jsonData = json_encode(
+            $languageData = $this->getLocaleData('frontend', $request);
+            $jsonData     = json_encode(
                 array(
                     'categories'            => $allcategories,
                     'configurations'        => s::get('section_settings'),
                     'subcategories'         => [],
                     'internal_categories'   => $this->getInternalCategories(),
                     'image_path'            => MEDIA_URL . MEDIA_DIR,
-                    'language_data'         => $this->getLocaleData($request)
+                    'language_data'         => $languageData,
                 )
             );
 
@@ -175,11 +170,11 @@ class CategoriesController extends Controller
 
         $category = new \ContentCategory($id);
         if ($category->pk_content_category != null) {
-            $ccm = \ContentCategoryManager::get_instance();
-            $allcategorys = $ccm->categories;
+            $ccm           = \ContentCategoryManager::get_instance();
+            $allcategorys  = $ccm->categories;
             $subcategories = $ccm->getSubcategories($id);
-
-            $jsonData = json_encode(
+            $languageData  = $this->getLocaleData('frontend', $request);
+            $jsonData      = json_encode(
                 array(
                     'categories'            => $allcategorys,
                     'configurations'        => s::get('section_settings'),
@@ -187,7 +182,7 @@ class CategoriesController extends Controller
                     'subcategories'         => $subcategories,
                     'internal_categories'   => $this->getInternalCategories(),
                     'image_path'            => MEDIA_URL . MEDIA_DIR,
-                    'language_data'         => $this->getLocaleData($request)
+                    'language_data'         => $languageData,
                 )
             );
 
@@ -197,14 +192,14 @@ class CategoriesController extends Controller
                     'categoryData'   => $jsonData
                 )
             );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to find a category for the given id.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_categories'));
         }
+
+        $this->get('session')->getFlashBag()->add(
+            'error',
+            _('Unable to find a category for the given id.')
+        );
+
+        return $this->redirect($this->generateUrl('admin_categories'));
     }
 
     /**
@@ -481,28 +476,34 @@ class CategoriesController extends Controller
     private function getInternalCategories()
     {
         $internalCategories = [1,7,9,10,11,14,15];
-        $allowedCategories = [1];
+        $allowedCategories  = [1];
 
         $security = $this->get('core.security');
 
         if ($security->hasExtension('ALBUM_MANAGER')) {
             $allowedCategories[] = 7;
         }
+
         if ($security->hasExtension('VIDEO_MANAGER')) {
             $allowedCategories[] = 9;
         }
+
         if ($security->hasExtension('POLL_MANAGER')) {
             $allowedCategories[] = 11;
         }
+
         if ($security->hasExtension('KIOSKO_MANAGER')) {
             $allowedCategories[] = 14;
         }
+
         if ($security->hasExtension('SPECIAL_MANAGER')) {
             $allowedCategories[] = 10;
         }
+
         if ($security->hasExtension('BOOK_MANAGER')) {
             $allowedCategories[] = 15;
         }
+
         if ($security->hasPermission('MASTER')) {
             $allowedCategories[] = 0;
         }
@@ -513,6 +514,7 @@ class CategoriesController extends Controller
                 $internalCategoriesList[$internalCategory['pk_content_type']] = $internalCategory;
             }
         }
+
         return [
             'internalCategories'    => $internalCategoriesList,
             'allowedCategories'     => $allowedCategories

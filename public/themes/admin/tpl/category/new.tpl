@@ -21,7 +21,7 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <translator language-data="[% languageData %]" change-language="changeLanguage" />
+              <translator ng-model="lang" language-data="languageData" />
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -103,7 +103,7 @@
                         [% subcategory.name %]
                       </td>
                       <td class="left">
-                          <i class="fa [% internalCategoriesImgs[subcategory.internal_category] %]" uib-tooltip="[% internalCategories[subcategory.internal_category] %]"></i>
+                          <i class="fa [% internalCategoriesImgs[subcategory.internal_category] %]" uib-tooltip="[% internalCategories.internalCategories[subcategory.internal_category] %]"></i>
                       </td>
                       <td class="left">
                         [% (subcategory.inmenu)?"{t}Yes{/t}":"{t}No{/t}" %]
@@ -160,7 +160,7 @@
                   <select name="category.internal_category"
                       id="internal_category"
                       ng-model="category.internal_category"
-                      ng-options="internalCategoryKey as (internalCategoryKey == 0)?'{t}Internal{/t}':internalCategories.internalCategories[internalCategoryKey].title for internalCategoryKey in internalCategories.allowedCategories"
+                      ng-options="internaAux as internaAux.value for internaAux in getInternalCategories('{t}Internal{/t}') track by internaAux.code"
                   >
                   </select>
                 </div>

@@ -9,7 +9,7 @@
           </a>
           <div class="listing-inline-actions">
               {is_module_activated name="es.openhost.module.multilanguage"}
-                <translator language-data="[% languageData %]" link="{url name=admin_category_show id=$category->pk_content_category}" />
+                <translator link="{url name=admin_category_show id=$category->pk_content_category}" />
               {/is_module_activated}
               {acl isAllowed="CATEGORY_UPDATE"}
                   {if $category->internal_category != 0 && $category->internal_category != 2}

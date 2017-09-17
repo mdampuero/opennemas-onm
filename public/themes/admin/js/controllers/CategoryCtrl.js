@@ -47,10 +47,11 @@
             $scope.subcategories = categoryData.subcategories;
             $scope.categories = categoryData.categories;
             $scope.configurations = categoryData.configurations;
-            $scope.internalCategories = categoryData.internalCategories;
+            $scope.internalCategories = categoryData.internal_categories;
             $scope.categoryUrl = categoryData.imagePath + '/sections/';
             $scope.languageData = categoryData.language_data;
             $scope.loading = false;
+            $scope.lang = categoryData.language_data.default;
             return;
           }
           $scope.loading = false;
@@ -58,8 +59,12 @@
           // TODO implement the ajax request for caregory info
         };
 
-        $scope.changeLanguage = function(language) {
-          alert(language);
+        $scope.getInternalCategories = function(internal) {
+          var prueba = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
+            var value = (categoryKey == 0)?'internal':$scope.internalCategories.internalCategories[categoryKey].title
+            return {'code':categoryKey, 'value':value};
+          });
+          return prueba;
         };
 
         $scope.test = function() {
@@ -93,8 +98,8 @@
         };
 
         $scope.internalCategoriesImgs = {
-          7: 'fa-stack-overflow',
-          9: 'fa-film',
+          7:  'fa-stack-overflow',
+          9:  'fa-film',
           11: 'fa-pie-chart',
           10: 'fa-star',
           14: 'fa-newspaper-o',
