@@ -70,12 +70,12 @@ class LocaleListener implements EventSubscriberInterface
     {
         // Get locale from request attributes
         if (!empty($request->attributes->get('_locale'))) {
-            $this->locale->setLocale($request->attributes->get('_locale'));
+            $this->locale->setRequestLocale($request->attributes->get('_locale'));
         }
 
         // Get locale from request parameters
         if (!empty($request->query->get('language'))) {
-            $this->locale->setLocale($request->query->get('language'));
+            $this->locale->setRequestLocale($request->query->get('language'));
         }
     }
 
