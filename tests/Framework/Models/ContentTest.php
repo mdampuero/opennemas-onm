@@ -25,17 +25,17 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStatus()
     {
-        $content = new \Content();
+        $content            = new \Content();
         $content->in_litter = 1;
         $this->assertEquals(\Content::TRASHED, $content->getStatus());
 
-        $content = new \Content();
+        $content            = new \Content();
         $content->available = 0;
         $this->assertEquals(\Content::PENDING, $content->getStatus());
 
-        $content = new \Content();
+        $content                 = new \Content();
         $content->content_status = 1;
-        $content->available = 1;
+        $content->available      = 1;
         $this->assertEquals(\Content::AVAILABLE, $content->getStatus());
     }
 
@@ -45,15 +45,13 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $content = new \Content();
-        $content->load(
-            array(
-                'pk_content'             => 123,
-                'other_value'            => 'other value',
-                'fk_content_type'        => 1,
-                'pk_fk_content_category' => 2,
-                'params'                 => 'a:2:{s:4:"test";i:1;s:5:"test2";i:2;}',
-            )
-        );
+        $content->load([
+            'pk_content'             => 123,
+            'other_value'            => 'other value',
+            'fk_content_type'        => 1,
+            'pk_fk_content_category' => 2,
+            'params'                 => 'a:2:{s:4:"test";i:1;s:5:"test2";i:2;}',
+        ]);
         $this->assertEquals(123, $content->id);
         $this->assertEquals('other value', $content->other_value);
         $this->assertEquals(1, $content->content_type);
@@ -68,7 +66,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $now = '2012-08-22 03:03:12';
 
-        $content = new \Content();
+        $content            = new \Content();
         $content->starttime = null;
         $content->endtime   = '2012-08-22 03:03:12';
         $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
@@ -97,7 +95,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $now = '2012-08-22 03:03:12';
 
-        $content = new \Content();
+        $content            = new \Content();
         $content->starttime = '2013-08-22 03:03:12';
         $content->endtime   = null;
         $this->assertEquals(\Content::POSTPONED, $content->getSchedulingState($now));
@@ -116,7 +114,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $now = '2012-08-22 03:03:12';
 
         // Check scheduling state with dued article with valid starttime
-        $content = new \Content();
+        $content            = new \Content();
         $content->starttime = '2013-08-20 03:03:12';
         $content->endtime   = '2012-08-21 03:03:12';
         $this->assertEquals(\Content::DUED, $content->getSchedulingState($now));
@@ -130,15 +128,15 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $now = '2012-08-22 03:03:12';
 
         // Check scheduling state with in time article with valid starttime
-        $content = new \Content();
+        $content            = new \Content();
         $content->starttime = '2012-08-20 03:03:12';
         $content->endtime   = '2012-08-24 03:03:12';
         $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState($now));
 
         // Check scheduling state with in time article with nulled starttime
-        $content = new \Content();
+        $content            = new \Content();
         $content->starttime = '2012-08-20 03:03:12';
-        $content->endtime   = null;;
+        $content->endtime   = null;
         $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState($now));
     }
 
@@ -353,7 +351,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSuggested()
     {
-        $content = new \Content();
+        $content            = new \Content();
         $content->frontpage = 1;
         $this->assertTrue($content->isSuggested());
 
@@ -367,7 +365,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetContentTypeName()
     {
-        $content = new \Content();
+        $content               = new \Content();
         $content->content_type = 1;
 
         $contentTypeName = $content->getContentTypeName();
@@ -380,7 +378,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetContentTypeNameWithEmptyContentType()
     {
-        $content = new \Content();
+        $content               = new \Content();
         $content->content_type = '';
 
         $contentTypeName = $content->getContentTypeName();
@@ -393,7 +391,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetContentTypeNameWithNotValidContentType()
     {
-        $content = new \Content();
+        $content               = new \Content();
         $content->content_type = -1;
 
         $contentTypeName = $content->getContentTypeName();
@@ -442,12 +440,30 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsOwner()
     {
+        // Check that the content belongs to publisher 4
         $content = new \Content();
         $content->load([
             'fk_publisher' => 4,
         ]);
 
         $this->assertTrue($content->isOwner(4));
+
+        // Check that the content belongs to the author 4
+        $content = new \Content();
+        $content->load([
+            'fk_publisher' => 4,
+            'fk_author'    => 5,
+        ]);
+
+        $this->assertTrue($content->isOwner(5));
+
+        // Check that the content doesnt belong to a unexisting user
+        $content = new \Content();
+        $content->load([
+            'fk_publisher' => 4,
+            'fk_author'    => 5,
+        ]);
+
         $this->assertFalse($content->isOwner(40));
     }
 }
