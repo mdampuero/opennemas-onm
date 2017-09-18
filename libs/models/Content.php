@@ -1616,14 +1616,16 @@ class Content
     }
 
     /**
-     * Checks if the given id is the creator's id
+     * Checks if the given id is the creator's/author's id
      *
      * @param  integer $userId
      * @return boolean
      */
     public function isOwner($userId)
     {
-        if ($this->fk_publisher == $userId) {
+        if ($this->fk_publisher == $userId
+            || $this->fk_author == $userId
+        ) {
             return true;
         }
 
