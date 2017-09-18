@@ -1,7 +1,7 @@
 function getVideoInformation(url) {
     var container = jQuery('#video-information');
     jQuery.ajax({
-        url: video_manager_url.get_information + '?url=' + encodeURI(url),
+        url: video_manager_url.get_information + '?url=' + encodeURIComponent(url),
         async: true,
         beforeSend: function() {
             container.html('<div class="spinner"></div>Loading request...');
@@ -18,7 +18,6 @@ function getVideoInformation(url) {
 }
 
 (function($) {
-
     jQuery('#video_url_button').on('click', function() {
         var url = jQuery('#video_url').val();
         getVideoInformation(url);
@@ -32,7 +31,7 @@ function getVideoInformation(url) {
         );
     });
 
-    jQuery('#save-widget-positions').on('click', function(e, ui) {
+    jQuery('#save-widget-positions').on('click', function(e) {
         e.preventDefault();
 
         var items_id = [];
@@ -44,13 +43,10 @@ function getVideoInformation(url) {
            type: 'POST',
            data: { positions: items_id }
         }).done(function(msg) {
-
             jQuery('#warnings-validation')
                 .html('<div class=\"success\">' + msg + '</div>')
                 .effect('highlight', {}, 3000);
-
        });
         return false;
     });
-
 })(jQuery);
