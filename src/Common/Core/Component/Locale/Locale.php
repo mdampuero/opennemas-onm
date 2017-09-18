@@ -58,6 +58,13 @@ class Locale
     protected $fixes = [ 'en' => 'en_US', 'gl' => 'gl_ES' ];
 
     /**
+     * The locale for the current request.
+     *
+     * @var string
+     */
+    protected $requestLocale;
+
+    /**
      * The path to locales.
      *
      * @var string
@@ -80,7 +87,7 @@ class Locale
         foreach ($this->config as $context => $config) {
             $this->config[$context] = array_replace_recursive(
                 $this->default,
-                $this->config[$context]
+                $config
             );
         }
     }
@@ -191,6 +198,20 @@ class Locale
     }
 
     /**
+     * Returns the locale for the current request.
+     *
+     * @return string The locale for the current request.
+     */
+    public function getRequestLocale()
+    {
+        if (empty($this->requestLocale)) {
+            return $this->getLocale();
+        }
+
+        return $this->requestLocale;
+    }
+
+    /**
      * Returns the list of all available locales.
      *
      * @return array The list of all available locales.
@@ -247,17 +268,36 @@ class Locale
      *
      * @return Locale The current locale service.
      */
-    public function setLocale($locale = null)
+    public function setLocale($locale)
     {
-        // Try to auto-correct the locale
-        if (!empty($locale)) {
-            if (array_key_exists($locale, $this->fixes)) {
-                $locale = $this->fixes[$locale];
-            }
+        if (empty($locale)) {
+            return $this;
+        }
 
-            if (in_array($locale, $this->config[$this->context]['language']['available'])) {
-                $this->config[$this->context]['language']['selected'] = $locale;
-            }
+        if (array_key_exists($locale, $this->fixes)) {
+            $locale = $this->fixes[$locale];
+        }
+
+        if (in_array($locale, $this->config[$this->context]['language']['available'])) {
+            $this->config[$this->context]['language']['selected'] = $locale;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Changes the locale for the current request.
+     *
+     * @param string $locale  The locale for the current request.
+     */
+    public function setRequestLocale($locale)
+    {
+        if (empty($locale)) {
+            return $this;
+        }
+
+        if (in_array($locale, $this->config[$this->context]['language']['available'])) {
+            $this->requestLocale = $locale;
         }
 
         return $this;
