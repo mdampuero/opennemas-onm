@@ -440,12 +440,30 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsOwner()
     {
+        // Check that the content belongs to publisher 4
         $content = new \Content();
         $content->load([
             'fk_publisher' => 4,
         ]);
 
         $this->assertTrue($content->isOwner(4));
+
+        // Check that the content belongs to the author 4
+        $content = new \Content();
+        $content->load([
+            'fk_publisher' => 4,
+            'fk_author'    => 5,
+        ]);
+
+        $this->assertTrue($content->isOwner(5));
+
+        // Check that the content doesnt belong to a unexisting user
+        $content = new \Content();
+        $content->load([
+            'fk_publisher' => 4,
+            'fk_author'    => 5,
+        ]);
+
         $this->assertFalse($content->isOwner(40));
     }
 }
