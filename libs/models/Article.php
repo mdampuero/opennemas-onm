@@ -237,6 +237,7 @@ class Article extends Content
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
 
+        // If content is created without publish, don't save any starttime
         if ($data['content_status'] == 0) {
             $data['starttime'] = null;
         }
