@@ -54,53 +54,11 @@
 class Menu
 {
     /**
-     * The menu id
+     * The array of raw data.
      *
-     * @var int
+     * @var array
      */
-    public $pk_menu = null;
-
-    /**
-     * The menu id
-     *
-     * @var int
-     */
-    public $id = null;
-
-    /**
-     * The name of the menu
-     *
-     * @var string
-     */
-    public $name = null;
-
-    /**
-     * The name of the menu
-     *
-     * @var string
-     */
-    public $title = null;
-
-    /**
-     * Menu type. internal, external...
-     *
-     * @var string
-     */
-    public $type = null;
-
-    /**
-     * Misc params for this menu
-     *
-     * @var string
-     */
-    public $params = null;
-
-    /**
-     * Unused variable
-     *
-     * @var string
-     */
-    public $config = "default_config";
+    protected $data = [];
 
     /**
      * Loads a menu given its id
@@ -117,6 +75,16 @@ class Menu
     }
 
     /**
+     * Returns the raw data of the menu
+     *
+     * @return array the menu properties
+     **/
+    public function getRawData()
+    {
+        return $this->data;
+    }
+
+    /**
      * Create a new menu
      *
      * @param array $data the menu data
@@ -128,15 +96,12 @@ class Menu
         try {
             $conn = getService('dbal_connection');
 
-            $conn->insert(
-                'menues',
-                [
-                    'name'     => $data['name'],
-                    'params'   => $data['params'],
-                    'type'     => 'user',
-                    'position' => $data['position']
-                ]
-            );
+            $conn->insert('menues', [
+                'name'     => $data['name'],
+                'params'   => $data['params'],
+                'type'     => 'user',
+                'position' => $data['position']
+            ]);
 
             $this->pk_menu = $conn->lastInsertId();
             $this->setMenuElements($this->pk_menu, $data['items']);
@@ -155,16 +120,112 @@ class Menu
      */
     public function load($data)
     {
-        $this->id       = $data['pk_menu'];
-        $this->pk_menu  = $data['pk_menu'];
-        $this->title    = $data['name'];
-        $this->name     = $data['name'];
-        $this->position = $data['position'];
-        $this->type     = $data['type'];
-        $this->params   = unserialize($data['params']);
-        $this->items    = $this->getMenuItems($this->pk_menu);
+        // Set the raw data to the internal property
+        $this->data               = $data;
+        $this->data['params']     = @unserialize($this->data['params']);
+        $this->data['menu_items'] = $this->getMenuItems($data['pk_menu']);
+
+        $this->pk_menu  = $this->id = $this->data['pk_menu'];
+        $this->name     = $this->data['name'];
+        $this->position = $this->data['position'];
+        $this->type     = $this->data['type'];
+        $this->params   = @unserialize($this->data['params']);
 
         return $this;
+    }
+
+    /**
+     * Picks the language of an item.
+     *
+     * @return void
+     **/
+    public function localize($params = [])
+    {
+        // TODO: process the target language from the main, default and fallback (first language).
+        $targetLanguage = array_key_exists('default', $params) ? $params['default'] : 'en';
+
+        // In order to force to load the new structure I'm reloading the object if
+        // RAW data is empty
+        if (empty($this->data)) {
+            $this->read($this->id);
+        }
+
+        $items = $this->data['menu_items'];
+
+        foreach ($items as &$element) {
+            if (is_array($element->title)) {
+                $element->title = $element->title[$targetLanguage];
+            }
+
+            if (is_array($element->link)) {
+                $element->link = $element->link[$targetLanguage];
+            }
+
+            $element->title = @iconv(mb_detect_encoding($element->title), 'utf-8', $element->title);
+            $element->link  = $item->link;
+        }
+
+        return $items;
+    }
+
+    /**
+     * Returns the elements of a menu given its id
+     *
+     * @param int $id the id of the menu
+     *
+     * @return array with categories order by positions
+     */
+    public function getMenuItems($id)
+    {
+        $menuItems = [];
+
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC",
+                [ $id ]
+            );
+
+            if (!$rs) {
+                return $menuItems;
+            }
+        } catch (\Exception $e) {
+            return $menuItems;
+        }
+
+        foreach ($rs as $element) {
+            $serializedData = @unserialize($element['title']);
+            if ($serializedData !== false) {
+                $element['title'] = $serializedData;
+            }
+
+            $serializedData = @unserialize($element['link_name']);
+            if ($serializedData !== false) {
+                $element['link_name'] = $serializedData;
+            }
+
+            $menuItem            = new stdClass();
+            $menuItem->pk_item   = (int) $element['pk_item'];
+            $menuItem->position  = (int) $element['position'];
+            $menuItem->type      = $element['type'];
+            $menuItem->pk_father = (int) $element['pk_father'];
+            $menuItem->submenu   = [];
+            $menuItem->title     = $element['title'];
+            $menuItem->link      = $element['link_name'];
+
+            $menuItems[$element['pk_item']] = $menuItem;
+        }
+
+        foreach ($menuItems as $id => $element) {
+            if (((int) $element->pk_father > 0)
+                && isset($menuItems[$element->pk_father])
+                && isset($menuItems[$element->pk_father]->submenu)
+            ) {
+                array_push($menuItems[$element->pk_father]->submenu, $element);
+                unset($menuItems[$id]);
+            }
+        }
+
+        return $menuItems;
     }
 
     /**
@@ -177,7 +238,9 @@ class Menu
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $sql = 'SELECT * FROM menues WHERE pk_menu=?';
@@ -308,56 +371,6 @@ class Menu
     }
 
     /**
-     * Returns the elements of a menu given its id
-     *
-     * @param int $id the id of the menu
-     *
-     * @return array with categories order by positions
-     */
-    public function getMenuItems($id)
-    {
-        $menuItems = array();
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC",
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return $menuItems;
-            }
-        } catch (\Exception $e) {
-            return $menuItems;
-        }
-
-        foreach ($rs as $element) {
-            $menuItem = new stdClass();
-            $menuItem->pk_item   = (int) $element['pk_item'];
-            $menuItem->title     = @iconv(mb_detect_encoding($element['title']), 'utf-8', $element['title']);
-            $menuItem->link      = $element['link_name'];
-            $menuItem->position  = (int) $element['position'];
-            $menuItem->type      = $element['type'];
-            $menuItem->pk_father = (int) $element['pk_father'];
-            $menuItem->submenu   = [];
-
-            $menuItems[$element['pk_item']] = $menuItem;
-        }
-
-        foreach ($menuItems as $id => $element) {
-            if (((int) $element->pk_father > 0)
-                && isset($menuItems[$element->pk_father])
-                && isset($menuItems[$element->pk_father]->submenu)
-            ) {
-                array_push($menuItems[$element->pk_father]->submenu, $element);
-                unset($menuItems[$id]);
-            }
-        }
-
-        return $menuItems;
-    }
-
-    /**
      * Sets the menu elements to one menu given its id and the list of items.
      *
      * @param int   $id     The menu id to set the elements in
@@ -380,7 +393,7 @@ class Menu
         }
 
         try {
-            $position  = 1;
+            $position = 1;
             foreach ($items as $item) {
                 $title = filter_var($item->title, FILTER_SANITIZE_STRING);
                 $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
