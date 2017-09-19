@@ -221,11 +221,7 @@ class NewsML extends Parser
         $classname = substr($classname, strrpos($classname, '\\') + 1);
 
         $resource = strtolower($classname);
-        $agency   = str_replace(
-            ' ',
-            '_',
-            strtolower(htmlentities($this->getAgencyName($data), ENT_QUOTES))
-        );
+        $agency   = strtolower(\Onm\StringUtils::generateSlug($this->getAgencyName($data)));
 
         $date = $this->getCreatedTime($data);
         $id   = $this->getId($data);
