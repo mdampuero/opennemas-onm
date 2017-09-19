@@ -67,8 +67,10 @@ class MultiOptionAdapter extends Adapter
                 if (property_exists($item, $field)) {
                     $item->{$field} = self::adaptField($item->{$field}, $params);
                 }
+
                 continue;
             }
+
             if (array_key_exists($fields, $item)) {
                 $item[$field] = self::adaptField($item[$field], $params);
             }
@@ -95,6 +97,7 @@ class MultiOptionAdapter extends Adapter
         if (isset($params[self::PARAM_KEY_FOR_MULTIVALUED_FIELDS])) {
             $keyMultivalued = $params[self::PARAM_KEY_FOR_MULTIVALUED_FIELDS];
         }
+
         $defaultValue = $params[self::PARAM_DEFAULT_KEY_VALUE];
         if (isset($params[self::PARAM_KEY_FOR_MULTIVALUED_FIELDS])) {
             if (!is_array($field) || sizeOf($field) == 0) {
@@ -115,6 +118,7 @@ class MultiOptionAdapter extends Adapter
         if (!is_array($field)) {
             return [$defaultValue => $field];
         }
+
         return $field;
     }
 }

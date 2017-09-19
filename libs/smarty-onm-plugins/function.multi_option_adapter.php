@@ -31,7 +31,9 @@ function smarty_function_multi_option_adapter($params)
             MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $params['params']['default'],
             MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $params['params']['locale']
         ];
-        return MultiOptionAdapter::adaptField($params['field'], $adaptParams);
+        $prueba      = MultiOptionAdapter::adaptField($params['field'], $adaptParams);
+        return $prueba;
     }
+
     return null;
 }

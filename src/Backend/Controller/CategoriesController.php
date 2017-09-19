@@ -174,7 +174,14 @@ class CategoriesController extends Controller
             $allcategorys  = $ccm->categories;
             $subcategories = $ccm->getSubcategories($id);
             $languageData  = $this->getLocaleData('frontend', $request);
-            $jsonData      = json_encode(
+            // we adapt the category data and if the value returned y multilanguage field is a string, create a new
+            //array with all values
+            $category = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
+                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
+            ]);
+
+            $jsonData = json_encode(
                 array(
                     'categories'            => $allcategorys,
                     'configurations'        => s::get('section_settings'),

@@ -48,10 +48,18 @@
             $scope.categories = categoryData.categories;
             $scope.configurations = categoryData.configurations;
             $scope.internalCategories = categoryData.internal_categories;
+            $scope.allowedCategories = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
+              var value = (categoryKey == 0)?'Internal':$scope.internalCategories.internalCategories[categoryKey].title
+              return {'code':categoryKey, 'value':value};
+            });
+
+
+
             $scope.categoryUrl = categoryData.imagePath + '/sections/';
             $scope.languageData = categoryData.language_data;
             $scope.loading = false;
-            $scope.lang = categoryData.language_data.default;
+            $scope.pre();
+            $scope.getL10nSupport();
             return;
           }
           $scope.loading = false;
@@ -59,12 +67,9 @@
           // TODO implement the ajax request for caregory info
         };
 
-        $scope.getInternalCategories = function(internal) {
-          var prueba = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
-            var value = (categoryKey == 0)?'internal':$scope.internalCategories.internalCategories[categoryKey].title
-            return {'code':categoryKey, 'value':value};
-          });
-          return prueba;
+        $scope.getL10nSupport = function(lang) {
+          $scope.titleAux = $scope.category.title[$scope.lang];
+          $scope.nameAux = $scope.category.name[$scope.lang];
         };
 
         $scope.test = function() {
@@ -78,24 +83,51 @@
          * @description
          *   Saves settings.
          */
-        $scope.save = function() {
-          alert($scope.category.inmenu);
-          $scope.category.inmenu = ($scope.category.inmenu == 1)?0:1;
-          /**
+        $scope.save = function()
+        {
           var data = $scope.post();
 
           $scope.saving = true;
 
-          http.put('api_v1_backend_settings_save', data)
+          http.put('backend_ws_category_save', data)
             .then(function(response) {
               $scope.saving = false;
-              messenger.post(response.data);
+              $scope.category.id = response.data.category.id;
+              messenger.post(response.data.message);
             }, function(response) {
               $scope.saving = false;
               messenger.post(response.data);
             });
-          */
         };
+
+        $scope.pre = function() {
+          Object.keys(categoryData.language_data.all).forEach(function (langAux) {
+            if(!$scope.category.title[langAux]) {
+              $scope.category.title[langAux] = '';
+            }
+            if(!$scope.category.name[langAux]) {
+              $scope.category.name[langAux] = '';
+            }
+          });
+
+          $scope.lang = categoryData.language_data.locale || categoryData.language_data.default;
+        }
+
+        $scope.post = function() {
+          Object.keys(data.all).forEach(function (lang) {
+            if(trim($scope.category.title[lang]) === '') {
+              $scope.category.title.delete(lang);
+            }
+            if(trim($scope.category.name[lang]) === '') {
+              $scope.category.name.delete(lang);
+            }
+          });
+        }
+
+        $scope.getL10nFlags = function ()
+        {
+
+        }
 
         $scope.internalCategoriesImgs = {
           7:  'fa-stack-overflow',

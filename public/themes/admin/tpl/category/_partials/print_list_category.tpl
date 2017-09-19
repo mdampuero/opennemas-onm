@@ -1,15 +1,12 @@
 {if $category->fk_content_category == 0}
-  <script>
-      var languageData = {$language_data|@json_encode};
-  </script>
   <tr>
       <td>
           <a href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
               {multi_option_adapter field=$category->title params=$language_data}
           </a>
-          <div class="listing-inline-actions">
+          <div class="listing-inline-actions" ng-init="languageData = {json_encode($language_data)|clear_json}">
               {is_module_activated name="es.openhost.module.multilanguage"}
-                <translator link="{url name=admin_category_show id=$category->pk_content_category}" />
+                <translator ng-model="prueba" link="{url name=admin_category_show id=$category->pk_content_category}" language-data="languageData" />
               {/is_module_activated}
               {acl isAllowed="CATEGORY_UPDATE"}
                   {if $category->internal_category != 0 && $category->internal_category != 2}

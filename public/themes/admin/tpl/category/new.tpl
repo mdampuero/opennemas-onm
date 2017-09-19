@@ -21,7 +21,7 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <translator ng-model="lang" language-data="languageData" />
+              <translator ng-model="lang" language-data="languageData" ng-change="getL10nSupport(lang)"/>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -59,13 +59,13 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-model="category.title" type="text" required>
+                  <input class="form-control" id="title" name="title" ng-model="titleAux" type="text" required>
                 </div>
               </div>
               <div class="form-group" ng-if="category.name">
                 <label for="name" class="form-label">{t}Slug{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="name" name="name" ng-model="category.name" type="text" readonly>
+                  <input class="form-control" id="name" name="name" ng-model="nameAux" type="text" readonly>
                 </div>
               </div>
               <div class="form-group">
@@ -160,8 +160,7 @@
                   <select name="category.internal_category"
                       id="internal_category"
                       ng-model="category.internal_category"
-                      ng-options="internaAux as internaAux.value for internaAux in getInternalCategories('{t}Internal{/t}') track by internaAux.code"
-                  >
+                      ng-options="internaAux.code as internaAux.value for internaAux in allowedCategories" >
                   </select>
                 </div>
               </div>
