@@ -457,6 +457,10 @@
                           </select>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="p-l-15">
                       <h4>
                         <i class="fa fa-language m-r-5"></i>
                         {t}Language{/t}
@@ -466,7 +470,7 @@
                           {t}Control Panel Language{/t}
                         </label>
                         <span class="help">
-                          {t}Used for displayed messages, interface and measures in your page.{/t}
+                          {t}Used for messages, interface and units in the control panel.{/t}
                         </span>
                         <div class="controls">
                           <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend.language.selected">
@@ -474,28 +478,27 @@
                           </select>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  {is_module_activated name="es.openhost.module.multilanguage"}
-                    <div class="col-md-6">
-                      <div class="p-l-15">
-                        <h4>
-                          <i class="fa fa-globe m-r-5"></i>
-                          {t}Translations{/t}
-                        </h4>
-                        <div class="form-group">
-                          <label class="form-label" for="frontend-language">
-                            {t}Newspaper Language{/t}
-                          </label>
-                          <span class="help">
-                            {t}Languages to translate your contents to.{/t}
+                      <div class="form-group">
+                        <label class="form-label" for="frontend-language">
+                          {t}Newspaper Language{/t}
+                        </label>
+                        <span class="help">
+                          {t}Used for messages, interface and units in the newspaper.{/t}
+                        </span>
+                        {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
+                        <div class="controls">
+                          <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected">
+                            <option value="">{t}Select a language...{/t}</option>
+                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
+                          </select>
+                        </div>
+                        {/is_module_activated}
+                        {is_module_activated name="es.openhost.module.multilanguage"}
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
                           </span>
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
-                            </span>
-                            <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
-                          </div>
+                          <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
                         </div>
                         <div class="form-group" ng-show="settings.locale.frontend.language.available.length > 0">
                           <label class="form-label">{t}Main language{/t}</label>
@@ -522,9 +525,10 @@
                             </div>
                           </div>
                         </div>
+                        {/is_module_activated}
                       </div>
                     </div>
-                  {/is_module_activated}
+                  </div>
                 </div>
               </div>
             </uib-tab>
