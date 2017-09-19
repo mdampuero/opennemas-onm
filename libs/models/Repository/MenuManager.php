@@ -176,6 +176,7 @@ class MenuManager extends BaseManager
             $menu    = $this->find($contentId);
             $menus[] = $menu;
         }
+
         // Unused var $contentType
         unset($contentType);
 
@@ -199,7 +200,7 @@ class MenuManager extends BaseManager
      *
      * @param array $menu The menu definition.
      */
-    public function addMenu($menu)
+    public function addMenu($name, $menu)
     {
         if (!is_array($menu)
             || !array_key_exists('name', $menu)
@@ -207,7 +208,7 @@ class MenuManager extends BaseManager
             throw new \Exception(_('Unable to register the menu'));
         }
 
-        $this->menus[$menu['name']] = array_merge($this->defaultMenu, $menu);
+        $this->menus[$name] = array_merge($this->defaultMenu, $menu);
     }
 
     /**
@@ -218,8 +219,8 @@ class MenuManager extends BaseManager
      */
     public function addMenus($menus)
     {
-        foreach ($menus as $menu) {
-            $this->addMenu($menu);
+        foreach ($menus as $name => $menu) {
+            $this->addMenu($name, $menu);
         }
     }
 
@@ -246,9 +247,12 @@ class MenuManager extends BaseManager
      */
     public function getMenus()
     {
-        return array_map(function ($a) {
-            return $a['name'];
-        }, $this->menus);
+        $menus = [];
+        foreach ($this->menus as $name => $value) {
+            $menus[$name] = $value['name'];
+        }
+
+        return $menus;
     }
 
     /**
