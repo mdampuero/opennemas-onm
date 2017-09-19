@@ -108,7 +108,7 @@
                             </label>
                             <div class="controls">
                                 <div class="input-group" id="title" >
-                                    <input class="form-control" name="title" ng-model="title" ng-trim="false" required="required" type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
+                                    <input class="form-control" name="title" ng-model="title" ng-trim="false" required type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
                                     <span class="input-group-addon">
                                       <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 100, 'text-danger': title.length >= 100 }">
                                         [% title.length %]
@@ -184,7 +184,7 @@
                                         {t}Type{/t}
                                     </label>
                                     <div class="controls">
-                                        <select id="type_opinion" name="type_opinion" required="required">
+                                        <select id="type_opinion" name="type_opinion" required>
                                             <option value="-1">{t}-- Select opinion type --{/t}</option>
                                             <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
                                             <option value="1" {if $opinion->type_opinion eq 1} selected {/if}>{t}Opinion from editorial{/t}</option>
@@ -198,7 +198,7 @@
                                     </label>
                                     <div class="controls">
                                         {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                                            <select id="fk_author" name="fk_author" required="required">
+                                            <select id="fk_author" name="fk_author" required>
                                                 <option value="0" {if is_null($author->id)}selected{/if}>{t} - Select one author - {/t}</option>
                                                 {foreach from=$all_authors item=author}
                                                 <option value="{$author->id}" {if $opinion->fk_author eq $author->id}selected{/if}>{$author->name} {if $author->meta['is_blog'] eq 1} (Blogger) {/if}</option>
@@ -216,7 +216,7 @@
                                         {t}Tags{/t}
                                     </label>
                                     <div class="controls">
-                                        <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
+                                        <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
                                     </div>
                                 </div>
 

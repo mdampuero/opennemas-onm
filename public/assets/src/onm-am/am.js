@@ -177,7 +177,7 @@
 
     item.src += 'category=' + this.config.category +
       '&module=' + this.config.extension +
-      '&dirtyId=' + this.config.dirtyId;
+      '&contentId=' + this.config.contentId;
 
     // Dispatch event when iframe loaded
     item.onload = function () {
@@ -541,6 +541,17 @@
 
     if (type && ad.position.indexOf(type) === -1) {
       return false;
+    }
+
+    // Change date format to work with all browsers:
+    // Before: 2017-08-23 13:38:00
+    // After:  2017-08-23T13:38:00
+    if (ad.starttime) {
+      ad.starttime = ad.starttime.replace(/\s+/g, 'T');
+    }
+
+    if (ad.endtime) {
+      ad.endtime = ad.endtime.replace(/\s+/g, 'T');
     }
 
     var groups    = [];

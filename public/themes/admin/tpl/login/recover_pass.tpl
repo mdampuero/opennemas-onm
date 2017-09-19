@@ -37,7 +37,7 @@
                   {render_messages}
                   <div class="form-group">
                     <div class="controls">
-                      <input type="email" class="form-control" name="email" required="required" autofocus placeholder="example@example.com">
+                      <input type="email" class="form-control" name="email" required autofocus placeholder="{t}example@example.com{/t}">
                     </div>
                   </div>
 

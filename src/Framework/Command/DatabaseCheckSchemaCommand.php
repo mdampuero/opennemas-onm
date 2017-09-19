@@ -80,12 +80,12 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
 
         // $this->dumpSchema('onm-instances');
 
-        $master = Yaml::parse(file_get_contents(APPLICATION_PATH.'/'.$this->path));
+        $master = Yaml::parse(file_get_contents(APPLICATION_PATH . '/' . $this->path));
         $master = $this->createSchema($master, $input->getoption('disable-foreign-keys'));
 
         $schema = $this->getSchema($database);
-        $conn = getService('dbal_connection');
-        $conn = $conn->selectDatabase($database);
+        $conn   = getService('dbal_connection');
+        $conn   = $conn->selectDatabase($database);
 
         $sql = $schema->getMigrateToSql($master, $conn->getDatabasePlatform());
 
@@ -96,14 +96,14 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
                 if (preg_match('/^ALTER TABLE .* ADD CONSTRAINT .* FOREIGN KEY .*/', $value)) {
                     $foreignKeys[] = $value;
                 } else {
-                    $output->writeln($value.';');
+                    $output->writeln($value . ';');
                 }
             }
 
-            $deleteSqls = $this->prepareForeignKeys($foreignKeys);
+            $deleteSqls     = $this->prepareForeignKeys($foreignKeys);
             $foreignKeysAux = array_merge($deleteSqls, $foreignKeys);
             foreach ($foreignKeysAux as $value) {
-                $output->writeln($value.';');
+                $output->writeln($value . ';');
             }
         }
     }
@@ -182,6 +182,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
                 if (!array_key_exists('name', $value)) {
                     $value['name'] = null;
                 }
+
                 if (array_key_exists('primary', $value) && $value['primary']) {
                     $table->setPrimaryKey($value['columns'], $value['name']);
                 } elseif (array_key_exists('unique', $value) && $value['unique']) {
@@ -306,16 +307,19 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
             if (preg_match('/^ALTER TABLE [A-Za-z,0-9,_]*/', $foreign, $matches) == 0) {
                 break;
             }
+
             $foreignTable = substr($matches[0], 12);
 
             if (preg_match('/FOREIGN KEY \([A-Za-z,0-9,_]*/', $foreign, $matches) == 0) {
                 break;
             }
+
             $foreignField = substr($matches[0], 13);
 
             if (preg_match('/REFERENCES [A-Za-z0-9_()]* \([A-Za-z0-9_]*/', $foreign, $matches) == 0) {
                 break;
             }
+
             $auxArr = explode(" ", $matches[0]);
             if (count($auxArr) != 3) {
                 break;
@@ -324,8 +328,9 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
             $primaryTable = $auxArr[1];
             $primaryField = substr($auxArr[2], 1);
             $deleteSqls[] = '--DELETE FROM ' . $foreignTable . ' WHERE NOT EXISTS(SELECT 1 FROM ' . $primaryTable .
-                ' WHERE ' . $foreignTable . '.' . $foreignField .' = ' . $primaryTable . '.' . $primaryField . ')';
+                ' WHERE ' . $foreignTable . '.' . $foreignField . ' = ' . $primaryTable . '.' . $primaryField . ')';
         }
+
         return $deleteSqls;
     }
 }

@@ -126,7 +126,11 @@ class DatabaseRepository implements Repository
             $sql .= ' WHERE ' . implode(' AND ', $filters);
         }
 
-        $sql .= sprintf(' LIMIT 1 OFFSET %s', $parsed);
+        if (!array_key_exists('limit', $this->config['source'])
+            || $this->config['source']['limit']
+        ) {
+            $sql .= sprintf(' LIMIT 1 OFFSET %s', $parsed);
+        }
 
         $rs = $this->conn->fetchAll($sql);
 

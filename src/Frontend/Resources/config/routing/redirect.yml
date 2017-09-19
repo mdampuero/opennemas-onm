@@ -5,7 +5,3 @@ frontend_redirect_external_link:
 frontend_redirect_content:
     path: /redirect/content
     defaults: { _controller: FrontendBundle:Redirectors:content }
-
-frontend_redirect_category:
-    path: /redirect/category
-    defaults: { _controller: FrontendBundle:Redirectors:category }

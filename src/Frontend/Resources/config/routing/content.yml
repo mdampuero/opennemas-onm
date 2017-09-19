@@ -4,6 +4,8 @@ frontend_content_print:
     requirements:
         slug         : '[^/]+'
         content_id   : '([0-9]+)'
+    options:
+        l10n: true
 
 frontend_external_content_print:
     path: /content/extprint/{category_name}/{slug}/{content_id}.{_format}

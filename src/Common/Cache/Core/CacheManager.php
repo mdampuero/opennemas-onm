@@ -61,13 +61,27 @@ class CacheManager
      */
     public function getConnection($name)
     {
-        $name = preg_replace('/@?cache.connection/', '', $name);
-
-        if (!array_key_exists($name, $this->caches)) {
+        if (!$this->hasConnection($name)) {
             throw new InvalidConnectionException($name);
         }
 
+        $name = preg_replace('/@?cache.connection/', '', $name);
+
         return $this->caches[$name];
+    }
+
+    /**
+     * Check if a connection exists.
+     *
+     * @param string $name The connection name.
+     *
+     * @return boolean True if a connection exists. False, otherwise.
+     */
+    public function hasConnection($name)
+    {
+        $name = preg_replace('/@?cache.connection/', '', $name);
+
+        return array_key_exists($name, $this->caches);
     }
 
     /**

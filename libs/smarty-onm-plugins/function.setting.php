@@ -8,28 +8,26 @@
 */
 function smarty_function_setting($params, &$smarty)
 {
-    $output = '';
-    if (array_key_exists('name',$params)) {
-        $key = $params['name'];
-        if (array_key_exists('field',$params)) {
-            $key_value = getService('setting_repository')->get($key);
-            if (is_array($key_value)) {
-                foreach ($key_value as $name => $value) {
-                    if ($name == $params['field']) {
-                        $output = $value;
-                    }
-                }
-            }
-        } else {
-            $output = getService('setting_repository')->get($key);
-        }
-    } elseif (count($keys) >0) {
-        $keys = array_keys($params);
-        $key = $keys[0];
-    } else {
+    if (!array_key_exists('name', $params)) {
         return '';
     }
 
-    return $output;
+    $output = '';
+    $key    = $params['name'];
+    $sr     = $smarty->getContainer()->get('setting_repository');
 
+    if (!array_key_exists('field', $params)) {
+        return $sr->get($key);
+    }
+
+    $keyValue = $sr->get($key);
+    if (is_array($keyValue)) {
+        foreach ($keyValue as $name => $value) {
+            if ($name == $params['field']) {
+                $output = $value;
+            }
+        }
+    }
+
+    return $output;
 }
