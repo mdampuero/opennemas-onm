@@ -483,47 +483,51 @@
                         {t}Used for messages, interface and units in the newspaper.{/t}
                       </span>
                       {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
-                      <div class="controls">
-                        <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected">
-                          <option value="">{t}Select a language...{/t}</option>
-                          <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
-                        </select>
-                      </div>
+                        <div class="controls">
+                          <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected">
+                            <option value="">{t}Select a language...{/t}</option>
+                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
+                          </select>
+                        </div>
                       {/is_module_activated}
                       {is_module_activated name="es.openhost.module.multilanguage"}
-                      <div class="input-group">
-                        <span class="input-group-addon">
-                          <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
-                        </span>
-                        <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
-                      </div>
-                      <div class="form-group" ng-show="settings.locale.frontend.language.available.length > 0">
-                        <label class="form-label">{t}Main language{/t}</label>
-                        <span class="help">
-                          <i class="fa fa-circle-info text-info"></i>
-                          {t}When no language in the URL, the main language will be used{/t}
-                        </span>
-                        <div class="col-md-12">
-                          <div class="row m-b-5" ng-repeat="item in settings.locale.frontend.language.available">
-                            <div class="col-xs-11">
-                              <div class="p-t-10 radio">
-                                <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
-                                <label for="radio-[% $index %]">
-                                  [% item.name %]
-                                  <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
-                                </label>
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
+                          </span>
+                          <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
+                        </div>
+                      {/is_module_activated}
+                    </div>
+                    {is_module_activated name="es.openhost.module.multilanguage"}
+                      <div class="form-group">
+                        <div class="form-group m-b-100" ng-show="settings.locale.frontend.language.available.length > 0">
+                          <label class="form-label">{t}Main language{/t}</label>
+                          <span class="help">
+                            <i class="fa fa-circle-info text-info"></i>
+                            {t}When no language in the URL, the main language will be used{/t}
+                          </span>
+                          <div class="col-md-12">
+                            <div class="row m-b-5" ng-repeat="item in settings.locale.frontend.language.available">
+                              <div class="col-xs-11">
+                                <div class="p-t-10 radio">
+                                  <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
+                                  <label for="radio-[% $index %]">
+                                    [% item.name %]
+                                    <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                            <div class="col-xs-1">
-                              <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
-                                <i class="fa fa-times text-danger"></i>
-                              </button>
+                              <div class="col-xs-1">
+                                <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
+                                  <i class="fa fa-times text-danger"></i>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      {/is_module_activated}
-                    </div>
+                    {/is_module_activated}
                   </div>
                 </div>
               </div>
