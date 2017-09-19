@@ -28,63 +28,6 @@ use Onm\Settings as s;
 class MenusController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     */
-    public function init()
-    {
-        $this->pages = array(array('title' => _("Frontpage"),'link' => "/"));
-
-        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
-            array_push($this->pages, array('title' => _("Opinion"),'link' => "opinion/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('BLOG_MANAGER')) {
-            array_push($this->pages, array('title' => _("Bloggers"),'link' => "blog/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
-            array_push($this->pages, array('title' => _("Album"),'link' => "album/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
-            array_push($this->pages, array('title' => _("Video"),'link' => "video/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
-            array_push($this->pages, array('title' => _("Poll"),'link' => "poll/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
-            array_push($this->pages, array('title' => _("Letters to the Editor"),'link' => "cartas-al-director/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
-            array_push($this->pages, array('title' => _("News Stand"),'link' => "portadas-papel/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('FORM_MANAGER')) {
-            array_push($this->pages, array('title' => _("Form"),'link' => "participa/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('NEWSLETTER_MANAGER')) {
-            array_push($this->pages, array('title' => _("Newsletter"),'link' => "newsletter/"));
-        }
-
-        if ($this->get('core.security')->hasExtension('LIBRARY_MANAGER')) {
-            array_push($this->pages, array('title' => _("Archive"),'link' => "archive/content/"));
-        }
-
-        $this->menuPositions = array_merge(
-            [ '' => _('Without position') ],
-            $this->container->get('core.manager.menu')->getMenus()
-        );
-
-        $this->view->assign('menu_positions', $this->menuPositions);
-    }
-
-    /**
      * Lists all the available menus
      *
      * @return void
@@ -94,7 +37,9 @@ class MenusController extends Controller
      */
     public function listAction()
     {
-        return $this->render('menues/list.tpl');
+        return $this->render('menues/list.tpl', [
+            'menu_positions' => $this->getMenuPositions()
+        ]);
     }
 
     /**
@@ -111,8 +56,7 @@ class MenusController extends Controller
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
-        $menu        = new \Menu($id);
-        $menu->items = array_values($menu->items); // Get categories from menu
+        $menu = new \Menu($id);
 
         if (is_null($menu->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -123,61 +67,24 @@ class MenusController extends Controller
             return $this->redirect($this->generateUrl('admin_menus'));
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
-        $cm  = new \ContentManager();
-
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
-        // Unused var  $categoryData
-        unset($categoryData);
-
-        foreach ($subcat as $subcategory) {
-            $parentCategories = array_merge($parentCategories, $subcategory);
-        }
-
-        $albumCategories = $videoCategories = $pollCategories = array();
-        foreach ($ccm->categories as $category) {
-            if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
-                $albumCategories[] = $category;
-            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
-                $videoCategories[] = $category;
-            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
-                $pollCategories[] = $category;
-            }
-        }
-
-        $em        = $this->get('orm.manager');
-        $converter = $em->getConverter('Content');
-
-        $oql = 'content_type_name = "static_page" and in_litter="0"'
-           . ' order by created desc';
-
-        $staticPages = $em->getRepository('Content')->findBy($oql);
-
-        $statics = [];
-        foreach ($staticPages as $staticPage) {
-            $statics[] = [
-                'title'      => $staticPage->title,
-                'slug'       => $staticPage->slug,
-                'pk_content' => $staticPage->pk_content
-            ];
-        }
-
-        // Fetch synchronized elements if exists
-        $syncSites = [];
-        if ($syncParams = s::get('sync_params')) {
-            $syncSites = $syncParams;
-        }
+        $categories = $this->getCategories();
 
         return $this->render('menues/new.tpl', [
-            'categories'      => $parentCategories,
-            'albumCategories' => $albumCategories,
-            'videoCategories' => $videoCategories,
-            'pollCategories'  => $pollCategories,
-            'staticPages'     => $statics,
-            'pages'           => $this->pages,
-            'menu'            => $menu,
-            'menu_positions'  => $this->menuPositions,
-            'elements'        => $syncSites,
+            'categories'          => $categories['categories'],
+            'categories_album'    => $categories['categories_album'],
+            'categories_video'    => $categories['categories_video'],
+            'categories_poll'     => $categories['categories_poll'],
+            'elements'            => $this->getSyncSites(),
+            'menu_positions'      => $this->getMenuPositions(),
+            'pages'               => $this->getModulePages(),
+            'staticPages'         => $this->getStaticPages(),
+            'subcat'              => $categories['subcategories'],
+
+            'menu'                => $menu,
+
+            'l10n_enabled'        => true,
+            'current_language'    => 'en',
+            'available_languages' => ['es', 'gl'],
         ]);
     }
 
@@ -216,67 +123,25 @@ class MenusController extends Controller
                 );
             }
 
-            return $this->redirect(
-                $this->generateUrl('admin_menu_show', ['id' => $menu->pk_menu])
-            );
-        } else {
-            $cm  = new \ContentManager();
-            $ccm = \ContentCategoryManager::get_instance();
-
-            list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
-            // Unused var  $categoryData
-            unset($categoryData);
-
-            foreach ($subcat as $subcategory) {
-                $parentCategories = array_merge($parentCategories, $subcategory);
-            }
-
-            $albumCategories = $videoCategories = $pollCategories = [];
-            foreach ($ccm->categories as $category) {
-                if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
-                    $albumCategories[] = $category;
-                } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
-                    $videoCategories[] = $category;
-                } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
-                    $pollCategories[] = $category;
-                }
-            }
-
-            $em        = $this->get('orm.manager');
-            $converter = $em->getConverter('Content');
-
-            $oql = 'content_type_name = "static_page" and in_litter = "0"'
-               . ' order by created desc';
-
-            $staticPages = $em->getRepository('Content')->findBy($oql);
-
-            $statics = [];
-            foreach ($staticPages as $staticPage) {
-                $statics[] = [
-                    'title'      => $staticPage->title,
-                    'slug'       => $staticPage->slug,
-                    'pk_content' => $staticPage->pk_content
-                ];
-            }
-
-            // Fetch synchronized elements if exists
-            $syncSites = [];
-            if ($syncParams = s::get('sync_params')) {
-                $syncSites = $syncParams;
-            }
-
-            return $this->render('menues/new.tpl', [
-                'categories'      => $parentCategories,
-                'subcat'          => $subcat,
-                'albumCategories' => $albumCategories,
-                'videoCategories' => $videoCategories,
-                'pollCategories'  => $pollCategories,
-                'staticPages'     => $statics,
-                'pages'           => $this->pages,
-                'menu_positions'  => $this->menuPositions,
-                'elements'        => $syncSites,
-            ]);
+            return $this->redirect($this->generateUrl(
+                'admin_menu_show',
+                ['id' => $menu->pk_menu]
+            ));
         }
+
+        $params = $this->getEditingData();
+
+        return $this->render('menues/new.tpl', [
+            'categories'       => $params['categories'],
+            'categories_album' => $params['categories_album'],
+            'categories_album' => $params['categories_video'],
+            'categories_poll'  => $params['categories_poll'],
+            'elements'         => $this->getSyncSites(),
+            'menu_positions'   => $this->getMenuPositions(),
+            'pages'            => $this->getModulePages(),
+            'staticPages'      => $this->getStaticPages(),
+            'subcat'           => $params['subcategories'],
+        ]);
     }
 
     /**
@@ -301,40 +166,187 @@ class MenusController extends Controller
             );
 
             return $this->redirect($this->generateUrl('admin_menus'));
+        }
+
+        // Check empty data
+        if (count($request->request) < 1) {
+            $this->get('session')->getFlashBag()->add('error', _("Menu data sent not valid."));
+
+            return $this->redirect($this->generateUrl('admin_menu_show', ['id' => $id]));
+        }
+
+        $data = [
+            'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'params'    => serialize([
+                'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
+            ]),
+            'site'      => SITE,
+            'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
+            'items'     => json_decode($request->request->get('items')),
+            'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
+        ];
+
+        if ($menu->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Menu updated successfully.")
+            );
         } else {
-            // Check empty data
-            if (count($request->request) < 1) {
-                $this->get('session')->getFlashBag()->add('error', _("Menu data sent not valid."));
-
-                return $this->redirect($this->generateUrl('admin_menu_show', ['id' => $id]));
-            }
-
-            $data = [
-                'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-                'params'    => serialize([
-                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
-                ]),
-                'site'      => SITE,
-                'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
-                'items'     => json_decode($request->request->get('items')),
-                'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
-            ];
-
-            if ($menu->update($data)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _("Menu updated successfully.")
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("There was an error while updating the menu.")
-                );
-            }
-
-            return $this->redirect(
-                $this->generateUrl('admin_menu_show', ['id' => $menu->pk_menu])
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was an error while updating the menu.")
             );
         }
+
+        return $this->redirect($this->generateUrl(
+            'admin_menu_show',
+            ['id' => $menu->pk_menu]
+        ));
+    }
+
+    /**
+     * Returns 5 category listings by content type
+     *
+     * @return array the list of category listings
+     **/
+    private function getCategories()
+    {
+        $cm  = new \ContentManager();
+        $ccm = \ContentCategoryManager::get_instance();
+
+        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+        // Unused var  $categoryData
+        unset($categoryData);
+
+        foreach ($subcat as $subcategory) {
+            $parentCategories = array_merge($parentCategories, $subcategory);
+        }
+
+        $albumCategories = $videoCategories = $pollCategories = [];
+        foreach ($ccm->categories as $category) {
+            if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
+                $albumCategories[] = $category;
+            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
+                $videoCategories[] = $category;
+            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
+                $pollCategories[] = $category;
+            }
+        }
+
+        return [
+            'categories'       => $parentCategories,
+            'subcategories'    => $subcat,
+            'categories_album' => $albumCategories,
+            'categories_video' => $videoCategories,
+            'categories_poll'  => $pollCategories,
+        ];
+    }
+
+    /**
+     * Returns a list of static pages and their slugs
+     *
+     * @return array the list of static pages
+     **/
+    private function getStaticPages()
+    {
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter('Content');
+
+        $oql = 'content_type_name = "static_page" and in_litter = "0"'
+           . ' order by created desc';
+
+        $staticPages = $em->getRepository('Content')->findBy($oql);
+
+        $statics = [];
+        foreach ($staticPages as $staticPage) {
+            $statics[] = [
+                'title'      => $staticPage->title,
+                'slug'       => $staticPage->slug,
+                'pk_content' => $staticPage->pk_content
+            ];
+        }
+
+        return $statics;
+    }
+
+    /**
+     * Returns the list of synchronized sites
+     *
+     * @return array the list of synchronized sites
+     **/
+    private function getSyncSites()
+    {
+        // Fetch synchronized elements if exists
+        $syncSites = [];
+        if ($syncParams = s::get('sync_params')) {
+            $syncSites = $syncParams;
+        }
+
+        return $syncSites;
+    }
+
+    /**
+     * Returns a list of activated module pages
+     *
+     * @return array the list of module pages
+     **/
+    private function getModulePages()
+    {
+        $pages = array(array('title' => _("Frontpage"),'link' => "/"));
+
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            array_push($pages, array('title' => _("Opinion"),'link' => "opinion/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('BLOG_MANAGER')) {
+            array_push($pages, array('title' => _("Bloggers"),'link' => "blog/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
+            array_push($pages, array('title' => _("Album"),'link' => "album/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
+            array_push($pages, array('title' => _("Video"),'link' => "video/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
+            array_push($pages, array('title' => _("Poll"),'link' => "poll/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
+            array_push($pages, array('title' => _("Letters to the Editor"),'link' => "cartas-al-director/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
+            array_push($pages, array('title' => _("News Stand"),'link' => "portadas-papel/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('FORM_MANAGER')) {
+            array_push($pages, array('title' => _("Form"),'link' => "participa/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('NEWSLETTER_MANAGER')) {
+            array_push($pages, array('title' => _("Newsletter"),'link' => "newsletter/"));
+        }
+
+        if ($this->get('core.security')->hasExtension('LIBRARY_MANAGER')) {
+            array_push($pages, array('title' => _("Archive"),'link' => "archive/content/"));
+        }
+
+        return $pages;
+    }
+
+    /**
+     * Returns the list of menu positions
+     *
+     * @return array the list of menu positions
+     **/
+    private function getMenuPositions()
+    {
+        return array_merge(
+            [ '' => _('Without position') ],
+            $this->container->get('core.manager.menu')->getMenus()
+        );
     }
 }
