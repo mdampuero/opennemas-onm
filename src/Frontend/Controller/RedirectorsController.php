@@ -55,7 +55,7 @@ class RedirectorsController extends Controller
             return $this->redirectNotMigratedContent($type);
         }
 
-        if ($content->content_type_name === 'comment') {
+        if ($type === 'comment') {
             $fragment = '#comentarios';
         }
 
