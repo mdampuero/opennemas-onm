@@ -40,7 +40,7 @@ class SettingController extends Controller
         'twitter_page', 'time_zone', 'vimeo_page', 'webmastertools_bing',
         'webmastertools_google', 'youtube_page', 'robots_txt_rules', 'chartbeat',
         'body_end_script', 'body_start_script','header_script',
-        'elements_in_rss', 'redirection', 'locale', 'rtb_files'
+        'elements_in_rss', 'redirection', 'rtb_files'
     ];
 
     /**
@@ -115,7 +115,7 @@ class SettingController extends Controller
             }
         }
 
-        foreach ([ 'locale', 'logo_enabled' ] as $key) {
+        foreach ([ 'logo_enabled' ] as $key) {
             $settings[$key] = $this->get('data.manager.adapter')
                 ->adapt($key, $settings[$key]);
         }
@@ -327,18 +327,6 @@ class SettingController extends Controller
 
         if (array_key_exists('logo_enabled', $settings)) {
             $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
-        }
-
-        if (array_key_exists('locale', $settings)
-            && is_array($settings['locale'])
-        ) {
-            if (array_key_exists('backend', $settings['locale'])) {
-                $settings['site_language'] = $settings['locale']['backend'];
-            }
-
-            if (array_key_exists('timezone', $settings['locale'])) {
-                $settings['time_zone'] = $settings['locale']['timezone'];
-            }
         }
 
         return $settings;
