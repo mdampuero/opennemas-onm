@@ -102,6 +102,7 @@ class TagsController extends Controller
         ) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
             $epp = $this->get('setting_repository')->get('items_in_blog', 8);
+            $epp = is_null($epp) || $epp <= 0)) ? 8 : $epp;
 
             $criteria = [
                 'content_status'  => [ [ 'value' => 1 ] ],
