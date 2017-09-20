@@ -162,7 +162,6 @@ class CategoryController extends Controller
         ]);
     }
 
-
     /**
      * Action for synchronized blog frontpage
      *

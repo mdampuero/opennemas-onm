@@ -31,7 +31,7 @@ class Frontpages
         $ccm = \ContentCategoryManager::get_instance();
 
         // Check if category exists and initialize contents var
-        $existsCategory = $ccm->exists($category);
+        $existsCategory     = $ccm->exists($category);
         $contentsInHomepage = null;
 
         if (!$existsCategory) {
@@ -40,12 +40,12 @@ class Frontpages
         } else {
             // Run entire logic
             $actualCategoryId = $ccm->get_id($category);
-            $categoryData = null;
+            $categoryData     = null;
             if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
                 $categoryData = $ccm->categories[$actualCategoryId];
             }
 
-            $cm = new \ContentManager;
+            $cm                 = new \ContentManager;
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
             // Filter articles if some of them has time scheduling and sort them by position
             $contentsInHomepage = $cm->getInTime($contentsInHomepage);
@@ -55,18 +55,18 @@ class Frontpages
             $imageIdsList = array();
             foreach ($contentsInHomepage as $content) {
                 if (isset($content->img1)) {
-                    $imageIdsList []= $content->img1;
+                    $imageIdsList [] = $content->img1;
                 }
             }
 
             if (count($imageIdsList) > 0) {
-                $er = getService('entity_repository');
-                $order = array('created' => 'DESC');
+                $er         = getService('entity_repository');
+                $order      = array('created' => 'DESC');
                 $imgFilters = array(
                     'content_type_name' => array(array('value' => 'photo')),
                     'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
                 );
-                $imageList = $er->findBy($imgFilters, $order);
+                $imageList  = $er->findBy($imgFilters, $order);
             } else {
                 $imageList = array();
             }
@@ -89,28 +89,27 @@ class Frontpages
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
-                        ->loadAttachedVideo()
-                        ->loadRelatedContents($category);
+                    ->loadAttachedVideo()
+                    ->loadRelatedContents($category);
 
                 //Change uri for href links except widgets
                 if ($content->content_type_name != 'widget') {
-                    $content->uri = "ext".$content->uri;
+                    $content->uri = "ext" . $content->uri;
 
                     // Overload floating ads with external url's
                     if ($content->content_type_name == 'advertisement') {
-                        $content->extWsUrl = SITE_URL;
-                        $content->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($content->created))
-                            .sprintf('%06d', $content->pk_advertisement).'.html';
-                        $content->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+                        $content->extWsUrl    = SITE_URL;
+                        $content->extUrl      = SITE_URL . 'ads/' . date('YmdHis', strtotime($content->created))
+                            . sprintf('%06d', $content->pk_advertisement) . '.html';
+                        $content->extMediaUrl = SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images';
                     }
                 }
-
 
                 // Generate uri for related content
                 foreach ($content->related_contents as &$item) {
                     // Generate content uri if it's not an attachment
                     if ($item->fk_content_type == '4') {
-                        $item->uri = "ext".preg_replace('@//@', '/author/', $item->uri);
+                        $item->uri = "ext" . preg_replace('@//@', '/author/', $item->uri);
                     } elseif ($item->fk_content_type == 3) {
                         // Get instance media
                         $basePath = INSTANCE_MEDIA;
@@ -119,9 +118,9 @@ class Frontpages
                         $filePath = \ContentManager::getFilePathFromId($item->id);
 
                         // Compose the full url to the file
-                        $item->fullFilePath = $basePath.FILE_DIR.$filePath;
+                        $item->fullFilePath = $basePath . FILE_DIR . $filePath;
                     } else {
-                        $item->uri = "ext".$item->uri;
+                        $item->uri = "ext" . $item->uri;
                     }
                 }
             }
@@ -138,7 +137,7 @@ class Frontpages
     {
         // Get category object
         $categoryManager = getService('category_repository');
-        $category = $categoryManager->findBy(
+        $category        = $categoryManager->findBy(
             array('name' => array(array('value' => $categoryName))),
             '1'
         );
@@ -174,9 +173,10 @@ class Frontpages
         $imageIdsList = array();
         foreach ($articles as $content) {
             if (isset($content->img1) && !empty($content->img1)) {
-                $imageIdsList []= $content->img1;
+                $imageIdsList [] = $content->img1;
             }
         }
+
         $imageIdsList = array_unique($imageIdsList);
 
         if (count($imageIdsList) > 0) {
@@ -184,7 +184,7 @@ class Frontpages
                 'content_type_name' => array(array('value' => 'photo')),
                 'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
             );
-            $imageList = $er->findBy($imgFilters, $order);
+            $imageList  = $er->findBy($imgFilters, $order);
         } else {
             $imageList = array();
         }
@@ -201,39 +201,37 @@ class Frontpages
             $content->category_title = $content->loadCategoryTitle($content->id);
             $content->author         = $ur->find($content->fk_author);
             if (!is_null($content->author)) {
-                $content->author->photo  = $content->author->getPhoto();
-                $content->author->photo->media_url  = MEDIA_IMG_ABSOLUTE_URL;
-                $content->author->external = 1;
+                $content->author->photo            = $content->author->getPhoto();
+                $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
+                $content->author->external         = 1;
             }
 
              //Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
-                $content->uri = "ext".$content->uri;
+                $content->uri = "ext" . $content->uri;
             }
 
             // Load attached and related contents from array
             $content->loadFrontpageImageFromHydratedArray($imageList)
-                    ->loadAttachedVideo()
-                    ->loadRelatedContents($categoryName);
+                ->loadAttachedVideo()
+                ->loadRelatedContents($categoryName);
         }
 
         // Get url generator
         $generator = getService('router');
 
         // Set pagination
-        $pagination = getService('paginator')->get(
-            [
-                'page'  => $page,
-                'epp'   => $itemsPerPage,
-                'total' => $countArticles,
-                'route' => [
-                    'name'   => 'categ_sync_frontpage',
-                    'params' => [
-                        'category_name' => $categoryName,
-                    ]
+        $pagination = getService('paginator')->get([
+            'page'  => $page,
+            'epp'   => $itemsPerPage,
+            'total' => $countArticles,
+            'route' => [
+                'name'   => 'categ_sync_frontpage',
+                'params' => [
+                    'category_name' => $categoryName,
                 ]
             ]
-        );
+        ]);
 
         return utf8_encode(serialize(array($pagination->links, $articles)));
     }
