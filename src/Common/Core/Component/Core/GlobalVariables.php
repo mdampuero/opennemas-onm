@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Component\Template;
+namespace Common\Core\Component\Core;
 
 class GlobalVariables implements \ArrayAccess
 {
@@ -147,7 +147,7 @@ class GlobalVariables implements \ArrayAccess
         $method = 'get' . ucfirst($offset);
 
         if (!method_exists($this, $method)) {
-            return  null;
+            return null;
         }
 
         return $this->{$method}();

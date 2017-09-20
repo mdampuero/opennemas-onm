@@ -340,14 +340,14 @@ class NewsAgencyController extends Controller
 
         // Get server config
         $servers = s::get('news_agency_config');
-        $server = $servers[$sourceId];
+        $server  = $servers[$sourceId];
 
         $fm = $this->get('data.manager.filter');
 
         // If the new has photos import them
         if (count($element->getPhotos()) > 0) {
-            $i = 0;
-            $importedPhotos = array();
+            $i              = 0;
+            $importedPhotos = [];
 
             foreach ($element->getPhotos() as $photo) {
                 // Get image from FTP
@@ -371,7 +371,8 @@ class NewsAgencyController extends Controller
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => $fm->filter('tags', $photo->getTitle()),
+                            'metadata'      => $fm->set($photo->getTitle())
+                                ->filter('tags')->get(),
                             'author_name'   => '&copy; EFE '.date('Y'),
                             'original_filename' => $fileName,
                         );

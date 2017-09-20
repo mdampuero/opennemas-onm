@@ -105,7 +105,7 @@ EOF
         foreach ($ads as $ad) {
             $data = [
                 'title' => $ad['title'],
-                'metadata' => $fm->filter('tags', $ad['title']),
+                'metadata' => $fm->set($ad['title'])->filter('tags')->get(),
                 'category' => '0',
                 'categories' => $ad['categories'],
                 'available' => '1',
@@ -134,9 +134,9 @@ EOF
             ];
 
             if ($am->create($data)) {
-                $this->output->writeln('Ad <fg=green>'.$data['title'].'</fg=green> created successfully');
+                $this->output->writeln('Ad <fg=green>' . $data['title'] . '</fg=green> created successfully');
             } else {
-                $this->output->writeln('<bg=red>Failed to create ad '.$data['title'].'</bg=red>');
+                $this->output->writeln('<bg=red>Failed to create ad ' . $data['title'] . '</bg=red>');
             }
         }
     }
@@ -159,11 +159,11 @@ EOF
                 'content_status'        => [[ 'value' => '1' ]],
             ];
 
-
             if (array_key_exists('categories', $ad)) {
                 if (is_array($ad['categories'])) {
                     $ad['categories'] = implode(',', $ad['categories']);
                 }
+
                 $filters['fk_content_categories'] = [[ 'value' => $ad['categories'] ]];
             }
 
@@ -171,12 +171,12 @@ EOF
 
             if (!is_null($adv)) {
                 if ($adv->remove($adv->id)) {
-                    $this->output->writeln('Ad <fg=green>'.$ad['title'].'</fg=green> removed successfully');
+                    $this->output->writeln('Ad <fg=green>' . $ad['title'] . '</fg=green> removed successfully');
                 } else {
-                    $this->output->writeln('<bg=red>Failed to remove ad '.$ad['title'].'</bg=red>');
+                    $this->output->writeln('<bg=red>Failed to remove ad ' . $ad['title'] . '</bg=red>');
                 }
             } else {
-                $this->output->writeln('<bg=red>Ad '.$ad['title'].' does not exist</bg=red>');
+                $this->output->writeln('<bg=red>Ad ' . $ad['title'] . ' does not exist</bg=red>');
             }
         }
     }
@@ -202,6 +202,7 @@ EOF
                 if (is_array($ad['old']['categories'])) {
                     $ad['old']['categories'] = implode(',', $ad['old']['categories']);
                 }
+
                 $filters['fk_content_categories'] = [[ 'value' => $ad['old']['categories'] ]];
             }
 
@@ -229,7 +230,7 @@ EOF
                 $data = [
                     'id'                 => $adv->id,
                     'title'              => $title,
-                    'metadata'           => $fm->filter('tags', $title),
+                    'metadata'           => $fm->set($title)->filter('tags')->get(),
                     'category'           => '0',
                     'categories'         => $categories,
                     'available'          => '1',
@@ -258,12 +259,12 @@ EOF
                 ];
 
                 if ($adv->update($data)) {
-                    $this->output->writeln('Ad <fg=green>'.$title.'</fg=green> updated successfully');
+                    $this->output->writeln('Ad <fg=green>' . $title . '</fg=green> updated successfully');
                 } else {
-                    $this->output->writeln('<bg=red>Failed to update ad '.$title.'</bg=red>');
+                    $this->output->writeln('<bg=red>Failed to update ad ' . $title . '</bg=red>');
                 }
             } else {
-                $this->output->writeln('<bg=red>Ad '.$ad['old']['title'].' does not exist</bg=red>');
+                $this->output->writeln('<bg=red>Ad ' . $ad['old']['title'] . ' does not exist</bg=red>');
             }
         }
     }
