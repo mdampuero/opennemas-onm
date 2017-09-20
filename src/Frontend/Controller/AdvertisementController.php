@@ -36,45 +36,40 @@ class AdvertisementController extends Controller
     public function getAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
+        $ad = $this->get('entity_repository')->find('Advertisement', $id);
 
-        if (!is_object($advertisement)) {
+        if (!is_object($ad)) {
             throw new ResourceNotFoundException();
         }
 
         return $this->render('ads/advertisement.tpl', [
-            'banner'  => $advertisement,
-            'content' => $advertisement,
-            'x-tags' => 'ad,'.$id
+            'banner'  => $ad,
+            'content' => $ad,
+            'x-tags' => 'ad,' . $id
         ]);
     }
 
     /**
-     * Redirects the user to the target URL defined by an advertisement
+     * Displays a public record of Authorized Digital Sellers - ads.txt file
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return Response The response object.
      */
-    public function redirectAction(Request $request)
+    public function adsTxtAction()
     {
-        $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-
-        // Resolve ad ID, search in repository or redirect to 404
-        $advertisement = $this->get('content_url_matcher')
-            ->matchContentUrl('advertisement', $dirtyID);
-
-        if (empty($advertisement)) {
+        // Check for the module existence and if it is enabled
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.advanced_advertisement')) {
             throw new ResourceNotFoundException();
         }
 
-        // Increase number of clicks
-        $advertisement->setNumClics($advertisement->id);
+        $content      = $this->get('setting_repository')->get('ads_txt');
+        $instanceName = getService('core.instance')->internal_name;
 
-        if ($advertisement->url) {
-            return $this->redirect($advertisement->url);
-        } else {
-            return new Response('<script type="text/javascript">window.close();</script>');
-        }
+        return new Response($content, 200, [
+            'Content-Type' => 'text/plain',
+            'x-cacheable'  => true,
+            'x-cache-for'  => '100d',
+            'x-tags'       => 'instance-' . $instanceName . ',ads,txt',
+            'x-instance'   => $instanceName,
+        ]);
     }
 }
