@@ -50,11 +50,6 @@
           google_analytics: [
             { api_key: '', base_domain: '', custom_var: '' }
           ],
-          locale: {
-            backend:   'en',
-            frontend:  [],
-            time_zone: 'UTC'
-          },
           rtb_files: []
         };
 
@@ -308,7 +303,8 @@
           };
 
           // Save only locale codes
-          if (data.settings.locale.frontend instanceof Array) {
+          if (data.settings.locale &&
+              data.settings.locale.frontend instanceof Array) {
             var frontend = data.settings.locale.frontend.map(function(e) {
                 return e.code;
               });
@@ -363,7 +359,8 @@
             site_logo:            $scope.settings.site_logo
           };
 
-          if ($scope.settings.locale.frontend instanceof Array) {
+          if ($scope.settings.locale &&
+              $scope.settings.locale.frontend instanceof Array) {
             var locales = [];
 
             for (var i = 0; i < $scope.settings.locale.frontend.length; i++) {
