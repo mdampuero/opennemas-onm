@@ -1187,41 +1187,6 @@ class Content
     }
 
     /**
-     * Enable the favorited flag for this content
-     *
-     * @return boolean true if the operation was performed sucessfully
-     */
-    public function setFavorited()
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        try {
-            $this->favorite = 1;
-
-            getService('dbal_connection')->update(
-                'contents',
-                [ 'favorite'   => $this->favorite ],
-                [ 'pk_content' => $this->id ]
-            );
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
-            dispatchEventWithParams(
-                $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
-            );
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:' . $id . '):' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Define content position in a widget
      *
      * @param int $position the position of the content
@@ -1659,43 +1624,6 @@ class Content
     }
 
     /**
-     * Removes element with $contentPK from homepage of category.
-     *
-     * @param string $category  the id of the category where remove the element.
-     * @param string $pkContent the pk of the content.
-     *
-     * @return boolean true if was removed successfully
-     */
-    public function dropFromHomePageOfCategory($category, $pkContent)
-    {
-        if ($category == 'home') {
-            $categoryName = 'home';
-            $category     = 0;
-        } else {
-            $categoryName = ContentCategoryManager::get_instance()->getName($category);
-        }
-
-        try {
-            getService('dbal_connection')->delete(
-                'content_positions',
-                [ 'fk_category' => $category, 'pk_fk_content' => $pkContent]
-            );
-
-            /* Notice log of this action */
-            getService('application.log')->notice(
-                'User ' . $user->username . ' (' . (int) getService('session')->get('user')->id . ') has executed'
-                . ' action Content::dropFromHomePageOfCategory ' . $categoryName
-                . ' an ' . $this->content_type_name . ' Id ' . $pkContent
-            );
-
-            return true;
-        } catch (\Exception $e) {
-            error_log('Error on Content::dropFromHomePageOfCategory ' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Removes element with $contentPK from Homepage.
      *
      * @return boolean true if was removed successfully
@@ -1734,86 +1662,6 @@ class Content
             return true;
         } catch (\Exception $e) {
             error_log('Error on Content::dropFromAllHomePages:' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Inserts this content directly to the category frontpage
-     *
-     * @return boolean true if all went well
-     */
-    public function putInCategoryFrontpage()
-    {
-        return true;
-    }
-
-    /**
-     * Search contents by its urn
-     *
-     * @param  array/string $urns one urn string or one array of urn strings
-     *
-     * @return array        the array of contents
-     */
-    public static function findByUrn($urns)
-    {
-        if (is_array($urns)) {
-            $sqlUrns = '';
-            foreach ($urns as &$urn) {
-                $urn = "'" . $urn . "'";
-            }
-
-            $sqlUrns = implode(', ', $urns);
-        } elseif (is_string($urns)) {
-            $sqlUrns = "'" . $urns . "'";
-        } else {
-            $message = sprintf('The param urn is not valid "%s".', $urns);
-            throw new \InvalidArgumentException($message);
-        }
-
-        try {
-            $contents = getService('dbal_connection')->fetchAll(
-                "SELECT urn_source FROM `contents` WHERE urn_source IN (" . $sqlUrns . ")"
-            );
-
-            if (count($contents) <= 0) {
-                return false;
-            }
-
-            $contentsUrns = array();
-            foreach ($contents as $content) {
-                $contentsUrns[] = $content['urn_source'];
-            }
-
-            return $contentsUrns;
-        } catch (\Exception $e) {
-            error_log('Error Conntent::findByUrn: ' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Search contents by its urn
-     *
-     * @param  string $originalName one urn string or one array of urn strings
-     *
-     * @return array        the array of contents
-     */
-    public static function findByOriginaNameInUrn($originalName)
-    {
-        if (!is_string($originalName)) {
-            $message = sprintf('The param name is not valid "%s".', $originalName);
-            throw new \InvalidArgumentException($message);
-        }
-
-        try {
-            $content = getService('dbal_connection')->fetchColumn(
-                "SELECT pk_content FROM `contents` WHERE urn_source LIKE ? LIMIT 1",
-                [ '%' . $originalName . '%' ]
-            );
-
-            return $content;
-        } catch (\Exception $e) {
             return false;
         }
     }
