@@ -41,7 +41,7 @@ class RTBController extends Controller
     public function showAction(Request $request)
     {
         // Check for the module existence and if it is enabled
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.rtb_media_advertisement')) {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.advanced_advertisement')) {
             throw new ResourceNotFoundException();
         }
 
@@ -107,7 +107,7 @@ class RTBController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $path = INSTANCE_MEDIA_PATH.FILE_DIR . $file->path;
+        $path = INSTANCE_MEDIA_PATH . FILE_DIR . $file->path;
 
         if (!file_exists($path) && !is_readable($path)) {
             throw new ResourceNotFoundException();
