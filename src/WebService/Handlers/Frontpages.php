@@ -146,14 +146,13 @@ class Frontpages
         if (empty($category)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
+
         $category = $category[0];
 
-        $itemsPerPage = s::get('items_in_blog');
-        if (empty($itemsPerPage)) {
-            $itemsPerPage = 8;
-        }
+        $itemsPerPage = s::get('items_in_blog', 8);
+        $itemsPerPage = is_null($itemsPerPage) || $itemsPerPage <= 0)) ? 8 : $itemsPerPage;
 
-        $order = array('starttime' => 'DESC');
+        $order   = [ 'starttime' => 'DESC' ];
         $filters = array(
             'content_type_name' => array(array('value' => 'article')),
             'content_status'    => array(array('value' => 1)),
