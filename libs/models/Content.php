@@ -19,103 +19,35 @@ use Onm\Settings as s;
  */
 class Content
 {
-    /**
-     * The content id
-     *
-     * @var ont
-     */
-    public $id = null;
+    const AVAILABLE     = 'available';
+    const TRASHED       = 'trashed';
+    const PENDING       = 'pending';
+    const NOT_SCHEDULED = 'not-scheduled';
+    const SCHEDULED     = 'scheduled';
+    const DUED          = 'dued';
+    const IN_TIME       = 'in-time';
+    const POSTPONED     = 'postponed';
 
     /**
-     * The content type of the content
+     * Not documented
      *
-     * @var string
+     * @var
      */
-    public $content_type = null;
+    public $archive = null;
 
     /**
-     * The content type name of the content
+     * Whether if this content is available
      *
-     * @var string
+     * @var int 0|1
      */
-    public $content_type_name = '';
-
-    /**
-     * The title of the content
-     *
-     * @var string
-     */
-    public $title = '';
-
-    /**
-     * The description of the content
-     *
-     * @var string
-     */
-    public $description = '';
+    public $available = null;
 
     /**
      * The main text of the content
      *
      * @var string
      */
-    public $body = '';
-
-    /**
-     * The list of tags of this content separated by commas
-     *
-     * @var string
-     */
-    public $metadata = '';
-
-    /**
-     * The date from when this will be available to publish
-     *
-     * @var string
-     */
-    public $starttime = null;
-
-    /**
-     * The end until when this content will be available to publish
-     *
-     * @var string
-     */
-    public $endtime = null;
-
-    /**
-     * The date when this content was created
-     *
-     * @var string
-     */
-    public $created = null;
-
-    /**
-     * The date when this content was updated the last time
-     *
-     * @var string
-     */
-    public $changed = null;
-
-    /**
-     * The user id of the last user that have changed this content
-     *
-     * @var int
-     */
-    public $fk_user = null;
-
-    /**
-     * The user id that have published this content
-     *
-     * @var int
-     */
-    public $fk_publisher = null;
-
-    /**
-     * The user id of the last user that have changed this content
-     *
-     * @var int
-     */
-    public $fk_user_last_editor = null;
+    private $body = '';
 
     /**
      * The category id this content belongs to
@@ -132,11 +64,132 @@ class Content
     public $category_name = null;
 
     /**
-     * Not documented
+     * Status of this content
      *
-     * @var
+     * @var int 0|1|2
      */
-    public $archive = null;
+    public $content_status = null;
+
+    /**
+     * The content type of the content
+     *
+     * @var string
+     */
+    public $content_type = null;
+
+    /**
+     * The content type name of the content
+     *
+     * @var string
+     */
+    public $content_type_name = '';
+
+    /**
+     * The date when this content was updated the last time
+     *
+     * @var string
+     */
+    public $changed = null;
+
+    /**
+     * The date when this content was created
+     *
+     * @var string
+     */
+    public $created = null;
+
+    /**
+     * The description of the content
+     *
+     * @var string
+     */
+    private $description = '';
+
+    /**
+     * The end until when this content will be available to publish
+     *
+     * @var string
+     */
+    public $endtime = null;
+
+    /**
+     * Whether if this content is marked as favorite
+     *
+     * @var int 0|1
+     */
+    public $favorite = null;
+
+    /**
+     * The user id that have published this content
+     *
+     * @var int
+     */
+    public $fk_publisher = null;
+
+    /**
+     * The user id of the last user that have changed this content
+     *
+     * @var int
+     */
+    public $fk_user = null;
+
+    /**
+     * The user id of the last user that have changed this content
+     *
+     * @var int
+     */
+    public $fk_user_last_editor = null;
+
+    /**
+     * Whether if this content is suggested to homepage
+     *
+     * @var int 0|1
+     */
+    public $frontpage = null;
+
+    /**
+     * The content id
+     *
+     * @var ont
+     */
+    public $id = null;
+
+    /**
+     * Whether this content is in home
+     *
+     * @var int 0|1
+     */
+    public $in_home = null;
+
+    /**
+     * Whether if this content is trashed
+     *
+     * @var int 0|1
+     */
+    public $in_litter = null;
+
+    /**
+     * The list of tags of this content separated by commas
+     *
+     * @var string
+     */
+    public $metadata = '';
+
+    /**
+     * Map of metadata which contains information that doesn't fit on normal vars.
+     * Stored in a separated table contentmeta. These values are not serialized.
+     *
+     * @var string
+     */
+    public $metas = [];
+
+    /**
+     * An array for misc information of this content
+     * Must be serialized when saved to database
+     *
+     * @var array
+     */
+    public $params = null;
 
     /**
      * The permalink/slug of this content
@@ -153,69 +206,25 @@ class Content
     public $position = null;
 
     /**
-     * Whether this content is in home
-     *
-     * @var int 0|1
-     */
-    public $in_home = null;
-
-    /**
-     * Whether if this content is available
-     *
-     * @var int 0|1
-     */
-    public $available = null;
-
-    /**
-     * Whether if this content is suggested to homepage
-     *
-     * @var int 0|1
-     */
-    public $frontpage = null;
-
-    /**
-     * Whether if this content is trashed
-     *
-     * @var int 0|1
-     */
-    public $in_litter = null;
-
-    /**
-     * Status of this content
-     *
-     * @var int 0|1|2
-     */
-    public $content_status = null;
-
-    /**
-     * An array for misc information of this content
-     * Must be serialized when saved to database
-     *
-     * @var array
-     */
-    public $params = null;
-
-    /**
      * The slug of the content
      *
      * @var string
      */
-    public $slug = null;
+    private $slug = null;
 
     /**
-     * Whether if this content is marked as favorite
-     *
-     * @var int 0|1
-     */
-    public $favorite = null;
-
-    /**
-     * Map of metadata which contains information that doesn't fit on normal vars.
-     * Stored in a separated table contentmeta. These values are not serialized.
+     * The date from when this will be available to publish
      *
      * @var string
      */
-    public $metas = [];
+    public $starttime = null;
+
+    /**
+     * The title of the content
+     *
+     * @var string
+     */
+    private $title = '';
 
     /**
      * Whether allowing comments in this content
@@ -223,17 +232,6 @@ class Content
      * @var boolean
      */
     public $with_comment = null;
-
-    const AVAILABLE = 'available';
-    const TRASHED   = 'trashed';
-    const PENDING   = 'pending';
-
-
-    const NOT_SCHEDULED = 'not-scheduled';
-    const SCHEDULED     = 'scheduled';
-    const DUED          = 'dued';
-    const IN_TIME       = 'in-time';
-    const POSTPONED     = 'postponed';
 
     /**
      * Initializes the content for a given id.
