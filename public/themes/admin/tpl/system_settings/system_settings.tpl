@@ -452,8 +452,8 @@
                           {t}Used for all the dates used in your webpage.{/t}
                         </span>
                         <div class="controls">
-                          <select name="timezone" ng-model="settings.locale.timezone">
-                            <option value="[% timezone %]" ng-repeat="timezone in extra.timezones" ng-selected="[% timezone === settings.locale.timezone %]">[% timezone %]</option>
+                          <select name="timezone" ng-model="settings.time_zone">
+                            <option value="[% timezone %]" ng-repeat="timezone in extra.timezones" ng-selected="[% timezone === settings.time_zone %]">[% timezone %]</option>
                           </select>
                         </div>
                       </div>
@@ -469,8 +469,8 @@
                           {t}Used for displayed messages, interface and measures in your page.{/t}
                         </span>
                         <div class="controls">
-                          <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend">
-                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.backend %]">[% name %]</option>
+                          <select id="locale-backend" name="locale-backend" ng-model="settings.site_language">
+                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.site_language %]">[% name %]</option>
                           </select>
                         </div>
                       </div>
