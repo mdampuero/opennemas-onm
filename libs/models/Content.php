@@ -298,6 +298,17 @@ class Content
     }
 
     /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public function getL10nKeys()
+    {
+        return [ 'body', 'description', 'slug', 'title' ];
+    }
+
+    /**
      * TODO: check funcionality
      * Overloads the object properties with an array of the new ones
      *
