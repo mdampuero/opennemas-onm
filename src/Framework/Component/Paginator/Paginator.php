@@ -79,6 +79,11 @@ class Paginator
             return '';
         }
 
+        // Do not generator the paginator if epp is less than 0. Division by 0.
+        if (!$this->options['epp'] <= 0) {
+            return '';
+        }
+
         if (array_key_exists('templates', $options)) {
             $this->templates = array_merge(
                 $this->templates,
@@ -115,7 +120,7 @@ class Paginator
         $disabled = $this->options['page'] == 1 ? ' disabled' : '';
 
         return '<li class="first' . $disabled . '"><a href="'
-            . $this->getUrl(1) .'">' . $this->templates['first'] . '</a></li>';
+            . $this->getUrl(1) . '">' . $this->templates['first'] . '</a></li>';
     }
 
     /**
@@ -133,7 +138,7 @@ class Paginator
             ' disabled' : '';
 
         return '<li class="last' . $disabled . '"><a href="'
-            . $this->getUrl($this->options['pages']) .'">'
+            . $this->getUrl($this->options['pages']) . '">'
             . $this->templates['last'] . '</a></li>';
     }
 
@@ -168,7 +173,7 @@ class Paginator
                 . '<a href="' . $this->getUrl($i) . '">'
                     . $i
                 . '</a>'
-            .'</li>';
+            . '</li>';
         }
 
         return $links;
@@ -190,7 +195,7 @@ class Paginator
             ' disabled' : '';
 
         return '<li class="next' . $disabled . '"><a href="'
-            . $this->getUrl($page) .'">' . $this->templates['next']
+            . $this->getUrl($page) . '">' . $this->templates['next']
             . '</a></li>';
     }
 
@@ -209,7 +214,7 @@ class Paginator
         $disabled = $this->options['page'] == 1 ? ' disabled' : '';
 
         return '<li class="previous' . $disabled . '">'
-            . '<a href="' . $this->getUrl($page) .'">'
+            . '<a href="' . $this->getUrl($page) . '">'
             . $this->templates['previous'] . '</a></li>';
     }
 
@@ -229,7 +234,7 @@ class Paginator
                 $params = $route['params'];
             }
 
-            $route  = $route['name'];
+            $route = $route['name'];
         }
 
         $params = array_merge($params, [ 'page' => $page ]);
