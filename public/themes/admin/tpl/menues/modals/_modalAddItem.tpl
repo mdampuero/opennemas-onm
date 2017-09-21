@@ -30,11 +30,11 @@
         {if count($pages) > 0}
           <option value="internal">{t}Modules{/t}</option>
         {/if}
-        {if count($staticPages) > 0}
+        {if count($static_pages) > 0}
           <option value="static">{t}Static Pages{/t}</option>
         {/if}
         {is_module_activated name="SYNC_MANAGER"}
-          {if count($elements) > 0}
+          {if count($sync_sites) > 0}
             <option value="syncCategory">{t}Sync Categories{/t}</option>
           {/if}
         {/is_module_activated}
@@ -42,7 +42,7 @@
           <option value="blog-category">{t}Automatic Categories{/t}</option>
         {/if}
         {is_module_activated name="SYNC_MANAGER"}
-          {if count($elements) > 0}
+          {if count($sync_sites) > 0}
             <option value="syncBlogCategory">{t}Sync Automatic Categories{/t}</option>
           {/if}
         {/is_module_activated}
@@ -133,8 +133,8 @@
         </div>
       </div>
     {/if}
-    {if count($staticPages) > 0}
-      <div ng-if="type == 'static'" ng-init="staticPages = {json_encode($staticPages)|clear_json}">
+    {if count($static_pages) > 0}
+      <div ng-if="type == 'static'" ng-init="staticPages = {json_encode($static_pages)|clear_json}">
         <div class="form-group" ng-repeat="page in staticPages">
           <div class="checkbox col-md-6">
             <input id="checkbox-static-pages-[% $index %]" checklist-model="selected" checklist-value="page" type="checkbox">
@@ -146,8 +146,8 @@
       </div>
     {/if}
     {is_module_activated name="SYNC_MANAGER"}
-      {if count($elements) > 0}
-        <div ng-if="type == 'syncCategory'" ng-init="elements = {json_encode($elements)|clear_json}">
+      {if count($sync_sites) > 0}
+        <div ng-if="type == 'syncCategory'" ng-init="elements = {json_encode($sync_sites)|clear_json}">
           <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
             <h5>[% site %]</h5>
             <div class="form-group" ng-repeat="category in params.categories" >
@@ -175,8 +175,8 @@
       </div>
     {/if}
     {is_module_activated name="SYNC_MANAGER"}
-     {if count($elements) > 0}
-      <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($elements)|clear_json}">
+     {if count($sync_sites) > 0}
+      <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($sync_sites)|clear_json}">
         <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
           <h5>[% site %]</h5>
           <div class="form-group" ng-repeat="category in params.categories">

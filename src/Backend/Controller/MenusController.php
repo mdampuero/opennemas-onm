@@ -70,21 +70,16 @@ class MenusController extends Controller
         $categories = $this->getCategories();
 
         return $this->render('menues/new.tpl', [
-            'categories'          => $categories['categories'],
-            'categories_album'    => $categories['categories_album'],
-            'categories_video'    => $categories['categories_video'],
-            'categories_poll'     => $categories['categories_poll'],
-            'elements'            => $this->getSyncSites(),
-            'menu_positions'      => $this->getMenuPositions(),
-            'pages'               => $this->getModulePages(),
-            'staticPages'         => $this->getStaticPages(),
-            'subcat'              => $categories['subcategories'],
-
-            'menu'                => $menu,
-
-            'l10n_enabled'        => true,
-            'current_language'    => 'en',
-            'available_languages' => ['es', 'gl'],
+            'categories'       => $categories['categories'],
+            'categories_album' => $categories['categories_album'],
+            'categories_poll'  => $categories['categories_poll'],
+            'categories_video' => $categories['categories_video'],
+            'menu'             => $menu,
+            'menu_positions'   => $this->getMenuPositions(),
+            'pages'            => $this->getModulePages(),
+            'static_pages'     => $this->getStaticPages(),
+            'subcat'           => $categories['subcategories'],
+            'sync_sites'       => $this->getSyncSites(),
         ]);
     }
 
@@ -136,11 +131,11 @@ class MenusController extends Controller
             'categories_album' => $params['categories_album'],
             'categories_album' => $params['categories_video'],
             'categories_poll'  => $params['categories_poll'],
-            'elements'         => $this->getSyncSites(),
             'menu_positions'   => $this->getMenuPositions(),
             'pages'            => $this->getModulePages(),
             'staticPages'      => $this->getStaticPages(),
             'subcat'           => $params['subcategories'],
+            'sync_sites'       => $this->getSyncSites(),
         ]);
     }
 
@@ -205,7 +200,7 @@ class MenusController extends Controller
     }
 
     /**
-     * Returns 5 category listings by content type
+     * Returns the category listings by content type
      *
      * @return array the list of category listings
      **/
