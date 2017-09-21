@@ -57,6 +57,7 @@
             },
             frontend: {
               language: { available: [], selected: null },
+              slug: {},
               timezone: 'UTC'
             }
           },
@@ -100,22 +101,31 @@
         $scope.addLocale = function(item) {
           if (!$scope.settings.locale.frontend.language) {
             $scope.settings.locale.frontend.language =
-              { available: [], selected: null };
+              { available: [], selected: null, slug: {} };
           }
 
           var frontend = $scope.settings.locale.frontend.language;
+
+          if (!frontend.slug) {
+            frontend.slug = {};
+          }
 
           // Set as selected locale if list empty
           if (!frontend.available || frontend.available.length === 0) {
             frontend.selected = item.code;
           }
 
+          var codes = frontend.available.map(function (e) {
+            return e.code;
+          });
+
           // Add item if no already added
-          if (frontend.available.indexOf(item.code) === -1) {
+          if (codes.indexOf(item.code) === -1) {
             // Remove code from name
-            item.name = item.name.replace(/\([a-z]+[A-Z_]*\)/, '');
+            item.name = item.name.replace(/\([a-z]+[_A-Za-z0-1]*\)/, '');
 
             frontend.available.push(item);
+            frontend.slug[item.code] = item.code;
           }
         };
 

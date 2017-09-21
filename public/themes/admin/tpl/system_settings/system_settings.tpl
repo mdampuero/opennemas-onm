@@ -509,19 +509,32 @@
                           </span>
                           <div class="col-md-12">
                             <div class="row m-b-5" ng-repeat="item in settings.locale.frontend.language.available">
-                              <div class="col-xs-11">
-                                <div class="p-t-10 radio">
-                                  <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
-                                  <label for="radio-[% $index %]">
-                                    [% item.name %] ([% item.code %])
-                                    <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
-                                  </label>
+                              <div class="col-md-12">
+                                <div class="row">
+                                  <div class="col-xs-12">
+                                    <div class="p-t-10 radio">
+                                      <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
+                                      <label for="radio-[% $index %]">
+                                        [% item.name %] ([% item.code %])
+                                        <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
+                                      </label>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-xs-1">
-                                <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
-                                  <i class="fa fa-times text-danger"></i>
-                                </button>
+                              <div class="row m-b-10">
+                                <div class="col-xs-11">
+                                  <input class="form-control" ng-model="settings.locale.frontend.language.slug[item.code]" placeholder="{t}Customize the language appears in the URL (e.g. en).{/t}" required type="text">
+                                  <span class="help">
+                                    <i class="fa fa-info-circle m-l-5 m-r-5 text-info"></i>
+                                    {t}URLs will look like http://newspaper.opennemas.com/[% settings.locale.frontend.language.slug[item.code] %]/<slug>{/t}
+                                  </span>
+                                </div>
+                                <div class="col-xs-1">
+                                  <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
+                                    <i class="fa fa-times text-danger"></i>
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
