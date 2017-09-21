@@ -52,7 +52,7 @@ class Content
      *
      * @var string
      */
-    public $description         = '';
+    public $description = '';
 
     /**
      * The main text of the content
@@ -66,49 +66,49 @@ class Content
      *
      * @var string
      */
-    public $metadata            = '';
+    public $metadata = '';
 
     /**
      * The date from when this will be available to publish
      *
      * @var string
      */
-    public $starttime           = null;
+    public $starttime = null;
 
     /**
      * The end until when this content will be available to publish
      *
      * @var string
      */
-    public $endtime             = null;
+    public $endtime = null;
 
     /**
      * The date when this content was created
      *
      * @var string
      */
-    public $created             = null;
+    public $created = null;
 
     /**
      * The date when this content was updated the last time
      *
      * @var string
      */
-    public $changed             = null;
+    public $changed = null;
 
     /**
      * The user id of the last user that have changed this content
      *
      * @var int
      */
-    public $fk_user             = null;
+    public $fk_user = null;
 
     /**
      * The user id that have published this content
      *
      * @var int
      */
-    public $fk_publisher        = null;
+    public $fk_publisher = null;
 
     /**
      * The user id of the last user that have changed this content
@@ -122,70 +122,70 @@ class Content
      *
      * @var int
      */
-    public $category            = null;
+    public $category = null;
 
     /**
      * The category name this content belongs to
      *
      * @var string
      */
-    public $category_name       = null;
+    public $category_name = null;
 
     /**
      * Not documented
      *
      * @var
      */
-    public $archive             = null;
+    public $archive = null;
 
     /**
      * The permalink/slug of this content
      *
      * @var string
      */
-    public $permalink           = null;
+    public $permalink = null;
 
     /**
      * The order of this content
      *
      * @var int
      */
-    public $position            = null;
+    public $position = null;
 
     /**
      * Whether this content is in home
      *
      * @var int 0|1
      */
-    public $in_home             = null;
+    public $in_home = null;
 
     /**
      * Whether if this content is available
      *
      * @var int 0|1
      */
-    public $available           = null;
+    public $available = null;
 
     /**
      * Whether if this content is suggested to homepage
      *
      * @var int 0|1
      */
-    public $frontpage           = null;
+    public $frontpage = null;
 
     /**
      * Whether if this content is trashed
      *
      * @var int 0|1
      */
-    public $in_litter           = null;
+    public $in_litter = null;
 
     /**
      * Status of this content
      *
      * @var int 0|1|2
      */
-    public $content_status      = null;
+    public $content_status = null;
 
     /**
      * An array for misc information of this content
@@ -193,21 +193,21 @@ class Content
      *
      * @var array
      */
-    public $params              = null;
+    public $params = null;
 
     /**
      * The slug of the content
      *
      * @var string
      */
-    public $slug                = null;
+    public $slug = null;
 
     /**
      * Whether if this content is marked as favorite
      *
      * @var int 0|1
      */
-    public $favorite            = null;
+    public $favorite = null;
 
     /**
      * Map of metadata which contains information that doesn't fit on normal vars.
@@ -222,18 +222,18 @@ class Content
      *
      * @var boolean
      */
-    public $with_comment  = null;
+    public $with_comment = null;
 
-    const AVAILABLE             = 'available';
-    const TRASHED               = 'trashed';
-    const PENDING               = 'pending';
+    const AVAILABLE = 'available';
+    const TRASHED   = 'trashed';
+    const PENDING   = 'pending';
 
 
-    const NOT_SCHEDULED         = 'not-scheduled';
-    const SCHEDULED             = 'scheduled';
-    const DUED                  = 'dued';
-    const IN_TIME               = 'in-time';
-    const POSTPONED             = 'postponed';
+    const NOT_SCHEDULED = 'not-scheduled';
+    const SCHEDULED     = 'scheduled';
+    const DUED          = 'dued';
+    const IN_TIME       = 'in-time';
+    const POSTPONED     = 'postponed';
 
     /**
      * Initializes the content for a given id.
@@ -262,7 +262,6 @@ class Content
             case 'uri':
                 return $this->getUri();
 
-                break;
             case 'slug':
                 if (!empty($this->slug)) {
                     return $this->slug;
@@ -273,31 +272,25 @@ class Content
             case 'content_type_name':
                 return $this->getContentTypeName();
 
-                break;
             case 'category_name':
                 return $this->category_name = $this->loadCategoryName($this->id);
 
-                break;
             case 'publisher':
-                $user  = new User();
+                $user = new User();
                 return $this->publisher = $user->getUserName($this->fk_publisher);
 
-                break;
             case 'last_editor':
-                $user  = new User();
+                $user = new User();
                 return $this->last_editor = $user->getUserName($this->fk_user_last_editor);
 
-                break;
             case 'ratings':
                 return 0;
 
-                break;
             case 'comments':
                 return 0;
                 // $commentRepository = getService('comment_repository');
                 // return $this->comments = $commentRepository->countCommentsForContentId($this->id);
 
-                break;
             default:
                 if (array_key_exists($name, $this->metas)) {
                     return $this->metas[$name];
@@ -377,8 +370,8 @@ class Content
         }
 
         if (isset($this->category_name)) {
-            $ccm = ContentCategoryManager::get_instance();
-            $this->category_name = $ccm->getName($this->category);
+            $this->category_name = ContentCategoryManager::get_instance()
+                ->getName($this->category);
         }
 
         $this->permalink = '';
@@ -422,7 +415,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error fetching content with id'.$id.': '.$e->getMessage());
+            error_log('Error fetching content with id' . $id . ': ' . $e->getMessage());
             return;
         }
     }
@@ -441,6 +434,7 @@ class Content
                 'SELECT fk_content_type FROM `contents` WHERE pk_content=?',
                 [ $contentId ]
             );
+
             $type = \ContentManager::getContentTypeNameFromId($contentTypeId);
 
             if (empty($type)) {
@@ -450,7 +444,7 @@ class Content
             $type = ucfirst($type);
             return new $type($contentId);
         } catch (\Exception $e) {
-            error_log('Error on Content::get (ID:'.$contentId.')'.$e->getMessage());
+            error_log('Error on Content::get (ID:' . $contentId . ')' . $e->getMessage());
             return false;
         }
     }
@@ -464,7 +458,7 @@ class Content
      */
     public function create($data)
     {
-        $data['content_status'] = (empty($data['content_status']))? 0: intval($data['content_status']);
+        $data['content_status'] = (empty($data['content_status'])) ? 0 : intval($data['content_status']);
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
                 $data['starttime'] = null;
@@ -480,8 +474,8 @@ class Content
         }
 
         if (!isset($data['with_comment'])) {
-            $config = s::get('comments_config');
-            $data['with_comment'] = isset($config['with_comments'])? intval($config['with_comments']) : 1;
+            $config               = s::get('comments_config');
+            $data['with_comment'] = isset($config['with_comments']) ? intval($config['with_comments']) : 1;
         }
 
         $catName = '';
@@ -494,28 +488,31 @@ class Content
             'fk_content_type'     => \ContentManager::getContentTypeIdFromName(underscore($this->content_type)),
             'content_type_name'   => underscore($this->content_type),
             'title'               => $data['title'],
-            'description'         => (empty($data['description']) && !isset($data['description'])) ? '' :$data['description'],
-            'body'                => (!array_key_exists('body', $data))? '': $data['body'],
+            'description'         => (empty($data['description'])
+                && !isset($data['description'])) ? '' : $data['description'],
+            'body'                => (!array_key_exists('body', $data)) ? '' : $data['body'],
             'metadata'            => (!array_key_exists('metadata', $data)) ? '' : $data['metadata'],
-            'starttime'           => ($data['starttime'] < date("Y-m-d H:i:s"))? date("Y-m-d H:i:s") : $data['starttime'],
-            'endtime'             => (empty($data['endtime']))? null: $data['endtime'],
-            'created'             => (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'],
+            'starttime'           => ($data['starttime'] < date("Y-m-d H:i:s")
+                && !is_null($data['starttime'])) ? date("Y-m-d H:i:s") : $data['starttime'],
+            'endtime'             => (empty($data['endtime'])) ? null : $data['endtime'],
+            'created'             => (empty($data['created'])) ? date("Y-m-d H:i:s") : $data['created'],
             'changed'             => date("Y-m-d H:i:s"),
             'content_status'      => (int) $data['content_status'],
-            'position'            => (empty($data['position']))? 2: (int) $data['position'],
-            'frontpage'           => (!isset($data['frontpage']) || empty($data['frontpage'])) ? 0: intval($data['frontpage']),
+            'position'            => (empty($data['position'])) ? 2 : (int) $data['position'],
+            'frontpage'           => (!isset($data['frontpage'])
+                || empty($data['frontpage'])) ? 0 : intval($data['frontpage']),
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? 0 : (int) $data['fk_author'],
             'fk_publisher'        => (int) getService('session')->get('user')->id,
             'fk_user_last_editor' => (int) getService('session')->get('user')->id,
-            'in_home'             => (empty($data['in_home']))? 0: intval($data['in_home']),
-            'favorite'            => (empty($data['favorite'])) ? 0: intval($data['favorite']),
+            'in_home'             => (empty($data['in_home'])) ? 0 : intval($data['in_home']),
+            'favorite'            => (empty($data['favorite'])) ? 0 : intval($data['favorite']),
             'available'           => (int) $data['content_status'],
             'with_comment'        => $data['with_comment'],
             'slug'                => $data['slug'],
             'category_name'       => $catName,
-            'urn_source'          => (empty($data['urn_source'])) ? null: $data['urn_source'],
+            'urn_source'          => (empty($data['urn_source'])) ? null : $data['urn_source'],
             'params'              => (!isset($data['params'])
-                || empty($data['params'])) ? null: serialize($data['params'])
+                || empty($data['params'])) ? null : serialize($data['params'])
         ];
 
         $conn = getService('dbal_connection');
@@ -555,7 +552,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error creating content:'.$e->getMessage());
+            error_log('Error creating content:' . $e->getMessage());
             throw $e;
         }
     }
@@ -602,26 +599,30 @@ class Content
 
         $contentData = [
             'title'          => $data['title'],
-            'available'      => (!isset($data['content_status'])) ? $this->content_status: (int) $data['content_status'],
-            'body'           => (!array_key_exists('body', $data))? '': $data['body'],
+            'available'      =>
+                (!isset($data['content_status'])) ? $this->content_status : (int) $data['content_status'],
+            'body'           => (!array_key_exists('body', $data)) ? '' : $data['body'],
             'category_name'  => $catName,
             'changed'        => date("Y-m-d H:i:s"),
-            'content_status' => (!isset($data['content_status'])) ? $this->content_status: (int) $data['content_status'],
-            'created'        => (!isset($data['created'])) ? $this->created: $data['created'],
-            'description'    => (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
-            'endtime'        => (empty($data['endtime'])) ? null: $data['endtime'],
-            'favorite'       => (!isset($data['favorite'])) ? (int) $this->favorite: (int) $data['favorite'],
-            'fk_author'      => (!isset($data['fk_author']) || is_null($data['fk_author']))? (int) $this->fk_author : (int) $data['fk_author'],
-            'fk_publisher'   => (empty($data['content_status']))? null : (int) getService('session')->get('user')->id,
+            'content_status' =>
+                (!isset($data['content_status'])) ? $this->content_status : (int) $data['content_status'],
+            'created'        => (!isset($data['created'])) ? $this->created : $data['created'],
+            'description'    =>
+                (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
+            'endtime'        => (empty($data['endtime'])) ? null : $data['endtime'],
+            'favorite'       => (!isset($data['favorite'])) ? (int) $this->favorite : (int) $data['favorite'],
+            'fk_author'      => (!isset($data['fk_author'])
+                || is_null($data['fk_author'])) ? (int) $this->fk_author : (int) $data['fk_author'],
+            'fk_publisher'   => $this->fk_publisher,
             'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
-            'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage: (int) $data['frontpage'],
-            'in_home'        => (!isset($data['in_home'])) ? $this->in_home: (int) $data['in_home'],
+            'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage : (int) $data['frontpage'],
+            'in_home'        => (!isset($data['in_home'])) ? $this->in_home : (int) $data['in_home'],
             'metadata'       => (!empty($data['metadata'])) ? $data['metadata'] : '',
             'params'         => (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
             'slug'           => $data['slug'],
-            'starttime'      => (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
+            'starttime'      => (!isset($data['starttime'])) ? $this->starttime : $data['starttime'],
             'title'          => $data['title'],
-            'with_comment'   => (!isset($data['with_comment'])) ? $this->with_comment: $data['with_comment'],
+            'with_comment'   => (!isset($data['with_comment'])) ? $this->with_comment : $data['with_comment'],
         ];
 
         try {
@@ -638,7 +639,8 @@ class Content
                     [ 'pk_fk_content' => $data['id'] ]
                 );
                 $conn->executeUpdate(
-                    'INSERT INTO contents_categories SET pk_fk_content_category=:cat_id, pk_fk_content=:content_id, catName=:cat_name',
+                    'INSERT INTO contents_categories'
+                    . ' SET pk_fk_content_category=:cat_id, pk_fk_content=:content_id, catName=:cat_name',
                     [
                         'content_id' => $data['id'],
                         'cat_id'     => $data['category'],
@@ -658,7 +660,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error updating content (ID:'.$data['id'].'):'.$e->getMessage());
+            error_log('Error updating content (ID:' . $data['id'] . '):' . $e->getMessage());
             return false;
         }
     }
@@ -690,7 +692,7 @@ class Content
             return true;
         } catch (Exception $e) {
             $conn->rollBack();
-            error_log('Error removing content (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error removing content (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -727,7 +729,7 @@ class Content
                 [ $this->content_type_name => $this ]
             );
         } catch (\Exception $e) {
-            error_log('Error Content:delete, aka sendToTrash (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error Content:delete, aka sendToTrash (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -753,7 +755,7 @@ class Content
 
             return count($contentNum) >= 1;
         } catch (\Exception $e) {
-            error_log('Error on check exists on content (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error on check exists on content (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -770,9 +772,9 @@ class Content
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-            $uri = 'redirect?to='.urlencode($this->params['bodyLink']).'" target="_blank';
+            $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
         } else {
-            $uri =  Uri::generate(
+            $uri = Uri::generate(
                 strtolower($this->content_type_name),
                 array(
                     'id'       => sprintf('%06d', $this->id),
@@ -821,7 +823,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setTrashed (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error content::setTrashed (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -845,6 +847,7 @@ class Content
                 ],
                 [ 'pk_content' => $this->id ]
             );
+
             $this->in_litter = 0;
 
             /* Notice log of this action */
@@ -857,7 +860,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error removing content (ID:'.$this->id.'):'.$e->getMessage());
+            error_log('Error removing content (ID:' . $this->id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -878,11 +881,10 @@ class Content
         try {
             $status = ($this->content_status + 1) % 2;
 
+            $date                 = date("Y-m-d H:i:s");
             $this->changed        = $date;
             $this->content_status = $status;
             $this->available      = $status;
-
-            $date   = date("Y-m-d H:i:s");
 
             $rs = getService('dbal_connection')->update(
                 'contents',
@@ -904,7 +906,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error removing content (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error removing content (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -940,7 +942,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleFavorite (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error content::toggleFavorite (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -976,7 +978,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleInHome (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error content::toggleInHome (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1006,7 +1008,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleSuggested (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error content::toggleSuggested (ID:' . $id . '):' . $e->getMessage());
             throw $e;
         }
     }
@@ -1033,10 +1035,11 @@ class Content
         try {
             if (!is_array($status)) {
                 if ($status == 1
-                    && ($this->starttime =='0000-00-00 00:00:00' || empty($this->starttime))
+                    && ($this->starttime == '0000-00-00 00:00:00' || empty($this->starttime))
                 ) {
                     $this->starttime = date("Y-m-d H:i:s");
                 }
+
                 $values = array(
                     $status,
                     $status,
@@ -1075,7 +1078,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error changing availability: '.$e->getMessage());
+            error_log('Error changing availability: ' . $e->getMessage());
             return false;
         }
     }
@@ -1097,9 +1100,12 @@ class Content
 
         try {
             if (!is_array($status)) {
-                if (($status == 1) && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)) {
+                if (($status == 1)
+                    && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)
+                ) {
                     $this->starttime = date("Y-m-d H:i:s");
                 }
+
                 $values = array(
                     $status,
                     $this->starttime,
@@ -1116,7 +1122,7 @@ class Content
 
             getService('dbal_connection')->executeUpdate(
                 'UPDATE contents '
-                .'SET `in_home`=?, `starttime`=?, `fk_user_last_editor`=? WHERE `pk_content`=?',
+                . 'SET `in_home`=?, `starttime`=?, `fk_user_last_editor`=? WHERE `pk_content`=?',
                 $values
             );
 
@@ -1130,7 +1136,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error changing in_home: '.$e->getMessage());
+            error_log('Error changing in_home: ' . $e->getMessage());
             return false;
         }
     }
@@ -1175,7 +1181,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error changing draft: '.$e->getMessage());
+            error_log('Error changing draft: ' . $e->getMessage());
             return false;
         }
     }
@@ -1200,7 +1206,6 @@ class Content
                 [ 'pk_content' => $this->id ]
             );
 
-
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
@@ -1211,7 +1216,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error content::setFavorite (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1250,7 +1255,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setPosition (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error content::setPosition (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1291,7 +1296,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:'.$id.'):'.$e->getMessage());
+            error_log('Error content::setFavorite (ID:' . $id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1345,12 +1350,13 @@ class Content
      */
     public function getQuickInfo()
     {
-        $ccm     = ContentCategoryManager::get_instance();
+        $ccm = ContentCategoryManager::get_instance();
         if (!empty($this->fk_user_last_editor)) {
-            $author  = getService('user_repository')->find($this->fk_user_last_editor);
+            $author = getService('user_repository')->find($this->fk_user_last_editor);
         } else {
-            $author  = getService('user_repository')->find($this->fk_author);
+            $author = getService('user_repository')->find($this->fk_author);
         }
+
         $authorName = (is_object($author)) ? $author->name : '';
 
         if ($this->id !== null) {
@@ -1358,7 +1364,7 @@ class Content
                 $this->views = getService('content_views_repository')->getViews($this->id);
             }
 
-            $status = $this->getStatus();
+            $status          = $this->getStatus();
             $schedulingState = $this->getSchedulingState();
 
             return array(
@@ -1398,12 +1404,11 @@ class Content
 
                 $this->category = $rs;
             } catch (\Exception $e) {
-                error_log('Error on Content::loadCategoyName (ID:'.$pkContent.')'.$e->getMessage());
+                error_log('Error on Content::loadCategoyName (ID:' . $pkContent . ')' . $e->getMessage());
             }
         }
 
-        $ccm = ContentCategoryManager::get_instance();
-        $this->category_name = $ccm->getName($this->category);
+        $this->category_name = ContentCategoryManager::get_instance()->getName($this->category);
 
         return $this->category_name;
     }
@@ -1433,15 +1438,14 @@ class Content
                 [ $pkContent ]
             );
 
-            $this->category = $rs;
-            $this->category_name = $this->loadCategoryName($this->category);
-
-            $ccm = ContentCategoryManager::get_instance();
-            $this->category_title = $ccm->getTitle($this->category_name);
+            $this->category       = $rs;
+            $this->category_name  = $this->loadCategoryName($this->category);
+            $this->category_title = ContentCategoryManager::get_instance()
+                ->getTitle($this->category_name);
 
             return $this->category_title;
         } catch (\Exception $e) {
-            error_log('Error on Content::loadCategoyTitle (ID:'.$pkContent.')'.$e->getMessage());
+            error_log('Error on Content::loadCategoyTitle (ID:' . $pkContent . ')' . $e->getMessage());
             return '';
         }
     }
@@ -1524,9 +1528,9 @@ class Content
     */
     public function isScheduled($now = null)
     {
-        $actual  = new \DateTime();
-        $start   = new \DateTime($this->starttime);
-        $end     = new \DateTime($this->endtime);
+        $now   = new \DateTime($now);
+        $start = new \DateTime($this->starttime);
+        $end   = new \DateTime($this->endtime);
 
         if (empty($this->starttime)) {
             return false;
@@ -1558,7 +1562,7 @@ class Content
         }
 
         $start = new \DateTime($this->starttime);
-        $now = new \DateTime($now);
+        $now   = new \DateTime($now);
 
         // If $start isn't defined then return true
         if ($start->getTimeStamp() > 0) {
@@ -1612,14 +1616,16 @@ class Content
     }
 
     /**
-     * Checks if the given id is the creator's id
+     * Checks if the given id is the creator's/author's id
      *
      * @param  integer $userId
      * @return boolean
      */
     public function isOwner($userId)
     {
-        if ($this->fk_publisher == $userId) {
+        if ($this->fk_publisher == $userId
+            || $this->fk_author == $userId
+        ) {
             return true;
         }
 
@@ -1664,10 +1670,9 @@ class Content
     {
         if ($category == 'home') {
             $categoryName = 'home';
-            $category = 0;
+            $category     = 0;
         } else {
-            $ccm = ContentCategoryManager::get_instance();
-            $categoryName = $ccm->getName($category);
+            $categoryName = ContentCategoryManager::get_instance()->getName($category);
         }
 
         try {
@@ -1678,14 +1683,14 @@ class Content
 
             /* Notice log of this action */
             getService('application.log')->notice(
-                'User '.$user->username.' ('.(int) getService('session')->get('user')->id.') has executed'
-                .' action Content::dropFromHomePageOfCategory '.$categoryName
-                .' an '.$this->content_type_name.' Id '.$pkContent
+                'User ' . $user->username . ' (' . (int) getService('session')->get('user')->id . ') has executed'
+                . ' action Content::dropFromHomePageOfCategory ' . $categoryName
+                . ' an ' . $this->content_type_name . ' Id ' . $pkContent
             );
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Content::dropFromHomePageOfCategory '.$e->getMessage());
+            error_log('Error on Content::dropFromHomePageOfCategory ' . $e->getMessage());
             return false;
         }
     }
@@ -1713,19 +1718,22 @@ class Content
             // Clean cache for each frontpage element listing
             $cache = getService('cache');
             foreach ($rs as $row) {
-                $contentIds = $cache->delete('frontpage_elements_map_'.$row['fk_category']);
-                getService('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $row['fk_category']));
+                $contentIds = $cache->delete('frontpage_elements_map_' . $row['fk_category']);
+                getService('core.dispatcher')->dispatch(
+                    'frontpage.save_position',
+                    [ 'category' => $row['fk_category'] ]
+                );
             }
 
             $user = getService('session')->get('user');
             getService('application.log')->notice(
-                'User '.$user->username.' ('.(int) $user->id.') has executed '
-                .'action Drop from frontpage to content with ID id '.$this->id
+                'User ' . $user->username . ' (' . (int) $user->id . ') has executed '
+                . 'action Drop from frontpage to content with ID id ' . $this->id
             );
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Content::dropFromAllHomePages:'.$e->getMessage());
+            error_log('Error on Content::dropFromAllHomePages:' . $e->getMessage());
             return false;
         }
     }
@@ -1752,11 +1760,12 @@ class Content
         if (is_array($urns)) {
             $sqlUrns = '';
             foreach ($urns as &$urn) {
-                $urn ="'".$urn."'";
+                $urn = "'" . $urn . "'";
             }
+
             $sqlUrns = implode(', ', $urns);
         } elseif (is_string($urns)) {
-            $sqlUrns = "'".$urns."'";
+            $sqlUrns = "'" . $urns . "'";
         } else {
             $message = sprintf('The param urn is not valid "%s".', $urns);
             throw new \InvalidArgumentException($message);
@@ -1764,7 +1773,7 @@ class Content
 
         try {
             $contents = getService('dbal_connection')->fetchAll(
-                "SELECT urn_source FROM `contents` WHERE urn_source IN (".$sqlUrns.")"
+                "SELECT urn_source FROM `contents` WHERE urn_source IN (" . $sqlUrns . ")"
             );
 
             if (count($contents) <= 0) {
@@ -1778,7 +1787,7 @@ class Content
 
             return $contentsUrns;
         } catch (\Exception $e) {
-            error_log('Error Conntent::findByUrn: '.$e->getMessage());
+            error_log('Error Conntent::findByUrn: ' . $e->getMessage());
             return false;
         }
     }
@@ -1800,7 +1809,7 @@ class Content
         try {
             $content = getService('dbal_connection')->fetchColumn(
                 "SELECT pk_content FROM `contents` WHERE urn_source LIKE ? LIMIT 1",
-                [ '%'.$originalName.'%' ]
+                [ '%' . $originalName . '%' ]
             );
 
             return $content;
@@ -1854,7 +1863,7 @@ class Content
 
                 $content->categoryName = $ccm->getName($content->category);
 
-                $this->related_contents []= $content;
+                $this->related_contents[] = $content;
             }
         }
 
@@ -1875,8 +1884,8 @@ class Content
             if (!empty($images)) {
                 foreach ($images as $image) {
                     if ($image->pk_content == $this->img1) {
-                        $this->img1_path = $image->path_file.$image->name;
-                        $this->img1 = $image;
+                        $this->img1_path = $image->path_file . $image->name;
+                        $this->img1      = $image;
                         break;
                     }
                 }
@@ -1900,8 +1909,8 @@ class Content
             if (!empty($images)) {
                 foreach ($images as $image) {
                     if ($image->pk_content == $this->img2) {
-                        $this->img2_path = $image->path_file.$image->name;
-                        $this->img2 = $image;
+                        $this->img2_path = $image->path_file . $image->name;
+                        $this->img2      = $image;
                         break;
                     }
                 }
@@ -1922,6 +1931,7 @@ class Content
         if (is_array($this->params) && array_key_exists('only_subscribers', $this->params)) {
             $onlySubscribers = ($this->params['only_subscribers'] == true);
         }
+
         return $onlySubscribers;
     }
 
@@ -1983,7 +1993,7 @@ class Content
 
             return $rs > 0;
         } catch (\Exception $e) {
-            error_log('Error on Content::isInFrontpageOfCategory (ID:'.$categoryID.')');
+            error_log('Error on Content::isInFrontpageOfCategory (ID:' . $categoryID . ')');
             return false;
         }
     }
@@ -2038,13 +2048,13 @@ class Content
         try {
             $value = getService('dbal_connection')->executeUpdate(
                 "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-                ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
+                . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
                 [ $this->id, $property, $value, $value ]
             );
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Content::setMetadata (ID:'.$this->id.') .'.$property.' => '.$value);
+            error_log('Error on Content::setMetadata (ID:' . $this->id . ') .' . $property . ' => ' . $value);
             return false;
         }
     }
@@ -2070,7 +2080,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Content::removeMetadata'.$e->getMessage());
+            error_log('Error on Content::removeMetadata' . $e->getMessage());
             return false;
         }
     }
@@ -2083,7 +2093,7 @@ class Content
     public function loadAllContentProperties($id = null)
     {
         $cache             = getService('cache');
-        $contentProperties = $cache->fetch('content-meta-'.$this->id);
+        $contentProperties = $cache->fetch('content-meta-' . $this->id);
 
         if (!is_array($contentProperties)) {
             $contentProperties = array();
@@ -2091,6 +2101,7 @@ class Content
             if ($this->id == null && $id == null) {
                 return false;
             }
+
             if (!empty($id)) {
                 $this->id = $id;
             }
@@ -2102,23 +2113,22 @@ class Content
                     [(int) $this->id ]
                 );
 
-
                 if (!is_null($properties) && is_array($properties)) {
                     foreach ($properties as $property) {
                         $contentProperties[$property['meta_name']] = $property['meta_value'];
                     }
                 }
-
             } catch (\Exception $e) {
-                error_log('Error on Content:loadAllContentProperties: '.$e->getMessage());
+                error_log('Error on Content:loadAllContentProperties: ' . $e->getMessage());
             }
 
-            $cache->save('content-meta-'.$this->id, $contentProperties);
+            $cache->save('content-meta-' . $this->id, $contentProperties);
         }
 
         foreach ($contentProperties as $key => $value) {
             $this->{$key} = $value;
         }
+
         $this->metas = $contentProperties;
 
         return $this;

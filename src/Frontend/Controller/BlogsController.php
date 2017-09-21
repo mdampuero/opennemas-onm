@@ -52,7 +52,8 @@ class BlogsController extends Controller
                 }
             }
 
-            $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $order   = array('starttime' => 'DESC');
             $date    = date('Y-m-d H:i:s');
@@ -75,12 +76,12 @@ class BlogsController extends Controller
             );
 
             $em         = $this->get('opinion_repository');
-            $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
+            $blogs      = $em->findBy($filters, $order, $epp, $page);
             $countItems = $em->countBy($filters);
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
-                'epp'         => $itemsPerPage,
+                'epp'         => $epp,
                 'total'       => $countItems,
                 'route'       => 'frontend_blog_frontpage',
             ]);
@@ -93,7 +94,7 @@ class BlogsController extends Controller
                     // ????
                     $item = new \Content();
                     $item->loadAllContentProperties($blog->pk_content);
-                    $blog->summary = $item->summary;
+                    $blog->summary     = $item->summary;
                     $blog->img1_footer = $item->img1_footer;
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $blog->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
@@ -124,7 +125,7 @@ class BlogsController extends Controller
             'ads_positions'   => $positions,
             'cache_id'        => $cacheID,
             'actual_category' => 'blog', // Used in renderMenu
-            'x-tags'          => 'blog-frontpage,'.$page
+            'x-tags'          => 'blog-frontpage,' . $page
         ]);
     }
 
@@ -151,19 +152,20 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
-            $itemsPerPage = s::get('items_per_page');
+            $epp = $this->get('setting_repository')->get('items_per_page', 10);
+            $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
-            $ur = $this->get('user_repository');
+            $ur     = $this->get('user_repository');
             $author = $ur->findOneBy("username='{$slug}'", 'ID DESC');
             if (!empty($author)) {
-                $author->slug = $author->username;
+                $author->slug  = $author->username;
                 $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
                 $author->getMeta();
 
-                $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$author->id;
+                $filter = 'opinions.type_opinion=0 AND opinions.fk_author=' . $author->id;
                   // generate pagination params
 
-                $_limit = ' LIMIT '.(($page-1)*$itemsPerPage).', '.($itemsPerPage);
+                $_limit = ' LIMIT ' . (($page - 1) * $epp) . ', ' . ($epp);
 
                 $this->cm = new \ContentManager();
 
@@ -171,14 +173,14 @@ class BlogsController extends Controller
                 $countItems = $this->cm->count(
                     'Opinion',
                     $filter
-                    .' AND contents.content_status=1 '
+                    . ' AND contents.content_status=1 '
                 );
 
                 // Get the list articles for this author
                 $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
                     $filter
-                    .' AND contents.content_status=1 AND starttime <= NOW()',
-                    'ORDER BY starttime DESC '.$_limit
+                    . ' AND contents.content_status=1 AND starttime <= NOW()',
+                    'ORDER BY starttime DESC ' . $_limit
                 );
 
                 if (!empty($blogs)) {
@@ -186,11 +188,11 @@ class BlogsController extends Controller
                         // Overload blog array with more information
                         $item = new \Content();
                         $item->loadAllContentProperties($blog['pk_content']);
-                        $blog['summary']           = $item->summary;
-                        $blog['img1_footer']       = $item->img1_footer;
-                        $blog['pk_author']         = $author->id;
-                        $blog['author_name_slug']  = $author->slug;
-                        $blog['comments']          = $item->comments;
+                        $blog['summary']          = $item->summary;
+                        $blog['img1_footer']      = $item->img1_footer;
+                        $blog['pk_author']        = $author->id;
+                        $blog['author_name_slug'] = $author->slug;
+                        $blog['comments']         = $item->comments;
                         if (isset($item->img1) && ($item->img1 > 0)) {
                             $blog['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                         }
@@ -199,7 +201,7 @@ class BlogsController extends Controller
                         $blog['uri'] = $this->generateUrl(
                             'frontend_blog_show',
                             array(
-                                'blog_id'     => date('YmdHis', strtotime($blog['created'])).$blog['id'],
+                                'blog_id'     => date('YmdHis', strtotime($blog['created'])) . $blog['id'],
                                 'author_name' => $blog['author_name_slug'],
                                 'blog_title'  => $blog['slug'],
                             )
@@ -217,7 +219,7 @@ class BlogsController extends Controller
 
                 $pagination = $this->get('paginator')->get([
                     'directional' => true,
-                    'epp'         => $itemsPerPage,
+                    'epp'         => $epp,
                     'total'       => $countItems,
                     'route'       => [
                         'name'   => 'frontend_blog_author_frontpage',
@@ -241,7 +243,7 @@ class BlogsController extends Controller
             'advertisements'  => $advertisements,
             'ads_positions'   => $positions,
             'actual_category' => 'blog', // Used in renderMenu
-            'x-tags'          => 'blog-author-frontpage,'.$slug.','.$page
+            'x-tags'          => 'blog-author-frontpage,' . $slug . ',' . $page
         ]);
     }
 
@@ -265,7 +267,7 @@ class BlogsController extends Controller
         }
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
-        $cacheable = $subscriptionFilter->subscriptionHook($blog);
+        $cacheable          = $subscriptionFilter->subscriptionHook($blog);
 
         // Setup templating cache layer
         $this->view->setConfig('opinion');
@@ -274,7 +276,7 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
-            $author = $this->get('user_repository')->find($blog->fk_author);
+            $author       = $this->get('user_repository')->find($blog->fk_author);
             $blog->author = $author;
 
             // This assignation is required to get the frontpage opinion link generated properly
@@ -296,6 +298,7 @@ class BlogsController extends Controller
                 $photo = $this->get('entity_repository')->find('Photo', $blog->img2);
                 $this->view->assign('photo', $photo);
             }
+
             $this->view->assign(['author' => $author]);
         }
 
@@ -310,7 +313,7 @@ class BlogsController extends Controller
             'content'         => $blog,
             'contentId'       => $blog->id,
             'actual_category' => 'blog', // Used in renderMenu
-            'x-tags'          => 'blog-inner,'.$blog->id,
+            'x-tags'          => 'blog-inner,' . $blog->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable
         ]);

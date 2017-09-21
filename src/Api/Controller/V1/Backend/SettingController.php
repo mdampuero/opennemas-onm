@@ -40,7 +40,7 @@ class SettingController extends Controller
         'twitter_page', 'time_zone', 'vimeo_page', 'webmastertools_bing',
         'webmastertools_google', 'youtube_page', 'robots_txt_rules', 'chartbeat',
         'body_end_script', 'body_start_script','header_script',
-        'elements_in_rss', 'redirection', 'locale', 'rtb_files'
+        'elements_in_rss', 'redirection', 'rtb_files'
     ];
 
     /**
