@@ -110,12 +110,31 @@ class NewsMLEuropaPress extends NewsML
     }
 
     /**
+     * Returns the agency name from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The agency name.
+     */
+    public function getAgencyName($data)
+    {
+        $agency = $data->xpath('//ProviderId');
+
+        if (is_array($agency) && count($agency) > 0) {
+            return (string) $agency[0];
+        }
+
+        return '';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function parse($data)
     {
         $this->bag['agency_name']  = $this->getAgencyName($data);
         $this->bag['id']           = $this->getId($data);
+        $this->bag['urn']          = $this->getUrn($data);
         $this->bag['body']         = $this->getBody($data);
         $this->bag['tags']         = $this->getTags($data);
         $this->bag['created_time'] = $this->getCreatedTime($data)
@@ -125,12 +144,14 @@ class NewsMLEuropaPress extends NewsML
 
         $contents = [];
         foreach ($items as $item) {
-            $items = simplexml_load_string($item->asXML());
+            $items    = simplexml_load_string($item->asXML());
             $contents = array_merge($contents, $this->parseItem($item));
         }
 
         foreach ($contents as &$content) {
             $content->merge($this->bag);
+            // Force update urn
+            $content->urn = $this->bag['urn'];
         }
 
         return $contents;
