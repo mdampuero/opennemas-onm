@@ -35,8 +35,8 @@ class CategoryController extends Controller
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 8);
-        $itemsPerPage = (is_null($itemsPerPage) || $itemsPerPage <= 0) ? 8 : $itemsPerPage;
+        $epp          = $this->get('setting_repository')->get('items_in_blog', 10);
+        $epp          = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         if ($page > 1) {
             $page = 2;
@@ -61,7 +61,7 @@ class CategoryController extends Controller
             'in_litter'         => [ [ 'value' => 0 ] ],
         ];
 
-        $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
+        $articles = $em->findBy($filters, $order, $epp, $page);
         $total    = count($articles) + 1;
 
         $starttime = \ContentManager::getEarlierStarttimeOfScheduledContents($articles);
@@ -130,7 +130,7 @@ class CategoryController extends Controller
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
-                'epp'         => $itemsPerPage,
+                'epp'         => $epp,
                 'maxLinks'    => 0,
                 'page'        => $page,
                 'total'       => $total + 1,

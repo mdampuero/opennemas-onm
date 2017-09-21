@@ -52,8 +52,8 @@ class BlogsController extends Controller
                 }
             }
 
-            $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 10);
-            $itemsPerPage = (is_null($itemsPerPage) || $itemsPerPage <= 0) ? 8 : $itemsPerPage;
+            $epp = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $order   = array('starttime' => 'DESC');
             $date    = date('Y-m-d H:i:s');
@@ -76,12 +76,12 @@ class BlogsController extends Controller
             );
 
             $em         = $this->get('opinion_repository');
-            $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
+            $blogs      = $em->findBy($filters, $order, $epp, $page);
             $countItems = $em->countBy($filters);
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
-                'epp'         => $itemsPerPage,
+                'epp'         => $epp,
                 'total'       => $countItems,
                 'route'       => 'frontend_blog_frontpage',
             ]);
@@ -152,7 +152,8 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
-            $itemsPerPage = s::get('items_per_page');
+            $epp = s::get('items_per_page', 10);
+            $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $ur     = $this->get('user_repository');
             $author = $ur->findOneBy("username='{$slug}'", 'ID DESC');
@@ -164,7 +165,7 @@ class BlogsController extends Controller
                 $filter = 'opinions.type_opinion=0 AND opinions.fk_author=' . $author->id;
                   // generate pagination params
 
-                $_limit = ' LIMIT ' . (($page - 1) * $itemsPerPage) . ', ' . ($itemsPerPage);
+                $_limit = ' LIMIT ' . (($page - 1) * $epp) . ', ' . ($epp);
 
                 $this->cm = new \ContentManager();
 
@@ -218,7 +219,7 @@ class BlogsController extends Controller
 
                 $pagination = $this->get('paginator')->get([
                     'directional' => true,
-                    'epp'         => $itemsPerPage,
+                    'epp'         => $epp,
                     'total'       => $countItems,
                     'route'       => [
                         'name'   => 'frontend_blog_author_frontpage',
