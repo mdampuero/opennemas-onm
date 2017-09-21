@@ -38,10 +38,10 @@ class WidgetFactory
      *
      * @return WidgetFactory The current instance.
      */
-    public function __construct($container, $content = null)
+    public function __construct($content = null)
     {
         $this->cachedId  = get_class($this);
-        $this->container = $container;
+        $this->container = getService('service_container');
         $this->content   = $content;
         $this->tpl       = $this->container->get('core.template');
 
