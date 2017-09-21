@@ -109,13 +109,14 @@ class Widget extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents '
-                .'LEFT JOIN widgets ON pk_content = pk_widget WHERE pk_content = ?',
+                . 'LEFT JOIN widgets ON pk_content = pk_widget WHERE pk_content = ?',
                 [ $id ]
             );
 
             if (!$rs) {
                 return false;
             }
+
             $this->load($rs);
             $this->loadAllContentProperties();
 
@@ -136,7 +137,7 @@ class Widget extends Content
     {
         $data['category'] = 0;
 
-        if ($data['renderlet'] != 'html'  && $data['renderlet'] != 'smarty') {
+        if ($data['renderlet'] != 'html' && $data['renderlet'] != 'smarty') {
             $data['content'] = strip_tags($data['content']);
         }
 
@@ -215,7 +216,7 @@ class Widget extends Content
                 break;
         }
 
-        return "<div class=\"widget\">" .$content. "</div>";
+        return "<div class=\"widget\">" . $content . "</div>";
     }
 
     /**
@@ -229,11 +230,12 @@ class Widget extends Content
     private function renderletSmarty()
     {
         $resource = 'string:' . $this->content;
-        $wgtTpl = getService('core.template');
+        $wgtTpl   = getService('core.template');
 
         // no caching
-        $wgtTpl->caching = 0;
+        $wgtTpl->caching       = 0;
         $wgtTpl->force_compile = true;
+
         $output = $wgtTpl->fetch($resource, [ 'widget' => $this->content ]);
 
         return $output;

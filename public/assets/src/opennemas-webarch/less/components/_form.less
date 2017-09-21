@@ -173,3 +173,10 @@ select.form-control {
     white-space: nowrap;
   }
 }
+
+@media(max-width: 768px) {
+  .form-control[uib-typeahead] + ul.dropdown-menu {
+    top: auto !important;
+    bottom: 37px;
+  }
+}

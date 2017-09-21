@@ -1324,7 +1324,8 @@ class MigrationSaver
                     ) {
                         $file = new File($values['path_img'], $values['image']);
 
-                        $values['avatar_img_id']   = $user->uploadUserAvatar($file, $values['username']);
+                        $values['avatar_img_id']   =
+                            $user->uploadUserAvatar($file, $values['username']);
                         $values['id']              = $userId;
                         $values['passwordconfirm'] = $values['password'];
                         $user->update($values);
@@ -1639,7 +1640,7 @@ class MigrationSaver
     {
         $fm = getService('data.manager.filter');
 
-        return $fm->filter('tags', $string);
+        return $fm->set($string)->filter('tags')->get();
     }
 
     /**
@@ -2030,14 +2031,14 @@ class MigrationSaver
     protected function updateOpinionFrontpagePhoto($id, $photo, $footer)
     {
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
 
         $values = array($id, 'img1', $photo, $photo);
 
         $this->conn->executeQuery($sql, $values);
 
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
 
         $values = array($id, 'img1_footer', $footer, $footer);
 

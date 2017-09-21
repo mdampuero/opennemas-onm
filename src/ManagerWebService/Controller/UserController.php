@@ -201,8 +201,8 @@ class UserController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
-        $em  = $this->get('orm.manager');
-        $msg = $this->get('core.messenger');
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
         $data = $em->getConverter('User')
             ->objectify($request->request->all());
 
@@ -394,7 +394,7 @@ class UserController extends Controller
         $extra = [
             'languages' => array_merge(
                 [ 'default' => _('Default system language') ],
-                $this->get('core.locale')->getLocales()
+                $this->get('core.locale')->getAvailableLocales()
             )
         ];
 

@@ -63,7 +63,8 @@ class SettingController extends Controller
     public function listLocaleAction(Request $request)
     {
         $query   = $request->get('q');
-        $locales = $this->get('core.locale')->getAvailableLocales();
+        $locales = $this->get('core.locale')->setContext('frontend')
+            ->getSupportedLocales();
 
         if (!empty($query)) {
             $locales = array_filter($locales, function ($a) use ($query) {
@@ -76,7 +77,10 @@ class SettingController extends Controller
         $locales = [];
 
         for ($i = 0; $i < count($keys); $i++) {
-            $locales[] = [ 'code' => $keys[$i], 'name' => $values[$i] ];
+            $locales[] = [
+                'code' => $keys[$i],
+                'name' => "$values[$i] ($keys[$i])"
+            ];
         }
 
         return new JsonResponse($locales);
@@ -93,6 +97,7 @@ class SettingController extends Controller
     public function listAction()
     {
         $settings = $this->get('setting_repository')->get($this->keys);
+        $locale   = $this->get('core.locale');
 
         if (array_key_exists('google_analytics', $settings)) {
             $settings['google_analytics'] = $this->get('data.manager.adapter')
@@ -136,8 +141,8 @@ class SettingController extends Controller
             'extra'    => [
                 'countries' => $this->get('core.geo')->getCountries(),
                 'locales'   => [
-                    'backend'  => $this->get('core.locale')->getLocales(),
-                    'frontend' => $this->getFrontendLocales($settings)
+                    'backend'  => $locale->getAvailableLocales(),
+                    'frontend' => $locale->setContext('frontend')->getAvailableLocales()
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
@@ -231,36 +236,6 @@ class SettingController extends Controller
         $msg->add(_('Settings saved.'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getcode());
-    }
-
-    /**
-     * Returns the list of frontend locales basing on the current locale
-     * configuration.
-     *
-     * @param array $settings The list of settings.
-     *
-     * @return array The list of frontend locales.
-     */
-    protected function getFrontendLocales($settings)
-    {
-        $frontend = [];
-
-        if (empty($settings)
-            || !is_array($settings)
-            || !array_key_exists('locale', $settings)
-            || !array_key_exists('frontend', $settings['locale'])
-            || !is_array($settings['locale']['frontend'])
-        ) {
-            return $frontend;
-        }
-
-        $locales = $this->get('core.locale')->getAvailableLocales();
-
-        foreach ($settings['locale']['frontend'] as $code) {
-            $frontend[$code] = $locales[$code];
-        }
-
-        return $frontend;
     }
 
     /**

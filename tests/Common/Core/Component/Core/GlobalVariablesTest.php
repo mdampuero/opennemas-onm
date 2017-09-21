@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Core\Component\Template;
+namespace Tests\Common\Core\Component\Core;
 
-use Common\Core\Component\Template\GlobalVariables;
+use Common\Core\Component\Core\GlobalVariables;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

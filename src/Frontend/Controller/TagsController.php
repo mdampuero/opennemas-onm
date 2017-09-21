@@ -54,7 +54,7 @@ class TagsController extends Controller
                     continue;
                 }
 
-                $normalized = $fm->filter('normalize', $tag);
+                $normalized = $fm->set($tag)->filter('normalize')->get();
 
                 if (in_array($normalized[0], $letters)) {
                     $tags[$normalized[0]][] = $tag;
