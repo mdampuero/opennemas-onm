@@ -94,9 +94,11 @@ class LocaleTest extends KernelTestCase
      */
     public function testGetAndSetContext()
     {
-        $this->assertEquals('backend', $this->locale->getContext());
+        $this->locale->setContext('');
+        $this->assertEquals('frontend', $this->locale->getContext());
         $this->assertEquals('frontend', $this->locale->setContext('frontend')->getContext());
-        $this->assertEquals('backend', $this->locale->setContext('grault')->getContext());
+        $this->assertEquals('frontend', $this->locale->setContext('grault')->getContext());
+        $this->assertEquals('backend', $this->locale->setContext('backend')->getContext());
 
         $config  = new \ReflectionProperty($this->locale, 'config');
         $default = new \ReflectionProperty($this->locale, 'default');
@@ -136,10 +138,10 @@ class LocaleTest extends KernelTestCase
     public function testGetAndSetRequestLocale()
     {
         $this->locale->setRequestLocale(null);
-        $this->assertEquals($this->locale->getLocale(), $this->locale->getRequestLocale());
+        $this->assertEmpty($this->locale->getRequestLocale());
 
         $this->locale->setRequestLocale('waldo');
-        $this->assertEquals($this->locale->getLocale(), $this->locale->getRequestLocale());
+        $this->assertEquals('waldo', $this->locale->getRequestLocale());
 
         $this->locale->setRequestLocale('es_ES');
         $this->assertEquals('es_ES', $this->locale->getRequestLocale());
@@ -192,6 +194,26 @@ class LocaleTest extends KernelTestCase
         ]]);
 
         $this->assertEquals('es', $this->locale->getLocaleShort());
+    }
+
+    /**
+     * Tests getSlugs for backend and frontend contexts.
+     */
+    public function testGetSlugs()
+    {
+        $config = new \ReflectionProperty($this->locale, 'config');
+        $config->setAccessible(true);
+        $value = $config->getValue($this->locale);
+
+        $value['frontend'] = [
+            'language' => [ 'available' => [ 'en_US' ], 'slug' => [ 'en_US' => 'en' ]],
+            'timezone' => 'UTC'
+        ];
+        $config->setValue($this->locale, $value);
+
+        $this->assertEmpty($this->locale->getSlugs());
+        $this->assertTrue(array_key_exists('en_US', $this->locale->setContext('frontend')->getSlugs()));
+        $this->assertEmpty($this->locale->setContext('backend')->getSlugs());
     }
 
     /**
