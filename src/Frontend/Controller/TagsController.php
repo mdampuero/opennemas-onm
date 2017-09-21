@@ -101,7 +101,8 @@ class TagsController extends Controller
             || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
         ) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
-            $epp = $this->get('setting_repository')->get('items_in_blog', 8);
+            $epp = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $criteria = [
                 'content_status'  => [ [ 'value' => 1 ] ],
