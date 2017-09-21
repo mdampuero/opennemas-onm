@@ -513,7 +513,7 @@
                                 <div class="p-t-10 radio">
                                   <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
                                   <label for="radio-[% $index %]">
-                                    [% item.name %]
+                                    [% item.name %] ([% item.code %])
                                     <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
                                   </label>
                                 </div>
