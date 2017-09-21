@@ -84,7 +84,9 @@ class LocaleListener implements EventSubscriberInterface
      */
     protected function configureUserLocale()
     {
-        if (!$this->container->has('core.user')) {
+        if ($this->locale->getContext() !== 'backend'
+            || !$this->container->has('core.user')
+        ) {
             return;
         }
 
