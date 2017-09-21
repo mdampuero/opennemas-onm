@@ -25,9 +25,7 @@ class Frontpages
     */
     public function allContent($category)
     {
-        /**
-         * Init the Content and Database object
-        */
+        // Init the Content and Database object
         $ccm = \ContentCategoryManager::get_instance();
 
         // Check if category exists and initialize contents var
@@ -148,8 +146,8 @@ class Frontpages
 
         $category = $category[0];
 
-        $itemsPerPage = s::get('items_in_blog', 8);
-        $itemsPerPage = (is_null($itemsPerPage) || $itemsPerPage <= 0) ? 8 : $itemsPerPage;
+        $epp = s::get('items_in_blog', 10);
+        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = array(
@@ -167,7 +165,7 @@ class Frontpages
 
         // Get all articles for this page
         $er            = getService('entity_repository');
-        $articles      = $er->findBy($filters, $order, $itemsPerPage, $page);
+        $articles      = $er->findBy($filters, $order, $epp, $page);
         $countArticles = $er->countBy($filters);
 
         $imageIdsList = array();
@@ -223,7 +221,7 @@ class Frontpages
         // Set pagination
         $pagination = getService('paginator')->get([
             'page'  => $page,
-            'epp'   => $itemsPerPage,
+            'epp'   => $epp,
             'total' => $countArticles,
             'route' => [
                 'name'   => 'categ_sync_frontpage',
