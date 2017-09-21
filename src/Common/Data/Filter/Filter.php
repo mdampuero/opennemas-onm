@@ -46,19 +46,21 @@ abstract class Filter
     /**
      * Returns the parameter give a name.
      *
-     * @param string $name    The parameter name.
-     * @param mixed  $default The default value for the parameter.
+     * @param string  $name      The parameter name.
+     * @param mixed   $default   The default value for the parameter.
+     * @param boolean $container Whether to search the parameter in the
+     *                           service container.
      *
      * @return mixed If the parameter exists, return the value. Otherwise,
      *               returns the default value.
      */
-    public function getParameter($name, $default = false)
+    public function getParameter($name, $default = false, $container = true)
     {
         if (array_key_exists($name, $this->params)) {
             return $this->params[$name];
         }
 
-        if ($this->container->hasParameter($name)) {
+        if ($container && $this->container->hasParameter($name)) {
             return $this->container->getParameter($name);
         }
 
