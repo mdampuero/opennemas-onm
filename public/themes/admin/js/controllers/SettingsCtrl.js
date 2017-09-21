@@ -52,7 +52,7 @@
           ],
           locale: {
             backend: {
-              language: { selected: 'en' },
+              language: { selected: 'en_US' },
               timezone: 'UTC'
             },
             frontend: {
@@ -112,6 +112,9 @@
 
           // Add item if no already added
           if (frontend.available.indexOf(item.code) === -1) {
+            // Remove code from name
+            item.name = item.name.replace(/\([a-z]+[A-Z_]*\)/, '');
+
             frontend.available.push(item);
           }
         };
