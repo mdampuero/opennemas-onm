@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form ng-app="BackendApp" ng-controller="SettingsCtrl" ng-init="list()" class="settings">
+  <form name="settingForm" ng-controller="SettingsCtrl" ng-init="list()" class="settings">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -16,7 +16,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" type="button">
+                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="settingForm.$invalid" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -524,11 +524,17 @@
                               </div>
                               <div class="row m-b-10">
                                 <div class="col-xs-11">
-                                  <input class="form-control" ng-model="settings.locale.frontend.language.slug[item.code]" placeholder="{t}Customize the language appears in the URL (e.g. en).{/t}" required type="text">
-                                  <span class="help">
-                                    <i class="fa fa-info-circle m-l-5 m-r-5 text-info"></i>
-                                    {t}URLs will look like http://newspaper.opennemas.com/[% settings.locale.frontend.language.slug[item.code] %]/<slug>{/t}
-                                  </span>
+                                  <div class="form-group" ng-class="{ 'has-error': settingForm['slug-' + $index].$invalid }">
+                                    <input class="form-control" name="slug-[% $index %]" ng-maxlength="2" ng-minlength="2" ng-model="settings.locale.frontend.language.slug[item.code]" placeholder="{t}Customize the language appears in the URL (e.g. en).{/t}" required type="text">
+                                    <div class="absolute help" ng-if="settingForm['slug-' + $index].$valid">
+                                      <i class="fa fa-info-circle text-info m-l-5 m-r-5"></i>
+                                      {t}URLs will look like http://newspaper.opennemas.com/[% settings.locale.frontend.language.slug[item.code] %]/<slug>{/t}
+                                    </div>
+                                    <div class="absolute help" ng-if="!settingForm['slug-' + $index].$valid">
+                                      <i class="fa fa-exclamation-circle text-danger m-l-5 m-r-5"></i>
+                                      <span class="no-animate text-danger">{t}Locale needs 2 characters{/t}</span>
+                                    </div>
+                                  </div>
                                 </div>
                                 <div class="col-xs-1">
                                   <button class="btn btn-white" ng-click="removeLocale($index)" type="button">

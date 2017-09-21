@@ -120,7 +120,7 @@
             item.name = item.name.replace(/\([a-z]+[_A-Za-z0-1]*\)/, '');
 
             frontend.available.push(item);
-            frontend.slug[item.code] = item.code;
+            frontend.slug[item.code] = item.code.substring(0, 2);
           }
         };
 
