@@ -149,7 +149,7 @@ class Frontpages
         $category = $category[0];
 
         $itemsPerPage = s::get('items_in_blog', 8);
-        $itemsPerPage = is_null($itemsPerPage) || $itemsPerPage <= 0)) ? 8 : $itemsPerPage;
+        $itemsPerPage = (is_null($itemsPerPage) || $itemsPerPage <= 0) ? 8 : $itemsPerPage;
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = array(

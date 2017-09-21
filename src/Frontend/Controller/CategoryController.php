@@ -36,7 +36,7 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 8);
-        $itemsPerPage = is_null($itemsPerPage) || $itemsPerPage <= 0)) ? 8 : $itemsPerPage;
+        $itemsPerPage = (is_null($itemsPerPage) || $itemsPerPage <= 0) ? 8 : $itemsPerPage;
 
         if ($page > 1) {
             $page = 2;

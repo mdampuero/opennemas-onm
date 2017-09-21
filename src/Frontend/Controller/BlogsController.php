@@ -53,7 +53,7 @@ class BlogsController extends Controller
             }
 
             $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 10);
-            $itemsPerPage = is_null($itemsPerPage) || $itemsPerPage <= 0)) ? 8 : $itemsPerPage;
+            $itemsPerPage = (is_null($itemsPerPage) || $itemsPerPage <= 0) ? 8 : $itemsPerPage;
 
             $order   = array('starttime' => 'DESC');
             $date    = date('Y-m-d H:i:s');
