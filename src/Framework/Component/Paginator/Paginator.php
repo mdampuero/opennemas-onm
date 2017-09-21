@@ -72,15 +72,13 @@ class Paginator
     {
         $this->options = array_merge($this->options, $options);
 
+        // Do not generator the paginator if epp is less than 0. Division by 0.
+        // Or if total items are 0 or less than epp
         if (!array_key_exists('total', $this->options)
             || $this->options['total'] === 0
             || $this->options['total'] <= $this->options['epp']
+            || $this->options['epp'] <= 0
         ) {
-            return '';
-        }
-
-        // Do not generator the paginator if epp is less than 0. Division by 0.
-        if (!$this->options['epp'] <= 0) {
             return '';
         }
 
