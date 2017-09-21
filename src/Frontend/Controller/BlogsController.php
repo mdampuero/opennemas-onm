@@ -152,7 +152,7 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
-            $epp = s::get('items_per_page', 10);
+            $epp = $this->get('setting_repository')->get('items_per_page', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $ur     = $this->get('user_repository');
