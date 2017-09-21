@@ -56,8 +56,7 @@
               timezone: 'UTC'
             },
             frontend: {
-              language: { available: [], selected: null },
-              slug: {},
+              language: { available: [], selected: null, slug: {} },
               timezone: 'UTC'
             }
           },
@@ -105,10 +104,6 @@
           }
 
           var frontend = $scope.settings.locale.frontend.language;
-
-          if (!frontend.slug) {
-            frontend.slug = {};
-          }
 
           // Set as selected locale if list empty
           if (!frontend.available || frontend.available.length === 0) {
@@ -269,6 +264,9 @@
         $scope.removeLocale = function(index) {
           var frontend = $scope.settings.locale.frontend.language;
           var item     = frontend.available[index];
+
+          // Remove slug
+          delete frontend.slug[item.code];
 
           frontend.available.splice(index, 1);
 
