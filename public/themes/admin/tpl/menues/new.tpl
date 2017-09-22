@@ -1,7 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl">
+<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl" {if $menu}ng-init="menu = {json_encode($menu->getRawData())|clear_json}{/if}">
+
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -32,6 +33,14 @@
                 {/if}
               </h5>
             </li>
+            {is_module_activated name="es.openhost.module.multilanguage"}
+            <li class="quicklinks ng-cloak">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="ng-cloak">
+              <translator ng-model="lang" translator-options="{json_encode($language_data)|clear_json}"/>
+            </li>
+            {/is_module_activated}
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -66,14 +75,13 @@
                 {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
               </div>
             </div>
-          </div>
-          <div class="row">
             {if count($menu_positions) > 1}
-            <div class="col-md-7 col-xs-12 form-group">
+            <div class="col-md-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Position{/t}</label>
-              <span class="help">{t}(If your theme has defined positions for menus you can assign one menu to each of them){/t}</span>
               <div class="controls">
                 {html_options options=$menu_positions selected=$menu->position name=position}
+                <br>
+                <span class="help"><span class="fa fa-info-circle text-info"></span>{t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
               </div>
             </div>
             {/if}
@@ -95,7 +103,7 @@
             </div>
           </div>
         </div>
-        <div class="grid-body" {if $menu}ng-init="menu = {json_encode($menu)|clear_json}"{/if}>
+        <div class="grid-body">
           <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
             <ol ui-tree-nodes="" ng-model="menu.items">
               <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
