@@ -51,7 +51,13 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        $config = $this->container->get('setting_repository')->get('locale');
+        // Get repository name
+        $instance = $this->container->get('core.instance');
+        $name     = $instance->internal_name === 'manager' ? 'manager' : null;
+
+        $config = $this->container->get('orm.manager')
+            ->getDataSet('Settings', $name)
+            ->get('locale');
 
         $this->locale->setContext(
             $this->container->get('core.globals')->getRoute()
