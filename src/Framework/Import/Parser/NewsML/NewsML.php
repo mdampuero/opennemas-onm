@@ -111,7 +111,7 @@ class NewsML extends Parser
      */
     public function getId($data)
     {
-        $id  = $data->xpath('//NewsItemId');
+        $id = $data->xpath('//NewsItemId');
 
         if (is_array($id) && count($id) > 0) {
             return (string) $id[0];
@@ -221,11 +221,7 @@ class NewsML extends Parser
         $classname = substr($classname, strrpos($classname, '\\') + 1);
 
         $resource = strtolower($classname);
-        $agency   = str_replace(
-            ' ',
-            '_',
-            strtolower($this->getAgencyName($data))
-        );
+        $agency   = strtolower(\Onm\StringUtils::generateSlug($this->getAgencyName($data)));
 
         $date = $this->getCreatedTime($data);
         $id   = $this->getId($data);
@@ -269,7 +265,7 @@ class NewsML extends Parser
 
         $contents = [];
         foreach ($items as $item) {
-            $items = simplexml_load_string($item->asXML());
+            $items    = simplexml_load_string($item->asXML());
             $contents = array_merge($contents, $this->parseItem($item));
         }
 
