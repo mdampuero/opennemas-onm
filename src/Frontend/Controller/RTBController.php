@@ -41,7 +41,7 @@ class RTBController extends Controller
     public function showAction(Request $request)
     {
         // Check for the module existence and if it is enabled
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.advanced_Advertisement')) {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.advancedAdvertisement')) {
             throw new ResourceNotFoundException();
         }
 

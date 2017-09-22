@@ -586,7 +586,7 @@
                       </div>
                     </div>
                     {/is_module_activated}
-                    {is_module_activated name="es.openhost.module.advanced_Advertisement"}
+                    {is_module_activated name="es.openhost.module.advancedAdvertisement"}
                     <h4>{t}RTB Media Integration{/t}</h4>
                     <div class="form-group">
                       <label class="form-label" for="rtbFiles">{t}RTB Files{/t}</label>
