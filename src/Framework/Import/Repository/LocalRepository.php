@@ -35,7 +35,7 @@ class LocalRepository
      */
     public function __construct()
     {
-        $this->syncPath = CACHE_PATH . DS .'importers';
+        $this->syncPath = CACHE_PATH . DS . 'importers';
         $this->compiler = new Compiler($this->syncPath);
 
         $this->contents = $this->compiler->getContentsFromCompiles();
@@ -111,24 +111,30 @@ class LocalRepository
      */
     protected function filter($criteria)
     {
-        return array_filter($this->contents, function ($a) use ($criteria) {
+        $contents = array_filter($this->contents, function ($a) use ($criteria) {
+            return $a->source == $criteria['source'];
+        });
+
+        // Remove source from criteria
+        unset($criteria['source']);
+
+        return array_filter($contents, function ($a) use ($criteria) {
             foreach ($criteria as $key => $value) {
                 $filters = explode(',', $value);
 
                 foreach ($filters as $filter) {
-                    if (!property_exists($a, $key)
-                        || (property_exists($a, $key)
-                        && !preg_match(
+                    if (property_exists($a, $key)
+                        && preg_match(
                             '@' . strtolower(trim($filter)) . '@',
                             strtolower($a->{$key})
-                        ))
+                        )
                     ) {
-                        return false;
+                        return true;
                     }
                 }
             }
 
-            return true;
+            return false;
         });
     }
 }

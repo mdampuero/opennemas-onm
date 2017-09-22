@@ -91,9 +91,9 @@ class Importer
 
         $resources = [];
         foreach ($this->config['filters'] as $filter) {
-            $criteria  = array_merge(
+            $criteria = array_merge(
                 $criteria,
-                [ 'title' => $filter, 'body' => $filter ]
+                [ 'tags' => $filter, 'title' => $filter, 'body' => $filter ]
             );
 
             $items     = $this->repository->findBy($criteria);
@@ -130,7 +130,7 @@ class Importer
 
         if ($resource->type === 'photo') {
             $photo = new \Photo();
-            $id = $photo->createFromLocalFile($data);
+            $id    = $photo->createFromLocalFile($data);
 
             return $id;
         }
@@ -190,7 +190,7 @@ class Importer
             || $this->config['author'] !== '1'
         ) {
             if (array_key_exists('target_author', $this->config)
-                &&  !empty($this->config['target_author'])
+                && !empty($this->config['target_author'])
             ) {
                 return $this->config['target_author'];
             }
@@ -208,7 +208,7 @@ class Importer
         $data = get_object_vars($author);
 
         if (array_key_exists('email', $data)) {
-            $um = $this->container->get('user_repository');
+            $um   = $this->container->get('user_repository');
             $user = $um->findOneBy([
                 'union'    => 'or',
                 'email'    => [ [ 'value' => $data['email'] ] ],
@@ -283,7 +283,7 @@ class Importer
             'created'     => $info->atime,
             'changed'     => $info->mtime,
             'date'        => $info->mtime,
-            'size'        => round($info->size/1024, 2),
+            'size'        => round($info->size / 1024, 2),
             'width'       => $info->width,
             'height'      => $info->height,
             'type'        => $info->type,
@@ -377,9 +377,9 @@ class Importer
         ];
 
         if ($resource->type === 'photo' || $target === 'photo') {
-            $data['local_file'] = realpath($this->repository->syncPath. DS
-                . $this->config['id'] .  DS . $resource->file_name);
             $data['original_filename'] = $resource->file_name;
+            $data['local_file']        = realpath($this->repository->syncPath
+                . DS . $this->config['id'] . DS . $resource->file_name);
 
             return $data;
         }
@@ -423,8 +423,8 @@ class Importer
      */
     protected function getRelatedData($resource, $target)
     {
-        $data       = [];
-        $related    = [];
+        $data    = [];
+        $related = [];
 
         foreach ($resource->related as $id) {
             $r = $this->repository->find($this->config['id'], $id);
@@ -448,7 +448,7 @@ class Importer
             ]
         ];
 
-        $total = $this->container->get('entity_repository')
+        $total    = $this->container->get('entity_repository')
             ->countBy($criteria);
         $contents = $this->container->get('entity_repository')
             ->findBy($criteria, [], $total);
@@ -478,7 +478,7 @@ class Importer
                 && $content->content_type_name === 'video'
             ) {
                 if (!array_key_exists('fk_video', $data)) {
-                    $data['fk_video']        = $content->pk_content;
+                    $data['fk_video']     = $content->pk_content;
                     $data['footer_video'] = $content->description;
                 }
 
