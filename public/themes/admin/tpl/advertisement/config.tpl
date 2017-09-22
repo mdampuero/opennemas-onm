@@ -126,7 +126,7 @@
         </div>
         {/is_module_activated}
       </uib-tab>
-      {is_module_activated name="es.openhost.module.advanced_advertisement"}
+      {is_module_activated name="es.openhost.module.advanced_Advertisement"}
       <uib-tab heading="{t}Advanced{/t}">
         <div class="form-group">
           <label for="ads_txt" class="form-label">
