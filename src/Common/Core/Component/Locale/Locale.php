@@ -267,9 +267,9 @@ class Locale
         }
 
         // Remove when more contexts supported
-        if (strpos('admin', $context) !== false
-            || strpos('backend', $context) !== false
-            || strpos('manager', $context) !== false
+        if (strpos($context, 'admin') !== false
+            || strpos($context, 'backend') !== false
+            || strpos($context, 'manager') !== false
         ) {
             $this->context = 'backend';
         }
