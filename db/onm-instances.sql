@@ -286,7 +286,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES ('log_db_enabled','s:2:\"on\";'),('log_enabled','s:2:\"on\";'),('log_level','s:6:\"normal\";'),('site_language','s:5:\"es_ES\";'),('time_zone','s:3:\"421\";');
+INSERT INTO `settings` (`name`, `value`) VALUES ('locale', 'a:2:{s:7:\"backend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:3:\"421\";}s:8:\"frontend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:3:\"UTC\";}}');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
