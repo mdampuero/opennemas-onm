@@ -49,5 +49,9 @@ class DebugNewsAgencyCommand extends ContainerAwareCommand
 
         $parser = $sf->get($xml);
         $parsed = $parser->parse($xml, $file);
+
+        if ($output->isVerbose()) {
+            \Symfony\Component\VarDumper\VarDumper::dump($parsed);
+        }
     }
 }
