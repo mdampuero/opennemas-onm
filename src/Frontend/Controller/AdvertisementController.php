@@ -50,6 +50,35 @@ class AdvertisementController extends Controller
     }
 
     /**
+     * Redirects the user to the target URL defined by an advertisement
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     */
+    public function redirectAction(Request $request)
+    {
+        $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+
+        // Resolve ad ID, search in repository or redirect to 404
+        $advertisement = $this->get('content_url_matcher')
+            ->matchContentUrl('advertisement', $dirtyID);
+
+        if (empty($advertisement)) {
+            throw new ResourceNotFoundException();
+        }
+
+        // Increase number of clicks
+        $advertisement->setNumClics($advertisement->id);
+
+        if ($advertisement->url) {
+            return $this->redirect($advertisement->url);
+        } else {
+            return new Response('<script type="text/javascript">window.close();</script>');
+        }
+    }
+
+    /**
      * Displays a public record of Authorized Digital Sellers - ads.txt file
      *
      * @return Response The response object.
