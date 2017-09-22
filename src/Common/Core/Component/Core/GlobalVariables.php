@@ -40,6 +40,13 @@ class GlobalVariables implements \ArrayAccess
     protected $extension;
 
     /**
+     * The route name.
+     *
+     * @var string
+     */
+    protected $route;
+
+    /**
      * Initializes the GlobalVariables.
      *
      * @param ServiceContainer $container The service container.
@@ -107,6 +114,16 @@ class GlobalVariables implements \ArrayAccess
     public function getLocale()
     {
         return $this->container->get('core.locale');
+    }
+
+    /**
+     * Returns the route name.
+     *
+     * @return string The route name.
+     */
+    public function getRoute()
+    {
+        return $this->route;
     }
 
     /**
@@ -201,5 +218,15 @@ class GlobalVariables implements \ArrayAccess
     public function setExtension($extension)
     {
         $this->extension = $extension;
+    }
+
+    /**
+     * Sets the route name.
+     *
+     * @param string The route name.
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
     }
 }

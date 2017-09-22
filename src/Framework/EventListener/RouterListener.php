@@ -191,6 +191,8 @@ class RouterListener implements EventSubscriberInterface
             }
 
             $this->container->get('core.globals')
+                ->setRoute($parameters['_route']);
+            $this->container->get('core.globals')
                 ->setEndpoint($this->getEndpoint($parameters['_route']));
 
             // Raise na error if the url came localized and it's not localizable

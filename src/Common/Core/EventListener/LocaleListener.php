@@ -10,6 +10,7 @@
 namespace Common\Core\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -53,10 +54,10 @@ class LocaleListener implements EventSubscriberInterface
         $config = $this->container->get('setting_repository')->get('locale');
 
         $this->locale->setContext(
-            $this->container->get('core.globals')->getEndpoint()
+            $this->container->get('core.globals')->getRoute()
         )->configure($config);
 
-        $this->configureRequestLocale($event->getRequest());
+        $this->configureRequestLocale($event);
         $this->configureUserLocale();
         $this->defineLanguageConstants();
 
@@ -66,17 +67,38 @@ class LocaleListener implements EventSubscriberInterface
     /**
      * Configures the Locale service basing on the current request.
      */
-    protected function configureRequestLocale($request)
+    protected function configureRequestLocale($event)
     {
+        $request = $event->getRequest();
+        $slug    = null;
+
         // Get locale from request attributes
         if (!empty($request->attributes->get('_locale'))) {
-            $this->locale->setRequestLocale($request->attributes->get('_locale'));
+            $slug = $request->attributes->get('_locale');
         }
 
         // Get locale from request parameters
         if (!empty($request->query->get('language'))) {
-            $this->locale->setRequestLocale($request->query->get('language'));
+            $slug = $request->query->get('language');
         }
+
+        if (empty($slug)) {
+            return;
+        }
+
+        // If slug invalid redirect to URL without slug
+        if (!in_array($slug, $this->locale->getSlugs())) {
+            $event->setResponse(new RedirectResponse(
+                str_replace('/' . $slug, '', $request->getUri()),
+                301
+            ));
+
+            return;
+        }
+
+        $locale = array_search($slug, $this->locale->getSlugs());
+
+        $this->locale->setRequestLocale($locale);
     }
 
     /**
@@ -84,7 +106,9 @@ class LocaleListener implements EventSubscriberInterface
      */
     protected function configureUserLocale()
     {
-        if (!$this->container->has('core.user')) {
+        if ($this->locale->getContext() !== 'backend'
+            || !$this->container->has('core.user')
+        ) {
             return;
         }
 
