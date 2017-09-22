@@ -121,9 +121,9 @@ class Menu
     public function load($data)
     {
         // Set the raw data to the internal property
-        $this->data               = $data;
-        $this->data['params']     = @unserialize($this->data['params']);
-        $this->data['menu_items'] = $this->getMenuItems($data['pk_menu']);
+        $this->data           = $data;
+        $this->data['params'] = @unserialize($this->data['params']);
+        $this->data['items']  = $this->getMenuItems($data['pk_menu']);
 
         $this->pk_menu  = $this->id = $this->data['pk_menu'];
         $this->name     = $this->data['name'];
@@ -150,7 +150,7 @@ class Menu
             $this->read($this->id);
         }
 
-        $items = $this->data['menu_items'];
+        $items = $this->data['items'];
 
         foreach ($items as &$element) {
             if (is_array($element->title)) {
