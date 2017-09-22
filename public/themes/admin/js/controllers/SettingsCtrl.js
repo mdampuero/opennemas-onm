@@ -50,6 +50,16 @@
           google_analytics: [
             { api_key: '', base_domain: '', custom_var: '' }
           ],
+          locale: {
+            backend: {
+              language: { selected: 'en_US' },
+              timezone: 'UTC'
+            },
+            frontend: {
+              language: { available: [], selected: null, slug: {} },
+              timezone: 'UTC'
+            }
+          },
           rtb_files: []
         };
 
@@ -88,20 +98,29 @@
          * @param Object The locale to add.
          */
         $scope.addLocale = function(item) {
-          if (!$scope.settings.locale.frontend) {
-            $scope.settings.locale.frontend = [];
+          if (!$scope.settings.locale.frontend.language) {
+            $scope.settings.locale.frontend.language =
+              { available: [], selected: null, slug: {} };
           }
 
-          if ($scope.settings.locale.frontend.length === 0) {
-            $scope.settings.locale.main = item.code;
+          var frontend = $scope.settings.locale.frontend.language;
+
+          // Set as selected locale if list empty
+          if (!frontend.available || frontend.available.length === 0) {
+            frontend.selected = item.code;
           }
 
-          var codes = $scope.settings.locale.frontend.map(function (e) {
+          var codes = frontend.available.map(function (e) {
             return e.code;
           });
 
+          // Add item if no already added
           if (codes.indexOf(item.code) === -1) {
-            $scope.settings.locale.frontend.push(item);
+            // Remove code from name
+            item.name = item.name.replace(/\([a-z]+[_A-Za-z0-1]*\)/, '');
+
+            frontend.available.push(item);
+            frontend.slug[item.code] = item.code.substring(0, 2);
           }
         };
 
@@ -243,26 +262,31 @@
          *                      locales.
          */
         $scope.removeLocale = function(index) {
-          var item = $scope.settings.locale.frontend[index];
+          var frontend = $scope.settings.locale.frontend.language;
+          var item     = frontend.available[index];
 
-          $scope.settings.locale.frontend.splice(index, 1);
+          // Remove slug
+          delete frontend.slug[item.code];
 
-          if ($scope.settings.locale.frontend.length === 0) {
-            $scope.settings.locale.main = null;
+          frontend.available.splice(index, 1);
 
+          // No locales
+          if (frontend.available.length === 0) {
+            frontend.selected = null;
             return;
           }
 
-          if (item.code !== $scope.settings.locale.main) {
+          // No selected locale removed
+          if (item.code !== frontend.selected) {
             return;
           }
 
-          if (index >= $scope.settings.locale.frontend.length) {
-            index = $scope.settings.locale.frontend.length - 1;
+          // Last language removed
+          if (index >= frontend.available.length) {
+            index = frontend.available.length - 1;
           }
 
-          $scope.settings.locale.main =
-            $scope.settings.locale.frontend[index].code;
+          frontend.selected = frontend.available[index].code;
         };
 
         /**
@@ -303,13 +327,17 @@
           };
 
           // Save only locale codes
-          if (data.settings.locale &&
-              data.settings.locale.frontend instanceof Array) {
-            var frontend = data.settings.locale.frontend.map(function(e) {
+          if (data.settings.locale.frontend.language.available instanceof Array) {
+            var frontend = data.settings.locale.frontend.language.available
+              .map(function(e) {
                 return e.code;
               });
 
-            data.settings.locale.frontend = frontend;
+            data.settings.locale.frontend.language.available = frontend;
+
+            if (data.settings.locale.frontend.language.available.length === 0) {
+              delete data.settings.locale.frontend.language.available;
+            }
           }
 
           if ($scope.settings.site_logo) {
@@ -359,19 +387,17 @@
             site_logo:            $scope.settings.site_logo
           };
 
-          if ($scope.settings.locale &&
-              $scope.settings.locale.frontend instanceof Array) {
+          if ($scope.settings.locale.frontend.language.available instanceof Array) {
             var locales = [];
 
-            for (var i = 0; i < $scope.settings.locale.frontend.length; i++) {
+            for (var i = 0; i < $scope.settings.locale.frontend.language.available.length; i++) {
               locales.push({
-                code: $scope.settings.locale.frontend[i],
-                name: $scope.extra.locales
-                .frontend[$scope.settings.locale.frontend[i]],
+                code: $scope.settings.locale.frontend.language.available[i],
+                name: $scope.extra.locales.frontend[$scope.settings.locale.frontend.language.available[i]],
               });
             }
 
-            $scope.settings.locale.frontend = locales;
+            $scope.settings.locale.frontend.language.available = locales;
           }
 
           if ($scope.settings.site_logo) {

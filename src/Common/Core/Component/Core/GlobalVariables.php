@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Component\Template;
+namespace Common\Core\Component\Core;
 
 class GlobalVariables implements \ArrayAccess
 {
@@ -38,6 +38,13 @@ class GlobalVariables implements \ArrayAccess
      * @var string
      */
     protected $extension;
+
+    /**
+     * The route name.
+     *
+     * @var string
+     */
+    protected $route;
 
     /**
      * Initializes the GlobalVariables.
@@ -110,6 +117,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the route name.
+     *
+     * @return string The route name.
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    /**
      * Returns the theme service.
      *
      * @return Locale The theme service.
@@ -147,7 +164,7 @@ class GlobalVariables implements \ArrayAccess
         $method = 'get' . ucfirst($offset);
 
         if (!method_exists($this, $method)) {
-            return  null;
+            return null;
         }
 
         return $this->{$method}();
@@ -201,5 +218,15 @@ class GlobalVariables implements \ArrayAccess
     public function setExtension($extension)
     {
         $this->extension = $extension;
+    }
+
+    /**
+     * Sets the route name.
+     *
+     * @param string The route name.
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
     }
 }
