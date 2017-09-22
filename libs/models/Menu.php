@@ -67,11 +67,11 @@ class Menu
      */
     public function __construct($id = null)
     {
+        $this->content_type_l10n_name = _('Menu');
+
         if (!is_null($id)) {
             $this->read($id);
         }
-
-        $this->content_type_l10n_name = _('Menu');
     }
 
     /**
@@ -120,16 +120,21 @@ class Menu
      */
     public function load($data)
     {
+        // Default Value
+        $this->id = null;
+
         // Set the raw data to the internal property
         $this->data           = $data;
         $this->data['params'] = @unserialize($this->data['params']);
         $this->data['items']  = $this->getMenuItems($data['pk_menu']);
 
-        $this->pk_menu  = $this->id = $this->data['pk_menu'];
+        $this->id       = $this->data['pk_menu'];
+        $this->pk_menu  = $this->data['pk_menu'];
         $this->name     = $this->data['name'];
+        $this->title    = $this->data['name']; // Why duplicated from name?
+        $this->params   = $this->data['params'];
         $this->position = $this->data['position'];
         $this->type     = $this->data['type'];
-        $this->params   = @unserialize($this->data['params']);
 
         return $this;
     }

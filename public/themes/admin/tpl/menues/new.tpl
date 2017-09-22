@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl" {if $menu}ng-init="menu = {json_encode($menu->getRawData())|clear_json}{/if}">
+<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl" {if $menu} ng-init="menu = {json_encode($menu->getRawData())|clear_json} {/if}">
 
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
@@ -34,10 +34,10 @@
               </h5>
             </li>
             {is_module_activated name="es.openhost.module.multilanguage"}
-            <li class="quicklinks ng-cloak">
+            <li class="hidden-xs quicklinks ng-cloak">
               <span class="h-seperate"></span>
             </li>
-            <li class="ng-cloak">
+            <li class="hidden-xs ng-cloak">
               <translator ng-model="lang" translator-options="{json_encode($language_data)|clear_json}"/>
             </li>
             {/is_module_activated}
@@ -67,6 +67,15 @@
       <div class="grid simple">
         <div class="grid-body">
           <div class="row">
+            {is_module_activated name="es.openhost.module.multilanguage"}
+            <div class="col-md-ng-cloak hidden-md hidden-lg hidden-sm clearfix">
+              Language:
+              <div class="cleafix pull-right">
+                <translator ng-model="lang" translator-options="{json_encode($language_data)|clear_json}"/>
+              </div>
+              <hr>
+            </div>
+            {/is_module_activated}
             <div class="col-md-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Name{/t}</label>
               <div class="controls">
@@ -112,7 +121,7 @@
         </div>
       </div>
 
-      <input type="hidden" name="items" ng-value="menuItems"/>
+      <input type="hidden" name="items" ng-value="json_menu_items"/>
     </div>
     <script type="text/ng-template" id="menu-item">
       {include file="menues/partials/_menu_item.tpl"}
