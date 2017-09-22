@@ -2,7 +2,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
     <h4 class="modal-title">{t}Add new item{/t}</h4>
   </div>
-  <div class="modal-body">
+  <div class="modal-body clearfix">
     <div class="form-group">
       <label class="form-label" for="item-type">
         {t}Type{/t}
@@ -13,17 +13,17 @@
           <option value="category">{t}Frontpages{/t}</option>
         {/if}
         {is_module_activated name="ALBUM_MANAGER"}
-          {if count($albumCategories) > 0}
+          {if count($categories_album) > 0}
             <option value="albumCategory">{t}Album Categories{/t}</option>
           {/if}
         {/is_module_activated}
         {is_module_activated name="VIDEO_MANAGER"}
-          {if count($videoCategories) > 0}
+          {if count($categories_video) > 0}
             <option value="videoCategory">{t}Video Categories{/t}</option>
           {/if}
         {/is_module_activated}
         {is_module_activated name="POLL_MANAGER"}
-          {if count($pollCategories) > 0}
+          {if count($categories_poll) > 0}
             <option value="pollCategory">{t}Poll Categories{/t}</option>
           {/if}
         {/is_module_activated}
@@ -80,8 +80,8 @@
       </div>
     {/if}
     {is_module_activated name="ALBUM_MANAGER"}
-      {if count($albumCategories) > 0}
-        <div ng-if="type == 'albumCategory'" ng-init="albumCategories = {json_encode($albumCategories)|clear_json}">
+      {if count($categories_album) > 0}
+        <div ng-if="type == 'albumCategory'" ng-init="albumCategories = {json_encode($categories_album)|clear_json}">
           <div class="form-group" ng-repeat="category in albumCategories">
             <div class="checkbox col-md-6">
               <input id="checkbox-album-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
@@ -94,8 +94,8 @@
       {/if}
     {/is_module_activated}
     {is_module_activated name="VIDEO_MANAGER"}
-      {if count($videoCategories) > 0}
-        <div ng-if="type == 'videoCategory'" ng-init="videoCategories = {json_encode($videoCategories)|clear_json}">
+      {if count($categories_video) > 0}
+        <div ng-if="type == 'videoCategory'" ng-init="videoCategories = {json_encode($categories_video)|clear_json}">
           <div class="form-group" ng-repeat="category in videoCategories">
             <div class="checkbox col-md-6">
               <input id="checkbox-video-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
@@ -108,8 +108,8 @@
       {/if}
     {/is_module_activated}
     {is_module_activated name="POLL_MANAGER"}
-      {if count($pollCategories) > 0}
-        <div ng-if="type == 'pollCategory'" ng-init="pollCategories = {json_encode($pollCategories)|clear_json}">
+      {if count($categories_poll) > 0}
+        <div ng-if="type == 'pollCategory'" ng-init="pollCategories = {json_encode($categories_poll)|clear_json}">
           <div class="form-group" ng-repeat="category in pollCategories">
             <div class="checkbox col-md-6">
               <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
