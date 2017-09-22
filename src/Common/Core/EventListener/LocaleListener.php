@@ -54,7 +54,7 @@ class LocaleListener implements EventSubscriberInterface
         $config = $this->container->get('setting_repository')->get('locale');
 
         $this->locale->setContext(
-            $this->container->get('core.globals')->getEndpoint()
+            $this->container->get('core.globals')->getRoute()
         )->configure($config);
 
         $this->configureRequestLocale($event);
