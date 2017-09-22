@@ -8782,6 +8782,9 @@ msgstr "Non podes pasar!"
 msgid "You are not allowed to access this resource."
 msgstr "Non tes permiso para acceder a este recurso."
 
+msgid "The title in the default language is required."
+msgstr "O título no idioma principal e requerido."
+
 #~ msgid ""
 #~ "You can get your Facebook App Keys from <a class=\"external-link\" ng-"
 #~ "click=\"$event.stopPropagation();\"  href=\"https://developers.facebook."

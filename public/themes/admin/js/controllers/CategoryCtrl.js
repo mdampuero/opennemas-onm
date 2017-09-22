@@ -13,8 +13,8 @@
      * @description
      *   Handles actions for paywall settings configuration form.
      */
-    .controller('CategoryCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger',
-      function($controller, $rootScope, $scope, http, messenger) {
+    .controller('CategoryCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing',
+      function($controller, $rootScope, $scope, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -26,7 +26,10 @@
          *
          * @type {Object}
          */
-        $scope.category = {};
+        $scope.category = {
+          title:{},
+          name:{},
+        };
 
         $scope.subcategories = [];
 
@@ -43,23 +46,15 @@
           $scope.loading = true;
           $scope.inmenu = false;
           if(categoryData) {
-            $scope.category = categoryData.category;
+            $scope.category = categoryData.category || $scope.category;
             $scope.subcategories = categoryData.subcategories;
             $scope.categories = categoryData.categories;
             $scope.configurations = categoryData.configurations;
             $scope.internalCategories = categoryData.internal_categories;
-            $scope.allowedCategories = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
-              var value = (categoryKey == 0)?'Internal':$scope.internalCategories.internalCategories[categoryKey].title
-              return {'code':categoryKey, 'value':value};
-            });
+            $scope.languageData = categoryData.language_data || $scope.languageData;
+            $scope.categoryUrl = categoryData.image_path + '/sections/' + $scope.category.logo_path;
 
-
-
-            $scope.categoryUrl = categoryData.imagePath + '/sections/';
-            $scope.languageData = categoryData.language_data;
-            $scope.loading = false;
             $scope.pre();
-            $scope.getL10nSupport();
             return;
           }
           $scope.loading = false;
@@ -68,8 +63,7 @@
         };
 
         $scope.getL10nSupport = function(lang) {
-          $scope.titleAux = $scope.category.title[$scope.lang];
-          $scope.nameAux = $scope.category.name[$scope.lang];
+          $scope.lang = lang;
         };
 
         $scope.test = function() {
@@ -85,14 +79,13 @@
          */
         $scope.save = function()
         {
-          var data = $scope.post();
-
+          var data = $scope.category;
           $scope.saving = true;
 
           http.put('backend_ws_category_save', data)
             .then(function(response) {
               $scope.saving = false;
-              $scope.category.id = response.data.category.id;
+              $scope.category.id = response.data.category;
               messenger.post(response.data.message);
             }, function(response) {
               $scope.saving = false;
@@ -101,7 +94,8 @@
         };
 
         $scope.pre = function() {
-          Object.keys(categoryData.language_data.all).forEach(function (langAux) {
+          var languageData = $scope.languageData || {all:['default'], locale:'default'};
+          Object.keys(languageData.all).forEach(function (langAux) {
             if(!$scope.category.title[langAux]) {
               $scope.category.title[langAux] = '';
             }
@@ -110,24 +104,36 @@
             }
           });
 
-          $scope.lang = categoryData.language_data.locale || categoryData.language_data.default;
-        }
+          $scope.lang = $scope.languageData.locale || $scope.languageData.default;
 
-        $scope.post = function() {
-          Object.keys(data.all).forEach(function (lang) {
-            if(trim($scope.category.title[lang]) === '') {
-              $scope.category.title.delete(lang);
-            }
-            if(trim($scope.category.name[lang]) === '') {
-              $scope.category.name.delete(lang);
-            }
+          $scope.allowedCategories = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
+            var value = (categoryKey == 0)?'Internal':$scope.internalCategories.internalCategories[categoryKey].title
+            return {'code':categoryKey, 'value':value};
           });
+          if(!$scope.category.internal_category) {
+            $scope.category.internal_category = $scope.allowedCategories[0].code;
+          }
+
+          $scope.subsectionCategories = [];
+          for(var key in $scope.categories) {
+            if($scope.category.id != $scope.categories[key].id) {
+              $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title});
+            }
+          }
+          $scope.loading = false;
+          $scope.getL10nSupport($scope.lang);
         }
 
-        $scope.getL10nFlags = function ()
-        {
-
-        }
+        /**
+         * Goes to category edit page.
+         *
+         * @param int    id    Category id.
+         */
+        $scope.createShowCategoryUrl = function(id) {
+          return routing.generate('admin_category_show', {
+            id: id
+          });
+        };
 
         $scope.internalCategoriesImgs = {
           7:  'fa-stack-overflow',

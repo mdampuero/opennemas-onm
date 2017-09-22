@@ -262,7 +262,7 @@ admin_categories_config:
 
 admin_category_create:
     path:     /categories/create
-    defaults: { _controller  : BackendBundle:Categories:create }
+    defaults: { _controller  : BackendBundle:Categories:show }
 
 admin_category_show:
     path:     /categories/{id}/show

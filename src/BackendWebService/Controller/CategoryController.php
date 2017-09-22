@@ -37,6 +37,9 @@ class CategoryController extends ContentController
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
+        $params = $request->request->get('params');
+        $inrss  = ($params && array_key_exists('inrss', $params) && $params['inrss'] == true) ? 1 : 0;
+
         $data = array(
             'id'                  => $request->request->getDigits('id', 0),
             'name'                => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
@@ -44,12 +47,32 @@ class CategoryController extends ContentController
             'inmenu'              => $request->request->getDigits('inmenu', 0),
             'subcategory'         => $request->request->getDigits('subcategory', 0),
             'internal_category'   => $request->request->getDigits('internal_category'),
-            'logo_path'           => $request->request->filter('logo_path', '', FILTER_SANITIZE_STRING),
+            'logo_path'           => $request->request->filter('logoPath', '', FILTER_SANITIZE_STRING),
             'color'               => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
             'params'  => array(
-                'inrss' => $inrss,
+                'inrss'           => $inrss,
             ),
         );
+
+        // Check if at least have the default language for the title
+        $locale = $this->get('core.locale')->setContext('frontend')->getLocale();
+
+        if (isset($data['title']) &&
+                empty($data['title']) ||
+                (
+                    is_array($data['title']) &&
+                    (
+                        !isset($data['title'][$locale]) ||
+                        empty($data['title'][$locale])
+                    )
+                )) {
+            $msg->add(
+                _('The title in the default language is required.'),
+                'error',
+                400
+            );
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
 
         $logoPath = '';
         if (!empty($_FILES) && isset($_FILES['logo_path'])) {
@@ -71,16 +94,19 @@ class CategoryController extends ContentController
         }
 
         if ($category->{$execMethod}($data)) {
-            dispatchEventWithParams('category.' . $method, ['category' => $category]);
+            dispatchEventWithParams('category.' . $execMethod, ['category' => $category]);
             $msg->add(
-                sprintf(_('Category "%s" ' . $method . 'd successfully.'), $data['title']),
+                sprintf(_('Category "%s" ' . $execMethod . 'd successfully.'), $data['title'][$locale]),
                 'success',
                 200
             );
             $data['id'] = $category->pk_content_category;
-            return new JsonResponse(['message' => $msg->getMessages(), 'category' => $data], $msg->getCode());
+            return new JsonResponse(['message' => $msg->getMessages(), 'category' => $data['id']], $msg->getCode());
         }
 
-        return new JsonResponse(_('Oups! Seems that we had an unknown problem while trying to run your request.'), 500);
+        return new JsonResponse(
+            ['message' => _('Oups! Seems that we had an unknown problem while trying to run your request.')],
+            500
+        );
     }
 }

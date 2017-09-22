@@ -444,13 +444,14 @@ class StringUtils
      */
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
-        if (!is_string($string) && is_object($string) && 'DataObject' === get_class($string)) {
+        if (!is_string($string)) {
 
             $slugArray = [];
-            foreach ($string->getData() as $key => $value) {
+            foreach ($string as $key => $value) {
                 $slugArray[$key] = self::generateSlug($value, $useStopList, $delimiter);
             }
-            return new DataObject($slugArray);
+
+            return $slugArray;
         }
 
         $string = strip_tags($string);

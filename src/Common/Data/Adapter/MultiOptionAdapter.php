@@ -71,7 +71,7 @@ class MultiOptionAdapter extends Adapter
                 continue;
             }
 
-            if (array_key_exists($fields, $item)) {
+            if (array_key_exists($field, $item)) {
                 $item[$field] = self::adaptField($item[$field], $params);
             }
         }
@@ -94,12 +94,12 @@ class MultiOptionAdapter extends Adapter
     public static function adaptField($field, array $params)
     {
         $keyMultivalued = null;
-        if (isset($params[self::PARAM_KEY_FOR_MULTIVALUED_FIELDS])) {
+        if (array_key_exists(self::PARAM_KEY_FOR_MULTIVALUED_FIELDS, $params)) {
             $keyMultivalued = $params[self::PARAM_KEY_FOR_MULTIVALUED_FIELDS];
         }
 
         $defaultValue = $params[self::PARAM_DEFAULT_KEY_VALUE];
-        if (isset($params[self::PARAM_KEY_FOR_MULTIVALUED_FIELDS])) {
+        if (array_key_exists(self::PARAM_KEY_FOR_MULTIVALUED_FIELDS, $params)) {
             if (!is_array($field) || sizeOf($field) == 0) {
                 return $field;
             }

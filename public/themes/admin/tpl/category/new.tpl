@@ -1,10 +1,25 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+  {javascripts}
+    <script>
+      $(document).ready(function($) {
+        var btn   = $('.onm-button');
+
+        $('.fileinput').fileinput({
+          name: 'logo_path',
+          uploadtype:'image'
+        });
+      });
+    </script>
+  {/javascripts}
+{/block}
+
 {block name="content"}
   <script>
       var categoryData = {$categoryData};
   </script>
-  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="init()">
+  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="init()" enctype="multipart/form-data">
     <div class="page-navbar actions-navbar ng-cloak" ng-if="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -59,13 +74,13 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-model="titleAux" type="text" required>
+                  <input class="form-control" id="title" name="title" ng-model="category.title[lang]" type="text" required>
                 </div>
               </div>
-              <div class="form-group" ng-if="category.name">
+              <div class="form-group" ng-if="category.name[lang]">
                 <label for="name" class="form-label">{t}Slug{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="name" name="name" ng-model="nameAux" type="text" readonly>
+                  <input class="form-control" id="name" name="name" ng-model="category.name[lang]" type="text" readonly>
                 </div>
               </div>
               <div class="form-group">
@@ -75,8 +90,9 @@
                 <div class="controls">
                   <select name="subcategory"
                       ng-model="category.subcategory"
-                      ng-options="auxCategory.pk_content_category as auxCategory.title for auxCategory in categories"
+                      ng-options="auxCategory.code as auxCategory.value for auxCategory in subsectionCategories"
                   >
+                    <option value=""></option>
                   </select>
                 </div>
               </div>
@@ -110,7 +126,7 @@
                       </td>
                       <td class="right">
                         <div class="btn-group">
-                          <a class="btn btn-mini" href="[% createShowCategoryUrl(subcategory.pkContentCategory) %]"
+                          <a class="btn btn-mini" href="[% createShowCategoryUrl(subcategory.id) %]"
                               title="Modificar">
                             <i class="fa fa-pencil"></i>
                           </a>
@@ -186,18 +202,17 @@
               <div class="form-group" ng-if="configurations.allowLogo">
                 <label for="logo_path" class="form-label">{t}Category logo{/t}</label>
                 <div class="controls">
-                  <div class="fileinput [%(category.logo_path)?'fileinput-exists':'fileinput-new'%]" data-trigger="fileinput">
+                  <div class="fileinput [%(category.logo_path)?'fileinput-exists':'fileinput-new'%]" data-provides="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
-                    <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" ng-if="category.logo_path">
-                        <img src="[% categoryUrl + category.logo_path %]" style="max-width:200px;" >
+                    <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
+                        <img src="[% categoryUrl %]" style="max-width:200px;" >
                     </div>
                     <div>
                       <span class="btn btn-file">
                         <span class="fileinput-new">{t}Add new photo{/t}</span>
                         <span class="fileinput-exists">{t}Change{/t}</span>
-                        <input type="file"/>
-                        <input type="hidden" name="logo_path" class="file-input" value="1">
+                        <input type="file" file-model="category.logo_path" name="category.logo_path" class="file-input" value="1">
                       </span>
                       <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
                         <i class="fa fa-trash-o"></i>

@@ -145,6 +145,10 @@ class Controller extends SymfonyController
      */
     protected function getLocaleData($context, Request $request = null)
     {
+        if (!$this->get('core.security')->hasPermission('es.openhost.module.multilanguage')) {
+            return null;
+        }
+
         $locale = null;
         if ($request != null) {
             $locale = $request->query->filter('locale', null, FILTER_SANITIZE_STRING);

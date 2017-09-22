@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Common\Data\Adapter\MultiOptionAdapter;
 
 /**
  * Handles the actions for managing articles
@@ -35,13 +36,25 @@ class ArticlesController extends Controller
 
         // Build the list of authors to render filters
         $allAuthors = \User::getAllUsersAuthors();
-        $authors = [ [ 'name' => _('All'), 'value' => -1 ], ];
+        $authors    = [ [ 'name' => _('All'), 'value' => -1 ], ];
         foreach ($allAuthors as $author) {
             $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
         }
 
         // Build the list of categories to render filters
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ], ];
+        $categories             = [ [ 'name' => _('All'), 'value' => -1 ], ];
+        $languageData           = $this->getLocaleData('frontend', $request);
+        $this->parentCategories = array_map(
+            function ($category) use ($languageData) {
+                return $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                        MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                        MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                        MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+                ]);
+            },
+            $this->parentCategories
+        );
+
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name'  => $category->title,
@@ -49,6 +62,11 @@ class ArticlesController extends Controller
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
+                $subcategory  = $this->get('data.manager.adapter')->adapt('multi_option', $subcategory, [
+                        MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                        MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                        MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+                ]);
                 $categories[] = [
                     'name'  => '&rarr; ' . $subcategory->title,
                     'value' => $subcategory->name

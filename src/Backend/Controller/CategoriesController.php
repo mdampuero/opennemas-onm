@@ -71,87 +71,41 @@ class CategoriesController extends Controller
      */
     public function createAction(Request $request)
     {
-        $configurations = s::get('section_settings');
-        $ccm = \ContentCategoryManager::get_instance();
+        $category      = new \ContentCategory();
+        $ccm           = \ContentCategoryManager::get_instance();
+        $allcategories = $ccm->categories;
+        $subcategories = [];
+        $languageData  = $this->getLocaleData('frontend', $request);
+        // we adapt the category data and if the value returned y multilanguage field is a string, create a new
+        //array with all values
+        $category = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
+                MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
+        ]);
 
-        if ('POST' == $request->getMethod()) {
-            $logoPath = '';
-            if (!empty($_FILES) && isset($_FILES['logo_path'])) {
-                $nameFile   = $_FILES['logo_path']['name'];
-                $uploaddir  = MEDIA_PATH.'/sections/'.$nameFile;
+        $allcategories = $this->get('data.manager.adapter')->adapt('multi_option', $allcategories, [
+                MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
+                MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
+        ]);
 
-                if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                    $logoPath = $nameFile;
-                }
-            }
+        $jsonData = json_encode(
+            array(
+                'categories'            => $allcategories,
+                'configurations'        => s::get('section_settings'),
+                'category'              => $category,
+                'subcategories'         => $subcategories,
+                'internal_categories'   => $this->getInternalCategories(),
+                'image_path'            => MEDIA_URL . MEDIA_DIR,
+                'language_data'         => $languageData,
+            )
+        );
 
-            $params = $request->request->get('params');
-            $data = array(
-                'title'             => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'inmenu'            => $request->request->getDigits('inmenu', 0),
-                'subcategory'       => $request->request->getDigits('subcategory'),
-                'internal_category' => $request->request->getDigits('internal_category'),
-                'logo_path'         => $logoPath,
-                'color'             => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
-                'params'            => array(
-                    'inrss' => $params['inrss'],
-                ),
-            );
-
-            $category = new \ContentCategory();
-
-            if ($category->create($data)) {
-                $user = $this->get('core.user');
-
-                if ($user->getOrigin() != 'manager') {
-                    $user->categories[] = $category->pk_content_category;
-                    $this->get('orm.manager')->persist($user, 'instance');
-                }
-
-                dispatchEventWithParams('category.create', ['category' => $category]);
-
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _("Category created successfully.")
-                );
-            }
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_category_show',
-                    array('id' => $category->pk_content_category)
-                )
-            );
-        } else {
-            $allcategories = $ccm->categories;
-            $categories    = array();
-            foreach ($allcategories as $category) {
-                if ($category->internal_category != 0
-                    && $category->fk_content_category == 0
-                ) {
-                    $categories[] = $category;
-                }
-            }
-
-            $languageData = $this->getLocaleData('frontend', $request);
-            $jsonData     = json_encode(
-                array(
-                    'categories'            => $allcategories,
-                    'configurations'        => s::get('section_settings'),
-                    'subcategories'         => [],
-                    'internal_categories'   => $this->getInternalCategories(),
-                    'image_path'            => MEDIA_URL . MEDIA_DIR,
-                    'language_data'         => $languageData,
-                )
-            );
-
-            return $this->render(
-                'category/new.tpl',
-                array(
-                    'categoryData'  => $jsonData
-                )
-            );
-        }
+        return $this->render(
+            'category/new.tpl',
+            array(
+                'categoryData'   => $jsonData
+            )
+        );
     }
 
     /**
@@ -166,47 +120,58 @@ class CategoriesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id = $request->query->getDigits('id', null);
 
-        $category = new \ContentCategory($id);
-        if ($category->pk_content_category != null) {
-            $ccm           = \ContentCategoryManager::get_instance();
-            $allcategorys  = $ccm->categories;
-            $subcategories = $ccm->getSubcategories($id);
-            $languageData  = $this->getLocaleData('frontend', $request);
-            // we adapt the category data and if the value returned y multilanguage field is a string, create a new
-            //array with all values
-            $category = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
-                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
-                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
-            ]);
+        $ccm           = \ContentCategoryManager::get_instance();
+        $allcategories = $ccm->categories;
+        $languageData  = $this->getLocaleData('frontend', $request);
+        // we adapt the category data and if the value returned y multilanguage field is a string, create a new
+        //array with all values
 
-            $jsonData = json_encode(
-                array(
-                    'categories'            => $allcategorys,
-                    'configurations'        => s::get('section_settings'),
-                    'category'              => $category,
-                    'subcategories'         => $subcategories,
-                    'internal_categories'   => $this->getInternalCategories(),
-                    'image_path'            => MEDIA_URL . MEDIA_DIR,
-                    'language_data'         => $languageData,
-                )
-            );
-
-            return $this->render(
-                'category/new.tpl',
-                array(
-                    'categoryData'   => $jsonData
-                )
-            );
-        }
-
-        $this->get('session')->getFlashBag()->add(
-            'error',
-            _('Unable to find a category for the given id.')
+        $allcategories = array_map(
+            function ($category) use ($languageData) {
+                return $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                        MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                        MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                        MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+                ]);
+            },
+            $allcategories
         );
 
-        return $this->redirect($this->generateUrl('admin_categories'));
+        if (empty($id)) {
+            $category      = null;
+            $subcategories = [];
+        } else {
+            $subcategories = $ccm->getSubcategories($id);
+            $category      = new \ContentCategory($id);
+            if ($category->pk_content_category != null) {
+                $ccm      = \ContentCategoryManager::get_instance();
+                $category = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
+                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
+                ]);
+            }
+        }
+
+        $jsonData = json_encode(
+            array(
+                'categories'            => $this->categoryMapping($allcategories),
+                'configurations'        => s::get('section_settings'),
+                'category'              => $this->categoryMapping($category),
+                'subcategories'         => $this->categoryMapping($subcategories),
+                'internal_categories'   => $this->getInternalCategories(),
+                'image_path'            => MEDIA_URL . MEDIA_DIR,
+                'language_data'         => $languageData,
+            )
+        );
+
+        return $this->render(
+            'category/new.tpl',
+            array(
+                'categoryData'   => $jsonData
+            )
+        );
     }
 
     /**
@@ -251,8 +216,8 @@ class CategoriesController extends Controller
 
         // If file was attached, handle it
         if (!empty($_FILES) && isset($_FILES['logo_path'])) {
-            $nameFile = $_FILES['logo_path']['name'];
-            $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
+            $nameFile  = $_FILES['logo_path']['name'];
+            $uploaddir = MEDIA_PATH . '/sections/' . $nameFile;
 
             if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
                 $data['logo_path'] = $nameFile;
@@ -284,7 +249,7 @@ class CategoriesController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id       = $request->query->getDigits('id');
         $category = new \ContentCategory($id);
 
         if ($category->pk_content_category != null) {
@@ -337,7 +302,7 @@ class CategoriesController extends Controller
      */
     public function emptyAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id       = $request->query->getDigits('id');
         $category = new \ContentCategory($id);
 
         if ($category->pk_content_category != null) {
@@ -381,8 +346,8 @@ class CategoriesController extends Controller
      */
     public function toggleAvailableAction(Request $request)
     {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
+        $id     = $request->query->getDigits('id', 0);
+        $status = $request->query->getDigits('status', 0);
 
         $category = new \ContentCategory($id);
 
@@ -417,8 +382,8 @@ class CategoriesController extends Controller
      */
     public function toggleRssAction(Request $request)
     {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
+        $id     = $request->query->getDigits('id', 0);
+        $status = $request->query->getDigits('status', 0);
 
         $category = new \ContentCategory($id);
 
@@ -456,7 +421,7 @@ class CategoriesController extends Controller
         if ('POST' == $request->getMethod()) {
             $sectionSettings = $request->request->get('section_settings');
             if ($sectionSettings['allowLogo'] == 1) {
-                $path = MEDIA_PATH.'/sections';
+                $path = MEDIA_PATH . '/sections';
                 \Onm\FilesManager::createDirectory($path);
             }
 
@@ -525,6 +490,40 @@ class CategoriesController extends Controller
         return [
             'internalCategories'    => $internalCategoriesList,
             'allowedCategories'     => $allowedCategories
+        ];
+    }
+
+    /**
+     *  Mapping to transform the category object for hidde the name fields too
+     * mutch caractetistic of the DB.
+     *
+     *  @param mixed $category category/categories to transform
+     *
+     *  @return mixed Return category/categories tranformed
+     */
+    private function categoryMapping($category)
+    {
+        if (is_array($category)) {
+            return array_map(function ($category) {
+                return $this->categoryMapping($category);
+            }, $category);
+        }
+
+        if (!is_object($category)) {
+            return $category;
+        }
+
+        return [
+            'id'                => $category->id,
+            'title'             => $category->title,
+            'name'              => $category->name,
+            'inmenu'            => $category->inmenu,
+            'posmenu'           => $category->posmenu,
+            'internal_category' => $category->internal_category,
+            'subcategory'       => $category-> fk_content_category ,
+            'logo_path'         => $category->logo_path,
+            'color'             => $category->color,
+            'params'            => $category->params
         ];
     }
 }
