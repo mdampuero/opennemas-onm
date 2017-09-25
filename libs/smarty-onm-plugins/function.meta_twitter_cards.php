@@ -7,20 +7,18 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     // Check for a content page
     if (array_key_exists('content', $smarty->tpl_vars)) {
         // Check if the twitter user is not empty
-        $sm = getService('setting_repository');
+        $sm   = getService('setting_repository');
         $user = preg_split('@.com/[#!/]*@', $sm->get('twitter_page'));
-        $twitterUser = $user[1];
 
+        $twitterUser = $user[1];
         if (empty($twitterUser)) {
             return '';
         }
 
-        $content = $smarty->tpl_vars['content']->value;
-
         // Preparing content data for the twitter card
+        $content = $smarty->tpl_vars['content']->value;
         $url     = SITE_URL . $content->uri;
-        $summary = $content->summary;
-        $summary = trim(\Onm\StringUtils::htmlAttribute($summary));
+        $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
         if (empty($summary)) {
             $summary = mb_substr(
                 trim(\Onm\StringUtils::htmlAttribute($content->body)),
@@ -28,6 +26,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
                 80
             ) . "...";
         }
+
         $title = htmlspecialchars(
             html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
         );
