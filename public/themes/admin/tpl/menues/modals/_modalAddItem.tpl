@@ -9,37 +9,37 @@
       </label>
       <select class="form-control" id="item-type" ng-model="type">
         <option value="external">{t}External link{/t}</option>
+        {if count($pages) > 0}
+          <option value="internal">{t}Module{/t}</option>
+        {/if}
         {if count($categories) > 0}
-          <option value="category">{t}Frontpages{/t}</option>
+          <option value="category">{t}Frontpage{/t}</option>
         {/if}
         {is_module_activated name="ALBUM_MANAGER"}
           {if count($categories_album) > 0}
-            <option value="albumCategory">{t}Album Categories{/t}</option>
+            <option value="albumCategory">{t}Album Category{/t}</option>
           {/if}
         {/is_module_activated}
         {is_module_activated name="VIDEO_MANAGER"}
           {if count($categories_video) > 0}
-            <option value="videoCategory">{t}Video Categories{/t}</option>
+            <option value="videoCategory">{t}Video Category{/t}</option>
           {/if}
         {/is_module_activated}
         {is_module_activated name="POLL_MANAGER"}
           {if count($categories_poll) > 0}
-            <option value="pollCategory">{t}Poll Categories{/t}</option>
+            <option value="pollCategory">{t}Poll Category{/t}</option>
           {/if}
         {/is_module_activated}
-        {if count($pages) > 0}
-          <option value="internal">{t}Modules{/t}</option>
-        {/if}
         {if count($static_pages) > 0}
-          <option value="static">{t}Static Pages{/t}</option>
+          <option value="static">{t}Static Page{/t}</option>
         {/if}
         {is_module_activated name="SYNC_MANAGER"}
           {if count($sync_sites) > 0}
-            <option value="syncCategory">{t}Sync Categories{/t}</option>
+            <option value="syncCategory">{t}Synchronized Category{/t}</option>
           {/if}
         {/is_module_activated}
         {if count($categories) > 0}
-          <option value="blog-category">{t}Automatic Categories{/t}</option>
+          <option value="blog-category">{t}Category blog{/t}</option>
         {/if}
         {is_module_activated name="SYNC_MANAGER"}
           {if count($sync_sites) > 0}
@@ -194,7 +194,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">{t}Close{/t}</button>
-    <button type="button" class="btn btn-primary" ng-click="addItem()">{t}Add item{/t}</button>
+    <button type="button" class="btn btn-primary" ng-click="addItem()">{t}Add{/t}</button>
   </div>
 <script>
   jQuery("#modal-add-item").modal({
