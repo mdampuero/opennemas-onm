@@ -103,7 +103,7 @@
               <h4><span class="semi-bold">{t}Menu structure{/t}</span></h4>
               <h6>
                 {t}Use drag and drop to sort and nest elements.{/t}
-                <br> {t}Use the arrow to reveal the the configuration options.{/t}
+                <br> {t}Click on arrow to reveal more configuration options.{/t}
               </h6>
             </div>
             <div class="col-xs-12 col-sm-6 right">
@@ -135,26 +135,6 @@
       {include file="menues/modals/_modalAddItem.tpl"}
     </script>
     <style>
-      .menu-item input{
-        border-color:rgb(209, 218, 222);
-      }
-      .menu-item-form {
-        display: block;
-        clear:both;
-        border-top: 1px solid rgb(209, 218, 222);
-        margin-top: 10px;
-        padding: 10px;
-        margin-bottom:0;
-      }
-      .angular-ui-tree-handle span{
-        font-weight: normal;
-      }
-      .item-type {
-        font-weight: 600 !important;
-      }
-      .menu-item.angular-ui-tree-handle {
-        background-image:none;
-      }
     </style>
  </form>
 {/block}
