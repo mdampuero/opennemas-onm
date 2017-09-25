@@ -54,6 +54,9 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $this->paginator->get([ 'epp' => 7, 'maxLinks' => 3, 'total' => 100 ]);
         $this->assertEquals(3, substr_count($this->paginator->links, '<li'));
+
+        // Test if passing epp=0 the return is empty.
+        $this->assertEquals('', $this->paginator->get([ 'epp' => 0, 'maxLinks' => 5, 'total' => 100 ]));
     }
 
     public function testGetFirstLink()

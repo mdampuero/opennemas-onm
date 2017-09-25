@@ -16,11 +16,13 @@ class LocalizeFilter extends Filter
      */
     public function filter($items)
     {
-        if (empty($items)
-            || empty($this->getParameter('keys'))
-            || empty($this->getParameter('locale'))
-        ) {
+        if (empty($items)) {
             return $items;
+        }
+
+        // Filter simple values
+        if (empty($this->getParameter('keys'))) {
+            return $this->filterValue($items);
         }
 
         if (is_array($items)) {
@@ -70,8 +72,14 @@ class LocalizeFilter extends Filter
             return $value;
         }
 
-        $locale  = $this->getParameter('locale');
+        // Locale from direct parameters
         $default = $this->getParameter('default');
+        $locale  = $this->getParameter('locale', null, false);
+
+        // Locale from request
+        if (empty($locale)) {
+            $locale = $this->container->get('core.locale')->getRequestLocale();
+        }
 
         if (array_key_exists($locale, $value)) {
             return $value[$locale];

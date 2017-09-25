@@ -102,7 +102,7 @@ class AuthenticationController extends Controller
             'locale'   => $this->get('core.locale')->getLocale(),
             'token'    => $token,
             'referer'  => $referer,
-            'locales'  => $this->get('core.locale')->getLocales(),
+            'locales'  => $this->get('core.locale')->getSupportedLocales(),
             'message'  => $message,
         ]);
     }

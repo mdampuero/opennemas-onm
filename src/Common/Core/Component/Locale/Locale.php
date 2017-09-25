@@ -21,11 +21,14 @@ class Locale
      */
     public $config = [
         'backend' => [
-            'language' => [ 'selected'  => 'en_US' ],
+            'language' => [ 'selected'  => 'en_US', 'slug' => [] ],
             'timezone' => 'UTC'
         ],
         'frontend' => [
-            'language' => [ 'selected'  => 'en_US' ],
+            'language' => [
+                'selected' => 'en_US',
+                'slug'     => [ 'en_US' => 'en']
+            ],
             'timezone' => 'UTC'
         ],
     ];
@@ -58,6 +61,13 @@ class Locale
     protected $fixes = [ 'en' => 'en_US', 'gl' => 'gl_ES' ];
 
     /**
+     * The locale for the current request.
+     *
+     * @var string
+     */
+    protected $requestLocale;
+
+    /**
      * The path to locales.
      *
      * @var string
@@ -80,7 +90,7 @@ class Locale
         foreach ($this->config as $context => $config) {
             $this->config[$context] = array_replace_recursive(
                 $this->default,
-                $this->config[$context]
+                $config
             );
         }
     }
@@ -191,6 +201,26 @@ class Locale
     }
 
     /**
+     * Returns the locale for the current request.
+     *
+     * @return string The locale for the current request.
+     */
+    public function getRequestLocale()
+    {
+        return $this->requestLocale;
+    }
+
+    /**
+     * Returns the list of slugs for the locales.
+     *
+     * @return array The list of slugs for the locales.
+     */
+    public function getSlugs()
+    {
+        return $this->config[$this->context]['language']['slug'];
+    }
+
+    /**
      * Returns the list of all available locales.
      *
      * @return array The list of all available locales.
@@ -230,8 +260,19 @@ class Locale
      */
     public function setContext($context)
     {
+        $this->context = 'frontend';
+
+        if (empty($context)) {
+            return $this;
+        }
+
         // Remove when more contexts supported
-        $this->context = $context === 'frontend' ? $context : 'backend';
+        if (strpos($context, 'admin') !== false
+            || strpos($context, 'backend') !== false
+            || strpos($context, 'manager') !== false
+        ) {
+            $this->context = 'backend';
+        }
 
         if (!array_key_exists($this->context, $this->config)) {
             $this->config[$this->context] = $this->default;
@@ -247,18 +288,31 @@ class Locale
      *
      * @return Locale The current locale service.
      */
-    public function setLocale($locale = null)
+    public function setLocale($locale)
     {
-        // Try to auto-correct the locale
-        if (!empty($locale)) {
-            if (array_key_exists($locale, $this->fixes)) {
-                $locale = $this->fixes[$locale];
-            }
-
-            if (in_array($locale, $this->config[$this->context]['language']['available'])) {
-                $this->config[$this->context]['language']['selected'] = $locale;
-            }
+        if (empty($locale)) {
+            return $this;
         }
+
+        if (array_key_exists($locale, $this->fixes)) {
+            $locale = $this->fixes[$locale];
+        }
+
+        if (in_array($locale, $this->config[$this->context]['language']['available'])) {
+            $this->config[$this->context]['language']['selected'] = $locale;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Changes the locale for the current request.
+     *
+     * @param string $locale  The locale for the current request.
+     */
+    public function setRequestLocale($locale)
+    {
+        $this->requestLocale = $locale;
 
         return $this;
     }

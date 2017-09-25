@@ -63,6 +63,17 @@ class GlobalVariablesTest extends KernelTestCase
     }
 
     /**
+     * Tests getTheme.
+     */
+    public function testGetTheme()
+    {
+        $this->container->expects($this->once())->method('get')
+            ->with('core.theme')->willReturn('wobble');
+
+        $this->assertEquals('wobble', $this->globals->getTheme());
+    }
+
+    /**
      * Tests getUser.
      */
     public function testGetUser()
@@ -131,5 +142,14 @@ class GlobalVariablesTest extends KernelTestCase
     {
         $this->globals->setExtension('quux');
         $this->assertEquals('quux', $this->globals->getExtension());
+    }
+
+    /**
+     * Tests get and set methods for route.
+     */
+    public function testSetAndGetRoute()
+    {
+        $this->globals->setRoute('norf');
+        $this->assertEquals('norf', $this->globals->getRoute());
     }
 }

@@ -24,7 +24,7 @@ class LocaleTest extends KernelTestCase
     {
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->setMethods([ 'addTextDomain', 'changeLocale', 'changeTimeZone'])
-            ->setConstructorArgs([ [ 'en_US' ], '/foo/bar' ])
+            ->setConstructorArgs([ [ 'en_US', 'es_ES' ], '/foo/bar' ])
             ->getMock();
     }
 
@@ -40,7 +40,10 @@ class LocaleTest extends KernelTestCase
         $config->setAccessible(true);
 
         $this->assertEquals('/foo/bar', $path->getValue($this->locale));
-        $this->assertEquals([ 'en_US' ], $config->getValue($this->locale)['backend']['language']['available']);
+        $this->assertEquals(
+            [ 'en_US', 'es_ES' ],
+            $config->getValue($this->locale)['backend']['language']['available']
+        );
     }
 
     /**
@@ -91,9 +94,11 @@ class LocaleTest extends KernelTestCase
      */
     public function testGetAndSetContext()
     {
-        $this->assertEquals('backend', $this->locale->getContext());
+        $this->locale->setContext('');
+        $this->assertEquals('frontend', $this->locale->getContext());
         $this->assertEquals('frontend', $this->locale->setContext('frontend')->getContext());
-        $this->assertEquals('backend', $this->locale->setContext('grault')->getContext());
+        $this->assertEquals('frontend', $this->locale->setContext('grault')->getContext());
+        $this->assertEquals('backend', $this->locale->setContext('backend')->getContext());
 
         $config  = new \ReflectionProperty($this->locale, 'config');
         $default = new \ReflectionProperty($this->locale, 'default');
@@ -113,11 +118,55 @@ class LocaleTest extends KernelTestCase
     }
 
     /**
-     * Tests getLocale with default and custom values.
+     * Tests getLocale and setLocale methods.
      */
-    public function testGetLocale()
+    public function testGetAndSetLocale()
     {
+        $this->locale->setLocale(null);
         $this->assertEquals('en_US', $this->locale->getLocale());
+
+        $this->locale->setLocale('foo');
+        $this->assertNotEquals('foo', $this->locale->getLocale());
+
+        $this->locale->setLocale('en');
+        $this->assertEquals('en_US', $this->locale->getLocale());
+    }
+
+    /**
+     * Tests getRequestLocale and setRequestLocale methods.
+     */
+    public function testGetAndSetRequestLocale()
+    {
+        $this->locale->setRequestLocale(null);
+        $this->assertEmpty($this->locale->getRequestLocale());
+
+        $this->locale->setRequestLocale('waldo');
+        $this->assertEquals('waldo', $this->locale->getRequestLocale());
+
+        $this->locale->setRequestLocale('es_ES');
+        $this->assertEquals('es_ES', $this->locale->getRequestLocale());
+    }
+
+    /**
+     * Tests getTimeZone and setTimeZone methods.
+     */
+    public function testGetAndSetTimeZone()
+    {
+        $id = array_flip(\DateTimeZone::listIdentifiers())['Europe/Lisbon'];
+
+        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
+
+        $this->locale->setTimeZone('foo');
+        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
+
+        $this->locale->setTimeZone(9999);
+        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
+
+        $this->locale->setTimeZone($id);
+        $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone()->getName());
+
+        $this->locale->setTimeZone('Europe/Lisbon');
+        $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone()->getName());
     }
 
     /**
@@ -148,12 +197,35 @@ class LocaleTest extends KernelTestCase
     }
 
     /**
+     * Tests getSlugs for backend and frontend contexts.
+     */
+    public function testGetSlugs()
+    {
+        $config = new \ReflectionProperty($this->locale, 'config');
+        $config->setAccessible(true);
+        $value = $config->getValue($this->locale);
+
+        $value['frontend'] = [
+            'language' => [ 'available' => [ 'en_US' ], 'slug' => [ 'en_US' => 'en' ]],
+            'timezone' => 'UTC'
+        ];
+        $config->setValue($this->locale, $value);
+
+        $this->assertEmpty($this->locale->getSlugs());
+        $this->assertTrue(array_key_exists('en_US', $this->locale->setContext('frontend')->getSlugs()));
+        $this->assertEmpty($this->locale->setContext('backend')->getSlugs());
+    }
+
+    /**
      * Tests getSupportedLocales.
      */
     public function testGetSupportedLocales()
     {
         $this->assertEquals(
-            [ 'en_US' => ucfirst(\Locale::getDisplayName('en_US')) ],
+            [
+                'en_US' => ucfirst(\Locale::getDisplayName('en_US')),
+                'es_ES' => ucfirst(\Locale::getDisplayName('es_ES'))
+            ],
             $this->locale->getSupportedLocales()
         );
 
@@ -161,46 +233,6 @@ class LocaleTest extends KernelTestCase
             count($this->locale->getSupportedLocales()),
             count($this->locale->setContext('frontend')->getSupportedLocales())
         );
-    }
-
-    /**
-     * Tests getTimeZone.
-     */
-    public function testGetTimeZone()
-    {
-        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
-    }
-
-    /**
-     * Tests setLocale.
-     */
-    public function testSetLocale()
-    {
-        $this->locale->setLocale('foo');
-        $this->assertNotEquals('foo', $this->locale->getLocale());
-
-        $this->locale->setLocale('en');
-        $this->assertEquals('en_US', $this->locale->getLocale());
-    }
-
-    /**
-     * Tests setTimeZone.
-     */
-    public function testSetTimeZone()
-    {
-        $id = array_flip(\DateTimeZone::listIdentifiers())['Europe/Lisbon'];
-
-        $this->locale->setTimeZone('foo');
-        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
-
-        $this->locale->setTimeZone(9999);
-        $this->assertEquals('UTC', $this->locale->getTimeZone()->getName());
-
-        $this->locale->setTimeZone($id);
-        $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone()->getName());
-
-        $this->locale->setTimeZone('Europe/Lisbon');
-        $this->assertEquals('Europe/Lisbon', $this->locale->getTimeZone()->getName());
     }
 
     /**

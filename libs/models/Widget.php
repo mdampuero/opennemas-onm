@@ -276,7 +276,7 @@ class Widget extends Content
             return null;
         }
 
-        $class = new $class(getService('service_container'), $this);
+        $class = new $class($this);
 
         $class->parseParams($params);
 

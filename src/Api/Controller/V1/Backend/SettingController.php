@@ -28,19 +28,19 @@ class SettingController extends Controller
         'comscore', 'contact_email', 'cookies_hint_enabled',
         'cookies_hint_url', 'facebook', 'facebook_id', 'facebook_page',
         'favico', 'google_analytics', 'google_analytics_others',
-        'google_custom_search_api_key', 'google_maps_api_key', 'google_tags_id',
-        'google_news_name', 'google_page', 'googleplus_page',
-        'instagram_page', 'items_in_blog', 'items_per_page',
-        'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',
-        'onm_digest_pass', 'onm_digest_user', 'paypal_mail',
-        'pinterest_page', 'piwik', 'recaptcha', 'refresh_interval',
-        'logo_enabled', 'section_settings', 'site_agency', 'site_color',
-        'site_color_secondary', 'site_description', 'site_footer', 'site_footer',
-        'site_keywords', 'site_language', 'site_logo', 'site_name', 'site_title',
-        'twitter_page', 'time_zone', 'vimeo_page', 'webmastertools_bing',
-        'webmastertools_google', 'youtube_page', 'robots_txt_rules', 'chartbeat',
-        'body_end_script', 'body_start_script','header_script',
-        'elements_in_rss', 'redirection', 'locale', 'rtb_files'
+        'google_custom_search_api_key', 'google_maps_api_key',
+        'google_tags_id', 'google_news_name', 'google_page', 'googleplus_page',
+        'instagram_page', 'items_in_blog', 'items_per_page', 'linkedin_page',
+        'locale', 'max_session_lifetime', 'mobile_logo', 'ojd',
+        'onm_digest_pass', 'onm_digest_user', 'paypal_mail', 'pinterest_page',
+        'piwik', 'recaptcha', 'refresh_interval', 'logo_enabled',
+        'section_settings', 'site_agency', 'site_color',
+        'site_color_secondary', 'site_description', 'site_footer',
+        'site_footer', 'site_keywords', 'site_logo', 'site_name', 'site_title',
+        'twitter_page', 'vimeo_page', 'webmastertools_bing',
+        'webmastertools_google', 'youtube_page', 'robots_txt_rules',
+        'chartbeat', 'body_end_script', 'body_start_script','header_script',
+        'elements_in_rss', 'redirection', 'rtb_files'
     ];
 
     /**
@@ -97,6 +97,7 @@ class SettingController extends Controller
     public function listAction()
     {
         $settings = $this->get('setting_repository')->get($this->keys);
+        $locale   = $this->get('core.locale');
 
         if (array_key_exists('google_analytics', $settings)) {
             $settings['google_analytics'] = $this->get('data.manager.adapter')
@@ -140,7 +141,8 @@ class SettingController extends Controller
             'extra'    => [
                 'countries' => $this->get('core.geo')->getCountries(),
                 'locales'   => [
-                    'backend' => $this->get('core.locale')->getAvailableLocales()
+                    'backend'  => $locale->getAvailableLocales(),
+                    'frontend' => $locale->setContext('frontend')->getAvailableLocales()
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
@@ -300,18 +302,6 @@ class SettingController extends Controller
 
         if (array_key_exists('logo_enabled', $settings)) {
             $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
-        }
-
-        if (array_key_exists('locale', $settings)
-            && is_array($settings['locale'])
-        ) {
-            if (array_key_exists('backend', $settings['locale'])) {
-                $settings['site_language'] = $settings['locale']['backend'];
-            }
-
-            if (array_key_exists('timezone', $settings['locale'])) {
-                $settings['time_zone'] = $settings['locale']['timezone'];
-            }
         }
 
         return $settings;
