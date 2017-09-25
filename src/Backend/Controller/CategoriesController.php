@@ -128,6 +128,9 @@ class CategoriesController extends Controller
         // we adapt the category data and if the value returned y multilanguage field is a string, create a new
         //array with all values
 
+        $fm = $this->get('data.manager.filter');
+
+        $fm->set($allcategories)->filter('localize', ['keys' => ['title', 'name'], 'locale' => 'es'])->get();
         $allcategories = array_map(
             function ($category) use ($languageData) {
                 return $this->get('data.manager.adapter')->adapt('multi_option', $category, [

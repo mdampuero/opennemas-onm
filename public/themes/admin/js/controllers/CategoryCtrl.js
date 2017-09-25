@@ -62,10 +62,6 @@
           // TODO implement the ajax request for caregory info
         };
 
-        $scope.getL10nSupport = function(lang) {
-          $scope.lang = lang;
-        };
-
         $scope.test = function() {
           alert('$scope.category.inmenu');
         };
@@ -104,7 +100,7 @@
             }
           });
 
-          $scope.lang = $scope.languageData.locale || $scope.languageData.default;
+          $scope.lang = 'es';
 
           $scope.allowedCategories = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
             var value = (categoryKey == 0)?'Internal':$scope.internalCategories.internalCategories[categoryKey].title
@@ -121,19 +117,7 @@
             }
           }
           $scope.loading = false;
-          $scope.getL10nSupport($scope.lang);
         }
-
-        /**
-         * Goes to category edit page.
-         *
-         * @param int    id    Category id.
-         */
-        $scope.createShowCategoryUrl = function(id) {
-          return routing.generate('admin_category_show', {
-            id: id
-          });
-        };
 
         $scope.internalCategoriesImgs = {
           7:  'fa-stack-overflow',

@@ -6,7 +6,7 @@
           </a>
           <div class="listing-inline-actions" ng-init="languageData = {json_encode($language_data)|clear_json}">
               {is_module_activated name="es.openhost.module.multilanguage"}
-                <translator ng-model="lang" link="{url name=admin_category_show id=$category->pk_content_category}" language-data="languageData" />
+                <translator ng-model="lang" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" />
               {/is_module_activated}
               {acl isAllowed="CATEGORY_UPDATE"}
                   {if $category->internal_category != 0 && $category->internal_category != 2}
@@ -88,7 +88,7 @@
                   <div class="listing-inline-actions">
                       {acl isAllowed="CATEGORY_UPDATE"}
                           {is_module_activated name="es.openhost.module.multilanguage"}
-                            <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" language-data="languageData" />
+                            <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" translator-options="languageData" />
                           {/is_module_activated}
                           <a class="link" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
                               <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}

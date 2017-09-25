@@ -20,7 +20,7 @@
       var categoryData = {$categoryData};
   </script>
   <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="init()" enctype="multipart/form-data">
-    <div class="page-navbar actions-navbar ng-cloak" ng-if="!loading">
+    <div class="page-navbar actions-navbar ng-cloak" ng-show="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -36,7 +36,7 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <translator ng-model="lang" language-data="languageData" ng-change="getL10nSupport(lang)"/>
+              <translator ng-model="lang" translator-options="languageData"/>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -64,7 +64,7 @@
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
     </div>
-    <div class="content ng-cloak" ng-if="!loading">
+    <div class="content ng-cloak" ng-show="!loading">
       <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
