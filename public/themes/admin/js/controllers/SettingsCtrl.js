@@ -13,8 +13,8 @@
      * @description
      *   Handles actions for paywall settings configuration form.
      */
-    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger',
-      function($controller, $rootScope, $scope, http, messenger) {
+    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http', 'cleaner', 'messenger',
+      function($controller, $rootScope, $scope, http, cleaner, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -351,8 +351,6 @@
 
           $scope.saving = true;
 
-
-
           http.put('api_v1_backend_settings_save', data)
             .then(function(response) {
               $scope.saving = false;
@@ -377,6 +375,8 @@
             instance: angular.copy($scope.instance),
             settings: angular.copy($scope.settings)
           };
+
+          data = cleaner.clean(data);
 
           // Save only locale codes
           if (data.settings.locale.frontend.language.available instanceof Array) {
@@ -439,20 +439,6 @@
             site_logo:            $scope.settings.site_logo
           };
 
-          if ($scope.settings.locale.frontend.language.available instanceof Array) {
-            var locales = [];
-
-            for (var i = 0; i < $scope.settings.locale.frontend.language.available.length; i++) {
-              locales.push({
-                code: $scope.settings.locale.frontend.language.available[i],
-                name: $scope.extra.locales.frontend[
-                  $scope.settings.locale.frontend.language.available[i]],
-              });
-            }
-
-            $scope.settings.locale.frontend.language.available = locales;
-          }
-
           if ($scope.settings.site_logo) {
             $scope.settings.site_logo =
               $scope.extra.prefix + $scope.settings.site_logo;
@@ -467,6 +453,27 @@
             $scope.settings.favico =
               $scope.extra.prefix + $scope.settings.favico;
           }
+
+          if (!$scope.settings.locale.frontend.language.slug) {
+            $scope.settings.locale.frontend.language.slug = {};
+          }
+
+          // Change value to string for old numeric timezones
+          if (!isNaN(+$scope.settings.locale.backend.timezone) &&
+              angular.isNumber(+$scope.settings.locale.backend.timezone)) {
+            $scope.settings.locale.backend.timezone = $scope.extra
+              .timezones[+$scope.settings.locale.backend.timezone
+            ];
+          }
+
+          if (!angular.isArray($scope.settings.locale.frontend.language.available)) {
+            return;
+          }
+
+          $scope.settings.locale.frontend.language.available =
+            $scope.settings.locale.frontend.language.available.map(function(e) {
+              return { code: e, name: $scope.extra.locales.frontend[e] };
+            });
         };
 
         /**
