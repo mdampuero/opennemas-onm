@@ -442,7 +442,7 @@
                         {t}Used for messages, interface and units in the control panel.{/t}
                       </span>
                       <div class="controls">
-                        <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend.language.selected">
+                        <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend.language.selected" required>
                           <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.backend.language.selected %]">[% name %]</option>
                         </select>
                       </div>
@@ -458,7 +458,7 @@
                           </span>
                           <div class="controls">
                             {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
-                              <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected">
+                              <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected" required>
                                 <option value="">{t}Select a language...{/t}</option>
                                 <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
                               </select>
@@ -528,7 +528,7 @@
                     <div class="form-group">
                       <label class="form-label" for="country">{t}Country{/t}</label>
                       <div class="controls">
-                        <select id="country" name="country" ng-model="instance.country">
+                        <select id="country" name="country" ng-model="instance.country" required>
                           <option value="">{t}Select a country{/t}...</option>
                           <option value="[% code %]" ng-repeat="(code,name) in extra.countries" ng-selected="[% code === instance.country %]">[% name %]</option>
                         </select>
@@ -542,7 +542,8 @@
                         {t}Used for all the dates used in your webpage.{/t}
                       </span>
                       <div class="controls">
-                        <select name="timezone" ng-model="settings.locale.backend.timezone">
+                        <select name="timezone" ng-model="settings.locale.backend.timezone" required>
+                          <option value="">{t}Select a timezone...{/t}</option>
                           <option value="[% timezone %]" ng-repeat="timezone in extra.timezones" ng-selected="[% timezone === settings.locale.backend.timezone %]">[% timezone %]</option>
                         </select>
                       </div>
