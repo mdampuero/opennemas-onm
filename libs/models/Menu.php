@@ -316,7 +316,7 @@ class Menu
         $conn->beginTransaction();
         try {
             // Delete menu elements
-            $this->emptyMenu($id);
+            $conn->delete('menu_items', [ 'pk_menu' => $id ]);
             $conn->delete('menues', [ 'pk_menu' => $id ]);
             $conn->commit();
 
@@ -402,9 +402,11 @@ class Menu
             return false;
         }
 
+        $conn = getService('dbal_connection');
+
         // Delete previous menu elements
         if ($parentID == 0) {
-            $this->emptyMenu($id);
+            $conn->delete('menu_items', [ 'pk_menu' => $id ]);
         }
 
         try {
@@ -414,18 +416,15 @@ class Menu
                 $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
                 $type  = filter_var($item->type, FILTER_SANITIZE_STRING);
 
-                getService('dbal_connection')->insert(
-                    'menu_items',
-                    [
-                        'pk_item'   => $elementID,
-                        'pk_menu'   => $id,
-                        'title'     => $title,
-                        'link_name' => $link,
-                        'type'      => $type,
-                        'position'  => $position,
-                        'pk_father' => $parentID
-                    ]
-                );
+                $conn->insert('menu_items', [
+                    'pk_item'   => $elementID,
+                    'pk_menu'   => $id,
+                    'title'     => $title,
+                    'link_name' => $link,
+                    'type'      => $type,
+                    'position'  => $position,
+                    'pk_father' => $parentID
+                ]);
 
                 $parent = $elementID;
                 $elementID++;
@@ -443,16 +442,5 @@ class Menu
             error_log($e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Deletes all items in a menu.
-     *
-     * @param integer $id The menu id.
-     */
-    public function emptyMenu($id)
-    {
-        getService('dbal_connection')
-            ->delete('menu_items', [ 'pk_menu' => $id ]);
     }
 }
