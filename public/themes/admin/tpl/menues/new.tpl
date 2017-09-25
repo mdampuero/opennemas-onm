@@ -75,7 +75,7 @@
               <hr>
             </div>
             {/is_module_activated}
-            <div class="col-md-6 col-xs-12 form-group">
+            <div class="col-sm-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Name{/t}</label>
               <div class="controls">
                 <input type="text" id="name" name="name" value="{$menu->name|default:""}"
@@ -84,12 +84,12 @@
               </div>
             </div>
             {if count($menu_positions) > 1}
-            <div class="col-md-6 col-xs-12 form-group">
+            <div class="col-sm-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Position{/t}</label>
               <div class="controls">
                 {html_options options=$menu_positions selected=$menu->position name=position}
                 <br>
-                <span class="help"><span class="fa fa-info-circle text-info"></span>{t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
+                <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
               </div>
             </div>
             {/if}
@@ -99,11 +99,14 @@
       <div class="grid simple">
         <div class="grid-title clearfix">
           <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <h4><span class="semi-bold">{t}Menu contents{/t}</span></h4>
-              <h6>{t}Use drag and drop to sort and nest elements{/t}</h6>
+            <div class="col-xs-12 col-sm-6">
+              <h4><span class="semi-bold">{t}Menu structure{/t}</span></h4>
+              <h6>
+                {t}Use drag and drop to sort and nest elements.{/t}
+                <br> {t}Use the arrow to reveal the the configuration options.{/t}
+              </h6>
             </div>
-            <div class="col-xs-12 col-md-6 right">
+            <div class="col-xs-12 col-sm-6 right">
               <button class="btn btn-white" type="button" ng-click="open('modal-add-item')">
                 <i class="fa fa-plus"></i>
                 {t}Add items{/t}
@@ -131,5 +134,27 @@
     <script type="text/ng-template" id="modal-add-item">
       {include file="menues/modals/_modalAddItem.tpl"}
     </script>
+    <style>
+      .menu-item input{
+        border-color:rgb(209, 218, 222);
+      }
+      .menu-item-form {
+        display: block;
+        clear:both;
+        border-top: 1px solid rgb(209, 218, 222);
+        margin-top: 10px;
+        padding: 10px;
+        margin-bottom:0;
+      }
+      .angular-ui-tree-handle span{
+        font-weight: normal;
+      }
+      .item-type {
+        font-weight: 600 !important;
+      }
+      .menu-item.angular-ui-tree-handle {
+        background-image:none;
+      }
+    </style>
  </form>
 {/block}
