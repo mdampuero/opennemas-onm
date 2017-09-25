@@ -14,6 +14,7 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Common\Data\Adapter\MultiOptionAdapter;
 
 class ContentController extends Controller
 {
@@ -936,9 +937,21 @@ class ContentController extends Controller
             }
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
-        $categories = $ccm->findAll();
+        $ccm                 = \ContentCategoryManager::get_instance();
+        $categories          = $ccm->findAll();
         $extra['categories'] = [];
+        $languageData        = $this->getLocaleData('frontend');
+
+        $categories = array_map(
+            function ($category) use ($languageData) {
+                return $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                        MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                        MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                        MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+                ]);
+            },
+            $categories
+        );
 
         foreach ($categories as $category) {
             $extra['categories'][$category->name] = $category->title;

@@ -19,6 +19,7 @@ use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Common\Data\Adapter\MultiOptionAdapter;
 
 /**
  * Handles the actions for the specials
@@ -61,15 +62,25 @@ class SpecialsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
-
+        $categories   = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $languageData = $this->getLocaleData('frontend');
         foreach ($this->parentCategories as $key => $category) {
+            $category     = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                    MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+            ]);
             $categories[] = [
                 'name' => $category->title,
                 'value' => $category->name
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
+                $subcategory  = $this->get('data.manager.adapter')->adapt('multi_option', $subcategory, [
+                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                    MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+                ]);
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
                     'value' => $subcategory->name

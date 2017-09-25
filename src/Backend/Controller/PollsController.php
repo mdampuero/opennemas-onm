@@ -18,6 +18,7 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\Data\Adapter\MultiOptionAdapter;
 use Onm\Settings as s;
 
 /**
@@ -33,15 +34,14 @@ class PollsController extends Controller
     public function init()
     {
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
+        $category    = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
+        $ccm         = \ContentCategoryManager::get_instance();
 
-        $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
-
-        $ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
         if (empty($category)) {
-            $category ='home';
+            $category = 'home';
         }
 
         $this->view->assign([
@@ -62,15 +62,27 @@ class PollsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories   = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $languageData = $this->getLocaleData('frontend');
 
         foreach ($this->parentCategories as $key => $category) {
+            $category = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
+                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                    MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+            ]);
+
             $categories[] = [
                 'name' => $category->title,
                 'value' => $category->name
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
+                $subcategory = $this->get('data.manager.adapter')->adapt('multi_option', $subcategory, [
+                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
+                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
+                    MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
+                ]);
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
                     'value' => $subcategory->name
