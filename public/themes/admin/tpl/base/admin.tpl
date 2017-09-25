@@ -553,7 +553,6 @@
       @Common/src/angular-renderer/renderer.js,
       @Common/src/angular-repeat-finish/repeat-finish.js,
       @Common/src/angular-scroll/angular-scroll.js,
-      @Common/src/angular-translator/js/translator.js,
       @AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js,
       @AdminTheme/js/app.js,
       @AdminTheme/js/config.js,
