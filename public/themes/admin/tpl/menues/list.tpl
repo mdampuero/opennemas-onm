@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init(null, { content_status: -1, renderlet: -1 }, 'name', 'asc', 'backend_ws_menus_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); menu_positions = {json_encode($menu_positions)|clear_json}";">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init(null, { content_status: -1, renderlet: -1 }, 'name', 'asc', 'backend_ws_menus_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); menu_positions = {json_encode($menu_positions)|clear_json}; languageData = {json_encode($language_data)|clear_json}">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -142,9 +142,14 @@
                 <td>
                   [% content.name %]
                   <div class="listing-inline-actions">
+                    {is_module_activated name="es.openhost.module.multilanguage"}
+                      <translator ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]" translator-options="languageData" />
+                    {/is_module_activated}
+                    {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
                     <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
+                    {/is_module_activated}
                     <button class="link link-danger" ng-click="removeMenu(content)" type="button">
                       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>

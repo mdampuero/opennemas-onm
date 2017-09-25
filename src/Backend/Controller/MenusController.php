@@ -35,10 +35,11 @@ class MenusController extends Controller
      * @Security("hasExtension('MENU_MANAGER')
      *     and hasPermission('MENU_ADMIN')")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         return $this->render('menues/list.tpl', [
-            'menu_positions' => $this->getMenuPositions()
+            'menu_positions' => $this->getMenuPositions(),
+            'language_data'  => $this->getLocaleData($request),
         ]);
     }
 
