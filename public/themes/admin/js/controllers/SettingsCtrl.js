@@ -126,6 +126,55 @@
         };
 
         /**
+         * @function filterFromLanguages
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Filter Filter all selected languages
+         *
+         * @param {Integer } element to filter
+         */
+        $scope.filterFromLanguages = function(index)  {
+          if(!$scope.settings.translators[index].from) {
+            return [];
+          }
+
+          var from = $scope.settings.translators[index].from;
+
+          return $scope.settings.locale.frontend.language.available
+            .filter(function (e)  {
+              return e.code !== from;
+            });
+        };
+
+        /**
+         * @function getExtraParams
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Get all extra params for a translation service
+         *
+         * @param {Integer} index The index of the translation service
+         */
+        $scope.getExtraParams = function(index)  {
+          if(!$scope.extra.translation_services)  {
+            return [];
+          }
+
+          var translator = $scope.settings.translators[index].translator;
+          var translators = $scope.extra.translation_services
+            .filter(function (e) {
+              return e.translator === translator;
+            });
+
+          if (translators.length === 0) {
+            return [];
+          }
+
+          return translators[0].parameters;
+        };
+
+        /**
          * @function expand
          * @memberOf SystemSettingsCtrl
          *
@@ -443,59 +492,6 @@
          */
         $scope.removeTranslator = function(index) {
           $scope.settings.translators.splice(index, 1);
-        };
-
-        /**
-         * @function getExtraParams
-         * @memberOf SettingsCtrl
-         *
-         * @description
-         *   Get all extra params for a translation service
-         *
-         * @param {Integer} index The index of the translation service
-         */
-        $scope.getExtraParams = function(index)  {
-          let extraParams = [];
-          if((0 != index && !index) || !$scope.extra.translation_services)  {
-            return extraParams;
-          }
-          let translator = $scope.settings.automatic_translators[index].translator
-          for(let i = 0; i < $scope.extra.translation_services.length; i++)  {
-            if($scope.extra.translation_services[i].translator == translator)  {
-              extraParams = $scope.extra.translation_services[i].required_parameters;
-              i = $scope.extra.translation_services.length;
-            }
-          }
-          return extraParams
-        };
-
-        /**
-         * @function filterFromLanguages
-         * @memberOf SettingsCtrl
-         *
-         * @description
-         *   Filter Filter all selected languages
-         *
-         * @param {Integer } element to filter
-         */
-        $scope.filterFromLanguages = function(index)  {
-          if(!$scope.settings.automatic_translators[index].from) {
-            return [];
-          }
-          var languageFromCode = $scope.settings.automatic_translators[index].from;
-          return $scope.settings.locale.frontend.filter(function (locale)  {
-            if(locale.code == languageFromCode) {
-              return false;
-            }
-            for(let i = 0;i < $scope.settings.automatic_translators.length ;i++)  {
-              if(i != index &&
-                  $scope.settings.automatic_translators[i].from == $scope.settings.automatic_translators[index].from &&
-                  $scope.settings.automatic_translators[i].to == locale.code)  {
-                return false;
-              }
-            }
-            return true;
-          });
         };
       }
     ]);

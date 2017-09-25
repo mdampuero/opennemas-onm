@@ -99,7 +99,7 @@ class TranslatorFactory
         $translationDataArr = array_map(function ($translator) {
             return [
                 'translator' => $translator,
-                'required_parameters' => $this->get($translator)->getRequiredParameters()];
+                'parameters' => $this->get($translator)->getRequiredParameters()];
         }, $this->getAvailableTranslators());
         return $translationDataArr;
     }
