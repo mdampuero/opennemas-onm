@@ -219,7 +219,7 @@ class MigrationSaver
 
                 if (is_array($values['photo'])) {
                     foreach ($values['photo'] as $id) {
-                        $albums[$values['album']]['album_photos_id'][] = $id;
+                        $albums[$values['album']]['album_photos_id'][]     = $id;
                         $albums[$values['album']]['album_photos_footer'][] =
                             $values['footer'];
                     }
@@ -454,7 +454,7 @@ class MigrationSaver
                         'path'              => $values['path'] . $info['basename'],
                         'title'             => $info['basename'],
                         'slug'              => $fileName,
-                        'id'                => $values['id'].'-'.$key
+                        'id'                => $values['id'] . '-' . $key
                     ]);
 
                     $items[] = $value;
@@ -475,7 +475,7 @@ class MigrationSaver
                         $fs->copy($i['source_path'], $i['target_path']);
 
                         $attachment = new \Attachment();
-                        $id = $attachment->create($i);
+                        $id         = $attachment->create($i);
 
                         if ($id) {
                             $slug = array_key_exists('slug', $schema['translation']) ?
@@ -914,9 +914,9 @@ class MigrationSaver
     public function savePhotos($name, $schema, $data)
     {
         $settings = array (
-            'image_thumb_size'=>'140',
-            'image_inner_thumb_size'=>'470',
-            'image_front_thumb_size'=>'350'
+            'image_thumb_size'       => '140',
+            'image_inner_thumb_size' => '470',
+            'image_front_thumb_size' => '350'
         );
 
         foreach ($settings as $key => $value) {
@@ -971,7 +971,7 @@ class MigrationSaver
                         'extension'         => $info['extension'],
                         'original_filename' => $info['basename'],
                         'title'             => $values['title'],
-                        'id'                => $values['id'].'-'.$key
+                        'id'                => $values['id'] . '-' . $key
                     ]);
 
                     unset($value['article']);
@@ -993,7 +993,7 @@ class MigrationSaver
                 // Inline images
                 foreach ($items as $key => $i) {
                     $photo = new \Photo();
-                    $id = null;
+                    $id    = null;
 
                     if ($this->matchTranslation(
                         $i[$schema['translation']['field']],
@@ -1017,6 +1017,7 @@ class MigrationSaver
                                 $i['directory'],
                                 $uploadPath
                             );
+
                             $slug = array_key_exists('slug', $schema['translation'])
                                 ? $i[$schema['translation']['slug']] : '';
 
@@ -1082,6 +1083,7 @@ class MigrationSaver
                     } else {
                         $this->stats[$name]['already_imported']++;
                     }
+
                     unset($photo);
                     gc_collect_cycles();
                 }
@@ -1163,9 +1165,10 @@ class MigrationSaver
 
                 if ($this->matchTranslation($oldId, $schema['translation']['name']) === false) {
                     $page = new \Common\ORM\Entity\Content($converter->objectify($values));
+
                     $page->content_type_name = 'static_page';
-                    $page->fk_content_type = 13;
-                    $page->content_status  = 1;
+                    $page->fk_content_type   = 13;
+                    $page->content_status    = 1;
 
                     $em->persist($page);
                     $this->stats[$name]['imported']++;
@@ -1208,8 +1211,9 @@ class MigrationSaver
                     $schema['translation']['name']
                 ) === false
                 ) {
-                    $group   = new \UserGroup();
+                    $group = new \UserGroup();
                     $group->create($values);
+
                     $slug = array_key_exists('slug', $schema['translation']) ?
                         $values[$schema['translation']['slug']] : '';
 
@@ -1310,7 +1314,8 @@ class MigrationSaver
 
                     $user = new \User();
                     $user->create($values);
-                    $slug = array_key_exists('slug', $schema['translation'])
+
+                    $slug   = array_key_exists('slug', $schema['translation'])
                         ? $values[$schema['translation']['slug']] : '';
                     $userId = $user->id;
 
@@ -1318,8 +1323,10 @@ class MigrationSaver
                         && file_exists($values['path_img'])
                     ) {
                         $file = new File($values['path_img'], $values['image']);
-                        $values['avatar_img_id'] = $user->uploadUserAvatar($file, $values['username']);
-                        $values['id'] = $userId;
+
+                        $values['avatar_img_id']   =
+                            $user->uploadUserAvatar($file, $values['username']);
+                        $values['id']              = $userId;
                         $values['passwordconfirm'] = $values['password'];
                         $user->update($values);
                     }
@@ -1396,6 +1403,7 @@ class MigrationSaver
 
                     $params = getService('service_container')->getParameter('panorama');
                     $videoP = new \Panorama\Video($values['video_url'], $params);
+
                     $values['information'] = $videoP->getVideoDetails();
 
                     foreach ($values['information'] as $key => $value) {
@@ -1562,6 +1570,8 @@ class MigrationSaver
                 . INSTANCE_UNIQUE_NAME . DIRECTORY_SEPARATOR);
         }
 
+        $this->redirector = getService('core.redirector');
+
         $this->conn = getService('orm.manager')->getConnection('instance');
         $this->conn->selectDatabase($this->settings['migration']['target']);
 
@@ -1630,7 +1640,7 @@ class MigrationSaver
     {
         $fm = getService('data.manager.filter');
 
-        return $fm->filter('tags', $string);
+        return $fm->set($string)->filter('tags')->get();
     }
 
     /**
@@ -1676,9 +1686,10 @@ class MigrationSaver
     {
         $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
             . '`type`, `slug`) VALUES (?,?,?,?)';
+
         $values = array($old, $new, $type, $slug);
 
-        $rss  = $this->conn->executeQuery($sql, $values);
+        $rss = $this->conn->executeQuery($sql, $values);
 
         if (!$rss) {
             $this->output->writeln('createTranslation: check error log');
@@ -1764,7 +1775,7 @@ class MigrationSaver
         foreach ($types as $type) {
             switch ($type) {
                 case 'body': // Replaces the content of the field
-                    $field = '<p>'. preg_replace(
+                    $field = '<p>' . preg_replace(
                         array(
                             "/([\r\n])+/i",
                             "/([\n]{2,})/i",
@@ -1816,6 +1827,7 @@ class MigrationSaver
                         foreach ($field as $v) {
                             $value .= $v . ',';
                         }
+
                         $field = rtrim($value, ',');
                     }
                     break;
@@ -1826,10 +1838,10 @@ class MigrationSaver
                     $field = $this->convertToSlug($field);
                     break;
                 case 'substr':
-                    $offset = array_key_exists('offset', $params) ? $params['offset'] : 0;
+                    $offset    = array_key_exists('offset', $params) ? $params['offset'] : 0;
                     $delimiter = $params['delimiter'];
-                    $start = array_key_exists('start', $params) ? $params['start'] : 0;
-                    $pos = (array_key_exists('strrpos', $params)
+                    $start     = array_key_exists('start', $params) ? $params['start'] : 0;
+                    $pos       = (array_key_exists('strrpos', $params)
                         && $params['strrpos']) ?
                         strrpos($field, $delimiter, $offset) + 1 :
                         strpos($field, $delimiter, $offset);
@@ -1841,9 +1853,9 @@ class MigrationSaver
                     }
                     break;
                 case 'substrr':
-                    $offset = array_key_exists('offset', $params) ? $params['offset'] : 0;
+                    $offset    = array_key_exists('offset', $params) ? $params['offset'] : 0;
                     $delimiter = $params['delimiter'];
-                    $pos = (array_key_exists('strrpos', $params)
+                    $pos       = (array_key_exists('strrpos', $params)
                         && $params['strrpos']) ?
                         strrpos($field, $delimiter, $offset) + 1 :
                         strpos($field, $delimiter, $offset);
@@ -1865,8 +1877,10 @@ class MigrationSaver
                     break;
                 case 'translation_from_slug':
                     if (!empty($field)) {
-                        list($type, $field) =
-                            \ContentManager::getOriginalIdAndContentTypeFromSlug($field);
+                        $translation = $this->redirector->getTranslationBySlug($field);
+
+                        $type  = $translation['type'];
+                        $field = $translation['pk_content'];
                     }
                     break;
                 case 'replace_body_images':
@@ -1877,12 +1891,15 @@ class MigrationSaver
                         if ($params['img_basename'] == true) {
                             $filename = pathinfo($value)['basename'];
                         }
-                        list($type, $id) =
-                            \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
 
-                        $photo = new \Photo($id);
-                        $photoUri = $params['media_path']. $photo->path_img;
-                        $field = str_replace($value, $photoUri, $field);
+                        $translation = $this->redirector->getTranslationBySlug($filename);
+
+                        $type = $translation['type'];
+                        $id   = $translation['pk_content'];
+
+                        $photo    = new \Photo($id);
+                        $photoUri = $params['media_path'] . $photo->path_img;
+                        $field    = str_replace($value, $photoUri, $field);
                     }
                     break;
                 case 'replace_body_files':
@@ -1890,13 +1907,17 @@ class MigrationSaver
 
                     foreach ($matches[1] as $value) {
                         $filename = $value;
+
                         if ($params['file_basename'] == true) {
                             $filename = pathinfo($value)['basename'];
                         }
-                        list($type, $id) =
-                            \ContentManager::getOriginalIdAndContentTypeFromSlug($filename);
 
-                        $file = new \Attachment($id);
+                        $translation = $this->redirector->getTranslationBySlug($filename);
+
+                        $type = $translation['type'];
+                        $id   = $translation['pk_content'];
+
+                        $file  = new \Attachment($id);
                         $field = str_replace($value, $file->uri, $field);
                     }
                     break;
@@ -1913,14 +1934,13 @@ class MigrationSaver
                 case 'md5':
                     if ($params['string']) {
                         if ($params['string']['position'] == 'before') {
-                            $field = md5($params['string']['value'].$field);
+                            $field = md5($params['string']['value'] . $field);
                         } else {
-                            $field = md5($field.$params['string']['value']);
+                            $field = md5($field . $params['string']['value']);
                         }
                     } else {
                         $field = md5($field);
                     }
-
                     break;
                 case 'youtube':
                     $field = $this->convertToYoutube($field);
@@ -1977,7 +1997,7 @@ class MigrationSaver
     protected function updateArticleFrontpagePhoto($id, $photo, $footer)
     {
         $sql = "UPDATE articles  SET `img1`=?, `img1_footer`=?"
-            ."WHERE pk_article=?";
+            . "WHERE pk_article=?";
 
         $values = array($photo, $footer, $id);
 
@@ -1994,7 +2014,7 @@ class MigrationSaver
     protected function updateArticlePhoto($id, $photo, $footer)
     {
         $sql = "UPDATE articles  SET `img2`=?, `img2_footer`=?"
-            ."WHERE pk_article=?";
+            . "WHERE pk_article=?";
 
         $values = array($photo, $footer, $id);
 
@@ -2011,13 +2031,15 @@ class MigrationSaver
     protected function updateOpinionFrontpagePhoto($id, $photo, $footer)
     {
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img1', $photo, $photo);
 
         $this->conn->executeQuery($sql, $values);
 
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img1_footer', $footer, $footer);
 
         $this->conn->executeQuery($sql, $values);
@@ -2033,13 +2055,15 @@ class MigrationSaver
     protected function updateOpinionPhoto($id, $photo, $footer)
     {
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img2', $photo, $photo);
 
         $this->conn->executeQuery($sql, $values);
 
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+            . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+
         $values = array($id, 'img2_footer', $footer, $footer);
 
         $this->conn->executeQuery($sql, $values);
@@ -2054,15 +2078,15 @@ class MigrationSaver
     {
         $sql = "DELETE FROM related_contents WHERE `pk_content1`=? AND `pk_content2`=?";
 
-        $rss  = $this->conn->executeQuery($sql, [$values['pk_content1'],$values['pk_content2']]);
+        $rss = $this->conn->executeQuery($sql, [$values['pk_content1'],$values['pk_content2']]);
 
         if (!$rss) {
             $this->output->writeln('Delete - updateRelated: Check error log');
         }
 
         $sql = "INSERT INTO related_contents  SET `pk_content1`=?, `pk_content2`=?,"
-            ."`relationship`=?, `text`=?, `position`=?, `posinterior`=?, `verportada`=?,"
-            ."`verinterior`=?";
+            . "`relationship`=?, `text`=?, `position`=?, `posinterior`=?, `verportada`=?,"
+            . "`verinterior`=?";
 
         $values = [
             $values['pk_content1'],
@@ -2093,7 +2117,7 @@ class MigrationSaver
     protected function updateArticleVideo($id, $video, $footer)
     {
         $sql = "UPDATE articles  SET `fk_video2`=?, `footer_video2`=?"
-            ."WHERE pk_article=?";
+            . "WHERE pk_article=?";
 
         $values = array($video, $footer, $id);
 
@@ -2113,7 +2137,7 @@ class MigrationSaver
             . ' WHERE `pk_content_old`=' . $old . ' AND `type`=\''
             . $type . '\'';
 
-        $rs  = $this->conn->executeQuery($sql);
+        $rs = $this->conn->executeQuery($sql);
 
         if (!$rs) {
             $this->output->writeln('createTranslation: check error log');
@@ -2154,7 +2178,7 @@ class MigrationSaver
     private function findContent($title)
     {
         $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
-        $sql = "SELECT pk_content FROM contents WHERE title='$title'";
+        $sql   = "SELECT pk_content FROM contents WHERE title='$title'";
 
         $rs = $this->conn->fetchAll($sql);
 
@@ -2176,7 +2200,7 @@ class MigrationSaver
     private function findCategory($name)
     {
         $name = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $name);
-        $sql = "SELECT pk_content_category FROM content_categories"
+        $sql  = "SELECT pk_content_category FROM content_categories"
             . " WHERE name='$name' OR title='$name'";
 
         $rs = $this->conn->fetchAll($sql);
@@ -2214,7 +2238,7 @@ class MigrationSaver
     {
         if (!empty($title)) {
             $title = str_replace([ '\'', '"'], [ '\\\'', '\\"'], $title);
-            $sql = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
+            $sql   = "SELECT pk_content FROM contents WHERE content_type_name='photo' AND title = '$title'";
 
             $rs = $this->conn->fetchAll($sql);
 
@@ -2279,7 +2303,7 @@ class MigrationSaver
         foreach ($params as $filter) {
             $merged = '';
             foreach ($filter['fields'] as $source) {
-                $merged .=  $values[$source] . $filter['separator'];
+                $merged .= $values[$source] . $filter['separator'];
             }
 
             $values[$filter['target']] = rtrim($merged, $filter['separator']);
@@ -2301,7 +2325,7 @@ class MigrationSaver
             $i    = 0;
             $next = true;
             while ($i < count($filter['fields']) && $next) {
-                $key = $filter['fields'][$i++];
+                $key      = $filter['fields'][$i++];
                 $selected = $values[$key];
 
                 switch ($filter['operator']) {

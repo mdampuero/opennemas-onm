@@ -949,8 +949,64 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES ('ads_settings','a:3:{s:15:\"lifetime_cookie\";s:3:\"300\";s:11:\"no_generics\";i:1;s:10:\"safe_frame\";i:1;}'),('advertisements_enabled','b:0;'),('album_settings','a:7:{s:12:\"total_widget\";s:1:\"4\";s:10:\"crop_width\";s:3:\"300\";s:11:\"crop_height\";s:3:\"240\";s:14:\"orderFrontpage\";s:7:\"created\";s:9:\"time_last\";s:3:\"100\";s:11:\"total_front\";s:2:\"12\";s:16:\"total_front_more\";s:1:\"6\";}'),('comment_system','s:8:\"facebook\";'),('comscore','a:1:{s:7:\"page_id\";s:0:\"\";}'),('continue','s:1:\"1\";'),('cookies_hint_enabled','s:1:\"1\";'),('cookies_hint_url','s:31:\"/estaticas/politica-de-cookies/\";'),('dfp_custom_code','s:0:\"\";'),('dfp_options','a:2:{s:6:\"target\";s:0:\"\";s:6:\"module\";s:0:\"\";}'),('elements_in_rss','s:2:\"20\";'),('europapress_server_auth','a:3:{s:6:\"server\";s:0:\"\";s:8:\"username\";s:0:\"\";s:8:\"password\";s:0:\"\";}'),('facebook','a:4:{s:7:\"api_key\";s:1:\" \";s:10:\"secret_key\";s:1:\" \";s:2:\"id\";s:12:\"282535299100\";s:4:\"page\";s:52:\"http://www.facebook.com/pages/OpenNemas/282535299100\";}'),('facebook_id','s:12:\"282535299100\";'),('facebook_page','s:52:\"http://www.facebook.com/pages/OpenNemas/282535299100\";'),('frontpage_0_last_saved','s:24:\"2016-04-05T11:20:33+0200\";'),('frontpage_24_last_saved','s:24:\"2015-01-15T22:47:28+0100\";'),('frontpage_25_last_saved','s:24:\"2015-11-12T15:06:22+0100\";'),('frontpage_layout_0','s:4:\"main\";'),('google_analytics','a:1:{i:0;a:3:{s:7:\"api_key\";s:1:\" \";s:11:\"base_domain\";s:0:\"\";s:10:\"custom_var\";s:0:\"\";}}'),('google_maps_api_key','s:86:\"ABQIAAAA_RE85FLaf_hXdhkxaS463hQC49KlvU2s_1jV47V5-i8q6UJ2IBQiAxw97Jt7tEWzuIY513Qutp-Cqg\";'),('google_page','s:49:\"https://plus.google.com/u/0/102922388479219778478\";'),('iadbox_id','s:0:\"\";'),('image_front_thumb_size','a:2:{s:5:\"width\";s:3:\"350\";s:6:\"height\";s:3:\"250\";}'),('image_inner_thumb_size','a:2:{s:5:\"width\";s:3:\"480\";s:6:\"height\";s:3:\"250\";}'),('image_thumb_size','a:2:{s:5:\"width\";s:3:\"140\";s:6:\"height\";s:3:\"100\";}'),('items_in_blog','s:2:\"20\";'),('items_per_page','s:2:\"20\";'),('last_invoice','s:19:\"2013-07-28 10:00:00\";'),('last_login','s:0:\"\";'),('locale','a:4:{s:7:\"backend\";s:5:\"es_ES\";s:8:\"frontend\";s:0:\"\";s:9:\"time_zone\";s:3:\"UTC\";s:8:\"timezone\";s:13:\"Europe/Madrid\";}'),('log_db_enabled','s:2:\"on\";'),('log_enabled','s:2:\"on\";'),('log_level','s:6:\"normal\";'),('mail_password','s:0:\"\";'),('mail_server','s:9:\"localhost\";'),('mail_username','s:0:\"\";'),('max_mailing','s:1:\"0\";'),('max_session_lifetime','s:2:\"30\";'),('max_users','s:3:\"NaN\";'),('newsletter_maillist','a:2:{s:4:\"name\";s:0:\"\";s:5:\"email\";s:30:\"newsletter@lists.opennemas.com\";}'),('newsletter_sender','s:30:\"no-reply@postman.opennemas.com\"'),('news_agency_config','a:0:{}'),('ojd','a:1:{s:7:\"page_id\";s:0:\"\";}'),('onm_digest_pass','s:9:\"12admin34\";'),('onm_digest_user','s:5:\"admin\";'),('opinion_settings','a:6:{s:14:\"total_director\";i:0;s:15:\"total_editorial\";i:0;s:14:\"total_opinions\";i:16;s:21:\"total_opinion_authors\";i:6;s:19:\"blog_orderFrontpage\";s:7:\"created\";s:19:\"blog_itemsFrontpage\";i:12;}'),('pass_level','s:2:\"-1\";'),('piwik','a:3:{s:7:\"page_id\";s:0:\"\";s:10:\"server_url\";s:0:\"\";s:10:\"token_auth\";s:0:\"\";}'),('poll_settings','a:3:{s:9:\"typeValue\";s:7:\"percent\";s:9:\"widthPoll\";s:3:\"600\";s:10:\"heightPoll\";s:3:\"500\";}'),('recaptcha','a:2:{s:10:\"public_key\";s:40:\"6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is\";s:11:\"private_key\";s:40:\"6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is\";}'),('refresh_interval','s:3:\"900\";'),('revive_ad_server','a:2:{s:3:\"url\";s:0:\"\";s:7:\"site_id\";s:0:\"\";}'),('section_settings','a:1:{s:9:\"allowLogo\";s:1:\"0\";}'),('site_color','s:7:\"#3b4c5c\";'),('site_created','s:19:\"2015-01-12 16:56:49\";'),('site_description','s:102:\"Basic Opennemas - Opennemas newspapers - CMS periodico digital - Online service for digital newspapers\";'),('site_footer','s:101:\"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\n&nbsp;OpenHost, S.L.</p>\n\";'),('site_keywords','s:114:\"Basic Opennemas viajes - CMS, openNemas, servicio, online, periÃ³dico, digital, service, newspapers, media manager\";'),('site_language','s:5:\"es_ES\";'),('site_name','s:15:\"Basic Opennemas\";'),('site_title','s:102:\"Basic Opennemas - Opennemas newspapers - CMS periodico digital - Online service for digital newspapers\";'),('time_zone','s:13:\"Europe/Madrid\";'),('tradedoubler_id','s:0:\"\";'),('twitter_page','s:28:\"http://twitter.com/opennemas\";'),('video_settings','a:5:{s:12:\"total_widget\";s:1:\"6\";s:11:\"total_front\";s:1:\"0\";s:16:\"total_front_more\";s:2:\"12\";s:12:\"front_offset\";s:1:\"0\";s:13:\"total_gallery\";s:2:\"20\";}');
-/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
+INSERT INTO `settings` (`name`, `value`) VALUES
+('ads_settings', 'a:3:{s:15:\"lifetime_cookie\";s:3:\"300\";s:11:\"no_generics\";i:1;s:10:\"safe_frame\";i:1;}'),
+('advertisements_enabled', 'b:0;'),
+('album_settings', 'a:7:{s:12:\"total_widget\";s:1:\"4\";s:10:\"crop_width\";s:3:\"300\";s:11:\"crop_height\";s:3:\"240\";s:14:\"orderFrontpage\";s:7:\"created\";s:9:\"time_last\";s:3:\"100\";s:11:\"total_front\";s:2:\"12\";s:16:\"total_front_more\";s:1:\"6\";}'),
+('comment_system', 's:8:\"facebook\";'),
+('comscore', 'a:1:{s:7:\"page_id\";s:0:\"\";}'),
+('cookies_hint_enabled', 's:1:\"1\";'),
+('cookies_hint_url', 's:31:\"/estaticas/politica-de-cookies/\";'),
+('dfp_custom_code', 's:0:\"\";'),
+('dfp_options', 'a:2:{s:6:\"target\";s:0:\"\";s:6:\"module\";s:0:\"\";}'),
+('elements_in_rss', 's:2:\"20\";'),
+('europapress_server_auth', 'a:3:{s:6:\"server\";s:0:\"\";s:8:\"username\";s:0:\"\";s:8:\"password\";s:0:\"\";}'),
+('facebook', 'a:4:{s:7:\"api_key\";s:1:\" \";s:10:\"secret_key\";s:1:\" \";s:2:\"id\";s:12:\"282535299100\";s:4:\"page\";s:52:\"http://www.facebook.com/pages/OpenNemas/282535299100\";}'),
+('facebook_id', 's:12:\"282535299100\";'),
+('facebook_page', 's:52:\"http://www.facebook.com/pages/OpenNemas/282535299100\";'),
+('frontpage_0_last_saved', 's:24:\"2016-04-05T11:20:33+0200\";'),
+('frontpage_24_last_saved', 's:24:\"2015-01-15T22:47:28+0100\";'),
+('frontpage_25_last_saved', 's:24:\"2015-11-12T15:06:22+0100\";'),
+('frontpage_layout_0', 's:4:\"main\";'),
+('google_analytics', 'a:1:{i:0;a:3:{s:7:\"api_key\";s:1:\" \";s:11:\"base_domain\";s:0:\"\";s:10:\"custom_var\";s:0:\"\";}}'),
+('google_maps_api_key', 's:86:\"ABQIAAAA_RE85FLaf_hXdhkxaS463hQC49KlvU2s_1jV47V5-i8q6UJ2IBQiAxw97Jt7tEWzuIY513Qutp-Cqg\";'),
+('google_page', 's:49:\"https://plus.google.com/u/0/102922388479219778478\";'),
+('image_front_thumb_size', 'a:2:{s:5:\"width\";s:3:\"350\";s:6:\"height\";s:3:\"250\";}'),
+('image_inner_thumb_size', 'a:2:{s:5:\"width\";s:3:\"480\";s:6:\"height\";s:3:\"250\";}'),
+('image_thumb_size', 'a:2:{s:5:\"width\";s:3:\"140\";s:6:\"height\";s:3:\"100\";}'),
+('items_in_blog', 's:2:\"20\";'),
+('items_per_page', 's:2:\"20\";'),
+('last_invoice', 's:19:\"2013-07-28 10:00:00\";'),
+('last_login', 's:0:\"\";'),
+('locale', 'a:2:{s:7:\"backend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:13:\"Europe/Madrid\";}s:8:\"frontend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:3:\"UTC\";}}'),
+('max_mailing', 's:1:\"0\";'),
+('max_users', 's:3:\"NaN\";'),
+('newsletter_maillist', 'a:2:{s:4:\"name\";s:0:\"\";s:5:\"email\";s:30:\"newsletter@lists.opennemas.com\";}'),
+('newsletter_sender', 's:30:\"no-reply@postman.opennemas.com\"'),
+('news_agency_config', 'a:0:{}'),
+('ojd', 'a:1:{s:7:\"page_id\";s:0:\"\";}'),
+('onm_digest_pass', 's:9:\"12admin34\";'),
+('onm_digest_user', 's:5:\"admin\";'),
+('opinion_settings', 'a:6:{s:14:\"total_director\";i:0;s:15:\"total_editorial\";i:0;s:14:\"total_opinions\";i:16;s:21:\"total_opinion_authors\";i:6;s:19:\"blog_orderFrontpage\";s:7:\"created\";s:19:\"blog_itemsFrontpage\";i:12;}'),
+('pass_level', 's:2:\"-1\";'),
+('piwik', 'a:3:{s:7:\"page_id\";s:0:\"\";s:10:\"server_url\";s:0:\"\";s:10:\"token_auth\";s:0:\"\";}'),
+('poll_settings', 'a:3:{s:9:\"typeValue\";s:7:\"percent\";s:9:\"widthPoll\";s:3:\"600\";s:10:\"heightPoll\";s:3:\"500\";}'),
+('recaptcha', 'a:2:{s:10:\"public_key\";s:40:\"6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is\";s:11:\"private_key\";s:40:\"6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is\";}'),
+('refresh_interval', 's:3:\"900\";'),
+('revive_ad_server', 'a:2:{s:3:\"url\";s:0:\"\";s:7:\"site_id\";s:0:\"\";}'),
+('section_settings', 'a:1:{s:9:\"allowLogo\";s:1:\"0\";}'),
+('site_color', 's:7:\"#3b4c5c\";'),
+('site_created', 's:19:\"2015-01-12 16:56:49\";'),
+('site_description', 's:102:\"Basic Opennemas - Opennemas newspapers - CMS periodico digital - Online service for digital newspapers\";'),
+('site_footer', 's:101:\"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\n&nbsp;OpenHost, S.L.</p>\n\";'),
+('site_keywords', 's:114:\"Basic Opennemas viajes - CMS, openNemas, servicio, online, periÃ³dico, digital, service, newspapers, media manager\";'),
+('site_language', 's:5:\"es_ES\";'),
+('site_name', 's:15:\"Basic Opennemas\";'),
+('site_title', 's:102:\"Basic Opennemas - Opennemas newspapers - CMS periodico digital - Online service for digital newspapers\";'),
+('time_zone', 's:13:\"Europe/Madrid\";'),
+('tradedoubler_id', 's:0:\"\";'),
+('twitter_page', 's:28:\"http://twitter.com/opennemas\";'),
+('video_settings', 'a:5:{s:12:\"total_widget\";s:1:\"6\";s:11:\"total_front\";s:1:\"0\";s:16:\"total_front_more\";s:2:\"12\";s:12:\"front_offset\";s:1:\"0\";s:13:\"total_gallery\";s:2:\"20\";}');/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1046,10 +1102,10 @@ CREATE TABLE `translation_ids` (
   `pk_content` bigint(20) unsigned NOT NULL,
   `type` varchar(100) NOT NULL,
   `slug` text,
+  `domain` varchar(255) NOT NULL,
   PRIMARY KEY (`pk_content_old`,`pk_content`,`type`),
   KEY `pk_content` (`pk_content`),
-  KEY `slug` (`slug`(255)),
-  CONSTRAINT `translationids_contentid_contents_id` FOREIGN KEY (`pk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `slug` (`slug`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

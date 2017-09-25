@@ -241,7 +241,7 @@ class AdsController extends Controller
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
             $this->get('session')->getFlashBag()->add(
-                'success',
+                'error',
                 sprintf(_('Unable to find the advertisement with the id "%d"'), $id)
             );
 
