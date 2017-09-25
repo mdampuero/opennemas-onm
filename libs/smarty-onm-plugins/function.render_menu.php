@@ -34,10 +34,10 @@ function smarty_function_render_menu($params, &$smarty)
         return $menu;
     }
 
-    $menu->items = $menu->localize(['current' => 'es', 'default' => 'en']);
+    $menuItems = $menu->localize($menu->items);
 
     $smarty->assign([
-        'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
+        'menuItems'       => ((!empty($menuItems)) ? $menuItems : []),
         'actual_category' => $params['actual_category'],
     ]);
     $output .= "\n" . $smarty->fetch($tpl);
