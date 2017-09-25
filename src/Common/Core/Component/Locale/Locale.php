@@ -151,6 +151,10 @@ class Locale
      */
     public function getAvailableLocales()
     {
+        if (empty($this->config[$this->context]['language']['available'])) {
+            return [];
+        }
+
         $locales = [];
 
         foreach ($this->config[$this->context]['language']['available'] as $locale) {
