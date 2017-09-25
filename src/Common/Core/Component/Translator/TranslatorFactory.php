@@ -52,6 +52,21 @@ class TranslatorFactory
     }
 
     /**
+     * Returns a list with all translator data.
+     *
+     * @return array A list of translator data
+     */
+    public function getTranslatorsData()
+    {
+        return array_map(function ($a) {
+            return [
+                'translator' => $a,
+                'parameters' => $this->get($a)->getRequiredParameters()
+            ];
+        }, $this->getAvailableTranslators());
+    }
+
+    /**
      * Returns a new Finder in the configured paths.
      *
      * @return Finder A Finder component.
@@ -87,20 +102,5 @@ class TranslatorFactory
         }
 
         return $translators;
-    }
-
-    /**
-     * Returns a list with all translator data.
-     *
-     * @return array A list of translator data
-     */
-    public function getTranslatorsData()
-    {
-        $translationDataArr = array_map(function ($translator) {
-            return [
-                'translator' => $translator,
-                'parameters' => $this->get($translator)->getRequiredParameters()];
-        }, $this->getAvailableTranslators());
-        return $translationDataArr;
     }
 }
