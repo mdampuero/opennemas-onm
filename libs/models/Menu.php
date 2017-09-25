@@ -135,6 +135,7 @@ class Menu
         $this->params   = $this->data['params'];
         $this->position = $this->data['position'];
         $this->type     = $this->data['type'];
+        $this->items    = $this->data['items'];
 
         return $this;
     }
@@ -167,7 +168,7 @@ class Menu
             }
 
             $element->title = @iconv(mb_detect_encoding($element->title), 'utf-8', $element->title);
-            $element->link  = $item->link;
+            $element->link  = $element->link;
         }
 
         return $items;
@@ -217,20 +218,29 @@ class Menu
             $menuItem->title     = $element['title'];
             $menuItem->link      = $element['link_name'];
 
-            $menuItems[$element['pk_item']] = $menuItem;
+            $menuItems[] = $menuItem;
         }
 
-        foreach ($menuItems as $id => $element) {
-            if (((int) $element->pk_father > 0)
-                && isset($menuItems[$element->pk_father])
-                && isset($menuItems[$element->pk_father]->submenu)
-            ) {
-                array_push($menuItems[$element->pk_father]->submenu, $element);
-                unset($menuItems[$id]);
+        foreach ($menuItems as $id => $child) {
+            foreach ($menuItems as &$parent) {
+                if (((int) $child->pk_father > 0)
+                    && ($parent->pk_item == $child->pk_father)
+                ) {
+                    array_push($parent->submenu, $child);
+                    unset($menuItems[$id]);
+                }
             }
         }
 
-        return $menuItems;
+        // I need to rebuild the menu items array as json_encode will convert
+        // the array with not continuous index numbers to an object in js
+        // and ui-tree will fail when trying to render it
+        $cleanMenuItems = [];
+        foreach ($menuItems as $key => $value) {
+            array_push($cleanMenuItems, $value);
+        }
+
+        return $cleanMenuItems;
     }
 
     /**
@@ -276,8 +286,8 @@ class Menu
                 [
                     'name'     => $data['name'],
                     'params'   => $data['params'],
+                    'position' => $data['position'],
                     'type'     => 'user',
-                    'position' => $data['position']
                 ],
                 [ 'pk_menu' => $this->pk_menu ]
             );

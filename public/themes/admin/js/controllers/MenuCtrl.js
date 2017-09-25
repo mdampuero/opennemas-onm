@@ -74,7 +74,7 @@
 
         // Updates the menu items input value when menu items change.
         $scope.$watch('menu.items', function() {
-          $scope.json_menu_items = angular.toJson($scope.menu.items);
+          $scope.menuItems = angular.toJson($scope.menu.items);
         }, true);
 
         // Prevent form submit on enter key press

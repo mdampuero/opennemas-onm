@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl" {if $menu} ng-init="menu = {json_encode($menu->getRawData())|clear_json} {/if}">
-
+<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl" {if $menu} ng-init="menu = {json_encode($menu)|clear_json};{/if}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -121,7 +120,7 @@
         </div>
       </div>
 
-      <input type="hidden" name="items" ng-value="json_menu_items"/>
+      <input type="hidden" name="items" ng-value="menuItems"/>
     </div>
     <script type="text/ng-template" id="menu-item">
       {include file="menues/partials/_menu_item.tpl"}
