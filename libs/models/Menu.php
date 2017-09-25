@@ -141,40 +141,6 @@ class Menu
     }
 
     /**
-     * Picks the language of an item.
-     *
-     * @return void
-     **/
-    public function localize($params = [])
-    {
-        // TODO: process the target language from the main, default and fallback (first language).
-        $targetLanguage = array_key_exists('default', $params) ? $params['default'] : 'en';
-
-        // In order to force to load the new structure I'm reloading the object if
-        // RAW data is empty
-        if (empty($this->data)) {
-            $this->read($this->id);
-        }
-
-        $items = $this->data['items'];
-
-        foreach ($items as &$element) {
-            if (is_array($element->title)) {
-                $element->title = $element->title[$targetLanguage];
-            }
-
-            if (is_array($element->link)) {
-                $element->link = $element->link[$targetLanguage];
-            }
-
-            $element->title = @iconv(mb_detect_encoding($element->title), 'utf-8', $element->title);
-            $element->link  = $element->link;
-        }
-
-        return $items;
-    }
-
-    /**
      * Returns the elements of a menu given its id
      *
      * @param int $id the id of the menu
@@ -328,6 +294,29 @@ class Menu
             error_log($e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Returns the localized elements
+     *
+     * @param array $items the list of items to localize
+     *
+     * @return array the localized array
+     **/
+    public function localize($items)
+    {
+        $fm = getService('data.manager.filter');
+
+        foreach ($items as &$item) {
+            $item = $fm->set($item)
+                ->filter('localize', ['keys' => ['title', 'link']])
+                ->get();
+            if (count($items->submenu) > 0) {
+                $items->submenu = $this->localize($item->submenu);
+            }
+        }
+
+        return $items;
     }
 
     /**
