@@ -12,6 +12,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         $sm      = getService('setting_repository');
         $url     = SITE_URL . $content->uri;
         $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
+
         if (empty($summary)) {
             $summary = mb_substr(
                 trim(\Onm\StringUtils::htmlAttribute($content->body)),

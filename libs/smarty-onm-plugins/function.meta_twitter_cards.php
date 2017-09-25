@@ -19,6 +19,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
         $content = $smarty->tpl_vars['content']->value;
         $url     = SITE_URL . $content->uri;
         $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
+
         if (empty($summary)) {
             $summary = mb_substr(
                 trim(\Onm\StringUtils::htmlAttribute($content->body)),
