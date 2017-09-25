@@ -112,7 +112,7 @@ class LocalRepository
     protected function filter($criteria)
     {
         $contents = array_filter($this->contents, function ($a) use ($criteria) {
-            return $a->source == $criteria['source'];
+            return preg_match('@' . $criteria['source'] . '@', $a->source);
         });
 
         // Remove source from criteria
@@ -120,17 +120,15 @@ class LocalRepository
 
         return array_filter($contents, function ($a) use ($criteria) {
             foreach ($criteria as $key => $value) {
-                $filters = explode(',', $value);
+                $pattern = strtolower(trim(preg_replace('/\s*,\s*/', '|', $value)));
 
-                foreach ($filters as $filter) {
-                    if (property_exists($a, $key)
-                        && preg_match(
-                            '@' . strtolower(trim($filter)) . '@',
-                            strtolower($a->{$key})
-                        )
-                    ) {
-                        return true;
-                    }
+                if (property_exists($a, $key)
+                    && preg_match(
+                        '@' . $pattern . '@',
+                        strtolower($a->{$key})
+                    )
+                ) {
+                    return true;
                 }
             }
 
