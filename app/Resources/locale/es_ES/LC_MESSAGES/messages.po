@@ -8937,6 +8937,24 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 #~ msgid "Google+ and YouTube"
 #~ msgstr "Google+ y YouTube"
 
+msgid "Automatic translations"
+msgstr "Traducciones automáticas"
+
+msgid "Services for automatic translations"
+msgstr "Servicios para la traducción automática"
+
+msgid "Select from language"
+msgstr "Lenguaje de origen"
+
+msgid "Language to translate"
+msgstr "Lenguaje de destino"
+
+msgid "Translation service"
+msgstr "Servicio de traducción"
+
+msgid "Required params for Service"
+msgstr "Parámetros requeridos para el servicio"
+
 #~ msgid ""
 #~ "We use cookies to personalise content and ads, to provide social media "
 #~ "features and to analyse our traffic. We also share information about your "

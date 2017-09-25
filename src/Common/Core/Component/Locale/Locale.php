@@ -19,7 +19,7 @@ class Locale
      *
      * @var array
      */
-    public $config = [
+    protected $config = [
         'backend' => [
             'language' => [ 'selected'  => 'en_US', 'slug' => [] ],
             'timezone' => 'UTC'
