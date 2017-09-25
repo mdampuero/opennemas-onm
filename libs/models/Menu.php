@@ -359,33 +359,6 @@ class Menu
     }
 
     /**
-     * Gets a menu instance given its position
-     *
-     * @param string $position the position of the menu
-     *
-     * @return mixed The Menu if it was found. False otherwise.
-     */
-    public function getMenuFromPosition($position)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                "SELECT * FROM menues WHERE position=? ORDER BY pk_menu LIMIT 1",
-                [ $position ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            $this->load($rs);
-            return $this;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Sets the menu elements to one menu given its id and the list of items.
      *
      * @param int   $id     The menu id to set the elements in
