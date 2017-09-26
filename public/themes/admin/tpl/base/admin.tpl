@@ -545,6 +545,7 @@
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-image-preview/js/image-preview.js,
+      @Common/src/angular-localize/localize.js,
       @Common/src/angular-oql-encoder/oql-encoder.js,
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,

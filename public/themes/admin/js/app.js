@@ -21,6 +21,7 @@ angular.module(
     'onm.http',
     'onm.imagePreview',
     'onm.item',
+    'onm.localize',
     'onm.messenger',
     'onm.oql',
     'onm.oqlEncoder',
