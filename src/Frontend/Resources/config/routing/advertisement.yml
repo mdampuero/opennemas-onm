@@ -1,11 +1,17 @@
-frontend_ad_get:
+frontend_ad_show:
     path: /ads/get/{id}.{_format}
-    defaults: { _controller: FrontendBundle:Advertisement:get, _format:html }
+    defaults: { _controller: FrontendBundle:Advertisement:show, _format:html }
 
 frontend_ad_redirect:
     path: /ads/{id}.{_format}
     defaults: { _controller: FrontendBundle:Advertisement:redirect, _format:html }
 
-frontend_ads_txt:
+frontend_ad_ads_txt:
     path: /ads.txt
-    defaults: { _controller: FrontendBundle:Advertisement:adsTxt }
+    defaults: { _controller: FrontendBundle:Advertisement:showAdsTxt }
+
+frontend_ad_rtb_file:
+    path: /ftlocal/{filename}
+    defaults: { _controller: FrontendBundle:Advertisement:showRTBFile }
+    requirements:
+        filename: '[^/]+'
