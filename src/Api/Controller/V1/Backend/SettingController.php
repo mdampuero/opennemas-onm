@@ -187,8 +187,8 @@ class SettingController extends Controller
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
                     . '/sections/',
-                'translation_services' => $this->get('core.factory.translator')
-                    ->getTranslatorsData()
+                'translation_services' =>
+                    $this->get('core.factory.translator')->getTranslatorsData()
             ],
             'settings' => $settings,
         ]);
