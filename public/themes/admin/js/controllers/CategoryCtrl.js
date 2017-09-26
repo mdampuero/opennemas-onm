@@ -100,7 +100,7 @@
             }
           });
 
-          $scope.lang = 'es';
+          $scope.lang = languageData['locale'] || languageData['default'];
 
           $scope.allowedCategories = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
             var value = (categoryKey == 0)?'Internal':$scope.internalCategories.internalCategories[categoryKey].title

@@ -463,4 +463,9 @@ class ContentCategory
             return false;
         }
     }
+
+    public static function getMultiLanguageFields()
+    {
+        return self::MULTI_LANGUAGE_FIELDS;
+    }
 }

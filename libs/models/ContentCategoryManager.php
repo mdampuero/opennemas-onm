@@ -755,6 +755,11 @@ class ContentCategoryManager
         //$fullcat = $this->orderByPosmenu($this->categories);
         $fullcat = $this->groupByType($this->categories);
 
+        $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
+            'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'locale' => getService('core.locale')->setContext('frontend')->getLocale()
+        ])->get();
+
         if (!is_array($internalCategory)) {
             $internalCategory = [$internalCategory];
         }
@@ -764,8 +769,8 @@ class ContentCategoryManager
         foreach ($fullcat as $prima) {
             if (!empty($category)
                 && $prima->pk_content_category == $category
-                && $category !='home'
-                && $category !='todos'
+                && $category != 'home'
+                && $category != 'todos'
             ) {
                 $categoryData[] = $prima;
             }

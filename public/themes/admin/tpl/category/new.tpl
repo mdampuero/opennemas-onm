@@ -35,9 +35,11 @@
               <h5> [% (category.pk_content_category)?"{t}Editing category{/t}":"{t}Creating category{/t}" %]</h5>
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+          {is_module_activated name="es.openhost.module.multilanguage"}
             <li class="quicklinks hidden-xs">
               <translator ng-model="lang" translator-options="languageData"/>
             </li>
+          {/is_module_activated}
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">

@@ -510,6 +510,13 @@ class AdsController extends Controller
                 . ' order by internal_category asc, title asc'
             );
 
+        $fm = $this->get('data.manager.filter');
+        // Sometimes category is array. When create & update advertisement
+        $categories = $fm->set($categories)->filter('localize', [
+            'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'locale' => $this->getLocaleData('frontend')['default']
+        ])->get();
+
         $categories = array_map(function ($a) {
             return [
                 'id'     => (int) $a->pk_content_category,

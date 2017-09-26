@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
-use Common\Data\Adapter\MultiOptionAdapter;
 
 /**
  * Handles the actions for categories
@@ -38,15 +37,13 @@ class CategoriesController extends Controller
      */
     public function listAction(Request $request)
     {
-        $categories   = $this->get('category_repository')->findBy(null, 'name ASC');
-        $languageData = $this->getLocaleData('frontend');
-
-        $categories = array_map(
-            function ($category) use ($languageData) {
-                return $this->get('data.manager.adapter')->adapt('multi_option', $category, $languageData);
-            },
-            $categories
-        );
+        $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
+        $languageData              = $this->getLocaleData('frontend');
+        $fm                        = $this->get('data.manager.filter');
+        $categories                = $fm->set($categories)->filter('unlocalize', [
+            'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'locale' => $languageData['default']
+        ])->get();
         $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
 
         return $this->render(
@@ -76,17 +73,16 @@ class CategoriesController extends Controller
         $allcategories = $ccm->categories;
         $subcategories = [];
         $languageData  = $this->getLocaleData('frontend', $request);
+        $fm            = $this->get('data.manager.filter');
         // we adapt the category data and if the value returned y multilanguage field is a string, create a new
         //array with all values
-        $category = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
-                MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
-                MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
-        ]);
-
-        $allcategories = $this->get('data.manager.adapter')->adapt('multi_option', $allcategories, [
-                MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
-                MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
-        ]);
+        $category      = $fm->set($category)->filter('unlocalize', [
+            'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS
+        ])->get();
+        $allcategories = $fm->set($allcategories)->filter('localize', [
+            'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'locale'    => $languageData['default']
+        ])->get();
 
         $jsonData = json_encode(
             array(
@@ -125,22 +121,14 @@ class CategoriesController extends Controller
         $ccm           = \ContentCategoryManager::get_instance();
         $allcategories = $ccm->categories;
         $languageData  = $this->getLocaleData('frontend', $request);
+        $fm            = $this->get('data.manager.filter');
         // we adapt the category data and if the value returned y multilanguage field is a string, create a new
         //array with all values
 
-        $fm = $this->get('data.manager.filter');
-
-        $fm->set($allcategories)->filter('localize', ['keys' => ['title', 'name'], 'locale' => 'es'])->get();
-        $allcategories = array_map(
-            function ($category) use ($languageData) {
-                return $this->get('data.manager.adapter')->adapt('multi_option', $category, [
-                        MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
-                        MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
-                        MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
-                ]);
-            },
-            $allcategories
-        );
+        $allcategories = $fm->set($allcategories)->filter('localize', [
+            'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'locale'    => $languageData['default']
+        ])->get();
 
         if (empty($id)) {
             $category      = null;
@@ -150,10 +138,9 @@ class CategoriesController extends Controller
             $category      = new \ContentCategory($id);
             if ($category->pk_content_category != null) {
                 $ccm      = \ContentCategoryManager::get_instance();
-                $category = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
-                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE => $languageData['default'],
-                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS => ['title', 'name']
-                ]);
+                $category = $fm->set($category)->filter('unlocalize', [
+                    'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS
+                ])->get();
             }
         }
 

@@ -14,7 +14,6 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Data\Adapter\MultiOptionAdapter;
 
 class ContentController extends Controller
 {
@@ -70,7 +69,7 @@ class ContentController extends Controller
 
         $em = $this->get('entity_repository');
 
-        $order = '`position` asc';
+        $order  = '`position` asc';
         $search = [
             'content_type_name' => [ [ 'value' => $contentType ] ],
             'in_home' => [ [ 'value' => 1 ] ],
@@ -505,12 +504,11 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $status  = $request->request->getDigits('value');
-
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
 
-        $content   = $em->find(\classify($contentType), $id);
+        $content = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
             $content->setAvailable($status, $this->getUser()->id);
@@ -520,7 +518,8 @@ class ContentController extends Controller
             } else {
                 $message = _('Item unpublished successfully');
             }
-            $status = $content->content_status;
+
+            $status    = $content->content_status;
             $success[] = array(
                 'id'      => $id,
                 'message' => $message,
@@ -688,7 +687,7 @@ class ContentController extends Controller
                 $message = _('Item removed from home successfully');
             }
 
-            $inHome = $content->in_home;
+            $inHome    = $content->in_home;
             $success[] = array(
                 'id'      => $id,
                 'message' => $message,
@@ -727,7 +726,7 @@ class ContentController extends Controller
         $updated = array();
 
         $inHome = $request->request->get('value');
-        $ids       = $request->request->get('ids');
+        $ids    = $request->request->get('ids');
 
         if (is_array($ids) && count($ids) > 0) {
             foreach ($ids as $id) {
@@ -801,7 +800,7 @@ class ContentController extends Controller
             $pos = 1;
             foreach ($positions as $id) {
                 $contentType = \classify($contentType);
-                $file= new $contentType($id);
+                $file        = new $contentType($id);
 
                 if ($file->setPosition($pos)) {
                     $updated[] = $id;
@@ -940,21 +939,14 @@ class ContentController extends Controller
         $ccm                 = \ContentCategoryManager::get_instance();
         $categories          = $ccm->findAll();
         $extra['categories'] = [];
-        $languageData        = $this->getLocaleData('frontend');
-
-        $categories = array_map(
-            function ($category) use ($languageData) {
-                return $this->get('data.manager.adapter')->adapt('multi_option', $category, [
-                        MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
-                        MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
-                        MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
-                ]);
-            },
-            $categories
-        );
+        $fm                  = $this->get('data.manager.filter');
+        $categories          = $fm->set($categories)->filter('localize', [
+            'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'locale' => $this->getLocaleData('frontend')['default']
+        ])->get();
 
         foreach ($categories as $category) {
-            $extra['categories'][$category->name] = $category->title;
+            $extra['categories'][$category->id] = $category->name;
         }
 
         return $extra;
