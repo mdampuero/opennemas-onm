@@ -19,13 +19,16 @@ class Locale
      *
      * @var array
      */
-    public $config = [
+    protected $config = [
         'backend' => [
-            'language' => [ 'selected'  => 'en_US' ],
+            'language' => [ 'selected'  => 'en_US', 'slug' => [] ],
             'timezone' => 'UTC'
         ],
         'frontend' => [
-            'language' => [ 'selected'  => 'en_US' ],
+            'language' => [
+                'selected' => 'en_US',
+                'slug'     => [ 'en_US' => 'en']
+            ],
             'timezone' => 'UTC'
         ],
     ];
@@ -148,6 +151,10 @@ class Locale
      */
     public function getAvailableLocales()
     {
+        if (empty($this->config[$this->context]['language']['available'])) {
+            return [];
+        }
+
         $locales = [];
 
         foreach ($this->config[$this->context]['language']['available'] as $locale) {
@@ -204,11 +211,17 @@ class Locale
      */
     public function getRequestLocale()
     {
-        if (empty($this->requestLocale)) {
-            return $this->getLocale();
-        }
-
         return $this->requestLocale;
+    }
+
+    /**
+     * Returns the list of slugs for the locales.
+     *
+     * @return array The list of slugs for the locales.
+     */
+    public function getSlugs()
+    {
+        return $this->config[$this->context]['language']['slug'];
     }
 
     /**
@@ -251,8 +264,19 @@ class Locale
      */
     public function setContext($context)
     {
+        $this->context = 'frontend';
+
+        if (empty($context)) {
+            return $this;
+        }
+
         // Remove when more contexts supported
-        $this->context = $context === 'frontend' ? $context : 'backend';
+        if (strpos($context, 'admin') !== false
+            || strpos($context, 'backend') !== false
+            || strpos($context, 'manager') !== false
+        ) {
+            $this->context = 'backend';
+        }
 
         if (!array_key_exists($this->context, $this->config)) {
             $this->config[$this->context] = $this->default;
@@ -292,13 +316,7 @@ class Locale
      */
     public function setRequestLocale($locale)
     {
-        if (empty($locale)) {
-            return $this;
-        }
-
-        if (in_array($locale, $this->config[$this->context]['language']['available'])) {
-            $this->requestLocale = $locale;
-        }
+        $this->requestLocale = $locale;
 
         return $this;
     }

@@ -72,9 +72,12 @@ class Paginator
     {
         $this->options = array_merge($this->options, $options);
 
+        // Do not generator the paginator if epp is less than 0. Division by 0.
+        // Or if total items are 0 or less than epp
         if (!array_key_exists('total', $this->options)
             || $this->options['total'] === 0
             || $this->options['total'] <= $this->options['epp']
+            || $this->options['epp'] <= 0
         ) {
             return '';
         }
@@ -115,7 +118,7 @@ class Paginator
         $disabled = $this->options['page'] == 1 ? ' disabled' : '';
 
         return '<li class="first' . $disabled . '"><a href="'
-            . $this->getUrl(1) .'">' . $this->templates['first'] . '</a></li>';
+            . $this->getUrl(1) . '">' . $this->templates['first'] . '</a></li>';
     }
 
     /**
@@ -133,7 +136,7 @@ class Paginator
             ' disabled' : '';
 
         return '<li class="last' . $disabled . '"><a href="'
-            . $this->getUrl($this->options['pages']) .'">'
+            . $this->getUrl($this->options['pages']) . '">'
             . $this->templates['last'] . '</a></li>';
     }
 
@@ -168,7 +171,7 @@ class Paginator
                 . '<a href="' . $this->getUrl($i) . '">'
                     . $i
                 . '</a>'
-            .'</li>';
+            . '</li>';
         }
 
         return $links;
@@ -190,7 +193,7 @@ class Paginator
             ' disabled' : '';
 
         return '<li class="next' . $disabled . '"><a href="'
-            . $this->getUrl($page) .'">' . $this->templates['next']
+            . $this->getUrl($page) . '">' . $this->templates['next']
             . '</a></li>';
     }
 
@@ -209,7 +212,7 @@ class Paginator
         $disabled = $this->options['page'] == 1 ? ' disabled' : '';
 
         return '<li class="previous' . $disabled . '">'
-            . '<a href="' . $this->getUrl($page) .'">'
+            . '<a href="' . $this->getUrl($page) . '">'
             . $this->templates['previous'] . '</a></li>';
     }
 
@@ -229,7 +232,7 @@ class Paginator
                 $params = $route['params'];
             }
 
-            $route  = $route['name'];
+            $route = $route['name'];
         }
 
         $params = array_merge($params, [ 'page' => $page ]);

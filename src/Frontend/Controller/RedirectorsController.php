@@ -35,6 +35,10 @@ class RedirectorsController extends Controller
         $fragment = '';
         $content  = null;
 
+        if (empty($id) && empty($slug)) {
+            throw new ResourceNotFoundException();
+        }
+
         $translation = $this->get('core.redirector')
             ->getTranslation($slug, $type, $id);
 

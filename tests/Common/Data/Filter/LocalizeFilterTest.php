@@ -23,10 +23,20 @@ class LocalizeFilterTest extends KernelTestCase
      */
     public function setUp()
     {
+        $this->locale = $this->getMockBuilder('Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRequestLocale' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'hasParameter' ])
+            ->setMethods([ 'hasParameter', 'get' ])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->locale->expects($this->any())->method('getRequestLocale')
+            ->willReturn('gl');
+        $this->container->expects($this->any())->method('get')
+            ->with('core.locale')->willReturn($this->locale);
 
         $this->filter = new LocalizeFilter($this->container, [
             'keys'    => [ 'xyzzy' ],
@@ -72,6 +82,14 @@ class LocalizeFilterTest extends KernelTestCase
         $this->assertEquals('frog', $entities[0]->xyzzy);
         $this->assertEmpty($entities[1]->xyzzy);
         $this->assertEquals('quux', $entities[2]->xyzzy);
+
+        $property = new \ReflectionProperty($this->filter, 'params');
+        $property->setAccessible(true);
+        $params = $property->getValue($this->filter);
+        unset($params['keys']);
+        $property->setValue($this->filter, $params);
+
+        $this->assertEquals('quux', $this->filter->filter([ 'es' => 'quux' ]));
     }
 
     /**
@@ -121,6 +139,16 @@ class LocalizeFilterTest extends KernelTestCase
             [ 'gl' => 'mumble' ]
         ]));
         $this->assertEquals('glork', $method->invokeArgs($this->filter, [
+            [ 'gl' => 'mumble', 'en' => 'glork' ]
+        ]));
+
+        $property = new \ReflectionProperty($this->filter, 'params');
+        $property->setAccessible(true);
+        $params = $property->getValue($this->filter);
+        unset($params['locale']);
+        $property->setValue($this->filter, $params);
+
+        $this->assertEquals('mumble', $method->invokeArgs($this->filter, [
             [ 'gl' => 'mumble', 'en' => 'glork' ]
         ]));
     }

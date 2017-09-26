@@ -62,96 +62,96 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     {
         throw new \Exception('I am using the old Youtube API. Please, update me.');
 
-        $start = time();
+        // $start = time();
 
-        // Get arguments
-        $instance       = $input->getArgument('instance-name');
-        $source         = $input->getArgument('source');
-        $this->category = $input->getArgument('category-id');
-        $this->channel  = $input->getOption('channel');
-        $csv            = $input->getOption('file');
+        // // Get arguments
+        // $instance       = $input->getArgument('instance-name');
+        // $source         = $input->getArgument('source');
+        // $this->category = $input->getArgument('category-id');
+        // $this->channel  = $input->getOption('channel');
+        // $csv            = $input->getOption('file');
 
-        $this->input  = $input;
-        $this->output = $output;
+        // $this->input  = $input;
+        // $this->output = $output;
 
-        // Initialize application
-        $basePath = APPLICATION_PATH;
+        // // Initialize application
+        // $basePath = APPLICATION_PATH;
 
-        chdir($basePath);
+        // chdir($basePath);
 
-        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        // $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
-        $rs = $conn->fetchAll('SELECT internal_name, settings FROM instances');
+        // $rs = $conn->fetchAll('SELECT internal_name, settings FROM instances');
 
-        $instances = array();
-        foreach ($rs as $database) {
-            $dbSettings = unserialize($database['settings']);
-            $instances[$database['internal_name']] = $dbSettings;
-        }
+        // $instances = array();
+        // foreach ($rs as $database) {
+        //     $dbSettings                            = unserialize($database['settings']);
+        //     $instances[$database['internal_name']] = $dbSettings;
+        // }
 
-        $instanceNames = array_keys($instances);
+        // $instanceNames = array_keys($instances);
 
-        if (!in_array($instance, $instanceNames)) {
-            throw new \Exception('Instance name not valid');
-        }
+        // if (!in_array($instance, $instanceNames)) {
+        //     throw new \Exception('Instance name not valid');
+        // }
 
-        // Initialize internal constants for logger
-        define('INSTANCE_UNIQUE_NAME', $instance);
+        // // Initialize internal constants for logger
+        // define('INSTANCE_UNIQUE_NAME', $instance);
 
-        // Initialize the template system
-        define('CACHE_PREFIX', '');
+        // // Initialize the template system
+        // define('CACHE_PREFIX', '');
 
-        // Set session variable
-        $this->getContainer()->get('session')->set(
-            'user',
-            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
-        );
+        // // Set session variable
+        // $this->getContainer()->get('session')->set(
+        //     'user',
+        //     json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
+        // );
 
-        $commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
-        if (!file_exists($commonCachepath)) {
-            mkdir($commonCachepath, 0755, true);
-        }
+        // $commonCachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . 'common';
+        // if (!file_exists($commonCachepath)) {
+        //     mkdir($commonCachepath, 0755, true);
+        // }
 
-        $this->tpl = new \TemplateAdmin('admin');
+        // $this->tpl = new \TemplateAdmin('admin');
 
-        $conn = $this->getContainer()->get('orm.manager')
-            ->getConnection('instance');
+        // $conn = $this->getContainer()->get('orm.manager')
+        //     ->getConnection('instance');
 
-        $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
+        // $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
 
-        switch ($source) {
-            case 'youtube':
-                if (is_null($this->channel)) {
-                    throw new \Exception(
-                        "For Youtube videos you need to select a channel"
-                    );
-                }
+        // switch ($source) {
+        //     case 'youtube':
+        //         if (is_null($this->channel)) {
+        //             throw new \Exception(
+        //                 "For Youtube videos you need to select a channel"
+        //             );
+        //         }
 
-                $this->importYoutubeVideos();
+        //         $this->importYoutubeVideos();
 
-                $end = time();
-                $this->displayFinalInfo($end - $start);
-                break;
+        //         $end = time();
+        //         $this->displayFinalInfo($end - $start);
+        //         break;
 
-            case 'csv':
-                $videos = array_map('str_getcsv', @file($csv));
+        //     case 'csv':
+        //         $videos = array_map('str_getcsv', @file($csv));
 
-                if (!is_array($videos) || empty($videos)) {
-                    throw new \Exception("Invalid csv file");
-                }
+        //         if (!is_array($videos) || empty($videos)) {
+        //             throw new \Exception("Invalid csv file");
+        //         }
 
-                $this->importHTMLVideosFromCsv($videos);
+        //         $this->importHTMLVideosFromCsv($videos);
 
-                $end = time();
-                $this->displayFinalInfo($end - $start);
-                break;
+        //         $end = time();
+        //         $this->displayFinalInfo($end - $start);
+        //         break;
 
-            default:
-                throw new \Exception(
-                    "There is no support for the selected source"
-                );
-                break;
-        }
+        //     default:
+        //         throw new \Exception(
+        //             "There is no support for the selected source"
+        //         );
+        //         break;
+        // }
     }
 
     /**

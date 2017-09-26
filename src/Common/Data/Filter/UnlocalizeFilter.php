@@ -9,35 +9,8 @@
  */
 namespace Common\Data\Filter;
 
-use Common\Data\Filter\LocalizeFilter;
-
-/**
- * Defines test cases for UnlocalizeFilter class.
- */
 class UnlocalizeFilter extends LocalizeFilter
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function filter($items)
-    {
-        if (empty($items) || empty($this->getParameter('keys'))) {
-            return $items;
-        }
-
-        if (is_array($items)) {
-            foreach ($items as $item) {
-                $this->filterItem($item);
-            }
-
-            return $items;
-        }
-
-        $this->filterItem($items);
-
-        return $items;
-    }
-
     /**
      * Filters a value and returns an array of values basing on locales.
      *
@@ -47,10 +20,17 @@ class UnlocalizeFilter extends LocalizeFilter
      */
     public function filterValue($value)
     {
-        $locales = $this->getParameter('locales');
-        $locale  = $this->getParameter('locale');
+        // Locales from direct parameters
+        $locales = $this->getParameter('locales', null, false);
 
-        if (empty($locales) || empty($locale)) {
+        // Locales from config
+        if (empty($locales)) {
+            $locale  = $this->container->get('core.locale');
+            $locales = !empty($locale->getAvailableLocales()) ?
+                array_keys($locale->getAvailableLocales()) : [];
+        }
+
+        if (empty($locales)) {
             return $value;
         }
 
@@ -61,6 +41,6 @@ class UnlocalizeFilter extends LocalizeFilter
             return $value;
         }
 
-        return array_fill_keys([ $locale ], $value);
+        return array_fill_keys($locales, $value);
     }
 }

@@ -23,74 +23,22 @@ class UnlocalizeFilterTest extends KernelTestCase
      */
     public function setUp()
     {
-        $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'hasParameter' ])
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getAvailableLocales' ])
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get', 'hasParameter' ])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->with('core.locale')->willReturn($this->locale);
+
         $this->filter = new UnlocalizeFilter($this->container, [
-            'keys'    => [ 'xyzzy' ],
-            'locale'  => 'es',
             'locales' => [ 'es', 'gl' ]
         ]);
-    }
-
-    /**
-     * Tests filter.
-     */
-    public function testFilter()
-    {
-        $entities = [
-            new Entity([
-                'flob' => 'norf',
-                'xyzzy' => [
-                    'en' => 'grault',
-                    'es' => 'frog',
-                    'gl' => 'corge',
-                ]
-            ]),
-            new Entity([
-                'flob'  => 'baz',
-                'xyzzy' => 'corge'
-            ]),
-            new Entity([
-                'flob' => 'baz',
-                'xyzzy' => [
-                    'en' => 'quux',
-                    'gl' => 'mumble',
-                ]
-            ])
-        ];
-
-        $this->assertEmpty($this->filter->filter([]));
-        $this->assertEmpty($this->filter->filter(null));
-        $this->assertEquals('wobble', $this->filter->filter('wobble'));
-
-        $this->filter->filter($entities);
-        $this->assertEquals([ 'en' => 'grault', 'es' => 'frog', 'gl' => 'corge' ], $entities[0]->xyzzy);
-        $this->assertEquals([ 'es' => 'corge' ], $entities[1]->xyzzy);
-    }
-
-    /**
-     * Tests filterItem with object and non-object values.
-     */
-    public function testFilterItem()
-    {
-        $item   = [ 'fubar', 'glorp' ];
-        $entity = new Entity([ 'flob' => 'norf', 'xyzzy' => 'grault' ]);
-
-        $method = new \ReflectionMethod($this->filter, 'filterItem');
-        $method->setAccessible(true);
-
-        $this->assertEmpty($method->invokeArgs($this->filter, [ 'wobble' ]));
-
-        $method->invokeArgs($this->filter, [ $item, [ 'keys' => [ 0 ] ] ]);
-        $this->assertEquals([ 'fubar', 'glorp' ], $item);
-
-        $method->invokeArgs($this->filter, [ $entity ]);
-
-        $this->assertEquals('norf', $entity->flob);
-        $this->assertEquals([ 'es' => 'grault' ], $entity->xyzzy);
     }
 
     /**
@@ -101,9 +49,9 @@ class UnlocalizeFilterTest extends KernelTestCase
         $method = new \ReflectionMethod($this->filter, 'filterValue');
         $method->setAccessible(true);
 
-        $this->assertEquals([ 'es' => 'fred' ], $method->invokeArgs($this->filter, [ 'fred' ]));
-        $this->assertEquals([ 'es' => null ], $method->invokeArgs($this->filter, [ null ]));
-        $this->assertEquals([ 'es' => 124 ], $method->invokeArgs($this->filter, [ 124 ]));
+        $this->assertEquals([ 'es' => 'fred', 'gl' => 'fred' ], $method->invokeArgs($this->filter, [ 'fred' ]));
+        $this->assertEquals([ 'es' => null, 'gl' => null ], $method->invokeArgs($this->filter, [ null ]));
+        $this->assertEquals([ 'es' => 124, 'gl' => 124 ], $method->invokeArgs($this->filter, [ 124 ]));
         $this->assertEquals(
             [ 'es' => 'mumble', 'gl' => 'glork' ],
             $method->invokeArgs($this->filter, [ [ 'es' => 'mumble', 'gl' => 'glork' ] ])
@@ -113,8 +61,38 @@ class UnlocalizeFilterTest extends KernelTestCase
             $method->invokeArgs($this->filter, [ [ 'gl' => 'mumble' ] ])
         );
         $this->assertEquals(
-            [ 'es' => [ 'en' => 'mumble' ] ],
+            [ 'es' => [ 'en' => 'mumble' ], 'gl' => [ 'en' => 'mumble' ] ],
             $method->invokeArgs($this->filter, [ [ 'en' => 'mumble' ] ])
+        );
+    }
+
+    /**
+     * Tests filterValue when no locales defined.
+     */
+    public function testFilterValueWhenLocalesInService()
+    {
+        $this->locale->expects($this->any())->method('getAvailableLocales')
+            ->willReturn([ 'es' => 'Spanish', 'gl' => 'Galician' ]);
+
+        $method = new \ReflectionMethod($this->filter, 'filterValue');
+        $method->setAccessible(true);
+
+        $property = new \ReflectionProperty($this->filter, 'params');
+        $property->setAccessible(true);
+        $params = $property->getValue($this->filter);
+        unset($params['locales']);
+        $property->setValue($this->filter, $params);
+
+        $this->assertEquals([ 'es' => 'fred', 'gl' => 'fred' ], $method->invokeArgs($this->filter, [ 'fred' ]));
+        $this->assertEquals([ 'es' => null, 'gl' => null ], $method->invokeArgs($this->filter, [ null ]));
+        $this->assertEquals([ 'es' => 124, 'gl' => 124 ], $method->invokeArgs($this->filter, [ 124 ]));
+        $this->assertEquals(
+            [ 'es' => 'mumble', 'gl' => 'glork' ],
+            $method->invokeArgs($this->filter, [ [ 'es' => 'mumble', 'gl' => 'glork' ] ])
+        );
+        $this->assertEquals(
+            [ 'gl' => 'mumble' ],
+            $method->invokeArgs($this->filter, [ [ 'gl' => 'mumble' ] ])
         );
     }
 
@@ -123,21 +101,28 @@ class UnlocalizeFilterTest extends KernelTestCase
      */
     public function testFilterValueWhenNoLocales()
     {
-        $filter = new UnlocalizeFilter($this->container, [ 'keys' => [ 'xyzzy' ] ]);
+        $this->locale->expects($this->any())->method('getAvailableLocales')
+            ->willReturn(null);
 
-        $method = new \ReflectionMethod($filter, 'filterValue');
+        $method = new \ReflectionMethod($this->filter, 'filterValue');
         $method->setAccessible(true);
 
-        $this->assertEquals('fred', $method->invokeArgs($filter, [ 'fred' ]));
-        $this->assertEquals(null, $method->invokeArgs($filter, [ null ]));
-        $this->assertEquals(124, $method->invokeArgs($filter, [ 124 ]));
+        $property = new \ReflectionProperty($this->filter, 'params');
+        $property->setAccessible(true);
+        $params = $property->getValue($this->filter);
+        unset($params['locales']);
+        $property->setValue($this->filter, $params);
+
+        $this->assertEquals('fred', $method->invokeArgs($this->filter, [ 'fred' ]));
+        $this->assertEquals(null, $method->invokeArgs($this->filter, [ null ]));
+        $this->assertEquals(124, $method->invokeArgs($this->filter, [ 124 ]));
         $this->assertEquals(
             [ 'es' => 'mumble', 'gl' => 'glork' ],
-            $method->invokeArgs($filter, [ [ 'es' => 'mumble', 'gl' => 'glork' ] ])
+            $method->invokeArgs($this->filter, [ [ 'es' => 'mumble', 'gl' => 'glork' ] ])
         );
         $this->assertEquals(
             [ 'gl' => 'mumble' ],
-            $method->invokeArgs($filter, [ [ 'gl' => 'mumble' ] ])
+            $method->invokeArgs($this->filter, [ [ 'gl' => 'mumble' ] ])
         );
     }
 }
