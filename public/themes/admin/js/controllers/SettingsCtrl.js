@@ -376,7 +376,7 @@
             settings: angular.copy($scope.settings)
           };
 
-          data = cleaner.clean(data);
+          data = cleaner.clean(data, true);
 
           // Save only locale codes
           if (data.settings.locale.frontend.language.available instanceof Array) {
