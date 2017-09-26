@@ -120,7 +120,8 @@ class LocalRepository
 
         return array_filter($contents, function ($a) use ($criteria) {
             foreach ($criteria as $key => $value) {
-                $pattern = strtolower(trim(preg_replace('/\s*,\s*/', '|', $value)));
+                // Force AND between tags in the same filter
+                $pattern = strtolower(trim(preg_replace('/\s*,\s*/', '.*?', $value)));
 
                 if (property_exists($a, $key)
                     && preg_match(
