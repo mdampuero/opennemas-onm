@@ -431,13 +431,104 @@
                 <div class="row">
                   <div class="col-md-6">
                     <h4>
+                      <i class="fa fa-language m-r-5"></i>
+                      {t}Language{/t}
+                    </h4>
+                    <div class="form-group">
+                      <label class="form-label" for="locale-backend">
+                        {t}Control Panel Language{/t}
+                      </label>
+                      <span class="help">
+                        {t}Used for messages, interface and units in the control panel.{/t}
+                      </span>
+                      <div class="controls">
+                        <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend.language.selected" required>
+                          <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.backend.language.selected %]">[% name %]</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-10">
+                        <div class="form-group">
+                          <label class="form-label" for="frontend-language">
+                            {t}Newspaper Language{/t}
+                          </label>
+                          <span class="help">
+                            {t}Used for messages, interface and units in the newspaper.{/t}
+                          </span>
+                          <div class="controls">
+                            {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
+                              <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected" required>
+                                <option value="">{t}Select a language...{/t}</option>
+                                <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
+                              </select>
+                            {/is_module_activated}
+                            {is_module_activated name="es.openhost.module.multilanguage"}
+                              <div class="input-group">
+                                <span class="input-group-addon">
+                                  <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
+                                </span>
+                                <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
+                              </div>
+                            {/is_module_activated}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {is_module_activated name="es.openhost.module.multilanguage"}
+                      <div class="form-group m-b-100" ng-show="settings.locale.frontend.language.available.length > 0">
+                        <label class="form-label">{t}Main language{/t}</label>
+                        <span class="help">
+                          <i class="fa fa-circle-info text-info"></i>
+                          {t}When no language in the URL, the main language will be used{/t}
+                        </span>
+                        <div class="row m-b-5" ng-repeat="item in settings.locale.frontend.language.available">
+                          <div class="col-xs-12">
+                            <div class="row">
+                              <div class="col-xs-12">
+                                <div class="p-t-10 radio">
+                                  <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
+                                  <label for="radio-[% $index %]">
+                                    [% item.name %] ([% item.code %])
+                                    <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row m-b-10">
+                              <div class="col-xs-10">
+                                <div class="form-group" ng-class="{ 'has-error': settingForm['slug-' + $index].$invalid }">
+                                  <input class="form-control" name="slug-[% $index %]" ng-maxlength="2" ng-minlength="2" ng-model="settings.locale.frontend.language.slug[item.code]" placeholder="{t}Customize the language appears in the URL (e.g. en).{/t}" required type="text">
+                                  <div class="absolute help" ng-if="settingForm['slug-' + $index].$valid">
+                                    <i class="fa fa-info-circle text-info m-l-5 m-r-5"></i>
+                                    {t}URLs will look like http://newspaper.opennemas.com/[% settings.locale.frontend.language.slug[item.code] %]/<slug>{/t}
+                                  </div>
+                                  <div class="absolute help" ng-if="!settingForm['slug-' + $index].$valid">
+                                    <i class="fa fa-exclamation-circle text-danger m-l-5 m-r-5"></i>
+                                    <span class="no-animate text-danger">{t}Locale needs 2 characters{/t}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-xs-2">
+                                <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
+                                  <i class="fa fa-times text-danger"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {/is_module_activated}
+                  </div>
+                  <div class="col-md-6">
+                    <h4>
                       <i class="fa fa-map-marker m-r-5"></i>
                       {t}Location{/t}
                     </h4>
                     <div class="form-group">
                       <label class="form-label" for="country">{t}Country{/t}</label>
                       <div class="controls">
-                        <select id="country" name="country" ng-model="instance.country">
+                        <select id="country" name="country" ng-model="instance.country" required>
                           <option value="">{t}Select a country{/t}...</option>
                           <option value="[% code %]" ng-repeat="(code,name) in extra.countries" ng-selected="[% code === instance.country %]">[% name %]</option>
                         </select>
@@ -451,98 +542,105 @@
                         {t}Used for all the dates used in your webpage.{/t}
                       </span>
                       <div class="controls">
-                        <select name="timezone" ng-model="settings.locale.backend.timezone">
+                        <select name="timezone" ng-model="settings.locale.backend.timezone" required>
+                          <option value="">{t}Select a timezone...{/t}</option>
                           <option value="[% timezone %]" ng-repeat="timezone in extra.timezones" ng-selected="[% timezone === settings.locale.backend.timezone %]">[% timezone %]</option>
                         </select>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <h4>
-                      <i class="fa fa-language m-r-5"></i>
-                      {t}Language{/t}
-                    </h4>
-                    <div class="form-group">
-                      <label class="form-label" for="locale-backend">
-                        {t}Control Panel Language{/t}
-                      </label>
-                      <span class="help">
-                        {t}Used for messages, interface and units in the control panel.{/t}
-                      </span>
-                      <div class="controls">
-                        <select id="locale-backend" name="locale-backend" ng-model="settings.locale.backend.language.selected">
-                          <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.backend.language.selected %]">[% name %]</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="frontend-language">
-                        {t}Newspaper Language{/t}
-                      </label>
-                      <span class="help">
-                        {t}Used for messages, interface and units in the newspaper.{/t}
-                      </span>
-                      {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
-                        <div class="controls">
-                          <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected">
-                            <option value="">{t}Select a language...{/t}</option>
-                            <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
-                          </select>
-                        </div>
-                      {/is_module_activated}
-                      {is_module_activated name="es.openhost.module.multilanguage"}
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
-                          </span>
-                          <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
-                        </div>
-                      {/is_module_activated}
-                    </div>
-                    {is_module_activated name="es.openhost.module.multilanguage"}
+                    {is_module_activated name="es.openhost.module.translations"}
+                      <h4>
+                        <i class="fa fa-globe m-r-5"></i>
+                        {t}Automatic translations{/t}
+                      </h4>
                       <div class="form-group">
-                        <div class="form-group m-b-100" ng-show="settings.locale.frontend.language.available.length > 0">
-                          <label class="form-label">{t}Main language{/t}</label>
-                          <span class="help">
-                            <i class="fa fa-circle-info text-info"></i>
-                            {t}When no language in the URL, the main language will be used{/t}
-                          </span>
-                          <div class="col-md-12">
-                            <div class="row m-b-5" ng-repeat="item in settings.locale.frontend.language.available">
-                              <div class="col-md-12">
-                                <div class="row">
-                                  <div class="col-xs-12">
-                                    <div class="p-t-10 radio">
-                                      <input id="radio-[% $index %]" ng-model="settings.locale.frontend.language.selected" type="radio" value="[% item.code %]">
-                                      <label for="radio-[% $index %]">
-                                        [% item.name %] ([% item.code %])
-                                        <strong ng-show="settings.locale.frontend.language.selected == item.code">({t}Main{/t})</strong>
-                                      </label>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row m-b-10">
-                                <div class="col-xs-11">
-                                  <div class="form-group" ng-class="{ 'has-error': settingForm['slug-' + $index].$invalid }">
-                                    <input class="form-control" name="slug-[% $index %]" ng-maxlength="2" ng-minlength="2" ng-model="settings.locale.frontend.language.slug[item.code]" placeholder="{t}Customize the language appears in the URL (e.g. en).{/t}" required type="text">
-                                    <div class="absolute help" ng-if="settingForm['slug-' + $index].$valid">
-                                      <i class="fa fa-info-circle text-info m-l-5 m-r-5"></i>
-                                      {t}URLs will look like http://newspaper.opennemas.com/[% settings.locale.frontend.language.slug[item.code] %]/<slug>{/t}
-                                    </div>
-                                    <div class="absolute help" ng-if="!settingForm['slug-' + $index].$valid">
-                                      <i class="fa fa-exclamation-circle text-danger m-l-5 m-r-5"></i>
-                                      <span class="no-animate text-danger">{t}Locale needs 2 characters{/t}</span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-xs-1">
-                                  <button class="btn btn-white" ng-click="removeLocale($index)" type="button">
-                                    <i class="fa fa-times text-danger"></i>
-                                  </button>
+                        <label class="form-label" for="frontend-language">
+                          {t}Services for automatic translations{/t}
+                        </label>
+                        <span class="help">
+                          {t}Services to translate your contents to a especific language.{/t}
+                        </span>
+                        <div ng-repeat="code in settings.translators track by $index">
+                          <div class="row" >
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="form-label">
+                                  {t}Translate from{/t}
+                                </label>
+                                <div class="controls">
+                                  <select class="form-control" ng-model="settings.translators[$index].from" required>
+                                    <option value="">{t}Select from language{/t}</option>
+                                    <option value="[% item.code %]" ng-repeat="item in settings.locale.frontend.language.available">[% item.name %]</option>
+                                  </select>
                                 </div>
                               </div>
                             </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="form-label">
+                                  {t}Translate to{/t}
+                                </label>
+                                <div class="controls">
+                                  <select class="form-control" ng-model="settings.translators[$index].to" ng-disabled="!settings.translators[$index].from" required>
+                                    <option value="">{t}Select to language{/t}</option>
+                                    <option value="[% item.code %]" ng-repeat="item in filterFromLanguages($index)">[% item.name %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row" ng-show="settings.translators[$index].translator && getExtraParams($index).length > 0">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label class="form-label">
+                                  {t}Required params for Service{/t}
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-4">
+                              <div class="form-group">
+                                <label class="form-label">
+                                  {t}Service{/t}
+                                </label>
+                                <div class="controls">
+                                  <select class="form-control" ng-model="settings.translators[$index].translator" required>
+                                    <option value="">{t}Select a service...{/t}</option>
+                                    <option value="[% service.translator %]" ng-repeat="service in extra.translation_services" >[% service.translator %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4" ng-repeat="(translationParam, text) in getExtraParams($index)" ng-show="settings.translators[$parent.$index].translator">
+                              <div class="form-group">
+                                <label class="form-label">
+                                  [% text %]
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" ng-model="settings.translators[$parent.$index].extra[translationParam]" type="text">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 m-b-15 text-center">
+                              <button class="btn btn-block btn-danger" ng-click="removeTranslator($index)" type="button">
+                                <i class="fa fa-trash-o"></i>
+                                {t}Delete{/t}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-t-30 text-center">
+                          <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4" ng-show="settings.locale.frontend && settings.locale.frontend.language.available.length > 1" type="button">
+                            <button class="btn btn-block btn-white" ng-click="addTranslator()">
+                              <i class="fa fa-plus"></i>
+                              {t}Add{/t}
+                            </button>
+                          </div>
+                          <div class="col-md-12" ng-show="settings.locale.frontend && settings.locale.frontend.language.available.length == 1">
+                            <h5>{t}Must have at least 2 languages to configure the translation system{/t}</h5>
                           </div>
                         </div>
                       </div>

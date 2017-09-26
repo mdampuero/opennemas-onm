@@ -1000,10 +1000,8 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('site_description', 's:102:\"Basic Opennemas - Opennemas newspapers - CMS periodico digital - Online service for digital newspapers\";'),
 ('site_footer', 's:101:\"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\n&nbsp;OpenHost, S.L.</p>\n\";'),
 ('site_keywords', 's:114:\"Basic Opennemas viajes - CMS, openNemas, servicio, online, periÃ³dico, digital, service, newspapers, media manager\";'),
-('site_language', 's:5:\"es_ES\";'),
 ('site_name', 's:15:\"Basic Opennemas\";'),
 ('site_title', 's:102:\"Basic Opennemas - Opennemas newspapers - CMS periodico digital - Online service for digital newspapers\";'),
-('time_zone', 's:13:\"Europe/Madrid\";'),
 ('tradedoubler_id', 's:0:\"\";'),
 ('twitter_page', 's:28:\"http://twitter.com/opennemas\";'),
 ('video_settings', 'a:5:{s:12:\"total_widget\";s:1:\"6\";s:11:\"total_front\";s:1:\"0\";s:16:\"total_front_more\";s:2:\"12\";s:12:\"front_offset\";s:1:\"0\";s:13:\"total_gallery\";s:2:\"20\";}');/*!40000 ALTER TABLE `settings` ENABLE KEYS */;

@@ -16,12 +16,13 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
         $this->paginator = new Paginator($this->router);
 
         $reflection = new \ReflectionClass(get_class($this->paginator));
-        $this->methods['getFirstLink'] = $reflection->getMethod('getFirstLink');
-        $this->methods['getLastLink'] = $reflection->getMethod('getLastLink');
-        $this->methods['getLinks'] = $reflection->getMethod('getLinks');
-        $this->methods['getNextLink'] = $reflection->getMethod('getNextLink');
+
+        $this->methods['getFirstLink']    = $reflection->getMethod('getFirstLink');
+        $this->methods['getLastLink']     = $reflection->getMethod('getLastLink');
+        $this->methods['getLinks']        = $reflection->getMethod('getLinks');
+        $this->methods['getNextLink']     = $reflection->getMethod('getNextLink');
         $this->methods['getPreviousLink'] = $reflection->getMethod('getPreviousLink');
-        $this->methods['getUrl'] = $reflection->getMethod('getUrl');
+        $this->methods['getUrl']          = $reflection->getMethod('getUrl');
 
         foreach ($this->methods as $method) {
             $method->setAccessible(true);

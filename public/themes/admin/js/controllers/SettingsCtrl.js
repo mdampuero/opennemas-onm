@@ -13,8 +13,8 @@
      * @description
      *   Handles actions for paywall settings configuration form.
      */
-    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger',
-      function($controller, $rootScope, $scope, http, messenger) {
+    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http', 'cleaner', 'messenger',
+      function($controller, $rootScope, $scope, http, cleaner, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -60,7 +60,8 @@
               timezone: 'UTC'
             }
           },
-          rtb_files: []
+          rtb_files: [],
+          translators: []
         };
 
         /**
@@ -125,6 +126,55 @@
         };
 
         /**
+         * @function filterFromLanguages
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Filter Filter all selected languages
+         *
+         * @param {Integer } element to filter
+         */
+        $scope.filterFromLanguages = function(index)  {
+          if(!$scope.settings.translators[index].from) {
+            return [];
+          }
+
+          var from = $scope.settings.translators[index].from;
+
+          return $scope.settings.locale.frontend.language.available
+            .filter(function (e)  {
+              return e.code !== from;
+            });
+        };
+
+        /**
+         * @function getExtraParams
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Get all extra params for a translation service
+         *
+         * @param {Integer} index The index of the translation service
+         */
+        $scope.getExtraParams = function(index)  {
+          if(!$scope.extra.translation_services)  {
+            return [];
+          }
+
+          var translator = $scope.settings.translators[index].translator;
+          var translators = $scope.extra.translation_services
+            .filter(function (e) {
+              return e.translator === translator;
+            });
+
+          if (translators.length === 0) {
+            return [];
+          }
+
+          return translators[0].parameters;
+        };
+
+        /**
          * @function expand
          * @memberOf SystemSettingsCtrl
          *
@@ -162,12 +212,12 @@
          * @return {Array} The list of locales.
          */
         $scope.getLocales = function(query) {
+          $scope.searching = true;
+
           var route = {
               name: 'api_v1_backend_settings_locale_list',
               params: { q: query }
           };
-
-          $scope.searching = true;
 
           return http.get(route).then(function(response) {
             $scope.searching = false;
@@ -326,6 +376,8 @@
             settings: angular.copy($scope.settings)
           };
 
+          data = cleaner.clean(data, true);
+
           // Save only locale codes
           if (data.settings.locale.frontend.language.available instanceof Array) {
             var frontend = data.settings.locale.frontend.language.available
@@ -387,19 +439,6 @@
             site_logo:            $scope.settings.site_logo
           };
 
-          if ($scope.settings.locale.frontend.language.available instanceof Array) {
-            var locales = [];
-
-            for (var i = 0; i < $scope.settings.locale.frontend.language.available.length; i++) {
-              locales.push({
-                code: $scope.settings.locale.frontend.language.available[i],
-                name: $scope.extra.locales.frontend[$scope.settings.locale.frontend.language.available[i]],
-              });
-            }
-
-            $scope.settings.locale.frontend.language.available = locales;
-          }
-
           if ($scope.settings.site_logo) {
             $scope.settings.site_logo =
               $scope.extra.prefix + $scope.settings.site_logo;
@@ -414,6 +453,52 @@
             $scope.settings.favico =
               $scope.extra.prefix + $scope.settings.favico;
           }
+
+          if (!$scope.settings.locale.frontend.language.slug) {
+            $scope.settings.locale.frontend.language.slug = {};
+          }
+
+          // Change value to string for old numeric timezones
+          if (!isNaN(+$scope.settings.locale.backend.timezone) &&
+              angular.isNumber(+$scope.settings.locale.backend.timezone)) {
+            $scope.settings.locale.backend.timezone = $scope.extra
+              .timezones[+$scope.settings.locale.backend.timezone
+            ];
+          }
+
+          if (!angular.isArray($scope.settings.locale.frontend.language.available)) {
+            return;
+          }
+
+          $scope.settings.locale.frontend.language.available =
+            $scope.settings.locale.frontend.language.available.map(function(e) {
+              return { code: e, name: $scope.extra.locales.frontend[e] };
+            });
+        };
+
+        /**
+         * @function addTranslator
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Add new translator.
+         */
+        $scope.addTranslator = function() {
+          $scope.settings.translators
+            .push({ from: '', to: '', translator: '' });
+        };
+
+        /**
+         * @function removeTranslator
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Removes a translator.
+         *
+         * @param {Integer} index The index of the input to remove.
+         */
+        $scope.removeTranslator = function(index) {
+          $scope.settings.translators.splice(index, 1);
         };
       }
     ]);

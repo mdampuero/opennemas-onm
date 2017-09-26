@@ -19,7 +19,7 @@ class Locale
      *
      * @var array
      */
-    public $config = [
+    protected $config = [
         'backend' => [
             'language' => [ 'selected'  => 'en_US', 'slug' => [] ],
             'timezone' => 'UTC'
@@ -151,6 +151,10 @@ class Locale
      */
     public function getAvailableLocales()
     {
+        if (empty($this->config[$this->context]['language']['available'])) {
+            return [];
+        }
+
         $locales = [];
 
         foreach ($this->config[$this->context]['language']['available'] as $locale) {
