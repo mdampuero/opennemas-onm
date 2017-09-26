@@ -27,9 +27,10 @@
          * @description
          *   Removes $$hashKey properties from object.
          *
-         * @param {Object} obj The object to clean.
+         * @param {Object}  obj   The object to clean.
+         * @param {Boolean} empty Whether to remove empty arrays and objects.
          */
-        this.cleanObject = function(obj) {
+        this.cleanObject = function(obj, empty) {
           if (!obj) {
             return;
           }
@@ -38,10 +39,10 @@
 
           for (var key in obj) {
             // Clean empty objects and arrays
-            if ((angular.isArray(obj[key]) &&
+            if (empty && ((angular.isArray(obj[key]) &&
                   obj[key].length === 0) ||
                 (angular.isObject(obj[key]) &&
-                  Object.keys(obj[key]).length === 0)) {
+                  Object.keys(obj[key]).length === 0))) {
               delete obj[key];
 
               continue;
