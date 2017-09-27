@@ -126,7 +126,7 @@ class MenusController extends Controller
             ));
         }
 
-        $params = $this->getEditingData();
+        $params = $this->getCategories();
 
         return $this->render('menues/new.tpl', [
             'categories'       => $params['categories'],
