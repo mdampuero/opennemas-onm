@@ -27,29 +27,6 @@ use Common\Core\Controller\Controller;
 class AdvertisementController extends Controller
 {
     /**
-     * Displays an advertisement given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     */
-    public function showAction(Request $request)
-    {
-        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $ad = $this->get('entity_repository')->find('Advertisement', $id);
-
-        if (!is_object($ad)) {
-            throw new ResourceNotFoundException();
-        }
-
-        return $this->render('ads/advertisement.tpl', [
-            'banner'  => $ad,
-            'content' => $ad,
-            'x-tags' => 'ad,' . $id
-        ]);
-    }
-
-    /**
      * Redirects the user to the target URL defined by an advertisement
      *
      * @param Request $request the request object
@@ -76,6 +53,29 @@ class AdvertisementController extends Controller
         } else {
             return new Response('<script type="text/javascript">window.close();</script>');
         }
+    }
+
+    /**
+     * Displays an advertisement given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     */
+    public function showAction(Request $request)
+    {
+        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $ad = $this->get('entity_repository')->find('Advertisement', $id);
+
+        if (!is_object($ad)) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $this->render('ads/advertisement.tpl', [
+            'banner'  => $ad,
+            'content' => $ad,
+            'x-tags' => 'ad,' . $id
+        ]);
     }
 
     /**
