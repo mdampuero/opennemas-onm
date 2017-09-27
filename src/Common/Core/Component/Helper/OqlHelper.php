@@ -42,6 +42,9 @@ class OqlHelper
         $order  = $this->getOrder();
         $page   = ($offset / $epp) + 1;
 
+        // Replace like operator
+        $this->oql = preg_replace('/\s+~\s+/', ' LIKE ', $this->oql);
+
         return [ $this->oql, $order, $epp, $page ];
     }
 
