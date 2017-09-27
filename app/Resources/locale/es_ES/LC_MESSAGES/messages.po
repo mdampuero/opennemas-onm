@@ -8900,6 +8900,15 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 #~ msgid "Viewed:"
 #~ msgstr "Visualizaciones:"
 
+msgid "Advanced"
+msgstr "Avanzado"
+
+msgid "Authorized Digital Sellers"
+msgstr "Authorized Digital Sellers"
+
+msgid "This will be the content of the file ads.txt on your root domain"
+msgstr "Este será el contenido del archivo ads.txt en la raíz de su dominio"
+
 #~ msgid ""
 #~ "You can get your Facebook App Keys from <a class=\"external-link\" ng-"
 #~ "click=\"$event.stopPropagation();\"  href=\"https://developers.facebook."

@@ -67,6 +67,9 @@
                   <docdata management-status="usable">
                     <doc.rights provider="Opennemas"/>
                     <doc-id id-string="{$article->id}" />
+                    <key-list>
+                      <keyword key="{$article->metadata}"/>
+                    </key-list>
                   </docdata>
                 </head>
                 <body>

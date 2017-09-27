@@ -93,7 +93,7 @@ class Importer
         foreach ($this->config['filters'] as $filter) {
             $criteria = array_merge(
                 $criteria,
-                [ 'title' => $filter, 'body' => $filter ]
+                [ 'tags' => $filter, 'title' => $filter, 'body' => $filter ]
             );
 
             $items     = $this->repository->findBy($criteria);
@@ -208,7 +208,8 @@ class Importer
         $data = get_object_vars($author);
 
         if (array_key_exists('email', $data)) {
-            $user = $this->container->get('user_repository')->findOneBy([
+            $um   = $this->container->get('user_repository');
+            $user = $um->findOneBy([
                 'union'    => 'or',
                 'email'    => [ [ 'value' => $data['email'] ] ],
                 'username' => [ [ 'value' => $data['email'] ] ]
@@ -377,10 +378,9 @@ class Importer
         ];
 
         if ($resource->type === 'photo' || $target === 'photo') {
-            $data['local_file'] = realpath($this->repository->syncPath . DS
-                . $this->config['id'] . DS . $resource->file_name);
-
             $data['original_filename'] = $resource->file_name;
+            $data['local_file']        = realpath($this->repository->syncPath
+                . DS . $this->config['id'] . DS . $resource->file_name);
 
             return $data;
         }
