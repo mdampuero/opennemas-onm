@@ -22,7 +22,7 @@ class Opinion extends Content
      *
      * @var int
      */
-    public $pk_opinion            = null;
+    public $pk_opinion = null;
 
     /**
      * The categories this opinion belongs to
@@ -36,21 +36,21 @@ class Opinion extends Content
      *
      * @var int
      */
-    public $fk_author             = null;
+    public $fk_author = null;
 
     /**
      * The author img id
      *
      * @var int
      */
-    public $fk_author_img         = null;
+    public $fk_author_img = null;
 
     /**
      * The type of the opinion (0,1,2)
      *
      * @var int
      */
-    public $type_opinion          = null;
+    public $type_opinion = null;
 
     /**
      * Initializes the opinion object given an id
@@ -77,7 +77,7 @@ class Opinion extends Content
     {
         switch ($name) {
             case 'uri':
-                $type ='opinion';
+                $type = 'opinion';
                 if ($this->fk_author == 0) {
                     if ((int) $this->type_opinion == 1) {
                         $authorName = 'Editorial';
@@ -109,27 +109,16 @@ class Opinion extends Content
                     }
                 }
 
-                $uri =  Uri::generate(
-                    $type,
-                    array(
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => urlencode($this->slug),
-                        'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
-                    )
-                );
+                $uri = Uri::generate( $type, [
+                    'id'       => sprintf('%06d', $this->id),
+                    'date'     => date('YmdHis', strtotime($this->created)),
+                    'slug'     => urlencode($this->slug),
+                    'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
+                ]);
 
                 return $uri;
-
-                break;
-            case 'slug':
-                return \Onm\StringUtils::getTitle($this->title);
-
-                break;
             case 'content_type_name':
                 return 'Opinion';
-
-                break;
             case 'author_object':
                 $ur = getService('user_repository');
                 if ((int) $this->type_opinion == 1) {
@@ -145,14 +134,9 @@ class Opinion extends Content
                 } else {
                     $authorObj = $ur->find($this->fk_author);
                 }
-
                 return $authorObj;
-
-                break;
             default:
                 return parent::__get($name);
-
-                break;
         }
     }
 
@@ -166,7 +150,7 @@ class Opinion extends Content
      */
     public function create($data)
     {
-        $data['position'] =  1;
+        $data['position'] = 1;
         $data['category'] = 4; // force internal category name
 
         // Editorial or director
@@ -175,27 +159,18 @@ class Opinion extends Content
         }
 
         // Set author img to null if not exist
-        (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
+        $data['fk_author_img'] = isset($data['fk_author_img']) ?
+            $data['fk_author_img'] : null;
 
         parent::create($data);
 
-        $values = [
-            $this->id,
-            (int) $data['fk_author'],
-            (int) $data['fk_author_img'],
-            $data['type_opinion']
-        ];
-
         try {
-            $rs = getService('dbal_connection')->insert(
-                "opinions",
-                [
-                    'pk_opinion'    => $this->id,
-                    'fk_author'     => (int) $data['fk_author'],
-                    'fk_author_img' => (int) $data['fk_author_img'],
-                    'type_opinion'  => $data['type_opinion'],
-                ]
-            );
+            getService('dbal_connection')->insert('opinions', [
+                'pk_opinion'    => $this->id,
+                'fk_author'     => (int) $data['fk_author'],
+                'fk_author_img' => (int) $data['fk_author_img'],
+                'type_opinion'  => $data['type_opinion'],
+            ]);
 
             if (array_key_exists('summary', $data) && !empty($data['summary'])) {
                 parent::setMetadata('summary', $data['summary']);
@@ -204,19 +179,22 @@ class Opinion extends Content
             if (array_key_exists('img1', $data) && !empty($data['img1'])) {
                 parent::setMetadata('img1', $data['img1']);
             }
+
             if (array_key_exists('img2', $data) && !empty($data['img2'])) {
                 parent::setMetadata('img2', $data['img2']);
             }
+
             if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
                 parent::setMetadata('img1_footer', $data['img1_footer']);
             }
+
             if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
                 parent::setMetadata('img2_footer', $data['img2_footer']);
             }
 
             return $this->id;
         } catch (\Exception $e) {
-            error_log('Error on Opinion::create: '.$e->getMessage());
+            error_log('Error on Opinion::create: ' . $e->getMessage());
             return false;
         }
     }
@@ -231,14 +209,17 @@ class Opinion extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if ((int) $id <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT contents.*, opinions.*, contents_categories.*, users.name, users.bio, users.url, users.avatar_img_id FROM contents '
-                .'LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN opinions ON pk_content = pk_opinion '
-                .'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
+                'SELECT contents.*, opinions.*, contents_categories.*, users.name, users.bio, users.url, '
+                . 'users.avatar_img_id FROM contents '
+                . 'LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                . 'LEFT JOIN opinions ON pk_content = pk_opinion '
+                . 'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
                 [ $id ]
             );
 
@@ -277,21 +258,18 @@ class Opinion extends Content
         if (!isset($data['fk_author'])) {
             $data['fk_author'] = $data['type_opinion'];
         } // Editorial o director
-        (isset($data['fk_author_img']))
-            ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
+
+        $data['fk_author_img'] = isset($data['fk_author_img']) ?
+            $data['fk_author_img'] : null;
 
         parent::update($data);
 
         try {
-            $rs = getService('dbal_connection')->update(
-                "opinions",
-                [
-                    'fk_author'     => (int) $data['fk_author'],
-                    'fk_author_img' => (int) $data['fk_author_img'],
-                    'type_opinion'  => $data['type_opinion'],
-                ],
-                [ 'pk_opinion' => (int) $data['id'] ]
-            );
+            getService('dbal_connection')->update('opinions', [
+                'fk_author'     => (int) $data['fk_author'],
+                'fk_author_img' => (int) $data['fk_author_img'],
+                'type_opinion'  => $data['type_opinion'],
+            ], [ 'pk_opinion' => (int) $data['id'] ]);
 
             if (array_key_exists('summary', $data) && !empty($data['summary'])) {
                 parent::setMetadata('summary', $data['summary']);
@@ -304,16 +282,19 @@ class Opinion extends Content
             } else {
                 parent::removeMetadata('img1');
             }
+
             if (array_key_exists('img2', $data) && !empty($data['img2'])) {
                 parent::setMetadata('img2', $data['img2']);
             } else {
                 parent::removeMetadata('img2');
             }
+
             if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
                 parent::setMetadata('img1_footer', $data['img1_footer']);
             } else {
                 parent::removeMetadata('img1_footer');
             }
+
             if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
                 parent::setMetadata('img2_footer', $data['img2_footer']);
             } else {
@@ -322,7 +303,7 @@ class Opinion extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error on Opinion::update: '.$e->getMessage());
+            error_log('Error on Opinion::update: ' . $e->getMessage());
             return false;
         }
     }
@@ -336,7 +317,9 @@ class Opinion extends Content
      */
     public function remove($id)
     {
-        if ((int) $id <= 0) return false;
+        if ((int) $id <= 0) {
+            return false;
+        }
 
         parent::remove($id);
 
@@ -372,15 +355,18 @@ class Opinion extends Content
             $this->author_name_slug = 'director';
         } else {
             $author = new \User($this->fk_author);
-            $this->name = \Onm\StringUtils::getTitle($author->name);
+
+            $this->name             = \Onm\StringUtils::getTitle($author->name);
             $this->author_name_slug = $this->name;
 
             if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
                 $params['item'] = $this;
-                $template = 'frontpage/contents/_blog.tpl';
+                $template       = 'frontpage/contents/_blog.tpl';
+
                 if ($params['custom'] == 1) {
                     $template = $params['tpl'];
                 }
+
                 return $tpl->fetch($template, $params);
             }
         }
@@ -403,29 +389,29 @@ class Opinion extends Content
     *
     * @return mixed, latest opinions sorted by creation time
     */
-    public static function getLatestAvailableOpinions($params = array())
+    public static function getLatestAvailableOpinions($params = [])
     {
-        $contents = array();
+        $contents = [];
 
         // Setting up default parameters
-        $default_params = array(
-            'limit' => 6,
-        );
-        $options = array_merge($default_params, $params);
-        $_sql_limit = " LIMIT {$options['limit']}";
+        $default_params = [ 'limit' => 6 ];
+        $options        = array_merge($default_params, $params);
+        $_sql_limit     = " LIMIT {$options['limit']}";
 
         $cm = new ContentManager();
 
         $category = 0;
+
         $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
+
         foreach ($contentsSuggestedInFrontpage as $content) {
             if ($content->content_type == 4) {
-                $excludedContents []= (int) $content->id;
+                $excludedContents[] = (int) $content->id;
             }
         }
 
         if (count($excludedContents) > 0) {
-            $sqlExcludedContents = ' AND opinions.pk_opinion NOT IN (';
+            $sqlExcludedContents  = ' AND opinions.pk_opinion NOT IN (';
             $sqlExcludedContents .= implode(', ', $excludedContents);
             $sqlExcludedContents .= ') ';
         }
@@ -433,8 +419,8 @@ class Opinion extends Content
         // Getting latest opinions taking in place later considerations
         $contents = $cm->find(
             'Opinion',
-            'contents.content_status=1'. $sqlExcludedContents,
-            'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit
+            'contents.content_status=1' . $sqlExcludedContents,
+            'ORDER BY contents.created DESC, contents.title ASC ' . $_sql_limit
         );
 
         // For each opinion get its author and photo
@@ -443,6 +429,7 @@ class Opinion extends Content
             if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
+
             $content->name = $content->author->name;
         }
 
@@ -456,15 +443,14 @@ class Opinion extends Content
     *
     * @return mixed, all latest opinions sorted by creation time
     */
-    public static function getAllLatestOpinions($params = array())
+    public static function getAllLatestOpinions($params = [])
     {
-        $contents = array();
+        $contents = [];
 
         // Setting up default parameters
-        $default_params = array(
-            'limit' => 6,
-        );
-        $options = array_merge($default_params, $params);
+        $default_params = [ 'limit' => 6 ];
+
+        $options  = array_merge($default_params, $params);
         $limitSql = " LIMIT {$options['limit']}";
 
         $cm = new ContentManager();
@@ -473,15 +459,17 @@ class Opinion extends Content
         $contents = $cm->find(
             'Opinion',
             'contents.content_status=1 ',
-            'ORDER BY  contents.created DESC,  contents.title ASC ' .$limitSql
+            'ORDER BY  contents.created DESC,  contents.title ASC ' . $limitSql
         );
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
             $content->author = new \User($content->fk_author);
+
             if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
+
             $content->name = $content->author->name;
         }
 
@@ -496,21 +484,17 @@ class Opinion extends Content
     *
     * @return mixed, all latest opinions sorted by creation time
     */
-    public static function getLatestOpinionsForAuthor(
-        $authorID,
-        $params = array()
-    ) {
-        $contents = array();
+    public static function getLatestOpinionsForAuthor($authorID, $params = [])
+    {
+        $contents = [];
 
         // Setting up default parameters
-        $defaultParams = array(
-            'limit' => 6,
-        );
-        $options  = array_merge($defaultParams, $params);
-        $sqlLimit = " LIMIT ".$options['limit'];
+        $defaultParams = [ 'limit' => 6 ];
+        $options       = array_merge($defaultParams, $params);
+        $sqlLimit      = " LIMIT " . $options['limit'];
 
         if (!isset($authorID)) {
-            return array();
+            return [];
         }
 
         $cm = new ContentManager();
@@ -518,8 +502,8 @@ class Opinion extends Content
         // Getting All latest opinions
         $contents = $cm->find(
             'Opinion',
-            'contents.content_status=1 AND opinions.fk_author = '.$authorID,
-            'ORDER BY contents.created DESC,  contents.title ASC ' .$sqlLimit
+            'contents.content_status=1 AND opinions.fk_author = ' . $authorID,
+            'ORDER BY contents.created DESC,  contents.title ASC ' . $sqlLimit
         );
 
         $author = new \User($authorID);
@@ -530,6 +514,7 @@ class Opinion extends Content
             if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
+
             $content->name = $content->author->name;
         }
 

@@ -134,24 +134,15 @@ class Article extends Content
                 if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
                     $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
                 } else {
-                    $uri = Uri::generate(
-                        'article',
-                        array(
-                            'id'       => sprintf('%06d', $this->id),
-                            'date'     => date('YmdHis', strtotime($this->created)),
-                            'category' => $this->category_name,
-                            'slug'     => urlencode($this->slug),
-                        )
-                    );
+                    $uri = Uri::generate('article', [
+                        'id'       => sprintf('%06d', $this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
+                        'category' => $this->category_name,
+                        'slug'     => urlencode($this->slug),
+                    ]);
                 }
                 return $uri;
-            case 'slug':
-                if (!empty($this->slug)) {
-                    return $this->slug;
-                } else {
-                    return \Onm\StringUtils::generateSlug($this->title);
-                }
-                break;
+
             case 'author':
                 return $this->getAuthor();
 
@@ -159,10 +150,8 @@ class Article extends Content
                 return 'Article';
 
             default:
-                break;
+                return parent::__get($name);
         }
-
-        return parent::__get($name);
     }
 
     /**
@@ -416,7 +405,7 @@ class Article extends Content
 
             parent::remove($id);
 
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 "articles",
                 [ 'pk_article' => $id ]
             );
