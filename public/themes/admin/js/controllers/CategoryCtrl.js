@@ -11,7 +11,7 @@
      * @requires $scope
      *
      * @description
-     *   Handles actions for paywall settings configuration form.
+     *   Handles actions for category edit form.
      */
     .controller('CategoryCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing',
       function($controller, $rootScope, $scope, http, messenger, routing) {
@@ -34,13 +34,11 @@
         $scope.subcategories = [];
 
         /**
-         * @function list
+         * @function init
          * @memberOf SettingsCtrl
          *
-         * @param {Map} category The string to search by.
-         *
          * @description
-         *   Lists all settings.
+         *   Initizalice the class for .
          */
         $scope.init = function() {
           $scope.loading = true;
@@ -55,15 +53,12 @@
             $scope.categoryUrl = categoryData.image_path + '/sections/' + $scope.category.logo_path;
 
             $scope.pre();
+            $scope.loading = false;
             return;
           }
           $scope.loading = false;
 
           // TODO implement the ajax request for caregory info
-        };
-
-        $scope.test = function() {
-          alert('$scope.category.inmenu');
         };
 
         /**
@@ -116,7 +111,10 @@
               $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title});
             }
           }
-          $scope.loading = false;
+        }
+
+        $scope.createShowCategoryUrl = function(categoryId) {
+          return routing.generate('admin_category_show', {id: categoryId});
         }
 
         $scope.internalCategoriesImgs = {

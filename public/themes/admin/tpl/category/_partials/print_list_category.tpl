@@ -5,14 +5,16 @@
               {multi_option_adapter field=$category->title params=$language_data}
           </a>
           <div class="listing-inline-actions" ng-init="languageData = {json_encode($language_data)|clear_json}">
-              {is_module_activated name="es.openhost.module.multilanguage"}
-                <translator ng-model="lang" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" />
-              {/is_module_activated}
               {acl isAllowed="CATEGORY_UPDATE"}
                   {if $category->internal_category != 0 && $category->internal_category != 2}
-                  <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
+                  <div>
+                    {is_module_activated name="es.openhost.module.multilanguage"}
+                      <translator ng-model="lang" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" />
+                    {/is_module_activated}
+                    <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                  </a>
+                    </a>
+                  </div>i
                   {/if}
               {/acl}
               {acl isAllowed="CATEGORY_DELETE"}
@@ -87,12 +89,14 @@
                   </a>
                   <div class="listing-inline-actions">
                       {acl isAllowed="CATEGORY_UPDATE"}
+                        <div>
                           {is_module_activated name="es.openhost.module.multilanguage"}
                             <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" translator-options="languageData" />
                           {/is_module_activated}
                           <a class="link" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
                               <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                           </a>
+                        </div>
                       {/acl}
                       {acl isAllowed="CATEGORY_DELETE"}
                          {if $subcategory->internal_category != 0 && array_key_exists($subcategory->id, $contents_count['articles']) &&  $contents_count['articles'][$subcategory->id] !== 0}

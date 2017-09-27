@@ -21,34 +21,34 @@ use Framework\Component\Data\DataObject;
 class StringUtils
 {
     static protected $trade = [
-        'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
-        'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
-        'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E', 'Ë'=>'E', 'Ê'=>'E',
-        'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',
-        'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o',
-        'ô'=>'o', 'Ó'=>'O', 'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O',
-        'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u', 'Ú'=>'U', 'Ù'=>'U',
-        'Ü'=>'U', 'Û'=>'U', '$'=>'',  '@'=>'',  '!'=>'',  '#'=>'',
-        '%'=>'',  '^'=>'',  '&'=>'',  '*'=>'',  '('=>'',  ')'=>'',
-        '-'=>'-', '+'=>'',  '='=>'',  '\\'=>'-', '|'=>'-', '`'=>'',
-        '~'=>'',  '/'=>'-', '\"'=>'', '\''=>'', '<'=>'',  '>'=>'',
-        '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C',  '·'=>'', 'ª'=>'',
-        'º'=>'', ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'n', 'Ñ'=>'N',
-        'Š'=>'S', 'š'=>'s', 'Đ'=>'Dj', 'đ'=>'dj', 'Ž'=>'Z', 'ž'=>'z',
-        'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c', 'À'=>'A', 'Á'=>'A',
-        'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C',
-        'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I',
-        'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O',
-        'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U',
-        'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a',
-        'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
-        'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i',
-        'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o',
-        'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u',
-        'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R',
-        'ŕ'=>'r', '/'=>'-', ' '=>'-', '"'=>'',  '!'=>'',  '¡'=>'',
-        '‐' => '', '‒' => '', '–' => '', '—'=> '',
-        '―' => '', '⁃' => '', '−' => '', "\r" => ' ', "\n" => '',
+        'á' => 'a', 'à' => 'a', 'ã' => 'a', 'ä' => 'a', 'â' => 'a', 'Á' => 'A',
+        'À' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Â' => 'A', 'é' => 'e', 'è' => 'e',
+        'ë' => 'e', 'ê' => 'e', 'É' => 'E', 'È' => 'E', 'Ë' => 'E', 'Ê' => 'E',
+        'í' => 'i', 'ì' => 'i', 'ï' => 'i', 'î' => 'i', 'Í' => 'I', 'Ì' => 'I',
+        'Ï' => 'I', 'Î' => 'I', 'ó' => 'o', 'ò' => 'o', 'õ' => 'o', 'ö' => 'o',
+        'ô' => 'o', 'Ó' => 'O', 'Ò' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ô' => 'O',
+        'ú' => 'u', 'ù' => 'u', 'ü' => 'u', 'û' => 'u', 'Ú' => 'U', 'Ù' => 'U',
+        'Ü' => 'U', 'Û' => 'U', '$' => '',  '@' => '',  '!' => '',  '#' => '',
+        '%' => '',  '^' => '',  '&' => '',  '*' => '',  '(' => '',  ')' => '',
+        '-' => '-', '+' => '',  '=' => '',  '\\' => '-', '|' => '-', '`' => '',
+        '~' => '',  '/' => '-', '\"' => '', '\'' => '', '<' => '',  '>' => '',
+        '?' => '-', ',' => '-', 'ç' => 'c', 'Ç' => 'C',  '·' => '', 'ª' => '',
+        'º' => '', ';' => '-', '[' => '-', ']' => '-', 'ñ' => 'n', 'Ñ' => 'N',
+        'Š' => 'S', 'š' => 's', 'Đ' => 'Dj', 'đ' => 'dj', 'Ž' => 'Z', 'ž' => 'z',
+        'Č' => 'C', 'č' => 'c', 'Ć' => 'C', 'ć' => 'c', 'À' => 'A', 'Á' => 'A',
+        'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C',
+        'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I',
+        'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O',
+        'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U',
+        'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a',
+        'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
+        'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i',
+        'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o',
+        'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u',
+        'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y', 'Ŕ' => 'R',
+        'ŕ' => 'r', '/' => '-', ' ' => '-', '"' => '',  '!' => '',  '¡' => '',
+        '‐' => '', '‒' => '', '–' => '', '—' => '', '―' => '', '⁃' => '',
+        '−' => '', "\r" => ' ', "\n" => '',
     ];
 
     /**
@@ -78,7 +78,7 @@ class StringUtils
      */
     public static function clearBadChars($string)
     {
-        $string = preg_replace('/'.chr(226).chr(128).chr(169).'/', '', $string);
+        $string = preg_replace('/' . chr(226) . chr(128) . chr(169) . '/', '', $string);
 
         return $string;
     }
@@ -153,7 +153,7 @@ class StringUtils
      */
     public static function extStrIreplace($findme, $replacewith, $subject)
     {
-        $rest = $subject;
+        $rest   = $subject;
         $result = '';
 
         while (stripos($rest, $findme) !== false) {
@@ -161,11 +161,11 @@ class StringUtils
 
              // Remove the wanted string from $rest and append it to $result
              $result .= substr($rest, 0, $pos);
-             $rest = substr($rest, $pos, strlen($rest)-$pos);
+             $rest    = substr($rest, $pos, strlen($rest) - $pos);
 
              // Remove the wanted string from $rest and place it correctly into $result
              $result .= str_replace('$1', substr($rest, 0, strlen($findme)), $replacewith);
-             $rest = substr($rest, strlen($findme), strlen($rest)-strlen($findme));
+             $rest    = substr($rest, strlen($findme), strlen($rest) - strlen($findme));
         }
 
         // After the last match, append the rest
@@ -186,9 +186,9 @@ class StringUtils
     public static function filterBadWords($text, $weight = 0, $replaceStr = ' ')
     {
         $words = self::loadBadWords();
-        $text = ' ' . $text . ' ';
+        $text  = ' ' . $text . ' ';
         if ($replaceStr != ' ') {
-            $replaceStr = ' '.$replaceStr. ' ';
+            $replaceStr = ' ' . $replaceStr . ' ';
         }
 
         foreach ($words as $word) {
@@ -215,12 +215,12 @@ class StringUtils
      */
     public static function generatePassword($length = 8)
     {
-        $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $i = 0;
+        $chars    = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $i        = 0;
         $password = "";
 
-        while ($i <= $length-1) {
-            $password .= $chars{mt_rand(0, strlen($chars)-1)};
+        while ($i <= $length - 1) {
+            $password .= $chars{mt_rand(0, strlen($chars) - 1)};
             $i++;
         }
 
@@ -444,8 +444,8 @@ class StringUtils
      */
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
+        // If the value is not a String
         if (!is_string($string)) {
-
             $slugArray = [];
             foreach ($string as $key => $value) {
                 $slugArray[$key] = self::generateSlug($value, $useStopList, $delimiter);
@@ -546,7 +546,7 @@ class StringUtils
         $noHtml      = strip_tags($text);
         $description = explode(" ", $noHtml, $numWords + 1);
         array_pop($description);
-        $words       = implode(" ", $description).'...';
+        $words = implode(" ", $description) . '...';
 
         return $words;
     }
@@ -585,7 +585,7 @@ class StringUtils
     public static function getWeightBadWords($text)
     {
         $words = self::loadBadWords();
-        $text = ' ' . $text . ' ';
+        $text  = ' ' . $text . ' ';
 
         $weight = 0;
 
@@ -747,8 +747,9 @@ class StringUtils
 
         $urlParams = '';
         if (array_key_exists('1', $urlParts)) {
-            $urlParams = '?'.$urlParts[1];
+            $urlParams = '?' . $urlParts[1];
         }
+
         $url = rtrim($url, '/');
 
         if ($urlParams !== '' && $url !== '/') {
@@ -756,11 +757,12 @@ class StringUtils
                 $url = str_replace('//', '/', $url);
             }
         }
+
         if (empty($url)) {
             $url = '/';
         }
 
-        return $url.$urlParams;
+        return $url . $urlParams;
     }
 
     /**
@@ -881,9 +883,9 @@ EOF;
 
         $newstring = $string;
         foreach ($shorts as $word) {
-            $newstring = preg_replace('/\b'.$word.'[\.\,\s]/', '', $newstring);
-            $newstring = preg_replace('/[\.\,\s]'.$word.'[\.\,\s]/', '', $newstring);
-            $newstring = preg_replace('/[\.\,\s]'.$word.'\b/', '', $newstring);
+            $newstring = preg_replace('/\b' . $word . '[\.\,\s]/', '', $newstring);
+            $newstring = preg_replace('/[\.\,\s]' . $word . '[\.\,\s]/', '', $newstring);
+            $newstring = preg_replace('/[\.\,\s]' . $word . '\b/', '', $newstring);
         }
 
         if (!empty(trim($newstring))) {
@@ -923,12 +925,12 @@ EOF;
     {
         if (strlen($string) > $maxLength) {
             $string = substr($string, 0, $maxLength);
-            $pos = strrpos($string, " ");
+            $pos    = strrpos($string, " ");
             if ($pos === false) {
-                return substr($string, 0, $maxLength).$suffix;
+                return substr($string, 0, $maxLength) . $suffix;
             }
 
-            return substr($string, 0, $pos).$suffix;
+            return substr($string, 0, $pos) . $suffix;
         } else {
             return $string;
         }
@@ -960,7 +962,7 @@ EOF;
         // Implode each key => value parameter into key-value
         foreach ($httpParams as $param) {
             foreach ($param as $key => $value) {
-                $result []= $key.'='.$value;
+                $result [] = $key . '=' . $value;
             }
         }
 
@@ -980,8 +982,8 @@ EOF;
     public static function unhtmlentities($string)
     {
         // replace numeric entities
-        $string   = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
-        $string   = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
+        $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
+        $string = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
         // replace literal entities
         $transTbl = get_html_translation_table(HTML_ENTITIES);
         $transTbl = array_flip($transTbl);

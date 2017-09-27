@@ -34,8 +34,9 @@ class CategoriesController extends Controller
      *
      * @Security("hasExtension('CATEGORY_MANAGER')
      *     and hasPermission('CATEGORY_ADMIN')")
+     *
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
         $languageData              = $this->getLocaleData('frontend');
@@ -52,54 +53,6 @@ class CategoriesController extends Controller
                 'categories'        => $categories,
                 'contents_count'    => $contentsCount,
                 'language_data'     => $languageData
-            )
-        );
-    }
-
-    /**
-     * Handles the creation of new categories
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('CATEGORY_MANAGER')
-     *     and hasPermission('CATEGORY_CREATE')")
-     */
-    public function createAction(Request $request)
-    {
-        $category      = new \ContentCategory();
-        $ccm           = \ContentCategoryManager::get_instance();
-        $allcategories = $ccm->categories;
-        $subcategories = [];
-        $languageData  = $this->getLocaleData('frontend', $request);
-        $fm            = $this->get('data.manager.filter');
-        // we adapt the category data and if the value returned y multilanguage field is a string, create a new
-        //array with all values
-        $category      = $fm->set($category)->filter('unlocalize', [
-            'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS
-        ])->get();
-        $allcategories = $fm->set($allcategories)->filter('localize', [
-            'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS,
-            'locale'    => $languageData['default']
-        ])->get();
-
-        $jsonData = json_encode(
-            array(
-                'categories'            => $allcategories,
-                'configurations'        => s::get('section_settings'),
-                'category'              => $category,
-                'subcategories'         => $subcategories,
-                'internal_categories'   => $this->getInternalCategories(),
-                'image_path'            => MEDIA_URL . MEDIA_DIR,
-                'language_data'         => $languageData,
-            )
-        );
-
-        return $this->render(
-            'category/new.tpl',
-            array(
-                'categoryData'   => $jsonData
             )
         );
     }
@@ -162,69 +115,6 @@ class CategoriesController extends Controller
                 'categoryData'   => $jsonData
             )
         );
-    }
-
-    /**
-     * Updates the category information send by POST
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('CATEGORY_MANAGER')
-     *     and hasPermission('CATEGORY_UPDATE')")
-     */
-    public function updateAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id');
-        $params = $request->request->get('params');
-        $inrss  = ($params && array_key_exists('inrss', $params) && $params['inrss'] == true);
-
-        // Check empty data
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Category data sent not valid.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
-        }
-
-        $data = array(
-            'id'                  => $id,
-            'name'                => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-            'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'inmenu'              => $request->request->getDigits('inmenu', 0),
-            'subcategory'         => $request->request->getDigits('subcategory', 0),
-            'internal_category'   => $request->request->getDigits('internal_category'),
-            'logo_path'           => $request->request->filter('logo_path', '', FILTER_SANITIZE_STRING),
-            'color'               => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
-            'params'  => array(
-                'inrss' => $inrss,
-            ),
-        );
-
-        // If file was attached, handle it
-        if (!empty($_FILES) && isset($_FILES['logo_path'])) {
-            $nameFile  = $_FILES['logo_path']['name'];
-            $uploaddir = MEDIA_PATH . '/sections/' . $nameFile;
-
-            if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                $data['logo_path'] = $nameFile;
-            }
-        }
-
-        $category = new \ContentCategory($id);
-        if ($category->update($data)) {
-            dispatchEventWithParams('category.update', ['category' => $category]);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Category "%s" updated successfully.'), $data['title'])
-            );
-        }
-
-        return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
     }
 
     /**

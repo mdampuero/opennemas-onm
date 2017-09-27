@@ -141,7 +141,8 @@ class ContentManager
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return [];
         }
     }
@@ -247,6 +248,7 @@ class ContentManager
             }, $contentIds);
 
             $contentsRaw = $er->findMulti($contentsMap);
+
             $er->populateContentMetasInContents($contentsRaw);
 
             $contentsRaw = $this->checkAndCleanFrontpageSize($contentsRaw);
@@ -386,7 +388,6 @@ class ContentManager
 
         // Return all the objects of contents initialized
         return $contents;
-
     }
 
     /**
@@ -547,52 +548,53 @@ class ContentManager
      */
     public static function sortArrayofObjectsByProperty($array, $property)
     {
-        // Y si el array es vacio ????
-        if (count($array) > 0) {
-            $cur           = 1;
-            $stack[1]['l'] = 0;
-            $stack[1]['r'] = count($array) - 1;
+        if (!is_array($array) || empty($array)) {
+            return $array;
+        }
 
+        $cur           = 1;
+        $stack[1]['l'] = 0;
+        $stack[1]['r'] = count($array) - 1;
+
+        do {
+            $l = $stack[$cur]['l'];
+            $r = $stack[$cur]['r'];
+            $cur--;
             do {
-                $l = $stack[$cur]['l'];
-                $r = $stack[$cur]['r'];
-                $cur--;
+                $i   = $l;
+                $j   = $r;
+                $tmp = $array[(int) (($l + $r) / 2)];
+
+                // split the array in to parts
+                // first: objects with "smaller" property $property
+                // second: objects with "bigger" property $property
                 do {
-                    $i   = $l;
-                    $j   = $r;
-                    $tmp = $array[(int) (($l + $r) / 2)];
-
-                    // split the array in to parts
-                    // first: objects with "smaller" property $property
-                    // second: objects with "bigger" property $property
-                    do {
-                        while ($array[$i]->{$property} < $tmp->{$property}) {
-                            $i++;
-                        } while ($tmp->{$property} < $array[$j]->{$property}) {
-                            $j--;
-                        }
-
-                        // Swap elements of two parts if necesary
-                        if ($i <= $j) {
-                            $w         = $array[$i];
-                            $array[$i] = $array[$j];
-                            $array[$j] = $w;
-
-                            $i++;
-                            $j--;
-                        }
-                    } while ($i <= $j);
-
-                    if ($i < $r) {
-                        $cur++;
-                        $stack[$cur]['l'] = $i;
-                        $stack[$cur]['r'] = $r;
+                    while ($array[$i]->{$property} < $tmp->{$property}) {
+                        $i++;
+                    } while ($tmp->{$property} < $array[$j]->{$property}) {
+                        $j--;
                     }
 
-                    $r = $j;
-                } while ($l < $r);
-            } while ($cur != 0);
-        }
+                    // Swap elements of two parts if necesary
+                    if ($i <= $j) {
+                        $w         = $array[$i];
+                        $array[$i] = $array[$j];
+                        $array[$j] = $w;
+
+                        $i++;
+                        $j--;
+                    }
+                } while ($i <= $j);
+
+                if ($i < $r) {
+                    $cur++;
+                    $stack[$cur]['l'] = $i;
+                    $stack[$cur]['r'] = $r;
+                }
+
+                $r = $j;
+            } while ($l < $r);
+        } while ($cur != 0);
 
         return $array;
     }
@@ -670,7 +672,8 @@ class ContentManager
 
             return ($ucfirst === true) ? ucfirst($rs['path']) : $rs['path'];
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -705,7 +708,8 @@ class ContentManager
         $days = 2,
         $num = 9,
         $all = false
-    ) {
+    )
+    {
         $em = getService('entity_repository');
 
         $date = new \DateTime();
@@ -798,7 +802,8 @@ class ContentManager
         $days = 2,
         $maxElements = 9,
         $all = false
-    ) {
+    )
+    {
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 "SELECT COUNT(comments.content_id) as num_comments, contents.*, articles.*
@@ -830,7 +835,8 @@ class ContentManager
 
             return $contentsArray;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -859,15 +865,9 @@ class ContentManager
      *                             status.
      * @return array the contents
      */
-    public function getMostVotedContent(
-        $contentType,
-        $notEmpty = false,
-        $category = 0,
-        $author = 0,
-        $days = 2,
-        $num = 8,
-        $all = false
-    ) {
+    public function getMostVotedContent($contentType, $notEmpty = false, $category = 0, $author = 0, $days = 2,
+        $num = 8, $all = false)
+    {
         // TODO: Review algorithm
         $table = tableize($contentType);
 
@@ -920,7 +920,8 @@ class ContentManager
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -940,13 +941,8 @@ class ContentManager
      *
      * @return array of objects
      */
-    public function getAllMostViewed(
-        $notEmpty = false,
-        $category = 0,
-        $days = 2,
-        $num = 6,
-        $all = false
-    ) {
+    public function getAllMostViewed($notEmpty = false, $category = 0, $days = 2, $num = 6, $all = false)
+    {
         $em = getService('entity_repository');
 
         $now = new \DateTime();
@@ -1099,18 +1095,22 @@ class ContentManager
      */
     public function getAvailable($items)
     {
-        $filtered = array();
-        if (is_array($items)) {
-            foreach ($items as $item) {
-                if (is_object($item)) {
-                    if (($item->content_status == 1) && ($item->in_litter == 0)) {
-                        $filtered[] = $item;
-                    }
-                } else {
-                    if (($item['content_status'] == 1) && ($item['in_litter'] == 0)) {
-                        $filtered[] = $item;
-                    }
+        $filtered = [];
+        if (!is_array($items)) {
+            return [];
+        }
+
+        foreach ($items as $item) {
+            if (is_object($item)) {
+                if (($item->content_status == 1) && ($item->in_litter == 0)) {
+                    $filtered[] = $item;
                 }
+
+                continue;
+            }
+
+            if (($item['content_status'] == 1) && ($item['in_litter'] == 0)) {
+                $filtered[] = $item;
             }
         }
 
@@ -1158,7 +1158,8 @@ class ContentManager
 
             return (is_array($rs) && array_key_exists('total', $rs)) ? (int) $rs['total'] : 0;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
 
@@ -1208,7 +1209,8 @@ class ContentManager
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -1253,7 +1255,8 @@ class ContentManager
 
             return $this->getInTime($items);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -1322,7 +1325,8 @@ class ContentManager
             $items = $this->getInTime($items);
             return $items;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -1364,7 +1368,8 @@ class ContentManager
 
             return $rs;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return [];
         }
     }
@@ -1563,7 +1568,8 @@ class ContentManager
 
             return '';
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -1732,7 +1738,8 @@ class ContentManager
 
             return $contents;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return [];
         }
     }
@@ -1758,7 +1765,8 @@ class ContentManager
 
             return $rs['pk_content'];
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -1837,7 +1845,8 @@ class ContentManager
 
             return $rs;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -1866,7 +1875,8 @@ class ContentManager
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }

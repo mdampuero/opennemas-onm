@@ -121,7 +121,7 @@
                         [% subcategory.name %]
                       </td>
                       <td class="left">
-                          <i class="fa [% internalCategoriesImgs[subcategory.internal_category] %]" uib-tooltip="[% internalCategories.internalCategories[subcategory.internal_category] %]"></i>
+                          <i class="fa [% internalCategoriesImgs[subcategory.internal_category] %]" uib-tooltip="[% internalCategories.internalCategories[subcategory.internal_category].name %]"></i>
                       </td>
                       <td class="left">
                         [% (subcategory.inmenu)?"{t}Yes{/t}":"{t}No{/t}" %]
