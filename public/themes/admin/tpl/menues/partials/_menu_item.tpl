@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="menu-item-form ng-cloak ng-hide" data-nodrag ng-show="showForm">
+    <div class="menu-item-form ng-cloak" data-nodrag ng-show="showForm">
       <div class="form-group">
         <label for="form-label">{t}Title{/t}</label>
         <div class="controls">
