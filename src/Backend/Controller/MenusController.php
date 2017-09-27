@@ -68,6 +68,10 @@ class MenusController extends Controller
             return $this->redirect($this->generateUrl('admin_menus'));
         }
 
+        $this->get('core.locale')->setContext('frontend');
+        $menu->items = $menu->unlocalize($menu->items);
+        $this->get('core.locale')->setContext('backend');
+
         $categories = $this->getCategories();
 
         return $this->render('menues/new.tpl', [

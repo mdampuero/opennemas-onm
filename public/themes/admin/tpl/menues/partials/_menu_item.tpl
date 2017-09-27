@@ -11,7 +11,7 @@
         <div class="menu-item-type" ng-if="item.type == 'static'"> {t}Static Page{/t} </div>
         <div class="menu-item-type" ng-if="item.type == 'syncCategory'"><span class="fa fa-folder-o"></span> {t}Synched category{/t} </div>
         <div class="menu-item-type" ng-if="item.type == 'syncBlogCategory'"><span class="fa fa-folder-o"></span> {t}Synched blog category{/t} </div>
-        <div class="menu-item-title">[% item.title %] <small>([% item.link %])</small></div>
+        <div class="menu-item-title">[% item.title[lang] %] <small>([% item.link[lang] %])</small></div>
       </div>
 
       <div class="btn-group pull-right">
@@ -28,13 +28,13 @@
       <div class="form-group">
         <label for="form-label">{t}Title{/t}</label>
         <div class="controls">
-          <input ng-model="item.title" type="text" class="form-control">
+          <input ng-model="item.title[lang]" type="text" class="form-control">
         </div>
       </div>
       <div class="form-group">
         <label for="form-label">{t}Link{/t}</label>
         <div class="controls">
-          <input ng-model="item.link" type="text" class="form-control">
+          <input ng-model="item.link[lang]" type="text" class="form-control">
         </div>
       </div>
     </div>
