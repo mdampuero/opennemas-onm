@@ -1,0 +1,63 @@
+.menu-item {
+  &.angular-ui-tree-handle {
+    background-image:none !important;
+  }
+
+  .check-element {
+    border: 1px solid black;
+    opacity: 1;
+    padding: 10px;
+  }
+
+  &.angular-ui-tree-handle span{
+    font-weight: normal;
+  }
+
+  .menu-item-info > * {
+    display:inline-block;
+  }
+
+  .menu-item-info {
+    padding-top:9px;
+    padding-left:9px;
+
+    .menu-item-type , .menu-item-title {
+      display:inline-block !important;
+      font-weight: normal !important;
+    }
+    .menu-item-type {
+      font-weight:600 !important;
+    }
+    .menu-item-title {
+      font-weight: normal !important;
+    }
+    .menu-item-type .fa {
+      padding-top: 4px;
+      padding-left: 0px;
+      padding-right: 4px;
+      opacity:0.8;
+    }
+  }
+
+  .menu-item-form {
+    display: block;
+    clear:both;
+    border-top: 1px solid rgb(209, 218, 222);
+    margin-top: 10px;
+    padding: 10px;
+    margin-bottom:0;
+
+    &.ng-hide {
+      opacity: 0;
+    }
+
+    &.ng-hide-add,
+    &.ng-hide-remove {
+      transition: all linear 0.5s;
+    }
+
+    input {
+      border-color:rgb(209, 218, 222);
+    }
+  }
+}
