@@ -35,7 +35,7 @@ class LocalRepository
      */
     public function __construct()
     {
-        $this->syncPath = CACHE_PATH . DS .'importers';
+        $this->syncPath = CACHE_PATH . DS . 'importers';
         $this->compiler = new Compiler($this->syncPath);
 
         $this->contents = $this->compiler->getContentsFromCompiles();
@@ -111,24 +111,29 @@ class LocalRepository
      */
     protected function filter($criteria)
     {
-        return array_filter($this->contents, function ($a) use ($criteria) {
-            foreach ($criteria as $key => $value) {
-                $filters = explode(',', $value);
+        $contents = array_filter($this->contents, function ($a) use ($criteria) {
+            return preg_match('@' . $criteria['source'] . '@', $a->source);
+        });
 
-                foreach ($filters as $filter) {
-                    if (!property_exists($a, $key)
-                        || (property_exists($a, $key)
-                        && !preg_match(
-                            '@' . strtolower(trim($filter)) . '@',
-                            strtolower($a->{$key})
-                        ))
-                    ) {
-                        return false;
-                    }
+        // Remove source from criteria
+        unset($criteria['source']);
+
+        return array_filter($contents, function ($a) use ($criteria) {
+            foreach ($criteria as $key => $value) {
+                // Force AND between tags in the same filter
+                $pattern = strtolower(trim(preg_replace('/\s*,\s*/', '.*?', $value)));
+
+                if (property_exists($a, $key)
+                    && preg_match(
+                        '@' . $pattern . '@',
+                        strtolower($a->{$key})
+                    )
+                ) {
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         });
     }
 }
