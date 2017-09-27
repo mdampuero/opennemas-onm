@@ -211,7 +211,11 @@ class Locale
      */
     public function getRequestLocale()
     {
-        return $this->requestLocale;
+        if (!empty($this->requestlocale)) {
+            return $this->requestLocale;
+        }
+
+        return $this->getLocale();
     }
 
     /**
