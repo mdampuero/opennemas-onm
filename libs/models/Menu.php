@@ -106,11 +106,11 @@ class Menu
             $this->pk_menu = $conn->lastInsertId();
             $this->setMenuElements($this->pk_menu, $data['items']);
 
-            dispatchEventWithParams('menu.create', array('content' => $this));
+            dispatchEventWithParams('menu.create', ['content' => $this]);
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -231,7 +231,7 @@ class Menu
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -260,10 +260,10 @@ class Menu
 
             $this->setMenuElements($this->pk_menu, $data['items']);
 
-            dispatchEventWithParams('menu.update', array('content' => $this));
+            dispatchEventWithParams('menu.update', ['content' => $this]);
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -286,12 +286,12 @@ class Menu
             $conn->delete('menues', [ 'pk_menu' => $id ]);
             $conn->commit();
 
-            dispatchEventWithParams('menu.delete', array('content' => $this));
+            dispatchEventWithParams('menu.delete', ['content' => $this]);
 
             return true;
         } catch (\Exception $e) {
             $conn->rollBack();
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -342,7 +342,7 @@ class Menu
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -401,7 +401,7 @@ class Menu
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
