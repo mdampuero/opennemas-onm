@@ -3219,6 +3219,9 @@ select.medium {
 select.large {
   width: 334px !important;
 }
+select.adaptative {
+  width: 95% !important;
+}
 select[multiple],
 select[size] {
   height: auto !important;

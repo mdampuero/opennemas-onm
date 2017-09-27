@@ -24,37 +24,35 @@ class WidgetFactory
     public $ttl = 1800;
 
     /**
-     * Wether preload CM and CCM in the widget
+     * The service container.
      *
-     * @var boolean
+     * @var ServiceContainer
      */
-    protected $useDB = true;
+    protected $container;
 
     /**
      * Initializes the WidgetFactory object instance
      *
-     * @param mixed   $content The widget to initializate factory from.
-     * @param boolean $useDB   Whether to use the database.
+     * @param ServiceContainer $container The service container.
+     * @param mixed            $content   The widget object.
      *
      * @return WidgetFactory The current instance.
      */
-    public function __construct($content = null, $useDB = true)
+    public function __construct($content = null)
     {
-        if ($this->useDB) {
-            $this->cm = new ContentManager();
-            $this->ccm = ContentCategoryManager::get_instance();
-        }
+        $this->cachedId  = get_class($this);
+        $this->container = getService('service_container');
+        $this->content   = $content;
+        $this->tpl       = $this->container->get('core.template');
 
-        $this->cachedId = get_class($this);
-
-        $this->content = $content;
+        // TODO: Remove when no usage in widgets
+        $this->cm  = new ContentManager();
+        $this->ccm = ContentCategoryManager::get_instance();
 
         // Append the widget id to the cached id
         if ($this->content && $this->content->pk_content) {
             $this->cachedId .= '-' . $this->content->pk_content;
         }
-
-        $this->tpl = getService('core.template');
 
         $this->tpl->caching       = 0;
         $this->tpl->force_compile = true;

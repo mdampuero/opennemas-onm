@@ -125,7 +125,7 @@ class NewsMLEuropaPress extends NewsML
 
         $contents = [];
         foreach ($items as $item) {
-            $items = simplexml_load_string($item->asXML());
+            $items    = simplexml_load_string($item->asXML());
             $contents = array_merge($contents, $this->parseItem($item));
         }
 
