@@ -10,17 +10,33 @@
 namespace Framework\Tests\Component\Routing;
 
 use Framework\Component\Routing\ContentUrlMatcher;
+use Common\Data\Core\FilterManager;
 
 class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get', 'hasParameter' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
             ->getMock();
 
-        $this->matcher = new ContentUrlMatcher($this->em);
+        $this->fm = new FilterManager($this->container);
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
 
         $this->content = new \Article();
         $this->content->load([
@@ -34,6 +50,17 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
             'in_litter'         => 0,
         ]);
         $this->content->category_name = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
+
+        $this->matcher = new ContentUrlMatcher($this->em);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        if ($name === 'data.manager.filter') {
+            return $this->fm;
+        }
+
+        return null;
     }
 
     public function testValidContent()
@@ -113,6 +140,7 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
     public function testScheduledContent()
     {
         $content = clone $this->content;
+
         $content->starttime = '3015-01-14 23:55:36';
         $this->em->expects($this->once())->method('find')
             ->willReturn($content);
@@ -128,6 +156,7 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
     public function testDuedContent()
     {
         $content = clone $this->content;
+
         $content->endtime = '2015-01-14 23:55:36';
         $this->em->expects($this->once())->method('find')
             ->willReturn($content);
@@ -142,6 +171,7 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
     public function testInLitterContent()
     {
         $content = clone $this->content;
+
         $content->in_litter = 1;
         $this->em->expects($this->once())->method('find')
             ->willReturn($content);
