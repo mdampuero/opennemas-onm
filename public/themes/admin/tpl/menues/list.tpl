@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init(null, { content_status: -1, renderlet: -1 }, 'name', 'asc', 'backend_ws_menus_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); menu_positions = {json_encode($menu_positions)|clear_json}; languageData = {json_encode($language_data)|clear_json}">
+<div ng-app="BackendApp" ng-controller="MenuListCtrl" ng-init="init(null, { content_status: -1, renderlet: -1 }, 'name', 'asc', 'backend_ws_menus_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); menu_positions = {json_encode($menu_positions)|clear_json}; languageData = {json_encode($language_data)|clear_json}">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
