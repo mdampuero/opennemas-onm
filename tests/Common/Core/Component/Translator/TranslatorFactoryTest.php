@@ -22,9 +22,12 @@ class TranslatorFactoryTest extends KernelTestCase
      */
     public function setUp()
     {
-        $this->getMockBuilder('Common\Core\Component\Translator\Foo\FooTranslator')
+        $this->foo = $this->getMockBuilder('Common\Core\Component\Translator\Foo\FooTranslator')
+            ->setMethods([ 'getRequiredParameters' ])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->foo->expects($this->any())->method('getRequiredParameters')->willReturn([ 'xyzzy' => 'mumble' ]);
 
         $file = $this->getMockBuilder('Symfony\Component\Finder\SplFileInfo')
             ->disableOriginalConstructor()
@@ -99,5 +102,26 @@ class TranslatorFactoryTest extends KernelTestCase
         $method->setAccessible(true);
 
         $this->assertEquals([ 'foo' => 'Foo\FooTranslator' ], $method->invokeArgs($this->factory, []));
+    }
+
+    /**
+     * Tests getTranslatorsData.
+     */
+    public function testGetTranslatorsData()
+    {
+        $factory = $this->getMockBuilder('Common\Core\Component\Translator\TranslatorFactory')
+            ->setMethods([ 'get', 'getFinder' ])
+            ->getMock();
+
+        $factory->expects($this->any())->method('get')->willReturn($this->foo);
+        $factory->expects($this->any())->method('getFinder')->willReturn($this->finder);
+
+        $this->assertEquals([
+            [
+                'translator' => 'foo',
+                'parameters' => [ 'xyzzy' => 'mumble' ]
+            ]
+        ], $factory->getTranslatorsData());
+
     }
 }

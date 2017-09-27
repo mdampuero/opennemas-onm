@@ -9,8 +9,8 @@
  */
 function smarty_modifier_ads_in_body($body, $contentType = 'article')
 {
-    // Split body into paragraphs
-    preg_match_all('/(.*?)<\/p>/s', $body, $matches);
+    // Split body into paragraphs and avoid losing data at body end
+    preg_match_all('/(.*?)<\/p>/s', $body . '<p></p>', $matches);
 
     if (empty($matches[0])) {
         return $body;

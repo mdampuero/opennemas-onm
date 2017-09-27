@@ -45,7 +45,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
                 </Identification>
                 <AdministrativeMetadata>
                     <Provider>
-                        <Party FormalName=\"Foobar Agency\"/>
+                        <Party FormalName=\"Foobar Agency 'quote' \"/>
                     </Provider>
                 </AdministrativeMetadata>
                 <DescriptiveMetadata>
@@ -71,7 +71,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
             </NewsItem>
         </NewsML>");
 
-        $this->miss   = simplexml_load_string("<NewsML>
+        $this->miss = simplexml_load_string("<NewsML>
             <NewsItem>
                 <NewsManagement>
                     <FirstCreated>20040729T054956Z</FirstCreated>
@@ -79,7 +79,6 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
                 </NewsManagement>
             </NewsItem>
         </NewsML>");
-
     }
 
     public function testCheckFormat()
@@ -93,7 +92,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->parser->getAgencyName($this->invalid));
 
         $this->assertEquals(
-            'Foobar Agency',
+            'Foobar Agency \'quote\' ',
             $this->parser->getAgencyName($this->valid)
         );
     }
@@ -177,7 +176,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertEquals(
-            'urn:newsml:foobar_agency:20040729054956:text:040729054956.xm61wen7',
+            'urn:newsml:foobar-agency-quote:20040729054956:text:040729054956.xm61wen7',
             $this->parser->getUrn($this->valid)
         );
     }
@@ -197,7 +196,7 @@ class NewsMLTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'agency_name'  => 'Foobar Agency',
+                'agency_name'  => 'Foobar Agency \'quote\' ',
                 'created_time' => $date->format('Y-m-d H:i:s'),
                 'id'           => '040729054956.xm61wen7'
             ],

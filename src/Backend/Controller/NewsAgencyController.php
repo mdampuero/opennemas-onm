@@ -196,7 +196,7 @@ class NewsAgencyController extends Controller
         $repository = new \Onm\Import\Repository\LocalRepository();
         $element    = $repository->findByFileName($sourceId, $id);
 
-        $ccm = \ContentCategoryManager::get_instance();
+        $ccm              = \ContentCategoryManager::get_instance();
         $parentCategories = $ccm->getArraysMenu();
 
         // If the element has a original category that matches an existing category
@@ -247,13 +247,13 @@ class NewsAgencyController extends Controller
             $ccm        = \ContentCategoryManager::get_instance();
             $categories = $ccm->findAll();
 
-            $prevPoint = 1000;
+            $prevPoint     = 1000;
             $finalCategory = null;
             foreach ($categories as $category) {
                 $categoryName = strtolower(utf8_decode($category->title));
                 $lev          = levenshtein($originalCategoryTemp, $categoryName);
 
-                if ($lev < 2  && $lev < $prevPoint) {
+                if ($lev < 2 && $lev < $prevPoint) {
                     $prevPoint     = $lev;
                     $finalCategory = $category->id;
                 }
@@ -317,13 +317,12 @@ class NewsAgencyController extends Controller
         // Get EFE new from a filename
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
-            $element = $repository->findByFileName($sourceId, $id);
+            $element    = $repository->findByFileName($sourceId, $id);
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('error', _('Please specify the article to import.'));
 
             return 'redirect_list';
         }
-
 
         if ($category == 'GUESS') {
             // If the element has a original category that matches an existing category
@@ -333,30 +332,33 @@ class NewsAgencyController extends Controller
                 $category = '20';
             }
         } elseif (empty($category)) {
-            $this->get('session')->getFlashBag()->add('error', _('Please assign the category where import this article'));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Please assign the category where import this article')
+            );
 
             return 'redirect_category';
         }
 
         // Get server config
         $servers = s::get('news_agency_config');
-        $server = $servers[$sourceId];
+        $server  = $servers[$sourceId];
 
         $fm = $this->get('data.manager.filter');
 
         // If the new has photos import them
         if (count($element->getPhotos()) > 0) {
-            $i = 0;
-            $importedPhotos = array();
+            $i              = 0;
+            $importedPhotos = [];
 
             foreach ($element->getPhotos() as $photo) {
                 // Get image from FTP
-                $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
+                $filePath = realpath($repository->syncPath . DS . $sourceId . DS . $photo->getFilePath());
                 $fileName = $photo->getFilePath();
 
                 // If no image from FTP check HTTP
                 if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
+                    $filePath = $repository->syncPath . DS . $sourceId . DS . $photo->getName();
                     $fileName = $photo->getName();
                 }
 
@@ -371,13 +373,14 @@ class NewsAgencyController extends Controller
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => $fm->filter('tags', $photo->getTitle()),
-                            'author_name'   => '&copy; EFE '.date('Y'),
+                            'metadata'      => $fm->set($photo->getTitle())
+                                ->filter('tags')->get(),
+                            'author_name'   => '&copy; EFE ' . date('Y'),
                             'original_filename' => $fileName,
                         );
 
                         $newphoto = new \Photo();
-                        $photoId = $newphoto->createFromLocalFile($data);
+                        $photoId  = $newphoto->createFromLocalFile($data);
 
                         $importedPhotos[$photo->getId()] = $photoId;
                     } else {
@@ -413,8 +416,8 @@ class NewsAgencyController extends Controller
                     $authorArray = get_object_vars($authorObj);
 
                     // Set user as deactivated author without privileges.
-                    $authorArray['activated'] = 0;
-                    $authorArray['id_user_group'] = ['3'];
+                    $authorArray['activated']        = 0;
+                    $authorArray['id_user_group']    = ['3'];
                     $authorArray['accesscategories'] = [];
 
                     // Create author
@@ -430,9 +433,9 @@ class NewsAgencyController extends Controller
                             // Write in log
                             $logger = $this->get('application.log');
                             $logger->info(
-                                'User '.$authorArray['username'].
-                                ' was created from importer by user '.
-                                $this->getUser()->name.' ('.$this->getUser()->id.')'
+                                'User ' . $authorArray['username'] .
+                                ' was created from importer by user ' .
+                                $this->getUser()->name . ' (' . $this->getUser()->id . ')'
                             );
                         }
 
@@ -443,23 +446,25 @@ class NewsAgencyController extends Controller
                         }
 
                         // Fetch and save author image if exists
-                        $authorImgUrl = $element->getRightsOwnerPhoto();
-                        $cm = new \ContentManager();
+                        $authorImgUrl   = $element->getRightsOwnerPhoto();
+                        $cm             = new \ContentManager();
                         $authorPhotoRaw = $cm->getUrlContent($authorImgUrl);
                         if ($authorPhotoRaw) {
-                            $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
-                            $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
+                            $localImageDir  = MEDIA_IMG_PATH . $authorObj->photo->path_file;
+                            $localImagePath = MEDIA_IMG_PATH . $authorObj->photo->path_img;
                             if (!is_dir($localImageDir)) {
                                 \Onm\FilesManager::createDirectory($localImageDir);
                             }
+
                             if (file_exists($localImagePath)) {
                                 unlink($localImagePath);
                             }
+
                             file_put_contents($localImagePath, $authorPhotoRaw);
 
                             // Get all necessary data for the photo
                             $infor = new \MediaItem($localImagePath);
-                            $data = array(
+                            $data  = array(
                                 'title'       => $authorObj->photo->name,
                                 'name'        => $authorObj->photo->name,
                                 'user_name'   => $authorObj->photo->name,
@@ -469,7 +474,7 @@ class NewsAgencyController extends Controller
                                 'created'     => $infor->atime,
                                 'changed'     => $infor->mtime,
                                 'date'        => $infor->mtime,
-                                'size'        => round($infor->size/1024, 2),
+                                'size'        => round($infor->size / 1024, 2),
                                 'width'       => $infor->width,
                                 'height'      => $infor->height,
                                 'type'        => $infor->type,
@@ -478,12 +483,12 @@ class NewsAgencyController extends Controller
                                 'author_name' => $authorObj->username,
                             );
 
-                            $photo = new \Photo();
+                            $photo   = new \Photo();
                             $photoId = $photo->create($data);
 
                             // Get new author id and update avatar_img_id
-                            $newAuthor = get_object_vars($user->findByEmail($authorObj->email));
-                            $authorId = $newAuthor['id'];
+                            $newAuthor                  = get_object_vars($user->findByEmail($authorObj->email));
+                            $authorId                   = $newAuthor['id'];
                             $newAuthor['avatar_img_id'] = $photoId;
                             unset($newAuthor['password']);
                             $user->update($newAuthor);
@@ -491,7 +496,7 @@ class NewsAgencyController extends Controller
                     } else {
                         // Fetch the user if exists and is not null
                         if (!is_null($authorObj->email)) {
-                            $author = $user->findByEmail($authorObj->email);
+                            $author   = $user->findByEmail($authorObj->email);
                             $authorId = $author->id;
                         }
                     }
@@ -503,15 +508,14 @@ class NewsAgencyController extends Controller
         if ($element->hasVideos()) {
             foreach ($element->getVideos() as $video) {
                 $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$video->getFilePath()
+                    $repository->syncPath . DS . $sourceId . DS . $video->getFilePath()
                 );
 
                 // If no video from FTP check HTTP
                 if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.$sourceId.DS.$video->getName();
+                    $filePath = $repository->syncPath . DS . $sourceId . DS . $video->getName();
                     $fileName = $video['name'];
                 }
-
 
                 // Check if the file exists
                 if ($filePath) {
@@ -526,7 +530,7 @@ class NewsAgencyController extends Controller
                         'author_name'    => 'internal',
                     );
 
-                    $video = new \Video();
+                    $video   = new \Video();
                     $videoID = $video->createFromLocalFile($videoFileData);
 
                     // If this article has more than one video take the first one
@@ -534,6 +538,7 @@ class NewsAgencyController extends Controller
                         $innerVideo = new \Video($videoID);
                     }
                 }
+
                 $i++;
             }
         }
@@ -543,7 +548,8 @@ class NewsAgencyController extends Controller
         $values = array(
             'title'          => $element->getTitle(),
             'category'       => $category,
-            'with_comment'   => (array_key_exists('with_comments', $commentsConfig) ? $commentsConfig['with_comments'] : 1),
+            'with_comment'   =>
+                (array_key_exists('with_comments', $commentsConfig) ? $commentsConfig['with_comments'] : 1),
             'content_status' => 0,
             'frontpage'      => 0,
             'in_home'        => 0,
@@ -569,8 +575,8 @@ class NewsAgencyController extends Controller
             'urn_source'     => $element->getUrn(),
         );
 
-        $article           = new \Article();
-        $newArticleID      = $article->create($values);
+        $article      = new \Article();
+        $newArticleID = $article->create($values);
 
         return $newArticleID;
     }
