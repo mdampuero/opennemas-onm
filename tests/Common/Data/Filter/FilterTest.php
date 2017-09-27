@@ -79,5 +79,6 @@ class FilterTest extends KernelTestCase
             ->getMockForAbstractClass();
 
         $this->assertEquals('plugh', $filter->getParameter('glorp'));
+        $this->assertEmpty($filter->getParameter('glorp', null, false));
     }
 }

@@ -159,18 +159,22 @@ class ImagesController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $photosRAW = $request->request->get('description');
-
-        $ids         = array();
+        $photosRAW   = $request->request->get('description');
+        $ids         = [];
         $photosSaved = 0;
+
         foreach (array_keys($photosRAW) as $id) {
             $photoData = array(
                 'id'             => filter_var($id, FILTER_SANITIZE_STRING),
                 'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
-                'description'    =>
-                    filter_var($_POST['description'][$id], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       =>
-                    \Onm\StringUtils::normalizeMetadata(filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING)),
+                'description'    => filter_var(
+                    $_POST['description'][$id],
+                    FILTER_SANITIZE_STRING,
+                    FILTER_FLAG_NO_ENCODE_QUOTES
+                ),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                    filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING)
+                ),
                 'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
                 'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
@@ -179,7 +183,7 @@ class ImagesController extends Controller
 
             $photo = new \Photo($id);
 
-            $ids [] = $id;
+            $ids[] = $id;
 
             if ($photo->update($photoData)) {
                 $photosSaved++;
@@ -222,7 +226,6 @@ class ImagesController extends Controller
             return $this->redirect($this->generateUrl('admin_images'));
         }
 
-        // $contents = $photo->isUsed($id);
         $photo->delete($id, $this->getUser()->id);
 
         return $this->redirect(
@@ -272,7 +275,7 @@ class ImagesController extends Controller
                 }
 
                 $files = isset($_FILES) ? $_FILES : null;
-                $info  = array();
+                $info  = [];
 
                 foreach ($files as $file) {
                     $photo = new \Photo();
@@ -305,7 +308,7 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => $fm->filter('tags', $tempName),
+                        'metadata'          => $fm->set($tempName)->filter('tags')->get(),
                     );
 
                     try {
@@ -325,20 +328,22 @@ class ImagesController extends Controller
                 $json = json_encode($info);
                 $response->setContent($json);
 
-                $response->headers->add(array('Vary' => 'Accept'));
+                $response->headers->add([ 'Vary' => 'Accept' ]);
 
                 $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
                 if (!empty($redirect)) {
                     return $this->redirect(sprintf($redirect, rawurlencode($json)));
                 }
 
-                if (isset($_SERVER['HTTP_ACCEPT']) &&
-                    (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
+                if (isset($_SERVER['HTTP_ACCEPT'])
+                    && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+                ) {
                     $response->headers->add(array('Content-type' => 'application/json'));
                 } else {
                     $response->headers->add(array('Content-type' => 'text/plain'));
                 }
                 return $response;
+
             case 'DELETE':
                 break;
             default:

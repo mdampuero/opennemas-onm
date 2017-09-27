@@ -190,6 +190,11 @@ class RouterListener implements EventSubscriberInterface
                 $parameters = $this->matcher->match($newRequest->getPathInfo());
             }
 
+            $this->container->get('core.globals')
+                ->setRoute($parameters['_route']);
+            $this->container->get('core.globals')
+                ->setEndpoint($this->getEndpoint($parameters['_route']));
+
             // Raise na error if the url came localized and it's not localizable
             if ($hasModule &&
                 !empty($locale)
@@ -275,7 +280,19 @@ class RouterListener implements EventSubscriberInterface
             $request = $request->duplicate(null, null, null, null, null, $serverParams);
         }
 
-        return [$request, $locale];
+        return [ $request, $locale ];
+    }
+
+    /**
+     * Returns the endpoint basing on the route name.
+     *
+     * @param string $namespace The route name.
+     *
+     * @return string The endpoint.
+     */
+    protected function getEndpoint($route)
+    {
+        return strtolower(substr($route, 0, strpos($route, '_')));
     }
 
     public static function getSubscribedEvents()
