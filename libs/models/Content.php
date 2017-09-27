@@ -17,7 +17,7 @@ use Onm\Settings as s;
  *
  * @package    Model
  */
-class Content
+class Content implements \JsonSerializable
 {
     const AVAILABLE     = 'available';
     const TRASHED       = 'trashed';
@@ -131,7 +131,7 @@ class Content
      *
      * @var int
      */
-    public $fk_user = null;
+    public $fk_author = null;
 
     /**
      * The user id of the last user that have changed this content
@@ -257,44 +257,60 @@ class Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                return $this->getUri();
-
-            case 'slug':
-                if (!empty($this->slug)) {
-                    return $this->slug;
-                } else {
-                    return \Onm\StringUtils::getTitle($this->title);
-                }
-                break;
-            case 'content_type_name':
-                return $this->getContentTypeName();
-
             case 'category_name':
                 return $this->category_name = $this->loadCategoryName($this->id);
 
-            case 'publisher':
-                $user = new User();
-                return $this->publisher = $user->getUserName($this->fk_publisher);
+            case 'comments':
+                return 0;
+
+            case 'content_type_name':
+                return $this->getContentTypeName();
+
+            case 'fk_user':
+                return $this->fk_author;
 
             case 'last_editor':
                 $user = new User();
                 return $this->last_editor = $user->getUserName($this->fk_user_last_editor);
 
+            case 'publisher':
+                $user = new User();
+                return $this->publisher = $user->getUserName($this->fk_publisher);
+
             case 'ratings':
                 return 0;
 
-            case 'comments':
-                return 0;
-                // $commentRepository = getService('comment_repository');
-                // return $this->comments = $commentRepository->countCommentsForContentId($this->id);
+            case 'uri':
+                return $this->getUri();
 
             default:
                 if (array_key_exists($name, $this->metas)) {
                     return $this->metas[$name];
                 }
-                break;
+
+                if ($name === 'slug' && empty($this->slug)) {
+                    $this->slug = \Onm\StringUtils::getTitle($this->title);
+                }
+
+                if (in_array($name, $this->getL10nKeys())) {
+                    return getService('data.manager.filter')
+                        ->set($this->{$name})
+                        ->filter('localize')
+                        ->get();
+                }
+                return $this->{$name};
         }
+    }
+
+    /**
+     * Chages a property value.
+     *
+     * @param string $name  The property name.
+     * @param mixed  $value The property value.
+     */
+    public function __set($name, $value)
+    {
+        $this->{$name} = $value;
     }
 
     /**
@@ -309,6 +325,22 @@ class Content
     }
 
     /**
+     * Returns all content information when serialized.
+     *
+     * @return array The content information.
+     */
+    public function jsonSerialize()
+    {
+        $data = get_object_vars($this);
+
+        foreach ($this->getL10nKeys() as $key) {
+            $data[$key] = $this->{$key};
+        }
+
+        return $data;
+    }
+
+    /**
      * TODO: check funcionality
      * Overloads the object properties with an array of the new ones
      *
@@ -320,30 +352,12 @@ class Content
     {
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
-                if (!is_numeric($propertyName) && !empty($propertyValue)) {
-                    $this->{$propertyName} = @iconv(
-                        mb_detect_encoding($propertyValue),
-                        'utf-8',
-                        $propertyValue
-                    );
-                } elseif (empty($propertyValue)) {
-                    $this->{$propertyName} = $propertyValue;
-                } else {
-                    $this->{$propertyName} = (int) $propertyValue;
-                }
+                $this->{$propertyName} = $this->parseProperty($propertyValue);
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $propertyName => $propertyValue) {
-                if (!is_numeric($k)) {
-                    $this->{$propertyName} = @iconv(
-                        mb_detect_encoding($v),
-                        'utf-8',
-                        $propertyValue
-                    );
-                } else {
-                    $this->{$propertyName} = (int) $propertyValue;
-                }
+                $this->{$propertyName} = $this->parseProperty($propertyValue);
             }
         }
 
@@ -387,8 +401,6 @@ class Content
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
         }
-
-        $this->fk_user = $this->fk_author;
     }
 
     /**
@@ -832,7 +844,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setTrashed (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::setTrashed (ID:' . $this->id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1989,5 +2001,29 @@ class Content
         $this->metas = $contentProperties;
 
         return $this;
+    }
+
+    /**
+     * Parses and executes some conversions basing on the property value.
+     *
+     * @param mixed $value The property value.
+     *
+     * @return mixed The converted value.
+     */
+    protected function parseProperty($value)
+    {
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        if (@unserialize($value) !== false) {
+            return unserialize($value);
+        }
+
+        if (!empty($value) && is_string($value)) {
+            return @iconv(mb_detect_encoding($value), 'utf-8', $value);
+        }
+
+        return $value;
     }
 }
