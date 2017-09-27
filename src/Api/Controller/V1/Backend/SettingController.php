@@ -25,23 +25,62 @@ class SettingController extends Controller
      * @var array
      */
     protected $keys = [
-        'comscore', 'contact_email', 'cookies_hint_enabled',
-        'cookies_hint_url', 'facebook', 'facebook_id', 'facebook_page',
-        'favico', 'google_analytics', 'google_analytics_others',
-        'google_custom_search_api_key', 'google_maps_api_key', 'google_tags_id',
-        'google_news_name', 'google_page', 'googleplus_page',
-        'instagram_page', 'items_in_blog', 'items_per_page',
-        'linkedin_page', 'max_session_lifetime', 'mobile_logo', 'ojd',
-        'onm_digest_pass', 'onm_digest_user', 'paypal_mail',
-        'pinterest_page', 'piwik', 'recaptcha', 'refresh_interval',
-        'logo_enabled', 'site_agency', 'site_color', 'site_color_secondary',
-        'site_description', 'site_footer', 'site_footer', 'site_keywords',
-        'site_language', 'site_logo', 'site_name', 'site_title',
-        'twitter_page', 'vimeo_page', 'webmastertools_bing',
-        'webmastertools_google', 'youtube_page',
-        'robots_txt_rules', 'chartbeat',
-        'body_end_script', 'body_start_script','header_script',
-        'elements_in_rss', 'redirection', 'locale', 'rtb_files'
+        'body_end_script',
+        'body_start_script',
+        'chartbeat',
+        'comscore',
+        'contact_email',
+        'cookies_hint_enabled',
+        'cookies_hint_url',
+        'elements_in_rss',
+        'facebook',
+        'facebook_id',
+        'facebook_page',
+        'favico',
+        'google_analytics',
+        'google_analytics_others',
+        'google_custom_search_api_key',
+        'google_maps_api_key',
+        'google_news_name',
+        'google_page',
+        'google_tags_id',
+        'googleplus_page',
+        'header_script',
+        'instagram_page',
+        'items_in_blog',
+        'items_per_page',
+        'linkedin_page',
+        'locale',
+        'logo_enabled',
+        'max_session_lifetime',
+        'mobile_logo',
+        'ojd',
+        'onm_digest_pass',
+        'onm_digest_user',
+        'paypal_mail',
+        'pinterest_page',
+        'piwik',
+        'recaptcha',
+        'redirection',
+        'refresh_interval',
+        'robots_txt_rules',
+        'rtb_files',
+        'section_settings',
+        'site_agency',
+        'site_color',
+        'site_color_secondary',
+        'site_description',
+        'site_footer',
+        'site_keywords',
+        'site_logo',
+        'site_name',
+        'site_title',
+        'translators',
+        'twitter_page',
+        'vimeo_page',
+        'webmastertools_bing',
+        'webmastertools_google',
+        'youtube_page',
     ];
 
     /**
@@ -64,7 +103,8 @@ class SettingController extends Controller
     public function listLocaleAction(Request $request)
     {
         $query   = $request->get('q');
-        $locales = $this->get('core.locale')->getAvailableLocales();
+        $locales = $this->get('core.locale')->setContext('frontend')
+            ->getSupportedLocales();
 
         if (!empty($query)) {
             $locales = array_filter($locales, function ($a) use ($query) {
@@ -77,7 +117,10 @@ class SettingController extends Controller
         $locales = [];
 
         for ($i = 0; $i < count($keys); $i++) {
-            $locales[] = [ 'code' => $keys[$i], 'name' => $values[$i] ];
+            $locales[] = [
+                'code' => $keys[$i],
+                'name' => "$values[$i] ($keys[$i])"
+            ];
         }
 
         return new JsonResponse($locales);
@@ -94,6 +137,7 @@ class SettingController extends Controller
     public function listAction()
     {
         $settings = $this->get('setting_repository')->get($this->keys);
+        $locale   = $this->get('core.locale');
 
         if (array_key_exists('google_analytics', $settings)) {
             $settings['google_analytics'] = $this->get('data.manager.adapter')
@@ -116,7 +160,7 @@ class SettingController extends Controller
             }
         }
 
-        foreach ([ 'locale', 'logo_enabled' ] as $key) {
+        foreach ([ 'logo_enabled' ] as $key) {
             $settings[$key] = $this->get('data.manager.adapter')
                 ->adapt($key, $settings[$key]);
         }
@@ -137,12 +181,14 @@ class SettingController extends Controller
             'extra'    => [
                 'countries' => $this->get('core.geo')->getCountries(),
                 'locales'   => [
-                    'backend'  => $this->get('core.locale')->getLocales(),
-                    'frontend' => $this->getFrontendLocales($settings)
+                    'backend'  => $locale->getAvailableLocales(),
+                    'frontend' => $locale->setContext('frontend')->getAvailableLocales()
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
-                    . '/sections/'
+                    . '/sections/',
+                'translation_services' =>
+                    $this->get('core.factory.translator')->getTranslatorsData()
             ],
             'settings' => $settings,
         ]);
@@ -212,11 +258,13 @@ class SettingController extends Controller
             }
         }
 
+        // TODO: Remove this hack when frontend settings name are updated
+        $settings = $this->updateOldSettingsName($settings);
+
         // Save settings
         $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->set($settings);
-
 
         // Delete caches for custom_css and frontpages
         $this->get('core.dispatcher')->dispatch('setting.update');
@@ -230,36 +278,6 @@ class SettingController extends Controller
         $msg->add(_('Settings saved.'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getcode());
-    }
-
-    /**
-     * Returns the list of frontend locales basing on the current locale
-     * configuration.
-     *
-     * @param array $settings The list of settings.
-     *
-     * @return array The list of frontend locales.
-     */
-    protected function getFrontendLocales($settings)
-    {
-        $frontend = [];
-
-        if (empty($settings)
-            || !is_array($settings)
-            || !array_key_exists('locale', $settings)
-            || !array_key_exists('frontend', $settings['locale'])
-            || !is_array($settings['locale']['frontend'])
-        ) {
-            return $frontend;
-        }
-
-        $locales = $this->get('core.locale')->getAvailableLocales();
-
-        foreach ($settings['locale']['frontend'] as $code) {
-            $frontend[$code] = $locales[$code];
-        }
-
-        return $frontend;
     }
 
     /**
@@ -300,6 +318,33 @@ class SettingController extends Controller
             $settings[$key] = $name;
         }
 
+        return $settings;
+    }
+
+    /**
+     * Update old settings name with new values
+     *
+     * @param array $settings The list of settings.
+     *
+     * @return array $settings The list of settings with old name updated.
+     */
+    protected function updateOldSettingsName($settings)
+    {
+        if (array_key_exists('facebook', $settings)
+            && is_array($settings['facebook'])
+        ) {
+            if (array_key_exists('page', $settings['facebook'])) {
+                $settings['facebook_page'] = $settings['facebook']['page'];
+            }
+
+            if (array_key_exists('id', $settings['facebook'])) {
+                $settings['facebook_id'] = $settings['facebook']['id'];
+            }
+        }
+
+        if (array_key_exists('logo_enabled', $settings)) {
+            $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
+        }
 
         return $settings;
     }

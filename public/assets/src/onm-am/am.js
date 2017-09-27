@@ -91,7 +91,9 @@
     document.body.className = document.body.className
       .replace(' interstitial-open', '');
 
-    element.remove();
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
   };
 
   /**
@@ -107,6 +109,7 @@
    */
   OAM.prototype.createInterstitial = function(ad) {
     var div = document.createElement('div');
+    var self = this;
 
     div.innerHTML = '<div class="interstitial interstitial-visible">' +
       '<div class="interstitial-wrapper">' +
@@ -131,7 +134,6 @@
     var oat     = div.getElementsByClassName('oat')[0];
     var wrapper = div.getElementsByClassName('interstitial-wrapper')[0];
     var iframe  = this.createNormal(ad);
-    var self    = this;
     var size    = this.getSize(ad);
 
     // Hide interstitial after X seconds
@@ -173,7 +175,9 @@
 
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
-    item.src += 'category=' + this.config.category + '&module=' + this.config.extension;
+    item.src += 'category=' + this.config.category +
+      '&module=' + this.config.extension +
+      '&contentId=' + this.config.contentId;
 
     // Dispatch event when iframe loaded
     item.onload = function () {
@@ -537,6 +541,17 @@
 
     if (type && ad.position.indexOf(type) === -1) {
       return false;
+    }
+
+    // Change date format to work with all browsers:
+    // Before: 2017-08-23 13:38:00
+    // After:  2017-08-23T13:38:00
+    if (ad.starttime) {
+      ad.starttime = ad.starttime.replace(/\s+/g, 'T');
+    }
+
+    if (ad.endtime) {
+      ad.endtime = ad.endtime.replace(/\s+/g, 'T');
     }
 
     var groups    = [];

@@ -61,14 +61,14 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$category->title|default:""}" required="required" class="form-control"/>
+                  <input type="text" id="title" name="title" value="{$category->title|default:""}" required class="form-control"/>
                 </div>
               </div>
               {if isset($category) && !empty($category->name)}
               <div class="form-group">
                 <label for="name" class="form-label">{t}Slug{/t}</label>
                 <div class="controls">
-                  <input type="text" id="name" name="name" readonly value="{$category->name|clearslash|default:""}"  required="required" class="form-control"/>
+                  <input type="text" id="name" name="name" readonly value="{$category->name|clearslash|default:""}"  required class="form-control"/>
                 </div>
               </div>
               {/if}
@@ -77,7 +77,7 @@
                   {t}Subsection of{/t}
                 </label>
                 <div class="controls">
-                  <select name="subcategory" required="required">
+                  <select name="subcategory" required>
                     <option value="0" {if !isset($category) || (!empty($category->fk_content_category) || $category->fk_content_category eq '0')}selected{/if}> -- </option>
                     {section name=as loop=$allcategorys}
                     <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category->fk_content_category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
@@ -170,7 +170,7 @@
                   {t}Category available for{/t}
                 </label>
                 <div class="controls">
-                  <select name="internal_category" id="internal_category"  required="required">
+                  <select name="internal_category" id="internal_category"  required>
                     <option value="1"
                     {if  (empty($category->internal_category) || $category->internal_category eq 1)} selected="selected"{/if}>{t}All contents{/t}</option>
                     {is_module_activated name="ALBUM_MANAGER"}

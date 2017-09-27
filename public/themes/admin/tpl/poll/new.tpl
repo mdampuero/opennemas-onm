@@ -68,13 +68,13 @@
               <div class="form-group">
                 <label class="form-label" for="title">{t}Title{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" required="required" type="text" value="{$poll->title|clearslash|escape:"html"}"/>
+                  <input class="form-control" id="title" name="title" required type="text" value="{$poll->title|clearslash|escape:"html"}"/>
                 </div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="subtitle">{t}Subtitle{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="subtitle" name="subtitle" type="text" required="required" value="{$poll->subtitle|clearslash}"/>
+                  <input class="form-control" id="subtitle" name="subtitle" type="text" required value="{$poll->subtitle|clearslash}"/>
                 </div>
               </div>
               <div class="form-group">
@@ -111,7 +111,7 @@
                       <div>
                         <div class="form-group">
                           <div class="input-group" style="width: 100%">
-                            <input class="form-control" name="item[]" type="text" ng-value="answer.item" ng-model="answer.item" class="form-control" required="required" />
+                            <input class="form-control" name="item[]" type="text" ng-value="answer.item" ng-model="answer.item" class="form-control" required />
                             <div class="input-group-btn">
                               <button type="button" class="btn btn-default">
                                 <small ng-if="answer.votes > 0">{t}Votes{/t}:  [% answer.votes %] / {$poll->total_votes}</small>
@@ -192,7 +192,7 @@
                   <div class="form-group">
                     <label for="metadata" class="form-label">{t}Tags{/t}</label>
                     <div class="controls">
-                      <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$poll->metadata|clearslash|escape:"html"}"/>
+                      <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$poll->metadata|clearslash|escape:"html"}"/>
                     </div>
                   </div>
                 </div>

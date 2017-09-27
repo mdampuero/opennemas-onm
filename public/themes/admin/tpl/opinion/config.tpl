@@ -51,7 +51,7 @@
             {t}How many director opinions will be shown in the opinion frontpage.{/t}
           </span>
           <div class="controls">
-            <input id="opinion_settings[total_director]" name="opinion_settings[total_director]" required="required" type="number" value="{$configs['opinion_settings']['total_director']|default:"1"}" />
+            <input id="opinion_settings[total_director]" name="opinion_settings[total_director]" required type="number" value="{$configs['opinion_settings']['total_director']|default:"1"}" />
           </div>
         </div>
         <div class="form-group">
@@ -62,7 +62,7 @@
             {t}How many editorial opinions will be shown in the opinion frontpage.{/t}
           </span>
           <div class="controls">
-            <input id="opinion_settings[total_editorial]" name="opinion_settings[total_editorial]" required="required" type="number" value="{$configs['opinion_settings']['total_editorial']|default:"2"}" />
+            <input id="opinion_settings[total_editorial]" name="opinion_settings[total_editorial]" required type="number" value="{$configs['opinion_settings']['total_editorial']|default:"2"}" />
           </div>
         </div>
         <div class="form-group">
@@ -73,7 +73,7 @@
             {t}How many opinions opinions will be shown in the opinion frontpage.{/t}
           </span>
           <div class="controls">
-            <input id="opinion_settings[total_opinions]" name="opinion_settings[total_opinions]" required="required" type="number"  value="{$configs['opinion_settings']['total_opinions']|default:"16"}" />
+            <input id="opinion_settings[total_opinions]" name="opinion_settings[total_opinions]" required type="number"  value="{$configs['opinion_settings']['total_opinions']|default:"16"}" />
           </div>
         </div>
         <div class="form-group">
@@ -84,7 +84,7 @@
             {t}How many author opinions will be shown in the widget.{/t}
           </span>
           <div class="controls">
-            <input id="opinion_settings[total_opinion_authors]" name="opinion_settings[total_opinion_authors]" required="required" type="number" value="{$configs['opinion_settings']['total_opinion_authors']|default:"6"}" />
+            <input id="opinion_settings[total_opinion_authors]" name="opinion_settings[total_opinion_authors]" required type="number" value="{$configs['opinion_settings']['total_opinion_authors']|default:"6"}" />
           </div>
         </div>
         {is_module_activated name="BLOG_MANAGER"}

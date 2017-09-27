@@ -62,7 +62,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" type="text" value="{$page->title|default:""}" maxlength="120" tabindex="1" required="required" ng-model="title"/>
+                  <input class="form-control" id="title" name="title" type="text" value="{$page->title|default:""}" maxlength="120" tabindex="1" required ng-model="title"/>
                 </div>
               </div>
               <div class="form-group">
@@ -73,7 +73,7 @@
                   {t}The slug component in the url{/t}: {$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html" target="_blank"><span class="fa fa-external-link"></span></a>
                 </span>
                 <div class="controls">
-                  <input class="form-control" id="slug" name="slug" type="text" value="{$page->slug|default:""}"  ng-model="slug" maxlength="120" tabindex="2" required="required"  />
+                  <input class="form-control" id="slug" name="slug" type="text" value="{$page->slug|default:""}"  ng-model="slug" maxlength="120" tabindex="2" required  />
                 </div>
               </div>
               <div class="form-group">
@@ -113,7 +113,7 @@
                   {t}Tags{/t}
                 </label>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$page->metadata|clearslash|escape:"html"}"/>
+                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$page->metadata|clearslash|escape:"html"}"/>
                 </div>
               </div>
             </div>
@@ -136,7 +136,6 @@
 
             var slugy = $.trim($('#slug').val());
             if ((slugy.length <= 0) && (previous !== slugy)) {
-
               $.ajax({
                 url:  '{url name=backend_static_page_build_slug id=$page->id|default:0}',
                 type: 'POST',

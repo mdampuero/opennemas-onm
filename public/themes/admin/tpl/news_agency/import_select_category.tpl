@@ -67,7 +67,7 @@
                                 {t}In which category you want to import this element?{/t}
                         </label>
                         <div class="controls">
-                          <select id="category" name="category" required="required">
+                          <select id="category" name="category" required>
                             <option value="" >{t}- Select a category -{/t}</option>
                             {section name=as loop=$allcategorys}
                             {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}

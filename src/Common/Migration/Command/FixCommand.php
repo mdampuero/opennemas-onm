@@ -95,7 +95,6 @@ class FixCommand extends ContainerAwareCommand
 
         $this->preFix();
 
-
         $this->output->writeln("<options=bold>(5/7) Executing the fix...</>");
 
         while (($item = $this->mm->getRepository()->next()) !== false) {
@@ -127,15 +126,15 @@ class FixCommand extends ContainerAwareCommand
             }
         }
 
+        if (!empty($progress)) {
+            $progress->finish();
+            $output->writeln('');
+        }
+
         $this->postFix();
 
         if (!$end) {
             $tracker->end();
-        }
-
-        if (!empty($progress)) {
-            $progress->finish();
-            $output->writeln('');
         }
 
         $this->getReport();
@@ -214,6 +213,8 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function getReport()
     {
+        date_default_timezone_set('UTC');
+
         $this->end = time();
 
         $diff = $this->end - $this->start;

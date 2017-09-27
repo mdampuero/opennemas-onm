@@ -27,15 +27,17 @@ class ImagesController extends Controller
      */
     public function init()
     {
-        $this->ccm         = \ContentCategoryManager::get_instance();
+        $this->ccm = \ContentCategoryManager::get_instance();
+
         $this->category    = $this->get('request_stack')->getCurrentRequest()
             ->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
         $this->contentType = \ContentManager::getContentTypeIdFromName('album');
+
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
-        $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
-        $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR;
+        $this->pathUpload = MEDIA_PATH . DS . IMG_DIR . DS;
+        $this->imgUrl     = MEDIA_URL . MEDIA_DIR . SS . IMG_DIR;
 
         $this->view->assign([
             'subcat'        => $this->subcat,
@@ -73,11 +75,11 @@ class ImagesController extends Controller
 
         foreach ($results as $value) {
             $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
-            $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+            $fmt  = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
             if (!is_null($fmt)) {
-                $years[$date->format('Y')]['name'] = $date->format('Y');
-                $years[$date->format('Y')]['months'][]= array(
+                $years[$date->format('Y')]['name']     = $date->format('Y');
+                $years[$date->format('Y')]['months'][] = array(
                     'name'  => ucfirst($fmt->format($date)),
                     'value' => $value['date_month']
                 );
@@ -98,8 +100,8 @@ class ImagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $ids         = $request->query->get('id');
-        $page        = $request->query->getDigits('page', 1);
+        $ids  = $request->query->get('id');
+        $page = $request->query->getDigits('page', 1);
 
         // Check if ids was passed as params
         if (!is_array($ids) || !(count($ids) > 0)) {
@@ -111,6 +113,7 @@ class ImagesController extends Controller
                     $this->generateUrl('admin_images', array('category' => $category))
                 );
             }
+
             $ids = array($ids);
         }
 
@@ -121,7 +124,9 @@ class ImagesController extends Controller
                 $photo = new \Photo($id);
                 $photo->getPhotoMetaData();
 
-                $photos []= $photo;
+                if (!is_null($photo->pk_photo)) {
+                    $photos [] = $photo;
+                }
             }
         }
 
@@ -130,13 +135,7 @@ class ImagesController extends Controller
             $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
 
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_images',
-                    array(
-                        'category' => $category,
-                        'page'     => $page,
-                    )
-                )
+                $this->generateUrl('admin_images', [ 'page' => $page ])
             );
         }
 
@@ -160,16 +159,22 @@ class ImagesController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $photosRAW = $request->request->get('description');
-
-        $ids = array();
+        $photosRAW   = $request->request->get('description');
+        $ids         = [];
         $photosSaved = 0;
+
         foreach (array_keys($photosRAW) as $id) {
             $photoData = array(
                 'id'             => filter_var($id, FILTER_SANITIZE_STRING),
                 'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
-                'description'    => filter_var($_POST['description'][$id], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata(filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING)),
+                'description'    => filter_var(
+                    $_POST['description'][$id],
+                    FILTER_SANITIZE_STRING,
+                    FILTER_FLAG_NO_ENCODE_QUOTES
+                ),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                    filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING)
+                ),
                 'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
                 'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
@@ -178,7 +183,7 @@ class ImagesController extends Controller
 
             $photo = new \Photo($id);
 
-            $ids []= $id;
+            $ids[] = $id;
 
             if ($photo->update($photoData)) {
                 $photosSaved++;
@@ -194,7 +199,7 @@ class ImagesController extends Controller
 
         $queryIDs = implode('&id[]=', $ids);
 
-        return $this->redirect($this->generateUrl('admin_image_show').'?id[]='.$queryIDs);
+        return $this->redirect($this->generateUrl('admin_image_show') . '?id[]=' . $queryIDs);
     }
 
     /**
@@ -220,7 +225,7 @@ class ImagesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_images'));
         }
-        // $contents = $photo->isUsed($id);
+
         $photo->delete($id, $this->getUser()->id);
 
         return $this->redirect(
@@ -259,8 +264,7 @@ class ImagesController extends Controller
         switch ($request->getMethod()) {
             case 'HEAD':
             case 'GET':
-                return  $response->setContent(json_encode([]));
-                break;
+                return $response->setContent(json_encode([]));
             case 'POST':
                 // check if category, and filesizes are properly setted and category_name is valid
                 $category = $request->request->getDigits('category', 0);
@@ -271,7 +275,7 @@ class ImagesController extends Controller
                 }
 
                 $files = isset($_FILES) ? $_FILES : null;
-                $info = array();
+                $info  = [];
 
                 foreach ($files as $file) {
                     $photo = new \Photo();
@@ -304,11 +308,11 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => $fm->filter('tags', $tempName),
+                        'metadata'          => $fm->set($tempName)->filter('tags')->get(),
                     );
 
                     try {
-                        $photo = new \Photo();
+                        $photo   = new \Photo();
                         $photoId = $photo->createFromLocalFile($data);
 
                         $photo = new \Photo($photoId);
@@ -324,21 +328,22 @@ class ImagesController extends Controller
                 $json = json_encode($info);
                 $response->setContent($json);
 
-                $response->headers->add(array('Vary' =>'Accept'));
+                $response->headers->add([ 'Vary' => 'Accept' ]);
 
                 $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
                 if (!empty($redirect)) {
                     return $this->redirect(sprintf($redirect, rawurlencode($json)));
                 }
-                if (isset($_SERVER['HTTP_ACCEPT']) &&
-                    (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
+
+                if (isset($_SERVER['HTTP_ACCEPT'])
+                    && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+                ) {
                     $response->headers->add(array('Content-type' => 'application/json'));
                 } else {
                     $response->headers->add(array('Content-type' => 'text/plain'));
                 }
-
                 return $response;
-                break;
+
             case 'DELETE':
                 break;
             default:

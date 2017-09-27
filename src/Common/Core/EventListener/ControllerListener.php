@@ -9,7 +9,8 @@
  */
 namespace Common\Core\EventListener;
 
-use Common\Core\Component\Template\GlobalVariables;
+use Common\Core\Component\Locale\Locale;
+use Common\Core\Component\Core\GlobalVariables;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
@@ -26,13 +27,21 @@ class ControllerListener
     protected $globals;
 
     /**
+     * The locale service
+     *
+     * @var Locale
+     */
+    protected $locale;
+
+    /**
      * Initializes the ControllerListener.
      *
      * @param GlobalVariables $globals The global variables service.
      */
-    public function __construct(GlobalVariables $globals)
+    public function __construct(GlobalVariables $globals, Locale $locale)
     {
         $this->globals = $globals;
+        $this->locale  = $locale;
     }
 
     /**
@@ -46,7 +55,6 @@ class ControllerListener
         $namespace  = get_class($controller[0]);
 
         $this->globals->setAction($this->getAction($controller[1]));
-        $this->globals->setEndpoint($this->getEndpoint($namespace));
         $this->globals->setExtension($this->getExtension($namespace));
     }
 
@@ -60,18 +68,6 @@ class ControllerListener
     protected function getAction($action)
     {
         return strtolower(str_replace('Action', '', $action));
-    }
-
-    /**
-     * Returns the endpoint from the controller namespace.
-     *
-     * @param string $namespace The controller namespace.
-     *
-     * @return string The endpoint.
-     */
-    protected function getEndpoint($namespace)
-    {
-        return substr($namespace, 0, strpos($namespace, '\\'));
     }
 
     /**

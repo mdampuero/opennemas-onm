@@ -1,9 +1,37 @@
 <?php
 // Onm advertisement php file
+$default = [
+    'with_script' => '1',
+    'content_type' => '2',
+    'content_type_name' => 'advertisement',
+    'starttime' => '2011-09-28 23:44:24',
+    'endtime' => null,
+    'created' => '2011-09-28 23:44:24',
+    'changed' => '2011-09-28 23:44:24',
+    'available' => '1',
+    'content_status' => '1',
+    'content_type_l10n_name' => 'Publicidad',
+    'fk_content_type' => '2',
+    'params' => [
+        'orientation' => 'top',
+        'devices' => [
+            'desktop' => 1,
+            'tablet' => 1,
+            'phone' => 1
+        ],
+        'restriction_devices' => [
+            'phone' => 1,
+            'tablet' => 1,
+            'desktop' => 1
+        ]
+    ],
+];
 
 $i = 1;
-return array_map(function ($ad) use (&$i) {
+return array_map(function ($ad) use (&$i, $default) {
     $adObject = new Advertisement();
+    // Merge default params on all ads
+    $ad = array_merge($default, $ad);
 
     foreach ($ad as $key => $value) {
         $adObject->{$key} = $value;
@@ -19,18 +47,9 @@ return array_map(function ($ad) use (&$i) {
 
     return $adObject;
 }, [
-    0 => [
-        'map' => null,
+    1 => [
         'type_advertisement' => '1',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-728x90 Leaderboard -->
             <ins class="adsbygoogle"
@@ -40,495 +59,137 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top left leaderboard - Frontpage - 728x90 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,left,leaderboard,frontpage,728x90,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:44:24',
-        'endtime' => null,
-        'created' => '2011-09-28 23:44:24',
-        'changed' => '2015-08-14 16:00:55',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '728',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-portada-top-left',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
+    ],
+    '1m' => [
+        'type_advertisement' => '1',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 320x100 Large mobile -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:100px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4186659580"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'phone'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 0,
+                'tablet' => 0,
+                'phone' => 1
+            ],
+        ],
     ],
     2 => [
-        'map' => null,
         'type_advertisement' => '2',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '126',
-        'path' => '126',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow"><img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top right leaderboard - Frontpage - 234x90 - Openhost Ads - Static',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,right,leaderboard,frontpage,234x90,openhost,ads,static',
-        'starttime' => '2011-09-28 23:14:50',
-        'endtime' => null,
-        'created' => '2011-09-28 23:14:50',
-        'changed' => '2013-04-18 09:42:56',
-        'fk_user' => '7',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
+            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
+            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
+            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
         'params' => [
-            'width' => '234',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-portada-top-right',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '7',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
     3 => [
-        'map' => null,
         'type_advertisement' => '3',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'728x90 (728x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'728\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'728x90 (728x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Center left leaderboard - Frontpage - 728x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'center,left,leaderboard,frontpage,728x90,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:19:44',
-        'endtime' => null,
-        'created' => '2011-09-28 23:19:44',
-        'changed' => '2015-08-14 16:03:00',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 970x250 Billboard -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:970px;height:250px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="5734231891"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
         'params' => [
-            'width' => '728',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-portada-middle-left',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    4 => [
-        'map' => null,
-        'type_advertisement' => '4',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'234x90 (234x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51510546, rank:1, width:234, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51510546&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'234\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'234x90 (234x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Center rigth leaderboard - Frontpage - 234x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'center,rigth,leaderboard,frontpage,234x90,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:20:48',
-        'endtime' => null,
-        'created' => '2011-09-28 23:20:48',
-        'changed' => '2015-08-14 16:04:51',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+    '3m' => [
+        'type_advertisement' => '3',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-format="fluid"
+                 data-ad-layout="image-top"
+                 data-ad-layout-key="-8i+1w-dq+e9+ft"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="9036619446"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
         'params' => [
-            'width' => '234',
-            'height' => '90',
-            'openx_zone_id' => '',
-            'googledfp_unit_id' => '',
+            'devices' => [
+                'desktop' => 0,
+                'tablet' => 0,
+                'phone' => 1
+            ],
         ],
-        'slug' => 'publicidad-portada-middle-right',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    6 => [
-        'map' => null,
+    5 => [
         'type_advertisement' => '5',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'728x90 (728x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'728\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'728x90 (728x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Bottom left leaderboard - Frontpage - 728x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'bottom, left, leaderboard, frontpage, 728x90, openhost, ads, ikreate',
-        'starttime' => '2015-08-14 00:00:00',
-        'endtime' => null,
-        'created' => '2015-08-21 18:01:45',
-        'changed' => '2015-08-21 18:01:45',
-        'fk_user' => '0',
-        'fk_publisher' => '0',
-        'fk_user_last_editor' => '0',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => 728,
-            'height' => 90,
-        ],
-        'slug' => 'bottom-left-leaderboard-frontpage-728x90-openhost-ads-ikreate',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '0',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '0',
-    ],
-    7 => [
-        'map' => null,
-        'type_advertisement' => '6',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'234x90 (234x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51510546, rank:1, width:234, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51510546&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'234\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'234x90 (234x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Bottom right Leaderboard - Frontpage - 234x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'bottom,right,leaderboard,frontpage,234x90,openhost,ads',
-        'starttime' => '2011-09-28 23:17:47',
-        'endtime' => null,
-        'created' => '2011-09-28 23:17:47',
-        'changed' => '2015-08-14 16:09:15',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '234',
-            'height' => '90',
-        ],
-        'slug' => 'publicidad-portada-botton-right',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
-    ],
-    8 => [
-        'map' => null,
-        'type_advertisement' => '31',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos1 Col3 - Frontpage - 300x250 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos2,col3,frontpage,300x250,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:23:16',
-        'endtime' => null,
-        'created' => '2011-09-28 23:23:16',
-        'changed' => '2013-04-18 05:55:37',
-        'fk_user' => '7',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '3',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-portada-columna3',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '7',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
-    ],
-    9 => [
-        'map' => null,
-        'type_advertisement' => '32',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos2 Col3 - Frontpage - 300x250 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'publicidad, portada, columna1, adsense',
-        'starttime' => '2011-09-28 23:19:00',
-        'endtime' => null,
-        'created' => '2011-09-28 23:19:00',
-        'changed' => '2015-08-14 16:16:54',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-portada-columna1',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
-    ],
-    11 => [
-        'map' => null,
-        'type_advertisement' => '101',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-728x90 Leaderboard -->
             <ins class="adsbygoogle"
@@ -538,186 +199,120 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top left leaderboard - Inner article - 728x90 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,left,leaderboard,frontpage,728x90,openhost,ads,inner,article,adsense',
-        'starttime' => '2011-09-28 23:24:19',
-        'endtime' => null,
-        'created' => '2011-09-28 23:24:19',
-        'changed' => '2015-08-14 16:25:37',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '728',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-inner-top-left',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    12 => [
-        'map' => null,
-        'type_advertisement' => '33',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'300x250 (300x250)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:7010263, rank:1, width:300, height:250, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=7010263&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'300\' height=\'250\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'300x250 (300x250)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos3 Col3 - Frontpage - 300x250 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'publicidad, portada, columna3, pos3, Ikreate',
-        'starttime' => '2011-09-28 23:19:00',
-        'endtime' => null,
-        'created' => '2011-09-28 23:19:00',
-        'changed' => '2015-08-14 16:16:54',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+    6 => [
+        'type_advertisement' => '6',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
+            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
+            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
+            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
         'params' => [
-            'width' => '300',
-            'height' => '250',
+            'sizes' => [
+                '0' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-portada-columna3-pos3',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    13 => [
-        'map' => null,
-        'type_advertisement' => '102',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'234x90 (234x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51510546, rank:1, width:234, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51510546&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'234\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'234x90 (234x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top right leaderboard - Inner Article - 234x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,right,leaderboard,inner,article,234x90,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:25:19',
-        'endtime' => null,
-        'created' => '2011-09-28 23:25:19',
-        'changed' => '2015-08-14 16:24:25',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+    11 => [
+        'type_advertisement' => '11',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 300x600 Large Skyscraper -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:600px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4024853965"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
         'params' => [
-            'width' => '234',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-inner-top-right',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    14 => [
-        'map' => null,
-        'type_advertisement' => '103',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+    21 => [
+        'type_advertisement' => '21',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 320x100 Large mobile -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:100px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4186659580"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    31 => [
+        'type_advertisement' => '31',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-300x250 - Medium Rectangle - #1 -->
             <ins class="adsbygoogle"
@@ -727,60 +322,120 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos1 - Inner Article - 300x250 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos1,inner,article,300x250,openhost,ads,adsense',
-        'starttime' => '2011-10-18 01:14:09',
-        'endtime' => null,
-        'created' => '2011-10-18 01:14:09',
-        'changed' => '2013-04-18 04:33:07',
-        'fk_user' => '3',
-        'fk_publisher' => '3',
-        'fk_user_last_editor' => '3',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '300',
-            'height' => '250',
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-inner-top-right-columna1',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '3',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    15 => [
-        'map' => null,
+    101 => [
+        'type_advertisement' => '101',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 970x250 Billboard -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:970px;height:250px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="5734231891"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
+        ],
+    ],
+    '101m' => [
+        'type_advertisement' => '101',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 320x100 Large mobile -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:100px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4186659580"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'desktop'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 0,
+                'tablet' => 0,
+                'phone' => 1
+            ],
+        ],
+    ],
+    103 => [
+        'type_advertisement' => '103',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 300x600 Large Skyscraper -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:600px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4024853965"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    104 => [
         'type_advertisement' => '104',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-468x60-robapagina -->
             <ins class="adsbygoogle"
@@ -790,249 +445,120 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Full banner - Inner Article - 468x60 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'full,banner,inner,article,468x60,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:26:10',
-        'endtime' => null,
-        'created' => '2011-09-28 23:26:10',
-        'changed' => '2015-08-14 16:30:22',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '468',
-            'height' => '60',
+            'sizes' => [
+                '0' => [
+                    'width' => 468,
+                    'height' => 60,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 468,
+                    'height' => 60,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 468,
+                    'height' => 60,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-inner-robapage',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    16 => [
-        'map' => null,
-        'type_advertisement' => '104',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'468x60 (468x60)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51506852, rank:1, width:468, height:60, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506852&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'468\' height=\'60\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'468x60 (468x60)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Full banner - Inner Article - 468x60 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'full, banner, inner, article, 468x60, openhost, ads, ikreate',
-        'starttime' => '2015-08-14 00:00:00',
-        'endtime' => null,
-        'created' => '2015-08-21 18:01:45',
-        'changed' => '2015-08-21 18:01:45',
-        'fk_user' => '0',
-        'fk_publisher' => '0',
-        'fk_user_last_editor' => '0',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+    105 => [
+        'type_advertisement' => '105',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm-300x250 - Medium Rectangle - #1 -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="9055006270"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
         'params' => [
-            'width' => 468,
-            'height' => 60,
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'full-banner-inner-article-468x60-openhost-ads-ikreate',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '0',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '0',
     ],
-    18 => [
-        'map' => null,
+    109 => [
         'type_advertisement' => '109',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'728x90 (728x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'728\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'728x90 (728x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Bottom left leaderboard - Inner Article - 728x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'bottom,left,leaderboard,inner,article,300x250,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:43:15',
-        'endtime' => null,
-        'created' => '2011-09-28 23:43:15',
-        'changed' => '2015-08-14 16:35:53',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm-728x90 Leaderboard -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:728px;height:90px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="2721775077"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
         'params' => [
-            'width' => '728',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-inner-bottom-left',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    19 => [
-        'map' => null,
+    110 => [
         'type_advertisement' => '110',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'234x90 (234x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51510546, rank:1, width:234, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51510546&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'234\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'234x90 (234x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Bottom right leaderboard - Inner Article - 234x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'bottom,right,leaderboard,inner,article,234x90,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:20:24',
-        'endtime' => null,
-        'created' => '2011-09-28 23:20:24',
-        'changed' => '2015-08-14 16:38:11',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '7',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
+            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
+            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
+            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
         'params' => [
-            'width' => '234',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-portada-middle-right',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
     ],
-    20 => [
-        'map' => null,
+    193 => [
         'type_advertisement' => '193',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-120x600-Skycraper -->
             <ins class="adsbygoogle"
@@ -1042,60 +568,29 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Body skycraper - Inner Article - 120x600 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'body,skycraper,inner,article,120x600,openhost,ads,adsense',
-        'starttime' => '2013-04-18 06:40:33',
-        'endtime' => null,
-        'created' => '2013-04-18 06:40:33',
-        'changed' => '2015-08-14 16:41:55',
-        'fk_user' => '4',
-        'fk_publisher' => '3',
-        'fk_user_last_editor' => '4',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '120',
-            'height' => '600',
+            'sizes' => [
+                '0' => [
+                    'width' => 120,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 120,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'body-skycraper-inner-article-120x600-openhost-ads',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '0',
     ],
-    22 => [
-        'map' => null,
+    601 => [
         'type_advertisement' => '601',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-728x90 Leaderboard -->
             <ins class="adsbygoogle"
@@ -1105,178 +600,115 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top left leaderboard - Frontpage OPINION - 728x90 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,left,leaderboard,frontpage,opinion,728x90,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:28:18',
-        'endtime' => null,
-        'created' => '2011-09-28 23:28:18',
-        'changed' => '2015-08-14 16:54:38',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '728',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-opinion-top-left',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    24 => [
-        'map' => null,
+    '601m' => [
+        'type_advertisement' => '601',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 320x100 Large mobile -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:100px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4186659580"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'phone'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 0,
+                'tablet' => 0,
+                'phone' => 1
+            ],
+        ],
+    ],
+    602 => [
         'type_advertisement' => '602',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '126',
-        'path' => '126',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow"><img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top right leaderboard - Opinion Frontpage - 234x90 - Openhost Ads - Static',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,right,leaderboard,opinion,frontpage,234x90,openhost,ads,static',
-        'starttime' => '2011-09-28 23:29:47',
-        'endtime' => null,
-        'created' => '2011-09-28 23:29:47',
-        'changed' => '2013-04-18 09:10:49',
-        'fk_user' => '7',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '3',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
+            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
+            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
+            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
         'params' => [
-            'width' => '234',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-opinion-column',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '7',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    25 => [
-        'map' => null,
+    603 => [
         'type_advertisement' => '603',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
+            <!-- Onm - 300x600 Large Skyscraper -->
             <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
+                 style="display:inline-block;width:300px;height:600px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
+                 data-ad-slot="4024853965"></ins>
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos1 - Opinion Frontpage - 300x250 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos1,opinion,frontpage,300x250,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:34:30',
-        'endtime' => null,
-        'created' => '2011-09-28 23:34:30',
-        'changed' => '2013-04-18 09:30:05',
-        'fk_user' => '7',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '3',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '300',
-            'height' => '250',
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-opinion-inner-columna',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '7',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    26 => [
-        'map' => null,
+    605 => [
         'type_advertisement' => '605',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-300x250 - Medium Rectangle - #1 -->
             <ins class="adsbygoogle"
@@ -1286,186 +718,184 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos2 - Opinion Frontpage - 300x250 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos2,opinion,frontpage,300x250,openhost,ads',
-        'starttime' => '2011-09-28 23:30:45',
-        'endtime' => null,
-        'created' => '2011-09-28 23:30:45',
-        'changed' => '2015-08-14 16:58:00',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '300',
-            'height' => '250',
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-opinion-column3',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    27 => [
-        'map' => null,
+    609 => [
         'type_advertisement' => '609',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'728x90 (728x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'728\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'728x90 (728x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Bottom Left leaderboard - Opinion Frontpage - 728x90 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'bottom,left,leaderboard,opinion,frontpage,728x90,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:31:31',
-        'endtime' => null,
-        'created' => '2011-09-28 23:31:31',
-        'changed' => '2015-08-14 17:00:39',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 970x250 Billboard -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:970px;height:250px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="5734231891"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
         'params' => [
-            'width' => '728',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-opinion-bottom-left',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    28 => [
-        'map' => null,
-        'type_advertisement' => '610',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'234x90 (234x90)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51510546, rank:1, width:234, height:90, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51510546&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'234\' height=\'90\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'234x90 (234x90)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Bottom right leaderboard - Frontpage Opinion - 300x250 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'bottom,right,leaderboard,frontpage,opinion,300x250,openhost,ads',
-        'starttime' => '2011-09-28 23:32:19',
-        'endtime' => null,
-        'created' => '2011-09-28 23:32:19',
-        'changed' => '2015-08-14 17:01:58',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '234',
-            'height' => '90',
-        ],
-        'slug' => 'publicidad-opinion-bottom-right',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
-    ],
-    29 => [
-        'map' => null,
+    701 => [
         'type_advertisement' => '701',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 970x250 Billboard -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:970px;height:250px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="5734231891"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
+        ],
+    ],
+    '701m' => [
+        'type_advertisement' => '701',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 320x100 Large mobile -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:100px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4186659580"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'desktop'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 0,
+                'tablet' => 0,
+                'phone' => 1
+            ],
+        ],
+    ],
+    703 => [
+        'type_advertisement' => '703',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm - 300x600 Large Skyscraper -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:600px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="4024853965"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    705 => [
+        'type_advertisement' => '705',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm-300x250 - Medium Rectangle - #1 -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="9055006270"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    709 => [
+        'type_advertisement' => '709',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-728x90 Leaderboard -->
             <ins class="adsbygoogle"
@@ -1475,619 +905,88 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top left leaderboard - Inner Opinion - 728x90 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,left,leaderboard,inner,opinion,728x90,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:33:49',
-        'endtime' => null,
-        'created' => '2011-09-28 23:33:49',
-        'changed' => '2015-08-14 17:02:54',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '728',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'publicidad-opinion-inner-top-left',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    31 => [
-        'map' => null,
-        'type_advertisement' => '702',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '126',
-        'path' => '126',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow"><img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Top right leaderboard - Inner Opinion - 234x90 - Openhost Ads - Static',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'top,right,leaderboard,inner,opinion,234x90,openhost,ads,static',
-        'starttime' => '2011-09-28 23:33:12',
-        'endtime' => null,
-        'created' => '2011-09-28 23:33:12',
-        'changed' => '2013-04-18 06:10:14',
-        'fk_user' => '7',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '3',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
+    710 => [
+        'type_advertisement' => '710',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
+            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
+            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
+            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
         'params' => [
-            'width' => '234',
-            'height' => '90',
+            'sizes' => [
+                '0' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 234,
+                    'height' => 90,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'publicidad-opinion-inner-top-right',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '7',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    32 => [
-        'map' => null,
-        'type_advertisement' => '703',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+    793 => [
+        'type_advertisement' => '793',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
+            <!-- Onm-120x600-Skycraper -->
             <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
+                 style="display:inline-block;width:120px;height:600px"
                  data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
+                 data-ad-slot="2407405696"></ins>
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos1 - Inner Opinion - 300x250 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos1,inner,opinion,300x250,openhost,ads,adsense',
-        'starttime' => '2013-04-18 06:05:41',
-        'endtime' => null,
-        'created' => '2013-04-18 06:05:41',
-        'changed' => '2013-04-18 06:05:41',
-        'fk_user' => '3',
-        'fk_publisher' => '3',
-        'fk_user_last_editor' => '3',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '300',
-            'height' => '250',
+            'sizes' => [
+                '0' => [
+                    'width' => 120,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 120,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 1,
+                'phone' => 0
+            ],
         ],
-        'slug' => 'medium-rectangle-pos1-inner-opinion-300x250-openhost-ads',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '3',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
     ],
-    33 => [
-        'map' => null,
-        'type_advertisement' => '705',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'300x250 (300x250)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:7010263, rank:1, width:300, height:250, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=7010263&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'300\' height=\'250\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'300x250 (300x250)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos2 - Inner Opinion - 300x250 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos2,inner,opinion,300x250,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:48:57',
-        'endtime' => null,
-        'created' => '2011-09-28 23:48:57',
-        'changed' => '2015-08-14 17:05:05',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-opinion-inner-column',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
-    ],
-    34 => [
-        'map' => null,
-        'type_advertisement' => '11',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'300x250 (300x250)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:7010263, rank:1, width:300, height:250, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=7010263&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'300\' height=\'250\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'300x250 (300x250)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos1 Col1 - Frontpage - 300x250 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos1,col1,frontpage,300x250,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:23:16',
-        'endtime' => null,
-        'created' => '2011-09-28 23:23:16',
-        'changed' => '2013-04-18 05:55:37',
-        'fk_user' => '7',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '3',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-portada-columna1-pos1',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '7',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
-    ],
-    35 => [
-        'map' => null,
-        'type_advertisement' => '21',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'300x250 (300x250)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:7010263, rank:1, width:300, height:250, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=7010263&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'300\' height=\'250\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'300x250 (300x250)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos2 Col1 - Frontpage - 300x250 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos2,col1,frontpage,300x250,openhost,ads,ikreate',
-        'starttime' => '2011-09-28 23:23:16',
-        'endtime' => null,
-        'created' => '2011-09-28 23:23:16',
-        'changed' => '2013-04-18 05:55:37',
-        'fk_user' => '7',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '3',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-portada-columna2-pos1',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '7',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
-    ],
-    37 => [
-        'map' => null,
-        'type_advertisement' => '105',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'300x250 (300x250)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:7010263, rank:1, width:300, height:250, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=7010263&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'300\' height=\'250\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'300x250 (300x250)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos2 - Inner Article - 300x250 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos2,inner,article,300x250,openhost,ads,ikreate',
-        'starttime' => '2011-10-18 01:14:09',
-        'endtime' => null,
-        'created' => '2011-10-18 01:14:09',
-        'changed' => '2013-04-18 04:33:07',
-        'fk_user' => '3',
-        'fk_publisher' => '3',
-        'fk_user_last_editor' => '3',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-inner-right-column-pos2',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '3',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
-    ],
-    38 => [
-        'map' => null,
-        'type_advertisement' => '106',
-        'fk_content_categories' => [ 0 => '0' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'300x250 (300x250)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:7010263, rank:1, width:300, height:250, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=7010263&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'300\' height=\'250\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'300x250 (300x250)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos3 - Inner Article - 300x250 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos3,inner,article,300x250,openhost,ads,ikreate',
-        'starttime' => '2011-10-18 01:14:09',
-        'endtime' => null,
-        'created' => '2011-10-18 01:14:09',
-        'changed' => '2013-04-18 04:33:07',
-        'fk_user' => '3',
-        'fk_publisher' => '3',
-        'fk_user_last_editor' => '3',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-inner-right-column-pos3',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '3',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '',
-    ],
-    47 => [
-        'map' => null,
-        'type_advertisement' => '793',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'120x600 (120x600)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:51506850, rank:1, width:120, height:600, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506850&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'120\' height=\'600\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'120x600 (120x600)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Body skycraper - Inner Opinion - 120x600 - Openhost Ads - Ikreate',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'body, skycraper, inner, opinion, 120x600, openhost, ads, ikreate',
-        'starttime' => '2015-08-14 00:00:00',
-        'endtime' => null,
-        'created' => '2015-08-21 18:01:46',
-        'changed' => '2015-08-21 18:01:46',
-        'fk_user' => '0',
-        'fk_publisher' => '0',
-        'fk_user_last_editor' => '0',
-        'category' => '0',
-        'category_name' => false,
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => 120,
-            'height' => 600,
-        ],
-        'slug' => 'body-skycraper-inner-opinion-120x600-openhost-ads-ikreate',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '0',
-        'urn_source' => '',
-        'pk_fk_content_category' => '0',
-        'catName' => '0',
-    ],
-    48 => [
-        'map' => null,
-        'type_advertisement' => '706',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
-        'script' => '<!-- START Admeta Placement Holder Web site: \'Openhost\', Web page \'http://opennemas.com/\', Format: \'300x250 (300x250)\' Priority: 1 START -->
-            <script type=\'text/javascript\'>
-              var ADM_PL = {tp:\'sp\', wId:599741, pId:7010263, rank:1, width:300, height:250, pbId:173, clk:\'[External click-tracking goes here (NOT URL-encoded)]\'};
-            </script>
-            <script type=\'text/javascript\' src=\'//s.atemda.com/Admeta.js\'></script>
-            <noscript>
-              <iframe src=\'//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=7010263&rank=1&clk=[URL-encoded external clicktracking link goes here]\' width=\'300\' height=\'250\' frameborder=\'0\' marginheight=\'0\' marginwidth=\'0\' scrolling=\'no\'></iframe>
-            </noscript>
-            <!-- END End of Admeta Placement Holder \'300x250 (300x250)\' (1) END -->',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Medium Rectangle - Pos3 - Inner Opinion - 300x250 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'medium,rectangle,pos3,inner,opinion,300x250,openhost,ads,adsense',
-        'starttime' => '2011-09-28 23:48:57',
-        'endtime' => null,
-        'created' => '2011-09-28 23:48:57',
-        'changed' => '2015-08-14 17:05:05',
-        'fk_user' => '4',
-        'fk_publisher' => '7',
-        'fk_user_last_editor' => '4',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
-        'params' => [
-            'width' => '300',
-            'height' => '250',
-        ],
-        'slug' => 'publicidad-opinion-inner-column-pos3',
-        'favorite' => '0',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '4',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
-    ],
-    50 => [
-        'map' => null,
+    704 => [
         'type_advertisement' => '704',
-        'fk_content_categories' => [ 0 => '4' ],
-        'img' => '',
-        'path' => '',
-        'url' => 'http://www.opennemas.com',
-        'type_medida' => 'null',
-        'num_clic' => '0',
-        'num_clic_count' => '0',
-        'num_view' => '0',
-        'overlap' => '0',
+        'fk_content_categories' => [ '0' ],
         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Onm-468x60-robapagina -->
             <ins class="adsbygoogle"
@@ -2097,46 +996,52 @@ return array_map(function ($ad) use (&$i) {
             <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
             </script>',
-        'with_script' => '1',
-        'timeout' => '4',
-        'is_flash' => 0,
-        'content_type' => '2',
-        'content_type_name' => 'advertisement',
-        'title' => 'Full banner - Inner Opinion - 468x60 - Openhost Ads - Adsense',
-        'description' => '',
-        'body' => '',
-        'metadata' => 'full,banner,inner,opoinion,468x60,openhost,ads,adsense',
-        'starttime' => '2013-04-18 06:05:41',
-        'endtime' => null,
-        'created' => '2013-04-18 06:05:41',
-        'changed' => '2013-04-18 06:05:41',
-        'fk_user' => '3',
-        'fk_publisher' => '3',
-        'fk_user_last_editor' => '3',
-        'category' => '4',
-        'category_name' => 'opinion',
-        'archive' => null,
-        'permalink' => '',
-        'position' => '2',
-        'in_home' => '0',
-        'home_pos' => '100',
-        'available' => '1',
-        'frontpage' => '0',
-        'in_litter' => '0',
-        'content_status' => '1',
         'params' => [
-            'width' => '468',
-            'height' => '60',
+            'sizes' => [
+                '0' => [
+                    'width' => 468,
+                    'height' => 60,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 468,
+                    'height' => 60,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 468,
+                    'height' => 60,
+                    'device' => 'phone'
+                ],
+            ],
         ],
-        'slug' => 'full-banner-inner-opinion-468x60-openhost-ads',
-        'favorite' => '',
-        'with_comment' => '1',
-        'cache' => null,
-        'content_type_l10n_name' => 'Publicidad',
-        'fk_content_type' => '2',
-        'fk_author' => '3',
-        'urn_source' => '',
-        'pk_fk_content_category' => '4',
-        'catName' => 'opinion',
+    ],
+    2202 => [
+        'type_advertisement' => '2202',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                 style="display:block; text-align:center;"
+                 data-ad-format="fluid"
+                 data-ad-layout="in-article"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="8755647912"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+    ],
+    3202 => [
+        'type_advertisement' => '3202',
+        'fk_content_categories' => [ '0' ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                 style="display:block; text-align:center;"
+                 data-ad-format="fluid"
+                 data-ad-layout="in-article"
+                 data-ad-client="ca-pub-7694073983816204"
+                 data-ad-slot="8755647912"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
     ],
 ]);

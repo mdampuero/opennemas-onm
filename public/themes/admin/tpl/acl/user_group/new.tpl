@@ -49,7 +49,7 @@
         <div class="form-group">
           <label for="name" class="form-label">{t}Group name{/t}</label>
           <div class="controls">
-            <input type="text" id="name" name="name" value="{$user_group->name}" class="form-control" required="required"
+            <input type="text" id="name" name="name" value="{$user_group->name}" class="form-control" required
             {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
           </div>
         </div>

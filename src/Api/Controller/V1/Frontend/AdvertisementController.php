@@ -70,8 +70,9 @@ class AdvertisementController extends Controller
      */
     public function showAction(Request $request, $id)
     {
-        $category = $request->query->get('category', 'home');
-        $module   = $request->query->get('module', 'frontpage');
+        $category  = $request->query->get('category', 'home');
+        $module    = $request->query->get('module', 'frontpage');
+        $contentId = $request->query->get('contentId', '');
 
         $ad = $this->getAdvertisement($id);
 
@@ -89,8 +90,9 @@ class AdvertisementController extends Controller
 
         $contents = $this->get('core.renderer.advertisement')
             ->renderSafeFrame($ad, [
-                'category' => $category,
+                'category'  => $category,
                 'extension' => $module,
+                'contentId' => $contentId,
             ]);
 
         return new Response($contents, 200, $headers);
@@ -131,7 +133,7 @@ class AdvertisementController extends Controller
      */
     protected function getAdvertisements($places, $category)
     {
-        $id = 0;
+        $id       = 0;
         $excluded = [ 'home', 'opinion', 'blog', 'newsletter' ];
 
         if (!empty($category) && !in_array($category, $excluded)) {
@@ -257,7 +259,7 @@ class AdvertisementController extends Controller
         $object->type        = ((($element->type_advertisement + 50) % 100) == 0) ?
             'interstitial' : 'normal'; // Types: normal, interstitial
         $object->position    = array_map('intval', explode(',', $element->type_advertisement));
-        $object->publicId    = date('YmdHis', strtotime($element->created)).
+        $object->publicId    = date('YmdHis', strtotime($element->created)) .
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;
         $object->starttime   = $element->starttime;
@@ -270,7 +272,7 @@ class AdvertisementController extends Controller
         $object->orientation = array_key_exists('orientation', $element->params) ?
             $element->params['orientation'] : 'top';
 
-        $object->target_url = ($object->format == 'image') ? $element->url: '';
+        $object->target_url = ($object->format == 'image') ? $element->url : '';
 
         return $object;
     }

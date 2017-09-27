@@ -76,9 +76,9 @@ class AdvertisementRenderer
         if ($ad->with_script == 1) {
             return $ad->script;
         } elseif ($ad->with_script == 2) {
-            return $this->renderInlineReviveSlot($ad, $format);
+            return $this->renderInlineReviveSlot($ad);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderInlineDFPSlot($ad, $format);
+            return $this->renderInlineDFPSlot($ad);
         }
 
         return $this->renderInlineImage($ad, $format);
@@ -113,7 +113,12 @@ class AdvertisementRenderer
                 'sizes' => $advertisement->getSizes()
             ];
         }
-        $targetingCode = $this->getDFPTargeting($params['category'], $params['extension']);
+
+        $targetingCode = $this->getDFPTargeting(
+            $params['category'],
+            $params['extension'],
+            $params['content']->id
+        );
 
         $options    = $this->sm->get('dfp_options');
         $customCode = $this->getDFPCustomCode();
@@ -136,7 +141,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML content for the DFP advertisement slot.
      */
-    public function renderInlineDFPSlot($ad, $format = null)
+    public function renderInlineDFPSlot($ad)
     {
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
             'id' => $ad->pk_advertisement
@@ -179,10 +184,11 @@ class AdvertisementRenderer
             'mediaUrl' => $img->path_img . $img->path_file,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->container->get('router')
-                ->generate('frontend_ad_redirect', [
-                    'id' => $publicId
-                ], true),
+            'url'      => $this->container->get('router')->generate(
+                'frontend_ad_redirect',
+                [ 'id' => $publicId ],
+                true
+            ),
             'width'    => $img->width
         ]);
     }
@@ -211,7 +217,7 @@ class AdvertisementRenderer
         $zones  = [];
 
         foreach ($ads as $ad) {
-            $zones =  [
+            $zones = [
                 'id'      => $ad->id,
                 'openXId' => (int) $ad->params['openx_zone_id']
             ];
@@ -254,7 +260,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML code for
      */
-    public function renderInlineInterstitial($ads, $params)
+    public function renderInlineInterstitial($ads)
     {
         $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
@@ -356,7 +362,7 @@ class AdvertisementRenderer
         } elseif ($ad->with_script == 2) {
             return $this->renderSafeFrameRevive($ad, $params);
         } elseif ($ad->with_script == 3) {
-            return  $this->renderSafeFrameDFP($ad, $params);
+            return $this->renderSafeFrameDFP($ad, $params);
         }
 
         $img = $this->container->get('entity_repository')->find('Photo', $ad->img);
@@ -402,11 +408,15 @@ class AdvertisementRenderer
     protected function renderSafeFrameDFP($ad, $params)
     {
         $params = [
-            'id'        => $ad->id,
-            'dfpId'     => $ad->params['googledfp_unit_id'],
-            'sizes'     => $ad->getSizes($ad->normalizeSizes($ad->params)),
-            'targetingCode' => $this->getDFPTargeting($params['category'], $params['extension']),
-            'customCode'    => $this->getDFPCustomCode()
+            'id'            => $ad->id,
+            'dfpId'         => $ad->params['googledfp_unit_id'],
+            'sizes'         => $ad->getSizes($ad->normalizeSizes($ad->params)),
+            'customCode'    => $this->getDFPCustomCode(),
+            'targetingCode' => $this->getDFPTargeting(
+                $params['category'],
+                $params['extension'],
+                $params['contentId']
+            )
         ];
 
         return $this->tpl->fetch('advertisement/helpers/safeframe/dfp.tpl', $params);
@@ -475,10 +485,10 @@ class AdvertisementRenderer
             'height'   => $img->height,
             'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->container->get('router')
-                ->generate('frontend_ad_redirect', [
-                    'id' => $publicId
-                ]),
+            'url'      => $this->container->get('router')->generate(
+                'frontend_ad_redirect',
+                [ 'id' => $publicId ]
+            ),
         ];
 
         return $this->container->get('core.template.admin')
@@ -498,7 +508,7 @@ class AdvertisementRenderer
             return '';
         }
 
-        $cssClasses= [];
+        $cssClasses = [];
         foreach ($ad->params['devices'] as $device => $status) {
             if ($status === 0) {
                 $cssClasses[] = 'hidden-' . $device;
@@ -531,7 +541,7 @@ class AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getDFPTargeting($category, $module)
+    protected function getDFPTargeting($category, $module, $contentId)
     {
         $options = $this->container->get('setting_repository')->get('dfp_options');
 
@@ -550,6 +560,14 @@ class AdvertisementRenderer
         if (array_key_exists('module', $options) && !empty($options['module'])) {
             $targetingCode .=
                 "googletag.pubads().setTargeting('{$options['module']}', ['{$module}']);\n";
+        }
+
+        if (array_key_exists('content_id', $options)
+            && !empty($options['content_id'])
+            && !empty($contentId)
+        ) {
+            $targetingCode .=
+                "googletag.pubads().setTargeting('{$options['content_id']}', ['{$contentId}']);\n";
         }
 
         return $targetingCode;

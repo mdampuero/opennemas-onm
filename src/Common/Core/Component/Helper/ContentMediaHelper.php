@@ -20,8 +20,8 @@ class ContentMediaHelper
      */
     public function __construct($sm, $er)
     {
-        $this->sm  = $sm;
-        $this->er  = $er;
+        $this->sm = $sm;
+        $this->er = $er;
     }
 
     /**
@@ -48,46 +48,48 @@ class ContentMediaHelper
                 } elseif (isset($content->fk_video2) && ($content->fk_video2 > 0)) {
                     // Articles with inner video
                     $mediaObject = $this->er->find('Video', $content->fk_video2);
-                    if (!empty($mediaObject)
-                        && strpos($mediaObject->thumb, 'http')  === false
-                    ) {
-                        $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
+                    if (!empty($mediaObject)) {
+                        if (strpos($mediaObject->thumb, 'http') === false) {
+                            $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
+                        }
+
+                        $mediaObject->url = $mediaObject->thumb;
                     }
-                    $mediaObject->url = $mediaObject->thumb;
                 } elseif (isset($content->img1) && ($content->img1 > 0)) {
                     // Articles/Opinion with front photo
                     $mediaObject = $this->er->find('Photo', $content->img1);
                     if (!empty($mediaObject)) {
                         $mediaObject->url = $mediaUrl . $mediaObject->path_file . $mediaObject->name;
                     }
-                } elseif (is_object($content->author->photo)) {
+                } elseif (is_object($content->author->photo)
+                    && $content->content_type_name == 'opinion'
+                ) {
                     // Photo author
-                    $mediaObject = $content->author->photo;
+                    $mediaObject      = $content->author->photo;
                     $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
-
                 break;
 
             case 'album':
                 if (isset($content->cover_image) && !empty($content->cover_image)) {
-                    $mediaObject = $content->cover_image;
+                    $mediaObject      = $content->cover_image;
                     $mediaObject->url = $mediaUrl . '/' . $mediaObject->path_img;
                 }
-
                 break;
 
             case 'video':
                 if (isset($content->thumb) && !empty($content->thumb)) {
-                    if (strpos($content->thumb, 'http')  === false) {
-                        $content->thumb = SITE_URL.$content->thumb;
+                    if (strpos($content->thumb, 'http') === false) {
+                        $content->thumb = SITE_URL . $content->thumb;
                     }
-                    $mediaObject = $content;
+
+                    $mediaObject      = $content;
                     $mediaObject->url = $content->thumb;
                 }
                 break;
         }
 
-        # The content doesnt have a media associated so return null.
+        // The content doesnt have a media associated so return null.
         $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
 
         if (!isset($mediaObject->url)) {
@@ -105,7 +107,7 @@ class ContentMediaHelper
         }
 
         // Overload object image size
-        $mediaObject->width = (isset($mediaObject->width) && !empty($mediaObject->width))
+        $mediaObject->width  = (isset($mediaObject->width) && !empty($mediaObject->width))
             ? $mediaObject->width : 700;
         $mediaObject->height = (isset($mediaObject->height) && !empty($mediaObject->height))
             ? $mediaObject->height : 450;

@@ -17,6 +17,13 @@ use Common\Core\Component\Exception\Filter\InvalidFilterException;
 class FilterManager
 {
     /**
+     * The value to filter.
+     *
+     * @var mixed
+     */
+    protected $value;
+
+    /**
      * Initalizes the filter manager.
      *
      * @param ServiceContainer $container The service container.
@@ -35,17 +42,45 @@ class FilterManager
      *
      * @return mixed The filtered value.
      */
-    public function filter($name, $value, $args = [])
+    public function filter($name, $args = [])
     {
+        if (empty($this->value)) {
+            return $this;
+        }
+
         $class = str_replace('Core', 'Filter', __NAMESPACE__)
             . '\\' . \classify($name) . 'Filter';
 
-        if (class_exists($class)) {
-            $filter = new $class($this->container, $args);
-
-            return $filter->filter($value);
+        if (!class_exists($class)) {
+            throw new InvalidFilterException($name);
         }
 
-        throw new InvalidFilterException($name);
+        $filter = new $class($this->container, $args);
+
+        $this->value = $filter->filter($this->value);
+
+        return $this;
+    }
+
+    /**
+     * Returns the current value to filter.
+     *
+     * @return mixed The current value to filter.
+     */
+    public function get()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Changes the current value to filter.
+     *
+     * @param mixed $value The current value to filter.
+     */
+    public function set($value)
+    {
+        $this->value = $value;
+
+        return $this;
     }
 }

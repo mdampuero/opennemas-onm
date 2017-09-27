@@ -34,7 +34,8 @@ class AdsController extends Controller
 
         // Fetch categories to all internal categories
         $contentTypes = [$contentType, 7, 9, 11, 14];
-        $ccm = \ContentCategoryManager::get_instance();
+        $ccm          = \ContentCategoryManager::get_instance();
+
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentTypes);
 
@@ -157,8 +158,10 @@ class AdsController extends Controller
         }
 
         $data = [
-            'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              =>
+                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'           =>
+                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -192,11 +195,11 @@ class AdsController extends Controller
             ]
         ];
 
-        $level = 'error';
+        $level   = 'error';
         $message = _('Unable to create the new advertisement.');
 
         if ($advertisement->create($data)) {
-            $level = 'success';
+            $level   = 'success';
             $message = _('Advertisement successfully created.');
         }
 
@@ -230,7 +233,7 @@ class AdsController extends Controller
         $page   = $request->query->getDigits('page', 1);
 
         $adsPositions = $this->container->get('core.helper.advertisement');
-        $serverUrl = '';
+        $serverUrl    = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
         }
@@ -238,12 +241,13 @@ class AdsController extends Controller
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
             $this->get('session')->getFlashBag()->add(
-                'success',
+                'error',
                 sprintf(_('Unable to find the advertisement with the id "%d"'), $id)
             );
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
+
         if ($ad->fk_publisher != $this->getUser()->id
             && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
@@ -305,6 +309,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
+
         if (!$ad->isOwner($this->getUser()->id)
             && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
@@ -324,8 +329,10 @@ class AdsController extends Controller
 
         $data = [
             'id'                 => $ad->id,
-            'title'              => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              =>
+                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'           =>
+                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'category'           => !empty($categories) ? $categories[0] : 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -392,13 +399,13 @@ class AdsController extends Controller
         $itemsPerPage = 8;
 
         $filters = array(
-            'type_advertisement' => array(array('value' => 37)),
-            'content_type_name'  => array(array('value' => 'advertisement')),
-            'in_litter'          => array(array('value' => 1, 'operator' => '!='))
+            'type_advertisement' => [[ 'value' => 37 ]],
+            'content_type_name'  => [[ 'value' => 'advertisement' ]],
+            'in_litter'          => [[ 'value' => 1, 'operator' => '!=' ]]
         );
 
-        $em       = $this->get('advertisement_repository');
-        $ads      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $em  = $this->get('advertisement_repository');
+        $ads = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
 
         $countAds = $em->countBy($filters);
 
@@ -448,8 +455,9 @@ class AdsController extends Controller
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
                 ],
                 'dfp_options' => [
-                    'target'  => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
-                    'module'  => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),
+                    'target'     => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
+                    'module'     => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),
+                    'content_id' => $formValues->filter('dfp_options_content_id', '', FILTER_SANITIZE_STRING),
                 ],
                 'tradedoubler_id'   => $formValues->getDigits('tradedoubler_id'),
                 'iadbox_id'         => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),

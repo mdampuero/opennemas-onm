@@ -1,6 +1,8 @@
 tag_frontpage_index:
     path: /tags
     defaults: { _controller: FrontendBundle:Tags:index }
+    options:
+        l10n: true
 
 tag_frontpage:
     path: /{resource}/{tag_name}
@@ -8,3 +10,5 @@ tag_frontpage:
     requirements:
         resource: 'tag|tags'
         tag_name: '[^\/]+'
+    options:
+        l10n: true

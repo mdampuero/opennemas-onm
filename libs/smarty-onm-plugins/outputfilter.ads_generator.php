@@ -30,14 +30,15 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     }
 
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
+    $content   = $smarty->parent->tpl_vars['content']->value;
     $positions = [];
     $settings  = getService('setting_repository')->get('ads_settings');
+
     $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
 
     if (!$safeFrameEnabled) {
-        $adsRenderer    = getService('core.renderer.advertisement');
-        $xtags          = $smarty->smarty->tpl_vars['x-tags']->value;
-        $content        = $smarty->parent->tpl_vars['content']->value;
+        $adsRenderer = getService('core.renderer.advertisement');
+        $xtags       = $smarty->smarty->tpl_vars['x-tags']->value;
 
         $ads = array_filter($ads, function ($a) {
             return $a->isInTime();
@@ -50,7 +51,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'    => $xtags,
         ];
 
-        $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads, $params);
+        $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads);
         $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
         $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
         $devices      = getService('core.template.admin')
@@ -79,6 +80,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
             'category'  => $category,
             'extension' => $app['extension'],
+            'contentId' => $content->id,
             'lifetime'  => $settings['lifetime_cookie'],
             'positions' => implode(',', $positions),
             'time'      => time(),

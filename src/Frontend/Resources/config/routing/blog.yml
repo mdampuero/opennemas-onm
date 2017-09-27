@@ -1,12 +1,16 @@
 frontend_blog_frontpage:
     path: /blog
     defaults: { _controller: FrontendBundle:Blogs:frontpage }
+    options:
+        l10n: true
 
 frontend_blog_author_frontpage:
     path: /blog/author/{author_slug}
     defaults: { _controller: FrontendBundle:Blogs:frontpageAuthor }
     requirements:
         author_slug : '[a-z0-9\-.]+'
+    options:
+        l10n: true
 
 frontend_blog_show:
     path: /blog/{author_name}/{blog_title}/{blog_id}.{_format}
@@ -15,3 +19,5 @@ frontend_blog_show:
         author_name : '[a-z0-9\-.]+'
         blog_title  : '[^/]+'
         blog_id     : '[^/]+'
+    options:
+        l10n: true

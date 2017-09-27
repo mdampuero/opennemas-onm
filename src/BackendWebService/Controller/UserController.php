@@ -95,12 +95,12 @@ class UserController extends Controller
      */
     public function exportAction()
     {
-        $users = $this->get('orm.manager')->getRepository('User')->findBy();
-
+        $users      = $this->get('orm.manager')->getRepository('User')->findBy();
         $csvHeaders = [
             _('Name'), _('Username'), _('Activated'), _('Email'), _('Gender'),
             _('Date Birth'),  _('Postal Code'),  _('Registration date'),
         ];
+
         $output = implode(",", $csvHeaders);
 
         foreach ($users as &$user) {
@@ -131,17 +131,18 @@ class UserController extends Controller
                 !empty($user->postal_code) ? $user->postal_code : '',
                 !empty($user->register_date) ? $user->register_date : '',
             ];
-            $output .= "\n".implode(",", $row);
+
+            $output .= "\n" . implode(",", $row);
         }
 
         $response = new Response($output, 200);
 
-        $fileName = 'users_export-'.date('Y-m-d').'.csv';
+        $fileName = 'users_export-' . date('Y-m-d') . '.csv';
 
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'User list Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Expires', '0');
@@ -230,9 +231,9 @@ class UserController extends Controller
     public function patchSelectedAction(Request $request)
     {
         $params = $request->request->all();
-        $em   = $this->get('orm.manager');
-        $msg  = $this->get('core.messenger');
-        $oql  = sprintf('id in [%s]', implode(',', $params[ 'ids' ]));
+        $em     = $this->get('orm.manager');
+        $msg    = $this->get('core.messenger');
+        $oql    = sprintf('id in [%s]', implode(',', $params[ 'ids' ]));
 
         unset($params['ids']);
 
@@ -280,7 +281,7 @@ class UserController extends Controller
         $extra = [
             'languages' => array_merge(
                 [ 'default' => _('Default system language') ],
-                $this->get('core.locale')->getLocales()
+                $this->get('core.locale')->getAvailableLocales()
             )
         ];
 

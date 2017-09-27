@@ -312,7 +312,7 @@ class Template extends \Smarty
         }
 
         $this->assign([
-            'app'       => $this->container->get('core.template.globals'),
+            'app'       => $this->container->get('core.globals'),
             '_template' => $this,
             'params'    => [ 'IMAGE_DIR' => $this->image_dir ]
         ]);
@@ -340,7 +340,7 @@ class Template extends \Smarty
         }
 
         // Copy default cache configuration if it doesnt exists
-        if (!file_exists($path.'/cache.conf')) {
+        if (!file_exists($path . '/cache.conf')) {
             $cm = $this->container->get('template_cache_config_manager');
             $cm->setConfigDir($path);
             $cm->saveDefault();
@@ -366,8 +366,8 @@ class Template extends \Smarty
     {
         $basePath = $this->container->getParameter('core.paths.cache.common');
 
-        $fs    = new Filesystem();
-        $path  = $basePath . '/smarty/compile-'
+        $fs   = new Filesystem();
+        $path = $basePath . '/smarty/compile-'
             . str_replace('es.openhost.theme.', '', $theme->uuid);
 
         if (!file_exists($path)) {
@@ -388,7 +388,7 @@ class Template extends \Smarty
             . str_replace('es.openhost.theme.', '', $theme->uuid) . '/plugins';
 
         $this->addPluginsDir($path);
-        $this->addPluginsDir(SITE_LIBS_PATH.'/smarty-onm-plugins/');
+        $this->addPluginsDir(SITE_LIBS_PATH . '/smarty-onm-plugins/');
 
         // Load filters
         foreach ($this->filters as $filterSectionName => $filters) {

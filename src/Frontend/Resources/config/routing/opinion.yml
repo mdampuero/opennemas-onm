@@ -1,6 +1,8 @@
 frontend_opinion_editorial_frontpage:
     path: /editorial
     defaults: { _controller: FrontendBundle:Opinions:frontpageAuthor, author_slug: editorial, author_id: 000001 }
+    options:
+        l10n: true
 
 frontend_opinion_author_frontpage:
     path: /opinion/autor/{author_id}/{author_slug}
@@ -8,7 +10,8 @@ frontend_opinion_author_frontpage:
     requirements:
         author_slug   : '(.*)?'
         author_id     : '([0-9]+)'
-
+    options:
+        l10n: true
 
 frontend_opinion_external_author_frontpage:
     path: /extopinion/autor/{author_id}/{author_slug}
@@ -24,6 +27,8 @@ frontend_opinion_show_with_author_slug:
         author_name   : '[^/]+'
         opinion_title : '[^/]+'
         opinion_id    : '[^/]+'
+    options:
+        l10n: true
 
 frontend_opinion_show_with_author_slug_and_date:
     path: /opinion/{author_name}/{date}/{opinion_title}/{opinion_id}.{_format}
@@ -33,6 +38,8 @@ frontend_opinion_show_with_author_slug_and_date:
         opinion_title: '[^/]+'
         opinion_id   : '[^/]+'
         date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
+    options:
+        l10n: true
 
 frontend_opinion_show:
     path: /opinion/{opinion_title}/{opinion_id}.{_format}
@@ -40,6 +47,8 @@ frontend_opinion_show:
     requirements:
         opinion_title: '[^/]+'
         opinion_id   : '[^/]+'
+    options:
+        l10n: true
 
 frontend_opinion_external_show_with_author_slug:
     path: /extopinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
@@ -59,6 +68,8 @@ frontend_opinion_external_show:
 frontend_opinion_frontpage:
     path: /opinion
     defaults: { _controller: FrontendBundle:Opinions:frontpage }
+    options:
+        l10n: true
 
 frontend_opinion_external_frontpage:
     path: /extseccion/opinion

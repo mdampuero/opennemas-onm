@@ -67,6 +67,10 @@ services:
         class:     Common\Core\Component\Helper\ContentMediaHelper
         arguments: [ '@setting_repository', '@entity_repository' ]
 
+    core.helper.l10n_route:
+        class:     Common\Core\Component\Helper\L10nRouteHelper
+        arguments: [ '@service_container' ]
+
     core.helper.url_generator:
         class:     Common\Core\Component\Helper\UrlGeneratorHelper
         arguments: [ '@service_container' ]
@@ -79,6 +83,10 @@ services:
         class:     Common\Core\Component\Security\Recaptcha\Recaptcha
         arguments: [ '@service_container' ]
 
+    core.redirector:
+        class:     Common\Core\Component\Routing\Redirector
+        arguments: [ '@service_container' ]
+
     core.instance.checker:
         class:     Common\Core\Component\Instance\Checker
         arguments: [ '@orm.manager' ]
@@ -89,7 +97,7 @@ services:
 
     core.listener.controller:
         class:     Common\Core\EventListener\ControllerListener
-        arguments: [ '@core.template.globals' ]
+        arguments: [ '@core.globals', '@core.locale' ]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
 
@@ -175,8 +183,8 @@ services:
         class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.filters%' ]
 
-    core.template.globals:
-        class:     Common\Core\Component\Template\GlobalVariables
+    core.globals:
+        class:     Common\Core\Component\Core\GlobalVariables
         arguments: [ '@service_container' ]
 
     core.template.admin:
@@ -190,6 +198,9 @@ services:
     core.theme:
         class:     Common\ORM\Entity\Extension
         factory:   [ '@core.loader', 'getTheme' ]
+
+    core.factory.translator:
+        class:     Common\Core\Component\Translator\TranslatorFactory
 
     core.user:
         alias:     'core.security.user'
