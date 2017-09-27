@@ -138,7 +138,8 @@ class LocaleTest extends KernelTestCase
     public function testGetAndSetRequestLocale()
     {
         $this->locale->setRequestLocale(null);
-        $this->assertEmpty($this->locale->getRequestLocale());
+        $this->assertNotEmpty($this->locale->getRequestLocale());
+        $this->assertEquals($this->locale->getLocale(), $this->locale->getRequestLocale());
 
         $this->locale->setRequestLocale('waldo');
         $this->assertEquals('waldo', $this->locale->getRequestLocale());
