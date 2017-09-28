@@ -152,7 +152,7 @@ class EntityManager extends BaseManager
 
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
-        $sql .= " ORDER BY $orderBySQL $limitSQL";
+        $sql .= " GROUP BY `pk_content` ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
