@@ -1,0 +1,6 @@
+api_v1_backend_articles_list:
+    path:    /articles
+    methods: [ GET ]
+    defaults: { _controller: ApiBundle:V1/Backend/Article:list }
+    options:
+        expose: true
