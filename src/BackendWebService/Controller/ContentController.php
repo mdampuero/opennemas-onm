@@ -941,7 +941,7 @@ class ContentController extends Controller
         $extra['categories'] = [];
         $fm                  = $this->get('data.manager.filter');
         $categories          = $fm->set($categories)->filter('localize', [
-            'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'keys' => \ContentCategory::getMultiLanguageFields(),
             'locale' => $this->getLocaleData('frontend')['default']
         ])->get();
 

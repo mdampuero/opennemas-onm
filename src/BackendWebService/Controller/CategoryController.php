@@ -60,7 +60,7 @@ class CategoryController extends ContentController
             $aux->title    = $data['title'];
             $fm            = $this->get('data.manager.filter');
             $aux           = $fm->set($aux)->filter('unlocalize', [
-                'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+                'keys' => \ContentCategory::getMultiLanguageFields(),
                 'locale' => $languageData['default']
             ])->get();
             $data['name']  = $aux->name;

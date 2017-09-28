@@ -756,7 +756,7 @@ class ContentCategoryManager
         $fullcat = $this->groupByType($this->categories);
 
         $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
-            'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'keys' => \ContentCategory::getMultiLanguageFields(),
             'locale' => getService('core.locale')->setContext('frontend')->getLocale()
         ])->get();
 
@@ -764,8 +764,8 @@ class ContentCategoryManager
             $internalCategory = [$internalCategory];
         }
 
-        $parentCategories = array();
-        $categoryData = array();
+        $parentCategories = [];
+        $categoryData     = [];
         foreach ($fullcat as $prima) {
             if (!empty($category)
                 && $prima->pk_content_category == $category
@@ -774,6 +774,7 @@ class ContentCategoryManager
             ) {
                 $categoryData[] = $prima;
             }
+
             if (($prima->internal_category == 1
                 || in_array($prima->internal_category, $internalCategory))
                 && ($prima->fk_content_category == 0)
@@ -781,9 +782,10 @@ class ContentCategoryManager
                 $parentCategories[] = $prima;
             }
         }
-        $subcat = array();
+
+        $subcat = [];
         foreach ($parentCategories as $k => $v) {
-            $subcat[$k] = array();
+            $subcat[$k] = [];
 
             foreach ($fullcat as $child) {
                 if ($v->pk_content_category == $child->fk_content_category) {
@@ -796,7 +798,7 @@ class ContentCategoryManager
              $categoryData[] = $parentCategories[0];
         }
 
-        return array($parentCategories, $subcat, $categoryData);
+        return [$parentCategories, $subcat, $categoryData];
     }
 
     /**
@@ -813,10 +815,10 @@ class ContentCategoryManager
             $this->categories = $this->cache->populateCategories();
         }
 
-        $items = array();
+        $items = [];
         foreach ($this->categories as $category) {
             if ($category->fk_content_category == $categoryId) {
-                $items[]=$category;
+                $items[] = $category;
             }
         }
 
