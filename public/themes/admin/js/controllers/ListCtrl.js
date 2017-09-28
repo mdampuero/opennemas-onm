@@ -13,8 +13,18 @@
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout',
-      function($scope, $timeout) {
+      '$scope', '$timeout', 'routing',
+      function($scope, $timeout, routing) {
+        /**
+         * @memberOf ListCtrl
+         *
+         * @description
+         *  The routing service.
+         *
+         * @type {Object}
+         */
+        $scope.routing = routing;
+
         /**
          * @memberOf ListCtrl
          *
@@ -34,6 +44,13 @@
          * @type {type}
          */
         $scope.tm = null;
+
+        /**
+         * The available elements per page
+         *
+         * @type {Array}
+         */
+        $scope.views = [ 10, 25, 50, 100 ];
 
         /**
          * @function closeColumns
