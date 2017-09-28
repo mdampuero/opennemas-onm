@@ -22,6 +22,7 @@ class UnlocalizeFilter extends LocalizeFilter
     {
         // Locales from direct parameters
         $locales = $this->getParameter('locales', null, false);
+        $locale  = null;
 
         // Locales from config
         if (empty($locales)) {
@@ -30,17 +31,14 @@ class UnlocalizeFilter extends LocalizeFilter
                 array_keys($locale->getAvailableLocales()) : [];
         }
 
-        if (empty($locales)) {
-            return $value;
+        if (!is_array($value)) {
+            if ($locale === null) {
+                $locale = $this->container->get('core.locale');
+            }
+
+            return [$locale->getLocale() => $value];
         }
 
-        // Already unlocalized
-        if (is_array($value)
-            && count(array_diff($locales, array_keys($value))) < count($locales)
-        ) {
-            return $value;
-        }
-
-        return array_fill_keys($locales, $value);
+        return $value;
     }
 }
