@@ -251,6 +251,29 @@ class Menu
     }
 
     /**
+     * Returns the unlocalized menu items
+     *
+     * @param array $items the list of items to localize
+     *
+     * @return array the localized array
+     **/
+    public function unlocalize($items)
+    {
+        $fm = getService('data.manager.filter');
+
+        foreach ($items as &$item) {
+            $item = $fm->set($item)
+                ->filter('unlocalize', ['keys' => ['title', 'link']])
+                ->get();
+            if (count($item->submenu) > 0) {
+                $item->submenu = $this->unlocalize($item->submenu);
+            }
+        }
+
+        return $items;
+    }
+
+    /**
      * Loads a menu given a name.
      *
      * @param string $name The menu name.
