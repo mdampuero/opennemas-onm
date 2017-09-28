@@ -203,12 +203,22 @@ class PickerController extends Controller
             }
         }
 
+        $ccm = \ContentCategoryManager::get_instance();
+
+        $languageData = $this->getLocaleData('frontend');
+        $fm           = $this->get('data.manager.filter');
+        $categories   = $ccm->find();
+        $categories   = $fm->set($categories)->filter('localize', [
+            'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'locale'    => $languageData['default']
+        ])->get();
+
         return [
             'allCategories'       => _('All categories'),
             'allContentTypes'     => _('All content types'),
             'allMonths'           => _('All months'),
             'category'            => _('Category'),
-            'categories'          => $ccm->find(),
+            'categories'          => $categories,
             'contentsInFrontpage' => _('Contents in frontpage'),
             'contentTypes'        => $contentTypesFiltered,
             'created'             => _('Created'),
