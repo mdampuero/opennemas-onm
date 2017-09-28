@@ -2,7 +2,7 @@
 
 namespace BackendWebService\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,9 +26,8 @@ class PickerController extends Controller
         $contentTypes = $request->query->filter('content_type_name', null, FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
-
         $filter = [ "in_litter = 0" ];
-        $order = [
+        $order  = [
             'created' => 'desc'
         ];
 
@@ -75,14 +74,12 @@ class PickerController extends Controller
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($filter);
 
-        return new JsonResponse(
-            array(
+        return new JsonResponse([
                 'epp'     => $epp,
                 'page'    => $page,
                 'results' => $results,
                 'total'   => $total,
-            )
-        );
+        ]);
     }
 
     /**
@@ -131,7 +128,7 @@ class PickerController extends Controller
         $this->get('cache')->delete('Photo' . "-" . $id);
 
         try {
-            $conn->executeUpdate($sql, array($description, $id));
+            $conn->executeUpdate($sql, [$description, $id]);
             return new JsonResponse();
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 500);
@@ -145,7 +142,7 @@ class PickerController extends Controller
      */
     private function getDates()
     {
-        $years = array();
+        $years = [];
 
         $conn = $this->get('orm.manager')->getConnection('instance');
 
@@ -156,14 +153,14 @@ class PickerController extends Controller
 
         foreach ($results as $value) {
             $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
-            $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+            $fmt  = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
             if (!is_null($fmt)) {
-                $years[$date->format('Y')]['name'] = $date->format('Y');
-                $years[$date->format('Y')]['months'][]= array(
+                $years[$date->format('Y')]['name']     = $date->format('Y');
+                $years[$date->format('Y')]['months'][] = [
                     'name'  => ucfirst($fmt->format($date)),
                     'value' => $value['date_month']
-                );
+                ];
             }
         }
 
@@ -177,8 +174,8 @@ class PickerController extends Controller
      */
     private function exploreMode()
     {
-        $contentTypes = \ContentManager::getContentTypes();
-        $contentTypesFiltered = array();
+        $contentTypes         = \ContentManager::getContentTypes();
+        $contentTypesFiltered = [];
 
         foreach ($contentTypes as $contentType) {
             switch ($contentType['name']) {
@@ -198,14 +195,13 @@ class PickerController extends Controller
                     $moduleName = $contentType['name'];
                     break;
             }
-            $moduleName = strtoupper($moduleName.'_MANAGER');
+
+            $moduleName = strtoupper($moduleName . '_MANAGER');
 
             if ($this->get('core.security')->hasExtension($moduleName)) {
                 $contentTypesFiltered[$contentType['name']] = $contentType['title'];
             }
         }
-
-        $ccm = \ContentCategoryManager::get_instance();
 
         return [
             'allCategories'       => _('All categories'),
@@ -252,12 +248,12 @@ class PickerController extends Controller
         $results = \Onm\StringUtils::convertToUtf8($results);
 
         return new JsonResponse(
-            array(
+            [
                 'epp'     => count($results),
                 'page'    => 1,
                 'results' => $results,
                 'total'   => count($results)
-            )
+            ]
         );
     }
 
