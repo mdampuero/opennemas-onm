@@ -104,7 +104,7 @@ class Menu
             ]);
 
             $this->pk_menu = $conn->lastInsertId();
-            $this->setMenuElements($this->pk_menu, $data['items']);
+            $this->setMenuItems($this->pk_menu, $data['items']);
 
             dispatchEventWithParams('menu.create', ['content' => $this]);
 
@@ -138,6 +138,144 @@ class Menu
         $this->items    = $this->data['items'];
 
         return $this;
+    }
+
+    /**
+     * Loads the menu data given an id.
+     *
+     * @param integer $id The menu id.
+     *
+     * @return Menu The current menu.
+     */
+    public function read($id)
+    {
+        // If no valid id then return
+        if (((int) $id) <= 0) {
+            return;
+        }
+
+        try {
+            $sql = 'SELECT * FROM menues WHERE pk_menu=?';
+            $rs  = getService('dbal_connection')->fetchAssoc($sql, [ $id ]);
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Updates the menu data given an array of data.
+     *
+     * @param array $data The menu data.
+     *
+     * @return mixed The current menu if it was updated successfully. False
+     *               otherwise.
+     */
+    public function update($data)
+    {
+        try {
+            getService('dbal_connection')->update(
+                'menues',
+                [
+                    'name'     => $data['name'],
+                    'params'   => $data['params'],
+                    'position' => $data['position'],
+                    'type'     => 'user',
+                ],
+                [ 'pk_menu' => $this->pk_menu ]
+            );
+
+            $this->setMenuItems($this->pk_menu, $data['items']);
+
+            dispatchEventWithParams('menu.update', ['content' => $this]);
+            return $this;
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Deletes permanently one content
+     *
+     * @param integer $id the menu id to delete
+     *
+     * @return null
+     */
+    public function delete($id)
+    {
+        $conn = getService('dbal_connection');
+
+        $conn->beginTransaction();
+        try {
+            // Delete menu elements
+            $conn->delete('menu_items', [ 'pk_menu' => $id ]);
+            $conn->delete('menues', [ 'pk_menu' => $id ]);
+            $conn->commit();
+
+            dispatchEventWithParams('menu.delete', ['content' => $this]);
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollBack();
+            getService('error.log')->error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Returns the localized elements
+     *
+     * @param array $items the list of items to localize
+     *
+     * @return array the localized array
+     **/
+    public function localize($items)
+    {
+        $fm = getService('data.manager.filter');
+
+        foreach ($items as &$item) {
+            $item = $fm->set($item)
+                ->filter('localize', ['keys' => ['title', 'link']])
+                ->get();
+            if (count($item->submenu) > 0) {
+                $item->submenu = $this->localize($item->submenu);
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Loads a menu given a name.
+     *
+     * @param string $name The menu name.
+     *
+     * @return mixed The menu if it was found. False otherwise.
+     */
+    public function getMenu($name)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                "SELECT * FROM menues WHERE name=?",
+                [ $name ]
+            );
+
+            if (!$rs) {
+                return false;
+            }
+
+            $this->load($rs);
+
+            return $this;
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -210,144 +348,6 @@ class Menu
     }
 
     /**
-     * Loads the menu data given an id.
-     *
-     * @param integer $id The menu id.
-     *
-     * @return Menu The current menu.
-     */
-    public function read($id)
-    {
-        // If no valid id then return
-        if (((int) $id) <= 0) {
-            return;
-        }
-
-        try {
-            $sql = 'SELECT * FROM menues WHERE pk_menu=?';
-            $rs  = getService('dbal_connection')->fetchAssoc($sql, [ $id ]);
-
-            $this->load($rs);
-
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Updates the menu data given an array of data.
-     *
-     * @param array $data The menu data.
-     *
-     * @return mixed The current menu if it was updated successfully. False
-     *               otherwise.
-     */
-    public function update($data)
-    {
-        try {
-            getService('dbal_connection')->update(
-                'menues',
-                [
-                    'name'     => $data['name'],
-                    'params'   => $data['params'],
-                    'position' => $data['position'],
-                    'type'     => 'user',
-                ],
-                [ 'pk_menu' => $this->pk_menu ]
-            );
-
-            $this->setMenuElements($this->pk_menu, $data['items']);
-
-            dispatchEventWithParams('menu.update', ['content' => $this]);
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Deletes permanently one content
-     *
-     * @param integer $id the menu id to delete
-     *
-     * @return null
-     */
-    public function delete($id)
-    {
-        $conn = getService('dbal_connection');
-
-        $conn->beginTransaction();
-        try {
-            // Delete menu elements
-            $conn->delete('menu_items', [ 'pk_menu' => $id ]);
-            $conn->delete('menues', [ 'pk_menu' => $id ]);
-            $conn->commit();
-
-            dispatchEventWithParams('menu.delete', ['content' => $this]);
-
-            return true;
-        } catch (\Exception $e) {
-            $conn->rollBack();
-            getService('error.log')->error($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Returns the localized elements
-     *
-     * @param array $items the list of items to localize
-     *
-     * @return array the localized array
-     **/
-    public function localize($items)
-    {
-        $fm = getService('data.manager.filter');
-
-        foreach ($items as &$item) {
-            $item = $fm->set($item)
-                ->filter('localize', ['keys' => ['title', 'link']])
-                ->get();
-            if (count($items->submenu) > 0) {
-                $items->submenu = $this->localize($item->submenu);
-            }
-        }
-
-        return $items;
-    }
-
-    /**
-     * Loads a menu given a name.
-     *
-     * @param string $name The menu name.
-     *
-     * @return mixed The menu if it was found. False otherwise.
-     */
-    public function getMenu($name)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                "SELECT * FROM menues WHERE name=?",
-                [ $name ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            $this->load($rs);
-
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Sets the menu elements to one menu given its id and the list of items.
      *
      * @param int   $id     The menu id to set the elements in
@@ -357,13 +357,8 @@ class Menu
      * @return boolean True if items were saved successfully. Otherwise, returns
      *                 false.
      */
-    public function setMenuElements($id, $items = array(), $parentID = 0, &$elementID = 1)
+    public function setMenuItems($id, $items = [], $parentID = 0, &$elementID = 1)
     {
-        // Check if id and $items are not empty
-        if (empty($id) || count($items) < 1) {
-            return false;
-        }
-
         $conn = getService('dbal_connection');
 
         // Delete previous menu elements
@@ -371,12 +366,25 @@ class Menu
             $conn->delete('menu_items', [ 'pk_menu' => $id ]);
         }
 
+        // Check if id and $items are not empty
+        if (empty($id) || count($items) < 1) {
+            return false;
+        }
+
         try {
             $position = 1;
             foreach ($items as $item) {
                 $title = filter_var($item->title, FILTER_SANITIZE_STRING);
-                $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
-                $type  = filter_var($item->type, FILTER_SANITIZE_STRING);
+                if (is_object($item->title)) {
+                    $title = serialize(get_object_vars($item->title));
+                }
+
+                $link = filter_var($item->link, FILTER_SANITIZE_STRING);
+                if (is_object($item->link)) {
+                    $link = serialize(get_object_vars($item->link));
+                }
+
+                $type = filter_var($item->type, FILTER_SANITIZE_STRING);
 
                 $conn->insert('menu_items', [
                     'pk_item'   => $elementID,
@@ -393,7 +401,7 @@ class Menu
                 $position++;
 
                 if (!empty($item->submenu)) {
-                    if (!$this->setMenuElements($id, $item->submenu, $parent, $elementID)) {
+                    if (!$this->setMenuItems($id, $item->submenu, $parent, $elementID)) {
                         return false;
                     }
                 }
