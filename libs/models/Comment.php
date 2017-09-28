@@ -236,7 +236,7 @@ class Comment
         $data['id'] = getService('dbal_connection')->lastInsertId();
         $this->load($data);
 
-        dispatchEventWithParams('comment.create', ['comment' => $this]);
+        dispatchEventWithParams('comment.create', ['content' => $this]);
 
         return $this;
     }
@@ -342,7 +342,7 @@ class Comment
             throw new \Exception(_('Unable to delete the comment.'));
         }
 
-        dispatchEventWithParams('comment.delete', ['comment' => $this]);
+        dispatchEventWithParams('comment.delete', ['content' => $this]);
 
         return true;
     }
@@ -364,7 +364,7 @@ class Comment
             );
 
             $this->load($data);
-            dispatchEventWithParams('comment.update', ['comment' => $this]);
+            dispatchEventWithParams('comment.update', ['content' => $this]);
 
             return $this;
         } catch (\Exception $e) {
@@ -482,7 +482,7 @@ class Comment
                 [ $this->id, $property, $value, $value ]
             );
 
-            dispatchEventWithParams('comment.update', ['comment' => $this]);
+            dispatchEventWithParams('comment.update', ['content' => $this]);
 
             return true;
         } catch (\Exception $e) {
@@ -511,7 +511,7 @@ class Comment
                 [ 'id' => (int) $this->id ]
             );
 
-            dispatchEventWithParams('comment.update', ['comment' => $this]);
+            dispatchEventWithParams('comment.update', ['content' => $this]);
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());
