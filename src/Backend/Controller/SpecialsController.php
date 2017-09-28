@@ -19,7 +19,6 @@ use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Common\Data\Adapter\MultiOptionAdapter;
 
 /**
  * Handles the actions for the specials
@@ -39,8 +38,8 @@ class SpecialsController extends Controller
 
         $this->category = $this->get('request_stack')->getCurrentRequest()
             ->query->getDigits('category', null);
+        $this->ccm      = \ContentCategoryManager::get_instance();
 
-        $this->ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
                 $this->ccm->getArraysMenu($this->category, $this->contentType);
 
@@ -62,25 +61,14 @@ class SpecialsController extends Controller
      */
     public function listAction()
     {
-        $categories   = [ [ 'name' => _('All'), 'value' => -1 ] ];
-        $languageData = $this->getLocaleData('frontend');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
         foreach ($this->parentCategories as $key => $category) {
-            $category     = $this->get('data.manager.adapter')->adapt('multi_option', $category, [
-                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
-                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
-                    MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
-            ]);
             $categories[] = [
                 'name' => $category->title,
                 'value' => $category->name
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
-                $subcategory  = $this->get('data.manager.adapter')->adapt('multi_option', $subcategory, [
-                    MultiOptionAdapter::PARAM_DEFAULT_KEY_VALUE          => $languageData['default'],
-                    MultiOptionAdapter::PARAM_MULTIVALUED_FIELDS         => ['title', 'name'],
-                    MultiOptionAdapter::PARAM_KEY_FOR_MULTIVALUED_FIELDS => $languageData['default']
-                ]);
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
                     'value' => $subcategory->name
@@ -200,7 +188,7 @@ class SpecialsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $contentsLeft = array();
+        $contentsLeft  = array();
         $contentsRight = array();
 
         if (!empty($contents)) {
@@ -211,6 +199,7 @@ class SpecialsController extends Controller
                     $contentsLeft[] = new \Content($content['fk_content']);
                 }
             }
+
             $this->view->assign(
                 array(
                     'contentsRight' => $contentsRight,
@@ -254,6 +243,7 @@ class SpecialsController extends Controller
 
                 return $this->redirect($this->generateUrl('admin_special_show', array('id' => $id)));
             }
+
             $data = array(
                 'id'             => $id,
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
@@ -358,11 +348,10 @@ class SpecialsController extends Controller
             $pos = 1;
             foreach ($positions as $id) {
                 $special = new \Special($id);
-                $result = $result && $special->setPosition($pos);
+                $result  = $result && $special->setPosition($pos);
 
                 $pos++;
             }
-
 
             // TODO: remove cache cleaning actions
             $cacheManager = $this->get('template_cache_manager');
@@ -393,7 +382,7 @@ class SpecialsController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             $settingsRAW = $request->request->get('special_settings');
-            $data = array(
+            $data        = array(
                 'special_settings' => array(
                     'total_widget' => $settingsRAW['total_widget'] ?: 0,
                     'time_last' => $settingsRAW['time_last'] ?: 0,
@@ -403,6 +392,7 @@ class SpecialsController extends Controller
             foreach ($data as $key => $value) {
                 s::set($key, $value);
             }
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Settings saved successfully.')
