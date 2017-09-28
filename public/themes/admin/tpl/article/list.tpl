@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('article', { content_status: -1, category_name: -1, title_like: '', in_litter: 0, fk_author: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-
+<div ng-app="BackendApp" ng-controller="ArticleListCtrl" ng-init="init('es', true)">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -15,6 +14,10 @@
               </a>
               {t}Articles{/t}
             </h4>
+          </li>
+          <li class="quicklinks">
+            <button class="btn" ng-click="locale = 'es'" type="button">es</button>
+            <button class="btn" ng-click="locale = 'gl'" type="button">gl</button>
           </li>
           <li class="quicklinks visible-xs">
             <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
@@ -91,13 +94,13 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" type="text"/>
+            <input class="no-boarder" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" type="text"/>
           </li>
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks dropdown hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|clear_json}">
-            <ui-select name="author" theme="select2" ng-model="criteria.category_name">
+            <ui-select name="author" theme="select2" ng-model="criteria.pk_fk_content_category">
               <ui-select-match>
                 <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
@@ -106,7 +109,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
               <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -127,7 +130,7 @@
             </ui-select>
           </li>
           <li class="quicklinks hidden-sm hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
@@ -137,13 +140,12 @@
             </ui-select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
         </ul>
       </div>
     </div>
   </div>
-
   <div class="content">
     <div class="grid simple">
       <div class="grid-body no-padding">
@@ -151,18 +153,18 @@
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
           <div class="center">
             <h4>{t}Unable to find any article that matches your search.{/t}</h4>
             <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
           </div>
         </div>
-        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
           <table class="table table-hover no-margin">
             <thead>
               <th class="checkbox-cell">
                 <div class="checkbox checkbox-default">
-                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll()">
                   <label for="select-all"></label>
                 </div>
               </th>
@@ -174,18 +176,18 @@
               <th class="text-center" width="100">{t}Published{/t}</th>
             </thead>
             <tbody>
-              <tr ng-if="contents.length == 0">
+              <tr ng-if="items.length == 0">
                 <td class="empty" colspan="10">{t}No available articles.{/t}</td>
               </tr>
-              <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+              <tr ng-if="items.length >= 0" ng-repeat="content in items" ng-class="{ row_selected: isSelected(content.id) }">
                 <td class="checkbox-cell">
                   <div class="checkbox check-default">
-                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                    <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="content.id" type="checkbox">
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
                 <td>
-                  <span uib-tooltip="{t}Last editor{/t} [% extra.authors[content.fk_user_last_editor].name %]">[% content.title %]</span>
+                  <span uib-tooltip="{t}Last editor{/t} [% data.extra.authors[content.fk_user_last_editor].name %]">[% content.title %]</span>
                   <div class="small-text">
                     <strong>{t}Created{/t}: </strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
@@ -200,7 +202,7 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                    <a class="link" href="[% edit(content.id, 'admin_article_show') %]">
+                    <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}
@@ -213,7 +215,7 @@
                 </td>
                 <td class="hidden-xs">
                   <span ng-if="content.fk_author != 0">
-                    [% extra.authors[content.fk_author].name %]
+                    [% data.extra.authors[content.fk_author].name %]
                   </span>
                   <span ng-if="content.fk_author == 0 && content.agency != ''">
                     [% content.agency %]
@@ -225,7 +227,7 @@
                       {t}Unasigned{/t}
                     </span>
                     <span ng-if="content.category_name != 'unknown'">
-                      [% extra.categories[content.category_name] %]
+                      [% data.extra.categories[content.pk_fk_content_category].name %]
                     </span>
                   </td>
                 {/if}
@@ -242,9 +244,9 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > -1">
           <div class="pull-right">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>
