@@ -8903,6 +8903,15 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 msgid "The title in the default language is required."
 msgstr "El título en el idioma principal es requerido."
 
+msgid "Advanced"
+msgstr "Avanzado"
+
+msgid "Authorized Digital Sellers"
+msgstr "Authorized Digital Sellers"
+
+msgid "This will be the content of the file ads.txt on your root domain"
+msgstr "Este será el contenido del archivo ads.txt en la raíz de su dominio"
+
 #~ msgid ""
 #~ "You can get your Facebook App Keys from <a class=\"external-link\" ng-"
 #~ "click=\"$event.stopPropagation();\"  href=\"https://developers.facebook."
@@ -8939,6 +8948,24 @@ msgstr "El título en el idioma principal es requerido."
 
 #~ msgid "Google+ and YouTube"
 #~ msgstr "Google+ y YouTube"
+
+msgid "Automatic translations"
+msgstr "Traducciones automáticas"
+
+msgid "Services for automatic translations"
+msgstr "Servicios para la traducción automática"
+
+msgid "Select from language"
+msgstr "Lenguaje de origen"
+
+msgid "Language to translate"
+msgstr "Lenguaje de destino"
+
+msgid "Translation service"
+msgstr "Servicio de traducción"
+
+msgid "Required params for Service"
+msgstr "Parámetros requeridos para el servicio"
 
 #~ msgid ""
 #~ "We use cookies to personalise content and ads, to provide social media "

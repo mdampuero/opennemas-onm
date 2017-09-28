@@ -45,6 +45,20 @@ class NitfOpennemas extends Nitf
     /**
      * {@inheritdoc}
      */
+    public function getTags($data)
+    {
+        $tags = $data->xpath('//head/docdata/key-list/keyword');
+
+        if (!empty($tags)) {
+            return (string) $tags[0]->attributes()->{'key'};
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function parse($data)
     {
         $resource = parent::parse($data);
@@ -119,7 +133,7 @@ class NitfOpennemas extends Nitf
      */
     protected function getAuthorPhoto($data)
     {
-        $photo = $data->xpath('//rights/rights.photo');
+        $photo = $data->xpath('//rights/rights.owner.photo');
 
         if (!empty($photo)) {
             return (string) $photo[0];

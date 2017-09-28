@@ -199,5 +199,8 @@ services:
         class:     Common\ORM\Entity\Extension
         factory:   [ '@core.loader', 'getTheme' ]
 
+    core.factory.translator:
+        class:     Common\Core\Component\Translator\TranslatorFactory
+
     core.user:
         alias:     'core.security.user'
