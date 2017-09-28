@@ -79,7 +79,7 @@ class MenusController extends Controller
             'categories_album' => $categories['categories_album'],
             'categories_poll'  => $categories['categories_poll'],
             'categories_video' => $categories['categories_video'],
-            'language_data'    => $this->getLocaleData($request),
+            'language_data'    => $this->getLocaleData('frontend', $request),
             'menu'             => $menu,
             'menu_positions'   => $this->getMenuPositions(),
             'pages'            => $this->getModulePages(),
