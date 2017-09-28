@@ -219,8 +219,8 @@
 
         // Reloads the list when filters change.
         $scope.$watch('criteria', function(nv, ov) {
-          if ($scope.searchTimeout) {
-            $timeout.cancel($scope.searchTimeout);
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
           }
 
           if (nv === ov) {
@@ -228,11 +228,11 @@
           }
 
           // Reset page when epp changes
-          if (nv.epp != ov.epp) {
+          if (nv.epp !== ov.epp) {
             nv.page = 1;
           }
 
-          $scope.searchTimeout = $timeout(function() {
+          $scope.tm = $timeout(function() {
             $scope.list();
           }, 500);
         }, true);
