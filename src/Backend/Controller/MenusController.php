@@ -294,46 +294,46 @@ class MenusController extends Controller
      **/
     private function getModulePages()
     {
-        $pages = array(array('title' => _("Frontpage"),'link' => "/"));
+        $pages = [['title' => _("Frontpage"),'link' => "/"]];
 
         if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
-            array_push($pages, array('title' => _("Opinion"),'link' => "opinion/"));
+            array_push($pages, ['title' => _("Opinion"),'link' => "opinion/"]);
         }
 
         if ($this->get('core.security')->hasExtension('BLOG_MANAGER')) {
-            array_push($pages, array('title' => _("Bloggers"),'link' => "blog/"));
+            array_push($pages, ['title' => _("Bloggers"),'link' => "blog/"]);
         }
 
         if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
-            array_push($pages, array('title' => _("Album"),'link' => "album/"));
+            array_push($pages, ['title' => _("Album"),'link' => "album/"]);
         }
 
         if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
-            array_push($pages, array('title' => _("Video"),'link' => "video/"));
+            array_push($pages, ['title' => _("Video"),'link' => "video/"]);
         }
 
         if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
-            array_push($pages, array('title' => _("Poll"),'link' => "poll/"));
+            array_push($pages, ['title' => _("Poll"),'link' => "poll/"]);
         }
 
         if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
-            array_push($pages, array('title' => _("Letters to the Editor"),'link' => "cartas-al-director/"));
+            array_push($pages, ['title' => _("Letters to the Editor"),'link' => "cartas-al-director/"]);
         }
 
         if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
-            array_push($pages, array('title' => _("News Stand"),'link' => "portadas-papel/"));
+            array_push($pages, ['title' => _("News Stand"),'link' => "portadas-papel/"]);
         }
 
         if ($this->get('core.security')->hasExtension('FORM_MANAGER')) {
-            array_push($pages, array('title' => _("Form"),'link' => "participa/"));
+            array_push($pages, ['title' => _("Form"),'link' => "participa/"]);
         }
 
         if ($this->get('core.security')->hasExtension('NEWSLETTER_MANAGER')) {
-            array_push($pages, array('title' => _("Newsletter"),'link' => "newsletter/"));
+            array_push($pages, ['title' => _("Newsletter"),'link' => "newsletter/"]);
         }
 
         if ($this->get('core.security')->hasExtension('LIBRARY_MANAGER')) {
-            array_push($pages, array('title' => _("Archive"),'link' => "archive/content/"));
+            array_push($pages, ['title' => _("Archive"),'link' => "archive/content/"]);
         }
 
         return $pages;
