@@ -133,6 +133,7 @@ class MenusController extends Controller
         $params = $this->getCategories();
 
         return $this->render('menues/new.tpl', [
+            'menu'             => new \Menu(),
             'categories'       => $params['categories'],
             'categories_album' => $params['categories_album'],
             'categories_album' => $params['categories_video'],

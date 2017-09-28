@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl" {if $menu} ng-init="menu = {json_encode($menu)|clear_json};{/if}">
+<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl" ng-init="init({json_encode($menu)|clear_json}, {json_encode($language_data)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -80,7 +80,7 @@
               <div class="controls">
                 <input type="text" id="name" name="name" value="{$menu->name|default:""}"
                 maxlength="120" tabindex="1" required class="form-control"
-                {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
+                {if (!empty($menu->id) && $menu->type neq 'user')} readonly="readonly" {/if} />
               </div>
             </div>
             {if count($menu_positions) > 1}
@@ -134,7 +134,5 @@
     <script type="text/ng-template" id="modal-add-item">
       {include file="menues/modals/_modalAddItem.tpl"}
     </script>
-    <style>
-    </style>
  </form>
 {/block}
