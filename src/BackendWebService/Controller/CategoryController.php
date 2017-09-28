@@ -54,18 +54,29 @@ class CategoryController extends ContentController
             ),
         );
 
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.multilanguage')) {
+            $aux           = (object) [];
+            $aux->name     = $data['name'];
+            $aux->title    = $data['title'];
+            $fm            = $this->get('data.manager.filter');
+            $aux           = $fm->set($aux)->filter('unlocalize', [
+                'keys' => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+                'locale' => $languageData['default']
+            ])->get();
+            $data['name']  = $aux->name;
+            $data['title'] = $aux->title;
+        }
+
         // Check if at least have the default language for the title
         $locale = $this->get('core.locale')->setContext('frontend')->getLocale();
 
         if (isset($data['title']) &&
-                empty($data['title']) ||
-                (
-                    is_array($data['title']) &&
-                    (
-                        !isset($data['title'][$locale]) ||
-                        empty($data['title'][$locale])
-                    )
-                )) {
+            empty($data['title']) ||
+            (
+                is_array($data['title']) &&
+                (!isset($data['title'][$locale]) || empty($data['title'][$locale]))
+            )
+        ) {
             $msg->add(
                 _('The title in the default language is required.'),
                 'error',

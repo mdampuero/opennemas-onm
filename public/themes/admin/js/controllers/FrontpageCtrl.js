@@ -1,4 +1,4 @@
-/**
+\/**
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('FrontpageCtrl', [

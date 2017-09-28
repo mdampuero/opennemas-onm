@@ -34,8 +34,8 @@
             <li class="quicklinks hidden-xs">
               <h5> [% (category.pk_content_category)?"{t}Editing category{/t}":"{t}Creating category{/t}" %]</h5>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
           {is_module_activated name="es.openhost.module.multilanguage"}
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
               <translator ng-model="lang" translator-options="languageData"/>
             </li>
@@ -76,10 +76,10 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-model="category.title[lang]" type="text" required>
+                  <input class="form-control" id="title" name="title" ng-model="category.title[lang]" type="text" ng-blur="loadSlug()" required>
                 </div>
               </div>
-              <div class="form-group" ng-if="category.name[lang]">
+              <div class="form-group">
                 <label for="name" class="form-label">{t}Slug{/t}</label>
                 <div class="controls">
                   <input class="form-control" id="name" name="name" ng-model="category.name[lang]" type="text" readonly>

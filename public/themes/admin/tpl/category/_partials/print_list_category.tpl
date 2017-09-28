@@ -2,7 +2,7 @@
   <tr>
       <td>
           <a href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
-              {multi_option_adapter field=$category->title params=$language_data}
+              {localize_filter field=$category->title params=$language_data}
           </a>
           <div class="listing-inline-actions" ng-init="languageData = {json_encode($language_data)|clear_json}">
               {acl isAllowed="CATEGORY_UPDATE"}
@@ -14,7 +14,7 @@
                     <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
-                  </div>i
+                  </div>
                   {/if}
               {/acl}
               {acl isAllowed="CATEGORY_DELETE"}
@@ -22,7 +22,7 @@
                   <a class="link link-danger del-category"
                       href="{url name=admin_category_delete id=$category->pk_content_category}"
                       data-url="{url name=admin_category_delete id=$category->pk_content_category}"
-                      data-title="{multi_option_adapter field=$category->title params=$language_data}"
+                      data-title="{localize_filter field=$category->title params=$language_data}"
                       title="Eliminar">
                       <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                   </a>
@@ -31,7 +31,7 @@
                   <a class="link empty-category"
                       href="{url name=admin_category_empty id=$category->pk_content_category}"
                       data-url="{url name=admin_category_empty id=$category->pk_content_category}"
-                      data-title="{multi_option_adapter field=$category->title params=$language_data}"
+                      data-title="{localize_filter field=$category->title params=$language_data}"
                       title="Vaciar">
                       <i class="fa fa-fire m-r-5"></i>{t}Empty{/t}
                   </a>
@@ -40,7 +40,7 @@
           </div>
       </td>
       <td>
-          {multi_option_adapter field=$category->name params=$language_data}
+          {localize_filter field=$category->name params=$language_data}
       </td>
       <td class="hidden-xs text-center">
           {$contents_count['articles'][$category->id]|default:0}
@@ -85,7 +85,7 @@
               </div>
               <div class="col-md-11">
                   <a href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
-                      {multi_option_adapter field=$subcategory->title params=$language_data}
+                      {localize_filter field=$subcategory->title params=$language_data}
                   </a>
                   <div class="listing-inline-actions">
                       {acl isAllowed="CATEGORY_UPDATE"}
@@ -103,7 +103,7 @@
                           <a class="link empty-category"
                               href="{url name=admin_category_empty id=$subcategory->pk_content_category}"
                               data-url="{url name=admin_category_empty id=$subcategory->pk_content_category}"
-                              data-title="{multi_option_adapter field=$category->title params=$language_data}"
+                              data-title="{localize_filter field=$category->title params=$language_data}"
                               title="{t}Delete all the contents in this category{/t}">
                             <i class="fa fa-fire m-r-5"></i>{t}Empty{/t}
                           </a>
@@ -111,7 +111,7 @@
                           <a class="link link-danger del-category"
                               href="{url name=admin_category_delete id=$subcategory->pk_content_category}"
                               data-url="{url name=admin_category_delete id=$subcategory->pk_content_category}"
-                              data-title="{multi_option_adapter field=$category->title params=$language_data}"
+                              data-title="{localize_filter field=$category->title params=$language_data}"
                               title="{t}Delete category{/t}">
                               <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                           </a>
@@ -121,7 +121,7 @@
           </div>
       </td>
       <td>
-          {multi_option_adapter field=$category->name params=$language_data}
+          {localize_filter field=$category->name params=$language_data}
       </td>
       <td class="center hidden-xs">
           {$contents_count['articles'][$subcategory->id]|default:0}

@@ -239,8 +239,7 @@ class ContentCategory
         $data['params'] = serialize($data['params']);
         $data['name']   = $this->name;
         foreach ($data['title'] as $locale => $text) {
-            if (!empty($data['title'][$locale]) &&
-                (!is_array($data['name']) || !isset($data['name'][$locale]) || empty($data['name'][$locale]))
+            if (!empty($data['title'][$locale])
             ) {
                 if (!is_array($data['name'])) {
                     $data['name'] = [];
