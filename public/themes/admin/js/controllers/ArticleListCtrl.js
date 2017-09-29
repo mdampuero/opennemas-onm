@@ -2,68 +2,97 @@
   'use strict';
 
   angular.module('BackendApp.controllers')
-      /**
-       * @ngdoc controller
-       * @name  ArticleListCtrl
-       *
-       * @description
-       *   description
-       */
-      .controller('ArticleListCtrl', [
-        '$controller', '$location', '$scope', '$timeout', '$uibModal', '$window', 'http', 'routing', 'messenger', 'webStorage', 'localizer', 'linker', 'oqlEncoder',
-        function($controller, $location, $scope, $timeout, $uibModal, $window, http, routing, messenger, webStorage, localizer, linker, oqlEncoder) {
-          // Initialize the super class and extend it.
-          $.extend(this, $controller('ListCtrl', {
-            $scope:   $scope,
-            $timeout: $timeout,
-            routing:  routing
-          }));
+    /**
+     * @ngdoc controller
+     * @name  ArticleListCtrl
+     *
+     * @description
+     *   description
+     */
+    .controller('ArticleListCtrl', [
+      '$controller', '$location', '$scope', '$timeout', 'http', 'routing', 'messenger', 'localizer', 'linker', 'oqlEncoder',
+      function($controller, $location, $scope, $timeout, http, routing, messenger, localizer, linker, oqlEncoder) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('ListCtrl', {
+          $scope:   $scope,
+          $timeout: $timeout,
+          routing:  routing
+        }));
 
-          /**
-           * The criteria to search.
-           *
-           * @type Object
-           */
-          $scope.criteria = {
-            content_type_name: 'article',
-            epp: 10,
-            in_litter: 0,
-            orderBy: { created:  'desc' },
-            page: 1
-          };
+        /**
+         * The criteria to search.
+         *
+         * @type Object
+         */
+        $scope.criteria = {
+          content_type_name: 'article',
+          epp: 10,
+          in_litter: 0,
+          orderBy: { created:  'desc' },
+          page: 1
+        };
 
-          /**
-           * The current locale.
-           *
-           * @type {String}
-           */
-          $scope.locale = 'es';
+        /**
+         * The current locale.
+         *
+         * @type {String}
+         */
+        $scope.locale = 'es';
 
-          /**
-           * The localizer service.
-           *
-           * @type {Object}
-           */
-          $scope.localizer = localizer;
+        /**
+         * The localizer service.
+         *
+         * @type {Object}
+         */
+        $scope.localizer = localizer;
 
-          /**
-           * Initializes the content type for the current list.
-           *
-           * @param string locale The current locale.
-           */
-          $scope.init = function(lang, localize) {
-            $scope.lang     = lang;
-            $scope.localize = localize;
+        /**
+         * @function getCategory
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Returns the category value from the list of categories.
+         *
+         * @param {Integer} id The category id.
+         *
+         * @return {Object} The category object.
+         */
+        $scope.getCategory = function(id) {
+          var category = $scope.categories.filter(function(e) {
+            return e.pk_content_category === id;
+          });
 
+          if (category.length === 0) {
+            return {};
+          }
+
+          return category[0];
+        };
+
+        /**
+         * Initializes the content type for the current list.
+         *
+         * @param string locale The current locale.
+         */
+        $scope.init = function(lang, localize) {
+          $scope.lang     = lang;
+          $scope.localize = localize;
+
+          if ($scope.localize && $scope.locale) {
             $scope.localizer.configure({
-              keys: [ 'title' ],
+              keys: [ 'title', 'name' ],
               locales: [ 'es', 'gl' ]
             });
 
-            linker.configure($scope, [ 'title' ]).setKey(lang);
+            $scope.il = linker.get([ 'title' ], $scope);
+            $scope.cl = linker.get([ 'title' ], $scope);
 
-            $scope.list();
-          };
+            $scope.il.setKey($scope.locale);
+            $scope.cl.setKey($scope.locale);
+          }
+
+          $scope.list();
+        };
 
         /**
          * Updates the array of contents.
@@ -87,15 +116,20 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            $scope.loading = 0;
-            $scope.data    = response.data;
-            $scope.items   = response.data.results;
+            $scope.loading    = 0;
+            $scope.data       = response.data;
+            $scope.items      = response.data.results;
+            $scope.categories = response.data.extra.categories;
 
             if ($scope.localize && $scope.locale) {
-              $scope.items = $scope.localizer
-                .localize(response.data.results, $scope.locale);
+              $scope.categories = $scope.localizer
+                .localize($scope.categories, $scope.locale);
 
-              linker.link($scope.data.results, $scope.items);
+              $scope.items = $scope.localizer
+                .localize($scope.items, $scope.locale);
+
+              $scope.il.link($scope.data.results, $scope.items);
+              $scope.cl.link($scope.data.extra.categories, $scope.categories);
             }
 
             // Scroll top
@@ -118,8 +152,10 @@
           }
 
           if ($scope.localize && $scope.locale) {
-            linker.setKey(nv);
-            linker.update();
+            $scope.il.setKey(nv);
+            $scope.cl.setKey(nv);
+            $scope.il.update();
+            $scope.cl.update();
           }
         });
       }
