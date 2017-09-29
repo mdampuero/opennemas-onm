@@ -112,11 +112,14 @@ class LocalRepository
     protected function filter($criteria)
     {
         $contents = array_filter($this->contents, function ($a) use ($criteria) {
-            return preg_match('@' . $criteria['source'] . '@', $a->source);
+            return preg_match('@' . $criteria['source'] . '@', $a->source)
+                && (!array_key_exists('type', $criteria)
+                    || preg_match('@' . $criteria['type'] . '@', $a->type));
         });
 
-        // Remove source from criteria
+        // Remove source and type from criteria
         unset($criteria['source']);
+        unset($criteria['type']);
 
         return array_filter($contents, function ($a) use ($criteria) {
             foreach ($criteria as $key => $value) {
