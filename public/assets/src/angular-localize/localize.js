@@ -111,207 +111,170 @@
 
         return value;
       };
-    }).service('linker', function() {
+    }).factory('linker', function() {
+
       /**
+       * @function get
        * @memberOf linker
        *
        * @description
-       *  The current key name to update.
+       *   Returns a linker.
        *
-       * @type {String}
+       * @return {Object} The linker
        */
-      this.key = null;
+      this.get = function(keys, scope) {
+        var linker = {
+          /**
+           * The current key name to update.
+           *
+           * @type {String}
+           */
+          key: null,
 
-      /**
-       * @memberOf linker
-       *
-       * @description
-       *  The list of keys that have to be updated on change.
-       *
-       * @type {Array}
-       */
-      this.keys = [];
+          /**
+           * The list of keys that have to be updated on change.
+           *
+           * @type {Array}
+           */
+          keys: keys,
 
-      /**
-       * @memberOf linker
-       *
-       * @description
-       *  The localized item or list of localized items
-       *
-       * @type {Object}
-       */
-      this.localized = null;
+          /**
+           * The localized item or list of localized items
+           *
+           * @type {Object}
+           */
+          localized: null,
 
-      /**
-       * @memberOf linker
-       *
-       * @description
-       *  The original item or list of original items.
-       *
-       * @type {Object}
-       */
-      this.original = null;
+          /**
+           * The original item or list of original items.
+           *
+           * @type {Object}
+           */
+          original: null,
 
-      /**
-       * @memberOf linker
-       *
-       * @description
-       *  The scope who watches source and target.
-       *
-       * @type {Object}
-       */
-      this.scope = null;
+          /**
+           * The scope who watches source and target.
+           *
+           * @type {Object}
+           */
+          scope: scope,
 
-      /**
-       * @function configure
-       * @memberOf linker
-       *
-       * @description
-       *   Configures the linker.
-       *
-       * @param {Object} scope The scope who watches for changes.
-       */
-      this.configure = function(scope, keys) {
-        this.keys  = keys;
-        this.scope = scope;
+          /**
+           * Links two object or two list of objects.
+           *
+           * @param {Object} original  The original item or list of original items.
+           * @param {Object} localized The localized item or list of localized
+           *                           items.
+           */
+          link: function(original, localized) {
+            if (!this.scope) {
+              return;
+            }
 
-        return this;
-      };
+            this.original  = original;
+            this.localized = localized;
 
-      /**
-       * @function link
-       * @memberOf linker
-       *
-       * @description
-       *   Links two object or two list of objects.
-       *
-       * @param {Object} original  The original item or list of original items.
-       * @param {Object} localized The localized item or list of localized
-       *                           items.
-       */
-      this.link = function(original, localized) {
-        if (!this.scope) {
-          return;
-        }
+            // Link objects
+            if (!angular.isArray(original) || !angular.isArray(localized)) {
+              return this.linkItem(original, localized);
+            }
 
-        this.original  = original;
-        this.localized = localized;
+            // Different lists' length
+            if (original.length !== localized.length) {
+              return;
+            }
 
-        // Link objects
-        if (!angular.isArray(original) || !angular.isArray(localized)) {
-          return this.linkItem(original, localized);
-        }
+            // Link a list of objects
+            for (var i = 0; i < original.length; i++) {
+              this.linkItem(original[i], localized[i]);
+            }
+          },
 
-        // Different lists' length
-        if (original.length !== localized.length) {
-          return;
-        }
+          /**
+           * Links two items.
+           *
+           * @param {Object} original  The original item.
+           * @param {Object} localized The localized item.
+           */
+          linkItem: function(original, localized) {
+            var self = this;
 
-        // Link a list of objects
-        for (var i = 0; i < original.length; i++) {
-          this.linkItem(original[i], localized[i]);
-        }
-      };
+            // Localized changes
+            this.scope.$watch(function() {
+              return localized;
+            }, function(nv, ov) {
+              if (nv === ov) {
+                return;
+              }
 
-      /**
-       * @function linkItem
-       * @memberOf linker
-       *
-       * @description
-       *   Links two items.
-       *
-       * @param {Object} original  The original item.
-       * @param {Object} localized The localized item.
-       */
-      this.linkItem = function(original, localized) {
-        var self = this;
+              self.updateOriginal(original, nv);
+            }, true);
 
-        // Localized changes
-        this.scope.$watch(function() {
-          return localized;
-        }, function(nv, ov) {
-          if (nv === ov) {
-            return;
+            // Original changes
+            this.scope.$watch(function() {
+              return original;
+            }, function(nv, ov) {
+              if (nv === ov) {
+                return;
+              }
+
+              self.updateLocalized(localized, nv);
+            }, true);
+          },
+
+          /**
+           * Updates the localized item or the list of localized items.
+           */
+          update: function() {
+            if (!angular.isArray(this.original)) {
+              this.updateLocalized(this.localized, this.original);
+              return;
+            }
+
+            for (var i = 0; i < this.original.length; i++) {
+              this.updateLocalized(this.localized[i], this.original[i]);
+            }
+          },
+
+          /**
+           * Updates the localized item basing on original values.
+           *
+           * @param {Object} localized The localized item.
+           * @param {Object} original  The original item.
+           */
+          updateLocalized: function(localized, original) {
+            for (var i = 0; i < this.keys.length; i++) {
+              if (original[this.keys[i]][this.key]) {
+                localized[this.keys[i]] = original[this.keys[i]][this.key];
+              }
+            }
+          },
+
+          /**
+           * Updates the original item basing on localized values.
+           *
+           * @param {Object} original  The original item.
+           * @param {Object} localized The localized item.
+           */
+          updateOriginal: function(original, localized) {
+            for (var i = 0; i < this.keys.length; i++) {
+              original[this.keys[i]][this.key] = localized[this.keys[i]];
+            }
+          },
+
+          /**
+           * Changes the key to update when target item changes.
+           *
+           * @param {String} key The key name.
+           */
+          setKey: function(key) {
+            this.key = key;
           }
+        };
 
-          self.updateOriginal(original, nv);
-        }, true);
-
-        // Original changes
-        this.scope.$watch(function() {
-          return original;
-        }, function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          self.updateLocalized(localized, nv);
-        }, true);
+        return linker;
       };
 
-      /**
-       * @function update
-       * @memberOf linker
-       *
-       * @description
-       *   Updates the localized item or the list of localized items.
-       */
-      this.update = function() {
-        if (!angular.isArray(this.original)) {
-          this.updateLocalized(this.localized, this.original);
-          return;
-        }
-
-        for (var i = 0; i < this.original.length; i++) {
-          this.updateLocalized(this.localized[i], this.original[i]);
-        }
-      };
-
-      /**
-       * @function updateLocalized
-       * @memberOf linker
-       *
-       * @description
-       *   Updates the localized item basing on original values.
-       *
-       * @param {Object} localized The localized item.
-       * @param {Object} original  The original item.
-       */
-      this.updateLocalized = function(localized, original) {
-        for (var i = 0; i < this.keys.length; i++) {
-          if (original[this.keys[i]][this.key]) {
-            localized[this.keys[i]] = original[this.keys[i]][this.key];
-          }
-        }
-      };
-
-      /**
-       * @function updateOriginal
-       * @memberOf linker
-       *
-       * @description
-       *   Updates the original item basing on localized values.
-       *
-       * @param {Object} original  The original item.
-       * @param {Object} localized The localized item.
-       */
-      this.updateOriginal = function(original, localized) {
-        for (var i = 0; i < this.keys.length; i++) {
-          original[this.keys[i]][this.key] = localized[this.keys[i]];
-        }
-      };
-
-      /**
-       * @function changeKey
-       * @memberOf linker
-       *
-       * @description
-       *   Changes the key to update when target item changes.
-       *
-       * @param {String} key The key name.
-       */
-      this.setKey = function(key) {
-        this.key = key;
-      };
+      return this;
     });
 })();
