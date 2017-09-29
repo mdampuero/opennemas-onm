@@ -83,11 +83,11 @@ class FrontpagesController extends Controller
         }
 
         // Fetch menu categories and override group
-        $menu          = new \Menu();
-        $menuFrontpage = $menu->getMenu('frontpage');
-        $menuItems     = (is_object($menuFrontpage)
-            && $menuFrontpage instanceof \Menu) ? $menuFrontpage->items : [];
-        foreach ($menuItems as $item) {
+        $menu        = new \Menu();
+        $menu        = $menu->getMenu('frontpage');
+        $menu->items = $menu->localize($menu->items);
+        $menu->items = (is_object($menu) && $menu instanceof \Menu) ? $menu->items : [];
+        foreach ($menu->items as $item) {
             $id = $ccm->get_id($item->link);
             if ($item->type == 'category') {
                 $categories[$id] = [
