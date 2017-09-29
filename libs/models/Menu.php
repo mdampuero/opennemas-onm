@@ -1,55 +1,11 @@
 <?php
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-/**
- * Class Menu
- *
- * Class to manage frontpage menu in OpenNeMas
- *
- * Example:
- * <ul class="clearfix">
- * {section  name=m loop=$menuFrontpage}
- *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
- *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}"
- *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
- *       <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
- *       <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
- *          {$menuFrontpage[m]->title|mb_lower} - {renderLink item=$menuFrontpage[m]}
- *       </a>
- *       {if count($menuFrontpage[m]->submenu) > 0}
- *       {assign value=$menuFrontpage[m]->submenu var=submenu}
- *       <ul class="nav">
- *       {section  name=s loop=$submenu}
- *           <li class="subcat {if $subcategory_name eq $submenu[s]->link}active{/if}">
- *               <a href="{$section_url}{$menuFrontpage[m]->link}/{$submenu[s]->link}/"
- *                   title="{$submenu[s]->title|mb_lower}">
- *                   {$submenu[s]->title|mb_lower}
- *               </a>
- *           </li>
- *       {/section}
- *       </ul>
- *       {/if}
- *       </li>
- * {/section}
- * </ul>
- *
- *  Show:
- *       -Frontpage
- *           * mobile
- *           * opinion
- *           * album
- *           * video
- *       -Internacional
- *       -Cultura | Ocio
- *       -América Latina
- *
- * @package Onm
- * @subpackage Model
  */
 class Menu
 {
