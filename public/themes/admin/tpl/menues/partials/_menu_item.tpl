@@ -1,17 +1,33 @@
 <div class="menu-item clearfix" ui-tree-handle ng-init="showForm = false">
     <div class="menu-item-heading clearfix">
-      <div class="menu-item-info clearfix pull-left">
-        <div class="menu-item-type" ng-if="item.type == 'external'"><span class="fa fa-external-link"></span> {t}External link{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'internal'"><span class="fa fa-cube"></span> {t}Module{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'blog-category'"><span class="fa fa-folder-o"></span> {t}Category blog{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'category'"><span class="fa fa-newspaper-o"></span> {t}Frontpage{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'albumCategory'"><span class="fa fa-folder-o"></span> {t}Album category{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'pollCategory'"><span class="fa fa-folder-o"></span> {t}Poll category{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'videoCategory'"><span class="fa fa-folder-o"></span> {t}Video Category{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'static'"> {t}Static Page{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'syncCategory'"><span class="fa fa-folder-o"></span> {t}Synched category{/t} </div>
-        <div class="menu-item-type" ng-if="item.type == 'syncBlogCategory'"><span class="fa fa-folder-o"></span> {t}Synched blog category{/t} </div>
-        <div class="menu-item-title">[% item.title[lang] %] <small>([% item.link[lang] %])</small></div>
+      <div class="menu-item-info clearfix pull-left" uib-tooltip="{t}Link to {/t} '[% item.link[lang] %]'">
+        <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'"></span>
+        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'blog-category'"></span>
+        <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'"></span>
+        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'albumCategory'"></span>
+        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'pollCategory'"></span>
+        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'videoCategory'"></span>
+        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'static'"></span>
+        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncCategory'"></span>
+        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncBlogCategory'"></span>
+        <span class="menu-item-type-icon fa fa-external-link" ng-if="item.type == 'external'"></span>
+
+        <div class="menu-item-title">[% item.title[lang] %]</div>
+
+        <div class="menu-item-type">
+          <small>
+            <span ng-if="item.type == 'external'">({t}External link{/t})</span>
+            <span ng-if="item.type == 'internal'">({t}Module{/t})</span>
+            <span ng-if="item.type == 'blog-category'">({t}Category blog{/t})</span>
+            <span ng-if="item.type == 'category'">({t}Frontpage{/t})</span>
+            <span ng-if="item.type == 'albumCategory'">({t}Album category{/t})</span>
+            <span ng-if="item.type == 'pollCategory'">({t}Poll category{/t}</span>
+            <span ng-if="item.type == 'videoCategory'">({t}Video Category{/t})</span>
+            <span ng-if="item.type == 'static'">({t}Static Page{/t})</span>
+            <span ng-if="item.type == 'syncCategory'">({t}Synched category{/t})</span>
+            <span ng-if="item.type == 'syncBlogCategory'">({t}Synched blog category{/t})</span>
+          </small>
+        </div>
       </div>
 
       <div class="btn-group pull-right">
@@ -41,6 +57,5 @@
   </div>
 </div>
 <ol ui-tree-nodes="" ng-model="item.submenu">
-  <li ng-repeat="item in item.submenu" ui-tree-node ng-include="'menu-sub-item'">
-  </li>
+  <li ng-repeat="item in item.submenu" ui-tree-node ng-include="'menu-sub-item'"></li>
 </ol>

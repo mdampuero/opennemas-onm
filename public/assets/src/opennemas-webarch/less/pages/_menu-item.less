@@ -2,6 +2,9 @@
   &.angular-ui-tree-handle {
     background-image:none !important;
   }
+  &.angular-ui-tree-handle span {
+    padding:0
+  }
 
   .check-element {
     border: 1px solid black;
@@ -15,27 +18,35 @@
 
   .menu-item-info > * {
     display:inline-block;
+    padding:0;
+    vertical-align:top;
   }
 
   .menu-item-info {
     padding-top:9px;
     padding-left:9px;
 
-    .menu-item-type , .menu-item-title {
-      display:inline-block !important;
-      font-weight: normal !important;
+    .menu-item-type-icon,
+    .menu-item-type,
+    .menu-item-title {
+      display:inline-block;
+      font-weight: normal;
+      color:#505458;
     }
     .menu-item-type {
-      font-weight:600 !important;
+      font-weight: normal;
     }
     .menu-item-title {
-      font-weight: normal !important;
+      font-weight:600;
+
+    font-family: 'Open Sans';
     }
-    .menu-item-type .fa {
+
+    .menu-item-type-icon {
+      padding-right:10px;
       padding-top: 4px;
       padding-left: 0px;
-      padding-right: 4px;
-      opacity:0.8;
+      opacity:0.7;
     }
   }
 
