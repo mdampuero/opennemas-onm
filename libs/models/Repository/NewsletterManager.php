@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
@@ -8,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Repository;
 
 use Onm\Settings as s;
@@ -59,24 +57,25 @@ class NewsletterManager extends BaseManager
         $page = null,
         $itemsPerPage = 20
     ) {
+        $limit = '';
         if (!is_null($page)) {
+            $limit = ' LIMIT ' . ($page - 1) * $itemsPerPage . ', ' . $itemsPerPage;
+
             if ($page == 1) {
-                $limit = ' LIMIT '. $itemsPerPage;
-            } else {
-                $limit = ' LIMIT '.($page-1) * $itemsPerPage.', '.$itemsPerPage;
+                $limit = ' LIMIT ' . $itemsPerPage;
             }
-        } else {
-            $limit = '';
         }
 
         try {
-            $sql = 'SELECT * FROM `newsletter_archive`'
-                .' WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
-            $rs = $this->dbConn->fetchAll($sql);
+            $rs = $this->dbConn->fetchAll(
+                'SELECT * FROM `newsletter_archive`'
+                . ' WHERE ' . $whereClause . ' ORDER BY ' . $order . ' ' . $limit
+            );
 
-            $sql = 'SELECT COUNT(`pk_newsletter`) FROM `newsletter_archive` '
-                .'WHERE '.$whereClause. ' ORDER BY '.$order;
-            $countNm = $this->dbConn->fetchColumn($sql);
+            $countNm = $this->dbConn->fetchColumn(
+                'SELECT COUNT(`pk_newsletter`) FROM `newsletter_archive` '
+                . 'WHERE ' . $whereClause . ' ORDER BY ' . $order
+            );
 
             $newsletters = [];
             foreach ($rs as $newsletterData) {
@@ -85,9 +84,10 @@ class NewsletterManager extends BaseManager
 
                 $newsletters[] = $obj;
             }
+
             return [$countNm, $newsletters];
         } catch (\Exception $e) {
-            error_log('Error fetching newsletters: '.$e->getMessage());
+            error_log('Error fetching newsletters: ' . $e->getMessage());
             return;
         }
     }
@@ -136,13 +136,13 @@ class NewsletterManager extends BaseManager
         // Fetch and assign newsletter ads
         $positions = getService('core.helper.advertisement')
             ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
-        $ads = getService('advertisement_repository')
+        $ads       = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, 0);
         $this->tpl->assign('advertisements', $ads);
 
         // Format and assign the current date.
         // CRAP!
-        $days = [
+        $days   = [
             'Domingo', 'Lunes', 'Martes', 'Miércoles',
             'Jueves', 'Viernes', 'Sábado'
         ];
@@ -154,8 +154,8 @@ class NewsletterManager extends BaseManager
         $time = new \DateTime();
         $this->tpl->assign(
             'current_date',
-            $days[$time->format('w')].' '. $time->format('j').' de '.
-            $months[(int) $time->format('n')].' '.$time->format('Y')
+            $days[$time->format('w')] . ' ' . $time->format('j') . ' de ' .
+            $months[(int) $time->format('n')] . ' ' . $time->format('Y')
         );
 
         // Process and assign public URL for images and links
@@ -201,33 +201,38 @@ class NewsletterManager extends BaseManager
         if (is_array($content->params)
             && array_key_exists('agencyBulletin', $content->params)
         ) {
-            $item->agency   = $content->params['agencyBulletin'];
+            $item->agency = $content->params['agencyBulletin'];
         }
-        $item->name  = (isset($content->name))?$content->name:'';
-        $item->image = (isset($content->cover))?$content->cover:'';
+
+        $item->name  = (isset($content->name)) ? $content->name : '';
+        $item->image = (isset($content->cover)) ? $content->cover : '';
 
         // Fetch images of articles if exists
         if (!empty($content->img1)) {
             $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img1);
+            $item->photo = $this->cm->find('Photo', 'pk_content =' . $content->img1);
         } elseif (!empty($content->fk_video)) {
             $item->video = $this->er->find('Video', $content->fk_video);
         } elseif (!empty($content->img2)) {
-            $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img2);
+            $item->photo = $this->cm->find('Photo', 'pk_content =' . $content->img2);
         }
 
         if (isset($content->summary)) {
-            $item->summary  = $content->summary;
+            $item->summary = $content->summary;
         } else {
-            $item->summary = substr(strip_tags($content->body), 0, 250).'...';
+            $item->summary = substr(strip_tags($content->body), 0, 250) . '...';
         }
+
         if (isset($content->description)) {
-            $item->description  = $content->description;
+            $item->description = $content->description;
         }
-        //Fetch opinion author photos
+
+        // Fetch opinion author photos
         if ($content->content_type == '4') {
             $item->author = new \User($content->fk_author);
         }
-        //Fetch video thumbnails
+
+        // Fetch video thumbnails
         if ($content->content_type == '9') {
             $item->thumb = $content->getThumb();
         }
