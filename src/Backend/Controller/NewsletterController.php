@@ -1,10 +1,5 @@
 <?php
 /**
- * Handles the actions for the newsletter
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
