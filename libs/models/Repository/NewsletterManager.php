@@ -129,9 +129,10 @@ class NewsletterManager extends BaseManager
         $this->tpl->assign('newsletterContent', $newsletterContent);
 
         // Fetch and assign the frontpage menu
-        $menuManager = new \Menu();
-        $menuFrontpage = $menuManager->getMenu('frontpage');
-        $this->tpl->assign('menuFrontpage', $menuFrontpage->items);
+        $menu        = new \Menu();
+        $menu        = $menu->getMenu('frontpage');
+        $menu->items = $menu->localize($menu->items);
+        $this->tpl->assign('menuFrontpage', $menu->items);
 
         // Fetch and assign newsletter ads
         $positions = getService('core.helper.advertisement')
@@ -209,7 +210,6 @@ class NewsletterManager extends BaseManager
 
         // Fetch images of articles if exists
         if (!empty($content->img1)) {
-            $item->photo = $this->cm->find('Photo', 'pk_content ='.$content->img1);
             $item->photo = $this->cm->find('Photo', 'pk_content =' . $content->img1);
         } elseif (!empty($content->fk_video)) {
             $item->video = $this->er->find('Video', $content->fk_video);
