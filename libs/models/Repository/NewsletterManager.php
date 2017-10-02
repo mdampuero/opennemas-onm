@@ -24,7 +24,7 @@ class NewsletterManager extends BaseManager
      * @param DbalWrapper    $dbConn      The database connection.
      * @param CacheInterface $cache       The cache service.
      * @param string         $cachePrefix The cache prefix.
-     * @pram  Template       $template    The template service.
+     * @param  Template       $template    The template service.
      */
     public function __construct(
         DbalWrapper $dbConn,
