@@ -22,7 +22,7 @@
         /**
          * The criteria to search.
          *
-         * @type Object
+         * @type {Object}
          */
         $scope.criteria = {
           content_type_name: 'article',
@@ -38,13 +38,6 @@
          * @type {String}
          */
         $scope.locale = 'es';
-
-        /**
-         * The localizer service.
-         *
-         * @type {Object}
-         */
-        $scope.localizer = localizer;
 
         /**
          * @function groupCategories
@@ -70,16 +63,21 @@
         };
 
         /**
-         * Initializes the content type for the current list.
+         * @function init
+         * @memberOf ArticleListCtrl
          *
-         * @param string locale The current locale.
+         * @description
+         *   Initializes services and list articles.
+         *
+         * @param {String}  locale   The current locale.
+         * @param {Boolean} localize Whether this content supports localization.
          */
-        $scope.init = function(lang, localize) {
-          $scope.lang     = lang;
+        $scope.init = function(locale, localize) {
+          $scope.locale   = locale;
           $scope.localize = localize;
 
           if ($scope.localize && $scope.locale) {
-            $scope.localizer.configure({
+            localizer.configure({
               keys: [ 'title', 'name' ],
               locales: [ 'es', 'gl' ]
             });
@@ -107,25 +105,24 @@
             }
           });
 
-          var oql   = oqlEncoder.getOql($scope.criteria);
-          var route = {
-            name: 'api_v1_backend_articles_list',
-            params: { oql: oql }
-          };
+          var oql = oqlEncoder.getOql($scope.criteria);
 
           $location.search('oql', oql);
 
-          return http.get(route).then(function(response) {
+          return http.get({
+            name: 'api_v1_backend_articles_list',
+            params: { oql: oql }
+          }).then(function(response) {
             $scope.loading    = 0;
             $scope.data       = response.data;
             $scope.items      = response.data.results;
             $scope.categories = response.data.extra.categories;
 
             if ($scope.localize && $scope.locale) {
-              $scope.categories = $scope.localizer
+              $scope.categories = localizer
                 .localize($scope.categories, $scope.locale);
 
-              $scope.items = $scope.localizer
+              $scope.items = localizer
                 .localize($scope.items, $scope.locale);
 
               $scope.il.link($scope.data.results, $scope.items);
