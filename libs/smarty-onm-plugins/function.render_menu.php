@@ -8,8 +8,8 @@ function smarty_function_render_menu($params, &$smarty)
 {
     // Disable caching for this partial
     $caching         = $smarty->caching;
-    $smarty->caching = 0;
 
+    $smarty->caching = 0;
     // Initializing parameters
     $tpl      = (isset($params['tpl']) ? $params['tpl'] : null);
     $menuName = (isset($params['name']) ? $params['name'] : null);
@@ -28,16 +28,14 @@ function smarty_function_render_menu($params, &$smarty)
         $criteria = [ 'position' => [ [ 'value' => $position ] ], ];
     }
 
-    $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
-    // $menu        = new \Menu(1);
+    // $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
+    $menu        = new \Menu(1);
     if (is_null($menu)) {
         return $menu;
     }
 
-    $menuItems = $menu->localize($menu->items);
-
     $smarty->assign([
-        'menuItems'       => ((!empty($menuItems)) ? $menuItems : []),
+        'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
         'actual_category' => $params['actual_category'],
     ]);
     $output .= "\n" . $smarty->fetch($tpl);
