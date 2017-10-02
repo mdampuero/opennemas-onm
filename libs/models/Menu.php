@@ -235,7 +235,7 @@ class Menu
             $proccesedItems[] = $item;
         }
 
-        return $items;
+        return $proccesedItems;
     }
 
     /**
@@ -361,29 +361,39 @@ class Menu
 
         try {
             $position = 1;
+
+            $fm = getService('data.manager.filter');
             foreach ($items as $item) {
-                $title = filter_var($item->title, FILTER_SANITIZE_STRING);
-                if (is_object($item->title)) {
-                    $title = serialize(get_object_vars($item->title));
+                $item->title = get_object_vars($item->title);
+                $item->link  = get_object_vars($item->link);
+
+                // If the content multilanguage is disabled
+                // remove additional translations
+                if (!getService('core.security')->hasExtension('es.openhost.module.multilanguage')) {
+                    $item = $fm->set($item)
+                        ->filter('localize', ['keys' => ['title', 'link']])
+                        ->get();
                 }
 
-                $link = filter_var($item->link, FILTER_SANITIZE_STRING);
-                if (is_object($item->link)) {
-                    $link = serialize(get_object_vars($item->link));
+                if (is_array($item->title)) {
+                    $item->title = serialize($item->title);
                 }
 
-                $type = filter_var($item->type, FILTER_SANITIZE_STRING);
+                if (is_array($item->link)) {
+                    $item->link = serialize($item->link);
+                }
+
+                $item->type = filter_var($item->type, FILTER_SANITIZE_STRING);
 
                 $conn->insert('menu_items', [
                     'pk_item'   => $elementID,
                     'pk_menu'   => $id,
-                    'title'     => $title,
-                    'link_name' => $link,
-                    'type'      => $type,
+                    'title'     => $item->title,
+                    'link_name' => $item->link,
+                    'type'      => $item->type,
                     'position'  => $position,
                     'pk_father' => $parentID
                 ]);
-
                 $parent = $elementID;
                 $elementID++;
                 $position++;
