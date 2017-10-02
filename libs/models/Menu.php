@@ -35,9 +35,9 @@ class Menu
      *
      * @return array the menu properties
      **/
-    public function getRawData()
+    public function getRawItems()
     {
-        return $this->data;
+        return $this->data['items'];
     }
 
     /**
@@ -91,7 +91,8 @@ class Menu
         $this->params   = $this->data['params'];
         $this->position = $this->data['position'];
         $this->type     = $this->data['type'];
-        $this->items    = $this->data['items'];
+
+        $this->items = $this->localize($this->data['items']);
 
         return $this;
     }
@@ -194,16 +195,20 @@ class Menu
     {
         $fm = getService('data.manager.filter');
 
-        foreach ($items as &$item) {
-            $item = $fm->set($item)
+        $itemsLocalized = [];
+        foreach ($items as $item) {
+            $item = $fm->set(clone $item)
                 ->filter('localize', ['keys' => ['title', 'link']])
                 ->get();
+
             if (count($item->submenu) > 0) {
                 $item->submenu = $this->localize($item->submenu);
             }
+
+            $itemsLocalized[] = $item;
         }
 
-        return $items;
+        return $itemsLocalized;
     }
 
     /**
@@ -217,13 +222,17 @@ class Menu
     {
         $fm = getService('data.manager.filter');
 
-        foreach ($items as &$item) {
-            $item = $fm->set($item)
+        $processedItems = [];
+        foreach ($items as $item) {
+            $item = $fm->set(clone $item)
                 ->filter('unlocalize', ['keys' => ['title', 'link']])
                 ->get();
+
             if (count($item->submenu) > 0) {
                 $item->submenu = $this->unlocalize($item->submenu);
             }
+
+            $proccesedItems[] = $item;
         }
 
         return $items;
