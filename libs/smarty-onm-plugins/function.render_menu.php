@@ -7,7 +7,7 @@
 function smarty_function_render_menu($params, &$smarty)
 {
     // Disable caching for this partial
-    $caching         = $smarty->caching;
+    $caching = $smarty->caching;
 
     $smarty->caching = 0;
     // Initializing parameters
@@ -28,11 +28,14 @@ function smarty_function_render_menu($params, &$smarty)
         $criteria = [ 'position' => [ [ 'value' => $position ] ], ];
     }
 
-    // $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
-    $menu        = new \Menu(1);
+    $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
+    // $menu = new \Menu(1);
+
     if (is_null($menu)) {
         return $menu;
     }
+
+    $menu->items = $menu->localize($menu->getRawItems());
 
     $smarty->assign([
         'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
