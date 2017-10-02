@@ -4,12 +4,12 @@
           <a href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
               {localize_filter field=$category->title params=$language_data}
           </a>
-          <div class="listing-inline-actions" ng-init="languageData = {json_encode($language_data)|clear_json}">
+          <div class="listing-inline-actions" ng-init="mainTranslationField = {json_encode($category->title)|clear_json}">
               {acl isAllowed="CATEGORY_UPDATE"}
                   {if $category->internal_category != 0 && $category->internal_category != 2}
                   <div>
                     {is_module_activated name="es.openhost.module.multilanguage"}
-                      <translator ng-model="lang" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" />
+                      <translator ng-model="mainTranslationField" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" />
                     {/is_module_activated}
                     <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
@@ -87,11 +87,11 @@
                   <a href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
                       {localize_filter field=$subcategory->title params=$language_data}
                   </a>
-                  <div class="listing-inline-actions">
+                  <div class="listing-inline-actions" ng-init="mainTranslationField = {json_encode($category->title)|clear_json};">
                       {acl isAllowed="CATEGORY_UPDATE"}
                         <div>
                           {is_module_activated name="es.openhost.module.multilanguage"}
-                            <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" translator-options="languageData" />
+                            <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" />
                           {/is_module_activated}
                           <a class="link" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
                               <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}

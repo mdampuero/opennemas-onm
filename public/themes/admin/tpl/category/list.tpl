@@ -75,7 +75,7 @@
                   {/acl}
                 </tr>
               </thead>
-              <tbody>
+              <tbody ng-init="languageData = {json_encode($language_data)|clear_json}">
                 {foreach $categories as $category}
                   {if $category->internal_category eq '1'}
                     {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data}

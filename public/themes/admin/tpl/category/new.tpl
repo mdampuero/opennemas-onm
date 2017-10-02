@@ -37,7 +37,7 @@
           {is_module_activated name="es.openhost.module.multilanguage"}
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <translator ng-model="lang" translator-options="languageData"/>
+              <translator ng-model="lang" translator-options="languageData" translator-item="category.title"/>
             </li>
           {/is_module_activated}
           </ul>

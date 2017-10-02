@@ -73,7 +73,7 @@ class CategoriesController extends Controller
 
         $ccm           = \ContentCategoryManager::get_instance();
         $allcategories = $ccm->categories;
-        $languageData  = $this->getLocaleData('frontend', $request);
+        $languageData  = $this->getLocaleData('frontend', $request, true);
         $fm            = $this->get('data.manager.filter');
         // we adapt the category data and if the value returned y multilanguage field is a string, create a new
         //array with all values
