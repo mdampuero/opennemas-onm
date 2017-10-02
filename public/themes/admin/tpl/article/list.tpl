@@ -99,13 +99,13 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks dropdown hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|clear_json}">
-            <ui-select name="author" theme="select2" ng-model="criteria.pk_fk_content_category">
+          <li class="quicklinks dropdown hidden-xs ng-cloak">
+            <ui-select name="category" theme="select2" ng-model="criteria.pk_fk_content_category">
               <ui-select-match>
-                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
+                <strong>{t}Category{/t}:</strong> [% $select.selected.title %]
               </ui-select-match>
-              <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
-                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              <ui-select-choices repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
+                <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
           </li>
@@ -119,12 +119,12 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs hidden-sm ng-cloak" ng-init="authors = {json_encode($authors)|clear_json}">
+          <li class="quicklinks hidden-xs hidden-sm ng-cloak">
             <ui-select name="author" theme="select2" ng-model="criteria.fk_author">
               <ui-select-match>
                 <strong>{t}Author{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
-              <ui-select-choices repeat="item.value as item in authors | filter: { name: $select.search }">
+              <ui-select-choices repeat="item.id as item in data.extra.users | filter: { name: $select.search }">
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
@@ -187,7 +187,7 @@
                   </div>
                 </td>
                 <td>
-                  <span uib-tooltip="{t}Last editor{/t} [% data.extra.authors[content.fk_user_last_editor].name %]">[% content.title %]</span>
+                  <span uib-tooltip="{t}Last editor{/t}: [% (data.extra.users | filter: { id: content.fk_user_last_editor }: true).length == 0 ? (data.extra.users | filter: { id: content.fk_author }: true)[0].name : (data.extra.users | filter: { id: content.fk_user_last_editor }: true)[0].name %]">[% content.title %]</span>
                   <div class="small-text">
                     <strong>{t}Created{/t}: </strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
@@ -215,22 +215,20 @@
                 </td>
                 <td class="hidden-xs">
                   <span ng-if="content.fk_author != 0">
-                    [% data.extra.authors[content.fk_author].name %]
+                    [% (data.extra.users | filter: { id: content.fk_author }: true)[0].name %]
                   </span>
                   <span ng-if="content.fk_author == 0 && content.agency != ''">
                     [% content.agency %]
                   </span>
                 </td>
-                {if $category eq 'all' || $category == 0}
-                  <td class="hidden-xs">
-                    <span ng-if="content.category_name == 'unknown'">
-                      {t}Unasigned{/t}
-                    </span>
-                    <span ng-if="content.category_name != 'unknown'">
-                      [% data.extra.categories[content.pk_fk_content_category].name %]
-                    </span>
-                  </td>
-                {/if}
+                <td class="hidden-xs">
+                  <span ng-if="!content.pk_fk_content_category">
+                    {t}Unasigned{/t}
+                  </span>
+                  <span ng-if="content.pk_fk_content_category">
+                    [% (categories | filter: { pk_content_category: content.pk_fk_content_category }: true)[0].title %]
+                  </span>
+                </td>
                 <td class="text-center">
                   <span ng-if="content.category != 20">
                     {acl isAllowed="ARTICLE_AVAILABLE"}
@@ -244,7 +242,7 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > -1">
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
           <div class="pull-right">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>

@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Api\Controller\V1\Backend;
 
 use Common\Core\Annotation\Security;
@@ -55,54 +54,28 @@ class ArticleController extends Controller
      * @param  array $contents Array of contents.
      * @return array           Array of extra data.
      */
-    protected function loadExtraData($contents)
+    protected function loadExtraData()
     {
-        if (empty($contents)) {
-            return [];
-        }
-
         $extra = [];
-        $ids   = [];
-
-        foreach ($contents as $content) {
-            $ids[] = $content->fk_author;
-            $ids[] = $content->fk_publisher;
-            $ids[] = $content->fk_user_last_editor;
-        }
-
-        $ids = array_unique($ids);
-
-        if (($key = array_search(0, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        if (($key = array_search(null, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        $extra['authors'] = [];
-        if (!empty($ids)) {
-            $converter = $this->get('orm.manager')->getConverter('User');
-            $users     = $this->get('orm.manager')->getRepository('User')
-                ->findBy(sprintf('id in [%s]', implode(',', $ids)));
-
-            foreach ($users as $user) {
-                $user->eraseCredentials();
-
-                $extra['authors'][$user->id] = $converter->responsify($user->getData());
-            }
-        }
 
         $converter  = $this->get('orm.manager')->getConverter('Category');
         $categories = $this->get('orm.manager')
             ->getRepository('Category')
             ->findBy();
 
-        $categories = $converter->responsify($categories);
+        $extra['categories'] = $converter->responsify($categories);
+        array_unshift($extra['categories'], [ 'pk_content_category' => null, 'title' => _('All') ]);
 
-        foreach ($categories as $category) {
-            $extra['categories'][$category['pk_content_category']] = $category;
+        $converter = $this->get('orm.manager')->getConverter('User');
+        $users     = $this->get('orm.manager')->getRepository('User')
+            ->findBy('fk_user_group regexp "^3($|,)|,\s*3\s*,|(^|,)\s*3$"');
+
+        foreach ($users as $user) {
+            $user->eraseCredentials();
         }
+
+        $extra['users'] = $converter->responsify($users);
+        array_unshift($extra['users'], [ 'id' => null, 'name' => _('All') ]);
 
         return $extra;
     }
