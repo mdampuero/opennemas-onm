@@ -9,21 +9,26 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         $content = $smarty->tpl_vars['content']->value;
 
         // Set content data for facebook tags
-        $summary = $content->summary;
-        if (empty($summary)) {
-            if (empty($content->body)) {
-                $summary = mb_substr($content->description, 0, 120) . "...";
-            } else {
-                $summary = mb_substr($content->body, 0, 120) . "...";
-            }
-        }
-
         $sm      = getService('setting_repository');
         $url     = SITE_URL . $content->uri;
-        $summary = trim(\Onm\StringUtils::htmlAttribute($summary));
-        $title   = htmlspecialchars(
+        $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
+
+        if (empty($summary)) {
+            $summary = mb_substr(
+                trim(\Onm\StringUtils::htmlAttribute($content->body)),
+                0,
+                80
+            ) . "...";
+        }
+
+        $title = htmlspecialchars(
             html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
         );
+
+        // Change summary for videos
+        if ($content->content_type_name == 'video') {
+            $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
+        }
 
         // Generate tags
         $output[] = '<meta property="og:type" content="website" />';

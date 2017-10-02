@@ -16,12 +16,13 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
         $this->paginator = new Paginator($this->router);
 
         $reflection = new \ReflectionClass(get_class($this->paginator));
-        $this->methods['getFirstLink'] = $reflection->getMethod('getFirstLink');
-        $this->methods['getLastLink'] = $reflection->getMethod('getLastLink');
-        $this->methods['getLinks'] = $reflection->getMethod('getLinks');
-        $this->methods['getNextLink'] = $reflection->getMethod('getNextLink');
+
+        $this->methods['getFirstLink']    = $reflection->getMethod('getFirstLink');
+        $this->methods['getLastLink']     = $reflection->getMethod('getLastLink');
+        $this->methods['getLinks']        = $reflection->getMethod('getLinks');
+        $this->methods['getNextLink']     = $reflection->getMethod('getNextLink');
         $this->methods['getPreviousLink'] = $reflection->getMethod('getPreviousLink');
-        $this->methods['getUrl'] = $reflection->getMethod('getUrl');
+        $this->methods['getUrl']          = $reflection->getMethod('getUrl');
 
         foreach ($this->methods as $method) {
             $method->setAccessible(true);
@@ -54,6 +55,9 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $this->paginator->get([ 'epp' => 7, 'maxLinks' => 3, 'total' => 100 ]);
         $this->assertEquals(3, substr_count($this->paginator->links, '<li'));
+
+        // Test if passing epp=0 the return is empty.
+        $this->assertEquals('', $this->paginator->get([ 'epp' => 0, 'maxLinks' => 5, 'total' => 100 ]));
     }
 
     public function testGetFirstLink()

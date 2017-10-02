@@ -72,7 +72,7 @@ class Compiler
     public function cleanCompileForServer($id)
     {
         // Remove all compiles for this server
-        $compiles = glob($this->path . DS . 'sync.' . $id .'*.php');
+        $compiles = glob($this->path . DS . 'sync.' . $id . '*.php');
 
         foreach ($compiles as $compile) {
             unlink($compile);

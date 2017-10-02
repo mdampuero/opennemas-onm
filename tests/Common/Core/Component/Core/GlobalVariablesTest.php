@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Core\Component\Template;
+namespace Tests\Common\Core\Component\Core;
 
-use Common\Core\Component\Template\GlobalVariables;
+use Common\Core\Component\Core\GlobalVariables;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -60,6 +60,17 @@ class GlobalVariablesTest extends KernelTestCase
             ->with('core.locale');
 
         $this->globals->getLocale();
+    }
+
+    /**
+     * Tests getTheme.
+     */
+    public function testGetTheme()
+    {
+        $this->container->expects($this->once())->method('get')
+            ->with('core.theme')->willReturn('wobble');
+
+        $this->assertEquals('wobble', $this->globals->getTheme());
     }
 
     /**
@@ -131,5 +142,14 @@ class GlobalVariablesTest extends KernelTestCase
     {
         $this->globals->setExtension('quux');
         $this->assertEquals('quux', $this->globals->getExtension());
+    }
+
+    /**
+     * Tests get and set methods for route.
+     */
+    public function testSetAndGetRoute()
+    {
+        $this->globals->setRoute('norf');
+        $this->assertEquals('norf', $this->globals->getRoute());
     }
 }
