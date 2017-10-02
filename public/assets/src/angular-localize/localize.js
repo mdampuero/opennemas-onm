@@ -244,7 +244,7 @@
            */
           updateLocalized: function(localized, original) {
             for (var i = 0; i < this.keys.length; i++) {
-              if (original[this.keys[i]][this.key]) {
+              if (original[this.keys[i]] && original[this.keys[i]][this.key]) {
                 localized[this.keys[i]] = original[this.keys[i]][this.key];
               }
             }
@@ -258,7 +258,10 @@
            */
           updateOriginal: function(original, localized) {
             for (var i = 0; i < this.keys.length; i++) {
-              original[this.keys[i]][this.key] = localized[this.keys[i]];
+              if (original[this.keys[i]] &&
+                  angular.isObject(original[this.keys[i]])) {
+                original[this.keys[i]][this.key] = localized[this.keys[i]];
+              }
             }
           },
 
