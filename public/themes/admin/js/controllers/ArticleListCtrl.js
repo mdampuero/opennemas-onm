@@ -47,26 +47,26 @@
         $scope.localizer = localizer;
 
         /**
-         * @function getCategory
+         * @function groupCategories
          * @memberOf ArticleListCtrl
          *
          * @description
-         *   Returns the category value from the list of categories.
+         *   Groups categories in the ui-select.
          *
-         * @param {Integer} id The category id.
+         * @param {Object} item The category to group.
          *
-         * @return {Object} The category object.
+         * @return {String} The group name.
          */
-        $scope.getCategory = function(id) {
+        $scope.groupCategories = function(item) {
           var category = $scope.categories.filter(function(e) {
-            return e.pk_content_category === id;
+            return e.pk_content_category === item.fk_content_category;
           });
 
-          if (category.length === 0) {
-            return {};
+          if (category.length > 0 && category[0].pk_content_category) {
+            return category[0].title;
           }
 
-          return category[0];
+          return '';
         };
 
         /**

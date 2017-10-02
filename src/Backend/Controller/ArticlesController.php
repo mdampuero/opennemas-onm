@@ -29,38 +29,9 @@ class ArticlesController extends Controller
      *     and hasPermission('ARTICLE_ADMIN')
      *     and hasPermission('ARTICLE_PENDINGS')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
-        $this->loadCategories($request);
-
-        // Build the list of authors to render filters
-        $allAuthors = \User::getAllUsersAuthors();
-        $authors    = [ [ 'name' => _('All'), 'value' => null ], ];
-
-        foreach ($allAuthors as $author) {
-            $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
-        }
-
-        // Build the list of categories to render filters
-        $categories = [ [ 'name' => _('All'), 'value' => null ], ];
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name'  => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name'  => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
-                ];
-            }
-        }
-
-        return $this->render('article/list.tpl', [
-            'authors'    => $authors,
-            'categories' => $categories,
-        ]);
+        return $this->render('article/list.tpl');
     }
 
     /**

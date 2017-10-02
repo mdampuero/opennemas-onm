@@ -104,7 +104,7 @@
               <ui-select-match>
                 <strong>{t}Category{/t}:</strong> [% $select.selected.title %]
               </ui-select-match>
-              <ui-select-choices repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
+              <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
