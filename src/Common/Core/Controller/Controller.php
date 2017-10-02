@@ -119,9 +119,7 @@ class Controller extends SymfonyController
             $instance = $this->get('core.instance')->internal_name;
 
             $response->headers->set('x-instance', $instance);
-            $response->headers->set(
-                'x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']
-            );
+            $response->headers->set('x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']);
 
             if (array_key_exists('x-cache-for', $parameters)
                 && !empty($parameters['x-cache-for'])
@@ -142,23 +140,39 @@ class Controller extends SymfonyController
      *
      * @return Array all info related with locale information for the instance and request
      */
-    protected function getLocaleData($context, Request $request = null)
+    protected function getLocaleData($context = null, $request = null, $translation = false)
     {
-        $locale = null;
+        $locale  = null;
+        $ls      = $this->get('core.locale')->setContext(($context === 'backend') ? $context : 'frontend');
+        $default = $ls->getLocale();
         if ($request != null) {
             $locale = $request->query->filter('locale', null, FILTER_SANITIZE_STRING);
         }
 
-        if ($this->get('core.security')->hasPermission('es.openhost.module.translation')) {
-            $translators = $this->get('setting_repository')->get('automatic_translators');
+        $translators = (
+            $translation &&
+            $this->get('core.security')->hasPermission('es.openhost.module.translation')
+        ) ?
+            $this->get('setting_repository')->get('translators') :
+            [];
+
+        // get all automatic translators for the main language
+        $translatorToMap = [];
+        if (count($translators) > 0) {
+            $translatorToMap = [];
+
+            foreach ($translators as $translator) {
+                if ($translator['from'] == $default) {
+                    $translatorToMap[] = $translator['to'];
+                }
+            }
         }
 
-        $ls = $this->get('core.locale')->setContext('frontend');
-
-        return array(
-            'locale'            => $locale,
-            'default'           => $ls->getLocale(),
-            'all'               => $ls->getAvailableLocales(),
-        );
+        return [
+            'locale'      => $locale,
+            'default'     => $default,
+            'all'         => $ls->getAvailableLocales(),
+            'translators' => $translatorToMap
+        ];
     }
 }
