@@ -15,8 +15,8 @@ angular.module('BackendApp.controllers')
    *   Controller for opinion list.
    */
   .controller('MenuListCtrl', [
-    '$controller', '$http', '$scope', 'routing', 'messenger', 'Encoder', 'queryManager',
-    function($controller, $http, $scope, routing, messenger, Encoder, queryManager) {
+    '$controller', '$uibModal', '$http', '$scope', 'routing', 'messenger', 'Encoder', 'queryManager',
+    function($controller, $uibModal, $http, $scope, routing, messenger, Encoder, queryManager) {
 
       // Initialize the super class and extend it.
       $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
