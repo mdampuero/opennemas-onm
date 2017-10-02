@@ -30,7 +30,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $subtitle = null;
+    protected $subtitle = null;
 
     /**
      * The agency that authored the article
@@ -44,7 +44,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $summary = null;
+    protected $summary = null;
 
     /**
      * The id of the image assigned for frontpage
@@ -58,7 +58,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $img1_footer = null;
+    protected $img1_footer = null;
 
     /**
      * The id of the image assigned for inner
@@ -72,7 +72,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $img2_footer = null;
+    protected $img2_footer = null;
 
     /**
      * The id of the video assigned for frontpage
@@ -89,11 +89,18 @@ class Article extends Content
     public $fk_video2 = null;
 
     /**
+     * The footer of the video assigned for frontpage
+     *
+     * @var string
+     */
+    protected $footer_video = null;
+
+    /**
      * The footer of the video assigned for inner
      *
      * @var string
      */
-    public $footer_video2 = null;
+    protected $footer_video2 = null;
 
     /**
      * The inner title of this article
@@ -126,23 +133,6 @@ class Article extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
-                }
-
-                if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-                    $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
-                } else {
-                    $uri = Uri::generate('article', [
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'category' => $this->category_name,
-                        'slug'     => urlencode($this->slug),
-                    ]);
-                }
-                return $uri;
-
             case 'author':
                 return $this->getAuthor();
 
@@ -152,6 +142,20 @@ class Article extends Content
             default:
                 return parent::__get($name);
         }
+    }
+
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public function getL10nKeys()
+    {
+        return array_merge(parent::getL10nKeys(), [
+            'subtitle', 'summary', 'img1_footer', 'img2_footer',
+            'footer_video', 'footer_video2'
+        ]);
     }
 
     /**

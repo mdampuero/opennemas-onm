@@ -47,7 +47,7 @@ class Content implements \JsonSerializable
      *
      * @var string
      */
-    private $body = '';
+    protected $body = '';
 
     /**
      * The category id this content belongs to
@@ -103,7 +103,7 @@ class Content implements \JsonSerializable
      *
      * @var string
      */
-    private $description = '';
+    protected $description = '';
 
     /**
      * The end until when this content will be available to publish
@@ -210,7 +210,7 @@ class Content implements \JsonSerializable
      *
      * @var string
      */
-    private $slug = null;
+    protected $slug = null;
 
     /**
      * The date from when this will be available to publish
@@ -224,7 +224,7 @@ class Content implements \JsonSerializable
      *
      * @var string
      */
-    private $title = '';
+    protected $title = '';
 
     /**
      * Whether allowing comments in this content
@@ -303,7 +303,7 @@ class Content implements \JsonSerializable
     }
 
     /**
-     * Chages a property value.
+     * Changes a property value.
      *
      * @param string $name  The property name.
      * @param mixed  $value The property value.
