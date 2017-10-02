@@ -81,11 +81,11 @@ class Controller extends SymfonyController
             $expireDate->setTimeStamp($expires);
             $expireDate->setTimeZone(new \DateTimeZone('UTC'));
 
-            $data = array(
+            $data = [
                 'creation_date' => $creationDate,
                 'expire_date'   => $expireDate,
                 'max_age'       => $expires - time(),
-            );
+            ];
         }
 
         return $data;
@@ -100,7 +100,7 @@ class Controller extends SymfonyController
      *
      * @return Response A Response object.
      */
-    public function render($view, array $parameters = array(), Response $response = null)
+    public function render($view, array $parameters = [], Response $response = null)
     {
         if (empty($response)) {
             $response = new Response();
