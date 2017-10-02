@@ -35,9 +35,9 @@ class NewsletterController extends Controller
      */
     public function listAction(Request $request)
     {
-        $maxAllowed      = s::get('max_mailing');
+        $maxAllowed      = $this->get('setting_repository')->get('max_mailing');
         $totalSendings   = $this->getTotalNumberOfNewslettersSend();
-        $lastInvoice     = new \DateTime(s::get('last_invoice'));
+        $lastInvoice     = new \DateTime($this->get('setting_repository')->get('last_invoice'));
         $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
@@ -47,17 +47,18 @@ class NewsletterController extends Controller
             return $configuredRedirection;
         }
 
+        $message = sprintf(_('No newsletter sent from %s.'), $lastInvoiceText);
+        if ($totalSendings > 0) {
+            $message = sprintf(_('%d newsletter sent from %s.'), (int) $totalSendings, $lastInvoiceText);
+        }
+
         if ($maxAllowed > 0) {
             $message = sprintf(
-                _('%s newsletter sent from %d (%d allowed).'),
+                _('%s newsletter sent from %s (%d allowed).'),
                 (int) $totalSendings,
                 $lastInvoiceText,
                 (int) $maxAllowed
             );
-        } elseif ($totalSendings == 0) {
-            $message = sprintf(_('No newsletter sent from %s.'), $lastInvoiceText);
-        } else {
-            $message = sprintf(_('%d newsletter sent from %s.'), (int) $totalSendings, $lastInvoiceText);
         }
 
         return $this->render('newsletter/list.tpl', ['message' => $message]);
@@ -75,7 +76,7 @@ class NewsletterController extends Controller
      */
     public function createAction(Request $request)
     {
-        $configurations = s::get('newsletter_maillist');
+        $configurations = $this->get('setting_repository')->get('newsletter_maillist');
 
         $newsletterContent = [];
         $menu              = new \Menu();
@@ -192,7 +193,7 @@ class NewsletterController extends Controller
 
         $title = $request->request->filter(
             'title',
-            s::get('site_name') . ' [' . $time . ']',
+            $this->get('setting_repository')->get('site_name') . ' [' . $time . ']',
             FILTER_SANITIZE_STRING
         );
 
@@ -302,7 +303,7 @@ class NewsletterController extends Controller
         $id         = $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
 
-        $subscriptionType = \Onm\Settings::get('newsletter_subscriptionType');
+        $subscriptionType = $this->get('setting_repository')->get('newsletter_subscriptionType');
 
         $accounts = [];
         if ($subscriptionType === 'create_subscriptor') {
@@ -313,7 +314,7 @@ class NewsletterController extends Controller
                 'pk_pc_user ASC'
             );
         } else {
-            $configurations = \Onm\Settings::get('newsletter_maillist');
+            $configurations = $this->get('setting_repository')->get('newsletter_maillist');
 
             if (!is_null($configurations)
                 && array_key_exists('email', $configurations)
@@ -375,7 +376,7 @@ class NewsletterController extends Controller
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
         $newsletterSender = $this->container->getParameter('mailer_no_reply_address');
-        $configurations   = s::get('newsletter_maillist');
+        $configurations   = $this->get('setting_repository')->get('newsletter_maillist');
 
         if (empty($newsletterSender)) {
             $this->get('session')->getFlashBag()->add(
@@ -389,10 +390,10 @@ class NewsletterController extends Controller
         $params = [
             'subject'            => $newsletter->title,
             'mail_from'          => $configurations['sender'],
-            'mail_from_name'     => s::get('site_name'),
+            'mail_from_name'     => $this->get('setting_repository')->get('site_name'),
         ];
 
-        $maxAllowed = s::get('max_mailing');
+        $maxAllowed = $this->get('setting_repository')->get('max_mailing');
         $remaining  = $maxAllowed - $this->getTotalNumberOfNewslettersSend();
 
         $subject = (!isset($params['subject'])) ? '[Boletin]' : $params['subject'];
@@ -436,23 +437,18 @@ class NewsletterController extends Controller
             $newsletter->update(['sent' => $sent]);
         } else {
             //duplicated newsletter for count month mail send
-            $newsletter->create(
-                [
-                    'title'   => $newsletter->title,
-                    'data'    => $newsletter->data,
-                    'html'    => $newsletter->html,
-                    'sent'    => $sent,
-                ]
-            );
+            $newsletter->create([
+                'title'   => $newsletter->title,
+                'data'    => $newsletter->data,
+                'html'    => $newsletter->html,
+                'sent'    => $sent,
+            ]);
         }
 
-        return $this->render(
-            'newsletter/steps/4-send.tpl',
-            [
-                'sent_result' => $sentResult,
-                'newsletter'  => $newsletter,
-            ]
-        );
+        return $this->render('newsletter/steps/4-send.tpl', [
+            'sent_result' => $sentResult,
+            'newsletter'  => $newsletter,
+        ]);
     }
 
     /**
@@ -474,7 +470,7 @@ class NewsletterController extends Controller
             ];
 
             foreach ($configurations as $key => $value) {
-                s::set($key, $value);
+                $this->get('setting_repository')->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add(
@@ -483,32 +479,27 @@ class NewsletterController extends Controller
             );
 
             return $this->redirect($this->generateUrl('admin_newsletter_config'));
-        } else {
-            $configurations = s::get(
-                [
-                    'newsletter_maillist',
-                    'newsletter_subscriptionType',
-                    'recaptcha',
-                    'max_mailing'
-                ]
-            );
-
-            // Check that user has configured reCaptcha keys if newsletter is enabled
-            $missingRecaptcha = false;
-            if (empty($configurations['recaptcha']['public_key'])
-                || empty($configurations['recaptcha']['private_key'])
-            ) {
-                $missingRecaptcha = true;
-            }
-
-            return $this->render(
-                'newsletter/config.tpl',
-                [
-                    'configs'           => $configurations,
-                    'missing_recaptcha' => $missingRecaptcha,
-                ]
-            );
         }
+
+        $configurations = $this->get('setting_repository')->get([
+            'newsletter_maillist',
+            'newsletter_subscriptionType',
+            'recaptcha',
+            'max_mailing'
+        ]);
+
+        // Check that user has configured reCaptcha keys if newsletter is enabled
+        $missingRecaptcha = false;
+        if (empty($configurations['recaptcha']['public_key'])
+            || empty($configurations['recaptcha']['private_key'])
+        ) {
+            $missingRecaptcha = true;
+        }
+
+        return $this->render('newsletter/config.tpl', [
+            'configs'           => $configurations,
+            'missing_recaptcha' => $missingRecaptcha,
+        ]);
     }
 
     /**
@@ -518,9 +509,11 @@ class NewsletterController extends Controller
      */
     private function checkModuleActivated()
     {
-        $type   = s::get('newsletter_subscriptionType');
-        $config = s::get('newsletter_maillist');
+        $type   = $this->get('setting_repository')->get('newsletter_subscriptionType');
+        $config = $this->get('setting_repository')->get('newsletter_maillist');
 
+        // If the module doesnt have settings already saved
+        // we redirect to the module configuration form
         if (is_null($config) || !$type) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
@@ -528,20 +521,21 @@ class NewsletterController extends Controller
             );
 
             return $this->redirect($this->generateUrl('admin_newsletter_config'));
-        } else {
-            foreach ($config as $key => $value) {
-                if ($type == 'submit' || ($key != 'subscription' && $key != 'email')) {
-                    if (empty($value)) {
-                        $this->get('session')->getFlashBag()->add(
-                            'error',
-                            _(
-                                'Your newsletter configuration is not completed. Please' .
-                                ' go to settings and complete the form.'
-                            )
-                        );
+        }
 
-                        return $this->redirect($this->generateUrl('admin_newsletter_config'));
-                    }
+        // There is settings saved but we will check if they are valid
+        foreach ($config as $key => $value) {
+            if ($type == 'submit' || ($key != 'subscription' && $key != 'email')) {
+                if (empty($value)) {
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        _(
+                            'Your newsletter configuration is not completed. Please' .
+                            ' go to settings and complete the form.'
+                        )
+                    );
+
+                    return $this->redirect($this->generateUrl('admin_newsletter_config'));
                 }
             }
         }
@@ -557,7 +551,7 @@ class NewsletterController extends Controller
     private function getTotalNumberOfNewslettersSend()
     {
         // Get maximum number of allowed sending mails
-        $maxAllowed = s::get('max_mailing');
+        $maxAllowed = $this->get('setting_repository')->get('max_mailing');
 
         // Get last invoice DateTime
         $lastInvoiceDate = $this->updateLastInvoice();
@@ -566,9 +560,10 @@ class NewsletterController extends Controller
         $today = new \DateTime();
 
         // Get all newsletters updated between today and last invoice
-        $nm                          = $this->get('newsletter_manager');
-        $where                       = " updated >= '" . $lastInvoiceDate->format('Y-m-d H:i:s') . "'
-            AND updated <= '" . $today->format('Y-m-d H:i:s') . "' and sent > 0";
+        $nm    = $this->get('newsletter_manager');
+        $where = " updated >= '" . $lastInvoiceDate->format('Y-m-d H:i:s')
+            . "' AND updated <= '" . $today->format('Y-m-d H:i:s') . "' and sent > 0";
+
         list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
 
         // Check if user has reached the limit of sent newsletters
@@ -601,7 +596,7 @@ class NewsletterController extends Controller
     private function updateLastInvoice()
     {
         // Generate last invoice DateTime
-        $lastInvoice = new \DateTime(s::get('last_invoice'));
+        $lastInvoice = new \DateTime($this->get('setting_repository')->get('last_invoice'));
 
         // Set day to 28 if it's more than that
         if ($lastInvoice->format('d') > 28) {
@@ -627,7 +622,7 @@ class NewsletterController extends Controller
         // Update last invoice DateTime
         $lastInvoice = $nextInvoiceDate->modify('-1 month');
 
-        s::set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
+        $this->get('setting_repository')->set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
 
         return $lastInvoice;
     }
