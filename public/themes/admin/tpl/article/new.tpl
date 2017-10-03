@@ -1,13 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  {javascripts}
-    <script>
-      var draftSavedMsg = '{t}Draft saved at {/t}';
-    </script>
-  {/javascripts}
-{/block}
-
 {block name="content"}
   <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if};categories = {json_encode($allcategorys)|clear_json}" novalidate>
     <div class="page-navbar actions-navbar">
@@ -43,7 +35,7 @@
                 <h5>
                   <i class="p-r-15">
                     <i class="fa fa-check"></i>
-                    [% draftSaved %]
+                    {t}Draft saved at {/t}[% draftSaved %]
                   </i>
                 </h5>
               </li>

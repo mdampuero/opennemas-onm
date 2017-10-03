@@ -521,9 +521,7 @@
               }
 
               $scope.dtm = $timeout(function() {
-                $scope.draftSaved = $window.draftSavedMsg +
-                  $window.moment().format('HH:mm');
-
+                $scope.draftSaved = $window.moment().format('HH:mm');
               }, 2500);
             }
 
