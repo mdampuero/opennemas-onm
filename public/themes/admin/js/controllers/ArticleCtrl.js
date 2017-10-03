@@ -16,15 +16,14 @@
      * @requires linker
      * @requires localizer
      * @requires messenger
-     * @requires routing
      * @requires webStorage
      *
      * @description
      *   Provides actions to edit, save and update articles.
      */
     .controller('ArticleCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'routing', 'webStorage',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, linker, localizer, messenger, routing, webStorage) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'webStorage',
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, linker, localizer, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -116,6 +115,76 @@
         };
 
         /**
+         * @function groupCategories
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Groups categories in the ui-select.
+         *
+         * @param {Object} item The category to group.
+         *
+         * @return {String} The group name.
+         */
+        $scope.groupCategories = function(item) {
+          var category = $scope.categories.filter(function(e) {
+            return e.pk_content_category === item.fk_content_category;
+          });
+
+          if (category.length > 0 && category[0].pk_content_category) {
+            return category[0].title;
+          }
+
+          return '';
+        };
+
+        /**
+         * @function init
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Initializes services and list articles.
+         *
+         * @param {String}  locale   The current locale.
+         * @param {Boolean} localize Whether this content supports localization.
+         * @param {Integer} id       The article id when editing.
+         */
+        $scope.init = function(localize, id) {
+          var keys =  [
+            'body',
+            'img1_footer',
+            'img2_footer',
+            'video_footer',
+            'video2_footer',
+            'slug',
+            'summary',
+            'title',
+            'title_int',
+          ];
+
+          $scope.localize = localize;
+
+          if ($scope.localize && $scope.locale) {
+            $scope.ilz = localizer.get({
+              keys: keys,
+              locales: [ 'es', 'gl' ]
+            });
+
+            $scope.cl = linker.get([ 'title' ], $scope);
+            $scope.il = linker.get(keys, $scope);
+
+            $scope.cl.setKey($scope.locale);
+            $scope.il.setKey($scope.locale);
+          }
+
+          if (!id) {
+            $scope.checkDraft();
+            return;
+          }
+
+          $scope.getArticle(id);
+        };
+
+        /**
          * @function getArticle
          * @memberOf ArticleCtrl
          *
@@ -125,16 +194,28 @@
          * @param {Integer} id The article id.
          */
         $scope.getArticle = function(id) {
-          $scope.loading = true;
+          $scope.loading = 1;
 
           var route = {
-            name:   'backend_ws_article_show',
+            name:   'api_v1_backend_article_show',
             params: { id: id }
           };
 
           http.get(route).then(function(response) {
-            for (var key in response.data) {
-              $scope[key] = response.data[key];
+            $scope.loading    = 0;
+            $scope.data       = response.data;
+            $scope.article    = response.data.article;
+            $scope.categories = response.data.extra.categories;
+
+            if ($scope.localize && $scope.locale) {
+              $scope.categories = $scope.ilz
+                .localize($scope.categories, $scope.locale);
+
+              $scope.article = $scope.ilz
+                .localize(response.data.article, $scope.locale);
+
+              $scope.cl.link($scope.data.extra.categories, $scope.categories);
+              $scope.il.link($scope.data.article, $scope.article);
             }
 
             if ($scope.article.metadata) {
@@ -144,31 +225,10 @@
             $scope.backup = { content_status: $scope.article.content_status };
 
             $scope.checkDraft();
-            $scope.loading = false;
           }, function(response) {
-            $scope.loading = false;
-            $scope.error   = true;
+            $scope.loading = 0;
             messenger.post(response.data);
           });
-        };
-
-        /**
-         * @function getCategoryName
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Returns the category name given a category id.
-         *
-         * @param {Integer} id The category id.
-         *
-         * @return {String} The category name.
-         */
-        $scope.getCategoryName = function(id) {
-          return $scope.categories.filter(function(e) {
-            return parseInt(e.id) === parseInt(id);
-          }).map(function (e) {
-            return e.name;
-          }).join('');
         };
 
         /**
@@ -199,7 +259,7 @@
               resolve: {
                 template: function() {
                   return {
-                    src: routing.generate(getPreviewUrl)
+                    src: $scope.routing.generate(getPreviewUrl)
                   };
                 },
                 success: function() {
@@ -547,26 +607,46 @@
 
           var title    = $scope.article.title ? $scope.article.title : '';
           var category = '';
+          var data     = title + ' ' + category;
 
+          // Get category name from category id
           if ($scope.article.category) {
-            category = $scope.getCategoryName($scope.article.category);
-          }
+            var categories = $scope.data.extra.categories.filter(function(e) {
+              return e.pk_content_category ===
+                $scope.article.pk_fk_content_category;
+            });
 
-          var data  = title + ' ' + category;
-          var route = {
-            name:   'admin_utils_calculate_tags',
-            params: { data: data }
-          };
+            if (categories.length > 0) {
+              category = categories[0].title;
+            }
+          }
 
           if ($scope.mtm) {
             $timeout.cancel($scope.mtm);
           }
 
           $scope.mtm = $timeout(function() {
-            http.get(route).then(function(response) {
+            http.get({
+              name: 'admin_utils_calculate_tags',
+              params: { data: data }
+            }).then(function(response) {
               $scope.article.metadata = response.data.split(',');
             });
-          }, 5000);
+          }, 2500);
+        });
+
+        // Localizes contents when locale changes
+        $scope.$watch('locale', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if ($scope.localize && $scope.locale) {
+            $scope.cl.setKey(nv);
+            $scope.il.setKey(nv);
+            $scope.cl.update();
+            $scope.il.update();
+          }
         });
 
         // Enable drafts after 5s to grant CKEditor initialization
