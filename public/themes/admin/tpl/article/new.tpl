@@ -403,7 +403,7 @@
       </div>
       {include  file="article/partials/_images.tpl"}
       <div id="related-contents">
-        {include file ="article/related/_related_list.tpl"}
+        {include file ="article/partials/_related_list.tpl"}
       </div>
       {is_module_activated name="CRONICAS_MODULES"}
         {include file ="article/partials/_article_advanced_customize.tpl"}
