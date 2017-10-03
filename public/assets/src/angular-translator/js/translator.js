@@ -21,25 +21,41 @@ angular.module('onm.translator', [])
           translatorItem: '=',
           ngModel: '=',
           link: '@',
+          editText: '@'
         },
         template: function(elem, attrs) {
-          if (attrs.link) {
-            return '<div class="btn-group btn-group-xs" role="group">' +
+          if (attrs.link ) {
+            return '<div class=\"translator btn-group  btn-group-xs\" ng-if=\"optionsSize > 4\">' +
+                '<button type=\"button\" class=\"form-control btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\">' +
+                  '<i class=\"fa {{options[ngModel].icon}}\"></i>' +
+                  '{{editText}}' +
+                  '<i class=\"fa fa-angle-down\"></i>' +
+                '</button>' +
+                '<ul class=\"dropdown-menu\" role=\"menu\">' +
+                  '<li ng-repeat=\"language in options\" ng-if=\"language.language != ngModel\">' +
+                    '<a href=\"{{link + \'?locale=\' + language.language}}\" >' +
+                      '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
+                      '{{language.name}}' +
+                    '</a>' +
+                  '</li>' +
+                '</ul>' +
+              '</div>' +
+              '<div class="translator btn-group btn-group-xs" role="group" ng-if=\"optionsSize < 5\">' +
                 '<a ng-repeat=\"option in options\" href="{{link + \'?locale=\' + option.language}}" class=\"btn {{option.btnClass}}\">' +
-                  '<span class=\"fa {{option.icon}} m-l-10\"></span>{{option.name}}' +
+                  '<i class=\"fa {{option.icon}} m-l-10\" ng-show=\"option.icon\"></i>{{option.name}}' +
                 '</a>' +
               '</div>';
           }
-          return '<div class=\"btn-group\">' +
+          return '<div class=\"translator btn-group\">' +
             '<button type=\"button\" class=\"form-control btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\">' +
-              '<span class=\"fa {{options[ngModel].icon}}\"></span>' +
+              '<i class=\"fa {{options[ngModel].icon}}\"></i>' +
               '{{options[ngModel].name}}' +
-              '<span class=\"caret\"></span>' +
+              '<i class=\"fa fa-angle-down\"></i>' +
             '</button>' +
             '<ul class=\"dropdown-menu\" role=\"menu\">' +
               '<li ng-repeat=\"language in options\" ng-if=\"language.language != ngModel\">' +
                 '<a href=\"#\" ng-click=\"changeSelected(language.language)\">' +
-                  '<span class=\"fa {{language.icon}}\" ></span>' +
+                  '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
                   '{{language.name}}' +
                 '</a>' +
               '</li>' +
@@ -55,6 +71,7 @@ angular.module('onm.translator', [])
             $scope.ngModel = language;
           };
 
+
           $scope.getTranslatorOption = function(lang, languageName, translatorToMap, mainTranslationField, main) {
             var option = {
               default: main === lang,
@@ -64,12 +81,12 @@ angular.module('onm.translator', [])
 
             if(lang === main) {
               option.btnClass = 'btn-primary';
-              option.icon = 'fa-exchange';
+              option.icon = 'fa-pencil';
               return option;
             }
 
             if(mainTranslationField[lang] && '' !== mainTranslationField[lang]) {
-              option.btnClass = '';
+              option.btnClass = 'btn-default';
               option.icon = 'fa-pencil';
               return option;
             }
@@ -79,12 +96,12 @@ angular.module('onm.translator', [])
                 (!mainTranslationField[lang] || '' === mainTranslationField[lang]) &&
                 translatorToMap.indexOf(lang) > -1
             ) {
-              option.btnClass = 'btn-transparent';
+              option.btnClass = 'btn-default';
               option.icon = 'fa-globe';
               return option;
             }
 
-            option.btnClass = 'btn-transparent';
+            option.btnClass = 'btn-default';
             option.icon = '';
             return option;
           };
@@ -97,13 +114,18 @@ angular.module('onm.translator', [])
             var translatorItem = $scope.translatorItem;
             var translationOptions = {};
             Object.keys(languageData.all).forEach(function(lang) {
-              translationOptions[lang] = $scope.getTranslatorOption(lang, languageData.all[lang], languageData.translators, translatorItem, languageData.default);
+              translationOptions[lang] = $scope.getTranslatorOption(lang,
+                languageData.all[lang],
+                languageData.translators,
+                translatorItem,
+                languageData.default
+              );
             });
-
             return translationOptions;
           };
 
           $scope.options = $scope.getTranslatorOptions();
+          $scope.optionsSize = Object.keys($scope.getTranslatorOptions()).length;
         },
       };
     }
