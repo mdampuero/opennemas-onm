@@ -142,37 +142,35 @@ class Controller extends SymfonyController
      */
     protected function getLocaleData($context = null, $request = null, $translation = false)
     {
-        $locale  = null;
-        $ls      = $this->get('core.locale')->setContext(($context === 'backend') ? $context : 'frontend');
-        $default = $ls->getLocale();
-        if ($request != null) {
-            $locale = $request->query->filter('locale', null, FILTER_SANITIZE_STRING);
+        $ls = $this->get('core.locale')
+            ->setContext($context === 'backend' ? $context : 'frontend');
+
+        $locale      = null;
+        $default     = $ls->getLocale();
+        $translators = [];
+
+        if (!empty($request)) {
+            $locale = $request->query->get('locale');
         }
 
-        $translators = (
-            $translation &&
-            $this->get('core.security')->hasPermission('es.openhost.module.translation')
-        ) ?
-            $this->get('setting_repository')->get('translators') :
-            [];
-
-        // get all automatic translators for the main language
-        $translatorToMap = [];
-        if (count($translators) > 0) {
-            $translatorToMap = [];
-
-            foreach ($translators as $translator) {
-                if ($translator['from'] == $default) {
-                    $translatorToMap[] = $translator['to'];
-                }
-            }
+        if ($translation
+            && $this->get('core.security')
+                ->hasPermission('es.openhost.module.translation')
+        ) {
+            $translators = $this->get('setting_repository')->get('translators');
         }
+
+        $translators = array_map(function ($a) {
+            return $a['to'];
+        }, array_filter($translators, function ($a) use ($default) {
+            return $a['from'] === $default;
+        }));
 
         return [
             'locale'      => $locale,
             'default'     => $default,
-            'all'         => $ls->getAvailableLocales(),
-            'translators' => $translatorToMap
+            'available'   => $ls->getAvailableLocales(),
+            'translators' => array_unique($translators)
         ];
     }
 }
