@@ -13,18 +13,8 @@
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout', 'routing',
-      function($scope, $timeout, routing) {
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *  The routing service.
-         *
-         * @type {Object}
-         */
-        $scope.routing = routing;
-
+      '$scope', '$timeout',
+      function($scope, $timeout) {
         /**
          * @memberOf ListCtrl
          *

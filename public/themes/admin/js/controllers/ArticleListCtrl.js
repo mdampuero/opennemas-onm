@@ -6,17 +6,26 @@
      * @ngdoc controller
      * @name  ArticleListCtrl
      *
+     * @requires $controller
+     * @requires $location
+     * @requires $scope
+     * @requires $timeout
+     * @requires http
+     * @requires messenger
+     * @requires linker
+     * @requires localizer
+     * @requires oqlEncoder
+     *
      * @description
-     *   description
+     *   Provides actions to list articles.
      */
     .controller('ArticleListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', 'http', 'routing', 'messenger', 'localizer', 'linker', 'oqlEncoder',
-      function($controller, $location, $scope, $timeout, http, routing, messenger, localizer, linker, oqlEncoder) {
+      '$controller', '$location', '$scope', '$timeout', 'http', 'messenger', 'linker', 'localizer', 'oqlEncoder',
+      function($controller, $location, $scope, $timeout, http, messenger, linker, localizer, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
-          $timeout: $timeout,
-          routing:  routing
+          $timeout: $timeout
         }));
 
         /**
@@ -82,11 +91,11 @@
               locales: [ 'es', 'gl' ]
             });
 
-            $scope.il = linker.get([ 'title' ], $scope);
             $scope.cl = linker.get([ 'title' ], $scope);
+            $scope.il = linker.get([ 'title' ], $scope);
 
-            $scope.il.setKey($scope.locale);
             $scope.cl.setKey($scope.locale);
+            $scope.il.setKey($scope.locale);
           }
 
           $scope.list();
@@ -125,8 +134,8 @@
               $scope.items = localizer
                 .localize($scope.items, $scope.locale);
 
-              $scope.il.link($scope.data.results, $scope.items);
               $scope.cl.link($scope.data.extra.categories, $scope.categories);
+              $scope.il.link($scope.data.results, $scope.items);
             }
 
             // Scroll top
@@ -149,10 +158,10 @@
           }
 
           if ($scope.localize && $scope.locale) {
-            $scope.il.setKey(nv);
             $scope.cl.setKey(nv);
-            $scope.il.update();
+            $scope.il.setKey(nv);
             $scope.cl.update();
+            $scope.il.update();
           }
         });
       }
