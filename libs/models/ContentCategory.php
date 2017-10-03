@@ -289,11 +289,10 @@ class ContentCategory
             }
 
             $conn->commit();
-            dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.update', ['category' => $this]);
 
             return true;
         } catch (\Exception $e) {
-            var_dump($e->getTraceAsString());
             getService('error.log')->error($e->getTraceAsString());
             $conn->rollBack();
             return false;
