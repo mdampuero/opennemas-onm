@@ -8,7 +8,6 @@ angular.module(
     'checklist-model',
     'colorpicker.module',
     'file-model',
-    'ngAnimate',
     'ngSanitize',
     'ngTouch',
     'ngTagsInput',
