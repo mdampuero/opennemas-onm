@@ -71,6 +71,15 @@
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
+              {is_module_activated name="es.openhost.module.multilanguage"}
+              <div class="col-md-ng-cloak hidden-md hidden-lg hidden-sm clearfix">
+                Language:
+                <div class="cleafix pull-right">
+                  <translator ng-model="lang" translator-options="languageData" translator-item="category.title"/>
+                </div>
+                <hr>
+              </div>
+              {/is_module_activated}
               <div class="form-group">
                 <label for="title" class="form-label">
                   {t}Title{/t}
