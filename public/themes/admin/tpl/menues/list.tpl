@@ -143,7 +143,7 @@
                   [% content.name %]
                   <div class="listing-inline-actions">
                     {is_module_activated name="es.openhost.module.multilanguage"}
-                      <translator ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]" translator-options="languageData" />
+                      <translator ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]" options="languageData" />
                     {/is_module_activated}
                     {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
                     <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">

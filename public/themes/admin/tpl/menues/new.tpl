@@ -37,7 +37,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="hidden-xs ng-cloak">
-              <translator ng-model="lang" translator-options="{json_encode($language_data)|clear_json}"/>
+              <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
             </li>
             {/is_module_activated}
           </ul>
@@ -70,7 +70,7 @@
             <div class="col-md-ng-cloak hidden-md hidden-lg hidden-sm clearfix">
               Language:
               <div class="cleafix pull-right">
-                <translator ng-model="lang" translator-options="{json_encode($language_data)|clear_json}"/>
+                <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
               </div>
               <hr>
             </div>
