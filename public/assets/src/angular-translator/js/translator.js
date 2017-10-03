@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('onm.translator', [])
+
   /**
    * @ngdoc directive
    * @name  translator
    *
    * @requires $http
+   * @requires routing
    *
    * @description
    *   Directive to create and display of the translator selector.
@@ -15,53 +17,94 @@ angular.module('onm.translator', [])
       return {
         restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
         scope: {
-          translatorOptions: '=',
+          item:    '=',
+          link:    '@',
           ngModel: '=',
-          link: '@',
+          options: '=',
+          text:    '@'
         },
         template: function(elem, attrs) {
           if (attrs.link) {
-            return '<a ng-repeat=\"language in languages\" href="{{language.link}}" class=\"{{language.btnClass}}\">' +
-                '<span class=\"fa {{language.icon}} m-l-10\"></span>{{language.name}}' +
-              '</a>';
+            return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"size > 4\">' +
+              '<button type=\"button\" class=\"form-control btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">' +
+                '<i class=\"fa fa-pencil\"></i>' +
+                '{{text}}' +
+                '<i class=\"fa fa-angle-down\"></i>' +
+              '</button>' +
+              '<ul class=\"dropdown-menu\" role=\"menu\">' +
+                '<li ng-repeat=\"language in languages\" ng-if=\"language.value != ngModel\">' +
+                  '<a href=\"{{link + \'?locale=\' + language.value}}\" >' +
+                    '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
+                    '{{language.name}}' +
+                  '</a>' +
+                '</li>' +
+              '</ul>' +
+            '</div>' +
+            '<div class="translator btn-group" role="group" ng-if=\"size < 5\">' +
+              '<a ng-repeat=\"language in languages\" href="{{link + \'?locale=\' + language.value}}" class=\"btn {{language.class}}\">' +
+                '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>{{language.name}}' +
+              '</a>' +
+            '</div>';
           }
-          return '<div class=\"btn-group\">' +
-            '<button type=\"button\" class=\"form-control btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\">' +
-              '<span class=\"fa {{language[ngModel].icon}}\"></span>' +
-              '{{translatorOptions.all[ngModel]}}' +
-              '<span class=\"caret\"></span>' +
+
+          return '<div class=\"translator btn-group\">' +
+            '<button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">' +
+              '<i class=\"fa {{languages[ngModel].icon}}\" ng-show=\"languages[ngModel].icon\"></i>' +
+              '{{languages[ngModel].name}}' +
+              '<i class=\"fa fa-angle-down\"></i>' +
             '</button>' +
             '<ul class=\"dropdown-menu\" role=\"menu\">' +
-              '<li ng-repeat=\"language in languages\" ng-if=\"language.language != ngModel\">' +
-                '<a href=\"#\" ng-click=\"changeSelected(language.language)\">' +
-                  '<span class=\"fa {{language.icon}}\" ></span>' +
+              '<li ng-repeat=\"language in languages\" ng-if=\"language.value != ngModel\">' +
+                '<a href=\"#\" ng-click=\"changeSelected(language.value)\">' +
+                  '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
                   '{{language.name}}' +
                 '</a>' +
               '</li>' +
             '</ul>' +
           '</div>';
         },
-        link: function($scope, element, $attrs) {
-          var data = $scope.translatorOptions;
-          var link = $scope.link || null;
+        link: function($scope) {
           $scope.languages = {};
+          $scope.size      = Object.keys($scope.options.available).length;
 
-          if (data.all) {
-            Object.keys(data.all).forEach(function(language) {
-              var icon = (!link && language === data.default) ? 'fa-exchange' : '';
-              $scope.languages[language] = {'icon': icon, 'language': language, 'name': data.all[language]};
-              if(link) {
-                $scope.languages[language].link = $attrs.link + '?locale=' + language;
-                $scope.languages[language].btnClass = 'btn ';
+          var getOption = function(name, value, main, translators, keys, item) {
+            var option = {
+              class: value === main ? 'btn-primary' : 'btn-default',
+              icon:  item ? 'fa-plus' : '',
+              value: value,
+              name:  name
+            };
+
+            if (item) {
+              if (translators && translators.indexOf(value) !== -1) {
+                option.icon = 'fa-globe';
               }
-              if(language === $scope.locale) {
-                $scope.selected = $scope.languages[language];
+
+              if (keys) {
+                for (var i = 0; i < keys.length; i++) {
+                  if (item[keys[i]] && angular.isObject(item[keys[i]]) &&
+                    item[keys[i]][value]) {
+                    option.icon = 'fa-pencil';
+                    return option;
+                  }
+                }
               }
-            });
+            }
+
+            return option;
+          };
+
+          for (var lang in $scope.options.available) {
+            $scope.languages[lang] = getOption(
+              $scope.options.available[lang],
+              lang,
+              $scope.options.default,
+              $scope.options.translators,
+              $scope.options.keys,
+              $scope.item
+            );
           }
-
           $scope.changeSelected = function (language) {
-            // $scope.locale = language;
             $scope.ngModel = language;
           };
         },
