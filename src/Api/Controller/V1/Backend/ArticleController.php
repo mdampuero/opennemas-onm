@@ -41,7 +41,7 @@ class ArticleController extends Controller
 
         return new JsonResponse([
             'elements_per_page' => $epp,
-            'extra'             => $this->loadExtraData($results),
+            'extra'             => $this->getExtraData(),
             'page'              => $page,
             'results'           => $results,
             'total'             => $total,
@@ -49,22 +49,93 @@ class ArticleController extends Controller
     }
 
     /**
+     * Returns the article information.
+     *
+     * @param integer $id The article id.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_UPDATE')")
+     */
+    public function showAction($id)
+    {
+        $article = $this->get('entity_repository')->find('Article', $id);
+
+        if (is_null($article->id)) {
+            return new JsonResponse(
+                sprintf(_('Unable to find the article with the id "%d"'), $id),
+                400
+            );
+        }
+
+        $extra = $this->getExtraData(false);
+        $extra = array_merge($extra, $this->getPhotos($article));
+        $extra = array_merge($extra, $this->getVideos($article));
+        $extra = array_merge($extra, $this->getAlbums($article));
+        $extra = array_merge($extra, $this->getRelated($article));
+
+        $article = \Onm\StringUtils::convertToUtf8($article);
+
+        return new JsonResponse([ 'article' => $article, 'extra' => $extra ]);
+    }
+
+    /**
+     * Returns the list of albums linked to the article.
+     *
+     * @param Article $article The article.
+     *
+     * @return array The list of albums linked to the article.
+     */
+    protected function getAlbums($article)
+    {
+        if (!$this->get('core.security')->hasExtension('CRONICAS_MODULES')) {
+            return [];
+        }
+
+        $em    = $this->get('entity_repository');
+        $extra = [];
+        $keys  = [ 'withGallery', 'withGalleryFrontpage', 'withGalleryHome' ];
+
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $article->params)
+                && !empty($article->params[$key])
+            ) {
+                $extra[$key] = \Onm\StringUtils::convertToUtf8(
+                   $em->find('Album', $article->params[$key])
+                );
+            }
+        }
+
+        return $extra;
+    }
+
+    /**
      * Loads extra data related to the given contents.
      *
-     * @param  array $contents Array of contents.
-     * @return array           Array of extra data.
+     * @param boolean $all Whether to use 'All' or 'Select...' option.
+     *
+     * @return array Array of extra data.
      */
-    protected function loadExtraData()
+    protected function getExtraData($all = true)
     {
         $extra = [];
 
+        $security   = $this->get('core.security');
         $converter  = $this->get('orm.manager')->getConverter('Category');
         $categories = $this->get('orm.manager')
             ->getRepository('Category')
             ->findBy();
 
+        $categories = array_filter($categories, function ($a) use ($security) {
+            return $security->hasCategory($a->pk_content_category);
+        });
+
         $extra['categories'] = $converter->responsify($categories);
-        array_unshift($extra['categories'], [ 'pk_content_category' => null, 'title' => _('All') ]);
+        array_unshift($extra['categories'], [
+            'pk_content_category' => null,
+            'title' => $all ? _('All') : _('Select a category...')
+        ]);
 
         $converter = $this->get('orm.manager')->getConverter('User');
         $users     = $this->get('orm.manager')->getRepository('User')
@@ -75,7 +146,105 @@ class ArticleController extends Controller
         }
 
         $extra['users'] = $converter->responsify($users);
-        array_unshift($extra['users'], [ 'id' => null, 'name' => _('All') ]);
+        array_unshift($extra['users'], [
+            'id'   => null,
+            'name' => $all ? _('All') : _('Select an author...')
+        ]);
+
+        return $extra;
+    }
+
+
+    /**
+     * Returns the list of photos linked to the article.
+     *
+     * @param Article $article The article.
+     *
+     * @return array The list of photos linked to the article.
+     */
+    protected function getPhotos($article)
+    {
+        $em    = $this->get('entity_repository');
+        $extra = [];
+        $keys  = [ 'img1', 'img2' ];
+
+        foreach ($keys as $key) {
+            if (!empty($article->{$key})) {
+                $extra[$key] = \Onm\StringUtils::convertToUtf8(
+                    $em->find('Photo', $article->img1)
+                );
+            }
+        }
+
+        if (is_array($article->params)
+            && (array_key_exists('imageHome', $article->params))
+            && !empty($article->params['imageHome'])
+        ) {
+            $extra['img3'] = \Onm\StringUtils::convertToUtf8(
+                $em->find('Photo', $article->params['imageHome'])
+            );
+        }
+
+        return $extra;
+    }
+
+    /**
+     * Returns the list of contents linked to the article in frontpage, inner
+     * and home.
+     *
+     * @param Article $article The article.
+     *
+     * @return array The list of contents linked to the article.
+     */
+    protected function getRelated($article)
+    {
+        $em    = $this->get('entity_repository');
+        $extra = [];
+        $keys  = [ 'frontpage', 'inner', 'home' ];
+        $rm    = $this->get('related_contents');
+
+        foreach ($keys as $key) {
+            if ($key === 'home'
+                && !$this->get('core.security')
+                    ->hasExtension('CRONICAS_MODULES')
+            ) {
+                continue;
+            }
+
+            $relations = $rm->getRelations($article->id, $key);
+
+            if (count($relations) === 0) {
+                continue;
+            }
+
+            $extra[$key] = array_map(function ($content) {
+                return \Onm\StringUtils::convertToUtf8($content);
+            }, $em->findMulti($relations));
+        }
+
+        return $extra;
+    }
+
+    /**
+     * Returns the list of videos linked to the article.
+     *
+     * @param Article $article The article.
+     *
+     * @return array The list of videos linked to the article.
+     */
+    protected function getVideos($article)
+    {
+        $em    = $this->get('entity_repository');
+        $extra = [];
+        $keys  = [ 'fk_video', 'fk_video2' ];
+
+        foreach ($keys as $key) {
+            if (!empty($article->{$key})) {
+                $extra[$key] = \Onm\StringUtils::convertToUtf8(
+                    $em->find('Video', $article->{$key})
+                );
+            }
+        }
 
         return $extra;
     }
