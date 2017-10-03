@@ -70,6 +70,16 @@ class Menu
             return false;
         }
     }
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public function getL10nKeys()
+    {
+        return ['title', 'link'];
+    }
 
     /**
      * Loads the menu properties from a data array, loads menu items
@@ -198,7 +208,7 @@ class Menu
         $itemsLocalized = [];
         foreach ($items as $item) {
             $item = $fm->set(clone $item)
-                ->filter('localize', ['keys' => ['title', 'link']])
+                ->filter('localize', ['keys' => $this->getL10nKeys()])
                 ->get();
 
             if (count($item->submenu) > 0) {
@@ -225,7 +235,7 @@ class Menu
         $processedItems = [];
         foreach ($items as $item) {
             $item = $fm->set(clone $item)
-                ->filter('unlocalize', ['keys' => ['title', 'link']])
+                ->filter('unlocalize', ['keys' => $this->getL10nKeys()])
                 ->get();
 
             if (count($item->submenu) > 0) {
