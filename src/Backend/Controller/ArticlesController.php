@@ -56,18 +56,6 @@ class ArticlesController extends Controller
         }
 
         return $this->render('article/new.tpl', [
-            'availableSizes' => [
-                16 => '16',
-                18 => '18',
-                20 => '20',
-                22 => '22',
-                24 => '24',
-                26 => '26',
-                28 => '28',
-                30 => '30',
-                32 => '32',
-                34 => '34'
-            ],
             'authors'        => $authors,
             'commentsConfig' => $this->get('setting_repository')
                 ->get('comments_config'),
@@ -90,11 +78,6 @@ class ArticlesController extends Controller
 
         return $this->render('article/new.tpl', [
             'authors' => $authors,
-            'availableSizes' => [
-                16 => '16', 18 => '18', 20 => '20', 22 => '22',
-                24 => '24', 26 => '26', 28 => '28',30 => '30',
-                32 => '32', 34 => '34'
-            ],
             'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
             'id'      => $id,
         ]);
