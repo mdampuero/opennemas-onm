@@ -529,10 +529,9 @@
           }, true);
 
         // Update title_int when title changes
-        $scope.$watch('article.title', function(nv) {
+        $scope.$watch('article.title', function(nv, ov) {
           if (nv && (!$scope.article.title_int ||
-              nv.substr(0, $scope.article.title_int.length) ===
-              $scope.article.title_int)) {
+              ov === $scope.article.title_int)) {
             $scope.article.title_int = nv;
           }
         }, true);
