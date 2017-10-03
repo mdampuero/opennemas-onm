@@ -240,9 +240,14 @@
                       {acl isAllowed="CONTENT_OTHER_UPDATE"}
                         <div class="form-group">
                           <div class="controls">
-                            <select id="fk_author" name="fk_author" ng-model="article.fk_author">
-                              {html_options options=$authors}
-                            </select>
+                            <ui-select class="form-control" name="author" theme="select2" ng-model="article.fk_author">
+                              <ui-select-match>
+                                [% $select.selected.name %]
+                              </ui-select-match>
+                              <ui-select-choices repeat="item.id as item in data.extra.users | filter: { name: $select.search }">
+                                <div ng-bind-html="item.name | highlight: $select.search"></div>
+                              </ui-select-choices>
+                            </ui-select>
                           </div>
                         </div>
                       {aclelse}
@@ -255,26 +260,14 @@
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select class="form-control" id="category" name="category" ng-model="article.category" required>
-                        <option value="" >{t}- Select a category -{/t}</option>
-                        {section name=as loop=$allcategorys}
-                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                        <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                          {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled{/if} >
-                          {$allcategorys[as]->title}</option>
-                          {/acl}
-                          {section name=su loop=$subcat[as]}
-                          {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                          {if $subcat[as][su]->internal_category eq 1}
-                          <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled{/if} >
-                            &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                          {/if}
-                          {/acl}
-                          {/section}
-                        {/section}
-                        <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
-                      </select>
+                      <ui-select class="form-control" name="category" theme="select2" ng-model="article.pk_fk_content_category">
+                        <ui-select-match>
+                          [% $select.selected.title %]
+                        </ui-select-match>
+                        <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
+                          <div ng-bind-html="item.title | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                   </div>
                   <div class="form-group">
