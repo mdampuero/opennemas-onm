@@ -77,7 +77,7 @@
             <span class="sort-icon"></span>
             [% galleryForFrontpage.content_type_name %] - [% galleryForFrontpage.title %]
           </div>
-          <button class="btn btn-white" ng-click="removeAlbum('galleryForFrontpage')" type="album">
+          <button class="btn btn-white" ng-click="removeItem('galleryForFrontpage')" type="album">
             <i class="fa fa-trash-o text-danger"></i>
           </button>
         </div>
@@ -95,7 +95,7 @@
             <span class="sort-icon"></span>
             [% galleryForInner.content_type_name %] - [% galleryForInner.title %]
           </div>
-          <button class="btn btn-white" ng-click="removeAlbum('galleryForInner')" type="album">
+          <button class="btn btn-white" ng-click="removeItem('galleryForInner')" type="album">
             <i class="fa fa-trash-o text-danger"></i>
           </button>
         </div>
@@ -113,7 +113,7 @@
             <span class="sort-icon"></span>
             [% galleryForHome.content_type_name %] - [% galleryForHome.title %]
           </div>
-          <button class="btn btn-white" ng-click="removeAlbum('galleryForHome')" type="album">
+          <button class="btn btn-white" ng-click="removeItem('galleryForHome')" type="album">
             <i class="fa fa-trash-o text-danger"></i>
           </button>
         </div>

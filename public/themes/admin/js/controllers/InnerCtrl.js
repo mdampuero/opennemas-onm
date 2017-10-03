@@ -62,7 +62,12 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param integer index The index of the element to remove.
      */
     $scope.removeItem = function(from, index) {
-      $scope[from].splice(index, 1);
+      if (angular.isArray($scope[from])) {
+        $scope[from].splice(index, 1);
+        return;
+      }
+
+      delete $scope[from];
     };
 
     $scope.toggleOverlay = function(overlay) {

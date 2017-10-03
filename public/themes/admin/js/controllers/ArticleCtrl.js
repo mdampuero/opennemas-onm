@@ -213,18 +213,6 @@
         };
 
         /**
-         * @function removeAlbum
-         * @memberOf ArticleCtrl
-         *
-         * Removes an album.
-         *
-         * @param {String} from The album name in the current scope.
-         */
-        $scope.removeAlbum = function(from) {
-          delete $scope[from];
-        };
-
-        /**
          * @function save
          * @memberOf ArticleCtrl
          *

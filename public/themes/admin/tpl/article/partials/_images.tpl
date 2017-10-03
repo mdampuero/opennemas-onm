@@ -19,7 +19,7 @@
                         <i class="fa fa-times fa-lg"></i>
                         {t}No{/t}
                       </button>
-                      <button class="btn btn-link" ng-click="removeImage('photo1');toggleOverlay('photo1')" type="button">
+                      <button class="btn btn-link" ng-click="removeItem('photo1');toggleOverlay('photo1')" type="button">
                         <i class="fa fa-check fa-lg"></i>
                         {t}Yes{/t}
                       </button>
@@ -70,7 +70,7 @@
                         <i class="fa fa-times fa-lg"></i>
                         {t}No{/t}
                       </button>
-                      <button class="btn btn-link" ng-click="removeImage('photo2');toggleOverlay('photo2')" type="button">
+                      <button class="btn btn-link" ng-click="removeItem('photo2');toggleOverlay('photo2')" type="button">
                         <i class="fa fa-check fa-lg"></i>
                         {t}Yes{/t}
                       </button>
@@ -123,7 +123,7 @@
                           <i class="fa fa-times fa-lg"></i>
                           {t}No{/t}
                         </button>
-                        <button class="btn btn-link" ng-click="removeImage('photo3');toggleOverlay('photo3')" type="button">
+                        <button class="btn btn-link" ng-click="removeItem('photo3');toggleOverlay('photo3')" type="button">
                           <i class="fa fa-check fa-lg"></i>
                           {t}Yes{/t}
                         </button>
@@ -191,7 +191,7 @@
                             <i class="fa fa-times fa-lg"></i>
                             {t}No{/t}
                           </button>
-                          <button class="btn btn-link" ng-click="removeImage('video1');toggleOverlay('video1')" type="button">
+                          <button class="btn btn-link" ng-click="removeItem('video1');toggleOverlay('video1')" type="button">
                             <i class="fa fa-check fa-lg"></i>
                             {t}Yes{/t}
                           </button>
@@ -258,7 +258,7 @@
                             <i class="fa fa-times fa-lg"></i>
                             {t}No{/t}
                           </button>
-                          <button class="btn btn-link" ng-click="removeImage('video2');toggleOverlay('video2')" type="button">
+                          <button class="btn btn-link" ng-click="removeItem('video2');toggleOverlay('video2')" type="button">
                             <i class="fa fa-check fa-lg"></i>
                             {t}Yes{/t}
                           </button>
