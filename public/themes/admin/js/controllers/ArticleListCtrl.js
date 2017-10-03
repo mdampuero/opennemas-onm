@@ -42,13 +42,6 @@
         };
 
         /**
-         * The current locale.
-         *
-         * @type {String}
-         */
-        $scope.locale = 'es';
-
-        /**
          * @function groupCategories
          * @memberOf ArticleListCtrl
          *
