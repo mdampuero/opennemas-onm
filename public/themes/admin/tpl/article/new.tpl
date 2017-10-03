@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="init({if !empty($multilanguage) && $multilanguage}true{/if})" novalidate>
+<form name="articleForm" ng-controller="ArticleCtrl" ng-init="init({if !empty($multilanguage) && $multilanguage}true{/if}{if !empty($id)}, {$id}{/if})" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
