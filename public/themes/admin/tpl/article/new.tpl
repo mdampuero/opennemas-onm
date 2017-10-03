@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if};categories = {json_encode($allcategorys)|clear_json}" novalidate>
+  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="init({if !empty($multilanguage) && $multilanguage}true{/if})" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -15,6 +15,12 @@
                 {t}Articles{/t}
               </h4>
             </li>
+            {if !empty($multilanguage) && $multilanguage}
+              <li class="quicklinks">
+                <button class="btn" ng-click="locale = 'es'" type="button">es</button>
+                <button class="btn" ng-click="locale = 'gl'" type="button">gl</button>
+              </li>
+            {/if}
             <li class="quicklinks visible-xs">
               <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question fa-lg"></i>

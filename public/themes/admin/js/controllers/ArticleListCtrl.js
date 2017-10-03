@@ -71,11 +71,9 @@
          * @description
          *   Initializes services and list articles.
          *
-         * @param {String}  locale   The current locale.
          * @param {Boolean} localize Whether this content supports localization.
          */
-        $scope.init = function(locale, localize) {
-          $scope.locale   = locale;
+        $scope.init = function(localize) {
           $scope.localize = localize;
 
           if ($scope.localize && $scope.locale) {

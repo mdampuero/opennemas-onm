@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ArticleListCtrl" ng-init="init('es', true)">
+<div ng-app="BackendApp" ng-controller="ArticleListCtrl" ng-init="init({if !empty($multilanguage) && $multilanguage}true{/if})">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -15,10 +15,12 @@
               {t}Articles{/t}
             </h4>
           </li>
-          <li class="quicklinks">
-            <button class="btn" ng-click="locale = 'es'" type="button">es</button>
-            <button class="btn" ng-click="locale = 'gl'" type="button">gl</button>
-          </li>
+          {if !empty($multilanguage) && $multilanguage}
+            <li class="quicklinks">
+              <button class="btn" ng-click="locale = 'es'" type="button">es</button>
+              <button class="btn" ng-click="locale = 'gl'" type="button">gl</button>
+            </li>
+          {/if}
           <li class="quicklinks visible-xs">
             <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
               <i class="fa fa-question fa-lg"></i>

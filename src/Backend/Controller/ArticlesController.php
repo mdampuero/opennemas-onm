@@ -31,55 +31,56 @@ class ArticlesController extends Controller
      */
     public function listAction()
     {
-        return $this->render('article/list.tpl');
+        return $this->render('article/list.tpl', [
+            'multilanguage' => in_array(
+                'es.openhost.module.multilanguage',
+                $this->get('core.instance')->activated_modules
+            )
+        ]);
     }
 
     /**
-     * Handles the form for creating a new article
+     * Shows the form to create a new article.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('ARTICLE_MANAGER')
      *     and hasPermission('ARTICLE_CREATE')")
      */
-    public function createAction(Request $request)
+    public function createAction()
     {
-        $this->loadCategories($request);
-
-        $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = [ '0' => _(' - Select one author - ') ];
-
-        foreach ($authorsComplete as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
         return $this->render('article/new.tpl', [
-            'authors'        => $authors,
             'commentsConfig' => $this->get('setting_repository')
                 ->get('comments_config'),
-                    'timezone' => $this->container->get('core.locale')
-                        ->getTimeZone()
-                        ->getName()
+            'multilanguage' => in_array(
+                'es.openhost.module.multilanguage',
+                $this->get('core.instance')->activated_modules
+            ),
+            'timezone' => $this->container->get('core.locale')
+                ->getTimeZone()->getName()
         ]);
     }
 
-    public function showAction(Request $request, $id)
+    /**
+     * Shows the form to edit an article.
+     *
+     * @return Response The response object.
+     *
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_UPDATE')")
+     */
+    public function showAction($id)
     {
-        $this->loadCategories($request);
-
-        $allAuthors = \User::getAllUsersAuthors();
-
-        $authors = [ '0' => _(' - Select one author - ') ];
-        foreach ($allAuthors as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
         return $this->render('article/new.tpl', [
-            'authors' => $authors,
-            'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
-            'id'      => $id,
+            'commentsConfig' => $this->get('setting_repository')
+                ->get('comments_config'),
+            'id' => $id,
+            'multilanguage' => in_array(
+                'es.openhost.module.multilanguage',
+                $this->get('core.instance')->activated_modules
+            ),
+            'timezone' => $this->container->get('core.locale')
+                ->getTimeZone()->getName()
         ]);
     }
 
