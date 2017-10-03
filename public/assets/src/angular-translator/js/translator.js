@@ -42,7 +42,7 @@ angular.module('onm.translator', [])
               '</div>' +
               '<div class="translator btn-group btn-group-xs" role="group" ng-if=\"optionsSize < 5\">' +
                 '<a ng-repeat=\"option in options\" href="{{link + \'?locale=\' + option.language}}" class=\"btn {{option.btnClass}}\">' +
-                  '<i class=\"fa {{option.icon}} m-l-10\" ng-show=\"option.icon\"></i>{{option.name}}' +
+                  '<i class=\"fa {{option.icon}}\" ng-show=\"option.icon\"></i>{{option.name}}' +
                 '</a>' +
               '</div>';
           }
