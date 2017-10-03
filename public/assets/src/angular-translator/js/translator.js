@@ -70,21 +70,23 @@ angular.module('onm.translator', [])
           var getOption = function(name, value, main, translators, keys, item) {
             var option = {
               class: value === main ? 'btn-primary' : 'btn-default',
-              icon:  translators ? 'fa-plus' : '',
+              icon:  item ? 'fa-plus' : '',
               value: value,
               name:  name
             };
 
-            if (translators && translators.indexOf(value) !== -1) {
-              option.icon = 'fa-globe';
-            }
+            if (item) {
+              if (translators && translators.indexOf(value) !== -1) {
+                option.icon = 'fa-globe';
+              }
 
-            if (keys && item) {
-              for (var i = 0; i < keys.length; i++) {
-                if (item[keys[i]] && angular.isObject(item[keys[i]]) &&
+              if (keys) {
+                for (var i = 0; i < keys.length; i++) {
+                  if (item[keys[i]] && angular.isObject(item[keys[i]]) &&
                     item[keys[i]][value]) {
-                  option.icon = 'fa-pencil';
-                  return option;
+                    option.icon = 'fa-pencil';
+                    return option;
+                  }
                 }
               }
             }
