@@ -11,8 +11,10 @@
      * @requires $timeout
      * @requires $uibModal
      * @requires $window
-     * @requires Editor
+     * @requires cleaner
      * @requires http
+     * @requires linker
+     * @requires localizer
      * @requires messenger
      * @requires routing
      * @requires webStorage
@@ -21,8 +23,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('ArticleCtrl', [
-      '$controller', '$interval', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
-      function($controller, $interval, $scope, $timeout, $uibModal, $window, cleaner, Editor, http, messenger, routing, webStorage) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'routing', 'webStorage',
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, linker, localizer, messenger, routing, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
