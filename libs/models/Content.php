@@ -401,6 +401,10 @@ class Content implements \JsonSerializable
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
         }
+
+        if (empty($this->params)) {
+            $this->params = [];
+        }
     }
 
     /**
