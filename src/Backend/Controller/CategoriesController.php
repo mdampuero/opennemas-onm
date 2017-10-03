@@ -39,7 +39,7 @@ class CategoriesController extends Controller
     public function listAction()
     {
         $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
-        $languageData              = $this->getLocaleData('frontend');
+        $languageData              = $this->getLocaleData('frontend', null, true);
         $fm                        = $this->get('data.manager.filter');
         $categories                = $fm->set($categories)->filter('unlocalize', [
             'keys' => \ContentCategory::getMultiLanguageFields(),

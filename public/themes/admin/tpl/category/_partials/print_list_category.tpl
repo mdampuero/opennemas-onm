@@ -9,7 +9,7 @@
                   {if $category->internal_category != 0 && $category->internal_category != 2}
                   <div>
                     {is_module_activated name="es.openhost.module.multilanguage"}
-                      <translator ng-model="mainTranslationField" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" />
+                      <translator ng-model="mainTranslationField" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" edit-text="{t}Edit{/t}" />
                     {/is_module_activated}
                     <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
@@ -91,7 +91,7 @@
                       {acl isAllowed="CATEGORY_UPDATE"}
                         <div>
                           {is_module_activated name="es.openhost.module.multilanguage"}
-                            <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" />
+                            <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" edit-text="{t}Edit{/t}" />
                           {/is_module_activated}
                           <a class="link" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
                               <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
