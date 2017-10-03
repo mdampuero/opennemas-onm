@@ -1,16 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  <style>
-    tags-input .tags .tag-item  {
-      background-color: #376092 !important;
-      font-size: 11px  !important;
-      font-family: 'Open Sans' !important;
-      font-weight: 600 !important;
-    }
-  </style>
-{/block}
-
 {block name="footer-js" append}
   {javascripts}
     <script>
@@ -325,7 +314,10 @@
                 <div class="col-md-12">
                   <div class="grid simple">
                     <div class="grid-title">
-                      <h4>{t}Schedule{/t}</h4>
+                      <h4>
+                        <i class="fa fa-clock-o"></i>
+                        {t}Schedule{/t}
+                      </h4>
                     </div>
                     <div class="grid-body">
                       <div class="form-group">
@@ -364,59 +356,60 @@
             </div>
           </div>
           {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-          <div class="row">
-            <div class="col-md-12">
-              <div class="grid simple">
-                <div class="grid-title">
-                  <h4>{t}Subscription{/t}</h4>
-                </div>
-                <div class="grid-body">
-                  <div class="checkbox">
-                    <input id="only_registered" name="params[only_registered]" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
-                    <label for="only_registered">
-                      {t}Only available for registered users{/t}
-                    </label>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="grid simple">
+                  <div class="grid-title">
+                    <h4>
+                      <i class="fa fa-check"></i>
+                      {t}Subscription{/t}
+                    </h4>
+                  </div>
+                  <div class="grid-body">
+                    <div class="checkbox">
+                      <input id="only_registered" name="params[only_registered]" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
+                      <label for="only_registered">
+                        {t}Only available for registered users{/t}
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
           {/is_module_activated}
           {is_module_activated name="PAYWALL"}
-          <div class="row">
-            <div class="col-md-12">
-              <div class="grid simple">
-                <div class="grid-title">
-                  <h4>{t}Paywall{/t}</h4>
-                </div>
-                <div class="grid-body">
-                  <div class="checkbox">
-                    <input id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
-                    <label for="only_subscribers">
-                      {t}Only available for subscribers{/t}
-                    </label>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="grid simple">
+                  <div class="grid-title">
+                    <h4>
+                      <i class="fa fa-paypal"></i>
+                      {t}Paywall{/t}
+                    </h4>
+                  </div>
+                  <div class="grid-body">
+                    <div class="checkbox">
+                      <input id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
+                      <label for="only_subscribers">
+                        {t}Only available for subscribers{/t}
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
           {/is_module_activated}
         </div>
       </div>
-
       {include  file="article/partials/_images.tpl"}
-
       <div id="related-contents">
         {include file ="article/related/_related_list.tpl"}
       </div>
-
       {is_module_activated name="CRONICAS_MODULES"}
         {include file ="article/partials/_article_advanced_customize.tpl"}
       {/is_module_activated}
-
       <input type="hidden" id="action" name="action" value="{$action}" />
     </div><!-- /wrapper-content contentform -->
-
     <script type="text/ng-template" id="modal-preview">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>

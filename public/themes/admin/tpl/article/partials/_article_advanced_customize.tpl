@@ -2,7 +2,10 @@
   <div class="col-md-12">
     <div class="grid simple">
       <div class="grid-title">
-        <h4>{t}Customize{/t}</h4>
+        <h4>
+          <i class="fa fa-magic"></i>
+          {t}Customize{/t}
+        </h4>
       </div>
       <div class="grid-body">
         <div class="col-md-4">

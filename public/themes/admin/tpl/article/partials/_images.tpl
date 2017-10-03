@@ -4,7 +4,10 @@
       <div class="col-md-12">
         <div class="grid simple">
           <div class="grid-title">
-            <h4>{t}Images assigned{/t}</h4>
+            <h4>
+              <i class="fa fa-picture-o"></i>
+              {t}Images assigned{/t}
+            </h4>
           </div>
           <div class="grid-body">
             <div class="row">
@@ -169,14 +172,16 @@
         </div>
       </div>
     </div>
-
     {if !isset($withoutVideo)}
       {acl isAllowed="VIDEO_ADMIN"}
         <div class="row">
           <div class="col-md-12">
             <div class="grid simple">
               <div class="grid-title">
-                <h4>{t}Video{/t}</h4>
+                <h4>
+                  <i class="fa fa-film"></i>
+                  {t}Video{/t}
+                </h4>
               </div>
               <div class="grid-body">
                 <div class="row">

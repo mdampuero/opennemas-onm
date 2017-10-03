@@ -1,6 +1,9 @@
 <div class="grid simple">
   <div class="grid-title">
-    <h4>{t}Related contents{/t}</h4>
+    <h4>
+      <i class="fa fa-list"></i>
+      {t}Related contents{/t}
+    </h4>
   </div>
   <div class="grid-body">
     <div class="m-b-40" {if isset($orderFront)}ng-init="relatedInFrontpage = {json_encode($orderFront)|clear_json}"{/if}>
