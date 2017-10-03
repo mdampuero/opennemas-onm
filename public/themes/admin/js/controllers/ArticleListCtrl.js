@@ -79,7 +79,7 @@
           $scope.localize = localize;
 
           if ($scope.localize && $scope.locale) {
-            localizer.configure({
+            $scope.ilz = localizer.get({
               keys: [ 'title', 'name' ],
               locales: [ 'es', 'gl' ]
             });
@@ -121,10 +121,10 @@
             $scope.categories = response.data.extra.categories;
 
             if ($scope.localize && $scope.locale) {
-              $scope.categories = localizer
+              $scope.categories = $scope.ilz
                 .localize($scope.categories, $scope.locale);
 
-              $scope.items = localizer
+              $scope.items = $scope.ilz
                 .localize($scope.items, $scope.locale);
 
               $scope.cl.link($scope.data.extra.categories, $scope.categories);
