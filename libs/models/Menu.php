@@ -324,29 +324,20 @@ class Menu
             $menuItem->title     = $element['title'];
             $menuItem->link      = $element['link_name'];
 
-            $menuItems[] = $menuItem;
+            $menuItems[$element['pk_item']] = $menuItem;
         }
 
-        foreach ($menuItems as $id => $child) {
-            foreach ($menuItems as &$parent) {
-                if (((int) $child->pk_father > 0)
-                    && ($parent->pk_item == $child->pk_father)
-                ) {
-                    array_push($parent->submenu, $child);
-                    unset($menuItems[$id]);
-                }
+        foreach ($menuItems as $id => $element) {
+            if (((int) $element->pk_father > 0)
+                && isset($menuItems[$element->pk_father])
+                && isset($menuItems[$element->pk_father]->submenu)
+            ) {
+                $menuItems[$element->pk_father]->submenu[] = $element;
+                unset($menuItems[$id]);
             }
         }
 
-        // I need to rebuild the menu items array as json_encode will convert
-        // the array with not continuous index numbers to an object in js
-        // and ui-tree will fail when trying to render it
-        $cleanMenuItems = [];
-        foreach ($menuItems as $key => $value) {
-            array_push($cleanMenuItems, $value);
-        }
-
-        return $cleanMenuItems;
+        return array_values($menuItems);
     }
 
     /**
