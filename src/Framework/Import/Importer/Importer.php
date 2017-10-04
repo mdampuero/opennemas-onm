@@ -273,7 +273,7 @@ class Importer
 
         // Get all necessary data for the photo
         $info = new \MediaItem($localImagePath);
-        $data = array(
+        $data = [
             'title'       => $author->photo->name,
             'name'        => $author->photo->name,
             'user_name'   => $author->photo->name,
@@ -290,7 +290,7 @@ class Importer
             'type_img'    => substr($author->photo->name, -3),
             'media_type'  => 'image',
             'author_name' => $author->username,
-        );
+        ];
 
         $photo   = new \Photo();
         $photoId = $photo->create($data);
@@ -431,6 +431,15 @@ class Importer
             $r = $this->repository->find($this->config['id'], $id);
 
             if (!empty($r)) {
+                $element = $this->container->get('entity_repository')
+                    ->findOneBy([ 'urn_source' => [[ 'value' => $r->urn ]] ]);
+
+                if (empty($element) && $r->type == 'photo') {
+                    $photoData = $this->getData($r, null, null, 1, 'photo');
+                    $photo     = new \Photo();
+                    $photo->createFromLocalFile($photoData);
+                }
+
                 $related[] = $r;
             }
         }
