@@ -68,8 +68,7 @@
          * @description
          *   Saves settings.
          */
-        $scope.save = function()
-        {
+        $scope.save = function() {
           $scope.preSave();
           var data = $scope.category;
           $scope.saving = true;

@@ -21,13 +21,15 @@ class ToolController extends Controller
     /**
      * Returns a list slug list for the strings passed in the request
      *
-     * @param  Request      $request     The request object.
-     * @return JsonResponse              The response object.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
      */
     public function slugAction(Request $request)
     {
         $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
         $slug = \Onm\StringUtils::generateSlug($slug);
+
         return new JsonResponse([ 'slug' => $slug ]);
     }
 }

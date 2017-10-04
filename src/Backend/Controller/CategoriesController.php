@@ -38,23 +38,23 @@ class CategoriesController extends Controller
      */
     public function listAction()
     {
-        $categories                = $this->get('category_repository')->findBy(null, 'name ASC');
-        $languageData              = $this->getLocaleData('frontend', null, true);
-        $fm                        = $this->get('data.manager.filter');
-        $categories                = $fm->set($categories)->filter('unlocalize', [
+        $categories   = $this->get('category_repository')->findBy(null, 'name ASC');
+        $languageData = $this->getLocaleData('frontend', null, true);
+        $fm           = $this->get('data.manager.filter');
+
+        $categories = $fm->set($categories)->filter('unlocalize', [
             'keys' => \ContentCategory::getL10nKeys(),
             'locale' => $languageData['default']
         ])->get();
-        $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
 
-        return $this->render(
-            'category/list.tpl',
-            array(
-                'categories'        => $categories,
-                'contents_count'    => $contentsCount,
-                'language_data'     => $languageData
-            )
-        );
+        $contentsCount['articles'] =
+            \ContentCategoryManager::countContentsByGroupType(1);
+
+        return $this->render('category/list.tpl', [
+            'categories'     => $categories,
+            'contents_count' => $contentsCount,
+            'language_data'  => $languageData
+        ]);
     }
 
     /**
@@ -75,12 +75,12 @@ class CategoriesController extends Controller
         $allcategories = $ccm->categories;
         $languageData  = $this->getLocaleData('frontend', $request, true);
         $fm            = $this->get('data.manager.filter');
-        // we adapt the category data and if the value returned y multilanguage field is a string, create a new
-        //array with all values
 
+        // we adapt the category data and if the value returned and
+        // multilanguage field is a string, create a new array with all values
         $allcategories = $fm->set($allcategories)->filter('localize', [
-            'keys'      => \ContentCategory::getL10nKeys(),
-            'locale'    => $languageData['default']
+            'keys'   => \ContentCategory::getL10nKeys(),
+            'locale' => $languageData['default']
         ])->get();
 
         if (empty($id)) {
@@ -97,24 +97,19 @@ class CategoriesController extends Controller
             }
         }
 
-        $jsonData = json_encode(
-            array(
-                'categories'            => $this->categoryMapping($allcategories),
-                'configurations'        => s::get('section_settings'),
-                'category'              => $this->categoryMapping($category),
-                'subcategories'         => $this->categoryMapping($subcategories),
-                'internal_categories'   => $this->getInternalCategories(),
-                'image_path'            => MEDIA_URL . MEDIA_DIR,
-                'language_data'         => $languageData,
-            )
-        );
+        $jsonData = json_encode([
+            'categories'          => $this->categoryMapping($allcategories),
+            'configurations'      => s::get('section_settings'),
+            'category'            => $this->categoryMapping($category),
+            'subcategories'       => $this->categoryMapping($subcategories),
+            'internal_categories' => $this->getInternalCategories(),
+            'image_path'          => MEDIA_URL . MEDIA_DIR,
+            'language_data'       => $languageData,
+        ]);
 
-        return $this->render(
-            'category/new.tpl',
-            array(
-                'categoryData'   => $jsonData
-            )
-        );
+        return $this->render('category/new.tpl', [
+            'categoryData' => $jsonData
+        ]);
     }
 
     /**

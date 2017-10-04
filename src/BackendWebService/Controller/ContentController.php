@@ -936,10 +936,11 @@ class ContentController extends Controller
             }
         }
 
-        $ccm                 = \ContentCategoryManager::get_instance();
+        $ccm = \ContentCategoryManager::get_instance();
+        $fm  = $this->get('data.manager.filter');
+
         $categories          = $ccm->findAll();
         $extra['categories'] = [];
-        $fm                  = $this->get('data.manager.filter');
         $categories          = $fm->set($categories)->filter('localize', [
             'keys' => \ContentCategory::getL10nKeys(),
             'locale' => $this->getLocaleData('frontend')['default']

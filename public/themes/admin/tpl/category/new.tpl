@@ -32,7 +32,7 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <h5> [% (category.pk_content_category)?"{t}Editing category{/t}":"{t}Creating category{/t}" %]</h5>
+              <h5> [% (category.pk_content_category) ? '{t}Editing category{/t}' : '{t}Creating category{/t}' %]</h5>
             </li>
           {is_module_activated name="es.openhost.module.multilanguage"}
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
@@ -72,7 +72,7 @@
           <div class="grid simple">
             <div class="grid-body">
               {is_module_activated name="es.openhost.module.multilanguage"}
-              <div class="col-md-ng-cloak hidden-md hidden-lg hidden-sm clearfix">
+              <div class="ng-cloak hidden-md hidden-lg hidden-sm clearfix">
                 Language:
                 <div class="cleafix pull-right">
                   <translator ng-model="lang" translator-options="languageData" translator-item="category.title"/>
@@ -99,10 +99,7 @@
                   {t}Subsection of{/t}
                 </label>
                 <div class="controls">
-                  <select name="subcategory"
-                      ng-model="category.subcategory"
-                      ng-options="auxCategory.code as auxCategory.value for auxCategory in subsectionCategories"
-                  >
+                  <select name="subcategory" ng-model="category.subcategory" ng-options="auxCategory.code as auxCategory.value for auxCategory in subsectionCategories">
                     <option value=""></option>
                   </select>
                 </div>
@@ -133,7 +130,7 @@
                           <i class="fa [% internalCategoriesImgs[subcategory.internal_category] %]" uib-tooltip="[% internalCategories.internalCategories[subcategory.internal_category].name %]"></i>
                       </td>
                       <td class="left">
-                        [% (subcategory.inmenu)?"{t}Yes{/t}":"{t}No{/t}" %]
+                        [% (subcategory.inmenu) ? '{t}Yes{/t}' : '{t}No{/t}' %]
                       </td>
                       <td class="right">
                         <div class="btn-group">
@@ -156,25 +153,15 @@
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox"
-                       id="inmenu"
-                       ng-model="category.inmenu"
-                       ng-true-value="1"
-                       ng-false-value="'0'">
-                    <label for="inmenu" class="form-label">
-                      {t}Available{/t}
-                    </label>
+                    <input type="checkbox" id="inmenu" ng-model="category.inmenu" ng-true-value="1" ng-false-value="'0'">
+                    <label for="inmenu" class="form-label">{t}Available{/t}</label>
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox"
-                       ng-model="category.params.inrss"
-                       id="inrss"
-                       name="inrss"
-                       ng-true-value="1">
+                    <input type="checkbox" ng-model="category.params.inrss" id="inrss" name="inrss" ng-true-value="1">
                     <label for="inrss" class="form-label">{t}Show in RSS{/t}</label>
                   </div>
                 </div>
@@ -184,11 +171,7 @@
                   {t}Category available for{/t}
                 </label>
                 <div class="controls">
-                  <select name="category.internal_category"
-                      id="internal_category"
-                      ng-model="category.internal_category"
-                      ng-options="internaAux.code as internaAux.value for internaAux in allowedCategories" >
-                  </select>
+                  <select name="category.internal_category" id="internal_category" ng-model="category.internal_category" ng-options="internaAux.code as internaAux.value for internaAux in allowedCategories"></select>
                 </div>
               </div>
               <div class="form-group">
@@ -213,7 +196,7 @@
               <div class="form-group" ng-if="configurations.allowLogo">
                 <label for="logo_path" class="form-label">{t}Category logo{/t}</label>
                 <div class="controls">
-                  <div class="fileinput [%(category.logo_path)?'fileinput-exists':'fileinput-new'%]" data-provides="fileinput">
+                  <div class="fileinput [% (category.logo_path) ? 'fileinput-exists' : 'fileinput-new' %]" data-provides="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
                     <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
