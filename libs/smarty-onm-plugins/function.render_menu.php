@@ -29,7 +29,6 @@ function smarty_function_render_menu($params, &$smarty)
     }
 
     $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
-    // $menu = new \Menu(1);
 
     if (is_null($menu)) {
         return $menu;

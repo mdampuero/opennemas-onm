@@ -32,7 +32,7 @@
         $scope.menu = {};
 
         $scope.init = function(menu, languageData) {
-          $scope.language_data = languageData;
+          $scope.languageData = languageData;
           $scope.menu = menu;
 
           $scope.lang = languageData.locale || languageData.default;
@@ -61,7 +61,7 @@
               var title = {};
               var link = {};
 
-              Object.keys($scope.language_data.available).forEach(function(langAux) {
+              Object.keys($scope.languageData.available).forEach(function(langAux) {
                 title[langAux] = item.title
                 link[langAux] = item.link
               });
