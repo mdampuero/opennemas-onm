@@ -756,7 +756,7 @@ class ContentCategoryManager
         $fullcat = $this->groupByType($this->categories);
 
         $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
-            'keys' => \ContentCategory::getMultiLanguageFields(),
+            'keys' => \ContentCategory::getL10nKeys(),
             'locale' => getService('core.locale')->setContext('frontend')->getLocale()
         ])->get();
 

@@ -514,7 +514,7 @@ class AdsController extends Controller
         $fm = $this->get('data.manager.filter');
         // Sometimes category is array. When create & update advertisement
         $categories = $fm->set($categories)->filter('localize', [
-            'keys' => \ContentCategory::getMultiLanguageFields(),
+            'keys' => \ContentCategory::getL10nKeys(),
             'locale' => $this->getLocaleData('frontend')['default']
         ])->get();
 

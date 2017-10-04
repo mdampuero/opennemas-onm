@@ -19,8 +19,6 @@
  */
 class ContentCategory
 {
-    const MULTI_LANGUAGE_FIELDS = ['title', 'name'];
-
     /**
      * Category id
      *
@@ -129,7 +127,7 @@ class ContentCategory
             if (is_numeric($k)) {
                 continue;
             }
-            if (in_array($k, self::MULTI_LANGUAGE_FIELDS)) {
+            if (in_array($k, self::getL10nKeys())) {
                 $aux        = @unserialize($v);
                 $this->{$k} = (is_bool($aux)) ? $v : $aux;
                 continue;
@@ -184,7 +182,7 @@ class ContentCategory
         // Serialize language fields
         array_map(function ($field) use (&$data) {
             $data[$field] = serialize($data[$field]);
-        }, self::MULTI_LANGUAGE_FIELDS);
+        }, self::getL10nKeys());
         // Serialize params
         $data['params'] = serialize($data['params']);
 
@@ -253,7 +251,7 @@ class ContentCategory
         array_map(function ($field) use (&$data) {
             $data[$field] = serialize($data[$field]);
             $this->$field = $data[$field];
-        }, self::MULTI_LANGUAGE_FIELDS);
+        }, self::getL10nKeys());
 
         if ($data['logo_path'] == '1') {
             $data['logo_path'] = $this->logo_path;
@@ -462,8 +460,14 @@ class ContentCategory
         }
     }
 
-    public static function getMultiLanguageFields()
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public static function getL10nKeys()
     {
-        return self::MULTI_LANGUAGE_FIELDS;
+        return [ 'name', 'title' ];
     }
 }

@@ -42,7 +42,7 @@ class CategoriesController extends Controller
         $languageData              = $this->getLocaleData('frontend', null, true);
         $fm                        = $this->get('data.manager.filter');
         $categories                = $fm->set($categories)->filter('unlocalize', [
-            'keys' => \ContentCategory::getMultiLanguageFields(),
+            'keys' => \ContentCategory::getL10nKeys(),
             'locale' => $languageData['default']
         ])->get();
         $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
@@ -79,7 +79,7 @@ class CategoriesController extends Controller
         //array with all values
 
         $allcategories = $fm->set($allcategories)->filter('localize', [
-            'keys'      => \ContentCategory::getMultiLanguageFields(),
+            'keys'      => \ContentCategory::getL10nKeys(),
             'locale'    => $languageData['default']
         ])->get();
 
@@ -92,7 +92,7 @@ class CategoriesController extends Controller
             if ($category->pk_content_category != null) {
                 $ccm      = \ContentCategoryManager::get_instance();
                 $category = $fm->set($category)->filter('unlocalize', [
-                    'keys'      => \ContentCategory::getMultiLanguageFields()
+                    'keys'      => \ContentCategory::getL10nKeys()
                 ])->get();
             }
         }
