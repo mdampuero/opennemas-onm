@@ -62,7 +62,7 @@ class UnlocalizeFilterTest extends KernelTestCase
             $method->invokeArgs($this->filter, [ [ 'gl' => 'mumble' ] ])
         );
         $this->assertEquals(
-            [ 'en' => 'mumble' ],
+            [ 'gl' => [ 'en' => 'mumble' ] ],
             $method->invokeArgs($this->filter, [ [ 'en' => 'mumble' ] ])
         );
     }
@@ -117,6 +117,7 @@ class UnlocalizeFilterTest extends KernelTestCase
         $this->assertEquals(['gl' => 'fred'], $method->invokeArgs($this->filter, [ 'fred' ]));
         $this->assertEquals(['gl' => null], $method->invokeArgs($this->filter, [ null ]));
         $this->assertEquals(['gl' => 124], $method->invokeArgs($this->filter, [ 124 ]));
+        $this->assertEquals(['gl' => [ 'baz' ]], $method->invokeArgs($this->filter, [ [ 'baz' ] ]));
         $this->assertEquals(
             [ 'es' => 'mumble', 'gl' => 'glork' ],
             $method->invokeArgs($this->filter, [ [ 'es' => 'mumble', 'gl' => 'glork' ] ])
