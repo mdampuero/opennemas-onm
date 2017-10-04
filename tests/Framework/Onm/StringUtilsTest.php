@@ -227,18 +227,13 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals(
-            [
-                'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
-                '0001-cambio-look-mariana-antoniale',
-            ],
-            $this->object->generateSlug(
-                [
-                    'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
-                    '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
-                ]
-            )
-        );
+        $this->assertEquals([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            '0001-cambio-look-mariana-antoniale',
+        ], $this->object->generateSlug([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
+        ]));
     }
 
     /**
@@ -533,24 +528,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'action=test&action=1',
-            $this->object->toHttpParams(array(
-                array('action' => 'test'),
-                array('action' => '1'),
-            ))
+            $this->object->toHttpParams([
+                [ 'action' => 'test' ],
+                [ 'action' => '1' ],
+            ])
         );
     }
-
-    // /**
-    //  * @covers Onm\StringUtils::ext_str_ireplace
-    //  * @todo   Implement testExt_str_ireplace().
-    //  */
-    // public function testExt_str_ireplace()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
 
     /**
      * @covers Onm\StringUtils::generatePassword
