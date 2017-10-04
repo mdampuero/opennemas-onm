@@ -61,7 +61,7 @@
               var title = {};
               var link = {};
 
-              Object.keys($scope.language_data.all).forEach(function(langAux) {
+              Object.keys($scope.language_data.available).forEach(function(langAux) {
                 title[langAux] = item.title
                 link[langAux] = item.link
               });
