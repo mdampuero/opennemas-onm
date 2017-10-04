@@ -45,11 +45,8 @@ tr:hover .listing-inline-actions {
 
 .listing-inline-actions {
   margin-top: 5px;
-  clear: both;
-}
-
-.listing-inline-actions {
   opacity: 0.7;
+  clear: both;
 }
 
 .listing-inline-actions .link:first-child {
