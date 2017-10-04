@@ -18,6 +18,7 @@
           restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
           scope: {
             item:    '=',
+            keys:    '=',
             link:    '@',
             ngModel: '=',
             options: '=',
@@ -101,7 +102,7 @@
                 lang,
                 $scope.options.default,
                 $scope.options.translators,
-                $scope.options.keys,
+                $scope.keys,
                 $scope.item
               );
             }
