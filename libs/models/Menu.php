@@ -242,10 +242,10 @@ class Menu
                 $item->submenu = $this->unlocalize($item->submenu);
             }
 
-            $proccesedItems[] = $item;
+            $processedItems[] = $item;
         }
 
-        return $proccesedItems;
+        return $processedItems;
     }
 
     /**
