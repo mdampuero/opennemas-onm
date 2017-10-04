@@ -379,9 +379,16 @@ class Menu
 
                 // If the content multilanguage is disabled
                 // remove additional translations
-                if (!getService('core.security')->hasExtension('es.openhost.module.multilanguage')) {
+                if (!in_array(
+                    'es.openhost.module.multilanguage',
+                    getService('core.instance')->activated_modules
+                )) {
                     $item = $fm->set($item)
-                        ->filter('localize', ['keys' => ['title', 'link']])
+                        ->filter('localize', [
+                            'keys' => ['title', 'link'],
+                            'locale' => getService('core.locale')
+                                ->setContext('frontend')->getLocale()
+                        ])
                         ->get();
                 }
 
