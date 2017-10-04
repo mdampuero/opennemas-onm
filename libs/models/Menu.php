@@ -208,7 +208,11 @@ class Menu
         $itemsLocalized = [];
         foreach ($items as $item) {
             $item = $fm->set(clone $item)
-                ->filter('localize', ['keys' => $this->getL10nKeys()])
+                ->filter('localize', [
+                    'keys' => $this->getL10nKeys(),
+                    'locale' => getService('core.locale')
+                        ->setContext('frontend')->getLocale()
+                ])
                 ->get();
 
             if (count($item->submenu) > 0) {
@@ -385,7 +389,7 @@ class Menu
                 )) {
                     $item = $fm->set($item)
                         ->filter('localize', [
-                            'keys' => ['title', 'link'],
+                            'keys' => $this->getL10nKeys(),
                             'locale' => getService('core.locale')
                                 ->setContext('frontend')->getLocale()
                         ])
