@@ -560,12 +560,9 @@ class StringUtils
     {
         // If the value is not a String
         if (!is_string($string)) {
-            $slugArray = [];
-            foreach ($string as $key => $value) {
-                $slugArray[$key] = self::generateSlug($value, $useStopList, $delimiter);
-            }
-
-            return $slugArray;
+            return array_map(function ($a) use ($useStopList, $delimiter) {
+                return self::generateSlug($a, $useStopList, $delimiter);
+            }, $string);
         }
 
         $string = strip_tags($string);
