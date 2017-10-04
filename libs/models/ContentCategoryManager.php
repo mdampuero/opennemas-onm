@@ -46,7 +46,7 @@ class ContentCategoryManager
     public function __construct()
     {
         if (is_null(self::$instance)) {
-            $this->cache = new MethodCacheManager($this, array('ttl' => 300));
+            $this->cache = new MethodCacheManager($this, [ 'ttl' => 300 ]);
 
             // Fill categories from cache
             $this->categories = $this->findAll();
@@ -84,8 +84,8 @@ class ContentCategoryManager
             return $this->categories;
         }
 
-        $cache = getService('cache');
-        $cacheKey = 'content_categories';
+        $cache      = getService('cache');
+        $cacheKey   = 'content_categories';
         $categories = $cache->fetch($cacheKey);
 
         if ($categories) {
@@ -132,16 +132,16 @@ class ContentCategoryManager
     {
         if (!empty($subcategoryName)) {
             // It's a father category
-            return array($categoryName, $subcategoryName);
+            return [ $categoryName, $subcategoryName ];
         }
 
         $father = $this->getFather($categoryName);
         if (!empty($father)) {
-            return array($father, $categoryName);
+            return [ $father, $categoryName ];
         }
 
         // If don't match return same values
-        return array($categoryName, $subcategoryName);
+        return [ $categoryName, $subcategoryName ];
     }
 
     /**
@@ -158,13 +158,13 @@ class ContentCategoryManager
 
         $where = '';
         if (!is_null($filter)) {
-            $where = ' AND '.$filter;
+            $where = ' AND ' . $filter;
         }
 
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT * FROM content_categories ' .
-                'WHERE internal_category<>0 '.$where.' '.$orderBy
+                'WHERE internal_category<>0 ' . $where . ' ' . $orderBy
             );
             foreach ($rs as $row) {
                 $obj = new ContentCategory();
@@ -344,8 +344,8 @@ class ContentCategoryManager
             try {
                 $rs = getService('dbal_connection')->fetchAll(
                     'SELECT name,title,internal_category '
-                    .'FROM content_categories WHERE internal_category<>0 '
-                    .'AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu',
+                    . 'FROM content_categories WHERE internal_category<>0 '
+                    . 'AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu',
                     [ $id ]
                 );
 
@@ -369,13 +369,14 @@ class ContentCategoryManager
         // Singleton version
         $categories = $this->orderByPosmenu($this->categories);
 
-        $items = array ();
+        $items = [];
         foreach ($categories as $category) {
             if (($category->internal_category)
                 && ($category->inmenu == 1)
                 && ($category->fk_content_category == $id)
             ) {
                 $items[$category->name]['title'] = $category->title;
+
                 $items[$category->name]['internal_category'] =
                     $category->internal_category;
             }
@@ -434,9 +435,11 @@ class ContentCategoryManager
             if ($b->internal_category == 0) {
                  return 0;
             }
+
             if ($a->internal_category == 0) {
                  return +1;
             }
+
             if ($a->internal_category == $b->internal_category) {
                 return ($a->posmenu > $b->posmenu) ? +1 : -1;
             }
@@ -467,7 +470,8 @@ class ContentCategoryManager
                 && $category->inmenu == 1
             ) {
                 $tree[$category->pk_content_category] = $category;
-                $tree[$category->pk_content_category]->childNodes = array();
+
+                $tree[$category->pk_content_category]->childNodes = [];
             }
         }
 
@@ -498,8 +502,8 @@ class ContentCategoryManager
             try {
                 $rs = getService('dbal_connection')->fetchAssoc(
                     'SELECT name FROM content_categories '
-                    .'WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0 '
-                    .'ORDER BY posmenu LIMIT 1',
+                    . 'WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0 '
+                    . 'ORDER BY posmenu LIMIT 1',
                     [ $categoryId ]
                 );
 
@@ -519,8 +523,8 @@ class ContentCategoryManager
 
         foreach ($categories as $category) {
             if ($category->fk_content_category == $categoryId
-                && $category->inmenu==1
-                && $category->internal_category!=0
+                && $category->inmenu == 1
+                && $category->internal_category != 0
             ) {
                 return $category->name;
             }
@@ -540,8 +544,8 @@ class ContentCategoryManager
             try {
                 $rs = getService('dbal_connection')->fetchAll(
                     'SELECT content2.name '
-                    .'FROM `content_categories` as content1, `content_categories` as content2 '
-                    .'WHERE content1.name=? AND content1.fk_content_category=content2.pk_content_category',
+                    . 'FROM `content_categories` as content1, `content_categories` as content2 '
+                    . 'WHERE content1.name=? AND content1.fk_content_category=content2.pk_content_category',
                     [ $categoryName ]
                 );
 
@@ -629,8 +633,8 @@ class ContentCategoryManager
 
             $rs2 = getService('dbal_connection')->fetchAssoc(
                 'SELECT count(pk_content) as content_count FROM `contents`, `contents_categories` '
-                .'WHERE`contents_categories`.`pk_fk_content_category`=? '
-                .'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`',
+                . 'WHERE`contents_categories`.`pk_fk_content_category`=? '
+                . 'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`',
                 [ $pkCategory ]
             );
 
@@ -653,10 +657,10 @@ class ContentCategoryManager
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
-                .'WHERE `fk_content_type`=1 '
-                .'AND `in_litter`=0 '
-                .'AND contents_categories.pk_fk_content_category=? '
-                .'AND contents.pk_content=pk_fk_content',
+                . 'WHERE `fk_content_type`=1 '
+                . 'AND `in_litter`=0 '
+                . 'AND contents_categories.pk_fk_content_category=? '
+                . 'AND contents.pk_content=pk_fk_content',
                 [ $category ]
             );
 
@@ -680,8 +684,8 @@ class ContentCategoryManager
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
-                 .'WHERE contents.pk_content=pk_fk_content '
-                 .'AND pk_fk_content_category=? AND `fk_content_type`=?',
+                . 'WHERE contents.pk_content=pk_fk_content '
+                . 'AND pk_fk_content_category=? AND `fk_content_type`=?',
                 [ $category, $type ]
             );
 
@@ -708,19 +712,19 @@ class ContentCategoryManager
      */
     public static function countContentsByGroupType($type, $filter = null)
     {
-        $where= '';
+        $where = '';
         if (!is_null($filter)) {
-            $where = ' AND '.$filter;
+            $where = ' AND ' . $filter;
         }
 
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT count(contents.pk_content) AS number,'
-                .'`contents_categories`.`pk_fk_content_category` AS cat '
-                .'FROM `contents`,`contents_categories` '
-                .'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
-                .'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
-                .$where.' GROUP BY `contents_categories`.`pk_fk_content_category`',
+                . '`contents_categories`.`pk_fk_content_category` AS cat '
+                . 'FROM `contents`,`contents_categories` '
+                . 'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
+                . 'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
+                . $where . ' GROUP BY `contents_categories`.`pk_fk_content_category`',
                 [ $type ]
             );
 
@@ -798,7 +802,7 @@ class ContentCategoryManager
              $categoryData[] = $parentCategories[0];
         }
 
-        return [$parentCategories, $subcat, $categoryData];
+        return [ $parentCategories, $subcat, $categoryData ];
     }
 
     /**
@@ -836,6 +840,7 @@ class ContentCategoryManager
         if (!is_numeric($id)) {
             return null;
         }
+
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT catName FROM contents_categories WHERE pk_fk_content=?',

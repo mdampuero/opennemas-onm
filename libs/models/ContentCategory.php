@@ -127,6 +127,7 @@ class ContentCategory
             if (is_numeric($k)) {
                 continue;
             }
+
             if (in_array($k, self::getL10nKeys())) {
                 $aux        = @unserialize($v);
                 $this->{$k} = (is_bool($aux)) ? $v : $aux;
@@ -183,6 +184,7 @@ class ContentCategory
         array_map(function ($field) use (&$data) {
             $data[$field] = serialize($data[$field]);
         }, self::getL10nKeys());
+
         // Serialize params
         $data['params'] = serialize($data['params']);
 
@@ -216,7 +218,7 @@ class ContentCategory
 
             $this->pk_content_category = getService('dbal_connection')->lastInsertId();
 
-            dispatchEventWithParams('category.create', array('category' => $this));
+            dispatchEventWithParams('category.create', [ 'category' => $this ]);
 
             return true;
         } catch (Exception $e) {
@@ -236,14 +238,15 @@ class ContentCategory
     {
         $data['params'] = serialize($data['params']);
         $data['name']   = $this->name;
+
         foreach ($data['title'] as $locale => $text) {
-            if (!empty($data['title'][$locale])
-            ) {
+            if (!empty($data['title'][$locale])) {
                 if (!is_array($data['name'])) {
                     $data['name'] = [];
                 }
 
-                $data['name'][$locale] = \Onm\StringUtils::generateSlug($data['title'][$locale]);
+                $data['name'][$locale] =
+                    \Onm\StringUtils::generateSlug($data['title'][$locale]);
             }
         }
 
@@ -320,7 +323,7 @@ class ContentCategory
                 return false;
             }
 
-            dispatchEventWithParams('category.delete', array('category' => $this));
+            dispatchEventWithParams('category.delete', [ 'category' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -357,8 +360,9 @@ class ContentCategory
             return true;
         }
 
-        // Prepare sqls to execute
         $contents = implode(', ', $contentsArray);
+
+        // Prepare sqls to execute
         $sqls[] = 'DELETE FROM contents  WHERE `pk_content` IN (' . $contents . ')';
         $sqls[] = 'DELETE FROM articles WHERE `pk_article` IN (' . $contents . ')';
         $sqls[] = 'DELETE FROM advertisements WHERE `pk_advertisement` IN (' . $contents . ')';
@@ -378,6 +382,7 @@ class ContentCategory
         $sqls[] = 'DELETE FROM contentmeta WHERE `fk_content` IN (' . $contents . ')';
 
         $conn->beginTransaction();
+
         try {
             foreach ($sqls as $sql) {
                 $conn->executeUpdate($sql);
@@ -419,7 +424,7 @@ class ContentCategory
                 return false;
             }
 
-            dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.update', [ 'category' => $this ]);
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());
@@ -440,7 +445,7 @@ class ContentCategory
 
         try {
             if (!is_array($this->params)) {
-                $this->params = array();
+                $this->params = [];
             }
 
             $this->params['inrss'] = $status;
@@ -452,7 +457,7 @@ class ContentCategory
                 [ 'pk_content_category' => $this->pk_content_category ]
             );
 
-            dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.update', [ 'category' => $this ]);
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());

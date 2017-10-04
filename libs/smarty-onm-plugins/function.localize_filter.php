@@ -19,11 +19,11 @@
  */
 function smarty_function_localize_filter($params)
 {
-    if (!is_array($params) ||
-        !array_key_exists('field', $params) ||
-        empty($params['field']) ||
-        !array_key_exists('params', $params) ||
-        empty($params['params'])
+    if (!is_array($params)
+        || !array_key_exists('field', $params)
+        || empty($params['field'])
+        || !array_key_exists('params', $params)
+        || empty($params['params'])
     ) {
         return null;
     }
@@ -35,10 +35,11 @@ function smarty_function_localize_filter($params)
     $field        = (object) ['field' => ''];
     $field->field = $params['field'];
 
-    $value = getService('data.manager.filter')->set($field)->filter('localize', [
-        'keys'   => ['field'],
-        'locale' => $params['params']['default']
-    ])->get();
+    $value = getService('data.manager.filter')->set($field)
+        ->filter('localize', [
+            'keys'   => ['field'],
+            'locale' => $params['params']['default']
+        ])->get();
 
     return $value->field;
 }
