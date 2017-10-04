@@ -70,6 +70,7 @@ class Menu
             return false;
         }
     }
+
     /**
      * Returns the list of properties that support multiple languages.
      *
@@ -200,7 +201,7 @@ class Menu
      * @param array $items the list of items to localize
      *
      * @return array the localized array
-     **/
+     */
     public function localize($items)
     {
         $fm = getService('data.manager.filter');
@@ -227,7 +228,7 @@ class Menu
      * @param array $items the list of items to localize
      *
      * @return array the localized array
-     **/
+     */
     public function unlocalize($items)
     {
         $fm = getService('data.manager.filter');

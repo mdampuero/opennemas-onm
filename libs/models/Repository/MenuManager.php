@@ -93,7 +93,7 @@ class MenuManager extends BaseManager
         $cacheId = "menu" . $this->cacheSeparator . $id;
         $entity  = null;
 
-        if (true || !$this->hasCache()
+        if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
             || !is_object($entity)
         ) {
