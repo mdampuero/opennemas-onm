@@ -55,7 +55,7 @@ angular.module('onm.picker')
                     <li ng-if=\"criteria.contentType != 'contents-in-frontpage'\">\
                       <select name=\"category\" ng-model=\"criteria.category\">\
                         <option value=\"\">[% picker.params.explore.allCategories %]</option>\
-                        <option value=\"[% category.name %]\" ng-repeat=\"category in picker.params.explore.categories\">\
+                        <option value=\"[% category.pk_content_category %]\" ng-repeat=\"category in picker.params.explore.categories\">\
                           [% category.title %]\
                         </option>\
                       </select>\

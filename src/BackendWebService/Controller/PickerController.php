@@ -27,9 +27,6 @@ class PickerController extends Controller
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
         $filter = [ "in_litter = 0" ];
-        $order  = [
-            'created' => 'desc'
-        ];
 
         if (!empty($contentTypes)) {
             if ($contentTypes[0] == 'contents-in-frontpage') {
@@ -57,11 +54,12 @@ class PickerController extends Controller
         }
 
         if (!empty($title)) {
+            $title    = \Onm\StringUtils::convertToUTF8AndStrToLower($title);
             $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%' OR metadata LIKE '%$title%')";
         }
 
         if (!empty($category)) {
-            $filter[] = "(category_name = '$category')";
+            $filter[] = "contents_categories.pk_fk_content_category = $category";
         }
 
         $filter[] = "in_litter != 1";
@@ -70,9 +68,30 @@ class PickerController extends Controller
 
         $filter = implode(' AND ', $filter);
 
-        $results = $em->findBy($filter, $order, $epp, $page);
-        $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($filter);
+        $query      = "FROM contents JOIN contents_categories ON  contents_categories.pk_fk_content = " .
+            "contents.pk_content WHERE " . $filter;
+        $contentMap = $em->dbConn->executeQuery(
+            "SELECT content_type_name, pk_content " . $query . " ORDER BY CREATED DESC LIMIT " .
+            (($page - 1) * $epp) . ", " . $epp
+        )->fetchAll();
+        $contentMap = array_map(function ($row) {
+            return [$row['content_type_name'], $row['pk_content']];
+        }, $contentMap);
+        $results = $em->findMulti($contentMap);
+
+        $languageData = $this->getLocaleData('frontend');
+        $fm           = $this->get('data.manager.filter');
+        $results      = $fm->set($results)->filter('localize', [
+            'keys'      => ['title', 'name', 'description'],
+            'locale'    => $languageData['default']
+        ])->get();
+        $results      = \Onm\StringUtils::convertToUtf8($results);
+
+        $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
+        $total      = 0;
+        if (count($contentMap) > 0) {
+            $total = $contentMap[0]['resultNumber'];
+        }
 
         return new JsonResponse([
                 'epp'     => $epp,
@@ -209,7 +228,7 @@ class PickerController extends Controller
         $fm           = $this->get('data.manager.filter');
         $categories   = $ccm->find();
         $categories   = $fm->set($categories)->filter('localize', [
-            'keys'      => \ContentCategory::MULTI_LANGUAGE_FIELDS,
+            'keys'      => ['title', 'name'],
             'locale'    => $languageData['default']
         ])->get();
 
