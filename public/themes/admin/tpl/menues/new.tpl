@@ -32,14 +32,14 @@
                 {/if}
               </h5>
             </li>
-            {is_module_activated name="es.openhost.module.multilanguage"}
+            {if $multilanguage}
             <li class="hidden-xs quicklinks ng-cloak">
               <span class="h-seperate"></span>
             </li>
             <li class="hidden-xs ng-cloak">
               <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
             </li>
-            {/is_module_activated}
+            {/if}
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -48,7 +48,7 @@
                   <i class="fa fa-reply"></i>
                 </a>
               </li>
-              <li class="quicklinks">
+              <li class="quicklinks hidden-xs">
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
@@ -66,7 +66,7 @@
       <div class="grid simple">
         <div class="grid-body">
           <div class="row">
-            {is_module_activated name="es.openhost.module.multilanguage"}
+            {if $multilanguage}
             <div class="col-md-ng-cloak hidden-md hidden-lg hidden-sm clearfix">
               Language:
               <div class="cleafix pull-right">
@@ -74,7 +74,7 @@
               </div>
               <hr>
             </div>
-            {/is_module_activated}
+            {/if}
             <div class="col-sm-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Name{/t}</label>
               <div class="controls">

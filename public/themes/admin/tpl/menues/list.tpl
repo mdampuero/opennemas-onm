@@ -127,7 +127,7 @@
                 </th>
                 <th class="pointer">{t}Name{/t}</th>
                 {if count($menu_positions) > 1}
-                <th class="pointer nowrap text-center" width="100">{t}Position assigned{/t}</th>
+                <th class="pointer nowrap hidden-xs" width="100">{t}Position assigned{/t}</th>
                 {/if}
               </tr>
             </thead>
@@ -141,22 +141,32 @@
                 </td>
                 <td>
                   [% content.name %]
+                  <div class="hidden-sm hidden-md hidden-lg">
+                    <small>
+                    <span ng-if="content.position">
+                      {t}Assigned to{/t}: [% menu_positions[content.position] %]
+                    </span>
+                    <span ng-if="!content.position">
+                      {t}No position{/t}
+                    </span>
+                    </small>
+                  </div>
                   <div class="listing-inline-actions">
-                    {is_module_activated name="es.openhost.module.multilanguage"}
-                      <translator ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]" options="languageData" />
-                    {/is_module_activated}
-                    {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
+                    {if $multilanguage}
+                      <translator ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]" options="languageData"></translator>
+                    {/if}
+                    {if !$multilanguage}
                     <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
-                    {/is_module_activated}
+                    {/if}
                     <button class="link link-danger" ng-click="removeMenu(content)" type="button">
                       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>
                   </div>
                 </td>
                 {if count($menu_positions) > 1}
-                <td class="text-center">
+                <td class="hidden-xs">
                   <span ng-if="content.position">
                     [% menu_positions[content.position] %]
                   </span>

@@ -40,6 +40,10 @@ class MenusController extends Controller
         return $this->render('menues/list.tpl', [
             'menu_positions' => $this->getMenuPositions(),
             'language_data'  => $this->getLocaleData($request),
+            'multilanguage' => in_array(
+                'es.openhost.module.multilanguage',
+                $this->get('core.instance')->activated_modules
+            )
         ]);
     }
 
@@ -86,6 +90,10 @@ class MenusController extends Controller
             'static_pages'     => $this->getStaticPages(),
             'subcat'           => $categories['subcategories'],
             'sync_sites'       => $this->getSyncSites(),
+            'multilanguage'    => in_array(
+                'es.openhost.module.multilanguage',
+                $this->get('core.instance')->activated_modules
+            )
         ]);
     }
 
