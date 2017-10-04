@@ -48,7 +48,7 @@ class LocalizeFilter extends Filter
      */
     protected function filterItem($item)
     {
-        if ((!is_array($item) && !is_object($item))) {
+        if (!is_object($item)) {
             return;
         }
 
