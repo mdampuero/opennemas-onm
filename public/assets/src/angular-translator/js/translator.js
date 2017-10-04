@@ -12,8 +12,8 @@
      * @description
      *   Directive to create and display of the translator selector.
      */
-    .directive('translator', [
-      function () {
+    .directive('translator', [ '$window',
+      function ($window) {
         return {
           restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
           scope: {
@@ -25,7 +25,7 @@
           },
           template: function(elem, attrs) {
             if (attrs.link) {
-              return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"size > 4\">' +
+              return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"collapsed || size > 4\">' +
                 '<button type=\"button\" class=\"form-control btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">' +
                   '<i class=\"fa fa-pencil\"></i>' +
                   '{{text}}' +
@@ -40,7 +40,7 @@
                   '</li>' +
                 '</ul>' +
               '</div>' +
-              '<div class="translator btn-group" role="group" ng-if=\"size < 5\">' +
+              '<div class="translator btn-group" role="group" ng-if=\"!collapsed && size < 5\">' +
                 '<a ng-repeat=\"language in languages\" href="{{link + \'?locale=\' + language.value}}" class=\"btn {{language.class}}\">' +
                   '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>{{language.name}}' +
                 '</a>' +
@@ -64,6 +64,7 @@
             '</div>';
           },
           link: function($scope) {
+            $scope.collapsed = $window.innerWidth < 992;
             $scope.languages = {};
             $scope.size      = Object.keys($scope.options.available).length;
 
@@ -104,9 +105,22 @@
                 $scope.item
               );
             }
-            $scope.changeSelected = function (language) {
+
+            /**
+             * Change the current language.
+             *
+             * @param {String} The language value.
+             */
+            $scope.changeSelected = function(language) {
               $scope.ngModel = language;
             };
+
+            // Collapse directive when window width changes
+            angular.element($window).bind('resize', function() {
+              $scope.collapsed = $window.innerWidth < 992;
+
+              $scope.$apply();
+            });
           },
         };
       }
