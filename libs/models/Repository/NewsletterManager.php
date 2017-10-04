@@ -129,9 +129,8 @@ class NewsletterManager extends BaseManager
         $this->tpl->assign('newsletterContent', $newsletterContent);
 
         // Fetch and assign the frontpage menu
-        $menu        = new \Menu();
-        $menu        = $menu->getMenu('frontpage');
-        $menu->items = $menu->localize($menu->items);
+        $menu = new \Menu();
+        $menu = $menu->getMenu('frontpage');
         $this->tpl->assign('menuFrontpage', $menu->items);
 
         // Fetch and assign newsletter ads
