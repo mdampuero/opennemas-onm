@@ -107,7 +107,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $title_int = null;
+    protected $title_int = null;
 
     /**
      * Initializes the Article object from an ID
@@ -483,8 +483,8 @@ class Article extends Content
     public static function getL10nKeys()
     {
         return array_merge(parent::getL10nKeys(), [
-            'subtitle', 'summary', 'img1_footer', 'img2_footer',
-            'footer_video', 'footer_video2'
+            'footer_video', 'footer_video2', 'img1_footer', 'img2_footer',
+            'subtitle', 'summary', 'title_int'
         ]);
     }
 }
