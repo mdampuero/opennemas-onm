@@ -126,6 +126,19 @@
         </div>
         {/is_module_activated}
       </uib-tab>
+      {is_module_activated name="es.openhost.module.advancedAdvertisement"}
+      <uib-tab heading="{t}Advanced{/t}">
+        <div class="form-group">
+          <label for="ads_txt" class="form-label">
+            {t}Authorized Digital Sellers{/t}
+          </label>
+          <div class="controls">
+            <textarea class="form-control" name="ads_txt">{$configs['ads_txt']|default:''}</textarea>
+            <span class="help">{t}This will be the content of the file ads.txt on your root domain{/t}</span>
+          </div>
+        </div>
+      </uib-tab>
+      {/is_module_activated}
     </uib-tabset>
   </div>
 </form>

@@ -1,7 +1,7 @@
 parameters:
     orm.parameter.setting.autoload.instance:
         - 'comscore'
-        - 'favico '
+        - 'favico'
         - 'google_analytics'
         - 'locale'
         - 'ojd'

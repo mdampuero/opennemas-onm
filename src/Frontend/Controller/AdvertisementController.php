@@ -27,29 +27,6 @@ use Common\Core\Controller\Controller;
 class AdvertisementController extends Controller
 {
     /**
-     * Displays an advertisement given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     */
-    public function getAction(Request $request)
-    {
-        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
-
-        if (!is_object($advertisement)) {
-            throw new ResourceNotFoundException();
-        }
-
-        return $this->render('ads/advertisement.tpl', [
-            'banner'  => $advertisement,
-            'content' => $advertisement,
-            'x-tags' => 'ad,'.$id
-        ]);
-    }
-
-    /**
      * Redirects the user to the target URL defined by an advertisement
      *
      * @param Request $request the request object
@@ -76,5 +53,137 @@ class AdvertisementController extends Controller
         } else {
             return new Response('<script type="text/javascript">window.close();</script>');
         }
+    }
+
+    /**
+     * Displays an advertisement given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     */
+    public function showAction(Request $request)
+    {
+        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $ad = $this->get('entity_repository')->find('Advertisement', $id);
+
+        if (!is_object($ad)) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $this->render('ads/advertisement.tpl', [
+            'banner'  => $ad,
+            'content' => $ad,
+            'x-tags' => 'ad,' . $id
+        ]);
+    }
+
+    /**
+     * Displays a public record of Authorized Digital Sellers - ads.txt file
+     *
+     * @return Response The response object.
+     */
+    public function showAdsTxtAction()
+    {
+        // Check for the module existence and if it is enabled
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.advancedAdvertisement')) {
+            throw new ResourceNotFoundException();
+        }
+
+        $content      = $this->get('setting_repository')->get('ads_txt');
+        $instanceName = getService('core.instance')->internal_name;
+
+        return new Response($content, 200, [
+            'Content-Type' => 'text/plain',
+            'x-cacheable'  => true,
+            'x-cache-for'  => '100d',
+            'x-tags'       => 'instance-' . $instanceName . ',ads,txt',
+            'x-instance'   => $instanceName,
+        ]);
+    }
+
+    /**
+     * Returns the file contents
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the requested file
+     */
+    public function showRTBFileAction(Request $request)
+    {
+        // Check for the module existence and if it is enabled
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.advancedAdvertisement')) {
+            throw new ResourceNotFoundException();
+        }
+
+        // Search for the
+        $fileName = $request->query->get('filename');
+        $fileId   = $this->checkRTBFileInConfigSettings($fileName);
+        $filePath = $this->getFilePath($fileId);
+
+        if (!file_exists($filePath)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $fileContents = file_get_contents($filePath);
+
+        // Return the resopnse object
+        return new Response($fileContents, 200, [
+            'x-instance'  => $this->get('core.instance')->internal_name,
+            'x-tags'      => 'rtb,',
+            'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
+        ]);
+    }
+
+    /**
+     * This method checks if the file was added to rtb files
+     *
+     * @param string $fileName the file to check
+     *
+     * @return boolean if the file was added
+     */
+    private function checkRTBFileInConfigSettings($fileName)
+    {
+        $configurations = $this->get('setting_repository')->get(['rtb_files']);
+
+        if (!is_array($configurations)
+            || !array_key_exists('rtb_files', $configurations)
+            || !is_array($configurations['rtb_files'])
+        ) {
+            return null;
+        }
+
+        foreach ($configurations['rtb_files'] as $file) {
+            if ($file['filename'] == $fileName) {
+                return $file['id'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * This method gets from the file path from DB
+     *
+     * @param string $fileId the file Id to recover from Database
+     *
+     * @return string path for the file
+     */
+    private function getFilePath($fileId)
+    {
+        $file = $this->get('entity_repository')->find('Attachment', $fileId);
+
+        if (!is_object($file)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $path = INSTANCE_MEDIA_PATH . FILE_DIR . $file->path;
+
+        if (!file_exists($path) && !is_readable($path)) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $path;
     }
 }

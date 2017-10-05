@@ -542,7 +542,7 @@
                         {t}Used for all the dates used in your webpage.{/t}
                       </span>
                       <div class="controls">
-                        <select name="timezone" ng-model="settings.locale.backend.timezone" required>
+                        <select name="timezone" ng-change="settings.locale.frontend.timezone = settings.locale.backend.timezone" ng-model="settings.locale.backend.timezone" required>
                           <option value="">{t}Select a timezone...{/t}</option>
                           <option value="[% timezone %]" ng-repeat="timezone in extra.timezones" ng-selected="[% timezone === settings.locale.backend.timezone %]">[% timezone %]</option>
                         </select>
@@ -709,7 +709,7 @@
                       </div>
                     </div>
                     {/is_module_activated}
-                    {is_module_activated name="es.openhost.module.rtb_media_advertisement"}
+                    {is_module_activated name="es.openhost.module.advancedAdvertisement"}
                     <h4>{t}RTB Media Integration{/t}</h4>
                     <div class="form-group">
                       <label class="form-label" for="rtbFiles">{t}RTB Files{/t}</label>

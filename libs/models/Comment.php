@@ -23,21 +23,21 @@ class Comment
      *
      * @var int
      */
-    public $id           = null;
+    public $id = null;
 
     /**
      * Content id that is referencing this comment
      *
      * @var int
      */
-    public $content_id   = 0;
+    public $content_id = 0;
 
     /**
      * The name of the author that sent this comment
      *
      * @var int
      */
-    public $author       = '';
+    public $author = '';
 
      /**
      * The email of the author that sent the comment
@@ -51,63 +51,63 @@ class Comment
      *
      * @var string
      */
-    public $author_url   = null;
+    public $author_url = null;
 
     /**
      * The IP of the author that sent the comment
      *
      * @var string
      */
-    public $author_ip    = '';
+    public $author_ip = '';
 
     /**
      * The date when was created this content
      *
      * @var string
      */
-    public $date         = null;
+    public $date = null;
 
     /**
      * The content body
      *
      * @var string
      */
-    public $body         = '';
+    public $body = '';
 
     /**
      * Whether this comment is published or not
      *
      * @var string
      */
-    public $status       = '';
+    public $status = '';
 
      /**
      * The type of comment
      *
      * @var string
      */
-    public $type       = '';
+    public $type = '';
 
     /**
      * The agent that sent this comment
      *
      * @var string
      */
-    public $agent       = '';
+    public $agent = '';
 
     /**
      * The id of the comment that references this element
      *
      * @var int
      */
-    public $parent_id       = 0;
+    public $parent_id = 0;
 
     /**
      * The user id that sent this comment
      *
      * @var int
      */
-    public $user_id       = 0;
+    public $user_id = 0;
 
     /**
      * The content type name that is referenced by the comment
@@ -199,14 +199,14 @@ class Comment
         $data = array_merge($defaultData, $params);
 
         try {
-            $contentTypeID = getService('dbal_connection')->fetchColumn(
+            $contentTypeID   = getService('dbal_connection')->fetchColumn(
                 "SELECT fk_content_type FROM contents WHERE pk_content=?",
                 [ $data['content_id'] ]
             );
             $contentTypeName = \ContentManager::getContentTypeNameFromId($contentTypeID);
         } catch (\Exception $e) {
             error_log($e->getMessage());
-            throw new \Exception('Error creating comment: '.$e->getMessage());
+            throw new \Exception('Error creating comment: ' . $e->getMessage());
         }
 
         try {
@@ -229,14 +229,14 @@ class Comment
                 ]
             );
         } catch (\Exception $e) {
-            error_log('DB error creating comment: '.$e->getMessage());
-            throw new \Exception('DB Error: '.$e->getMessage());
+            error_log('DB error creating comment: ' . $e->getMessage());
+            throw new \Exception('DB Error: ' . $e->getMessage());
         }
 
         $data['id'] = getService('dbal_connection')->lastInsertId();
         $this->load($data);
 
-        dispatchEventWithParams('comment.create', array('comment' => $this));
+        dispatchEventWithParams('comment.create', ['content' => $this]);
 
         return $this;
     }
@@ -313,7 +313,7 @@ class Comment
         // Load new data
         $this->load($data);
 
-        dispatchEventWithParams('comment.update', array('content' => $this));
+        dispatchEventWithParams('comment.update', ['content' => $this]);
 
         return $this;
     }
@@ -342,7 +342,7 @@ class Comment
             throw new \Exception(_('Unable to delete the comment.'));
         }
 
-        dispatchEventWithParams('comment.delete', array('comment' => $this));
+        dispatchEventWithParams('comment.delete', ['content' => $this]);
 
         return true;
     }
@@ -357,18 +357,18 @@ class Comment
     {
         try {
             $data = [ 'status' => $statusName ];
-            $rs = getService('dbal_connection')->update(
+            $rs   = getService('dbal_connection')->update(
                 "comments",
                 $data,
                 [ 'id' => (int) $this->id ]
             );
 
             $this->load($data);
-            dispatchEventWithParams('comment.update', array('comment' => $this));
+            dispatchEventWithParams('comment.update', ['content' => $this]);
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error changing comment status: '.$e->getMessage());
+            error_log('Error changing comment status: ' . $e->getMessage());
             return false;
         }
     }
@@ -414,7 +414,9 @@ class Comment
      */
     public function getProperty($property)
     {
-        if ((int) $this->id <= 0) return false;
+        if ((int) $this->id <= 0) {
+            return false;
+        }
 
         if (isset($this->$property)) {
             return $this->$property;
@@ -448,7 +450,9 @@ class Comment
                 [ $property, $value ]
             );
 
-            if (!$commentId) return 0;
+            if (!$commentId) {
+                return 0;
+            }
 
             return $commentId;
         } catch (\Exception $e) {
@@ -474,11 +478,11 @@ class Comment
         try {
             $rs = getService('dbal_connection')->executeUpdate(
                 "INSERT INTO commentsmeta (`fk_content`, `meta_name`, `meta_value`)"
-                ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
+                . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
                 [ $this->id, $property, $value, $value ]
             );
 
-            dispatchEventWithParams('comment.update', array('comment' => $this));
+            dispatchEventWithParams('comment.update', ['content' => $this]);
 
             return true;
         } catch (\Exception $e) {
@@ -496,7 +500,9 @@ class Comment
      */
     public function updateParentId($parentId = null)
     {
-        if (is_null($parentId)) return false;
+        if (is_null($parentId)) {
+            return false;
+        }
 
         try {
             $rs = getService('dbal_connection')->update(
@@ -505,7 +511,7 @@ class Comment
                 [ 'id' => (int) $this->id ]
             );
 
-            dispatchEventWithParams('comment.update', array('comment' => $this));
+            dispatchEventWithParams('comment.update', ['content' => $this]);
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());
@@ -542,7 +548,7 @@ class Comment
         try {
             $numComments = getService('dbal_connection')->fetchColumn(
                 "SELECT count(id) as total FROM `comments` "
-                ."WHERE `content_id` = ? GROUP BY `content_id`",
+                . "WHERE `content_id` = ? GROUP BY `content_id`",
                 [ $id ]
             );
 
@@ -551,7 +557,7 @@ class Comment
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on ContentManager::updateContentTotalComments: '.$e->getMessage());
+            error_log('Error on ContentManager::updateContentTotalComments: ' . $e->getMessage());
             return false;
         }
     }

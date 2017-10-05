@@ -93,7 +93,7 @@ class Importer
         foreach ($this->config['filters'] as $filter) {
             $criteria = array_merge(
                 $criteria,
-                [ 'title' => $filter, 'body' => $filter ]
+                [ 'tags' => $filter, 'title' => $filter, 'body' => $filter ]
             );
 
             $items     = $this->repository->findBy($criteria);
@@ -208,7 +208,8 @@ class Importer
         $data = get_object_vars($author);
 
         if (array_key_exists('email', $data)) {
-            $user = $this->container->get('user_repository')->findOneBy([
+            $um   = $this->container->get('user_repository');
+            $user = $um->findOneBy([
                 'union'    => 'or',
                 'email'    => [ [ 'value' => $data['email'] ] ],
                 'username' => [ [ 'value' => $data['email'] ] ]
@@ -272,7 +273,7 @@ class Importer
 
         // Get all necessary data for the photo
         $info = new \MediaItem($localImagePath);
-        $data = array(
+        $data = [
             'title'       => $author->photo->name,
             'name'        => $author->photo->name,
             'user_name'   => $author->photo->name,
@@ -289,7 +290,7 @@ class Importer
             'type_img'    => substr($author->photo->name, -3),
             'media_type'  => 'image',
             'author_name' => $author->username,
-        );
+        ];
 
         $photo   = new \Photo();
         $photoId = $photo->create($data);
@@ -377,10 +378,9 @@ class Importer
         ];
 
         if ($resource->type === 'photo' || $target === 'photo') {
-            $data['local_file'] = realpath($this->repository->syncPath . DS
-                . $this->config['id'] . DS . $resource->file_name);
-
             $data['original_filename'] = $resource->file_name;
+            $data['local_file']        = realpath($this->repository->syncPath
+                . DS . $this->config['id'] . DS . $resource->file_name);
 
             return $data;
         }
@@ -431,6 +431,15 @@ class Importer
             $r = $this->repository->find($this->config['id'], $id);
 
             if (!empty($r)) {
+                $element = $this->container->get('entity_repository')
+                    ->findOneBy([ 'urn_source' => [[ 'value' => $r->urn ]] ]);
+
+                if (empty($element) && $r->type == 'photo') {
+                    $photoData = $this->getData($r, null, null, 1, 'photo');
+                    $photo     = new \Photo();
+                    $photo->createFromLocalFile($photoData);
+                }
+
                 $related[] = $r;
             }
         }
