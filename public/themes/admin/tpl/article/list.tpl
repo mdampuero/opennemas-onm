@@ -204,15 +204,15 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                    <translator class="m-r-10" item="content" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" ng-model="config.locale" options="data.extra.options"></translator>
-                    <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
-                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                    </a>
+                      <translator class="m-r-10" item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" ng-model="config.locale" options="data.extra.options"></translator>
+                      <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
+                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                      </a>
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
-                    <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
-                    </button>
+                      <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
+                        <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                      </button>
                     {/acl}
                   </div>
                 </td>
