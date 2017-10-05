@@ -33,6 +33,10 @@
 
         $scope.init = function(menu, languageData) {
           $scope.languageData = languageData;
+          if ($scope.languageData.available.length === 0) {
+            $scope.languageData.available[$scope.languageData.default] = $scope.languageData.default;
+          }
+
           $scope.menu = menu;
 
           $scope.lang = languageData.locale || languageData.default;
