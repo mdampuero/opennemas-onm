@@ -17,6 +17,16 @@ use Symfony\Component\HttpFoundation\Request;
 class ArticleController extends Controller
 {
     /**
+     * Returns the list of paramters needed to create a new article.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function createAction()
+    {
+        return new JsonResponse([ 'extra' => $this->getExtraData(false) ]);
+    }
+
+    /**
      * Returns a list of contents in JSON format.
      *
      * @param Request $request     The request object.
