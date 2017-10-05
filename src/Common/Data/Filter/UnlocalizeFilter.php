@@ -22,25 +22,23 @@ class UnlocalizeFilter extends LocalizeFilter
     {
         // Locales from direct parameters
         $locales = $this->getParameter('locales', null, false);
+        $locale  = $this->container->get('core.locale');
 
         // Locales from config
         if (empty($locales)) {
-            $locale  = $this->container->get('core.locale');
             $locales = !empty($locale->getAvailableLocales()) ?
                 array_keys($locale->getAvailableLocales()) : [];
         }
 
-        if (empty($locales)) {
-            return $value;
-        }
-
         // Already unlocalized
         if (is_array($value)
-            && count(array_diff($locales, array_keys($value))) < count($locales)
+            && (count(array_diff($locales, array_keys($value))) < count($locales)
+            || in_array($locale->getLocale(), array_keys($value), true))
         ) {
             return $value;
         }
 
-        return array_fill_keys($locales, $value);
+        return [ $locale->getLocale() => $value ];
+
     }
 }
