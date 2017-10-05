@@ -81,11 +81,11 @@ class Controller extends SymfonyController
             $expireDate->setTimeStamp($expires);
             $expireDate->setTimeZone(new \DateTimeZone('UTC'));
 
-            $data = array(
+            $data = [
                 'creation_date' => $creationDate,
                 'expire_date'   => $expireDate,
                 'max_age'       => $expires - time(),
-            );
+            ];
         }
 
         return $data;
@@ -100,7 +100,7 @@ class Controller extends SymfonyController
      *
      * @return Response A Response object.
      */
-    public function render($view, array $parameters = array(), Response $response = null)
+    public function render($view, array $parameters = [], Response $response = null)
     {
         if (empty($response)) {
             $response = new Response();
@@ -119,9 +119,7 @@ class Controller extends SymfonyController
             $instance = $this->get('core.instance')->internal_name;
 
             $response->headers->set('x-instance', $instance);
-            $response->headers->set(
-                'x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']
-            );
+            $response->headers->set('x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']);
 
             if (array_key_exists('x-cache-for', $parameters)
                 && !empty($parameters['x-cache-for'])
@@ -132,5 +130,47 @@ class Controller extends SymfonyController
         }
 
         return $response;
+    }
+
+    /**
+     * Get the locale info needed for multiLanguage.
+     *
+     * @param String    $context    Locale context
+     * @param Request   $request    User request.
+     *
+     * @return Array all info related with locale information for the instance and request
+     */
+    protected function getLocaleData($context = null, $request = null, $translation = false)
+    {
+        $ls = $this->get('core.locale')
+            ->setContext($context === 'backend' ? $context : 'frontend');
+
+        $locale      = null;
+        $default     = $ls->getLocale();
+        $translators = [];
+
+        if (!empty($request)) {
+            $locale = $request->query->get('locale');
+        }
+
+        if ($translation
+            && $this->get('core.security')
+                ->hasPermission('es.openhost.module.translation')
+        ) {
+            $translators = $this->get('setting_repository')->get('translators');
+        }
+
+        $translators = array_map(function ($a) {
+            return $a['to'];
+        }, array_filter($translators, function ($a) use ($default) {
+            return $a['from'] === $default;
+        }));
+
+        return [
+            'locale'      => $locale,
+            'default'     => $default,
+            'available'   => $ls->getAvailableLocales(),
+            'translators' => array_unique($translators)
+        ];
     }
 }

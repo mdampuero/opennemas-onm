@@ -48,6 +48,11 @@
               continue;
             }
 
+            // Skip file object handling
+            if (obj instanceof File) {
+              continue;
+            }
+
             // Convert undefined to null
             if (typeof obj[key] === 'undefined') {
               obj[key] = null;
