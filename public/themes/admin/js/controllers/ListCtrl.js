@@ -19,6 +19,24 @@
          * @memberOf ListCtrl
          *
          * @description
+         *  The list configuration.
+         *
+         * @type {Object}
+         */
+        $scope.config = {
+          columns: {
+            collapsed: true,
+            selected: []
+          },
+          linkers: {},
+          locale: null,
+          multilanguage: null
+        };
+
+        /**
+         * @memberOf ListCtrl
+         *
+         * @description
          *   The list of selected elements.
          *
          * @type {Array}
@@ -55,7 +73,7 @@
           }
 
           $scope.tm = $timeout(function () {
-            $scope.open = false;
+            $scope.config.columns.collapsed = true;
           }, 500);
         };
 
@@ -72,7 +90,7 @@
           }
 
           $scope.tm = $timeout(function () {
-            $scope.open = true;
+            $scope.config.columns.collapsed = false;
           }, 500);
         };
 
@@ -86,7 +104,7 @@
          * @param {String} name The columns name.
          */
         $scope.isColumnEnabled = function(name) {
-          return $scope.columns.selected.indexOf(name) !== -1;
+          return $scope.config.columns.selected.indexOf(name) !== -1;
         };
 
         /**
@@ -207,21 +225,19 @@
          *   Toggles column filters container.
          */
         $scope.toggleColumns = function() {
-          $scope.columns.collapsed = !$scope.columns.collapsed;
+          $scope.config.columns.collapsed = !$scope.config.columns.collapsed;
 
-          if (!$scope.columns.collapsed) {
+          if (!$scope.config.columns.collapsed) {
             $scope.scrollTop();
           }
         };
 
         // Marks variables to delete for garbage collector
         $scope.$on('$destroy', function() {
-          $scope.criteria   = null;
-          $scope.columns    = null;
-          $scope.pagination = null;
-          $scope.items      = null;
-          $scope.selected   = null;
-          $scope.orderBy    = null;
+          $scope.criteria = null;
+          $scope.config   = null;
+          $scope.items    = null;
+          $scope.selected = null;
         });
 
         // Reloads the list when filters change.
