@@ -141,20 +141,6 @@
             });
           });
         };
-
-        // Localizes contents when locale changes
-        $scope.$watch('locale', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if ($scope.localize && $scope.locale) {
-            $scope.cl.setKey(nv);
-            $scope.il.setKey(nv);
-            $scope.cl.update();
-            $scope.il.update();
-          }
-        });
       }
     ]);
 })();

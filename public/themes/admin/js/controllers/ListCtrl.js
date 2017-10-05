@@ -240,6 +240,22 @@
           $scope.selected = null;
         });
 
+        // Updates linkers when locale changes
+        $scope.$watch('config.locale', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if (!$scope.config.multilanguage || !$scope.config.locale) {
+            return;
+          }
+
+          for (var key in $scope.config.linkers) {
+            $scope.config.linkers[key].setKey(nv);
+            $scope.config.linkers[key].update();
+          }
+        });
+
         // Reloads the list when filters change.
         $scope.$watch('criteria', function(nv, ov) {
           if ($scope.tm) {
