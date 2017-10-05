@@ -151,9 +151,40 @@ class ArticleController extends Controller
             'name' => $all ? _('All') : _('Select an author...')
         ]);
 
+        $extra['keys']          = \Article::getL10nKeys();
+        $extra['multilanguage'] = in_array(
+            'es.openhost.module.multilanguage',
+            $this->get('core.instance')->activated_modules
+        );
+
+        $ls          = $this->get('core.locale')->setContext('frontend');
+        $translators = null;
+        $default     = $ls->getLocale();
+
+        $extra['locale'] = $ls->getRequestLocale();
+
+        if ($this->get('core.security')->hasExtension('es.openhost.module.translation')) {
+            $translators = $this->get('setting_repository')->get('translators');
+        }
+
+        if (empty($translators)) {
+            $translators = [];
+        }
+
+        $translators = array_map(function ($a) {
+            return $a['to'];
+        }, array_filter($translators, function ($a) use ($default) {
+            return $a['from'] === $default;
+        }));
+
+        $extra['options'] = [
+            'default'     => $default,
+            'available'   => $ls->getAvailableLocales(),
+            'translators' => array_unique($translators)
+        ];
+
         return $extra;
     }
-
 
     /**
      * Returns the list of photos linked to the article.
