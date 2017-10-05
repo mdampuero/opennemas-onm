@@ -314,17 +314,6 @@ class Content implements \JsonSerializable
     }
 
     /**
-     * Returns the list of properties that support multiple languages.
-     *
-     * @return array The list of properties that can be localized to multiple
-     *               languages.
-     */
-    public function getL10nKeys()
-    {
-        return [ 'body', 'description', 'slug', 'title' ];
-    }
-
-    /**
      * Returns all content information when serialized.
      *
      * @return array The content information.
@@ -2029,5 +2018,16 @@ class Content implements \JsonSerializable
         }
 
         return $value;
+    }
+
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public static function getL10nKeys()
+    {
+        return [ 'body', 'description', 'slug', 'title' ];
     }
 }

@@ -145,20 +145,6 @@ class Article extends Content
     }
 
     /**
-     * Returns the list of properties that support multiple languages.
-     *
-     * @return array The list of properties that can be localized to multiple
-     *               languages.
-     */
-    public function getL10nKeys()
-    {
-        return array_merge(parent::getL10nKeys(), [
-            'subtitle', 'summary', 'img1_footer', 'img2_footer',
-            'footer_video', 'footer_video2'
-        ]);
-    }
-
-    /**
      * Load object properties
      *
      * @param array $properties
@@ -486,5 +472,19 @@ class Article extends Content
         }
 
         return $this->author;
+    }
+
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public static function getL10nKeys()
+    {
+        return array_merge(parent::getL10nKeys(), [
+            'subtitle', 'summary', 'img1_footer', 'img2_footer',
+            'footer_video', 'footer_video2'
+        ]);
     }
 }
