@@ -88,6 +88,17 @@
                   var draft =  webStorage.session.get(key);
 
                   for (var name in draft) {
+                    if (name === 'article') {
+                      $scope.data.article = draft[name];
+
+                      $scope.config.linkers.il.link(
+                        $scope.data.article, $scope.article);
+
+                      $scope.config.linkers.il.update();
+
+                      continue;
+                    }
+
                     $scope[name] = draft[name];
                   }
 
@@ -144,43 +155,9 @@
          * @description
          *   Initializes services and list articles.
          *
-         * @param {String}  locale   The current locale.
-         * @param {Boolean} localize Whether this content supports localization.
-         * @param {Integer} id       The article id when editing.
+         * @param {Integer} id The article id when editing.
          */
-        $scope.init = function(localize, id) {
-          var keys =  [
-            'body',
-            'img1_footer',
-            'img2_footer',
-            'video_footer',
-            'video2_footer',
-            'slug',
-            'summary',
-            'title',
-            'title_int',
-          ];
-
-          $scope.localize = localize;
-
-          if ($scope.localize && $scope.locale) {
-            $scope.ilz = localizer.get({
-              keys: keys,
-              locales: [ 'es', 'gl' ]
-            });
-
-            $scope.cl = linker.get([ 'title' ], $scope);
-            $scope.il = linker.get(keys, $scope);
-
-            $scope.cl.setKey($scope.locale);
-            $scope.il.setKey($scope.locale);
-          }
-
-          if (!id) {
-            $scope.checkDraft();
-            return;
-          }
-
+        $scope.init = function(id) {
           $scope.getArticle(id);
         };
 
@@ -196,33 +173,63 @@
         $scope.getArticle = function(id) {
           $scope.loading = 1;
 
-          var route = {
-            name:   'api_v1_backend_article_show',
-            params: { id: id }
-          };
+          var route = !id ? 'api_v1_backend_article_create' :
+            { name: 'api_v1_backend_article_show', params: { id: id } };
 
           http.get(route).then(function(response) {
-            $scope.loading    = 0;
-            $scope.data       = response.data;
+            $scope.loading = 0;
+            $scope.data    = response.data;
+
+            // Duplicate default article when creating
+            if (!response.data.article) {
+              response.data.article = angular.copy($scope.article);
+            }
+
+            if (response.data.article) {
+              $scope.backup = { content_status: $scope.article.content_status };
+
+              // Convert metadata to an array
+              if (response.data.article.metadata) {
+                response.data.article.metadata =
+                  response.data.article.metadata.split(',');
+              }
+            }
+
+            // Load items
             $scope.article    = response.data.article;
             $scope.categories = response.data.extra.categories;
 
-            if ($scope.localize && $scope.locale) {
-              $scope.categories = $scope.ilz
-                .localize($scope.categories, $scope.locale);
-
-              $scope.article = $scope.ilz
-                .localize(response.data.article, $scope.locale);
-
-              $scope.cl.link($scope.data.extra.categories, $scope.categories);
-              $scope.il.link($scope.data.article, $scope.article);
+            // Configure the form
+            if ($scope.config.multilanguage === null) {
+              $scope.config.multilanguage = response.data.extra.multilanguage;
             }
 
-            if ($scope.article.metadata) {
-              $scope.article.metadata = $scope.article.metadata.split(',');
+            if ($scope.config.locale === null) {
+              $scope.config.locale = response.data.extra.locale;
             }
 
-            $scope.backup = { content_status: $scope.article.content_status };
+            if ($scope.config.multilanguage && $scope.config.locale) {
+              $scope.config.linkers.il =
+                linker.get(response.data.extra.keys, $scope, true);
+              $scope.config.linkers.cl =
+                linker.get([ 'title' ], $scope);
+
+              var lz = localizer.get($scope.data.extra.options);
+
+              $scope.categories =
+                lz.localize($scope.categories, $scope.locale);
+
+              $scope.article =
+                lz.localize(response.data.article, $scope.locale);
+
+              $scope.config.linkers.cl.setKey($scope.config.locale);
+              $scope.config.linkers.il.setKey($scope.config.locale);
+
+              $scope.config.linkers.cl.link(
+                $scope.data.extra.categories, $scope.categories);
+              $scope.config.linkers.il.link(
+                $scope.data.article, $scope.article);
+            }
 
             $scope.checkDraft();
           }, function(response) {
@@ -563,7 +570,7 @@
               }
 
               webStorage.session.set(key, {
-                article:             $scope.article,
+                article:             $scope.data.article,
                 photo1:              $scope.photo1,
                 photo2:              $scope.photo2,
                 photo3:              $scope.photo3,
@@ -633,20 +640,6 @@
               $scope.article.metadata = response.data.split(',');
             });
           }, 2500);
-        });
-
-        // Localizes contents when locale changes
-        $scope.$watch('locale', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if ($scope.localize && $scope.locale) {
-            $scope.cl.setKey(nv);
-            $scope.il.setKey(nv);
-            $scope.cl.update();
-            $scope.il.update();
-          }
         });
 
         // Enable drafts after 5s to grant CKEditor initialization
