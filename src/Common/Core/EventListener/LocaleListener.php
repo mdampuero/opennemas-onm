@@ -83,11 +83,6 @@ class LocaleListener implements EventSubscriberInterface
             $slug = $request->attributes->get('_locale');
         }
 
-        // Get locale from request parameters
-        if (!empty($request->query->get('language'))) {
-            $slug = $request->query->get('language');
-        }
-
         if (empty($slug)) {
             return;
         }
@@ -100,6 +95,11 @@ class LocaleListener implements EventSubscriberInterface
             ));
 
             return;
+        }
+
+        // Get locale from request parameters
+        if (!empty($request->query->get('language'))) {
+            $slug = $request->query->get('language');
         }
 
         $locale = array_search($slug, $this->locale->getSlugs());
