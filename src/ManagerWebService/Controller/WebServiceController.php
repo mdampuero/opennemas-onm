@@ -108,18 +108,14 @@ class WebServiceController extends Controller
             $timezone = 'UTC';
         }
 
+        $siteLanguage = $request->request->filter('language', '', FILTER_SANITIZE_STRING);
+
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('User');
         $creator   = new InstanceCreator(
             $em->getConnection('instance'),
             $this->get('application.log')
         );
-
-        $settings = [
-            'site_language' => $request->request->filter('language', '', FILTER_SANITIZE_STRING),
-            'time_zone'     => $timezone,
-            'site_created'  => $instance->created,
-        ];
 
         $user = new User($converter->objectify([
             'activated'     => true,
@@ -158,8 +154,18 @@ class WebServiceController extends Controller
             $em->getConnection('instance')
                 ->selectDatabase($instance->getDatabaseName());
 
-            // Save settings and user
-            $em->getDataSet('Settings', 'instance')->set($settings);
+            // Save settings and user            // Save settings and user
+            $locale = $em->getDataSet('Settings', 'instance')->get('locale');
+
+            $locale['frontend']['timezone']             = $timezone;
+            $locale['backend']['timezone']              = $timezone;
+            $locale['backend']['language']['selected']  = $siteLanguage;
+            $locale['frontend']['language']['selected'] = $siteLanguage;
+
+            $em->getDataSet('Settings', 'instance')->set([
+                'locale'       => $locale,
+                'site_created' => $instance->created,
+            ]);
             $em->persist($user, 'instance');
         } catch (DatabaseNotRestoredException $e) {
             // Can not create database
