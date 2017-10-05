@@ -72,9 +72,6 @@
          *   Configures and initializes the list.
          */
         $scope.init = function() {
-          $scope.config.linkers.il = linker.get([ 'title' ], $scope);
-          $scope.config.linkers.cl = linker.get([ 'title' ], $scope);
-
           oqlEncoder.configure({
             placeholder: {
               title: 'title ~ "%[value]%"',
@@ -107,6 +104,15 @@
               $scope.config.multilanguage = response.data.extra.multilanguage;
             }
 
+            if (!$scope.config.linkers.il) {
+              $scope.config.linkers.il =
+                linker.get(response.data.extra.keys, $scope, false);
+            }
+
+            if (!$scope.config.linkers.cl) {
+              $scope.config.linkers.cl = linker.get([ 'title' ], $scope, false);
+            }
+
             if ($scope.config.locale === null) {
               $scope.config.locale = response.data.extra.locale;
 
@@ -119,10 +125,7 @@
             $scope.categories = response.data.extra.categories;
 
             if ($scope.config.multilanguage && $scope.config.locale) {
-              var lz = localizer.get({
-                keys: [ 'title', 'name' ],
-                locales: [ 'es', 'gl' ]
-              });
+              var lz = localizer.get({ keys: $scope.data.extra.keys });
 
               $scope.categories =
                 lz.localize($scope.categories, $scope.config.locale);
