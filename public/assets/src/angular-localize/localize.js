@@ -255,9 +255,9 @@
               return value[locale];
             }
 
-            for (var i = 0; i < this.config.locales.length; i++) {
-              if (value[this.config.locales[i]]) {
-                return value[this.config.locales[i]];
+            for (var i = 0; i < this.config.available.length; i++) {
+              if (value[this.config.available[i]]) {
+                return value[this.config.available[i]];
               }
             }
 
