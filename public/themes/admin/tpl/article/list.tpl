@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ArticleListCtrl" ng-init="init({if !empty($multilanguage) && $multilanguage}true{/if})">
+<div ng-app="BackendApp" ng-controller="ArticleListCtrl" ng-init="init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -15,12 +15,12 @@
               {t}Articles{/t}
             </h4>
           </li>
-          {if !empty($multilanguage) && $multilanguage}
-            <li class="quicklinks">
-              <button class="btn" ng-click="locale = 'es'" type="button">es</button>
-              <button class="btn" ng-click="locale = 'gl'" type="button">gl</button>
-            </li>
-          {/if}
+          <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.multilanguage">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="config.multilanguage">
+            <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.options"></translator>
+          </li>
           <li class="quicklinks visible-xs">
             <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
               <i class="fa fa-question fa-lg"></i>
@@ -204,7 +204,8 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                    <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]">
+                    <translator class="m-r-10" item="content" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" ng-model="config.locale" options="data.extra.options"></translator>
+                    <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}
