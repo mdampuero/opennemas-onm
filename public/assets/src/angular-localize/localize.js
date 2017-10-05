@@ -20,8 +20,15 @@
        *
        * @return {Object} The linker
        */
-      this.get = function(keys, scope) {
+      this.get = function(keys, scope, clean) {
         return {
+          /**
+           * Flag to delete objects not found in original values when enabled.
+           *
+           * @type {Boolean}
+           */
+          clean: clean,
+
           /**
            * The current key name to update.
            *
@@ -143,7 +150,9 @@
           updateLocalized: function(localized, original) {
             for (var i = 0; i < this.keys.length; i++) {
               if (original[this.keys[i]]) {
-                delete localized[this.keys[i]];
+                if (this.clean) {
+                  delete localized[this.keys[i]];
+                }
 
                 if (original[this.keys[i]][this.key]) {
                   localized[this.keys[i]] = original[this.keys[i]][this.key];
@@ -200,7 +209,7 @@
            *
            * @type {Object}
           */
-          config: angular.merge({ keys: [], locale: 'en' }, config),
+          config: angular.merge({ keys: [] }, config),
 
           /**
            * Localizes an item or an array of items.
