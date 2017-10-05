@@ -7,6 +7,20 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
     'use strict';
 
     /**
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *  The list configuration.
+     *
+     * @type {Object}
+     */
+    $scope.config = {
+      linkers: {},
+      locale: null,
+      multilanguage: null
+    };
+
+    /**
      * Inserts an array of items in a CKEditor instance.
      *
      * @param string target The target id.
@@ -107,6 +121,22 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       }
 
       $scope.insertInModel(args.target, args.items);
+    });
+
+    // Updates linkers when locale changes
+    $scope.$watch('config.locale', function(nv, ov) {
+      if (nv === ov) {
+        return;
+      }
+
+      if (!$scope.config.multilanguage || !$scope.config.locale) {
+        return;
+      }
+
+      for (var key in $scope.config.linkers) {
+        $scope.config.linkers[key].setKey(nv);
+        $scope.config.linkers[key].update();
+      }
     });
 
     // Initialize the scope with the input/select values.
