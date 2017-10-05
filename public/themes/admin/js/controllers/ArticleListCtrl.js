@@ -69,25 +69,18 @@
          * @memberOf ArticleListCtrl
          *
          * @description
-         *   Initializes services and list articles.
-         *
-         * @param {Boolean} localize Whether this content supports localization.
+         *   Configures and initializes the list.
          */
-        $scope.init = function(localize) {
-          $scope.localize = localize;
+        $scope.init = function() {
+          $scope.config.linkers.il = linker.get([ 'title' ], $scope);
+          $scope.config.linkers.cl = linker.get([ 'title' ], $scope);
 
-          if ($scope.localize && $scope.locale) {
-            $scope.ilz = localizer.get({
-              keys: [ 'title', 'name' ],
-              locales: [ 'es', 'gl' ]
-            });
-
-            $scope.cl = linker.get([ 'title' ], $scope);
-            $scope.il = linker.get([ 'title' ], $scope);
-
-            $scope.cl.setKey($scope.locale);
-            $scope.il.setKey($scope.locale);
-          }
+          oqlEncoder.configure({
+            placeholder: {
+              title: 'title ~ "%[value]%"',
+              fk_user_group: '[key] regexp "^[value],|^[value]$|,[value],|,[value]$"'
+            }
+          });
 
           $scope.list();
         };
@@ -98,13 +91,6 @@
         $scope.list = function() {
           $scope.loading  = 1;
 
-          oqlEncoder.configure({
-            placeholder: {
-              title: 'title ~ "%[value]%"',
-              fk_user_group: '[key] regexp "^[value],|^[value]$|,[value],|,[value]$"'
-            }
-          });
-
           var oql = oqlEncoder.getOql($scope.criteria);
 
           $location.search('oql', oql);
@@ -113,20 +99,40 @@
             name: 'api_v1_backend_articles_list',
             params: { oql: oql }
           }).then(function(response) {
-            $scope.loading    = 0;
-            $scope.data       = response.data;
+            $scope.loading = 0;
+            $scope.data    = response.data;
+
+            // Configure the list
+            if ($scope.config.multilanguage === null) {
+              $scope.config.multilanguage = response.data.extra.multilanguage;
+            }
+
+            if ($scope.config.locale === null) {
+              $scope.config.locale = response.data.extra.locale;
+
+              $scope.config.linkers.cl.setKey($scope.config.locale);
+              $scope.config.linkers.il.setKey($scope.config.locale);
+            }
+
+            // Load items
             $scope.items      = response.data.results;
             $scope.categories = response.data.extra.categories;
 
-            if ($scope.localize && $scope.locale) {
-              $scope.categories = $scope.ilz
-                .localize($scope.categories, $scope.locale);
+            if ($scope.config.multilanguage && $scope.config.locale) {
+              var lz = localizer.get({
+                keys: [ 'title', 'name' ],
+                locales: [ 'es', 'gl' ]
+              });
 
-              $scope.items = $scope.ilz
-                .localize($scope.items, $scope.locale);
+              $scope.categories =
+                lz.localize($scope.categories, $scope.config.locale);
+              $scope.items =
+                lz.localize($scope.items, $scope.config.locale);
 
-              $scope.cl.link($scope.data.extra.categories, $scope.categories);
-              $scope.il.link($scope.data.results, $scope.items);
+              $scope.config.linkers.cl.link(
+                $scope.data.extra.categories, $scope.categories);
+              $scope.config.linkers.il.link(
+                $scope.data.results, $scope.items);
             }
 
             // Scroll top
