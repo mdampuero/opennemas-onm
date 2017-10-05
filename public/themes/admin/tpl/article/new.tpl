@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="articleForm" ng-controller="ArticleCtrl" ng-init="init({if !empty($multilanguage) && $multilanguage}true{/if}{if !empty($id)}, {$id}{/if})" novalidate>
+<form name="articleForm" ng-controller="ArticleCtrl" ng-init="init()" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -15,12 +15,6 @@
                 {t}Articles{/t}
               </h4>
             </li>
-            {if !empty($multilanguage) && $multilanguage}
-              <li class="quicklinks">
-                <button class="btn" ng-click="locale = 'es'" type="button">es</button>
-                <button class="btn" ng-click="locale = 'gl'" type="button">gl</button>
-              </li>
-            {/if}
             <li class="quicklinks visible-xs">
               <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question fa-lg"></i>
@@ -33,6 +27,12 @@
               <h5>
                 {if !isset($id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
+            </li>
+            <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.multilanguage">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks ng-cloak" ng-if="config.multilanguage">
+              <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.options"></translator>
             </li>
           </ul>
           <div class="all-actions pull-right">
