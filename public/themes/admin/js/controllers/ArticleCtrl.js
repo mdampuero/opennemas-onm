@@ -157,7 +157,9 @@
          *
          * @param {Integer} id The article id when editing.
          */
-        $scope.init = function(id) {
+        $scope.init = function(locale, id) {
+          $scope.forcedLocale = locale;
+
           $scope.getArticle(id);
         };
 
@@ -206,6 +208,11 @@
 
             if ($scope.config.locale === null) {
               $scope.config.locale = response.data.extra.locale;
+            }
+
+            if ($scope.forcedLocale && Object.keys($scope.data.extra.options
+                .available).indexOf($scope.forcedLocale)) {
+              $scope.config.locale = $scope.forcedLocale;
             }
 
             if ($scope.config.multilanguage && $scope.config.locale) {
