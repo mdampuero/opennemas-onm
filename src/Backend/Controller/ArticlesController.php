@@ -31,31 +31,25 @@ class ArticlesController extends Controller
      */
     public function listAction()
     {
-        return $this->render('article/list.tpl', [
-            'multilanguage' => in_array(
-                'es.openhost.module.multilanguage',
-                $this->get('core.instance')->activated_modules
-            )
-        ]);
+        return $this->render('article/list.tpl');
     }
 
     /**
      * Shows the form to create a new article.
+     *
+     * @param Request $request The request object.
      *
      * @return Response The response object.
      *
      * @Security("hasExtension('ARTICLE_MANAGER')
      *     and hasPermission('ARTICLE_CREATE')")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         return $this->render('article/new.tpl', [
             'commentsConfig' => $this->get('setting_repository')
                 ->get('comments_config'),
-            'multilanguage' => in_array(
-                'es.openhost.module.multilanguage',
-                $this->get('core.instance')->activated_modules
-            ),
+            'locale' => $request->query->get('locale'),
             'timezone' => $this->container->get('core.locale')
                 ->getTimeZone()->getName()
         ]);
@@ -64,21 +58,21 @@ class ArticlesController extends Controller
     /**
      * Shows the form to edit an article.
      *
+     * @param Request $request The request object.
+     * @param integer $id      The article id.
+     *
      * @return Response The response object.
      *
      * @Security("hasExtension('ARTICLE_MANAGER')
      *     and hasPermission('ARTICLE_UPDATE')")
      */
-    public function showAction($id)
+    public function showAction(Request $request, $id)
     {
         return $this->render('article/new.tpl', [
             'commentsConfig' => $this->get('setting_repository')
                 ->get('comments_config'),
             'id' => $id,
-            'multilanguage' => in_array(
-                'es.openhost.module.multilanguage',
-                $this->get('core.instance')->activated_modules
-            ),
+            'locale' => $request->query->get('locale'),
             'timezone' => $this->container->get('core.locale')
                 ->getTimeZone()->getName()
         ]);

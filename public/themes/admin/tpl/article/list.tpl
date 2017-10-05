@@ -31,7 +31,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               {acl isAllowed="ARTICLE_CREATE"}
-              <a class="btn btn-primary" href="{url name=admin_article_create}" id="create-button">
+              <a class="btn btn-primary" href="{url name=admin_article_create}[% config.multilanguage ? '?locale=' + config.locale : '' %]" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>
