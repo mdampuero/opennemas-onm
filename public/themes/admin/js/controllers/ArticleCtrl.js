@@ -259,9 +259,12 @@
           $scope.previewLoading = true;
 
           var data = angular.copy($scope.article);
-          data.metadata = data.metadata.map(function(e) {
-            return e.text;
-          }).join(',');
+
+          if (angular.isArray(data.metadata)) {
+            data.metadata = data.metadata.map(function(e) {
+              return e.text;
+            }).join(',');
+          }
 
           var data = { 'article': data };
 
@@ -301,10 +304,13 @@
             return;
           }
 
-          var data = angular.copy($scope.article);
-          data.metadata = data.metadata.map(function(e) {
-            return e.text;
-          }).join(',');
+          var data = cleaner.clean(angular.copy($scope.data.article));
+
+          if (angular.isArray(data.metadata)) {
+            data.metadata = data.metadata.map(function(e) {
+              return e.text;
+            }).join(',');
+          }
 
           $scope.saving = true;
 
@@ -338,10 +344,12 @@
 
           $scope.saving = true;
 
-          var data = angular.copy($scope.article);
-          data.metadata = data.metadata.map(function(e) {
-            return e.text;
-          }).join(',');
+          var data = cleaner.clean(angular.copy($scope.data.article));
+          if (angular.isArray(data.metadata)) {
+            data.metadata = data.metadata.map(function(e) {
+              return e.text;
+            }).join(',');
+          }
 
           var route = {
             name: 'backend_ws_article_update',
