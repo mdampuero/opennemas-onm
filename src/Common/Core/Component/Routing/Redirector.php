@@ -65,7 +65,7 @@ class Redirector
             return $this->cache->get($cacheId);
         }
 
-        $translation = !empty($id) ? $this->getTranslationById($id) :
+        $translation = !empty($id) ? $this->getTranslationById($id, $type) :
             $this->getTranslationBySlug($slug, $type);
 
         if ($this->hasCache()) {
@@ -96,12 +96,17 @@ class Redirector
      *
      * @return array The content translation values.
      */
-    protected function getTranslationById($id)
+    protected function getTranslationById($id, $type = null)
     {
-        return $this->conn->fetchAssoc(
-            'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1',
-            [ $id ]
-        );
+        $sql    = 'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1';
+        $params = [ $id ];
+
+        if (!empty($type)) {
+            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? AND `type` = ? LIMIT 1';
+            array_push($params, $type);
+        }
+
+        return $this->conn->fetchAssoc($sql, $params);
     }
 
     /**
