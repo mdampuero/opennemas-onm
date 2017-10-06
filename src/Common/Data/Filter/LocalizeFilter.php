@@ -78,10 +78,16 @@ class LocalizeFilter extends Filter
 
         // Locale from request
         if (empty($locale)) {
-            $locale = $this->container->get('core.locale')->getRequestLocale();
+            $locale = $this->container->get('core.locale')
+                ->getRequestLocale('frontend');
         }
 
-        if (array_key_exists($locale, $value)) {
+        if (empty($default)) {
+            $default = $this->container->get('core.locale')
+                ->getLocale('frontend');
+        }
+
+        if (!empty($locale) && array_key_exists($locale, $value)) {
             return $value[$locale];
         }
 

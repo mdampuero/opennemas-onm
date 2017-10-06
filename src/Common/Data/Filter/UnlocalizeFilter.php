@@ -26,18 +26,19 @@ class UnlocalizeFilter extends LocalizeFilter
 
         // Locales from config
         if (empty($locales)) {
-            $locales = !empty($locale->getAvailableLocales()) ?
-                array_keys($locale->getAvailableLocales()) : [];
+            $locales = !empty($locale->getAvailableLocales('frontend')) ?
+                array_keys($locale->getAvailableLocales('frontend')) : [];
         }
 
         // Already unlocalized
         if (is_array($value)
             && (count(array_diff($locales, array_keys($value))) < count($locales)
-            || in_array($locale->getLocale(), array_keys($value), true))
+            || in_array($locale->getLocale('frontend'), array_keys($value), true))
         ) {
             return $value;
         }
 
-        return [ $locale->getLocale() => $value ];
+        return [ $locale->getLocale('frontend') => $value ];
+
     }
 }
