@@ -155,15 +155,12 @@ class Article extends Content
     {
         parent::load($data);
 
-        $this->permalink = Uri::generate(
-            'article',
-            [
-                'id'       => $this->id,
-                'date'     => date('Y-m-d', strtotime($this->created)),
-                'category' => urlencode($this->category_name),
-                'slug'     => urlencode($this->slug),
-            ]
-        );
+        $this->permalink = Uri::generate('article', [
+            'id'       => $this->id,
+            'date'     => date('Y-m-d', strtotime($this->created)),
+            'category' => urlencode($this->category_name),
+            'slug'     => urlencode($this->slug),
+        ]);
 
         return $this;
     }
