@@ -41,7 +41,7 @@
                   '</li>' +
                 '</ul>' +
               '</div>' +
-              '<div class="translator btn-group" role="group" ng-if=\"!collapsed && size < 5\">' +
+              '<div class="translator btn-group btn-group-xs" role="group" ng-if=\"!collapsed && size < 5\">' +
                 '<a ng-repeat=\"language in languages\" href="{{link + \'?locale=\' + language.value}}" class=\"btn {{language.class}}\">' +
                   '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>{{language.name}}' +
                 '</a>' +
