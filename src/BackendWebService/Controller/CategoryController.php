@@ -40,7 +40,7 @@ class CategoryController extends ContentController
         $params = $request->request->get('params');
         $inrss  = ($params && array_key_exists('inrss', $params) && $params['inrss'] == true) ? 1 : 0;
 
-        $data = array(
+        $data = [
             'id'                  => $request->request->getDigits('id', 0),
             'name'                => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
@@ -49,10 +49,10 @@ class CategoryController extends ContentController
             'internal_category'   => $request->request->getDigits('internal_category'),
             'logo_path'           => $request->request->filter('logoPath', '', FILTER_SANITIZE_STRING),
             'color'               => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
-            'params'  => array(
+            'params'  => [
                 'inrss'           => $inrss,
-            ),
-        );
+            ],
+        ];
 
         if (!$this->get('core.security')->hasExtension('es.openhost.module.multilanguage')) {
             $aux           = (object) [];
@@ -109,7 +109,7 @@ class CategoryController extends ContentController
             $msg->add(
                 sprintf(_('Category "%s" ' . $execMethod . 'd successfully.'), $data['title'][$locale]),
                 'success',
-                200
+                201
             );
             $data['id'] = $category->pk_content_category;
             return new JsonResponse(['message' => $msg->getMessages(), 'category' => $data['id']], $msg->getCode());

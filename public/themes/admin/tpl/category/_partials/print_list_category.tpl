@@ -4,17 +4,17 @@
           <a href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
               {localize_filter field=$category->title params=$language_data}
           </a>
-          <div class="listing-inline-actions" ng-init="mainTranslationField = {json_encode($category->title)|clear_json}">
+          <div class="listing-inline-actions" ng-init="mainTranslationField = {json_encode($category)|clear_json}">
               {acl isAllowed="CATEGORY_UPDATE"}
                   {if $category->internal_category != 0 && $category->internal_category != 2}
-                  <div>
-                    {is_module_activated name="es.openhost.module.multilanguage"}
-                      <translator ng-model="mainTranslationField" link="{url name=admin_category_show id=$category->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" edit-text="{t}Edit{/t}" />
-                    {/is_module_activated}
-                    <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
-                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                    </a>
-                  </div>
+                  {is_module_activated name="es.openhost.module.multilanguage"}
+                    <translator ng-model="mainTranslationField" link="{url name=admin_category_show id=$category->pk_content_category}" options="languageData" item="mainTranslationField" text="{t}Edit{/t}" keys="keys"></translator>
+                  {/is_module_activated}
+                  {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
+                  <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                  </a>
+                  {/is_module_activated}
                   {/if}
               {/acl}
               {acl isAllowed="CATEGORY_DELETE"}
@@ -80,23 +80,22 @@
   <tr>
       <td style="padding-left: 10px;">
           <div class="row">
-              <div class="col-md-1 right">
+              <div class="col-md-12">
+                <div class="p-l-20">
                   <span class="fa fa-angle-right"></span>
-              </div>
-              <div class="col-md-11">
                   <a href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
                       {localize_filter field=$subcategory->title params=$language_data}
                   </a>
-                  <div class="listing-inline-actions" ng-init="mainTranslationField = {json_encode($category->title)|clear_json};">
+                  <div class="listing-inline-actions" ng-init="mainTranslationField = {json_encode($category)|clear_json};">
                       {acl isAllowed="CATEGORY_UPDATE"}
-                        <div>
-                          {is_module_activated name="es.openhost.module.multilanguage"}
-                            <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" translator-options="languageData" translator-item="mainTranslationField" edit-text="{t}Edit{/t}" />
-                          {/is_module_activated}
-                          <a class="link" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
-                              <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                          </a>
-                        </div>
+                        {is_module_activated name="es.openhost.module.multilanguage"}
+                          <translator ng-model="lang" link="{url name=admin_category_show id=$subcategory->pk_content_category}" options="languageData" item="mainTranslationField" text="{t}Edit{/t}" keys="keys"></translator>
+                        {/is_module_activated}
+                        {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
+                        <a class="link" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
+                            <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                        </a>
+                        {/is_module_activated}
                       {/acl}
                       {acl isAllowed="CATEGORY_DELETE"}
                          {if $subcategory->internal_category != 0 && array_key_exists($subcategory->id, $contents_count['articles']) &&  $contents_count['articles'][$subcategory->id] !== 0}
@@ -117,6 +116,7 @@
                           </a>
                       {/acl}
                   </div>
+                </div>
               </div>
           </div>
       </td>

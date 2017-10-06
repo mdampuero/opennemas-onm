@@ -32,9 +32,7 @@ function smarty_function_localize_filter($params)
         return $params['field'];
     }
 
-    $field        = (object) ['field' => ''];
-    $field->field = $params['field'];
-
+    $field = (object) ['field' => $params['field']];
     $value = getService('data.manager.filter')->set($field)
         ->filter('localize', [
             'keys'   => ['field'],

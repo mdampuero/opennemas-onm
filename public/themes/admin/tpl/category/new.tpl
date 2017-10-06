@@ -16,10 +16,7 @@
 {/block}
 
 {block name="content"}
-  <script>
-      var categoryData = {$categoryData};
-  </script>
-  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="init()" enctype="multipart/form-data">
+  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="categoryData = {json_encode($categoryData)|clear_json}; init()" enctype="multipart/form-data">
     <div class="page-navbar actions-navbar ng-cloak" ng-show="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -35,9 +32,9 @@
               <h5> [% (category.pk_content_category) ? '{t}Editing category{/t}' : '{t}Creating category{/t}' %]</h5>
             </li>
           {is_module_activated name="es.openhost.module.multilanguage"}
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-            <li class="quicklinks hidden-xs">
-              <translator ng-model="lang" translator-options="languageData" translator-item="category.title"/>
+            <li class="quicklinks hidden-xs" ng-show="multilanguageEnable"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs" ng-show="multilanguageEnable">
+              <translator ng-model="lang" options="languageData" item="category" keys="multiLanguageFields"/>
             </li>
           {/is_module_activated}
           </ul>
@@ -71,15 +68,13 @@
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
-              {is_module_activated name="es.openhost.module.multilanguage"}
-              <div class="ng-cloak hidden-md hidden-lg hidden-sm clearfix">
+              <div class="ng-cloak hidden-md hidden-lg hidden-sm clearfix" ng-show="multilanguageEnable">
                 Language:
                 <div class="cleafix pull-right">
-                  <translator ng-model="lang" translator-options="languageData" translator-item="category.title"/>
+                  <translator ng-model="lang" options="languageData" item="category" keys="multiLanguageFields"/>
                 </div>
                 <hr>
               </div>
-              {/is_module_activated}
               <div class="form-group">
                 <label for="title" class="form-label">
                   {t}Title{/t}

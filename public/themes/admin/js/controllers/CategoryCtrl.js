@@ -13,8 +13,8 @@
      * @description
      *   Handles actions for category edit form.
      */
-    .controller('CategoryCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing',
-      function($controller, $rootScope, $scope, http, messenger, routing) {
+    .controller('CategoryCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', '$window',
+      function($controller, $rootScope, $scope, http, messenger, routing, $window) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -29,6 +29,7 @@
         $scope.category = {
           title:{},
           name:{},
+          internal_category: 1
         };
 
         $scope.subcategories = [];
@@ -43,14 +44,15 @@
         $scope.init = function() {
           $scope.loading = true;
           $scope.inmenu = false;
-          if(categoryData) {
-            $scope.category = categoryData.category || $scope.category;
-            $scope.subcategories = categoryData.subcategories;
-            $scope.categories = categoryData.categories;
-            $scope.configurations = categoryData.configurations;
-            $scope.internalCategories = categoryData.internal_categories;
-            $scope.languageData = categoryData.language_data || $scope.languageData;
-            $scope.categoryUrl = categoryData.image_path + '/sections/' + $scope.category.logo_path;
+          if(this.categoryData) {
+            $scope.category = this.categoryData.category || $scope.category;
+            $scope.subcategories = this.categoryData.subcategories;
+            $scope.categories = this.categoryData.categories;
+            $scope.configurations = this.categoryData.configurations;
+            $scope.internalCategories = this.categoryData.internal_categories;
+            $scope.languageData = this.categoryData.language_data || $scope.languageData;
+            $scope.categoryUrl = this.categoryData.image_path + '/sections/' + $scope.category.logo_path;
+            $scope.multilanguageEnable = this.categoryData.multilanguage_enable;
 
             $scope.pre();
             $scope.loading = false;
@@ -75,11 +77,27 @@
 
           http.put('backend_ws_category_save', data)
             .then(function(response) {
-              $scope.saving = false;
+              $scope.saving      = false;
+              if($scope.category.internal_category === 0) {
+                $scope.category.internal_category = -1;
+              }
+              var reload         = response.status === 201 && (
+                !$scope.category.id
+                || '' === $scope.category.id
+                || null === $scope.category.id
+              );
               $scope.category.id = response.data.category;
               messenger.post(response.data.message);
+              if (reload) {
+                setTimeout(function(){
+                  $window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + routing.generate('admin_category_show', {id: $scope.category.id});
+                }, 2000);
+              }
             }, function(response) {
               $scope.saving = false;
+              if($scope.category.internal_category === 0) {
+                $scope.category.internal_category = -1;
+              }
               messenger.post(response.data);
             });
         };
@@ -88,8 +106,8 @@
          * Precalculation of params needed
          */
         $scope.pre = function() {
-          var languageData = $scope.languageData || {all:['default'], locale:'default'};
-          Object.keys(languageData.all).forEach(function (langAux) {
+          var languageData = $scope.languageData || {available:['default'], locale:'default'};
+          Object.keys(languageData.available).forEach(function (langAux) {
             if(!$scope.category.title[langAux]) {
               $scope.category.title[langAux] = '';
             }
@@ -98,11 +116,17 @@
             }
           });
 
+          if($scope.category.internal_category === 0) {
+            $scope.category.internal_category = -1;
+          }
+
           $scope.lang = languageData.locale || languageData['default'];
 
           $scope.allowedCategories = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
-            var value = (categoryKey === 0)?'Internal':$scope.internalCategories.internalCategories[categoryKey].title;
-            return {'code':categoryKey, 'value':value};
+            if (categoryKey === 0) {
+              return {'code':-1, 'value':'Internal'};
+            }
+            return {'code':categoryKey, 'value':$scope.internalCategories.internalCategories[categoryKey].title};
           });
 
           if(!$scope.category.internal_category) {
@@ -115,13 +139,14 @@
               $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title});
             }
           }
+          $scope.multiLanguageFields = ['title', 'name']
         };
 
         /**
          * Precalculation needed before save.
          */
         $scope.preSave = function() {
-          Object.keys($scope.languageData.all).forEach(function (langAux) {
+          Object.keys($scope.languageData.available).forEach(function (langAux) {
             if($scope.category.title[langAux].trim() === '') {
               delete $scope.category.title[langAux];
             }
@@ -129,24 +154,19 @@
               delete $scope.category.name[langAux];
             }
           });
+          if($scope.category.internal_category === -1) {
+            $scope.category.internal_category = 0;
+          }
         };
 
+        /**
+         * This method load the slug text when the title value changes
+         */
         $scope.loadSlug = function() {
-
           $scope.getSlug($scope.category.title[$scope.lang], function(response) {
               $scope.category.name[$scope.lang] = response.data.slug;
-              $scope.loading = false;
             }
           );
-          /*
-          var config = {name: 'api_v1_backend_tools_slug', params: {'slug':$scope.category.title[$scope.lang]}};
-          http.get(config).then(function(response) {
-            $scope.category.name[$scope.lang] = response.data.slug;
-
-            $scope.loading = false;
-          }, function() {
-          });
-          */
         };
 
         /**

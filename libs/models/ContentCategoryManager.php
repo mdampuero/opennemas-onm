@@ -115,7 +115,7 @@ class ContentCategoryManager
 
             return $this->categories;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -175,7 +175,7 @@ class ContentCategoryManager
 
             return $items;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return [];
         }
     }
@@ -204,7 +204,7 @@ class ContentCategoryManager
 
                 return $rs['name'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -238,7 +238,7 @@ class ContentCategoryManager
 
                 return $rs['pk_content_category'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -275,7 +275,7 @@ class ContentCategoryManager
 
                 return $rs['title'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -315,7 +315,7 @@ class ContentCategoryManager
 
                 return $category;
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -340,30 +340,8 @@ class ContentCategoryManager
      */
     public function getAllSubcategories($id)
     {
-        if (true|| is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAll(
-                    'SELECT name,title,internal_category '
-                    . 'FROM content_categories WHERE internal_category<>0 '
-                    . 'AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu',
-                    [ $id ]
-                );
-
-                if (!$rs) {
-                    return null;
-                }
-
-                $items = [];
-                foreach ($rs as $row) {
-                    $items[$row['name']]['title']             = $row['title'];
-                    $items[$row['name']]['internal_category'] = $row['internal_category'];
-                }
-
-                return $items;
-            } catch (\Exception $e) {
-                error_log($e->getMessage());
-                return false;
-            }
+        if (is_null($this->categories)) {
+            $this->categories = $this->cache->populateCategories();
         }
 
         // Singleton version
@@ -375,10 +353,13 @@ class ContentCategoryManager
                 && ($category->inmenu == 1)
                 && ($category->fk_content_category == $id)
             ) {
-                $items[$category->name]['title'] = $category->title;
+                if (!isset($items[$category->pk_content_category])) {
+                    $items[$category->pk_content_category] = [];
+                }
 
-                $items[$category->name]['internal_category'] =
-                    $category->internal_category;
+                $items[$category->pk_content_category]['title']             = $category->title;
+                $items[$category->pk_content_category]['name']              = $category->name;
+                $items[$category->pk_content_category]['internal_category'] = $category->internal_category;
             }
         }
 
@@ -445,7 +426,6 @@ class ContentCategoryManager
             }
 
             return ($a->internal_category < $b->internal_category) ? 1 : +1;
-
         });
 
         return $categories;
@@ -513,7 +493,7 @@ class ContentCategoryManager
 
                 return $rs['name'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -555,7 +535,7 @@ class ContentCategoryManager
 
                 return $rs[0]['name'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -598,7 +578,7 @@ class ContentCategoryManager
 
                 return intval($rs['total']) > 0;
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -640,7 +620,7 @@ class ContentCategoryManager
 
             return $rs['content_count'] == 0 && $rs2['content_count'] == 0;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -666,7 +646,7 @@ class ContentCategoryManager
 
             return $rs['number'] == 0;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -695,7 +675,7 @@ class ContentCategoryManager
                 return 0;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -735,7 +715,7 @@ class ContentCategoryManager
 
             return $groups;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -853,7 +833,7 @@ class ContentCategoryManager
 
             return $rs['catName'];
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }

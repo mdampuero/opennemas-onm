@@ -38,14 +38,16 @@ class CategoriesController extends Controller
      */
     public function listAction()
     {
-        $categories   = $this->get('category_repository')->findBy(null, 'name ASC');
+        $cm           = $this->get('category_repository');
+        $categories   = $cm->findBy(null, 'name ASC');
         $languageData = $this->getLocaleData('frontend', null, true);
-        $fm           = $this->get('data.manager.filter');
 
-        $categories = $fm->set($categories)->filter('unlocalize', [
+        $categories = $this->get('data.manager.filter')->set($categories)->filter('unlocalize', [
             'keys' => \ContentCategory::getL10nKeys(),
             'locale' => $languageData['default']
         ])->get();
+
+        $cm->sortCategories($categories, $languageData);
 
         $contentsCount['articles'] =
             \ContentCategoryManager::countContentsByGroupType(1);
@@ -97,18 +99,17 @@ class CategoriesController extends Controller
             }
         }
 
-        $jsonData = json_encode([
-            'categories'          => $this->categoryMapping($allcategories),
-            'configurations'      => s::get('section_settings'),
-            'category'            => $this->categoryMapping($category),
-            'subcategories'       => $this->categoryMapping($subcategories),
-            'internal_categories' => $this->getInternalCategories(),
-            'image_path'          => MEDIA_URL . MEDIA_DIR,
-            'language_data'       => $languageData,
-        ]);
-
         return $this->render('category/new.tpl', [
-            'categoryData' => $jsonData
+            'categoryData' => [
+                'categories'            => $this->categoryMapping($allcategories),
+                'configurations'        => s::get('section_settings'),
+                'category'              => $this->categoryMapping($category),
+                'subcategories'         => $this->categoryMapping($subcategories),
+                'internal_categories'   => $this->getInternalCategories(),
+                'image_path'            => MEDIA_URL . MEDIA_DIR,
+                'language_data'         => $languageData,
+                'multilanguage_enable'  => $this->get('core.security')->hasExtension('es.openhost.module.multilanguage')
+            ]
         ]);
     }
 
@@ -306,11 +307,11 @@ class CategoriesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_categories_config'));
         } else {
-            $configurations = s::get(array('section_settings',));
+            $configurations = s::get(['section_settings']);
 
             return $this->render(
                 'category/config.tpl',
-                array('configs'   => $configurations,)
+                ['configs'   => $configurations]
             );
         }
     }
