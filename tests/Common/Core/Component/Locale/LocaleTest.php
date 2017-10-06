@@ -96,6 +96,7 @@ class LocaleTest extends KernelTestCase
     {
         $this->locale->setContext('');
         $this->assertEquals('frontend', $this->locale->getContext());
+        $this->assertEquals('foo', $this->locale->getContext('foo'));
         $this->assertEquals('frontend', $this->locale->setContext('frontend')->getContext());
         $this->assertEquals('frontend', $this->locale->setContext('grault')->getContext());
         $this->assertEquals('backend', $this->locale->setContext('backend')->getContext());
