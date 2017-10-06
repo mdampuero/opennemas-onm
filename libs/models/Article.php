@@ -209,6 +209,12 @@ class Article extends Content
      */
     public function create($data)
     {
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
+
         if (!isset($data['description'])) {
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
@@ -288,6 +294,12 @@ class Article extends Content
      */
     public function update($data)
     {
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
+
         // Update an article
         if (!$data['description']) {
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);

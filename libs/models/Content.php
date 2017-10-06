@@ -490,6 +490,12 @@ class Content implements \JsonSerializable
      */
     public function create($data)
     {
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
+
         $data['content_status'] = (empty($data['content_status'])) ? 0 : intval($data['content_status']);
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
@@ -599,6 +605,12 @@ class Content implements \JsonSerializable
     public function update($data)
     {
         $this->read($data['id']);
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
 
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
