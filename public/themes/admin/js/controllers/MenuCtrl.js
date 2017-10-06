@@ -31,6 +31,17 @@
          */
         $scope.menu = {};
 
+        $scope.init = function(menu, languageData) {
+          $scope.languageData = languageData;
+          if ($scope.languageData.available.length === 0) {
+            $scope.languageData.available[$scope.languageData.default] = $scope.languageData.default;
+          }
+
+          $scope.menu = menu;
+
+          $scope.lang = languageData.locale || languageData.default;
+        };
+
         /**
          * @function open
          * @memberOf MenuCtrl
@@ -50,7 +61,22 @@
               $scope.menu.items = [];
             }
 
-            $scope.menu.items = $scope.menu.items.concat(response.items);
+            var items = response.items.map(function(item) {
+              var title = {};
+              var link = {};
+
+              Object.keys($scope.languageData.available).forEach(function(langAux) {
+                title[langAux] = item.title
+                link[langAux] = item.link
+              });
+
+              item.title = title;
+              item.link = link;
+
+              return item;
+            });
+
+            $scope.menu.items = $scope.menu.items.concat(items);
           });
         };
 
