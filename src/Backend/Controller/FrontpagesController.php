@@ -1,10 +1,5 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -83,11 +78,10 @@ class FrontpagesController extends Controller
         }
 
         // Fetch menu categories and override group
-        $menu          = new \Menu();
-        $menuFrontpage = $menu->getMenu('frontpage');
-        $menuItems     = (is_object($menuFrontpage)
-            && $menuFrontpage instanceof \Menu) ? $menuFrontpage->items : [];
-        foreach ($menuItems as $item) {
+        $menu        = new \Menu();
+        $menu        = $menu->getMenu('frontpage');
+        $menu->items = (is_object($menu) && $menu instanceof \Menu) ? $menu->items : [];
+        foreach ($menu->items as $item) {
             $id = $ccm->get_id($item->link);
             if ($item->type == 'category') {
                 $categories[$id] = [

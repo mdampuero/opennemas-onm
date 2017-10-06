@@ -367,7 +367,6 @@ class Locale
 
         $this->addTextDomain($domain, $this->path);
         textdomain($domain);
-
     }
 
     /**

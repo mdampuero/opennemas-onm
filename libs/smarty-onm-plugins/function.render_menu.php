@@ -6,6 +6,10 @@
  */
 function smarty_function_render_menu($params, &$smarty)
 {
+    // Disable caching for this partial
+    $caching = $smarty->caching;
+
+    $smarty->caching = 0;
     // Initializing parameters
     $tpl      = (isset($params['tpl']) ? $params['tpl'] : null);
     $menuName = (isset($params['name']) ? $params['name'] : null);
@@ -23,16 +27,22 @@ function smarty_function_render_menu($params, &$smarty)
     } else {
         $criteria = [ 'position' => [ [ 'value' => $position ] ], ];
     }
+
     $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
+
+    if (is_null($menu)) {
+        return $menu;
+    }
+
+    $menu->items = $menu->localize($menu->getRawItems());
 
     $smarty->assign([
         'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
         'actual_category' => $params['actual_category'],
     ]);
+    $output .= "\n" . $smarty->fetch($tpl);
 
-    $caching = $smarty->caching;
-    $smarty->caching = 0;
-    $output .= "\n". $smarty->fetch($tpl);
+    // Restore previous caching value
     $smarty->caching = $caching;
 
     // Render menu items

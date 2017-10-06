@@ -85,7 +85,6 @@ class WebServiceController extends Controller
             'support_plan'      => 'SUPPORT_NONE'
         ]);
 
-
         $instance->activated_modules =
             array_merge($instance->activated_modules, $pack->modules_included);
 
@@ -109,18 +108,14 @@ class WebServiceController extends Controller
             $timezone = 'UTC';
         }
 
+        $siteLanguage = $request->request->filter('language', '', FILTER_SANITIZE_STRING);
+
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('User');
         $creator   = new InstanceCreator(
             $em->getConnection('instance'),
             $this->get('application.log')
         );
-
-        $settings = [
-            'site_language' => $request->request->filter('language', '', FILTER_SANITIZE_STRING),
-            'time_zone'     => $timezone,
-            'site_created'  => $instance->created,
-        ];
 
         $user = new User($converter->objectify([
             'activated'     => true,
@@ -139,13 +134,13 @@ class WebServiceController extends Controller
             );
 
         try {
-            $errors = [];
-            $companyMail = array(
+            $errors      = [];
+            $companyMail = [
                 'company_mail' => $this->params["company_mail"],
                 'info_mail'    => $this->params["info_mail"],
                 'sender_mail'  => $this->params["no_reply_sender"],
                 'from_mail'    => $this->params["no_reply_from"],
-            );
+            ];
 
             $em->persist($instance);
             $instance->refresh();
@@ -159,8 +154,18 @@ class WebServiceController extends Controller
             $em->getConnection('instance')
                 ->selectDatabase($instance->getDatabaseName());
 
-            // Save settings and user
-            $em->getDataSet('Settings', 'instance')->set($settings);
+            // Save settings and user            // Save settings and user
+            $locale = $em->getDataSet('Settings', 'instance')->get('locale');
+
+            $locale['frontend']['timezone']             = $timezone;
+            $locale['backend']['timezone']              = $timezone;
+            $locale['backend']['language']['selected']  = $siteLanguage;
+            $locale['frontend']['language']['selected'] = $siteLanguage;
+
+            $em->getDataSet('Settings', 'instance')->set([
+                'locale'       => $locale,
+                'site_created' => $instance->created,
+            ]);
             $em->persist($user, 'instance');
         } catch (DatabaseNotRestoredException $e) {
             // Can not create database
@@ -228,28 +233,30 @@ class WebServiceController extends Controller
         // Prepare message
         $message = \Swift_Message::newInstance();
         $message->setFrom($companyMail['from_mail'])
-            ->setTo(array($companyMail['info_mail'] => $companyMail['info_mail']))
+            ->setTo([$companyMail['info_mail'] => $companyMail['info_mail']])
             ->setSender($companyMail['sender_mail'], "Opennemas")
             ->setSubject(_("A new opennemas instance has been created"))
             ->setBody(
                 $this->renderView(
                     'instance/emails/newInstanceToCompany.tpl',
-                    array(
+                    [
                         'data'        => $data,
                         'domain'      => $domain,
                         'plan'        => $plan
-                    )
+                    ]
                 )
             );
 
         // Send message
         $this->get('mailer')->send($message);
-        $this->get('application.log')->notice("Sending mail to company {$companyMail['info_mail']} - new instance - {$data['name']}");
+        $this->get('application.log')->notice(
+            "Sending mail to company {$companyMail['info_mail']} - new instance "
+            . " - {$data['name']}");
     }
 
     private function sendMailToUser($data, $companyMail, $domain)
     {
-        $instanceBaseURL = "http://".$data['internal_name'].".".$domain;
+        $instanceBaseURL = "http://" . $data['internal_name'] . "." . $domain;
 
         // Prepare message
         $message = \Swift_Message::newInstance();
@@ -260,12 +267,12 @@ class WebServiceController extends Controller
             ->setBody(
                 $this->renderView(
                     'instance/emails/newInstanceToUser.tpl',
-                    array(
+                    [
                         'data'              => $data,
                         'domain'            => $domain,
                         'companyMail'       => $companyMail['company_mail'],
                         'instance_base_url' => $instanceBaseURL,
-                    )
+                    ]
                 ),
                 'text/html'
             );
@@ -286,17 +293,17 @@ class WebServiceController extends Controller
             ->setBody(
                 $this->renderView(
                     'instance/emails/instanceCreationError.tpl',
-                    array(
+                    [
                         'instance'  => $instance,
                         'exception' => $exception
-                    )
+                    ]
                 ),
                 'text/html'
             );
 
         // Send message
         $this->get('mailer')->send($message);
-        error_log("Error while creating instance. ".$exception->getMessage()
-            .'. Instance Data: '.json_encode($instance));
+        error_log("Error while creating instance. " . $exception->getMessage()
+            . '. Instance Data: ' . json_encode($instance));
     }
 }

@@ -67,7 +67,7 @@ class MenuManager extends BaseManager
     public function countBy($criteria)
     {
         // Building the SQL filter
-        $whereSQL  = $this->getFilterSQL($criteria);
+        $whereSQL = $this->getFilterSQL($criteria);
 
         // Executing the SQL
         $sql = "SELECT COUNT(pk_menu) FROM `menues` WHERE $whereSQL";
@@ -98,7 +98,6 @@ class MenuManager extends BaseManager
             || !is_object($entity)
         ) {
             $entity = new \Menu($id);
-            $entity->items = $entity->getMenuItems($entity->pk_menu);
 
             if ($this->hasCache()) {
                 $this->cache->save($cacheId, $entity);
@@ -127,6 +126,7 @@ class MenuManager extends BaseManager
         if (!empty($order)) {
             $orderSQL = $this->getOrderBySQL($order);
         }
+
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
@@ -134,7 +134,7 @@ class MenuManager extends BaseManager
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $ids = array();
+        $ids = [];
         foreach ($rs as $resultElement) {
             $ids[] = $resultElement['pk_menu'];
         }
@@ -153,32 +153,34 @@ class MenuManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        $ids = array();
-        $keys = array();
+        $ids  = [];
+        $keys = [];
         foreach ($data as $value) {
-            $ids[] = 'menu' . $this->cacheSeparator . $value;
+            $ids[]  = 'menu' . $this->cacheSeparator . $value;
             $keys[] = $value;
         }
 
         $menus = array_values($this->cache->fetch($ids));
 
-        $cachedIds = array();
+        $cachedIds = [];
         foreach ($menus as $menu) {
             $ordered[$menu->pk_menu] = $menu;
-            $cachedIds[] = 'menu' . $this->cacheSeparator . $menu->pk_menu;
+            $cachedIds[]             = 'menu' . $this->cacheSeparator . $menu->pk_menu;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $id) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $id);
-            $menu = $this->find($contentId);
+
+            $menu    = $this->find($contentId);
             $menus[] = $menu;
         }
+
         // Unused var $contentType
         unset($contentType);
 
-        $ordered = array();
+        $ordered = [];
         foreach ($keys as $id) {
             $i = 0;
             while ($i < count($menus) && $menus[$i]->pk_menu != $id) {
@@ -198,7 +200,7 @@ class MenuManager extends BaseManager
      *
      * @param array $menu The menu definition.
      */
-    public function addMenu($menu)
+    public function addMenu($name, $menu)
     {
         if (!is_array($menu)
             || !array_key_exists('name', $menu)
@@ -206,7 +208,7 @@ class MenuManager extends BaseManager
             throw new \Exception(_('Unable to register the menu'));
         }
 
-        $this->menus[$menu['name']] = array_merge($this->defaultMenu, $menu);
+        $this->menus[$name] = array_merge($this->defaultMenu, $menu);
     }
 
     /**
@@ -217,8 +219,8 @@ class MenuManager extends BaseManager
      */
     public function addMenus($menus)
     {
-        foreach ($menus as $menu) {
-            $this->addMenu($menu);
+        foreach ($menus as $name => $menu) {
+            $this->addMenu($name, $menu);
         }
     }
 
@@ -245,9 +247,12 @@ class MenuManager extends BaseManager
      */
     public function getMenus()
     {
-        return array_map(function ($a) {
-            return $a['name'];
-        }, $this->menus);
+        $menus = [];
+        foreach ($this->menus as $name => $value) {
+            $menus[$name] = $value['name'];
+        }
+
+        return $menus;
     }
 
     /**

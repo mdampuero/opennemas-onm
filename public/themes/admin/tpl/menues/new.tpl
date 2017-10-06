@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl">
+<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" ng-controller="MenuCtrl" ng-init="init({json_encode($menu)|clear_json}, {json_encode($language_data)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -32,6 +32,14 @@
                 {/if}
               </h5>
             </li>
+            {if $multilanguage}
+            <li class="hidden-xs quicklinks ng-cloak">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="hidden-xs ng-cloak">
+              <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
+            </li>
+            {/if}
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -40,7 +48,7 @@
                   <i class="fa fa-reply"></i>
                 </a>
               </li>
-              <li class="quicklinks">
+              <li class="quicklinks hidden-xs">
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
@@ -58,22 +66,30 @@
       <div class="grid simple">
         <div class="grid-body">
           <div class="row">
-            <div class="col-md-6 col-xs-12 form-group">
+            {if $multilanguage}
+            <div class="col-md-ng-cloak hidden-md hidden-lg hidden-sm clearfix">
+              Language:
+              <div class="cleafix pull-right">
+                <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
+              </div>
+              <hr>
+            </div>
+            {/if}
+            <div class="col-sm-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Name{/t}</label>
               <div class="controls">
                 <input type="text" id="name" name="name" value="{$menu->name|default:""}"
                 maxlength="120" tabindex="1" required class="form-control"
-                {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
+                {if (!empty($menu->id) && $menu->type neq 'user')} readonly="readonly" {/if} />
               </div>
             </div>
-          </div>
-          <div class="row">
             {if count($menu_positions) > 1}
-            <div class="col-md-7 col-xs-12 form-group">
+            <div class="col-sm-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Position{/t}</label>
-              <span class="help">{t}(If your theme has defined positions for menus you can assign one menu to each of them){/t}</span>
               <div class="controls">
                 {html_options options=$menu_positions selected=$menu->position name=position}
+                <br>
+                <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
               </div>
             </div>
             {/if}
@@ -83,11 +99,14 @@
       <div class="grid simple">
         <div class="grid-title clearfix">
           <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <h4><span class="semi-bold">{t}Menu contents{/t}</span></h4>
-              <h6>{t}Use drag and drop to sort and nest elements{/t}</h6>
+            <div class="col-xs-12 col-sm-6">
+              <h4><span class="semi-bold">{t}Menu structure{/t}</span></h4>
+              <h6>
+                {t}Use drag and drop to sort and nest elements.{/t}
+                <br> {t}Click on arrow to reveal more configuration options.{/t}
+              </h6>
             </div>
-            <div class="col-xs-12 col-md-6 right">
+            <div class="col-xs-12 col-sm-6 right">
               <button class="btn btn-white" type="button" ng-click="open('modal-add-item')">
                 <i class="fa fa-plus"></i>
                 {t}Add items{/t}
@@ -95,7 +114,7 @@
             </div>
           </div>
         </div>
-        <div class="grid-body" {if $menu}ng-init="menu = {json_encode($menu)|clear_json}"{/if}>
+        <div class="grid-body">
           <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
             <ol ui-tree-nodes="" ng-model="menu.items">
               <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
