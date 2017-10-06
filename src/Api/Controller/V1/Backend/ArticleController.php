@@ -167,11 +167,11 @@ class ArticleController extends Controller
             $this->get('core.instance')->activated_modules
         );
 
-        $ls          = $this->get('core.locale')->setContext('frontend');
+        $ls          = $this->get('core.locale');
         $translators = null;
-        $default     = $ls->getLocale();
+        $default     = $ls->getLocale('frontend');
 
-        $extra['locale'] = $ls->getRequestLocale();
+        $extra['locale'] = $ls->getRequestLocale('frontend');
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.translation')) {
             $translators = $this->get('setting_repository')->get('translators');
@@ -189,7 +189,7 @@ class ArticleController extends Controller
 
         $extra['options'] = [
             'default'     => $default,
-            'available'   => $ls->getAvailableLocales(),
+            'available'   => $ls->getAvailableLocales('frontend'),
             'translators' => array_unique($translators)
         ];
 
