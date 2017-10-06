@@ -27,6 +27,10 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->fm = new FilterManager($this->container);
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
@@ -58,6 +62,10 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
     {
         if ($name === 'data.manager.filter') {
             return $this->fm;
+        }
+
+        if ($name === 'core.instance') {
+            return $this->instance;
         }
 
         return null;
