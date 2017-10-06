@@ -272,9 +272,9 @@
               return value[locale];
             }
 
-            for (var i = 0; i < this.config.available.length; i++) {
-              if (value[this.config.available[i]]) {
-                return value[this.config.available[i]];
+            for (var key in this.config.available) {
+              if (value[this.config.available[key]]) {
+                return value[this.config.available[key]];
               }
             }
 
