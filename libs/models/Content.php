@@ -293,9 +293,18 @@ class Content implements \JsonSerializable
                 }
 
                 if (in_array($name, $this->getL10nKeys())) {
+                    if (!getService('core.instance')->hasMultilanguage()
+                        || getService('core.locale')->getContext() !== 'backend'
+                    ) {
+                        return getService('data.manager.filter')
+                            ->set($this->{$name})
+                            ->filter('localize')
+                            ->get();
+                    }
+
                     return getService('data.manager.filter')
                         ->set($this->{$name})
-                        ->filter('localize')
+                        ->filter('unlocalize')
                         ->get();
                 }
                 return $this->{$name};
@@ -310,6 +319,15 @@ class Content implements \JsonSerializable
      */
     public function __set($name, $value)
     {
+        if (getService('core.instance')->hasMultilanguage()
+            && in_array($name, $this->getL10nKeys())
+        ) {
+            $value = getService('data.manager.filter')
+                ->set($value)
+                ->filter('unlocalize')
+                ->get();
+        }
+
         $this->{$name} = $value;
     }
 
@@ -323,7 +341,7 @@ class Content implements \JsonSerializable
         $data = get_object_vars($this);
 
         foreach ($this->getL10nKeys() as $key) {
-            $data[$key] = $this->{$key};
+            $data[$key] = $this->__get($key);
         }
 
         return $data;
@@ -788,15 +806,12 @@ class Content implements \JsonSerializable
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
             $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
         } else {
-            $uri = Uri::generate(
-                strtolower($this->content_type_name),
-                array(
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => urlencode($this->category_name),
-                    'slug'     => urlencode($this->slug),
-                )
-            );
+            $uri = Uri::generate(strtolower($this->content_type_name), [
+                'id'       => sprintf('%06d', $this->id),
+                'date'     => date('YmdHis', strtotime($this->created)),
+                'category' => urlencode($this->category_name),
+                'slug'     => urlencode($this->slug),
+            ]);
         }
 
         return ($uri !== '') ? $uri : $this->permalink;
