@@ -55,7 +55,11 @@ class CategoriesController extends Controller
         return $this->render('category/list.tpl', [
             'categories'     => $categories,
             'contents_count' => $contentsCount,
-            'language_data'  => $languageData
+            'language_data'  => $languageData,
+            'multilanguage_enable'  => !in_array(
+                'es.openhost.module.multilanguage',
+                getService('core.instance')->activated_modules
+            )
         ]);
     }
 
@@ -108,7 +112,10 @@ class CategoriesController extends Controller
                 'internal_categories'   => $this->getInternalCategories(),
                 'image_path'            => MEDIA_URL . MEDIA_DIR,
                 'language_data'         => $languageData,
-                'multilanguage_enable'  => $this->get('core.security')->hasExtension('es.openhost.module.multilanguage')
+                'multilanguage_enable'  => !in_array(
+                    'es.openhost.module.multilanguage',
+                    getService('core.instance')->activated_modules
+                )
             ]
         ]);
     }

@@ -54,7 +54,10 @@ class CategoryController extends ContentController
             ],
         ];
 
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.multilanguage')) {
+        if (!in_array(
+            'es.openhost.module.multilanguage',
+            $this->get('core.instance')->activated_modules
+        )) {
             $aux           = (object) [];
             $aux->name     = $data['name'];
             $aux->title    = $data['title'];
