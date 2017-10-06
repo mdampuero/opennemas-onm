@@ -32,7 +32,7 @@
                   '{{text}}' +
                   '<i class=\"fa fa-angle-down\"></i>' +
                 '</button>' +
-                '<ul class=\"dropdown-menu\" role=\"menu\">' +
+                '<ul class=\"dropdown-menu\" role=\"menu\" style=\"padding:0\">' +
                   '<li ng-repeat=\"language in languages\" ng-if=\"language.value != ngModel\">' +
                     '<a href=\"{{link + \'?locale=\' + language.value}}\">' +
                       '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
@@ -54,7 +54,7 @@
                 '{{languages[ngModel].name}}' +
                 '<i class=\"fa fa-angle-down\"></i>' +
               '</button>' +
-              '<ul class=\"dropdown-menu\" role=\"menu\">' +
+              '<ul class=\"dropdown-menu\" role=\"menu\" style=\"padding:0\">' +
                 '<li ng-repeat=\"language in languages\" ng-if=\"language.value != ngModel\">' +
                   '<a href=\"#\" ng-click=\"changeSelected(language.value)\">' +
                     '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
