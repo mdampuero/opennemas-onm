@@ -556,6 +556,12 @@ class StringUtils
      */
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
+        if (is_array($string)) {
+            return array_map(function ($a) use ($useStopList, $delimiter) {
+                return \Onm\StringUtils::generateSlug($a, $useStopList, $delimiter);
+            }, $string);
+        }
+
         $string = strip_tags($string);
         // Remove UTF-8 C0 controls chars encoded in HTML entities
         // http://www.w3schools.com/charsets/ref_utf_basic_latin.asp
@@ -657,6 +663,12 @@ class StringUtils
      */
     public static function getNumWords($text, $numWords)
     {
+        if (is_array($text)) {
+            return array_map(function ($a) use ($numWords) {
+                \Onm\StringUtils::getNumWords($a, $numWords);
+            }, $text);
+        }
+
         $noHtml      = strip_tags($text);
         $description = explode(" ", $noHtml, $numWords + 1);
         array_pop($description);
