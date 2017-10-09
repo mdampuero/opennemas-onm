@@ -227,7 +227,17 @@ class PickerController extends Controller
         $languageData = $this->getLocaleData('frontend');
         $fm           = $this->get('data.manager.filter');
         $categories   = $ccm->find();
-        $categories   = $fm->set($categories)->filter('localize', [
+
+        // TODO: remove this after merging the category l10n branch
+        foreach ($categories as &$cat) {
+            if (!@unserialize($cat->title)) {
+                continue;
+            }
+
+            $cat->title = unserialize($cat->title);
+        }
+
+        $categories = $fm->set($categories)->filter('localize', [
             'keys'      => ['title', 'name'],
             'locale'    => $languageData['default']
         ])->get();
