@@ -38,7 +38,10 @@ class MigrationManagerTest extends KernelTestCase
                     'type'   => [ 'literal' ],
                     'params' => [ 'literal' => [ 'value' => 'bar' ] ]
                 ],
-                'foobar' => [ 'type' => [ 'html' ] ]
+                'foobar' => [
+                    'type'   => [ 'html' ],
+                    'params' => [ 'html' => [ 'value' => 'baz' ] ]
+                ]
             ]
         ];
 
@@ -56,7 +59,7 @@ class MigrationManagerTest extends KernelTestCase
      */
     public function testConfigure()
     {
-        $property  = new \ReflectionProperty($this->mm, 'config');
+        $property = new \ReflectionProperty($this->mm, 'config');
         $property->setAccessible(true);
 
         $this->mm->configure($this->config);
@@ -70,20 +73,20 @@ class MigrationManagerTest extends KernelTestCase
     public function testFilter()
     {
         $fm = $this->getMockBuilder('Common\Data\Core\FilterManager')
+            ->setMethods([ 'filter' ])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->mm->configure($this->config);
 
-        $property  = new \ReflectionProperty($this->mm, 'fm');
+        $property = new \ReflectionProperty($this->mm, 'fm');
         $property->setAccessible(true);
 
         $property->setValue($this->mm, $fm);
 
         $fm->expects($this->at(0))->method('filter')
-            ->with('literal', null, [ 'value' => 'bar' ]);
-        $fm->expects($this->at(1))->method('filter')
-            ->with('html', 'flob', []);
+            ->with('html', [ 'value' => 'baz' ])
+            ->willReturn($fm);
 
         $this->mm->filter([ 'foobar' => 'flob' ]);
     }
@@ -111,7 +114,7 @@ class MigrationManagerTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $property  = new \ReflectionProperty($this->mm, 'persister');
+        $property = new \ReflectionProperty($this->mm, 'persister');
         $property->setAccessible(true);
         $property->setValue($this->mm, $tracker);
 
@@ -151,7 +154,7 @@ class MigrationManagerTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $property  = new \ReflectionProperty($this->mm, 'tracker');
+        $property = new \ReflectionProperty($this->mm, 'tracker');
         $property->setAccessible(true);
         $property->setValue($this->mm, $tracker);
 
@@ -173,7 +176,7 @@ class MigrationManagerTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $property  = new \ReflectionProperty($this->mm, 'repository');
+        $property = new \ReflectionProperty($this->mm, 'repository');
         $property->setAccessible(true);
         $property->setValue($this->mm, $repository);
 
@@ -226,7 +229,7 @@ class MigrationManagerTest extends KernelTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $property  = new \ReflectionProperty($this->mm, 'tracker');
+        $property = new \ReflectionProperty($this->mm, 'tracker');
         $property->setAccessible(true);
         $property->setValue($this->mm, $tracker);
 
@@ -256,7 +259,7 @@ class MigrationManagerTest extends KernelTestCase
             ->setMethods([ 'persist' ])
             ->getMock();
 
-        $property  = new \ReflectionProperty($this->mm, 'persister');
+        $property = new \ReflectionProperty($this->mm, 'persister');
         $property->setAccessible(true);
         $property->setValue($this->mm, $persister);
 
