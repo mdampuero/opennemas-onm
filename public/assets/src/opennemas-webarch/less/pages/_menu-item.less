@@ -1,0 +1,74 @@
+.menu-item {
+  &.angular-ui-tree-handle {
+    background-image:none !important;
+  }
+  &.angular-ui-tree-handle span {
+    padding:0
+  }
+
+  .check-element {
+    border: 1px solid black;
+    opacity: 1;
+    padding: 10px;
+  }
+
+  &.angular-ui-tree-handle span{
+    font-weight: normal;
+  }
+
+  .menu-item-info > * {
+    display:inline-block;
+    padding:0;
+    vertical-align:top;
+  }
+
+  .menu-item-info {
+    padding-top:9px;
+    padding-left:9px;
+
+    .menu-item-type-icon,
+    .menu-item-type,
+    .menu-item-title {
+      display:inline-block;
+      font-weight: normal;
+      color:#505458;
+    }
+    .menu-item-type {
+      font-weight: normal;
+    }
+    .menu-item-title {
+      font-weight:600;
+
+    font-family: 'Open Sans';
+    }
+
+    .menu-item-type-icon {
+      padding-right:10px;
+      padding-top: 4px;
+      padding-left: 0px;
+      opacity:0.7;
+    }
+  }
+
+  .menu-item-form {
+    display: block;
+    clear:both;
+    border-top: 1px solid rgb(209, 218, 222);
+    margin-top: 10px;
+    padding: 10px;
+    margin-bottom:0;
+
+    &.ng-hide {
+      opacity: 0;
+    }
+
+    &.ng-hide-add,
+    &.ng-hide-remove {
+      transition: all linear 0.5s;
+    }
+
+    input {
+      border-color:rgb(209, 218, 222);
+    }
+  }
+}

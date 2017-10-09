@@ -343,7 +343,6 @@ class ImagesController extends Controller
                     $response->headers->add(array('Content-type' => 'text/plain'));
                 }
                 return $response;
-
             case 'DELETE':
                 break;
             default:
