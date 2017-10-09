@@ -27,7 +27,7 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
     }
 
     $modules = explode(',', $params['name']);
-    $output = '';
+    $output  = '';
 
     if (count($modules) > 1) {
         $returnContent = false;

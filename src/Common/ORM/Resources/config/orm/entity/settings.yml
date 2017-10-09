@@ -8,7 +8,7 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.settings', '@cache.connection.instance', '%orm.parameter.setting.autoload.instance%' ]
                 manager:
                     class:     Common\ORM\Database\DataSet\BaseDataSet
-                    arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.instance', '%orm.parameter.setting.autoload.manager%' ]
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.manager', '%orm.parameter.setting.autoload.manager%' ]
             mapping:
                 database:
                     table: settings
