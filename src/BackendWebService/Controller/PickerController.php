@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace BackendWebService\Controller;
 
 use Common\Core\Controller\Controller;
@@ -94,10 +101,10 @@ class PickerController extends Controller
         }
 
         return new JsonResponse([
-                'epp'     => $epp,
-                'page'    => $page,
-                'results' => $results,
-                'total'   => $total,
+            'epp'     => $epp,
+            'page'    => $page,
+            'results' => $results,
+            'total'   => $total,
         ]);
     }
 
@@ -140,14 +147,14 @@ class PickerController extends Controller
     public function saveDescriptionAction(Request $request, $id)
     {
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
-        $sql         = "UPDATE contents SET `description`=? WHERE pk_content=?";
-
-        $conn = $this->get('orm.manager')->getConnection('instance');
-
-        $this->get('cache')->delete('Photo' . "-" . $id);
 
         try {
+            $sql  = "UPDATE contents SET `description`=? WHERE pk_content=?";
+            $conn = $this->get('orm.manager')->getConnection('instance');
+
             $conn->executeUpdate($sql, [$description, $id]);
+
+            $this->get('cache')->delete('Photo' . "-" . $id);
             return new JsonResponse();
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 500);
@@ -286,14 +293,12 @@ class PickerController extends Controller
 
         $results = \Onm\StringUtils::convertToUtf8($results);
 
-        return new JsonResponse(
-            [
-                'epp'     => count($results),
-                'page'    => 1,
-                'results' => $results,
-                'total'   => count($results)
-            ]
-        );
+        return new JsonResponse([
+            'epp'     => count($results),
+            'page'    => 1,
+            'results' => $results,
+            'total'   => count($results)
+        ]);
     }
 
     /**
