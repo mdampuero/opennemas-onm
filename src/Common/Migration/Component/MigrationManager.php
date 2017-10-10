@@ -92,10 +92,11 @@ class MigrationManager
     {
         foreach ($this->config['filter'] as $key => $options) {
             foreach ($options['type'] as $name) {
-                $value  = null;
-                if (array_key_exists($key, $item)) {
-                    $value = $item[$key];
+                if (!array_key_exists($key, $item)) {
+                    continue;
                 }
+
+                $value = $item[$key];
 
                 $params = [];
                 if (array_key_exists('params', $options)
@@ -104,7 +105,9 @@ class MigrationManager
                     $params = $this->translateParams($item, $options['params'][$name]);
                 }
 
-                $item[$key] = $this->fm->filter($name, $value, $params);
+                $item[$key] = $this->fm->set($value)
+                    ->filter($name, $params)
+                    ->get();
             }
         }
 
