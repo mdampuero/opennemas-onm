@@ -349,12 +349,9 @@ class SettingController extends Controller
         if (array_key_exists('locale', $settings)
             && is_array($settings['locale'])
         ) {
-            if (array_key_exists('backend', $settings['locale'])) {
-                $settings['site_language'] = $settings['locale']['backend'];
-            }
-
-            if (array_key_exists('timezone', $settings['locale'])) {
-                $settings['time_zone'] = $settings['locale']['timezone'];
+            if (array_key_exists('frontend', $settings['locale'])) {
+                $settings['site_language'] = $settings['locale']['frontend']['language']['selected'];
+                $settings['time_zone']     = $settings['locale']['frontend']['timezone'];
             }
         }
 
