@@ -353,13 +353,11 @@ class ContentCategoryManager
                 && ($category->inmenu == 1)
                 && ($category->fk_content_category == $id)
             ) {
-                if (!isset($items[$category->pk_content_category])) {
-                    $items[$category->pk_content_category] = [];
-                }
-
-                $items[$category->pk_content_category]['title']             = $category->title;
-                $items[$category->pk_content_category]['name']              = $category->name;
-                $items[$category->pk_content_category]['internal_category'] = $category->internal_category;
+                $items[$category->pk_content_category] = [
+                    'title'         => $category->title,
+                    'name'          => $category->name,
+                    'internal_name' => $category->internal_name,
+                ];
             }
         }
 
