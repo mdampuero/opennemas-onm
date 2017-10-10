@@ -16,7 +16,8 @@
 {/block}
 
 {block name="content"}
-  <form ng-app="BackendApp" ng-controller="CategoryCtrl" ng-init="categoryData = {json_encode($categoryData)|clear_json}; init()" enctype="multipart/form-data">
+  <form ng-app="BackendApp" ng-controller="CategoryCtrl"
+  ng-init="init({json_encode($category)|clear_json}, {json_encode($extra_data)|clear_json}, {json_encode($multilanguage_enabled)|clear_json}, {json_encode($language_data)|clear_json})" enctype="multipart/form-data">
     <div class="page-navbar actions-navbar ng-cloak" ng-show="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -131,7 +132,7 @@
                       </td>
                       <td class="right">
                         <div class="btn-group">
-                          <a class="btn btn-mini" href="[% createShowCategoryUrl(subcategory.id) %]"
+                          <a class="btn btn-mini" href="[% routing.generate('admin_category_show', { id: subcategory.id }) %]"
                               title="Modificar">
                             <i class="fa fa-pencil"></i>
                           </a>
@@ -168,7 +169,7 @@
                   {t}Category available for{/t}
                 </label>
                 <div class="controls">
-                  <select name="category.internal_category" id="internal_category" ng-model="category.internal_category" ng-options="internaAux.code as internaAux.value for internaAux in allowedCategories"></select>
+                  <select name="category.internal_category" id="internal_category" ng-model="category.internal_category" ng-options="key as value for (key , value) in modules"></select>
                 </div>
               </div>
               <div class="form-group">
@@ -197,7 +198,7 @@
                     <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
                     <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
-                        <img src="[% categoryUrl %]" style="max-width:200px;" >
+                        <img src="[% categoryUrl %]" style="max-width:200px;" ng-show="category.logo_path !== ''" >
                     </div>
                     <div>
                       <span class="btn btn-file">
