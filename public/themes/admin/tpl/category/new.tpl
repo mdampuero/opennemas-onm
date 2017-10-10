@@ -31,12 +31,12 @@
             <li class="quicklinks hidden-xs">
               <h5> [% (category.pk_content_category) ? '{t}Editing category{/t}' : '{t}Creating category{/t}' %]</h5>
             </li>
-          {is_module_activated name="es.openhost.module.multilanguage"}
-            <li class="quicklinks hidden-xs" ng-show="multilanguageEnable"><span class="h-seperate"></span></li>
-            <li class="quicklinks hidden-xs" ng-show="multilanguageEnable">
+          {if $multilanguage_enable}
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs">
               <translator ng-model="lang" options="languageData" item="category" keys="multiLanguageFields"/>
             </li>
-          {/is_module_activated}
+          {/if}
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -68,13 +68,15 @@
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
-              <div class="ng-cloak hidden-md hidden-lg hidden-sm clearfix" ng-show="multilanguageEnable">
+              {if $multilanguage_enable}
+              <div class="ng-cloak hidden-md hidden-lg hidden-sm clearfix">
                 Language:
                 <div class="cleafix pull-right">
                   <translator ng-model="lang" options="languageData" item="category" keys="multiLanguageFields"/>
                 </div>
                 <hr>
               </div>
+              {/if}
               <div class="form-group">
                 <label for="title" class="form-label">
                   {t}Title{/t}
