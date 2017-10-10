@@ -41,26 +41,24 @@
          * @description
          *   Initizalice the class for .
          */
-        $scope.init = function() {
+        $scope.init = function(category, extraData, multilanguageEnable, languageData) {
           $scope.loading = true;
           $scope.inmenu = false;
-          if(this.categoryData) {
-            $scope.category = this.categoryData.category || $scope.category;
-            $scope.subcategories = this.categoryData.subcategories;
-            $scope.categories = this.categoryData.categories;
-            $scope.configurations = this.categoryData.configurations;
-            $scope.internalCategories = this.categoryData.internal_categories;
-            $scope.languageData = this.categoryData.language_data || $scope.languageData;
-            $scope.categoryUrl = this.categoryData.image_path + '/sections/' + $scope.category.logo_path;
-            $scope.multilanguageEnable = this.categoryData.multilanguage_enable;
 
-            $scope.pre();
-            $scope.loading = false;
-            return;
-          }
+          $scope.languageData = languageData;
+
+          $scope.category            = ('id' in category) ? category : $scope.category;
+          $scope.subcategories       = extraData.subcategories;
+          $scope.categories          = extraData.categories;
+          $scope.modules             = extraData.modules;
+          $scope.configurations      = extraData.configurations;
+          $scope.categoryUrl         = extraData.image_path + '/sections/' + $scope.category.logo_path;
+          $scope.multilanguageEnable = multilanguageEnable;
+
+          $scope.pre();
           $scope.loading = false;
 
-          // TODO implement the ajax request for caregory info
+          // TODO implement the ajax request for category info
         };
 
         /**
@@ -78,19 +76,23 @@
           http.put('backend_ws_category_save', data)
             .then(function(response) {
               $scope.saving      = false;
-              if($scope.category.internal_category === 0) {
+
+              if ($scope.category.internal_category === 0) {
                 $scope.category.internal_category = -1;
               }
-              var reload         = response.status === 201 && (
-                !$scope.category.id
-                || '' === $scope.category.id
-                || null === $scope.category.id
+
+              var reload = response.status === 201 && (
+                !$scope.category.id ||
+                $scope.category.id === '' ||
+                $scope.category.id === null
               );
               $scope.category.id = response.data.category;
+
               messenger.post(response.data.message);
+
               if (reload) {
                 setTimeout(function(){
-                  $window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + routing.generate('admin_category_show', {id: $scope.category.id});
+                  $window.location.href = '/' + routing.generate('admin_category_show', {id: $scope.category.id});
                 }, 2000);
               }
             }, function(response) {
@@ -106,36 +108,33 @@
          * Precalculation of params needed
          */
         $scope.pre = function() {
-          var languageData = $scope.languageData || {available:['default'], locale:'default'};
-          Object.keys(languageData.available).forEach(function (langAux) {
-            if(!$scope.category.title[langAux]) {
+          $scope.languageData = $scope.languageData || {available:['default'], locale:'default'};
+
+          // Initialize all the languages
+          Object.keys($scope.languageData.available).forEach(function (langAux) {
+            if (!$scope.category.title[langAux]) {
               $scope.category.title[langAux] = '';
             }
-            if(!$scope.category.name[langAux]) {
+
+            if (!$scope.category.name[langAux]) {
               $scope.category.name[langAux] = '';
             }
           });
 
-          if($scope.category.internal_category === 0) {
+          if ($scope.category.internal_category === 0) {
             $scope.category.internal_category = -1;
           }
 
-          $scope.lang = languageData.locale || languageData['default'];
+          $scope.lang = $scope.languageData.locale || $scope.languageData['default'];
 
-          $scope.allowedCategories = $scope.internalCategories.allowedCategories.map(function(categoryKey) {
-            if (categoryKey === 0) {
-              return {'code':-1, 'value':'Internal'};
-            }
-            return {'code':categoryKey, 'value':$scope.internalCategories.internalCategories[categoryKey].title};
-          });
-
-          if(!$scope.category.internal_category) {
+          if (!$scope.category.internal_category) {
             $scope.category.internal_category = $scope.allowedCategories[0].code;
           }
+          $scope.category.internal_category = $scope.category.internal_category.toString();
 
           $scope.subsectionCategories = [];
           for(var key in $scope.categories) {
-            if($scope.category.id !== $scope.categories[key].id) {
+            if($scope.category.id !== $scope.categories[key].id && $scope.categories[key].internal_category === 1) {
               $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title});
             }
           }
@@ -146,15 +145,7 @@
          * Precalculation needed before save.
          */
         $scope.preSave = function() {
-          Object.keys($scope.languageData.available).forEach(function (langAux) {
-            if($scope.category.title[langAux].trim() === '') {
-              delete $scope.category.title[langAux];
-            }
-            if($scope.category.name[langAux].trim() === '') {
-              delete $scope.category.name[langAux];
-            }
-          });
-          if($scope.category.internal_category === -1) {
+          if ($scope.category.internal_category === -1) {
             $scope.category.internal_category = 0;
           }
         };
@@ -167,17 +158,6 @@
               $scope.category.name[$scope.lang] = response.data.slug;
             }
           );
-        };
-
-        /**
-         * Create the category url for category edition
-         *
-         * @param {number} categoryId Id for the category to edit
-         *
-         * @return string category edition url
-         */
-        $scope.createShowCategoryUrl = function(categoryId) {
-          return routing.generate('admin_category_show', {id: categoryId});
         };
 
         $scope.internalCategoriesImgs = {
