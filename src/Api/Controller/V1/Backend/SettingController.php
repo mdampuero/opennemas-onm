@@ -346,6 +346,18 @@ class SettingController extends Controller
             $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
         }
 
+        if (array_key_exists('locale', $settings)
+            && is_array($settings['locale'])
+        ) {
+            if (array_key_exists('backend', $settings['locale'])) {
+                $settings['site_language'] = $settings['locale']['backend'];
+            }
+
+            if (array_key_exists('timezone', $settings['locale'])) {
+                $settings['time_zone'] = $settings['locale']['timezone'];
+            }
+        }
+
         return $settings;
     }
 }
