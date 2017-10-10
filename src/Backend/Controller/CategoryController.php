@@ -25,7 +25,7 @@ use Onm\Settings as s;
  *
  * @package Backend_Controllers
  */
-class CategoriesController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Lists all the available categories
@@ -56,7 +56,7 @@ class CategoriesController extends Controller
             'categories'     => $categories,
             'contents_count' => $contentsCount,
             'language_data'  => $languageData,
-            'multilanguage_enable'  => !in_array(
+            'multilanguage_enable'  => in_array(
                 'es.openhost.module.multilanguage',
                 getService('core.instance')->activated_modules
             )
@@ -90,7 +90,7 @@ class CategoriesController extends Controller
         ])->get();
 
         if (empty($id)) {
-            $category      = null;
+            $category      = [];
             $subcategories = [];
         } else {
             $subcategories = $ccm->getSubcategories($id);
@@ -104,19 +104,19 @@ class CategoriesController extends Controller
         }
 
         return $this->render('category/new.tpl', [
-            'categoryData' => [
-                'categories'            => $this->categoryMapping($allcategories),
-                'configurations'        => s::get('section_settings'),
-                'category'              => $this->categoryMapping($category),
-                'subcategories'         => $this->categoryMapping($subcategories),
-                'internal_categories'   => $this->getInternalCategories(),
+            'category' => $this->categoryMapping($category),
+            'extra_data' => [
+                'categories'    => $this->categoryMapping($allcategories),
+                'subcategories' => $this->categoryMapping($subcategories),
+                'modules'       => $this->getModules(),
+                'configurations'        => $this->get('setting_repository')->get('section_settings'),
                 'image_path'            => MEDIA_URL . MEDIA_DIR,
-                'language_data'         => $languageData,
-                'multilanguage_enable'  => !in_array(
-                    'es.openhost.module.multilanguage',
-                    getService('core.instance')->activated_modules
-                )
-            ]
+            ],
+            'language_data'         => $languageData,
+            'multilanguage_enable'  => in_array(
+                'es.openhost.module.multilanguage',
+                getService('core.instance')->activated_modules
+            )
         ]);
     }
 
@@ -324,56 +324,45 @@ class CategoriesController extends Controller
     }
 
     /**
-     *  Handles the list of internalCategories needed for the view
+     *  Handles the list of modules needed for the view
      *
-     *  @return Response the list of internal categories and the permissions for them
+     *  @return Response the list of modules and the permissions for them
      */
-    private function getInternalCategories()
+    private function getModules()
     {
-        $internalCategories = [1,7,9,10,11,14,15];
-        $allowedCategories  = [1];
-
         $security = $this->get('core.security');
 
+        $modules[1] = _('All contents');
+
         if ($security->hasExtension('ALBUM_MANAGER')) {
-            $allowedCategories[] = 7;
+            $modules[7] = _('Album');
         }
 
         if ($security->hasExtension('VIDEO_MANAGER')) {
-            $allowedCategories[] = 9;
+            $modules[9] = _('Video');
         }
 
         if ($security->hasExtension('POLL_MANAGER')) {
-            $allowedCategories[] = 11;
+            $modules[11] = _('Poll');
         }
 
         if ($security->hasExtension('KIOSKO_MANAGER')) {
-            $allowedCategories[] = 14;
+            $modules[14] = _('Kiosko');
         }
 
         if ($security->hasExtension('SPECIAL_MANAGER')) {
-            $allowedCategories[] = 10;
+            $modules[10] = _('Special');
         }
 
         if ($security->hasExtension('BOOK_MANAGER')) {
-            $allowedCategories[] = 15;
+            $modules[15] = _('Book');
         }
 
         if ($security->hasPermission('MASTER')) {
-            $allowedCategories[] = 0;
+            $modules[0] = _('Internal');
         }
 
-        $internalCategoriesList = [];
-        foreach (\ContentManager::getContentTypes() as $internalCategory) {
-            if (in_array($internalCategory['pk_content_type'], $internalCategories)) {
-                $internalCategoriesList[$internalCategory['pk_content_type']] = $internalCategory;
-            }
-        }
-
-        return [
-            'internalCategories'    => $internalCategoriesList,
-            'allowedCategories'     => $allowedCategories
-        ];
+        return $modules;
     }
 
     /**

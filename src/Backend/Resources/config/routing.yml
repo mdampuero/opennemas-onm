@@ -250,46 +250,6 @@ admin_letters_content_provider:
 admin_letters_content_provider_related:
     path:     /letters/content-provider-related
     defaults: { _controller  : BackendBundle:Letters:contentProviderRelated }
-
-# Category manager routes
-admin_categories:
-    path:     /categories
-    defaults: { _controller  : BackendBundle:Categories:list }
-
-admin_categories_config:
-    path:     /categories/config
-    defaults: { _controller  : BackendBundle:Categories:config }
-
-admin_category_create:
-    path:     /categories/create
-    defaults: { _controller  : BackendBundle:Categories:show }
-
-admin_category_show:
-    path:     /categories/{id}/show
-    defaults: { _controller  : BackendBundle:Categories:show }
-    options:
-        expose: true
-
-admin_category_update:
-    path:     /category/{id}/update
-    defaults: { _controller  : BackendBundle:Categories:update }
-
-admin_category_delete:
-    path:     /category/{id}/delete
-    defaults: { _controller  : BackendBundle:Categories:delete }
-
-admin_category_empty:
-    path:     /category/{id}/empty
-    defaults: { _controller  : BackendBundle:Categories:empty }
-
-admin_category_toggleavailable:
-    path:     /category/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Categories:toggleAvailable }
-
-admin_category_togglerss:
-    path:     /category/{id}/toggle-rss
-    defaults: { _controller  : BackendBundle:Categories:toggleRss }
-
 # Image manager routes
 admin_images:
     path:     /images
@@ -1022,6 +982,10 @@ backend_author:
 backend_account:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/account.yml'
+
+backend_category:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/category.yml'
 
 backend_domain:
     prefix: /
