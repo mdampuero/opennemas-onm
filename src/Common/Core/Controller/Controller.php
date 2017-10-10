@@ -159,6 +159,10 @@ class Controller extends SymfonyController
                 ->hasPermission('es.openhost.module.translation')
         ) {
             $translators = $this->get('setting_repository')->get('translators');
+
+            if (empty($translators)) {
+                $translators = [];
+            }
         }
 
         $translators = array_map(function ($a) {
