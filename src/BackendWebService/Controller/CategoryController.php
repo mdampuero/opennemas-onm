@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends ContentController
 {
-
     /**
      * Returns a list of available locales by name.
      *
@@ -38,7 +37,7 @@ class CategoryController extends ContentController
         }
 
         $params = $request->request->get('params');
-        $inrss  = ($params && array_key_exists('inrss', $params) && $params['inrss'] == true) ? 1 : 0;
+        $inrss  = ($params && array_key_exists('inrss', $params) && $params['inrss'] === '1') ? 1 : 0;
 
         $data = [
             'id'                  => $request->request->getDigits('id', 0),
@@ -62,9 +61,10 @@ class CategoryController extends ContentController
             $aux->name     = $data['name'];
             $aux->title    = $data['title'];
             $fm            = $this->get('data.manager.filter');
-            $aux           = $fm->set($aux)->filter('unlocalize', [
-                'keys' => \ContentCategory::getL10nKeys(),
-                'locale' => $languageData['default']
+            $aux           = $fm->set($aux)->filter('localize', [
+                'keys'   => \ContentCategory::getL10nKeys(),
+                'locale' => $this->get('core.locale')
+                    ->setContext('frontend')->getLocale()
             ])->get();
             $data['name']  = $aux->name;
             $data['title'] = $aux->title;
@@ -110,7 +110,7 @@ class CategoryController extends ContentController
         if ($category->{$execMethod}($data)) {
             dispatchEventWithParams('category.' . $execMethod, ['category' => $category]);
             $msg->add(
-                sprintf(_('Category "%s" ' . $execMethod . 'd successfully.'), $data['title'][$locale]),
+                sprintf(_('Category "%s" ' . $execMethod . 'd successfully.'), $data['id']),
                 'success',
                 201
             );
