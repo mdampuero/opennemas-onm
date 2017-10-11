@@ -53,23 +53,6 @@ class CategoryController extends ContentController
             ],
         ];
 
-        if (!in_array(
-            'es.openhost.module.multilanguage',
-            $this->get('core.instance')->activated_modules
-        )) {
-            $aux           = (object) [];
-            $aux->name     = $data['name'];
-            $aux->title    = $data['title'];
-            $fm            = $this->get('data.manager.filter');
-            $aux           = $fm->set($aux)->filter('localize', [
-                'keys'   => \ContentCategory::getL10nKeys(),
-                'locale' => $this->get('core.locale')
-                    ->setContext('frontend')->getLocale()
-            ])->get();
-            $data['name']  = $aux->name;
-            $data['title'] = $aux->title;
-        }
-
         // Check if at least have the default language for the title
         $locale = $this->get('core.locale')->setContext('frontend')->getLocale();
 
