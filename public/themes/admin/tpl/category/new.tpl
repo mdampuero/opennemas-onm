@@ -30,7 +30,7 @@
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <h5> [% (category.pk_content_category) ? '{t}Editing category{/t}' : '{t}Creating category{/t}' %]</h5>
+              <h5> [% (category.id) ? '{t}Editing category{/t}' : '{t}Creating category{/t}' %]</h5>
             </li>
           {if $multilanguage_enable}
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
@@ -83,13 +83,13 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-model="category.title[lang]" type="text" ng-blur="loadSlug()" required>
+                  <input class="form-control" id="title" name="title" ng-model="category.title[lang]" type="text" ng-blur="loadSlug()" required="required">
                 </div>
               </div>
               <div class="form-group">
                 <label for="name" class="form-label">{t}Slug{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="name" name="name" ng-model="category.name[lang]" type="text" readonly>
+                  <input class="form-control" id="name" name="name" ng-model="category.name[lang]" type="text" ng-readonly="category.id > 0"  required="required">
                 </div>
               </div>
               <div class="form-group">
@@ -194,11 +194,12 @@
               <div class="form-group" ng-if="configurations.allowLogo">
                 <label for="logo_path" class="form-label">{t}Category logo{/t}</label>
                 <div class="controls">
+                  [%  %]
                   <div class="fileinput [% (category.logo_path) ? 'fileinput-exists' : 'fileinput-new' %]" data-provides="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
                     <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
-                        <img src="[% categoryUrl %]" style="max-width:200px;" ng-show="category.logo_path !== ''" >
+                        <img src="[% categoryUrl %]" style="max-width:200px;" ng-show="category.logo_path !== '' && categoryUrl !== ''" >
                     </div>
                     <div>
                       <span class="btn btn-file">
