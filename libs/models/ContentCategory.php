@@ -180,10 +180,26 @@ class ContentCategory
         // Generate slug for category
         $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
 
-        // Serialize language fields
-        array_map(function ($field) use (&$data) {
-            $data[$field] = serialize($data[$field]);
-        }, self::getL10nKeys());
+        if (!in_array(
+            'es.openhost.module.multilanguage',
+            getService('core.instance')->activated_modules
+        )) {
+            $aux           = new stdClass();
+            $aux->name     = $data['name'];
+            $aux->title    = $data['title'];
+            $aux           = getService('data.manager.filter')->set($aux)
+                ->filter('localize', [
+                    'keys'   => \ContentCategory::getL10nKeys(),
+                    'locale' => getService('core.locale')->setContext('frontend')->getLocale()
+                ])->get();
+            $data['name']  = $aux->name;
+            $data['title'] = $aux->title;
+        } else {
+            // Serialize language fields
+            array_map(function ($field) use (&$data) {
+                $data[$field] = serialize($data[$field]);
+            }, self::getL10nKeys());
+        }
 
         // Serialize params
         $data['params'] = serialize($data['params']);
@@ -239,22 +255,26 @@ class ContentCategory
         $data['params'] = serialize($data['params']);
         $data['name']   = $this->name;
 
-        foreach ($data['title'] as $locale => $text) {
-            if (!empty($data['title'][$locale])) {
-                if (!is_array($data['name'])) {
-                    $data['name'] = [];
-                }
-
-                $data['name'][$locale] =
-                    \Onm\StringUtils::generateSlug($data['title'][$locale]);
-            }
+        if (!in_array(
+            'es.openhost.module.multilanguage',
+            getService('core.instance')->activated_modules
+        )) {
+            $aux           = new stdClass();
+            $aux->name     = $data['name'];
+            $aux->title    = $data['title'];
+            $aux           = getService('data.manager.filter')->set($aux)
+                ->filter('localize', [
+                    'keys'   => \ContentCategory::getL10nKeys(),
+                    'locale' => getService('core.locale')->setContext('frontend')->getLocale()
+                ])->get();
+            $data['name']  = $aux->name;
+            $data['title'] = $aux->title;
+        } else {
+            // Serialize language fields
+            array_map(function ($field) use (&$data) {
+                $data[$field] = serialize($data[$field]);
+            }, self::getL10nKeys());
         }
-
-        // Serialize language fields
-        array_map(function ($field) use (&$data) {
-            $data[$field] = serialize($data[$field]);
-            $this->$field = $data[$field];
-        }, self::getL10nKeys());
 
         if ($data['logo_path'] == '1') {
             $data['logo_path'] = $this->logo_path;
