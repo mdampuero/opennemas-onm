@@ -22,7 +22,12 @@ class DomainController extends Controller
      */
     public function listAction()
     {
-        return $this->render('domain/list.tpl');
+        return $this->render('domain/list.tpl', [
+            'ssl_enabled' => in_array(
+                'es.openhost.module.frontendSsl',
+                $this->get('core.instance')->activated_modules
+            )
+        ]);
     }
 
     /**
@@ -50,6 +55,7 @@ class DomainController extends Controller
                 $params = [ 'customerId' => $client->id ];
                 $client = $client->getData();
             } catch (\Exception $e) {
+                error_log($e->getMessage());
             }
         }
 
@@ -65,9 +71,9 @@ class DomainController extends Controller
 
         $lang = $this->get('core.locale')->getLocaleShort();
 
-        $extension['name'] = array_key_exists($lang, $extension['name']) ?
+        $extension['name']        = array_key_exists($lang, $extension['name']) ?
             $extension['name'][$lang] : $extension['name']['en'];
-        $extension['about'] = array_key_exists($lang, $extension['about']) ?
+        $extension['about']       = array_key_exists($lang, $extension['about']) ?
             $extension['about'][$lang] : $extension['about']['en'];
         $extension['description'] = array_key_exists($lang, $extension['description']) ?
             $extension['description'][$lang] : $extension['description']['en'];

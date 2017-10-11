@@ -38,15 +38,33 @@
           </a>
         </div>
         <div class="col-sm-6">
-          <a class="btn btn-block btn-success" href="{url name=backend_domain_add create=1}" id="add-domain-button">
+          <a class="btn btn-block btn-white" href="{url name=backend_domain_add create=1}" id="add-domain-button">
             <i class="block fa fa-plus fa-2x m-b-15"></i>
-            <h4 class="block uppercase text-white">{t}Add new domain{/t}</h4>
-            <h5 class="text-white wrap">
+            <h4 class="block uppercase">{t}Add new domain{/t}</h4>
+            <h5 class="wrap">
               {t}I DO NOT have my own domain and I want to create one and redirect it to my Opennemas digital newspaper{/t}
             </h5>
           </a>
         </div>
       </div>
+      {if $ssl_enabled}
+      <div class="tiles green m-b-15">
+        <div class="tiles-body clearfix">
+          <div class="col-sm-2">
+            <div class="icon">
+              <span class="fa-stack fa-3x">
+                <i class="fa fa-shield fa-stack-2x"></i>
+                <i class="fa fa-lock fa-stack-1x text-danger m-t-15 m-l-15"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <h4 class="text-white">{t escape=off}You have <strong><a href="https://en.wikipedia.org/wiki/HTTPS" class="text-white" title="What is SSL encryption?" target="_blank">SSL encription enabled</a></strong> for your main domain.{/t}</h4>
+            <p>{t}Congrats, your newspaper is secure!{/t}</p>
+          </div>
+        </div>
+      </div>
+      {/if}
       <div>
         <h4>{t}Your domains{/t}</h4>
       </div>
