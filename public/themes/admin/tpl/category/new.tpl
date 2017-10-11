@@ -4,7 +4,7 @@
   {javascripts}
     <script>
       $(document).ready(function($) {
-        var btn   = $('.onm-button');
+        var btn = $('.onm-button');
 
         $('.fileinput').fileinput({
           name: 'logo_path',

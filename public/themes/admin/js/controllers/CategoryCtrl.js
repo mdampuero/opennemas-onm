@@ -13,8 +13,9 @@
      * @description
      *   Handles actions for category edit form.
      */
-    .controller('CategoryCtrl', ['$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', '$window',
-      function($controller, $rootScope, $scope, http, messenger, routing, $window) {
+    .controller('CategoryCtrl', [
+      '$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', '$window', '$location',
+      function($controller, $rootScope, $scope, http, messenger, routing, $window, $location) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -75,7 +76,7 @@
 
           http.put('backend_ws_category_save', data)
             .then(function(response) {
-              $scope.saving      = false;
+              $scope.saving = false;
 
               if ($scope.category.internal_category === 0) {
                 $scope.category.internal_category = -1;
@@ -91,9 +92,7 @@
               messenger.post(response.data.message);
 
               if (reload) {
-                setTimeout(function(){
-                  $window.location.href = '/' + routing.generate('admin_category_show', {id: $scope.category.id});
-                }, 2000);
+                $location.url(routing.generate('admin_category_show', {id: $scope.category.id}));
               }
             }, function(response) {
               $scope.saving = false;
@@ -138,7 +137,8 @@
               $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title});
             }
           }
-          $scope.multiLanguageFields = ['title', 'name']
+
+          $scope.multiLanguageFields = ['title', 'name'];
         };
 
         /**
