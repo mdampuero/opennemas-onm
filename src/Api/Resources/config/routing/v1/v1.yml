@@ -13,3 +13,6 @@ api_v1_backend_user:
 api_v1_frontend_tool:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
     prefix:   /
+
+api_v1_frontend_advertisement:
+    resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
