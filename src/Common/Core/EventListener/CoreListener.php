@@ -145,7 +145,7 @@ class CoreListener implements EventSubscriberInterface
             }
         }
 
-        if ($this->security->hasExtension('es.openhost.module.frontend_ssl')
+        if ($this->security->hasExtension('es.openhost.module.frontendSsl')
             && strpos($uri, '/admin') !== 0
             && strpos($uri, '/manager') !== 0
             && strpos($uri, '/ws') !== 0

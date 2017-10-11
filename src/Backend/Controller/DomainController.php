@@ -24,7 +24,7 @@ class DomainController extends Controller
     {
         return $this->render('domain/list.tpl', [
             'ssl_enabled' => in_array(
-                'es.openhost.module.frontend_ssl',
+                'es.openhost.module.frontendSsl',
                 $this->get('core.instance')->activated_modules
             )
         ]);
