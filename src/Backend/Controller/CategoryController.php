@@ -392,7 +392,7 @@ class CategoryController extends Controller
             'inmenu'            => $category->inmenu,
             'posmenu'           => $category->posmenu,
             'internal_category' => $category->internal_category,
-            'subcategory'       => $category-> fk_content_category ,
+            'subcategory'       => $category->fk_content_category,
             'logo_path'         => $category->logo_path,
             'color'             => $category->color,
             'params'            => $category->params
