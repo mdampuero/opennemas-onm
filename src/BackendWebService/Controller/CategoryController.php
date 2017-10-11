@@ -64,7 +64,7 @@ class CategoryController extends ContentController
             )
         ) {
             $msg->add(
-                _('The title in the default language is required.'),
+                _('The title and slug are required.'),
                 'error',
                 400
             );
@@ -74,9 +74,12 @@ class CategoryController extends ContentController
         $logoPath = '';
         if (!empty($_FILES) && isset($_FILES['logo_path'])) {
             $nameFile  = $_FILES['logo_path']['name'];
-            $uploaddir = MEDIA_PATH . '/sections/' . $nameFile;
+            $uploadDir = MEDIA_PATH . '/sections/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir);
+            }
 
-            if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+            if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploadDir . $nameFile)) {
                 $data['logo_path'] = $nameFile;
             }
         }
