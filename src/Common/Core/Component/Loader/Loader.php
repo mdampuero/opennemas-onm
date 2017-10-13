@@ -192,11 +192,13 @@ class Loader
             return $this->instance;
         }
 
-        if ($this->container->has('cache.manager')) {
-            $this->instance = $this->container->get('cache.manager')
-                ->getConnection('manager')->get($host);
+        $cacheManager = $this->container->get('cache.manager')->getConnection('manager');
 
-            if (!empty($this->instance)) {
+        if ($this->container->has('cache.manager')) {
+            $this->instance = $cacheManager->get($host);
+
+            // ONM-2799 Check that cache is not empty or invalid
+            if ($this->instance instanceof \Common\ORM\Entity\Instance) {
                 $this->configureInstance($this->instance);
 
                 return $this->instance;
@@ -208,8 +210,7 @@ class Loader
         $this->loadInstanceFromOql(sprintf($oql, $host, $host, $host));
 
         if ($this->container->has('cache.manager')) {
-            $this->container->get('cache.manager')->getConnection('manager')
-                ->set($host, $this->instance);
+            $cacheManager->set($host, $this->instance);
         }
 
         $this->configureInstance($this->instance);
