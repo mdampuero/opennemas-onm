@@ -38,14 +38,15 @@ class ErrorController extends Controller
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
         }
+
         $error = $request->attributes->get('exception');
 
         $exceptionName = $error->getClass();
 
         if (defined('INSTANCE_UNIQUE_NAME')) {
-            $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
+            $errorID = strtoupper(INSTANCE_UNIQUE_NAME . '_' . uniqid());
         } else {
-            $errorID = strtoupper('ONM_FRAMEWORK_'.uniqid());
+            $errorID = strtoupper('ONM_FRAMEWORK_' . uniqid());
         }
 
         if (!defined('CURRENT_LANGUAGE')) {
@@ -54,167 +55,120 @@ class ErrorController extends Controller
 
         $this->view = $this->get('onm_templating')->getBackendTemplate();
 
-        $requestAddress = $request->getSchemeAndHttpHost().$request->getRequestUri();
+        $logMessage = '';
+
+        $requestAddress = $request->getSchemeAndHttpHost() . $request->getRequestUri();
         switch ($exceptionName) {
             case 'Common\Core\Component\Exception\InstanceNotRegisteredException':
                 $trace = $error->getTrace();
 
-                error_log('Backend instance not registered error at '.$requestAddress.' '.$error->getMessage().' '.json_encode($error->getTrace()));
+                $logMessage = 'Backend instance not registered error at '
+                    . $requestAddress . ' ' . $error->getMessage() . ' ' . json_encode($error->getTrace());
 
                 $errorMessage = _('Instance not found');
-                if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMessage;
-                } else {
-                    $content = $this->renderView(
-                        'error/instance_not_found.tpl',
-                        array(
-                            'server'      => $request->server,
-                            'error_message' => $errorMessage,
-                            'error'         => $error,
-                            'error_id'      => $errorID,
-                            'environment'   => $environment,
-                            'backtrace'     => $error->getTrace(),
-                        )
-                    );
-                }
-                return new Response($content, 404);
+                $content      = $errorMessage;
 
-                break;
-
-            case 'Common\Core\Component\Exception\InstanceNotActivatedException':
-                $trace = $error->getTrace();
-
-                error_log('Backend instance not activated error at '.$requestAddress.' '.$error->getMessage().' '.json_encode($error->getTrace()));
-
-                $errorMessage = _('Instance not activated');
-                if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMessage;
-                } else {
-                    $content = $this->renderView(
-                        'error/instance_not_activated.tpl',
-                        array(
-                            'server'        => $request->server,
-                            'error_message' => $errorMessage,
-                            'error'         => $error,
-                            'error_id'      => $errorID,
-                            'environment'   => $environment,
-                            'backtrace'     => $error->getTrace(),
-                        )
-                    );
-                }
-                return new Response($content, 404);
-
-                break;
-
-            case 'ResourceNotFoundException':
-            case 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException':
-                $trace = $error->getTrace();
-                $path = $request->getRequestUri();
-
-                error_log('Backend page not found at: '.$requestAddress);
-                $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMesage;
-                } else {
-                    $content = $this->renderView(
-                        'error/404.tpl',
-                        array(
-                            'error_message' => $errorMessage,
-                            'error'         => $error,
-                            'environment'   => $environment,
-                            'backtrace'     => $error->getTrace(),
-                        )
-                    );
-                }
-
-                return new Response($content, 404);
-                break;
-
-            case 'Symfony\Component\Security\Core\Exception\AccessDeniedException':
-                $errorMessage = _('You are not allowed to perform this action.');
-
-                if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMessage;
-                } else {
-                    $content = $this->renderView(
-                        'error/404.tpl',
-                        array(
-                            'error_message' => $errorMessage,
-                            'error'         => $error,
-                            'environment'   => $environment,
-                            'backtrace'     => $error->getTrace(),
-                        )
-                    );
-                }
-
-                return new Response($content, 401);
-
-                break;
-            default:
-                // Change this handle to a more generic error template
-                $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');
-
-                if ($environment == 'development') {
-                    $errorMessage = $error->getMessage();
-                }
-
-                error_log('ERROR_ID: '.$errorID.' - '.$error->getMessage()." ".json_encode($error->getTrace()));
-
-                $content = $this->renderView(
-                    'error/404.tpl',
-                    array(
+                if (!$this->request->isXmlHttpRequest()) {
+                    $content = $this->renderView('error/instance_not_found.tpl', [
+                        'server'        => $request->server,
                         'error_message' => $errorMessage,
                         'error'         => $error,
                         'error_id'      => $errorID,
                         'environment'   => $environment,
                         'backtrace'     => $error->getTrace(),
-                    )
-                );
+                    ]);
+                }
 
+                $response = new Response($content, 404);
+                $response->headers->set('x-cache-for', '5s');
+                break;
+            case 'Common\Core\Component\Exception\InstanceNotActivatedException':
+                $trace = $error->getTrace();
+
+                $logMessage = 'Backend instance not activated error at '
+                    . $requestAddress . ' ' . $error->getMessage() . ' ' . json_encode($error->getTrace());
+
+                $errorMessage = _('Instance not activated');
+                $content      = $errorMessage;
+
+                if (!$this->request->isXmlHttpRequest()) {
+                    $content = $this->renderView('error/instance_not_activated.tpl', [
+                        'server'        => $request->server,
+                        'error_message' => $errorMessage,
+                        'error'         => $error,
+                        'error_id'      => $errorID,
+                        'environment'   => $environment,
+                        'backtrace'     => $error->getTrace(),
+                    ]);
+                }
+
+                $response = new Response($content, 404);
+                $response->headers->set('x-cache-for', '5s');
+                break;
+            case 'ResourceNotFoundException':
+            case 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException':
+                $trace = $error->getTrace();
+                $path  = $request->getRequestUri();
+
+                $logMessage = 'Backend page not found at: ' . $requestAddress;
+
+                $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
+                $content      = $errorMesage;
+
+                if (!$this->request->isXmlHttpRequest()) {
+                    $content = $this->renderView('error/404.tpl', [
+                        'error_message' => $errorMessage,
+                        'error'         => $error,
+                        'environment'   => $environment,
+                        'backtrace'     => $error->getTrace(),
+                    ]);
+                }
+
+                $response = new Response($content, 404);
+                break;
+            case 'Symfony\Component\Security\Core\Exception\AccessDeniedException':
+                $errorMessage = _('You are not allowed to perform this action.');
+
+                $content = $errorMessage;
+                if (!$this->request->isXmlHttpRequest()) {
+                    $content = $this->renderView('error/404.tpl', [
+                        'error_message' => $errorMessage,
+                        'error'         => $error,
+                        'environment'   => $environment,
+                        'backtrace'     => $error->getTrace(),
+                    ]);
+                }
+
+                $response = new Response($content, 401);
+                break;
+            default:
+                // Change this handle to a more generic error template
+                $errorMessage = _('Oups! Seems that we had an unknown problem'
+                    . ' while trying to run your request.');
+
+                if ($environment == 'development') {
+                    $errorMessage = $error->getMessage();
+                }
+
+                $logMessage = 'ERROR_ID: ' . $errorID . ' - '
+                    . $error->getMessage() . " " . json_encode($error->getTrace());
+
+                $content = $this->renderView('error/404.tpl', [
+                    'error_message' => $errorMessage,
+                    'error'         => $error,
+                    'error_id'      => $errorID,
+                    'environment'   => $environment,
+                    'backtrace'     => $error->getTrace(),
+                ]);
+
+                $response = new Response($content, 500);
                 break;
         }
 
-        return new Response($content, 500);
-    }
-
-    /**
-     * Returns an exceprt HTML with the content of the file highlighting
-     * the line that produces the error.
-     *
-     * @param string $fileName  The name of the file where is the error
-     * @param string $lineNumber  The line inside the file where is the error
-     * @param int    $showLines The number of lines to show before and after the error line
-     *
-     * @return strin The HTML with the highlighted source.
-     */
-    public static function highlightSource($fileName, $lineNumber, $showLines)
-    {
-
-        $lines = htmlspecialchars(file_get_contents($fileName));
-        $lines = nl2br($lines);
-        $lines = explode("<br />", $lines);
-
-        $offset = max(0, $lineNumber - ceil($showLines / 2));
-
-        $lines = array_slice($lines, $offset, $showLines);
-
-        $html = '';
-        foreach ($lines as $line) {
-            $offset++;
-            $line = preg_replace("@\s@", "&nbsp;", $line);
-
-            if ($offset == $lineNumber) {
-                $line = '<em class="lineno highlighted">'
-                        . sprintf('%4d', $offset) . ' </em>' . $line . '<br/>';
-                $html .= '<div class="code highlighted">'
-                        . $line . '</div>';
-            } else {
-                $line = '<em class="lineno">'
-                        . sprintf('%4d', $offset) . ' </em>' . $line . '<br/>';
-                $html .= $line;
-            }
+        if (!empty($logMessage)) {
+            error_log($logMessage);
         }
 
-        return $html;
+        return $response;
     }
 }
