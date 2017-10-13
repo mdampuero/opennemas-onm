@@ -197,7 +197,8 @@ class Loader
         if ($this->container->has('cache.manager')) {
             $this->instance = $cacheManager->get($host);
 
-            if (!empty($this->instance)) {
+            // ONM-2799 Check that cache is not empty or invalid
+            if ($this->instance instanceof \Common\ORM\Entity\Instance) {
                 $this->configureInstance($this->instance);
 
                 return $this->instance;
