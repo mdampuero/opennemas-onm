@@ -70,7 +70,7 @@ class ErrorController extends Controller
 
                 if (!$this->request->isXmlHttpRequest()) {
                     $content = $this->renderView('error/instance_not_found.tpl', [
-                        'server'      => $request->server,
+                        'server'        => $request->server,
                         'error_message' => $errorMessage,
                         'error'         => $error,
                         'error_id'      => $errorID,
@@ -80,6 +80,7 @@ class ErrorController extends Controller
                 }
 
                 $response = new Response($content, 404);
+                $response->headers->set('x-cache-for', '5s');
                 break;
             case 'Common\Core\Component\Exception\InstanceNotActivatedException':
                 $trace = $error->getTrace();
@@ -102,6 +103,7 @@ class ErrorController extends Controller
                 }
 
                 $response = new Response($content, 404);
+                $response->headers->set('x-cache-for', '5s');
                 break;
             case 'ResourceNotFoundException':
             case 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException':
