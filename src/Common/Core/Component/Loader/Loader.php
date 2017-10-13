@@ -192,9 +192,10 @@ class Loader
             return $this->instance;
         }
 
+        $cacheManager = $this->container->get('cache.manager')->getConnection('manager');
+
         if ($this->container->has('cache.manager')) {
-            $this->instance = $this->container->get('cache.manager')
-                ->getConnection('manager')->get($host);
+            $this->instance = $cacheManager->get($host);
 
             if (!empty($this->instance)) {
                 $this->configureInstance($this->instance);
@@ -208,8 +209,7 @@ class Loader
         $this->loadInstanceFromOql(sprintf($oql, $host, $host, $host));
 
         if ($this->container->has('cache.manager')) {
-            $this->container->get('cache.manager')->getConnection('manager')
-                ->set($host, $this->instance);
+            $cacheManager->set($host, $this->instance);
         }
 
         $this->configureInstance($this->instance);
