@@ -62,8 +62,7 @@ class ErrorController extends Controller
             case 'Common\Core\Component\Exception\InstanceNotRegisteredException':
                 $trace = $error->getTrace();
 
-                $logMessage = 'Backend instance not registered error at '
-                    . $requestAddress . ' ' . $error->getMessage() . ' ' . json_encode($error->getTrace());
+                $logMessage = 'Backend instance not registered error at ' . $requestAddress;
 
                 $errorMessage = _('Instance not found');
                 $content      = $errorMessage;
@@ -85,8 +84,7 @@ class ErrorController extends Controller
             case 'Common\Core\Component\Exception\InstanceNotActivatedException':
                 $trace = $error->getTrace();
 
-                $logMessage = 'Backend instance not activated error at '
-                    . $requestAddress . ' ' . $error->getMessage() . ' ' . json_encode($error->getTrace());
+                $logMessage = 'Backend instance not activated error at ' . $requestAddress;
 
                 $errorMessage = _('Instance not activated');
                 $content      = $errorMessage;
@@ -147,8 +145,7 @@ class ErrorController extends Controller
                 break;
             default:
                 // Change this handle to a more generic error template
-                $errorMessage = _('Oups! Seems that we had an unknown problem'
-                    . ' while trying to run your request.');
+                $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');
 
                 if ($environment == 'development') {
                     $errorMessage = $error->getMessage();
