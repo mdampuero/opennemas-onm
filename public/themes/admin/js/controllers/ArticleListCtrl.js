@@ -193,6 +193,36 @@
         };
 
         /**
+         * Updates selected items current status.
+         * @param  string  loading Name of the work-in-progress property.
+         * @param  integer status  Current work-in-progress status.
+         * @param  string  name    Name of the property to update.
+         * @param  mixed   value   Value of the property to update.
+         */
+        $scope.updateItemsStatus = function(loading, status, name, value) {
+          // Load shared variables
+          var contents = $scope.items;
+          var selected = $scope.selected.items;
+
+          for (var i = 0; i < selected.length; i++) {
+            var j = 0;
+
+            while (j < contents.length && contents[j].id !== selected[i]) {
+              j++;
+            }
+
+            if (j < contents.length) {
+              contents[j][loading] = status;
+              contents[j][name] = value;
+            }
+          }
+
+          // Updated shared variable
+          $scope.contents = contents;
+          $scope.selected.items = selected;
+        };
+
+        /**
          * Updates selected items.
          *
          * @param string route   Route name.
@@ -251,33 +281,41 @@
         };
 
         /**
-         * Updates selected items current status.
-         * @param  string  loading Name of the work-in-progress property.
-         * @param  integer status  Current work-in-progress status.
-         * @param  string  name    Name of the property to update.
-         * @param  mixed   value   Value of the property to update.
+         * Sends a content to trash by using a confirmation dialog
+         *
+         * @param mixed content The content to send to trash.
          */
-        $scope.updateItemsStatus = function(loading, status, name, value) {
-          // Load shared variables
-          var contents = $scope.items;
-          var selected = $scope.selected.items;
+        $scope.sendToTrash = function(content) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-delete',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  content: content
+                };
+              },
+              success: function() {
+                return function() {
+                  var url = routing.generate(
+                    'backend_ws_content_send_to_trash',
+                    { contentType: content.content_type_name, id: content.id }
+                  );
 
-          for (var i = 0; i < selected.length; i++) {
-            var j = 0;
-
-            while (j < contents.length && contents[j].id !== selected[i]) {
-              j++;
+                  return http.post(url);
+                };
+              }
             }
+          });
 
-            if (j < contents.length) {
-              contents[j][loading] = status;
-              contents[j][name] = value;
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list($scope.route, true);
             }
-          }
-
-          // Updated shared variable
-          $scope.contents = contents;
-          $scope.selected.items = selected;
+          });
         };
 
         /**
