@@ -643,18 +643,20 @@
             }
           }
 
-          if ($scope.mtm) {
-            $timeout.cancel($scope.mtm);
-          }
+          if (!$scope.config.multilanguage) {
+            if ($scope.mtm) {
+              $timeout.cancel($scope.mtm);
+            }
 
-          $scope.mtm = $timeout(function() {
-            http.get({
-              name: 'admin_utils_calculate_tags',
-              params: { data: data }
-            }).then(function(response) {
-              $scope.article.metadata = response.data.split(',');
-            });
-          }, 2500);
+            $scope.mtm = $timeout(function() {
+              http.get({
+                name: 'admin_utils_calculate_tags',
+                params: { data: data }
+              }).then(function(response) {
+                $scope.article.metadata = response.data.split(',');
+              });
+            }, 2500);
+          }
         });
 
         // Enable drafts after 5s to grant CKEditor initialization
