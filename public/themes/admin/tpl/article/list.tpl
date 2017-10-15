@@ -42,7 +42,7 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+  <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
@@ -56,7 +56,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+              [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
             </h4>
           </li>
         </ul>

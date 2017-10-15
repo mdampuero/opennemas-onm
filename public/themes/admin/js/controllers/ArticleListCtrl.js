@@ -20,8 +20,8 @@
      *   Provides actions to list articles.
      */
     .controller('ArticleListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', 'http', 'messenger', 'linker', 'localizer', 'oqlEncoder',
-      function($controller, $location, $scope, $timeout, http, messenger, linker, localizer, oqlEncoder) {
+      '$controller', '$location', '$scope', '$timeout','$uibModal', 'http', 'messenger', 'linker', 'localizer', 'oqlEncoder', 'routing',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, linker, localizer, oqlEncoder, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -148,6 +148,175 @@
               message: 'Error while fetching data from backend',
               type: 'error'
             });
+          });
+        };
+
+        /**
+         * Updates an item.
+         *
+         * @param int    index   Index of the item to update in contents.
+         * @param int    id      Id of the item to update.
+         * @param string route   Route name.
+         * @param string name    Name of the property to update.
+         * @param mixed  value   New value.
+         * @param string loading Name of the property used to show work-in-progress.
+         */
+        $scope.updateItem = function(index, id, route, name, value, loading, reload) {
+          // Load shared variable
+          var contents = $scope.items;
+
+          // Enable spinner
+          contents[index][loading] = 1;
+
+          var url = routing.generate(
+            route, {
+              contentType: 'article',
+              id: id
+            }
+          );
+
+          http.get(url, { value: value }).success(function(response) {
+            contents[index][loading] = 0;
+            contents[index][name] = response[name];
+            messenger.post(response.messages);
+
+            if (reload) {
+              $scope.list($scope.route);
+            }
+          }).error(function(response) {
+            contents[index][loading] = 0;
+            messenger.post(response.messages);
+          });
+
+          // Updated shared variable
+          $scope.contents = contents;
+        };
+
+        /**
+         * Updates selected items.
+         *
+         * @param string route   Route name.
+         * @param string name    Name of the property to update.
+         * @param mixed  value   New value.
+         * @param string loading Name of the property used to show work-in-progress.
+         */
+        $scope.updateSelectedItems = function(route, name, value, loading) {
+          // Enable spinner
+          $scope.deleting = 1;
+
+          var modal = $uibModal.open({
+            templateUrl: 'modal-update-selected',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  checkPhone:  $scope.checkPhone,
+                  checkVat:    $scope.checkVat,
+                  extra:       $scope.extra,
+                  name:        name,
+                  saveBilling: $scope.saveBilling,
+                  selected:    $scope.selected,
+                  value:       value
+                };
+              },
+              success: function() {
+                return function() {
+                  // Load shared variable
+                  var selected = $scope.selected.items;
+
+                  $scope.updateItemsStatus(loading, 1);
+
+                  var url = routing.generate(route,
+                    { contentType: $scope.criteria.content_type_name });
+
+                  return http.post(url, { ids: selected, value: value });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              messenger.post(response.data.messages);
+
+              if (response.success) {
+                $scope.updateItemsStatus(loading, 0, name, value);
+              }
+            }
+
+            $scope.selected.items = [];
+            $scope.selected.all = false;
+          });
+        };
+
+        /**
+         * Updates selected items current status.
+         * @param  string  loading Name of the work-in-progress property.
+         * @param  integer status  Current work-in-progress status.
+         * @param  string  name    Name of the property to update.
+         * @param  mixed   value   Value of the property to update.
+         */
+        $scope.updateItemsStatus = function(loading, status, name, value) {
+          // Load shared variables
+          var contents = $scope.items;
+          var selected = $scope.selected.items;
+
+          for (var i = 0; i < selected.length; i++) {
+            var j = 0;
+
+            while (j < contents.length && contents[j].id !== selected[i]) {
+              j++;
+            }
+
+            if (j < contents.length) {
+              contents[j][loading] = status;
+              contents[j][name] = value;
+            }
+          }
+
+          // Updated shared variable
+          $scope.contents = contents;
+          $scope.selected.items = selected;
+        };
+
+        /**
+         * Sends a list of selected contents to trash by using a confirmation dialog
+         */
+        $scope.sendToTrashSelected = function () {
+          // Enable spinner
+          $scope.deleting = 1;
+
+          var modal = $uibModal.open({
+            templateUrl: 'modal-delete-selected',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  selected: $scope.selected
+                };
+              },
+              success: function() {
+                return function() {
+                  var url = routing.generate(
+                    'backend_ws_contents_batch_send_to_trash',
+                    { contentType: $scope.criteria.content_type_name }
+                  );
+
+                  return http.post(url, {ids: $scope.selected.items});
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.selected = { all: false, contents: [] };
+              $scope.list($scope.route, true);
+            }
           });
         };
       }
