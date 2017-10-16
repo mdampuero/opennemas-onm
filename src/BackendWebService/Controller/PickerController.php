@@ -75,8 +75,9 @@ class PickerController extends Controller
 
         $filter = implode(' AND ', $filter);
 
-        $query      = "FROM contents JOIN contents_categories ON  contents_categories.pk_fk_content = " .
+        $query = "FROM contents LEFT JOIN contents_categories ON contents_categories.pk_fk_content = " .
             "contents.pk_content WHERE " . $filter;
+
         $contentMap = $em->dbConn->executeQuery(
             "SELECT content_type_name, pk_content " . $query . " ORDER BY CREATED DESC LIMIT " .
             (($page - 1) * $epp) . ", " . $epp
