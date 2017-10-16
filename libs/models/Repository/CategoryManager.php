@@ -179,26 +179,10 @@ class CategoryManager extends BaseManager
         return $rs[0];
     }
 
-    public function sortCategories(&$categoryList, $languageData)
+    public function sortCategories(&$categoryList)
     {
-        return usort($categoryList, function ($a, $b) use ($languageData) {
-            // this object is because the filter change the original object and
-            //localize the object when don't want that.
-            $field = (object) ['field' => $a->name];
-            $nameA = getService('data.manager.filter')->set($field)
-            ->filter('localize', [
-                'keys'   => ['field'],
-                'locale' => $languageData['default']
-            ])->get()->field;
-
-            $field = (object) ['field' => $b->name];
-            $nameB = getService('data.manager.filter')->set($field)
-            ->filter('localize', [
-                'keys'   => ['field'],
-                'locale' => $languageData['default']
-            ])->get()->field;
-
-            return strcmp($nameA, $nameB);
+        usort($categoryList, function ($a, $b) {
+            return strcmp($a->name, $b->name);
         });
     }
 }

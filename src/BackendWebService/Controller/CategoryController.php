@@ -54,7 +54,7 @@ class CategoryController extends ContentController
         ];
 
         // Check if at least have the default language for the title
-        $locale = $this->get('core.locale')->setContext('frontend')->getLocale();
+        $locale = $this->get('core.locale')->getLocale('frontend');
 
         if (isset($data['title']) &&
             empty($data['title']) ||
