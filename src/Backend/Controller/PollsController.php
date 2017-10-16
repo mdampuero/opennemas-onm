@@ -33,15 +33,14 @@ class PollsController extends Controller
     public function init()
     {
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
+        $category    = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
+        $ccm         = \ContentCategoryManager::get_instance();
 
-        $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
-
-        $ccm = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
         if (empty($category)) {
-            $category ='home';
+            $category = 'home';
         }
 
         $this->view->assign([
@@ -95,7 +94,7 @@ class PollsController extends Controller
     public function widgetAction()
     {
         $configurations = s::get('poll_settings');
-        $totalWidget = 0;
+        $totalWidget    = 0;
 
         if (array_key_exists('total_widget', $configurations)) {
             $totalWidget = $configurations['total_widget'];
