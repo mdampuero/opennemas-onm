@@ -91,6 +91,9 @@ class CategoryController extends ContentController
             $execMethod = 'create';
         } else {
             $category = new \ContentCategory($data['id']);
+            if (empty($data['logo_path'])) {
+                $data['logo_path'] = '1';
+            }
         }
 
         if ($category->{$execMethod}($data)) {
