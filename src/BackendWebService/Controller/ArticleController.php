@@ -67,9 +67,9 @@ class ArticleController extends Controller
             'title'          => $postReq->get('title'),
             'title_int'      => $postReq->get('title_int'),
             'with_comment'   => (empty($withComment)) ? 0 : 1,
-            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
-            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
-            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
+            'relatedFront'   => $postReq->get('relatedFront', []),
+            'relatedHome'    => $postReq->get('relatedHome', []),
+            'relatedInner'   => $postReq->get('relatedInner', []),
             'fk_author'      => $postReq->getDigits('fk_author', 0),
             'params' => [
                 'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
@@ -187,9 +187,9 @@ class ArticleController extends Controller
             'metadata'       => \Onm\StringUtils::normalizeMetadata(
                 $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)
             ),
-            'relatedFront'   => json_decode($postReq->get('relatedFront', '')),
-            'relatedHome'    => json_decode($postReq->get('relatedHome', '')),
-            'relatedInner'   => json_decode($postReq->get('relatedInner', '')),
+            'relatedFront'   => $postReq->get('relatedFront', []),
+            'relatedHome'    => $postReq->get('relatedHome', []),
+            'relatedInner'   => $postReq->get('relatedInner', []),
             'slug'           => $postReq->get('slug'),
             'starttime'      => $postReq->get('starttime'),
             'subtitle'       => $postReq->get('subtitle'),
