@@ -14,8 +14,8 @@
      *   Handles actions for category edit form.
      */
     .controller('CategoryCtrl', [
-      '$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', '$window', '$location',
-      function($controller, $rootScope, $scope, http, messenger, routing, $window, $location) {
+      '$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing',
+      function($controller, $rootScope, $scope, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -127,9 +127,9 @@
           $scope.category.internal_category = $scope.category.internal_category.toString();
 
           $scope.subsectionCategories = [];
-          for(var key in $scope.categories) {
-            if($scope.category.id !== $scope.categories[key].id && $scope.categories[key].internal_category === 1) {
-              $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title});
+          for (var key in $scope.categories) {
+            if ($scope.category.id !== $scope.categories[key].id && $scope.categories[key].internal_category === 1) {
+              $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title[$scope.lang]});
             }
           }
 

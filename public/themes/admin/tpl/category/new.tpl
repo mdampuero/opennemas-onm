@@ -46,7 +46,7 @@
                   <span class="fa fa-reply"></span>
                 </a>
               </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
+              <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
               <li class="quicklinks">
                 <button class="btn btn-loading btn-primary" ng-click="save()" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
@@ -72,11 +72,11 @@
               {if $multilanguage_enable}
               <div class="ng-cloak hidden-md hidden-lg hidden-sm clearfix">
                 Language:
-                <div class="cleafix pull-right">
+                <div class="pull-right">
                   <translator ng-model="lang" options="languageData" item="category" keys="multiLanguageFields"/>
                 </div>
-                <hr>
               </div>
+              <hr>
               {/if}
               <div class="form-group">
                 <label for="title" class="form-label">
