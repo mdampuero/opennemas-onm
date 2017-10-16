@@ -163,33 +163,29 @@
          */
         $scope.updateItem = function(index, id, route, name, value, loading, reload) {
           // Load shared variable
-          var contents = $scope.items;
+          var items = $scope.items;
 
           // Enable spinner
-          contents[index][loading] = 1;
+          items[index][loading] = 1;
 
-          var url = routing.generate(
-            route, {
-              contentType: 'article',
-              id: id
-            }
-          );
-
-          http.get(url, { value: value }).success(function(response) {
-            contents[index][loading] = 0;
-            contents[index][name] = response[name];
+          http.post({
+            name: route,
+            params: { contentType: 'article', id: id }
+          }, { value: value }).success(function(response) {
+            items[index][loading] = 0;
+            items[index][name] = response[name];
             messenger.post(response.messages);
 
             if (reload) {
               $scope.list($scope.route);
             }
           }).error(function(response) {
-            contents[index][loading] = 0;
+            items[index][loading] = 0;
             messenger.post(response.messages);
           });
 
           // Updated shared variable
-          $scope.contents = contents;
+          $scope.items = items;
         };
 
         /**
@@ -257,10 +253,10 @@
 
                   $scope.updateItemsStatus(loading, 1);
 
-                  var url = routing.generate(route,
-                    { contentType: $scope.criteria.content_type_name });
-
-                  return http.post(url, { ids: selected, value: value });
+                  return http.post({
+                    name: route,
+                    params: { contentType: $scope.criteria.content_type_name }
+                  }, { ids: selected, value: value });
                 };
               }
             }
@@ -298,22 +294,22 @@
               },
               success: function() {
                 return function() {
-                  var url = routing.generate(
-                    'backend_ws_content_send_to_trash',
-                    { contentType: content.content_type_name, id: content.id }
-                  );
-
-                  return http.post(url);
+                  return http.post({
+                    name: 'backend_ws_content_send_to_trash',
+                    params: { contentType: content.content_type_name, id: content.id }
+                  });
                 };
               }
             }
           });
 
           modal.result.then(function(response) {
-            messenger.post(response.data);
+            if (response) {
+              messenger.post(response.data);
 
-            if (response.success) {
-              $scope.list($scope.route, true);
+              if (response.success) {
+                $scope.list($scope.route, true);
+              }
             }
           });
         };
@@ -337,12 +333,10 @@
               },
               success: function() {
                 return function() {
-                  var url = routing.generate(
-                    'backend_ws_contents_batch_send_to_trash',
-                    { contentType: $scope.criteria.content_type_name }
-                  );
-
-                  return http.post(url, {ids: $scope.selected.items});
+                  return http.post({
+                    name: 'backend_ws_contents_batch_send_to_trash',
+                    params: { contentType: $scope.criteria.content_type_name }
+                  }, {ids: $scope.selected.items} );
                 };
               }
             }

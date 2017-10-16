@@ -1030,7 +1030,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Updated shared variable
       $scope.contents = contents;
       $scope.selected.contents = selected;
-    }
+    };
 
     /**
      * Updates the status property for selected contents.
