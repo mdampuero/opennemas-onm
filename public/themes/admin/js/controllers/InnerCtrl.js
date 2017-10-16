@@ -52,7 +52,19 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      */
     $scope.insertInModel = function(target, items) {
       $scope.loaded = false;
-      $scope[target] = items;
+
+      var keys  = target.split('.');
+      var model = $scope;
+
+      for (var i = 0; i < keys.length - 1; i++) {
+        if (!model[keys[i]]) {
+          model[keys[i]] = {};
+        }
+
+        model = model[keys[i]];
+      }
+
+      model[keys[i]] = items;
 
       // Trick to force dynamic image re-rendering
       $timeout(function() {
