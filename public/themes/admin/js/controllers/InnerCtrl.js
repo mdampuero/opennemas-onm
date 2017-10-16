@@ -67,21 +67,15 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param array  items  The items to insert.
      */
     $scope.insertInCKEditor = function(target, items) {
-      var html;
-
-      if (items instanceof Array) {
-        for (var i = 0; i < items.length; i++) {
-          html = Renderer.renderImage(items[i]);
-          Editor.get(target).insertHtml(html);
-        }
-
-        Editor.get(target).fire('change');
-
-        return;
+      if (!(items instanceof Array)) {
+        items = [ items ];
       }
 
-      html = Renderer.renderImage(items);
-      Editor.get(target).insertHtml(html);
+      for (var i = 0; i < items.length; i++) {
+        Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
+      }
+
+      Editor.get(target).fire('change');
     };
 
     /**
