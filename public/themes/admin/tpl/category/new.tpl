@@ -199,7 +199,7 @@
                     <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
                     <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
-                        <img src="[% categoryUrl %]" style="max-width:200px;" ng-show="category.logo_path !== '' && categoryUrl !== ''" >
+                        <img ng-src="[% categoryUrl %]" style="max-width:200px;" ng-if="category.logo_path.length > 1" >
                     </div>
                     <div>
                       <span class="btn btn-file">
