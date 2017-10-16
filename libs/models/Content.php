@@ -822,7 +822,7 @@ class Content implements \JsonSerializable
                 'id'       => sprintf('%06d', $this->id),
                 'date'     => date('YmdHis', strtotime($this->created)),
                 'category' => urlencode($this->category_name),
-                'slug'     => urlencode($this->slug),
+                'slug'     => urlencode($this->__get('slug')),
             ]);
         }
 

@@ -159,7 +159,7 @@ class Article extends Content
             'id'       => $this->id,
             'date'     => date('Y-m-d', strtotime($this->created)),
             'category' => urlencode($this->category_name),
-            'slug'     => urlencode($this->slug),
+            'slug'     => urlencode($this->__get('slug')),
         ]);
 
         return $this;
