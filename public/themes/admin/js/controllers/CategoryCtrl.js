@@ -154,12 +154,14 @@
          * This method load the slug text when the title value changes
          */
         $scope.loadSlug = function() {
-          if ($scope.category.id > 1 || $scope.category.title[$scope.lang].length < 1) {
+          if ($scope.category.id > 1 || undefined === $scope.category.title[$scope.lang]) {
             return;
           }
 
           $scope.getSlug($scope.category.title[$scope.lang], function(response) {
-              $scope.category.name[$scope.lang] = response.data.slug;
+              if (response.data.slug !== undefined) {
+                $scope.category.name[$scope.lang] = response.data.slug;
+              }
             }
           );
         };
