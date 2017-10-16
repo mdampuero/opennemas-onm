@@ -83,13 +83,13 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-model="category.title[lang]" type="text" ng-blur="loadSlug()" required="required">
+                  <input class="form-control" id="title" name="title" ng-model="category.title[lang]" type="text" ng-blur="loadSlug()" required="required" uib-tooltip="[% category.title[languageData.default] %]" tooltip-enable="languageData.default !== lang">
                 </div>
               </div>
               <div class="form-group">
                 <label for="name" class="form-label">{t}Slug{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="name" name="name" ng-model="category.name[lang]" type="text" ng-readonly="category.id > 0"  required="required">
+                  <input class="form-control" id="name" name="name" ng-model="category.name" type="text" ng-readonly="category.id > 0"  required="required">
                 </div>
               </div>
               <div class="form-group">

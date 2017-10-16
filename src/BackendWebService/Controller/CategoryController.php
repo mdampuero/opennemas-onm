@@ -99,11 +99,12 @@ class CategoryController extends ContentController
         if ($category->{$execMethod}($data)) {
             dispatchEventWithParams('category.' . $execMethod, ['category' => $category]);
             $msg->add(
-                sprintf(_('Category "%s" ' . $execMethod . 'd successfully.'), $data['id']),
+                sprintf(_('Category data saved successfully.'), $data['id']),
                 'success',
                 201
             );
             $data['id'] = $category->pk_content_category;
+
             return new JsonResponse(['message' => $msg->getMessages(), 'category' => $data['id']], $msg->getCode());
         }
 

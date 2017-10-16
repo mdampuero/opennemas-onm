@@ -185,16 +185,15 @@ class ContentCategory
             getService('core.instance')->activated_modules
         )) {
             $aux           = new stdClass();
-            $aux->name     = $data['name'];
             $aux->title    = $data['title'];
             $aux           = getService('data.manager.filter')->set($aux)
                 ->filter('localize', [
                     'keys'   => \ContentCategory::getL10nKeys(),
                     'locale' => getService('core.locale')->setContext('frontend')->getLocale()
                 ])->get();
-            $data['name']  = $aux->name;
             $data['title'] = $aux->title;
         } else {
+
             // Serialize language fields
             array_map(function ($field) use (&$data) {
                 $data[$field] = serialize($data[$field]);
@@ -260,14 +259,12 @@ class ContentCategory
             getService('core.instance')->activated_modules
         )) {
             $aux           = new stdClass();
-            $aux->name     = $data['name'];
             $aux->title    = $data['title'];
             $aux           = getService('data.manager.filter')->set($aux)
                 ->filter('localize', [
                     'keys'   => \ContentCategory::getL10nKeys(),
                     'locale' => getService('core.locale')->setContext('frontend')->getLocale()
                 ])->get();
-            $data['name']  = $aux->name;
             $data['title'] = $aux->title;
         } else {
             // Serialize language fields
@@ -493,6 +490,6 @@ class ContentCategory
      */
     public static function getL10nKeys()
     {
-        return [ 'name', 'title' ];
+        return [ 'title' ];
     }
 }
