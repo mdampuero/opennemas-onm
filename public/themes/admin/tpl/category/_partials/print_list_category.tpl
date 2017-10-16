@@ -39,7 +39,7 @@
           </div>
       </td>
       <td>
-          {localize_filter field=$category->name params=$language_data}
+          {$category->name}
       </td>
       <td class="hidden-xs text-center">
           {$contents_count['articles'][$category->id]|default:0}

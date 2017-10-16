@@ -143,11 +143,11 @@ class Controller extends SymfonyController
      */
     protected function getLocaleData($context = null, $request = null, $translation = false)
     {
-        $ls = $this->get('core.locale')
-            ->setContext($context === 'backend' ? $context : 'frontend');
+        $ls      = $this->get('core.locale');
+        $context = $context === 'backend' ? $context : 'frontend';
 
         $locale      = null;
-        $default     = $ls->getLocale();
+        $default     = $ls->getLocale($context);
         $translators = [];
 
         if (!empty($request)) {
@@ -174,7 +174,7 @@ class Controller extends SymfonyController
         return [
             'locale'      => $locale,
             'default'     => $default,
-            'available'   => $ls->getAvailableLocales(),
+            'available'   => $ls->getAvailableLocales($context),
             'translators' => array_unique($translators)
         ];
     }

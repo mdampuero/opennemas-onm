@@ -29,7 +29,6 @@
          */
         $scope.category = {
           title:{},
-          name:{},
           internal_category: 1
         };
 
@@ -114,10 +113,6 @@
             if (!$scope.category.title[langAux]) {
               $scope.category.title[langAux] = '';
             }
-
-            if (!$scope.category.name[langAux]) {
-              $scope.category.name[langAux] = '';
-            }
           });
 
           if ($scope.category.internal_category === 0) {
@@ -138,7 +133,7 @@
             }
           }
 
-          $scope.multiLanguageFields = ['title', 'name'];
+          $scope.multiLanguageFields = ['title'];
         };
 
         /**
@@ -159,8 +154,8 @@
           }
 
           $scope.getSlug($scope.category.title[$scope.lang], function(response) {
-              if (response.data.slug !== undefined) {
-                $scope.category.name[$scope.lang] = response.data.slug;
+              if (response.data.slug !== undefined && $scope.category.name === undefined) {
+                $scope.category.name = response.data.slug;
               }
             }
           );

@@ -54,7 +54,7 @@ class CategoryController extends ContentController
         ];
 
         // Check if at least have the default language for the title
-        $locale = $this->get('core.locale')->setContext('frontend')->getLocale();
+        $locale = $this->get('core.locale')->getLocale('frontend');
 
         if (isset($data['title']) &&
             empty($data['title']) ||
@@ -91,16 +91,20 @@ class CategoryController extends ContentController
             $execMethod = 'create';
         } else {
             $category = new \ContentCategory($data['id']);
+            if (empty($data['logo_path'])) {
+                $data['logo_path'] = '1';
+            }
         }
 
         if ($category->{$execMethod}($data)) {
             dispatchEventWithParams('category.' . $execMethod, ['category' => $category]);
             $msg->add(
-                sprintf(_('Category "%s" ' . $execMethod . 'd successfully.'), $data['id']),
+                sprintf(_('Category data saved successfully.'), $data['id']),
                 'success',
                 201
             );
             $data['id'] = $category->pk_content_category;
+
             return new JsonResponse(['message' => $msg->getMessages(), 'category' => $data['id']], $msg->getCode());
         }
 

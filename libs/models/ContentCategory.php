@@ -17,7 +17,7 @@
  *
  * @package    Model
  */
-class ContentCategory
+class ContentCategory implements \JsonSerializable
 {
     /**
      * Category id
@@ -59,7 +59,7 @@ class ContentCategory
      *
      * @var string
      */
-    public $title = null;
+    protected $title = null;
 
     /**
      * Whether if this category is in menu
@@ -143,6 +143,71 @@ class ContentCategory
     }
 
     /**
+     * Magic function to get uninitialized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     */
+    public function __get($name)
+    {
+        if (in_array($name, $this->getL10nKeys())) {
+            if (getService('core.locale')->getContext() !== 'backend') {
+                return getService('data.manager.filter')
+                    ->set($this->{$name})
+                    ->filter('localize')
+                    ->get();
+            }
+
+            return getService('data.manager.filter')
+                ->set($this->{$name})
+                ->filter('unlocalize')
+                ->get();
+        }
+
+        return $this->{$name};
+    }
+
+    /**
+     * Changes a property value.
+     *
+     * @param string $name  The property name.
+     * @param mixed  $value The property value.
+     */
+    public function __set($name, $value)
+    {
+        if (in_array(
+                'es.openhost.module.multilanguage',
+                getService('core.instance')->activated_modules
+            )
+            && in_array($name, $this->getL10nKeys())
+        ) {
+            $value = getService('data.manager.filter')
+                ->set($value)
+                ->filter('unlocalize')
+                ->get();
+        }
+
+        $this->{$name} = $value;
+    }
+
+    /**
+     * Returns all content information when serialized.
+     *
+     * @return array The content information.
+     */
+    public function jsonSerialize()
+    {
+        $data = get_object_vars($this);
+
+        foreach ($this->getL10nKeys() as $key) {
+            $data[$key] = $this->__get($key);
+        }
+
+        return $data;
+    }
+
+    /**
      * Fetches all the information of a category into the object.
      *
      * @param string $id the category id.
@@ -178,21 +243,19 @@ class ContentCategory
     public function create($data)
     {
         // Generate slug for category
-        $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
+        // $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
 
         if (!in_array(
             'es.openhost.module.multilanguage',
             getService('core.instance')->activated_modules
         )) {
             $aux           = new stdClass();
-            $aux->name     = $data['name'];
             $aux->title    = $data['title'];
             $aux           = getService('data.manager.filter')->set($aux)
                 ->filter('localize', [
                     'keys'   => \ContentCategory::getL10nKeys(),
                     'locale' => getService('core.locale')->setContext('frontend')->getLocale()
                 ])->get();
-            $data['name']  = $aux->name;
             $data['title'] = $aux->title;
         } else {
             // Serialize language fields
@@ -260,14 +323,12 @@ class ContentCategory
             getService('core.instance')->activated_modules
         )) {
             $aux           = new stdClass();
-            $aux->name     = $data['name'];
             $aux->title    = $data['title'];
             $aux           = getService('data.manager.filter')->set($aux)
                 ->filter('localize', [
                     'keys'   => \ContentCategory::getL10nKeys(),
                     'locale' => getService('core.locale')->setContext('frontend')->getLocale()
                 ])->get();
-            $data['name']  = $aux->name;
             $data['title'] = $aux->title;
         } else {
             // Serialize language fields
@@ -493,6 +554,6 @@ class ContentCategory
      */
     public static function getL10nKeys()
     {
-        return [ 'name', 'title' ];
+        return [ 'title' ];
     }
 }

@@ -210,8 +210,7 @@ class Menu
             $item = $fm->set(clone $item)
                 ->filter('localize', [
                     'keys' => $this->getL10nKeys(),
-                    'locale' => getService('core.locale')
-                        ->setContext('frontend')->getLocale()
+                    'locale' => getService('core.locale')->getRequestLocale('frontend')
                 ])
                 ->get();
 
