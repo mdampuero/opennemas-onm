@@ -229,6 +229,10 @@
         $scope.updateSelectedItems = function(route, name, value, loading) {
           // Enable spinner
           $scope.deleting = 1;
+          var selected = {
+            all: $scope.selected.contents,
+            contents: $scope.selected.items
+          };
 
           var modal = $uibModal.open({
             templateUrl: 'modal-update-selected',
@@ -237,12 +241,8 @@
             resolve: {
               template: function() {
                 return {
-                  checkPhone:  $scope.checkPhone,
-                  checkVat:    $scope.checkVat,
-                  extra:       $scope.extra,
                   name:        name,
-                  saveBilling: $scope.saveBilling,
-                  selected:    $scope.selected,
+                  selected:    selected,
                   value:       value
                 };
               },
@@ -320,6 +320,10 @@
         $scope.sendToTrashSelected = function () {
           // Enable spinner
           $scope.deleting = 1;
+          var selected = {
+            all: $scope.selected.contents,
+            contents: $scope.selected.items
+          };
 
           var modal = $uibModal.open({
             templateUrl: 'modal-delete-selected',
@@ -328,7 +332,7 @@
             resolve: {
               template: function() {
                 return {
-                  selected: $scope.selected
+                  selected: selected
                 };
               },
               success: function() {
