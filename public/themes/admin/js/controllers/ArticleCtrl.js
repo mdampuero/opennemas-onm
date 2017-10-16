@@ -55,6 +55,26 @@
         $scope.draftEnabled = false;
 
         /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'article-draft';
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm  = null;
+
+        /**
          * @function checkDraft
          * @memberOf ArticleCtrl
          *
@@ -62,13 +82,7 @@
          *   Checks if there is a draft from a previous article.
          */
         $scope.checkDraft = function() {
-          var key = 'article-draft';
-
-          if ($scope.article && $scope.article.pk_article) {
-            key = 'article-' + $scope.article.pk_article + '-draft';
-          }
-
-          if (!webStorage.session.has(key)) {
+          if (!webStorage.session.has($scope.draftKey)) {
             return;
           }
 
@@ -85,22 +99,11 @@
               },
               yes: function() {
                 return function(modalWindow) {
-                  var draft =  webStorage.session.get(key);
+                  $scope.data.article = webStorage.session.get($scope.draftKey);
 
-                  for (var name in draft) {
-                    if (name === 'article') {
-                      $scope.data.article = draft[name];
-
-                      $scope.config.linkers.il.link(
-                        $scope.data.article, $scope.article);
-
-                      $scope.config.linkers.il.update();
-
-                      continue;
-                    }
-
-                    $scope[name] = draft[name];
-                  }
+                  $scope.config.linkers.il.link(
+                    $scope.data.article, $scope.article);
+                  $scope.config.linkers.il.update();
 
                   modalWindow.close({ response: true, success: true });
 
@@ -117,7 +120,7 @@
               },
               no: function() {
                 return function(modalWindow) {
-                  webStorage.session.remove(key);
+                  webStorage.session.remove($scope.draftKey);
                   modalWindow.close({ response: false, success: true });
                 };
               }
@@ -160,6 +163,10 @@
         $scope.init = function(locale, id) {
           $scope.forcedLocale = locale;
 
+          if (id) {
+            $scope.draftKey = 'article-' + id + '-draft';
+          }
+
           $scope.getArticle(id);
         };
 
@@ -173,19 +180,18 @@
          * @param {Integer} id The article id.
          */
         $scope.getArticle = function(id) {
-          $scope.loading = 1;
+          $scope.flags.loading = 1;
 
           var route = !id ? 'api_v1_backend_article_create' :
             { name: 'api_v1_backend_article_show', params: { id: id } };
 
           http.get(route).then(function(response) {
-            $scope.loading = 0;
+            $scope.disableFlags();
             $scope.data    = response.data;
 
-            // Duplicate default article when creating
-            if (!response.data.article) {
-              response.data.article = angular.copy($scope.article);
-            }
+            // Grant that article has all default values
+            $scope.data.article =
+              angular.merge($scope.data.article, $scope.article);
 
             if (response.data.article) {
               $scope.backup = { content_status: $scope.article.content_status };
@@ -239,10 +245,7 @@
             }
 
             $scope.checkDraft();
-          }, function(response) {
-            $scope.loading = 0;
-            messenger.post(response.data);
-          });
+          }, $scope.errorCb);
         };
 
         /**
@@ -256,7 +259,7 @@
          * @param {String} getPreviewUrl The URL to get the preview.
          */
         $scope.preview = function(previewUrl, getPreviewUrl) {
-          $scope.previewLoading = true;
+          $scope.flags.preview = true;
 
           var data = angular.copy($scope.article);
 
@@ -285,9 +288,9 @@
               }
             });
 
-            $scope.previewLoading = false;
+            $scope.disableFlags();
           }).error(function() {
-            $scope.previewLoading = false;
+            $scope.disableFlags();
           });
         };
 
@@ -304,6 +307,8 @@
             return;
           }
 
+          $scope.flags.saving = true;
+
           var data = cleaner.clean(angular.copy($scope.data.article));
 
           if (angular.isArray(data.metadata)) {
@@ -312,214 +317,98 @@
             }).join(',');
           }
 
-          $scope.saving = true;
+          /**
+           * Callback executed when article is saved/updated successfully.
+           *
+           * @param {Object} response The response object.
+           */
+          var successCb = function(response) {
+            $scope.disableFlags();
+            webStorage.session.remove($scope.draftKey);
 
-          http.post('backend_ws_article_save', data)
-            .then(function(response) {
-              $scope.saving = false;
-              $scope.articleForm.$setPristine(true);
+            if (response.status === 201) {
+              $window.location.href = response.headers().location;
+            }
 
-              if (response.status === 201) {
-                webStorage.session.remove('article-draft');
-                $window.location.href = response.headers().location;
-              }
-            }, function(response) {
-              $scope.saving = false;
-              messenger.post(response.data);
-            });
-        };
-
-        /**
-         * @function update
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Updates an article.
-         */
-        $scope.update = function() {
-          if ($scope.articleForm.$invalid) {
-            $scope.showRequired = true;
-            return;
-          }
-
-          $scope.saving = true;
-
-          var data = cleaner.clean(angular.copy($scope.data.article));
-          if (angular.isArray(data.metadata)) {
-            data.metadata = data.metadata.map(function(e) {
-              return e.text;
-            }).join(',');
-          }
-
-          var route = {
-            name: 'backend_ws_article_update',
-            params: { id: $scope.article.pk_article }
+            $scope.articleForm.$setPristine(true);
+            messenger.post(response.data);
+            $scope.backup.content_status = $scope.article.content_status;
           };
 
-          http.put(route, data)
-            .then(function(response) {
-              $scope.saving = false;
-              webStorage.session.remove('article-' +
-                  $scope.article.pk_article + '-draft');
-              $scope.articleForm.$setPristine(true);
-              messenger.post(response.data);
-              $scope.backup.content_status = $scope.article.content_status;
-            }, function(response) {
-              $scope.saving = false;
-              messenger.post(response.data);
-            });
+          if (!$scope.article.pk_article) {
+            http.post('backend_ws_article_save', data)
+              .then(successCb, $scope.errorCb);
+
+            return;
+          }
+
+          http.put({
+            name: 'backend_ws_article_update',
+            params: { id: $scope.article.pk_article }
+          }, data).then(successCb, $scope.errorCb);
         };
 
-        // Updates scope when photo1 changes.
-        $scope.$watch('photo1', function(nv, ov) {
-          // Remove image
-          if (!nv) {
-            $scope.article.img1 = null;
-
-            // If photo 2  = photo1, remove photo2 too
-            if (angular.equals($scope.photo2, ov)) {
-              $scope.photo2 = null;
+        // Update footers when photos change
+        $scope.$watch('[article.img1, article.img2, article.params.imageHome ]',
+          function(nv, ov) {
+            if (angular.equals(nv, ov)) {
+              return;
             }
 
-            delete $scope.article.img1_footer;
-
-            return;
-          }
-
-          $scope.article.img1 = nv.id;
-
-          // Update img1_footer if empty or equals to old description
-          if (angular.isUndefined($scope.article.img1_footer) ||
-              $scope.article.img1_footer === null ||
-              (ov && $scope.article.img1_footer === ov.description)) {
-            $scope.article.img1_footer = nv.description;
-          }
-
-          // Set inner image if empty or equals to old photo1
-          if ($scope.articleForm.$dirty &&
-              (!ov && (angular.isUndefined($scope.photo2) || !$scope.photo2)) ||
-              (ov &&angular.equals($scope.photo2, ov))) {
-
-            $scope.photo2 = nv;
-          }
-        }, true);
-
-        // Updates scope when photo2 changes.
-        $scope.$watch('photo2', function(nv, ov) {
-          // Remove image
-          if (!nv) {
-            $scope.article.img2 = null;
-
-            delete $scope.article.img2_footer;
-
-            return;
-          }
-
-          $scope.article.img2 = $scope.photo2.id;
-
-          if (angular.isUndefined($scope.article.img2_footer) ||
-              $scope.article.img2_footer === null ||
-              (ov && $scope.article.img2_footer === ov.description)) {
-            $scope.article.img2_footer = $scope.photo2.description;
-          }
-        }, true);
-
-        //Updates scope when photo3 changes.
-        $scope.$watch('photo3', function(nv, ov) {
-          // Remove image
-          if (!nv) {
-
-            $scope.article.params.imageHome = null;
-
-            delete $scope.article.params.imageHomeFooter;
-
-            return;
-          }
-
-          $scope.article.params.imageHome = $scope.photo3.id;
-
-          if (angular.isUndefined($scope.article.params.imageHomeFooter) ||
-              $scope.article.params.imageHomeFooter === null ||
-              (ov && ov.description === $scope.article.params.imageHomeFooter)) {
-            $scope.article.params.imageHomeFooter = $scope.photo3.description;
-          }
-        }, true);
-
-        // Updates scope when video1 changes.
-        $scope.$watch('video1', function(nv, ov) {
-          $scope.article.fk_video     = null;
-          $scope.article.footer_video = null;
-
-          if ($scope.video1) {
-            $scope.article.fk_video     = $scope.video1.id;
-            $scope.article.footer_video = $scope.video1.description;
-
-            // Set inner video if empty
-            if (angular.isUndefined($scope.video2) && nv !== ov) {
-              $scope.video2 = $scope.video1;
-            }
-          }
-        }, true);
-
-        // Updates scope when video2 changes.
-        $scope.$watch('video2', function() {
-          $scope.article.fk_video2     = null;
-          $scope.article.footer_video2 = null;
-
-          if ($scope.video2) {
-            $scope.article.fk_video2     = $scope.video2.id;
-            $scope.article.footer_video2 = $scope.video2.description;
-          }
-        }, true);
-
-        // Updates scope when relatedInFrontpage changes.
-        $scope.$watch('relatedInFrontpage', function(nv, ov) {
-          // Set inner if creating and empty or when old value in front is
-          // equals to current value in inner
-          if ((!$scope.article.pk_article && !$scope.relatedInInner) || (ov &&
-                angular.equals(cleaner.clean($scope.relatedInInner),
-                  cleaner.clean(ov)))) {
-            $scope.relatedInInner = angular.copy(nv);
-          }
-
-          var items                   = [];
-          $scope.article.relatedFront = [];
-
-          if (nv instanceof Array) {
             for (var i = 0; i < nv.length; i++) {
-              items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+              var footer = 'img' + (i + 1) + '_footer';
+              var model  = $scope.article;
+
+              if (i === 2) {
+                footer = 'imageHomeFooter';
+                model  = $scope.article.params;
+              }
+
+              if (angular.isUndefined(model[footer]) || model[footer] === null ||
+                  (ov && ov[i] && model[footer] === ov[i].description)) {
+                model[footer] = nv[i].description;
+              }
             }
-          }
 
-          $scope.article.relatedFront = angular.toJson(items);
-        }, true);
+            if ($scope.articleForm.$dirty && (!$scope.article.img2) ||
+                angular.equals($scope.article.img2, ov[1])) {
+              $scope.article.img2 = $scope.article.img1;
+            }
+          }, true);
 
-        // Updates scope when relatedInInner changes.
-        $scope.$watch('relatedInInner', function(nv) {
-          var items                   = [];
-          $scope.article.relatedInner = [];
+        // Updates footers when videos changes
+        $scope.$watch('[article.fk_video, article.fk_video2]',
+          function(nv, ov) {
+            if (angular.equals(nv, ov)) {
+              return;
+            }
 
-          if (nv instanceof Array) {
             for (var i = 0; i < nv.length; i++) {
-              items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+              var footer = 'footer_video';
+              var model  = $scope.article;
+
+              if (i > 0) {
+                footer = 'footer_video2';
+              }
+
+              if (angular.isUndefined(model[footer]) || model[footer] === null ||
+                  (ov && model[footer] === ov[i].description)) {
+                model[footer] = nv[i].description;
+              }
             }
-          }
 
-          $scope.article.relatedInner = angular.toJson(items);
-        }, true);
-
-        // Updates scope when relatedInHome changes.
-        $scope.$watch('relatedInHome', function(nv) {
-          var items                  = [];
-          $scope.article.relatedHome = [];
-
-          if (nv instanceof Array) {
-            for (var i = 0; i < nv.length; i++) {
-              items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+            if ($scope.articleForm.$dirty && (!$scope.article.fk_video2) ||
+                angular.equals($scope.article.fk_video2, ov[1])) {
+              $scope.article.fk_video2 = $scope.article.fk_video;
             }
-          }
+          }, true);
 
-          $scope.article.relatedHome = angular.toJson(items);
+        // Sets relatedInInner equals to relatedInFrontpage
+        $scope.$watch('article.relatedInFrontpage', function(nv, ov) {
+          if ((!ov && $scope.article.relatedInInner) ||
+              angular.equals(ov, $scope.article.relatedInInner)) {
+            $scope.article.relatedInInner = angular.copy(nv);
+          }
         }, true);
 
         // TODO: Remove when no target="_blank" in URI for external
@@ -530,87 +419,35 @@
           }
         }, true);
 
-        // Updates the model when galleryForFrontpage changes.
-        $scope.$watch('galleryForFrontpage', function(nv) {
-          delete $scope.article.withGallery;
-
-          if (nv) {
-            $scope.article.params.withGallery = nv.id;
+        // Saves a draft 2.5s after the last change
+        $scope.$watch('article', function(nv, ov) {
+          if (!nv || ov === nv) {
+            return;
           }
-        }, true);
 
-        // Updates the model when galleryForInner changes.
-        $scope.$watch('galleryForInner', function(nv) {
-          delete $scope.article.params.withGalleryInt;
-
-          if (nv) {
-            $scope.article.params.withGalleryInt = nv.id;
-          }
-        }, true);
-
-        // Updates the model when galleryForHome changes.
-        $scope.$watch('galleryForHome', function(nv) {
-          delete $scope.article.params.withGalleryHome;
-
-          if (nv) {
-            $scope.article.params.withGalleryHome = nv.id;
-          }
-        }, true);
-
-
-        $scope.dtm  = null;
-
-        // Saves a draft 1s after the last change
-        $scope.$watch('[article, photo1, photo2, photo3, video1, video2,' +
-          'galleryForFrontpage, galleryForInner, galleryForHome]',
-          function(nv, ov) {
-            if (!nv || ov === nv || (ov[0] && !ov[0].pk_article &&
-                  nv[0].pk_article)) {
-              return;
+          // Show a message when leaving before saving
+          $($window).bind('beforeunload', function() {
+            if ($scope.articleForm.$dirty){
+              return $window.leaveMessage;
             }
+          });
 
-            // Show a message when leaving before saving
-            $($window).bind('beforeunload', function() {
-              if ($scope.articleForm.$dirty){
-                return $window.leaveMessage;
-              }
-            });
+          $scope.articleForm.$setDirty(true);
 
-            var key = 'article-draft';
+          if ($scope.draftEnabled) {
             $scope.draftSaved = null;
 
-            if (ov && nv !== ov && $scope.draftEnabled) {
-              if ($scope.article.pk_article) {
-                key = 'article-' + $scope.article.pk_article + '-draft';
-              }
-
-              webStorage.session.set(key, {
-                article:             $scope.data.article,
-                photo1:              $scope.photo1,
-                photo2:              $scope.photo2,
-                photo3:              $scope.photo3,
-                video1:              $scope.video1,
-                video2:              $scope.video2,
-                relatedInHome:       $scope.relatedInHome,
-                relatedInInner:      $scope.relatedInInner,
-                relatedInFrontpage:  $scope.relatedInFrontpage,
-                galleryForFrontpage: $scope.galleryForFrontpage,
-                galleryForInner:     $scope.galleryForInner,
-                galleryForHome:      $scope.galleryForHome,
-              });
-
-              // Cancel draft save
-              if ($scope.dtm) {
-                $timeout.cancel($scope.dtm);
-              }
-
-              $scope.dtm = $timeout(function() {
-                $scope.draftSaved = $window.moment().format('HH:mm');
-              }, 2500);
+            if ($scope.dtm) {
+              $timeout.cancel($scope.dtm);
             }
 
-            $scope.articleForm.$setDirty(true);
-          }, true);
+            $scope.dtm = $timeout(function() {
+              webStorage.session.set($scope.draftKey, $scope.data.article);
+
+              $scope.draftSaved = $window.moment().format('HH:mm');
+            }, 2500);
+          }
+        }, true);
 
         // Update title_int when title changes
         $scope.$watch('article.title', function(nv, ov) {

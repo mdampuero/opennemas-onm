@@ -55,7 +55,7 @@
               </li>
               <li class="quicklinks hidden-xs">
                 <button class="btn btn-white" id="button_preview" ng-click="preview('admin_article_preview', 'admin_article_get_preview')" type="button">
-                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': previewLoading }" ></i>
+                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.preview }" ></i>
                   <span class="hidden-xs">{t}Preview{/t}</span>
                 </button>
               </li>
@@ -63,36 +63,36 @@
                 <span class="h-seperate"></span>
               </li>
               {if isset($id)}
-              {acl isAllowed="ARTICLE_UPDATE"}
-              <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving" type="button" id="update-button">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
-                  <span class="text">{t}Update{/t}</span>
-                </button>
-              </li>
-              {/acl}
+                {acl isAllowed="ARTICLE_UPDATE"}
+                  <li class="quicklinks">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
+                      <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                      <span class="text">{t}Update{/t}</span>
+                    </button>
+                  </li>
+                {/acl}
               {else}
-              {acl isAllowed="ARTICLE_CREATE"}
-              <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="saving" type="button" id="save-button">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
-                  <span class="text">{t}Save{/t}</span>
-                </button>
-              </li>
-              {/acl}
+                {acl isAllowed="ARTICLE_CREATE"}
+                  <li class="quicklinks">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
+                      <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                      <span class="text">{t}Save{/t}</span>
+                    </button>
+                  </li>
+                {/acl}
               {/if}
             </ul>
           </div>
         </div>
       </div>
     </div>
-    <div class="content ng-cloak no-animate" ng-if="loading">
+    <div class="content ng-cloak no-animate" ng-if="flags.loading">
       <div class="spinner-wrapper">
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
     </div>
-    <div class="content ng-cloak" ng-if="!error && !loading && article">
+    <div class="content ng-cloak" ng-if="!error && !flags.loading && article">
       <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
