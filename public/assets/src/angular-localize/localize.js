@@ -148,6 +148,8 @@
            * @param {Object} original  The original item.
            */
           updateLocalized: function(localized, original) {
+            var self  = this;
+
             for (var i = 0; i < this.keys.length; i++) {
               if (original[this.keys[i]]) {
                 if (this.clean) {
@@ -159,6 +161,14 @@
                 }
               }
             }
+
+            var ukeys = Object.keys(original).filter(function(e) {
+              return self.keys.indexOf(e) < 0;
+            });
+
+            for (var i = 0; i < ukeys.length; i++) {
+              localized[ukeys[i]] = original[ukeys[i]];
+            }
           },
 
           /**
@@ -168,15 +178,24 @@
            * @param {Object} localized The localized item.
            */
           updateOriginal: function(original, localized) {
+            var self  = this;
+
             for (var i = 0; i < this.keys.length; i++) {
               if (!original[this.keys[i]]) {
                 original[this.keys[i]] = {};
               }
 
-              if (original[this.keys[i]] &&
-                  angular.isObject(original[this.keys[i]])) {
+              if (angular.isObject(original[this.keys[i]])) {
                 original[this.keys[i]][this.key] = localized[this.keys[i]];
               }
+            }
+
+            var ukeys = Object.keys(localized).filter(function(e) {
+              return self.keys.indexOf(e) < 0;
+            });
+
+            for (var i = 0; i < ukeys.length; i++) {
+              original[ukeys[i]] = localized[ukeys[i]];
             }
           },
 
