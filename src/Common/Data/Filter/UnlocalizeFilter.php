@@ -39,6 +39,5 @@ class UnlocalizeFilter extends LocalizeFilter
         }
 
         return [ $locale->getLocale() => $value ];
-
     }
 }

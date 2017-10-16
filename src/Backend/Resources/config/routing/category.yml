@@ -1,0 +1,38 @@
+# Category manager routes
+admin_categories:
+    path:     /categories
+    defaults: { _controller  : BackendBundle:Category:list }
+
+admin_categories_config:
+    path:     /categories/config
+    defaults: { _controller  : BackendBundle:Category:config }
+
+admin_category_create:
+    path:     /categories/create
+    defaults: { _controller  : BackendBundle:Category:show }
+
+admin_category_show:
+    path:     /categories/{id}/show
+    defaults: { _controller  : BackendBundle:Category:show }
+    options:
+        expose: true
+
+admin_category_update:
+    path:     /category/{id}/update
+    defaults: { _controller  : BackendBundle:Category:update }
+
+admin_category_delete:
+    path:     /category/{id}/delete
+    defaults: { _controller  : BackendBundle:Category:delete }
+
+admin_category_empty:
+    path:     /category/{id}/empty
+    defaults: { _controller  : BackendBundle:Category:empty }
+
+admin_category_toggleavailable:
+    path:     /category/{id}/toggle-available
+    defaults: { _controller  : BackendBundle:Category:toggleAvailable }
+
+admin_category_togglerss:
+    path:     /category/{id}/toggle-rss
+    defaults: { _controller  : BackendBundle:Category:toggleRss }

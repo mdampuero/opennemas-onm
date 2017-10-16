@@ -4,8 +4,8 @@ orm:
             name: Category
             properties:
                 pk_content_category: integer
-                title:               string
-                name:                string
+                title:               array
+                name:                array
                 inmenu:              boolean
                 posmenu:             integer
                 internal_category:   integer

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
@@ -8,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -75,18 +73,18 @@ class CategoryManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        $ids  = array();
-        $keys = array();
+        $ids  = [];
+        $keys = [];
         foreach ($data as $value) {
-            $ids[] = 'category' . $this->cacheSeparator . $value;
+            $ids[]  = 'category' . $this->cacheSeparator . $value;
             $keys[] = $value;
         }
 
         $categories = array_values($this->cache->fetch($ids));
 
-        $cachedIds = array();
+        $cachedIds = [];
         foreach ($categories as $category) {
-            $cachedIds[] = 'category'. $this->cacheSeparator
+            $cachedIds[] = 'category' . $this->cacheSeparator
                 . $category->pk_content_category;
         }
 
@@ -94,15 +92,16 @@ class CategoryManager extends BaseManager
 
         foreach ($missedIds as $id) {
             list($contentType, $categoryId) = explode($this->cacheSeparator, $id);
-            $category = $this->find($categoryId);
+            $category                       = $this->find($categoryId);
             if ($category->pk_content_category) {
                 $categories[] = $category;
             }
         }
+
         // Unused var $contentType
         unset($contentType);
 
-        $ordered = array();
+        $ordered = [];
         foreach ($keys as $id) {
             $i = 0;
             while ($i < count($categories)
@@ -133,20 +132,20 @@ class CategoryManager extends BaseManager
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
-
-        $orderBySQL  = '`pk_content_category` DESC';
+        $orderBySQL = '`pk_content_category` DESC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
         $sql = "SELECT pk_content_category FROM `content_categories` "
-            ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+            . "WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $ids = array();
+        $ids = [];
         foreach ($rs as $result) {
             $ids[] = $result['pk_content_category'];
         }
@@ -166,17 +165,40 @@ class CategoryManager extends BaseManager
     public function countBy($criteria)
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $filterSQL = $this->getFilterSQL($criteria);
 
         // Executing the SQL
         $sql = "SELECT COUNT(pk_content_category) FROM `content_categories`"
-            ." WHERE $filterSQL";
-        $rs = $this->dbConn->fetchArray($sql);
+            . " WHERE $filterSQL";
+        $rs  = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
         }
 
         return $rs[0];
+    }
+
+    public function sortCategories(&$categoryList, $languageData)
+    {
+        return usort($categoryList, function ($a, $b) use ($languageData) {
+            // this object is because the filter change the original object and
+            //localize the object when don't want that.
+            $field = (object) ['field' => $a->name];
+            $nameA = getService('data.manager.filter')->set($field)
+            ->filter('localize', [
+                'keys'   => ['field'],
+                'locale' => $languageData['default']
+            ])->get()->field;
+
+            $field = (object) ['field' => $b->name];
+            $nameB = getService('data.manager.filter')->set($field)
+            ->filter('localize', [
+                'keys'   => ['field'],
+                'locale' => $languageData['default']
+            ])->get()->field;
+
+            return strcmp($nameA, $nameB);
+        });
     }
 }
