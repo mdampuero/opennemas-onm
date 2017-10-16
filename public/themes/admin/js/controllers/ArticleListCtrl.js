@@ -343,11 +343,13 @@
           });
 
           modal.result.then(function(response) {
-            messenger.post(response.data);
+            if (response) {
+              messenger.post(response.data);
 
-            if (response.success) {
-              $scope.selected = { all: false, contents: [] };
-              $scope.list($scope.route, true);
+              if (response.success) {
+                $scope.selected = { all: false, items: [] };
+                $scope.list();
+              }
             }
           });
         };

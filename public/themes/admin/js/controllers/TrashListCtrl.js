@@ -34,10 +34,12 @@ angular.module('BackendApp.controllers').controller('TrashListCtrl', [
       });
 
       modal.result.then(function(response) {
-        messenger.post(response.data.messages);
+        if (response) {
+          messenger.post(response.data.messages);
 
-        if (response.success) {
-            $scope.list($scope.route);
+          if (response.success) {
+              $scope.list($scope.route);
+          }
         }
       });
     };
