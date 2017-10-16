@@ -2,8 +2,8 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('InnerCtrl', [
-  '$rootScope', '$scope', '$timeout', 'Editor', 'Renderer',
-  function($rootScope, $scope, $timeout, Editor, Renderer) {
+  '$rootScope', '$scope', '$timeout', 'Editor', 'messenger', 'Renderer',
+  function($rootScope, $scope, $timeout, Editor, messenger, Renderer) {
     'use strict';
 
     /**
@@ -18,6 +18,46 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       linkers: {},
       locale: null,
       multilanguage: null
+    };
+
+    /**
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *  The list of flags
+     *
+     * @type {Object}
+     */
+    $scope.flags = {};
+
+    /**
+     * @function disableFlags
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   Disables all flags.
+     */
+    $scope.disableFlags = function() {
+      for (var key in $scope.flags) {
+        $scope.flags[key] = false;
+      }
+    };
+
+    /**
+     * @function errorCb
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   The callback function to execute when an ajax request fails.
+     *
+     * @param {Object} response The response object.
+     */
+    $scope.errorCb = function(response) {
+      $scope.disableFlags();
+
+      if (response && response.data) {
+        messenger.post(response.data);
+      }
     };
 
     /**
