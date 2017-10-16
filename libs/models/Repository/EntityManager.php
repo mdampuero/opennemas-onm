@@ -135,7 +135,7 @@ class EntityManager extends BaseManager
         $sql = 'SELECT content_type_name, pk_content'
             . ' FROM ' . $fromSQL
             . ' LEFT JOIN contents_categories'
-            . ' ON pk_content = pk_fk_content';
+            . ' ON pk_content = pk_fk_content ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
