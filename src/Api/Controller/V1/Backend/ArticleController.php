@@ -237,7 +237,7 @@ class ArticleController extends Controller
      *
      * @return array The list of contents linked to the article.
      */
-    protected function getRelated($article)
+    protected function getRelated(&$article)
     {
         $em    = $this->get('entity_repository');
         $extra = [];
@@ -245,6 +245,8 @@ class ArticleController extends Controller
         $rm    = $this->get('related_contents');
 
         foreach ($keys as $key) {
+            $name = 'related' . ucfirst(str_replace('page', '', $key));
+
             if ($key === 'home'
                 && !$this->get('core.security')
                     ->hasExtension('CRONICAS_MODULES')
@@ -258,9 +260,13 @@ class ArticleController extends Controller
                 continue;
             }
 
-            $extra[$key] = array_map(function ($content) {
+            $extra[$name] = array_map(function ($content) {
                 return \Onm\StringUtils::convertToUtf8($content);
             }, $em->findMulti($relations));
+
+            $article->{$name} = array_map(function ($a) {
+                return $a[1];
+            }, $relations);
         }
 
         return $extra;
