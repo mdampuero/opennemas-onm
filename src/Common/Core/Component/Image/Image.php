@@ -119,10 +119,10 @@ class Image
         }
 
         return $image->resize(
-            new \Imagine\Image\Box($widthResize, $heightResize, ImageInterface::THUMBNAIL_OUTBOUND)
+            $this->getBox($widthResize, $heightResize, ImageInterface::THUMBNAIL_OUTBOUND)
         )->crop(
-            new \Imagine\Image\Point($topX, $topY),
-            new \Imagine\Image\Box($width, $height)
+            $this->getPoint($topX, $topY),
+            $this->getBox($width, $height)
         );
     }
 

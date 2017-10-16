@@ -34,7 +34,7 @@ class ImageTest extends TestCase
     private function getMocketImagine()
     {
         return $this->getMockBuilder('Tests\Common\Core\Component\Image\ImagineMockTest')
-            ->setMethods(['resize', 'crop', 'thumbnail'])
+            ->setMethods(['resize', 'crop', 'thumbnail', 'zoomCrop', 'getSize'])
             ->getMock();
     }
 
@@ -110,7 +110,8 @@ class ImageTest extends TestCase
             ->with(
                 $this->equalTo($parameters[0]),
                 $this->equalTo($parameters[1]),
-                $this->equalTo(ImageInterface::THUMBNAIL_OUTBOUND))
+                $this->equalTo(ImageInterface::THUMBNAIL_OUTBOUND)
+            )
             ->will($this->returnValue($box));
         $imagine = $this->getMocketImagine();
         $imagine->expects($this->once())
@@ -127,7 +128,8 @@ class ImageTest extends TestCase
             ->with(
                 $this->equalTo($parameters[0]),
                 $this->equalTo($parameters[1]),
-                $this->equalTo(ImageInterface::THUMBNAIL_INSET))
+                $this->equalTo(ImageInterface::THUMBNAIL_INSET)
+            )
             ->will($this->returnValue($box));
         $imagine = $this->getMocketImagine();
         $imagine->expects($this->once())
@@ -137,114 +139,42 @@ class ImageTest extends TestCase
         $this->assertSame($image->process('thumbnail', $imagine, $parameters), $imagine);
 
         $parameters = [50, 100];
-        $box        = $this->getMocketBox($parameters[0], $parameters[1], ImageInterface::THUMBNAIL_INSET);
+        $box        = $this->getMocketBox($parameters[0], $parameters[1], ImageInterface::THUMBNAIL_OUTBOUND);
+        $box2       = $this->getMocketBox($parameters[0], $parameters[1]);
+        $point      = $this->getMocketPoint($parameters[0], $parameters[1]);
         $image      = $this->getMocketImage();
-        $image->expects($this->once())
+        $image->expects($this->exactly(2))
             ->method('getBox')
-            ->with(
-                $this->equalTo($parameters[0]),
-                $this->equalTo($parameters[1]),
-                $this->equalTo(ImageInterface::THUMBNAIL_INSET))
-            ->will($this->returnValue($box));
+            ->withConsecutive(
+                [
+                    $this->equalTo($parameters[0]),
+                    $this->equalTo($parameters[1]),
+                    $this->equalTo(ImageInterface::THUMBNAIL_OUTBOUND)
+                ],
+                [
+                    $this->equalTo($parameters[0]),
+                    $this->equalTo($parameters[1])
+                ]
+            )
+            ->willReturnOnConsecutiveCalls($this->returnValue($box), $this->returnValue($box2));
+
+        $image->expects($this->once())
+            ->method('getPoint')
+            ->with($this->equalTo(0), $this->equalTo(0))
+            ->will($this->returnValue($point));
+
         $imagine = $this->getMocketImagine();
         $imagine->expects($this->once())
-            ->method('thumbnail')
+            ->method('resize')
             ->with($box)
             ->will($this->returnValue($imagine));
+        $imagine->expects($this->once())
+            ->method('crop')
+            ->with($point, $box2)
+            ->will($this->returnValue($imagine));
+        $imagine->expects($this->once())
+            ->method('getSize')
+            ->will($this->returnValue($box));
         $this->assertSame($image->process('zoomCrop', $imagine, $parameters), $imagine);
-
-/*
-
-        $parameters   = [50, 100];
-        $imageProcess = $this->image->process('zoomCrop', $this->createTestImage(), $parameters);
-        $resize       = $this->image->zoomCrop($this->createTestImage(), $parameters);
-        $this->assertEquals($resize->getImagick()->compareImages($imageProcess->getImagick(), 1)[1], 0);
-        */
-    }
-
-    /**
-     * this method performs tests for the crop operation. To do this compare the
-     * metadata of the photo before and after, to check the changes made
-     *
-     */
-    public function testCrop()
-    {
-        /*
-        // topX, topY, width, height
-        $parameters = [10, 10, 50, 100];
-        $picture    = $this->image->crop($this->createTestImage(), $parameters);
-        $this->assertEquals($picture->getSize()->getWidth(), 50);
-        $this->assertEquals($picture->getSize()->getHeight(), 100);
-        */
-    }
-
-    /**
-     * this method performs tests for the thumbnail operation. To do this compare the
-     * metadata of the photo before and after, to check the changes made.
-     *
-     */
-    public function testThumbnail()
-    {
-        /*/ width, height, type
-        $parameters = [50, 100];
-        $picture    = $this->image->thumbnail($this->createTestImage(), $parameters);
-        $this->assertEquals($picture->getSize()->getWidth(), 50);
-        $this->assertEquals($picture->getSize()->getHeight(), 42);
-
-        // width, height, type
-        $parameters = [50, 100, 'out'];
-        $picture    = $this->image->thumbnail($this->createTestImage(), $parameters);
-        $this->assertEquals($picture->getSize()->getWidth(), 50);
-        $this->assertEquals($picture->getSize()->getHeight(), 42);
-        */
-    }
-
-    /**
-     * this method performs tests for the thumbnail operation. To do this compare the
-     * metadata of the photo before and after, to check the changes made.
-     *
-     */
-    public function testZoomCrop()
-    {
-        /*/ width, height
-        $parameters = [50, 100];
-        $picture    = $this->image->zoomCrop($this->createTestImage(), $parameters);
-        $this->assertEquals($picture->getSize()->getWidth(), 50);
-        $this->assertEquals($picture->getSize()->getHeight(), 100);
-        */
-    }
-
-    /**
-     * this method performs tests for the resize operation. To do this compare the
-     * metadata of the photo before and after, to check the changes made.
-     *
-     */
-    public function testResize()
-    {
-        /*/ width, height
-        $parameters = [50, 100];
-        $picture    = $this->image->resize($this->createTestImage(), $parameters);
-        $this->assertEquals($picture->getSize()->getWidth(), 50);
-        $this->assertEquals($picture->getSize()->getHeight(), 100);
-        */
-    }
-
-    /**
-     * This method performs tests for the resize operation. To do this check if you put a icorrect path if return
-     * something. The second test is check if we create one image we can retrive them from file system.
-     *
-     */
-    public function testGetImage()
-    {
-        /*
-        $picture = $this->image->getImage('/tmp/thumbnail.png');
-        $this->assertNull($picture);
-
-        $picture = $this->createTestImage();
-        $picture->save('/tmp/thumbnail.png');
-        $picture = $this->image->getImage('/tmp/thumbnail.png');
-        $this->assertNotNull($picture);
-        unlink('/tmp/thumbnail.png');
-        */
     }
 }
