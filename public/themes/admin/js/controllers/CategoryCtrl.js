@@ -92,7 +92,7 @@
               messenger.post(response.data.message);
 
               if (reload) {
-                $location.url(routing.generate('admin_category_show', {id: $scope.category.id}));
+                document.location = routing.generate('admin_category_show', {id: $scope.category.id});
               }
             }, function(response) {
               $scope.saving = false;
