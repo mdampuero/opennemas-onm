@@ -178,7 +178,7 @@ class ContentCategory
     public function create($data)
     {
         // Generate slug for category
-        $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
+        // $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
 
         if (!in_array(
             'es.openhost.module.multilanguage',
@@ -193,7 +193,6 @@ class ContentCategory
                 ])->get();
             $data['title'] = $aux->title;
         } else {
-
             // Serialize language fields
             array_map(function ($field) use (&$data) {
                 $data[$field] = serialize($data[$field]);
