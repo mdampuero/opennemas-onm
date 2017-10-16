@@ -22,7 +22,7 @@
                         <i class="fa fa-times fa-lg"></i>
                         {t}No{/t}
                       </button>
-                      <button class="btn btn-link" ng-click="removeItem('photo1');toggleOverlay('photo1')" type="button">
+                      <button class="btn btn-link" ng-click="removeItem('article.img1');toggleOverlay('photo1')" type="button">
                         <i class="fa fa-check fa-lg"></i>
                         {t}Yes{/t}
                       </button>
@@ -30,28 +30,28 @@
                   </div>
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
-                      <div class="img-thumbnail" ng-if="!photo1">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" ng-click="articleForm.$setDirty(true)">
+                      <div class="img-thumbnail" ng-if="!article.img1">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" ng-click="articleForm.$setDirty(true)">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
                       </div>
-                      <div class="dynamic-image-placeholder ng-cloak" ng-if="photo1">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" only-image="true">
+                      <div class="dynamic-image-placeholder ng-cloak" ng-if="article.img1">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="article.img1" only-image="true">
                           <div class="thumbnail-actions ng-cloak">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" ng-click="articleForm.$setDirty(true)">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" ng-click="articleForm.$setDirty(true)">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
                         </dynamic-image>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group ng-cloak" ng-show="photo1">
+                  <div class="form-group ng-cloak" ng-show="article.img1">
                     <label class="form-label" for="img1_footer">
                       {t}Footer text{/t}
                     </label>
@@ -73,7 +73,7 @@
                         <i class="fa fa-times fa-lg"></i>
                         {t}No{/t}
                       </button>
-                      <button class="btn btn-link" ng-click="removeItem('photo2');toggleOverlay('photo2')" type="button">
+                      <button class="btn btn-link" ng-click="removeItem('article.img2');toggleOverlay('photo2')" type="button">
                         <i class="fa fa-check fa-lg"></i>
                         {t}Yes{/t}
                       </button>
@@ -81,28 +81,28 @@
                   </div>
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
-                      <div class="img-thumbnail" ng-if="!photo2">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" ng-click="articleForm.$setDirty(true)">
+                      <div class="img-thumbnail" ng-if="!article.img2">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img2" ng-click="articleForm.$setDirty(true)">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
                       </div>
-                      <div class="dynamic-image-placeholder ng-cloak" ng-if="photo2">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" ng-if="photo2" only-image="true">
+                      <div class="dynamic-image-placeholder ng-cloak" ng-if="article.img2">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="article.img2" ng-if="article.img2" only-image="true">
                           <div class="thumbnail-actions ng-cloak">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo2')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" ng-click="articleForm.$setDirty(true)">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img2" ng-click="articleForm.$setDirty(true)">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img2" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
                         </dynamic-image>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group ng-cloak" ng-show="photo2">
+                  <div class="form-group ng-cloak" ng-show="article.img2">
                     <label class="form-label" for="title">
                       {t}Footer text{/t}
                     </label>
@@ -126,7 +126,7 @@
                           <i class="fa fa-times fa-lg"></i>
                           {t}No{/t}
                         </button>
-                        <button class="btn btn-link" ng-click="removeItem('photo3');toggleOverlay('photo3')" type="button">
+                        <button class="btn btn-link" ng-click="removeItem('article.params.imageHome');toggleOverlay('photo3')" type="button">
                           <i class="fa fa-check fa-lg"></i>
                           {t}Yes{/t}
                         </button>
@@ -134,28 +134,28 @@
                     </div>
                     <div class="form-group">
                       <div class="thumbnail-placeholder">
-                        <div class="img-thumbnail" ng-if="!photo3">
-                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                        <div class="img-thumbnail" ng-if="!article.params.imageHome">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.params.imageHome">
                             <i class="fa fa-picture-o fa-2x"></i>
                             <h5>{t}Pick an image{/t}</h5>
                           </div>
                         </div>
-                        <div class="dynamic-image-placeholder ng-cloak" ng-if="photo3">
-                          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" only-image="true">
+                        <div class="dynamic-image-placeholder ng-cloak" ng-if="article.params.imageHome">
+                          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="article.params.imageHome" only-image="true">
                             <div class="thumbnail-actions ng-cloak">
                               <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo3')">
                                 <i class="fa fa-trash-o fa-2x"></i>
                               </div>
-                               <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                               <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.params.imageHome">
                                 <i class="fa fa-camera fa-2x"></i>
                               </div>
                             </div>
-                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3" media-picker-type="photo"></div>
+                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.params.imageHome" media-picker-type="photo"></div>
                           </dynamic-image>
                         </div>
                       </div>
                     </div>
-                    <div class="form-group ng-cloak" ng-show="photo3">
+                    <div class="form-group ng-cloak" ng-show="article.params.imageHome">
                       <label class="form-label" for="params[imageHomeFooter]">
                         {t}Footer text{/t}
                       </label>
@@ -196,7 +196,7 @@
                             <i class="fa fa-times fa-lg"></i>
                             {t}No{/t}
                           </button>
-                          <button class="btn btn-link" ng-click="removeItem('video1');toggleOverlay('video1')" type="button">
+                          <button class="btn btn-link" ng-click="removeItem('article.fk_video');toggleOverlay('video1')" type="button">
                             <i class="fa fa-check fa-lg"></i>
                             {t}Yes{/t}
                           </button>
@@ -205,7 +205,7 @@
                       <div class="form-group">
                         <div class="thumbnail-placeholder">
                           <div class="img-thumbnail" ng-if="!video1">
-                            <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                            <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video">
                               <i class="fa fa-film fa-2x"></i>
                               <h5>{t}Pick a video{/t}</h5>
                             </div>
@@ -216,11 +216,11 @@
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
                                   <i class="fa fa-trash-o fa-2x"></i>
                                 </div>
-                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video">
                                   <i class="fa fa-film fa-2x"></i>
                                 </div>
                               </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
                           <div class="dynamic-image-placeholder ng-cloak" ng-if="video1 && !video1.thumb_image">
@@ -229,11 +229,11 @@
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
                                   <i class="fa fa-trash-o fa-2x"></i>
                                 </div>
-                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video">
                                   <i class="fa fa-film fa-2x"></i>
                                 </div>
                               </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
                         </div>
@@ -263,7 +263,7 @@
                             <i class="fa fa-times fa-lg"></i>
                             {t}No{/t}
                           </button>
-                          <button class="btn btn-link" ng-click="removeItem('video2');toggleOverlay('video2')" type="button">
+                          <button class="btn btn-link" ng-click="removeItem('article.fk_video2');toggleOverlay('video2')" type="button">
                             <i class="fa fa-check fa-lg"></i>
                             {t}Yes{/t}
                           </button>
@@ -272,7 +272,7 @@
                       <div class="form-group">
                         <div class="thumbnail-placeholder">
                           <div class="img-thumbnail" ng-if="!video2">
-                            <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                            <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video">
                               <i class="fa fa-film fa-2x"></i>
                               <h5>Pick a video</h5>
                             </div>
@@ -283,11 +283,11 @@
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
                                   <i class="fa fa-trash-o fa-2x"></i>
                                 </div>
-                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video">
                                   <i class="fa fa-film fa-2x"></i>
                                 </div>
                               </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
                           <div class="dynamic-image-placeholder ng-cloak" ng-if="video2 && !video2.thumb_image">
@@ -296,11 +296,11 @@
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
                                   <i class="fa fa-trash-o fa-2x"></i>
                                 </div>
-                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video">
                                   <i class="fa fa-film fa-2x"></i>
                                 </div>
                               </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
                         </div>

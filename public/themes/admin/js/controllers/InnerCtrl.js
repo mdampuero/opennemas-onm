@@ -31,6 +31,16 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
     $scope.flags = {};
 
     /**
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *  The list of overlays
+     *
+     * @type {Object}
+     */
+    $scope.overlay = {};
+
+    /**
      * @function disableFlags
      * @memberOf InnerCtrl
      *
@@ -122,21 +132,32 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param integer index The index of the element to remove.
      */
     $scope.removeItem = function(from, index) {
-      if (angular.isArray($scope[from])) {
-        $scope[from].splice(index, 1);
+      var keys  = from.split('.');
+      var model = $scope;
+
+      for (var i = 0; i < keys.length - 1; i++) {
+        if (!model[keys[i]]) {
+          model[keys[i]] = {};
+        }
+
+        model = model[keys[i]];
+      }
+
+      if (angular.isArray(model[keys[i]])) {
+        model[keys[i]].splice(index, 1);
         return;
       }
 
-      delete $scope[from];
+      model[keys[i]] = null;
     };
 
-    $scope.toggleOverlay = function(overlay) {
-      if (!$scope.overlay) {
-        $scope.overlay = {};
-        $scope.overlay[overlay] = false;
-      }
-
-      $scope.overlay[overlay] = !$scope.overlay[overlay];
+    /**
+     * Insert the selected items in media picker in the target element.
+     *
+     * @param String name The overlay name.
+     */
+    $scope.toggleOverlay = function(name) {
+      $scope.overlay[name] = !$scope.overlay[name];
     };
 
     /**
