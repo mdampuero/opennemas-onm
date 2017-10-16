@@ -51,8 +51,8 @@ class Image
         $height = $parameters[3];
 
         return $image->crop(
-            new \Imagine\Image\Point($topX, $topY),
-            new \Imagine\Image\Box($width, $height)
+            $this->getPoint($topX, $topY),
+            $this->getBox($width, $height)
         );
     }
 
@@ -70,14 +70,14 @@ class Image
         $width  = $parameters[0];
         $height = $parameters[1];
 
-        if (isset($parameters[3]) && $parameters[3] == 'in') {
+        if (isset($parameters[2]) && $parameters[2] == 'in') {
             $mode = ImageInterface::THUMBNAIL_INSET;
         } else {
             $mode = ImageInterface::THUMBNAIL_OUTBOUND;
         }
 
         return $image->thumbnail(
-            new \Imagine\Image\Box($width, $height, $mode)
+            $this->getBox($width, $height, $mode)
         );
     }
 
@@ -139,7 +139,7 @@ class Image
         $width  = $parameters[0];
         $height = $parameters[1];
 
-        return $image->resize(new \Imagine\Image\Box($width, $height));
+        return $image->resize($this->getBox($width, $height));
     }
 
     /*
@@ -196,5 +196,15 @@ class Image
     public function getImageFormat($image)
     {
         return strtolower($image->getImagick()->getImageFormat());
+    }
+
+    public function getBox($widthResize, $heightResize, $mode = null)
+    {
+        return new \Imagine\Image\Box($widthResize, $heightResize, $mode);
+    }
+
+    public function getPoint($topX, $topY)
+    {
+        return new \Imagine\Image\Point($topX, $topY);
     }
 }

@@ -7,17 +7,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Common\Core\Component\Image;
-class BoxMock
+namespace Tests\Common\Core\Component\Image;
+
+class ImagineMockTest
 {
-    protected $box;
+    protected $imagine;
 
-    function __construct() {
-
-   }
+    public function __construct()
+    {
+        $this->imagine = new \Imagine\Imagick\Imagine();
+    }
 
     public function __call($name, $args)
     {
-
+        return call_user_func_array(array($this->imagine, $name), $args);
     }
 }
