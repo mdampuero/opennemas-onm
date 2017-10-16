@@ -41,6 +41,31 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
     $scope.overlay = {};
 
     /**
+     * @function configure
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   Configures the inner form.
+     *
+     * @param {Object} data The data to configure the form.
+     */
+    $scope.configure = function(data) {
+      // Configure the form
+      if ($scope.config.multilanguage === null) {
+        $scope.config.multilanguage = data.multilanguage;
+      }
+
+      if ($scope.config.locale === null) {
+        $scope.config.locale = data.locale;
+      }
+
+      if ($scope.forcedLocale && Object.keys(data.options.available)
+          .indexOf($scope.forcedLocale)) {
+        $scope.config.locale = $scope.forcedLocale;
+      }
+    };
+
+    /**
      * @function disableFlags
      * @memberOf InnerCtrl
      *
