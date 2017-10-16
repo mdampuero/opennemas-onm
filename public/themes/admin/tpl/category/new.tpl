@@ -119,7 +119,7 @@
                     </thead>
                     <tr ng-repeat="subcategory in subcategories">
                       <td class="left">
-                        [% subcategory.title %]
+                        [% subcategory.title[languageData.default] %]
                       </td>
                       <td class="left">
                         [% subcategory.name %]

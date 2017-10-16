@@ -42,21 +42,15 @@ class CategoryController extends Controller
         $categories   = $cm->findBy(null, 'name ASC');
         $languageData = $this->getLocaleData('frontend', null, true);
 
-        $categories = $this->get('data.manager.filter')->set($categories)->filter('unlocalize', [
-            'keys' => \ContentCategory::getL10nKeys(),
-            'locale' => $languageData['default']
-        ])->get();
+        $cm->sortCategories($categories);
 
-        $cm->sortCategories($categories, $languageData);
-
-        $contentsCount['articles'] =
-            \ContentCategoryManager::countContentsByGroupType(1);
+        $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
 
         return $this->render('category/list.tpl', [
-            'categories'     => $categories,
-            'contents_count' => $contentsCount,
-            'language_data'  => $languageData,
-            'multilanguage_enable'  => in_array(
+            'categories'           => $categories,
+            'contents_count'       => $contentsCount,
+            'language_data'        => $languageData,
+            'multilanguage_enable' => in_array(
                 'es.openhost.module.multilanguage',
                 getService('core.instance')->activated_modules
             )
@@ -82,25 +76,12 @@ class CategoryController extends Controller
         $languageData  = $this->getLocaleData('frontend', $request, true);
         $fm            = $this->get('data.manager.filter');
 
-        // we adapt the category data and if the value returned and
-        // multilanguage field is a string, create a new array with all values
-        $allcategories = $fm->set($allcategories)->filter('localize', [
-            'keys'   => \ContentCategory::getL10nKeys(),
-            'locale' => $languageData['default']
-        ])->get();
-
         if (empty($id)) {
             $category      = [];
             $subcategories = [];
         } else {
             $subcategories = $ccm->getSubcategories($id);
             $category      = new \ContentCategory($id);
-            if ($category->pk_content_category != null) {
-                $ccm      = \ContentCategoryManager::get_instance();
-                $category = $fm->set($category)->filter('unlocalize', [
-                    'keys'      => \ContentCategory::getL10nKeys()
-                ])->get();
-            }
         }
 
         return $this->render('category/new.tpl', [
