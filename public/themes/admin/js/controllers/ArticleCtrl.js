@@ -290,7 +290,7 @@
 
             // Load items
             $scope.article    = $scope.data.article;
-            $scope.categories = $scope.data.categories;
+            $scope.categories = $scope.data.extra.categories;
 
             var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
 
@@ -324,12 +324,20 @@
           // Localize original items
           $scope.article = lz.localize($scope.data.article,
             $scope.data.extra.keys, $scope.config.locale);
-
           $scope.config.linkers.article =
             linker.get($scope.data.extra.keys, $scope, true, keys);
 
           $scope.config.linkers.article.setKey($scope.config.locale);
           $scope.config.linkers.article.link($scope.data.article, $scope.article);
+
+          $scope.categories = lz.localize($scope.data.extra.categories,
+            [ 'title' ], $scope.config.locale);
+
+          $scope.config.linkers.categories =
+            linker.get($scope.data.extra.keys, $scope, true, keys);
+
+          $scope.config.linkers.categories.setKey($scope.config.locale);
+          $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope[keys[i]]) {
