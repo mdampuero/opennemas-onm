@@ -20,7 +20,7 @@
        *
        * @return {Object} The linker
        */
-      this.get = function(keys, scope, clean) {
+      this.get = function(keys, scope, clean, ignore) {
         return {
           /**
            * Flag to delete objects not found in original values when enabled.
@@ -28,6 +28,13 @@
            * @type {Boolean}
            */
           clean: clean,
+
+          /**
+           * List of keys to ignore in this linker.
+           *
+           * @type {Array}
+           */
+          ignore: ignore || [],
 
           /**
            * The current key name to update.
@@ -163,7 +170,7 @@
             }
 
             var ukeys = Object.keys(original).filter(function(e) {
-              return self.keys.indexOf(e) < 0;
+              return self.keys.indexOf(e) < 0 && self.ignore.indexOf(e) < 0;
             });
 
             for (var i = 0; i < ukeys.length; i++) {
@@ -191,7 +198,7 @@
             }
 
             var ukeys = Object.keys(localized).filter(function(e) {
-              return self.keys.indexOf(e) < 0;
+              return self.keys.indexOf(e) < 0 && self.ignore.indexOf(e) < 0;
             });
 
             for (var i = 0; i < ukeys.length; i++) {
@@ -228,24 +235,25 @@
            *
            * @type {Object}
           */
-          config: angular.merge({ keys: [] }, config),
+          config: config,
 
           /**
            * Localizes an item or an array of items.
            *
            * @param {Object} item   An item or an array of items to localize.
+           * @param {Array}  keys   The list of keys to localize.
            * @param {String} locale The locale to localize to.
            *
            * @return {Object} The localized item or an array of localized items.
            */
-          localize: function(item, locale) {
+          localize: function(item, keys, locale) {
             if (!angular.isArray(item)) {
-              return this.localizeItem(item, locale);
+              return this.localizeItem(item, keys, locale);
             }
 
             var localized = [];
             for (var i = 0; i < item.length; i++) {
-              localized.push(this.localizeItem(item[i], locale));
+              localized.push(this.localizeItem(item[i], keys, locale));
             }
 
             return localized;
@@ -255,16 +263,21 @@
            * Localizes an item.
            *
            * @param {Object} item   The item to localize.
+           * @param {Array}  keys   The list of keys to localize.
            * @param {String} locale The locale to localize to.
            *
            * @return {Object} The localized item.
            */
-          localizeItem: function(item, locale) {
+          localizeItem: function(item, keys, locale) {
             var localized = angular.copy(item);
 
-            for (var i = 0; i < this.config.keys.length; i++) {
-              localized[this.config.keys[i]] =
-                this.localizeValue(localized[this.config.keys[i]], locale);
+            for (var i = 0; i < keys.length; i++) {
+              if (!angular.isDefined(localized[keys[i]])) {
+                continue;
+              }
+
+              localized[keys[i]] =
+                this.localizeValue(localized[keys[i]], locale);
             }
 
             return localized;
@@ -277,7 +290,7 @@
            * @description
            *   Localizes a value.
            *
-           * @param {Object} value   The value to localize.
+           * @param {Object} value  The value to localize.
            * @param {String} locale The locale to localize to.
            *
            * @return {String} The localized value.
@@ -287,7 +300,7 @@
               return value;
             }
 
-            if (value[locale]) {
+            if (angular.isDefined(value[locale])) {
               return value[locale];
             }
 
