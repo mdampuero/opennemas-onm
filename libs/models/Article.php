@@ -139,6 +139,14 @@ class Article extends Content
             case 'content_type_name':
                 return 'Article';
 
+            case 'permalink':
+                return Uri::generate('article', [
+                    'id'       => $this->id,
+                    'date'     => date('Y-m-d', strtotime($this->created)),
+                    'category' => urlencode($this->category_name),
+                    'slug'     => urlencode($this->__get('slug')),
+                ]);
+
             default:
                 return parent::__get($name);
         }
@@ -154,13 +162,6 @@ class Article extends Content
     public function load($data)
     {
         parent::load($data);
-
-        $this->permalink = Uri::generate('article', [
-            'id'       => $this->id,
-            'date'     => date('Y-m-d', strtotime($this->created)),
-            'category' => urlencode($this->category_name),
-            'slug'     => urlencode($this->__get('slug')),
-        ]);
 
         return $this;
     }
@@ -463,8 +464,8 @@ class Article extends Content
         $rel = getService('related_contents');
 
         if (is_array($data) && count($data) > 0) {
-            foreach ($data as $content) {
-                $rel->{$method}($id, $content->position, $content->id);
+            for ($i = 0; $i < count($data); $i++) {
+                $rel->{$method}($id, $i, $data[$i]);
             }
         }
     }
