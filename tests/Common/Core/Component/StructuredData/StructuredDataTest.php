@@ -11,6 +11,7 @@ namespace Test\Common\Core\Component\StructuredData;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Common\Core\Component\StructuredData\StructuredData;
+use Common\Data\Core\FilterManager;
 
 /**
  * Defines test cases for StructuredData class.
@@ -19,6 +20,33 @@ class StructuredDataTest extends KernelTestCase
 {
     public function setUp()
     {
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get', 'hasParameter' ])
+            ->getMock();
+
+        $this->fm = new FilterManager($this->container);
+
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+        $this->instance->activated_modules = [];
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContext' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
+
         $this->data = [
             'content'  => new \Content(),
             'url'      => 'http://onm.com/20161013114032000674.html',
@@ -59,6 +87,23 @@ class StructuredDataTest extends KernelTestCase
             ->getMock();
 
         $this->object =  new StructuredData($sm);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        if ($name === 'data.manager.filter') {
+            return $this->fm;
+        }
+
+        if ($name === 'core.locale') {
+            return $this->locale;
+        }
+
+        if ($name === 'core.instance') {
+            return $this->instance;
+        }
+
+        return null;
     }
 
     /**
