@@ -20,7 +20,7 @@ function smarty_function_get_url($params, $smarty)
     $url = $smarty->getContainer()->get('core.helper.url_generator')
         ->generate($params['item'], ['absolute' => $absolute]);
 
-    $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url);
+    $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url, '', $absolute);
 
     return $url;
 }
