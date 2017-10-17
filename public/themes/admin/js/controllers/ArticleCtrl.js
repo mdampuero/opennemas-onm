@@ -92,11 +92,11 @@
             'relatedInner', 'relatedHome' ];
 
           for (var i = 0; i < keys.length; i++) {
-            if (!$scope[keys[i]]) {
+            if (!$scope.data.extra[keys[i]]) {
               continue;
             }
 
-            $scope.article[keys[i]] = $scope[keys[i]];
+            $scope.article[keys[i]] = $scope.data.extra[keys[i]];
           }
 
           keys = [ 'imageHome', 'withGallery', 'withGalleryInt',
