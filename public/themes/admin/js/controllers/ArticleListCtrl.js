@@ -20,8 +20,8 @@
      *   Provides actions to list articles.
      */
     .controller('ArticleListCtrl', [
-      '$controller', '$location', '$scope', '$timeout','$uibModal', 'http', 'messenger', 'linker', 'localizer', 'oqlEncoder', 'routing',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, linker, localizer, oqlEncoder, routing) {
+      '$controller', '$location', '$scope', '$timeout','$uibModal', 'http', 'messenger', 'linker', 'localizer', 'oqlEncoder',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, linker, localizer, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -115,9 +115,6 @@
 
             if ($scope.config.locale === null) {
               $scope.config.locale = response.data.extra.locale;
-
-              $scope.config.linkers.cl.setKey($scope.config.locale);
-              $scope.config.linkers.il.setKey($scope.config.locale);
             }
 
             // Load items
@@ -127,10 +124,10 @@
             if ($scope.config.multilanguage && $scope.config.locale) {
               var lz = localizer.get({ keys: $scope.data.extra.keys });
 
-              $scope.categories =
-                lz.localize($scope.categories, $scope.config.locale);
-              $scope.items =
-                lz.localize($scope.items, $scope.config.locale);
+              $scope.categories = lz.localize($scope.categories,
+                [ 'title' ], $scope.config.locale);
+              $scope.items = lz.localize($scope.items, $scope.data.extra.keys,
+                $scope.config.locale);
 
               $scope.config.linkers.cl.link(
                 $scope.data.extra.categories, $scope.categories);
