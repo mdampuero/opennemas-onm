@@ -160,6 +160,11 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
+            '',
+            $this->object->generateSlug(null)
+        );
+
+        $this->assertEquals(
             'es-por-tu-bien',
             $this->object->generateSlug(
                 '"Es por tu bien…"'
@@ -233,6 +238,22 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         ], $this->object->generateSlug([
             'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
             '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
+        ]));
+
+        $this->assertEquals([], $this->object->generateSlug([]));
+
+        $this->assertEquals([1 => null], $this->object->generateSlug([1 => null]));
+
+        $this->assertEquals([''], $this->object->generateSlug(['']));
+
+        $this->assertEquals([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            '',
+        ],
+
+        $this->object->generateSlug([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            ''
         ]));
     }
 
