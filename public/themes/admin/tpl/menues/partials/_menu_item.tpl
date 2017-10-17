@@ -44,13 +44,13 @@
       <div class="form-group">
         <label for="form-label">{t}Title{/t}</label>
         <div class="controls">
-          <input ng-model="item.title[lang]" type="text" class="form-control">
+          <input ng-model="item.title[lang]" type="text" class="form-control" uib-tooltip="{t}Original:{/t} [% item.title[languageData.default] %]" tooltip-enable="languageData.default !== lang">
         </div>
       </div>
       <div class="form-group">
         <label for="form-label">{t}Link{/t}</label>
         <div class="controls">
-          <input ng-model="item.link[lang]" type="text" class="form-control">
+          <input ng-model="item.link[lang]" type="text" class="form-control" uib-tooltip="{t}Original:{/t} [% item.link[languageData.default] %]" tooltip-enable=" languageData.default !== lang">
         </div>
       </div>
     </div>

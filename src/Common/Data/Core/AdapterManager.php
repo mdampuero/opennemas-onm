@@ -51,7 +51,7 @@ class AdapterManager
         if (class_exists($class)) {
             $adapter = new $class($this->container, $args);
 
-            return $adapter->adapt($value);
+            return $adapter->adapt($value, $args);
         }
 
         throw new InvalidAdapterException($name);

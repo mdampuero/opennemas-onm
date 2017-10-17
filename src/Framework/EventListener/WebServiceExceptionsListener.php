@@ -79,7 +79,10 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
             return;
         }
 
-        error_log($exception->getMessage());
+        $errorMessage = 'WS Error: "' . $exception->getMessage()
+            . '", File: "' . $exception->getFile() . ':' . $exception->getLine() . '"';
+
+        error_log($errorMessage);
 
         if ($exception instanceof AuthenticationException) {
             $event->setResponse(new JsonResponse('', 401));

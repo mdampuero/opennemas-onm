@@ -46,13 +46,13 @@ class ContentController extends Controller
         $total   = $em->countBy($search);
 
         return new JsonResponse(
-            array(
+            [
                 'elements_per_page' => $elementsPerPage,
                 'extra'             => $this->loadExtraData($results),
                 'page'              => $page,
                 'results'           => $results,
                 'total'             => $total,
-            )
+            ]
         );
     }
 
@@ -69,7 +69,7 @@ class ContentController extends Controller
 
         $em = $this->get('entity_repository');
 
-        $order = '`position` asc';
+        $order  = '`position` asc';
         $search = [
             'content_type_name' => [ [ 'value' => $contentType ] ],
             'in_home' => [ [ 'value' => 1 ] ],
@@ -80,11 +80,11 @@ class ContentController extends Controller
         $total   = $em->countBy($search);
 
         return new JsonResponse(
-            array(
+            [
                 'extra'             => $this->loadExtraData($results),
                 'results'           => $results,
                 'total'             => $total,
-            )
+            ]
         );
     }
 
@@ -101,8 +101,8 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
+        $errors  = [];
+        $success = [];
 
         $content = $em->find(\classify($contentType), $id);
 
@@ -117,31 +117,31 @@ class ContentController extends Controller
                     ];
                 } else {
                     $content->delete($id);
-                    $success[] = array(
+                    $success[] = [
                         'id'      => $id,
                         'message' => _('Item deleted successfully'),
                         'type'    => 'success'
-                    );
+                    ];
                 }
             } catch (Exception $e) {
-                $errors[] = array(
+                $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages'  => array_merge($success, $errors),
-            )
+            ]
         );
     }
 
@@ -157,61 +157,67 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $ids = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find(\classify($contentType), $id);
+        if (!is_array($ids) || empty($ids)) {
+            return new JsonResponse([
+                'messages' => array_merge($success, $errors)
+            ]);
+        }
 
-                if (!is_null($content->id)) {
-                    try {
-                        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-                            && !$content->isOwner($this->getUser()->id)
-                        ) {
-                            $errors[] = [
-                                'error',
-                                sprintf(
-                                    _("You don't have enough privileges to delete the content with id %s."),
-                                    $content->id
-                                )
-                            ];
-                        } else {
-                            $content->delete($id);
-                            $updated[] = $id;
-                        }
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                        'type'    => 'error'
-                    );
+        foreach ($ids as $id) {
+            $content = $em->find(\classify($contentType), $id);
+
+            if (is_null($content->id)) {
+                $errors[] = [
+                    'id'      => $id,
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'type'    => 'error'
+                ];
+                continue;
+            }
+
+            try {
+                if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
+                    && !$content->isOwner($this->getUser()->id)
+                ) {
+                    $errors[] = [
+                        'error',
+                        sprintf(
+                            _("You don't have enough privileges to delete the content with id %s."),
+                            $content->id
+                        )
+                    ];
+                    continue;
                 }
+
+                $content->delete($id);
+                $updated[] = $id;
+            } catch (Exception $e) {
+                $errors[] = [
+                    'id'      => $id,
+                    'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
+                    'type'    => 'error'
+                ];
             }
         }
 
         if ($updated > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages' => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -227,38 +233,38 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
+        $errors  = [];
+        $success = [];
 
         $content = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
             try {
                 $content->restoreFromTrash($id);
-                $success[] = array(
+                $success[] = [
                     'id'      => $id,
                     'message' => _('Item restored successfully'),
                     'type'    => 'success'
-                );
+                ];
             } catch (Exception $e) {
-                $errors[] = array(
+                $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to restore the item with id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages' => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -274,49 +280,53 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, 'trash');
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $ids = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find(\classify($contentType), $id);
+        if (!is_array($ids) || empty($ids)) {
+            return new JsonResponse([
+                'messages' => array_merge($success, $errors)
+            ]);
+        }
 
-                if (!is_null($content->id)) {
-                    try {
-                        $content->restoreFromTrash($id);
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to restore from trash the item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
+        foreach ($ids as $id) {
+            $content = $em->find(\classify($contentType), $id);
+
+            if (!is_null($content->id)) {
+                try {
+                    $content->restoreFromTrash($id);
+                    $updated[] = $id;
+                } catch (Exception $e) {
+                    $errors[] = [
                         'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'message' => sprintf(_('Unable to restore from trash the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
+            } else {
+                $errors[] = [
+                    'id'      => $id,
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'type'    => 'error'
+                ];
             }
         }
 
         if ($updated > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) restored successfully'), count($updated)),
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages'  => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -332,38 +342,38 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, 'trash');
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
+        $errors  = [];
+        $success = [];
 
         $content = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
             try {
                 $content->remove($id);
-                $success[] = array(
+                $success[] = [
                     'id'      => $id,
                     'message' => _('Item permanently removed successfully'),
                     'type'    => 'success'
-                );
+                ];
             } catch (Exception $e) {
-                $errors[] = array(
+                $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%s"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages' => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -379,52 +389,56 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $ids = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find(\classify($contentType), $id);
+        if (!is_array($ids) || empty($ids)) {
+            return new JsonResponse([
+                'messages' => array_merge($success, $errors)
+            ]);
+        }
 
-                if (!is_null($content->id)) {
-                    try {
-                        $content->remove($id);
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
+        foreach ($ids as $id) {
+            $content = $em->find(\classify($contentType), $id);
+
+            if (!is_null($content->id)) {
+                try {
+                    $content->remove($id);
+                    $updated[] = $id;
+                } catch (Exception $e) {
+                    $errors[] = [
                         'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
+            } else {
+                $errors[] = [
+                    'id'      => $id,
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'type'    => 'error'
+                ];
             }
         }
 
         if ($updated > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(
                     _('%d item(s) permanently removed successfully'),
                     count($updated)
                 ),
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages'  => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -437,9 +451,9 @@ class ContentController extends Controller
     public function emptyTrashAction()
     {
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $contents = $this->get('entity_repository')->findBy([
             'in_litter' => [
@@ -450,45 +464,49 @@ class ContentController extends Controller
             ]
         ]);
 
-        if (is_array($contents) && count($contents) > 0) {
-            foreach ($contents as $content) {
-                $id = $content->id;
-                if (!is_null($content->id)) {
-                    try {
-                        $content->remove($id);
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
+        if (!is_array($contents) || empty($contents)) {
+            return new JsonResponse([
+                'messages' => array_merge($success, $errors)
+            ]);
+        }
+
+        foreach ($contents as $content) {
+            $id = $content->id;
+            if (!is_null($content->id)) {
+                try {
+                    $content->remove($id);
+                    $updated[] = $id;
+                } catch (Exception $e) {
+                    $errors[] = [
                         'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
+            } else {
+                $errors[] = [
+                    'id'      => $id,
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'type'    => 'error'
+                ];
             }
         }
 
         if ($updated > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(
                     _('%d item(s) permanently removed successfully'),
                     count($updated)
                 ),
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages'  => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -504,12 +522,11 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $status  = $request->request->getDigits('value');
-
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
+        $errors  = [];
+        $success = [];
 
-        $content   = $em->find(\classify($contentType), $id);
+        $content = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
             $content->setAvailable($status, $this->getUser()->id);
@@ -519,25 +536,26 @@ class ContentController extends Controller
             } else {
                 $message = _('Item unpublished successfully');
             }
-            $status = $content->content_status;
-            $success[] = array(
+
+            $status    = $content->content_status;
+            $success[] = [
                 'id'      => $id,
                 'message' => $message,
                 'type'    => 'success'
-            );
+            ];
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'content_status' => $status,
                 'messages'       => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -553,39 +571,43 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $available = $request->request->get('value');
         $ids       = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find(\classify($contentType), $id);
+        if (!is_array($ids) || empty($ids)) {
+            return new JsonResponse([
+                'messages' => array_merge($success, $errors)
+            ]);
+        }
 
-                if (!is_null($content->id)) {
-                    try {
-                        $content->setAvailable(
-                            $available,
-                            $this->getUser()->id
-                        );
+        foreach ($ids as $id) {
+            $content = $em->find(\classify($contentType), $id);
 
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                        'type'    => 'error'
+            if (!is_null($content->id)) {
+                try {
+                    $content->setAvailable(
+                        $available,
+                        $this->getUser()->id
                     );
+
+                    $updated[] = $id;
+                } catch (Exception $e) {
+                    $errors[] = [
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    ];
                 }
+            } else {
+                $errors[] = [
+                    'id'      => $id,
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'type'    => 'error'
+                ];
             }
         }
 
@@ -596,17 +618,17 @@ class ContentController extends Controller
                 $message = sprintf(_('%d item(s) unpublished successfully'), count($updated));
             }
 
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => $message,
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages'  => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -622,9 +644,9 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em       = $this->get('entity_repository');
-        $errors   = array();
+        $errors   = [];
         $favorite = null;
-        $success  = array();
+        $success  = [];
 
         $content = $em->find(\classify($contentType), $id);
 
@@ -639,24 +661,24 @@ class ContentController extends Controller
                 $message = _('Item removed from favorites successfully');
             }
 
-            $success[] = array(
+            $success[] = [
                 'id'      => $id,
                 'message' => $message,
                 'type'    => 'success'
-            );
+            ];
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%s"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'favorite' => $favorite,
                 'messages' => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -672,9 +694,9 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
+        $errors  = [];
         $inHome  = null;
-        $success = array();
+        $success = [];
 
         $content = $em->find(\classify($contentType), $id);
 
@@ -687,25 +709,25 @@ class ContentController extends Controller
                 $message = _('Item removed from home successfully');
             }
 
-            $inHome = $content->in_home;
-            $success[] = array(
+            $inHome    = $content->in_home;
+            $success[] = [
                 'id'      => $id,
                 'message' => $message,
                 'type'    => 'success'
-            );
+            ];
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'in_home'  => $inHome,
                 'messages' => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -721,39 +743,43 @@ class ContentController extends Controller
         $this->hasRoles(__FUNCTION__, $contentType);
 
         $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $inHome = $request->request->get('value');
-        $ids       = $request->request->get('ids');
+        $ids    = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find(\classify($contentType), $id);
+        if (!is_array($ids) || empty($ids)) {
+            return new JsonResponse([
+                'messages' => array_merge($success, $errors)
+            ]);
+        }
 
-                if (!is_null($content->id)) {
-                    try {
-                        $content->setInHome(
-                            $inHome,
-                            $this->getUser()->id
-                        );
+        foreach ($ids as $id) {
+            $content = $em->find(\classify($contentType), $id);
 
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                        'type'    => 'error'
+            if (!is_null($content->id)) {
+                try {
+                    $content->setInHome(
+                        $inHome,
+                        $this->getUser()->id
                     );
+
+                    $updated[] = $id;
+                } catch (Exception $e) {
+                    $errors[] = [
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    ];
                 }
+            } else {
+                $errors[] = [
+                    'id'      => $id,
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'type'    => 'error'
+                ];
             }
         }
 
@@ -764,17 +790,17 @@ class ContentController extends Controller
                 $message = sprintf(_('%d item(s) removed from home successfully'), count($updated));
             }
 
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => $message,
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages' => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -788,10 +814,10 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, $contentType);
 
-        $errors    = array();
+        $errors    = [];
         $positions = $request->request->get('positions');
-        $success   = array();
-        $updated   = array();
+        $success   = [];
+        $updated   = [];
 
         if (isset($positions)
             && is_array($positions)
@@ -800,16 +826,16 @@ class ContentController extends Controller
             $pos = 1;
             foreach ($positions as $id) {
                 $contentType = \classify($contentType);
-                $file= new $contentType($id);
+                $file        = new $contentType($id);
 
                 if ($file->setPosition($pos)) {
                     $updated[] = $id;
                 } else {
-                    $errors[] = array(
+                    $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to save the position for the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
 
                 $pos += 1;
@@ -817,17 +843,17 @@ class ContentController extends Controller
         }
 
         if ($updated > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $id,
                 'message' => _('Positions saved successfully'),
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse(
-            array(
+            [
                 'messages'  => array_merge($success, $errors)
-            )
+            ]
         );
     }
 
@@ -937,11 +963,17 @@ class ContentController extends Controller
         }
 
         $ccm = \ContentCategoryManager::get_instance();
-        $categories = $ccm->findAll();
+        $fm  = $this->get('data.manager.filter');
+
+        $categories          = $ccm->findAll();
         $extra['categories'] = [];
+        $categories          = $fm->set($categories)->filter('localize', [
+            'keys' => \ContentCategory::getL10nKeys(),
+            'locale' => $this->getLocaleData('frontend')['default']
+        ])->get();
 
         foreach ($categories as $category) {
-            $extra['categories'][$category->name] = $category->title;
+            $extra['categories'][$category->id] = $category->name;
         }
 
         return $extra;

@@ -119,6 +119,7 @@ class Controller extends SymfonyController
             $instance = $this->get('core.instance')->internal_name;
 
             $response->headers->set('x-instance', $instance);
+
             $response->headers->set('x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']);
 
             if (array_key_exists('x-cache-for', $parameters)
@@ -142,11 +143,11 @@ class Controller extends SymfonyController
      */
     protected function getLocaleData($context = null, $request = null, $translation = false)
     {
-        $ls = $this->get('core.locale')
-            ->setContext($context === 'backend' ? $context : 'frontend');
+        $ls      = $this->get('core.locale');
+        $context = $context === 'backend' ? $context : 'frontend';
 
         $locale      = null;
-        $default     = $ls->getLocale();
+        $default     = $ls->getLocale($context);
         $translators = [];
 
         if (!empty($request)) {
@@ -158,6 +159,10 @@ class Controller extends SymfonyController
                 ->hasPermission('es.openhost.module.translation')
         ) {
             $translators = $this->get('setting_repository')->get('translators');
+
+            if (empty($translators)) {
+                $translators = [];
+            }
         }
 
         $translators = array_map(function ($a) {
@@ -169,7 +174,7 @@ class Controller extends SymfonyController
         return [
             'locale'      => $locale,
             'default'     => $default,
-            'available'   => $ls->getAvailableLocales(),
+            'available'   => $ls->getAvailableLocales($context),
             'translators' => array_unique($translators)
         ];
     }

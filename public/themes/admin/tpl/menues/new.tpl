@@ -72,8 +72,8 @@
               <div class="cleafix pull-right">
                 <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
               </div>
-              <hr>
             </div>
+            <hr>
             {/if}
             <div class="col-sm-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Name{/t}</label>
