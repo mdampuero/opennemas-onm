@@ -559,7 +559,7 @@ class StringUtils
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
         // If the value is not a String
-        if (!is_string($string)) {
+        if (is_array($string)) {
             return array_map(function ($a) use ($useStopList, $delimiter) {
                 return self::generateSlug($a, $useStopList, $delimiter);
             }, $string);
