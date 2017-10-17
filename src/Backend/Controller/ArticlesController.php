@@ -158,6 +158,8 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
         $countArticles = $em->countBy($filters);
 
+        $this->get('core.locale')->setContext('frontend');
+
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
@@ -208,6 +210,8 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
         $countArticles = $em->countBy($filters);
 
+        $this->get('core.locale')->setContext('frontend');
+
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
@@ -255,6 +259,8 @@ class ArticlesController extends Controller
 
         $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countArticles = $em->countBy($filters);
+
+        $this->get('core.locale')->setContext('frontend');
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
