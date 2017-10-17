@@ -142,7 +142,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="!article.id ? article.params.agencyBulletin = '{setting name=site_agency}' : ''" type="text">
+                    <input class="form-control" id="agency_bulletin" ng-model="article.params.agencyBulletin" ng-init="!article.id ? article.params.agencyBulletin = '{setting name=site_agency}' : ''" type="text">
                   </div>
                 </div>
                 {/is_module_activated}
@@ -205,7 +205,7 @@
                   {acl isAllowed="ARTICLE_AVAILABLE"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="content_status" name="content_status" ng-model="article.content_status" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="content_status" name="content_status" ng-model="article.content_status" ng-false-value="0" ng-true-value="1" type="checkbox">
                         <label for="content_status">
                           {t}Published{/t}
                         </label>
@@ -215,7 +215,7 @@
                   {is_module_activated name="COMMENT_MANAGER"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="with_comment" name="with_comment" ng-model="article.with_comment" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="with_comment" name="with_comment" ng-model="article.with_comment" ng-false-value="0" ng-true-value="1" type="checkbox">
                         <label class="form-label" for="with_comment">
                           {t}Allow comments{/t}
                         </label>
@@ -225,7 +225,7 @@
                   {acl isAllowed="ARTICLE_HOME"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="frontpage" name="frontpage" ng-model="article.frontpage" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="frontpage" name="frontpage" ng-model="article.frontpage" ng-false-value="0" ng-true-value="1" type="checkbox">
                         <label class="form-label" for="frontpage">
                           {t}Suggested for frontpage{/t}
                         </label>
@@ -296,7 +296,7 @@
                       {t}External link{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="bodyLink" name="params[bodyLink]" ng-model="article.params.bodyLink" type="text">
+                      <input class="form-control" id="bodyLink" ng-model="article.params.bodyLink" type="text">
                     </div>
                   </div>
                 </div>
@@ -358,7 +358,7 @@
                   </div>
                   <div class="grid-body">
                     <div class="checkbox">
-                      <input id="only_registered" name="params[only_registered]" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
+                      <input id="only_registered" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
                       <label for="only_registered">
                         {t}Only available for registered users{/t}
                       </label>
@@ -380,7 +380,7 @@
                   </div>
                   <div class="grid-body">
                     <div class="checkbox">
-                      <input id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
+                      <input id="only_subscribers" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
                       <label for="only_subscribers">
                         {t}Only available for subscribers{/t}
                       </label>
