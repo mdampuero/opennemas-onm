@@ -278,15 +278,14 @@
 
           http.get(route).then(function(response) {
             $scope.data   = response.data;
-            $scope.backup = { content_status: $scope.article.content_status };
+            $scope.backup = { content_status: $scope.data.article.content_status };
 
             $scope.configure(response.data.extra);
             $scope.disableFlags();
 
             // Grant that article has all default values
             $scope.data.article =
-              angular.merge($scope.data.article, $scope.article);
-
+              angular.extend($scope.article, $scope.data.article);
 
             // Load items
             $scope.article    = $scope.data.article;
@@ -334,7 +333,7 @@
             [ 'title' ], $scope.config.locale);
 
           $scope.config.linkers.categories =
-            linker.get($scope.data.extra.keys, $scope, true, keys);
+            linker.get($scope.data.extra.keys, $scope, false, keys);
 
           $scope.config.linkers.categories.setKey($scope.config.locale);
           $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
