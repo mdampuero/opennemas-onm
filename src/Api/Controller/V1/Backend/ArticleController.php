@@ -221,7 +221,7 @@ class ArticleController extends Controller
             && (array_key_exists('imageHome', $article->params))
             && !empty($article->params['imageHome'])
         ) {
-            $extra['img3'] = \Onm\StringUtils::convertToUtf8(
+            $extra['imageHome'] = \Onm\StringUtils::convertToUtf8(
                 $em->find('Photo', $article->params['imageHome'])
             );
         }
@@ -239,10 +239,12 @@ class ArticleController extends Controller
      */
     protected function getRelated(&$article)
     {
-        $em    = $this->get('entity_repository');
-        $extra = [];
-        $keys  = [ 'frontpage', 'inner', 'home' ];
-        $rm    = $this->get('related_contents');
+        $em     = $this->get('entity_repository');
+        $extra  = [];
+        $fm     = $this->get('data.manager.filter');
+        $keys   = [ 'frontpage', 'inner', 'home' ];
+        $locale = $this->get('core.locale')->getLocale('frontend');
+        $rm     = $this->get('related_contents');
 
         foreach ($keys as $key) {
             $name = 'related' . ucfirst(str_replace('page', '', $key));
@@ -263,6 +265,10 @@ class ArticleController extends Controller
             $extra[$name] = array_map(function ($content) {
                 return \Onm\StringUtils::convertToUtf8($content);
             }, $em->findMulti($relations));
+
+            $extra[$name] = $fm->set($extra[$name])
+                ->filter('localize', [ 'keys' => [ 'title' ] ])
+                ->get();
 
             $article->{$name} = array_map(function ($a) {
                 return $a[1];
