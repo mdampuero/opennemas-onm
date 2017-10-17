@@ -29,8 +29,15 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'hasMultilanguage' ])
             ->getMock();
 
+        $this->instance->activated_modules = [];
+
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContext' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -86,6 +93,10 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
     {
         if ($name === 'data.manager.filter') {
             return $this->fm;
+        }
+
+        if ($name === 'core.locale') {
+            return $this->locale;
         }
 
         if ($name === 'core.instance') {
