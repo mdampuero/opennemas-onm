@@ -44,7 +44,7 @@ class ArticleController extends Controller
         $data = [
             'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'body'           => $postReq->get('body'),
-            'category'       => $postReq->getDigits('category'),
+            'category'       => $postReq->getDigits('pk_fk_content_category'),
             'content_status' => (empty($contentStatus)) ? 0 : 1,
             'description'    => $postReq->get('description'),
             'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING),
@@ -169,7 +169,7 @@ class ArticleController extends Controller
         $data = [
             'agency'         => $postReq->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'body'           => $postReq->get('body', ''),
-            'category'       => $postReq->getDigits('category'),
+            'category'       => $postReq->getDigits('pk_fk_content_category'),
             'content_status' => (empty($contentStatus)) ? 0 : 1,
             'description'    => $postReq->get('description'),
             'endtime'        => $postReq->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
