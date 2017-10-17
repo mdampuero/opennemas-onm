@@ -356,6 +356,8 @@ class Content implements \JsonSerializable
             $data[$key] = $this->__get($key);
         }
 
+        $data['uri'] = $this->uri;
+
         return $data;
     }
 
@@ -828,17 +830,33 @@ class Content implements \JsonSerializable
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-            $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
-        } else {
-            $uri = Uri::generate(strtolower($this->content_type_name), [
-                'id'       => sprintf('%06d', $this->id),
-                'date'     => date('YmdHis', strtotime($this->created)),
-                'category' => urlencode($this->category_name),
-                'slug'     => urlencode($this->__get('slug')),
-            ]);
+            return 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
         }
 
-        return ($uri !== '') ? $uri : $this->permalink;
+        $type     = $this->content_type_name;
+        $id       = sprintf('%06d', $this->id);
+        $date     = date('YmdHis', strtotime($this->created));
+        $category = urlencode($this->category_name);
+
+        if (is_array($this->__get('slug'))) {
+            return array_map(function ($a) use ($type, $id, $date, $category) {
+                return Uri::generate(strtolower($type), [
+                    'id'       => $id,
+                    'date'     => $date,
+                    'category' => $category,
+                    'slug'     => urlencode($a),
+                ]);
+            }, $this->__get('slug'));
+        }
+
+        $uri = Uri::generate(strtolower($this->content_type_name), [
+            'id'       => $id,
+            'date'     => $date,
+            'category' => $category,
+            'slug'     => urlencode($this->__get('slug')),
+        ]);
+
+        return empty($uri) ? $uri : $this->permalink;
     }
 
     /**
@@ -2067,6 +2085,6 @@ class Content implements \JsonSerializable
      */
     public static function getL10nKeys()
     {
-        return [ 'body', 'description', 'slug', 'title' ];
+        return [ 'body', 'description', 'slug', 'uri', 'title' ];
     }
 }
