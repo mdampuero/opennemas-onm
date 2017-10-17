@@ -48,8 +48,8 @@ class StringUtils
         'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u',
         'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y', 'Ŕ' => 'R',
         'ŕ' => 'r', '/' => '-', ' ' => '-', '"' => '',  '!' => '',  '¡' => '',
-        '‐' => '', '‒' => '', '–' => '', '—' => '',
-        '―' => '', '⁃' => '', '−' => '', "\r" => ' ', "\n" => '',
+        '‐' => '', '‒' => '', '–' => '', '—' => '', '―' => '', '⁃' => '',
+        '−' => '', "\r" => ' ', "\n" => '',
     ];
 
     /**
@@ -550,15 +550,15 @@ class StringUtils
      /**
      * Clean the special chars and add - for separate words
      *
-     * @param  string  $string the string to transform
+     * @param  mixed  $string the string to transform
      *
-     * @return string the string cleaned
+     * @return mixed the string cleaned
      */
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
         if (is_array($string)) {
             return array_map(function ($a) use ($useStopList, $delimiter) {
-                return \Onm\StringUtils::generateSlug($a, $useStopList, $delimiter);
+                return self::generateSlug($a, $useStopList, $delimiter);
             }, $string);
         }
 

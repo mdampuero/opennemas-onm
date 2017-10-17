@@ -65,7 +65,7 @@ class ContentManager
             $this->init($contentType);
         }
 
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+        $this->cache = new MethodCacheManager($this, [ 'ttl' => 30 ]);
     }
 
     /**
@@ -141,7 +141,10 @@ class ContentManager
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return [];
         }
     }
@@ -210,7 +213,7 @@ class ContentManager
             // Fetch the list of contents for the current frontpage and its metadata
             // We need to get articles in frontpage too in order to mark them as in_frontpage
             $contentIds = $this->getContentIdsInHomePageWithIDs(
-                array((int) $categoryID, 0)
+                [ (int) $categoryID, 0 ]
             );
 
             $cache->save('frontpage_elements_map_' . $categoryID, $contentIds);
@@ -243,10 +246,11 @@ class ContentManager
 
             // Retrieve contents from cache
             $contentsMap = array_map(function ($content) {
-                return array($content['content_type'], $content['content_id']);
+                return [ $content['content_type'], $content['content_id'] ];
             }, $contentIds);
 
             $contentsRaw = $er->findMulti($contentsMap);
+
             $er->populateContentMetasInContents($contentsRaw);
 
             $contentsRaw = $this->checkAndCleanFrontpageSize($contentsRaw);
@@ -308,10 +312,10 @@ class ContentManager
      *
      * @return mixed, array of contents
      */
-    public function getContentIdsInHomePageWithIDs($categories = array())
+    public function getContentIdsInHomePageWithIDs($categories = [])
     {
         // Initialization of variables
-        $contents = array();
+        $contents = [];
 
         if (count($categories) == 0) {
             return $contents;
@@ -328,14 +332,14 @@ class ContentManager
         $rs = $conn->fetchAll($sql);
 
         foreach ($rs as $content) {
-            $contents[] = array(
+            $contents[] = [
                 'content_id'   => $content['pk_fk_content'],
                 'frontpage_id' => $content['fk_category'],
                 'position'     => $content['position'],
                 'placeholder'  => $content['placeholder'],
                 'params'       => unserialize($content['params']),
                 'content_type' => $content['content_type'],
-            );
+            ];
         }
 
         return $contents;
@@ -354,7 +358,7 @@ class ContentManager
     public function getContentsForHomepageFromArray($contentsArray)
     {
         // Initialization of variables
-        $contents = array();
+        $contents = [];
 
         $em = getService('entity_repository');
 
@@ -364,12 +368,10 @@ class ContentManager
 
             // only add it to the final results if is not in litter
             if ($content->in_litter == 0) {
-                $content->load(
-                    array(
-                        'placeholder' => $element['placeholder'],
-                        'position'    => $element['position'],
-                    )
-                );
+                $content->load([
+                    'placeholder' => $element['placeholder'],
+                    'position'    => $element['position'],
+                ]);
 
                 if (is_array($content->params) && $content->params > 0) {
                     $content->params = array_merge(
@@ -386,7 +388,6 @@ class ContentManager
 
         // Return all the objects of contents initialized
         return $contents;
-
     }
 
     /**
@@ -397,29 +398,28 @@ class ContentManager
      *
      * @return boolean, if all went good this will be true and viceversa
      */
-    public static function saveContentPositionsForHomePage($categoryID, $elements = array())
+    public static function saveContentPositionsForHomePage($categoryID, $elements = [])
     {
-        $positions   = array();
-        $contentIds  = array();
+        $positions   = [];
+        $contentIds  = [];
         $returnValue = false;
 
         if (empty($elements)) {
             return $returnValue;
         }
 
-        $conn   = getService('orm.manager')->getConnection('instance');
-        $logger = getService('application.log');
+        $conn = getService('orm.manager')->getConnection('instance');
 
         // Foreach element setup the sql values statement part
         foreach ($elements as $element) {
             $contentIds[] = $element['id'];
-            $positions[]  = array(
+            $positions[]  = [
                 $conn->quote($element['id'], \PDO::PARAM_INT),
                 $conn->quote($categoryID, \PDO::PARAM_INT),
                 $conn->quote($element['position'], \PDO::PARAM_INT),
                 $conn->quote($element['placeholder'], \PDO::PARAM_STR),
                 $conn->quote($element['content_type'], \PDO::PARAM_STR)
-            );
+            ];
         }
 
         try {
@@ -451,7 +451,7 @@ class ContentManager
         } catch (\Exception $e) {
             $conn->rollback();
 
-            $logger->error(
+            getService('application.log')->error(
                 'User ' . getService('session')->get('user')->username
                 . ' (' . getService('session')->get('user')->id
                 . ') updated frontpage of category ' . $categoryID . ' with error message: '
@@ -485,8 +485,7 @@ class ContentManager
             }
 
             /* Notice log of this action */
-            $logger = getService('application.log');
-            $logger->notice(
+            getService('application.log')->notice(
                 'User ' . getService('session')->get('user')->username
                 . ' (' . getService('session')->get('user')->id
                 . ') has executed action drop suggested flag at ' . $contentIdsSQL . ' ids'
@@ -513,8 +512,7 @@ class ContentManager
         $sql = 'DELETE FROM content_positions WHERE `fk_category` = ' . $categoryID;
         $conn->executeUpdate($sql);
 
-        $logger = getService('application.log');
-        $logger->info(
+        getService('application.log')->info(
             'User ' . getService('session')->get('user')->username
             . ' (' . getService('session')->get('user')->id
             . ') clear contents frontpage of category ' . $categoryID
@@ -547,52 +545,53 @@ class ContentManager
      */
     public static function sortArrayofObjectsByProperty($array, $property)
     {
-        // Y si el array es vacio ????
-        if (count($array) > 0) {
-            $cur           = 1;
-            $stack[1]['l'] = 0;
-            $stack[1]['r'] = count($array) - 1;
+        if (!is_array($array) || empty($array)) {
+            return $array;
+        }
 
+        $cur           = 1;
+        $stack[1]['l'] = 0;
+        $stack[1]['r'] = count($array) - 1;
+
+        do {
+            $l = $stack[$cur]['l'];
+            $r = $stack[$cur]['r'];
+            $cur--;
             do {
-                $l = $stack[$cur]['l'];
-                $r = $stack[$cur]['r'];
-                $cur--;
+                $i   = $l;
+                $j   = $r;
+                $tmp = $array[(int) (($l + $r) / 2)];
+
+                // split the array in to parts
+                // first: objects with "smaller" property $property
+                // second: objects with "bigger" property $property
                 do {
-                    $i   = $l;
-                    $j   = $r;
-                    $tmp = $array[(int) (($l + $r) / 2)];
-
-                    // split the array in to parts
-                    // first: objects with "smaller" property $property
-                    // second: objects with "bigger" property $property
-                    do {
-                        while ($array[$i]->{$property} < $tmp->{$property}) {
-                            $i++;
-                        } while ($tmp->{$property} < $array[$j]->{$property}) {
-                            $j--;
-                        }
-
-                        // Swap elements of two parts if necesary
-                        if ($i <= $j) {
-                            $w         = $array[$i];
-                            $array[$i] = $array[$j];
-                            $array[$j] = $w;
-
-                            $i++;
-                            $j--;
-                        }
-                    } while ($i <= $j);
-
-                    if ($i < $r) {
-                        $cur++;
-                        $stack[$cur]['l'] = $i;
-                        $stack[$cur]['r'] = $r;
+                    while ($array[$i]->{$property} < $tmp->{$property}) {
+                        $i++;
+                    } while ($tmp->{$property} < $array[$j]->{$property}) {
+                        $j--;
                     }
 
-                    $r = $j;
-                } while ($l < $r);
-            } while ($cur != 0);
-        }
+                    // Swap elements of two parts if necesary
+                    if ($i <= $j) {
+                        $w         = $array[$i];
+                        $array[$i] = $array[$j];
+                        $array[$j] = $w;
+
+                        $i++;
+                        $j--;
+                    }
+                } while ($i <= $j);
+
+                if ($i < $r) {
+                    $cur++;
+                    $stack[$cur]['l'] = $i;
+                    $stack[$cur]['r'] = $r;
+                }
+
+                $r = $j;
+            } while ($l < $r);
+        } while ($cur != 0);
 
         return $array;
     }
@@ -670,7 +669,10 @@ class ContentManager
 
             return ($ucfirst === true) ? ucfirst($rs['path']) : $rs['path'];
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -813,24 +815,26 @@ class ContentManager
                 [ $days, $maxElements ]
             );
 
-            $contentsArray = [];
+            $contents = [];
             foreach ($rs as $row) {
                 $content = new $contentType();
                 $content->load($row);
-                $contents[] = $content;
 
-                $contentsArray[$content->pk_content] = array(
+                $contents[$content->pk_content] = [
                     'pk_content' => $content->pk_content,
                     'num'        => $content->num_comments,
                     'title'      => $content->title,
                     'permalink'  => $content->slug,
                     'uri'        => $content->uri
-                );
+                ];
             }
 
-            return $contentsArray;
+            return $contents;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -871,7 +875,6 @@ class ContentManager
         // TODO: Review algorithm
         $table = tableize($contentType);
 
-        $fields   = ' * ';
         $tables   = '`contents`, `' . $table . '`, `ratings` ';
         $whereSQL = '`contents`.in_litter=0 ';
         if (!$all) {
@@ -899,7 +902,7 @@ class ContentManager
                 . 'AND `contents_categories`.pk_fk_content_category=' . $category . ' ';
         }
 
-        $sql = 'SELECT *  FROM ' . $tables
+        $sql = 'SELECT * FROM ' . $tables
             . ' WHERE ' . $whereSQL . $daysFilterSQL . $tablesRelationSQL
             . $orderBySQL . $limitSQL;
 
@@ -920,7 +923,10 @@ class ContentManager
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -940,13 +946,8 @@ class ContentManager
      *
      * @return array of objects
      */
-    public function getAllMostViewed(
-        $notEmpty = false,
-        $category = 0,
-        $days = 2,
-        $num = 6,
-        $all = false
-    ) {
+    public function getAllMostViewed($notEmpty = false, $category = 0, $days = 2, $num = 6, $all = false)
+    {
         $em = getService('entity_repository');
 
         $now = new \DateTime();
@@ -956,31 +957,31 @@ class ContentManager
         $date->sub(new \DateInterval('P' . $days . 'D'));
         $date = $date->format('Y-m-d H:i:s');
 
-        $criteria = array(
-            'join' => array(
-                array(
+        $criteria = [
+            'join' => [
+                [
                     'table'               => 'content_views',
                     'type'                => 'left',
-                    'contents.pk_content' => array(
-                        array(
+                    'contents.pk_content' => [
+                        [
                             'value' => 'content_views.pk_fk_content',
                             'field' => true
-                        )
-                    )
-                )
-            ),
-            'fk_content_type' => [[ 'value' => array(1,3,4,7,9,11), 'operator' => 'IN' ]],
+                        ]
+                    ]
+                ]
+            ],
+            'fk_content_type' => [[ 'value' => [ 1,3,4,7,9,11 ], 'operator' => 'IN' ]],
             'in_litter'       => [[ 'value' => 0 ]],
             'starttime'       => [[ 'value' => $date, 'operator' => '>=' ]],
-            'endtime'         => array(
+            'endtime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => $now, 'operator' => '>' ],
-            ),
-        );
+            ],
+        ];
 
-        $order = array('content_views.views' => 'desc');
+        $order = [ 'content_views.views' => 'desc' ];
 
         if ($category) {
             $category = getService('category_repository')->find($category);
@@ -989,11 +990,11 @@ class ContentManager
                 $category = $category->name;
             }
 
-            $criteria['category_name'] = array(array('value' => $category));
+            $criteria['category_name'] = [ [ 'value' => $category ] ];
         }
 
         if (!$all) {
-            $criteria['content_status'] = array(array('value' => 1));
+            $criteria['content_status'] = [ [ 'value' => 1 ] ];
         }
 
         $contents = $em->findBy($criteria, $order, $num, 1);
@@ -1037,7 +1038,7 @@ class ContentManager
     */
     public function getInTime($items, $time = null)
     {
-        $filtered = array();
+        $filtered = [];
         if (is_array($items)) {
             $filtered = array_filter(
                 $items,
@@ -1099,18 +1100,22 @@ class ContentManager
      */
     public function getAvailable($items)
     {
-        $filtered = array();
-        if (is_array($items)) {
-            foreach ($items as $item) {
-                if (is_object($item)) {
-                    if (($item->content_status == 1) && ($item->in_litter == 0)) {
-                        $filtered[] = $item;
-                    }
-                } else {
-                    if (($item['content_status'] == 1) && ($item['in_litter'] == 0)) {
-                        $filtered[] = $item;
-                    }
+        $filtered = [];
+        if (!is_array($items)) {
+            return [];
+        }
+
+        foreach ($items as $item) {
+            if (is_object($item)) {
+                if ($item->content_status == 1 && $item->in_litter == 0) {
+                    $filtered[] = $item;
                 }
+
+                continue;
+            }
+
+            if ($item['content_status'] == 1 && $item['in_litter'] == 0) {
+                $filtered[] = $item;
             }
         }
 
@@ -1158,7 +1163,10 @@ class ContentManager
 
             return (is_array($rs) && array_key_exists('total', $rs)) ? (int) $rs['total'] : 0;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
 
@@ -1200,7 +1208,7 @@ class ContentManager
                  . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                  . $orderBy;
         } else {
-            return $items;
+            return [];
         }
 
         try {
@@ -1208,7 +1216,10 @@ class ContentManager
 
             return $this->loadObject($rs, $contentType);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -1238,7 +1249,7 @@ class ContentManager
 
             $ccm = ContentCategoryManager::get_instance();
             foreach ($rs as $row) {
-                $items[] = array(
+                $items[] = [
                     'title'          => $row['title'],
                     'catName'        => $ccm->getName($row['category_id']),
                     'slug'           => $row['slug'],
@@ -1248,12 +1259,15 @@ class ContentManager
                     /* to filter in getInTime() */
                     'starttime'      => $row['starttime'],
                     'endtime'        => $row['endtime']
-                );
+                ];
             }
 
             return $this->getInTime($items);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -1322,7 +1336,10 @@ class ContentManager
             $items = $this->getInTime($items);
             return $items;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -1364,7 +1381,10 @@ class ContentManager
 
             return $rs;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return [];
         }
     }
@@ -1376,98 +1396,98 @@ class ContentManager
      */
     public static function getContentTypes()
     {
-        $contentTypes = array(
-            array(
+        $contentTypes = [
+            [
                 'pk_content_type' => 1,
                 'name'            => 'article',
                 'title'           => _('Article')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 2,
                 'name'            => 'advertisement',
                 'title'           => _('Advertisement')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 3,
                 'name'            => 'attachment',
                 'title'           => _('File')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 4,
                 'name'            => 'opinion',
                 'title'           => _('Opinion')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 5,
                 'name'            => 'event',
                 'title'           => _('Event')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 6,
                 'name'            => 'comment',
                 'title'           => _('Comment')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 7,
                 'name'            => 'album',
                 'title'           => _('Album')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 8,
                 'name'            => 'photo',
                 'title'           => _('Image')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 9,
                 'name'            => 'video',
                 'title'           => _('Video')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 10,
                 'name'            => 'special',
                 'title'           => _('Special')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 11,
                 'name'            => 'poll',
                 'title'           => _('Poll')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 12,
                 'name'            => 'widget',
                 'title'           => _('Widget')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 13,
                 'name'            => 'static_page',
                 'title'           => _('Static page')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 14,
                 'name'            => 'kiosko',
                 'title'           => _('Kiosko')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 15,
                 'name'            => 'book',
                 'title'           => _('Book')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 16,
                 'name'            => 'schedule',
                 'title'           => _('Agenda')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 17,
                 'name'            => 'letter',
                 'title'           => _('Letter to editor')
-            ),
-            array(
+            ],
+            [
                 'pk_content_type' => 18,
                 'name'            => 'frontpage',
                 'title'           => _('Frontpage')
-            ),
-        );
+            ],
+        ];
 
         return $contentTypes;
     }
@@ -1563,7 +1583,10 @@ class ContentManager
 
             return '';
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -1577,7 +1600,7 @@ class ContentManager
      */
     public function getContents($contentIds)
     {
-        $contents = array();
+        $contents = [];
         $content  = new Content();
         if (is_array($contentIds) && count($contentIds) > 0) {
             foreach ($contentIds as $contentId) {
@@ -1605,15 +1628,13 @@ class ContentManager
     public static function getRelatedImagesForContentsWithIDs($relatedImagesIDs)
     {
         // If the given ids is an unique element transform it to an array.
-        if (!is_array($relatedImagesIDs)
-            && !empty($relatedImagesIDs)
-        ) {
-            $relatedImagesIDs = array($relatedImagesIDs);
+        if (!is_array($relatedImagesIDs) && !empty($relatedImagesIDs)) {
+            $relatedImagesIDs = [ $relatedImagesIDs ];
         }
 
         // If the related images id array is empty just return an empty array
         if (!(count($relatedImagesIDs) > 0)) {
-            return array();
+            return [];
         }
 
         // Fetch the images from SQL
@@ -1732,7 +1753,10 @@ class ContentManager
 
             return $contents;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return [];
         }
     }
@@ -1758,7 +1782,10 @@ class ContentManager
 
             return $rs['pk_content'];
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -1837,7 +1864,10 @@ class ContentManager
 
             return $rs;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -1858,7 +1888,7 @@ class ContentManager
         }
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
+            getService('dbal_connection')->executeUpdate(
                 "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
                 . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
                 [ $id, $property, $value, $value ]
@@ -1866,7 +1896,10 @@ class ContentManager
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }

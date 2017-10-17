@@ -46,7 +46,7 @@ class ContentCategoryManager
     public function __construct()
     {
         if (is_null(self::$instance)) {
-            $this->cache = new MethodCacheManager($this, array('ttl' => 300));
+            $this->cache = new MethodCacheManager($this, [ 'ttl' => 300 ]);
 
             // Fill categories from cache
             $this->categories = $this->findAll();
@@ -84,8 +84,8 @@ class ContentCategoryManager
             return $this->categories;
         }
 
-        $cache = getService('cache');
-        $cacheKey = 'content_categories';
+        $cache      = getService('cache');
+        $cacheKey   = 'content_categories';
         $categories = $cache->fetch($cacheKey);
 
         if ($categories) {
@@ -115,7 +115,7 @@ class ContentCategoryManager
 
             return $this->categories;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -132,16 +132,16 @@ class ContentCategoryManager
     {
         if (!empty($subcategoryName)) {
             // It's a father category
-            return array($categoryName, $subcategoryName);
+            return [ $categoryName, $subcategoryName ];
         }
 
         $father = $this->getFather($categoryName);
         if (!empty($father)) {
-            return array($father, $categoryName);
+            return [ $father, $categoryName ];
         }
 
         // If don't match return same values
-        return array($categoryName, $subcategoryName);
+        return [ $categoryName, $subcategoryName ];
     }
 
     /**
@@ -158,13 +158,13 @@ class ContentCategoryManager
 
         $where = '';
         if (!is_null($filter)) {
-            $where = ' AND '.$filter;
+            $where = ' AND ' . $filter;
         }
 
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT * FROM content_categories ' .
-                'WHERE internal_category<>0 '.$where.' '.$orderBy
+                'WHERE internal_category<>0 ' . $where . ' ' . $orderBy
             );
             foreach ($rs as $row) {
                 $obj = new ContentCategory();
@@ -175,7 +175,7 @@ class ContentCategoryManager
 
             return $items;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return [];
         }
     }
@@ -204,7 +204,7 @@ class ContentCategoryManager
 
                 return $rs['name'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -238,7 +238,7 @@ class ContentCategoryManager
 
                 return $rs['pk_content_category'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -275,7 +275,7 @@ class ContentCategoryManager
 
                 return $rs['title'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -315,7 +315,7 @@ class ContentCategoryManager
 
                 return $category;
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -340,44 +340,24 @@ class ContentCategoryManager
      */
     public function getAllSubcategories($id)
     {
-        if (true|| is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAll(
-                    'SELECT name,title,internal_category '
-                    .'FROM content_categories WHERE internal_category<>0 '
-                    .'AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu',
-                    [ $id ]
-                );
-
-                if (!$rs) {
-                    return null;
-                }
-
-                $items = [];
-                foreach ($rs as $row) {
-                    $items[$row['name']]['title']             = $row['title'];
-                    $items[$row['name']]['internal_category'] = $row['internal_category'];
-                }
-
-                return $items;
-            } catch (\Exception $e) {
-                error_log($e->getMessage());
-                return false;
-            }
+        if (is_null($this->categories)) {
+            $this->categories = $this->cache->populateCategories();
         }
 
         // Singleton version
         $categories = $this->orderByPosmenu($this->categories);
 
-        $items = array ();
+        $items = [];
         foreach ($categories as $category) {
             if (($category->internal_category)
                 && ($category->inmenu == 1)
                 && ($category->fk_content_category == $id)
             ) {
-                $items[$category->name]['title'] = $category->title;
-                $items[$category->name]['internal_category'] =
-                    $category->internal_category;
+                $items[$category->pk_content_category] = [
+                    'title'         => $category->title,
+                    'name'          => $category->name,
+                    'internal_name' => $category->internal_name,
+                ];
             }
         }
 
@@ -434,15 +414,16 @@ class ContentCategoryManager
             if ($b->internal_category == 0) {
                  return 0;
             }
+
             if ($a->internal_category == 0) {
                  return +1;
             }
+
             if ($a->internal_category == $b->internal_category) {
                 return ($a->posmenu > $b->posmenu) ? +1 : -1;
             }
 
             return ($a->internal_category < $b->internal_category) ? 1 : +1;
-
         });
 
         return $categories;
@@ -467,7 +448,8 @@ class ContentCategoryManager
                 && $category->inmenu == 1
             ) {
                 $tree[$category->pk_content_category] = $category;
-                $tree[$category->pk_content_category]->childNodes = array();
+
+                $tree[$category->pk_content_category]->childNodes = [];
             }
         }
 
@@ -498,8 +480,8 @@ class ContentCategoryManager
             try {
                 $rs = getService('dbal_connection')->fetchAssoc(
                     'SELECT name FROM content_categories '
-                    .'WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0 '
-                    .'ORDER BY posmenu LIMIT 1',
+                    . 'WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0 '
+                    . 'ORDER BY posmenu LIMIT 1',
                     [ $categoryId ]
                 );
 
@@ -509,7 +491,7 @@ class ContentCategoryManager
 
                 return $rs['name'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -519,8 +501,8 @@ class ContentCategoryManager
 
         foreach ($categories as $category) {
             if ($category->fk_content_category == $categoryId
-                && $category->inmenu==1
-                && $category->internal_category!=0
+                && $category->inmenu == 1
+                && $category->internal_category != 0
             ) {
                 return $category->name;
             }
@@ -540,8 +522,8 @@ class ContentCategoryManager
             try {
                 $rs = getService('dbal_connection')->fetchAll(
                     'SELECT content2.name '
-                    .'FROM `content_categories` as content1, `content_categories` as content2 '
-                    .'WHERE content1.name=? AND content1.fk_content_category=content2.pk_content_category',
+                    . 'FROM `content_categories` as content1, `content_categories` as content2 '
+                    . 'WHERE content1.name=? AND content1.fk_content_category=content2.pk_content_category',
                     [ $categoryName ]
                 );
 
@@ -551,7 +533,7 @@ class ContentCategoryManager
 
                 return $rs[0]['name'];
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -594,7 +576,7 @@ class ContentCategoryManager
 
                 return intval($rs['total']) > 0;
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
                 return false;
             }
         }
@@ -629,14 +611,14 @@ class ContentCategoryManager
 
             $rs2 = getService('dbal_connection')->fetchAssoc(
                 'SELECT count(pk_content) as content_count FROM `contents`, `contents_categories` '
-                .'WHERE`contents_categories`.`pk_fk_content_category`=? '
-                .'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`',
+                . 'WHERE`contents_categories`.`pk_fk_content_category`=? '
+                . 'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`',
                 [ $pkCategory ]
             );
 
             return $rs['content_count'] == 0 && $rs2['content_count'] == 0;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -653,16 +635,16 @@ class ContentCategoryManager
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
-                .'WHERE `fk_content_type`=1 '
-                .'AND `in_litter`=0 '
-                .'AND contents_categories.pk_fk_content_category=? '
-                .'AND contents.pk_content=pk_fk_content',
+                . 'WHERE `fk_content_type`=1 '
+                . 'AND `in_litter`=0 '
+                . 'AND contents_categories.pk_fk_content_category=? '
+                . 'AND contents.pk_content=pk_fk_content',
                 [ $category ]
             );
 
             return $rs['number'] == 0;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -680,8 +662,8 @@ class ContentCategoryManager
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
-                 .'WHERE contents.pk_content=pk_fk_content '
-                 .'AND pk_fk_content_category=? AND `fk_content_type`=?',
+                . 'WHERE contents.pk_content=pk_fk_content '
+                . 'AND pk_fk_content_category=? AND `fk_content_type`=?',
                 [ $category, $type ]
             );
 
@@ -691,7 +673,7 @@ class ContentCategoryManager
                 return 0;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -708,19 +690,19 @@ class ContentCategoryManager
      */
     public static function countContentsByGroupType($type, $filter = null)
     {
-        $where= '';
+        $where = '';
         if (!is_null($filter)) {
-            $where = ' AND '.$filter;
+            $where = ' AND ' . $filter;
         }
 
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT count(contents.pk_content) AS number,'
-                .'`contents_categories`.`pk_fk_content_category` AS cat '
-                .'FROM `contents`,`contents_categories` '
-                .'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
-                .'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
-                .$where.' GROUP BY `contents_categories`.`pk_fk_content_category`',
+                . '`contents_categories`.`pk_fk_content_category` AS cat '
+                . 'FROM `contents`,`contents_categories` '
+                . 'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
+                . 'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
+                . $where . ' GROUP BY `contents_categories`.`pk_fk_content_category`',
                 [ $type ]
             );
 
@@ -731,7 +713,7 @@ class ContentCategoryManager
 
             return $groups;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -755,20 +737,26 @@ class ContentCategoryManager
         //$fullcat = $this->orderByPosmenu($this->categories);
         $fullcat = $this->groupByType($this->categories);
 
+        $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
+            'keys' => \ContentCategory::getL10nKeys(),
+            'locale' => getService('core.locale')->setContext('frontend')->getLocale()
+        ])->get();
+
         if (!is_array($internalCategory)) {
             $internalCategory = [$internalCategory];
         }
 
-        $parentCategories = array();
-        $categoryData = array();
+        $parentCategories = [];
+        $categoryData     = [];
         foreach ($fullcat as $prima) {
             if (!empty($category)
                 && $prima->pk_content_category == $category
-                && $category !='home'
-                && $category !='todos'
+                && $category != 'home'
+                && $category != 'todos'
             ) {
                 $categoryData[] = $prima;
             }
+
             if (($prima->internal_category == 1
                 || in_array($prima->internal_category, $internalCategory))
                 && ($prima->fk_content_category == 0)
@@ -776,9 +764,10 @@ class ContentCategoryManager
                 $parentCategories[] = $prima;
             }
         }
-        $subcat = array();
+
+        $subcat = [];
         foreach ($parentCategories as $k => $v) {
-            $subcat[$k] = array();
+            $subcat[$k] = [];
 
             foreach ($fullcat as $child) {
                 if ($v->pk_content_category == $child->fk_content_category) {
@@ -791,7 +780,7 @@ class ContentCategoryManager
              $categoryData[] = $parentCategories[0];
         }
 
-        return array($parentCategories, $subcat, $categoryData);
+        return [ $parentCategories, $subcat, $categoryData ];
     }
 
     /**
@@ -808,10 +797,10 @@ class ContentCategoryManager
             $this->categories = $this->cache->populateCategories();
         }
 
-        $items = array();
+        $items = [];
         foreach ($this->categories as $category) {
             if ($category->fk_content_category == $categoryId) {
-                $items[]=$category;
+                $items[] = $category;
             }
         }
 
@@ -829,6 +818,7 @@ class ContentCategoryManager
         if (!is_numeric($id)) {
             return null;
         }
+
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT catName FROM contents_categories WHERE pk_fk_content=?',
@@ -841,7 +831,7 @@ class ContentCategoryManager
 
             return $rs['catName'];
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
     }

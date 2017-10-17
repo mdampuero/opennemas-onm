@@ -66,7 +66,7 @@ class RssController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
-        $cacheID  = $this->view->getCacheId('rss', 'frontpage', $categoryName);
+        $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
@@ -112,7 +112,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,frontpage-'.$categoryName ],
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,frontpage-' . $categoryName ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
     }
@@ -141,7 +141,7 @@ class RssController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
-        $cacheID  = $this->view->getCacheId('rss', $type, $category);
+        $cacheID = $this->view->getCacheId('rss', $type, $category);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
@@ -171,7 +171,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,'.$type.','.$category ],
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,' . $type . ',' . $category ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
     }
@@ -185,12 +185,12 @@ class RssController extends Controller
      */
     public function authorRSSAction(Request $request)
     {
-        $slug    = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
-        $total   = 10;
+        $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $total = 10;
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
-        $cacheID  = $this->view->getCacheId('rss', 'author', $slug);
+        $cacheID = $this->view->getCacheId('rss', 'author', $slug);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
@@ -205,13 +205,13 @@ class RssController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            $rssTitle   = sprintf('RSS de «%s»', $user->name);
+            $rssTitle = sprintf('RSS de «%s»', $user->name);
             // Get entity repository
-            $er = $this->get('entity_repository');
+            $er          = $this->get('entity_repository');
             $user->photo = $er->find('Photo', $user->avatar_img_id);
 
-            $order = ['starttime' => 'DESC' ];
-            $filters =  [
+            $order   = ['starttime' => 'DESC' ];
+            $filters = [
                 'fk_author'       => [['value' => $user->id]],
                 'fk_content_type' => [['value' => [1, 4, 7], 'operator' => 'IN']],
                 'content_status'  => [['value' => 1]],
@@ -237,7 +237,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,author-'.$slug ],
+            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,author-' . $slug ],
             new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
         );
     }
@@ -249,7 +249,7 @@ class RssController extends Controller
      *
      * @return Response The response object.
      */
-    public function facebookInstantArticlesRSSAction(Request $request)
+    public function facebookInstantArticlesRSSAction()
     {
         if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
             throw new ResourceNotFoundException();
@@ -304,11 +304,12 @@ class RssController extends Controller
                     );
 
                     // Wrap social embed and iframes
-                    $patterns = [
-                        '@(<blockquote.*class="(instagram-media|twitter-tweet)"[^>]+>.+<\/blockquote>\n*<script[^>]+><\/script>)@',
+                    $patterns      = [
+                        '@(<blockquote.*class="(instagram-media|twitter-tweet)"[^>]+>.+'
+                        . '<\/blockquote>\n*<script[^>]+><\/script>)@',
                         '@(<p>)*(<iframe[^>]+><\/iframe>)@'
                     ];
-                    $replacements = [
+                    $replacements  = [
                         '<figure class="op-social"><iframe>${1}</iframe></figure>',
                         '<figure class="op-interactive">${2}</figure>${1}'
                     ];
@@ -387,7 +388,7 @@ class RssController extends Controller
      */
     public static function getAds($category = 'home')
     {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         $positions = getService('core.helper.advertisement')
             ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
@@ -497,9 +498,9 @@ class RssController extends Controller
             $relations = getService('related_contents')->getRelations($content->id, 'inner');
 
             if (count($relations) > 0) {
-                $relatedContents  = [];
+                $relatedContents = [];
                 $relatedContents = $this->get('entity_repository')->findMulti($relations);
-                $ccm = new \ContentCategoryManager();
+                $ccm             = new \ContentCategoryManager();
 
                 // Filter out not ready for publish contents.
                 foreach ($relatedContents as $contentID) {
@@ -510,6 +511,7 @@ class RssController extends Controller
                         } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
                             $content->video = $er->find('Video', $content->fk_video);
                         }
+
                         $relatedContents[] = $content;
                     }
                 }

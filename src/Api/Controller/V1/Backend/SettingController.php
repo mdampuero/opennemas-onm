@@ -181,8 +181,8 @@ class SettingController extends Controller
             'extra'    => [
                 'countries' => $this->get('core.geo')->getCountries(),
                 'locales'   => [
-                    'backend'  => $locale->getAvailableLocales(),
-                    'frontend' => $locale->setContext('frontend')->getAvailableLocales()
+                    'backend'  => $locale->getAvailableLocales('backend'),
+                    'frontend' => $locale->getAvailableLocales('frontend')
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()

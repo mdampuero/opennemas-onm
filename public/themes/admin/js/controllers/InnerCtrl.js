@@ -2,8 +2,8 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('InnerCtrl', [
-  '$rootScope', '$scope', '$timeout', 'Editor', 'messenger', 'Renderer',
-  function($rootScope, $scope, $timeout, Editor, messenger, Renderer) {
+  '$rootScope', '$scope', '$timeout', 'Editor', 'http', 'messenger', 'Renderer',
+  function($rootScope, $scope, $timeout, Editor, http, messenger, Renderer) {
     'use strict';
 
     /**
@@ -183,6 +183,17 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      */
     $scope.toggleOverlay = function(name) {
       $scope.overlay[name] = !$scope.overlay[name];
+    };
+
+    /**
+     * Request a slug to the server.
+     *
+     * @param {String}   slug     The value to calculate slug from.
+     * @param {Function} callback The callback to execute on success.
+     */
+    $scope.getSlug = function(slug, callback) {
+      var config = {name: 'api_v1_backend_tools_slug', params: { 'slug': slug }};
+      http.get(config).then(callback);
     };
 
     /**

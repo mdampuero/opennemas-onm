@@ -75,10 +75,10 @@
                   {/acl}
                 </tr>
               </thead>
-              <tbody>
+              <tbody ng-init="languageData = {json_encode($language_data)|clear_json}; keys = ['title', 'name']">
                 {foreach $categories as $category}
                   {if $category->internal_category eq '1'}
-                    {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count}
+                    {include file="category/_partials/print_list_category.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data}
                   {/if}
                 {foreachelse}
                 <tr>
@@ -295,6 +295,7 @@
           {/acl}
         </div>
       </div>
+      <div class="grid-body"></div>
     </div>
   </div>
 {/block}

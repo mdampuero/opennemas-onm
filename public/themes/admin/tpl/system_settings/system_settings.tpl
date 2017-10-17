@@ -457,20 +457,20 @@
                             {t}Used for messages, interface and units in the newspaper.{/t}
                           </span>
                           <div class="controls">
-                            {is_module_activated name="es.openhost.module.multilanguage" deactivated=1}
+                            {if !$multilanguage}
                               <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected" required>
                                 <option value="">{t}Select a language...{/t}</option>
                                 <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
                               </select>
-                            {/is_module_activated}
-                            {is_module_activated name="es.openhost.module.multilanguage"}
+                            {/if}
+                            {if $multilanguage}
                               <div class="input-group">
                                 <span class="input-group-addon">
                                   <i class="fa fa-search" ng-class="{ 'fa-circle-o-notch fa-spin': searching }"></i>
                                 </span>
                                 <input class="form-control" ng-model="l" placeholder="{t}Search a language{/t}..." type="text" typeahead-on-select="addLocale($item, $model, $label); l = ''" typeahead-wait-ms="250" uib-typeahead="locale.id as locale.name for locale in getLocales($viewValue)">
                               </div>
-                            {/is_module_activated}
+                            {/if}
                           </div>
                         </div>
                       </div>
