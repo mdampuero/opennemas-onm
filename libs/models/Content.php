@@ -856,7 +856,7 @@ class Content implements \JsonSerializable
             'slug'     => urlencode($this->__get('slug')),
         ]);
 
-        return empty($uri) ? $uri : $this->permalink;
+        return !empty($uri) ? $uri : $this->permalink;
     }
 
     /**
