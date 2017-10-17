@@ -28,7 +28,7 @@ class Image
      */
     public function process($method, $image, $parameters)
     {
-        if (!is_callable([$this, $method])) {
+        if (!method_exists($this, $method)) {
             $method = 'resize';
         }
 
