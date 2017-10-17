@@ -76,7 +76,7 @@
                   <translator ng-model="lang" options="languageData" item="category" keys="multiLanguageFields"/>
                 </div>
               </div>
-              <hr>
+              <hr class="hidden-md hidden-lg hidden-sm">
               {/if}
               <div class="form-group">
                 <label for="title" class="form-label">
