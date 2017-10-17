@@ -312,6 +312,18 @@ class Content implements \JsonSerializable
     }
 
     /**
+     * Checks if a property exists.
+     *
+     * @param string $name The property name.
+     *
+     * @return boolean True if the property exists. False otherwise.
+     */
+    public function __isset($name)
+    {
+        return property_exists($this, $name);
+    }
+
+    /**
      * Changes a property value.
      *
      * @param string $name  The property name.
@@ -880,7 +892,7 @@ class Content implements \JsonSerializable
     public function restoreFromTrash()
     {
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'contents',
                 [
                     'in_litter' => 0,
@@ -927,7 +939,7 @@ class Content implements \JsonSerializable
             $this->content_status = $status;
             $this->available      = $status;
 
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'contents',
                 [
                     'available'      => $this->available,
@@ -1049,7 +1061,7 @@ class Content implements \JsonSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleSuggested (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::toggleSuggested (ID:' . $this->id . '):' . $e->getMessage());
             throw $e;
         }
     }
@@ -1081,13 +1093,13 @@ class Content implements \JsonSerializable
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
-                $values = array(
+                $values = [
                     $status,
                     $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
-                );
+                ];
             } else {
                 $values = $status;
             }
@@ -1147,12 +1159,12 @@ class Content implements \JsonSerializable
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
-                $values = array(
+                $values = [
                     $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
-                );
+                ];
             } else {
                 $values = $status;
             }
@@ -1261,7 +1273,7 @@ class Content implements \JsonSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setPosition (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::setPosition (ID:' . $this->id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1302,7 +1314,7 @@ class Content implements \JsonSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::setFavorite (ID:' . $this->id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1373,7 +1385,7 @@ class Content implements \JsonSerializable
             $status          = $this->getStatus();
             $schedulingState = $this->getSchedulingState();
 
-            return array(
+            return [
                 'title'           => $this->title,
                 'category'        => $ccm->getName($this->category),
                 'views'           => $this->views,
@@ -1382,7 +1394,7 @@ class Content implements \JsonSerializable
                 'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
                 'state'           => $this->getL10nStatus($status),
                 'last_author'     => $authorName,
-            );
+            ];
         }
     }
 
@@ -1687,7 +1699,7 @@ class Content implements \JsonSerializable
             // Clean cache for each frontpage element listing
             $cache = getService('cache');
             foreach ($rs as $row) {
-                $contentIds = $cache->delete('frontpage_elements_map_' . $row['fk_category']);
+                $cache->delete('frontpage_elements_map_' . $row['fk_category']);
                 getService('core.dispatcher')->dispatch(
                     'frontpage.save_position',
                     [ 'category' => $row['fk_category'] ]
@@ -1985,7 +1997,7 @@ class Content implements \JsonSerializable
         $contentProperties = $cache->fetch('content-meta-' . $this->id);
 
         if (!is_array($contentProperties)) {
-            $contentProperties = array();
+            $contentProperties = [];
 
             if ($this->id == null && $id == null) {
                 return false;
