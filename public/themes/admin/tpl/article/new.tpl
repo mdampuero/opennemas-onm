@@ -416,5 +416,8 @@
     <script type="text/ng-template" id="modal-draft">
       {include file="article/modal/_draft.tpl"}
     </script>
+    <script type="text/ng-template" id="modal-translate">
+      {include file="common/modals/_translate.tpl"}
+    </script>
   </form>
 {/block}
