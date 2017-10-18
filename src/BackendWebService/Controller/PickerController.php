@@ -61,7 +61,6 @@ class PickerController extends Controller
         }
 
         if (!empty($title)) {
-            $title    = \Onm\StringUtils::convertToUTF8AndStrToLower($title);
             $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%' OR metadata LIKE '%$title%')";
         }
 
