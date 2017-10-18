@@ -302,10 +302,12 @@ class Content implements \JsonSerializable
                             ->get();
                     }
 
-                    return getService('data.manager.filter')
-                        ->set($this->{$name})
-                        ->filter('unlocalize')
-                        ->get();
+                    if($this->getContentTypeName() === 'article') {
+                        return getService('data.manager.filter')
+                            ->set($this->{$name})
+                            ->filter('unlocalize')
+                            ->get();
+                    }
                 }
                 return $this->{$name};
         }

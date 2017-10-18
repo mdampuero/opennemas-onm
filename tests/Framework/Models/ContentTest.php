@@ -90,6 +90,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $content->content_status);
 
+        $content->content_type_name = 'article';
         $this->assertEquals([ 'en' => 'mumble' ], $property->getValue($content));
         $this->assertEquals('mumble', $content->title);
     }
@@ -107,6 +108,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         // No multiple languages in database
         $property->setValue($content, 'fred');
         $content->content_status = 1;
+        $content->content_type_name = 'article';
 
         $this->assertEquals('fred', $property->getValue($content));
         $this->assertEquals([ 'en' => 'fred' ], $content->title);
