@@ -91,7 +91,7 @@ class EntityManager extends BaseManager
 
         $contents = $this->cache->fetch($ids);
 
-        $cachedIds = array();
+        $cachedIds = [];
         foreach ($contents as $content) {
             $cachedIds[] = $content->content_type_name . $this->cacheSeparator . $content->id;
         }
@@ -128,11 +128,14 @@ class EntityManager extends BaseManager
         $fromSQL = 'contents';
 
         if (is_array($criteria) && array_key_exists('tables', $criteria)) {
-            $fromSQL .= ', '.implode(',', $criteria['tables']);
+            $fromSQL .= ', ' . implode(',', $criteria['tables']);
             unset($criteria['tables']);
         }
 
-        $sql = "SELECT content_type_name, pk_content FROM $fromSQL ";
+        $sql = 'SELECT content_type_name, pk_content'
+            . ' FROM ' . $fromSQL
+            . ' LEFT JOIN contents_categories'
+            . ' ON pk_content = pk_fk_content ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
@@ -142,23 +145,24 @@ class EntityManager extends BaseManager
 
         $sql .= " WHERE " . $this->getFilterSQL($criteria);
 
-        $orderBySQL  = '`pk_content` ASC';
+        $orderBySQL = '`pk_content` ASC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
 
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
-        $sql .= " ORDER BY $orderBySQL $limitSQL";
+        $sql .= " GROUP BY `pk_content` ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $ids = array();
+        $ids = [];
         foreach ($rs as $item) {
-            $ids[] = array($item['content_type_name'], $item['pk_content']);
+            $ids[$item['pk_content']] =
+                [ $item['content_type_name'], $item['pk_content']];
         }
 
-        $contents = $this->findMulti($ids);
+        $contents = $this->findMulti(array_values($ids));
 
         return $contents;
     }
@@ -175,11 +179,14 @@ class EntityManager extends BaseManager
         $fromSQL = 'contents';
 
         if (is_array($criteria) && array_key_exists('tables', $criteria)) {
-            $fromSQL .= ', '.implode(',', $criteria['tables']);
+            $fromSQL .= ', ' . implode(',', $criteria['tables']);
             unset($criteria['tables']);
         }
 
-        $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
+        $sql = 'SELECT COUNT(DISTINCT content_type_name, pk_content)'
+            . ' FROM ' . $fromSQL
+            . ' LEFT JOIN contents_categories'
+            . ' ON pk_content = pk_fk_content';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
@@ -220,10 +227,10 @@ class EntityManager extends BaseManager
         // Populate contents with fetched content metas
         foreach ($contentMap as $content) {
             // If content metas weren't in cache fetch them from mysql
-            if (!array_key_exists('content-meta-'.$content->id, $contentMetaMap)) {
+            if (!array_key_exists('content-meta-' . $content->id, $contentMetaMap)) {
                 $content->loadAllContentProperties();
             } else {
-                $contentMeta = $contentMetaMap['content-meta-'.$content->id];
+                $contentMeta = $contentMetaMap['content-meta-' . $content->id];
 
                 if (!empty($contentMeta)) {
                     foreach ($contentMeta as $key => $value) {

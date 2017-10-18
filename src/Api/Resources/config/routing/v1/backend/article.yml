@@ -1,0 +1,20 @@
+api_v1_backend_article_create:
+    path:    /articles/new
+    methods: [ GET ]
+    defaults: { _controller: ApiBundle:V1/Backend/Article:create }
+    options:
+        expose: true
+
+api_v1_backend_article_show:
+    path:    /articles/{id}
+    methods: [ GET ]
+    defaults: { _controller: ApiBundle:V1/Backend/Article:show }
+    options:
+        expose: true
+
+api_v1_backend_articles_list:
+    path:    /articles
+    methods: [ GET ]
+    defaults: { _controller: ApiBundle:V1/Backend/Article:list }
+    options:
+        expose: true

@@ -2,7 +2,10 @@
   <div class="col-md-12">
     <div class="grid simple">
       <div class="grid-title">
-        <h4>{t}Customize{/t}</h4>
+        <h4>
+          <i class="fa fa-magic"></i>
+          {t}Customize{/t}
+        </h4>
       </div>
       <div class="grid-body">
         <div class="col-md-4">
@@ -18,7 +21,16 @@
                 {assign var=defaultValue value=26}
               {/if}
               <select name="params[titleSize]" ng-model="article.params.titleSize">
-                {html_options values=$availableSizes options=$availableSizes selected=$defaultValue}
+                <option value="">{t}Select a size...{/t}</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="20">20</option>
+                <option value="22">24</option>
+                <option value="26">26</option>
+                <option value="28">28</option>
+                <option value="30">30</option>
+                <option value="32">32</option>
+                <option value="34">34</option>
               </select>
             </div>
           </div>
@@ -28,6 +40,7 @@
             </label>
               <div class="controls">
                 <select name="params[imagePosition]" id="img_home_pos" ng-model="article.params.imagePosition">
+                  <option value="">{t}Select a position...{/t}</option>
                   <option value="right" {if $article->params['imagePosition'] eq "right" || !$article->params['imagePosition']} selected{/if}>Derecha</option>
                   <option value="left" {if $article->params['imagePosition'] eq "left"} selected{/if}>Izquierda</option>
                   <option value="none" {if $article->params['imagePosition'] eq "none"} selected{/if}>Justificada(300px)</option>

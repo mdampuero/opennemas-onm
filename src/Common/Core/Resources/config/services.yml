@@ -71,6 +71,9 @@ services:
         class:     Common\Core\Component\Helper\L10nRouteHelper
         arguments: [ '@service_container' ]
 
+    core.helper.oql:
+        class:     Common\Core\Component\Helper\OqlHelper
+
     core.helper.url_generator:
         class:     Common\Core\Component\Helper\UrlGeneratorHelper
         arguments: [ '@service_container' ]

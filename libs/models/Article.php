@@ -30,7 +30,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $subtitle = null;
+    protected $subtitle = null;
 
     /**
      * The agency that authored the article
@@ -44,7 +44,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $summary = null;
+    protected $summary = null;
 
     /**
      * The id of the image assigned for frontpage
@@ -58,7 +58,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $img1_footer = null;
+    protected $img1_footer = null;
 
     /**
      * The id of the image assigned for inner
@@ -72,7 +72,7 @@ class Article extends Content
      *
      * @var string
      */
-    public $img2_footer = null;
+    protected $img2_footer = null;
 
     /**
      * The id of the video assigned for frontpage
@@ -89,18 +89,25 @@ class Article extends Content
     public $fk_video2 = null;
 
     /**
+     * The footer of the video assigned for frontpage
+     *
+     * @var string
+     */
+    protected $footer_video = null;
+
+    /**
      * The footer of the video assigned for inner
      *
      * @var string
      */
-    public $footer_video2 = null;
+    protected $footer_video2 = null;
 
     /**
      * The inner title of this article
      *
      * @var string
      */
-    public $title_int = null;
+    protected $title_int = null;
 
     /**
      * Initializes the Article object from an ID
@@ -126,43 +133,23 @@ class Article extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
-                }
-
-                if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-                    $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
-                } else {
-                    $uri = Uri::generate(
-                        'article',
-                        array(
-                            'id'       => sprintf('%06d', $this->id),
-                            'date'     => date('YmdHis', strtotime($this->created)),
-                            'category' => $this->category_name,
-                            'slug'     => urlencode($this->slug),
-                        )
-                    );
-                }
-                return $uri;
-            case 'slug':
-                if (!empty($this->slug)) {
-                    return $this->slug;
-                } else {
-                    return \Onm\StringUtils::generateSlug($this->title);
-                }
-                break;
             case 'author':
                 return $this->getAuthor();
 
             case 'content_type_name':
                 return 'Article';
 
-            default:
-                break;
-        }
+            case 'permalink':
+                return Uri::generate('article', [
+                    'id'       => $this->id,
+                    'date'     => date('Y-m-d', strtotime($this->created)),
+                    'category' => urlencode($this->category_name),
+                    'slug'     => urlencode($this->__get('slug')),
+                ]);
 
-        return parent::__get($name);
+            default:
+                return parent::__get($name);
+        }
     }
 
     /**
@@ -175,16 +162,6 @@ class Article extends Content
     public function load($data)
     {
         parent::load($data);
-
-        $this->permalink = Uri::generate(
-            'article',
-            [
-                'id'       => $this->id,
-                'date'     => date('Y-m-d', strtotime($this->created)),
-                'category' => urlencode($this->category_name),
-                'slug'     => urlencode($this->slug),
-            ]
-        );
 
         return $this;
     }
@@ -233,6 +210,12 @@ class Article extends Content
      */
     public function create($data)
     {
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
+
         if (!isset($data['description'])) {
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
@@ -312,6 +295,12 @@ class Article extends Content
      */
     public function update($data)
     {
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
+
         // Update an article
         if (!$data['description']) {
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
@@ -416,7 +405,7 @@ class Article extends Content
 
             parent::remove($id);
 
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 "articles",
                 [ 'pk_article' => $id ]
             );
@@ -475,8 +464,8 @@ class Article extends Content
         $rel = getService('related_contents');
 
         if (is_array($data) && count($data) > 0) {
-            foreach ($data as $content) {
-                $rel->{$method}($id, $content->position, $content->id);
+            for ($i = 0; $i < count($data); $i++) {
+                $rel->{$method}($id, $i, $data[$i]);
             }
         }
     }
@@ -493,5 +482,19 @@ class Article extends Content
         }
 
         return $this->author;
+    }
+
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public static function getL10nKeys()
+    {
+        return array_merge(parent::getL10nKeys(), [
+            'footer_video', 'footer_video2', 'img1_footer', 'img2_footer',
+            'subtitle', 'summary', 'title_int'
+        ]);
     }
 }

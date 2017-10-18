@@ -17,105 +17,37 @@ use Onm\Settings as s;
  *
  * @package    Model
  */
-class Content
+class Content implements \JsonSerializable
 {
-    /**
-     * The content id
-     *
-     * @var ont
-     */
-    public $id = null;
+    const AVAILABLE     = 'available';
+    const TRASHED       = 'trashed';
+    const PENDING       = 'pending';
+    const NOT_SCHEDULED = 'not-scheduled';
+    const SCHEDULED     = 'scheduled';
+    const DUED          = 'dued';
+    const IN_TIME       = 'in-time';
+    const POSTPONED     = 'postponed';
 
     /**
-     * The content type of the content
+     * Not documented
      *
-     * @var string
+     * @var
      */
-    public $content_type = null;
+    public $archive = null;
 
     /**
-     * The content type name of the content
+     * Whether if this content is available
      *
-     * @var string
+     * @var int 0|1
      */
-    public $content_type_name = '';
-
-    /**
-     * The title of the content
-     *
-     * @var string
-     */
-    public $title = '';
-
-    /**
-     * The description of the content
-     *
-     * @var string
-     */
-    public $description = '';
+    public $available = null;
 
     /**
      * The main text of the content
      *
      * @var string
      */
-    public $body = '';
-
-    /**
-     * The list of tags of this content separated by commas
-     *
-     * @var string
-     */
-    public $metadata = '';
-
-    /**
-     * The date from when this will be available to publish
-     *
-     * @var string
-     */
-    public $starttime = null;
-
-    /**
-     * The end until when this content will be available to publish
-     *
-     * @var string
-     */
-    public $endtime = null;
-
-    /**
-     * The date when this content was created
-     *
-     * @var string
-     */
-    public $created = null;
-
-    /**
-     * The date when this content was updated the last time
-     *
-     * @var string
-     */
-    public $changed = null;
-
-    /**
-     * The user id of the last user that have changed this content
-     *
-     * @var int
-     */
-    public $fk_user = null;
-
-    /**
-     * The user id that have published this content
-     *
-     * @var int
-     */
-    public $fk_publisher = null;
-
-    /**
-     * The user id of the last user that have changed this content
-     *
-     * @var int
-     */
-    public $fk_user_last_editor = null;
+    protected $body = '';
 
     /**
      * The category id this content belongs to
@@ -132,11 +64,132 @@ class Content
     public $category_name = null;
 
     /**
-     * Not documented
+     * Status of this content
      *
-     * @var
+     * @var int 0|1|2
      */
-    public $archive = null;
+    public $content_status = null;
+
+    /**
+     * The content type of the content
+     *
+     * @var string
+     */
+    public $content_type = null;
+
+    /**
+     * The content type name of the content
+     *
+     * @var string
+     */
+    public $content_type_name = '';
+
+    /**
+     * The date when this content was updated the last time
+     *
+     * @var string
+     */
+    public $changed = null;
+
+    /**
+     * The date when this content was created
+     *
+     * @var string
+     */
+    public $created = null;
+
+    /**
+     * The description of the content
+     *
+     * @var string
+     */
+    protected $description = '';
+
+    /**
+     * The end until when this content will be available to publish
+     *
+     * @var string
+     */
+    public $endtime = null;
+
+    /**
+     * Whether if this content is marked as favorite
+     *
+     * @var int 0|1
+     */
+    public $favorite = null;
+
+    /**
+     * The user id that have published this content
+     *
+     * @var int
+     */
+    public $fk_publisher = null;
+
+    /**
+     * The user id of the last user that have changed this content
+     *
+     * @var int
+     */
+    public $fk_author = null;
+
+    /**
+     * The user id of the last user that have changed this content
+     *
+     * @var int
+     */
+    public $fk_user_last_editor = null;
+
+    /**
+     * Whether if this content is suggested to homepage
+     *
+     * @var int 0|1
+     */
+    public $frontpage = null;
+
+    /**
+     * The content id
+     *
+     * @var ont
+     */
+    public $id = null;
+
+    /**
+     * Whether this content is in home
+     *
+     * @var int 0|1
+     */
+    public $in_home = null;
+
+    /**
+     * Whether if this content is trashed
+     *
+     * @var int 0|1
+     */
+    public $in_litter = null;
+
+    /**
+     * The list of tags of this content separated by commas
+     *
+     * @var string
+     */
+    public $metadata = '';
+
+    /**
+     * Map of metadata which contains information that doesn't fit on normal vars.
+     * Stored in a separated table contentmeta. These values are not serialized.
+     *
+     * @var string
+     */
+    public $metas = [];
+
+    /**
+     * An array for misc information of this content
+     * Must be serialized when saved to database
+     *
+     * @var array
+     */
+    public $params = null;
 
     /**
      * The permalink/slug of this content
@@ -153,69 +206,25 @@ class Content
     public $position = null;
 
     /**
-     * Whether this content is in home
-     *
-     * @var int 0|1
-     */
-    public $in_home = null;
-
-    /**
-     * Whether if this content is available
-     *
-     * @var int 0|1
-     */
-    public $available = null;
-
-    /**
-     * Whether if this content is suggested to homepage
-     *
-     * @var int 0|1
-     */
-    public $frontpage = null;
-
-    /**
-     * Whether if this content is trashed
-     *
-     * @var int 0|1
-     */
-    public $in_litter = null;
-
-    /**
-     * Status of this content
-     *
-     * @var int 0|1|2
-     */
-    public $content_status = null;
-
-    /**
-     * An array for misc information of this content
-     * Must be serialized when saved to database
-     *
-     * @var array
-     */
-    public $params = null;
-
-    /**
      * The slug of the content
      *
      * @var string
      */
-    public $slug = null;
+    protected $slug = null;
 
     /**
-     * Whether if this content is marked as favorite
-     *
-     * @var int 0|1
-     */
-    public $favorite = null;
-
-    /**
-     * Map of metadata which contains information that doesn't fit on normal vars.
-     * Stored in a separated table contentmeta. These values are not serialized.
+     * The date from when this will be available to publish
      *
      * @var string
      */
-    public $metas = [];
+    public $starttime = null;
+
+    /**
+     * The title of the content
+     *
+     * @var string
+     */
+    protected $title = '';
 
     /**
      * Whether allowing comments in this content
@@ -223,17 +232,6 @@ class Content
      * @var boolean
      */
     public $with_comment = null;
-
-    const AVAILABLE = 'available';
-    const TRASHED   = 'trashed';
-    const PENDING   = 'pending';
-
-
-    const NOT_SCHEDULED = 'not-scheduled';
-    const SCHEDULED     = 'scheduled';
-    const DUED          = 'dued';
-    const IN_TIME       = 'in-time';
-    const POSTPONED     = 'postponed';
 
     /**
      * Initializes the content for a given id.
@@ -259,44 +257,108 @@ class Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                return $this->getUri();
-
-            case 'slug':
-                if (!empty($this->slug)) {
-                    return $this->slug;
-                } else {
-                    return \Onm\StringUtils::getTitle($this->title);
-                }
-                break;
-            case 'content_type_name':
-                return $this->getContentTypeName();
-
             case 'category_name':
                 return $this->category_name = $this->loadCategoryName($this->id);
 
-            case 'publisher':
-                $user = new User();
-                return $this->publisher = $user->getUserName($this->fk_publisher);
+            case 'comments':
+                return 0;
+
+            case 'content_type_name':
+                return $this->getContentTypeName();
+
+            case 'fk_user':
+                return $this->fk_author;
 
             case 'last_editor':
                 $user = new User();
                 return $this->last_editor = $user->getUserName($this->fk_user_last_editor);
 
+            case 'publisher':
+                $user = new User();
+                return $this->publisher = $user->getUserName($this->fk_publisher);
+
             case 'ratings':
                 return 0;
 
-            case 'comments':
-                return 0;
-                // $commentRepository = getService('comment_repository');
-                // return $this->comments = $commentRepository->countCommentsForContentId($this->id);
+            case 'uri':
+                return $this->getUri();
 
             default:
                 if (array_key_exists($name, $this->metas)) {
                     return $this->metas[$name];
                 }
-                break;
+
+                if ($name === 'slug' && empty($this->slug)) {
+                    $this->slug = \Onm\StringUtils::getTitle($this->title);
+                }
+
+                if (in_array($name, $this->getL10nKeys())) {
+                    if (!getService('core.instance')->hasMultilanguage()
+                        || getService('core.locale')->getContext() !== 'backend'
+                    ) {
+                        return getService('data.manager.filter')
+                            ->set($this->{$name})
+                            ->filter('localize')
+                            ->get();
+                    }
+
+                    return getService('data.manager.filter')
+                        ->set($this->{$name})
+                        ->filter('unlocalize')
+                        ->get();
+                }
+                return $this->{$name};
         }
+    }
+
+    /**
+     * Checks if a property exists.
+     *
+     * @param string $name The property name.
+     *
+     * @return boolean True if the property exists. False otherwise.
+     */
+    public function __isset($name)
+    {
+        return property_exists($this, $name);
+    }
+
+    /**
+     * Changes a property value.
+     *
+     * @param string $name  The property name.
+     * @param mixed  $value The property value.
+     */
+    public function __set($name, $value)
+    {
+        if (getService('core.instance')->hasMultilanguage()
+            && in_array($name, $this->getL10nKeys())
+        ) {
+            $value = getService('data.manager.filter')
+                ->set($value)
+                ->filter('unlocalize')
+                ->get();
+        }
+
+        $this->{$name} = $value;
+    }
+
+    /**
+     * Returns all content information when serialized.
+     *
+     * @return array The content information.
+     */
+    public function jsonSerialize()
+    {
+        $data = get_object_vars($this);
+
+        foreach ($this->getL10nKeys() as $key) {
+            $data[$key] = $this->__get($key);
+        }
+
+        $data['uri'] = $this->uri;
+
+        return $data;
     }
 
     /**
@@ -311,30 +373,12 @@ class Content
     {
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
-                if (!is_numeric($propertyName) && !empty($propertyValue)) {
-                    $this->{$propertyName} = @iconv(
-                        mb_detect_encoding($propertyValue),
-                        'utf-8',
-                        $propertyValue
-                    );
-                } elseif (empty($propertyValue)) {
-                    $this->{$propertyName} = $propertyValue;
-                } else {
-                    $this->{$propertyName} = (int) $propertyValue;
-                }
+                $this->{$propertyName} = $this->parseProperty($propertyValue);
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $propertyName => $propertyValue) {
-                if (!is_numeric($k)) {
-                    $this->{$propertyName} = @iconv(
-                        mb_detect_encoding($v),
-                        'utf-8',
-                        $propertyValue
-                    );
-                } else {
-                    $this->{$propertyName} = (int) $propertyValue;
-                }
+                $this->{$propertyName} = $this->parseProperty($propertyValue);
             }
         }
 
@@ -379,7 +423,9 @@ class Content
             $this->params = @unserialize($this->params);
         }
 
-        $this->fk_user = $this->fk_author;
+        if (empty($this->params)) {
+            $this->params = [];
+        }
     }
 
     /**
@@ -458,6 +504,12 @@ class Content
      */
     public function create($data)
     {
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
+
         $data['content_status'] = (empty($data['content_status'])) ? 0 : intval($data['content_status']);
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
@@ -567,6 +619,12 @@ class Content
     public function update($data)
     {
         $this->read($data['id']);
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = serialize($data[$key]);
+            }
+        }
 
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
@@ -772,20 +830,33 @@ class Content
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-            $uri = 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
-        } else {
-            $uri = Uri::generate(
-                strtolower($this->content_type_name),
-                array(
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => urlencode($this->category_name),
-                    'slug'     => urlencode($this->slug),
-                )
-            );
+            return 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
         }
 
-        return ($uri !== '') ? $uri : $this->permalink;
+        $type     = $this->content_type_name;
+        $id       = sprintf('%06d', $this->id);
+        $date     = date('YmdHis', strtotime($this->created));
+        $category = urlencode($this->category_name);
+
+        if (is_array($this->__get('slug'))) {
+            return array_map(function ($a) use ($type, $id, $date, $category) {
+                return Uri::generate(strtolower($type), [
+                    'id'       => $id,
+                    'date'     => $date,
+                    'category' => $category,
+                    'slug'     => urlencode($a),
+                ]);
+            }, $this->__get('slug'));
+        }
+
+        $uri = Uri::generate(strtolower($this->content_type_name), [
+            'id'       => $id,
+            'date'     => $date,
+            'category' => $category,
+            'slug'     => urlencode($this->__get('slug')),
+        ]);
+
+        return !empty($uri) ? $uri : $this->permalink;
     }
 
     /**
@@ -823,7 +894,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setTrashed (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::setTrashed (ID:' . $this->id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -839,7 +910,7 @@ class Content
     public function restoreFromTrash()
     {
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'contents',
                 [
                     'in_litter' => 0,
@@ -886,7 +957,7 @@ class Content
             $this->content_status = $status;
             $this->available      = $status;
 
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'contents',
                 [
                     'available'      => $this->available,
@@ -1008,7 +1079,7 @@ class Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleSuggested (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::toggleSuggested (ID:' . $this->id . '):' . $e->getMessage());
             throw $e;
         }
     }
@@ -1040,13 +1111,13 @@ class Content
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
-                $values = array(
+                $values = [
                     $status,
                     $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
-                );
+                ];
             } else {
                 $values = $status;
             }
@@ -1106,12 +1177,12 @@ class Content
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
-                $values = array(
+                $values = [
                     $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
-                );
+                ];
             } else {
                 $values = $status;
             }
@@ -1187,41 +1258,6 @@ class Content
     }
 
     /**
-     * Enable the favorited flag for this content
-     *
-     * @return boolean true if the operation was performed sucessfully
-     */
-    public function setFavorited()
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        try {
-            $this->favorite = 1;
-
-            getService('dbal_connection')->update(
-                'contents',
-                [ 'favorite'   => $this->favorite ],
-                [ 'pk_content' => $this->id ]
-            );
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
-            dispatchEventWithParams(
-                $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
-            );
-
-            return $this;
-        } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:' . $id . '):' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Define content position in a widget
      *
      * @param int $position the position of the content
@@ -1255,7 +1291,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setPosition (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::setPosition (ID:' . $this->id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1296,7 +1332,7 @@ class Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:' . $id . '):' . $e->getMessage());
+            error_log('Error content::setFavorite (ID:' . $this->id . '):' . $e->getMessage());
             return false;
         }
     }
@@ -1367,7 +1403,7 @@ class Content
             $status          = $this->getStatus();
             $schedulingState = $this->getSchedulingState();
 
-            return array(
+            return [
                 'title'           => $this->title,
                 'category'        => $ccm->getName($this->category),
                 'views'           => $this->views,
@@ -1376,7 +1412,7 @@ class Content
                 'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
                 'state'           => $this->getL10nStatus($status),
                 'last_author'     => $authorName,
-            );
+            ];
         }
     }
 
@@ -1659,43 +1695,6 @@ class Content
     }
 
     /**
-     * Removes element with $contentPK from homepage of category.
-     *
-     * @param string $category  the id of the category where remove the element.
-     * @param string $pkContent the pk of the content.
-     *
-     * @return boolean true if was removed successfully
-     */
-    public function dropFromHomePageOfCategory($category, $pkContent)
-    {
-        if ($category == 'home') {
-            $categoryName = 'home';
-            $category     = 0;
-        } else {
-            $categoryName = ContentCategoryManager::get_instance()->getName($category);
-        }
-
-        try {
-            getService('dbal_connection')->delete(
-                'content_positions',
-                [ 'fk_category' => $category, 'pk_fk_content' => $pkContent]
-            );
-
-            /* Notice log of this action */
-            getService('application.log')->notice(
-                'User ' . $user->username . ' (' . (int) getService('session')->get('user')->id . ') has executed'
-                . ' action Content::dropFromHomePageOfCategory ' . $categoryName
-                . ' an ' . $this->content_type_name . ' Id ' . $pkContent
-            );
-
-            return true;
-        } catch (\Exception $e) {
-            error_log('Error on Content::dropFromHomePageOfCategory ' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Removes element with $contentPK from Homepage.
      *
      * @return boolean true if was removed successfully
@@ -1718,7 +1717,7 @@ class Content
             // Clean cache for each frontpage element listing
             $cache = getService('cache');
             foreach ($rs as $row) {
-                $contentIds = $cache->delete('frontpage_elements_map_' . $row['fk_category']);
+                $cache->delete('frontpage_elements_map_' . $row['fk_category']);
                 getService('core.dispatcher')->dispatch(
                     'frontpage.save_position',
                     [ 'category' => $row['fk_category'] ]
@@ -1734,86 +1733,6 @@ class Content
             return true;
         } catch (\Exception $e) {
             error_log('Error on Content::dropFromAllHomePages:' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Inserts this content directly to the category frontpage
-     *
-     * @return boolean true if all went well
-     */
-    public function putInCategoryFrontpage()
-    {
-        return true;
-    }
-
-    /**
-     * Search contents by its urn
-     *
-     * @param  array/string $urns one urn string or one array of urn strings
-     *
-     * @return array        the array of contents
-     */
-    public static function findByUrn($urns)
-    {
-        if (is_array($urns)) {
-            $sqlUrns = '';
-            foreach ($urns as &$urn) {
-                $urn = "'" . $urn . "'";
-            }
-
-            $sqlUrns = implode(', ', $urns);
-        } elseif (is_string($urns)) {
-            $sqlUrns = "'" . $urns . "'";
-        } else {
-            $message = sprintf('The param urn is not valid "%s".', $urns);
-            throw new \InvalidArgumentException($message);
-        }
-
-        try {
-            $contents = getService('dbal_connection')->fetchAll(
-                "SELECT urn_source FROM `contents` WHERE urn_source IN (" . $sqlUrns . ")"
-            );
-
-            if (count($contents) <= 0) {
-                return false;
-            }
-
-            $contentsUrns = array();
-            foreach ($contents as $content) {
-                $contentsUrns[] = $content['urn_source'];
-            }
-
-            return $contentsUrns;
-        } catch (\Exception $e) {
-            error_log('Error Conntent::findByUrn: ' . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Search contents by its urn
-     *
-     * @param  string $originalName one urn string or one array of urn strings
-     *
-     * @return array        the array of contents
-     */
-    public static function findByOriginaNameInUrn($originalName)
-    {
-        if (!is_string($originalName)) {
-            $message = sprintf('The param name is not valid "%s".', $originalName);
-            throw new \InvalidArgumentException($message);
-        }
-
-        try {
-            $content = getService('dbal_connection')->fetchColumn(
-                "SELECT pk_content FROM `contents` WHERE urn_source LIKE ? LIMIT 1",
-                [ '%' . $originalName . '%' ]
-            );
-
-            return $content;
-        } catch (\Exception $e) {
             return false;
         }
     }
@@ -2096,7 +2015,7 @@ class Content
         $contentProperties = $cache->fetch('content-meta-' . $this->id);
 
         if (!is_array($contentProperties)) {
-            $contentProperties = array();
+            $contentProperties = [];
 
             if ($this->id == null && $id == null) {
                 return false;
@@ -2132,5 +2051,40 @@ class Content
         $this->metas = $contentProperties;
 
         return $this;
+    }
+
+    /**
+     * Parses and executes some conversions basing on the property value.
+     *
+     * @param mixed $value The property value.
+     *
+     * @return mixed The converted value.
+     */
+    protected function parseProperty($value)
+    {
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        if (@unserialize($value) !== false) {
+            return unserialize($value);
+        }
+
+        if (!empty($value) && is_string($value)) {
+            return @iconv(mb_detect_encoding($value), 'utf-8', $value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public static function getL10nKeys()
+    {
+        return [ 'body', 'description', 'slug', 'uri', 'title' ];
     }
 }

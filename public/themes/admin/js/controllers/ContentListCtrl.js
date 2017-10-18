@@ -867,10 +867,12 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        messenger.post(response.data.messages);
+        if (response) {
+          messenger.post(response.data.messages);
 
-        if (response.success) {
-          $scope.list($scope.route);
+          if (response.success) {
+            $scope.list($scope.route);
+          }
         }
       });
     };
@@ -906,13 +908,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
 
       modal.result.then(function(response) {
-        messenger.post(response.data.messages);
+        if (response) {
+          messenger.post(response.data.messages);
 
-        $scope.selected.total = 0;
-        $scope.selected.contents = [];
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
 
-        if (response.success) {
-          $scope.list($scope.route);
+          if (response.success) {
+            $scope.list($scope.route);
+          }
         }
       });
     };
@@ -1030,7 +1034,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Updated shared variable
       $scope.contents = contents;
       $scope.selected.contents = selected;
-    }
+    };
 
     /**
      * Updates the status property for selected contents.

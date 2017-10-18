@@ -2,9 +2,98 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('InnerCtrl', [
-  '$rootScope', '$scope', '$timeout', 'Editor', 'Renderer', 'http',
-  function($rootScope, $scope, $timeout, Editor, Renderer, http) {
+  '$rootScope', '$scope', '$timeout', 'Editor', 'http', 'messenger', 'Renderer',
+  function($rootScope, $scope, $timeout, Editor, http, messenger, Renderer) {
     'use strict';
+
+    /**
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *  The list configuration.
+     *
+     * @type {Object}
+     */
+    $scope.config = {
+      linkers: {},
+      locale: null,
+      multilanguage: null
+    };
+
+    /**
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *  The list of flags
+     *
+     * @type {Object}
+     */
+    $scope.flags = {};
+
+    /**
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *  The list of overlays
+     *
+     * @type {Object}
+     */
+    $scope.overlay = {};
+
+    /**
+     * @function configure
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   Configures the inner form.
+     *
+     * @param {Object} data The data to configure the form.
+     */
+    $scope.configure = function(data) {
+      // Configure the form
+      if ($scope.config.multilanguage === null) {
+        $scope.config.multilanguage = data.multilanguage;
+      }
+
+      if ($scope.config.locale === null) {
+        $scope.config.locale = data.locale;
+      }
+
+      if ($scope.forcedLocale && Object.keys(data.options.available)
+          .indexOf($scope.forcedLocale)) {
+        $scope.config.locale = $scope.forcedLocale;
+      }
+    };
+
+    /**
+     * @function disableFlags
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   Disables all flags.
+     */
+    $scope.disableFlags = function() {
+      for (var key in $scope.flags) {
+        $scope.flags[key] = false;
+      }
+    };
+
+    /**
+     * @function errorCb
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   The callback function to execute when an ajax request fails.
+     *
+     * @param {Object} response The response object.
+     */
+    $scope.errorCb = function(response) {
+      $scope.disableFlags();
+
+      if (response && response.data) {
+        messenger.post(response.data);
+      }
+    };
 
     /**
      * Inserts an array of items in a CKEditor instance.
@@ -13,21 +102,15 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param array  items  The items to insert.
      */
     $scope.insertInCKEditor = function(target, items) {
-      var html;
-
-      if (items instanceof Array) {
-        for (var i = 0; i < items.length; i++) {
-          html = Renderer.renderImage(items[i]);
-          Editor.get(target).insertHtml(html);
-        }
-
-        Editor.get(target).fire('change');
-
-        return;
+      if (!(items instanceof Array)) {
+        items = [ items ];
       }
 
-      html = Renderer.renderImage(items);
-      Editor.get(target).insertHtml(html);
+      for (var i = 0; i < items.length; i++) {
+        Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
+      }
+
+      Editor.get(target).fire('change');
     };
 
     /**
@@ -38,7 +121,19 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      */
     $scope.insertInModel = function(target, items) {
       $scope.loaded = false;
-      $scope[target] = items;
+
+      var keys  = target.split('.');
+      var model = $scope;
+
+      for (var i = 0; i < keys.length - 1; i++) {
+        if (!model[keys[i]]) {
+          model[keys[i]] = {};
+        }
+
+        model = model[keys[i]];
+      }
+
+      model[keys[i]] = items;
 
       // Trick to force dynamic image re-rendering
       $timeout(function() {
@@ -62,16 +157,32 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param integer index The index of the element to remove.
      */
     $scope.removeItem = function(from, index) {
-      $scope[from].splice(index, 1);
-    };
+      var keys  = from.split('.');
+      var model = $scope;
 
-    $scope.toggleOverlay = function(overlay) {
-      if (!$scope.overlay) {
-        $scope.overlay = {};
-        $scope.overlay[overlay] = false;
+      for (var i = 0; i < keys.length - 1; i++) {
+        if (!model[keys[i]]) {
+          model[keys[i]] = {};
+        }
+
+        model = model[keys[i]];
       }
 
-      $scope.overlay[overlay] = !$scope.overlay[overlay];
+      if (angular.isArray(model[keys[i]])) {
+        model[keys[i]].splice(index, 1);
+        return;
+      }
+
+      model[keys[i]] = null;
+    };
+
+    /**
+     * Insert the selected items in media picker in the target element.
+     *
+     * @param String name The overlay name.
+     */
+    $scope.toggleOverlay = function(name) {
+      $scope.overlay[name] = !$scope.overlay[name];
     };
 
     /**
@@ -113,6 +224,22 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       }
 
       $scope.insertInModel(args.target, args.items);
+    });
+
+    // Updates linkers when locale changes
+    $scope.$watch('config.locale', function(nv, ov) {
+      if (nv === ov) {
+        return;
+      }
+
+      if (!$scope.config.multilanguage || !$scope.config.locale) {
+        return;
+      }
+
+      for (var key in $scope.config.linkers) {
+        $scope.config.linkers[key].setKey(nv);
+        $scope.config.linkers[key].update();
+      }
     });
 
     // Initialize the scope with the input/select values.

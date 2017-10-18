@@ -74,12 +74,11 @@ class PickerController extends Controller
         $em = $this->get('entity_repository');
 
         $filter = implode(' AND ', $filter);
+        $query  = "FROM contents  WHERE " . $filter;
 
         if (!in_array('photo', $contentTypes)) {
-            $query = "FROM contents JOIN contents_categories ON  contents_categories.pk_fk_content = " .
-                "contents.pk_content WHERE " . $filter;
-        } else {
-            $query = "FROM contents  WHERE " . $filter;
+            $query = "FROM contents LEFT JOIN contents_categories ON contents_categories.pk_fk_content = "
+                . "contents.pk_content WHERE " . $filter;
         }
 
         $contentMap = $em->dbConn->executeQuery(
@@ -98,6 +97,8 @@ class PickerController extends Controller
             'locale'    => $languageData['default']
         ])->get();
         $results      = \Onm\StringUtils::convertToUtf8($results);
+
+        $this->get('core.locale')->setContext('frontend');
 
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;
