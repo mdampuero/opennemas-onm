@@ -253,6 +253,21 @@ class AdvertisementController extends Controller
             $element->params['user_groups'] = [];
         }
 
+        // Set ads datetime to UTC (avoid browsers issues with Date)
+        $element->starttime = \DateTime::createFromFormat(
+            'Y-m-d H:i:s',
+            $element->starttime,
+            $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
+        )->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+
+        if (!is_null($element->endtime)) {
+            $element->endtime = \DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $element->endtime,
+                $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
+            )->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+        }
+
         $object = new \stdClass();
 
         $object->id          = (int) $element->pk_content;
