@@ -170,7 +170,7 @@
               </ul>
             </td>
             <td class="hidden-xs">
-              [% extra.categories[content.category_name] %]
+              [% extra.categories[content.category] %]
             </td>
             <td class="text-center hidden-xs hidden-sm">
               [% content.total_votes %]
