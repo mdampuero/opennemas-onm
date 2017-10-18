@@ -96,7 +96,7 @@ class Attachment extends Content
                 break;
         }
 
-        parent::__get($name);
+        return parent::__get($name);
     }
 
     /**
