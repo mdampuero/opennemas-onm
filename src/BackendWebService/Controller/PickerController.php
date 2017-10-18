@@ -98,6 +98,8 @@ class PickerController extends Controller
         ])->get();
         $results      = \Onm\StringUtils::convertToUtf8($results);
 
+        $this->get('core.locale')->setContext('frontend');
+
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;
         if (count($contentMap) > 0) {
