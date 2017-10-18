@@ -72,7 +72,7 @@
          *
          * @type {Function}
          */
-        $scope.dtm  = null;
+        $scope.dtm = null;
 
         /**
          * @function build
@@ -252,25 +252,6 @@
         };
 
         /**
-         * @function init
-         * @memberOf ArticleListCtrl
-         *
-         * @description
-         *   Initializes services and list articles.
-         *
-         * @param {Integer} id The article id when editing.
-         */
-        $scope.init = function(locale, id) {
-          $scope.forcedLocale = locale;
-
-          if (id) {
-            $scope.draftKey = 'article-' + id + '-draft';
-          }
-
-          $scope.getArticle(id);
-        };
-
-        /**
          * @function getArticle
          * @memberOf ArticleCtrl
          *
@@ -320,6 +301,25 @@
 
             $scope.checkDraft();
           }, $scope.errorCb);
+        };
+
+        /**
+         * @function init
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Initializes services and list articles.
+         *
+         * @param {Integer} id The article id when editing.
+         */
+        $scope.init = function(locale, id) {
+          $scope.forcedLocale = locale;
+
+          if (id) {
+            $scope.draftKey = 'article-' + id + '-draft';
+          }
+
+          $scope.getArticle(id);
         };
 
         /**
@@ -463,6 +463,63 @@
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
           }, data).then(successCb, $scope.errorCb);
+        };
+
+        /**
+         * @function translate
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Shows a modal to translate a content automatically.
+         *
+         * @param {String} to     The locale to translate to.
+         * @param {Object} config The locale-related configuration.
+         *
+         * @return {type} description
+         */
+        $scope.translate = function(to, config) {
+          $uibModal.open({
+            backdrop:    true,
+            backdropClass: 'modal-backdrop-transparent',
+            controller:  'modalCtrl',
+            openedClass: 'modal-relative-open',
+            templateUrl: 'modal-translate',
+            resolve: {
+              template: function() {
+                return { config: config, to: to };
+              },
+              success: function() {
+                return function(modalWindow, template) {
+                  var params = {
+                    data: {},
+                    from: template.translator.from,
+                    to: template.translator.to,
+                    translator: template.translator.translator
+                  };
+
+                  for (var i = 0; i < $scope.data.extra.keys.length; i++) {
+                    var key = $scope.data.extra.keys[i];
+
+                    if ($scope.data.article[key] && angular.isObject(
+                        $scope.data.article[key]) && $scope.data
+                        .article[key][params.from]) {
+                      params.data[key] = $scope.data.article[key][params.from];
+                    }
+                  }
+
+                  return http.post('api_v1_backend_tools_translate', params)
+                    .then(function(response) {
+                      for (var i = 0; i < $scope.data.extra.keys.length; i++) {
+                        var key = $scope.data.extra.keys[i];
+                        $scope.article[key] = response.data[key];
+                      }
+
+                      modalWindow.close({ response: true, success: true });
+                    });
+                };
+              }
+            }
+          });
         };
 
         // Update footers when photos change
@@ -612,6 +669,29 @@
             }, 2500);
           }
         });
+
+        // Shows a modal window to translate content automatically
+        $scope.$watch('config.locale', function(nv, ov) {
+          if (!ov || nv === ov || $scope.isTranslated($scope.data.article,
+              $scope.data.extra.keys, nv)) {
+            return;
+          }
+
+          var translators = $scope.config.translators.filter(function(e) {
+            return e.to === nv;
+          });
+
+          if (translators.length === 0) {
+            return;
+          }
+
+          var config = {
+            locales: $scope.data.extra.options.available,
+            translators: translators
+          };
+
+          $scope.translate(nv, config);
+        }, true);
 
         // Enable drafts after 5s to grant CKEditor initialization
         $timeout(function() {
