@@ -287,10 +287,14 @@
 
           http.get(route).then(function(response) {
             $scope.data   = response.data;
-            $scope.backup = { content_status: $scope.data.article.content_status };
+            $scope.backup = { content_status: 0 };
 
             $scope.configure(response.data.extra);
             $scope.disableFlags();
+
+            if ($scope.data.article) {
+              $scope.backup.content_status = $scope.data.article.content_status;
+            }
 
             // Grant that article has all default values
             $scope.data.article =
