@@ -292,7 +292,9 @@ class Content implements \JsonSerializable
                     $this->slug = \Onm\StringUtils::getTitle($this->title);
                 }
 
-                if ($this->getContentTypeName() === 'article' && in_array($name, $this->getL10nKeys())) {
+                if ($this->content_type_name === 'article'
+                    && in_array($name, $this->getL10nKeys())
+                ) {
                     if (!getService('core.instance')->hasMultilanguage()
                         || getService('core.locale')->getContext() !== 'backend'
                     ) {
@@ -302,12 +304,10 @@ class Content implements \JsonSerializable
                             ->get();
                     }
 
-                    if($this->getContentTypeName() === 'article') {
-                        return getService('data.manager.filter')
-                            ->set($this->{$name})
-                            ->filter('unlocalize')
-                            ->get();
-                    }
+                    return getService('data.manager.filter')
+                        ->set($this->{$name})
+                        ->filter('unlocalize')
+                        ->get();
                 }
                 return $this->{$name};
         }
