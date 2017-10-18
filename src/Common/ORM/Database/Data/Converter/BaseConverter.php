@@ -112,7 +112,7 @@ class BaseConverter extends Converter
         $mapping = $this->metadata->mapping['database'];
         $data    = [];
         foreach ($source as $key => $value) {
-            $from   = gettype($value);
+            $from   = strtolower(gettype($value));
             $to     = 'String';
             $params = [];
 
