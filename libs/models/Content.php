@@ -356,8 +356,6 @@ class Content implements \JsonSerializable
             $data[$key] = $this->__get($key);
         }
 
-        $data['uri'] = $this->uri;
-
         return $data;
     }
 
@@ -837,8 +835,9 @@ class Content implements \JsonSerializable
         $id       = sprintf('%06d', $this->id);
         $date     = date('YmdHis', strtotime($this->created));
         $category = urlencode($this->category_name);
+        $slug     = $this->__get('slug');
 
-        if (is_array($this->__get('slug'))) {
+        if (is_array($slug)) {
             return array_map(function ($a) use ($type, $id, $date, $category) {
                 return Uri::generate(strtolower($type), [
                     'id'       => $id,
@@ -846,14 +845,14 @@ class Content implements \JsonSerializable
                     'category' => $category,
                     'slug'     => urlencode($a),
                 ]);
-            }, $this->__get('slug'));
+            }, $slug);
         }
 
         $uri = Uri::generate(strtolower($this->content_type_name), [
             'id'       => $id,
             'date'     => $date,
             'category' => $category,
-            'slug'     => urlencode($this->__get('slug')),
+            'slug'     => urlencode($slug),
         ]);
 
         return !empty($uri) ? $uri : $this->permalink;
@@ -2085,6 +2084,6 @@ class Content implements \JsonSerializable
      */
     public static function getL10nKeys()
     {
-        return [ 'body', 'description', 'slug', 'uri', 'title' ];
+        return [ 'body', 'description', 'slug', 'title' ];
     }
 }

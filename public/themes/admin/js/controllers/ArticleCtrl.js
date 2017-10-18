@@ -172,7 +172,7 @@
          * @description
          *   Executes actions to adapt data from template to the webservice.
          */
-        $scope.clean = function(article) {
+        $scope.clean = function(article, preview) {
           var data = angular.copy(article);
 
           if (angular.isArray(article.metadata)) {
@@ -201,7 +201,16 @@
             data[keys[i]] = [];
 
             for (var j = 0; j < article[keys[i]].length; j++) {
-              data[keys[i]].push(article[keys[i]][j].pk_content);
+              var item = article[keys[i]][j].pk_content;
+
+              if (preview) {
+                item = {
+                  id: article[keys[i]][j].pk_content,
+                  type: article[keys[i]][j].content_type_name
+                };
+              }
+
+              data[keys[i]].push(item);
             }
           }
 
@@ -278,10 +287,14 @@
 
           http.get(route).then(function(response) {
             $scope.data   = response.data;
-            $scope.backup = { content_status: $scope.data.article.content_status };
+            $scope.backup = { content_status: 0 };
 
             $scope.configure(response.data.extra);
             $scope.disableFlags();
+
+            if ($scope.data.article) {
+              $scope.backup.content_status = $scope.data.article.content_status;
+            }
 
             // Grant that article has all default values
             $scope.data.article =
@@ -367,7 +380,9 @@
         $scope.preview = function(previewUrl, getPreviewUrl) {
           $scope.flags.preview = true;
 
-          var data = angular.copy($scope.article);
+          var data = $scope.clean($scope.article, true);
+
+          data = cleaner.clean(data);
 
           if (angular.isArray(data.metadata)) {
             data.metadata = data.metadata.map(function(e) {
@@ -375,7 +390,7 @@
             }).join(',');
           }
 
-          var data = { 'article': data };
+          var data = { 'article': data, 'locale': $scope.config.locale };
 
           http.post(previewUrl, data).success(function() {
             $uibModal.open({

@@ -297,6 +297,11 @@ class ArticlesController extends Controller
      */
     public function previewAction(Request $request)
     {
+        $locale = $request->get('locale');
+
+        $this->get('core.locale')->setContext('frontend')
+            ->setRequestLocale($locale);
+
         $this->loadCategories($request);
 
         $er = $this->get('entity_repository');
@@ -346,35 +351,28 @@ class ArticlesController extends Controller
             $videoInt = $er->find('Video', $article->fk_video2);
         }
 
-        // Fetch related contents to the inner article
-        $relations      = [];
-        $innerRelations = json_decode($article->relatedInner, true);
-        if (!empty($innerRelations)) {
-            foreach ($innerRelations as $key => $value) {
-                $relations[$key] = $value['id'];
-            }
+        $ids = [];
+        if (!empty($article->relatedInner)) {
+            $ids = array_map(function ($a) {
+                return [ $a['type'],  $a['id'] ];
+            }, $article->relatedInner);
         }
 
-        $cm    = new \ContentManager();
-        $relat = $cm->getContents($relations);
-        $relat = $cm->getInTime($relat);
-        $relat = $cm->getAvailable($relat);
-
-        foreach ($relat as $ril) {
-            $ril->category_name = $ccm->getCategoryNameByContentId($ril->id);
-        }
+        $related = $this->get('entity_repository')->findMulti($ids);
 
         // Machine suggested contents code
-        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-            'article',
-            "category_name= '" . $article->category_name . "' AND pk_content <>" . $article->id,
-            4
-        );
+        $machineSuggestedContents = $this->get('automatic_contents')
+            ->searchSuggestedContents(
+                'article',
+                "category_name= '" . $article->category_name
+                    . "' AND pk_content <>" . $article->id,
+                4
+            );
 
         $this->view->assign([
             'ads_positions'         => $positions,
             'advertisements'        => $advertisements,
-            'relationed'            => $relat,
+            'relationed'            => $related,
             'suggested'             => $machineSuggestedContents,
             'contentId'             => $article->id,
             'category_name'         => $category_name,
