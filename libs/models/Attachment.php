@@ -25,26 +25,26 @@ class Attachment extends Content
      *
      * @var int
      */
-    public $pk_attachment   = null;
+    public $pk_attachment = null;
 
     /**
      * The attachemnt title
      *
      * @var
      */
-    public $title           = null;
+    public $title = null;
 
     /**
      * The relative path to the file
      *
      * @var
      */
-    public $path            = null;
+    public $path = null;
 
     /**
      * The category Id
      */
-    public $category        = null;
+    public $category = null;
 
     /**
      * Proxy handler for the object cache
@@ -63,7 +63,7 @@ class Attachment extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('File');
-        $this->file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR;
+        $this->file_path              = MEDIA_PATH . DIRECTORY_SEPARATOR . FILE_DIR;
 
         parent::__construct($id);
     }
@@ -83,15 +83,11 @@ class Attachment extends Content
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
 
-                $uri = "media".DS.INSTANCE_UNIQUE_NAME.DS.FILE_DIR . $this->path;
+                $uri = "media" . DS . INSTANCE_UNIQUE_NAME . DS . FILE_DIR . $this->path;
 
                 return ($uri !== '') ? $uri : $this->permalink;
-
-                break;
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->title);
-
-                break;
             default:
                 break;
         }
@@ -116,7 +112,7 @@ class Attachment extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN attachments ON pk_content = pk_attachment WHERE pk_content = ?',
+                . 'LEFT JOIN attachments ON pk_content = pk_attachment WHERE pk_content = ?',
                 [ $id ]
             );
 
@@ -159,7 +155,7 @@ class Attachment extends Content
         try {
             $rs = getService('dbal_connection')->executeUpdate(
                 "INSERT INTO attachments (`pk_attachment`,`title`, `path`, `category`) "
-                ." VALUES (?,?,?,?)",
+                . " VALUES (?,?,?,?)",
                 [
                     (int) $this->id,
                     $data['title'],
@@ -178,7 +174,7 @@ class Attachment extends Content
 
         // Check if exist thumbnail for this PDF
         if (preg_match('/\.pdf$/', $data['path'])) {
-            $media_path = $this->file_path.DS.FILE_DIR.$dirDate;
+            $media_path = $this->file_path . DS . FILE_DIR . $dirDate;
             $imageName  = basename($data['path'], ".pdf") . '.jpg';
 
             // Remove existent thumbnail for PDF
@@ -232,7 +228,7 @@ class Attachment extends Content
             return false;
         }
 
-        $filename = MEDIA_PATH.DS.FILE_DIR.$this->path;
+        $filename = MEDIA_PATH . DS . FILE_DIR . $this->path;
 
         parent::remove($id);
 
@@ -290,17 +286,17 @@ class Attachment extends Content
             }, $arrayIds));
 
             $paths = getService('dbal_connection')->fetchAll(
-                'SELECT path FROM attachments WHERE pk_attachment IN ('.$contents.')'
+                'SELECT path FROM attachments WHERE pk_attachment IN (' . $contents . ')'
             );
 
             $rs = getService('dbal_connection')->executeUpdate(
-                'DELETE FROM attachments WHERE `pk_attachment` IN ('.$contents.')'
+                'DELETE FROM attachments WHERE `pk_attachment` IN (' . $contents . ')'
             );
 
             foreach ($paths as $path) {
-                $file = MEDIA_PATH.DS.FILE_DIR.DS.$path['path'];
+                $file = MEDIA_PATH . DS . FILE_DIR . DS . $path['path'];
                 if (file_exists($file)) {
-                    echo $path."\n";
+                    echo $path . "\n";
                     // @unlink($file);
                 }
             }
