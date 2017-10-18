@@ -16,6 +16,13 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
     };
 
     /**
+     * Closes the modal without returning response.
+     */
+    $scope.dismiss = function() {
+      $uibModalInstance.dismiss();
+    };
+
+    /**
      * Confirms and executes the confirmed action.
      */
     $scope.confirm = function() {
