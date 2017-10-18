@@ -240,19 +240,20 @@ class PickerController extends Controller
         $fm           = $this->get('data.manager.filter');
         $categories   = $ccm->find();
 
-        // TODO: remove this after merging the category l10n branch
-        foreach ($categories as &$cat) {
-            if (!@unserialize($cat->title)) {
-                continue;
-            }
+        $cleanCategories = [];
+        foreach ($categories as $category) {
+            $categoryInfo = [
+                'pk_content_category' => $category->pk_content_category,
+                'name' => $category->name,
+                'title' => $fm->set($category->title)
+                    ->filter('localize')
+                    ->get(),
+            ];
 
-            $cat->title = unserialize($cat->title);
+            $cleanCategories[] = $categoryInfo;
         }
 
-        $categories = $fm->set($categories)->filter('localize', [
-            'keys'      => ['title', 'name'],
-            'locale'    => $languageData['default']
-        ])->get();
+        $categories = $cleanCategories;
 
         return [
             'allCategories'       => _('All categories'),
