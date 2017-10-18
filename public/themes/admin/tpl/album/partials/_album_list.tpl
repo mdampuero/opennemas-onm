@@ -192,7 +192,7 @@
               </td>
               {if $category=='widget' || $category=='all'}
                 <td class="left hidden-xs">
-                 [% extra.categories[content.category_name] %]
+                 [% extra.categories[content.category] %]
                 </td>
               {/if}
               {acl isAllowed="ALBUM_HOME"}

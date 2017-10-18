@@ -118,7 +118,7 @@
                 </div>
               </td>
               <td class="hidden-xs">
-                [% extra.categories[content.category_name] %]
+                [% extra.categories[content.category] %]
               </td>
               {if $category!='widget'}
               {acl isAllowed="SPECIAL_HOME"}
