@@ -25,7 +25,7 @@ class SettingManager extends BaseManager
      *
      * @var array
      */
-    protected $autoloaded = array();
+    protected $autoloaded = [];
 
     /**
      * Array of names of settings to auto-load.
@@ -36,17 +36,16 @@ class SettingManager extends BaseManager
         'comscore',
         'favico',
         'google_analytics',
+        'locale',
         'ojd',
         'piwik',
         'site_color',
         'site_description',
         'site_footer',
         'site_keywords',
-        'site_language',
         'site_logo',
         'site_name',
         'site_title',
-        'time_zone'
     ];
 
     /**
@@ -55,8 +54,7 @@ class SettingManager extends BaseManager
      * @var array
      */
     protected $toAutoloadManager = [
-        'site_language',
-        'time_zone'
+        'locale',
     ];
 
     /**
@@ -141,7 +139,7 @@ class SettingManager extends BaseManager
 
             $rs = $this->dbConn->fetchAll($sql);
             foreach ($rs as $setting) {
-                $value = @unserialize($setting['value']);
+                $value                     = @unserialize($setting['value']);
                 $results[$setting['name']] = $value;
 
                 $this->cache->save($setting['name'], $value);
@@ -188,9 +186,10 @@ class SettingManager extends BaseManager
         }
 
         $serialized = serialize($value);
+
         $sql = "INSERT INTO settings (name,value) "
-                ."VALUES ('$name', '$serialized') "
-                ."ON DUPLICATE KEY UPDATE value = '$serialized'";
+            . "VALUES ('$name', '$serialized') "
+            . "ON DUPLICATE KEY UPDATE value = '$serialized'";
 
         $this->dbConn->executeUpdate($sql);
         $this->cache->save($name, $value);
@@ -257,7 +256,7 @@ class SettingManager extends BaseManager
 
         $names = array();
         foreach ($rs as $setting) {
-            $value = @unserialize($setting['value']);
+            $value   = @unserialize($setting['value']);
             $names[] = $setting['name'];
 
             $this->autoloaded[$setting['name']] = $value;

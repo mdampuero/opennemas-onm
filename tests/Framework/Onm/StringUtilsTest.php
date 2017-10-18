@@ -69,18 +69,18 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testSetSeparator()
     {
         $this->assertEquals(
-            'Lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-Cras-elit-sapien,'.
+            'Lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-Cras-elit-sapien,' .
             '-porttitor-non-aliquam-ac,-sagittis-a-urna.',
             $this->object->setSeparator(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit '.
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit ' .
                 'sapien, porttitor non aliquam ac, sagittis a urna.'
             )
         );
         $this->assertEquals(
-            'Lorem=ipsum=dolor=sit=amet,=consectetur=adipiscing=elit.=Cras=elit=sapien,'.
+            'Lorem=ipsum=dolor=sit=amet,=consectetur=adipiscing=elit.=Cras=elit=sapien,' .
             '=porttitor=non=aliquam=ac,=sagittis=a=urna.',
             $this->object->setSeparator(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit '.
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit ' .
                 'sapien, porttitor non aliquam ac, sagittis a urna.',
                 '='
             )
@@ -107,20 +107,20 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-' .
             'porttitor-non-aliquam-ac-sagittis-urna',
             $this->object->getTitle(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,'.
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,' .
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
         );
 
-        # Test with double slashes
+        // Test with double slashes
         $this->assertEquals(
-            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-' .
             'porttitor-non-aliquam-ac-sagittis-urna',
             $this->object->getTitle(
-                'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,'.
+                'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,' .
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
         );
@@ -160,6 +160,11 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
+            '',
+            $this->object->generateSlug(null)
+        );
+
+        $this->assertEquals(
             'es-por-tu-bien',
             $this->object->generateSlug(
                 '"Es por tu bien…"'
@@ -167,20 +172,20 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-' .
             'porttitor-non-aliquam-ac-sagittis-urna',
             $this->object->generateSlug(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,'.
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,' .
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
         );
 
-        # Test with double slashes
+        // Test with double slashes
         $this->assertEquals(
-            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-' .
             'porttitor-non-aliquam-ac-sagittis-urna',
             $this->object->generateSlug(
-                'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,'.
+                'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,' .
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
         );
@@ -226,6 +231,30 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
                 'detienen-dieciseis-personas-robo-joyas-kim-kardashian'
             )
         );
+
+        $this->assertEquals([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            '0001-cambio-look-mariana-antoniale',
+        ], $this->object->generateSlug([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
+        ]));
+
+        $this->assertEquals([], $this->object->generateSlug([]));
+
+        $this->assertEquals([1 => null], $this->object->generateSlug([1 => null]));
+
+        $this->assertEquals([''], $this->object->generateSlug(['']));
+
+        $this->assertEquals([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            '',
+        ],
+
+        $this->object->generateSlug([
+            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+            ''
+        ]));
     }
 
     /**
@@ -258,10 +287,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTags()
     {
         $this->assertEquals(
-            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, '.
+            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, ' .
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
             $this->object->getTags(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing'.
+                'Lorem ipsum dolor sit amet, consectetur adipiscing' .
                 ' elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
         );
@@ -273,10 +302,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTagsReturnsStringWithUniqueElements()
     {
         $this->assertEquals(
-            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, '.
+            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, ' .
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
             $this->object->getTags(
-                'Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. '.
+                'Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. ' .
                 'Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
         );
@@ -288,10 +317,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTagsRemovesUnnecesaryWords()
     {
         $this->assertEquals(
-            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, '.
+            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, ' .
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
             $this->object->getTags(
-                'de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit.'.
+                'de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit.' .
                 ' Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
         );
@@ -382,7 +411,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function testClearBadChars()
     {
-        $text = $this->object->clearBadChars('Text'.chr(226).chr(128).chr(169));
+        $text = $this->object->clearBadChars('Text' . chr(226) . chr(128) . chr(169));
         $this->assertTrue(strpos(chr(226), $text) == false);
     }
 
@@ -520,24 +549,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'action=test&action=1',
-            $this->object->toHttpParams(array(
-                array('action' => 'test'),
-                array('action' => '1'),
-            ))
+            $this->object->toHttpParams([
+                [ 'action' => 'test' ],
+                [ 'action' => '1' ],
+            ])
         );
     }
-
-    // /**
-    //  * @covers Onm\StringUtils::ext_str_ireplace
-    //  * @todo   Implement testExt_str_ireplace().
-    //  */
-    // public function testExt_str_ireplace()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
 
     /**
      * @covers Onm\StringUtils::generatePassword

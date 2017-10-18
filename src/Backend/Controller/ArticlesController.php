@@ -35,13 +35,14 @@ class ArticlesController extends Controller
 
         // Build the list of authors to render filters
         $allAuthors = \User::getAllUsersAuthors();
-        $authors = [ [ 'name' => _('All'), 'value' => -1 ], ];
+        $authors    = [ [ 'name' => _('All'), 'value' => -1 ], ];
         foreach ($allAuthors as $author) {
             $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
         }
 
         // Build the list of categories to render filters
         $categories = [ [ 'name' => _('All'), 'value' => -1 ], ];
+
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name'  => $category->title,

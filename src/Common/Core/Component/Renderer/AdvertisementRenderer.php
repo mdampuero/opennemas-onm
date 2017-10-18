@@ -241,7 +241,7 @@ class AdvertisementRenderer
     public function renderInlineReviveSlot($ad)
     {
         $iframe = in_array($ad->type_advertisement, [ 50, 150, 250, 350, 450, 550 ]);
-        $url    = $this->router->generate('frontend_ad_get', [
+        $url    = $this->router->generate('frontend_ad_show', [
             'id' => $ad->pk_content
         ]);
 

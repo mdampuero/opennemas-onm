@@ -74,7 +74,7 @@ class Converter
     protected function convert($mapper, $method, $value, $params = [])
     {
         $mapper = 'Common\\ORM\\Core\\Data\\Mapper\\'
-            . ucfirst(strtolower($mapper)) . 'DataMapper';
+            . \classify($mapper) . 'DataMapper';
 
         $mapper = new $mapper($this->metadata);
 

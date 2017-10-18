@@ -1,10 +1,5 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -55,7 +50,9 @@ class FrontpagesController extends Controller
             'value' => 'home',
             'group' => _('Frontpages')
         ];
+
         $ccm = \ContentCategoryManager::get_instance();
+
         list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryId);
         unset($datos_cat);
         foreach ($parentCategories as $key => $category) {
@@ -81,9 +78,10 @@ class FrontpagesController extends Controller
         }
 
         // Fetch menu categories and override group
-        $menu = new \Menu();
-        $menuFrontpage = $menu->getMenu('frontpage');
-        foreach ($menuFrontpage->items as $item) {
+        $menu        = new \Menu();
+        $menu        = $menu->getMenu('frontpage');
+        $menu->items = (is_object($menu) && $menu instanceof \Menu) ? $menu->items : [];
+        foreach ($menu->items as $item) {
             $id = $ccm->get_id($item->link);
             if ($item->type == 'category') {
                 $categories[$id] = [
@@ -93,10 +91,12 @@ class FrontpagesController extends Controller
                     'group' => _('Frontpages')
                 ];
             }
+
             if (!empty($item->submenu)) {
                 foreach ($item->submenu as $subitem) {
                     if ($subitem->type == 'category') {
                         $id = $ccm->get_id($subitem->link);
+
                         $categories[$id] = [
                             'id'    => $id,
                             'name'  => $subitem->title,
@@ -109,11 +109,12 @@ class FrontpagesController extends Controller
         }
 
         // Get theme layout
-        $layoutTheme = s::get('frontpage_layout_'.$categoryId, 'default');
+        $layoutTheme = s::get('frontpage_layout_' . $categoryId, 'default');
         // Check if layout is valid,if not use the default value
         if (!file_exists(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml")) {
             $layoutTheme = 'default';
         }
+
         $lm = $this->get('core.manager.layout');
         $lm->load(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml");
 
@@ -121,12 +122,13 @@ class FrontpagesController extends Controller
 
         // Get contents for this home
         $cm = new \ContentManager();
-        $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory(
+
+        $contentElementsInFrontpage = $cm->getContentsForHomepageOfCategory(
             $categoryId
         );
 
         // Sort all the elements by its position
-        $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty(
+        $contentElementsInFrontpage = $cm->sortArrayofObjectsByProperty(
             $contentElementsInFrontpage,
             'position'
         );
@@ -157,13 +159,13 @@ class FrontpagesController extends Controller
         $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
         // Get last saved and check
-        $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_'.$categoryId);
+        $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_' . $categoryId);
         // $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
         if ($lastSaved == false) {
             // Save the actual date for
-            $date = new \Datetime("now");
+            $date      = new \Datetime("now");
             $dateForDB = $date->format(\DateTime::ISO8601);
-            $this->get('cache')->save('frontpage_last_saved_'.$categoryId, $dateForDB);
+            $this->get('cache')->save('frontpage_last_saved_' . $categoryId, $dateForDB);
             $lastSaved = $dateForDB;
         }
 
@@ -203,7 +205,7 @@ class FrontpagesController extends Controller
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
         // Fetch old contents
-        $cm = new \ContentManager();
+        $cm          = new \ContentManager();
         $oldContents = $cm->getContentsForHomepageOfCategory($category);
 
         if ($category === null && $category === '') {
@@ -236,7 +238,7 @@ class FrontpagesController extends Controller
                     || !isset($params['content_type'])
                     || strpos('placeholder', $params['placeholder'])
                 ) {
-                    $validReceivedData = false;
+                    $validReceivedData     = false;
                     $dataPositionsNotValid = true;
                     break;
                 }
@@ -247,15 +249,19 @@ class FrontpagesController extends Controller
             $message = _("Unable to save content positions: Data sent from the client were not valid.");
 
             if ($dataPositionsNotValid) {
-                $message = _("Unable to save content positions: Content positions sent from the client were not valid.");
+                $message = _(
+                    "Unable to save content positions: Content positions sent from the client were not valid."
+                );
             }
 
             $logger->info(
-                'User '.$this->getUser()->name.' ('.$this->getUser()->id.') was failed '.$message.' to execute'
-                .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
+                'User ' . $this->getUser()->name
+                . ' (' . $this->getUser()->id . ') was failed ' . $message . ' to execute'
+                . ' action Frontpage save positions at category ' . $categoryID
+                . ' Ids ' . json_encode($contentsPositions)
             );
 
-            return new JsonResponse([ 'message' =>  $message ]);
+            return new JsonResponse([ 'message' => $message ]);
         }
 
         $contents = array();
@@ -275,20 +281,21 @@ class FrontpagesController extends Controller
 
         if (!$savedProperly) {
             $message = _("Unable to save content positions: Error while saving in database.");
-            return new JsonResponse([ 'message' =>  $message ]);
+            return new JsonResponse([ 'message' => $message ]);
         }
 
         // Notice log of this action
         $logger->info(
-            'User '.$this->getUser()->name.' ('.$this->getUser()->id.') has executed'
-            .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
+            'User ' . $this->getUser()->name . ' (' . $this->getUser()->id . ') has executed'
+            . ' action Frontpage save positions at category ' . $categoryID
+            . ' Ids ' . json_encode($contentsPositions)
         );
 
         $this->get('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $categoryID));
 
         // Save the actual date for fronpage
         $dateForDB = time();
-        $this->get('cache')->save('frontpage_last_saved_'.$category, $dateForDB);
+        $this->get('cache')->save('frontpage_last_saved_' . $category, $dateForDB);
 
         return new JsonResponse([
             'message' => _("Content positions saved properly"),
@@ -309,7 +316,7 @@ class FrontpagesController extends Controller
     public function pickLayoutAction(Request $request)
     {
         $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
-        $layout = $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+        $layout   = $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
 
         if ($category == 'home') {
             $category = 0;
@@ -318,13 +325,13 @@ class FrontpagesController extends Controller
         $availableLayouts = $this->container->get('core.manager.layout')->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
 
-        $layoutValid  = in_array($layout, $availableLayouts);
+        $layoutValid = in_array($layout, $availableLayouts);
 
         if (!is_null($category)
             && !is_null($layout)
             && $layoutValid
         ) {
-            $this->get('setting_repository')->set('frontpage_layout_'.$category, $layout);
+            $this->get('setting_repository')->set('frontpage_layout_' . $category, $layout);
 
             $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', array('category' => $category));
 
@@ -371,10 +378,9 @@ class FrontpagesController extends Controller
                 $category = 0;
             }
 
-            $lastSaved           = $this->get('cache')->fetch('frontpage_last_saved_'.$category);
+            $lastSaved           = $this->get('cache')->fetch('frontpage_last_saved_' . $category);
             $newVersionAvailable = $lastSaved > $dateRequest;
         }
-
 
         return new Response(json_encode($newVersionAvailable));
     }
@@ -400,13 +406,13 @@ class FrontpagesController extends Controller
             'actual_category' => $categoryName
         ]);
 
-        // Get the ID of the actual category from the categoryName
         $ccm = \ContentCategoryManager::get_instance();
+        // Get the ID of the actual category from the categoryName
         $actualCategoryId = $ccm->get_id($categoryName);
 
-        $cm = new \ContentManager;
+        $cm          = new \ContentManager;
         $contentsRAW = $request->request->get('contents');
-        $contents = json_decode($contentsRAW, true);
+        $contents    = json_decode($contentsRAW, true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
         // Filter articles if some of them has time scheduling and sort them by position
@@ -422,14 +428,14 @@ class FrontpagesController extends Controller
         $imageIdsList = array();
         foreach ($contentsInHomepage as $content) {
             if (isset($content->img1)) {
-                $imageIdsList []= $content->img1;
+                $imageIdsList[] = $content->img1;
             }
         }
 
         if (count($imageIdsList) > 0) {
-            $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+            $imageList = $cm->find('Photo', 'pk_content IN (' . implode(',', $imageIdsList) . ')');
         } else {
-            $imageList = array();
+            $imageList = [];
         }
 
         // Overloading information for contents
@@ -440,19 +446,19 @@ class FrontpagesController extends Controller
 
             // Load attached and related contents from array
             $content->loadFrontpageImageFromHydratedArray($imageList)
-                    ->loadAttachedVideo()
-                    ->loadRelatedContents();
+                ->loadAttachedVideo()
+                ->loadRelatedContents();
         }
+
         $this->view->assign('column', $contentsInHomepage);
 
         // Getting categories
-        $ccm = \ContentCategoryManager::get_instance();
         $actualCategoryId = $ccm->get_id($categoryName);
-        $categoryID = ($categoryName == 'home') ? 0 : $actualCategoryId;
+        $categoryID       = ($categoryName == 'home') ? 0 : $actualCategoryId;
 
         // Fetch category layout
-        $layout = s::get('frontpage_layout_'.$categoryID, 'default');
-        $layoutFile = 'layouts/'.$layout.'.tpl';
+        $layout     = s::get('frontpage_layout_' . $categoryID, 'default');
+        $layoutFile = 'layouts/' . $layout . '.tpl';
 
         $this->view->assign([
             'layoutFile'         => $layoutFile,

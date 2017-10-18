@@ -202,7 +202,7 @@ class InstanceController extends Controller
             }
 
             $oql = sprintf('owner_id = "%s"', $this->get('core.user')->id)
-                .  $oql;
+                . $oql;
         }
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
@@ -223,7 +223,7 @@ class InstanceController extends Controller
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Expires', '0');
@@ -292,7 +292,7 @@ class InstanceController extends Controller
         ) {
             throw new AccessDeniedException(
                 '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
-                .sprintf(
+                . sprintf(
                     _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
                     $this->getParameter('manager_webservice')['company_mail'],
                     $this->getParameter('manager_webservice')['company_mail']
@@ -320,8 +320,8 @@ class InstanceController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
-        $em  = $this->get('orm.manager');
-        $msg = $this->get('core.messenger');
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Instance')
             ->objectify($request->request->all());
 
@@ -424,7 +424,7 @@ class InstanceController extends Controller
         ) {
             throw new AccessDeniedException(
                 '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
-                .sprintf(
+                . sprintf(
                     _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
                     $this->getParameter('manager_webservice')['company_mail'],
                     $this->getParameter('manager_webservice')['company_mail']
@@ -525,12 +525,14 @@ class InstanceController extends Controller
      */
     public function showAction($id)
     {
-        $em        = $this->get('orm.manager');
-        $instance  = $em->getRepository('Instance')->find($id);
+        $em       = $this->get('orm.manager');
+        $instance = $em->getRepository('Instance')->find($id);
 
         if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
             throw new AccessDeniedException();
         }
+
+        $this->get('core.loader')->configureInstance($instance);
 
         $converter = $em->getConverter('Instance');
         $ds        = $em->getDataSet('Settings', 'instance');
@@ -538,12 +540,7 @@ class InstanceController extends Controller
         $instance->settings['TEMPLATE_USER'] = 'es.openhost.theme.'
             . str_replace('es.openhost.theme.', '', $instance->settings['TEMPLATE_USER']);
 
-        $this->get('core.loader')->configureInstance($instance);
-
-        $em->getConnection('instance')
-            ->selectDatabase($instance->getDatabaseName());
-
-        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik', 'time_zone' ]);
+        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik', 'locale' ]);
         $template = $this->getTemplateParams($instance->id);
 
         if (!empty($instance->getClient())) {
@@ -595,7 +592,7 @@ class InstanceController extends Controller
 
         $instance->setData($data);
         $owners[] = 'user-' . $instance->owner_id;
-        $owners = array_unique(array_filter($owners, function ($a) {
+        $owners   = array_unique(array_filter($owners, function ($a) {
             return !empty($a);
         }));
 

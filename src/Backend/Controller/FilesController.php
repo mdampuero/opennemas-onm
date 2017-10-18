@@ -36,6 +36,7 @@ class FilesController extends Controller
         $this->category    = $this->get('request_stack')->getCurrentRequest()
             ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $this->ccm         = \ContentCategoryManager::get_instance();
+
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
@@ -47,7 +48,7 @@ class FilesController extends Controller
         ]);
 
         // Optimize  this crap from this ---------------------------------------
-        $this->fileSavePath = INSTANCE_MEDIA_PATH.FILE_DIR;
+        $this->fileSavePath = INSTANCE_MEDIA_PATH . FILE_DIR;
 
         // Create folder if it doesn't exist
         if (!file_exists($this->fileSavePath)) {
@@ -121,11 +122,11 @@ class FilesController extends Controller
         $fullcat          = $this->ccm->orderByPosmenu($this->ccm->categories);
 
         $num_sub_photos = array();
-        $sub_files = array();
+        $sub_files      = array();
         $aux_categories = array();
 
         foreach ($this->parentCategories as $k => $v) {
-            $num_photos[$k] =
+            $num_photos[$k]    =
                 $this->ccm->countContentByType($v->pk_content_category, $this->contentType);
             $total_num_photos += $num_photos[$k];
 
@@ -140,16 +141,16 @@ class FilesController extends Controller
                     if ($v->pk_content_category == $child->fk_content_category) {
                         $num_sub_photos[$k][$child->pk_content_category] =
                             $this->ccm->countContentByType($child->pk_content_category, 3);
-                        $total_num_photos +=
+                        $total_num_photos                               +=
                             $num_sub_photos[$k][$child->pk_content_category];
-                        $sub_files[$child->pk_content_category][] =
+                        $sub_files[$child->pk_content_category][]        =
                             $cm->findAll(
                                 'Attachment',
-                                'fk_content_type = 3 AND category = '.$child->pk_content_category,
+                                'fk_content_type = 3 AND category = ' . $child->pk_content_category,
                                 'ORDER BY created DESC'
                             );
-                        $aux_categories[] = $child->pk_content_category;
-                        $sub_size[$k][$child->pk_content_category] = 0;
+                        $aux_categories[]                                = $child->pk_content_category;
+                        $sub_size[$k][$child->pk_content_category]       = 0;
                         $this->view->assign('num_sub_photos', $num_sub_photos);
                     }
                 }
@@ -157,22 +158,24 @@ class FilesController extends Controller
         }
 
         //Calculo del tamaño de los ficheros por categoria/subcategoria
-        $i = 0;
+        $i          = 0;
         $total_size = 0;
         foreach ($files as $categories => $contenido) {
             $size[$i] = 0;
             if (!empty($contenido)) {
                 foreach ($contenido as $value) {
                     if ($categories == $value->category) {
-                        if (file_exists($this->fileSavePath.'/'.$value->path)) {
-                            $size[$i] += filesize($this->fileSavePath.'/'.$value->path);
+                        if (file_exists($this->fileSavePath . '/' . $value->path)) {
+                            $size[$i] += filesize($this->fileSavePath . '/' . $value->path);
                         }
                     }
                 }
             }
+
             $total_size += $size[$i];
             $i++;
         }
+
         if (!empty($parentCategories) && !empty($aux_categories)) {
             foreach ($parentCategories as $k => $v) {
                 foreach ($aux_categories as $ind) {
@@ -180,11 +183,12 @@ class FilesController extends Controller
                         foreach ($sub_files[$ind][0] as $value) {
                             if ($v->pk_content_category == $ccm->get_id($ccm->getFather($value->catName))) {
                                 if ($ccm->get_id($ccm->getFather($value->catName))) {
-                                    $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);
+                                    $sub_size[$k][$ind] += filesize(MEDIA_PATH . '/' . FILE_DIR . '/' . $value->path);
                                 }
                             }
                         }
                     }
+
                     if (isset($sub_size[$k][$ind])) {
                         $total_size += $sub_size[$k][$ind];
                     }
@@ -241,14 +245,14 @@ class FilesController extends Controller
         $uploadedFile = $files['path'];
 
         if (!$uploadedFile->isValid()) {
-            error_log(sprintf(
+            $this->get('error.log')->error(sprintf(
                 'There was a problem uploading %s .Error Code: %s',
                 $uploadedFile->getClientOriginalName(),
                 $uploadedFile->getError()
             ));
             $this->get('session')->getFlashBag()->add(
                 'error',
-                sprintf(_('You must pick a file smaller than %d Mb'), MAX_UPLOAD_FILE/1024/1024)
+                sprintf(_('You must pick a file smaller than %d Mb'), MAX_UPLOAD_FILE / 1024 / 1024)
             );
 
             return $this->redirect(
@@ -260,17 +264,18 @@ class FilesController extends Controller
         if ($this->get('core.security')->hasExtension('es.openhost.module.rtb_media_advertisement')) {
             $rtbMediaManager = '|js|html';
         }
+
         // White list of file types that we allow
         $regexp = sprintf(
             '@(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz'
-            .'|ico|jpeg|jpg|js|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|odp|ods|odw'
-            .'|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz'
-            .'|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip%s)$@',
+            . '|ico|jpeg|jpg|js|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|odp|ods|odw'
+            . '|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz'
+            . '|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip%s)$@',
             $rtbMediaManager
         );
 
         if (!preg_match($regexp, $uploadedFile->getClientOriginalExtension())) {
-            error_log(sprintf(
+            $this->get('error.log')->error(sprintf(
                 'User %s tried to upload a not allowed file type %s (%s).',
                 $this->getUser()->id,
                 $uploadedFile->getClientOriginalExtension(),
@@ -279,8 +284,8 @@ class FilesController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('We are sorry, file extension %s is not allowed for upload as it could '
-                    .'contain malicious code. Please contact with our support  or retry using a '
-                    .'different file extension.'), $uploadedFile->getClientOriginalExtension())
+                    . 'contain malicious code. Please contact with our support  or retry using a '
+                    . 'different file extension.'), $uploadedFile->getClientOriginalExtension())
             );
 
             return $this->redirect(
@@ -290,8 +295,7 @@ class FilesController extends Controller
 
         $date          = new \DateTime();
         $directoryDate = $date->format("/Y/m/d/");
-        $basePath      = $this->fileSavePath.$directoryDate;
-
+        $basePath      = $this->fileSavePath . $directoryDate;
         $fileName      = \Onm\StringUtils::cleanFileName($uploadedFile->getClientOriginalName());
         // Create folder if it doesn't exist
         if (!file_exists($basePath)) {
@@ -314,7 +318,7 @@ class FilesController extends Controller
          */
         $data = array(
             'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'path'           => $directoryDate.$fileName,
+            'path'           => $directoryDate . $fileName,
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
             'description'    => $request->request->get('description', ''),
@@ -370,8 +374,8 @@ class FilesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id      = $request->query->getDigits('id');
-        $page    = $request->query->getDigits('page');
+        $id   = $request->query->getDigits('id');
+        $page = $request->query->getDigits('page');
 
         $file = new \Attachment($id);
 
@@ -455,21 +459,20 @@ class FilesController extends Controller
         ) {
             $pos = 1;
             foreach ($positions as $id) {
-                $file= new \Attachment($id);
+                $file   = new \Attachment($id);
                 $result = $result && $file->setPosition($pos);
-
-                $pos += 1;
+                $pos   += 1;
             }
         }
 
         if ($result) {
             $msg = "<div class='alert alert-success'>"
-                ._("Positions saved successfully.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+                . _("Positions saved successfully.")
+                . '<button data-dismiss="alert" class="close">×</button></div>';
         } else {
             $msg = "<div class='alert alert-error'>"
-                ._("Unable to save the new positions. Please contact with your system administrator.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+                . _("Unable to save the new positions. Please contact with your system administrator.")
+                . '<button data-dismiss="alert" class="close">×</button></div>';
         }
 
         return new Response($msg);

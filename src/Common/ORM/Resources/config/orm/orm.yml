@@ -1,3 +1,22 @@
+parameters:
+    orm.parameter.setting.autoload.instance:
+        - 'comscore'
+        - 'favico'
+        - 'google_analytics'
+        - 'locale'
+        - 'ojd'
+        - 'piwik'
+        - 'site_color'
+        - 'site_description'
+        - 'site_footer'
+        - 'site_keywords'
+        - 'site_language'
+        - 'site_logo'
+        - 'site_name'
+        - 'site_title'
+    orm.parameter.setting.autoload.manager:
+        - 'locale'
+
 imports:
     - { resource: connection/instance.yml }
     - { resource: connection/manager.yml }

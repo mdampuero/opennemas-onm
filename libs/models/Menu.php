@@ -1,106 +1,20 @@
 <?php
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-/**
- * Class Menu
- *
- * Class to manage frontpage menu in OpenNeMas
- *
- * Example:
- * <ul class="clearfix">
- * {section  name=m loop=$menuFrontpage}
- *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
- *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}"
- *   <li class="cat {$menuFrontpage[m]->link}{if $category_name eq $menuFrontpage[m]->link} active{/if}">
- *       <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
- *       <a href="{renderLink item=$menuFrontpage[m]}" title="Sección: {$menuFrontpage[m]->title}">
- *          {$menuFrontpage[m]->title|mb_lower} - {renderLink item=$menuFrontpage[m]}
- *       </a>
- *       {if count($menuFrontpage[m]->submenu) > 0}
- *       {assign value=$menuFrontpage[m]->submenu var=submenu}
- *       <ul class="nav">
- *       {section  name=s loop=$submenu}
- *           <li class="subcat {if $subcategory_name eq $submenu[s]->link}active{/if}">
- *               <a href="{$section_url}{$menuFrontpage[m]->link}/{$submenu[s]->link}/"
- *                   title="{$submenu[s]->title|mb_lower}">
- *                   {$submenu[s]->title|mb_lower}
- *               </a>
- *           </li>
- *       {/section}
- *       </ul>
- *       {/if}
- *       </li>
- * {/section}
- * </ul>
- *
- *  Show:
- *       -Frontpage
- *           * mobile
- *           * opinion
- *           * album
- *           * video
- *       -Internacional
- *       -Cultura | Ocio
- *       -América Latina
- *
- * @package Onm
- * @subpackage Model
- */
 class Menu
 {
     /**
-     * The menu id
+     * The array of raw data.
      *
-     * @var int
+     * @var array
      */
-    public $pk_menu = null;
-
-    /**
-     * The menu id
-     *
-     * @var int
-     */
-    public $id = null;
-
-    /**
-     * The name of the menu
-     *
-     * @var string
-     */
-    public $name = null;
-
-    /**
-     * The name of the menu
-     *
-     * @var string
-     */
-    public $title = null;
-
-    /**
-     * Menu type. internal, external...
-     *
-     * @var string
-     */
-    public $type = null;
-
-    /**
-     * Misc params for this menu
-     *
-     * @var string
-     */
-    public $params = null;
-
-    /**
-     * Unused variable
-     *
-     * @var string
-     */
-    public $config = "default_config";
+    protected $data = [];
 
     /**
      * Loads a menu given its id
@@ -109,11 +23,21 @@ class Menu
      */
     public function __construct($id = null)
     {
+        $this->content_type_l10n_name = _('Menu');
+
         if (!is_null($id)) {
             $this->read($id);
         }
+    }
 
-        $this->content_type_l10n_name = _('Menu');
+    /**
+     * Returns the raw data of the menu
+     *
+     * @return array the menu properties
+     **/
+    public function getRawItems()
+    {
+        return $this->data['items'];
     }
 
     /**
@@ -128,26 +52,33 @@ class Menu
         try {
             $conn = getService('dbal_connection');
 
-            $conn->insert(
-                'menues',
-                [
-                    'name'     => $data['name'],
-                    'params'   => $data['params'],
-                    'type'     => 'user',
-                    'position' => $data['position']
-                ]
-            );
+            $conn->insert('menues', [
+                'name'     => $data['name'],
+                'params'   => $data['params'],
+                'type'     => 'user',
+                'position' => $data['position']
+            ]);
 
             $this->pk_menu = $conn->lastInsertId();
-            $this->setMenuElements($this->pk_menu, $data['items']);
+            $this->setMenuItems($this->pk_menu, $data['items']);
 
-            dispatchEventWithParams('menu.create', array('content' => $this));
+            dispatchEventWithParams('menu.create', ['content' => $this]);
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
+    }
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public function getL10nKeys()
+    {
+        return ['title', 'link'];
     }
 
     /**
@@ -155,14 +86,23 @@ class Menu
      */
     public function load($data)
     {
-        $this->id       = $data['pk_menu'];
-        $this->pk_menu  = $data['pk_menu'];
-        $this->title    = $data['name'];
-        $this->name     = $data['name'];
-        $this->position = $data['position'];
-        $this->type     = $data['type'];
-        $this->params   = unserialize($data['params']);
-        $this->items    = $this->getMenuItems($this->pk_menu);
+        // Default Value
+        $this->id = null;
+
+        // Set the raw data to the internal property
+        $this->data           = $data;
+        $this->data['params'] = @unserialize($this->data['params']);
+        $this->data['items']  = $this->getMenuItems($data['pk_menu']);
+
+        $this->id       = $this->data['pk_menu'];
+        $this->pk_menu  = $this->data['pk_menu'];
+        $this->name     = $this->data['name'];
+        $this->title    = $this->data['name']; // Why duplicated from name?
+        $this->params   = $this->data['params'];
+        $this->position = $this->data['position'];
+        $this->type     = $this->data['type'];
+
+        $this->items = $this->localize($this->data['items']);
 
         return $this;
     }
@@ -177,7 +117,9 @@ class Menu
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $sql = 'SELECT * FROM menues WHERE pk_menu=?';
@@ -187,7 +129,7 @@ class Menu
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -208,18 +150,18 @@ class Menu
                 [
                     'name'     => $data['name'],
                     'params'   => $data['params'],
+                    'position' => $data['position'],
                     'type'     => 'user',
-                    'position' => $data['position']
                 ],
                 [ 'pk_menu' => $this->pk_menu ]
             );
 
-            $this->setMenuElements($this->pk_menu, $data['items']);
+            $this->setMenuItems($this->pk_menu, $data['items']);
 
-            dispatchEventWithParams('menu.update', array('content' => $this));
+            dispatchEventWithParams('menu.update', ['content' => $this]);
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -238,18 +180,75 @@ class Menu
         $conn->beginTransaction();
         try {
             // Delete menu elements
-            $this->emptyMenu($id);
+            $conn->delete('menu_items', [ 'pk_menu' => $id ]);
             $conn->delete('menues', [ 'pk_menu' => $id ]);
             $conn->commit();
 
-            dispatchEventWithParams('menu.delete', array('content' => $this));
+            dispatchEventWithParams('menu.delete', ['content' => $this]);
 
             return true;
         } catch (\Exception $e) {
             $conn->rollBack();
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Returns the localized elements
+     *
+     * @param array $items the list of items to localize
+     *
+     * @return array the localized array
+     **/
+    public function localize($items)
+    {
+        $fm = getService('data.manager.filter');
+
+        $itemsLocalized = [];
+        foreach ($items as $item) {
+            $item = $fm->set(clone $item)
+                ->filter('localize', [
+                    'keys' => $this->getL10nKeys(),
+                    'locale' => getService('core.locale')->getRequestLocale('frontend')
+                ])
+                ->get();
+
+            if (count($item->submenu) > 0) {
+                $item->submenu = $this->localize($item->submenu);
+            }
+
+            $itemsLocalized[] = $item;
+        }
+
+        return $itemsLocalized;
+    }
+
+    /**
+     * Returns the unlocalized menu items
+     *
+     * @param array $items the list of items to localize
+     *
+     * @return array the localized array
+     **/
+    public function unlocalize($items)
+    {
+        $fm = getService('data.manager.filter');
+
+        $processedItems = [];
+        foreach ($items as $item) {
+            $item = $fm->set(clone $item)
+                ->filter('unlocalize', ['keys' => $this->getL10nKeys()])
+                ->get();
+
+            if (count($item->submenu) > 0) {
+                $item->submenu = $this->unlocalize($item->submenu);
+            }
+
+            $processedItems[] = $item;
+        }
+
+        return $processedItems;
     }
 
     /**
@@ -275,34 +274,7 @@ class Menu
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Gets a menu instance given its position
-     *
-     * @param string $position the position of the menu
-     *
-     * @return mixed The Menu if it was found. False otherwise.
-     */
-    public function getMenuFromPosition($position)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                "SELECT * FROM menues WHERE position=? ORDER BY pk_menu LIMIT 1",
-                [ $position ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            $this->load($rs);
-            return $this;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -316,7 +288,7 @@ class Menu
      */
     public function getMenuItems($id)
     {
-        $menuItems = array();
+        $menuItems = [];
 
         try {
             $rs = getService('dbal_connection')->fetchAll(
@@ -332,14 +304,24 @@ class Menu
         }
 
         foreach ($rs as $element) {
-            $menuItem = new stdClass();
+            $serializedData = @unserialize($element['title']);
+            if ($serializedData !== false) {
+                $element['title'] = $serializedData;
+            }
+
+            $serializedData = @unserialize($element['link_name']);
+            if ($serializedData !== false) {
+                $element['link_name'] = $serializedData;
+            }
+
+            $menuItem            = new stdClass();
             $menuItem->pk_item   = (int) $element['pk_item'];
-            $menuItem->title     = @iconv(mb_detect_encoding($element['title']), 'utf-8', $element['title']);
-            $menuItem->link      = $element['link_name'];
             $menuItem->position  = (int) $element['position'];
             $menuItem->type      = $element['type'];
             $menuItem->pk_father = (int) $element['pk_father'];
             $menuItem->submenu   = [];
+            $menuItem->title     = $element['title'];
+            $menuItem->link      = $element['link_name'];
 
             $menuItems[$element['pk_item']] = $menuItem;
         }
@@ -349,12 +331,12 @@ class Menu
                 && isset($menuItems[$element->pk_father])
                 && isset($menuItems[$element->pk_father]->submenu)
             ) {
-                array_push($menuItems[$element->pk_father]->submenu, $element);
+                $menuItems[$element->pk_father]->submenu[] = $element;
                 unset($menuItems[$id]);
             }
         }
 
-        return $menuItems;
+        return array_values($menuItems);
     }
 
     /**
@@ -367,44 +349,68 @@ class Menu
      * @return boolean True if items were saved successfully. Otherwise, returns
      *                 false.
      */
-    public function setMenuElements($id, $items = array(), $parentID = 0, &$elementID = 1)
+    public function setMenuItems($id, $items = [], $parentID = 0, &$elementID = 1)
     {
+        $conn = getService('dbal_connection');
+
+        // Delete previous menu elements
+        if ($parentID == 0) {
+            $conn->delete('menu_items', [ 'pk_menu' => $id ]);
+        }
+
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
             return false;
         }
 
-        // Delete previous menu elements
-        if ($parentID == 0) {
-            $this->emptyMenu($id);
-        }
-
         try {
-            $position  = 1;
+            $position = 1;
+
+            $fm = getService('data.manager.filter');
             foreach ($items as $item) {
-                $title = filter_var($item->title, FILTER_SANITIZE_STRING);
-                $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
-                $type  = filter_var($item->type, FILTER_SANITIZE_STRING);
+                $item->title = get_object_vars($item->title);
+                $item->link  = get_object_vars($item->link);
 
-                getService('dbal_connection')->insert(
-                    'menu_items',
-                    [
-                        'pk_item'   => $elementID,
-                        'pk_menu'   => $id,
-                        'title'     => $title,
-                        'link_name' => $link,
-                        'type'      => $type,
-                        'position'  => $position,
-                        'pk_father' => $parentID
-                    ]
-                );
+                // If the content multilanguage is disabled
+                // remove additional translations
+                if (!in_array(
+                    'es.openhost.module.multilanguage',
+                    getService('core.instance')->activated_modules
+                )) {
+                    $item = $fm->set($item)
+                        ->filter('localize', [
+                            'keys' => $this->getL10nKeys(),
+                            'locale' => getService('core.locale')
+                                ->setContext('frontend')->getLocale()
+                        ])
+                        ->get();
+                }
 
+                if (is_array($item->title)) {
+                    $item->title = serialize($item->title);
+                }
+
+                if (is_array($item->link)) {
+                    $item->link = serialize($item->link);
+                }
+
+                $item->type = filter_var($item->type, FILTER_SANITIZE_STRING);
+
+                $conn->insert('menu_items', [
+                    'pk_item'   => $elementID,
+                    'pk_menu'   => $id,
+                    'title'     => $item->title,
+                    'link_name' => $item->link,
+                    'type'      => $item->type,
+                    'position'  => $position,
+                    'pk_father' => $parentID
+                ]);
                 $parent = $elementID;
                 $elementID++;
                 $position++;
 
                 if (!empty($item->submenu)) {
-                    if (!$this->setMenuElements($id, $item->submenu, $parent, $elementID)) {
+                    if (!$this->setMenuItems($id, $item->submenu, $parent, $elementID)) {
                         return false;
                     }
                 }
@@ -412,19 +418,8 @@ class Menu
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Deletes all items in a menu.
-     *
-     * @param integer $id The menu id.
-     */
-    public function emptyMenu($id)
-    {
-        getService('dbal_connection')
-            ->delete('menu_items', [ 'pk_menu' => $id ]);
     }
 }

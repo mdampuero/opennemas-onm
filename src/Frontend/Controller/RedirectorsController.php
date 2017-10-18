@@ -35,6 +35,10 @@ class RedirectorsController extends Controller
         $fragment = '';
         $content  = null;
 
+        if (empty($id) && empty($slug)) {
+            throw new ResourceNotFoundException();
+        }
+
         $translation = $this->get('core.redirector')
             ->getTranslation($slug, $type, $id);
 
@@ -55,7 +59,7 @@ class RedirectorsController extends Controller
             return $this->redirectNotMigratedContent($type);
         }
 
-        if ($content->content_type_name === 'comment') {
+        if ($type === 'comment') {
             $fragment = '#comentarios';
         }
 

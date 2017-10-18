@@ -1,8 +1,15 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace BackendWebService\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,11 +33,7 @@ class PickerController extends Controller
         $contentTypes = $request->query->filter('content_type_name', null, FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
-
         $filter = [ "in_litter = 0" ];
-        $order = [
-            'created' => 'desc'
-        ];
 
         if (!empty($contentTypes)) {
             if ($contentTypes[0] == 'contents-in-frontpage') {
@@ -58,11 +61,12 @@ class PickerController extends Controller
         }
 
         if (!empty($title)) {
+            $title    = \Onm\StringUtils::convertToUTF8AndStrToLower($title);
             $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%' OR metadata LIKE '%$title%')";
         }
 
         if (!empty($category)) {
-            $filter[] = "(category_name = '$category')";
+            $filter[] = "contents_categories.pk_fk_content_category = $category";
         }
 
         $filter[] = "in_litter != 1";
@@ -71,18 +75,42 @@ class PickerController extends Controller
 
         $filter = implode(' AND ', $filter);
 
-        $results = $em->findBy($filter, $order, $epp, $page);
-        $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($filter);
+        if (!in_array('photo', $contentTypes)) {
+            $query = "FROM contents JOIN contents_categories ON  contents_categories.pk_fk_content = " .
+                "contents.pk_content WHERE " . $filter;
+        } else {
+            $query = "FROM contents  WHERE " . $filter;
+        }
 
-        return new JsonResponse(
-            array(
-                'epp'     => $epp,
-                'page'    => $page,
-                'results' => $results,
-                'total'   => $total,
-            )
-        );
+        $contentMap = $em->dbConn->executeQuery(
+            "SELECT content_type_name, pk_content " . $query . " ORDER BY CREATED DESC LIMIT " .
+            (($page - 1) * $epp) . ", " . $epp
+        )->fetchAll();
+        $contentMap = array_map(function ($row) {
+            return [$row['content_type_name'], $row['pk_content']];
+        }, $contentMap);
+        $results = $em->findMulti($contentMap);
+
+        $languageData = $this->getLocaleData('frontend');
+        $fm           = $this->get('data.manager.filter');
+        $results      = $fm->set($results)->filter('localize', [
+            'keys'      => ['title', 'name', 'description'],
+            'locale'    => $languageData['default']
+        ])->get();
+        $results      = \Onm\StringUtils::convertToUtf8($results);
+
+        $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
+        $total      = 0;
+        if (count($contentMap) > 0) {
+            $total = $contentMap[0]['resultNumber'];
+        }
+
+        return new JsonResponse([
+            'epp'     => $epp,
+            'page'    => $page,
+            'results' => $results,
+            'total'   => $total,
+        ]);
     }
 
     /**
@@ -124,14 +152,14 @@ class PickerController extends Controller
     public function saveDescriptionAction(Request $request, $id)
     {
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
-        $sql         = "UPDATE contents SET `description`=? WHERE pk_content=?";
-
-        $conn = $this->get('orm.manager')->getConnection('instance');
-
-        $this->get('cache')->delete('Photo' . "-" . $id);
 
         try {
-            $conn->executeUpdate($sql, array($description, $id));
+            $sql  = "UPDATE contents SET `description`=? WHERE pk_content=?";
+            $conn = $this->get('orm.manager')->getConnection('instance');
+
+            $conn->executeUpdate($sql, [$description, $id]);
+
+            $this->get('cache')->delete('Photo' . "-" . $id);
             return new JsonResponse();
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 500);
@@ -145,7 +173,7 @@ class PickerController extends Controller
      */
     private function getDates()
     {
-        $years = array();
+        $years = [];
 
         $conn = $this->get('orm.manager')->getConnection('instance');
 
@@ -156,14 +184,14 @@ class PickerController extends Controller
 
         foreach ($results as $value) {
             $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
-            $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+            $fmt  = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
             if (!is_null($fmt)) {
-                $years[$date->format('Y')]['name'] = $date->format('Y');
-                $years[$date->format('Y')]['months'][]= array(
+                $years[$date->format('Y')]['name']     = $date->format('Y');
+                $years[$date->format('Y')]['months'][] = [
                     'name'  => ucfirst($fmt->format($date)),
                     'value' => $value['date_month']
-                );
+                ];
             }
         }
 
@@ -177,8 +205,8 @@ class PickerController extends Controller
      */
     private function exploreMode()
     {
-        $contentTypes = \ContentManager::getContentTypes();
-        $contentTypesFiltered = array();
+        $contentTypes         = \ContentManager::getContentTypes();
+        $contentTypesFiltered = [];
 
         foreach ($contentTypes as $contentType) {
             switch ($contentType['name']) {
@@ -198,7 +226,8 @@ class PickerController extends Controller
                     $moduleName = $contentType['name'];
                     break;
             }
-            $moduleName = strtoupper($moduleName.'_MANAGER');
+
+            $moduleName = strtoupper($moduleName . '_MANAGER');
 
             if ($this->get('core.security')->hasExtension($moduleName)) {
                 $contentTypesFiltered[$contentType['name']] = $contentType['title'];
@@ -207,12 +236,30 @@ class PickerController extends Controller
 
         $ccm = \ContentCategoryManager::get_instance();
 
+        $languageData = $this->getLocaleData('frontend');
+        $fm           = $this->get('data.manager.filter');
+        $categories   = $ccm->find();
+
+        // TODO: remove this after merging the category l10n branch
+        foreach ($categories as &$cat) {
+            if (!@unserialize($cat->title)) {
+                continue;
+            }
+
+            $cat->title = unserialize($cat->title);
+        }
+
+        $categories = $fm->set($categories)->filter('localize', [
+            'keys'      => ['title', 'name'],
+            'locale'    => $languageData['default']
+        ])->get();
+
         return [
             'allCategories'       => _('All categories'),
             'allContentTypes'     => _('All content types'),
             'allMonths'           => _('All months'),
             'category'            => _('Category'),
-            'categories'          => $ccm->find(),
+            'categories'          => $categories,
             'contentsInFrontpage' => _('Contents in frontpage'),
             'contentTypes'        => $contentTypesFiltered,
             'created'             => _('Created'),
@@ -251,14 +298,12 @@ class PickerController extends Controller
 
         $results = \Onm\StringUtils::convertToUtf8($results);
 
-        return new JsonResponse(
-            array(
-                'epp'     => count($results),
-                'page'    => 1,
-                'results' => $results,
-                'total'   => count($results)
-            )
-        );
+        return new JsonResponse([
+            'epp'     => count($results),
+            'page'    => 1,
+            'results' => $results,
+            'total'   => count($results)
+        ]);
     }
 
     /**

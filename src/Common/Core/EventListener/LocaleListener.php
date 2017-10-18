@@ -10,8 +10,8 @@
 namespace Common\Core\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -35,6 +35,7 @@ class LocaleListener implements EventSubscriberInterface
     public function __construct($container)
     {
         $this->container = $container;
+        $this->locale    = $container->get('core.locale');
     }
 
     /**
@@ -50,52 +51,105 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
-        // Get locale from instance settings
-        $settings = $this->container->get('setting_repository')
-            ->get([ 'time_zone', 'site_language' ], [ 'UTC', 'en_US' ]);
+        // Get repository name
+        $instance = $this->container->get('core.instance');
+        $name     = $instance->internal_name === 'manager' ? 'manager' : null;
 
-        $locale   = $settings['site_language'];
-        $timezone = $settings['time_zone'];
+        $config = $this->container->get('orm.manager')
+            ->getDataSet('Settings', $name)
+            ->get('locale');
 
-        // Get locale from user
-        if ($this->container->has('core.user')) {
-            $user = $this->container->get('core.user');
+        $this->locale->setContext(
+            $this->container->get('core.globals')->getRoute()
+        )->configure($config);
 
-            if (!empty($user->user_language)
-                && $user->user_language !== 'default'
-            ) {
-                $locale = $user->user_language;
-            }
+        $this->configureRequestLocale($event);
+        $this->configureUserLocale();
+        $this->defineLanguageConstants();
 
-            if (!empty($user->time_zone)) {
-                $timezone = $user->time_zone;
-            }
+        $this->locale->apply();
+    }
+
+    /**
+     * Configures the Locale service basing on the current request.
+     */
+    protected function configureRequestLocale($event)
+    {
+        $request = $event->getRequest();
+        $slug    = null;
+
+        // Get locale from request attributes
+        if (!empty($request->attributes->get('_locale'))) {
+            $slug = $request->attributes->get('_locale');
         }
 
-        // Get locale from request
-        if (!empty($event->getRequest()->query->get('language'))) {
-            $locale = $event->getRequest()->query->get('language');
+        if (empty($slug)) {
+            return;
         }
 
-        $lm = $this->container->get('core.locale');
+        // If slug invalid redirect to URL without slug
+        if (!in_array($slug, $this->locale->getSlugs())) {
+            $event->setResponse(new RedirectResponse(
+                str_replace('/' . $slug, '', $request->getUri()),
+                301
+            ));
 
-        $lm->setTimeZone($timezone);
-        $lm->setLocale($locale);
+            return;
+        }
 
-        // TODO: Replace usage by Locale methods
+        // Get locale from request parameters
+        if (!empty($request->query->get('language'))) {
+            $slug = $request->query->get('language');
+        }
+
+        $locale = array_search($slug, $this->locale->getSlugs());
+
+        $this->locale->setRequestLocale($locale);
+    }
+
+    /**
+     * Configures the Locale service basing on the current user.
+     */
+    protected function configureUserLocale()
+    {
+        if ($this->locale->getContext() !== 'backend'
+            || !$this->container->has('core.user')
+        ) {
+            return;
+        }
+
+        $user = $this->container->get('core.user');
+
+        if (!empty($user->user_language)
+            && $user->user_language !== 'default'
+        ) {
+            $this->locale->setLocale($user->user_language);
+        }
+
+        if (!empty($user->time_zone)) {
+            $this->locale->setTimeZone($user->time_zone);
+        }
+    }
+
+    /**
+     * TODO: Remove when no usage in frontend
+     *
+     * Defines language related constants.
+     */
+    protected function defineLanguageConstants()
+    {
         if (!defined('CURRENT_LANGUAGE_LONG')) {
-            define('CURRENT_LANGUAGE_LONG', $lm->getLocale());
+            define('CURRENT_LANGUAGE_LONG', $this->locale->getLocale());
         }
 
-        // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE')) {
-            define('CURRENT_LANGUAGE', $lm->getLocale());
+            define('CURRENT_LANGUAGE', $this->locale->getLocale());
         }
 
-        // TODO: Replace usage by Locale methods
         if (!defined('CURRENT_LANGUAGE_SHORT')) {
-            define('CURRENT_LANGUAGE_SHORT', $lm->getLocaleShort());
+            define('CURRENT_LANGUAGE_SHORT', $this->locale->getLocaleShort());
         }
+
     }
 
     /**
