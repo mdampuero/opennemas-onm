@@ -973,7 +973,10 @@ class ContentController extends Controller
         ])->get();
 
         foreach ($categories as $category) {
-            $extra['categories'][$category->id] = $category->name;
+            $extra['categories'][$category->id] = $this->get('data.manager.filter')
+                ->set($category->title)
+                ->filter('localize')
+                ->get();
         }
 
         return $extra;
