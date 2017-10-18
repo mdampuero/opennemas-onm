@@ -17,7 +17,8 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
     $scope.config = {
       linkers: {},
       locale: null,
-      multilanguage: null
+      multilanguage: null,
+      translators: []
     };
 
     /**
@@ -53,6 +54,10 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       // Configure the form
       if ($scope.config.multilanguage === null) {
         $scope.config.multilanguage = data.multilanguage;
+      }
+
+      if (data.translators) {
+        $scope.config.translators = data.translators;
       }
 
       if ($scope.config.locale === null) {
@@ -139,6 +144,27 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       $timeout(function() {
         $scope.loaded = true;
       }, 0);
+    };
+
+    /**
+     * @function isTranslated
+     * @memberOf ArticleCtrl
+     *
+     * @description
+     *   Checks if the article is translated to the locale.
+     *
+     * @param {String} locale The locale to check.
+     *
+     * @return {Boolean} True if the article is translated. False otherwise.
+     */
+    $scope.isTranslated = function (item, keys, locale) {
+      for (var i = 0; i < keys.length; i++) {
+        if (item[keys[i]] && item[keys[i]][locale]) {
+          return true;
+        }
+      }
+
+      return false;
     };
 
     /**
