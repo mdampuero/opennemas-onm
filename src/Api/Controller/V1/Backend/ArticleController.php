@@ -135,7 +135,7 @@ class ArticleController extends Controller
         $converter  = $this->get('orm.manager')->getConverter('Category');
         $categories = $this->get('orm.manager')
             ->getRepository('Category')
-            ->findBy();
+            ->findBy('internal_category = 1');
 
         $categories = array_filter($categories, function ($a) use ($security) {
             return $security->hasCategory($a->pk_content_category);
