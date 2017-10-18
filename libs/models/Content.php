@@ -292,7 +292,9 @@ class Content implements \JsonSerializable
                     $this->slug = \Onm\StringUtils::getTitle($this->title);
                 }
 
-                if (in_array($name, $this->getL10nKeys())) {
+                if ($this->content_type_name === 'article'
+                    && in_array($name, $this->getL10nKeys())
+                ) {
                     if (!getService('core.instance')->hasMultilanguage()
                         || getService('core.locale')->getContext() !== 'backend'
                     ) {
