@@ -87,7 +87,10 @@ class MachineSearcher
                 $result = array();
                 foreach ($contents as $content) {
                     $content->uri = $content->uri;
-                    $result []= get_object_vars($content);
+
+                    // We have to call jsonSerialize to get all protected properties
+                    $vars = $content->jsonSerialize();
+                    $result []= $vars;
                 }
             } catch (Exception $e) {
                 return array();
