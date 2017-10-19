@@ -65,5 +65,10 @@ function smarty_function_renderLink($params, &$smarty)
         $link = substr($link, 1);
     }
 
+    if ($item->type !== 'external') {
+        $link = $smarty->getContainer()->get('core.helper.l10n_route')
+            ->localizeUrl($link, '');
+    }
+
     return $link;
 }
