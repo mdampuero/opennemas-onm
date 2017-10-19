@@ -105,10 +105,9 @@ class Special extends Content
 
                 break;
             default:
+                return parent::__get($name);
                 break;
         }
-
-        parent::__get($name);
     }
 
     /**

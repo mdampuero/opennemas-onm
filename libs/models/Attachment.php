@@ -89,10 +89,9 @@ class Attachment extends Content
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->title);
             default:
+                return parent::__get($name);
                 break;
         }
-
-        return parent::__get($name);
     }
 
     /**
