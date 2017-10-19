@@ -59,6 +59,9 @@ function smarty_function_renderTags($params, &$smarty)
                     break;
             }
             if (!empty($url)) {
+                $url = $smarty->getContainer()->get('core.helper.l10n_route')
+                    ->localizeUrl($url, '', $absolute);
+
                 $output .= '<a '.$class.' '.$target.' href="'.$url.
                     '" title="'.$tag.'">'.$tag.'</a>'.$separator;
                 $i++;
