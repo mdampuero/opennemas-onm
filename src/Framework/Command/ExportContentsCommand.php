@@ -22,7 +22,7 @@ class ExportContentsCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(
-                array(
+                [
                     new InputOption('instance', 'i', InputOption::VALUE_REQUIRED, 'Instance to get contents from', '*'),
                     new InputOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Number of contents to export', '*'),
                     new InputOption('from', 'f', InputOption::VALUE_OPTIONAL, 'Created Date from when to export', '*'),
@@ -33,7 +33,7 @@ class ExportContentsCommand extends ContainerAwareCommand
                         'The folder where store backups',
                         './backups'
                     ),
-                )
+                ]
             )
             ->setName('export:contents')
             ->setDescription('Exports contents from one instance to a given folder path')
@@ -78,7 +78,7 @@ EOF
 
         $rs = $dbConn->fetchAll('SELECT internal_name, settings FROM instances');
 
-        $instances = array();
+        $instances = [];
         foreach ($rs as $database) {
             $instances[$database['internal_name']] =
                 unserialize($database['settings']);
@@ -156,12 +156,12 @@ EOF
     public function convertToNewsML($content)
     {
         $content = $this->tpl->fetch(
-            'news_agency/newsml_templates/base.tpl',
-            array(
+            'news_agency/newsml_templates/export.tpl',
+            [
                 'article'    => $content,
                 'photo'      => $content->img1,
                 'photoInner' => $content->img2
-            )
+            ]
         );
 
         return $content;
@@ -177,9 +177,7 @@ EOF
     {
         $content = $this->tpl->fetch(
             'news_agency/newsml_templates/video.tpl',
-            array(
-                'video'    => $content,
-            )
+            [ 'video'    => $content ]
         );
 
         return $content;
@@ -234,16 +232,16 @@ EOF
     public function exportContents()
     {
         // Sql order, limit and filters
-        $order   = array('created' => 'DESC');
-        $filters = array(
-            'content_type_name' => array(
+        $order   = [ 'created' => 'DESC' ];
+        $filters = [
+            'content_type_name' => [
                 'union' => 'OR',
-                array('value' => 'article'),
-                array('value' => 'opinion'),
-                array('value' => 'album'),
-                array('value' => 'video'),
-            ),
-        );
+                [ 'value' => 'article' ],
+                [ 'value' => 'opinion' ],
+                [ 'value' => 'album' ],
+                [ 'value' => 'video' ],
+            ],
+        ];
 
         // Get entity repository
         $this->er = getService('entity_repository');
@@ -338,10 +336,10 @@ EOF
                     $this->output->writeln(
                         $this->albumsCounter . " of " . $this->total . '(id: ' . $content->id . ')'
                     );
-                    $photos = array();
+                    $photos = [];
                     $photos = $content->_getAttachedPhotos($content->id);
 
-                    $content->all_photos = array();
+                    $content->all_photos = [];
                     foreach ($photos as $value) {
                         // Add DateTime with format Y-m-d H:i:s
                         $value['photo']->created_datetime =
