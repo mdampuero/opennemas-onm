@@ -45,16 +45,11 @@ class L10nRouteHelper
      */
     public function localizeUrl($url, $routeName = '', $forceAbsolute = false)
     {
-        // L10n for urls
-        $requestedLocale = $this->container
-            ->get('request_stack')->getCurrentRequest()
-            ->attributes->get('_locale', '');
-
         $localeService = $this->container->get('core.locale');
         $requestLocale = $localeService->getRequestLocale();
         $defaultLocale = $localeService->getLocale('frontend');
 
-        // If no locale skip the l10n setting
+        // If no locale or locale is the default locale skip the l10n setting
         if ($requestLocale == $defaultLocale
             || !in_array($requestLocale, $localeService->getSlugs())
         ) {

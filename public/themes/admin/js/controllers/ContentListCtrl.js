@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'Encoder', 'queryManager',
-  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, Encoder, queryManager) {
+  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'Encoder', 'queryManager', 'localizer',
+  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, Encoder, queryManager, localizer) {
     'use strict';
 
     /**
@@ -1140,5 +1140,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.$apply();
       }
     });
+
+
+    /**
+     *  Localize all titles of the contents
+     */
+    $scope.getContentsLocalizeTitle = function() {
+      var lz   = localizer.get($scope.extra.options);
+      var keys = [ 'title' ];
+      return lz.localize($scope.contents, keys, $scope.extra.options.default);
+    }
   }
 ]);

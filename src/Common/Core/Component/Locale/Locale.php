@@ -58,7 +58,7 @@ class Locale
      *
      * @var array
      */
-    protected $fixes = [ 'en' => 'en_US', 'gl' => 'gl_ES' ];
+    protected $fixes = [ 'en' => 'en_US', 'gl' => 'gl_ES', 'es' => 'es_ES' ];
 
     /**
      * The locale for the current request.

@@ -204,6 +204,7 @@ class User
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->name);
             default:
+                parent::__get($name);
                 break;
         }
     }

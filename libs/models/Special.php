@@ -88,7 +88,7 @@ class Special extends Content
 
                 break;
             case 'slug':
-                return String_Utils::getTitle($this->title);
+                return \Onm\StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':
@@ -105,10 +105,9 @@ class Special extends Content
 
                 break;
             default:
+                return parent::__get($name);
                 break;
         }
-
-        parent::__get($name);
     }
 
     /**
