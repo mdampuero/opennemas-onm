@@ -107,6 +107,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         // No multiple languages in database
         $property->setValue($content, 'fred');
+
         $content->content_status    = 1;
         $content->content_type_name = 'article';
 

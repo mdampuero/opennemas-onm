@@ -181,8 +181,10 @@ class ArticleController extends Controller
             $translators = [];
         }
 
-        $translators = array_map(function ($a) {
-            return $a['to'];
+        $extra['translators'] = array_map(function ($a) {
+            unset($a['config']);
+
+            return $a;
         }, array_filter($translators, function ($a) use ($default) {
             return $a['from'] === $default;
         }));
@@ -190,7 +192,11 @@ class ArticleController extends Controller
         $extra['options'] = [
             'default'     => $default,
             'available'   => $ls->getAvailableLocales('frontend'),
-            'translators' => array_unique($translators)
+            'translators' => array_unique(
+                array_filter($extra['translators'], function ($a) {
+                    return $a['to'];
+                })
+            )
         ];
 
         return $extra;

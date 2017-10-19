@@ -49,7 +49,7 @@ abstract class Translator
      * @param string $str  The string to translate.
      * @param string $from The language to translate from. This parameter
      *                     overrides the translator configuration.
-     * #param string $to   The language to translate to. This parameter
+     * @param string $to   The language to translate to. This parameter
      *                     overrides the translator configuration.
      *
      * @return string The translated string.
