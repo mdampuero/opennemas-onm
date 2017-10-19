@@ -305,8 +305,8 @@
             }
 
             for (var key in this.config.available) {
-              if (value[this.config.available[key]]) {
-                return value[this.config.available[key]];
+              if (value[key]) {
+                return value[key];
               }
             }
 
