@@ -208,7 +208,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+              <tr ng-repeat="content in getContentsLocalizeTitle()" ng-class="{ row_selected: isSelected(content.id) }">
                 <td class="checkbox-cell">
                   <div class="checkbox check-default">
                     <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">

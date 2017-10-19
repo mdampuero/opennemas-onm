@@ -44,7 +44,6 @@ class ContentController extends Controller
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
-
         return new JsonResponse(
             [
                 'elements_per_page' => $elementsPerPage,
@@ -978,6 +977,8 @@ class ContentController extends Controller
                 ->filter('localize')
                 ->get();
         }
+
+        $extra['options'] = $this->getLocaleData('frontend', null, false);
 
         return $extra;
     }
