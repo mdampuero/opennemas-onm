@@ -254,11 +254,13 @@ class AdvertisementController extends Controller
         }
 
         // Set ads datetime to UTC (avoid browsers issues with Date)
-        $element->starttime = \DateTime::createFromFormat(
-            'Y-m-d H:i:s',
-            $element->starttime,
-            $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
-        )->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+        if (!is_null($element->starttime)) {
+            $element->starttime = \DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $element->starttime,
+                $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
+            )->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+        }
 
         if (!is_null($element->endtime)) {
             $element->endtime = \DateTime::createFromFormat(
