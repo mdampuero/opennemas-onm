@@ -672,13 +672,15 @@
 
         // Shows a modal window to translate content automatically
         $scope.$watch('config.locale', function(nv, ov) {
-          if (!ov || nv === ov || $scope.isTranslated($scope.data.article,
+          if (!nv || nv === ov || $scope.isTranslated($scope.data.article,
               $scope.data.extra.keys, nv)) {
             return;
           }
 
+          // Filter for selected locale and translated in original language
           var translators = $scope.config.translators.filter(function(e) {
-            return e.to === nv;
+            return e.to === nv && $scope.isTranslated($scope.data.article,
+              $scope.data.extra.keys, e.from);
           });
 
           if (translators.length === 0) {
