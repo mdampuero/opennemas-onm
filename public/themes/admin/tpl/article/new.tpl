@@ -102,8 +102,8 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required type="text">
+                  <div class="input-group">
+                    <input class="form-control" id="title" name="title" ng-model="article.title" ng-trim="false" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="[% data.article.title[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
                         [% article.title ? article.title.length : 0 %]
@@ -113,12 +113,12 @@
                 </div>
               </div>
               <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title_int.$invalid }">
-                <label class="form-label" for="title_int_input">
+                <label class="form-label" for="title-int">
                   {t}Inner title{/t}
                 </label>
                 <div class="controls">
-                  <div class="input-group" id="title_int">
-                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required>
+                  <div class="input-group">
+                    <input class="form-control" id="title-int" maxlength="256" name="title-int" ng-model="article.title_int" ng-trim="false" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="[% data.article.title_int[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
@@ -153,7 +153,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="subtitle">
-                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" type="text"/>
+                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="[% data.article.subtitle[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.subtitle.length >= 50 && article.subtitle.length < 100, 'text-danger': article.subtitle.length >= 100 }">
                         [% article.subtitle ? article.subtitle.length : 0 %]
