@@ -12,13 +12,13 @@ function smarty_function_renderLink($params, &$smarty)
     $nameUrl  = 'seccion';
     if (isset($nameMenu) && !empty($nameMenu)) {
         if ($nameMenu == 'video') {
-            $nameUrl='video';
+            $nameUrl = 'video';
         } elseif ($nameMenu == 'album') {
-            $nameUrl='album';
+            $nameUrl = 'album';
         } elseif ($nameMenu == 'special') {
-            $nameUrl='especiales';
+            $nameUrl = 'especiales';
         } elseif ($nameMenu == 'encuesta') {
-            $nameUrl='encuesta';
+            $nameUrl = 'encuesta';
         }
     }
 
@@ -36,12 +36,13 @@ function smarty_function_renderLink($params, &$smarty)
             $link = "/encuesta/$item->link/";
             break;
         case 'static':
-            $link = "/".STATIC_PAGE_PATH."/$item->link/";
+            $link = "/" . STATIC_PAGE_PATH . "/$item->link/";
             break;
         case 'internal':
             if ($item->link == '/') {
                 $item->link = '';
             }
+
             $link = "/$item->link";
             break;
         case 'external':
