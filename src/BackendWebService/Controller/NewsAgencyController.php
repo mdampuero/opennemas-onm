@@ -268,9 +268,12 @@ class NewsAgencyController extends Controller
             return $category->internal_category == '1';
         });
 
-
         $params['categories'] = array_map(function ($category) {
-            return [ 'name' => $category->title, 'value' => $category->id ];
+            return [
+                'name' => $this->get('data.manager.filter')
+                    ->set($category->title)->filter('localize')->get(),
+                'value' => $category->id
+            ];
         }, $categories);
 
         // Get servers
