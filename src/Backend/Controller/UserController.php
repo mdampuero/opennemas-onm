@@ -436,15 +436,19 @@ class UserController extends Controller
             'name ASC'
         );
 
+        $extra['categories'] = array_map(function ($category) {
+            return [
+                'title' => $this->get('data.manager.filter')
+                    ->set($category->title)->filter('localize')->get(),
+                'id' => $category->id
+            ];
+        }, $categories);
+
         $extra['user_groups'] = array_map(function ($a) {
             return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
         }, $userGroups);
 
-        $extra['categories'] = array_map(function ($a) {
-            return [ 'id' => $a->id, 'title' => $a->title ];
-        }, $categories);
-
-        array_unshift($extra['categories'], [ 'id' => 0, 'title' => _('Frontpage') ]);
+        $extra['language_data'] = $this->getLocaleData('frontend');
 
         $selected = [
             'categories' => array_filter($extra['categories'], function ($a) use ($user) {
