@@ -210,12 +210,6 @@ class Article extends Content
      */
     public function create($data)
     {
-        foreach ($this->getL10nKeys() as $key) {
-            if (array_key_exists($key, $data) && is_array($data[$key])) {
-                $data[$key] = serialize($data[$key]);
-            }
-        }
-
         if (!isset($data['description'])) {
             $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
@@ -231,6 +225,24 @@ class Article extends Content
             $conn->beginTransaction();
 
             parent::create($data);
+
+            foreach ($this->getL10nKeys() as $key) {
+                if (!array_key_exists($key, $data) || !is_array($data[$key])) {
+                    continue;
+                }
+
+                if (empty($data[$key])
+                    || empty(array_filter($data[$key], function ($a) {
+                        return !empty($a);
+                    }))
+                ) {
+                    $data[$key] = null;
+
+                    continue;
+                }
+
+                $data[$key] = serialize($data[$key]);
+            }
 
             $this->pk_article = $this->id;
             $this->pk_content = $this->id;

@@ -504,12 +504,6 @@ class Content implements \JsonSerializable
      */
     public function create($data)
     {
-        foreach ($this->getL10nKeys() as $key) {
-            if (array_key_exists($key, $data) && is_array($data[$key])) {
-                $data[$key] = serialize($data[$key]);
-            }
-        }
-
         $data['content_status'] = (empty($data['content_status'])) ? 0 : intval($data['content_status']);
         if (!isset($data['starttime']) || empty($data['starttime'])) {
             if ($data['content_status'] == 0) {
@@ -519,10 +513,16 @@ class Content implements \JsonSerializable
             }
         }
 
-        if (empty($data['slug']) && !empty($data['title'])) {
-            $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
-        } else {
+        if (!empty($data['slug'])) {
             $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
+        }
+
+        if (empty($data['slug'])
+            || empty(array_filter($data['slug'], function ($a) {
+                return !empty($a);
+            }))
+        ) {
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
         }
 
         if (!isset($data['with_comment'])) {
@@ -534,6 +534,24 @@ class Content implements \JsonSerializable
         if (array_key_exists('category', $data) && !empty($data['category'])) {
             $ccm     = ContentCategoryManager::get_instance();
             $catName = $ccm->getName($data['category']);
+        }
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (!array_key_exists($key, $data) || !is_array($data[$key])) {
+                continue;
+            }
+
+            if (empty($data[$key])
+                || empty(array_filter($data[$key], function ($a) {
+                    return !empty($a);
+                }))
+            ) {
+                $data[$key] = null;
+
+                continue;
+            }
+
+            $data[$key] = serialize($data[$key]);
         }
 
         $contentData = [

@@ -56,7 +56,7 @@
                       {t}Footer text{/t}
                     </label>
                     <div class="controls">
-                      <textarea class="form-control" name="img1_footer" ng-model="article.img1_footer"></textarea>
+                      <textarea class="form-control" name="img1_footer" ng-model="article.img1_footer" placeholder="[% data.article.img1_footer[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.img1_footer[data.extra.options.default] %]"></textarea>
                       <input type="hidden" name="img1" ng-model="article.img1" ng-value="img1"/>
                     </div>
                   </div>
@@ -107,7 +107,7 @@
                       {t}Footer text{/t}
                     </label>
                     <div class="controls">
-                      <textarea class="form-control" name="img2_footer" ng-model="article.img2_footer"></textarea>
+                      <textarea class="form-control" name="img2_footer" ng-model="article.img2_footer" placeholder="[% data.article.img2_footer[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.img1_footer[data.extra.options.default] %]"></textarea>
                       <input type="hidden" name="img2" ng-value="img2"/>
                     </div>
                   </div>
@@ -248,7 +248,7 @@
                         <label class="form-label" for="title">
                           {t}Footer text for inner video:{/t}
                         </label>
-                        <textarea  class="form-control" name="footer_video" ng-model="article.footer_video"></textarea>
+                        <textarea  class="form-control" name="footer_video" ng-model="article.footer_video" placeholder="[% data.article.footer_video[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.footer_video[data.extra.options.default] %]"></textarea>
                       </div>
                     </div>
                   </div>
@@ -315,7 +315,7 @@
                         <label class="form-label" for="title">
                           {t}Footer text for inner video:{/t}
                         </label>
-                        <textarea  class="form-control" name="footer_video2" ng-model="article.footer_video2"></textarea>
+                        <textarea  class="form-control" name="footer_video2" ng-model="article.footer_video2" placeholder="[% data.article.footer_video2[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.footer_video[data.extra.options.default] %]"></textarea>
                       </div>
                     </div>
                   </div>

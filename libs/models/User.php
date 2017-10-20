@@ -204,9 +204,20 @@ class User
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->name);
             default:
-                parent::__get($name);
-                break;
+                return;
         }
+    }
+
+    /**
+     * Checks if a property exists.
+     *
+     * @param string $name The property name.
+     *
+     * @return boolean True if the property exists. False otherwise.
+     */
+    public function __isset($name)
+    {
+        return property_exists($this, $name);
     }
 
     /**
