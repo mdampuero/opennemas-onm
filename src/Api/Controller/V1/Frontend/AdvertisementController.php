@@ -259,7 +259,13 @@ class AdvertisementController extends Controller
                 'Y-m-d H:i:s',
                 $element->starttime,
                 $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
-            )->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+            );
+
+            if ($element->starttime !== false) {
+                $element->starttime->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+            } else {
+                $element->starttime = null;
+            }
         }
 
         if (!is_null($element->endtime)) {
@@ -267,7 +273,13 @@ class AdvertisementController extends Controller
                 'Y-m-d H:i:s',
                 $element->endtime,
                 $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
-            )->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+            );
+
+            if ($element->endtime !== false) {
+                $element->endtime->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
+            } else {
+                $element->endtime = null;
+            }
         }
 
         $object = new \stdClass();
