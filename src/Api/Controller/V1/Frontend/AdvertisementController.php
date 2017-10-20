@@ -253,34 +253,11 @@ class AdvertisementController extends Controller
             $element->params['user_groups'] = [];
         }
 
-        // Set ads datetime to UTC (avoid browsers issues with Date)
-        if (!is_null($element->starttime)) {
-            $element->starttime = \DateTime::createFromFormat(
-                'Y-m-d H:i:s',
-                $element->starttime,
-                $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
-            );
+        // Convert endtime to UTC
+        $element->starttime = $this->setTimeZoneToUTC($element->starttime);
 
-            if ($element->starttime !== false) {
-                $element->starttime->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
-            } else {
-                $element->starttime = null;
-            }
-        }
-
-        if (!is_null($element->endtime)) {
-            $element->endtime = \DateTime::createFromFormat(
-                'Y-m-d H:i:s',
-                $element->endtime,
-                $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
-            );
-
-            if ($element->endtime !== false) {
-                $element->endtime->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d h:i:s');
-            } else {
-                $element->endtime = null;
-            }
-        }
+        // Convert endtime to UTC
+        $element->endtime = $this->setTimeZoneToUTC($element->endtime);
 
         $object = new \stdClass();
 
@@ -304,5 +281,35 @@ class AdvertisementController extends Controller
         $object->target_url = ($object->format == 'image') ? $element->url : '';
 
         return $object;
+    }
+
+    /**
+     * Returns a DateTime object with timezone UTC from a date string or null
+     * if the input is not valid to convert
+     *
+     * @param string $date The date string to convert
+     *
+     * @return DateTime
+     **/
+    public function setTimeZoneToUTC($dateString)
+    {
+        if (is_null($dateString) || empty($dateString)) {
+            return null;
+        }
+
+        // Convert date to UTC
+        try {
+            $date = new \DateTime(
+                $dateString,
+                $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
+            );
+
+            // This is separated because the previous initialization can raise an exception
+            $date = $date->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            $date = null;
+        }
+
+        return $date;
     }
 }
