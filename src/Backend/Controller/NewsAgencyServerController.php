@@ -141,11 +141,15 @@ class NewsAgencyServerController extends Controller
     public function showAction(Request $request)
     {
         $servers = $this->get('setting_repository')->get('news_agency_config');
-        $items   = $this->get('category_repository')->findBy([], []);
+        $items   = $this->get('category_repository')->findBy(
+            ['internal_category' => [ [ 'value' => 1  ]] ],
+            []
+        );
 
         $categories = [];
         foreach ($items as $category) {
-            $categories[$category->id] = $category->title;
+            $categories[$category->id] = $this->get('data.manager.filter')
+                ->set($category->title)->filter('localize')->get();
         }
 
         asort($categories);
