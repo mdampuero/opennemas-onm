@@ -13,8 +13,8 @@
    *   Handles actions for advertisement inner.
    */
   angular.module('BackendApp.controllers').controller('UserSettingsCtrl', [
-    '$scope', 'Cleaner', 'http', 'messenger',
-    function($scope, Cleaner, http, messenger) {
+    '$scope', 'cleaner', 'http', 'messenger',
+    function($scope, cleaner, http, messenger) {
       /**
        * @memberOf UserSettingsCtrl
        *
@@ -86,7 +86,7 @@
       $scope.save = function() {
         $scope.saving = true;
 
-        var data = Cleaner.clean($scope.settings);
+        var data = cleaner.clean($scope.settings);
 
         http.put('backend_ws_users_settings_save', data)
           .then(function(response) {
