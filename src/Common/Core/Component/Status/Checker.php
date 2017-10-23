@@ -128,7 +128,6 @@ class Checker
                 $this->fs->mkdir($path);
             }
 
-            $this->fs->chmod($path, 0777);
             $this->fs->dumpFile($filename, 'bar');
             $this->fs->remove($filename);
         } catch (\Exception $e) {
