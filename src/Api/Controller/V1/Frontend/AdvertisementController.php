@@ -285,22 +285,22 @@ class AdvertisementController extends Controller
 
     /**
      * Returns a DateTime object with timezone UTC from a date string or null
-     * if the input is not valid to convert
+     * if the input is not valid to convert.
      *
-     * @param string $date The date string to convert
+     * @param string $date The date to convert.
      *
-     * @return DateTime
-     **/
-    public function setTimeZoneToUTC($dateString)
+     * @return mixed The datetime converted to UTC or null if the date is empty.
+     */
+    public function setTimeZoneToUTC($date)
     {
-        if (is_null($dateString) || empty($dateString)) {
+        if (is_null($date) || empty($date)) {
             return null;
         }
 
         // Convert date to UTC
         try {
             $date = new \DateTime(
-                $dateString,
+                $date,
                 $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
             );
 
