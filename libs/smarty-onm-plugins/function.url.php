@@ -17,6 +17,11 @@ function smarty_function_url($params, &$smarty)
         return $url;
     }
 
+    // Hack for opinions and authors url's
+    if (array_key_exists('author_slug', $params)) {
+        $params['author_slug'] = \Onm\StringUtils::generateSlug($params['author_slug']);
+    }
+
     $name          = $params['name'];
     $forceAbsolute = array_key_exists('absolute', $params) && $params['absolute'];
     $absoluteUrl   = $forceAbsolute
