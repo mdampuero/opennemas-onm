@@ -92,7 +92,8 @@ class Redirector
     /**
      * Returns a translation by id.
      *
-     * @param integer $id The content id.
+     * @param integer $id   The content id.
+     * @param string  $type The content type.
      *
      * @return array The content translation values.
      */
@@ -102,8 +103,10 @@ class Redirector
         $params = [ $id ];
 
         if (!empty($type)) {
-            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? AND `type` = ? LIMIT 1';
-            array_push($params, $type);
+            $params[] = $type;
+
+            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ?'
+                . ' AND `type` = ? LIMIT 1';
         }
 
         return $this->conn->fetchAssoc($sql, $params);
