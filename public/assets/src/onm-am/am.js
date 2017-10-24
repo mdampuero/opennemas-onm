@@ -543,15 +543,15 @@
       return false;
     }
 
-    // Change date format to work with all browsers:
+    // Change date format to work with all browsers (UTC timezone from server)
     // Before: 2017-08-23 13:38:00
-    // After:  2017-08-23T13:38:00
+    // After:  2017-08-23T13:38:00Z
     if (ad.starttime) {
-      ad.starttime = ad.starttime.replace(/\s+/g, 'T');
+      ad.starttime = ad.starttime.replace(/\s+/g, 'T').concat('Z');
     }
 
     if (ad.endtime) {
-      ad.endtime = ad.endtime.replace(/\s+/g, 'T');
+      ad.endtime = ad.endtime.replace(/\s+/g, 'T').concat('Z');
     }
 
     var groups    = [];

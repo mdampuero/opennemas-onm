@@ -253,6 +253,12 @@ class AdvertisementController extends Controller
             $element->params['user_groups'] = [];
         }
 
+        // Convert endtime to UTC
+        $element->starttime = $this->setTimeZoneToUTC($element->starttime);
+
+        // Convert endtime to UTC
+        $element->endtime = $this->setTimeZoneToUTC($element->endtime);
+
         $object = new \stdClass();
 
         $object->id          = (int) $element->pk_content;
@@ -275,5 +281,35 @@ class AdvertisementController extends Controller
         $object->target_url = ($object->format == 'image') ? $element->url : '';
 
         return $object;
+    }
+
+    /**
+     * Returns a DateTime object with timezone UTC from a date string or null
+     * if the input is not valid to convert.
+     *
+     * @param string $date The date to convert.
+     *
+     * @return mixed The datetime converted to UTC or null if the date is empty.
+     */
+    public function setTimeZoneToUTC($date)
+    {
+        if (is_null($date) || empty($date)) {
+            return null;
+        }
+
+        // Convert date to UTC
+        try {
+            $date = new \DateTime(
+                $date,
+                $this->container->get('core.locale')->setContext('frontend')->getTimeZone()
+            );
+
+            // This is separated because the previous initialization can raise an exception
+            $date = $date->setTimeZone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            $date = null;
+        }
+
+        return $date;
     }
 }

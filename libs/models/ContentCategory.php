@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Defines the ContentCategory class
  *
@@ -16,7 +17,7 @@
  *
  * @package    Model
  */
-class ContentCategory
+class ContentCategory implements \JsonSerializable
 {
     /**
      * Category id
@@ -37,42 +38,42 @@ class ContentCategory
      *
      * @var string
      */
-    public $img_path            = null;
+    public $img_path = null;
 
     /**
      * The color of the category
      *
      * @var string
      */
-    public $color               = null;
+    public $color = null;
 
     /**
      * The name of the category
      *
      * @var string
      */
-    public $name                = null;
+    public $name = null;
 
     /**
      * The human readable category name
      *
      * @var string
      */
-    public $title               = null;
+    protected $title = null;
 
     /**
      * Whether if this category is in menu
      *
      * @var boolean
      */
-    public $inmenu              = null;
+    public $inmenu = null;
 
     /**
      * Position in menu
      *
      * @var int
      */
-    public $posmenu             = null;
+    public $posmenu = null;
 
     /**
      * Special category for identify types of content
@@ -85,14 +86,14 @@ class ContentCategory
      *
      * @var int
      */
-    public $internal_category   = null;
+    public $internal_category = null;
 
     /**
      * Misc params for this category
      *
      * @var array
      */
-    public $params              = null;
+    public $params = null;
 
     /**
      * Initializes the Category class.
@@ -113,33 +114,97 @@ class ContentCategory
      */
     public function load($properties)
     {
-        if (is_array($properties)) {
-            if (array_key_exists('pk_content_category', $properties)) {
-                $this->id = (int) $properties['pk_content_category'];
+        $propertiesAux = $properties;
+        if (is_object($properties)) {
+            $propertiesAux = get_object_vars($properties);
+        }
+
+        if (array_key_exists('pk_content_category', $propertiesAux)) {
+            $this->id = (int) $properties['pk_content_category'];
+        }
+
+        foreach ($properties as $k => $v) {
+            if (is_numeric($k)) {
+                continue;
             }
 
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-
-            if (array_key_exists('pk_content_category', $properties)) {
-                $this->id = (int) $properties['pk_content_category'];
+            if (in_array($k, self::getL10nKeys())) {
+                $aux        = @unserialize($v);
+                $this->{$k} = (is_bool($aux)) ? $v : $aux;
+                continue;
             }
 
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
+            $this->{$k} = $v;
         }
 
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
         }
+    }
+
+    /**
+     * Magic function to get uninitialized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     */
+    public function __get($name)
+    {
+        if (in_array($name, $this->getL10nKeys())) {
+            if (getService('core.locale')->getContext() !== 'backend') {
+                return getService('data.manager.filter')
+                    ->set($this->{$name})
+                    ->filter('localize')
+                    ->get();
+            }
+
+            return getService('data.manager.filter')
+                ->set($this->{$name})
+                ->filter('unlocalize')
+                ->get();
+        }
+
+        return $this->{$name};
+    }
+
+    /**
+     * Changes a property value.
+     *
+     * @param string $name  The property name.
+     * @param mixed  $value The property value.
+     */
+    public function __set($name, $value)
+    {
+        if (in_array(
+                'es.openhost.module.multilanguage',
+                getService('core.instance')->activated_modules
+            )
+            && in_array($name, $this->getL10nKeys())
+        ) {
+            $value = getService('data.manager.filter')
+                ->set($value)
+                ->filter('unlocalize')
+                ->get();
+        }
+
+        $this->{$name} = $value;
+    }
+
+    /**
+     * Returns all content information when serialized.
+     *
+     * @return array The content information.
+     */
+    public function jsonSerialize()
+    {
+        $data = get_object_vars($this);
+
+        foreach ($this->getL10nKeys() as $key) {
+            $data[$key] = $this->__get($key);
+        }
+
+        return $data;
     }
 
     /**
@@ -163,7 +228,7 @@ class ContentCategory
 
             $this->id = $this->pk_content_category;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -178,20 +243,40 @@ class ContentCategory
     public function create($data)
     {
         // Generate slug for category
-        $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
+        // $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
 
-        // Unserialize params
+        if (!in_array(
+            'es.openhost.module.multilanguage',
+            getService('core.instance')->activated_modules
+        )) {
+            $aux           = new stdClass();
+            $aux->title    = $data['title'];
+            $aux           = getService('data.manager.filter')->set($aux)
+                ->filter('localize', [
+                    'keys'   => \ContentCategory::getL10nKeys(),
+                    'locale' => getService('core.locale')->setContext('frontend')->getLocale()
+                ])->get();
+            $data['title'] = $aux->title;
+        } else {
+            // Serialize language fields
+            array_map(function ($field) use (&$data) {
+                $data[$field] = serialize($data[$field]);
+            }, self::getL10nKeys());
+        }
+
+        // Serialize params
         $data['params'] = serialize($data['params']);
 
         // Check if slug already exists and add number
         $ccm = new ContentCategoryManager();
         if ($ccm->exists($data['name'])) {
-            $i = 1;
+            $i    = 1;
             $name = $data['name'];
             while ($ccm->exists($name)) {
                 $name = $data['name'] . $i;
                 $i++;
             }
+
             $data['name'] = $name;
         }
 
@@ -212,11 +297,11 @@ class ContentCategory
 
             $this->pk_content_category = getService('dbal_connection')->lastInsertId();
 
-            dispatchEventWithParams('category.create', array('category' => $this));
+            dispatchEventWithParams('category.create', [ 'category' => $this ]);
 
             return true;
         } catch (Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -231,19 +316,41 @@ class ContentCategory
     public function update($data)
     {
         $data['params'] = serialize($data['params']);
+        $data['name']   = $this->name;
+
+        if (!in_array(
+            'es.openhost.module.multilanguage',
+            getService('core.instance')->activated_modules
+        )) {
+            $aux           = new stdClass();
+            $aux->title    = $data['title'];
+            $aux           = getService('data.manager.filter')->set($aux)
+                ->filter('localize', [
+                    'keys'   => \ContentCategory::getL10nKeys(),
+                    'locale' => getService('core.locale')->setContext('frontend')->getLocale()
+                ])->get();
+            $data['title'] = $aux->title;
+        } else {
+            // Serialize language fields
+            array_map(function ($field) use (&$data) {
+                $data[$field] = serialize($data[$field]);
+            }, self::getL10nKeys());
+        }
+
         if ($data['logo_path'] == '1') {
             $data['logo_path'] = $this->logo_path;
         }
+
         $data['color'] = (isset($data['color'])) ? $data['color'] : $this->color;
 
         $conn = getService('dbal_connection');
         try {
             $conn->beginTransaction();
-
             $rs = $conn->update(
                 'content_categories',
                 [
                     'title'               => $data['title'],
+                    'name'                => $data['name'],
                     'inmenu'              => (int) $data['inmenu'],
                     'fk_content_category' => (int) $data['subcategory'],
                     'internal_category'   => (int) $data['internal_category'],
@@ -254,11 +361,6 @@ class ContentCategory
                 [ 'pk_content_category' => $data['id'] ]
             );
 
-            if (!$rs) {
-                $conn->rollBack();
-                return false;
-            }
-
             if ($data['subcategory']) {
                 // We look at subcategories and wee add them to their parent
                 $rs = $conn->update(
@@ -266,16 +368,15 @@ class ContentCategory
                     [ 'fk_content_category' => $data['subcategory'] ],
                     [ 'fk_content_category' => $data['id'] ]
                 );
-
             }
 
             $conn->commit();
-            dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.update', ['category' => $this]);
 
             return true;
         } catch (\Exception $e) {
+            getService('error.log')->error($e->getTraceAsString());
             $conn->rollBack();
-            error_log($e->getMessage());
             return false;
         }
     }
@@ -303,7 +404,7 @@ class ContentCategory
                 return false;
             }
 
-            dispatchEventWithParams('category.delete', array('category' => $this));
+            dispatchEventWithParams('category.delete', [ 'category' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -328,7 +429,7 @@ class ContentCategory
                 [ $this->pk_content_category ]
             );
 
-            $contentsArray = array_map(function($item) {
+            $contentsArray = array_map(function ($item) {
                 return $item['pk_fk_content'];
             }, $rs);
         } catch (\Exception $e) {
@@ -340,28 +441,29 @@ class ContentCategory
             return true;
         }
 
-        // Prepare sqls to execute
         $contents = implode(', ', $contentsArray);
-        $sqls []= 'DELETE FROM contents  WHERE `pk_content` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM articles WHERE `pk_article` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM advertisements WHERE `pk_advertisement` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM albums WHERE `pk_album` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM albums_photos WHERE `pk_album` IN (' . $contents . ')  '
-            .'OR `pk_photo` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM comments WHERE `content_id` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM votes WHERE `pk_vote` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM ratings WHERE `pk_rating` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM polls WHERE `pk_poll` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM poll_items WHERE `fk_pk_poll` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM related_contents '
-            .'WHERE `pk_content1` IN (' . $contents . ') OR `pk_content2` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM kioskos WHERE `pk_kiosko` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM static_pages WHERE `pk_static_page` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM content_positions WHERE `pk_fk_content` IN ('.$contents.')';
-        $sqls []= 'DELETE FROM contentmeta WHERE `fk_content` IN ('.$contents.')';
 
+        // Prepare sqls to execute
+        $sqls[] = 'DELETE FROM contents  WHERE `pk_content` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM articles WHERE `pk_article` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM advertisements WHERE `pk_advertisement` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM albums WHERE `pk_album` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM albums_photos WHERE `pk_album` IN (' . $contents . ')  '
+            . 'OR `pk_photo` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM comments WHERE `content_id` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM votes WHERE `pk_vote` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM ratings WHERE `pk_rating` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM polls WHERE `pk_poll` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM poll_items WHERE `fk_pk_poll` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM related_contents '
+            . 'WHERE `pk_content1` IN (' . $contents . ') OR `pk_content2` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM kioskos WHERE `pk_kiosko` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM static_pages WHERE `pk_static_page` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM content_positions WHERE `pk_fk_content` IN (' . $contents . ')';
+        $sqls[] = 'DELETE FROM contentmeta WHERE `fk_content` IN (' . $contents . ')';
 
         $conn->beginTransaction();
+
         try {
             foreach ($sqls as $sql) {
                 $conn->executeUpdate($sql);
@@ -403,7 +505,7 @@ class ContentCategory
                 return false;
             }
 
-            dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.update', [ 'category' => $this ]);
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());
@@ -424,10 +526,11 @@ class ContentCategory
 
         try {
             if (!is_array($this->params)) {
-                $this->params = array();
+                $this->params = [];
             }
+
             $this->params['inrss'] = $status;
-            $this->params = serialize($this->params);
+            $this->params          = serialize($this->params);
 
             getService('dbal_connection')->update(
                 'content_categories',
@@ -435,11 +538,22 @@ class ContentCategory
                 [ 'pk_content_category' => $this->pk_content_category ]
             );
 
-            dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.update', [ 'category' => $this ]);
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Returns the list of properties that support multiple languages.
+     *
+     * @return array The list of properties that can be localized to multiple
+     *               languages.
+     */
+    public static function getL10nKeys()
+    {
+        return [ 'title' ];
     }
 }

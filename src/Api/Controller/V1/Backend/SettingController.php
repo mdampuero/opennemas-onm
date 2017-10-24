@@ -181,8 +181,8 @@ class SettingController extends Controller
             'extra'    => [
                 'countries' => $this->get('core.geo')->getCountries(),
                 'locales'   => [
-                    'backend'  => $locale->getAvailableLocales(),
-                    'frontend' => $locale->setContext('frontend')->getAvailableLocales()
+                    'backend'  => $locale->getAvailableLocales('backend'),
+                    'frontend' => $locale->getAvailableLocales('frontend')
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
@@ -344,6 +344,15 @@ class SettingController extends Controller
 
         if (array_key_exists('logo_enabled', $settings)) {
             $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
+        }
+
+        if (array_key_exists('locale', $settings)
+            && is_array($settings['locale'])
+        ) {
+            if (array_key_exists('frontend', $settings['locale'])) {
+                $settings['site_language'] = $settings['locale']['frontend']['language']['selected'];
+                $settings['time_zone']     = $settings['locale']['frontend']['timezone'];
+            }
         }
 
         return $settings;

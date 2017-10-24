@@ -511,7 +511,15 @@ class AdsController extends Controller
                 . ' order by internal_category asc, title asc'
             );
 
+        $fm = $this->get('data.manager.filter');
+
         $categories = array_map(function ($a) {
+            // Sometimes category is array. When create & update advertisement
+            $a = $this->get('data.manager.filter')->set($a)->filter('localize', [
+                'keys' => \ContentCategory::getL10nKeys(),
+                'locale' => $this->getLocaleData('frontend')['default']
+            ])->get();
+
             return [
                 'id'     => (int) $a->pk_content_category,
                 'name'   => $a->title,

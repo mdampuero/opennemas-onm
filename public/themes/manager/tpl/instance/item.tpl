@@ -75,13 +75,13 @@
                     <h5><i class="fa fa-flag-checkered"></i> {t}Language{/t}</h5>
                   </dt>
                   <dd>
-                    [% template.languages[settings.site_language] %]
+                    [% template.languages[settings.locale.backend.language.selected] %]
                   </dd>
                   <dt>
                     <h5><i class="fa fa-globe"></i> {t}Time Zone{/t}</h5>
                   </dt>
                   <dd>
-                    [% template.timezones[settings.time_zone] ? template.timezones[settings.time_zone] : settings.time_zone %]
+                    [% template.timezones[settings.locale.backend.timezone] ? template.timezones[settings.locale.backend.timezone] : settings.locale.backend.timezone %]
                   </dd>
                 </dl>
               </div>

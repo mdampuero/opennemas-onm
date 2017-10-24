@@ -27,6 +27,11 @@ class SystemSettingsController extends Controller
      */
     public function defaultAction()
     {
-        return $this->render('system_settings/system_settings.tpl');
+        return $this->render('system_settings/system_settings.tpl', [
+            'multilanguage'  => in_array(
+                'es.openhost.module.multilanguage',
+                getService('core.instance')->activated_modules
+            )
+        ]);
     }
 }

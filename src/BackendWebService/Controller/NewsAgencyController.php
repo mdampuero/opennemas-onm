@@ -187,7 +187,7 @@ class NewsAgencyController extends Controller
             }
         }
 
-        $timezone  = $this->container->get('core.locale')->getTimeZone();
+        $timezone = $this->container->get('core.locale')->getTimeZone();
 
         $extra = array_merge([
             'imported' => $imported,
@@ -245,9 +245,8 @@ class NewsAgencyController extends Controller
     {
         $params = [];
 
-        $path = $this->getParameter('core.paths.cache') .  DS
-            . $this->get('core.instance')->internal_name;
-        $tpl  = $this->get('view')->getBackendTemplate();
+        $path   = $this->getParameter('core.paths.cache') . DS . $this->get('core.instance')->internal_name;
+        $tpl    = $this->get('view')->getBackendTemplate();
         $logger = $this->get('error.log');
 
         // Check last synchronization
@@ -263,21 +262,23 @@ class NewsAgencyController extends Controller
 
         // Get categories
         $this->ccm  = \ContentCategoryManager::get_instance();
-
         $categories = array_filter($this->ccm->findAll(), function ($category) {
             return $category->internal_category == '1';
         });
 
-
         $params['categories'] = array_map(function ($category) {
-            return [ 'name' => $category->title, 'value' => $category->id ];
+            return [
+                'name' => $this->get('data.manager.filter')
+                    ->set($category->title)->filter('localize')->get(),
+                'value' => $category->id
+            ];
         }, $categories);
 
         // Get servers
         $params['servers'] = $this->get('setting_repository')->get('news_agency_config');
 
         if (!is_array($params['servers'])) {
-            $params['servers'] = array();
+            $params['servers'] = [];
         }
 
         // Build sources select options
@@ -286,7 +287,7 @@ class NewsAgencyController extends Controller
         foreach ($params['servers'] as $server) {
             if ($server['activated']) {
                 $params['sources'][] = [
-                    'name' => $server['name'],
+                    'name'  => $server['name'],
                     'value' => $server['id']
                 ];
             }
@@ -297,7 +298,7 @@ class NewsAgencyController extends Controller
             [ 'name' => _('Photo'), 'value' => 'photo' ]
         ];
 
-        $authors = \User::getAllUsersAuthors();
+        $authors           = \User::getAllUsersAuthors();
         $params['authors'] = [];
 
         foreach ($authors as $author) {

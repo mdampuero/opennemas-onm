@@ -147,17 +147,19 @@ class Locale
     /**
      * Returns the list of available locales for context.
      *
+     * @param string $context The context to get available locale for.
+     *
      * @return array The list of available locales for context.
      */
-    public function getAvailableLocales()
+    public function getAvailableLocales($context = null)
     {
-        if (empty($this->config[$this->context]['language']['available'])) {
+        if (empty($this->config[$this->getContext($context)]['language']['available'])) {
             return [];
         }
 
         $locales = [];
 
-        foreach ($this->config[$this->context]['language']['available'] as $locale) {
+        foreach ($this->config[$this->getContext($context)]['language']['available'] as $locale) {
             $locales[$locale] = ucfirst(\Locale::getDisplayName($locale));
         }
 
@@ -167,52 +169,66 @@ class Locale
     /**
      * Return the current context.
      *
+     * @param string $context The explicit context.
+     *
      * @return string The current context.
      */
-    public function getContext()
+    public function getContext($context = null)
     {
+        if (!empty($context)) {
+            return $context;
+        }
+
         return $this->context;
     }
 
     /**
      * Returns the current locale for context.
      *
+     * @param string $context The context to get locale for.
+     *
      * @return string The current locale for context.
      */
-    public function getLocale()
+    public function getLocale($context = null)
     {
-        return $this->config[$this->context]['language']['selected'];
+        return $this->config[$this->getContext($context)]['language']['selected'];
     }
 
     /**
      * Returns the current locale name.
      *
+     * @param string $context The context to get locale name for.
+     *
      * @return string The current locale name.
      */
-    public function getLocaleName()
+    public function getLocaleName($context = null)
     {
-        return ucfirst(\Locale::getDisplayName($this->getLocale()));
+        return ucfirst(\Locale::getDisplayName($this->getLocale($context)));
     }
 
     /**
      * Returns the current locale without region.
      *
+     * @param string $context The context to get short locale for.
+     *
      * @return string The current locale without region.
      */
-    public function getLocaleShort()
+    public function getLocaleShort($context = null)
     {
-        return explode('_', $this->getLocale())[0];
+        return explode('_', $this->getLocale($context))[0];
     }
 
     /**
      * Returns the locale for the current request.
      *
+     * @param string $context The context to get request locale for.
+     *
      * @return string The locale for the current request.
      */
-    public function getRequestLocale()
+    public function getRequestLocale($context = null)
     {
         if (empty($this->requestLocale)) {
-            return $this->getLocale();
+            return $this->getLocale($context);
         }
 
         return $this->requestLocale;
@@ -221,24 +237,28 @@ class Locale
     /**
      * Returns the list of slugs for the locales.
      *
+     * @param string $context The context to get slugs for.
+     *
      * @return array The list of slugs for the locales.
      */
-    public function getSlugs()
+    public function getSlugs($context = null)
     {
-        return $this->config[$this->context]['language']['slug'];
+        return $this->config[$this->getContext($context)]['language']['slug'];
     }
 
     /**
      * Returns the list of all available locales.
      *
+     * @param string $context The context to get supported locales for.
+     *
      * @return array The list of all available locales.
      */
-    public function getSupportedLocales()
+    public function getSupportedLocales($context = null)
     {
         $codes   = $this->config['backend']['language']['available'];
         $locales = [];
 
-        if ($this->context === 'frontend') {
+        if ($this->getContext($context) === 'frontend') {
             $codes = \ResourceBundle::getLocales('');
         }
 
@@ -254,9 +274,9 @@ class Locale
      *
      * @return string The current timezone.
      */
-    public function getTimeZone()
+    public function getTimeZone($context = null)
     {
-        return new \DateTimeZone($this->config[$this->context]['timezone']);
+        return new \DateTimeZone($this->config[$this->getContext($context)]['timezone']);
     }
 
     /**
@@ -306,8 +326,8 @@ class Locale
             $locale = $this->fixes[$locale];
         }
 
-        if (in_array($locale, $this->config[$this->context]['language']['available'])) {
-            $this->config[$this->context]['language']['selected'] = $locale;
+        if (in_array($locale, $this->config[$this->getContext()]['language']['available'])) {
+            $this->config[$this->getContext()]['language']['selected'] = $locale;
         }
 
         return $this;
@@ -367,7 +387,6 @@ class Locale
 
         $this->addTextDomain($domain, $this->path);
         textdomain($domain);
-
     }
 
     /**

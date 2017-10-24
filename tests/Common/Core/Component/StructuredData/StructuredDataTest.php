@@ -9,16 +9,43 @@
  */
 namespace Test\Common\Core\Component\StructuredData;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Common\Core\Component\StructuredData\StructuredData;
+use Common\Data\Core\FilterManager;
 
 /**
  * Defines test cases for StructuredData class.
  */
-class StructuredDataTest extends KernelTestCase
+class StructuredDataTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get', 'hasParameter' ])
+            ->getMock();
+
+        $this->fm = new FilterManager($this->container);
+
+        $this->instance                    = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+        $this->instance->activated_modules = [];
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContext' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
+
         $this->data = [
             'content'  => new \Content(),
             'url'      => 'http://onm.com/20161013114032000674.html',
@@ -37,28 +64,45 @@ class StructuredDataTest extends KernelTestCase
             'video'    => new \Video(),
         ];
 
-        $this->data['image']->url = "http://image-url.com";
-        $this->data['image']->width = 700;
-        $this->data['image']->height = 450;
+        $this->data['image']->url         = "http://image-url.com";
+        $this->data['image']->width       = 700;
+        $this->data['image']->height      = 450;
         $this->data['image']->description = "Image description/caption";
 
-        $this->data['video']->title = "This is the video title";
+        $this->data['video']->title       = "This is the video title";
         $this->data['video']->description = "<p>Video description</p>";
-        $this->data['video']->created = "2016-10-13 11:40:32";
-        $this->data['video']->thumb = "http://video-thumb.com";
-        $this->data['video']->metadata = "keywords,video,json,linking,data";
+        $this->data['video']->created     = "2016-10-13 11:40:32";
+        $this->data['video']->thumb       = "http://video-thumb.com";
+        $this->data['video']->metadata    = "keywords,video,json,linking,data";
 
         $this->data['category']->title = "Mundo";
 
         $this->data['content']->metadata = "keywords,content,json,linking,data";
-        $this->data['content']->body = "This is the body text";
+        $this->data['content']->body     = "This is the body text";
 
         $sm = $this->getMockBuilder('SettingManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->object =  new StructuredData($sm);
+        $this->object = new StructuredData($sm);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        if ($name === 'data.manager.filter') {
+            return $this->fm;
+        }
+
+        if ($name === 'core.locale') {
+            return $this->locale;
+        }
+
+        if ($name === 'core.instance') {
+            return $this->instance;
+        }
+
+        return null;
     }
 
     /**
@@ -105,7 +149,7 @@ class StructuredDataTest extends KernelTestCase
                     "width": 350,
                     "height": 60
                 },
-                "url": "'.SITE_URL.'"
+                "url": "' . SITE_URL . '"
             }
         }';
 
@@ -143,14 +187,14 @@ class StructuredDataTest extends KernelTestCase
                 "width": 700
             }';
 
-        $this->data['content'] = $this->getMockBuilder('Album')
+        $this->data['content']           = $this->getMockBuilder('Album')
             ->disableOriginalConstructor()
             ->setMethods([ '_getAttachedPhotos' ])
             ->getMock();
         $this->data['content']->metadata = 'keywords,object,json,linking,data';
 
         // Gallery only with cover image
-        $onlyCover = $galleryJson.'}';
+        $onlyCover = $galleryJson . '}';
         $this->assertEquals($onlyCover, $this->object->generateImageGalleryJsonLDCode($this->data));
 
         // Load album photos
@@ -167,12 +211,12 @@ class StructuredDataTest extends KernelTestCase
         ];
 
         foreach ($albumPhotos as $key => &$value) {
-            $value['photo']->url = 'http://image'.$key.'-url.com';
-            $value['photo']->path_file = $key;
-            $value['photo']->name = '-url.com';
-            $value['photo']->width = 700 + $key;
-            $value['photo']->height = 450 + $key;
-            $value['photo']->description = "Image description/caption ".$key;
+            $value['photo']->url         = 'http://image' . $key . '-url.com';
+            $value['photo']->path_file   = $key;
+            $value['photo']->name        = '-url.com';
+            $value['photo']->width       = 700 + $key;
+            $value['photo']->height      = 450 + $key;
+            $value['photo']->description = "Image description/caption " . $key;
         }
 
         $this->data['content']->expects($this->once())->method('_getAttachedPhotos')
@@ -228,7 +272,7 @@ class StructuredDataTest extends KernelTestCase
         define('MEDIA_IMG_ABSOLUTE_URL', 'http://image');
 
         // Gallery with several photos
-        $severalImages = $galleryJson.$albumPhotosJson.'}'.$albumPhotosObjectJson;
+        $severalImages = $galleryJson . $albumPhotosJson . '}' . $albumPhotosObjectJson;
         $this->assertEquals($severalImages, $this->object->generateImageGalleryJsonLDCode($this->data));
     }
 
@@ -265,12 +309,11 @@ class StructuredDataTest extends KernelTestCase
                     "width": 350,
                     "height": 60
                 },
-                "url": "'.SITE_URL.'"
+                "url": "' . SITE_URL . '"
             }';
 
         $this->object->sm->expects($this->any())->method('get')
             ->willReturn('Site Name');
-
 
         // Article with image
         $imageJson = '
@@ -280,11 +323,11 @@ class StructuredDataTest extends KernelTestCase
                     "height": 450,
                     "width": 700
                 }}';
-        $this->assertEquals($articleJson.$imageJson, $this->object->generateNewsArticleJsonLDCode($this->data));
+        $this->assertEquals($articleJson . $imageJson, $this->object->generateNewsArticleJsonLDCode($this->data));
 
         // Article without image
         unset($this->data['image']);
-        $articleNoImageJson = $articleJson.'}';
+        $articleNoImageJson = $articleJson . '}';
         $this->assertEquals($articleNoImageJson, $this->object->generateNewsArticleJsonLDCode($this->data));
     }
 }

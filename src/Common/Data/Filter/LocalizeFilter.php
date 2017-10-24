@@ -48,7 +48,7 @@ class LocalizeFilter extends Filter
      */
     protected function filterItem($item)
     {
-        if ((!is_array($item) && !is_object($item))) {
+        if (!is_object($item)) {
             return;
         }
 
@@ -78,10 +78,16 @@ class LocalizeFilter extends Filter
 
         // Locale from request
         if (empty($locale)) {
-            $locale = $this->container->get('core.locale')->getRequestLocale();
+            $locale = $this->container->get('core.locale')
+                ->getRequestLocale('frontend');
         }
 
-        if (array_key_exists($locale, $value)) {
+        if (empty($default)) {
+            $default = $this->container->get('core.locale')
+                ->getLocale('frontend');
+        }
+
+        if (!empty($locale) && array_key_exists($locale, $value)) {
             return $value[$locale];
         }
 

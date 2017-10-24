@@ -79,6 +79,7 @@ class ArchiveController extends Controller
                 // Create category group
                 if (!isset($library[$content->category])) {
                     $library[$content->category] = $cr->find($content->category);
+                    $library[$content->category]->contents = [];
                 }
 
                 // Fetch video or image for article and opinions

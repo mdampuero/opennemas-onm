@@ -26,22 +26,22 @@
           },
           template: function(elem, attrs) {
             if (attrs.link) {
-              return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"collapsed || size > 4\">' +
+              return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"collapsed || size > collapse_on_width\">' +
                 '<button type=\"button\" class=\"form-control btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">' +
                   '<i class=\"fa fa-pencil\"></i>' +
                   '{{text}}' +
                   '<i class=\"fa fa-angle-down\"></i>' +
                 '</button>' +
-                '<ul class=\"dropdown-menu\" role=\"menu\">' +
+                '<ul class=\"dropdown-menu\" role=\"menu\" style=\"padding:0\">' +
                   '<li ng-repeat=\"language in languages\" ng-if=\"language.value != ngModel\">' +
-                    '<a href=\"{{link + \'?locale=\' + language.value}}\" >' +
+                    '<a href=\"{{link + \'?locale=\' + language.value}}\">' +
                       '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
                       '{{language.name}}' +
                     '</a>' +
                   '</li>' +
                 '</ul>' +
               '</div>' +
-              '<div class="translator btn-group" role="group" ng-if=\"!collapsed && size < 5\">' +
+              '<div class="translator btn-group btn-group-xs" role="group" ng-if=\"!collapsed && size < collapse_on_width + 1\">' +
                 '<a ng-repeat=\"language in languages\" href="{{link + \'?locale=\' + language.value}}" class=\"btn {{language.class}}\">' +
                   '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>{{language.name}}' +
                 '</a>' +
@@ -54,7 +54,7 @@
                 '{{languages[ngModel].name}}' +
                 '<i class=\"fa fa-angle-down\"></i>' +
               '</button>' +
-              '<ul class=\"dropdown-menu\" role=\"menu\">' +
+              '<ul class=\"dropdown-menu\" role=\"menu\" style=\"padding:0\">' +
                 '<li ng-repeat=\"language in languages\" ng-if=\"language.value != ngModel\">' +
                   '<a href=\"#\" ng-click=\"changeSelected(language.value)\">' +
                     '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>' +
@@ -65,6 +65,7 @@
             '</div>';
           },
           link: function($scope) {
+            $scope.collapse_on_width = 4;
             $scope.collapsed = $window.innerWidth < 992;
             $scope.languages = {};
             $scope.size      = Object.keys($scope.options.available).length;
