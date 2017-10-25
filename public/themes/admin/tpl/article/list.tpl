@@ -204,7 +204,7 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                      <translator class="m-r-10" item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" ng-model="config.locale" options="data.extra.options"></translator>
+                      <translator class="m-r-10" item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" options="data.extra.options" text="{t}Edit{/t}"></translator>
                       <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
