@@ -73,7 +73,7 @@ class UserController extends Controller
 
         return $this->render(
             'acl/user/new.tpl',
-            array(
+            [
                 'extra'          => $extra,
                 'user_groups'    => $userGroups,
                 'languages'      => $languages,
@@ -85,7 +85,7 @@ class UserController extends Controller
                     'female' => _('Female'),
                     'other'  => _('Other')
                 ],
-            )
+            ]
         );
     }
 
@@ -113,7 +113,7 @@ class UserController extends Controller
 
         $this->get('orm.manager')->persist($user);
 
-        $this->get('core.dispatcher')->dispatch('social.disconnect', array('user' => $user));
+        $this->get('core.dispatcher')->dispatch('social.disconnect', ['user' => $user]);
 
         return $this->redirect(
             $this->generateUrl(
@@ -175,7 +175,7 @@ class UserController extends Controller
                 $user->merge([ 'token' => $token ]);
                 $em->persist($user);
 
-                $url = $this->generateUrl('admin_acl_user_reset_pass', array('token' => $token), true);
+                $url = $this->generateUrl('admin_acl_user_reset_pass', ['token' => $token], true);
 
                 $this->view->setCaching(0);
 
@@ -186,10 +186,10 @@ class UserController extends Controller
 
                 $mailBody = $this->renderView(
                     'login/emails/recoverpassword.tpl',
-                    array(
+                    [
                         'user' => $user,
                         'url'  => $url,
-                    )
+                    ]
                 );
 
                 //  Build the message
@@ -234,7 +234,7 @@ class UserController extends Controller
             }
 
             // Display form
-            return $this->render('login/recover_pass.tpl', array('token' => $token));
+            return $this->render('login/recover_pass.tpl', ['token' => $token]);
         }
     }
 
@@ -297,7 +297,7 @@ class UserController extends Controller
             }
         }
 
-        return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+        return $this->render('login/regenerate_pass.tpl', ['token' => $token, 'user' => $user]);
     }
 
     /**
@@ -365,7 +365,7 @@ class UserController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_acl_user_show',
-                    array('id' => $user->id)
+                    ['id' => $user->id]
                 )
             );
         } catch (\Exception $e) {
@@ -436,15 +436,19 @@ class UserController extends Controller
             'name ASC'
         );
 
+        $extra['categories'] = array_map(function ($category) {
+            return [
+                'title' => $this->get('data.manager.filter')
+                    ->set($category->title)->filter('localize')->get(),
+                'id' => $category->id
+            ];
+        }, $categories);
+
         $extra['user_groups'] = array_map(function ($a) {
             return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
         }, $userGroups);
 
-        $extra['categories'] = array_map(function ($a) {
-            return [ 'id' => $a->id, 'title' => $a->title ];
-        }, $categories);
-
-        array_unshift($extra['categories'], [ 'id' => 0, 'title' => _('Frontpage') ]);
+        $extra['language_data'] = $this->getLocaleData('frontend');
 
         $selected = [
             'categories' => array_filter($extra['categories'], function ($a) use ($user) {
@@ -496,7 +500,7 @@ class UserController extends Controller
 
         return $this->render(
             'acl/user/new.tpl',
-            array(
+            [
                 'extra'          => $extra,
                 'user'           => $converter->responsify($user),
                 'user_groups'    => $userGroups,
@@ -510,7 +514,7 @@ class UserController extends Controller
                     'female' => _('Female'),
                     'other'  => _('Other')
                 ],
-            )
+            ]
         );
     }
 
@@ -565,7 +569,7 @@ class UserController extends Controller
             $template = 'acl/user/social_alt.tpl';
         }
 
-        $this->get('core.dispatcher')->dispatch('social.connect', array('user' => $user));
+        $this->get('core.dispatcher')->dispatch('social.connect', ['user' => $user]);
 
         return $this->render($template, [
             'current_user_id' => $user->id,
@@ -648,11 +652,11 @@ class UserController extends Controller
             $em->persist($user);
 
             // Clear caches
-            $this->get('core.dispatcher')->dispatch('user.update', array('user' => $user));
+            $this->get('core.dispatcher')->dispatch('user.update', ['user' => $user]);
 
             // Check if is an author and delete caches
             if (in_array('3', $user->fk_user_group)) {
-                $this->get('core.dispatcher')->dispatch('author.update', array('id' => $user->id));
+                $this->get('core.dispatcher')->dispatch('author.update', ['id' => $user->id]);
             }
 
             $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
@@ -661,7 +665,7 @@ class UserController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_acl_user_show', array('id' => $user->id))
+            $this->generateUrl('admin_acl_user_show', ['id' => $user->id])
         );
     }
 
@@ -698,7 +702,7 @@ class UserController extends Controller
 
         // Get all necessary data for the photo
         $infor = new \MediaItem($uploadDirectory . '/' . $newFileName);
-        $data  = array(
+        $data  = [
             'title'       => $originalFileName,
             'name'        => $newFileName,
             'user_name'   => $newFileName,
@@ -712,7 +716,7 @@ class UserController extends Controller
             'height'      => $infor->height,
             'type'        => $infor->type,
             'author_name' => '',
-        );
+        ];
 
         // Create new photo
         $photo   = new \Photo();

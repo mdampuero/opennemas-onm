@@ -122,7 +122,7 @@ class NewsletterManager extends BaseManager
                     continue;
                 }
 
-                $item = $this->hydrateContent($item, $content);
+                $item = $this->hydrateContent($content);
             }
         }
 
@@ -185,57 +185,42 @@ class NewsletterManager extends BaseManager
      *
      * @return Content the item completed
      **/
-    public function hydrateContent($item, $content)
+    public function hydrateContent($content)
     {
-        $item->content_type = $content->content_type;
-        $item->title        = $content->title;
-        $item->slug         = $content->slug;
-        $item->uri          = $content->uri;
-        $item->subtitle     = $content->subtitle;
-        $item->date         = date(
+        $content->cat    = $content->category_name;
+        $content->name   = (isset($content->name)) ? $content->name : '';
+        $content->image  = (isset($content->cover)) ? $content->cover : '';
+        $content->agency = is_array($content->params) && array_key_exists('agencyBulletin', $content->params)
+            ? $content->params['agencyBulletin'] : '';
+        $content->date   = date(
             'Y-m-d',
             strtotime(str_replace('/', '-', substr($content->created, 6)))
         );
-        $item->cat          = $content->category_name;
-        $item->agency       = '';
-        if (is_array($content->params)
-            && array_key_exists('agencyBulletin', $content->params)
-        ) {
-            $item->agency = $content->params['agencyBulletin'];
-        }
-
-        $item->name  = (isset($content->name)) ? $content->name : '';
-        $item->image = (isset($content->cover)) ? $content->cover : '';
 
         // Fetch images of articles if exists
+        $content->photo = [];
         if (!empty($content->img1)) {
-            $item->photo = $this->cm->find('Photo', 'pk_content =' . $content->img1);
+            $content->photo[] = $this->er->find('Photo', $content->img1);
         } elseif (!empty($content->fk_video)) {
-            $item->video = $this->er->find('Video', $content->fk_video);
+            $content->video = $this->er->find('Video', $content->fk_video);
         } elseif (!empty($content->img2)) {
-            $item->photo = $this->cm->find('Photo', 'pk_content =' . $content->img2);
+            $content->photo[] = $this->er->find('Photo', $content->img2);
         }
 
-        if (isset($content->summary)) {
-            $item->summary = $content->summary;
-        } else {
-            $item->summary = substr(strip_tags($content->body), 0, 250) . '...';
-        }
-
-        if (isset($content->description)) {
-            $item->description = $content->description;
+        if (!isset($content->summary)) {
+            $content->summary = substr(strip_tags($content->body), 0, 250) . '...';
         }
 
         // Fetch opinion author photos
         if ($content->content_type == '4') {
-            $item->author = new \User($content->fk_author);
+            $content->author = $this->er->find('User', $content->fk_author);
         }
 
         // Fetch video thumbnails
         if ($content->content_type == '9') {
-            $item->thumb = $content->getThumb();
+            $content->thumb = $content->getThumb();
         }
 
-        return $item;
+        return $content;
     }
 }
