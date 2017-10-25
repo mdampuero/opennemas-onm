@@ -230,22 +230,27 @@ class Converter
                 $data[$key] = $this->translate($key, $value);
             }
 
+            if (is_null($value)
+                && array_key_exists($key, $this->metadata->properties)
+                && $this->metadata->properties[$key] === 'array'
+            ) {
+                $data[$key] = [];
+                continue;
+            }
+
             if ($value instanceof Entity) {
                 $data[$key] = $value->getData();
+                continue;
             }
 
             if ($value instanceof \Datetime) {
                 $data[$key] = $value->format('Y-m-d H:i:s');
+                continue;
             }
 
             if (is_bool($value)) {
                 $data[$key] = $value ? 1 : 0;
-            }
-
-            if (is_null($value)
-                && $this->metadata->properties[$key] === 'array'
-            ) {
-                $data[$key] = [];
+                continue;
             }
         }
 
