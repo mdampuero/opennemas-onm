@@ -16,11 +16,13 @@ function smarty_function_get_url($params, $smarty)
 
     $content  = $params['item'];
     $absolute = array_key_exists('absolute', $params) && $params['absolute'];
+    $escape   = array_key_exists('escape', $params) && $params['escape'];
 
     $url = $smarty->getContainer()->get('core.helper.url_generator')
         ->generate($params['item'], ['absolute' => $absolute]);
 
     $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url);
+    $url = $escape ? rawurlencode($url) : $url;
 
     return $url;
 }
