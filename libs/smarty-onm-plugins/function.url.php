@@ -18,10 +18,11 @@ function smarty_function_url($params, &$smarty)
     }
 
     // Hack for opinions authors frontpage url's
-    if (array_key_exists('author_slug', $params)
-        && $params['name'] == 'frontend_opinion_author_frontpage'
+    if (array_key_exists('sluggable', $params) &&
+        array_key_exists('slug_key', $params) &&
+        $params['sluggable']
     ) {
-        $params['author_slug'] = \Onm\StringUtils::generateSlug($params['author_slug']);
+        $params[$params['slug_key']] = \Onm\StringUtils::generateSlug($params[$params['slug_key']]);
     }
 
     $name          = $params['name'];
@@ -30,7 +31,7 @@ function smarty_function_url($params, &$smarty)
         ? UrlGeneratorInterface::ABSOLUTE_URL
         : UrlGeneratorInterface::ABSOLUTE_PATH;
 
-    unset($params['name'], $params['absolute']);
+    unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
     try {
         $url = $smarty->getContainer()
             ->get('router')
