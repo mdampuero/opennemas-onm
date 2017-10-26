@@ -75,6 +75,11 @@
                                             <![CDATA[{$video->description}]]>
                                         </hl2>
                                     </hedline>
+                                    {if $video->author neq 'null'}
+                                    <rights>
+                                      <rights.owner>{$video->author|htmlspecialchars}</rights.owner>
+                                    </rights>
+                                    {/if}
                                     <distributor>{setting name=site_name}</distributor>
                                     <dateline>
                                         <story.date norm="{$video->created_datetime->format('Ymd\THisP')}">{$video->created_datetime->format('Ymd\THisP')}</story.date>

@@ -9,14 +9,13 @@
  */
 namespace Test\Common\Core\Component\StructuredData;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Common\Core\Component\StructuredData\StructuredData;
 use Common\Data\Core\FilterManager;
 
 /**
  * Defines test cases for StructuredData class.
  */
-class StructuredDataTest extends KernelTestCase
+class StructuredDataTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

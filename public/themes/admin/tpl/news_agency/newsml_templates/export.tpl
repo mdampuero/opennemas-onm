@@ -81,9 +81,6 @@
                     {if $article->author neq 'null'}
                     <rights>
                       <rights.owner>{$article->author|htmlspecialchars}</rights.owner>
-                      {if $smarty.const.SITE neq 'console'}
-                      <rights.owner.photo>http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$authorPhoto->path_img}</rights.owner.photo>
-                      {/if}
                     </rights>
                     {/if}
                     <dateline>
@@ -92,11 +89,20 @@
                       </story.date>
                     </dateline>
                     <abstract>
-                      <p><![CDATA[{$article->summary|trim|substr:3:-4|unescape:"htmlall"}]]></p>
+                      <![CDATA[{$article->summary}]]>
                     </abstract>
                   </body.head>
                   <body.content>
-                    <![CDATA[{$article->body|replace:'<br />':"</p><p>"|unescape:"htmlall"|htmlspecialchars}]]>
+                    <![CDATA[{$article->body}]]>
+                    {if isset($article->related) && !empty($article->related)}
+                    <block class="related-contents">
+                      {foreach $article->related as $related}
+                      <p>
+                        <a href="/{$related->uri}">{$related->title}</a>
+                      </p>
+                      {/foreach}
+                    </block>
+                    {/if}
                   </body.content>
                 </body>
               </nitf>
@@ -168,7 +174,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p><![CDATA[{$photo->description|htmlspecialchars_decode|trim}]]></p>
+                        <![CDATA[{$photo->description}]]>
                       </body.content>
                     </body>
                   </nitf>
@@ -237,7 +243,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p><![CDATA[{$photoInner->description|htmlspecialchars_decode|trim}]]></p>
+                        <![CDATA[{$photoInner->description}]]>
                       </body.content>
                     </body>
                   </nitf>
@@ -313,7 +319,7 @@
                       </dateline>
                     </body.head>
                     <body.content>
-                      <p><![CDATA[{$photo->description|htmlspecialchars_decode|trim}]]></p>
+                      <![CDATA[{$photo->description}]]>
                     </body.content>
                   </body>
                 </nitf>
