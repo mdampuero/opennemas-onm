@@ -17,8 +17,10 @@ function smarty_function_url($params, &$smarty)
         return $url;
     }
 
-    // Hack for opinions and authors url's
-    if (array_key_exists('author_slug', $params)) {
+    // Hack for opinions authors frontpage url's
+    if (array_key_exists('author_slug', $params)
+        && $params['name'] == 'frontend_opinion_author_frontpage'
+    ) {
         $params['author_slug'] = \Onm\StringUtils::generateSlug($params['author_slug']);
     }
 
