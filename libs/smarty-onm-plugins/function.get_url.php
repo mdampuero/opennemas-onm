@@ -17,6 +17,17 @@ function smarty_function_get_url($params, $smarty)
     $content  = $params['item'];
     $absolute = array_key_exists('absolute', $params) && $params['absolute'];
 
+    // If the article has an external link return it
+    if (array_key_exists('bodyLink', $content->params)
+        && !empty($content->params['bodyLink'])
+    ) {
+        $url = $smarty->getContainer()
+            ->get('router')
+            ->generate('frontend_redirect_external_link', ['to' => $content->params['bodyLink']])
+            . '" target="_blank';
+        return $url;
+    }
+
     $url = $smarty->getContainer()->get('core.helper.url_generator')
         ->generate($params['item'], ['absolute' => $absolute]);
 
