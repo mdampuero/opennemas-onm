@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for sitemaps
@@ -112,6 +111,7 @@ class SitemapController extends Controller
                     } elseif (!empty($content->img2)) {
                         $content->image = $er->find('Photo', $content->img2);
                     }
+
                     // Get content video
                     if (!empty($content->fk_video)) {
                         $content->video = $er->find('Video', $content->fk_video);
@@ -123,7 +123,7 @@ class SitemapController extends Controller
 
             $this->view->assign([
                 'contents'   => $contents,
-                'googleNews' => s::get('google_news_name'),
+                'googleNews' => $this->get('setting_repository')->get('google_news_name'),
             ]);
         }
 
@@ -149,12 +149,16 @@ class SitemapController extends Controller
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
             // Set sql filters for articles with inner image
-            $filters = array(
-                'tables'            => ['articles'],
-                'pk_content'        => [['value' => 'pk_article', 'field' => true]],
+            $filters = [
+                'join' => [
+                    [
+                        'table'      => 'articles',
+                        'pk_content' => [ [ 'value' => 'pk_article', 'field' => true ] ]
+                    ]
+                ],
                 'content_type_name' => [['value' => 'article']],
                 'img2'              => [['value' => 'NULL', 'operator' => '<>']],
-            );
+            ];
 
             // Fetch contents
             $contents = $this->fetchContents($filters);
@@ -230,11 +234,11 @@ class SitemapController extends Controller
             // compress data
             $contents = gzencode($contents, 9);
 
-            $headers = array(
+            $headers = [
                 'Content-Type'        => 'application/x-gzip',
                 'Content-Length'      => strlen($contents),
-                'Content-Disposition' => 'attachment; filename="sitemap'.$action.'.xml.gz"'
-            );
+                'Content-Disposition' => 'attachment; filename="sitemap' . $action . '.xml.gz"'
+            ];
         } else {
             // Return the output as xml
             $headers = ['Content-Type' => 'application/xml; charset=utf-8'];
@@ -246,7 +250,7 @@ class SitemapController extends Controller
             'x-cache-for'  => '1d',
             'x-cacheable'  => true,
             'x-instance'   => $instanceName,
-            'x-tags'       => 'instance-'.$instanceName.',sitemap,'.$action,
+            'x-tags'       => 'instance-' . $instanceName . ',sitemap,' . $action,
         ]);
 
         return new Response($contents, 200, $headers);
@@ -259,10 +263,10 @@ class SitemapController extends Controller
      *
      * @return Array all contents
      */
-    public function fetchContents($criteria = array(), $limit = 100)
+    public function fetchContents($criteria = [], $limit = 100)
     {
         // Set search filters
-        $filters = array(
+        $filters = [
             'content_type_name' => [
                 'union' => 'OR',
                 ['value' => 'article'],
@@ -270,18 +274,18 @@ class SitemapController extends Controller
             ],
             'content_status'    => [['value' => 1]],
             'in_litter'         => [['value' => 1, 'operator' => '<>']],
-        );
+        ];
 
         if (!empty($criteria)) {
             $filters = array_merge($filters, $criteria);
         }
 
         // Fetch contents
-        $er = getService('entity_repository');
+        $er       = getService('entity_repository');
         $contents = $er->findBy($filters, ['created' => 'desc'], $limit, 1);
 
         // Filter by scheduled
-        $cm = new \ContentManager();
+        $cm       = new \ContentManager();
         $contents = $cm->getInTime($contents);
 
         return $contents;
