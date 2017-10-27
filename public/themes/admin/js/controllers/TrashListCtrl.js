@@ -43,4 +43,86 @@ angular.module('BackendApp.controllers').controller('TrashListCtrl', [
         }
       });
     };
+
+    /**
+     * Takes out of trash a content by using a confirmation dialog
+     */
+    $scope.restoreFromTrash = function(content) {
+      var modal = $uibModal.open({
+        templateUrl: 'modal-restore-from-trash',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              content: content
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_content_restore_from_trash',
+                { contentType: content.content_type_name, id: content.id }
+              );
+
+              return $http.post(url);
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          messenger.post(response.data.messages);
+
+          if (response.success) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
+    /**
+     * Takes out of trash a list of contents by using a confirmation dialog
+     */
+    $scope.restoreFromTrashSelected = function () {
+      // Enable spinner
+      $scope.deleting = 1;
+
+      var modal = $uibModal.open({
+        templateUrl: 'modal-batch-restore',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_contents_batch_restore_from_trash',
+                { contentType: 'content' }
+              );
+
+              return $http.post(url, {ids: $scope.selected.contents});
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          messenger.post(response.data.messages);
+
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
+
+          if (response.success) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
 }]);
