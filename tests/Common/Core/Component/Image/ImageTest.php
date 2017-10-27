@@ -31,7 +31,7 @@ class ImageTest extends TestCase
     private function getMocketImage()
     {
         return $this->getMockBuilder('Common\Core\Component\Image\Image')
-            ->setMethods([ 'getBox', 'getPoint' ])
+            ->setMethods([ 'getBox', 'getPoint', 'getImage' ])
             ->getMock();
     }
 
@@ -167,23 +167,30 @@ class ImageTest extends TestCase
      */
     public function testZoomCrop()
     {
-        $parameters = [50, 100];
-        $box        = $this->getMocketBox($parameters[0], $parameters[1], ImageInterface::THUMBNAIL_OUTBOUND);
+        //[size width, size height, Image width, Image height, x point, y point, width resize, height resize]
+        $parameters = [50, 1000000, 10, 4000, 50, 400, 50, 20000, 0, 0];
+        $this->zoomCropTest($parameters);
+        $parameters = [1000000, 50, 400, 50, 50, 400, 400, 50, 0, 0];
+        $this->zoomCropTest($parameters);
+    }
+
+    private function zoomCropTest($parameters) {
+        $box        = $this->getMocketBox($parameters[2], $parameters[3], ImageInterface::THUMBNAIL_OUTBOUND);
         $box->expects($this->once())
             ->method('getWidth')
-            ->will($this->returnValue(50));
+            ->will($this->returnValue($parameters[2]));
         $box->expects($this->once())
             ->method('getHeight')
-            ->will($this->returnValue(100));
+            ->will($this->returnValue($parameters[3]));
         $box2       = $this->getMocketBox($parameters[0], $parameters[1]);
-        $point      = $this->getMocketPoint($parameters[0], $parameters[1]);
+        $point      = $this->getMocketPoint($parameters[4], $parameters[5]);
         $image      = $this->getMocketImage();
         $image->expects($this->exactly(2))
             ->method('getBox')
             ->withConsecutive(
                 [
-                    $this->equalTo($parameters[0]),
-                    $this->equalTo($parameters[1]),
+                    $this->equalTo($parameters[6]),
+                    $this->equalTo($parameters[7]),
                     $this->equalTo(ImageInterface::THUMBNAIL_OUTBOUND)
                 ],
                 [
@@ -195,7 +202,7 @@ class ImageTest extends TestCase
 
         $image->expects($this->once())
             ->method('getPoint')
-            ->with($this->equalTo(0), $this->equalTo(0))
+            ->with($this->equalTo($parameters[8]), $this->equalTo($parameters[9]))
             ->will($this->returnValue($point));
 
         $imagine = $this->getMocketImagine();
@@ -274,5 +281,20 @@ class ImageTest extends TestCase
             ->will($this->returnValue($imagick));
         $image = $this->getMocketImage();
         $this->assertSame($image->getImageFormat($imagine), 'hh');
+    }
+
+    /**
+     *  Check Crop method
+     */
+    public function testGetImage()
+    {
+        $image      = $this->getMocketImage();
+        $imagick    = $this->getMocketImagick();
+        $image->expects($this->once())
+            ->method('getImage')
+            ->with($this->equalTo('prueba'))
+            ->will($this->returnValue($imagick));
+
+        $this->assertSame($image->getImage('prueba'), $imagick);
     }
 }

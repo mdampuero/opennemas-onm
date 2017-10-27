@@ -171,6 +171,8 @@ class Image
      *  @param String   $image      path to the image
      *
      *  @return imagine recover from the filesystem
+     *
+     *  @codeCoverageIgnore
      */
     public function getImage($image)
     {
@@ -198,11 +200,28 @@ class Image
         return strtolower($image->getImagick()->getImageFormat());
     }
 
+    /**
+     *  Method for muckup propouses. This method create a new Box element
+     *
+     *  @param int      box width
+     *  @param int      box hegith
+     *  @param String   box mode
+     *
+     *  @codeCoverageIgnore
+     */
     public function getBox($widthResize, $heightResize, $mode = null)
     {
         return new \Imagine\Image\Box($widthResize, $heightResize, $mode);
     }
 
+    /**
+     *  Method for muckup propouses. This method create a new Point element
+     *
+     *  @param int x point
+     *  @param int y point
+     *
+     *  @codeCoverageIgnore
+     */
     public function getPoint($topX, $topY)
     {
         return new \Imagine\Image\Point($topX, $topY);
