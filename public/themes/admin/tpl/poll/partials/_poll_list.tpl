@@ -43,7 +43,6 @@
     </div>
   </div>
 </div>
-
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -52,13 +51,13 @@
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+          <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
         </li>
         <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
-          <ui-select name="author" theme="select2" ng-model="criteria.category_name">
+          <ui-select name="author" theme="select2" ng-model="criteria.pk_fk_content_category">
             <ui-select-match>
               <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
@@ -67,7 +66,7 @@
             </ui-select-choices>
           </ui-select>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+        <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
           <ui-select name="status" theme="select2" ng-model="criteria.content_status">
             <ui-select-match>
               <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -78,7 +77,7 @@
           </ui-select>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -90,16 +89,16 @@
       </ul>
       <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
         <li class="quicklinks hidden-xs">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
   </div>
 </div>
 
-<div class="content" ng-init="init('poll', { content_status: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div class="content" ng-init="{if $category == 'widget'}criteria.in_home = 1;{/if}{if $category == 'widget'}criteria.order = { position: 'asc' };{/if}init('poll', 'backend_ws_contents_list')">
   {if $category == 'widget' && $total_elements_widget > 0}
-  <div class="messages" ng-if="{$total_elements_widget} > 0 && pagination.total != {$total_elements_widget}">
+  <div class="messages" ng-if="{$total_elements_widget} > 0 && total != {$total_elements_widget}">
     <div class="alert alert-info">
       <button class="close" data-dismiss="alert">×</button>
       {t 1=$total_elements_widget}You must put %1 polls in the HOME{/t}<br>
@@ -204,7 +203,7 @@
   </div>
   <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
     <div class="pull-right">
-      <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+      <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
     </div>
   </div>
 </div>
