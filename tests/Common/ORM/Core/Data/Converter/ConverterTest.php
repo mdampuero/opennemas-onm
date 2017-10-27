@@ -140,6 +140,34 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'baz' => [ 'en' => 'wubble' ]
             ])
         );
+
+        $this->assertEquals(
+            [
+                'foo'               => '2000-01-01 10:00:00',
+                'bar'               => [ 'gorp' => 'norf' ],
+                'baz'               => [ 'en' => 'wubble' ],
+                'not_in_meta_field' => null
+            ],
+            $this->converter->responsify([
+                'foo' => new \DateTime('2000-01-01 10:00:00'),
+                'bar' => new Entity([ 'gorp' => 'norf' ]),
+                'baz' => [ 'en' => 'wubble' ],
+                'not_in_meta_field' => null
+            ])
+        );
+
+        $this->assertEquals(
+            [
+                'foo' => '2000-01-01 10:00:00',
+                'bar' => [ 'gorp' => 'norf' ],
+                'baz' => []
+            ],
+            $this->converter->responsify([
+                'foo' => new \DateTime('2000-01-01 10:00:00'),
+                'bar' => new Entity([ 'gorp' => 'norf' ]),
+                'baz' => null
+            ])
+        );
     }
 
     /**
