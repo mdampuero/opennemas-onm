@@ -370,6 +370,23 @@ class RssController extends Controller
             ]
         ];
 
+        // Fetch contents only on categories set inrss
+        $categories = \ContentCategoryManager::get_instance()->findAll();
+        $categories = array_map(function ($a) {
+            return $a->name;
+        }, array_filter($categories, function ($a) {
+            return $a->internal_category == 1
+                && is_array($a->params)
+                && !empty($a->params['inrss']);
+        }));
+
+        // Fix condition for IN operator when no categories
+        $categories = empty($categories) ? [ '' ] : $categories;
+
+        $filters['category_name'] = [
+            [ 'value' => $categories, 'operator' => 'IN' ]
+        ];
+
         if ($contentType !== 'opinion' && !empty($category)) {
             $filters['category_name'] = [ [ 'value' => $category ] ];
         }
