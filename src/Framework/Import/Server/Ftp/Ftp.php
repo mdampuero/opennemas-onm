@@ -221,7 +221,7 @@ class Ftp extends Server
                 if ($systype == 'Windows_NT') {
                     $fileInfo = $this->getFileInfoWindows($rawfile);
                 } else {
-                    $fileInfo = $this->getFileInfoLinux($rawFile);
+                    $fileInfo = $this->getFileInfoLinux($rawfile);
                 }
 
                 $arraypointer[] = $fileInfo;
