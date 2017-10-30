@@ -1495,8 +1495,13 @@ class Content implements \JsonSerializable
 
             $this->category       = $rs;
             $this->category_name  = $this->loadCategoryName($this->category);
-            $this->category_title = ContentCategoryManager::get_instance()
-                ->getTitle($this->category_name);
+            $category_title_aux = ContentCategoryManager::get_instance()
+                 ->getTitle($this->category_name);
+
+            $this->category_title = getService('data.manager.filter')
+                ->set($category_title_aux)
+                ->filter('localize')
+                ->get();
 
             return $this->category_title;
         } catch (\Exception $e) {

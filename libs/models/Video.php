@@ -71,12 +71,10 @@ class Video extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                return $this->getUri();
-
             case 'content_type_name':
                 return 'Video';
-
+            case 'uri':
+                return $this->getUri();
             default:
                 return parent::__get($name);
         }
@@ -108,9 +106,8 @@ class Video extends Content
             }
 
             $this->load($rs);
-            $this->category_title = $this->loadCategoryTitle($rs['pk_video']);
-            $this->information    = unserialize($rs['information']);
-            $this->thumb          = $this->getThumb();
+            $this->information = unserialize($rs['information']);
+            $this->thumb       = $this->getThumb();
 
             return $this;
         } catch (\Exception $e) {
@@ -154,12 +151,13 @@ class Video extends Content
                 'video_url'   => $data['video_url'],
                 'information' => array_key_exists('information', $data) ?
                 serialize($data['information']) : null,
-                    'author_name' => $data['author_name'],
-                ]);
+                'author_name' => $data['author_name'],
+            ]);
 
             return $this->id;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -190,7 +188,8 @@ class Video extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -222,7 +221,8 @@ class Video extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -278,7 +278,8 @@ class Video extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -413,11 +414,9 @@ class Video extends Content
                 if ($returnExec !== 0) {
                     throw new \Exception(_('There was a problem while converting your video. '));
                 };
-
                 break;
             case 'video/x-flv':
                 copy($temporaryVideoPath, $videoSavePath);
-
                 break;
             default:
                 $message = sprintf(_('Video format "%s" not supported'), $fileType);
@@ -555,6 +554,8 @@ class Video extends Content
         try {
             $html = $tpl->fetch($template, $params);
         } catch (\Exception $e) {
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             $html = _('Video not available');
         }
 
