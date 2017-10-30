@@ -114,7 +114,7 @@ class Ftp extends Server
 
         foreach ($this->remoteFiles as $file) {
             $localFile = $this->params['path'] . DS
-                . strtolower(basename($file['filename']));
+                . strtolower($file['filename']);
 
             if (!preg_match('/index\.xml$/', $localFile) &&
                 !file_exists($localFile)
