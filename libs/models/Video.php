@@ -31,14 +31,14 @@ class Video extends Content
      *
      * @var string
      */
-    public $information  = null;
+    public $information = null;
 
     /**
      * The original video url, if it comes from an external source
      *
      * @var string
      */
-    public $video_url  = null;
+    public $video_url = null;
 
     /**
      * The video author name
@@ -73,18 +73,12 @@ class Video extends Content
         switch ($name) {
             case 'uri':
                 return $this->getUri();
-                break;
             case 'slug':
                 return \Onm\StringUtils::getTitle($this->title);
-
-                break;
             case 'content_type_name':
                 return 'Video';
-
-                break;
             default:
                 return parent::__get($name);
-                break;
         }
 
         return parent::__get($name);
@@ -100,12 +94,14 @@ class Video extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN videos ON pk_content = pk_video WHERE pk_content = ?',
+                . 'LEFT JOIN videos ON pk_content = pk_video WHERE pk_content = ?',
                 [ $id ]
             );
 
@@ -114,9 +110,8 @@ class Video extends Content
             }
 
             $this->load($rs);
-            $this->category_title = $this->loadCategoryTitle($rs['pk_video']);
-            $this->information    = unserialize($rs['information']);
-            $this->thumb          = $this->getThumb();
+            $this->information = unserialize($rs['information']);
+            $this->thumb       = $this->getThumb();
 
             return $this;
         } catch (\Exception $e) {
@@ -168,7 +163,8 @@ class Video extends Content
 
             return $this->id;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -199,7 +195,8 @@ class Video extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -213,7 +210,9 @@ class Video extends Content
      */
     public function remove($id)
     {
-        if ((int) $id <= 0) return false;
+        if ((int) $id <= 0) {
+            return false;
+        }
 
         parent::remove($id);
 
@@ -229,7 +228,8 @@ class Video extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -251,9 +251,9 @@ class Video extends Content
         $contents = implode(', ', $arrayIds);
         try {
             $conn = getService('dbal_connection');
-            $rs = $conn->fetchAll(
-                "SELECT video_url, information FROM videos WHERE author_name='internal' "
-                ." AND pk_video IN (".$contents.")"
+            $rs   = $conn->fetchAll(
+                "SELECT video_url, information FROM videos WHERE author_name='internal' " .
+                " AND pk_video IN (" . $contents . ")"
             );
 
             if ($rs) {
@@ -261,8 +261,8 @@ class Video extends Content
             }
 
             foreach ($rs as $element) {
-                $image       = MEDIA_PATH.DS . $element['video_url'];
-                $thumbs      = unserialize($element['information']);
+                $image  = MEDIA_PATH . DS . $element['video_url'];
+                $thumbs = unserialize($element['information']);
                 if (!array_key_exists('thumbnails', $thumbs)) {
                     continue;
                 }
@@ -270,7 +270,7 @@ class Video extends Content
                 $sizes = ['small', 'normal', 'big' ];
                 foreach ($sizes as $size) {
                     if (array_key_exists($size, $thumbs['thumbnails'])) {
-                        $fileName = MEDIA_PATH.DS .$thumbs['thumbnails'][$size];
+                        $fileName = MEDIA_PATH . DS . $thumbs['thumbnails'][$size];
                         if (file_exists($fileName)) {
                             @unlink($image);
                         }
@@ -278,14 +278,15 @@ class Video extends Content
                 }
             }
 
-            $result = $conn->executeUpdate('DELETE FROM videos WHERE `pk_video` IN ('.$contents.')');
+            $result = $conn->executeUpdate('DELETE FROM videos WHERE `pk_video` IN (' . $contents . ')');
             if (!$result) {
                 return false;
             }
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -298,9 +299,9 @@ class Video extends Content
      * @return true
      * @throws Exception, if something goes wrong
      */
-    public function createFromLocalFile($videoFileData = array())
+    public function createFromLocalFile($videoFileData = [])
     {
-        $pathUpload = MEDIA_PATH.DS;
+        $pathUpload    = MEDIA_PATH . DS;
         $processedFile = $this->upload($videoFileData, $pathUpload);
 
         // If video file was converted/copied successfully insert
@@ -314,7 +315,7 @@ class Video extends Content
                     "author_name" => 'internal',
                 ]
             );
-            $videoId = $this->create($videoInformation);
+            $videoId          = $this->create($videoInformation);
             if (!$videoId) {
                 throw new \Exception($this->errors);
             }
@@ -337,19 +338,20 @@ class Video extends Content
      */
     public function upload($file, $baseUploadpath)
     {
-        $videoInformation = array();
+        $videoInformation = [];
 
         if (empty($file["file_path"])) {
             throw new Exception(
                 sprintf(
                     _(
-                        'The server limits file uploads up to %s Mb. '
-                        .'Try to upload files smaller than that size.'
+                        'The server limits file uploads up to %s Mb. ' .
+                        'Try to upload files smaller than that size.'
                     ),
                     (int) ini_get('upload_max_filesize')
                 )
             );
         }
+
         $convertedVideo = $this->convertVideotoFLV($file, $baseUploadpath);
 
         if (array_key_exists('relative_path', $convertedVideo)) {
@@ -363,7 +365,7 @@ class Video extends Content
             $relativeUploadDir = $convertedVideo['relative_dir'];
             foreach ($thumbnails as $name => $value) {
                 $videoInformation['thumbnails'][$name] =
-                    $relativeUploadDir.DIRECTORY_SEPARATOR.$value;
+                    $relativeUploadDir . DIRECTORY_SEPARATOR . $value;
             }
         }
 
@@ -380,7 +382,7 @@ class Video extends Content
      */
     public function convertVideotoFLV($originalVideo, $baseUploadpath)
     {
-        $return = array();
+        $return = [];
 
         $ffmpgePath = exec("which ffmpeg");
 
@@ -389,8 +391,8 @@ class Video extends Content
         $temporaryVideoPath = $originalVideo['file_path'];
 
         // Calculate upload directory and create it if not exists
-        $relativeUploadDir  = 'video'.DS.date("Y/m/d");
-        $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir.DS;
+        $relativeUploadDir  = 'video' . DS . date("Y/m/d");
+        $absoluteUploadpath = $baseUploadpath . DS . $relativeUploadDir . DS;
         if (!is_dir($absoluteUploadpath)) {
             \Onm\FilesManager::createDirectory($absoluteUploadpath);
         }
@@ -401,7 +403,7 @@ class Video extends Content
         $fileName = date("YmdHis") . $micro . "." . 'flv';
 
         // Compose absolute path to the new video file
-        $videoSavePath = realpath($absoluteUploadpath).DS.$fileName;
+        $videoSavePath = realpath($absoluteUploadpath) . DS . $fileName;
 
         switch ($fileType) {
             case 'video/x-ms-wmv':
@@ -410,29 +412,25 @@ class Video extends Content
             case 'video/x-msvideo':
                 // Dropped option -s 320x240
                 $shellCommand = escapeshellcmd(
-                    $ffmpgePath." -i "
-                    .$temporaryVideoPath." -f flv  ".$videoSavePath
-                ). " 2>&1";
+                    $ffmpgePath . " -i " .
+                    $temporaryVideoPath . " -f flv  " . $videoSavePath
+                ) . " 2>&1";
                 exec($shellCommand, $outputExec, $returnExec);
                 unset($outputExec);
                 if ($returnExec !== 0) {
                     throw new \Exception(_('There was a problem while converting your video. '));
                 };
-
                 break;
             case 'video/x-flv':
                 copy($temporaryVideoPath, $videoSavePath);
-
                 break;
             default:
                 $message = sprintf(_('Video format "%s" not supported'), $fileType);
                 throw new \Exception($message);
-
-                break;
         }
 
         $return['relative_dir']  = $relativeUploadDir;
-        $return['relative_path'] = $relativeUploadDir.DS.$fileName;
+        $return['relative_path'] = $relativeUploadDir . DS . $fileName;
         $return['absolute_path'] = $videoSavePath;
 
         return $return;
@@ -446,33 +444,33 @@ class Video extends Content
      *
      * @return array the list of paths to the generated thumbnails
      */
-    public static function createThumbnailsfromFLV($flvPath, $sizes = array())
+    public static function createThumbnailsfromFLV($flvPath, $sizes = [])
     {
-        $defaultThumbnailSizes = array(
-            'small'  =>  ['width' => 150, 'height' => 150],
-            'normal' =>  ['width' => 300, 'height' => 300],
-            'big'    =>  ['width' => 450, 'height' => 450],
-        );
+        $defaultThumbnailSizes = [
+            'small'  => ['width' => 150, 'height' => 150],
+            'normal' => ['width' => 300, 'height' => 300],
+            'big'    => ['width' => 450, 'height' => 450],
+        ];
 
         // Get the thumbnail sizes
         $sizes = array_merge($defaultThumbnailSizes, $sizes);
 
-        $ffmpeg = \FFMpeg\FFMpeg::create(array(
+        $ffmpeg = \FFMpeg\FFMpeg::create([
             'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
             'ffprobe.binaries' => '/usr/bin/ffprobe',
             'timeout'          => 3600, // The timeout for the underlying process
             'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
-        ));
-        $video = $ffmpeg->open($flvPath);
+        ]);
+        $video  = $ffmpeg->open($flvPath);
 
         foreach (array_keys($sizes) as $name) {
             // Getting file information from flv file
             // for building  save path and final filename for the thumbnail
             $flvFileInfo = pathinfo($flvPath);
 
-            $basePath = $flvFileInfo['dirname'];
-            $baseName = $flvFileInfo['filename']."-".$name.'.jpg';
-            $imageFile = $basePath.DIRECTORY_SEPARATOR.$baseName;
+            $basePath  = $flvFileInfo['dirname'];
+            $baseName  = $flvFileInfo['filename'] . "-" . $name . '.jpg';
+            $imageFile = $basePath . DIRECTORY_SEPARATOR . $baseName;
 
             $frame = $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(10));
             $frame->save($imageFile);
@@ -492,14 +490,15 @@ class Video extends Content
         if (empty($this->category_name)) {
             $this->category_name = $this->loadCategoryName($this->pk_content);
         }
-        $uri =  Uri::generate(
+
+        $uri = Uri::generate(
             'video',
-            array(
+            [
                 'id'       => sprintf('%06d', $this->id),
                 'date'     => date('YmdHis', strtotime($this->created)),
                 'category' => urlencode($this->category_name),
                 'slug'     => urlencode($this->slug),
-            )
+            ]
         );
 
         return ($uri !== '') ? $uri : $this->permalink;
@@ -520,7 +519,7 @@ class Video extends Content
 
         if ($this->author_name == 'internal') {
             $thumbnail =
-                MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
+                MEDIA_IMG_PATH_WEB . "/../" . $information['thumbnails']['normal'];
         } elseif (!empty($information)
             && is_array($information)
             && array_key_exists('thumbnail', $information)
@@ -528,7 +527,7 @@ class Video extends Content
             if ($this->author_name == 'external' || $this->author_name == 'script') {
                 $this->thumb_image = new \Photo($information['thumbnail']);
                 if (!empty($this->thumb_image->name)) {
-                    $thumbnail   = MEDIA_IMG_PATH_WEB.$this->thumb_image->path_file.$this->thumb_image->name;
+                    $thumbnail = MEDIA_IMG_PATH_WEB . $this->thumb_image->path_file . $this->thumb_image->name;
                 } else {
                     $thumbnail = '/assets/images/transparent.png';
                 }
@@ -563,6 +562,8 @@ class Video extends Content
         try {
             $html = $tpl->fetch($template, $params);
         } catch (\Exception $e) {
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             $html = _('Video not available');
         }
 

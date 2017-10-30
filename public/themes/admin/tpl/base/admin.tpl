@@ -389,7 +389,7 @@
                         </a>
                       {else}
                         {acl isAllowed="USER_EDIT_OWN_PROFILE"}
-                        <a href="{url name=admin_acl_user_show id=me}">
+                        <a href="{url name=admin_acl_user_show id=$app->getUser()->id}">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>
