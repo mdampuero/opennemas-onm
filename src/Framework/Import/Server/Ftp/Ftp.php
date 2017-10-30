@@ -37,7 +37,7 @@ class Ftp extends Server
                 sprintf(
                     _(
                         'Can\'t connect to server %s. Please check your'
-                        .' conn details.'
+                        . ' conn details.'
                     ),
                     $this->params['name']
                 )
@@ -69,7 +69,7 @@ class Ftp extends Server
                         sprintf(
                             _(
                                 "Directory '%s' in the server '%s' doesn't exists or "
-                                ."you don't have enought permissions to access it"
+                                . "you don't have enought permissions to access it"
                             ),
                             $url['path'],
                             $url['host']
@@ -159,9 +159,9 @@ class Ftp extends Server
      */
     protected function byteConvert($bytes)
     {
-        $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $symbol = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         if ($bytes > 0) {
-            $exp    = floor(log($bytes)/log(1024));
+            $exp = floor(log($bytes) / log(1024));
         } else {
             $exp = 0;
         }
@@ -178,7 +178,7 @@ class Ftp extends Server
      */
     protected function chmodNum($chmod)
     {
-        $trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
+        $trans = ['-' => '0', 'r' => '4', 'w' => '2', 'x' => '1'];
         $chmod = substr(strtr($chmod, $trans), 1);
         $array = str_split($chmod, 3);
 
@@ -199,13 +199,14 @@ class Ftp extends Server
         }
 
         // here the magic begins!
-        $structure = array();
+        $structure    = [];
         $arraypointer = &$structure;
+
+        $systype = @ftp_systype($this->conn);
 
         foreach ($raw as $rawfile) {
             if ($rawfile[0] == '/') {
-                $paths =
-                    array_slice(explode('/', str_replace(':', '', $rawfile)), 1);
+                $paths        = array_slice(explode('/', str_replace(':', '', $rawfile)), 1);
                 $arraypointer = &$structure;
                 foreach ($paths as $path) {
                     foreach ($arraypointer as $i => $file) {
@@ -216,22 +217,72 @@ class Ftp extends Server
                     }
                 }
             } elseif (!empty($rawfile)) {
-                $info = preg_split("/[\s]+/", $rawfile, 9);
-                $arraypointer[] = [
-                    'filename' => $info[8],
-                    'isDir'    => $info[0]{0} == 'd',
-                    'size'     => $this->byteConvert($info[4]),
-                    'chmod'    => $this->chmodNum($info[0]),
-                    'date'     => \DateTime::createFromFormat(
-                        'd M H:i',
-                        $info[6] . ' ' . $info[5] . ' ' . $info[7]
-                    ),
-                    'raw'      => $info,
-                    'raw2'     => $rawfile,
-                ];
+                // Process the line according to the FTP server SO
+                if ($systype == 'Windows_NT') {
+                    $fileInfo = $this->getFileInfoWindows($rawfile);
+                } else {
+                    $fileInfo = $this->getFileInfoLinux($rawFile);
+                }
+
+                $arraypointer[] = $fileInfo;
             }
         }
 
         return $structure;
+    }
+
+    /**
+     * Returns an array of information extracted from the Windows FTP Server
+     * raw list element
+     *
+     * @param string $rawfile the FTP rawfile info
+     *
+     * @return array the properties extracted for the element
+     **/
+    private function getFileInfoWindows($rawfile)
+    {
+        $lineRegexp = "@([0-9]{2})-([0-9]{2})-([0-9]{2}) "
+            . "+([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)@";
+
+        $matched = preg_match($lineRegexp, $rawfile, $matches);
+
+        $date = $matches[3] . '-' . $matches[1] . '-' . $matches[2] . ' '
+            . $matches[4] . ':' . $matches[5];
+
+        return [
+            'filename' => $matches[8],
+            'isDir'    => ($matches[7] == '<DIR>') == 'd',
+            'size'     => $this->byteConvert($matches[4]),
+            'chmod'    => 0,
+            'date'     => \DateTime::createFromFormat('y-m-d g:i', $date),
+            'raw'      => $matches,
+            'raw2'     => $rawfile,
+        ];
+    }
+
+    /**
+     * Returns an array of information extracted from the Linux FTP servers
+     * raw list element
+     *
+     * @param string $rawfile the FTP rawfile info
+     *
+     * @return array the properties extracted for the element
+     **/
+    private function getFileInfoLinux($rawfile)
+    {
+        $info = preg_split("/[\s]+/", $rawfile, 9);
+
+        return [
+            'filename' => $info[3],
+            'isDir'    => $info[0]{0} == 'd',
+            'size'     => $this->byteConvert($info[4]),
+            'chmod'    => $this->chmodNum($info[0]),
+            'date'     => \DateTime::createFromFormat(
+                'd M H:i',
+                $info[6] . ' ' . $info[5] . ' ' . $info[7]
+            ),
+            'raw'      => $info,
+            'raw2'     => $rawfile,
+        ];
     }
 }
