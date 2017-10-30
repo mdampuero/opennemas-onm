@@ -393,7 +393,7 @@ class UserController extends Controller
     {
         $em        = $this->get('orm.manager');
         $converter = $em->getConverter('User');
-        $id        = $request->query->getInt('id');
+        $id        = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
         if ($id === 'me') {
             $id = $this->getUser()->id;
