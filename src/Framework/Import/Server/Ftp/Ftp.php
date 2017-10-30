@@ -273,7 +273,7 @@ class Ftp extends Server
         $info = preg_split("/[\s]+/", $rawfile, 9);
 
         return [
-            'filename' => $info[3],
+            'filename' => $info[8],
             'isDir'    => $info[0]{0} == 'd',
             'size'     => $this->byteConvert($info[4]),
             'chmod'    => $this->chmodNum($info[0]),
