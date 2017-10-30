@@ -77,10 +77,7 @@ class PollsController extends Controller
             }
         }
 
-        return $this->render(
-            'poll/list.tpl',
-            [ 'categories' => $categories ]
-        );
+        return $this->render('poll/list.tpl', [ 'categories' => $categories ]);
     }
 
     /**
@@ -100,13 +97,10 @@ class PollsController extends Controller
             $totalWidget = $configurations['total_widget'];
         }
 
-        return $this->render(
-            'poll/list.tpl',
-            [
-                'category'              => 'widget',
-                'total_elements_widget' => $totalWidget,
-            ]
-        );
+        return $this->render('poll/list.tpl', [
+            'category'              => 'widget',
+            'total_elements_widget' => $totalWidget,
+        ]);
     }
 
     /**
@@ -165,7 +159,9 @@ class PollsController extends Controller
             );
         }
 
-        return $this->render('poll/new.tpl', [ 'commentsConfig' => s::get('comments_config') ]);
+        return $this->render('poll/new.tpl', [
+            'commentsConfig' => s::get('comments_config')
+        ]);
     }
 
     /**
@@ -195,14 +191,11 @@ class PollsController extends Controller
             $poll->params = unserialize($poll->params);
         }
 
-        return $this->render(
-            'poll/new.tpl',
-            [
-                'poll'  => $poll,
-                'items' => $poll->items,
-                'commentsConfig' => s::get('comments_config'),
-            ]
-        );
+        return $this->render('poll/new.tpl', [
+            'poll'  => $poll,
+            'items' => $poll->items,
+            'commentsConfig' => s::get('comments_config'),
+        ]);
     }
 
     /**
@@ -305,15 +298,10 @@ class PollsController extends Controller
         );
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_polls',
-                    [
-                        'category' => $category,
-                        'page'     => $page
-                    ]
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_polls', [
+                'category' => $category,
+                'page'     => $page
+            ]));
         }
 
         return new Response('Ok', 200);
@@ -360,13 +348,10 @@ class PollsController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'poll/content-provider.tpl',
-            [
-                'polls'      => $polls,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('poll/content-provider.tpl', [
+            'polls'      => $polls,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
