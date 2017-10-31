@@ -2,12 +2,11 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace BackendWebService\Controller;
 
 use Common\Core\Annotation\Security;
@@ -23,35 +22,29 @@ class OpinionsController extends ContentController
      * @param string  $contentType Content type name.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('OPINION_MANAGER')
+     *     and hasPermission('OPINION_ADMIN')")
      */
-    public function listAction(Request $request, $contentType = null)
+    public function listAction(Request $request, $contentType = 'opinion')
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $oql = $request->query->get('oql', '');
+        $em  = $this->get('opinion_repository');
 
-        $em = $this->get('opinion_repository');
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        $order = null;
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
+        $criteria = preg_replace('/fk_author/', 'contents.fk_author', $criteria);
 
-        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($search);
+        $total   = $em->countBy($criteria);
 
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'extra'             => $this->loadExtraData($results),
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => $total
-            )
-        );
+        return new JsonResponse([
+            'extra'   => $this->loadExtraData($results),
+            'results' => $results,
+            'total'   => $total
+        ]);
     }
 
     /**
@@ -67,7 +60,6 @@ class OpinionsController extends ContentController
     public function saveFrontpageAction(Request $request)
     {
         $containers = $request->get('positions');
-        $errors     = [];
         $result     = true;
 
         if (is_array($containers) && count($containers) > 0) {
@@ -76,13 +68,13 @@ class OpinionsController extends ContentController
 
                 foreach ($ids as $id) {
                     $opinion = new \Opinion($id);
-                    $result = $result &&  $opinion->setPosition($position);
+                    $result  = $result && $opinion->setPosition($position);
                     $position++;
                 }
             }
         }
 
-        dispatchEventWithParams('frontpage.save_position', array('category' => 'opinion'));
+        dispatchEventWithParams('frontpage.save_position', [ 'category' => 'opinion' ]);
 
         if (!$result) {
             return new JsonResponse([

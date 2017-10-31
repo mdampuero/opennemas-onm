@@ -7,9 +7,7 @@
      * @name  OpinionListCtrl
      *
      * @requires $controller
-     * @requires $http
      * @requires $scope
-     * @requires routing
      * @requires messenger
      * @requires oqlEncoder
      * @requires queryManager
@@ -18,8 +16,8 @@
      *   Controller for opinion list.
      */
     .controller('OpinionListCtrl', [
-      '$controller', '$http', '$scope', 'routing', 'messenger', 'Encoder', 'queryManager',
-      function($controller, $http, $scope, routing, messenger, Encoder, queryManager) {
+      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
+      function($controller, $location, $scope, http, messenger, oqlEncoder) {
 
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
@@ -33,25 +31,25 @@
         $scope.loading = 1;
         $scope.selected = { all: false, contents: [] };
 
-        var url              = routing.generate(route);
-        var processedFilters = Encoder.encode($scope.criteria);
-        var filtersToEncode  = angular.copy($scope.criteria);
+        oqlEncoder.configure({
+          placeholder: {
+            title: 'title ~ "%[value]%"',
+          }
+        });
 
-        delete filtersToEncode.content_type_name;
-
-        queryManager.setParams(filtersToEncode, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
-
-        var postData = {
-          elements_per_page: $scope.pagination.epp,
-          page:              $scope.pagination.page,
-          sort_by:           $scope.orderBy.name,
-          sort_order:        $scope.orderBy.value,
-          search:            processedFilters
+        var oql   = oqlEncoder.getOql($scope.criteria);
+        var route = {
+          name: $scope.route,
+          params:  {
+            contentType: $scope.criteria.content_type_name,
+            oql: oql
+          }
         };
 
-        $http.post(url, postData).then(function(response) {
-          $scope.pagination.total = parseInt(response.data.total);
+        $location.search('oql', oql);
+
+        http.get(route).then(function(response) {
+          $scope.total = parseInt(response.data.total);
           $scope.contents         = response.data.results;
           $scope.map              = response.data.map;
 
