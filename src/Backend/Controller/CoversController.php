@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for handling the pdf covers
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,7 +30,7 @@ class CoversController extends Controller
     public function init()
     {
         if (!defined('KIOSKO_DIR')) {
-            define('KIOSKO_DIR', "kiosko".SS);
+            define('KIOSKO_DIR', "kiosko" . SS);
         }
 
         $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
@@ -44,6 +39,7 @@ class CoversController extends Controller
             ->query->getDigits('category', 'all');
 
         $ccm = \ContentCategoryManager::get_instance();
+
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
@@ -65,29 +61,26 @@ class CoversController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
 
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->name
+                'value' => $category->pk_content_category
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
+                    'value' => $subcategory->pk_content_category
                 ];
             }
         }
 
-        return $this->render(
-            'covers/list.tpl',
-            [
-                'categories' => $categories,
-                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR
-            ]
-        );
+        return $this->render('covers/list.tpl', [
+            'categories' => $categories,
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR
+        ]);
     }
 
     /**
@@ -102,13 +95,10 @@ class CoversController extends Controller
     {
         $category = 'widget';
 
-        return $this->render(
-            'covers/list.tpl',
-            array(
-                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'category'       => $category,
-            )
-        );
+        return $this->render('covers/list.tpl', [
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+            'category'       => $category,
+        ]);
     }
 
     /**
@@ -149,13 +139,10 @@ class CoversController extends Controller
             );
         }
 
-        return $this->render(
-            'covers/new.tpl',
-            array(
-                'cover'          => $cover,
-                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-            )
-        );
+        return $this->render('covers/new.tpl', [
+            'cover'          => $cover,
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+        ]);
     }
 
     /**
@@ -176,9 +163,11 @@ class CoversController extends Controller
 
         $postInfo = $request->request;
 
-        $coverData = array(
+        $coverData = [
             'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($postInfo->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING)
+            ),
             'type'           => (int) $postInfo->getDigits('type', 0),
             'category'       => (int) $postInfo->getDigits('category'),
             'content_status' => (int) $postInfo->getDigits('content_status', 1),
@@ -186,18 +175,22 @@ class CoversController extends Controller
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
             'fk_publisher'   => (int) $this->getUser()->id,
-        );
+        ];
 
         $dateTime = new \DateTime($coverData['date']);
-        $coverData['name'] = $dateTime->format('Ymd').date('His').'-'.$coverData['category'].'.pdf';
-        $coverData['path'] = $dateTime->format('Y/m/d').'/';
-        $path = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $coverData['path'];
+
+        $coverData['name'] = $dateTime->format('Ymd') . date('His') . '-'
+            . $coverData['category'] . '.pdf';
+        $coverData['path'] = $dateTime->format('Y/m/d') . '/';
+
+        $path = INSTANCE_MEDIA_PATH . KIOSKO_DIR . $coverData['path'];
 
         try {
             // Create folder if it doesn't exist
             if (!file_exists($path)) {
                 \Onm\FilesManager::createDirectory($path);
             }
+
             $uploadStatus = false;
 
             foreach ($request->files as $file) {
@@ -220,19 +213,14 @@ class CoversController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl('admin_kiosko_show', array('id' => $kiosko->id))
+                $this->generateUrl('admin_kiosko_show', [ 'id' => $kiosko->id ])
             );
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_kioskos',
-                    array(
-                        'category' => $postInfo->getDigits('category'),
-                    )
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_kioskos', [
+                'category' => $postInfo->getDigits('category'),
+            ]));
         }
     }
 
@@ -254,14 +242,9 @@ class CoversController extends Controller
         if ($cover->id == null) {
             $this->get('session')->getFlashBag()->add('error', _('Cover id not valid.'));
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_kioskos',
-                    array(
-                        'category' => $cover->category,
-                    )
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_kioskos', [
+                'category' => $cover->category,
+            ]));
         }
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
@@ -279,13 +262,17 @@ class CoversController extends Controller
 
         try {
             $postReq = $request->request;
+
             $data = [
                 'id'             => $postReq->getDigits('id', 0),
                 'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata($postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)),
-                'price'          => (float) $postReq->filter('price', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                    $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)
+                ),
+                'price'          => (float) $postReq
+                    ->filter('price', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'content_status' => $postReq->getDigits('content_status', 0),
                 'type'           => $postReq->getDigits('type', 0),
                 'favorite'       => $postReq->getDigits('favorite', 0),
@@ -296,7 +283,7 @@ class CoversController extends Controller
             ];
 
             if (!$request->request->get('cover') && !empty($cover->name)) {
-                $coverFile = $cover->kiosko_path . $cover->path . $cover->name;
+                $coverFile  = $cover->kiosko_path . $cover->path . $cover->name;
                 $coverThumb = $cover->kiosko_path . $cover->path . $cover->thumb_url;
 
                 // Remove old files if fileinput changed
@@ -308,22 +295,25 @@ class CoversController extends Controller
                     unlink($coverThumb);
                 }
 
-                $data['name'] = '';
+                $data['name']      = '';
                 $data['thumb_url'] = '';
             }
 
             // Handle new file
             if ($request->files->get('cover')) {
-                $data['name'] = date('His').'-'.$data['category'].'.pdf';
+                $data['name'] = date('His') . '-' . $data['category'] . '.pdf';
+
                 $path = $cover->kiosko_path . $cover->path;
 
                 // Create folder if it doesn't exist
                 if (!file_exists($path)) {
                     \Onm\FilesManager::createDirectory($path);
                 }
+
                 $uploadStatus = false;
 
                 $file = $request->files->get('cover');
+
                 $uploadStatus = $file->isValid() && $file->move(realpath($path), $data['name']);
 
                 if (!$uploadStatus) {
@@ -387,15 +377,10 @@ class CoversController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_kioskos',
-                array(
-                    'category' => $cover->category,
-                    'page'     => $page
-                )
-            )
-        );
+        return $this->redirect($this->generateUrl('admin_kioskos', [
+            'category' => $cover->category,
+            'page'     => $page
+        ]));
     }
 
     /**
@@ -420,7 +405,7 @@ class CoversController extends Controller
             $pos = 1;
 
             foreach ($positions as $id) {
-                $cover = new \Kiosko($id);
+                $cover  = new \Kiosko($id);
                 $result = $result && $cover->setPosition($pos);
                 $pos++;
             }
@@ -448,21 +433,20 @@ class CoversController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            $configurationsKeys = array('kiosko_settings',);
-            $configurations = s::get($configurationsKeys);
+            $configurationsKeys = [ 'kiosko_settings', ];
+            $configurations     = s::get($configurationsKeys);
 
-            return $this->render(
-                'covers/config.tpl',
-                array('configs'   => $configurations,)
-            );
+            return $this->render('covers/config.tpl', [
+                'configs' => $configurations
+            ]);
         }
 
         $settingsRAW = $request->request->get('kiosko_settings');
-        $settings = array(
-            'kiosko_settings' => array(
+        $settings    = [
+            'kiosko_settings' => [
                 'orderFrontpage' => filter_var($settingsRAW['orderFrontpage'], FILTER_SANITIZE_STRING),
-            )
-        );
+            ]
+        ];
 
         foreach ($settings as $key => $value) {
             s::set($key, $value);
