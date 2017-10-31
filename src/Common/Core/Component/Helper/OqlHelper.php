@@ -22,6 +22,16 @@ class OqlHelper
     protected $oql;
 
     /**
+     * Initializes the OQLHelper
+     *
+     * @param ServiceContainer $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+    /**
      * Returns an array with the criteria, the order, the items per page and the
      * page to use with old repositories basing on an OQL query.
      *
@@ -37,6 +47,8 @@ class OqlHelper
 
         $this->oql = $oql;
 
+        $this->fixBlog();
+
         $epp    = $this->getEpp();
         $offset = $this->getOffset();
         $order  = $this->getOrder();
@@ -46,6 +58,33 @@ class OqlHelper
         $this->oql = preg_replace('/\s+~\s+/', ' LIKE ', $this->oql);
 
         return [ $this->oql, $order, $epp, $page ];
+    }
+
+    /**
+     * Checks and fix OQL if condition with 'blog' field is present.
+     */
+    protected function fixBlog()
+    {
+        if (!preg_match_all('/blog\s*=\s*"?(1|0)"?/', $this->oql, $matches)) {
+            return;
+        }
+
+        $bloggers = $this->container->get('user_repository')->findByUserMeta([
+            'meta_key' => [ [ 'value' => 'is_blog' ] ],
+            'meta_value' => [ [ 'value' => '1' ] ]
+        ], [ 'username' => 'asc' ], 1, 0);
+
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $bloggers);
+
+        $operator = (int) $matches[1][0] === 0 ? 'NOT IN' : 'IN';
+
+        $this->oql = preg_replace(
+            '/blog\s*=\s*"?(1|0)"?/',
+            'fk_author ' . $operator . ' (' . implode(',', $ids) . ')',
+            $this->oql
+        );
     }
 
     /**
