@@ -61,7 +61,7 @@
       </td>
       {if $category->internal_category eq '1'}
       <td class="hidden-xs text-center">
-          {if !is_array($category->params) || ($category->params['inrss'] eq 1 || !isset($category->params['inrss']))}
+          {if is_array($category->params) && ($category->params['inrss'] eq 1 )}
               <a class="btn btn-white" href="{url name=admin_category_togglerss id=$category->pk_content_category status=0}" title="En rss">
                   <i class="fa fa-check text-success"></i>
               </a>
