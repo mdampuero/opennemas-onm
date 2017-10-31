@@ -33,11 +33,12 @@ class AdvertisementManager extends EntityManager
     public function countBy($criteria)
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $filterSQL = $this->getFilterSQL($criteria);
 
         // Executing the SQL
         $sql = "SELECT COUNT(pk_content) FROM `contents`, `advertisements`"
-            ." WHERE $filterSQL AND pk_content=pk_advertisement";
+            . " WHERE $filterSQL AND pk_content=pk_advertisement";
+
         $rs = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {
@@ -61,11 +62,12 @@ class AdvertisementManager extends EntityManager
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
+        $orderBySQL = '`pk_content` DESC';
 
-        $orderBySQL  = '`pk_content` DESC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
+
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
@@ -75,9 +77,9 @@ class AdvertisementManager extends EntityManager
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $contentIdentifiers = array();
+        $contentIdentifiers = [];
         foreach ($rs as $resultElement) {
-            $contentIdentifiers[]= array($resultElement['content_type_name'], $resultElement['pk_content']);
+            $contentIdentifiers[] = [ $resultElement['content_type_name'], $resultElement['pk_content'] ];
         }
 
         $contents = $this->findMulti($contentIdentifiers);
@@ -97,9 +99,9 @@ class AdvertisementManager extends EntityManager
         if (empty($criteria)) {
             $filterSQL = ' 1=1 ';
         } elseif (!is_array($criteria)) {
-            $filterSQL = $filters;
+            $filterSQL = $criteria;
         } else {
-            $filterSQL = array();
+            $filterSQL = [];
 
             $fieldUnion = ' AND ';
             if (array_key_exists('union', $criteria)) {
@@ -114,7 +116,7 @@ class AdvertisementManager extends EntityManager
                     unset($filters['union']);
                 }
 
-                $fieldFilters = array();
+                $fieldFilters = [];
                 foreach ($filters as $filter) {
                     $operator = "=";
                     if (array_key_exists('operator', $filter)) {
@@ -139,7 +141,8 @@ class AdvertisementManager extends EntityManager
                     } else {
                         if ($field == 'fk_content_categories') {
                             $fieldFilters[] = "`$field` REGEXP '(," . $value
-                                .",)|(,".$value."$)|(^".$value."$)|(^".$value.",[\d]*)'";
+                                . ",)|(," . $value . "$)|(^" . $value . "$)|(^"
+                                . $value . ",[\d]*)'";
                         } else {
                             $fieldFilters[] = "`$field` $operator '$value'";
                         }
@@ -171,10 +174,10 @@ class AdvertisementManager extends EntityManager
             return [];
         }
 
-        $category = (empty($category) || ($category=='home')) ? 0 : $category;
+        $category = (empty($category) || ($category == 'home')) ? 0 : $category;
 
         if (!getService('core.security')->hasExtension('ADS_MANAGER')) {
-            return  $this->findDefaultAdvertisements($types, $category);
+            return $this->findDefaultAdvertisements($types, $category);
         }
 
         $generics = true;
@@ -256,7 +259,7 @@ class AdvertisementManager extends EntityManager
      */
     protected function findDefaultAdvertisements($types, $category)
     {
-        $ads = include APP_PATH.'config/ads/onm_default_ads.php';
+        $ads = include APP_PATH . 'config/ads/onm_default_ads.php';
 
         $ads = array_filter($ads, function ($a) use ($types, $category) {
             return in_array($a->type_advertisement, $types)
