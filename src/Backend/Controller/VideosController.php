@@ -63,26 +63,23 @@ class VideosController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
 
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->name
+                'value' => $category->pk_content_category
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
+                    'value' => $subcategory->pk_content_category
                 ];
             }
         }
 
-        return $this->render(
-            'video/list.tpl',
-            [ 'categories' => $categories ]
-        );
+        return $this->render('video/list.tpl', [ 'categories' => $categories ]);
     }
 
     /**
