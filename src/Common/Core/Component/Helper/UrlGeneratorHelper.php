@@ -48,7 +48,7 @@ class UrlGeneratorHelper
                 ->getCurrentRequest()->getSchemeAndHttpHost();
         }
 
-        return $url.'/'.$this->getUriForContent($content);
+        return $url . '/' . $this->getUriForContent($content);
     }
 
     /**
@@ -116,7 +116,7 @@ class UrlGeneratorHelper
     {
         // If the content has a bodyLink parameter then that it is the final uri.
         if (isset($content->params['bodyLink']) && !empty($content->params['bodyLink'])) {
-            return 'redirect?to='.urlencode($content->params['bodyLink']);
+            return 'redirect?to=' . urlencode($content->params['bodyLink']);
         }
 
         $methodName = 'getUriFor' . ucfirst($content->content_type_name);
@@ -168,7 +168,7 @@ class UrlGeneratorHelper
      */
     private function getUriForOpinion($content)
     {
-        $type ='opinion';
+        $type = 'opinion';
 
         if (is_object($content->author)
             && is_array($content->author->meta) &&
@@ -237,7 +237,7 @@ class UrlGeneratorHelper
      */
     private function getUriForPhoto($content)
     {
-        $pathFile = trim(rtrim($content->path_file, DS), DS);
+        $pathFile    = trim(rtrim($content->path_file, DS), DS);
         $contentName = trim(rtrim($content->name, DS), DS);
 
         return implode(DS, ["media", INSTANCE_UNIQUE_NAME, 'images', $pathFile, $contentName]);
