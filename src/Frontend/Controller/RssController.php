@@ -383,14 +383,14 @@ class RssController extends Controller
         // Fix condition for IN operator when no categories
         $categories = empty($categories) ? [ '' ] : $categories;
 
-        $filters['category_name'] = [
-            [ 'value' => $categories, 'operator' => 'IN' ]
-        ];
+        if ($contentType !== 'opinion') {
+            $filters['category_name'] = [
+                [ 'value' => $categories, 'operator' => 'IN' ]
+            ];
 
-        if ($contentType !== 'opinion' && !empty($category)) {
-            $filters['category_name'] = [ [ 'value' => $category ] ];
-        } else {
-            unset($filters['category_name']);
+            if (!empty($category)) {
+                $filters['category_name'] = [ [ 'value' => $category ] ];
+            }
         }
 
         $contents = $em->findBy($filters, $order, $total, 1);
