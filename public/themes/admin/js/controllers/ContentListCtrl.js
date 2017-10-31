@@ -144,6 +144,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.contents = response.data.results;
         }
 
+        $scope.getContentsLocalizeTitle();
+
         $scope.map = response.data.map;
 
         if (response.data.hasOwnProperty('extra')) {
@@ -888,6 +890,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      *  Localize all titles of the contents
      */
     $scope.getContentsLocalizeTitle = function() {
+      if (!$scope.extra || !$scope.extra.options) {
+        return;
+      }
+
       var lz   = localizer.get($scope.extra.options);
       var keys = [ 'title' ];
 
