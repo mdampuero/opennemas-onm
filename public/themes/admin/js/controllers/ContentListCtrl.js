@@ -128,7 +128,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var route = {
         name: $scope.route,
         params:  {
-          contentType: $scope.criteria.content_type_name,
+          contentType: $scope.criteria.content_type_name ?
+            $scope.criteria.content_type_name : 'content' ,
           oql: oql
         }
       };

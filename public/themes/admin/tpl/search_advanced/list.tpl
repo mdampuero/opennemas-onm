@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-controller="ContentListCtrl" ng-init="init('content', { content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('content', 'backend_ws_contents_list')">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -26,7 +26,7 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" type="text" name="name" ng-model="criteria.title_like" placeholder="{t}Filter by title{/t}" />
+            <input class="no-boarder" type="text" name="name" ng-model="criteria.title" placeholder="{t}Filter by title{/t}" />
           </li>
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
@@ -42,7 +42,7 @@
             </ui-select>
           </li>
           <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
@@ -54,7 +54,7 @@
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -103,7 +103,7 @@
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right ">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>
