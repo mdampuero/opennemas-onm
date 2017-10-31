@@ -38,14 +38,14 @@ class PClave
      *
      * @var string
      */
-    public $value  = null;
+    public $value = null;
 
     /**
      * The type of the keyword (url, internal search, ...)
      *
      * @var
      */
-    public $tipo   = null;
+    public $tipo = null;
 
     /**
      * The content type (required by the automated listings)
@@ -85,6 +85,7 @@ class PClave
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
+
                 if ($k == 'pclave') {
                     $this->title = $v;
                 }
@@ -137,7 +138,7 @@ class PClave
     {
         $conn = getService('dbal_connection');
         try {
-            $rs = $conn->insert(
+            $conn->insert(
                 'pclave',
                 [
                     'pclave' => $data['pclave'],
@@ -166,7 +167,7 @@ class PClave
     {
         $conn = getService('dbal_connection');
         try {
-            $rs = $conn->update(
+            $conn->update(
                 'pclave',
                 [
                     'pclave' => $data['pclave'],
@@ -211,7 +212,7 @@ class PClave
      *
      * @return array list of terms
      */
-    public function find($filter = null)
+    public function find($filter = null, $order = '', $epp = '', $page = '')
     {
         try {
             $sql = 'SELECT * FROM `pclave`';
@@ -219,7 +220,12 @@ class PClave
                 $sql = 'SELECT * FROM `pclave` WHERE ' . $filter;
             }
 
+            $sql .= empty($order) ? '' : ' order by ' . $order;
+            $sql .= empty($epp) ? '' : ' limit ' . $epp;
+            $sql .= empty($page) ? '' : ' offset ' . ($page - 1) * $epp;
+
             $rs = getService('dbal_connection')->fetchAll($sql);
+
             $terms = [];
             foreach ($rs as $element) {
                 $obj = new PClave();
@@ -246,10 +252,10 @@ class PClave
     public function replaceTerms($text, $terms)
     {
         if (mb_detect_encoding($text) == "UTF-8") {
-            $text = ' '.($text).' ';
+            $text = ' ' . ($text) . ' ';
         } else {
             // spaces necessary to evaluate first and last pattern matching
-            $text = ' '.utf8_decode($text).' ';
+            $text = ' ' . utf8_decode($text) . ' ';
         }
 
         usort(
@@ -270,30 +276,30 @@ class PClave
             // Select keyword type
             switch ($term->tipo) {
                 case 'url':
-                    $replacement = "<a href='".$term->value."'
-                                       title='".$term->pclave."'>".
-                                       $term->pclave."</a>";
+                    $replacement = "<a href='" . $term->value . "'
+                                       title='" . $term->pclave . "'>" .
+                                       $term->pclave . "</a>";
 
                     break;
 
                 case 'email':
-                    $replacement = "<a href='mailto:".$term->value."'
-                                       target='_blank'>".$term->pclave."</a>";
+                    $replacement = "<a href='mailto:" . $term->value . "'
+                                       target='_blank'>" . $term->pclave . "</a>";
 
                     break;
 
                 case 'intsearch':
-                    $replacement = "<a href='".SITE_URL."tag/".$term->value."'
-                                       target='_blank'>".$term->pclave."</a>";
+                    $replacement = "<a href='" . SITE_URL . "tag/" . $term->value . "'
+                                       target='_blank'>" . $term->pclave . "</a>";
 
                     break;
                 default:
                     break;
             }
 
-            $regexp = '@'.htmlentities($term->pclave).'@';
+            $regexp = '@' . htmlentities($term->pclave) . '@';
 
-            $text = preg_replace($regexp, '\1'.$replacement.'\4', $text);
+            $text = preg_replace($regexp, '\1' . $replacement . '\4', $text);
         }
 
         return trim($text);
@@ -306,11 +312,11 @@ class PClave
      */
     public static function getTypes()
     {
-        $types = array(
+        $types = [
             'url'       => _('URL'),
             'intsearch' => _('Internal search'),
             'email'     => _('Email')
-        );
+        ];
 
         return $types;
     }
