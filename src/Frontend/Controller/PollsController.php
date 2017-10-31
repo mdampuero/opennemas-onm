@@ -76,31 +76,34 @@ class PollsController extends Controller
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
-            if (isset($this->category) && !empty($this->category)) {
-                $polls = $this->cm->find_by_category(
-                    'Poll',
-                    $this->category,
-                    'content_status=1',
-                    'ORDER BY starttime DESC LIMIT 2'
-                );
+            $filter = [
+                'content_type_name' => [[ 'value' => 'poll']],
+                'content_status'    => [['value' => 1]],
+                'in_home'           => [['value' => 1]]
+            ];
 
-                $otherPolls = $this->cm->find(
-                    'Poll',
-                    'content_status=1',
-                    'ORDER BY starttime DESC LIMIT 5'
-                );
-            } else {
-                $polls = $this->cm->find(
-                    'Poll',
-                    'content_status=1 and in_home=1',
-                    'ORDER BY starttime DESC LIMIT 2'
-                );
-                $otherPolls = $this->cm->find(
-                    'Poll',
-                    'content_status=1',
-                    'ORDER BY starttime DESC LIMIT 2,7'
-                );
+            if (isset($this->category) && !empty($this->category)) {
+                $filter = [
+                    'content_type_name' => [[ 'value' => 'poll' ]],
+                    'content_status'    => [[ 'value' => 1 ]],
+                    'category_name'     => [[ 'value' => $this->categoryName ]],
+                ];
             }
+
+            $polls = $this->get('entity_repository')->findBy(
+                $filter,
+                ['starttime' => 'DESC'],
+                2
+            );
+
+            $otherPolls = $this->get('entity_repository')->findBy(
+                [
+                    'content_type_name' => [[ 'value' => 'poll']],
+                    'content_status'    => [[ 'value' => 1 ]],
+                ],
+                ['starttime' => 'DESC'],
+                5
+            );
 
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
