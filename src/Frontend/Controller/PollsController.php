@@ -167,10 +167,13 @@ class PollsController extends Controller
             $items         = $poll->items;
             $poll->dirtyId = $dirtyID;
 
-            $otherPolls = $this->cm->find(
-                'Poll',
-                'content_status=1 ',
-                'ORDER BY created DESC LIMIT 5'
+            $otherPolls = $this->get('entity_repository')->findBy(
+                [
+                    'content_type_name' => [[ 'value' => 'poll']],
+                    'content_status'    => [[ 'value' => 1 ]],
+                ],
+                ['starttime' => 'DESC'],
+                5
             );
 
             $this->view->assign([
