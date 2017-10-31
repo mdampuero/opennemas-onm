@@ -389,6 +389,8 @@ class RssController extends Controller
 
         if ($contentType !== 'opinion' && !empty($category)) {
             $filters['category_name'] = [ [ 'value' => $category ] ];
+        } else {
+            unset($filters['category_name']);
         }
 
         $contents = $em->findBy($filters, $order, $total, 1);
