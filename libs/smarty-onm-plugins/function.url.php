@@ -20,6 +20,7 @@ function smarty_function_url($params, &$smarty)
     // Hack for opinions authors frontpage url's
     if (array_key_exists('sluggable', $params) &&
         array_key_exists('slug_key', $params) &&
+        array_key_exists($params['slug_key'], $params) &&
         $params['sluggable']
     ) {
         $params[$params['slug_key']] = \Onm\StringUtils::generateSlug($params[$params['slug_key']]);

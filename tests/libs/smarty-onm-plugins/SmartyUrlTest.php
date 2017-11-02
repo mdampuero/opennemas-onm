@@ -151,7 +151,7 @@ class SmartyUrlTest extends KernelTestCase
         $this->router->expects($this->once())->method('generate')
             ->with('waldo', [ 'frog' => 'baz' ]);
 
-        $this->assertFalse(smarty_function_url([
+        $this->assertEmpty(smarty_function_url([
             'name' => 'waldo',
             'frog' => 'baz',
             'sluggable' => true,
