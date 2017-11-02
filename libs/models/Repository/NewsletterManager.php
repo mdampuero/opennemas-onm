@@ -66,6 +66,10 @@ class NewsletterManager extends BaseManager
             }
         }
 
+        if (empty($whereClause)) {
+            $whereClause = '1 = 1';
+        }
+
         try {
             $rs = $this->dbConn->fetchAll(
                 'SELECT * FROM `newsletter_archive`'
