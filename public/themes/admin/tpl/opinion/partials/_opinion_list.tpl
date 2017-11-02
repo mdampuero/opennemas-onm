@@ -75,7 +75,7 @@
         <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Opinion{/t}', value: 0 }{is_module_activated name="BLOG_MANAGER"}, { name: '{t}Blog{/t}', value: 1 }{/is_module_activated} ]">
+        <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: null }, { name: '{t}Opinion{/t}', value: 0 }{is_module_activated name="BLOG_MANAGER"}, { name: '{t}Blog{/t}', value: 1 }{/is_module_activated} ]">
           <ui-select name="blog" theme="select2" ng-model="criteria.blog">
             <ui-select-match>
               <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
@@ -85,7 +85,7 @@
             </ui-select-choices>
           </ui-select>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+        <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
           <ui-select name="status" theme="select2" ng-model="criteria.content_status">
             <ui-select-match>
               <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -96,7 +96,7 @@
           </ui-select>
         </li>
         <li class="quicklinks hidden-xs hidden-sm ng-cloak" ng-init="authors = {json_encode($authors)|clear_json}">
-          <ui-select name="author" theme="select2" ng-model="criteria.author">
+          <ui-select name="author" theme="select2" ng-model="criteria.fk_author">
             <ui-select-match>
               <strong>{t}Author{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
@@ -106,7 +106,7 @@
           </ui-select>
         </li>
         <li class="quicklinks hidden-sm hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -118,7 +118,7 @@
       </ul>
       <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
         <li class="quicklinks hidden-xs">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
@@ -226,7 +226,7 @@
     </div>
     <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

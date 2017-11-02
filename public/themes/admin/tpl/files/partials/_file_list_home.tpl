@@ -1,4 +1,4 @@
-<div class="content" ng-init="init('attachment', {}, null, null, 'backend_ws_contents_list_home', '{{$smarty.const.CURRENT_LANGUAGE}}', null)">
+<div class="content" ng-init="init('attachment', 'backend_ws_contents_list_home')">
   <div class="grid simple">
     <div class="grid-title">
       <h4>{t}Sort elements{/t}</h4>

@@ -4,7 +4,7 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  OpinionListCtrl
+     * @name  KeywordListCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -15,7 +15,7 @@
      * @description
      *   Controller for opinion list.
      */
-    .controller('OpinionListCtrl', [
+    .controller('KeywordListCtrl', [
       '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
       function($controller, $location, $scope, http, messenger, oqlEncoder) {
 
@@ -33,17 +33,14 @@
 
         oqlEncoder.configure({
           placeholder: {
-            title: 'title ~ "%[value]%"',
+            pclave: 'pclave ~ "%[value]%"',
           }
         });
 
         var oql   = oqlEncoder.getOql($scope.criteria);
         var route = {
           name: $scope.route,
-          params:  {
-            contentType: $scope.criteria.content_type_name,
-            oql: oql
-          }
+          params:  { oql: oql }
         };
 
         $location.search('oql', oql);

@@ -4,7 +4,7 @@
   angular.module('BackendApp.controllers')
     /**
      * @ngdoc controller
-     * @name  OpinionListCtrl
+     * @name  ImageListCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -15,7 +15,7 @@
      * @description
      *   Controller for opinion list.
      */
-    .controller('OpinionListCtrl', [
+    .controller('ImageListCtrl', [
       '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
       function($controller, $location, $scope, http, messenger, oqlEncoder) {
 
@@ -33,7 +33,8 @@
 
         oqlEncoder.configure({
           placeholder: {
-            title: 'title ~ "%[value]%"',
+            title: '(title ~ "%[value]%" or metadata ~ "%[value]%" or' +
+              ' description ~ "%[value]%") ',
           }
         });
 

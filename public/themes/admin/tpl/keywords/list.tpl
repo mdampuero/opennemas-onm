@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('keywords', { title_like: '' }, 'created', 'desc', 'backend_ws_keywords_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-
+<div ng-app="BackendApp" ng-controller="KeywordListCtrl" ng-init=" criteria = { epp: 10, orderBy: { pclave:  'asc' }, page: 1 }; init(null, 'backend_ws_keywords_list');">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -67,13 +66,13 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" type="text" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name{/t}" />
+            <input class="no-boarder" type="text" name="title" ng-model="criteria.pclave" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name{/t}" />
           </li>
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
@@ -85,7 +84,7 @@
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -175,7 +174,7 @@
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right pagination-wrapper">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>

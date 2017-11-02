@@ -44,7 +44,7 @@ class OpinionsController extends Controller
         $allAuthors = \User::getAllUsersAuthors();
 
         $authors = [
-            [ 'name' => _('All'), 'value' => -1 ],
+            [ 'name' => _('All'), 'value' => null ],
         ];
 
         foreach ($allAuthors as $author) {
@@ -275,7 +275,7 @@ class OpinionsController extends Controller
         $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
         $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
-        $data = array(
+        $data = [
             'body'                => $request->request->get('body', ''),
             'content_status'      => (empty($contentStatus)) ? 0 : 1,
             'endtime'             => $request->request->get('endtime', ''),
@@ -301,7 +301,7 @@ class OpinionsController extends Controller
             'params'              => [
                 'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ]
-        );
+        ];
 
         if ($opinion->create($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -310,7 +310,7 @@ class OpinionsController extends Controller
             );
 
             // Clear caches
-            dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
+            dispatchEventWithParams('opinion.create', [ 'authorId' => $data['fk_author'] ]);
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -319,7 +319,7 @@ class OpinionsController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+            $this->generateUrl('admin_opinion_show', [ 'id' => $opinion->id ])
         );
     }
 
@@ -370,7 +370,7 @@ class OpinionsController extends Controller
                 _("Opinion data sent not valid.")
             );
 
-            return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_opinion_show', [ 'id' => $id ]));
         }
 
         $data = [
@@ -415,9 +415,9 @@ class OpinionsController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
-        );
+        return $this->redirect($this->generateUrl('admin_opinion_show', [
+            'id' => $opinion->id
+        ]));
     }
 
     /**
@@ -453,15 +453,14 @@ class OpinionsController extends Controller
         }
 
         if ($type != 'frontpage') {
-            $url = $this->generateUrl(
-                'admin_opinions',
-                array('type' => $type, 'page' => $page)
-            );
+            $url = $this->generateUrl('admin_opinions', [
+                'type' => $type,
+                'page' => $page
+            ]);
         } else {
-            $url = $this->generateUrl(
-                'admin_opinions_frontpage',
-                array('page' => $page)
-            );
+            $url = $this->generateUrl('admin_opinions_frontpage', [
+                'page' => $page
+            ]);
         }
 
          return $this->redirect($url);
@@ -482,16 +481,17 @@ class OpinionsController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int) $categoryId);
+        $ids = $this->get('frontpage_repository')
+            ->getContentIdsForHomepageOfCategory((int) $categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'opinion')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'opinion' ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
+        ];
 
-        $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->get([
@@ -506,13 +506,10 @@ class OpinionsController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'opinion/content-provider.tpl',
-            array(
-                'opinions'   => $opinions,
-                'pagination' => $pagination,
-            )
-        );
+        return $this->render('opinion/content-provider.tpl', [
+            'opinions'   => $opinions,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -528,13 +525,13 @@ class OpinionsController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'opinion')),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'opinion' ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
+        ];
 
         $em            = $this->get('entity_repository');
-        $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->get([
@@ -548,12 +545,12 @@ class OpinionsController extends Controller
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
-            array(
+            [
                 'contentType'           => 'Opinion',
                 'contents'              => $opinions,
                 'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
-            )
+            ]
         );
     }
 
@@ -571,16 +568,16 @@ class OpinionsController extends Controller
         if ('POST' == $request->getMethod()) {
             $configsRAW = $request->request->get('opinion_settings');
 
-            $configs = array(
-                'opinion_settings' => array(
+            $configs = [
+                'opinion_settings' => [
                     'total_director'        => filter_var($configsRAW['total_director'], FILTER_VALIDATE_INT),
                     'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
                     'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
                     'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
                     'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                     'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
-                )
-            );
+                ]
+            ];
 
             foreach ($configs as $key => $value) {
                 s::set($key, $value);
@@ -593,12 +590,11 @@ class OpinionsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_opinions_config'));
         } else {
-            $configurations = s::get(array('opinion_settings'));
+            $configurations = s::get([ 'opinion_settings' ]);
 
-            return $this->render(
-                'opinion/config.tpl',
-                array('configs'   => $configurations)
-            );
+            return $this->render('opinion/config.tpl', [
+                'configs' => $configurations
+            ]);
         }
     }
 

@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="init('subscriptors', {  title_like: '', subscription: -1, status: -1 }, 'created', 'desc', 'backend_ws_newsletter_subscriptors', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-
+<div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="criteria = { epp: 10, orderBy: { name: 'asc' }, page: 1 }; init(null, 'backend_ws_newsletter_subscriptors')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -39,8 +38,6 @@
       </div>
     </div>
   </div>
-
-
   <div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -105,12 +102,12 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name or email{/t}" type="search"/>
+            <input class="no-boarder" name="title" ng-model="criteria.name" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name or email{/t}" type="search"/>
           </li>
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Yes{/t}', value: 2 }, { name: '{t}No{/t}', value: 3 } ]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}All{/t}', value: null }, { name: '{t}Yes{/t}', value: 2 }, { name: '{t}No{/t}', value: 3 } ]">
             <ui-select name="filters[status]" theme="select2" ng-model="criteria.status">
               <ui-select-match>
                 <strong>{t}Activated{/t}:</strong> [% $select.selected.name %]
@@ -120,7 +117,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Subscribed{/t}', value: 1 }, { name: '{t}No subscribed{/t}', value: 0 } ]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Subscribed{/t}', value: 1 }, { name: '{t}No subscribed{/t}', value: 0 } ]">
             <ui-select name="filters[subscription]" theme="select2" ng-model="criteria.subscription">
               <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -131,7 +128,7 @@
             </ui-select>
           </li>
           <li class="quicklinks hidden-sm hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
@@ -142,7 +139,7 @@
           </li>
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </ul>
       </div>
     </div>
@@ -224,7 +221,7 @@
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>

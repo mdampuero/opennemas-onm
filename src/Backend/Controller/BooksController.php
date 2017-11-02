@@ -1,12 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
+ * This file is part of the Onm package.
  *
- * @package Backend_Controllers
- */
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -41,10 +37,11 @@ class BooksController extends Controller
             ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
+
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category, $contentType);
 
-        $this->bookCategories = array();
+        $this->bookCategories = [];
         foreach ($this->parentCategories as $bCat) {
             if ($bCat->internal_category == $contentType) {
                 $this->bookCategories[] = $bCat;
@@ -79,18 +76,18 @@ class BooksController extends Controller
             );
         }
 
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
 
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->name
+                'value' => $category->pk_content_category
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
+                    'value' => $subcategory->pk_content_category
                 ];
             }
         }
@@ -121,12 +118,7 @@ class BooksController extends Controller
             );
         }
 
-        return $this->render(
-            'book/list.tpl',
-            array(
-                'category' => 'widget',
-            )
-        );
+        return $this->render('book/list.tpl', [ 'category' => 'widget' ]);
     }
 
     /**
@@ -148,12 +140,16 @@ class BooksController extends Controller
         }
 
         $data = [
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'cover_id'       => $request->request->getInt('book_cover_id'),
-            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'editorial'      => $request->request
+                ->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->filter('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
@@ -172,7 +168,7 @@ class BooksController extends Controller
                 _('Book created successfully.')
             );
 
-            return $this->render('book/new.tpl', array('book' => $book));
+            return $this->render('book/new.tpl', [ 'book' => $book ]);
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -219,13 +215,10 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
-        return $this->render(
-            'book/new.tpl',
-            array(
-                'book'     => $book,
-                'category' => $book->category,
-            )
-        );
+        return $this->render('book/new.tpl', [
+            'book'     => $book,
+            'category' => $book->category,
+        ]);
     }
 
     /**
@@ -271,17 +264,21 @@ class BooksController extends Controller
                 _("Book data sent not valid.")
             );
 
-            return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_book_show', [ 'id' => $id ]));
         }
 
         $data = [
             'id'             => $id,
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'editorial'      => $request->request
+                ->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
@@ -296,15 +293,10 @@ class BooksController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_book_show',
-                array(
-                    'category' => $this->category,
-                    'id'       => $book->id,
-                )
-            )
-        );
+        return $this->redirect($this->generateUrl('admin_book_show', [
+            'category' => $this->category,
+            'id'       => $book->id,
+        ]));
     }
 
     /**
@@ -328,6 +320,7 @@ class BooksController extends Controller
                 sprintf(_('Unable to find the book with the id "%d"'), $id)
             );
         }
+
         $book->delete($id);
 
         $this->get('session')->getFlashBag()->add(
@@ -335,14 +328,9 @@ class BooksController extends Controller
             sprintf(_("Book '%s' deleted successfully."), $book->title)
         );
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_books',
-                array(
-                    'category' => $book->category
-                )
-            )
-        );
+        return $this->redirect($this->generateUrl('admin_books', [
+            'category' => $book->category
+        ]));
     }
 
     /**
@@ -366,20 +354,20 @@ class BooksController extends Controller
         ) {
             $pos = 1;
             foreach ($positions as $id) {
-                $book = new \Book($id);
+                $book   = new \Book($id);
                 $result = $result && $book->setPosition($pos);
-                $pos += 1;
+                $pos++;
             }
         }
 
         if ($result) {
             $msg = "<div class='alert alert-success'>"
-                ._("Positions saved successfully.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+                . _("Positions saved successfully.")
+                . '<button data-dismiss="alert" class="close">×</button></div>';
         } else {
             $msg = "<div class='alert alert-error'>"
-                ._("Unable to save the new positions. Please contact with your system administrator.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+                . _("Unable to save the new positions. Please contact with your system administrator.")
+                . '<button data-dismiss="alert" class="close">×</button></div>';
         }
 
         return new Response($msg);

@@ -38,32 +38,19 @@ class KeywordsController extends Controller
      */
     public function listAction(Request $request)
     {
-        $search = $request->query->get('search');
-        $page = $request->query->getDigits('page', 1);
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
+        $oql = $request->query->get('oql', '');
 
-        $filter = '';
-        if (is_array($search) && array_key_exists('title', $search)) {
-            $name = $search['title'][0]['value'];
-            $filter = '`pclave` LIKE "%' . $name . '%"';
-        }
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        $keywordManager = new \PClave();
-        $keywords = $keywordManager->find($filter);
+        $km       = new \PClave();
+        $keywords = $km->find($criteria, $order, $epp, $page);
 
-        $results = array_slice($keywords, ($page-1) * $elementsPerPage, $elementsPerPage);
-
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'extra'             => array(
-                    'types'      => \PClave::getTypes(),
-                ),
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => count($keywords),
-            )
-        );
+        return new JsonResponse([
+            'extra'   => [ 'types' => \PClave::getTypes() ],
+            'results' => $keywords,
+            'total'   => count($keywords),
+        ]);
     }
 
     /**
@@ -78,8 +65,8 @@ class KeywordsController extends Controller
      */
     public function deleteAction($id)
     {
-        $errors  = array();
-        $success = array();
+        $errors  = [];
+        $success = [];
 
         $keyword = new \PClave();
         $keyword->read($id);
@@ -88,31 +75,27 @@ class KeywordsController extends Controller
             $deleted = $keyword->delete($id);
 
             if ($deleted) {
-                $success[] = array(
+                $success[] = [
                     'id'      => $id,
                     'message' => _('Item deleted successfully'),
                     'type'    => 'success'
-                );
+                ];
             } else {
-                $errors[] = array(
+                $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages'  => array_merge($success, $errors),
-            )
-        );
+        return new JsonResponse([ 'messages'  => array_merge($success, $errors) ]);
     }
 
     /**
@@ -123,9 +106,9 @@ class KeywordsController extends Controller
      */
     public function batchDeleteAction(Request $request)
     {
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $ids = $request->request->get('ids');
 
@@ -140,34 +123,30 @@ class KeywordsController extends Controller
                     if ($deleted) {
                         $updated++;
                     } else {
-                        $errors[] = array(
+                        $errors[] = [
                             'id'      => $id,
                             'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                             'type'    => 'error'
-                        );
+                        ];
                     }
                 } else {
-                    $errors[] = array(
+                    $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
             }
         }
 
         if (count($updated) > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages' => array_merge($success, $errors)
-            )
-        );
+        return new JsonResponse([ 'messages' => array_merge($success, $errors) ]);
     }
 }

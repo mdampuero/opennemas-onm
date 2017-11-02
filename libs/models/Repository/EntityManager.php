@@ -125,15 +125,8 @@ class EntityManager extends BaseManager
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        $fromSQL = 'contents';
-
-        if (is_array($criteria) && array_key_exists('tables', $criteria)) {
-            $fromSQL .= ', ' . implode(',', $criteria['tables']);
-            unset($criteria['tables']);
-        }
-
         $sql = 'SELECT content_type_name, pk_content'
-            . ' FROM ' . $fromSQL
+            . ' FROM contents'
             . ' LEFT JOIN contents_categories'
             . ' ON pk_content = pk_fk_content ';
 

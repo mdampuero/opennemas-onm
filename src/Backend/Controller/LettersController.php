@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the letters content
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -55,8 +50,11 @@ class LettersController extends Controller
             $letter = new \Letter();
 
             $data = [
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+                'title'          => $request->request
+                    ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                    $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+                ),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
                 'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
@@ -78,20 +76,15 @@ class LettersController extends Controller
                     _('Unable to create the new letter.')
                 );
             }
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_letter_show',
-                    [ 'id' => $letter->id ]
-                )
-            );
+
+            return $this->redirect($this->generateUrl('admin_letter_show', [
+                'id' => $letter->id ]
+            ));
         } else {
-            return $this->render(
-                'letter/new.tpl',
-                [
-                    'commentsConfig' => $this->get('setting_repository')
-                        ->get('comments_config')
-                ]
-            );
+            return $this->render('letter/new.tpl', [
+                'commentsConfig' => $this->get('setting_repository')
+                    ->get('comments_config')
+            ]);
         }
     }
 
@@ -152,7 +145,7 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letter_show', [ 'id' => $id ]));
         }
 
-        $id = $request->query->getDigits('id');
+        $id     = $request->query->getDigits('id');
         $letter = new \Letter($id);
         if ($letter->id == null) {
             return $this->redirect($this->generateUrl('admin_letters'));
@@ -160,8 +153,11 @@ class LettersController extends Controller
 
         $data = [
             'id'             => $id,
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
             'content_status' => $request->request->filter('content_status', '', FILTER_SANITIZE_STRING),
             'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
@@ -198,7 +194,8 @@ class LettersController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int)$categoryId);
+        $ids = $this->get('frontpage_repository')
+            ->getContentIdsForHomepageOfCategory((int) $categoryId);
 
         $filters = [
             'content_type_name' => [ ['value' => 'letter'] ],

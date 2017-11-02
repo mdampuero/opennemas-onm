@@ -44,10 +44,23 @@ class CategoryController extends Controller
 
         $cm->sortCategories($categories);
 
-        $contentsCount['articles'] = \ContentCategoryManager::countContentsByGroupType(1);
+        $map = [];
+        foreach ($categories as $category) {
+            $category->subcategories = array_map(function ($a) {
+                return $a->pk_content_category;
+            }, array_filter($categories, function ($a) use ($category) {
+                return $a->fk_content_category ===
+                    $category->pk_content_category;
+            }));
+
+            $map[$category->pk_content_category] = $category;
+        }
+
+        $contentsCount['articles'] =
+            \ContentCategoryManager::countContentsByGroupType(1);
 
         return $this->render('category/list.tpl', [
-            'categories'           => $categories,
+            'categories'           => $map,
             'contents_count'       => $contentsCount,
             'language_data'        => $languageData,
             'multilanguage_enable' => in_array(
@@ -74,7 +87,6 @@ class CategoryController extends Controller
         $ccm           = \ContentCategoryManager::get_instance();
         $allcategories = $ccm->categories;
         $languageData  = $this->getLocaleData('frontend', $request, true);
-        $fm            = $this->get('data.manager.filter');
 
         if (empty($id)) {
             $category      = [];

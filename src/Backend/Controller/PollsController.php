@@ -61,12 +61,12 @@ class PollsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
 
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->name
+                'value' => $category->pk_content_category
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
@@ -77,10 +77,7 @@ class PollsController extends Controller
             }
         }
 
-        return $this->render(
-            'poll/list.tpl',
-            [ 'categories' => $categories ]
-        );
+        return $this->render('poll/list.tpl', [ 'categories' => $categories ]);
     }
 
     /**
@@ -100,13 +97,10 @@ class PollsController extends Controller
             $totalWidget = $configurations['total_widget'];
         }
 
-        return $this->render(
-            'poll/list.tpl',
-            [
-                'category'              => 'widget',
-                'total_elements_widget' => $totalWidget,
-            ]
-        );
+        return $this->render('poll/list.tpl', [
+            'category'              => 'widget',
+            'total_elements_widget' => $totalWidget,
+        ]);
     }
 
     /**
@@ -125,10 +119,15 @@ class PollsController extends Controller
             $poll = new \Poll();
 
             $data = [
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+                'title'          => $request->request
+                    ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'subtitle'       => $request->request
+                    ->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'description'    => $request->request
+                    ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                    $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+                ),
                 'favorite'       => $request->request->getDigits('favorite', 0),
                 'with_comment'   => $request->request->getDigits('with_comment', 0),
                 'visualization'  => $request->request->getDigits('visualization', 0),
@@ -160,7 +159,9 @@ class PollsController extends Controller
             );
         }
 
-        return $this->render('poll/new.tpl', [ 'commentsConfig' => s::get('comments_config') ]);
+        return $this->render('poll/new.tpl', [
+            'commentsConfig' => s::get('comments_config')
+        ]);
     }
 
     /**
@@ -185,18 +186,16 @@ class PollsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_polls'));
         }
+
         if (is_string($poll->params)) {
             $poll->params = unserialize($poll->params);
         }
 
-        return $this->render(
-            'poll/new.tpl',
-            [
-                'poll'  => $poll,
-                'items' => $poll->items,
-                'commentsConfig' => s::get('comments_config'),
-            ]
-        );
+        return $this->render('poll/new.tpl', [
+            'poll'  => $poll,
+            'items' => $poll->items,
+            'commentsConfig' => s::get('comments_config'),
+        ]);
     }
 
     /**
@@ -233,11 +232,17 @@ class PollsController extends Controller
 
         $data = [
             'id'             => $id,
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'visualization'  => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'subtitle'       => $request->request
+                ->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $request->request
+                ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'visualization'  => $request->request
+                ->filter('visualization', '', FILTER_SANITIZE_STRING),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
             'favorite'       => $request->request->getDigits('favorite', 0),
             'with_comment'   => $request->request->getDigits('with_comment', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
@@ -293,15 +298,10 @@ class PollsController extends Controller
         );
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_polls',
-                    [
-                        'category' => $category,
-                        'page'     => $page
-                    ]
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_polls', [
+                'category' => $category,
+                'page'     => $page
+            ]));
         }
 
         return new Response('Ok', 200);
@@ -322,7 +322,8 @@ class PollsController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int)$categoryId);
+        $ids = $this->get('frontpage_repository')
+            ->getContentIdsForHomepageOfCategory((int) $categoryId);
 
         $filters = [
             'content_type_name' => [ [ 'value' => 'poll' ] ],
@@ -347,13 +348,10 @@ class PollsController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'poll/content-provider.tpl',
-            [
-                'polls'      => $polls,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('poll/content-provider.tpl', [
+            'polls'      => $polls,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -422,6 +420,7 @@ class PollsController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             $settingsRAW = $request->request->get('poll_settings');
+
             $data = [
                 'poll_settings' => [
                     'typeValue'    => $settingsRAW['typeValue'] ?: 0,
@@ -436,6 +435,7 @@ class PollsController extends Controller
             foreach ($data as $key => $value) {
                 s::set($key, $value);
             }
+
             $this->get('session')->getFlashBag()->add('success', _('Settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_polls_config'));

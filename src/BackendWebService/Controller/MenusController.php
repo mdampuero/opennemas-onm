@@ -119,36 +119,23 @@ class MenusController extends ContentController
     /**
      * Returns a list of contents in JSON format.
      *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
+     * @param Request $request     The request object.
+     * @param string  $contentType Content type name.
+     *
+     * @return JsonResponse The response object.
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = $request->query->getDigits('page', 1);
-        $search          = $request->query->get('search');
-        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
-        $order           = null;
+        $oql = $request->query->get('oql', '');
+        $em  = $this->get('menu_repository');
 
-        $em = $this->get('menu_repository');
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
-
-        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($search);
+        $total   = $em->countBy($criteria);
 
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => $total
-            )
-        );
+        return new JsonResponse([ 'results' => $results, 'total' => $total ]);
     }
 }

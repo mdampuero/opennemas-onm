@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
-
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="NewsletterListCtrl" ng-init="init('newsletter', { title_like: '' }, 'created', 'desc', 'backend_ws_newsletter_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-controller="NewsletterListCtrl" ng-init="criteria = { epp: 10, orderBy: { created: 'desc' }, page: 1 }; init(null, 'backend_ws_newsletter_list')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -39,7 +38,6 @@
       </div>
     </div>
   </div>
-
   {*<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -68,7 +66,6 @@
       </div>
     </div>
   </div>*}
-
   <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -77,7 +74,7 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by subject{/t}" type="text"/>
+            <input class="no-boarder" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by subject{/t}" type="text"/>
           </li>
           <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks hidden-xs">
@@ -86,16 +83,13 @@
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
     </div>
   </div>
-
   <div class="content">
-
-
     <div class="grid simple">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
@@ -137,12 +131,10 @@
                   <div class="small-text">
                     <strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
-
                   <div class="listing-inline-actions">
                     <a class="link" href="[% edit(content.id, 'admin_newsletter_show_contents') %]" title="{t}Edit{/t}" >
                       <i class="fa fa-pencil"></i> {t}Edit{/t}
                     </a>
-
                     <a href="[% edit(content.id, 'admin_newsletter_preview') %]" title="{t}Preview{/t}" class="link">
                       <i class="fa fa-eye"></i>
                       {t}Show contents{/t}
@@ -166,16 +158,14 @@
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>
-
   </div>
   <script type="text/ng-template" id="modal-delete">
     {include file="common/modals/_modalDelete.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-batch-remove-permanently">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>

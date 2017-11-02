@@ -4,7 +4,6 @@
   "camelcase": false,
   "curly"    : true,
   "eqeqeq"   : true,
-  "es5"      : true,
   "esnext"   : true,
   "immed"    : true,
   "indent"   : 2,

@@ -21,49 +21,26 @@ class ImagesController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = $request->query->getDigits('page', 1);
-        $search          = $request->query->get('search');
-        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $em  = $this->get('entity_repository');
+        $oql = $request->query->get('oql', '');
 
-        $em = $this->get('entity_repository');
+        $oql = preg_replace(
+            '/month\s*=\s*"([0-9-]+)"/',
+            '(DATE_FORMAT(created, "%Y-%m") = "$1")',
+            $oql
+        );
 
-        $order = null;
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        if (array_key_exists('month', $search) && !empty($search['month'])) {
-            $filter[] = "(DATE_FORMAT(created, '%Y-%m') = '".$search['month'][0]['value']."')";
-        }
-
-        $filter[] = "(content_type_name = 'photo')";
-
-        // Search in title and metadata
-        if (is_array($search) && array_key_exists('title', $search)) {
-            $title = $search['title'][0]['value'];
-            $filter[] = "(title LIKE '%".$title."%' OR".
-                         " description LIKE '%".$title."%' OR".
-                         " metadata LIKE '%".$title."%')";
-        }
-
-        $filter[] = "in_litter != 1";
-
-        $criteria = implode(' AND ', $filter);
-
-        $results = $em->findBy($criteria, $order, $elementsPerPage, $page);
+        $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
 
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'extra'             => $this->loadExtraData($results),
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => $total,
-            )
-        );
+        return new JsonResponse([
+            'extra'   => $this->loadExtraData($results),
+            'results' => $results,
+            'total'   => $total,
+        ]);
     }
 }

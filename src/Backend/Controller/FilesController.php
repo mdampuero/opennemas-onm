@@ -66,18 +66,18 @@ class FilesController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
 
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->name
+                'value' => $category->pk_content_category
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
+                    'value' => $subcategory->pk_content_category
                 ];
             }
         }
@@ -98,12 +98,9 @@ class FilesController extends Controller
      */
     public function widgetAction()
     {
-        return $this->render(
-            'files/list.tpl',
-            array(
-                'category' => 'widget'
-            )
-        );
+        return $this->render('files/list.tpl', [
+            'category' => 'widget'
+        ]);
     }
 
     /**
@@ -118,12 +115,12 @@ class FilesController extends Controller
     {
         $cm               = new \ContentManager();
         $total_num_photos = 0;
-        $files            = $size = $sub_size = $num_photos = array();
+        $files            = $size = $sub_size = $num_photos = [];
         $fullcat          = $this->ccm->orderByPosmenu($this->ccm->categories);
 
-        $num_sub_photos = array();
-        $sub_files      = array();
-        $aux_categories = array();
+        $num_sub_photos = [];
+        $sub_files      = [];
+        $aux_categories = [];
 
         foreach ($this->parentCategories as $k => $v) {
             $num_photos[$k]    =
@@ -132,7 +129,7 @@ class FilesController extends Controller
 
             $files[$v->pk_content_category] = $cm->findAll(
                 'Attachment',
-                'fk_content_type = 3 AND category = '.$v->pk_content_category,
+                'fk_content_type = 3 AND category = ' . $v->pk_content_category,
                 'ORDER BY created DESC'
             );
 
@@ -196,18 +193,15 @@ class FilesController extends Controller
             }
         }
 
-        return $this->render(
-            'files/statistics.tpl',
-            array(
-                'total_img'    => $total_num_photos,
-                'total_size'   => $total_size,
-                'size'         => $size,
-                'sub_size'     => $sub_size,
-                'num_photos'   => $num_photos,
-                'categorys'    => $this->parentCategories,
-                'subcategorys' => $this->subcat,
-            )
-        );
+        return $this->render('files/statistics.tpl', [
+            'total_img'    => $total_num_photos,
+            'total_size'   => $total_size,
+            'size'         => $size,
+            'sub_size'     => $sub_size,
+            'num_photos'   => $num_photos,
+            'categorys'    => $this->parentCategories,
+            'subcategorys' => $this->subcat,
+        ]);
     }
 
     /**
@@ -312,19 +306,19 @@ class FilesController extends Controller
             }
         }
 
-        /**
-         *  content_status => If the file extension is html or js this files will be use for sever them directly from a expecific
-         *  url
-         */
-        $data = array(
-            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+        //  If the file extension is html or js this files will be use for sever them directly from a expecific
+        $data = [
+            'title'          => $request->request
+                ->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'path'           => $directoryDate . $fileName,
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
             'description'    => $request->request->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', null, FILTER_SANITIZE_STRING)
+            ),
             'fk_publisher'   => $this->getUser()->id,
-        );
+        ];
 
         // Move uploaded file
         try {
@@ -391,13 +385,10 @@ class FilesController extends Controller
         }
 
         // Show the
-        return $this->render(
-            'files/new.tpl',
-            array(
-                'attaches' => $file,
-                'page'     => $page,
-            )
-        );
+        return $this->render('files/new.tpl', [
+            'attaches' => $file,
+            'page'     => $page,
+        ]);
     }
 
     /**
@@ -414,18 +405,21 @@ class FilesController extends Controller
         $id = $request->request->getDigits('id');
 
         $file = new \Attachment($id);
-        $data = array(
-            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+        $data = [
+            'title'          => $request->request
+                ->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => 1,
             'id'             => (int) $id,
             'description'    => $request->request->filter('description', null),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', null, FILTER_SANITIZE_STRING)
+            ),
             'fk_publisher'   => $this->getUser()->id,
-        );
+        ];
 
         if ($file->update($data)) {
-            dispatchEventWithParams('content.update', array('content' => $file));
+            dispatchEventWithParams('content.update', [ 'content' => $file ]);
             $this->get('session')->getFlashBag()->add('success', sprintf(_('File successfully updated.')));
         } else {
             $this->get('session')->getFlashBag()->add(
@@ -435,7 +429,7 @@ class FilesController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_file_show', array('id' => $id,))
+            $this->generateUrl('admin_file_show', [ 'id' => $id, ])
         );
     }
 
@@ -496,16 +490,16 @@ class FilesController extends Controller
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'attachment')),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'attachment' ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
+        ];
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $files      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $files      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countFiles = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->get([
@@ -520,14 +514,14 @@ class FilesController extends Controller
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
-            array(
+            [
                 'contentType'           => 'Attachment',
                 'contents'              => $files,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $this->category,
                 'pagination'            => $pagination->links,
                 'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider_related'),
-            )
+            ]
         );
     }
 }

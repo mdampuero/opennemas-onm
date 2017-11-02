@@ -7,23 +7,81 @@
      * @name  CommentListCtrl
      *
      * @requires $controller
-     * @requires $http
-     * @requires $uibModal
+     * @requires $location
      * @requires $scope
-     * @requires $timeout
-     * @requires itemService
-     * @requires routing
+     * @requires http
      * @requires messenger
-     * @requires $http
+     * @requires oqlEncoder
      *
      * @description
-     *   Controller for News Agency listing.
+     *   Controller for comments listing.
      */
     .controller('CommentListCtrl', [
-      '$controller', '$scope', 'http', 'messenger', 'routing',
-      function($controller, $scope, http, messenger, routing) {
+      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
+      function($controller, $location, $scope, http, messenger, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+
+        /**
+         * The criteria to search.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = {
+          epp: 10,
+          orderBy: { date:  'desc' },
+          page: 1
+        };
+
+        /**
+         * Updates the array of contents.
+         *
+         * @param string route Route name.
+         */
+        $scope.list = function(route) {
+          $scope.contents = [];
+          $scope.loading  = 1;
+          $scope.selected = { all: false, contents: [] };
+
+          oqlEncoder.configure({
+            placeholder: {
+              body: 'body ~ "%[value]%"',
+            }
+          });
+
+          var oql   = oqlEncoder.getOql($scope.criteria);
+          var route = {
+            name: $scope.route,
+            params:  {
+              contentType: 'comment',
+              oql: oql
+            }
+          };
+
+          $location.search('oql', oql);
+
+          http.get(route).then(function(response) {
+            $scope.total = parseInt(response.data.total);
+            $scope.contents = response.data.results;
+
+            if (response.data.hasOwnProperty('extra')) {
+              $scope.extra = response.data.extra;
+            }
+
+            // Disable spinner
+            $scope.loading = 0;
+            $scope.loadingMore = false;
+          }, function () {
+            $scope.loading = 0;
+            var params = {
+              id: new Date().getTime(),
+              message: 'Error while fetching data from backend',
+              type: 'error'
+            };
+
+            messenger.post(params);
+          });
+        };
 
         /**
          * @function patch

@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the specials
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,11 +15,6 @@ use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Handles the actions for the specials
- *
- * @package Backend_Controllers
- */
 class SpecialsController extends Controller
 {
     /**
@@ -61,11 +51,11 @@ class SpecialsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
-                'name' => $category->title,
-                'value' => $category->name
+                'name'  => $category->title,
+                'value' => $category->pk_content_category
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
@@ -92,21 +82,21 @@ class SpecialsController extends Controller
      */
     public function widgetAction()
     {
-        if (isset($configurations['total_widget'])
-            && !empty($configurations['total_widget'])
+        $numFavorites = 1;
+        $settings     = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([ 'special_settings' ]);
+
+        if (isset($settings['total_widget'])
+            && !empty($settings['total_widget'])
         ) {
-            $numFavorites = $configurations['total_widget'];
-        } else {
-            $numFavorites = 1;
+            $numFavorites = $settings['total_widget'];
         }
 
-        return $this->render(
-            'special/list.tpl',
-            array(
-                'total_elements_widget' => $numFavorites,
-                'category'              => 'widget',
-            )
-        );
+        return $this->render('special/list.tpl', [
+            'total_elements_widget' => $numFavorites,
+            'category'              => 'widget',
+        ]);
     }
 
     /**
@@ -127,11 +117,15 @@ class SpecialsController extends Controller
 
         $special = new \Special();
 
-        $data = array(
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+        $data = [
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'subtitle'       => $request->request
+                ->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
             'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -139,7 +133,7 @@ class SpecialsController extends Controller
             'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
             'noticias_right' => json_decode($request->request->get('noticias_right_input')),
             'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
-        );
+        ];
 
         if ($special->create($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -188,8 +182,8 @@ class SpecialsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $contentsLeft  = array();
-        $contentsRight = array();
+        $contentsLeft  = [];
+        $contentsRight = [];
 
         if (!empty($contents)) {
             foreach ($contents as $content) {
@@ -200,21 +194,16 @@ class SpecialsController extends Controller
                 }
             }
 
-            $this->view->assign(
-                array(
-                    'contentsRight' => $contentsRight,
-                    'contentsLeft'  => $contentsLeft,
-                )
-            );
+            $this->view->assign([
+                'contentsRight' => $contentsRight,
+                'contentsLeft'  => $contentsLeft,
+            ]);
         }
 
-        return $this->render(
-            'special/new.tpl',
-            array(
-                'special'  => $special,
-                'category' => $special->category,
-            )
-        );
+        return $this->render('special/new.tpl', [
+            'special'  => $special,
+            'category' => $special->category,
+        ]);
     }
 
     /**
@@ -241,15 +230,19 @@ class SpecialsController extends Controller
                     _("Special data sent not valid.")
                 );
 
-                return $this->redirect($this->generateUrl('admin_special_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('admin_special_show', [ 'id' => $id ]));
             }
 
-            $data = array(
+            $data = [
                 'id'             => $id,
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'title'          => $request->request
+                    ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'subtitle'       => $request->request
+                    ->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'description'    => $request->request->get('description', ''),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                    $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+                ),
                 'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -257,7 +250,7 @@ class SpecialsController extends Controller
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
                 'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
                 'noticias_right' => json_decode($request->request->get('noticias_right_input')),
-            );
+            ];
 
             if ($special->update($data)) {
                 $this->get('session')->getFlashBag()->add(
@@ -271,12 +264,9 @@ class SpecialsController extends Controller
                 );
             }
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_special_show',
-                    array('id' => $special->id)
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_special_show', [
+                'id' => $special->id
+            ]));
         }
     }
 
@@ -312,15 +302,10 @@ class SpecialsController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_specials',
-                    array(
-                        'category' => $category,
-                        'page'     => $page
-                    )
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_specials', [
+                'category' => $category,
+                'page'     => $page
+            ]));
         } else {
             return new Response('Ok', 200);
         }
@@ -380,17 +365,19 @@ class SpecialsController extends Controller
      */
     public function configAction(Request $request)
     {
+        $sm = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
         if ('POST' == $request->getMethod()) {
             $settingsRAW = $request->request->get('special_settings');
-            $data        = array(
-                'special_settings' => array(
+            $data        = [
+                'special_settings' => [
                     'total_widget' => $settingsRAW['total_widget'] ?: 0,
-                    'time_last' => $settingsRAW['time_last'] ?: 0,
-                )
-            );
+                    'time_last'    => $settingsRAW['time_last'] ?: 0,
+                ]
+            ];
 
             foreach ($data as $key => $value) {
-                s::set($key, $value);
+                $sm->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add(
@@ -399,13 +386,10 @@ class SpecialsController extends Controller
             );
 
             return $this->redirect($this->generateUrl('admin_specials_config'));
-        } else {
-            $configurations = s::get(array('special_settings',));
-
-            return $this->render(
-                'special/config.tpl',
-                array('configs'   => $configurations,)
-            );
         }
+
+        $settings = $sm->get([ 'special_settings' ]);
+
+        return $this->render('special/config.tpl', [ 'configs' => $settings ]);
     }
 }

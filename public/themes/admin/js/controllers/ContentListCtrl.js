@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$http', '$uibModal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'Encoder', 'queryManager', 'localizer',
-  function($http, $uibModal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, Encoder, queryManager, localizer) {
+  '$http', '$location', '$uibModal', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'localizer',
+  function($http, $location, $uibModal, $scope, $timeout, $window, http, routing, messenger, webStorage, oqlEncoder, localizer) {
     'use strict';
 
     /**
@@ -11,7 +11,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      *
      * @type Object
      */
-    $scope.criteria = {};
+    $scope.criteria = {
+      content_type_name: 'article',
+      epp: 10,
+      in_litter: 0,
+      orderBy: { created:  'desc' },
+      page: 1
+    };
 
     /**
      * The list of elements.
@@ -21,42 +27,18 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     $scope.contents = [];
 
     /**
-     * The search timeout function.
-     *
-     * @type function
-     */
-    $scope.searchTimeout;
-
-    /**
      * The list of selected elements.
      *
      * @type array
      */
-    $scope.selected = {
-      all: false,
-      contents: []
-    };
+    $scope.selected = { all: false, contents: [] };
 
     /**
-     * The listing order.
+     * The search timeout function.
      *
-     * @type Object
+     * @type function
      */
-    $scope.orderBy = [{
-      name: 'created',
-      value: 'desc'
-    }];
-
-    /**
-     * The current pagination status.
-     *
-     * @type Object
-     */
-    $scope.pagination = {
-      epp: 10,
-      page: 1,
-      total: 0
-    };
+    $scope.tm = null;
 
     /**
      * Tree options for opinion frontpage.
@@ -64,8 +46,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @type {Object}
      */
     $scope.treeOptions = {
-      accept: function(sourceNodeScope, destNodesScope, destIndex) {
-        return destNodesScope.$modelValue.indexOf(sourceNodeScope.$modelValue) !== -1;
+      accept: function(sourceScope, targetScope) {
+        return targetScope.$modelValue.indexOf(sourceScope.$modelValue) !== -1;
       },
     };
 
@@ -76,16 +58,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.views = [ 10, 25, 50, 100 ];
 
-    /**
-     * Default join operator for filters.
-     *
-     * @type string
-     */
-    $scope.union = 'AND';
-
     $scope.deselectAll = function() {
-      $scope.selected.all = 0
-      $scope.selected.contents = [];
+      $scope.selected.all          = 0;
+      $scope.selected.contents     = [];
       $scope.selected.lastSelected = null;
     };
 
@@ -96,9 +71,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param string route Route name.
      */
     $scope.edit = function(id, route) {
-      return routing.generate(route, {
-        id: id
-      });
+      return routing.generate(route, { id: id });
     };
 
     /**
@@ -109,75 +82,16 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param string sortBy  Field name to sort by.
      * @param string route   Route name.
      */
-    $scope.init = function(contentName, filters, sortBy, sortOrder, route, lang, epp) {
-      // Filters used in GUI
-      $scope.criteria = filters;
-
-      if (!angular.isUndefined(epp)) {
-        $scope.pagination.epp = epp;
-      }
-
+    $scope.init = function(contentName, route) {
       // Add content_type_name if it isn't a list of all content types
-      if (contentName !== null && contentName !== 'content'
-      ) {
+      if (contentName !== null && contentName !== 'content') {
         $scope.criteria.content_type_name = contentName;
-      }
-
-      // Set sortBy
-      if (sortBy != null) {
-        $scope.orderBy.name = sortBy;
-      }
-
-      // Set sortOrder
-      if (sortOrder != null) {
-        $scope.orderBy.value = sortOrder;
-      }
-
-      // Initialize filters from URL
-      var queryParams = queryManager.getParams();
-
-      for (var name in queryParams.criteria) {
-        $scope.criteria[name] = queryParams.criteria[name];
-      }
-
-      // Set sortBy
-      if (queryParams.order != null) {
-        $scope.orderBy = queryParams.order;
-      }
-
-      if (queryParams.epp) {
-        $scope.pagination.epp = queryParams.epp;
-      }
-
-      if (queryParams.page) {
-        $scope.pagination.page = queryParams.page;
       }
 
       // Route for list (required by $watch)
       $scope.route = route;
 
       $scope.list(route);
-    };
-
-    /**
-     * Checks if the listing is ordered by the given field name.
-     *
-     * @param string name The field name.
-     *
-     * @return mixed The order value, if the order exists. Otherwise,
-     *               returns false.
-     */
-    $scope.isOrderedBy = function(name) {
-      var i = 0;
-      while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
-        i++;
-      }
-
-      if (i < $scope.orderBy.length) {
-        return $scope.orderBy[i].value;
-      }
-
-      return false;
     };
 
     /**
@@ -200,40 +114,37 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.loadingMore = true;
       } else {
         $scope.contents = [];
-        $scope.loading = 1;
-
+        $scope.loading  = 1;
         $scope.selected = { all: false, contents: [] };
       }
 
-      var processedFilters = Encoder.encode($scope.criteria);
-      var filtersToEncode = angular.copy($scope.criteria);
+      oqlEncoder.configure({
+        placeholder: {
+          title: 'title ~ "%[value]%"',
+        }
+      });
 
-      delete filtersToEncode.content_type_name;
-
-      if ($scope.mode !== 'grid') {
-        queryManager.setParams(filtersToEncode, $scope.orderBy,
-            $scope.pagination.epp, $scope.pagination.page);
-      }
-
-      var data = {
-        contentType:       $scope.criteria.content_type_name,
-        elements_per_page: $scope.pagination.epp,
-        page:              $scope.pagination.page,
-        sort_by:           $scope.orderBy.name,
-        sort_order:        $scope.orderBy.value,
-        search:            processedFilters
+      var oql   = oqlEncoder.getOql($scope.criteria);
+      var route = {
+        name: $scope.route,
+        params:  {
+          contentType: $scope.criteria.content_type_name ?
+            $scope.criteria.content_type_name : 'content' ,
+          oql: oql
+        }
       };
 
-      var url = routing.generate(route, data);
+      $location.search('oql', oql);
 
-      $http.get(url).then(function(response) {
-        $scope.pagination.total = parseInt(response.data.total);
+      http.get(route).then(function(response) {
+        $scope.total = parseInt(response.data.total);
         if ($scope.mode === 'grid' && !reset) {
           $scope.contents = $scope.contents.concat(response.data.results);
         } else {
           $scope.contents = response.data.results;
-
         }
+
+        $scope.getContentsLocalizeTitle();
 
         $scope.map = response.data.map;
 
@@ -244,7 +155,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         // Disable spinner
         $scope.loading = 0;
         $scope.loadingMore = false;
-      }, function errorCallback(response) {
+      }, function () {
         $scope.loading = 0;
         var params = {
           id: new Date().getTime(),
@@ -276,32 +187,18 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         }
       );
 
-      $http.post(url, {
-        positions: ids
-      }).success(function(response) {
-        if (response.content_status != null) {
-          contents[index].content_status = response.content_status;
-        }
-
-        for (var i = 0; i < response.messages.length; i++) {
-          var params = {
-            id: new Date().getTime() + '_' + response.messages[i].id,
-            message: response.messages[i].message,
-            type: response.messages[i].type
-          };
-
-          messenger.post(params);
-        }
-      }).error(function(response) {});
+      $http.post(url, { positions: ids }).success(function(response) {
+        messenger.post(response.messages);
+      }).error(function() {});
     };
 
-    $scope.saveOpinionsFrontpage = function(route) {
+    $scope.saveOpinionsFrontpage = function() {
       var ids = { director: [], editorial: [], opinions: [] };
 
       for (var name in ids) {
         for (var i = 0; i < $scope[name].length; i++) {
           ids[name].push($scope[name][i].id);
-        };
+        }
       }
 
       var url = routing.generate('backend_ws_opinions_save_frontpage');
@@ -311,12 +208,12 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }).error(function() {});
     };
 
-    $scope.scroll = function(route) {
+    $scope.scroll = function() {
       if ($scope.total === $scope.contents.length) {
         return false;
       }
 
-      $scope.pagination.page++;
+      $scope.criteria.page++;
     };
 
     /**
@@ -356,7 +253,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
     };
 
-
     /**
      * Selects/unselects all instances.
      */
@@ -368,19 +264,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       } else {
         $scope.selected.contents = [];
         $scope.selected.lastSelected = null;
-      }
-    };
-
-    /**
-     * Changes the page of the list.
-     *
-     * @param  int page Page number.
-     */
-    $scope.selectPage = function(page, route) {
-      if (page !== $scope.pagination.page) {
-        $scope.pagination.page = page;
-        // $location.search('page', page);
-        $scope.list(route);
       }
     };
 
@@ -397,36 +280,38 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $scope.mode = mode;
 
-      if (mode === 'grid') {
-        var maxHeight = $(window).height() - $('.header').height() -
-          $('.actions-navbar').height();
-        var maxWidth = $(window).width() - $('.sidebar').width();
-
-        if ($('.content-wrapper').length > 0) {
-          maxWidth -=parseInt($('.content-wrapper').css('padding-right'));
-        }
-
-        var height = $('.infinite-col').width() + 15;
-        var width = $('.infinite-col').width() + 15;
-
-
-        var rows = Math.ceil(maxHeight / height);
-        var cols = Math.floor(maxWidth / width);
-
-        if (rows === 0) {
-          rows = 1;
-        }
-
-        if (cols === 0) {
-          cols = 1;
-        }
-
-        if ($scope.pagination.epp !== rows * cols) {
-          $scope.contents = [];
-        }
-
-        $scope.pagination.epp = rows * cols;
+      if (mode !== 'grid') {
+        return;
       }
+
+      var maxHeight = $(window).height() - $('.header').height() -
+        $('.actions-navbar').height();
+      var maxWidth = $(window).width() - $('.sidebar').width();
+
+      if ($('.content-wrapper').length > 0) {
+        maxWidth -=parseInt($('.content-wrapper').css('padding-right'));
+      }
+
+      var height = $('.infinite-col').width() + 15;
+      var width = $('.infinite-col').width() + 15;
+
+
+      var rows = Math.ceil(maxHeight / height);
+      var cols = Math.floor(maxWidth / width);
+
+      if (rows === 0) {
+        rows = 1;
+      }
+
+      if (cols === 0) {
+        cols = 1;
+      }
+
+      if ($scope.criteria.epp !== rows * cols) {
+        $scope.contents = [];
+      }
+
+      $scope.criteria.epp = rows * cols;
     };
 
     /**
@@ -436,8 +321,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.searchByKeypress = function(event) {
       if (event.keyCode === 13) {
-        if ($scope.pagination.page !== 1) {
-          $scope.pagination.page = 1;
+        if ($scope.criteria.page !== 1) {
+          $scope.criteria.page = 1;
         } else {
           $scope.list($scope.route);
         }
@@ -468,8 +353,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.sort_order = 'asc';
         }
       } else {
-        $scope.sort_by = field;
-        $scope.sort_order === 'asc';
+        $scope.sort_by    = field;
+        $scope.sort_order = 'asc';
       }
 
       $scope.list($scope.route);
@@ -492,7 +377,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.selected.contents.splice(
             $scope.selected.contents.indexOf(content.id), 1);
       }
-    }
+    };
 
     /**
      * Updates an item.
@@ -840,88 +725,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
-     * Takes out of trash a content by using a confirmation dialog
-     */
-    $scope.restoreFromTrash = function(content) {
-      var modal = $uibModal.open({
-        templateUrl: 'modal-restore-from-trash',
-        backdrop: 'static',
-        controller: 'modalCtrl',
-        resolve: {
-          template: function() {
-            return {
-              content: content
-            };
-          },
-          success: function() {
-            return function() {
-              var url = routing.generate(
-                'backend_ws_content_restore_from_trash',
-                { contentType: content.content_type_name, id: content.id }
-              );
-
-              return $http.post(url);
-            };
-          }
-        }
-      });
-
-      modal.result.then(function(response) {
-        if (response) {
-          messenger.post(response.data.messages);
-
-          if (response.success) {
-            $scope.list($scope.route);
-          }
-        }
-      });
-    };
-
-    /**
-     * Takes out of trash a list of contents by using a confirmation dialog
-     */
-    $scope.restoreFromTrashSelected = function () {
-      // Enable spinner
-      $scope.deleting = 1;
-
-      var modal = $uibModal.open({
-        templateUrl: 'modal-batch-restore',
-        backdrop: 'static',
-        controller: 'modalCtrl',
-        resolve: {
-          template: function() {
-            return {
-              selected: $scope.selected
-            };
-          },
-          success: function() {
-            return function() {
-              var url = routing.generate(
-                'backend_ws_contents_batch_restore_from_trash',
-                { contentType: 'content' }
-              );
-
-              return $http.post(url, {ids: $scope.selected.contents});
-            };
-          }
-        }
-      });
-
-      modal.result.then(function(response) {
-        if (response) {
-          messenger.post(response.data.messages);
-
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
-
-          if (response.success) {
-            $scope.list($scope.route);
-          }
-        }
-      });
-    };
-
-    /**
      * Sends a content to trash by using a confirmation dialog
      *
      * @param mixed content The content to send to trash.
@@ -1000,13 +803,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
-     * Returns a number of pages for the total amount of contents
-     */
-    $scope.getNumberOfPages = function() {
-      return Math.ceil($scope.pagination.total / $scope.pagination.epp);
-    };
-
-    /**
      * Updates selected items current status.
      * @param  string  loading Name of the work-in-progress property.
      * @param  integer status  Current work-in-progress status.
@@ -1037,34 +833,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
-     * Updates the status property for selected contents.
-     *
-     * @param int loading Loading flag to use in template.
-     * @param int status  Status value.
-     */
-    function updateStatus(loading, status) {
-      // Load shared variable
-      var contents = $scope.contents;
-      var selected = $scope.selected.contents;
-
-      for (var i = 0; i < selected.length; i++) {
-        var j = 0;
-        while (j < contents.length && contents[j].id !== selected[i]) {
-          j++;
-        }
-
-        if (j < contents.length) {
-          contents[j].status = status;
-          contents[j].loading = loading;
-        }
-      }
-
-      // Updated shared variable
-      $scope.contents = contents;
-      $scope.selected.contents = selected;
-    }
-
-    /**
      * Reloads the image list on media picker close event.
      */
     $scope.$on('MediaPicker.close', function() {
@@ -1073,60 +841,37 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }
     });
 
-    /**
-     * Go back to page 1 when changing the elements per page in the list.
-     *
-     * @param array newValues The new values
-     * @param array oldValues The old values
-     */
-    $scope.$watch('[pagination.epp]', function(newValues, oldValues) {
-        $scope.pagination.page = 1;
-    }, true);
-
-    /**
-     * Refresh the list of elements when some parameter changes.
-     *
-     * @param array newValues The new values
-     * @param array oldValues The old values
-     */
-    $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
-      if (newValues !== oldValues) {
-        $scope.list($scope.route);
+    // Reloads the list when criteria changes
+    $scope.$watch('criteria', function(nv, ov) {
+      if (nv === ov) {
+        return;
       }
-    }, true);
 
-    /**
-     * Reloads the list when filters change.
-     *
-     * @param  object newValues New filters values.
-     * @param  object oldValues Old filters values.
-     */
-    $scope.$watch('criteria', function(newValues, oldValues) {
       // Change page when scrolling in grid mode
-      if ($scope.searchTimeout) {
-        $timeout.cancel($scope.searchTimeout);
+      if ($scope.tm) {
+        $timeout.cancel($scope.tm);
       }
 
-      if (newValues !== oldValues) {
-        $scope.pagination.page = 1;
-
-        $scope.searchTimeout = $timeout(function() {
-          $scope.list($scope.route, true);
-        }, 500);
+      if (ov.page === nv.page) {
+        $scope.criteria.page = 1;
       }
+
+      $scope.tm = $timeout(function() {
+        $scope.list($scope.route, true);
+      }, 500);
     }, true);
 
     // Change page when scrolling in grid mode
     var step = 0;
     $(window).scroll(function() {
-      if (!$scope.mode || $scope.mode === 'list'
-          || $scope.contents.length == $scope.pagination.total) {
+      if (!$scope.mode || $scope.mode === 'list' ||
+          $scope.contents.length === $scope.total) {
         return;
       }
 
       var top = $(window).scrollTop();
 
-      if (top != step && top - step > 50) {
+      if (top !== step && top - step > 50) {
         step = top;
       } else {
         return;
@@ -1136,19 +881,23 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var maxHeight = $('.page-container').height();
 
       if (maxHeight - height - top < 100) {
-        $scope.pagination.page++;
+        $scope.criteria.page++;
         $scope.$apply();
       }
     });
-
 
     /**
      *  Localize all titles of the contents
      */
     $scope.getContentsLocalizeTitle = function() {
+      if (!$scope.extra || !$scope.extra.options) {
+        return;
+      }
+
       var lz   = localizer.get($scope.extra.options);
       var keys = [ 'title' ];
+
       return lz.localize($scope.contents, keys, $scope.extra.options.default);
-    }
+    };
   }
 ]);
