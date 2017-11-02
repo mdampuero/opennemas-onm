@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="MenuListCtrl" ng-init="init(null, { content_status: -1, renderlet: -1 }, 'name', 'asc', 'backend_ws_menus_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); menu_positions = {json_encode($menu_positions)|clear_json}; languageData = {json_encode($language_data)|clear_json}">
+<div ng-app="BackendApp" ng-controller="MenuListCtrl" ng-init="criteria = { epp: 10, orderBy: { name: 'asc' }, page: 1 }; init(null, 'backend_ws_menus_list'); menu_positions = {json_encode($menu_positions)|clear_json}; languageData = {json_encode($language_data)|clear_json}">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -78,11 +78,11 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="name" ng-model="criteria.name_like" placeholder="{t}Search by name{/t}" type="text"/>
+            <input class="no-boarder" name="name" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text"/>
           </li>
           <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
@@ -94,7 +94,7 @@
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>
