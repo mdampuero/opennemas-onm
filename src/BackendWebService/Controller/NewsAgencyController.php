@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -118,29 +118,27 @@ class NewsAgencyController extends Controller
      */
     public function listAction(Request $request)
     {
-        $page   = $request->request->getDigits('page', 1);
-        $search = $request->request->get('search');
-        $epp    = $request->request->getDigits('elements_per_page', 10);
+        $oql = $request->query->get('oql', '');
+
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
         $source = $title = '.*';
         $type   = 'text';
 
-        if (is_array($search)) {
-            if (array_key_exists('source', $search)) {
-                $source = $search['source'][0]['value'];
-            }
-
-            if (array_key_exists('title', $search)) {
-                $title = $search['title'][0]['value'];
-            }
-
-            if (array_key_exists('type', $search)) {
-                $type = $search['type'][0]['value'];
-            }
+        if (preg_match_all('/title\s*LIKE\s*"([^"]+)"/', $criteria, $matches)) {
+            $title = preg_replace('/%/', '', $matches[1][0]);
         }
 
-        $criteria = [ 'source' => $source, 'title'  => $title, 'type' => $type ];
+        if (preg_match_all('/source\s*=\s*"([^"]+)"/', $criteria, $matches)) {
+            $source = $matches[1][0];
+        }
 
+        if (preg_match_all('/type\s*=\s*"([^"]+)"/', $criteria, $matches)) {
+            $type = $matches[1][0];
+        }
+
+        $criteria   = [ 'source' => $source, 'title'  => $title, 'type' => $type ];
         $repository = new LocalRepository();
 
         $total    = $repository->countBy($criteria);
@@ -187,17 +185,15 @@ class NewsAgencyController extends Controller
             }
         }
 
-        $timezone  = $this->container->get('core.locale')->getTimeZone();
+        $timezone = $this->container->get('core.locale')->getTimeZone();
 
         $extra = array_merge([
             'imported' => $imported,
-            'related' => $related,
+            'related'  => $related,
             'timezone' => $timezone->getName(),
         ], $this->getTemplateParams());
 
         return new JsonResponse([
-            'epp'     => $epp,
-            'page'    => $page,
             'results' => $elements,
             'total'   => $total,
             'extra'   => $extra,
@@ -244,11 +240,12 @@ class NewsAgencyController extends Controller
     private function getTemplateParams()
     {
         $params = [];
-
-        $path = $this->getParameter('core.paths.cache') .  DS
-            . $this->get('core.instance')->internal_name;
-        $tpl  = $this->get('view')->getBackendTemplate();
         $logger = $this->get('error.log');
+
+        $path = $this->getParameter('core.paths.cache') . DS
+            . $this->get('core.instance')->internal_name;
+
+        $tpl = $this->get('view')->getBackendTemplate();
 
         // Check last synchronization
         $synchronizer        = new Synchronizer($path, $tpl, $logger);
@@ -262,12 +259,11 @@ class NewsAgencyController extends Controller
         }
 
         // Get categories
-        $this->ccm  = \ContentCategoryManager::get_instance();
+        $this->ccm = \ContentCategoryManager::get_instance();
 
         $categories = array_filter($this->ccm->findAll(), function ($category) {
             return $category->internal_category == '1';
         });
-
 
         $params['categories'] = array_map(function ($category) {
             return [ 'name' => $category->title, 'value' => $category->id ];
@@ -277,7 +273,7 @@ class NewsAgencyController extends Controller
         $params['servers'] = $this->get('setting_repository')->get('news_agency_config');
 
         if (!is_array($params['servers'])) {
-            $params['servers'] = array();
+            $params['servers'] = [];
         }
 
         // Build sources select options
@@ -298,6 +294,7 @@ class NewsAgencyController extends Controller
         ];
 
         $authors = \User::getAllUsersAuthors();
+
         $params['authors'] = [];
 
         foreach ($authors as $author) {
