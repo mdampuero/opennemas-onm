@@ -9,10 +9,10 @@
     <div class="m-b-40">
       <div class="clearfix">
         <h5 class="pull-left">{t}Related in frontpage{/t}</h5>
-        <div class="btn btn-white btn-mini pull-right m-t-5" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedFront">
+        <button class="btn btn-white btn-mini pull-right m-t-5" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedFront" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
           <i class="fa fa-plus"></i>
           {t}Add contents{/t}
-        </div>
+        </button>
       </div>
       <div ui-sortable class="ng-cloak" ng-model="article.relatedFront">
         <div class="related-item" ng-repeat="content in article.relatedFront">
@@ -29,10 +29,10 @@
     <div class="m-b-40">
       <div class="clearfix">
         <h5 class="pull-left">{t}Related in inner{/t}</h5>
-        <div class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedInner">
+        <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedInner" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
           <i class="fa fa-plus"></i>
           {t}Add contents{/t}
-        </div>
+        </button>
       </div>
       <div ui-sortable class="ng-cloak" ng-model="article.relatedInner">
         <div class="related-item" ng-repeat="content in article.relatedInner">
@@ -50,7 +50,7 @@
       <div class="m-b-40">
         <div class="clearfix">
           <h5 class="pull-left">{t}Related in home{/t}</h5>
-          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedHome" type="button">
+          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedHome" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
             <i class="fa fa-plus"></i>
             {t}Add contents{/t}
           </button>

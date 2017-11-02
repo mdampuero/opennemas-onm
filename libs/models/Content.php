@@ -333,7 +333,8 @@ class Content implements \JsonSerializable
      */
     public function __set($name, $value)
     {
-        if (getService('core.instance')->hasMultilanguage()
+        if ($this->content_type_name === 'article'
+            && getService('core.instance')->hasMultilanguage()
             && in_array($name, $this->getL10nKeys())
         ) {
             $value = getService('data.manager.filter')
@@ -1493,8 +1494,9 @@ class Content implements \JsonSerializable
                 [ $pkContent ]
             );
 
-            $this->category       = $rs;
-            $this->category_name  = $this->loadCategoryName($this->category);
+            $this->category      = $rs;
+            $this->category_name = $this->loadCategoryName($this->category);
+
             $category_title_aux = ContentCategoryManager::get_instance()
                  ->getTitle($this->category_name);
 
