@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="NewsAgencyListCtrl" ng-init="criteria = { source: '', title: '', type: 'text' }; init('', 'backend_ws_news_agency_list')">
+  <div ng-app="BackendApp" ng-controller="NewsAgencyListCtrl" ng-init="criteria = { epp: 10, page: 1, source: '', title: '', type: 'text'}; init('', 'backend_ws_news_agency_list')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
