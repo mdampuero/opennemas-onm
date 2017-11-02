@@ -26,6 +26,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
         if (!defined('MEDIA_PATH')) {
             define('MEDIA_PATH', 'media');
         }
+
         if (!defined('INSTANCE_UNIQUE_NAME')) {
             define('INSTANCE_UNIQUE_NAME', 'opennemas');
         }
@@ -62,11 +63,11 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
         );
 
         // Test absolute url generation for article
-        $this->container = $this->getMockBuilder('Container')
+        $this->container    = $this->getMockBuilder('Container')
             ->setMethods(['get'])->getMock();
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods(['getCurrentRequest'])->getMock();
-        $this->request = $this->getMockBuilder('Request')
+        $this->request      = $this->getMockBuilder('Request')
             ->setMethods(['getSchemeAndHttpHost'])->getMock();
 
         $this->request->expects($this->once())
@@ -79,9 +80,9 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->urlGenerator->generate($this->getFixture('article'), ['absolute' => true]),
-            'http://www.example.com/articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
+            'http://www.example.com/articulo/actualidad/'
+            . 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
         );
-
     }
 
     /**
@@ -98,11 +99,11 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
             'media/opennemas/files/route/to/file.name'
         );
 
-        $article = $this->getFixture('article');
+        $article                     = $this->getFixture('article');
         $article->params['bodyLink'] = 'http://www.example.com';
         $this->assertEquals(
             $method->invokeArgs($this->urlGenerator, [ $article ]),
-            '/redirect?to=http%3A%2F%2Fwww.example.com'
+            'redirect?to=http%3A%2F%2Fwww.example.com'
         );
 
         $article = $this->getFixture('article');
@@ -203,93 +204,93 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
     {
         switch ($name) {
             case 'article':
-                $content = new \Article();
-                $content->id = 252;
-                $content->category_name = 'actualidad';
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Article();
+                $content->id                = 252;
+                $content->category_name     = 'actualidad';
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'article';
-                $content->slug = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+                $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
                 break;
             case 'attachment':
-                $content = new \Attachment();
+                $content                    = new \Attachment();
                 $content->content_type_name = 'attachment';
-                $content->id = 252;
-                $content->path = 'route/to/file.name';
+                $content->id                = 252;
+                $content->path              = 'route/to/file.name';
                 break;
             case 'photo':
-                $content = new \Photo();
+                $content                    = new \Photo();
                 $content->content_type_name = 'photo';
-                $content->path_file = 'route/to';
-                $content->name = 'photo.file.name';
+                $content->path_file         = 'route/to';
+                $content->name              = 'photo.file.name';
                 break;
             case 'video':
-                $content = new \Video();
-                $content->id = 252;
-                $content->category_name = 'actualidad';
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Video();
+                $content->id                = 252;
+                $content->category_name     = 'actualidad';
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'video';
-                $content->slug = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+                $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
                 break;
             case 'letter':
-                $content = new \Letter();
-                $content->id = 252;
-                $content->author = 'My author';
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Letter();
+                $content->id                = 252;
+                $content->author            = 'My author';
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'letter';
-                $content->slug = 'letter-slug';
+                $content->slug              = 'letter-slug';
                 break;
             case 'opinionEditorial':
-                $content = new \Opinion();
-                $content->id = 252;
-                $content->fk_author = 0;
-                $content->type_opinion  = 1;
-                $content->author = 'My author';
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Opinion();
+                $content->id                = 252;
+                $content->fk_author         = 0;
+                $content->type_opinion      = 1;
+                $content->author            = 'My author';
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'opinion';
-                $content->slug = 'opinion-editorial-slug';
+                $content->slug              = 'opinion-editorial-slug';
                 break;
             case 'opinionDirector':
-                $content = new \Opinion();
-                $content->id = 252;
-                $content->fk_author = 0;
-                $content->type_opinion  = 2;
-                $content->author = 'My author';
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Opinion();
+                $content->id                = 252;
+                $content->fk_author         = 0;
+                $content->type_opinion      = 2;
+                $content->author            = 'My author';
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'opinion';
-                $content->slug = 'opinion-director-slug';
+                $content->slug              = 'opinion-director-slug';
                 break;
             case 'opinionAuthor':
-                $content = new \Opinion();
-                $content->id = 252;
-                $content->fk_author = 0;
-                $content->type_opinion  = 0;
-                $content->author = 'My author';
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Opinion();
+                $content->id                = 252;
+                $content->fk_author         = 0;
+                $content->type_opinion      = 0;
+                $content->author            = 'My author';
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'opinion';
-                $content->slug = 'opinion-author-slug';
+                $content->slug              = 'opinion-author-slug';
                 break;
             case 'opinionAuthorWithAuthor':
-                $content = new \Opinion();
-                $content->id = 252;
-                $content->fk_author = 1;
-                $content->type_opinion  = 0;
-                $content->author = new \User();
-                $content->author->name = 'Name';
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Opinion();
+                $content->id                = 252;
+                $content->fk_author         = 1;
+                $content->type_opinion      = 0;
+                $content->author            = new \User();
+                $content->author->name      = 'Name';
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'opinion';
-                $content->slug = 'opinion-author-slug';
+                $content->slug              = 'opinion-author-slug';
                 break;
             case 'opinionAuthorWithAuthorBlog':
-                $content = new \Opinion();
-                $content->id = 252;
-                $content->fk_author = 1;
-                $content->type_opinion  = 0;
-                $content->author = new \User();
-                $content->author->name = 'Name';
-                $content->author->meta = ['is_blog' => 1];
-                $content->created = '2015-01-14 23:49:40';
+                $content                    = new \Opinion();
+                $content->id                = 252;
+                $content->fk_author         = 1;
+                $content->type_opinion      = 0;
+                $content->author            = new \User();
+                $content->author->name      = 'Name';
+                $content->author->meta      = ['is_blog' => 1];
+                $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'opinion';
-                $content->slug = 'opinion-author-slug';
+                $content->slug              = 'opinion-author-slug';
                 break;
         }
 
