@@ -159,7 +159,7 @@
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox" ng-model="category.params.inrss" id="inrss" name="inrss" ng-true-value="1">
+                    <input type="checkbox" ng-model="category.params.inrss" id="inrss" name="inrss" ng-true-value="'1'">
                     <label for="inrss" class="form-label">{t}Show in RSS{/t}</label>
                   </div>
                 </div>
