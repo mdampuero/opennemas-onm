@@ -179,14 +179,16 @@ class RedirectorsController extends Controller
             $translation['type'] = $fixTypes[$translation['type']];
         }
 
-        $method = 'get' . \classify($translation['type']);
+        $contentType = \classify($translation['type']);
+
+        $method = 'get' . $contentType;
 
         if (method_exists($this, $method)) {
             return $this->{$method}($translation['pk_content']);
         }
 
         return $this->get('entity_repository')
-            ->find($translation['type'], $translation['pk_content']);
+            ->find($contentType, $translation['pk_content']);
     }
 
     /**
