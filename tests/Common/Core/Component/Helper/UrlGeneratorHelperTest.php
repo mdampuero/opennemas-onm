@@ -118,10 +118,9 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->urlGenerator->generate($this->getFixture('article'), ['absolute' => true]),
-            'http://www.example.com/articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena'
-            . '/20150114234940000252.html'
+            'http://www.example.com/articulo/actualidad/'
+            . 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
         );
-
     }
 
     /**
@@ -143,7 +142,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
         $article->params['bodyLink'] = 'http://www.example.com';
         $this->assertEquals(
             $method->invokeArgs($this->urlGenerator, [ $article ]),
-            '/redirect?to=http%3A%2F%2Fwww.example.com'
+            'redirect?to=http%3A%2F%2Fwww.example.com'
         );
 
         $article = $this->getFixture('article');
@@ -252,6 +251,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->content_type_name = 'article';
                 $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
                 break;
+
             case 'attachment':
                 $content = new \Attachment();
 
@@ -259,6 +259,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->id                = 252;
                 $content->path              = 'route/to/file.name';
                 break;
+
             case 'photo':
                 $content = new \Photo();
 
@@ -266,6 +267,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->path_file         = 'route/to';
                 $content->name              = 'photo.file.name';
                 break;
+
             case 'video':
                 $content = new \Video();
 
@@ -275,6 +277,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->content_type_name = 'video';
                 $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
                 break;
+
             case 'letter':
                 $content = new \Letter();
 
@@ -284,6 +287,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->content_type_name = 'letter';
                 $content->slug              = 'letter-slug';
                 break;
+
             case 'opinionEditorial':
                 $content = new \Opinion();
 
@@ -295,6 +299,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->content_type_name = 'opinion';
                 $content->slug              = 'opinion-editorial-slug';
                 break;
+
             case 'opinionDirector':
                 $content = new \Opinion();
 
@@ -306,6 +311,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->content_type_name = 'opinion';
                 $content->slug              = 'opinion-director-slug';
                 break;
+
             case 'opinionAuthor':
                 $content = new \Opinion();
 
@@ -317,6 +323,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->content_type_name = 'opinion';
                 $content->slug              = 'opinion-author-slug';
                 break;
+
             case 'opinionAuthorWithAuthor':
                 $content = new \Opinion();
 
