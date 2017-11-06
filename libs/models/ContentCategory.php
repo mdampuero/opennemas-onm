@@ -469,7 +469,6 @@ class ContentCategory implements \JsonSerializable
                 $conn->executeUpdate($sql);
             }
 
-            \Photo::batchDelete($contentsArray);
             \Video::batchDelete($contentsArray);
             \Attachment::batchDelete($contentsArray);
             $conn->commit();
