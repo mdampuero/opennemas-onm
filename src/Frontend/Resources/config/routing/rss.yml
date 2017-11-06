@@ -39,7 +39,7 @@ frontend_rss_category:
     path: /rss/{category}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
-        category: '(?!album|opinion|video)[^/]+'
+        category: '[^/]+'
 
 frontend_fb_instant_articles:
     path: /fb/instant-articles
