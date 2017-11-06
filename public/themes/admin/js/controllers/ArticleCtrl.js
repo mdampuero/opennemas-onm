@@ -538,8 +538,10 @@
                 model  = $scope.article.params;
               }
 
-              if (angular.isUndefined(model[footer]) || model[footer] === null ||
-                  (ov && ov[i] && model[footer] === ov[i].description)) {
+              if (angular.isObject(nv[i]) &&
+                  (angular.isUndefined(model[footer]) ||
+                  model[footer] === null || (ov && ov[i] &&
+                  model[footer] === ov[i].description))) {
                 model[footer] = nv[i].description;
               }
             }
