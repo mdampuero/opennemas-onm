@@ -627,9 +627,25 @@
 
         // Update title_int when title changes
         $scope.$watch('article.title', function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+
           if (nv && (!$scope.article.title_int ||
               ov === $scope.article.title_int)) {
             $scope.article.title_int = nv;
+          }
+
+          if (!$scope.article.slug || $scope.article.slug === '') {
+            if ($scope.tm) {
+              $timeout.cancel($scope.tm);
+            }
+
+            $scope.tm = $timeout(function() {
+              $scope.getSlug(nv, function(response) {
+                $scope.article.slug = response.data.slug;
+              });
+            }, 500);
           }
         }, true);
 
