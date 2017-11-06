@@ -35,7 +35,7 @@
          */
         $scope.criteria = {
           content_type_name: 'article',
-          epp: 1,
+          epp: 10,
           in_litter: 0,
           orderBy: { created:  'desc' },
           page: 1
