@@ -72,29 +72,29 @@ class LocalizeFilter extends Filter
             return $value;
         }
 
+        $lm = $this->container->get('core.locale');
+
         // Locale from direct parameters
-        $default = $this->getParameter('default');
-        $locale  = $this->getParameter('locale', null, false);
+        $default = !empty($this->getParameter('default')) ?
+            $this->getParameter('default') :
+            $lm->getLocale('frontend');
 
-        // Locale from request
-        if (empty($locale)) {
-            $locale = $this->container->get('core.locale')
-                ->getRequestLocale('frontend');
-        }
+        $locale = !empty($this->getParameter('locale', null, false)) ?
+            $this->getParameter('locale', null, false) :
+            $lm->getRequestLocale('frontend');
 
-        if (empty($default)) {
-            $default = $this->container->get('core.locale')
-                ->getLocale('frontend');
-        }
-
-        if (!empty($locale) && array_key_exists($locale, $value)) {
+        if (array_key_exists($locale, $value) && !empty($value[$locale])) {
             return $value[$locale];
         }
 
-        if (!empty($default) && array_key_exists($default, $value)) {
+        if (array_key_exists($default, $value) && !empty($value[$default])) {
             return $value[$default];
         }
 
-        return null;
+        $value = array_filter($value, function ($a) {
+            return !empty($a);
+        });
+
+        return array_pop($value);
     }
 }
