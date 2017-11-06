@@ -260,7 +260,7 @@
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <ui-select class="form-control" name="category" theme="select2" ng-model="article.pk_fk_content_category">
+                      <ui-select class="form-control" name="pk_fk_content_category" theme="select2" ng-model="article.pk_fk_content_category">
                         <ui-select-match>
                           [% $select.selected.title %]
                         </ui-select-match>
@@ -282,7 +282,7 @@
                     <label class="form-label" for="slug">
                       {t}Slug{/t}
                     </label>
-                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !articleForm.$dirty">
+                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !articleForm.pk_fk_content_category.$dirty && !articleForm.content_status.$dirty">
                       <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% data.extra.options.default === config.locale ? '' : config.locale + '/' %]articulo/[% (categories | filter: { pk_content_category: article.pk_fk_content_category })[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% ('000000' + article.pk_content).substr(-6) %].html" target="_blank">
                         <i class="fa fa-external-link"></i>
                         {t}Link{/t}
