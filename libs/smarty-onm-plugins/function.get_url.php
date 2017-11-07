@@ -1,6 +1,5 @@
 <?php
-/*
- * -------------------------------------------------------------
+/* -------------------------------------------------------------
  * File:        function.get_url.php
  * Returns the url for a given content
  * -------------------------------------------------------------
@@ -18,20 +17,22 @@ function smarty_function_get_url($params, $smarty)
     $absolute = array_key_exists('absolute', $params) && $params['absolute'];
 
     // If the article has an external link return it
-    if (array_key_exists('bodyLink', $content->params)
+    if (!empty($content->params)
+        && is_array($content->params)
+        && array_key_exists('bodyLink', $content->params)
         && !empty($content->params['bodyLink'])
     ) {
-        $url = $smarty->getContainer()
+        return $smarty->getContainer()
             ->get('router')
-            ->generate('frontend_redirect_external_link', ['to' => $content->params['bodyLink']])
-            . '" target="_blank';
-        return $url;
+            ->generate(
+                'frontend_redirect_external_link',
+                [ 'to' => $content->params['bodyLink'] ]
+            ) . '" target="_blank';
     }
 
     $url = $smarty->getContainer()->get('core.helper.url_generator')
-        ->generate($params['item'], ['absolute' => $absolute]);
+        ->generate($params['item'], [ 'absolute' => $absolute ]);
 
-    $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url, '', $absolute);
-
-    return $url;
+    return $smarty->getContainer()->get('core.helper.l10n_route')
+        ->localizeUrl($url, '', $absolute);
 }
