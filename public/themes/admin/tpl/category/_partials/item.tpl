@@ -79,4 +79,4 @@
 </tr>
 {foreach $category->subcategories as $id}
   {include file="category/_partials/item.tpl" category=$categories[$id] categories=$categories contents_count=$contents_count level=($level + 1)}
- {/foreach}
+{/foreach}
