@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the menus
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the menus
@@ -130,10 +124,10 @@ class MenusController extends Controller
                 );
             }
 
-            return $this->redirect($this->generateUrl(
-                'admin_menu_show',
-                ['id' => $menu->pk_menu]
-            ));
+            return $this->redirect($this->generateUrl('admin_menu_show', [
+                'id'     => $menu->pk_menu,
+                'locale' => $request->get('locale')
+            ]));
         }
 
         $params = $this->getCategories();
@@ -207,10 +201,10 @@ class MenusController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl(
-            'admin_menu_show',
-            ['id' => $menu->pk_menu]
-        ));
+        return $this->redirect($this->generateUrl('admin_menu_show', [
+            'id' => $menu->pk_menu,
+            'locale' => $request->get('lang')
+        ]));
     }
 
     /**
@@ -220,7 +214,6 @@ class MenusController extends Controller
      **/
     private function getCategories()
     {
-        $cm  = new \ContentManager();
         $ccm = \ContentCategoryManager::get_instance();
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
@@ -258,13 +251,12 @@ class MenusController extends Controller
      **/
     private function getStaticPages()
     {
-        $em        = $this->get('orm.manager');
-        $converter = $em->getConverter('Content');
-
         $oql = 'content_type_name = "static_page" and in_litter = "0"'
            . ' order by created desc';
 
-        $staticPages = $em->getRepository('Content')->findBy($oql);
+        $staticPages = $this->get('orm.manager')
+            ->getRepository('Content')
+            ->findBy($oql);
 
         $statics = [];
         foreach ($staticPages as $staticPage) {
@@ -279,16 +271,17 @@ class MenusController extends Controller
     }
 
     /**
-     * Returns the list of synchronized sites
+     * Returns the list of synchronized sites.
      *
-     * @return array the list of synchronized sites
-     **/
+     * @return array The list of synchronized sites.
+     */
     private function getSyncSites()
     {
         // Fetch synchronized elements if exists
-        $syncSites = [];
-        if ($syncParams = s::get('sync_params')) {
-            $syncSites = $syncParams;
+        $syncSites = $this->get('setting_repository')->get('sync_params');
+
+        if (empty($syncSites)) {
+            return [];
         }
 
         return $syncSites;
