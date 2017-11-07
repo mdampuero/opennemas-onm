@@ -122,7 +122,8 @@
             $scope.categories = response.data.extra.categories;
 
             if ($scope.config.multilanguage && $scope.config.locale) {
-              var lz = localizer.get({ keys: $scope.data.extra.keys });
+              var lz = localizer.get({ keys: $scope.data.extra.keys,
+                available: $scope.data.extra.options.available });
 
               $scope.categories = lz.localize($scope.categories,
                 [ 'title' ], $scope.config.locale);

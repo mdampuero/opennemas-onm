@@ -80,7 +80,7 @@ class LocalizeFilterTest extends KernelTestCase
 
         $this->filter->filter($entities);
         $this->assertEquals('frog', $entities[0]->xyzzy);
-        $this->assertEmpty($entities[1]->xyzzy);
+        $this->assertEquals('corge', $entities[1]->xyzzy);
         $this->assertEquals('quux', $entities[2]->xyzzy);
 
         $property = new \ReflectionProperty($this->filter, 'params');
@@ -135,8 +135,11 @@ class LocalizeFilterTest extends KernelTestCase
         $this->assertEquals('mumble', $method->invokeArgs($this->filter, [
             [ 'es' => 'mumble', 'en' => 'glork' ]
         ]));
-        $this->assertEmpty($method->invokeArgs($this->filter, [
+        $this->assertEquals('mumble', $method->invokeArgs($this->filter, [
             [ 'gl' => 'mumble' ]
+        ]));
+        $this->assertEmpty($method->invokeArgs($this->filter, [
+            [ 'gl' => '' ]
         ]));
         $this->assertEquals('glork', $method->invokeArgs($this->filter, [
             [ 'gl' => 'mumble', 'en' => 'glork' ]

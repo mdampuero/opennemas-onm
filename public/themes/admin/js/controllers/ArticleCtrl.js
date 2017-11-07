@@ -538,8 +538,10 @@
                 model  = $scope.article.params;
               }
 
-              if (angular.isUndefined(model[footer]) || model[footer] === null ||
-                  (ov && ov[i] && model[footer] === ov[i].description)) {
+              if (angular.isObject(nv[i]) &&
+                  (angular.isUndefined(model[footer]) ||
+                  model[footer] === null || (ov && ov[i] &&
+                  model[footer] === ov[i].description))) {
                 model[footer] = nv[i].description;
               }
             }
@@ -625,9 +627,25 @@
 
         // Update title_int when title changes
         $scope.$watch('article.title', function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+
           if (nv && (!$scope.article.title_int ||
               ov === $scope.article.title_int)) {
             $scope.article.title_int = nv;
+          }
+
+          if (!$scope.article.slug || $scope.article.slug === '') {
+            if ($scope.tm) {
+              $timeout.cancel($scope.tm);
+            }
+
+            $scope.tm = $timeout(function() {
+              $scope.getSlug(nv, function(response) {
+                $scope.article.slug = response.data.slug;
+              });
+            }, 500);
           }
         }, true);
 

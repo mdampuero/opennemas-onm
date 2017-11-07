@@ -266,8 +266,8 @@
             return;
           }
 
-          // Reset page when epp changes
-          if (nv.epp !== ov.epp) {
+          // Reset page when criteria changes
+          if (nv.page === ov.page) {
             nv.page = 1;
           }
 

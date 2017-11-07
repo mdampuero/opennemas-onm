@@ -244,7 +244,8 @@ class NewsAgencyController extends Controller
 
         $path = $this->getParameter('core.paths.cache') . DS
             . $this->get('core.instance')->internal_name;
-        $tpl  = $this->get('view')->getBackendTemplate();
+
+        $tpl = $this->get('view')->getBackendTemplate();
 
         // Check last synchronization
         $synchronizer        = new Synchronizer($path, $tpl, $logger);
@@ -258,15 +259,18 @@ class NewsAgencyController extends Controller
         }
 
         // Get categories
-        $this->ccm  = \ContentCategoryManager::get_instance();
-        $categories = array_filter($this->ccm->findAll(), function ($category) {
+        $ccm = \ContentCategoryManager::get_instance();
+        $fm  = $this->get('data.manager.filter');
+
+        $categories = array_filter($ccm->findAll(), function ($category) {
             return $category->internal_category == '1';
         });
 
-        $params['categories'] = array_map(function ($category) {
+        $params['categories'] = array_map(function ($category) use ($fm) {
             return [
-                'name' => $this->get('data.manager.filter')
-                    ->set($category->title)->filter('localize')->get(),
+                'name' => $fm->set($category->title)
+                    ->filter('localize')
+                    ->get(),
                 'value' => $category->id
             ];
         }, $categories);

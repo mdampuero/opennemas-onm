@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('TrashListCtrl', [
-  '$http', '$uibModal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'Encoder', 'queryManager', '$controller',
-  function($http, $uibModal, $scope, $timeout, itemService, routing, messenger, webStorage, Encoder, queryManager, $controller) {
+  '$controller', '$http', '$uibModal', '$scope', 'localizer', 'messenger', 'routing',
+  function($controller, $http, $uibModal, $scope, localizer, messenger, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -125,4 +125,17 @@ angular.module('BackendApp.controllers').controller('TrashListCtrl', [
         }
       });
     };
+
+    // Localize titles when content list changes
+    $scope.$watch('contents', function(nv, ov) {
+      if (nv === ov) {
+        return;
+      }
+
+      var lz   = localizer.get($scope.extra.options);
+      var keys = [ 'title' ];
+
+      $scope.contents = lz.localize(nv, keys,
+        $scope.extra.options.default);
+    }, true);
 }]);

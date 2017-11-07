@@ -78,7 +78,7 @@
               <tbody ng-init="languageData = {json_encode($language_data)|clear_json}; keys = ['title', 'name']">
                 {foreach $categories as $category}
                   {if $category->internal_category eq '1' && empty($category->fk_content_category)}
-                    {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data}
+                    {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                   {/if}
                 {foreachelse}
                 <tr>
@@ -106,7 +106,7 @@
                 <tbody>
                   {foreach $categories as $category}
                     {if $category->internal_category eq '7' && empty($category->fk_content_category)}
-                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count}
+                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                     {/if}
                   {foreachelse}
                   <tr>
@@ -135,7 +135,7 @@
                 <tbody>
                   {foreach $categories as $category}
                     {if $category->internal_category eq '9' && empty($category->fk_content_category)}
-                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count}
+                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                     {/if}
                   {foreachelse}
                   <tr>
@@ -164,7 +164,7 @@
                 <tbody>
                   {foreach $categories as $category}
                     {if $category->internal_category eq '14' && empty($category->fk_content_category)}
-                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count}
+                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                     {/if}
                   {foreachelse}
                   <tr>
@@ -193,7 +193,7 @@
                 <tbody>
                   {foreach $categories as $category}
                     {if $category->internal_category eq '11' && empty($category->fk_content_category)}
-                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count}
+                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                     {/if}
                   {foreachelse}
                   <tr>
@@ -222,7 +222,7 @@
                 <tbody>
                   {foreach $categories as $category}
                     {if $category->internal_category eq '10' && empty($category->fk_content_category)}
-                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count}
+                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                     {/if}
                   {foreachelse}
                   <tr>
@@ -251,7 +251,7 @@
                 <tbody>
                   {foreach $categories as $category}
                     {if $category->internal_category eq '15' && empty($category->fk_content_category)}
-                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count}
+                      {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                     {/if}
                   {foreachelse}
                   <tr>
@@ -280,7 +280,7 @@
                 <tbody>
                 {foreach $categories as $category}
                   {if $category->internal_category eq '0' && empty($category->fk_content_category)}
-                    {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count level=0}
+                    {include file="category/_partials/item.tpl" category=$category categories=$categories contents_count=$contents_count language_data=$language_data level=0}
                   {/if}
                 {foreachelse}
                 <tr>

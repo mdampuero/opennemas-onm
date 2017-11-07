@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div method="post" ng-controller="TrashListCtrl" ng-init="init('content', 'backend_ws_contents_list')">
+<div method="post" ng-controller="TrashListCtrl" ng-init="criteria = { epp: 10, in_litter: 1, page: 1 }; init('content', 'backend_ws_contents_list')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">

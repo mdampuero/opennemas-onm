@@ -300,12 +300,12 @@
               return value;
             }
 
-            if (angular.isDefined(value[locale])) {
+            if (angular.isDefined(value[locale]) && value[locale] !== '') {
               return value[locale];
             }
 
             for (var key in this.config.available) {
-              if (value[key]) {
+              if (value[key] && value[key] !== '') {
                 return value[key];
               }
             }

@@ -133,9 +133,17 @@ class MenusController extends ContentController
             $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
         $results = $em->findBy($criteria, $order, $epp, $page);
-        $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
 
-        return new JsonResponse([ 'results' => $results, 'total' => $total ]);
+        foreach ($results as &$result) {
+            $result->items = $result->getRawItems();
+        }
+
+        $results = \Onm\StringUtils::convertToUtf8($results);
+
+        return new JsonResponse([
+            'results' => $results,
+            'total'   => $total
+        ]);
     }
 }

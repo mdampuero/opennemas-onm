@@ -122,8 +122,8 @@
           </div>
         </div>
       </div>
-
       <input type="hidden" name="items" ng-value="menuItems"/>
+      <input type="hidden" name="lang" ng-value="lang"/>
     </div>
     <script type="text/ng-template" id="menu-item">
       {include file="menues/partials/_menu_item.tpl"}
