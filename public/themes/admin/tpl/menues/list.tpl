@@ -153,7 +153,7 @@
                   </div>
                   <div class="listing-inline-actions">
                     {if $multilanguage}
-                      <translator item="content.items[0]" keys="[ 'title' ]" ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]" options="languageData" text="{t}Edit{/t}"></translator>
+                      <translator item="content.items.length > 0 ? content.items[0] : content.items" keys="[ 'title' ]" ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]" options="languageData" text="{t}Edit{/t}"></translator>
                     {/if}
                     {if !$multilanguage}
                     <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">
