@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,22 +18,18 @@ use Onm\Settings as s;
 
 /**
  * Handles the actions for the newsletter
- *
- * @package Backend_Controllers
  */
 class NewsletterController extends Controller
 {
     /**
-     * Lists all the available newsletters
+     * Lists all the available newsletters.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('NEWSLETTER_MANAGER')
      *     and hasPermission('NEWSLETTER_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $maxAllowed      = $this->get('setting_repository')->get('max_mailing');
         $totalSendings   = $this->getTotalNumberOfNewslettersSend();
@@ -61,20 +57,18 @@ class NewsletterController extends Controller
             );
         }
 
-        return $this->render('newsletter/list.tpl', ['message' => $message]);
+        return $this->render('newsletter/list.tpl', [ 'message' => $message ]);
     }
 
     /**
-     * List the form for create or load contents in a newsletter
+     * List the form for create or load contents in a newsletter.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('NEWSLETTER_MANAGER')
      *     and hasPermission('NEWSLETTER_ADMIN')")
      */
-    public function createAction(Request $request)
+    public function createAction()
     {
         $configurations = $this->get('setting_repository')->get('newsletter_maillist');
 
@@ -84,43 +78,46 @@ class NewsletterController extends Controller
         $menu->getMenu('frontpage');
         $i = 1;
         foreach ($menu->items as $item) {
-            if ($item->type == 'category' ||
-                $item->type == 'blog-category' ||
-                $item->type == 'internal'
+            if ($item->type != 'category' &&
+                $item->type != 'blog-category' &&
+                $item->type != 'internal'
             ) {
-                unset($item->pk_item);
-                unset($item->link);
-                unset($item->pk_father);
-                unset($item->type);
-                $item->id           = $i;
-                $item->items        = [];
-                $item->content_type = 'container';
-
-                $newsletterContent[] = $item;
-                if (!empty($item->submenu)) {
-                    foreach ($item->submenu as $subitem) {
-                        unset($subitem->pk_item);
-                        unset($subitem->link);
-                        unset($subitem->pk_father);
-                        unset($subitem->type);
-                        unset($subitem->submenu);
-                        $subitem->id           = $i++;
-                        $subitem->items        = [];
-                        $subitem->content_type = 'container';
-                        $newsletterContent[]   = $subitem;
-                    }
-                }
-
-                unset($item->submenu);
-                $i++;
+                continue;
             }
+
+            unset($item->pk_item);
+            unset($item->link);
+            unset($item->pk_father);
+            unset($item->type);
+            $item->id           = $i;
+            $item->items        = [];
+            $item->content_type = 'container';
+
+            $newsletterContent[] = $item;
+
+            if (!empty($item->submenu)) {
+                foreach ($item->submenu as $subitem) {
+                    unset($subitem->pk_item);
+                    unset($subitem->link);
+                    unset($subitem->pk_father);
+                    unset($subitem->type);
+                    unset($subitem->submenu);
+                    $subitem->id           = $i++;
+                    $subitem->items        = [];
+                    $subitem->content_type = 'container';
+                    $newsletterContent[]   = $subitem;
+                }
+            }
+
+            unset($item->submenu);
+            $i++;
         }
 
         $time = new \DateTime();
         $time = $time->format('d/m/Y');
 
         return $this->render('newsletter/steps/1-pick-elements.tpl', [
-            'name'              => $configurations['name'] . " [" . $time . "]",
+            'name'              => $configurations['name'] . ' [' . $time . ']',
             'newsletterContent' => $newsletterContent,
         ]);
     }
@@ -154,14 +151,11 @@ class NewsletterController extends Controller
             }
         }
 
-        return $this->render(
-            'newsletter/steps/1-pick-elements.tpl',
-            [
-                'with_html'         => true,
-                'newsletter'        => $newsletter,
-                'newsletterContent' => $containers,
-            ]
-        );
+        return $this->render('newsletter/steps/1-pick-elements.tpl', [
+            'with_html'         => true,
+            'newsletter'        => $newsletter,
+            'newsletterContent' => $containers,
+        ]);
     }
 
     /**
@@ -179,6 +173,8 @@ class NewsletterController extends Controller
         $id          = (int) $request->request->getDigits('id');
         $contentsRAW = $request->request->get('content_ids');
         $containers  = json_decode($contentsRAW);
+
+        $this->get('core.locale')->setContext('frontend');
 
         foreach ($containers as $container) {
             foreach ($container->items as &$content) {
@@ -224,12 +220,10 @@ class NewsletterController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_newsletter_preview',
-                ['id' => $newsletter->pk_newsletter]
-            )
-        );
+        return $this->redirect($this->generateUrl(
+            'admin_newsletter_preview',
+            ['id' => $newsletter->pk_newsletter]
+        ));
     }
 
     /**
@@ -247,10 +241,9 @@ class NewsletterController extends Controller
         $id         = (int) $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
 
-        return $this->render(
-            'newsletter/steps/2-preview.tpl',
-            [ 'newsletter' => $newsletter ]
-        );
+        return $this->render('newsletter/steps/2-preview.tpl', [
+            'newsletter' => $newsletter
+        ]);
     }
 
     /**
@@ -300,10 +293,10 @@ class NewsletterController extends Controller
      */
     public function pickRecipientsAction(Request $request)
     {
-        $id         = $request->query->getDigits('id');
-        $newsletter = new \Newsletter($id);
+        $id = $request->query->getDigits('id');
 
-        $subscriptionType = $this->get('setting_repository')->get('newsletter_subscriptionType');
+        $subscriptionType = $this->get('setting_repository')
+            ->get('newsletter_subscriptionType');
 
         $accounts = [];
         if ($subscriptionType === 'create_subscriptor') {
@@ -342,15 +335,12 @@ class NewsletterController extends Controller
 
         $recipients = [];
 
-        return $this->render(
-            'newsletter/steps/3-pick-recipients.tpl',
-            [
-                'id'               => $id,
-                'accounts'         => $accounts,
-                'recipients'       => $recipients,
-                'subscriptionType' => $subscriptionType,
-            ]
-        );
+        return $this->render('newsletter/steps/3-pick-recipients.tpl', [
+            'id'               => $id,
+            'accounts'         => $accounts,
+            'recipients'       => $recipients,
+            'subscriptionType' => $subscriptionType,
+        ]);
     }
 
     /**
@@ -388,9 +378,9 @@ class NewsletterController extends Controller
         }
 
         $params = [
-            'subject'            => $newsletter->title,
-            'mail_from'          => $configurations['sender'],
-            'mail_from_name'     => $this->get('setting_repository')->get('site_name'),
+            'subject'        => $newsletter->title,
+            'mail_from'      => $configurations['sender'],
+            'mail_from_name' => $this->get('setting_repository')->get('site_name'),
         ];
 
         $maxAllowed = $this->get('setting_repository')->get('max_mailing');
@@ -421,14 +411,14 @@ class NewsletterController extends Controller
                             "Email sent. Backend newsletter sent (to: " . $mailbox->email . ")"
                         );
 
-                        $sentResult [] = [$mailbox, (bool) $properlySent, _('Unable to deliver your email')];
+                        $sentResult[] = [$mailbox, (bool) $properlySent, _('Unable to deliver your email')];
                         $remaining--;
                         $sent++;
                     } catch (\Exception $e) {
-                        $sentResult [] = [$mailbox, false, $e->getMessage()];
+                        $sentResult[] = [$mailbox, false, $e->getMessage()];
                     }
                 } else {
-                    $sentResult [] = [$mailbox, false, _('Max sents reached.')];
+                    $sentResult[] = [$mailbox, false, _('Max sents reached.')];
                 }
             }
         }
