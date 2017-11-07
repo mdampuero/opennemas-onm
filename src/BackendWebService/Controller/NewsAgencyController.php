@@ -288,7 +288,7 @@ class NewsAgencyController extends Controller
         foreach ($params['servers'] as $server) {
             if ($server['activated']) {
                 $params['sources'][] = [
-                    'name' => $server['name'],
+                    'name'  => $server['name'],
                     'value' => $server['id']
                 ];
             }

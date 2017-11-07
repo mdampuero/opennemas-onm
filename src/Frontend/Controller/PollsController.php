@@ -26,13 +26,13 @@ class PollsController extends Controller
      */
     public function init()
     {
-        $this->cm   = new \ContentManager();
+        $this->cm = new \ContentManager();
 
-        $request = $this->get('request_stack')->getCurrentRequest();
+        $request            = $this->get('request_stack')->getCurrentRequest();
         $this->categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
-            $this->ccm = new \ContentCategoryManager();
+            $this->ccm          = new \ContentCategoryManager();
             $this->category     = $this->ccm->get_id($this->categoryName);
             $actual_category_id = $this->category; // FOR WIDGETS
             $category_real_name = $this->ccm->getTitle($this->categoryName); //used in title
@@ -76,40 +76,44 @@ class PollsController extends Controller
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
-            if (isset($this->category) && !empty($this->category)) {
-                $polls = $this->cm->find_by_category(
-                    'Poll',
-                    $this->category,
-                    'content_status=1',
-                    'ORDER BY starttime DESC LIMIT 2'
-                );
+            $filter = [
+                'content_type_name' => [[ 'value' => 'poll']],
+                'content_status'    => [['value' => 1]],
+                'in_home'           => [['value' => 1]]
+            ];
 
-                $otherPolls = $this->cm->find(
-                    'Poll',
-                    'content_status=1',
-                    'ORDER BY starttime DESC LIMIT 5'
-                );
-            } else {
-                $polls = $this->cm->find(
-                    'Poll',
-                    'content_status=1 and in_home=1',
-                    'ORDER BY starttime DESC LIMIT 2'
-                );
-                $otherPolls = $this->cm->find(
-                    'Poll',
-                    'content_status=1',
-                    'ORDER BY starttime DESC LIMIT 2,7'
-                );
+            if (isset($this->category) && !empty($this->category)) {
+                $filter = [
+                    'content_type_name' => [[ 'value' => 'poll' ]],
+                    'content_status'    => [[ 'value' => 1 ]],
+                    'category_name'     => [[ 'value' => $this->categoryName ]],
+                ];
             }
+
+            $polls = $this->get('entity_repository')->findBy(
+                $filter,
+                ['starttime' => 'DESC'],
+                2
+            );
+
+            $otherPolls = $this->get('entity_repository')->findBy(
+                [
+                    'content_type_name' => [[ 'value' => 'poll']],
+                    'content_status'    => [[ 'value' => 1 ]],
+                ],
+                ['starttime' => 'DESC'],
+                5
+            );
 
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
                     $poll->items   = $poll->getItems($poll->id);
-                    $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d', $poll->id);
+                    $poll->dirtyId = date('YmdHis', strtotime($poll->created)) . sprintf('%06d', $poll->id);
                     $poll->status  = 'opened';
                     if (is_string($poll->params)) {
                         $poll->params = unserialize($poll->params);
                     }
+
                     if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
                         && (!empty($poll->params['closetime']))
                         && ($poll->params['closetime'] != '0000-00-00 00:00:00')
@@ -143,8 +147,8 @@ class PollsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID    = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        $urlSlug    = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         $poll = $this->get('content_url_matcher')
             ->matchContentUrl('poll', $dirtyID, $urlSlug, $this->categoryName);
@@ -163,10 +167,13 @@ class PollsController extends Controller
             $items         = $poll->items;
             $poll->dirtyId = $dirtyID;
 
-            $otherPolls = $this->cm->find(
-                'Poll',
-                'content_status=1 ',
-                'ORDER BY created DESC LIMIT 5'
+            $otherPolls = $this->get('entity_repository')->findBy(
+                [
+                    'content_type_name' => [[ 'value' => 'poll']],
+                    'content_status'    => [[ 'value' => 1 ]],
+                ],
+                ['starttime' => 'DESC'],
+                5
             );
 
             $this->view->assign([
@@ -175,10 +182,10 @@ class PollsController extends Controller
             ]);
         }
 
-        $cookieName = "poll-".$poll->id;
+        $cookieName = "poll-" . $poll->id;
         $cookie     = $request->cookies->get($cookieName);
 
-        $message = null;
+        $message      = null;
         $alreadyVoted = false;
         if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
             && (!empty($poll->params['closetime']))
@@ -186,22 +193,22 @@ class PollsController extends Controller
             && ($poll->params['closetime'] < date('Y-m-d H:i:s'))
         ) {
             $poll->status = 'closed';
-            $message = "<span class='closed'>"._('You can\'t vote this poll, it is closed.')."</span>";
+            $message      = "<span class='closed'>" . _('You can\'t vote this poll, it is closed.') . "</span>";
         } else {
             $voted = (int) $request->query->getDigits('voted', 0);
             $valid = (int) $request->query->getDigits('valid', 3);
             if ($voted == 1) {
                 if ($voted == 1 && $valid === 1) {
-                    $message = "<span class='thanks'>"._('Thanks for participating.')."</span>";
+                    $message = "<span class='thanks'>" . _('Thanks for participating.') . "</span>";
                 } elseif ($voted == 1 && $valid === 0) {
-                    $message = "<span class='wrong'>"._('Please select a valid poll answer.')."</span>";
+                    $message = "<span class='wrong'>" . _('Please select a valid poll answer.') . "</span>";
                 }
             } elseif (isset($cookie)) {
                 $alreadyVoted = true;
-                $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
+                $message      = "<span class='ok'>" . _('You have voted this poll previously.') . "</span>";
             } elseif (($valid === 0) && ($voted == 0)) {
                 $alreadyVoted = true;
-                $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
+                $message      = "<span class='ok'>" . _('You have voted this poll previously.') . "</span>";
             }
         }
 
@@ -228,7 +235,7 @@ class PollsController extends Controller
      */
     public function addVoteAction(Request $request)
     {
-        $answer  = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
+        $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
         $pollID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
         $poll = $this->get('entity_repository')->find('Poll', $pollID);
@@ -236,8 +243,8 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $cookieName = "poll-".$pollID;
-        $cookie = $request->cookies->get($cookieName);
+        $cookieName = "poll-" . $pollID;
+        $cookie     = $request->cookies->get($cookieName);
 
         $valid = 0;
         $voted = 0;
@@ -251,13 +258,13 @@ class PollsController extends Controller
             $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
 
             // Clear all caches
-            dispatchEventWithParams('content.update', array('content' => $poll));
+            dispatchEventWithParams('content.update', [ 'content' => $poll ]);
         } elseif (empty($answer)) {
             $valid = 0;
             $voted = 1;
         }
 
-        $response = new RedirectResponse(SITE_URL.$poll->uri.'?voted='.$voted.'&valid='.$valid);
+        $response = new RedirectResponse(SITE_URL . $poll->uri . '?voted=' . $voted . '&valid=' . $valid);
         if (isset($cookieVoted)) {
             $response->headers->setCookie($cookieVoted);
         }

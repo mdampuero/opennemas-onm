@@ -165,10 +165,19 @@ class RedirectorTest extends KernelTestCase
         $method = new \ReflectionMethod($this->redirector, 'getTranslationById');
         $method->setAccessible(true);
 
-        $this->connection->expects($this->once())->method('fetchAssoc')
-            ->with('SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1', [ 4796 ])
+        $this->connection->expects($this->at(0))->method('fetchAssoc')
+            ->with(
+                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? AND `type` = ? LIMIT 1', [ 4796, 'norf' ]
+            )
             ->willReturn($translation);
 
+        $this->connection->expects($this->at(1))->method('fetchAssoc')
+            ->with(
+                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1', [ 4796 ]
+            )
+            ->willReturn($translation);
+
+        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 4796, 'norf' ]));
         $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 4796 ]));
     }
 

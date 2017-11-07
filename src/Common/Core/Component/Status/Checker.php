@@ -55,7 +55,7 @@ class Checker
         $this->container = $container;
 
         $this->cache = $this->container->get('cache.manager')
-                ->getConnection('manager');
+            ->getConnection('manager');
         $this->conn  = $this->container->get('orm.manager')
             ->getConnection('manager');
         $this->fs    = new Filesystem();
@@ -119,7 +119,7 @@ class Checker
      */
     public function checkNfs()
     {
-        $path = $this->container->getParameter('kernel.root_dir')
+        $path     = $this->container->getParameter('kernel.root_dir')
             . '/../tmp/cache/common';
         $filename = $path . '/framework.nfs.check';
 
@@ -128,7 +128,6 @@ class Checker
                 $this->fs->mkdir($path);
             }
 
-            $this->fs->chmod($path, 0777);
             $this->fs->dumpFile($filename, 'bar');
             $this->fs->remove($filename);
         } catch (\Exception $e) {
