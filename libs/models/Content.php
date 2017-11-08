@@ -367,11 +367,10 @@ class Content
 
         if (isset($this->pk_fk_content_category)) {
             $this->category = $this->pk_fk_content_category;
-        }
-
-        if (isset($this->category_name)) {
-            $this->category_name = ContentCategoryManager::get_instance()
-                ->getName($this->category);
+            if (empty($this->category_name)) {
+                $this->category_name = ContentCategoryManager::get_instance()
+                    ->getName($this->pk_fk_content_category);
+            }
         }
 
         $this->permalink = '';
@@ -776,12 +775,12 @@ class Content
         } else {
             $uri = Uri::generate(
                 strtolower($this->content_type_name),
-                array(
+                [
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),
                     'category' => urlencode($this->category_name),
                     'slug'     => urlencode($this->slug),
-                )
+                ]
             );
         }
 
@@ -1040,13 +1039,13 @@ class Content
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
-                $values = array(
+                $values = [
                     $status,
                     $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
-                );
+                ];
             } else {
                 $values = $status;
             }
@@ -1106,12 +1105,12 @@ class Content
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
-                $values = array(
+                $values = [
                     $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
-                );
+                ];
             } else {
                 $values = $status;
             }
@@ -1367,7 +1366,7 @@ class Content
             $status          = $this->getStatus();
             $schedulingState = $this->getSchedulingState();
 
-            return array(
+            return [
                 'title'           => $this->title,
                 'category'        => $ccm->getName($this->category),
                 'views'           => $this->views,
@@ -1376,7 +1375,7 @@ class Content
                 'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
                 'state'           => $this->getL10nStatus($status),
                 'last_author'     => $authorName,
-            );
+            ];
         }
     }
 
@@ -1438,9 +1437,9 @@ class Content
                 [ $pkContent ]
             );
 
-            $this->category       = $rs;
-            $this->category_name  = $this->loadCategoryName($this->category);
-            $category_title_aux = ContentCategoryManager::get_instance()
+            $this->category      = $rs;
+            $this->category_name = $this->loadCategoryName($this->category);
+            $category_title_aux  = ContentCategoryManager::get_instance()
                  ->getTitle($this->category_name);
 
             $this->category_title = getService('data.manager.filter')
@@ -1785,7 +1784,7 @@ class Content
                 return false;
             }
 
-            $contentsUrns = array();
+            $contentsUrns = [];
             foreach ($contents as $content) {
                 $contentsUrns[] = $content['urn_source'];
             }
@@ -2101,7 +2100,7 @@ class Content
         $contentProperties = $cache->fetch('content-meta-' . $this->id);
 
         if (!is_array($contentProperties)) {
-            $contentProperties = array();
+            $contentProperties = [];
 
             if ($this->id == null && $id == null) {
                 return false;
