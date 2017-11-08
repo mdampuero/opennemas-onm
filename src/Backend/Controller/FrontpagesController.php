@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,11 +17,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
 class FrontpagesController extends Controller
 {
     /**
@@ -147,20 +142,17 @@ class FrontpagesController extends Controller
             }
         }
 
-        $layout = $lm->render(
-            array(
-                'contents'  => $contentElementsInFrontpage,
-                'home'      => ($categoryId == 0),
-                // 'smarty'    => $this->view,
-                'category'  => $categoryId,
-            )
-        );
+        $layout = $lm->render([
+            'contents'  => $contentElementsInFrontpage,
+            'home'      => ($categoryId == 0),
+            // 'smarty'    => $this->view,
+            'category'  => $categoryId,
+        ]);
 
         $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
         // Get last saved and check
         $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_' . $categoryId);
-        // $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
         if ($lastSaved == false) {
             // Save the actual date for
             $date      = new \Datetime("now");
@@ -169,18 +161,15 @@ class FrontpagesController extends Controller
             $lastSaved = $dateForDB;
         }
 
-        return $this->render(
-            'frontpagemanager/list.tpl',
-            array(
-                'category_id'          => $categoryId,
-                'frontpage_articles'   => $contentElementsInFrontpage,
-                'layout'               => $layout,
-                'available_layouts'    => $layouts,
-                'layout_theme'         => $layoutSettings,
-                'frontpage_last_saved' => $lastSaved,
-                'categories'           => $categories,
-            )
-        );
+        return $this->render('frontpagemanager/list.tpl', [
+            'category_id'          => $categoryId,
+            'frontpage_articles'   => $contentElementsInFrontpage,
+            'layout'               => $layout,
+            'available_layouts'    => $layouts,
+            'layout_theme'         => $layoutSettings,
+            'frontpage_last_saved' => $lastSaved,
+            'categories'           => $categories,
+        ]);
     }
 
     /**
@@ -203,10 +192,6 @@ class FrontpagesController extends Controller
         $logger = $this->get('application.log');
 
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-
-        // Fetch old contents
-        $cm          = new \ContentManager();
-        $oldContents = $cm->getContentsForHomepageOfCategory($category);
 
         if ($category === null && $category === '') {
             return new JsonResponse(
@@ -264,16 +249,16 @@ class FrontpagesController extends Controller
             return new JsonResponse([ 'message' => $message ]);
         }
 
-        $contents = array();
+        $contents = [];
         // Iterate over each element and fetch its parameters to save.
         foreach ($contentsPositions as $params) {
-            $contents[] = array(
+            $contents[] = [
                 'id'           => $params['id'],
                 'category'     => $categoryID,
                 'placeholder'  => $params['placeholder'],
                 'position'     => $params['position'],
                 'content_type' => $params['content_type'],
-            );
+            ];
         }
 
         // Save contents
@@ -291,7 +276,7 @@ class FrontpagesController extends Controller
             . ' Ids ' . json_encode($contentsPositions)
         );
 
-        $this->get('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $categoryID));
+        $this->get('core.dispatcher')->dispatch('frontpage.save_position', [ 'category' => $categoryID ]);
 
         // Save the actual date for fronpage
         $dateForDB = time();
@@ -333,7 +318,7 @@ class FrontpagesController extends Controller
         ) {
             $this->get('setting_repository')->set('frontpage_layout_' . $category, $layout);
 
-            $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', array('category' => $category));
+            $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', [ 'category' => $category ]);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -352,9 +337,9 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        $this->get('core.dispatcher')->dispatch('frontpage.save_position', array('category' => $category));
+        $this->get('core.dispatcher')->dispatch('frontpage.save_position', [ 'category' => $category ]);
 
-        return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));
+        return $this->redirect($this->generateUrl('admin_frontpage_list', [ 'category' => $category ]));
     }
 
     /**
@@ -397,8 +382,11 @@ class FrontpagesController extends Controller
      */
     public function previewAction(Request $request)
     {
+        $this->get('core.locale')->setContext('frontend');
+
         $categoryName = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->view   = $this->get('core.template');
+
         $this->view->setCaching(0);
 
         $this->view->assign([
@@ -425,7 +413,7 @@ class FrontpagesController extends Controller
         $this->view->assign('advertisements', $advertisements);
 
         // Get all frontpage images
-        $imageIdsList = array();
+        $imageIdsList = [];
         foreach ($contentsInHomepage as $content) {
             if (isset($content->img1)) {
                 $imageIdsList[] = $content->img1;
