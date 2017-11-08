@@ -309,7 +309,12 @@ class Content implements \JsonSerializable
                         ->filter('unlocalize')
                         ->get();
                 }
-                return $this->{$name};
+
+                if (property_exists($this, $name)) {
+                    return $this->{$name};
+                }
+
+                return null;
         }
     }
 
