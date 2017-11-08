@@ -320,6 +320,11 @@ class ArticlesController extends Controller
             }
         }
 
+        // Copy starttime on created if array found
+        if (is_array($article->created)) {
+            $article->created = $article->starttime;
+        }
+
         // Set a dummy Id for the article if doesn't exists
         if (empty($article->pk_article) && empty($article->id)) {
             $article->pk_article = '-1';
