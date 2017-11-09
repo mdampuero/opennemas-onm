@@ -375,7 +375,6 @@ class OpinionsController extends Controller
 
         $data = [
             'body'                => $request->request->get('body', ''),
-            'category'            => 'opinion',
             'content_status'      => (empty($contentStatus)) ? 0 : 1,
             'endtime'             => $request->request->get('endtime', ''),
             'fk_author'           => $request->request->getDigits('fk_author'),
