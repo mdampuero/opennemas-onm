@@ -66,12 +66,12 @@ class ContentUrlMatcher
 
         // Check if the content matches the info provided and is ready for publish.
         if (is_object($content)
-            && $content->pk_content        == $id
-            && $content->created           == $date
-            && $content->content_type_name == $type
-            && $content->isReadyforPublish()
+            && $content->pk_content === $id
+            && $content->created === $date
+            && $content->content_type_name === $type
             && (is_null($slug) || $slug === $content->slug)
             && (is_null($category) || $category === $content->category_name)
+            && $content->isReadyForPublish()
         ) {
             return $content;
         }
