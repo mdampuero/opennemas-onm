@@ -138,19 +138,19 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       http.get(route).then(function(response) {
         $scope.total = parseInt(response.data.total);
+
+        if (response.data.hasOwnProperty('extra')) {
+          $scope.extra = response.data.extra;
+        }
+
         if ($scope.mode === 'grid' && !reset) {
           $scope.contents = $scope.contents.concat(response.data.results);
         } else {
           $scope.contents = response.data.results;
         }
 
-        $scope.getContentsLocalizeTitle();
-
-        $scope.map = response.data.map;
-
-        if (response.data.hasOwnProperty('extra')) {
-          $scope.extra = response.data.extra;
-        }
+        $scope.contents = $scope.getContentsLocalizeTitle();
+        $scope.map      = response.data.map;
 
         // Disable spinner
         $scope.loading = 0;
@@ -891,7 +891,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.getContentsLocalizeTitle = function() {
       if (!$scope.extra || !$scope.extra.options) {
-        return;
+        return $scope.contents;
       }
 
       var lz   = localizer.get($scope.extra.options);
