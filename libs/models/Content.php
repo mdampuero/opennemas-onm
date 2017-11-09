@@ -658,7 +658,9 @@ class Content implements \JsonSerializable
             }
         }
 
-        if ($data['category'] != $this->category) {
+        if (array_key_exists('category', $data)
+            && $data['category'] != $this->category
+        ) {
             $ccm     = ContentCategoryManager::get_instance();
             $catName = $ccm->getName($data['category']);
         } else {
@@ -715,7 +717,9 @@ class Content implements \JsonSerializable
                 [ 'pk_content' => (int) $data['id'] ]
             );
 
-            if ($data['category'] != $this->category) {
+            if (array_key_exists('category', $data)
+                && $data['category'] != $this->category
+            ) {
                 $conn->delete(
                     'contents_categories',
                     [ 'pk_fk_content' => $data['id'] ]
