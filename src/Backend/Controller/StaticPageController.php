@@ -141,7 +141,7 @@ class StaticPageController extends Controller
         $id = $request->query->getInt('id');
         try {
             $entity = $this->get('orm.manager')
-                ->getRepository('content')
+                ->getRepository('Content')
                 ->find($id);
 
             $entity->id = $entity->pk_content;
@@ -198,6 +198,9 @@ class StaticPageController extends Controller
 
         try {
             $em->persist($entity);
+
+            // TODO: Remove when static pages list ported to the new ORM
+            $this->get('cache')->delete('static_page-' . $id);
 
             $this->get('session')->getFlashBag()
                 ->add('success', _('Content updated successfully'));
