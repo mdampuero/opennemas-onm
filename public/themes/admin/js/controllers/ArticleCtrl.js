@@ -441,7 +441,7 @@
            */
           var successCb = function(response) {
             $scope.disableFlags();
-            //webStorage.session.remove($scope.draftKey);
+            webStorage.session.remove($scope.draftKey);
 
             if (response.status === 201) {
               $window.location.href = response.headers().location;
