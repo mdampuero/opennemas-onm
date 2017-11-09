@@ -103,7 +103,7 @@ class BaseRepository extends Repository
             $sql .= " where $filter";
         }
 
-        $rs  = $this->conn->fetchArray($sql, $params, $types);
+        $rs = $this->conn->fetchArray($sql, $params, $types);
 
         if (!$rs) {
             return false;
