@@ -441,7 +441,7 @@
            */
           var successCb = function(response) {
             $scope.disableFlags();
-            //webStorage.session.remove($scope.draftKey);
+            webStorage.session.remove($scope.draftKey);
 
             if (response.status === 201) {
               $window.location.href = response.headers().location;
@@ -453,9 +453,13 @@
           };
 
           if (!$scope.article.pk_article) {
-            http.post('backend_ws_article_save', data)
-              .then(successCb, $scope.errorCb);
+            var route = { name: 'backend_ws_article_save' };
 
+            if ($scope.config.multilanguage) {
+              route.params = { locale: $scope.config.locale };
+            }
+
+            http.post(route, data).then(successCb, $scope.errorCb);
             return;
           }
 

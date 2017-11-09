@@ -540,6 +540,9 @@ class ContentController extends Controller
             ];
         }
 
+        // TODO: Remove when static pages list ported to the new ORM
+        $this->get('cache.manager')->getConnection('instance')->remove('content-' . $id);
+
         return new JsonResponse(
             [
                 'content_status' => $status,
@@ -614,11 +617,16 @@ class ContentController extends Controller
             ];
         }
 
-        return new JsonResponse(
-            [
-                'messages'  => array_merge($success, $errors)
-            ]
-        );
+        // TODO: Remove when static pages list ported to the new ORM
+        $ids = array_map(function ($a) {
+            return 'content-' . $a;
+        }, $ids);
+
+        $this->get('cache.manager')->getConnection('instance')->remove($ids);
+
+        return new JsonResponse([
+            'messages'  => array_merge($success, $errors)
+        ]);
     }
 
     /**

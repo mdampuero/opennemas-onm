@@ -111,7 +111,17 @@ class ArticleController extends Controller
         if (!empty($article->pk_content)
             && $this->get('core.security')->hasPermission('ARTICLE_UPDATE')
         ) {
-            $url = $this->generateUrl('admin_article_show', [ 'id' => $article->id ]);
+            $params = [ 'id' => $article->id ];
+
+            if ($this->get('core.instance')->hasMultilanguage()
+                && !empty($request->get('locale'))
+                && $request->get('locale') !==
+                    $this->get('core.locale')->getLocale('frontend')
+            ) {
+                $params['locale'] = $this->request->get('locale');
+            }
+
+            $url = $this->generateUrl('admin_article_show', $params);
         }
 
         $response = new JsonResponse('', 201);

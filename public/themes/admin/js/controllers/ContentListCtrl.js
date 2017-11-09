@@ -108,13 +108,14 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      *
      * @param string route Route name.
      */
-    $scope.list = function(route, reset) {
+    $scope.list = function(route) {
+
       // Enable spinner
-      if ($scope.mode === 'grid' && !reset) {
-        $scope.loadingMore = true;
+      if ($scope.mode === 'grid') {
+        $scope.loadingMore = 1;
       } else {
-        $scope.contents = [];
         $scope.loading  = 1;
+        $scope.contents = [];
         $scope.selected = { all: false, contents: [] };
       }
 
@@ -138,25 +139,27 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       http.get(route).then(function(response) {
         $scope.total = parseInt(response.data.total);
-        if ($scope.mode === 'grid' && !reset) {
-          $scope.contents = $scope.contents.concat(response.data.results);
-        } else {
-          $scope.contents = response.data.results;
-        }
-
-        $scope.getContentsLocalizeTitle();
-
-        $scope.map = response.data.map;
 
         if (response.data.hasOwnProperty('extra')) {
           $scope.extra = response.data.extra;
         }
 
+        if ($scope.mode === 'grid') {
+          $scope.contents = $scope.contents.concat(response.data.results);
+        } else {
+          $scope.contents = response.data.results;
+        }
+
+        $scope.contents = $scope.getContentsLocalizeTitle();
+        $scope.map      = response.data.map;
+
         // Disable spinner
-        $scope.loading = 0;
-        $scope.loadingMore = false;
+        $scope.loading     = 0;
+        $scope.loadingMore = 0;
       }, function () {
-        $scope.loading = 0;
+        $scope.loading     = 0;
+        $scope.loadingMore = 0;
+
         var params = {
           id: new Date().getTime(),
           message: 'Error while fetching data from backend',
@@ -273,7 +276,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param {String} mode The new list mode.
      */
     $scope.setMode = function(mode) {
-      step = 0;
       if ($scope.mode === mode) {
         return;
       }
@@ -862,25 +864,14 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     }, true);
 
     // Change page when scrolling in grid mode
-    var step = 0;
     $(window).scroll(function() {
       if (!$scope.mode || $scope.mode === 'list' ||
           $scope.contents.length === $scope.total) {
         return;
       }
 
-      var top = $(window).scrollTop();
-
-      if (top !== step && top - step > 50) {
-        step = top;
-      } else {
-        return;
-      }
-
-      var height = $(window).height();
-      var maxHeight = $('.page-container').height();
-
-      if (maxHeight - height - top < 100) {
+      if (!$scope.loadingMore && $(document).height() ===
+          $(window).height() + $(window).scrollTop()) {
         $scope.criteria.page++;
         $scope.$apply();
       }
@@ -891,7 +882,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.getContentsLocalizeTitle = function() {
       if (!$scope.extra || !$scope.extra.options) {
-        return;
+        return $scope.contents;
       }
 
       var lz   = localizer.get($scope.extra.options);

@@ -28,7 +28,12 @@
        * @param string route Route name.
        */
       $scope.list = function(route) {
-        $scope.loading = 1;
+        if ($scope.mode === 'grid') {
+          $scope.loadingMore = 1;
+        } else {
+          $scope.loading = 1;
+        }
+
         $scope.selected = { all: false, contents: [] };
 
         oqlEncoder.configure({
@@ -51,17 +56,24 @@
 
         http.get(route).then(function(response) {
           $scope.total = parseInt(response.data.total);
-          $scope.contents         = response.data.results;
-          $scope.map              = response.data.map;
+          $scope.map   = response.data.map;
 
           if (response.data.hasOwnProperty('extra')) {
             $scope.extra = response.data.extra;
           }
 
+          if ($scope.mode === 'grid') {
+            $scope.contents = $scope.contents.concat(response.data.results);
+          } else {
+            $scope.contents = response.data.results;
+          }
+
           // Disable spinner
-          $scope.loading = 0;
+          $scope.loading     = 0;
+          $scope.loadingMore = 0;
         }, function () {
-          $scope.loading = 0;
+          $scope.loading     = 0;
+          $scope.loadingMore = 0;
 
           messenger.post({
             message: 'Error while fetching data from backend',
