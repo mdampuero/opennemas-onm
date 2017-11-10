@@ -9,21 +9,20 @@
  */
 namespace Tests\Libs\Smarty;
 
-require './libs/smarty-onm-plugins/function.url.php';
-
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyUrlTest extends KernelTestCase
+class SmartyUrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the testing environment.
      */
     public function setUp()
     {
+        include_once './libs/smarty-onm-plugins/function.url.php';
+
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get' ])
             ->getMock();
