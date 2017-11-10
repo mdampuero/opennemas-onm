@@ -190,7 +190,14 @@
                 <span class="help m-l-5">{t}Activate this if you want to import the author of the elements if available{/t}</span>
               </div>
             </div>
-            <div class="form-group" ng-hide="true">
+            <div class="form-group">
+              <label for="agency_string" class="form-label">{t}External link{/t}</label>
+              <span class="help m-l-5">{t}When importing assign an external link to the elements{/t}</span>
+              <div class="controls">
+                <input class="form-control" id="external_link" name="external_link" type="text" value="{$server['external_link']}">
+              </div>
+            </div>
+            <div class="form-group ng-cloak" ng-hide="true">
               <div class="checkbox">
                 <input id="source" name="source" {if $server['source'] != 0}checked{/if} type="checkbox" value="1">
                 <label class="form-label" for="source">{t}Link to source{/t}</label>

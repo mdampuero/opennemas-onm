@@ -41,6 +41,8 @@ class NewsAgencyController extends Controller
         $edit      = $request->request->get('edit');
         $activated = 1;
 
+        $servers = $this->get('setting_repository')->get('news_agency_config');
+
         if ($edit) {
             $activated = 0;
         }
@@ -54,6 +56,7 @@ class NewsAgencyController extends Controller
         $imported = [];
         foreach ($ids as $value) {
             $resource = $repository->find($value['source'], $value['id']);
+
             $importer->configure($servers[$value['source']]);
 
             $criteria = [

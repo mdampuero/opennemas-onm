@@ -377,6 +377,14 @@ class Importer
             'img2_footer'         => '',
         ];
 
+        // If the source has an external link configured assign it as
+        // the external link in the content to import
+        if (array_key_exists('external_link', $this->config)
+            && !empty($this->config['external_link'])
+        ) {
+            $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
+        }
+
         if ($resource->type === 'photo' || $target === 'photo') {
             $data['original_filename'] = $resource->file_name;
             $data['local_file']        = realpath($this->repository->syncPath

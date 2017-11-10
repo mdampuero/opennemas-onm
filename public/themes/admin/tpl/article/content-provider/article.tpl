@@ -15,7 +15,6 @@
             {if !($content->in_frontpage) && ($params['home'] != true)}<i class="fa fa-star content-icon-suggested"></i>{/if}
             <span class="type">{t}Article{/t}</span>
             {$content->title}
-
         </div>
     </div>
     <div class="content-action-buttons btn-group">
