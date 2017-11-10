@@ -256,8 +256,9 @@ class RouterListener implements EventSubscriberInterface
         $request = $this->requestStack->getCurrentRequest();
 
         // Support for l10n urls;
+        // Match any combination of two letters unless 'ws'
         $existsLocale = preg_match(
-            "@^/(?<locale>(?![\/])[a-z]{2})\b(/)?@",
+            "@^/(?<locale>(?![\/])(?!ws)[a-z]{2})\b(/)?@",
             $request->getRequestUri(),
             $matches
         );
