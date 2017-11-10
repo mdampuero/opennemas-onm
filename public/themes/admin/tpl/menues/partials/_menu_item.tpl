@@ -50,7 +50,7 @@
       <div class="form-group">
         <label for="form-label">{t}Link{/t}</label>
         <div class="controls">
-          <input ng-model="item.link[lang]" type="text" class="form-control" uib-tooltip="{t}Original:{/t} [% item.link[languageData.default] %]" tooltip-enable=" languageData.default !== lang">
+          <input ng-model="item.link[lang]" type="text" class="form-control" uib-tooltip="{t}Original:{/t} [% item.link[languageData.default] %]" tooltip-enable=" languageData.default !== lang" ng-readonly="item.type != 'external'">
         </div>
       </div>
     </div>

@@ -62,14 +62,14 @@ class AdsController extends Controller
         $map             = $positionManager->getPositions();
         $adsNames        = $positionManager->getPositionNames();
 
-        $typeAdvertisement = [ [ 'name' => _("All"), 'value' => -1 ] ];
+        $typeAdvertisement = [ [ 'name' => _("All"), 'value' => null ] ];
 
         foreach ($adsNames as $key => $value) {
             $typeAdvertisement[] = [ 'name' => $value, 'value' => $key];
         }
 
         $types = [
-            [ 'name' => _("All"), 'value' => -1 ],
+            [ 'name' => _("All"), 'value' => null ],
             [ 'name' => _("Multimedia"), 'value' => 0 ],
             [ 'name' => _("Javascript"), 'value' => 1 ],
             [ 'name' => _("OpenX"), 'value' => 2 ],
@@ -77,7 +77,7 @@ class AdsController extends Controller
         ];
 
         $categories = [
-            [ 'name' => _('All'), 'value' => -1 ],
+            [ 'name' => _('All'), 'value' => null ],
             [ 'name' => _('HOMEPAGE'), 'value' => 0, 'group' => _('Special elements') ],
             [ 'name' => _('OPINION'), 'value' => 4, 'group' => _('Special elements') ],
             [ 'name' => _('ALBUM'), 'value' => 3, 'group' => _('Special elements') ],

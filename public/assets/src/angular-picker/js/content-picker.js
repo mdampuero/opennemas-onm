@@ -335,10 +335,6 @@ angular.module('onm.picker')
               $scope.loading = false;
               $scope.picker.params = response.data;
 
-              for (var ctype in response.data.explore.contentTypes) {
-                $scope.picker.setType(ctype);
-              }
-
               $scope.explore();
             });
           });
@@ -371,6 +367,13 @@ angular.module('onm.picker')
       $scope.contents = [];
 
       /**
+       * The criteria object.
+       *
+       * @type {Object}
+       */
+      $scope.criteria = {};
+
+      /**
        * The number of elements per page.
        *
        * @type {integer}
@@ -390,8 +393,6 @@ angular.module('onm.picker')
        * @type {Object}
        */
       $scope.routing = routing;
-
-      $scope.criteria = {};
 
       /**
        * The list of selected contents.

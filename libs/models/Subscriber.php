@@ -24,21 +24,21 @@ class Subscriber
      *
      * @var int
      */
-    public $id        = null;
+    public $id = null;
 
     /**
      * The email of the subscriber
      *
      * @var string
      */
-    public $email     = null;
+    public $email = null;
 
     /**
      * The name of the subscriber
      *
      * @var string
      */
-    public $name      = null;
+    public $name = null;
 
     /**
      * The firstname of the user
@@ -52,7 +52,7 @@ class Subscriber
      *
      * @var string
      */
-    public $lastname  = null;
+    public $lastname = null;
 
     /**
      * status=0 - (mail se le envio pero aun no le dio al link del correo)
@@ -146,27 +146,26 @@ class Subscriber
      */
     public function create($data)
     {
-        $data['status']       = (!isset($data['status']))? 0: $data['status'];
-        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
-        $data['firstname']    = (isset($data['firstname']))? $data['firstname']: "";
-        $data['lastname']     = (isset($data['lastname']))? $data['lastname']: "";
+        $data['status']       = (!isset($data['status'])) ? 0 : $data['status'];
+        $data['subscription'] = (isset($data['subscription'])) ? $data['subscription'] : 1;
+        $data['firstname']    = (isset($data['firstname'])) ? $data['firstname'] : "";
+        $data['lastname']     = (isset($data['lastname'])) ? $data['lastname'] : "";
 
         $conn = getService('dbal_connection');
+
         try {
-            $rs = $conn->insert(
-                "pc_users",
-                [
-                  'email'        => $data['email'],
-                  'name'         => $data['name'],
-                  'firstname'    => $data['firstname'],
-                  'lastname'     => $data['lastname'],
-                  'status'       => $data['status'],
-                  'subscription' => $data['subscription'],
-                ]
-            );
+            $conn->insert("pc_users", [
+                'email'        => $data['email'],
+                'name'         => $data['name'],
+                'firstname'    => $data['firstname'],
+                'lastname'     => $data['lastname'],
+                'status'       => $data['status'],
+                'subscription' => $data['subscription'],
+            ]);
+
             $this->id = $conn->lastInsertId();
 
-            dispatchEventWithParams('newsletter_subscriptor.create', array('subscriptor' => $this));
+            dispatchEventWithParams('newsletter_subscriptor.create', [ 'subscriptor' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -185,7 +184,7 @@ class Subscriber
      */
     public function update($data, $isBackend = false)
     {
-        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
+        $data['subscription'] = (isset($data['subscription'])) ? $data['subscription'] : 1;
 
         $newData = [
             'subscription' => $data['subscription'],
@@ -201,14 +200,15 @@ class Subscriber
         }
 
         try {
-            $rs = getService('dbal_connection')->update(
-                "pc_users",
+            getService('dbal_connection')->update(
+                'pc_users',
                 $newData,
                 [ 'pk_pc_user' => (int) $data['id'] ]
             );
 
             $this->id = $data['id'];
-            dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+
+            dispatchEventWithParams('newsletter_subscriptor.update', [ 'subscriptor' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -237,7 +237,7 @@ class Subscriber
             );
 
             $this->id = $id;
-            dispatchEventWithParams('newsletter_subscriptor.delete', array('subscriptor' => $this));
+            dispatchEventWithParams('newsletter_subscriptor.delete', [ 'subscriptor' => $this ]);
 
             if (!$rs) {
                 return false;
@@ -287,11 +287,11 @@ class Subscriber
     {
         $items = [];
         $where = '';
-        if (!is_null($filter)) {
-            $where = ' WHERE '.$filter;
+        if (!empty($filter)) {
+            $where = ' WHERE ' . $filter;
         }
 
-        $sql = 'SELECT * FROM pc_users '.$where.' ORDER BY '.$orderBy;
+        $sql = 'SELECT * FROM pc_users ' . $where . ' ORDER BY ' . $orderBy;
 
         if (!empty($limit)) {
             $sql .= ' LIMIT ' . $limit;
@@ -324,14 +324,14 @@ class Subscriber
     public function setStatus($id, $status)
     {
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 "pc_users",
                 [ 'status' => $status ],
                 [ 'pk_pc_user' => (int) $id ]
             );
 
             $this->id = $id;
-            dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+            dispatchEventWithParams('newsletter_subscriptor.update', [ 'subscriptor' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -351,14 +351,14 @@ class Subscriber
     public function setSubscriptionStatus($id, $status)
     {
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 "pc_users",
                 [ 'subscription' => $status ],
                 [ 'pk_pc_user' => (int) $id ]
             );
 
             $this->id = $id;
-            dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+            dispatchEventWithParams('newsletter_subscriptor.update', [ 'subscriptor' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -402,6 +402,7 @@ class Subscriber
         if (!empty($where)) {
             $sql .= ' WHERE ' . $where;
         }
+
         try {
             $rs = getService('dbal_connection')->fetchAssoc($sql);
 

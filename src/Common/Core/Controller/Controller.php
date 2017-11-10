@@ -106,6 +106,14 @@ class Controller extends SymfonyController
             $response = new Response();
         }
 
+        if (array_key_exists('cache_id', $parameters)) {
+            $parameters['cache_id'] .= '|' . $this->get('core.locale')->getRequestLocale();
+        }
+
+        if (array_key_exists('xtags', $parameters)) {
+            $parameters['cache_id'] .= ',' . $this->get('core.locale')->getRequestLocale();
+        }
+
         $content = $this->renderView($view, $parameters);
         $response->setContent($content);
 

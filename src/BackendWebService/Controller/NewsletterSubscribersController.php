@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the newsletters
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -38,27 +33,21 @@ class NewsletterSubscribersController extends Controller
      */
     public function listAction(Request $request)
     {
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = $request->query->getDigits('page', 1);
-        $search          = $request->query->get('search', '');
+        $oql = $request->query->get('oql', '');
+        $sb  = new \Subscriber();
 
-        // Build filters for sql
-        list($where, $orderBy) = $this->buildFilter($search);
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        $sb = new \Subscriber();
-        $subscribers = $sb->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
+        $subscribers = $sb->getUsers($criteria, $epp * ($page - 1) . ',' . $epp, $order);
         $subscribers = \Onm\StringUtils::convertToUtf8($subscribers);
 
-        $total = $sb->countUsers($where);
+        $total = $sb->countUsers($criteria);
 
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'page'              => $page,
-                'results'           => $subscribers,
-                'total'             => $total,
-            )
-        );
+        return new JsonResponse([
+            'results' => $subscribers,
+            'total'   => $total,
+        ]);
     }
 
     /**
@@ -77,34 +66,30 @@ class NewsletterSubscribersController extends Controller
 
         $errors = $success = [];
         if (!empty($id)) {
-            $user = new \Subscriber($id);
+            $user   = new \Subscriber($id);
             $result = $user->delete($id);
 
             if ($user->id && $result) {
-                $success[] = array(
+                $success[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Subscritor with id "%d" deleted successfully'), $id),
                     'type'    => 'success'
-                );
+                ];
             } else {
-                $errors[] = array(
+                $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to find the user with the id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'message' => _('You must provide an id to delete a newsletter subscriber.'),
                 'type'    => 'error'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages'  => array_merge($success, $errors),
-            )
-        );
+        return new JsonResponse([ 'messages' => array_merge($success, $errors) ]);
     }
 
     /**
@@ -119,33 +104,29 @@ class NewsletterSubscribersController extends Controller
      */
     public function toggleSubscriptionAction(Request $request)
     {
-        $id   = $request->query->getDigits('id', null);
-
-        $user = new \Subscriber($id);
-
+        $id           = $request->query->getDigits('id', null);
+        $user         = new \Subscriber($id);
         $subscription = ($user->subscription + 1) % 2;
-        $toggled = $user->setSubscriptionStatus($user->id, $subscription);
+        $toggled      = $user->setSubscriptionStatus($user->id, $subscription);
 
         if ($toggled) {
-            $messages = array(
+            $messages = [
                 'id'      => $id,
                 'message' => _('Item updated successfully'),
                 'type'    => 'success'
-            );
+            ];
         } else {
-            $messages = array(
+            $messages = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'subscription' => $subscription,
-                'messages'       => $messages
-            )
-        );
+        return new JsonResponse([
+            'subscription' => $subscription,
+            'messages'     => $messages
+        ]);
     }
 
     /**
@@ -160,33 +141,29 @@ class NewsletterSubscribersController extends Controller
      */
     public function toggleActivatedAction(Request $request)
     {
-        $id   = $request->query->getDigits('id', null);
-
-        $user = new \Subscriber($id);
-
-        $status = ($user->status == 2) ? 3: 2;
+        $id      = $request->query->getDigits('id', null);
+        $user    = new \Subscriber($id);
+        $status  = ($user->status == 2) ? 3 : 2;
         $toggled = $user->setStatus($id, $status);
 
         if ($toggled) {
-            $messages = array(
+            $messages = [
                 'id'      => $id,
                 'message' => _('Item updated successfully'),
                 'type'    => 'success'
-            );
+            ];
         } else {
-            $messages = array(
+            $messages = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'status'   => $status,
-                'messages' => $messages
-            )
-        );
+        return new JsonResponse([
+            'status'   => $status,
+            'messages' => $messages
+        ]);
     }
 
     /**
@@ -201,35 +178,35 @@ class NewsletterSubscribersController extends Controller
      */
     public function batchDeleteAction(Request $request)
     {
-        $ids = $request->request->get('selected');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $ids     = $request->request->get('selected');
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         if (is_array($ids) && count($ids) > 0) {
             $user = new \Subscriber();
-            $count = 0;
+
             foreach ($ids as $id) {
                 if ($user->delete($id)) {
                     $updated[] = $id;
                 } else {
-                    $errors[] = array(
+                    $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
             }
         }
 
         if ($updated > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(
                     sprintf(_('Successfully deleted %d subscribers.'), count($updated))
                 ),
                 'type'    => 'success'
-            );
+            ];
         }
 
         return new JsonResponse([
@@ -249,7 +226,7 @@ class NewsletterSubscribersController extends Controller
      */
     public function batchSubscribeAction(Request $request)
     {
-        $ids = $request->request->get('ids');
+        $ids   = $request->request->get('ids');
         $state = $request->request->getDigits('value', 1);
 
         if (!is_array($ids) || count($ids) == 0) {
@@ -292,7 +269,7 @@ class NewsletterSubscribersController extends Controller
      */
     public function batchActivatedAction(Request $request)
     {
-        $ids = $request->request->get('ids');
+        $ids   = $request->request->get('ids');
         $state = $request->request->getDigits('value', 1);
 
         if (!is_array($ids) || count($ids) == 0) {
@@ -321,41 +298,5 @@ class NewsletterSubscribersController extends Controller
                 ]
             ]
         ]);
-    }
-
-    /**
-     * Builds the search filter
-     *
-     * @param array $filters the list of filters to take in place
-     *
-     * @return array a tuple with the where and the orderby SQL clause
-     */
-    private function buildFilter($filters)
-    {
-        $orderBy = 'name, email';
-
-
-        $fltr = array();
-        if (isset($filters['title'])
-            && !empty($filters['title'])
-        ) {
-            $fltr[] = "(name LIKE '".addslashes($filters['title'][0]['value'])."' OR ".
-                      "email LIKE '".addslashes($filters['title'][0]['value'])."')";
-        }
-
-        if (isset($filters['subscription']) && ($filters['subscription'][0]['value']>=0)) {
-            $fltr[] = '`subscription`=' . $filters['subscription'][0]['value'];
-        }
-
-        if (isset($filters['status']) && ($filters['status'][0]['value']>=0)) {
-            $fltr[] = '`status`=' . $filters['status'][0]['value'];
-        }
-
-        $where = null;
-        if (count($fltr) > 0) {
-            $where = implode(' AND ', $fltr);
-        }
-
-        return array($where, $orderBy);
     }
 }

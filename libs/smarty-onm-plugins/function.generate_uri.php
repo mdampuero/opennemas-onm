@@ -12,17 +12,12 @@ function smarty_function_generate_uri($params, &$smarty)
         $slug = \Onm\StringUtils::generateSlug($params['title']);
     }
 
-    $output = Uri::generate(
-        $params['content_type'],
-        [
-            'id'       => sprintf('%06d',$params['id']),
-            'date'     => date('YmdHis', strtotime($params['date'])),
-            'category' => urlencode($params['category_name']),
-            'slug'     => urlencode($slug),
-        ]
-    );
+    $output = Uri::generate($params['content_type'], [
+        'id'       => sprintf('%06d', $params['id']),
+        'date'     => date('YmdHis', strtotime($params['date'])),
+        'category' => urlencode($params['category_name']),
+        'slug'     => urlencode($slug),
+    ]);
 
     return $output;
 }
-
-

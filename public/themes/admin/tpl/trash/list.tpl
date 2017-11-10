@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div method="post" ng-app="BackendApp" ng-controller="TrashListCtrl" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-
+<div method="post" ng-controller="TrashListCtrl" ng-init="criteria = { epp: 10, in_litter: 1, page: 1 }; init('content', 'backend_ws_contents_list')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -29,7 +28,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -65,7 +63,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -74,14 +71,14 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" type="text" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name{/t}" />
+            <input class="no-boarder" type="text" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name{/t}" />
           </li>
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks hidden-xs">
             <select id="content_type_name" ng-model="criteria.content_type_name" data-label="{t}Content Type{/t}" class="select2">
-              <option value="-1">{t}-- All --{/t}</option>
+              <option value="">{t}All{/t}</option>
 
               {is_module_activated name="ARTICLE_MANAGER"}
               {acl isAllowed="ARTICLE_TRASH"}
@@ -162,11 +159,11 @@
             </select>
           </li>
           <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
-              <ui-select-choices repeat="item in views  | filter: $select.search">
+              <ui-select-choices repeat="item in views | filter: $select.search">
                 <div ng-bind-html="item | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
@@ -174,15 +171,13 @@
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
     </div>
   </div>
-
   <div class="content">
-
     <div class="grid simple">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
@@ -241,31 +236,25 @@
           </table>
         </div>
       </div>
-
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>
   </div>
-
   <script type="text/ng-template" id="modal-restore-from-trash">
     {include file="common/modals/_modalRestoreFromTrash.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-remove-permanently">
     {include file="common/modals/_modalRemovePermanently.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-batch-restore">
     {include file="common/modals/_modalBatchRestoreFromTrash.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-batch-remove-permanently">
     {include file="common/modals/_modalBatchRemovePermanently.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-remove-all">
     <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>

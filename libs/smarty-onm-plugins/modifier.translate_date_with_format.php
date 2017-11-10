@@ -36,10 +36,10 @@ function smarty_modifier_translate_date_with_format($date, $format = "L, j de F"
     $datetime = new DateTime($date);
     $dateEn = $datetime->format($format);
 
-    $locale = getService('setting_repository')->get('site_language');
-    if ($locale == 'es_ES') {
+    $locale = getService('core.locale')->getLocale();
+    if ($locale == 'es_ES' || $locale == 'es') {
         $dateR = preg_replace($namesEN, $namesES, $dateEn);
-    } elseif ($locale == 'gl_ES') {
+    } elseif ($locale == 'gl_ES' || $locale == 'gl') {
         $dateR = preg_replace($namesEN, $namesGL, $dateEn);
     } else {
         $dateR = preg_replace('/de/', '', $dateEn);

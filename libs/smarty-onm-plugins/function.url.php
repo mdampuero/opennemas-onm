@@ -43,7 +43,7 @@ function smarty_function_url($params, &$smarty)
         $url = '#not-found';
     }
 
-    $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url, $name);
+    $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url, $name, $forceAbsolute);
 
     return $url;
 }

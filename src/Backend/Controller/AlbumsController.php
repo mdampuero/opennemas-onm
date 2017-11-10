@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -32,13 +27,12 @@ class AlbumsController extends Controller
      */
     public function init()
     {
-        $request = $this->get('request_stack')->getCurrentRequest();
-
+        $request     = $this->get('request_stack')->getCurrentRequest();
         $contentType = \ContentManager::getContentTypeIdFromName('album');
-
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $category    = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
+
         list($this->parentCategories, $this->subcat, $this->categoryData)
             = $this->ccm->getArraysMenu($category, $contentType);
 
@@ -53,33 +47,30 @@ class AlbumsController extends Controller
     /**
      * Lists all albums.
      *
-     * @return Response          The response object.
+     * @return Response The response object.
      *
      * @Security("hasExtension('ALBUM_MANAGER')
      *     and hasPermission('ALBUM_ADMIN')")
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
 
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->name
+                'value' => $category->pk_content_category
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
+                    'value' => $subcategory->pk_content_category
                 ];
             }
         }
 
-        return $this->render(
-            'album/list.tpl',
-            [ 'categories' => $categories ]
-        );
+        return $this->render('album/list.tpl', [ 'categories' => $categories ]);
     }
 
     /**
@@ -92,12 +83,7 @@ class AlbumsController extends Controller
      */
     public function widgetAction()
     {
-        return $this->render(
-            'album/list.tpl',
-            array(
-                'category'   => 'widget',
-            )
-        );
+        return $this->render('album/list.tpl', [ 'category' => 'widget' ]);
     }
 
     /**
@@ -113,33 +99,41 @@ class AlbumsController extends Controller
     {
         if ('POST' !== $request->getMethod()) {
             $authorsComplete = \User::getAllUsersAuthors();
-            $authors = array('0' => _(' - Select one author - '));
+            $authors         = [ '0' => _(' - Select one author - ') ];
+
             foreach ($authorsComplete as $author) {
                 $authors[$author->id] = $author->name;
             }
 
-            return $this->render(
-                'album/new.tpl',
-                array ('authors' => $authors, 'commentsConfig' => s::get('comments_config'),)
-            );
+            return $this->render('album/new.tpl', [
+                'authors' => $authors,
+                'commentsConfig' => s::get('comments_config')
+            ]);
         }
 
-        $data = array(
+        $data = [
             'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'category'       => $request->request->getDigits('category'),
-            'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'agency'         => $request->request
+                ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
             'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $request->request->get('album_photos_id'),
             'album_photos_footer'   => $request->request->get('album_photos_footer'),
             'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            'endtime'        => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'endtime'        => $request->request
+                ->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'starttime'      => $request->request
+                ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $request->request->get('params', []),
-        );
+        ];
+
         $album = new \Album();
         $album->create($data);
 
@@ -148,13 +142,10 @@ class AlbumsController extends Controller
             _('Album created successfully')
         );
 
-        // Get category name
-        $ccm = \ContentCategoryManager::get_instance();
-        $categoryName = $ccm->getName($request->request->get('category'));
         // Return user to list if has no update acl
         if ($this->get('core.security')->hasPermission('ALBUM_UPDATE')) {
             return $this->redirect(
-                $this->generateUrl('admin_album_show', array('id' => $album->id))
+                $this->generateUrl('admin_album_show', [ 'id' => $album->id ])
             );
         } else {
             return $this->redirect(
@@ -174,9 +165,8 @@ class AlbumsController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $id      = $request->query->getDigits('id');
-        $page    = $request->query->getDigits('page', 1);
-
+        $id    = $request->query->getDigits('id');
+        $page  = $request->query->getDigits('page', 1);
         $album = new \Album($id);
 
         if (is_null($album->id)) {
@@ -197,15 +187,10 @@ class AlbumsController extends Controller
         );
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_albums',
-                    array(
-                        'category' => $album->category,
-                        'page'     => $page,
-                    )
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_albums', [
+                'category' => $album->category,
+                'page'     => $page,
+            ]));
         } else {
             return new Response('ok');
         }
@@ -243,32 +228,25 @@ class AlbumsController extends Controller
                 _("You don't have enough privileges for modify this album.")
             );
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_albums',
-                    array('category' => $album->category,)
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_albums', [
+                'category' => $album->category
+            ]));
         }
-
 
         $photos          = $album->_getAttachedPhotos($id);
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = array('0' => _(' - Select one author - '));
+        $authors         = [ '0' => _(' - Select one author - ') ];
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
 
-        return $this->render(
-            'album/new.tpl',
-            array(
-                'category'       => $album->category,
-                'photos'         => $photos,
-                'album'          => $album,
-                'authors'        => $authors,
-                'commentsConfig' => s::get('comments_config'),
-            )
-        );
+        return $this->render('album/new.tpl', [
+            'category'       => $album->category,
+            'photos'         => $photos,
+            'album'          => $album,
+            'authors'        => $authors,
+            'commentsConfig' => s::get('comments_config'),
+        ]);
     }
 
     /**
@@ -302,12 +280,9 @@ class AlbumsController extends Controller
                 _("You don't have enough privileges for modify this album.")
             );
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_albums',
-                    array('category' => $album->category,)
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_albums', [
+                'category' => $album->category
+            ]));
         }
 
         // Check empty data
@@ -317,27 +292,33 @@ class AlbumsController extends Controller
                 _("Album data sent not valid.")
             );
 
-            return $this->redirect($this->generateUrl('admin_album_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_album_show', [ 'id' => $id ]));
         }
 
         $requestPost = $request->request;
-        $data = array(
+
+        $data = [
             'id'             => $id,
             'content_status' => $requestPost->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
             'title'          => $requestPost->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'category'       => $requestPost->getDigits('category'),
-            'agency'         => $requestPost->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'agency'         => $requestPost
+                ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $requestPost->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $requestPost->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
             'with_comment'   => $requestPost->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $requestPost->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $requestPost->get('album_photos_id'),
             'album_photos_footer'   => $requestPost->get('album_photos_footer'),
             'fk_author'             => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            'endtime'        => $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      => $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'endtime'        => $requestPost
+                ->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'starttime'      => $requestPost
+                ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $requestPost->get('params', []),
-        );
+        ];
 
         $album->update($data);
         $this->get('session')->getFlashBag()->add(
@@ -345,9 +326,7 @@ class AlbumsController extends Controller
             _("Album updated successfully.")
         );
 
-        return $this->redirect(
-            $this->generateUrl('admin_album_show', array('id' => $album->id))
-        );
+        return $this->redirect($this->generateUrl('admin_album_show', [ 'id' => $album->id ]));
     }
 
     /**
@@ -370,7 +349,7 @@ class AlbumsController extends Controller
         ) {
             $pos = 1;
             foreach ($positions as $id) {
-                $album = new \Album($id);
+                $album  = new \Album($id);
                 $result = $result && $album->setPosition($pos);
 
                 $pos++;
@@ -401,16 +380,17 @@ class AlbumsController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int)$categoryId);
+        $ids = $this->get('frontpage_repository')
+            ->getContentIdsForHomepageOfCategory((int) $categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'album')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'album' ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
+        ];
 
-        $albums      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $albums      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countAlbums = $em->countBy($filters);
 
         // Build the pagination
@@ -426,13 +406,10 @@ class AlbumsController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'album/content-provider.tpl',
-            array(
-                'albums'     => $albums,
-                'pagination' => $pagination,
-            )
-        );
+        return $this->render('album/content-provider.tpl', [
+            'albums'     => $albums,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -452,10 +429,10 @@ class AlbumsController extends Controller
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
+        $filters = [
             'content_type_name' => [['value' => 'album']],
             'in_litter'         => [['value' => 1, 'operator' => '!=']]
-        );
+        ];
 
         if ($categoryId != 0) {
             $filters['category_name'] = [['value' => $category->name]];
@@ -477,14 +454,14 @@ class AlbumsController extends Controller
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
-            array(
+            [
                 'contentType'           => 'Album',
                 'contents'              => $albums,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $categoryId,
                 'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
-            )
+            ]
         );
     }
 
@@ -501,26 +478,26 @@ class AlbumsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' !== $this->request->getMethod()) {
-            $configurationsKeys = array('album_settings',);
-            $configurations = s::get($configurationsKeys);
+            $configurationsKeys = [ 'album_settings', ];
+            $configurations     = s::get($configurationsKeys);
 
-            return $this->render(
-                'album/config.tpl',
-                array('configs'   => $configurations,)
-            );
+            return $this->render('album/config.tpl', [
+                'configs'   => $configurations
+            ]);
         }
 
-        $settings = array(
-            'album_settings' => array(
+        $settings = [
+            'album_settings' => [
                 'total_widget'     => $request->request->getDigits('album_settings_total_widget'),
                 'crop_width'       => $request->request->getDigits('album_settings_crop_width'),
                 'crop_height'      => $request->request->getDigits('album_settings_crop_height'),
-                'orderFrontpage'   => $request->request->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
+                'orderFrontpage'   => $request->request
+                    ->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
                 'time_last'        => $request->request->getDigits('album_settings_time_last'),
                 'total_front'      => $request->request->getDigits('album_settings_total_front'),
                 'total_front_more' => $request->request->getDigits('album_settings_total_front_more'),
-            )
-        );
+            ]
+        ];
 
         foreach ($settings as $key => $value) {
             s::set($key, $value);

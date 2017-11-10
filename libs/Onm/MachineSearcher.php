@@ -50,11 +50,11 @@ class MachineSearcher
      */
     public function searchSuggestedContents($contentTypeName, $filter = '', $numberOfElements = 4)
     {
-        $cacheKey = $this->cachePrefix.'_suggested_contents_'.md5(implode(',', func_get_args()));
-        $result = $this->cache->fetch($cacheKey);
+        $cacheKey = $this->cachePrefix . '_suggested_contents_' . md5(implode(',', func_get_args()));
+        $result   = $this->cache->fetch($cacheKey);
 
         if (!is_array($result)) {
-            $filter = (empty($filter) ? "" : " AND ".$filter);
+            $filter = (empty($filter) ? "" : " AND " . $filter);
 
             // Generate where clause for filtering fk_content_type
             $selectedContentTypesSQL = $this->parseTypes($contentTypeName);
@@ -65,35 +65,38 @@ class MachineSearcher
             }
 
             $sql = "SELECT content_type_name, pk_content FROM contents"
-                    ." WHERE `contents`.`content_status` = 1 AND `contents`.`in_litter` = 0 "
-                    .$selectedContentTypesSQL
-                    .$filter
-                    ." ORDER BY created DESC LIMIT ". $numberOfElements;
+                    . " WHERE `contents`.`content_status` = 1 AND `contents`.`in_litter` = 0 "
+                    . $selectedContentTypesSQL
+                    . $filter
+                    . " ORDER BY created DESC LIMIT " . $numberOfElements;
 
             try {
-                $rs = $this->dbConn->fetchAll($sql);
-                $contentProps = array();
+                $rs           = $this->dbConn->fetchAll($sql);
+                $contentProps = [];
                 foreach ($rs as $content) {
-                    $contentProps []= array($content['content_type_name'], $content['pk_content']);
+                    $contentProps [] = [$content['content_type_name'], $content['pk_content']];
                 }
 
                 if (count($contentProps) < 1) {
-                    return array();
+                    return [];
                 }
 
                 $contents = $this->er->findMulti($contentProps);
 
                 // TODO: nasty hack to convert content objects to the old array way
-                $result = array();
+                $result = [];
                 foreach ($contents as $content) {
                     $content->uri = $content->uri;
-                    $result []= get_object_vars($content);
+
+                    // We have to call jsonSerialize to get all protected properties
+                    $vars      = $content->jsonSerialize();
+                    $result [] = $vars;
                 }
             } catch (Exception $e) {
-                return array();
+                return [];
             }
 
-            $cm = new \ContentManager();
+            $cm     = new \ContentManager();
             $result = $cm->getInTime($result);
 
             $er = getService('entity_repository');
@@ -127,11 +130,12 @@ class MachineSearcher
 
         $contentTypeNames = explode(',', $szSource);
 
-        $contentTypesSQL = array();
+        $contentTypesSQL = [];
         foreach ($contentTypeNames as $contentTypeName) {
-            $contentTypesSQL []= "`content_type_name` = '".trim($contentTypeName)."'";
+            $contentTypesSQL [] = "`content_type_name` = '" . trim($contentTypeName) . "'";
         }
-        $contentTypesSQL = " AND (". implode(' OR ', $contentTypesSQL).") ";
+
+        $contentTypesSQL = " AND (" . implode(' OR ', $contentTypesSQL) . ") ";
 
         return $contentTypesSQL;
     }

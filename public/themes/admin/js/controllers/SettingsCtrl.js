@@ -148,7 +148,7 @@
         };
 
         /**
-         * @function getExtraParams
+         * @function getParameters
          * @memberOf SettingsCtrl
          *
          * @description
@@ -156,7 +156,7 @@
          *
          * @param {Integer} index The index of the translation service
          */
-        $scope.getExtraParams = function(index)  {
+        $scope.getParameters = function(index)  {
           if(!$scope.extra.translation_services)  {
             return [];
           }

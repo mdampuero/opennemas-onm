@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('widget', { content_status: -1, renderlet: -1, title_like: '', in_litter: 0,  content: -1}, 'title', 'asc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('widget', 'backend_ws_contents_list')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -29,7 +28,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -84,12 +82,12 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+            <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
           </li>
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}IntelligentWidget{/t}', value: 'intelligentwidget' }, { name: '{t}HTML{/t}', value: 'html' }]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: null }, { name: '{t}IntelligentWidget{/t}', value: 'intelligentwidget' }, { name: '{t}HTML{/t}', value: 'html' }]">
             <ui-select name="status" theme="select2" ng-model="criteria.renderlet">
               <ui-select-match>
                 <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
@@ -99,7 +97,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
               <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -120,7 +118,7 @@
             </ui-select>
           </li>
           <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
@@ -132,7 +130,7 @@
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -217,7 +215,7 @@
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right pagination-wrapper">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>

@@ -6,13 +6,6 @@ backend_ws_article_save:
     options:
         expose: true
 
-backend_ws_article_show:
-    path:     /articles/{id}
-    defaults: { _controller: BackendWebServiceBundle:Article:show }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 backend_ws_article_update:
     path:     /articles/{id}
     defaults: { _controller: BackendWebServiceBundle:Article:update }

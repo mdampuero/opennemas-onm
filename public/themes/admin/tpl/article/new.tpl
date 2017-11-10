@@ -1,26 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  <style>
-    tags-input .tags .tag-item  {
-      background-color: #376092 !important;
-      font-size: 11px  !important;
-      font-family: 'Open Sans' !important;
-      font-weight: 600 !important;
-    }
-  </style>
-{/block}
-
-{block name="footer-js" append}
-  {javascripts}
-    <script>
-      var draftSavedMsg = '{t}Draft saved at {/t}';
-    </script>
-  {/javascripts}
-{/block}
-
 {block name="content"}
-  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="{if isset($id)}getArticle({$id}){else}checkDraft(){/if};categories = {json_encode($allcategorys)|clear_json}" novalidate>
+<form name="articleForm" ng-controller="ArticleCtrl" ng-init="init('{$locale}', '{$id}')" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -47,6 +28,12 @@
                 {if !isset($id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
             </li>
+            <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.multilanguage">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks ng-cloak" ng-if="config.multilanguage">
+              <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.options"></translator>
+            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -54,7 +41,7 @@
                 <h5>
                   <i class="p-r-15">
                     <i class="fa fa-check"></i>
-                    [% draftSaved %]
+                    {t}Draft saved at {/t}[% draftSaved %]
                   </i>
                 </h5>
               </li>
@@ -68,7 +55,7 @@
               </li>
               <li class="quicklinks hidden-xs">
                 <button class="btn btn-white" id="button_preview" ng-click="preview('admin_article_preview', 'admin_article_get_preview')" type="button">
-                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': previewLoading }" ></i>
+                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.preview }" ></i>
                   <span class="hidden-xs">{t}Preview{/t}</span>
                 </button>
               </li>
@@ -76,36 +63,36 @@
                 <span class="h-seperate"></span>
               </li>
               {if isset($id)}
-              {acl isAllowed="ARTICLE_UPDATE"}
-              <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="update()" ng-disabled="saving" type="button" id="update-button">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
-                  <span class="text">{t}Update{/t}</span>
-                </button>
-              </li>
-              {/acl}
+                {acl isAllowed="ARTICLE_UPDATE"}
+                  <li class="quicklinks">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
+                      <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                      <span class="text">{t}Update{/t}</span>
+                    </button>
+                  </li>
+                {/acl}
               {else}
-              {acl isAllowed="ARTICLE_CREATE"}
-              <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="saving" type="button" id="save-button">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
-                  <span class="text">{t}Save{/t}</span>
-                </button>
-              </li>
-              {/acl}
+                {acl isAllowed="ARTICLE_CREATE"}
+                  <li class="quicklinks">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
+                      <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                      <span class="text">{t}Save{/t}</span>
+                    </button>
+                  </li>
+                {/acl}
               {/if}
             </ul>
           </div>
         </div>
       </div>
     </div>
-    <div class="content ng-cloak no-animate" ng-if="loading">
+    <div class="content ng-cloak no-animate" ng-if="flags.loading">
       <div class="spinner-wrapper">
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
     </div>
-    <div class="content ng-cloak" ng-if="!error && !loading && article">
+    <div class="content ng-cloak" ng-if="!error && !flags.loading && article">
       <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
@@ -115,8 +102,8 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" name="title" ng-model="article.title" ng-trim="false" required type="text">
+                  <div class="input-group">
+                    <input class="form-control" id="title" name="title" ng-model="article.title" ng-trim="false" placeholder="[% data.article.title[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
                         [% article.title ? article.title.length : 0 %]
@@ -126,12 +113,12 @@
                 </div>
               </div>
               <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title_int.$invalid }">
-                <label class="form-label" for="title_int_input">
+                <label class="form-label" for="title-int">
                   {t}Inner title{/t}
                 </label>
                 <div class="controls">
-                  <div class="input-group" id="title_int">
-                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="article.title_int" ng-trim="false" required>
+                  <div class="input-group">
+                    <input class="form-control" id="title-int" maxlength="256" name="title-int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
@@ -155,7 +142,7 @@
                     {t}Signature{/t} #2
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" ng-model="article.params.agencyBulletin" ng-init="!article.id ? article.params.agencyBulletin = '{setting name=site_agency}' : ''" type="text">
+                    <input class="form-control" id="agency_bulletin" ng-model="article.params.agencyBulletin" ng-init="!article.id ? article.params.agencyBulletin = '{setting name=site_agency}' : ''" type="text">
                   </div>
                 </div>
                 {/is_module_activated}
@@ -166,7 +153,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="subtitle">
-                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" type="text"/>
+                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" placeholder="[% data.article.subtitle[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.subtitle[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.subtitle.length >= 50 && article.subtitle.length < 100, 'text-danger': article.subtitle.length >= 100 }">
                         [% article.subtitle ? article.subtitle.length : 0 %]
@@ -218,7 +205,7 @@
                   {acl isAllowed="ARTICLE_AVAILABLE"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="content_status" name="content_status" ng-model="article.content_status" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="content_status" name="content_status" ng-model="article.content_status" ng-false-value="0" ng-true-value="1" type="checkbox">
                         <label for="content_status">
                           {t}Published{/t}
                         </label>
@@ -228,7 +215,7 @@
                   {is_module_activated name="COMMENT_MANAGER"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="with_comment" name="with_comment" ng-model="article.with_comment" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="with_comment" name="with_comment" ng-model="article.with_comment" ng-false-value="0" ng-true-value="1" type="checkbox">
                         <label class="form-label" for="with_comment">
                           {t}Allow comments{/t}
                         </label>
@@ -238,7 +225,7 @@
                   {acl isAllowed="ARTICLE_HOME"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="frontpage" name="frontpage" ng-model="article.frontpage" ng-false-value="'0'" ng-true-value="'1'" type="checkbox">
+                        <input id="frontpage" name="frontpage" ng-model="article.frontpage" ng-false-value="0" ng-true-value="1" type="checkbox">
                         <label class="form-label" for="frontpage">
                           {t}Suggested for frontpage{/t}
                         </label>
@@ -253,9 +240,14 @@
                       {acl isAllowed="CONTENT_OTHER_UPDATE"}
                         <div class="form-group">
                           <div class="controls">
-                            <select id="fk_author" name="fk_author" ng-model="article.fk_author">
-                              {html_options options=$authors}
-                            </select>
+                            <ui-select class="form-control" name="author" theme="select2" ng-model="article.fk_author">
+                              <ui-select-match>
+                                [% $select.selected.name %]
+                              </ui-select-match>
+                              <ui-select-choices repeat="item.id as item in data.extra.users | filter: { name: $select.search }">
+                                <div ng-bind-html="item.name | highlight: $select.search"></div>
+                              </ui-select-choices>
+                            </ui-select>
                           </div>
                         </div>
                       {aclelse}
@@ -268,26 +260,14 @@
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select class="form-control" id="category" name="category" ng-model="article.category" required>
-                        <option value="" >{t}- Select a category -{/t}</option>
-                        {section name=as loop=$allcategorys}
-                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                        <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                          {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled{/if} >
-                          {$allcategorys[as]->title}</option>
-                          {/acl}
-                          {section name=su loop=$subcat[as]}
-                          {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                          {if $subcat[as][su]->internal_category eq 1}
-                          <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled{/if} >
-                            &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                          {/if}
-                          {/acl}
-                          {/section}
-                        {/section}
-                        <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
-                      </select>
+                      <ui-select class="form-control" name="pk_fk_content_category" theme="select2" ng-model="article.pk_fk_content_category">
+                        <ui-select-match>
+                          [% $select.selected.title %]
+                        </ui-select-match>
+                        <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
+                          <div ng-bind-html="item.title | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                   </div>
                   <div class="form-group">
@@ -302,13 +282,14 @@
                     <label class="form-label" for="slug">
                       {t}Slug{/t}
                     </label>
+                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !articleForm.pk_fk_content_category.$dirty && !articleForm.content_status.$dirty">
+                      <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% data.extra.options.default === config.locale ? '' : config.locale + '/' %]articulo/[% (categories | filter: { pk_content_category: article.pk_fk_content_category })[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% ('000000' + article.pk_content).substr(-6) %].html" target="_blank">
+                        <i class="fa fa-external-link"></i>
+                        {t}Link{/t}
+                      </a>
+                    </span>
                     <div class="controls">
                       <input class="form-control" id="slug" name="slug" ng-model="article.slug" type="text" ng-disabled="article.content_status != '0'">
-                      <span class="help-block" ng-if="article.pk_article && backup.content_status != '0'">
-                        <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% article.uri %]" target="_blank">
-                          <i class="fa fa-external-link"></i> {t}Link{/t}
-                        </a>
-                      </span>
                     </div>
                   </div>
                   <div class="form-group">
@@ -316,7 +297,7 @@
                       {t}External link{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="bodyLink" name="params[bodyLink]" ng-model="article.params.bodyLink" type="text">
+                      <input class="form-control" id="bodyLink" ng-model="article.params.bodyLink" type="text">
                     </div>
                   </div>
                 </div>
@@ -325,7 +306,10 @@
                 <div class="col-md-12">
                   <div class="grid simple">
                     <div class="grid-title">
-                      <h4>{t}Schedule{/t}</h4>
+                      <h4>
+                        <i class="fa fa-clock-o"></i>
+                        {t}Schedule{/t}
+                      </h4>
                     </div>
                     <div class="grid-body">
                       <div class="form-group">
@@ -364,59 +348,60 @@
             </div>
           </div>
           {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-          <div class="row">
-            <div class="col-md-12">
-              <div class="grid simple">
-                <div class="grid-title">
-                  <h4>{t}Subscription{/t}</h4>
-                </div>
-                <div class="grid-body">
-                  <div class="checkbox">
-                    <input id="only_registered" name="params[only_registered]" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
-                    <label for="only_registered">
-                      {t}Only available for registered users{/t}
-                    </label>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="grid simple">
+                  <div class="grid-title">
+                    <h4>
+                      <i class="fa fa-check"></i>
+                      {t}Subscription{/t}
+                    </h4>
+                  </div>
+                  <div class="grid-body">
+                    <div class="checkbox">
+                      <input id="only_registered" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
+                      <label for="only_registered">
+                        {t}Only available for registered users{/t}
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
           {/is_module_activated}
           {is_module_activated name="PAYWALL"}
-          <div class="row">
-            <div class="col-md-12">
-              <div class="grid simple">
-                <div class="grid-title">
-                  <h4>{t}Paywall{/t}</h4>
-                </div>
-                <div class="grid-body">
-                  <div class="checkbox">
-                    <input id="only_subscribers" name="params[only_subscribers]" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
-                    <label for="only_subscribers">
-                      {t}Only available for subscribers{/t}
-                    </label>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="grid simple">
+                  <div class="grid-title">
+                    <h4>
+                      <i class="fa fa-paypal"></i>
+                      {t}Paywall{/t}
+                    </h4>
+                  </div>
+                  <div class="grid-body">
+                    <div class="checkbox">
+                      <input id="only_subscribers" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
+                      <label for="only_subscribers">
+                        {t}Only available for subscribers{/t}
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
           {/is_module_activated}
         </div>
       </div>
-
       {include  file="article/partials/_images.tpl"}
-
       <div id="related-contents">
-        {include file ="article/related/_related_list.tpl"}
+        {include file ="article/partials/_related_list.tpl"}
       </div>
-
       {is_module_activated name="CRONICAS_MODULES"}
         {include file ="article/partials/_article_advanced_customize.tpl"}
       {/is_module_activated}
-
       <input type="hidden" id="action" name="action" value="{$action}" />
     </div><!-- /wrapper-content contentform -->
-
     <script type="text/ng-template" id="modal-preview">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
@@ -430,6 +415,9 @@
     </script>
     <script type="text/ng-template" id="modal-draft">
       {include file="article/modal/_draft.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-translate">
+      {include file="common/modals/_translate.tpl"}
     </script>
   </form>
 {/block}

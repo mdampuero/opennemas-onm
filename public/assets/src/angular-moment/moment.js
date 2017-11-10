@@ -18,7 +18,6 @@
       return function(input, format, language, timezone) {
         var fmt  = 'MMMM Do, YYYY, HH:mm';
         var lang = 'en';
-        var tmz  = 'Europe/Madrid';
 
         if (language) {
           lang = language;
@@ -35,12 +34,12 @@
         $window.moment.locale(lang);
 
         var date = $window.moment(input);
+
         if (timezone) {
-          date = $window.moment.tz(input, 'UTC');
-          tmz  = timezone;
+          date = $window.moment.tz(input, timezone);
         }
 
-        return date.tz(tmz).format(fmt);
+        return date.format(fmt);
       };
     }]);
 })();

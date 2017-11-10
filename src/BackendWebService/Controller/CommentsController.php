@@ -2,12 +2,11 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace BackendWebService\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -25,9 +24,10 @@ class CommentsController extends ContentController
     public function batchDeleteAction(Request $request)
     {
         $em = $this->get('comment_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $ids = $request->request->get('ids');
 
@@ -40,35 +40,31 @@ class CommentsController extends ContentController
                         $content->delete($id);
                         $updated[] = $id;
                     } catch (Exception $e) {
-                        $errors[] = array(
+                        $errors[] = [
                             'id'      => $id,
                             'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                             'type'    => 'error'
-                        );
+                        ];
                     }
                 } else {
-                    $errors[] = array(
+                    $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
             }
         }
 
         if (count($updated) > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages'  => array_merge($success, $errors)
-            )
-        );
+        return new JsonResponse([ 'messages' => array_merge($success, $errors) ]);
     }
 
     /**
@@ -80,39 +76,36 @@ class CommentsController extends ContentController
     public function deleteAction($id)
     {
         $em       = $this->get('comment_repository');
-        $messages = array();
-
-        $comment = $em->find($id);
+        $messages = [];
+        $comment  = $em->find($id);
 
         if (!is_null($id)) {
             try {
                 $comment->delete($id);
 
-                $messages[] = array(
+                $messages[] = [
                     'id'      => $id,
                     'message' => _('Item deleted successfully'),
                     'type'    => 'success'
-                );
+                ];
             } catch (Exception $e) {
-                $messages[] = array(
+                $messages[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $messages[] = array(
+            $messages[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages'  => $messages
-            )
-        );
+        return new JsonResponse([
+            'messages' => $messages
+        ]);
     }
 
     /**
@@ -124,33 +117,21 @@ class CommentsController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = $request->query->getDigits('page', 1);
-        $search          = $request->query->get('search');
-        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $oql = $request->query->get('oql', '');
+        $em  = $this->get('comment_repository');
 
-        $order = null;
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        unset($search['content_type_name']);
-
-        $em      = $this->get('comment_repository');
-        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($search);
+        $total   = $em->countBy($criteria);
 
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'extra'             => $this->loadExtraData($results),
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => $total
-            )
-        );
+        return new JsonResponse([
+            'extra'   => $this->loadExtraData($results),
+            'results' => $results,
+            'total'   => $total
+        ]);
     }
 
     /**
@@ -163,9 +144,9 @@ class CommentsController extends ContentController
     public function patchSelectedAction(Request $request)
     {
         $em      = $this->get('comment_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $status = $request->request->get('status');
         $ids    = $request->request->get('ids');
@@ -180,35 +161,31 @@ class CommentsController extends ContentController
                         $em->delete($id);
                         $updated[] = $id;
                     } catch (Exception $e) {
-                        $errors[] = array(
+                        $errors[] = [
                             'id'      => $id,
                             'message' => sprintf(_('Unable to update item with id "%d"'), $id),
                             'type'    => 'error'
-                        );
+                        ];
                     }
                 } else {
-                    $errors[] = array(
+                    $errors[] = [
                         'id'   => $id,
                         'text' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type' => 'error'
-                    );
+                    ];
                 }
             }
         }
 
         if (count($updated)) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
                 'type'    => 'success'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages'  => array_merge($success, $errors)
-            )
-        );
+        return new JsonResponse([ 'messages' => array_merge($success, $errors) ]);
     }
 
 
@@ -221,43 +198,40 @@ class CommentsController extends ContentController
      */
     public function patchAction(Request $request, $id)
     {
-
         $em      = $this->get('comment_repository');
         $comment = $em->find($id);
         $status  = $request->request->get('status');
 
-        $messages = array();
+        $messages = [];
         if (!is_null($comment->id)) {
             try {
                 $comment->setStatus($status);
                 $em->delete($id);
 
-                $messages[] = array(
+                $messages[] = [
                     'id'      => $id,
                     'message' => _('Item updated successfully'),
                     'type'    => 'success'
-                );
+                ];
             } catch (Exception $e) {
-                $messages[] = array(
+                $messages[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to update item with id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $messages[] = array(
+            $messages[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'status'   => $status,
-                'messages' => $messages,
-            )
-        );
+        return new JsonResponse([
+            'status'   => $status,
+            'messages' => $messages,
+        ]);
     }
 
     /**
@@ -268,20 +242,21 @@ class CommentsController extends ContentController
      */
     protected function loadExtraData($comments)
     {
-        $extra = array();
+        $extra = [];
+        $ids   = [];
 
-        $ids = array();
         foreach ($comments as $comment) {
             if ($comment->content_type_referenced && $comment->content_id) {
-                $ids[] = array($comment->content_type_referenced, $comment->content_id);
+                $ids[] = [ $comment->content_type_referenced, $comment->content_id ];
             }
         }
 
         $contents = $this->get('entity_repository')->findMulti($ids);
 
-        $extra['contents'] = array();
+        $extra['contents'] = [];
         foreach ($contents as $content) {
             $content->uri = $content->uri;
+
             $extra['contents'][$content->pk_content] = $content;
         }
 

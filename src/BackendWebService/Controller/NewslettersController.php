@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the newsletters
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -38,29 +33,20 @@ class NewslettersController extends Controller
      */
     public function listAction(Request $request)
     {
-        // Initialization of the newsletter provider
-        $nm = $this->get('newsletter_manager');
+        $oql = $request->query->get('oql', '');
+        $nm  = $this->get('newsletter_manager');
 
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = $request->query->getDigits('page', 1);
-        $search          = $request->query->get('search', '');
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        if (is_array($search) && array_key_exists('title', $search)) {
-            $titleFilter = 'title LIKE \''.(string) $search['title'][0]['value'].'\'';
-        } else {
-            $titleFilter = '1 = 1';
-        }
-        list($total, $newsletters) = $nm->find($titleFilter, 'created DESC', $page, $elementsPerPage);
+        list($total, $newsletters) =
+            $nm->find($criteria, $order, $page, $epp);
 
         // new code
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'page'              => $page,
-                'results'           => $newsletters,
-                'total'             => $total,
-            )
-        );
+        return new JsonResponse([
+            'results' => $newsletters,
+            'total'   => $total,
+        ]);
     }
 
     /**
@@ -80,32 +66,28 @@ class NewslettersController extends Controller
         $errors = $success = [];
         if (!empty($id)) {
             $newsletter = new \Newsletter($id);
-            $result = $newsletter->delete();
+            $result     = $newsletter->delete();
 
             if ($result) {
-                $success[] = array(
+                $success[] = [
                     'id'      => $id,
                     'message' => _("Newsletter deleted successfully."),
                     'type'    => 'success'
-                );
+                ];
             } else {
-                $errors[] = array(
+                $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the newsletter "%s"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $errors[] = array(
+            $errors[] = [
                 'message' => _('You must provide an id for delete a newsletter.'),
                 'type'    => 'error'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages'  => array_merge($success, $errors),
-            )
-        );
+        return new JsonResponse([ 'messages' => array_merge($success, $errors) ]);
     }
 }

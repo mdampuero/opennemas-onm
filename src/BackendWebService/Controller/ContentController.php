@@ -28,32 +28,21 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, $contentType);
 
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = $request->query->getDigits('page', 1);
-        $search          = $request->query->get('search');
-        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $oql = $request->query->get('oql', '');
+
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
         $em = $this->get('entity_repository');
 
-        $order = null;
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
-
-        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($search);
-
-        return new JsonResponse(
-            [
-                'elements_per_page' => $elementsPerPage,
-                'extra'             => $this->loadExtraData($results),
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => $total,
-            ]
-        );
+        $total   = $em->countBy($criteria);
+        return new JsonResponse([
+            'extra'   => $this->loadExtraData($results),
+            'results' => $results,
+            'total'   => $total,
+        ]);
     }
 
     /**
@@ -551,6 +540,9 @@ class ContentController extends Controller
             ];
         }
 
+        // TODO: Remove when static pages list ported to the new ORM
+        $this->get('cache.manager')->getConnection('instance')->remove('content-' . $id);
+
         return new JsonResponse(
             [
                 'content_status' => $status,
@@ -625,11 +617,16 @@ class ContentController extends Controller
             ];
         }
 
-        return new JsonResponse(
-            [
-                'messages'  => array_merge($success, $errors)
-            ]
-        );
+        // TODO: Remove when static pages list ported to the new ORM
+        $ids = array_map(function ($a) {
+            return 'content-' . $a;
+        }, $ids);
+
+        $this->get('cache.manager')->getConnection('instance')->remove($ids);
+
+        return new JsonResponse([
+            'messages'  => array_merge($success, $errors)
+        ]);
     }
 
     /**
@@ -935,10 +932,6 @@ class ContentController extends Controller
             $contentIds[] = $content->id;
         }
 
-        // Fetch all content views at once
-        //$vm = $this->get('content_views_repository');
-        //$extra['views'] = $vm->getViews($contentIds);
-
         $ids = array_unique($ids);
 
         if (($key = array_search(0, $ids)) !== false) {
@@ -978,6 +971,8 @@ class ContentController extends Controller
                 ->filter('localize')
                 ->get();
         }
+
+        $extra['options'] = $this->getLocaleData('frontend', null, false);
 
         return $extra;
     }

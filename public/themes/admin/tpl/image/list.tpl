@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="setMode('grid');init('photo', { content_status: -1, title: '', category_name: -1, in_litter: 0, month: '' }, 'created', 'desc', 'backend_ws_image_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); years = {json_encode($years)|clear_json}">
+<div ng-app="BackendApp" ng-controller="ImageListCtrl" ng-init="setMode('grid');init('photo', 'backend_ws_image_list'); years = {json_encode($years)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -98,7 +98,7 @@
             </select>
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
-            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
               <ui-select-match>
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
@@ -110,7 +110,7 @@
         </ul>
         <ul class="nav quick-section pull-right ng-cloak">
           <li class="quicklinks hidden-xs" ng-if="mode === 'list' && contents.length > 0">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -213,12 +213,12 @@
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
         <div class="pull-right">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>
     <div class="content-wrapper">
-      <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading && contents.length < pagination.total">
+      <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading && contents.length < total">
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
@@ -249,7 +249,7 @@
           </div>
         </div>
       </div>
-      <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!loading && mode == 'grid' && pagination.total != contents.length">
+      <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll('backend_ws_contents_list')" ng-if="!loading && mode == 'grid' && total != contents.length">
         <h5>
           <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loadingMore"></i>
           <span ng-if="!loadingMore">{t}Load more{/t}</span>

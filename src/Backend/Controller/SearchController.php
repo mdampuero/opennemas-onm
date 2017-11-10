@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -41,17 +36,14 @@ class SearchController extends Controller
         unset($contentTypesAvailable['comment']);
 
         $types = [
-            [ 'name' => _('All'), 'value' => -1 ]
+            [ 'name' => _('All'), 'value' => null ]
         ];
 
         foreach ($contentTypesAvailable as $key => $value) {
             $types[] = [ 'name' => _($value), 'value' => $key ];
         }
 
-        return $this->render(
-            'search_advanced/list.tpl',
-            array('types' => $types)
-        );
+        return $this->render('search_advanced/list.tpl', ['types' => $types ]);
     }
 
     /**
@@ -130,18 +122,18 @@ class SearchController extends Controller
             if ($related == true) {
                 return $this->render(
                     'search_advanced/content-provider-related.tpl',
-                    array(
+                    [
                         'contents'    => $results,
                         'contentType' => 'Content',
-                    )
+                    ]
                 );
             } else {
                 return $this->render(
                     'search_advanced/content-provider.tpl',
-                    array(
+                    [
                         'contents'    => $results,
                         'contentType' => 'Content',
-                    )
+                    ]
                 );
             }
         } else {
@@ -161,7 +153,7 @@ class SearchController extends Controller
     private function getContentTypesFiltered()
     {
         $contentTypes         = \ContentManager::getContentTypes();
-        $contentTypesFiltered = array();
+        $contentTypesFiltered = [];
 
         foreach ($contentTypes as $contentType) {
             switch ($contentType['name']) {

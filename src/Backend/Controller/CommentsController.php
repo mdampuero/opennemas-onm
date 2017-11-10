@@ -34,7 +34,7 @@ class CommentsController extends Controller
     public function init()
     {
         $this->statuses = [
-            [ 'title' => _('All'), 'value' => -1 ],
+            [ 'title' => _('All'), 'value' => null ],
             [ 'title' => _('Accepted'), 'value' => \Comment::STATUS_ACCEPTED ],
             [ 'title' => _('Rejected'), 'value' => \Comment::STATUS_REJECTED ],
             [ 'title' => _('Pending'), 'value' => \Comment::STATUS_PENDING ],
@@ -61,22 +61,16 @@ class CommentsController extends Controller
         switch ($commentSystem) {
             case 'onm':
                 return $this->redirect($this->generateUrl('admin_comments_list'));
-                break;
 
             case 'disqus':
                 return $this->redirect($this->generateUrl('admin_comments_disqus'));
-                break;
 
             case 'facebook':
                 return $this->redirect($this->generateUrl('admin_comments_facebook'));
-                break;
 
             default:
                 return $this->render('comment/select_module.tpl');
-                break;
         }
-
-        return $this->render('comment/select_module.tpl');
     }
 
     /**
@@ -101,11 +95,9 @@ class CommentsController extends Controller
                     _("Now you are using the Opennemas comment system.")
                 );
                 return $this->redirect($this->generateUrl('admin_comments_config'));
-                break;
 
             case 'disqus':
                 return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
-                break;
 
             case 'facebook':
                 $this->sm->set('comment_system', 'facebook');
@@ -114,11 +106,9 @@ class CommentsController extends Controller
                     _("Now you are using the Facebook comment system.")
                 );
                 return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
-                break;
 
             case 'reset':
                 return $this->render('comment/select_module.tpl');
-                break;
 
             default:
                 $this->get('session')->getFlashBag()->add(
@@ -126,7 +116,6 @@ class CommentsController extends Controller
                     _("Comment data sent not valid.")
                 );
                 return $this->redirect($this->generateUrl('admin_comments'));
-                break;
         }
     }
 
@@ -153,13 +142,10 @@ class CommentsController extends Controller
             return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
         }
 
-        return $this->render(
-            'comment/disqus/list.tpl',
-            array(
-                'disqus_shortname'  => $disqusShortName,
-                'disqus_secret_key' => $disqusSecretKey,
-            )
-        );
+        return $this->render('comment/disqus/list.tpl', [
+            'disqus_shortname'  => $disqusShortName,
+            'disqus_secret_key' => $disqusSecretKey,
+        ]);
     }
 
     /**
@@ -178,18 +164,15 @@ class CommentsController extends Controller
             $disqusShortName = $this->sm->get('disqus_shortname');
             $disqusSecretKey = $this->sm->get('disqus_secret_key');
 
-            return $this->render(
-                'comment/disqus/config.tpl',
-                array(
-                    'shortname' => $disqusShortName,
-                    'secretKey' => $disqusSecretKey,
-                    'configs'   => $this->sm->get('comments_config'),
-                )
-            );
+            return $this->render('comment/disqus/config.tpl', [
+                'shortname' => $disqusShortName,
+                'secretKey' => $disqusSecretKey,
+                'configs'   => $this->sm->get('comments_config'),
+            ]);
         } else {
             $shortname = $request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
             $secretKey = $request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
-            $configs   = $request->request->filter('configs', array(), FILTER_SANITIZE_STRING);
+            $configs   = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
 
             if ($this->sm->set('disqus_shortname', $shortname)
                 && $this->sm->set('disqus_secret_key', $secretKey)
@@ -222,12 +205,9 @@ class CommentsController extends Controller
     {
         $fbSettings = $this->sm->get('facebook');
 
-        return $this->render(
-            'comment/facebook/list.tpl',
-            array(
-                'fb_app_id'  => $fbSettings['api_key'],
-            )
-        );
+        return $this->render('comment/facebook/list.tpl', [
+            'fb_app_id'  => $fbSettings['api_key'],
+        ]);
     }
 
 
@@ -308,7 +288,7 @@ class CommentsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id      = $request->query->getDigits('id');
         $comment = new \Comment($id);
 
         if (!is_null($comment->id)) {
@@ -413,6 +393,7 @@ class CommentsController extends Controller
                 'with_comments'   => false,
                 'number_elements' => 10,
             ];
+
             $configs = array_merge($defaultConfigs, $configs);
 
             if ($this->sm->set('comments_config', $configs)) {

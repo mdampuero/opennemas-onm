@@ -11,18 +11,19 @@
      * @requires $timeout
      * @requires $uibModal
      * @requires $window
-     * @requires Editor
+     * @requires cleaner
      * @requires http
+     * @requires linker
+     * @requires localizer
      * @requires messenger
-     * @requires routing
      * @requires webStorage
      *
      * @description
      *   Provides actions to edit, save and update articles.
      */
     .controller('ArticleCtrl', [
-      '$controller', '$interval', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'Editor', 'http', 'messenger', 'routing', 'webStorage',
-      function($controller, $interval, $scope, $timeout, $uibModal, $window, cleaner, Editor, http, messenger, routing, webStorage) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'webStorage',
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, linker, localizer, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -54,6 +55,63 @@
         $scope.draftEnabled = false;
 
         /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'article-draft';
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
+
+        /**
+         * @function build
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Executes actions to adapt data from template to the webservice.
+         */
+        $scope.build = function() {
+          // Convert metadata to an array
+          if ($scope.data.article.metadata) {
+            $scope.data.article.metadata =
+              $scope.data.article.metadata.split(',');
+          }
+
+          var keys = [ 'img1', 'img2', 'fk_video', 'fk_video2','relatedFront',
+            'relatedInner', 'relatedHome' ];
+
+          for (var i = 0; i < keys.length; i++) {
+            if (!$scope.data.extra[keys[i]]) {
+              continue;
+            }
+
+            $scope.article[keys[i]] = $scope.data.extra[keys[i]];
+          }
+
+          keys = [ 'imageHome', 'withGallery', 'withGalleryInt',
+            'withGalleryHome' ];
+
+          for (var i = 0; i < keys.length; i++) {
+            if (!$scope.data.extra[keys[i]]) {
+              continue;
+            }
+
+            $scope.article.params[keys[i]] = $scope.data.extra[keys[i]];
+          }
+        };
+
+        /**
          * @function checkDraft
          * @memberOf ArticleCtrl
          *
@@ -61,13 +119,7 @@
          *   Checks if there is a draft from a previous article.
          */
         $scope.checkDraft = function() {
-          var key = 'article-draft';
-
-          if ($scope.article && $scope.article.pk_article) {
-            key = 'article-' + $scope.article.pk_article + '-draft';
-          }
-
-          if (!webStorage.session.has(key)) {
+          if (!webStorage.session.has($scope.draftKey)) {
             return;
           }
 
@@ -84,11 +136,11 @@
               },
               yes: function() {
                 return function(modalWindow) {
-                  var draft =  webStorage.session.get(key);
+                  $scope.data.article = webStorage.session.get($scope.draftKey);
 
-                  for (var name in draft) {
-                    $scope[name] = draft[name];
-                  }
+                  $scope.config.linkers.article.link(
+                    $scope.data.article, $scope.article);
+                  $scope.config.linkers.article.update();
 
                   modalWindow.close({ response: true, success: true });
 
@@ -105,12 +157,98 @@
               },
               no: function() {
                 return function(modalWindow) {
-                  webStorage.session.remove(key);
+                  webStorage.session.remove($scope.draftKey);
                   modalWindow.close({ response: false, success: true });
                 };
               }
             }
           });
+        };
+
+        /**
+         * @function clean
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Executes actions to adapt data from template to the webservice.
+         */
+        $scope.clean = function(article, preview) {
+          var data = angular.copy(article);
+
+          if (angular.isArray(article.metadata)) {
+            data.metadata = article.metadata.map(function(e) {
+              return e.text;
+            }).join(',');
+          }
+
+          var keys = [ 'img1', 'img2', 'fk_video', 'fk_video2' ];
+
+          for (var i = 0; i < keys.length; i++) {
+            if (!article[keys[i]]) {
+              continue;
+            }
+
+            data[keys[i]] = article[keys[i]].pk_content;
+          }
+
+          keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
+
+          for (var i = 0; i < keys.length; i++) {
+            if (!article[keys[i]]) {
+              continue;
+            }
+
+            data[keys[i]] = [];
+
+            for (var j = 0; j < article[keys[i]].length; j++) {
+              var item = article[keys[i]][j].pk_content;
+
+              if (preview) {
+                item = {
+                  id: article[keys[i]][j].pk_content,
+                  type: article[keys[i]][j].content_type_name
+                };
+              }
+
+              data[keys[i]].push(item);
+            }
+          }
+
+          keys = [ 'imageHome', 'withGallery', 'withGalleryInt',
+            'withGalleryHome' ];
+
+          for (var i = 0; i < keys.length; i++) {
+            if (!article.params[keys[i]]) {
+              continue;
+            }
+
+            data.params[keys[i]] = article.params[keys[i]].pk_content;
+          }
+
+          return data;
+        };
+
+        /**
+         * @function groupCategories
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Groups categories in the ui-select.
+         *
+         * @param {Object} item The category to group.
+         *
+         * @return {String} The group name.
+         */
+        $scope.groupCategories = function(item) {
+          var category = $scope.categories.filter(function(e) {
+            return e.pk_content_category === item.fk_content_category;
+          });
+
+          if (category.length > 0 && category[0].pk_content_category) {
+            return category[0].title;
+          }
+
+          return '';
         };
 
         /**
@@ -123,51 +261,111 @@
          * @param {Integer} id The article id.
          */
         $scope.getArticle = function(id) {
-          $scope.loading = true;
+          $scope.flags.loading = 1;
 
-          var route = {
-            name:   'backend_ws_article_show',
-            params: { id: id }
-          };
+          var route = !id ? 'api_v1_backend_article_create' :
+            { name: 'api_v1_backend_article_show', params: { id: id } };
 
           http.get(route).then(function(response) {
-            for (var key in response.data) {
-              $scope[key] = response.data[key];
+            $scope.data   = response.data;
+            $scope.backup = { content_status: 0 };
+
+            $scope.configure(response.data.extra);
+            $scope.disableFlags();
+
+            if ($scope.data.article) {
+              $scope.backup.content_status = $scope.data.article.content_status;
             }
 
-            if ($scope.article.metadata) {
-              $scope.article.metadata = $scope.article.metadata.split(',');
+            // Grant that article has all default values
+            $scope.data.article =
+              angular.extend($scope.article, $scope.data.article);
+
+            // Load items
+            $scope.article    = $scope.data.article;
+            $scope.categories = $scope.data.extra.categories;
+
+            var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
+
+            for (var i = 0; i < keys.length; i++) {
+              if ($scope.data.extra[keys[i]]) {
+                $scope[keys[i]] = response.data.extra[keys[i]];
+              }
             }
 
-            $scope.backup = { content_status: $scope.article.content_status };
+            $scope.build();
+
+            if ($scope.config.multilanguage && $scope.config.locale) {
+              $scope.localize();
+            }
 
             $scope.checkDraft();
-            $scope.loading = false;
-          }, function(response) {
-            $scope.loading = false;
-            $scope.error   = true;
-            messenger.post(response.data);
-          });
+          }, $scope.errorCb);
         };
 
         /**
-         * @function getCategoryName
+         * @function init
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Initializes services and list articles.
+         *
+         * @param {Integer} id The article id when editing.
+         */
+        $scope.init = function(locale, id) {
+          $scope.forcedLocale = locale;
+
+          if (id) {
+            $scope.draftKey = 'article-' + id + '-draft';
+          }
+
+          $scope.getArticle(id);
+        };
+
+        /**
+         * @function localize
          * @memberOf ArticleCtrl
          *
          * @description
-         *   Returns the category name given a category id.
-         *
-         * @param {Integer} id The category id.
-         *
-         * @return {String} The category name.
+         *   Configures the localization for the current form.
          */
-        $scope.getCategoryName = function(id) {
-          return $scope.categories.filter(function(e) {
-            return parseInt(e.id) === parseInt(id);
-          }).map(function (e) {
-            return e.name;
-          }).join('');
-        };
+        $scope.localize = function() {
+          var lz   = localizer.get($scope.data.extra.options);
+          var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
+
+          // Localize original items
+          $scope.article = lz.localize($scope.data.article,
+            $scope.data.extra.keys, $scope.config.locale);
+          $scope.config.linkers.article =
+            linker.get($scope.data.extra.keys, $scope, true, keys);
+
+          $scope.config.linkers.article.setKey($scope.config.locale);
+          $scope.config.linkers.article.link($scope.data.article, $scope.article);
+
+          $scope.categories = lz.localize($scope.data.extra.categories,
+            [ 'title' ], $scope.config.locale);
+
+          $scope.config.linkers.categories =
+            linker.get($scope.data.extra.keys, $scope, false, keys);
+
+          $scope.config.linkers.categories.setKey($scope.config.locale);
+          $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
+
+          for (var i = 0; i < keys.length; i++) {
+            if (!$scope[keys[i]]) {
+              continue;
+            }
+
+            $scope.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
+              [ 'title' ], $scope.config.locale);
+
+            $scope.config.linkers[keys[i]] = linker.get([ 'title' ], $scope);
+
+            $scope.config.linkers[keys[i]].setKey($scope.config.locale);
+            $scope.config.linkers[keys[i]].link($scope.data.article[keys[i]],
+              $scope.article[keys[i]]);
+          }
+       };
 
         /**
          * @function preview
@@ -180,14 +378,19 @@
          * @param {String} getPreviewUrl The URL to get the preview.
          */
         $scope.preview = function(previewUrl, getPreviewUrl) {
-          $scope.previewLoading = true;
+          $scope.flags.preview = true;
 
-          var data = angular.copy($scope.article);
-          data.metadata = data.metadata.map(function(e) {
-            return e.text;
-          }).join(',');
+          var data = $scope.clean($scope.article, true);
 
-          var data = { 'article': data };
+          data = cleaner.clean(data);
+
+          if (angular.isArray(data.metadata)) {
+            data.metadata = data.metadata.map(function(e) {
+              return e.text;
+            }).join(',');
+          }
+
+          var data = { 'article': data, 'locale': $scope.config.locale };
 
           http.post(previewUrl, data).success(function() {
             $uibModal.open({
@@ -197,7 +400,7 @@
               resolve: {
                 template: function() {
                   return {
-                    src: routing.generate(getPreviewUrl)
+                    src: $scope.routing.generate(getPreviewUrl)
                   };
                 },
                 success: function() {
@@ -206,22 +409,10 @@
               }
             });
 
-            $scope.previewLoading = false;
+            $scope.disableFlags();
           }).error(function() {
-            $scope.previewLoading = false;
+            $scope.disableFlags();
           });
-        };
-
-        /**
-         * @function removeAlbum
-         * @memberOf ArticleCtrl
-         *
-         * Removes an album.
-         *
-         * @param {String} from The album name in the current scope.
-         */
-        $scope.removeAlbum = function(from) {
-          delete $scope[from];
         };
 
         /**
@@ -237,217 +428,167 @@
             return;
           }
 
-          var data = angular.copy($scope.article);
-          data.metadata = data.metadata.map(function(e) {
-            return e.text;
-          }).join(',');
+          $scope.flags.saving = true;
 
-          $scope.saving = true;
+          var data = $scope.clean($scope.data.article);
 
-          http.post('backend_ws_article_save', data)
-            .then(function(response) {
-              $scope.saving = false;
-              $scope.articleForm.$setPristine(true);
+          data = cleaner.clean(data);
 
-              if (response.status === 201) {
-                webStorage.session.remove('article-draft');
-                $window.location.href = response.headers().location;
-              }
-            }, function(response) {
-              $scope.saving = false;
-              messenger.post(response.data);
-            });
+          /**
+           * Callback executed when article is saved/updated successfully.
+           *
+           * @param {Object} response The response object.
+           */
+          var successCb = function(response) {
+            $scope.disableFlags();
+            webStorage.session.remove($scope.draftKey);
+
+            if (response.status === 201) {
+              $window.location.href = response.headers().location;
+            }
+
+            $scope.articleForm.$setPristine(true);
+            messenger.post(response.data);
+            $scope.backup.content_status = $scope.article.content_status;
+          };
+
+          if (!$scope.article.pk_article) {
+            var route = { name: 'backend_ws_article_save' };
+
+            if ($scope.config.multilanguage) {
+              route.params = { locale: $scope.config.locale };
+            }
+
+            http.post(route, data).then(successCb, $scope.errorCb);
+            return;
+          }
+
+          http.put({
+            name: 'backend_ws_article_update',
+            params: { id: $scope.article.pk_article }
+          }, data).then(successCb, $scope.errorCb);
         };
 
         /**
-         * @function update
+         * @function translate
          * @memberOf ArticleCtrl
          *
          * @description
-         *   Updates an article.
+         *   Shows a modal to translate a content automatically.
+         *
+         * @param {String} to     The locale to translate to.
+         * @param {Object} config The locale-related configuration.
+         *
+         * @return {type} description
          */
-        $scope.update = function() {
-          if ($scope.articleForm.$invalid) {
-            $scope.showRequired = true;
-            return;
-          }
+        $scope.translate = function(to, config) {
+          $uibModal.open({
+            backdrop:    true,
+            backdropClass: 'modal-backdrop-transparent',
+            controller:  'modalCtrl',
+            openedClass: 'modal-relative-open',
+            templateUrl: 'modal-translate',
+            resolve: {
+              template: function() {
+                return { config: config, to: to };
+              },
+              success: function() {
+                return function(modalWindow, template) {
+                  var params = {
+                    data: {},
+                    from: template.translator.from,
+                    to: template.translator.to,
+                    translator: template.translator.translator
+                  };
 
-          $scope.saving = true;
+                  for (var i = 0; i < $scope.data.extra.keys.length; i++) {
+                    var key = $scope.data.extra.keys[i];
 
-          var data = angular.copy($scope.article);
-          data.metadata = data.metadata.map(function(e) {
-            return e.text;
-          }).join(',');
+                    if ($scope.data.article[key] && angular.isObject(
+                        $scope.data.article[key]) && $scope.data
+                        .article[key][params.from]) {
+                      params.data[key] = $scope.data.article[key][params.from];
+                    }
+                  }
 
-          var route = {
-            name: 'backend_ws_article_update',
-            params: { id: $scope.article.pk_article }
-          };
+                  return http.post('api_v1_backend_tools_translate', params)
+                    .then(function(response) {
+                      for (var i = 0; i < $scope.data.extra.keys.length; i++) {
+                        var key = $scope.data.extra.keys[i];
+                        $scope.article[key] = response.data[key];
+                      }
 
-          http.put(route, data)
-            .then(function(response) {
-              $scope.saving = false;
-              webStorage.session.remove('article-' +
-                  $scope.article.pk_article + '-draft');
-              $scope.articleForm.$setPristine(true);
-              messenger.post(response.data);
-              $scope.backup.content_status = $scope.article.content_status;
-            }, function(response) {
-              $scope.saving = false;
-              messenger.post(response.data);
-            });
+                      modalWindow.close({ response: true, success: true });
+                    });
+                };
+              }
+            }
+          });
         };
 
-        // Updates scope when photo1 changes.
-        $scope.$watch('photo1', function(nv, ov) {
-          // Remove image
-          if (!nv) {
-            $scope.article.img1 = null;
-
-            // If photo 2  = photo1, remove photo2 too
-            if (angular.equals($scope.photo2, ov)) {
-              $scope.photo2 = null;
+        // Update footers when photos change
+        $scope.$watch('[ article.img1, article.img2, article.params.imageHome ]',
+          function(nv, ov) {
+            if (angular.equals(nv, ov)) {
+              return;
             }
 
-            delete $scope.article.img1_footer;
-
-            return;
-          }
-
-          $scope.article.img1 = nv.id;
-
-          // Update img1_footer if empty or equals to old description
-          if (angular.isUndefined($scope.article.img1_footer) ||
-              $scope.article.img1_footer === null ||
-              (ov && $scope.article.img1_footer === ov.description)) {
-            $scope.article.img1_footer = nv.description;
-          }
-
-          // Set inner image if empty or equals to old photo1
-          if ($scope.articleForm.$dirty &&
-              (!ov && (angular.isUndefined($scope.photo2) || !$scope.photo2)) ||
-              (ov &&angular.equals($scope.photo2, ov))) {
-
-            $scope.photo2 = nv;
-          }
-        }, true);
-
-        // Updates scope when photo2 changes.
-        $scope.$watch('photo2', function(nv, ov) {
-          // Remove image
-          if (!nv) {
-            $scope.article.img2 = null;
-
-            delete $scope.article.img2_footer;
-
-            return;
-          }
-
-          $scope.article.img2 = $scope.photo2.id;
-
-          if (angular.isUndefined($scope.article.img2_footer) ||
-              $scope.article.img2_footer === null ||
-              (ov && $scope.article.img2_footer === ov.description)) {
-            $scope.article.img2_footer = $scope.photo2.description;
-          }
-        }, true);
-
-        //Updates scope when photo3 changes.
-        $scope.$watch('photo3', function(nv, ov) {
-          // Remove image
-          if (!nv) {
-
-            $scope.article.params.imageHome = null;
-
-            delete $scope.article.params.imageHomeFooter;
-
-            return;
-          }
-
-          $scope.article.params.imageHome = $scope.photo3.id;
-
-          if (angular.isUndefined($scope.article.params.imageHomeFooter) ||
-              $scope.article.params.imageHomeFooter === null ||
-              (ov && ov.description === $scope.article.params.imageHomeFooter)) {
-            $scope.article.params.imageHomeFooter = $scope.photo3.description;
-          }
-        }, true);
-
-        // Updates scope when video1 changes.
-        $scope.$watch('video1', function(nv, ov) {
-          $scope.article.fk_video     = null;
-          $scope.article.footer_video = null;
-
-          if ($scope.video1) {
-            $scope.article.fk_video     = $scope.video1.id;
-            $scope.article.footer_video = $scope.video1.description;
-
-            // Set inner video if empty
-            if (angular.isUndefined($scope.video2) && nv !== ov) {
-              $scope.video2 = $scope.video1;
-            }
-          }
-        }, true);
-
-        // Updates scope when video2 changes.
-        $scope.$watch('video2', function() {
-          $scope.article.fk_video2     = null;
-          $scope.article.footer_video2 = null;
-
-          if ($scope.video2) {
-            $scope.article.fk_video2     = $scope.video2.id;
-            $scope.article.footer_video2 = $scope.video2.description;
-          }
-        }, true);
-
-        // Updates scope when relatedInFrontpage changes.
-        $scope.$watch('relatedInFrontpage', function(nv, ov) {
-          // Set inner if creating and empty or when old value in front is
-          // equals to current value in inner
-          if ((!$scope.article.pk_article && !$scope.relatedInInner) || (ov &&
-                angular.equals(cleaner.clean($scope.relatedInInner),
-                  cleaner.clean(ov)))) {
-            $scope.relatedInInner = angular.copy(nv);
-          }
-
-          var items                   = [];
-          $scope.article.relatedFront = [];
-
-          if (nv instanceof Array) {
             for (var i = 0; i < nv.length; i++) {
-              items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+              var footer = 'img' + (i + 1) + '_footer';
+              var model  = $scope.article;
+
+              if (i === 2) {
+                footer = 'imageHomeFooter';
+                model  = $scope.article.params;
+              }
+
+              if (angular.isObject(nv[i]) &&
+                  (angular.isUndefined(model[footer]) ||
+                  model[footer] === null || (ov && ov[i] &&
+                  model[footer] === ov[i].description))) {
+                model[footer] = nv[i].description;
+              }
             }
-          }
 
-          $scope.article.relatedFront = angular.toJson(items);
-        }, true);
+            if ($scope.articleForm.$dirty && (!$scope.article.img2) ||
+                angular.equals($scope.article.img2, ov[1])) {
+              $scope.article.img2 = $scope.article.img1;
+            }
+          }, true);
 
-        // Updates scope when relatedInInner changes.
-        $scope.$watch('relatedInInner', function(nv) {
-          var items                   = [];
-          $scope.article.relatedInner = [];
+        // Updates footers when videos changes
+        $scope.$watch('[ article.fk_video, article.fk_video2 ]',
+          function(nv, ov) {
+            if (angular.equals(nv, ov)) {
+              return;
+            }
 
-          if (nv instanceof Array) {
             for (var i = 0; i < nv.length; i++) {
-              items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+              var footer = 'footer_video';
+              var model  = $scope.article;
+
+              if (i > 0) {
+                footer = 'footer_video2';
+              }
+
+              if (angular.isUndefined(model[footer]) || model[footer] === null ||
+                  (ov && ov[i] && model[footer] === ov[i].description)) {
+                model[footer] = nv[i].description;
+              }
             }
-          }
 
-          $scope.article.relatedInner = angular.toJson(items);
-        }, true);
-
-        // Updates scope when relatedInHome changes.
-        $scope.$watch('relatedInHome', function(nv) {
-          var items                  = [];
-          $scope.article.relatedHome = [];
-
-          if (nv instanceof Array) {
-            for (var i = 0; i < nv.length; i++) {
-              items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+            if ($scope.articleForm.$dirty && (!$scope.article.fk_video2) ||
+                angular.equals($scope.article.fk_video2, ov[1])) {
+              $scope.article.fk_video2 = $scope.article.fk_video;
             }
-          }
+          }, true);
 
-          $scope.article.relatedHome = angular.toJson(items);
+        // Sets relatedInner equals to relatedFront
+        $scope.$watch('article.relatedFront', function(nv, ov) {
+          if ((!ov && $scope.article.relatedInner) ||
+              angular.equals(ov, $scope.article.relatedInner)) {
+            $scope.article.relatedInner = angular.copy(nv);
+          }
         }, true);
 
         // TODO: Remove when no target="_blank" in URI for external
@@ -458,96 +599,57 @@
           }
         }, true);
 
-        // Updates the model when galleryForFrontpage changes.
-        $scope.$watch('galleryForFrontpage', function(nv) {
-          delete $scope.article.withGallery;
-
-          if (nv) {
-            $scope.article.params.withGallery = nv.id;
+        // Saves a draft 2.5s after the last change
+        $scope.$watch('article', function(nv, ov) {
+          if (!nv || ov === nv) {
+            return;
           }
-        }, true);
 
-        // Updates the model when galleryForInner changes.
-        $scope.$watch('galleryForInner', function(nv) {
-          delete $scope.article.params.withGalleryInt;
-
-          if (nv) {
-            $scope.article.params.withGalleryInt = nv.id;
-          }
-        }, true);
-
-        // Updates the model when galleryForHome changes.
-        $scope.$watch('galleryForHome', function(nv) {
-          delete $scope.article.params.withGalleryHome;
-
-          if (nv) {
-            $scope.article.params.withGalleryHome = nv.id;
-          }
-        }, true);
-
-
-        $scope.dtm  = null;
-
-        // Saves a draft 1s after the last change
-        $scope.$watch('[article, photo1, photo2, photo3, video1, video2,' +
-          'galleryForFrontpage, galleryForInner, galleryForHome]',
-          function(nv, ov) {
-            if (!nv || ov === nv || (ov[0] && !ov[0].pk_article &&
-                  nv[0].pk_article)) {
-              return;
+          // Show a message when leaving before saving
+          $($window).bind('beforeunload', function() {
+            if ($scope.articleForm.$dirty){
+              return $window.leaveMessage;
             }
+          });
 
-            // Show a message when leaving before saving
-            $($window).bind('beforeunload', function() {
-              if ($scope.articleForm.$dirty){
-                return $window.leaveMessage;
-              }
-            });
+          $scope.articleForm.$setDirty(true);
 
-            var key = 'article-draft';
+          if ($scope.draftEnabled) {
             $scope.draftSaved = null;
 
-            if (ov && nv !== ov && $scope.draftEnabled) {
-              if ($scope.article.pk_article) {
-                key = 'article-' + $scope.article.pk_article + '-draft';
-              }
-
-              webStorage.session.set(key, {
-                article:             $scope.article,
-                photo1:              $scope.photo1,
-                photo2:              $scope.photo2,
-                photo3:              $scope.photo3,
-                video1:              $scope.video1,
-                video2:              $scope.video2,
-                relatedInHome:       $scope.relatedInHome,
-                relatedInInner:      $scope.relatedInInner,
-                relatedInFrontpage:  $scope.relatedInFrontpage,
-                galleryForFrontpage: $scope.galleryForFrontpage,
-                galleryForInner:     $scope.galleryForInner,
-                galleryForHome:      $scope.galleryForHome,
-              });
-
-              // Cancel draft save
-              if ($scope.dtm) {
-                $timeout.cancel($scope.dtm);
-              }
-
-              $scope.dtm = $timeout(function() {
-                $scope.draftSaved = $window.draftSavedMsg +
-                  $window.moment().format('HH:mm');
-
-              }, 2500);
+            if ($scope.dtm) {
+              $timeout.cancel($scope.dtm);
             }
 
-            $scope.articleForm.$setDirty(true);
-          }, true);
+            $scope.dtm = $timeout(function() {
+              webStorage.session.set($scope.draftKey, $scope.data.article);
+
+              $scope.draftSaved = $window.moment().format('HH:mm');
+            }, 2500);
+          }
+        }, true);
 
         // Update title_int when title changes
-        $scope.$watch('article.title', function(nv) {
+        $scope.$watch('article.title', function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+
           if (nv && (!$scope.article.title_int ||
-              nv.substr(0, $scope.article.title_int.length) ===
-              $scope.article.title_int)) {
+              ov === $scope.article.title_int)) {
             $scope.article.title_int = nv;
+          }
+
+          if (!$scope.article.slug || $scope.article.slug === '') {
+            if ($scope.tm) {
+              $timeout.cancel($scope.tm);
+            }
+
+            $scope.tm = $timeout(function() {
+              $scope.getSlug(nv, function(response) {
+                $scope.article.slug = response.data.slug;
+              });
+            }, 500);
           }
         }, true);
 
@@ -560,27 +662,60 @@
 
           var title    = $scope.article.title ? $scope.article.title : '';
           var category = '';
+          var data     = title + ' ' + category;
 
+          // Get category name from category id
           if ($scope.article.category) {
-            category = $scope.getCategoryName($scope.article.category);
+            var categories = $scope.data.extra.categories.filter(function(e) {
+              return e.pk_content_category ===
+                $scope.article.pk_fk_content_category;
+            });
+
+            if (categories.length > 0) {
+              category = categories[0].title;
+            }
           }
 
-          var data  = title + ' ' + category;
-          var route = {
-            name:   'admin_utils_calculate_tags',
-            params: { data: data }
+          if (!$scope.config.multilanguage) {
+            if ($scope.mtm) {
+              $timeout.cancel($scope.mtm);
+            }
+
+            $scope.mtm = $timeout(function() {
+              http.get({
+                name: 'admin_utils_calculate_tags',
+                params: { data: data }
+              }).then(function(response) {
+                $scope.article.metadata = response.data.split(',');
+              });
+            }, 2500);
+          }
+        });
+
+        // Shows a modal window to translate content automatically
+        $scope.$watch('config.locale', function(nv, ov) {
+          if (!nv || nv === ov || $scope.isTranslated($scope.data.article,
+              $scope.data.extra.keys, nv)) {
+            return;
+          }
+
+          // Filter for selected locale and translated in original language
+          var translators = $scope.config.translators.filter(function(e) {
+            return e.to === nv && $scope.isTranslated($scope.data.article,
+              $scope.data.extra.keys, e.from);
+          });
+
+          if (translators.length === 0) {
+            return;
+          }
+
+          var config = {
+            locales: $scope.data.extra.options.available,
+            translators: translators
           };
 
-          if ($scope.mtm) {
-            $timeout.cancel($scope.mtm);
-          }
-
-          $scope.mtm = $timeout(function() {
-            http.get(route).then(function(response) {
-              $scope.article.metadata = response.data.split(',');
-            });
-          }, 5000);
-        });
+          $scope.translate(nv, config);
+        }, true);
 
         // Enable drafts after 5s to grant CKEditor initialization
         $timeout(function() {

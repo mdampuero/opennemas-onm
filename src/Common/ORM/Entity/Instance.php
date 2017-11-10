@@ -71,4 +71,18 @@ class Instance extends Entity
     {
         return "/media/{$this->internal_name}";
     }
+
+    /**
+     * Checks if the current instance has multilanguage enabled.
+     *
+     * @return boolean True if the instance has multilanguage enabled. False
+     *                 otherwise.
+     */
+    public function hasMultilanguage()
+    {
+        return in_array(
+            'es.openhost.module.multilanguage',
+            $this->activated_modules
+        );
+    }
 }

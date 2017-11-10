@@ -45,7 +45,7 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
-            $authors = array();
+            $authors = [];
             foreach (\User::getAllUsersAuthors() as $author) {
                 if ($author->is_blog == 1) {
                     $authors[$author->id] = $author;
@@ -55,9 +55,9 @@ class BlogsController extends Controller
             $epp = $this->get('setting_repository')->get('items_in_blog', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
-            $order   = array('starttime' => 'DESC');
+            $order   = [ 'starttime' => 'DESC' ];
             $date    = date('Y-m-d H:i:s');
-            $filters = array(
+            $filters = [
                 'content_type_name' => [[ 'value' => 'opinion' ]],
                 'type_opinion'      => [[ 'value' => 0 ]],
                 'content_status'    => [[ 'value' => 1 ]],
@@ -73,7 +73,7 @@ class BlogsController extends Controller
                     [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                     [ 'value' => $date, 'operator' => '>' ]
                 ],
-            );
+            ];
 
             $em         = $this->get('opinion_repository');
             $blogs      = $em->findBy($filters, $order, $epp, $page);
@@ -102,10 +102,10 @@ class BlogsController extends Controller
 
                     $blog->author->uri = \Uri::generate(
                         'frontend_blog_author_frontpage',
-                        array(
+                        [
                             'slug' => urlencode($blog->author->username),
                             'id'   => $blog->author->id
-                        )
+                        ]
                     );
                 }
             }
@@ -185,34 +185,21 @@ class BlogsController extends Controller
 
                 if (!empty($blogs)) {
                     foreach ($blogs as &$blog) {
-                        // Overload blog array with more information
-                        $item = new \Content();
-                        $item->loadAllContentProperties($blog['pk_content']);
-                        $blog['summary']          = $item->summary;
-                        $blog['img1_footer']      = $item->img1_footer;
-                        $blog['pk_author']        = $author->id;
-                        $blog['author_name_slug'] = $author->slug;
-                        $blog['comments']         = $item->comments;
-                        if (isset($item->img1) && ($item->img1 > 0)) {
-                            $blog['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
+                        $blog = $this->get('entity_repository')->find('Opinion', $blog['id']);
+                        if (isset($blog->img1) && ($blog->img1 > 0)) {
+                            $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
                         }
 
-                        // Generate blog item uri
-                        $blog['uri'] = $this->generateUrl(
-                            'frontend_blog_show',
-                            array(
-                                'blog_id'     => date('YmdHis', strtotime($blog['created'])) . $blog['id'],
-                                'author_name' => $blog['author_name_slug'],
-                                'blog_title'  => $blog['slug'],
-                            )
-                        );
+                        // Overload blog object with more information
+                        $blog->pk_author        = $author->id;
+                        $blog->author_name_slug = $author->slug;
 
                         // Generate author uri
-                        $blog['author_uri'] = $this->generateUrl(
+                        $blog->author_uri = $this->generateUrl(
                             'frontend_blog_author_frontpage',
-                            array(
-                                'author_slug' => $blog['author_name_slug'],
-                            )
+                            [
+                                'author_slug' => $blog->author_name_slug,
+                            ]
                         );
                     }
                 }
