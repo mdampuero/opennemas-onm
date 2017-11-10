@@ -9,17 +9,63 @@ angular.module('BackendApp.controllers')
    * @requires routing
    * @requires messenger
    * @requires oqlEncoder
-   * @requires queryManager
    *
    * @description
    *   Controller for opinion list.
    */
   .controller('MenuListCtrl', [
-    '$controller', '$uibModal', '$http', '$scope', 'routing', 'messenger', 'Encoder', 'queryManager',
-    function($controller, $uibModal, $http, $scope, routing, messenger, Encoder, queryManager) {
-
+    '$controller', '$location', '$uibModal', '$scope', 'http', 'routing', 'messenger', 'oqlEncoder',
+    function($controller, $location, $uibModal, $scope, http, routing, messenger, oqlEncoder) {
       // Initialize the super class and extend it.
       $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+
+      /**
+       * Updates the array of contents.
+       *
+       * @param string route Route name.
+       */
+      $scope.list = function(route) {
+        $scope.contents = [];
+        $scope.loading  = 1;
+        $scope.selected = { all: false, contents: [] };
+
+        oqlEncoder.configure({
+          placeholder: {
+            name: 'name ~ "%[value]%"',
+          }
+        });
+
+        var oql   = oqlEncoder.getOql($scope.criteria);
+        var route = {
+          name: $scope.route,
+          params:  { oql: oql }
+        };
+
+        $location.search('oql', oql);
+
+        http.get(route).then(function(response) {
+          $scope.total    = parseInt(response.data.total);
+          $scope.contents = response.data.results;
+
+          $scope.getContentsLocalizeTitle();
+
+          if (response.data.hasOwnProperty('extra')) {
+            $scope.extra = response.data.extra;
+          }
+
+          // Disable spinner
+          $scope.loading = 0;
+        }, function () {
+          $scope.loading = 0;
+          var params = {
+            id: new Date().getTime(),
+            message: 'Error while fetching data from backend',
+            type: 'error'
+          };
+
+          messenger.post(params);
+        });
+      };
 
       /**
        * Permanently removes a list of contents by using a confirmation dialog
@@ -40,9 +86,8 @@ angular.module('BackendApp.controllers')
             },
             success: function() {
               return function() {
-                var url = routing.generate('backend_ws_menus_batch_delete');
-
-                return $http.post(url, {ids: $scope.selected.contents});
+                return http.post('backend_ws_menus_batch_delete',
+                  {ids: $scope.selected.contents});
               };
             }
           }
@@ -76,12 +121,12 @@ angular.module('BackendApp.controllers')
             },
             success: function() {
               return function() {
-                var url = routing.generate(
-                  'backend_ws_menu_delete',
-                  { id: content.id }
-                );
+                var route = {
+                  name: 'backend_ws_menu_delete',
+                  params: { id: content.id }
+                };
 
-                return $http.post(url);
+                return http.post(route);
               };
             }
           }
@@ -95,5 +140,4 @@ angular.module('BackendApp.controllers')
           }
         });
       };
-
   }]);

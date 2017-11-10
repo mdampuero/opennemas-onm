@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\ReplaceImagesUrlFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for ReplaeImagesUrlFilter class.
  */
-class ReplaceImagesUrlFilterTest extends KernelTestCase
+class ReplaceImagesUrlFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the testing environment.
@@ -30,19 +29,46 @@ class ReplaceImagesUrlFilterTest extends KernelTestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->redirector = $this->getMockBuilder('Redirector')
             ->setMethods([ 'getTranslationBySlug' ])
             ->getMock();
 
-        $this->container->expects($this->at(0))->method('get')
-            ->with('core.redirector')->willReturn($this->redirector);
-        $this->container->expects($this->at(1))->method('get')
-            ->with('entity_repository')->willReturn($this->em);
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->filter = new ReplaceImagesUrlFilter($this->container, [
             'pattern' => '/(?<slug>.+.jpg)/',
             'path'    => 'plugh/frog'
         ]);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.instance':
+                return $this->instance;
+
+            case 'core.redirector':
+                return $this->redirector;
+
+            case 'entity_repository':
+                return $this->em;
+        }
+
+        return null;
     }
 
     /**

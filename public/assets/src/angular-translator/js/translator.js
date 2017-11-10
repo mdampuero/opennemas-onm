@@ -26,8 +26,8 @@
           },
           template: function(elem, attrs) {
             if (attrs.link) {
-              return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"collapsed || size > collapse_on_width\">' +
-                '<button type=\"button\" class=\"form-control btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">' +
+              return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"collapsed || size > max\">' +
+                '<button class=\"form-control btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" type=\"button\">' +
                   '<i class=\"fa fa-pencil\"></i>' +
                   '{{text}}' +
                   '<i class=\"fa fa-angle-down\"></i>' +
@@ -41,15 +41,16 @@
                   '</li>' +
                 '</ul>' +
               '</div>' +
-              '<div class="translator btn-group btn-group-xs" role="group" ng-if=\"!collapsed && size < collapse_on_width + 1\">' +
-                '<a ng-repeat=\"language in languages\" href="{{link + \'?locale=\' + language.value}}" class=\"btn {{language.class}}\">' +
+              '<div class="translator btn-group btn-group-xs" role="group" ng-if=\"!collapsed && size <= max\">' +
+                '<a class=\"btn btn-{{language.class}} btn-{{language.translated ? \'solid\' : \'transparent\' }}\"' +
+                    ' href="{{link + \'?locale=\' + language.value}}" ng-repeat=\"language in languages\">' +
                   '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>{{language.name}}' +
                 '</a>' +
               '</div>';
             }
 
             return '<div class=\"translator btn-group\">' +
-              '<button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\">' +
+              '<button class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" type=\"button\">' +
                 '<i class=\"fa {{languages[ngModel].icon}}\" ng-show=\"languages[ngModel].icon\"></i>' +
                 '{{languages[ngModel].name}}' +
                 '<i class=\"fa fa-angle-down\"></i>' +
@@ -65,17 +66,18 @@
             '</div>';
           },
           link: function($scope) {
-            $scope.collapse_on_width = 4;
+            $scope.max       = 4;
             $scope.collapsed = $window.innerWidth < 992;
             $scope.languages = {};
             $scope.size      = Object.keys($scope.options.available).length;
 
             var getOption = function(name, value, main, translators, keys, item) {
               var option = {
-                class: value === main ? 'btn-primary' : 'btn-default',
-                icon:  item ? 'fa-plus' : '',
+                class: value === main ? 'primary' : 'default',
+                icon: item ? 'fa-plus' : '',
+                name: name,
+                translated: false,
                 value: value,
-                name:  name
               };
 
               if (item) {
@@ -86,8 +88,10 @@
                 if (keys) {
                   for (var i = 0; i < keys.length; i++) {
                     if (item[keys[i]] && angular.isObject(item[keys[i]]) &&
-                      item[keys[i]][value]) {
-                      option.icon = 'fa-pencil';
+                        item[keys[i]][value]) {
+                      option.icon       = 'fa-pencil';
+                      option.translated = true;
+
                       return option;
                     }
                   }

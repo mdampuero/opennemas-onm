@@ -10,8 +10,6 @@
  */
 namespace Onm;
 
-use Framework\Component\Data\DataObject;
-
 /**
  * Library for handling unusual string operations.
  *
@@ -558,7 +556,6 @@ class StringUtils
      */
     public static function generateSlug($string, $useStopList = true, $delimiter = '-')
     {
-        // If the value is not a String
         if (is_array($string)) {
             return array_map(function ($a) use ($useStopList, $delimiter) {
                 return self::generateSlug($a, $useStopList, $delimiter);
@@ -666,6 +663,12 @@ class StringUtils
      */
     public static function getNumWords($text, $numWords)
     {
+        if (is_array($text)) {
+            return array_map(function ($a) use ($numWords) {
+                \Onm\StringUtils::getNumWords($a, $numWords);
+            }, $text);
+        }
+
         $noHtml      = strip_tags($text);
         $description = explode(" ", $noHtml, $numWords + 1);
         array_pop($description);

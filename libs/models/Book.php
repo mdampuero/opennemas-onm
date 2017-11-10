@@ -88,10 +88,10 @@ class Book extends Content
 
                 break;
             default:
+                return parent::__get($name);
                 break;
         }
 
-        return parent::__get($name);
     }
 
     /**

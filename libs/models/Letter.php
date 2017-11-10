@@ -56,44 +56,31 @@ class Letter extends Content
     {
         switch ($name) {
             case 'uri':
-                $uri =  Uri::generate(
-                    'letter',
-                    array(
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => urlencode($this->slug),
-                        'category' => urlencode(\Onm\StringUtils::generateSlug($this->author)),
-                    )
-                );
+                $uri = Uri::generate('letter', [
+                    'id'       => sprintf('%06d', $this->id),
+                    'date'     => date('YmdHis', strtotime($this->created)),
+                    'slug'     => urlencode($this->slug),
+                    'category' => urlencode(\Onm\StringUtils::generateSlug($this->author)),
+                ]);
                 //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
                 return $uri;
 
-                break;
-            case 'slug':
-                return \Onm\StringUtils::getTitle($this->title);
-
-                break;
             case 'photo':
                 return new \Photo($this->image);
 
-                break;
-
             case 'summary':
                 $summary = substr(strip_tags($this->body), 0, 200);
-                $pos = strripos($summary, ".");
+                $pos     = strripos($summary, ".");
 
                 if ($pos > 100) {
-                    $summary = substr($summary, 0, $pos).".";
+                    $summary = substr($summary, 0, $pos) . ".";
                 } else {
                     $summary = substr($summary, 0, strripos($summary, " "));
                 }
-
                 return $summary;
 
-                break;
             default:
                 return parent::__get($name);
-                break;
         }
     }
 
@@ -129,12 +116,14 @@ class Letter extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN letters ON pk_content = pk_letter WHERE pk_content=?',
+                . 'LEFT JOIN letters ON pk_content = pk_letter WHERE pk_content=?',
                 [ $id ]
             );
 
@@ -186,7 +175,7 @@ class Letter extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error creating Letter: '.$e->getMessage());
+            error_log('Error creating Letter: ' . $e->getMessage());
             return false;
         }
     }
@@ -200,7 +189,7 @@ class Letter extends Content
      */
     public function update($data)
     {
-        $data['position'] =  1;
+        $data['position'] = 1;
         $data['category'] = 0;
 
         parent::update($data);

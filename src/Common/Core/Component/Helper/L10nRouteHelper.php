@@ -43,31 +43,17 @@ class L10nRouteHelper
      *
      * @return string The generated URI.
      */
-    public function localizeUrl($url, $routeName = '')
+    public function localizeUrl($url, $routeName = '', $forceAbsolute = false)
     {
-        // L10n for urls
-        $requestedLocale = $this->container
-            ->get('request_stack')->getCurrentRequest()
-            ->attributes->get('_locale', '');
+        $localeService = $this->container->get('core.locale');
+        $requestLocale = $localeService->getRequestLocale();
+        $defaultLocale = $localeService->getLocale('frontend');
 
-        // If no locale skip the l10n setting
-        if (empty($requestedLocale)) {
-            return $url;
-        }
-
-        $localeSettings = $this->container
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('locale');
-
-        $localeForUri = '';
-        if (is_array($localeSettings)
-            && is_array($localeSettings)
-            && array_key_exists('main', $localeSettings)
-            && $requestedLocale !== $localeSettings['main']
-            && in_array($requestedLocale, $localeSettings['frontend'])
+        // If no locale or locale is the default locale skip the l10n setting
+        if ($requestLocale == $defaultLocale
+            || !in_array($requestLocale, $localeService->getSlugs())
         ) {
-            $localeForUri = $requestedLocale;
+            return $url;
         }
 
         $routes = [];
@@ -77,11 +63,8 @@ class L10nRouteHelper
 
         // Only localize urls if the user comes from a localized site
         // and if the url can be localized
-        if (!empty($localeForUri)
-            && (
-                (!empty($routeName) && in_array($urlName, $routes))
-                || (empty($routeName))
-            )
+        if ((!empty($routeName) && in_array($routeName, $routes))
+            || empty($routeName)
         ) {
             // Append the locale for uri to the url path part
             if ($forceAbsolute) {
@@ -92,7 +75,7 @@ class L10nRouteHelper
                 return $url;
             }
 
-            $url = '/' . $localeForUri . $url;
+            $url = '/' . $requestLocale . $url;
         }
 
         return $url;

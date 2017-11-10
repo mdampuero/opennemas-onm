@@ -589,7 +589,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row" ng-show="settings.translators[$index].translator && getExtraParams($index).length > 0">
+                          <div class="row" ng-show="settings.translators[$index].translator && getParameters($index).length > 0">
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label class="form-label">
@@ -607,18 +607,18 @@
                                 <div class="controls">
                                   <select class="form-control" ng-model="settings.translators[$index].translator" required>
                                     <option value="">{t}Select a service...{/t}</option>
-                                    <option value="[% service.translator %]" ng-repeat="service in extra.translation_services" >[% service.translator %]</option>
+                                    <option value="[% service.translator %]" ng-repeat="service in extra.translation_services">[% service.translator %]</option>
                                   </select>
                                 </div>
                               </div>
                             </div>
-                            <div class="col-sm-4" ng-repeat="(translationParam, text) in getExtraParams($index)" ng-show="settings.translators[$parent.$index].translator">
+                            <div class="col-sm-4" ng-repeat="(translationParam, text) in getParameters($index)" ng-show="settings.translators[$parent.$index].translator">
                               <div class="form-group">
                                 <label class="form-label">
                                   [% text %]
                                 </label>
                                 <div class="controls">
-                                  <input class="form-control" ng-model="settings.translators[$parent.$index].extra[translationParam]" type="text">
+                                  <input class="form-control" ng-model="settings.translators[$parent.$index].config[translationParam]" type="text">
                                 </div>
                               </div>
                             </div>

@@ -331,13 +331,16 @@
 
               // Updates CKEditor when model changes
               scope.$watch('ngModel', function(nv, ov) {
+                // Prevent infinite loop when comparing '' and undefined
+                var value = angular.isUndefined(nv) ? '' : nv;
+
                 if (stop) {
                   stop = !stop;
                   return;
                 }
 
-                if (instance.getData() !== nv) {
-                  instance.setData(nv, { internal: false });
+                if (instance.getData() !== value) {
+                  instance.setData(value, { internal: false });
                 }
 
                 if (nv === ov) {

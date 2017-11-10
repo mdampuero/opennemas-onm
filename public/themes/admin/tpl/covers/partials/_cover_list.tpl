@@ -70,13 +70,13 @@
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+          <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
         </li>
         <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
-          <ui-select name="author" theme="select2" ng-model="criteria.category_name">
+          <ui-select name="author" theme="select2" ng-model="criteria.pk_fk_content_category">
             <ui-select-match>
               <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
@@ -85,7 +85,7 @@
             </ui-select-choices>
           </ui-select>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+        <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
           <ui-select name="status" theme="select2" ng-model="criteria.content_status">
             <ui-select-match>
               <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -96,7 +96,7 @@
           </ui-select>
         </li>
         <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="pagination.epp">
+          <ui-select name="view" theme="select2" ng-model="criteria.epp">
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
@@ -108,7 +108,7 @@
       </ul>
       <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
         <li class="quicklinks hidden-xs">
-          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
       <input type="hidden" name="in_home" ng-model="criteria.in_home">
@@ -116,7 +116,7 @@
   </div>
 </div>
 
-<div class="content" ng-init="init('kiosko', { content_status: -1, title_like: '', category_name: -1, in_litter: 0}, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div class="content" ng-init="init('kiosko', 'backend_ws_contents_list')">
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="spinner-wrapper" ng-if="loading">
@@ -221,7 +221,7 @@
     </div>
     <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
       <div class="pull-right">
-        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

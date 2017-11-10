@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,7 @@ class PickerController extends Controller
         $title        = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
         $from         = $request->query->filter('from', '', FILTER_SANITIZE_STRING);
         $to           = $request->query->filter('to', '', FILTER_SANITIZE_STRING);
-        $contentTypes = $request->query->filter('content_type_name', null, FILTER_SANITIZE_STRING);
+        $contentTypes = $request->query->filter('content_type_name', [], FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
         $filter = [ "in_litter = 0" ];
@@ -73,12 +73,11 @@ class PickerController extends Controller
         $em = $this->get('entity_repository');
 
         $filter = implode(' AND ', $filter);
+        $query  = "FROM contents  WHERE " . $filter;
 
         if (!in_array('photo', $contentTypes)) {
-            $query = "FROM contents JOIN contents_categories ON  contents_categories.pk_fk_content = " .
-                "contents.pk_content WHERE " . $filter;
-        } else {
-            $query = "FROM contents  WHERE " . $filter;
+            $query = "FROM contents LEFT JOIN contents_categories ON contents_categories.pk_fk_content = "
+                . "contents.pk_content WHERE " . $filter;
         }
 
         $contentMap = $em->dbConn->executeQuery(
@@ -97,6 +96,8 @@ class PickerController extends Controller
             'locale'    => $languageData['default']
         ])->get();
         $results      = \Onm\StringUtils::convertToUtf8($results);
+
+        $this->get('core.locale')->setContext('frontend');
 
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;
@@ -235,9 +236,8 @@ class PickerController extends Controller
 
         $ccm = \ContentCategoryManager::get_instance();
 
-        $languageData = $this->getLocaleData('frontend');
-        $fm           = $this->get('data.manager.filter');
-        $categories   = $ccm->find();
+        $fm         = $this->get('data.manager.filter');
+        $categories = $ccm->find();
 
         $cleanCategories = [];
         foreach ($categories as $category) {
@@ -291,12 +291,13 @@ class PickerController extends Controller
 
         // Get contents for this home
         $results = $cm->getContentsForHomepageOfCategory(0);
-
         $results = array_filter($results, function ($value) {
             return $value->content_type_name != 'widget';
         });
 
         $results = \Onm\StringUtils::convertToUtf8($results);
+
+        $this->get('core.locale')->setContext('frontend');
 
         return new JsonResponse([
             'epp'     => count($results),

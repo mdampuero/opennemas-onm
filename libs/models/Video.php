@@ -71,17 +71,13 @@ class Video extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                return $this->getUri();
-            case 'slug':
-                return \Onm\StringUtils::getTitle($this->title);
             case 'content_type_name':
                 return 'Video';
+            case 'uri':
+                return $this->getUri();
             default:
                 return parent::__get($name);
         }
-
-        return parent::__get($name);
     }
 
     /**
@@ -94,7 +90,7 @@ class Video extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) {
+        if ((int) $id <= 0) {
             return;
         }
 
@@ -150,16 +146,13 @@ class Video extends Content
             $this->pk_video   = $this->id;
             $this->pk_content = $this->id;
 
-            $rs = getService('dbal_connection')->insert(
-                "videos",
-                [
-                  'pk_video'    => $this->id,
-                  'video_url'   => $data['video_url'],
-                  'information' => array_key_exists('information', $data) ?
-                      serialize($data['information']) : null,
-                  'author_name' => $data['author_name'],
-                ]
-            );
+            getService('dbal_connection')->insert('videos', [
+                'pk_video'    => $this->id,
+                'video_url'   => $data['video_url'],
+                'information' => array_key_exists('information', $data) ?
+                serialize($data['information']) : null,
+                'author_name' => $data['author_name'],
+            ]);
 
             return $this->id;
         } catch (\Exception $e) {
@@ -181,7 +174,7 @@ class Video extends Content
         try {
             parent::update($data);
 
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 "videos",
                 [
                     'video_url' => $data['video_url'],
@@ -252,8 +245,8 @@ class Video extends Content
         try {
             $conn = getService('dbal_connection');
             $rs   = $conn->fetchAll(
-                "SELECT video_url, information FROM videos WHERE author_name='internal' " .
-                " AND pk_video IN (" . $contents . ")"
+                "SELECT video_url, information FROM videos WHERE author_name='internal' "
+                . " AND pk_video IN (" . $contents . ")"
             );
 
             if ($rs) {
@@ -315,7 +308,8 @@ class Video extends Content
                     "author_name" => 'internal',
                 ]
             );
-            $videoId          = $this->create($videoInformation);
+
+            $videoId = $this->create($videoInformation);
             if (!$videoId) {
                 throw new \Exception($this->errors);
             }
@@ -344,8 +338,8 @@ class Video extends Content
             throw new Exception(
                 sprintf(
                     _(
-                        'The server limits file uploads up to %s Mb. ' .
-                        'Try to upload files smaller than that size.'
+                        'The server limits file uploads up to %s Mb. '
+                        . 'Try to upload files smaller than that size.'
                     ),
                     (int) ini_get('upload_max_filesize')
                 )
@@ -412,8 +406,8 @@ class Video extends Content
             case 'video/x-msvideo':
                 // Dropped option -s 320x240
                 $shellCommand = escapeshellcmd(
-                    $ffmpgePath . " -i " .
-                    $temporaryVideoPath . " -f flv  " . $videoSavePath
+                    $ffmpgePath . " -i "
+                    . $temporaryVideoPath . " -f flv  " . $videoSavePath
                 ) . " 2>&1";
                 exec($shellCommand, $outputExec, $returnExec);
                 unset($outputExec);
@@ -461,7 +455,8 @@ class Video extends Content
             'timeout'          => 3600, // The timeout for the underlying process
             'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
         ]);
-        $video  = $ffmpeg->open($flvPath);
+
+        $video = $ffmpeg->open($flvPath);
 
         foreach (array_keys($sizes) as $name) {
             // Getting file information from flv file
@@ -491,15 +486,12 @@ class Video extends Content
             $this->category_name = $this->loadCategoryName($this->pk_content);
         }
 
-        $uri = Uri::generate(
-            'video',
-            [
-                'id'       => sprintf('%06d', $this->id),
-                'date'     => date('YmdHis', strtotime($this->created)),
-                'category' => urlencode($this->category_name),
-                'slug'     => urlencode($this->slug),
-            ]
-        );
+        $uri = Uri::generate('video', [
+            'id'       => sprintf('%06d', $this->id),
+            'date'     => date('YmdHis', strtotime($this->created)),
+            'category' => urlencode($this->category_name),
+            'slug'     => urlencode($this->slug),
+        ]);
 
         return ($uri !== '') ? $uri : $this->permalink;
     }

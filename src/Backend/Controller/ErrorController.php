@@ -115,7 +115,7 @@ class ErrorController extends Controller
                 $logMessage = 'Backend page not found at: ' . $requestAddress;
 
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                $content      = $errorMesage;
+                $content      = $errorMessage;
 
                 if (!$this->request->isXmlHttpRequest()) {
                     $content = $this->renderView('error/404.tpl', [

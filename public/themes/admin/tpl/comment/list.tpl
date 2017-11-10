@@ -15,7 +15,7 @@
     clear:both;
   }
 </style>
-  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -89,14 +89,14 @@
               <span class="add-on">
                 <span class="fa fa-search fa-lg"></span>
               </span>
-              <input class="no-boarder" ng-model="criteria.body_like" placeholder="{t}Search by body{/t}" type="text">
+              <input class="no-boarder" ng-model="criteria.body" placeholder="{t}Search by body{/t}" type="text">
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks ng-cloak" ng-init="statuses = {json_encode($statuses)|clear_json}">
               <ui-select name="status" theme="select2" ng-model="criteria.status" data-label="{t}Status{/t}">
-                <ui-select-match placeholder="Select a report">
+                <ui-select-match>
                   <strong>{t}Status{/t}:</strong> [% $select.selected.title %]
                 </ui-select-match>
                 <ui-select-choices repeat="item.value as item in statuses | filter: $select.search">
@@ -105,7 +105,7 @@
               </ui-select>
             </li>
             <li class="quicklinks ng-cloak hidden-xs">
-              <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select name="view" theme="select2" ng-model="criteria.epp">
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
                 </ui-select-match>
@@ -117,7 +117,7 @@
           </ul>
           <ul class="nav quick-section pull-right ng-cloak hidden-xs" ng-if="contents.length > 0">
             <li class="quicklinks">
-              <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
             </li>
           </ul>
         </div>
@@ -202,7 +202,7 @@
         </div>
         <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
           <div class="pull-right">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      *
      * @type {String}
      */
-    $scope.lang = 'en';
+    $scope.locale = 'en';
 
     /**
      * The routing service.

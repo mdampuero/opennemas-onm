@@ -25,9 +25,10 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
 
         $this->fm = new FilterManager($this->container);
 
-        $this->instance                    = $this->getMockBuilder('Instance')
+        $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
             ->getMock();
+
         $this->instance->activated_modules = [];
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -187,10 +188,11 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
                 "width": 700
             }';
 
-        $this->data['content']           = $this->getMockBuilder('Album')
+        $this->data['content'] = $this->getMockBuilder('Album')
             ->disableOriginalConstructor()
             ->setMethods([ '_getAttachedPhotos' ])
             ->getMock();
+
         $this->data['content']->metadata = 'keywords,object,json,linking,data';
 
         // Gallery only with cover image
@@ -199,15 +201,9 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
 
         // Load album photos
         $albumPhotos = [
-            [
-                'photo' => new \Photo()
-            ],
-            [
-                'photo' => new \Photo()
-            ],
-            [
-                'photo' => new \Photo()
-            ]
+            [ 'photo' => new \Photo() ],
+            [ 'photo' => new \Photo() ],
+            [ 'photo' => new \Photo() ]
         ];
 
         foreach ($albumPhotos as $key => &$value) {

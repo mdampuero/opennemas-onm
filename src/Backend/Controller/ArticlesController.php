@@ -29,108 +29,52 @@ class ArticlesController extends Controller
      *     and hasPermission('ARTICLE_ADMIN')
      *     and hasPermission('ARTICLE_PENDINGS')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
-        $this->loadCategories($request);
-
-        // Build the list of authors to render filters
-        $allAuthors = \User::getAllUsersAuthors();
-        $authors    = [ [ 'name' => _('All'), 'value' => -1 ], ];
-        foreach ($allAuthors as $author) {
-            $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
-        }
-
-        // Build the list of categories to render filters
-        $categories = [ [ 'name' => _('All'), 'value' => -1 ], ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name'  => $category->title,
-                'value' => $category->name
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name'  => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
-                ];
-            }
-        }
-
-        return $this->render(
-            'article/list.tpl',
-            array(
-                'authors'    => $authors,
-                'categories' => $categories,
-            )
-        );
+        return $this->render('article/list.tpl');
     }
 
     /**
-     * Handles the form for creating a new article
+     * Shows the form to create a new article.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('ARTICLE_MANAGER')
      *     and hasPermission('ARTICLE_CREATE')")
      */
     public function createAction(Request $request)
     {
-        $this->loadCategories($request);
-
-        $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array('0' => _(' - Select one author - '));
-        foreach ($authorsComplete as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
-        return $this->render(
-            'article/new.tpl',
-            [
-                'availableSizes' => array(
-                    16 => '16',
-                    18 => '18',
-                    20 => '20',
-                    22 => '22',
-                    24 => '24',
-                    26 => '26',
-                    28 => '28',
-                    30 => '30',
-                    32 => '32',
-                    34 => '34'
-                ),
-                'authors'        => $authors,
-                'commentsConfig' => $this->get('setting_repository')
-                    ->get('comments_config'),
-                'timezone' => $this->container->get('core.locale')
-                    ->getTimeZone()
-                    ->getName(),
-            ]
-        );
+        return $this->render('article/new.tpl', [
+            'commentsConfig' => $this->get('setting_repository')
+                ->get('comments_config'),
+            'locale' => $request->query->get('locale'),
+            'timezone' => $this->container->get('core.locale')
+                ->getTimeZone()->getName()
+        ]);
     }
 
+    /**
+     * Shows the form to edit an article.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The article id.
+     *
+     * @return Response The response object.
+     *
+     * @Security("hasExtension('ARTICLE_MANAGER')
+     *     and hasPermission('ARTICLE_UPDATE')")
+     */
     public function showAction(Request $request, $id)
     {
-        $this->loadCategories($request);
-
-        $allAuthors = \User::getAllUsersAuthors();
-
-        $authors = [ '0' => _(' - Select one author - ') ];
-        foreach ($allAuthors as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
         return $this->render('article/new.tpl', [
-            'authors' => $authors,
-            'availableSizes' => [
-                16 => '16', 18 => '18', 20 => '20', 22 => '22',
-                24 => '24', 26 => '26', 28 => '28',30 => '30',
-                32 => '32', 34 => '34'
-            ],
-            'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
-            'id'      => $id,
+            'commentsConfig' => $this->get('setting_repository')
+                ->get('comments_config'),
+            'id' => $id,
+            'locale' => $request->query->get('locale'),
+            'timezone' => $this->container->get('core.locale')
+                ->getTimeZone()->getName()
         ]);
     }
 
@@ -151,17 +95,17 @@ class ArticlesController extends Controller
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
+        $filters = [
             'content_type_name' => [[ 'value' => 'article' ]],
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]]
-        );
+        ];
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countArticles = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->get([
@@ -177,17 +121,14 @@ class ArticlesController extends Controller
             ]
         ]);
 
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            array(
-                'contentType'           => 'Article',
-                'contents'              => $articles,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $this->category,
-                'pagination'            => $pagination->links,
-                'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
-            )
-        );
+        return $this->render('common/content_provider/_container-content-list.tpl', [
+            'contentType'           => 'Article',
+            'contents'              => $articles,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $this->category,
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
+        ]);
     }
 
     /**
@@ -206,16 +147,18 @@ class ArticlesController extends Controller
         $em  = $this->get('entity_repository');
         $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory(0);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'article')),
-            'content_status'    => array(array('value' => 1)),
-            'frontpage'         => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'article' ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'frontpage'         => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
+        ];
 
-        $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
         $countArticles = $em->countBy($filters);
+
+        $this->get('core.locale')->setContext('frontend');
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
@@ -230,13 +173,10 @@ class ArticlesController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'article/content-provider-suggested.tpl',
-            array(
-                'articles'   => $articles,
-                'pagination' => $pagination,
-            )
-        );
+        return $this->render('article/content-provider-suggested.tpl', [
+            'articles'   => $articles,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -256,19 +196,21 @@ class ArticlesController extends Controller
         $ids      = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory($categoryId);
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'article')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN')),
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'article' ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
+        ];
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
         $countArticles = $em->countBy($filters);
+
+        $this->get('core.locale')->setContext('frontend');
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
@@ -283,13 +225,10 @@ class ArticlesController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'article/content-provider-category.tpl',
-            array(
-                'articles'   => $articles,
-                'pagination' => $pagination,
-            )
-        );
+        return $this->render('article/content-provider-category.tpl', [
+            'articles'   => $articles,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -309,17 +248,19 @@ class ArticlesController extends Controller
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'article')),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'article' ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
+        ];
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countArticles = $em->countBy($filters);
+
+        $this->get('core.locale')->setContext('frontend');
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
@@ -334,17 +275,14 @@ class ArticlesController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            array(
-                'contentType'           => 'Article',
-                'contents'              => $articles,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $this->category,
-                'pagination'            => $pagination->links,
-                'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_related'),
-            )
-        );
+        return $this->render('common/content_provider/_container-content-list.tpl', [
+            'contentType'           => 'Article',
+            'contents'              => $articles,
+            'contentTypeCategories' => $this->parentCategories,
+            'category'              => $this->category,
+            'pagination'            => $pagination->links,
+            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_related'),
+        ]);
     }
 
     /**
@@ -359,11 +297,16 @@ class ArticlesController extends Controller
      */
     public function previewAction(Request $request)
     {
+        $locale = $request->get('locale');
+
+        $this->get('core.locale')->setContext('frontend')
+            ->setRequestLocale($locale);
+
         $this->loadCategories($request);
 
-        $er  = $this->get('entity_repository');
+        $er = $this->get('entity_repository');
 
-        $article    = new \Article();
+        $article         = new \Article();
         $articleContents = $request->request->filter('article');
 
         // Load config
@@ -380,16 +323,16 @@ class ArticlesController extends Controller
         // Set a dummy Id for the article if doesn't exists
         if (empty($article->pk_article) && empty($article->id)) {
             $article->pk_article = '-1';
-            $article->id = '-1';
+            $article->id         = '-1';
         }
 
         // Fetch article category name
         $ccm = \ContentCategoryManager::get_instance();
+
         $category_name         = $ccm->getName($article->category);
         $actual_category_title = $ccm->getTitle($category_name);
+        $actualCategoryId      = $ccm->get_id($category_name);
 
-        // Get advertisements for single article
-        $actualCategoryId = $ccm->get_id($category_name);
         list($positions, $advertisements) =
             \Frontend\Controller\ArticlesController::getAds($actualCategoryId);
 
@@ -408,35 +351,28 @@ class ArticlesController extends Controller
             $videoInt = $er->find('Video', $article->fk_video2);
         }
 
-        // Fetch related contents to the inner article
-        $relations = [];
-        $innerRelations = json_decode($article->relatedInner, true);
-        if (!empty($innerRelations)) {
-            foreach ($innerRelations as $key => $value) {
-                $relations[$key] = $value['id'];
-            }
+        $ids = [];
+        if (!empty($article->relatedInner)) {
+            $ids = array_map(function ($a) {
+                return [ $a['type'],  $a['id'] ];
+            }, $article->relatedInner);
         }
 
-        $cm  = new \ContentManager();
-        $relat = $cm->getContents($relations);
-        $relat = $cm->getInTime($relat);
-        $relat = $cm->getAvailable($relat);
-
-        foreach ($relat as $ril) {
-            $ril->category_name = $ccm->getCategoryNameByContentId($ril->id);
-        }
+        $related = $this->get('entity_repository')->findMulti($ids);
 
         // Machine suggested contents code
-        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-            'article',
-            "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
-            4
-        );
+        $machineSuggestedContents = $this->get('automatic_contents')
+            ->searchSuggestedContents(
+                'article',
+                "category_name= '" . $article->category_name
+                    . "' AND pk_content <>" . $article->id,
+                4
+            );
 
         $this->view->assign([
             'ads_positions'         => $positions,
             'advertisements'        => $advertisements,
-            'relationed'            => $relat,
+            'relationed'            => $related,
             'suggested'             => $machineSuggestedContents,
             'contentId'             => $article->id,
             'category_name'         => $category_name,
@@ -485,6 +421,7 @@ class ArticlesController extends Controller
 
         $this->ccm      = \ContentCategoryManager::get_instance();
         $this->category = ($this->category == 'all') ? 0 : $this->category;
+
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category);
 

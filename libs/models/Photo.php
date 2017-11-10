@@ -26,42 +26,42 @@ class Photo extends Content
      *
      * @var int
      */
-    public $pk_photo    = null;
+    public $pk_photo = null;
 
     /**
      * File name of the photo
      *
      * @var string
      */
-    public $name        = null;
+    public $name = null;
 
     /**
      * Full path to the photo file
      *
      * @var string
      */
-    public $path_file   = null;
+    public $path_file = null;
 
     /**
      * The size of the image
      *
      * @var int
      */
-    public $size        = null;
+    public $size = null;
 
     /**
      * The width of the image
      *
      * @var int
      */
-    public $width       = null;
+    public $width = null;
 
     /**
      * The height of the image
      *
      * @var int
      */
-    public $height      = null;
+    public $height = null;
 
     /**
      * The copyright of the image
@@ -69,6 +69,13 @@ class Photo extends Content
      * @var string
      */
     public $author_name = null;
+
+    /**
+     * The photo information.
+     *
+     * @var string
+     */
+    public $infor = null;
 
     /**
      * Initializes the Photo object instance given an id
@@ -95,12 +102,14 @@ class Photo extends Content
     {
         parent::load($properties);
 
-        $this->pk_photo    = $properties['pk_photo'];
-        $this->name        = $properties['name'];
-        $this->path_file   = $properties['path_file'];
+        $this->pk_photo  = $properties['pk_photo'];
+        $this->name      = $properties['name'];
+        $this->path_file = $properties['path_file'];
+
         if (!empty($properties['path_file'])) {
-            $this->path_img = $properties['path_file'].DS.$properties['name'];
+            $this->path_img = $properties['path_file'] . DS . $properties['name'];
         }
+
         $this->size        = $properties['size'];
         $this->width       = $properties['width'];
         $this->height      = $properties['height'];
@@ -116,10 +125,10 @@ class Photo extends Content
                 && array_key_exists(0, $positions)
                 && array_key_exists(1, $positions)
             ) {
-                $this->latlong = array(
+                $this->latlong = [
                     'lat' => $positions[0],
                     'long' => $positions[1],
-                );
+                ];
             }
         }
     }
@@ -133,8 +142,9 @@ class Photo extends Content
      */
     public function read($id)
     {
-        // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if ((int) $id <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
@@ -169,7 +179,7 @@ class Photo extends Content
         try {
             parent::create($data);
 
-            $rs = getService('dbal_connection')->insert(
+            getService('dbal_connection')->insert(
                 "photos",
                 [
                     'pk_photo'    => (int) $this->id,
@@ -219,7 +229,7 @@ class Photo extends Content
             $dateForDirectory = $date->format("/Y/m/d/");
         }
 
-        $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
+        $uploadDir = MEDIA_PATH . DS . IMG_DIR . DS . $dateForDirectory . DIRECTORY_SEPARATOR;
         if (!is_null($uploadPath)) {
             $uploadDir = $uploadPath;
         }
@@ -239,7 +249,7 @@ class Photo extends Content
         // Getting information for creating
         $t                  = gettimeofday();
         $micro              = intval(substr($t['usec'], 0, 5));
-        $finalPhotoFileName = $date->format("YmdHis"). $micro . "."
+        $finalPhotoFileName = $date->format("YmdHis") . $micro . "."
             . MimeTypeTool::getExtension($filePath);
         $fileInformation    = new MediaItem($filePath);
 
@@ -247,7 +257,7 @@ class Photo extends Content
             || empty($data['urn_source'])
         ) {
             $data['urn_source'] = "urn:newsml:" . SITE . ":" . $date->format("YmdHis")
-                . ":" . StringUtils::cleanFileName($originalFileName).":2";
+                . ":" . StringUtils::cleanFileName($originalFileName) . ":2";
         }
 
         $date = new \DateTime();
@@ -257,16 +267,18 @@ class Photo extends Content
         if (!array_key_exists('created', $data)) {
             $data['created'] = $dateString;
         }
+
         if (!array_key_exists('changed', $data)) {
             $data['changed'] = $dateString;
         }
+
         if (!array_key_exists('content_status', $data)) {
             $data['content_status'] = 1;
         }
 
         // Building information for the photo image
-        $dataPhoto = array(
-            'title'               => isset($data['title']) ? $data['title'] :$originalFileName,
+        $dataPhoto = [
+            'title'               => isset($data['title']) ? $data['title'] : $originalFileName,
             'name'                => $finalPhotoFileName,
             'path_file'           => $dateForDirectory,
             'created'             => $data["created"],
@@ -275,21 +287,21 @@ class Photo extends Content
             'description'         => $data['description'],
             'metadata'            => $data["metadata"],
             'urn_source'          => $data['urn_source'],
-            'size'                => round($fileInformation->size/1024, 2),
+            'size'                => round($fileInformation->size / 1024, 2),
             'date'                => $dateString,
             'width'               => $fileInformation->width,
             'height'              => $fileInformation->height,
             'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
-            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'],
+            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : $data['fk_author'],
             'fk_user_last_editor' => getService('session')->get('user')->id,
             'fk_publisher'        => getService('session')->get('user')->id,
-        );
+        ];
 
         if (array_key_exists('extension', $filePathInfo) &&
             $filePathInfo['extension'] != 'swf'
         ) {
             $imageCreated = new \Imagine\Imagick\Imagine();
-            $image = $imageCreated->open($data['local_file']);
+            $image        = $imageCreated->open($data['local_file']);
 
             // Doesn't work as expected. Commented for now
             // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
@@ -298,18 +310,18 @@ class Photo extends Content
             try {
                 if ($filePathInfo['extension'] == 'gif') {
                     $image->save(
-                        realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
-                        array('flatten' => false)
+                        realpath($uploadDir) . DIRECTORY_SEPARATOR . $finalPhotoFileName,
+                        [ 'flatten' => false ]
                     );
                 } else {
                     $image->save(
-                        realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
-                        array(
+                        realpath($uploadDir) . DIRECTORY_SEPARATOR . $finalPhotoFileName,
+                        [
                             'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
                             'resolution-x'     => 72,
                             'resolution-y'     => 72,
                             'quality'          => 85,
-                        )
+                        ]
                     );
                 }
             } catch (\RuntimeException $e) {
@@ -318,15 +330,16 @@ class Photo extends Content
                     sprintf(
                         'Unable to create the photo file %s (destination: %s).',
                         $data['local_file'],
-                        $uploadDir.$finalPhotoFileName
+                        $uploadDir . $finalPhotoFileName
                     )
                 );
+
                 throw new Exception(_('Unable to copy your image file'));
             }
         } else {
             // Check source and target
             $fileCopied = false;
-            $targetPath = realpath($uploadDir).DS.$finalPhotoFileName;
+            $targetPath = realpath($uploadDir) . DS . $finalPhotoFileName;
             if (is_file($data['local_file']) && is_writable($targetPath)) {
                 $fileCopied = copy($data['local_file'], $targetPath);
             }
@@ -337,7 +350,7 @@ class Photo extends Content
                     sprintf(
                         'Unable to create the photo file %s (destination: %s).',
                         $data['local_file'],
-                        $uploadDir.$finalPhotoFileName
+                        $uploadDir . $finalPhotoFileName
                     )
                 );
                 throw new Exception(_('Unable to copy your image file'));
@@ -352,7 +365,7 @@ class Photo extends Content
                 sprintf(
                     'Unable to save the image object %s (destination: %s).',
                     $data['local_file'],
-                    $uploadDir.$finalPhotoFileName
+                    $uploadDir . $finalPhotoFileName
                 )
             );
             throw new Exception(_('Unable to save your image information.'));
@@ -373,8 +386,8 @@ class Photo extends Content
         try {
             parent::update($data);
 
-            $rs = getService('dbal_connection')->update(
-                "photos",
+            getService('dbal_connection')->update(
+                'photos',
                 [
                     'name'        => $this->name,
                     'path_file'   => $this->path_file,
@@ -403,9 +416,11 @@ class Photo extends Content
      */
     public function remove($id)
     {
-        if ((int) $id <= 0) return false;
+        if ((int) $id <= 0) {
+            return false;
+        }
 
-        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        $image = MEDIA_IMG_PATH . $this->path_file . $this->name;
 
         if (file_exists($image) && !@unlink($image)) {
             return false;
@@ -437,7 +452,7 @@ class Photo extends Content
      */
     public function getPhotoMetaData()
     {
-        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        $image = MEDIA_IMG_PATH . $this->path_file . $this->name;
 
         if (is_file($image)) {
             $size = getimagesize($image, $info);
@@ -456,7 +471,7 @@ class Photo extends Content
 
                     break;
                 case 'image/jpeg':
-                    $exif = array();
+                    $exif = [];
                     if (isset($info)) {
                         foreach (array_keys($info) as $key) {
                             if ($key != 'APP1') {
@@ -476,10 +491,10 @@ class Photo extends Content
                         $this->infor .= _("No available EXIF data");
                     } else {
                         if (empty($this->color)) {
-                            if ($exifData['COMPUTED']['IsColor']==0) {
-                                $this->color= 'BN';
+                            if ($exifData['COMPUTED']['IsColor'] == 0) {
+                                $this->color = 'BN';
                             } else {
-                                $this->color= 'color';
+                                $this->color = 'color';
                             }
                         }
 
@@ -494,7 +509,7 @@ class Photo extends Content
                             if (empty($this->date)
                                 && !is_null($exifData['FILE']['FileDateTime'])
                             ) {
-                                $this->date= $exifData['FILE']['FileDateTime'];
+                                $this->date = $exifData['FILE']['FileDateTime'];
                             }
                         }
                     }
@@ -510,20 +525,20 @@ class Photo extends Content
                                 $keywordcount = count($iptc["2#025"]);
                                 $keywords     = $iptc["2#025"][0];
 
-                                for ($i=1; $i<$keywordcount; $i++) {
-                                    $keywords .= ", ".$iptc["2#025"][$i]  ;
+                                for ($i = 1; $i < $keywordcount; $i++) {
+                                    $keywords .= ", " . $iptc["2#025"][$i];
                                 }
                             } else {
                                 $keywords = '';
                             }
 
-                            $myiptc['Keywords']            =$keywords;
-                            $myiptc['Caption']             = $iptc["2#120"][0];
+                            $myiptc['Keywords']     = $keywords;
+                            $myiptc['Caption']      = $iptc["2#120"][0];
+                            $myiptc['Graphic_name'] = $iptc["2#005"][0];
+                            $myiptc['Urgency']      = $iptc["2#010"][0];
+                            $myiptc['Category']     = $iptc["2#015"][0];
+                            $myiptc['Program']      = $iptc["2#065"][0];
 
-                            $myiptc['Graphic_name']        = $iptc["2#005"][0];
-                            $myiptc['Urgency']             = $iptc["2#010"][0];
-                            $myiptc['Category']            = $iptc["2#015"][0];
-                            $myiptc['Program']             = $iptc["2#065"][0];
                             // note that sometimes supp_categories
                             // contans multiple entries
                             $myiptc['Supp_categories']     = $iptc["2#020"][0];
@@ -540,10 +555,11 @@ class Photo extends Content
                             $myiptc['Photo_source']        = $iptc["2#183"][0];
 
                             $myiptc = array_map('\Onm\StringUtils::convertToUTF8AndStrToLower', $myiptc);
+
                             $this->myiptc = $myiptc;
 
                             if (empty($this->description)) {
-                                $this->description= $myiptc['Caption'];
+                                $this->description = $myiptc['Caption'];
                             }
 
                             if (empty($this->metadata)) {
@@ -556,7 +572,7 @@ class Photo extends Content
 
                             ini_set($errorReporting);
                         } else {
-                            $this->infor .=  _("No available IPTC data");
+                            $this->infor .= _("No available IPTC data");
                         }
                     }
                     break;
@@ -564,7 +580,7 @@ class Photo extends Content
                     break;
             } // endswitch;
         } else {
-            $this->infor .=  _("Invalid image file");
+            $this->infor .= _("Invalid image file");
         }
 
         return $this;
@@ -589,7 +605,7 @@ class Photo extends Content
                 return false;
             }
 
-            return (string) $rs['path_file'].$rs['name'];
+            return (string) $rs['path_file'] . $rs['name'];
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -610,7 +626,7 @@ class Photo extends Content
         $contents = implode(', ', $arrayIds);
         try {
             $rs = $conn->fetchAssoc(
-                'SELECT  path_file, name  FROM photos WHERE pk_photo IN ('.$contents.')'
+                'SELECT  path_file, name  FROM photos WHERE pk_photo IN (' . $contents . ')'
             );
 
             if (!$rs) {
@@ -618,14 +634,14 @@ class Photo extends Content
             }
 
             foreach ($rs as $item) {
-                $image = MEDIA_IMG_PATH.$item['path_file'].$item['name'];
+                $image = MEDIA_IMG_PATH . $item['path_file'] . $item['name'];
 
                 if (file_exists($image)) {
                     @unlink($image);
                 }
             }
 
-            $rs = $conn->executeUpdate('DELETE FROM photos WHERE `pk_photo` IN ('.$contents.')');
+            $rs = $conn->executeUpdate('DELETE FROM photos WHERE `pk_photo` IN (' . $contents . ')');
 
             return true;
         } catch (\Exception $e) {

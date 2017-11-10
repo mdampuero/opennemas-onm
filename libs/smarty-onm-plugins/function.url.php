@@ -17,9 +17,13 @@ function smarty_function_url($params, &$smarty)
         return $url;
     }
 
-    // Hack for opinions and authors url's
-    if (array_key_exists('author_slug', $params)) {
-        $params['author_slug'] = \Onm\StringUtils::generateSlug($params['author_slug']);
+    // Hack for opinions authors frontpage url's
+    if (array_key_exists('sluggable', $params) &&
+        array_key_exists('slug_key', $params) &&
+        array_key_exists($params['slug_key'], $params) &&
+        $params['sluggable']
+    ) {
+        $params[$params['slug_key']] = \Onm\StringUtils::generateSlug($params[$params['slug_key']]);
     }
 
     $name          = $params['name'];
@@ -28,7 +32,7 @@ function smarty_function_url($params, &$smarty)
         ? UrlGeneratorInterface::ABSOLUTE_URL
         : UrlGeneratorInterface::ABSOLUTE_PATH;
 
-    unset($params['name'], $params['absolute']);
+    unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
     try {
         $url = $smarty->getContainer()
             ->get('router')
@@ -39,7 +43,7 @@ function smarty_function_url($params, &$smarty)
         $url = '#not-found';
     }
 
-    $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url, $name);
+    $url = $smarty->getContainer()->get('core.helper.l10n_route')->localizeUrl($url, $name, $forceAbsolute);
 
     return $url;
 }

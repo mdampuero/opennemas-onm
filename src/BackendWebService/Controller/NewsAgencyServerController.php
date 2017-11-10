@@ -29,7 +29,7 @@ class NewsAgencyServerController extends Controller
      */
     public function init()
     {
-        $this->syncFrom = array(
+        $this->syncFrom = [
             '3600'         => sprintf(_('%d hour'), '1'),
             '10800'         => sprintf(_('%d hours'), '3'),
             '21600'         => sprintf(_('%d hours'), '6'),
@@ -43,7 +43,7 @@ class NewsAgencyServerController extends Controller
             '604800'        => sprintf(_('%d week'), '1'),
             '1209600'       => sprintf(_('%d weeks'), '2'),
             'no_limits'     => _('No limit'),
-        );
+        ];
 
         ini_set('memory_limit', '128M');
         ini_set('set_time_limit', '0');
@@ -103,13 +103,14 @@ class NewsAgencyServerController extends Controller
     public function cleanAction(Request $request)
     {
         $id = $request->query->getDigits('id');
+
         $servers = $this->get('setting_repository')->get('news_agency_config');
 
         if (!array_key_exists($id, $servers)) {
             return new JsonResponse(
                 [
                     'messages' => [
-                        'message' =>  sprintf(
+                        'message' => sprintf(
                             _('Source identifier "%d" not valid'),
                             $id
                         ),
@@ -135,13 +136,14 @@ class NewsAgencyServerController extends Controller
             ];
         } catch (\Exception $e) {
             $status = 200;
+
             $messages[] = [
                 'message' => $e->getMessage(),
                 'type'    => 'error'
             ];
         }
 
-        return new JsonResponse([ 'messages' =>  $messages], $status);
+        return new JsonResponse([ 'messages' => $messages ], $status);
     }
 
     /**
@@ -158,11 +160,7 @@ class NewsAgencyServerController extends Controller
         $servers = $this->get('setting_repository')->get('news_agency_config');
 
         return new JsonResponse([
-            'extra'   => [
-                'sync_from' => $this->syncFrom
-            ],
-            'page'    => 1,
-            'epp'     => count($servers),
+            'extra'   => [ 'sync_from' => $this->syncFrom ],
             'total'   => count($servers),
             'results' => array_values($servers),
         ]);
@@ -191,17 +189,15 @@ class NewsAgencyServerController extends Controller
 
         $this->get('setting_repository')->set('news_agency_config', $servers);
 
-        return new JsonResponse(
-            array(
-                'activated' => $status,
-                'messages'       => [
-                    [
-                        'message' => _('Server updated successfully'),
-                        'type'    => 'success'
-                    ]
+        return new JsonResponse( [
+            'activated' => $status,
+            'messages'       => [
+                [
+                    'message' => _('Server updated successfully'),
+                    'type'    => 'success'
                 ]
-            )
-        );
+            ]
+        ]);
     }
 
     /**
@@ -216,13 +212,13 @@ class NewsAgencyServerController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id      = $request->query->getDigits('id');
         $servers = $this->get('setting_repository')->get('news_agency_config');
 
         if (!array_key_exists($id, $servers)) {
             return new JsonResponse([
                 'messages' => [
-                    'message' =>  sprintf(
+                    'message' => sprintf(
                         _('Source identifier "%d" not valid'),
                         $id
                     ),
@@ -234,7 +230,8 @@ class NewsAgencyServerController extends Controller
         $messages = [];
         try {
             $repository = new LocalRepository();
-            $compiler = new Compiler($repository->syncPath);
+            $compiler   = new Compiler($repository->syncPath);
+
             $compiler->cleanCompileForServer($id);
             $compiler->cleanSourceFilesForServer($id);
 
@@ -253,6 +250,6 @@ class NewsAgencyServerController extends Controller
             ];
         }
 
-        return new JsonResponse([ 'messages' =>  $messages ]);
+        return new JsonResponse([ 'messages' => $messages ]);
     }
 }

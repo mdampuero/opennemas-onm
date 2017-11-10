@@ -62,4 +62,26 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $instance->main_domain = 5;
         $this->assertEquals('mumble.opennemas.com', $instance->getMainDomain());
     }
+
+    /**
+     * Tests getMediaShortPath.
+     */
+    public function testGetMediaShortPath()
+    {
+        $instance = new Instance([ 'internal_name' => 'garply' ]);
+
+        $this->assertEquals('/media/garply', $instance->getMediaShortPath());
+    }
+
+    /**
+     * Tests hasMultilanguage when instance has module enabled and disabled.
+     */
+    public function testHasMultilanguage()
+    {
+        $instance = new Instance([ 'activated_modules' => [ 'garply' ] ]);
+        $this->assertFalse($instance->hasMultilanguage());
+
+        $instance->activated_modules[] = 'es.openhost.module.multilanguage';
+        $this->assertTrue($instance->hasMultilanguage());
+    }
 }

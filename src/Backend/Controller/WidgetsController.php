@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,7 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
 class WidgetsController extends Controller
 {
     /**
@@ -32,21 +26,16 @@ class WidgetsController extends Controller
      */
     public function listAction()
     {
-        $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
+        $types = $this->get('widget_repository')->getWidgets();
+        $types = array_map(function ($a) {
+            return [ 'name' => $a, 'value' => $a ];
+        }, $types);
 
-        $allInteligentWidgetsContents = [];
-        foreach ($allInteligentWidgets as $type) {
-            $allInteligentWidgetsContents[] = [ 'name' => $type, 'value' => $type ];
-        }
+        array_unshift($types, [ 'name' => _('All'), 'value' => null ]);
 
-        array_unshift($allInteligentWidgetsContents, [ 'name' => _('All'), 'value' => -1 ]);
-
-        return $this->render(
-            'widget/list.tpl',
-            [
-                'all_widgets' => $allInteligentWidgetsContents,
-            ]
-        );
+        return $this->render('widget/list.tpl', [
+            'all_widgets' => $types,
+        ]);
     }
 
     /**
@@ -83,16 +72,13 @@ class WidgetsController extends Controller
 
         $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
-        return $this->render(
-            'widget/new.tpl',
-            array(
-                'all_widgets'  => $allInteligentWidgets,
-                'id'           => $id,
-                'widget'       => $widget,
-                'page'         => $page,
-                'category'     => $category
-            )
-        );
+        return $this->render('widget/new.tpl', [
+            'all_widgets'  => $allInteligentWidgets,
+            'id'           => $id,
+            'widget'       => $widget,
+            'page'         => $page,
+            'category'     => $category
+        ]);
     }
 
     /**
@@ -110,17 +96,19 @@ class WidgetsController extends Controller
         if ('POST' == $request->getMethod()) {
             $post = $request->request;
 
-            $widgetData = array(
+            $widgetData = [
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
                 'title'          => $post->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'content_status' => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata($post->filter('metadata', null, FILTER_SANITIZE_STRING)),
+                'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                    $post->filter('metadata', null, FILTER_SANITIZE_STRING)
+                ),
                 'description'    => $post->get('description', ''),
                 'content'        => $post->filter('content', ''),
                 'params'          => json_decode($post->get('parsedParams', null)),
-            );
+            ];
 
             if ($widgetData['renderlet'] == 'intelligentwidget') {
                 $widgetData['content'] = $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING);
@@ -129,8 +117,9 @@ class WidgetsController extends Controller
             if (count($widgetData['params']) > 0) {
                 $newParams = [];
                 foreach ($widgetData['params'] as $param) {
-                    $newParams [$param->name]= $param->value;
+                    $newParams [$param->name] = $param->value;
                 }
+
                 $widgetData['params'] = $newParams;
             }
 
@@ -149,13 +138,10 @@ class WidgetsController extends Controller
         } else {
             $allInteligentWidgets = $this->get('widget_repository')->getWidgets();
 
-            return $this->render(
-                'widget/new.tpl',
-                array(
-                    'all_widgets' => $allInteligentWidgets,
-                    'action'      => 'new',
-                )
-            );
+            return $this->render('widget/new.tpl', [
+                'all_widgets' => $allInteligentWidgets,
+                'action'      => 'new',
+            ]);
         }
     }
 
@@ -171,35 +157,38 @@ class WidgetsController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
-
         $post = $request->request;
 
         // Check empty data
         if (count($request->request) < 1) {
             $this->get('session')->getFlashBag()->add('error', _("Widget data sent not valid."));
 
-            return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_widget_show', [ 'id' => $id ]));
         }
 
-        $widgetData = array(
+        $widgetData = [
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
             'title'           => $post->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'content_status'  => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
-            'metadata'        => \Onm\StringUtils::normalizeMetadata($post->filter('metadata', null, FILTER_SANITIZE_STRING)),
+            'metadata'        => \Onm\StringUtils::normalizeMetadata(
+                $post->filter('metadata', null, FILTER_SANITIZE_STRING)
+            ),
             'description'     => $post->get('description', ''),
             'content'         => $post->filter('content', ''),
             'intelligentType' => $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING),
             'params'          => json_decode($post->get('parsedParams', null)),
-        );
+        ];
+
         if (count($widgetData['params']) > 0) {
             $newParams = [];
             foreach ($widgetData['params'] as $param) {
-                $newParams [$param->name]= $param->value;
+                $newParams[$param->name] = $param->value;
             }
+
             $widgetData['params'] = $newParams;
         }
 
@@ -217,7 +206,7 @@ class WidgetsController extends Controller
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_widgets', array('page' => $page,))
+                $this->generateUrl('admin_widgets', [ 'page' => $page, ])
             );
         }
 
@@ -227,7 +216,7 @@ class WidgetsController extends Controller
         );
 
         return $this->redirect(
-            $this->generateUrl('admin_widget_show', array('id' => $id,))
+            $this->generateUrl('admin_widget_show', [ 'id' => $id, ])
         );
     }
 
@@ -246,16 +235,17 @@ class WidgetsController extends Controller
         $itemsPerPage = 8;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int)$categoryId);
+        $ids = $this->get('frontpage_repository')
+            ->getContentIdsForHomepageOfCategory((int) $categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'widget')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
-        );
+        $filters = [
+            'content_type_name' => [ [ 'value' => 'widget' ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
+        ];
 
-        $widgets      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $widgets      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
         $countWidgets = $em->countBy($filters);
 
         // Build the pagination
@@ -271,12 +261,9 @@ class WidgetsController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'widget/content-provider.tpl',
-            [
-                'widgets'    => $widgets,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('widget/content-provider.tpl', [
+            'widgets'    => $widgets,
+            'pagination' => $pagination,
+        ]);
     }
 }

@@ -2,12 +2,11 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace BackendWebService\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -25,33 +24,22 @@ class AdvertisementsController extends ContentController
      */
     public function listAction(Request $request, $contentType = null)
     {
-        $elementsPerPage = $request->query->getDigits('elements_per_page', 10);
-        $page            = $request->query->getDigits('page', 1);
-        $search          = $request->query->get('search');
-        $sortBy          = $request->query->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->query->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+        $oql = $request->query->get('oql', '');
+        $em  = $this->get('advertisement_repository');
+        $map = $this->container->get('core.helper.advertisement')
+            ->getPositions();
 
-        $positionManager = $this->container->get('core.helper.advertisement');
-        $map = $positionManager->getPositions();
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-        $order = null;
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
-
-        $em = $this->get('advertisement_repository');
-        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($search);
+        $total   = $em->countBy($criteria);
 
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'map'               => $map,
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => $total
-            )
-        );
+        return new JsonResponse([
+            'map'     => $map,
+            'results' => $results,
+            'total'   => $total
+        ]);
     }
 }
