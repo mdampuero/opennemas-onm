@@ -189,7 +189,6 @@
                   </div>
                 </td>
                 <td>
-                  <!-- <span ng-if="content.params.bodyLink.length > 0" title="{t}Article has external link{/t}"><i class="fa fa-external-link-square"></i></span> -->
                   <span uib-tooltip="{t}Last editor{/t}: [% (data.extra.users | filter: { id: content.fk_user_last_editor }: true).length == 0 ? (data.extra.users | filter: { id: content.fk_author }: true)[0].name : (data.extra.users | filter: { id: content.fk_user_last_editor }: true)[0].name %]">[% content.title %]</span>
 
                   <div class="small-text">
