@@ -186,7 +186,6 @@ class BlogsController extends Controller
                 if (!empty($blogs)) {
                     foreach ($blogs as &$blog) {
                         $blog = $this->get('entity_repository')->find('Opinion', $blog['id']);
-                        $blog->loadAllContentProperties($blog->id);
                         if (isset($blog->img1) && ($blog->img1 > 0)) {
                             $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
                         }
