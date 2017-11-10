@@ -185,37 +185,23 @@ class BlogsController extends Controller
 
                 if (!empty($blogs)) {
                     foreach ($blogs as &$blog) {
-                        // Overload blog array with more information
-                        $item = new \Content();
-                        $item->loadAllContentProperties($blog['pk_content']);
-                        $blog['summary']          = $item->summary;
-                        $blog['img1_footer']      = $item->img1_footer;
-                        $blog['pk_author']        = $author->id;
-                        $blog['author_name_slug'] = $author->slug;
-                        $blog['comments']         = $item->comments;
-                        if (isset($item->img1) && ($item->img1 > 0)) {
-                            $blog['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
+                        $blog = $this->get('entity_repository')->find('Opinion', $blog['id']);
+                        $blog->loadAllContentProperties($blog->id);
+                        if (isset($blog->img1) && ($blog->img1 > 0)) {
+                            $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
                         }
 
-                        // Generate blog item uri
-                        $blog['uri'] = $this->generateUrl(
-                            'frontend_blog_show',
-                            [
-                                'blog_id'     => date('YmdHis', strtotime($blog['created'])) . $blog['id'],
-                                'author_name' => $blog['author_name_slug'],
-                                'blog_title'  => $blog['slug'],
-                            ]
-                        );
+                        // Overload blog object with more information
+                        $blog->pk_author        = $author->id;
+                        $blog->author_name_slug = $author->slug;
 
                         // Generate author uri
-                        $blog['author_uri'] = $this->generateUrl(
+                        $blog->author_uri = $this->generateUrl(
                             'frontend_blog_author_frontpage',
                             [
-                                'author_slug' => $blog['author_name_slug'],
+                                'author_slug' => $blog->author_name_slug,
                             ]
                         );
-
-                        $blog = json_decode(json_encode($blog));
                     }
                 }
 
