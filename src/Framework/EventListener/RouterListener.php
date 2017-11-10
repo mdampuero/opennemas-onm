@@ -70,13 +70,14 @@ class RouterListener implements EventSubscriberInterface
             @trigger_error(
                 'The ' . __METHOD__ . ' method now requires a RequestStack to be '
                 . 'given as second argument as ' . __CLASS__ . '::setRequest method '
-                . 'will not be supported anymore in 3.0.', E_USER_DEPRECATED
+                . 'will not be supported anymore in 3.0.',
+                E_USER_DEPRECATED
             );
         } elseif (!$requestStack instanceof RequestStack) {
             @trigger_error(
                 'The ' . __METHOD__ . ' method now requires a RequestStack instance as '
                 . __CLASS__ . '::setRequest method will not be supported anymore in 3.0.',
-                 E_USER_DEPRECATED
+                E_USER_DEPRECATED
             );
         }
 
@@ -218,7 +219,7 @@ class RouterListener implements EventSubscriberInterface
 
             // As we have replaced the standard symfony router we have to
             // identify requests manually into new relic agent
-            if (extension_loaded ('newrelic')) {
+            if (extension_loaded('newrelic')) {
                 newrelic_name_transaction($parameters['_route']);
             }
 
@@ -256,8 +257,9 @@ class RouterListener implements EventSubscriberInterface
         $request = $this->requestStack->getCurrentRequest();
 
         // Support for l10n urls;
+        // Match any combination of two letters unless 'ws'
         $existsLocale = preg_match(
-            "@^/(?<locale>(?![\/])[a-z]{2})\b(/)?@",
+            "@^/(?<locale>(?![\/])(?!ws)[a-z]{2})\b(/)?@",
             $request->getRequestUri(),
             $matches
         );
