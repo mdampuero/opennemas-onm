@@ -526,9 +526,10 @@ class Content implements \JsonSerializable
         }
 
         if (empty($data['slug'])
-            || empty(array_filter($data['slug'], function ($a) {
-                return !empty($a);
-            }))
+            || (is_array($data['slug'])
+                && empty(array_filter($data['slug'], function ($a) {
+                    return !empty($a);
+                })))
         ) {
             $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
         }
