@@ -9,13 +9,12 @@
  */
 namespace Tests\Libs\Smarty;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyUrlTest extends KernelTestCase
+class SmartyGetUrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the testing environment.
