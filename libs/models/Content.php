@@ -179,7 +179,7 @@ class Content implements \JsonSerializable
      * Map of metadata which contains information that doesn't fit on normal vars.
      * Stored in a separated table contentmeta. These values are not serialized.
      *
-     * @var string
+     * @var array
      */
     public $metas = [];
 
@@ -419,9 +419,11 @@ class Content implements \JsonSerializable
             $this->category = $this->pk_fk_content_category;
         }
 
-        if (isset($this->category_name)) {
+        if (empty($this->category_name)
+            && !empty($this->pk_fk_content_category)
+        ) {
             $this->category_name = ContentCategoryManager::get_instance()
-                ->getName($this->category);
+                ->getName($this->pk_fk_content_category);
         }
 
         $this->permalink = '';
@@ -524,9 +526,10 @@ class Content implements \JsonSerializable
         }
 
         if (empty($data['slug'])
-            || empty(array_filter($data['slug'], function ($a) {
-                return !empty($a);
-            }))
+            || (is_array($data['slug'])
+                && empty(array_filter($data['slug'], function ($a) {
+                    return !empty($a);
+                })))
         ) {
             $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
         }

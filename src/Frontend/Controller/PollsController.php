@@ -93,7 +93,8 @@ class PollsController extends Controller
             $polls = $this->get('entity_repository')->findBy(
                 $filter,
                 ['starttime' => 'DESC'],
-                2
+                2,
+                1
             );
 
             $otherPolls = $this->get('entity_repository')->findBy(
@@ -102,7 +103,8 @@ class PollsController extends Controller
                     'content_status'    => [[ 'value' => 1 ]],
                 ],
                 ['starttime' => 'DESC'],
-                5
+                5,
+                1
             );
 
             if (!empty($polls)) {
@@ -173,7 +175,8 @@ class PollsController extends Controller
                     'content_status'    => [[ 'value' => 1 ]],
                 ],
                 ['starttime' => 'DESC'],
-                5
+                5,
+                1
             );
 
             $this->view->assign([
