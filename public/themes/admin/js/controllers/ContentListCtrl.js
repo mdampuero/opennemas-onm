@@ -106,12 +106,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Updates the array of contents.
      *
-     * @param string route Route name.
+     * @param {String}  route The route name.
+     * @param {Boolean} reset Whether to reset the list.
      */
-    $scope.list = function(route) {
-
-      // Enable spinner
-      if ($scope.mode === 'grid') {
+    $scope.list = function(route, reset) {
+      if (!reset && $scope.mode === 'grid') {
         $scope.loadingMore = 1;
       } else {
         $scope.loading  = 1;
@@ -144,7 +143,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.extra = response.data.extra;
         }
 
-        if ($scope.mode === 'grid') {
+        if (reset || $scope.mode === 'grid') {
           $scope.contents = $scope.contents.concat(response.data.results);
         } else {
           $scope.contents = response.data.results;
@@ -849,6 +848,18 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         return;
       }
 
+      var changes = [];
+
+      // Get which values change ignoring page
+      for (var key in $scope.criteria) {
+        if (key !== 'page' && !angular.equals(nv[key], ov[key])) {
+          changes.push(key);
+        }
+      }
+
+      // Reset the list if search changes
+      var reset = changes.length > 0;
+
       // Change page when scrolling in grid mode
       if ($scope.tm) {
         $timeout.cancel($scope.tm);
@@ -859,7 +870,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }
 
       $scope.tm = $timeout(function() {
-        $scope.list($scope.route, true);
+        $scope.list($scope.route, reset);
       }, 500);
     }, true);
 
