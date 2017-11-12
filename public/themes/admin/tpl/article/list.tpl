@@ -190,7 +190,6 @@
                 </td>
                 <td>
                   <span uib-tooltip="{t}Last editor{/t}: [% (data.extra.users | filter: { id: content.fk_user_last_editor }: true).length == 0 ? (data.extra.users | filter: { id: content.fk_author }: true)[0].name : (data.extra.users | filter: { id: content.fk_user_last_editor }: true)[0].name %]">[% content.title %]</span>
-
                   <div class="small-text">
                     <strong>{t}Created{/t}: </strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
