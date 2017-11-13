@@ -214,6 +214,7 @@
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     {/acl}
+                    <span ng-if="content.params.bodyLink.length > 0" title="{t}Article has external link{/t}"><i class="fa fa-external-link-square"></i> <small>Has external link</small></span>
                   </div>
                 </td>
                 <td class="hidden-xs">

@@ -54,6 +54,7 @@ class NewsAgencyController extends Controller
         $imported = [];
         foreach ($ids as $value) {
             $resource = $repository->find($value['source'], $value['id']);
+
             $importer->configure($servers[$value['source']]);
 
             $criteria = [
