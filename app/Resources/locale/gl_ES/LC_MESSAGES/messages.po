@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 10:11+0000\n"
-"PO-Revision-Date: 2017-10-09 12:23+0200\n"
+"POT-Creation-Date: 2017-11-13 11:44+0000\n"
+"PO-Revision-Date: 2017-11-13 12:51+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -160,19 +160,6 @@ msgstr ""
 "Produciuse un erro ao subir o ficheiro. Por favor, contacte co administrador "
 "do sistema."
 
-msgid "Category created successfully."
-msgstr "Categoria creada correctamente."
-
-msgid "Unable to find a category for the given id."
-msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
-
-msgid "Category data sent not valid."
-msgstr "Os datos enviados da categoría non son válidos."
-
-#, php-format
-msgid "Category \"%s\" updated successfully."
-msgstr "Categoria «%s» actualizada correctamente."
-
 msgid "Category deleted successfully."
 msgstr "Categoria eliminada correctamente."
 
@@ -206,6 +193,30 @@ msgstr ""
 
 msgid "Settings saved."
 msgstr "Opcións gardadas."
+
+msgid "All contents"
+msgstr "Todos os contidos"
+
+msgid "Album"
+msgstr "Álbum"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Poll"
+msgstr "Enquisa"
+
+msgid "Kiosko"
+msgstr "Kiosko"
+
+msgid "Special"
+msgstr "Especial"
+
+msgid "Book"
+msgstr "Libro"
+
+msgid "Internal"
+msgstr "Interno"
 
 msgid "Accepted"
 msgstr "Aceptado"
@@ -473,15 +484,6 @@ msgstr "Artigo de opinión"
 
 msgid "Bloggers"
 msgstr "Autores de blog"
-
-msgid "Album"
-msgstr "Álbum"
-
-msgid "Video"
-msgstr "Video"
-
-msgid "Poll"
-msgstr "Enquisa"
 
 msgid "Letters to the Editor"
 msgstr "Cartas ao director"
@@ -1029,10 +1031,6 @@ msgstr "Non se puido crear o novo artigo."
 msgid "Article successfully created."
 msgstr "Artigo creado correctamente."
 
-#, php-format
-msgid "Unable to find the article with the id \"%d\""
-msgstr "Non se puido atopar o artigo co identificador «%d»"
-
 msgid "Unable to update the article."
 msgstr "Non se puido actualizar o artigo."
 
@@ -1045,6 +1043,16 @@ msgstr "Os datos enviados do artigo non son válidos."
 
 msgid "Article successfully updated."
 msgstr "Artigo actualizado correctamente."
+
+msgid "Category data send not valid."
+msgstr "Os datos enviados da categoría non son válidos."
+
+msgid "The title and slug are required."
+msgstr "O título e slug son obrigatorios."
+
+#, php-format
+msgid "Category data saved successfully."
+msgstr "Datos da categoría gardados correctamente."
 
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
@@ -2248,6 +2256,16 @@ msgstr "Anterior"
 msgid "Content already imported"
 msgstr "Contido xa importado"
 
+#, php-format
+msgid "Unable to find the article with the id \"%d\""
+msgstr "Non se puido atopar o artigo co identificador «%d»"
+
+msgid "Select a category..."
+msgstr "Seleccione unha categoría…"
+
+msgid "Select an author..."
+msgstr "Seleccione un autor…"
+
 msgid ""
 "The maximum height for the \"Site Logo\" is 120px. Please adjust your image "
 "size."
@@ -2585,9 +2603,6 @@ msgstr "Ficheiro"
 msgid "File not available"
 msgstr "Ficheiro non dispoñíbel"
 
-msgid "Book"
-msgstr "Libro"
-
 msgid "Not valid comment id."
 msgstr "Non é un id de comentario válido."
 
@@ -2630,17 +2645,11 @@ msgstr "Comentario"
 msgid "Image"
 msgstr "Imaxe"
 
-msgid "Special"
-msgstr "Especial"
-
 msgid "Widget"
 msgstr "Widget"
 
 msgid "Static page"
 msgstr "Páxina estática"
-
-msgid "Kiosko"
-msgstr "Kiosko"
 
 msgid "Agenda"
 msgstr "Axenda"
@@ -3442,6 +3451,18 @@ msgstr "Debes seleccionar algún elemento."
 msgid "Accept"
 msgstr "Aceptar"
 
+msgid "Translate content"
+msgstr "Traducir contido"
+
+msgid "Do you want to use an automatic translator?"
+msgstr "Desexas usar un tradutor automático?"
+
+msgid "Select a translator..."
+msgstr "Seleccionar un tradutor…"
+
+msgid "Yes"
+msgstr "Si"
+
 msgid "- Select a category -"
 msgstr "- Seleccione categoría -"
 
@@ -3948,9 +3969,6 @@ msgstr "Tamaño da imaxe"
 msgid "Exclusive"
 msgstr "Exclusivo"
 
-msgid "Yes"
-msgstr "Si"
-
 msgid "Delivery time"
 msgstr "Tempo de entrega"
 
@@ -4261,17 +4279,20 @@ msgstr "Rexeitar"
 msgid "Resume editing"
 msgstr "Continuar edición"
 
-msgid "Draft saved at "
-msgstr "Borrador gardado ás "
-
 msgid "Creating article"
 msgstr "Creando artigo"
 
 msgid "Editing article"
 msgstr "Editar artigo"
 
+msgid "Draft saved at "
+msgstr "Borrador gardado ás "
+
 msgid "Preview"
 msgstr "Previsualizar"
+
+msgid "Original"
+msgstr "Orixinal"
 
 msgid "Inner title"
 msgstr "Titulo interior:"
@@ -4309,6 +4330,18 @@ msgstr "Data de final de publicación"
 msgid "Only available for subscribers"
 msgstr "Só dispoñíbel para subscritores"
 
+msgid "Suggest this element to home"
+msgstr "Suxerir este elemento á portada"
+
+msgid "Suggest to home"
+msgstr "Suxerir a portada"
+
+msgid "Unsuggest this element to home"
+msgstr "Non suxerir este elemento á portada"
+
+msgid "Unsuggest to home"
+msgstr "Non suxerir a portada"
+
 msgid "Related contents"
 msgstr "Contidos relacionados"
 
@@ -4339,18 +4372,6 @@ msgstr "Galería para interior"
 msgid "Gallery for Home"
 msgstr "Galería para portada principal"
 
-msgid "Suggest this element to home"
-msgstr "Suxerir este elemento á portada"
-
-msgid "Suggest to home"
-msgstr "Suxerir a portada"
-
-msgid "Unsuggest this element to home"
-msgstr "Non suxerir este elemento á portada"
-
-msgid "Unsuggest to home"
-msgstr "Non suxerir a portada"
-
 msgid "Customize"
 msgstr "Personalizar"
 
@@ -4360,8 +4381,14 @@ msgstr "Preferencias para a portada"
 msgid "Text size for title"
 msgstr "Tamaño do texto para o titulo"
 
+msgid "Select a size..."
+msgstr "Seleccione un tamaño…"
+
 msgid "Image position"
 msgstr "Posición da imaxe"
+
+msgid "Select a position..."
+msgstr "Seleccione unha posición…"
 
 msgid "Settings home frontpage"
 msgstr "Preferencias para a portada principal"
@@ -4419,6 +4446,9 @@ msgstr "Dispoñíbel desde"
 
 msgid "to"
 msgstr "até"
+
+msgid "Article has external link"
+msgstr "Artigo con ligazon externa"
 
 msgid "Unasigned"
 msgstr "Sen asignar"
@@ -4605,15 +4635,6 @@ msgstr "Mostrar en RSS"
 msgid "Category available for"
 msgstr "Categoria dispoñíbel para"
 
-msgid "All contents"
-msgstr "Todos os contidos"
-
-msgid "ePaper"
-msgstr "ePapel"
-
-msgid "Internal"
-msgstr "Interno"
-
 msgid "Category logo"
 msgstr "Logo da categoría"
 
@@ -4625,9 +4646,6 @@ msgstr "Cambiar"
 
 msgid "Empty"
 msgstr "Baleiro"
-
-msgid "Delete all the contents in this category"
-msgstr "Eliminar todos os contidos nesta categoría"
 
 msgid "For articles"
 msgstr "Para artigos"
@@ -5135,9 +5153,6 @@ msgstr "Restaurar"
 
 msgid "Content Type"
 msgstr "Tipo de contido"
-
-msgid "-- All --"
-msgstr "-- Todos --"
 
 msgid "Letters"
 msgstr "Cartas"
@@ -5870,6 +5885,9 @@ msgstr ""
 "Activa esta opción se queres importar o autor dos elementos, se está "
 "dispoñible"
 
+msgid "When importing assign an external link to the elements"
+msgstr "Ao importar asignar unha ligazón externa aos elementos"
+
 msgid "Link to source"
 msgstr "Enlazar a orixe"
 
@@ -6487,6 +6505,9 @@ msgstr "Sincronizar categoría"
 msgid "Synched blog category"
 msgstr "Categoria sincronizada blog"
 
+msgid "Original:"
+msgstr "Orixinal:"
+
 msgid "Unable to find any menu that matches your search."
 msgstr "Non se puideron atopar menús que coincidan coa súa busca."
 
@@ -6860,8 +6881,8 @@ msgid ""
 "URLs will look like http://newspaper.opennemas.com/[% settings.locale."
 "frontend.language.slug[item.code] %]/<slug>"
 msgstr ""
-"Os URLs semellaranse a http://xornal.opennemas.com/[% "
-"settings.locale.frontend.language.slug[item.code] %]/<slug>"
+"Os URLs semellaranse a http://xornal.opennemas.com/[% settings.locale."
+"frontend.language.slug[item.code] %]/<slug>"
 
 msgid "Locale needs 2 characters"
 msgstr "O locale precisa 2 caracteres"
@@ -7707,6 +7728,18 @@ msgstr "Como podo cambiar o dominio «opennemas.com» no meu xornal?"
 
 msgid "Redirect your own domain"
 msgstr "Redirixe o teu dominio"
+
+msgid ""
+"You have <strong><a href=\"https://en.wikipedia.org/wiki/HTTPS\" class="
+"\"text-white\" title=\"What is SSL encryption?\" target=\"_blank\">SSL "
+"encription enabled</a></strong> for your main domain."
+msgstr ""
+"O seu dominio principal conta con <strong><a href=\""
+"https://en.wikipedia.org/wiki/HTTPS\" class=\"text-white\" title=\"What is "
+"SSL encryption?\" target=\"_blank\">cifrado SSL activado</a></strong>."
+
+msgid "Congrats, your newspaper is secure!"
+msgstr "Paravéns, o seu xornal é seguro!"
 
 msgid "Your domains"
 msgstr "Os teus dominios"
@@ -8672,9 +8705,6 @@ msgstr "Dominio"
 msgid "Theme addon"
 msgstr "Engadido de tema"
 
-msgid "Select a category..."
-msgstr "Seleccione unha categoría…"
-
 msgid "Pack"
 msgstr "Pack"
 
@@ -8862,6 +8892,24 @@ msgstr ""
 "opennemas.com/\" style=\"font-family: 'trebuchet ms', 'lucida grande', "
 "'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; "
 "line-height: normal;\" target=\"_blank\">Opennemas</a>"
+
+#~ msgid "Category created successfully."
+#~ msgstr "Categoria creada correctamente."
+
+#~ msgid "Unable to find a category for the given id."
+#~ msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
+
+#~ msgid "Category \"%s\" updated successfully."
+#~ msgstr "Categoria «%s» actualizada correctamente."
+
+#~ msgid "ePaper"
+#~ msgstr "ePapel"
+
+#~ msgid "Delete all the contents in this category"
+#~ msgstr "Eliminar todos os contidos nesta categoría"
+
+#~ msgid "-- All --"
+#~ msgstr "-- Todos --"
 
 #~ msgid "Album Categories"
 #~ msgstr "Categorias de álbum"
