@@ -51,6 +51,7 @@ class ServerFactory
             try {
                 return new $class($params, $this->tpl);
             } catch (\Exception $e) {
+                continue;
             }
         }
 
