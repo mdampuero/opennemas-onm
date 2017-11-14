@@ -126,9 +126,7 @@ class EntityManager extends BaseManager
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
         $sql = 'SELECT content_type_name, pk_content'
-            . ' FROM contents'
-            . ' LEFT JOIN contents_categories'
-            . ' ON pk_content = pk_fk_content ';
+            . ' FROM contents ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
@@ -136,7 +134,16 @@ class EntityManager extends BaseManager
             $sql .= $this->getJoinSQL($join);
         }
 
-        $sql .= " WHERE " . $this->getFilterSQL($criteria);
+        $criteriaAux = $this->getFilterSQL($criteria);
+
+        $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
+
+        if ($haveContentCategory) {
+            $sql .= 'LEFT JOIN contents_categories'
+            . ' ON pk_content = pk_fk_content ';
+        }
+
+        $sql .= " WHERE " . $criteriaAux;
 
         $orderBySQL = '`pk_content` ASC';
         if (!empty($order)) {
@@ -145,7 +152,10 @@ class EntityManager extends BaseManager
 
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
-        $sql .= " GROUP BY `pk_content` ORDER BY $orderBySQL $limitSQL";
+        if ($haveContentCategory) {
+            $sql .= " GROUP BY `pk_content`";
+        }
+        $sql .= " ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
