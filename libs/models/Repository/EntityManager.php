@@ -187,14 +187,21 @@ class EntityManager extends BaseManager
         }
 
         $sql = 'SELECT COUNT(DISTINCT content_type_name, pk_content)'
-            . ' FROM ' . $fromSQL
-            . ' LEFT JOIN contents_categories'
-            . ' ON pk_content = pk_fk_content';
+            . ' FROM ' . $fromSQL;
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
             unset($criteria['join']);
             $sql .= $this->getJoinSQL($join);
+        }
+
+        $criteriaAux = $this->getFilterSQL($criteria);
+
+        $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
+
+        if ($haveContentCategory) {
+            $sql .= ' LEFT JOIN contents_categories'
+            . ' ON pk_content = pk_fk_content ';
         }
 
         $sql .= " WHERE " . $this->getFilterSQL($criteria);
