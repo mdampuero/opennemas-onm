@@ -14,12 +14,13 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Handles the actions for advertisements
@@ -29,9 +30,11 @@ use Onm\Settings as s;
 class OpinionsController extends Controller
 {
     /**
-     * Renders the opinion frontpage
+     * Renders the opinion frontpage.
      *
-     * @return Response the response object
+     * @return Response The response object.
+     *
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function frontpageAction()
     {
@@ -219,6 +222,8 @@ class OpinionsController extends Controller
      * Renders the opinion frontpage
      *
      * @return Response the response object
+     *
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function extFrontpageAction()
     {
@@ -335,6 +340,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function frontpageAuthorAction(Request $request)
     {
@@ -472,6 +479,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function extFrontpageAuthorAction(Request $request)
     {
@@ -609,6 +618,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function showAction(Request $request)
     {
@@ -735,6 +746,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function extShowAction(Request $request)
     {
