@@ -25,16 +25,17 @@
       /**
        * Updates the array of contents.
        *
-       * @param string route Route name.
+       * @param {String}  route The route name.
+       * @param {Boolean} reset Whether to reset the list.
        */
-      $scope.list = function(route) {
-        if ($scope.mode === 'grid') {
+      $scope.list = function(route, reset) {
+        if (!reset && $scope.mode === 'grid') {
           $scope.loadingMore = 1;
         } else {
-          $scope.loading = 1;
+          $scope.loading  = 1;
+          $scope.contents = [];
+          $scope.selected = { all: false, contents: [] };
         }
-
-        $scope.selected = { all: false, contents: [] };
 
         oqlEncoder.configure({
           placeholder: {
@@ -62,7 +63,7 @@
             $scope.extra = response.data.extra;
           }
 
-          if ($scope.mode === 'grid') {
+          if (!reset && $scope.mode === 'grid') {
             $scope.contents = $scope.contents.concat(response.data.results);
           } else {
             $scope.contents = response.data.results;
