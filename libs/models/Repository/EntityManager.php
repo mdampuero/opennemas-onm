@@ -269,16 +269,25 @@ class EntityManager extends BaseManager
     public function removeContentTypeNameFromCriteria(&$criterias)
     {
         $criteriasList = preg_split("/and/i", $criterias);
-        foreach ($criteriasList as &$criteria) {
-            if (strpos($criteria, 'content_type_name') !== false &&
-                ($aux = stristr($criteria, '=')) !== false
-            ) {
-                if (\ContentManager::getContentTypeIdFromName(preg_replace("/[^A-Za-z]/", '', $aux))) {
-                    $criteria = 'fk_content_type = ' . $aux;
-                    break;
-                }
+
+        preg_match_all(
+            "/content_type_name\s*=\s*'{1}([A-Za-z0-9 ]*)'{1}|content_type_name\s*=\s*\"{1}([A-Za-z0-9 ]*)\"{1}/",
+            $criterias,
+            $result
+        );
+        $count = 0;
+        foreach ($result[0] as $value) {
+            $value = $result[1][$count];
+
+            if (!empty($result[2][$count])) {
+                $value = $result[2][$count];
             }
+
+            $contentTypeName = \ContentManager::getContentTypeIdFromName($value);
+            if ($contentTypeName !== false) {
+                $criterias = str_replace($result[0][$count], 'fk_content_type="' . $contentTypeName . '"', $criterias);
+            }
+            $count++;
         }
-        $criteria = implode(" AND ", $criteriasList);
     }
 }
