@@ -143,6 +143,10 @@ class EntityManager extends BaseManager
             . ' ON pk_content = pk_fk_content ';
         }
 
+        if (strpos($criteriaAux, 'content_type_name') !== false) {
+            $this->removeContentTypeNameFromCriteria($criteriaAux);
+        }
+
         $sql .= " WHERE " . $criteriaAux;
 
         $orderBySQL = '`pk_content` ASC';
@@ -196,6 +200,10 @@ class EntityManager extends BaseManager
         }
 
         $criteriaAux = $this->getFilterSQL($criteria);
+
+        if (strpos($criteriaAux, 'content_type_name') !== false) {
+            $this->removeContentTypeNameFromCriteria($criteriaAux);
+        }
 
         $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
 
@@ -251,5 +259,33 @@ class EntityManager extends BaseManager
         }
 
         return $contentMap;
+    }
+
+    /**
+     *  Replace criterias with content_type_name for fk_content_type
+     *
+     *   @param String $criterias The criteria used to search.
+     */
+    public function removeContentTypeNameFromCriteria(&$criterias)
+    {
+        preg_match_all(
+            "/content_type_name\s*=\s*'{1}([A-Za-z0-9 ]*)'{1}|content_type_name\s*=\s*\"{1}([A-Za-z0-9 ]*)\"{1}/",
+            $criterias,
+            $result
+        );
+        $count = 0;
+
+        for ($count = 0; $count < count($result[0]); $count++) {
+            $value = $result[1][$count];
+
+            if (empty($value)) {
+                $value = $result[2][$count];
+            }
+
+            $contentTypeName = \ContentManager::getContentTypeIdFromName($value);
+            if ($contentTypeName !== false) {
+                $criterias = str_replace($result[0][$count], 'fk_content_type=' . $contentTypeName . ' ', $criterias);
+            }
+        }
     }
 }
