@@ -276,18 +276,18 @@ class EntityManager extends BaseManager
             $result
         );
         $count = 0;
-        foreach ($result[0] as $value) {
+
+        for ($count = 0; $count < count($result[0]); $count++) {
             $value = $result[1][$count];
 
-            if (!empty($result[2][$count])) {
+            if (empty($value)) {
                 $value = $result[2][$count];
             }
 
             $contentTypeName = \ContentManager::getContentTypeIdFromName($value);
             if ($contentTypeName !== false) {
-                $criterias = str_replace($result[0][$count], 'fk_content_type="' . $contentTypeName . '"', $criterias);
+                $criterias = str_replace($result[0][$count], 'fk_content_type=' . $contentTypeName . ' ', $criterias);
             }
-            $count++;
         }
     }
 }
