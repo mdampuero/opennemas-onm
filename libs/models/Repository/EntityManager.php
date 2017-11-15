@@ -268,8 +268,6 @@ class EntityManager extends BaseManager
      */
     public function removeContentTypeNameFromCriteria(&$criterias)
     {
-        $criteriasList = preg_split("/and/i", $criterias);
-
         preg_match_all(
             "/content_type_name\s*=\s*'{1}([A-Za-z0-9 ]*)'{1}|content_type_name\s*=\s*\"{1}([A-Za-z0-9 ]*)\"{1}/",
             $criterias,
