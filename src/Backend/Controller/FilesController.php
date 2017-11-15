@@ -324,7 +324,7 @@ class FilesController extends Controller
         try {
             $uploadedFile->move($basePath, $fileName);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $this->get('error.log')->error($e->getMessage());
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('There was an error while uploading the file.')

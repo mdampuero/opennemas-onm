@@ -398,11 +398,11 @@ class AdsController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        $filters = array(
+        $filters = [
             'type_advertisement' => [[ 'value' => 37 ]],
             'content_type_name'  => [[ 'value' => 'advertisement' ]],
             'in_litter'          => [[ 'value' => 1, 'operator' => '!=' ]]
-        );
+        ];
 
         $em  = $this->get('advertisement_repository');
         $ads = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
@@ -423,10 +423,10 @@ class AdsController extends Controller
 
         return $this->render(
             'advertisement/content-provider.tpl',
-            array(
+            [
                 'ads'        => $ads,
                 'pagination' => $pagination,
-            )
+            ]
         );
     }
 
