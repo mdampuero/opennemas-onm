@@ -143,6 +143,10 @@ class EntityManager extends BaseManager
             . ' ON pk_content = pk_fk_content ';
         }
 
+        if (strpos($criteriaAux, 'content_type_name') !== false) {
+            $this->removeContentTypeNameFromCriteria($criteriaAux);
+        }
+
         $sql .= " WHERE " . $criteriaAux;
 
         $orderBySQL = '`pk_content` ASC';
@@ -196,6 +200,10 @@ class EntityManager extends BaseManager
         }
 
         $criteriaAux = $this->getFilterSQL($criteria);
+
+        if (strpos($criteriaAux, 'content_type_name') !== false) {
+            $this->removeContentTypeNameFromCriteria($criteriaAux);
+        }
 
         $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
 
@@ -251,5 +259,26 @@ class EntityManager extends BaseManager
         }
 
         return $contentMap;
+    }
+
+    /**
+     *  Replace criterias with content_type_name for fk_content_type
+     *
+     *   @param String $criterias The criteria used to search.
+     */
+    public function removeContentTypeNameFromCriteria(&$criterias)
+    {
+        $criteriasList = preg_split("/and/i", $criterias);
+        foreach ($criteriasList as &$criteria) {
+            if (strpos($criteria, 'content_type_name') !== false &&
+                ($aux = stristr($criteria, '=')) !== false
+            ) {
+                if (\ContentManager::getContentTypeIdFromName(preg_replace("/[^A-Za-z]/", '', $aux))) {
+                    $criteria = 'fk_content_type = ' . $aux;
+                    break;
+                }
+            }
+        }
+        $criteria = implode(" AND ", $criteriasList);
     }
 }
