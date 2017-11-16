@@ -103,17 +103,18 @@ class CommentManager extends BaseManager
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null, &$count = null)
     {
         // Building the SQL filter
-        $filterSQL = $this->getFilterSQL($criteria);
-
+        $filterSQL  = $this->getFilterSQL($criteria);
         $orderBySQL = '`id` DESC';
+
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
+
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') .
-            " id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '')
+            . " id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
         $rs  = $this->dbConn->fetchAll($sql);
 
         if ($count) {
@@ -125,9 +126,7 @@ class CommentManager extends BaseManager
             $ids[] = $resultElement['id'];
         }
 
-        $comments = $this->findMulti($ids);
-
-        return $comments;
+        return $this->findMulti($ids);
     }
 
     /**
@@ -146,9 +145,9 @@ class CommentManager extends BaseManager
             $keys[] = $value;
         }
 
-        $comments = array_values($this->cache->fetch($ids));
-
+        $comments  = array_values($this->cache->fetch($ids));
         $cachedIds = [];
+
         foreach ($comments as $comment) {
             $cachedIds[] = 'comment' . $this->cacheSeparator . $comment->id;
         }
@@ -157,12 +156,14 @@ class CommentManager extends BaseManager
 
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
-            $comment                       = $this->find($contentId);
+
+            $comment = $this->find($contentId);
 
             if ($comment->id) {
                 $comments[] = $comment;
             }
         }
+
         // Unused var $contentType
         unset($contentType);
 
@@ -226,7 +227,7 @@ class CommentManager extends BaseManager
         ];
 
         $filterSQL = $this->getFilterSQL($criteria);
-        // Executing the SQL
+
         try {
             $sql = "SELECT id FROM `comments` LEFT JOIN `votes` ON `comments`.`id`=`votes`.`pk_vote` " .
                 "WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
@@ -240,9 +241,7 @@ class CommentManager extends BaseManager
             $ids[] = $resultElement['id'];
         }
 
-        $comments = $this->findMulti($ids);
-
-        return $comments;
+        return $this->findMulti($ids);
     }
 
     /**
@@ -257,6 +256,7 @@ class CommentManager extends BaseManager
         if (empty($contentID)) {
             return false;
         }
+
         return $this->countBy(
             [
                 'content_id' => [['value' => $contentID]],
@@ -287,6 +287,7 @@ class CommentManager extends BaseManager
         if ($rs === false) {
             return [0, []];
         }
+
         $countComments = intval($rs);
 
         // Retrieve the comments and their votes
@@ -346,14 +347,11 @@ class CommentManager extends BaseManager
     public function deleteFromFilter($filter)
     {
         try {
-            $rs = $this->dbConn->delete(
-                'comments',
-                $filter
-            );
+            $this->dbConn->delete('comments', $filter);
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error while deleting comments from filter:'.$e->getMessage());
+            error_log('Error while deleting comments from filter:' . $e->getMessage());
         }
     }
 }

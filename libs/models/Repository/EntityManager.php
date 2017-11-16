@@ -266,11 +266,30 @@ class EntityManager extends BaseManager
     }
 
     /**
+     *  Retrieve from database the number of queryes from the request before.
+     *
+     *  @return integer The number of found contents.
+     */
+    protected function getSqlCount()
+    {
+        $rs = $this->dbConn->fetchAll('SELECT FOUND_ROWS() as count');
+
+        if (is_array($rs)
+            && array_key_exists(0, $rs)
+            && array_key_exists('count', $rs[0])
+        ) {
+            return $rs[0]['count'];
+        }
+
+        return 0;
+    }
+
+    /**
      *  Replace criterias with content_type_name for fk_content_type
      *
      *   @param String $criterias The criteria used to search.
      */
-    public function removeContentTypeNameFromCriteria(&$criterias)
+    protected function removeContentTypeNameFromCriteria(&$criterias)
     {
         preg_match_all(
             "/content_type_name\s*=\s*'{1}([A-Za-z0-9 ]*)'{1}|content_type_name\s*=\s*\"{1}([A-Za-z0-9 ]*)\"{1}/",
@@ -291,20 +310,5 @@ class EntityManager extends BaseManager
                 $criterias = str_replace($result[0][$count], 'fk_content_type=' . $contentTypeName . ' ', $criterias);
             }
         }
-    }
-
-    /**
-     *  Retrieve from database the number of queryes from the request before
-     *
-     *  @return integer The number of found contents.
-     */
-    protected function getSqlCount()
-    {
-        $aux   = $this->dbConn->fetchAll('SELECT FOUND_ROWS() as count');
-        $count = 0;
-        if (is_array($aux) && array_key_exists(0, $aux) && array_key_exists('count', $aux[0])) {
-            $count = $aux[0]['count'];
-        }
-        return $count;
     }
 }
