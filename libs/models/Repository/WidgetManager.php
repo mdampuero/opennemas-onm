@@ -42,7 +42,7 @@ class WidgetManager extends EntityManager
      * @param  integer      $offset          The offset to start with.
      * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);

@@ -120,12 +120,13 @@ class EntityManager extends BaseManager
      * @param integer $elementsPerPage The max number of elements.
      * @param integer $page            The current page.
      * @param integer $offset          The offset to start with.
+     * @param integer $count           Number of results for the query
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
     {
-        $sql = 'SELECT content_type_name, pk_content'
+        $sql = 'SELECT ' . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') . 'content_type_name, pk_content'
             . ' FROM contents ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
@@ -162,6 +163,13 @@ class EntityManager extends BaseManager
         $sql .= " ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
+        if ($count) {
+            $aux   = $this->dbConn->fetchAll('SELECT FOUND_ROWS() as count');
+            $count = 0;
+            if (is_array($aux) && array_key_exists(0, $aux) && array_key_exists('count', $aux[0])) {
+                $count = $aux[0]['count'];
+            }
+        }
 
         $ids = [];
         foreach ($rs as $item) {

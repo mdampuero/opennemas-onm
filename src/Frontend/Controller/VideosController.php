@@ -262,8 +262,8 @@ class VideosController extends Controller
             }
 
             $er          = $this->get('entity_repository');
-            $videos      = $er->findBy($filters, $order, $itemsPerPage, $this->page);
-            $countVideos = $er->countBy($filters);
+            $countVideos = true;
+            $videos      = $er->findBy($filters, $order, $itemsPerPage, $this->page, 0, $countVideos);
 
             $pager = $this->get('paginator')->get([
                 'boundary'    => false,
@@ -483,8 +483,8 @@ class VideosController extends Controller
 
         $em = $this->get('entity_repository');
 
-        $othersVideos = $em->findBy($filters, $order, $epp, $this->page, $offset);
-        $countVideos  = $em->countBy($filters);
+        $countVideos  = true;
+        $othersVideos = $em->findBy($filters, $order, $epp, $this->page, $offset, 0, $countVideos);
 
         if ($countVideos == 0) {
             return new RedirectResponse(

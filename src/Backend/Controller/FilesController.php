@@ -499,8 +499,8 @@ class FilesController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $files      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countFiles = $em->countBy($filters);
+        $countFiles = true;
+        $files      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countFiles);
 
         $pagination = $this->get('paginator')->get([
             'epp'   => $itemsPerPage,

@@ -404,10 +404,9 @@ class AdsController extends Controller
             'in_litter'          => [[ 'value' => 1, 'operator' => '!=' ]]
         ];
 
-        $em  = $this->get('advertisement_repository');
-        $ads = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-
-        $countAds = $em->countBy($filters);
+        $em       = $this->get('advertisement_repository');
+        $countAds = true;
+        $ads      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countAds);
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,

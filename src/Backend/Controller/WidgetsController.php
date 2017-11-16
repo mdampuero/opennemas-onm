@@ -245,8 +245,8 @@ class WidgetsController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $widgets      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countWidgets = $em->countBy($filters);
+        $countWidgets = true;
+        $widgets      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countWidgets);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([
