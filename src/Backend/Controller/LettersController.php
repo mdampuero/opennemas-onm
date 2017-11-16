@@ -204,8 +204,8 @@ class LettersController extends Controller
             'pk_content'        => [ ['value' => $ids, 'operator' => 'NOT IN'] ]
         ];
 
-        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countLetters = $em->countBy($filters);
+        $countLetters = true;
+        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countLetters);
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
@@ -254,8 +254,8 @@ class LettersController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countLetters = $em->countBy($filters);
+        $countLetters = true;
+        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countLetters);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([

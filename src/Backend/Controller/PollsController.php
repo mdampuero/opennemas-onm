@@ -332,8 +332,8 @@ class PollsController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countPolls = $em->countBy($filters);
+        $countPolls = true;
+        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countPolls);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([
@@ -380,8 +380,8 @@ class PollsController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countPolls = $em->countBy($filters);
+        $countPolls = true;
+        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countPolls);
 
         $pagination = $this->get('paginator')->get([
             'epp'   => $itemsPerPage,

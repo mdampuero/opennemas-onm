@@ -97,10 +97,10 @@ class VideosController extends Controller
 
         return $this->render(
             'video/list.tpl',
-            array(
+            [
                 'total_elements_widget' => $numFavorites,
                 'category'              => 'widget',
-            )
+            ]
         );
     }
 
@@ -121,18 +121,18 @@ class VideosController extends Controller
                 return $this->render('video/selecttype.tpl');
             } else {
                 $authorsComplete = \User::getAllUsersAuthors();
-                $authors         = array('0' => _(' - Select one author - '));
+                $authors         = ['0' => _(' - Select one author - ')];
                 foreach ($authorsComplete as $author) {
                     $authors[$author->id] = $author->name;
                 }
 
                 return $this->render(
                     'video/new.tpl',
-                    array(
+                    [
                         'type'           => $type,
                         'authors'        => $authors,
                         'commentsConfig' => s::get('comments_config'),
-                    )
+                    ]
                 );
             }
         }
@@ -175,7 +175,7 @@ class VideosController extends Controller
                 _('There was an error while uploading the form, not all the required data was sent.')
             );
 
-            return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+            return $this->redirect($this->generateUrl('admin_videos_create', ['type' => $type]));
         }
 
         try {
@@ -188,7 +188,7 @@ class VideosController extends Controller
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
-            return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+            return $this->redirect($this->generateUrl('admin_videos_create', ['type' => $type]));
         }
     }
 
@@ -264,7 +264,7 @@ class VideosController extends Controller
         return $this->redirect(
             $this->generateUrl(
                 'admin_video_show',
-                array('id' => $video->id)
+                ['id' => $video->id]
             )
         );
     }
@@ -306,10 +306,10 @@ class VideosController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_videos',
-                    array(
+                    [
                         'category' => $video->category,
                         'page' => $page
-                    )
+                    ]
                 )
             );
         } else {
@@ -365,19 +365,19 @@ class VideosController extends Controller
         }
 
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = array('0' => _(' - Select one author - '));
+        $authors         = ['0' => _(' - Select one author - ')];
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
 
         return $this->render(
             'video/new.tpl',
-            array(
+            [
                 'information'    => $video->information,
                 'video'          => $video,
                 'authors'        => $authors,
                 'commentsConfig' => s::get('comments_config'),
-            )
+            ]
         );
     }
 
@@ -403,7 +403,7 @@ class VideosController extends Controller
 
                 $output = $this->renderView(
                     'video/partials/_video_information.tpl',
-                    array('information' => $information,)
+                    ['information' => $information]
                 );
             } catch (\Exception $e) {
                 $output = _("Can't get video information. Check the url");
@@ -438,15 +438,15 @@ class VideosController extends Controller
 
             return $this->redirect($this->generateUrl('admin_videos_config'));
         } else {
-            $configurationsKeys = array(
+            $configurationsKeys = [
                 'video_settings',
-            );
+            ];
 
             $configurations = s::get($configurationsKeys);
 
             return $this->render(
                 'video/config.tpl',
-                array('configs' => $configurations,)
+                ['configs' => $configurations]
             );
         }
     }
@@ -513,14 +513,14 @@ class VideosController extends Controller
         $em  = $this->get('entity_repository');
         $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory((int) $categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'video')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
-        );
+        $filters = [
+            'content_type_name' => [['value' => 'video']],
+            'content_status'    => [['value' => 1]],
+            'in_litter'         => [['value' => 1, 'operator' => '!=']],
+            'pk_content'        => [['value' => $ids, 'operator' => 'NOT IN']]
+        ];
 
-        $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $videos      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
         $countVideos = $em->countBy($filters);
 
         // Build the pagination
@@ -538,10 +538,10 @@ class VideosController extends Controller
 
         return $this->render(
             'video/content-provider.tpl',
-            array(
+            [
                 'videos'     => $videos,
                 'pagination' => $pagination,
-            )
+            ]
         );
     }
 
@@ -562,16 +562,16 @@ class VideosController extends Controller
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
-        $filters = array(
-            'content_type_name' => array(array('value' => 'video')),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
+        $filters = [
+            'content_type_name' => [['value' => 'video']],
+            'in_litter'         => [['value' => 1, 'operator' => '!=']]
+        ];
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [['value' => $category->name]];
         }
 
-        $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $videos      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
         $countVideos = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->get([
@@ -586,14 +586,14 @@ class VideosController extends Controller
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
-            array(
+            [
                 'contentType'           => 'Video',
                 'contents'              => $videos,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $this->category,
                 'pagination'            => $pagination,
                 'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
-            )
+            ]
         );
     }
 }

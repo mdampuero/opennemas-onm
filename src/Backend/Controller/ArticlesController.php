@@ -105,8 +105,8 @@ class ArticlesController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countArticles = $em->countBy($filters);
+        $countArticles = true;
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countArticles);
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
@@ -155,8 +155,8 @@ class ArticlesController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
-        $countArticles = $em->countBy($filters);
+        $countArticles = true;
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -207,8 +207,8 @@ class ArticlesController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
-        $countArticles = $em->countBy($filters);
+        $countArticles = true;
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -257,8 +257,8 @@ class ArticlesController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countArticles = $em->countBy($filters);
+        $countArticles = true;
+        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countArticles);
 
         $this->get('core.locale')->setContext('frontend');
 

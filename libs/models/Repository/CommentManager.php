@@ -49,7 +49,7 @@ class CommentManager extends BaseManager
     public function countBy($criteria)
     {
         // Building the SQL filter
-        $whereSQL  = $this->getFilterSQL($criteria);
+        $whereSQL = $this->getFilterSQL($criteria);
 
         // Executing the SQL
         $sql = "SELECT COUNT(id) FROM `comments` WHERE $whereSQL";
@@ -100,29 +100,33 @@ class CommentManager extends BaseManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null, &$count = null)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
+        $orderBySQL = '`id` DESC';
 
-        $orderBySQL  = '`id` DESC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
+
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
-        $rs = $this->dbConn->fetchAll($sql);
+        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '')
+            . " id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $rs  = $this->dbConn->fetchAll($sql);
 
-        $ids = array();
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
+
+        $ids = [];
         foreach ($rs as $resultElement) {
             $ids[] = $resultElement['id'];
         }
 
-        $comments = $this->findMulti($ids);
-
-        return $comments;
+        return $this->findMulti($ids);
     }
 
     /**
@@ -134,17 +138,16 @@ class CommentManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-
-        $ids  = array();
-        $keys = array();
+        $ids  = [];
+        $keys = [];
         foreach ($data as $value) {
-            $ids[] = 'comment' . $this->cacheSeparator . $value;
+            $ids[]  = 'comment' . $this->cacheSeparator . $value;
             $keys[] = $value;
         }
 
-        $comments = array_values($this->cache->fetch($ids));
+        $comments  = array_values($this->cache->fetch($ids));
+        $cachedIds = [];
 
-        $cachedIds = array();
         foreach ($comments as $comment) {
             $cachedIds[] = 'comment' . $this->cacheSeparator . $comment->id;
         }
@@ -153,16 +156,18 @@ class CommentManager extends BaseManager
 
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
+
             $comment = $this->find($contentId);
 
             if ($comment->id) {
                 $comments[] = $comment;
             }
         }
+
         // Unused var $contentType
         unset($contentType);
 
-        $ordered = array();
+        $ordered = [];
         foreach ($keys as $id) {
             $i = 0;
             while ($i < count($comments) && $comments[$i]->id != $id) {
@@ -189,10 +194,10 @@ class CommentManager extends BaseManager
     public function getCommentsforContentId($contentID, $elemsByPage = null, $page = null)
     {
         return $this->findBy(
-            array(
-                'content_id' => array(array('value' => $contentID)),
-                'status' => array(array('value' => \Comment::STATUS_ACCEPTED))
-            ),
+            [
+                'content_id' => [['value' => $contentID]],
+                'status' => [['value' => \Comment::STATUS_ACCEPTED]]
+            ],
             null,
             $elemsByPage,
             $page
@@ -209,7 +214,7 @@ class CommentManager extends BaseManager
      */
     public function getMostVotedCommentsforContentID($contentId, $limit = 1)
     {
-        $orderBySQL  = '`value_pos` DESC';
+        $orderBySQL = '`value_pos` DESC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
@@ -221,23 +226,22 @@ class CommentManager extends BaseManager
             'value_pos'  => [[ 'value' => 0, 'operator' => '>' ]],
         ];
 
-        $filterSQL  = $this->getFilterSQL($criteria);
-        // Executing the SQL
+        $filterSQL = $this->getFilterSQL($criteria);
+
         try {
-            $sql = "SELECT id FROM `comments` LEFT JOIN `votes` ON `comments`.`id`=`votes`.`pk_vote` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+            $sql = "SELECT id FROM `comments` LEFT JOIN `votes` ON `comments`.`id`=`votes`.`pk_vote` " .
+                "WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
             $rs  = $this->dbConn->fetchAll($sql);
         } catch (\Exception $e) {
             return [];
         }
 
-        $ids = array();
+        $ids = [];
         foreach ($rs as $resultElement) {
             $ids[] = $resultElement['id'];
         }
 
-        $comments = $this->findMulti($ids);
-
-        return $comments;
+        return $this->findMulti($ids);
     }
 
     /**
@@ -252,47 +256,13 @@ class CommentManager extends BaseManager
         if (empty($contentID)) {
             return false;
         }
+
         return $this->countBy(
-            array(
-                'content_id' => array(array('value' => $contentID)),
-                'status' => array(array('value' => \Comment::STATUS_ACCEPTED))
-            )
+            [
+                'content_id' => [['value' => $contentID]],
+                'status' => [['value' => \Comment::STATUS_ACCEPTED]]
+            ]
         );
-    }
-
-    /**
-     * Returns the total amount of comments for a contentId and a slice from the
-     * list of all those comments, starting from the offset and displaying only
-     * some elements for this slice
-     *
-     * @param integer $contentId   The content id where fetch comments from.
-     * @param integer $elemsByPage The amount of comments to get.
-     * @param integer $offset      The starting page to start to display
-     *                             elements.
-     *
-     * @return array  The total amount of comments, and a list of comments.
-     */
-    public static function getPublicCommentsAndTotalCount($contentId, $elemsByPage, $offset)
-    {
-        // Get the total number of comments
-        $sql = 'SELECT count(id) FROM comments WHERE content_id = ? AND content_status=?';
-        $rs = $this->dbConn->GetOne($sql, array($contentId, \Comment::STATUS_ACCEPTED));
-
-        // If there is no comments do a early return
-        if ($rs === false) {
-            return array(0, array());
-        }
-        $countComments = intval($rs);
-
-        // Retrieve the comments and their votes
-        $comments = self::get_public_comments($contentId, $elemsByPage, $offset);
-
-        foreach ($comments as &$comment) {
-            $vote = new \Vote($comment->id);
-            $comment->votes = $vote;
-        }
-
-        return array($countComments, $comments);
     }
 
     /**
@@ -341,14 +311,11 @@ class CommentManager extends BaseManager
     public function deleteFromFilter($filter)
     {
         try {
-            $rs = $this->dbConn->delete(
-                'comments',
-                $filter
-            );
+            $this->dbConn->delete('comments', $filter);
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error while deleting comments from filter:'.$e->getMessage());
+            error_log('Error while deleting comments from filter:' . $e->getMessage());
         }
     }
 }

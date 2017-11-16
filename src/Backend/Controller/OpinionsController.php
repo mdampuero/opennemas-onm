@@ -490,8 +490,8 @@ class OpinionsController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countOpinions = $em->countBy($filters);
+        $countOpinions = true;
+        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countOpinions);
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
@@ -530,8 +530,8 @@ class OpinionsController extends Controller
         ];
 
         $em            = $this->get('entity_repository');
-        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countOpinions = $em->countBy($filters);
+        $countOpinions = true;
+        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countOpinions);
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,

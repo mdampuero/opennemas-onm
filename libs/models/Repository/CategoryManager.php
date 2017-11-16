@@ -128,7 +128,7 @@ class CategoryManager extends BaseManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null, &$count = null)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
@@ -140,10 +140,14 @@ class CategoryManager extends BaseManager
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT pk_content_category FROM `content_categories` "
+        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') . " pk_content_category FROM `content_categories` "
             . "WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
+
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
 
         $ids = [];
         foreach ($rs as $result) {

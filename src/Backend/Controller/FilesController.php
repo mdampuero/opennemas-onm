@@ -324,7 +324,7 @@ class FilesController extends Controller
         try {
             $uploadedFile->move($basePath, $fileName);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $this->get('error.log')->error($e->getMessage());
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('There was an error while uploading the file.')
@@ -499,8 +499,8 @@ class FilesController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $files      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countFiles = $em->countBy($filters);
+        $countFiles = true;
+        $files      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countFiles);
 
         $pagination = $this->get('paginator')->get([
             'epp'   => $itemsPerPage,
