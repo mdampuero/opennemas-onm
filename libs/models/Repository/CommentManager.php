@@ -100,7 +100,7 @@ class CommentManager extends BaseManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null, &$count = null)
     {
         // Building the SQL filter
         $filterSQL = $this->getFilterSQL($criteria);
@@ -112,8 +112,13 @@ class CommentManager extends BaseManager
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') .
+            " id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
         $rs  = $this->dbConn->fetchAll($sql);
+
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
 
         $ids = [];
         foreach ($rs as $resultElement) {

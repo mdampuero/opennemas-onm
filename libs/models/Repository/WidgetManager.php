@@ -53,13 +53,18 @@ class WidgetManager extends EntityManager
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents`, `widgets`
+        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') .
+            " content_type_name, pk_content FROM `contents`, `widgets`
             WHERE $filterSQL AND pk_content=pk_widget
             ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $contentIdentifiers = []
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
+
+        $contentIdentifiers = [];
         foreach ($rs as $resultElement) {
             $contentIdentifiers[] = [$resultElement['content_type_name'], $resultElement['pk_content']];
         }

@@ -164,11 +164,7 @@ class EntityManager extends BaseManager
 
         $rs = $this->dbConn->fetchAll($sql);
         if ($count) {
-            $aux   = $this->dbConn->fetchAll('SELECT FOUND_ROWS() as count');
-            $count = 0;
-            if (is_array($aux) && array_key_exists(0, $aux) && array_key_exists('count', $aux[0])) {
-                $count = $aux[0]['count'];
-            }
+            $count = $this->getSqlCount();
         }
 
         $ids = [];
@@ -295,5 +291,20 @@ class EntityManager extends BaseManager
                 $criterias = str_replace($result[0][$count], 'fk_content_type=' . $contentTypeName . ' ', $criterias);
             }
         }
+    }
+
+    /**
+     *  Retrieve from database the number of queryes from the request before
+     *
+     *  @return integer The number of found contents.
+     */
+    protected function getSqlCount()
+    {
+        $aux   = $this->dbConn->fetchAll('SELECT FOUND_ROWS() as count');
+        $count = 0;
+        if (is_array($aux) && array_key_exists(0, $aux) && array_key_exists('count', $aux[0])) {
+            $count = $aux[0]['count'];
+        }
+        return $count;
     }
 }

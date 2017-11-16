@@ -37,7 +37,7 @@ class OpinionManager extends EntityManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, $group = '')
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null, $group = '')
     {
         // Building the SQL filter
         $filterSQL = $this->getFilterSQL($criteria);
@@ -53,13 +53,19 @@ class OpinionManager extends EntityManager
             $group_by = "GROUP BY {$group} ";
         }
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents`, `opinions`
+        $sql = "SELECT " . (($count) ? "SQL_CALC_FOUND_ROWS  " : "") .
+            " content_type_name, pk_content FROM `contents`, `opinions`
             WHERE $filterSQL AND pk_content=pk_opinion $group_by
             ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
+
         $contentIdentifiers = [];
+
         foreach ($rs as $resultElement) {
             $contentIdentifiers[] = [$resultElement['content_type_name'], $resultElement['pk_content']];
         }
@@ -90,7 +96,6 @@ class OpinionManager extends EntityManager
         $rs  = $this->dbConn->fetchAll($sql);
 
         return count($rs);
-
     }
 
     /**
