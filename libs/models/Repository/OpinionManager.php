@@ -37,31 +37,37 @@ class OpinionManager extends EntityManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, $group = '')
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null, $group = '')
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $filterSQL = $this->getFilterSQL($criteria);
 
-        $orderBySQL  = '`pk_content` DESC';
+        $orderBySQL = '`pk_content` DESC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
-        $group_by ='';
+        $group_by = '';
         if (!empty($group)) {
             $group_by = "GROUP BY {$group} ";
         }
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents`, `opinions`
+        $sql = "SELECT " . (($count) ? "SQL_CALC_FOUND_ROWS  " : "") .
+            " content_type_name, pk_content FROM `contents`, `opinions`
             WHERE $filterSQL AND pk_content=pk_opinion $group_by
             ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $contentIdentifiers = array();
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
+
+        $contentIdentifiers = [];
+
         foreach ($rs as $resultElement) {
-            $contentIdentifiers[]= array($resultElement['content_type_name'], $resultElement['pk_content']);
+            $contentIdentifiers[] = [$resultElement['content_type_name'], $resultElement['pk_content']];
         }
 
         $contents = $this->findMulti($contentIdentifiers);
@@ -79,18 +85,17 @@ class OpinionManager extends EntityManager
     public function countBy($criteria, $group = '')
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
-        $group_by ='';
+        $filterSQL = $this->getFilterSQL($criteria);
+        $group_by  = '';
         if (!empty($group)) {
             $group_by = "GROUP BY {$group} ";
         }
         // Executing the SQL
         $sql = "SELECT pk_content FROM `contents`, `opinions`"
-            ." WHERE $filterSQL AND pk_content=pk_opinion $group_by";
-        $rs = $this->dbConn->fetchAll($sql);
+            . " WHERE $filterSQL AND pk_content=pk_opinion $group_by";
+        $rs  = $this->dbConn->fetchAll($sql);
 
         return count($rs);
-
     }
 
     /**
@@ -108,7 +113,7 @@ class OpinionManager extends EntityManager
         } elseif (!is_array($criteria)) {
             $filterSQL = $criteria;
         } elseif (is_array($criteria)) {
-            $filterSQL = array();
+            $filterSQL = [];
 
             $fieldUnion = ' AND ';
             if (array_key_exists('union', $criteria)) {
@@ -123,34 +128,34 @@ class OpinionManager extends EntityManager
                     unset($filters['union']);
                 }
 
-                $fieldFilters = array();
+                $fieldFilters = [];
                 if ($field == 'blog') {
                     $bloggers = getService('user_repository')->findByUserMeta(
-                        array(
-                            'meta_key' => array(
-                                array('value' => 'is_blog')
-                            ),
-                            'meta_value' => array(
-                                array('value' => '1')
-                            )
-                        ),
-                        array('username' => 'asc'),
+                        [
+                            'meta_key' => [
+                                ['value' => 'is_blog']
+                            ],
+                            'meta_value' => [
+                                ['value' => '1']
+                            ]
+                        ],
+                        ['username' => 'asc'],
                         1,
                         0
                     );
 
                     if (!empty($bloggers)) {
-                        $ids = array();
+                        $ids = [];
                         foreach ($bloggers as $blogger) {
-                            $ids[] =  $blogger->id;
+                            $ids[] = $blogger->id;
                         }
 
                         if ($filters[0]['value']) {
                             $filterSQL[] = 'opinions.fk_author IN ('
-                                . implode(', ', array_values($ids)).") ";
+                                . implode(', ', array_values($ids)) . ") ";
                         } else {
                             $filterSQL[] = 'opinions.fk_author NOT IN ('
-                                . implode(', ', array_values($ids)).") ";
+                                . implode(', ', array_values($ids)) . ") ";
                         }
                     } else {
                         if ($filters[0]['value']) {
@@ -166,7 +171,7 @@ class OpinionManager extends EntityManager
                         $filterSQL[] = 'opinions.type_opinion=1';
                     }
                 } else {
-                    $fieldFilters = array();
+                    $fieldFilters = [];
                     foreach ($filters as $filter) {
                         $operator = "=";
                         if (array_key_exists('operator', $filter)) {
@@ -185,7 +190,7 @@ class OpinionManager extends EntityManager
                                 $fieldFilters[] = "`$field` $operator (" .
                                     implode(', ', $value) . ")";
                             } else {
-                                $value = $this->parseValues($value, $operator);
+                                $value          = $this->parseValues($value, $operator);
                                 $fieldFilters[] = "`$field` $operator " .
                                     implode(' ', $value);
                             }

@@ -44,8 +44,8 @@ class ArticleController extends Controller
             $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
         $em      = $this->get('entity_repository');
-        $total   = $em->countBy($criteria);
-        $results = $em->findBy($criteria, $order, $epp, $page);
+        $total   = true;
+        $results = $em->findBy($criteria, $order, $epp, $page, 0, $total);
 
         $results = \Onm\StringUtils::convertToUtf8($results);
 
@@ -112,7 +112,7 @@ class ArticleController extends Controller
                 && !empty($article->params[$key])
             ) {
                 $extra[$key] = \Onm\StringUtils::convertToUtf8(
-                   $em->find('Album', $article->params[$key])
+                    $em->find('Album', $article->params[$key])
                 );
             }
         }

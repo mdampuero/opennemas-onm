@@ -58,7 +58,7 @@ class AdvertisementManager extends EntityManager
      * @param  integer      $offset          The offset to start with.
      * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
@@ -71,11 +71,16 @@ class AdvertisementManager extends EntityManager
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents`, `advertisements`
+        $sql = "SELECT " . (($count) ? "SQL_CALC_FOUND_ROWS  " : "") .
+            " content_type_name, pk_content FROM `contents`, `advertisements`
             WHERE $filterSQL AND pk_content=pk_advertisement
             ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
+
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
 
         $contentIdentifiers = [];
         foreach ($rs as $resultElement) {

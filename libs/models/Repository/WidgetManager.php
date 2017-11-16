@@ -42,27 +42,31 @@ class WidgetManager extends EntityManager
      * @param  integer      $offset          The offset to start with.
      * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
-
-        $orderBySQL  = '`pk_content` DESC';
+        $orderBySQL = '`pk_content` DESC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents`, `widgets`
+        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') .
+            " content_type_name, pk_content FROM `contents`, `widgets`
             WHERE $filterSQL AND pk_content=pk_widget
             ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $contentIdentifiers = array();
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
+
+        $contentIdentifiers = [];
         foreach ($rs as $resultElement) {
-            $contentIdentifiers[]= array($resultElement['content_type_name'], $resultElement['pk_content']);
+            $contentIdentifiers[] = [$resultElement['content_type_name'], $resultElement['pk_content']];
         }
 
         $contents = $this->findMulti($contentIdentifiers);
@@ -79,12 +83,12 @@ class WidgetManager extends EntityManager
     public function countBy($criteria)
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $filterSQL = $this->getFilterSQL($criteria);
 
         // Executing the SQL
         $sql = "SELECT COUNT(pk_content) FROM `contents`, `widgets`"
-            ." WHERE $filterSQL AND pk_content=pk_widget";
-        $rs = $this->dbConn->fetchArray($sql);
+            . " WHERE $filterSQL AND pk_content=pk_widget";
+        $rs  = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
@@ -142,12 +146,12 @@ class WidgetManager extends EntityManager
 
         foreach ($this->paths as $path) {
             if (file_exists($path . DS . $filename . '.class.php')) {
-                require_once $path . DS . $filename . '.class.php';
+                include_once $path . DS . $filename . '.class.php';
                 return;
             }
 
             if (file_exists($path . DS . $widgetName . '.php')) {
-                require_once $path . DS . $widgetName . '.php';
+                include_once $path . DS . $widgetName . '.php';
                 return;
             }
         }

@@ -390,8 +390,8 @@ class AlbumsController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $albums      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $countAlbums = $em->countBy($filters);
+        $countAlbums = true;
+        $albums      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countAlbums);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([
@@ -438,8 +438,8 @@ class AlbumsController extends Controller
             $filters['category_name'] = [['value' => $category->name]];
         }
 
-        $albums      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
-        $countAlbums = $em->countBy($filters);
+        $countAlbums = true;
+        $albums      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page, 0, $countAlbums);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([

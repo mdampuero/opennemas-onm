@@ -120,12 +120,13 @@ class EntityManager extends BaseManager
      * @param integer $elementsPerPage The max number of elements.
      * @param integer $page            The current page.
      * @param integer $offset          The offset to start with.
+     * @param integer $count           Number of results for the query
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
     {
-        $sql = 'SELECT content_type_name, pk_content'
+        $sql = 'SELECT ' . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') . 'content_type_name, pk_content'
             . ' FROM contents ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
@@ -162,6 +163,9 @@ class EntityManager extends BaseManager
         $sql .= " ORDER BY $orderBySQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
+        if ($count) {
+            $count = $this->getSqlCount();
+        }
 
         $ids = [];
         foreach ($rs as $item) {
@@ -262,11 +266,30 @@ class EntityManager extends BaseManager
     }
 
     /**
+     *  Retrieve from database the number of queryes from the request before.
+     *
+     *  @return integer The number of found contents.
+     */
+    protected function getSqlCount()
+    {
+        $rs = $this->dbConn->fetchAll('SELECT FOUND_ROWS() as count');
+
+        if (is_array($rs)
+            && array_key_exists(0, $rs)
+            && array_key_exists('count', $rs[0])
+        ) {
+            return $rs[0]['count'];
+        }
+
+        return 0;
+    }
+
+    /**
      *  Replace criterias with content_type_name for fk_content_type
      *
      *   @param String $criterias The criteria used to search.
      */
-    public function removeContentTypeNameFromCriteria(&$criterias)
+    protected function removeContentTypeNameFromCriteria(&$criterias)
     {
         preg_match_all(
             "/content_type_name\s*=\s*'{1}([A-Za-z0-9 ]*)'{1}|content_type_name\s*=\s*\"{1}([A-Za-z0-9 ]*)\"{1}/",
