@@ -266,42 +266,6 @@ class CommentManager extends BaseManager
     }
 
     /**
-     * Returns the total amount of comments for a contentId and a slice from the
-     * list of all those comments, starting from the offset and displaying only
-     * some elements for this slice
-     *
-     * @param integer $contentId   The content id where fetch comments from.
-     * @param integer $elemsByPage The amount of comments to get.
-     * @param integer $offset      The starting page to start to display
-     *                             elements.
-     *
-     * @return array  The total amount of comments, and a list of comments.
-     */
-    public static function getPublicCommentsAndTotalCount($contentId, $elemsByPage, $offset)
-    {
-        // Get the total number of comments
-        $sql = 'SELECT count(id) FROM comments WHERE content_id = ? AND content_status=?';
-        $rs  = $this->dbConn->GetOne($sql, [$contentId, \Comment::STATUS_ACCEPTED]);
-
-        // If there is no comments do a early return
-        if ($rs === false) {
-            return [0, []];
-        }
-
-        $countComments = intval($rs);
-
-        // Retrieve the comments and their votes
-        $comments = self::get_public_comments($contentId, $elemsByPage, $offset);
-
-        foreach ($comments as &$comment) {
-            $vote           = new \Vote($comment->id);
-            $comment->votes = $vote;
-        }
-
-        return [$countComments, $comments];
-    }
-
-    /**
      * Returns the number of pending comments.
      *
      * @return integer The number of pending comments.
