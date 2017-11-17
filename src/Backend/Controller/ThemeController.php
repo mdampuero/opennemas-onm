@@ -10,6 +10,7 @@
 namespace Backend\Controller;
 
 use Common\Core\Controller\Controller;
+use Common\Core\Annotation\Security;
 
 class ThemeController extends Controller
 {
@@ -17,6 +18,8 @@ class ThemeController extends Controller
      * Displays the list of themes.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function listAction()
     {
