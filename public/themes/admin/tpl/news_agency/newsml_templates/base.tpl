@@ -92,11 +92,11 @@
                       </story.date>
                     </dateline>
                     <abstract>
-                      <p><![CDATA[{$article->summary|trim|substr:3:-4|unescape:"htmlall"}]]></p>
+                      <p><![CDATA[{$article->summary}]]></p>
                     </abstract>
                   </body.head>
                   <body.content>
-                    <![CDATA[{$article->body|replace:'<br />':"</p><p>"|unescape:"htmlall"|htmlspecialchars}]]>
+                    <![CDATA[{$article->body}]]>
                   </body.content>
                 </body>
               </nitf>
