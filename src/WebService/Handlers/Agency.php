@@ -39,7 +39,9 @@ class Agency
      */
     protected function export($until = 86400)
     {
-        $total = $page = null;
+        $total = null;
+        $page  = null;
+
         if ($until == 'no_limits' || $until == '') {
             $until = 0;
             $total = 100;
@@ -48,47 +50,45 @@ class Agency
 
         $this->validateInt($until);
 
+        $er  = getService('entity_repository');
+        $tpl = getService('view')->getBackendTemplate();
+
         $timeLimit = date('Y-m-d H:i:s', time() - $until);
-
-        $er = getService('entity_repository');
-
-        $criteria = array(
+        $criteria  = [
             'content_type_name' => [[ 'value' => 'article' ]],
             'fk_content_type'   => [[ 'value' => 1 ]],
             'content_status'    => [[ 'value' => 1 ]],
-        );
+        ];
 
         if ($until != 0) {
             $criteria['created'] = [[ 'value' => $timeLimit, 'operator' => '>=' ]];
         }
 
         $articles = $er->findBy($criteria, 'created DESC', $total, $page);
+        $output   = $tpl->fetch(
+            'news_agency/newsml_templates/contents_list.tpl',
+            [ 'articles' => $articles ]
+        );
 
-        $tpl = getService('view')->getBackendTemplate();
-
-        $output = $tpl->fetch('news_agency/newsml_templates/contents_list.tpl', array('articles' => $articles));
-
-        XmlFormat::$rootName = 'contents';
+        XmlFormat::$rootName              = 'contents';
         XmlFormat::$importSettingsFromXml = true;
 
         $output = simplexml_load_string($output);
+        $xml    = new XmlFormat($output);
 
-        $xml = new XmlFormat($output);
-
-        $output = $xml->read($output);
-
-        return $output;
+        return $xml->read($output);
     }
 
     /**
-     * Get an newsml given a content id
+     * Get an newsml given a content id.
      *
+     * @param integer $id The content id.
      */
     protected function newsml($id = null)
     {
         $this->validateInt($id);
 
-        $er = getService('entity_repository');
+        $er      = getService('entity_repository');
         $article = $er->find('Article', $id);
 
         if (is_null($article->id)) {
@@ -105,16 +105,21 @@ class Agency
         $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);
         $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
 
-        $imageId = $article->img1;
+        $imageId      = $article->img1;
         $imageInnerId = $article->img2;
 
         if (!empty($imageId)) {
             $image[] = $er->find('Photo', $imageId);
+
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
+
             // Add DateTime with format Y-m-d H:i:s
-            $article->img1->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->created);
-            $article->img1->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->changed);
+            $article->img1->created_datetime =
+                \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->created);
+            $article->img1->updated_datetime =
+                \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->changed);
+
             if (!mb_check_encoding($article->img1->description)) {
                 $article->img1->description = utf8_encode($article->img1->description);
             }
@@ -122,18 +127,22 @@ class Agency
 
         if (!empty($imageInnerId)) {
             $image[] = $er->find('Photo', $imageInnerId);
+
             // Load attached and related contents from array
             $article->loadInnerImageFromHydratedArray($image);
+
             // Add DateTime with format Y-m-d H:i:s
             $article->img2->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->created);
             $article->img2->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->changed);
+
             if (!mb_check_encoding($article->img2->description)) {
                 $article->img2->description = utf8_encode($article->img2->description);
             }
         }
 
-        // Get author obj
         $ur = getService('user_repository');
+
+        // Get author obj
         $article->author = $ur->find($article->fk_author);
 
         $authorPhoto = '';
@@ -142,6 +151,7 @@ class Agency
         ) {
             // Get author photo
             $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
+
             if (is_object($authorPhoto) && !empty($authorPhoto)) {
                 $article->author->photo = $authorPhoto;
             }
@@ -150,26 +160,20 @@ class Agency
         // Encode author in json format
         $article->author = json_encode($article->author);
 
-        $output = $tpl->fetch(
-            'news_agency/newsml_templates/base.tpl',
-            array(
-                'article'     => $article,
-                'authorPhoto' => $authorPhoto,
-                'photo'       => $article->img1,
-                'photoInner'  => $article->img2,
-            )
-        );
+        $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [
+            'article'     => $article,
+            'authorPhoto' => $authorPhoto,
+            'photo'       => $article->img1,
+            'photoInner'  => $article->img2,
+        ]);
 
-        XmlFormat::$rootName = 'NewsML';
+        XmlFormat::$rootName              = 'NewsML';
         XmlFormat::$importSettingsFromXml = true;
 
         $output = simplexml_load_string($output);
+        $xml    = new XmlFormat();
 
-        $xml = new XmlFormat();
-
-        $output = $xml->read($output);
-
-        return $output;
+        return $xml->read($output);
     }
 
     /**
@@ -183,6 +187,7 @@ class Agency
         if (!is_numeric($number)) {
             throw new RestException(400, 'parameter is not a number');
         }
+
         if (is_infinite($number)) {
             throw new RestException(400, 'parameter is not finite');
         }
