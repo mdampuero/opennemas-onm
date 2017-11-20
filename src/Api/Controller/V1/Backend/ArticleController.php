@@ -218,7 +218,7 @@ class ArticleController extends Controller
         foreach ($keys as $key) {
             if (!empty($article->{$key})) {
                 $extra[$key] = \Onm\StringUtils::convertToUtf8(
-                    $em->find('Photo', $article->img1)
+                    $em->find('Photo', $article->{$key})
                 );
             }
         }
