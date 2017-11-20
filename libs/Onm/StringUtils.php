@@ -1043,13 +1043,30 @@ class StringUtils
      */
     public static function convertObjectToUtf8(&$object)
     {
-        foreach (get_object_vars($object) as $key => $value) {
+        $keys = array_keys(get_object_vars($object));
+
+        if ($object instanceof \Content) {
+            $keys = array_merge($keys, $object->getL10nKeys());
+        }
+
+        foreach ($keys as $key) {
+            $value = $object->{$key};
+
             if (is_string($value)) {
                 $object->{$key} = mb_convert_encoding(
                     $value,
                     'UTF-8',
                     mb_detect_encoding($value)
                 );
+            }
+
+            if ($object instanceof \Content
+                && is_array($value)
+                && in_array($key, $object->getL10nKeys())
+            ) {
+                $object->{$key} = array_map(function ($a) {
+                    return mb_convert_encoding($a, 'UTF-8', mb_detect_encoding($a));
+                }, $value);
             }
         }
     }

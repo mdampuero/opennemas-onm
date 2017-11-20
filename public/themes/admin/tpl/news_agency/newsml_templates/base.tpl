@@ -68,7 +68,7 @@
                     <doc.rights provider="Opennemas"/>
                     <doc-id id-string="{$article->id}" />
                     <key-list>
-                      <keyword key="{$article->metadata}"/>
+                      <keyword key="{$article->metadata|escape:"html"}"/>
                     </key-list>
                   </docdata>
                 </head>
@@ -92,11 +92,11 @@
                       </story.date>
                     </dateline>
                     <abstract>
-                      <p><![CDATA[{$article->summary|trim|substr:3:-4|unescape:"htmlall"}]]></p>
+                      <p><![CDATA[{$article->summary}]]></p>
                     </abstract>
                   </body.head>
                   <body.content>
-                    <![CDATA[{$article->body|replace:'<br />':"</p><p>"|unescape:"htmlall"|htmlspecialchars}]]>
+                    <![CDATA[{$article->body}]]>
                   </body.content>
                 </body>
               </nitf>
