@@ -113,8 +113,14 @@ class Locale
      */
     public function apply()
     {
-        $this->changeLocale();
-        $this->changeTimeZone();
+        $locale = $this->getLocale();
+
+        if (array_key_exists($locale, $this->fixes)) {
+            $locale = $this->fixes[$locale];
+        }
+
+        $this->changeLocale($locale);
+        $this->changeTimeZone($this->getTimeZone()->getName());
     }
 
     /**
@@ -322,10 +328,6 @@ class Locale
             return $this;
         }
 
-        if (array_key_exists($locale, $this->fixes)) {
-            $locale = $this->fixes[$locale];
-        }
-
         if (in_array($locale, $this->config[$this->getContext()]['language']['available'])) {
             $this->config[$this->getContext()]['language']['selected'] = $locale;
         }
@@ -373,14 +375,16 @@ class Locale
     /**
      * Changes the PHP locale basing on configuration.
      *
+     * $param string $locale The locale to change to.
+     *
      * @codeCoverageIgnore
      */
-    protected function changeLocale()
+    protected function changeLocale($locale)
     {
-        \Locale::setDefault($this->getLocale());
+        \Locale::setDefault($locale);
 
         // Set locale for gettext
-        setlocale(LC_ALL, $this->getLocale() . '.UTF-8');
+        setlocale(LC_ALL, $locale . '.UTF-8');
         setlocale(LC_NUMERIC, 'C');
 
         $domain = 'messages';
@@ -392,11 +396,13 @@ class Locale
     /**
      * Changes the PHP timezone basing on configuration.
      *
+     * @param string $name The timezone name.
+     *
      * @codeCoverageIgnore
      */
-    protected function changeTimeZone()
+    protected function changeTimeZone($name)
     {
-        date_default_timezone_set($this->getTimeZone()->getName());
+        date_default_timezone_set($name);
     }
 
     /**
