@@ -653,7 +653,7 @@
               $scope.getSlug(nv, function(response) {
                 $scope.article.slug = response.data.slug;
               });
-            }, 500);
+            }, 2500);
           }
         }, true);
 
