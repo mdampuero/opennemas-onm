@@ -219,7 +219,7 @@
                   <div class="small-text">
                     <span class="hidden-lg">
                       <strong>{t}Position{/t}:</strong>
-                        <div ng-repeat="position in content.type_advertisement.split(',')"> [% map[position].name %] </div>
+                      [% map[content.type_advertisement].name %]
                     </span>
                   </div>
                   <div class="listing-inline-actions">
@@ -236,9 +236,7 @@
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  <div ng-repeat="position in content.type_advertisement.split(',')">
-                    [% map[position].name %]
-                  </div>
+                  [% map[content.type_advertisement].name %]
                 </td>
                 <td class="hidden-xs text-center">
                   [% content.num_clic_count %]
