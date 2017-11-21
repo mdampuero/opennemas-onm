@@ -9,7 +9,6 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,11 +22,13 @@ class OpinionsController extends Controller
      * Renders the opinion frontpage.
      *
      * @return Response The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function frontpageAction()
     {
+        if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $page = $this->request->query->getDigits('page', 1);
 
         // Setup templating cache layer
@@ -212,11 +213,13 @@ class OpinionsController extends Controller
      * Renders the opinion frontpage
      *
      * @return Response the response object
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function extFrontpageAction()
     {
+        if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $page         = $this->request->query->getDigits('page', 1);
         $categoryName = 'opinion';
 
@@ -331,11 +334,13 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function frontpageAuthorAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $authorID = (int) $request->query->getDigits('author_id', null);
         $page     = $this->request->query->getDigits('page', 1);
 
@@ -473,11 +478,13 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function extFrontpageAuthorAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $authorID     = $request->query->getDigits('author_id', null);
         $authorSlug   = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
@@ -616,11 +623,13 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function showAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
 
@@ -749,11 +758,13 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
      */
     public function extShowAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $dirtyID      = $request->query->getDigits('opinion_id');
         $categoryName = 'opinion';
 
