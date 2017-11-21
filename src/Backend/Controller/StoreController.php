@@ -5,6 +5,7 @@ namespace Backend\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Intl\Intl;
+use Common\Core\Annotation\Security;
 
 class StoreController extends Controller
 {
@@ -12,6 +13,8 @@ class StoreController extends Controller
      * Displays the wizard form for checkout.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function checkoutAction()
     {
@@ -29,6 +32,7 @@ class StoreController extends Controller
                 $client = $this->get('orm.manager')->getConverter('Client')
                     ->responsify($client);
             } catch (\Exception $e) {
+                getService('error.log')->error($e->getMessage());
             }
         }
 
@@ -65,6 +69,8 @@ class StoreController extends Controller
      * Displays the list of available modules.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function listAction()
     {

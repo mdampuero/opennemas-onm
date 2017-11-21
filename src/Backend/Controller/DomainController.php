@@ -12,6 +12,7 @@ namespace Backend\Controller;
 use Framework\ORM\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\Core\Annotation\Security;
 
 class DomainController extends Controller
 {
@@ -19,6 +20,8 @@ class DomainController extends Controller
      * Lists all the available ads.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function listAction()
     {
@@ -36,6 +39,8 @@ class DomainController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function addAction(Request $request)
     {
@@ -55,7 +60,7 @@ class DomainController extends Controller
                 $params = [ 'customerId' => $client->id ];
                 $client = $client->getData();
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                getService('error.log')->error($e->getMessage());
             }
         }
 

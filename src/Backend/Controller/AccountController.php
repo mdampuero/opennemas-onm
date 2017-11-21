@@ -9,8 +9,8 @@
  */
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Intl;
@@ -21,6 +21,8 @@ class AccountController extends Controller
      * Returns account information.
      *
      * @return Response The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function defaultAction()
     {
