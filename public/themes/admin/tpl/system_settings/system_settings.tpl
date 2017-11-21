@@ -548,7 +548,7 @@
                         </select>
                       </div>
                     </div>
-                    {is_module_activated name="es.openhost.module.translations"}
+                    {is_module_activated name="es.openhost.module.translation"}
                       <h4>
                         <i class="fa fa-globe m-r-5"></i>
                         {t}Automatic translations{/t}
