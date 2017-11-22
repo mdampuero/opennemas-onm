@@ -851,24 +851,22 @@ angular.module('onm.picker')
           $scope.saving = false;
           $scope.saved = true;
 
-          if (response.status === 200) {
-            $timeout(function() {
-              $scope.saved = false;
-            }, 2000);
-
-            return true;
-          }
-
-          if (response.status !== 200) {
+          $timeout(function() {
+            $scope.saving = false;
             $scope.saved = false;
-            $scope.error = true;
+          }, 2000);
 
-            $timeout(function() {
-              $scope.error = false;
-            }, 2000);
+          return true;
+        }, function(error) {
+          $scope.saved = false;
+          $scope.error = true;
 
-            return false;
-          }
+          $timeout(function() {
+            $scope.saving = false;
+            $scope.error = false;
+          }, 2000);
+
+          return false;
         });
       };
 
