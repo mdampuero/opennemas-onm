@@ -390,6 +390,10 @@
             }).join(',');
           }
 
+          if (data.created instanceof Date) {
+            data.created = null;
+          }
+
           var data = { 'article': data, 'locale': $scope.config.locale };
 
           http.post(previewUrl, data).success(function() {
@@ -649,7 +653,7 @@
               $scope.getSlug(nv, function(response) {
                 $scope.article.slug = response.data.slug;
               });
-            }, 500);
+            }, 2500);
           }
         }, true);
 

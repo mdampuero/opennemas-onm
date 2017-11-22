@@ -5,6 +5,7 @@ namespace BackendWebService\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Common\Core\Annotation\Security;
 
 class StoreController extends Controller
 {
@@ -14,11 +15,13 @@ class StoreController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function checkoutAction(Request $request)
     {
-        $purchase  = $request->request->get('purchase');
-        $nonce     = $request->request->get('nonce');
+        $purchase = $request->request->get('purchase');
+        $nonce    = $request->request->get('nonce');
 
         try {
             $ph = $this->get('core.helper.checkout');
@@ -38,11 +41,11 @@ class StoreController extends Controller
 
             $this->get('application.log')->info(
                 'The user ' . $this->getUser()->username
-                . '(' . $this->getUser()->id  .') has purchased '
+                . '(' . $this->getUser()->id . ') has purchased '
                 . json_encode($purchase->details)
             );
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
 
             return new JsonResponse([
                 'message' => $e->getMessage(),
@@ -59,6 +62,8 @@ class StoreController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function checkPhoneAction(Request $request)
     {
@@ -86,11 +91,13 @@ class StoreController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function checkVatAction(Request $request)
     {
-        $code  = 200;
-        $vat   = $this->get('vat');
+        $code = 200;
+        $vat  = $this->get('vat');
 
         $country   = $request->query->get('country');
         $region    = $request->query->get('region');
@@ -115,6 +122,8 @@ class StoreController extends Controller
      * Returns the list of modules and current activated modules.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('ROLE_ADMIN')")
      */
     public function listAction()
     {

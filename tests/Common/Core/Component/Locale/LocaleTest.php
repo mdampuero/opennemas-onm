@@ -24,7 +24,7 @@ class LocaleTest extends KernelTestCase
     {
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->setMethods([ 'addTextDomain', 'changeLocale', 'changeTimeZone'])
-            ->setConstructorArgs([ [ 'en_US', 'es_ES' ], '/foo/bar' ])
+            ->setConstructorArgs([ [ 'en_US', 'es' ], '/foo/bar' ])
             ->getMock();
     }
 
@@ -41,7 +41,7 @@ class LocaleTest extends KernelTestCase
 
         $this->assertEquals('/foo/bar', $path->getValue($this->locale));
         $this->assertEquals(
-            [ 'en_US', 'es_ES' ],
+            [ 'en_US', 'es' ],
             $config->getValue($this->locale)['backend']['language']['available']
         );
     }
@@ -51,9 +51,16 @@ class LocaleTest extends KernelTestCase
      */
     public function testApply()
     {
-        $this->locale->expects($this->once())->method('changeLocale');
-        $this->locale->expects($this->once())->method('changeTimeZone');
+        $this->locale->expects($this->at(0))->method('changeLocale')
+            ->with('en_US');
+        $this->locale->expects($this->any())->method('changeTimeZone')
+            ->with('UTC');
+        $this->locale->expects($this->at(2))->method('changeLocale')
+            ->with('es_ES');
 
+        $this->locale->apply();
+
+        $this->locale->setLocale('es');
         $this->locale->apply();
     }
 
@@ -127,10 +134,10 @@ class LocaleTest extends KernelTestCase
         $this->assertEquals('en_US', $this->locale->getLocale());
 
         $this->locale->setLocale('foo');
-        $this->assertNotEquals('foo', $this->locale->getLocale());
-
-        $this->locale->setLocale('en');
         $this->assertEquals('en_US', $this->locale->getLocale());
+
+        $this->locale->setLocale('es');
+        $this->assertEquals('es', $this->locale->getLocale());
     }
 
     /**
@@ -208,7 +215,7 @@ class LocaleTest extends KernelTestCase
         $value = $config->getValue($this->locale);
 
         $value['frontend'] = [
-            'language' => [ 'available' => [ 'en_US' ], 'slug' => [ 'en_US' => 'en' ]],
+            'language' => [ 'available' => [ 'en_US', 'es_ES' ], 'slug' => [ 'en_US' => 'en' ]],
             'timezone' => 'UTC'
         ];
         $config->setValue($this->locale, $value);
@@ -226,7 +233,7 @@ class LocaleTest extends KernelTestCase
         $this->assertEquals(
             [
                 'en_US' => ucfirst(\Locale::getDisplayName('en_US')),
-                'es_ES' => ucfirst(\Locale::getDisplayName('es_ES'))
+                'es'    => ucfirst(\Locale::getDisplayName('es'))
             ],
             $this->locale->getSupportedLocales()
         );

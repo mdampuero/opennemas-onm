@@ -18,6 +18,7 @@
 
 <div class="content welcome-page">
   <div class="row">
+    {acl isAllowed="ROLE_ADMIN"}
     <div class="col-sm-6">
       <a href="{url name=backend_domain_add}">
         <div class="grid simple">
@@ -44,6 +45,7 @@
         </div>
       </a>
     </div>
+    {/acl}
     <div class="col-sm-6">
       <div class="grid simple add-contents">
         <div class="grid-title">
@@ -111,6 +113,7 @@
           </div>
         </div>
       </div>
+      {acl isAllowed="ROLE_ADMIN"}
       <div class="grid simple merchant">
         <div class="grid-title">
           <h4>{t}Want more features?{/t}</h4>
@@ -140,6 +143,7 @@
           <i class="fa fa-shopping-cart background-icon"></i>
         </div>
       </div>
+      {/acl}
     </div>
     <div class="col-sm-6">
       <div class="grid simple">
