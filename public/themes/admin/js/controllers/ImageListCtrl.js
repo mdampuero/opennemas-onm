@@ -1,26 +1,24 @@
-(function () {
- 'use strict';
+angular.module('BackendApp.controllers')
+  /**
+   * @ngdoc controller
+   * @name  ImageListCtrl
+   *
+   * @requires $controller
+   * @requires $scope
+   * @requires messenger
+   * @requires oqlEncoder
+   * @requires queryManager
+   *
+   * @description
+   *   Controller for opinion list.
+   */
+  .controller('ImageListCtrl', [
+    '$controller', '$location', '$scope', 'http', '$http', '$timeout', 'routing', 'messenger', 'oqlEncoder',
+    function($controller, $location, $scope, http, $http, $timeout, routing, messenger, oqlEncoder) {
+      'use strict';
 
-  angular.module('BackendApp.controllers')
-    /**
-     * @ngdoc controller
-     * @name  ImageListCtrl
-     *
-     * @requires $controller
-     * @requires $scope
-     * @requires messenger
-     * @requires oqlEncoder
-     * @requires queryManager
-     *
-     * @description
-     *   Controller for opinion list.
-     */
-    .controller('ImageListCtrl', [
-      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
-      function($controller, $location, $scope, http, messenger, oqlEncoder) {
-
-        // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+      // Initialize the super class and extend it.
+      $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
 
       /**
        * Updates the array of contents.
@@ -117,4 +115,3 @@
         });
       };
     }]);
-})();
