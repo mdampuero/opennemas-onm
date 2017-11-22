@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="articleForm" ng-controller="ArticleCtrl" ng-init="init('{$locale}', '{$id}')" novalidate>
+  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="init('{$locale}', '{$id}')" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -65,7 +65,7 @@
               {if isset($id)}
                 {acl isAllowed="ARTICLE_UPDATE"}
                   <li class="quicklinks">
-                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving || articleForm.$invalid || !article.pk_fk_content_category" type="button">
                       <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
                       <span class="text">{t}Update{/t}</span>
                     </button>
@@ -74,7 +74,7 @@
               {else}
                 {acl isAllowed="ARTICLE_CREATE"}
                   <li class="quicklinks">
-                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving || articleForm.$invalid || !article.pk_fk_content_category" type="button">
                       <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
                       <span class="text">{t}Save{/t}</span>
                     </button>
@@ -99,7 +99,7 @@
             <div class="grid-body">
               <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title.$invalid }">
                 <label class="form-label" for="title">
-                  {t}Title{/t}
+                  {t}Title{/t} *
                 </label>
                 <div class="controls">
                   <div class="input-group">
@@ -255,9 +255,9 @@
                       {/acl}
                     </div>
                   </div>
-                  <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.category.$invalid }">
+                  <div class="form-group" ng-class="{ 'has-error': showRequired && !article.pk_fk_content_category }">
                     <label class="form-label" for="category">
-                      {t}Category{/t}
+                      {t}Category{/t} *
                     </label>
                     <div class="controls">
                       <ui-select class="form-control" name="pk_fk_content_category" theme="select2" ng-model="article.pk_fk_content_category">
