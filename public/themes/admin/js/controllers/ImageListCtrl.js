@@ -82,5 +82,39 @@
           });
         });
       };
+
+      /**
+       * Saves the last selected item description.
+       */
+      $scope.saveDescription = function() {
+        $scope.saving = true;
+
+        var data = { description: $scope.selected.lastSelected.description };
+        var url  = routing.generate(
+          'backend_ws_picker_save_description',
+          { id: $scope.selected.lastSelected.id }
+        );
+
+        $http.post(url, data).then(function(response) {
+          $scope.saving = false;
+          $scope.saved = true;
+
+          $timeout(function() {
+            $scope.saved = false;
+          }, 2000);
+
+          return true;
+        }, function(error) {
+          $scope.saving = false;
+          $scope.saved = false;
+          $scope.error = true;
+
+          $timeout(function() {
+            $scope.error = false;
+          }, 2000);
+
+          return false;
+        });
+      };
     }]);
 })();
