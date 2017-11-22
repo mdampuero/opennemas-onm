@@ -6,7 +6,6 @@ angular.module('BackendApp.controllers')
    * @requires $controller
    * @requires $scope
    * @requires http
-   * @requires $http
    * @requires $timeout
    * @requires routing
    * @requires messenger
@@ -16,8 +15,8 @@ angular.module('BackendApp.controllers')
    *   Controller for opinion list.
    */
   .controller('ImageListCtrl', [
-    '$controller', '$location', '$scope', 'http', '$http', '$timeout', 'routing', 'messenger', 'oqlEncoder',
-    function($controller, $location, $scope, http, $http, $timeout, routing, messenger, oqlEncoder) {
+    '$controller', '$location', '$scope', 'http', '$timeout', 'routing', 'messenger', 'oqlEncoder',
+    function($controller, $location, $scope, http, $timeout, routing, messenger, oqlEncoder) {
       'use strict';
 
       // Initialize the super class and extend it.
@@ -91,12 +90,15 @@ angular.module('BackendApp.controllers')
         $scope.saving = true;
 
         var data = { description: $scope.selected.lastSelected.description };
-        var url  = routing.generate(
-          'backend_ws_picker_save_description',
-          { id: $scope.selected.lastSelected.id }
-        );
 
-        $http.post(url, data).then(function() {
+        var route = {
+          name: 'backend_ws_picker_save_description',
+          params:  {
+            id: $scope.selected.lastSelected.id
+          }
+        };
+
+        http.post(route, data).then(function() {
           $scope.saving = false;
           $scope.saved = true;
 
