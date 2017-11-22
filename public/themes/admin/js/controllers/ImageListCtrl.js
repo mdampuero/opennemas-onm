@@ -5,9 +5,12 @@ angular.module('BackendApp.controllers')
    *
    * @requires $controller
    * @requires $scope
+   * @requires http
+   * @requires $http
+   * @requires $timeout
+   * @requires routing
    * @requires messenger
    * @requires oqlEncoder
-   * @requires queryManager
    *
    * @description
    *   Controller for opinion list.
