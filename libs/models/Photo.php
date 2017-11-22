@@ -611,42 +611,4 @@ class Photo extends Content
             return false;
         }
     }
-
-    /**
-     * Removes photos given its id
-     *
-     * @param array $arrayId the photo ids to delete
-     *
-     * @return boolean true if the photo was deleted
-     */
-    public static function batchDelete($arrayIds)
-    {
-        $conn = getService('dbal_connection');
-
-        $contents = implode(', ', $arrayIds);
-        try {
-            $rs = $conn->fetchAssoc(
-                'SELECT  path_file, name  FROM photos WHERE pk_photo IN (' . $contents . ')'
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            foreach ($rs as $item) {
-                $image = MEDIA_IMG_PATH . $item['path_file'] . $item['name'];
-
-                if (file_exists($image)) {
-                    @unlink($image);
-                }
-            }
-
-            $rs = $conn->executeUpdate('DELETE FROM photos WHERE `pk_photo` IN (' . $contents . ')');
-
-            return true;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
 }
