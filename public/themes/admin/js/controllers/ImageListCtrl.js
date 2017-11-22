@@ -95,7 +95,7 @@
           { id: $scope.selected.lastSelected.id }
         );
 
-        $http.post(url, data).then(function(response) {
+        $http.post(url, data).then(function() {
           $scope.saving = false;
           $scope.saved = true;
 
@@ -104,7 +104,7 @@
           }, 2000);
 
           return true;
-        }, function(error) {
+        }, function() {
           $scope.saving = false;
           $scope.saved = false;
           $scope.error = true;
