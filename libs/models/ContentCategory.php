@@ -408,7 +408,8 @@ class ContentCategory implements \JsonSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -433,7 +434,8 @@ class ContentCategory implements \JsonSerializable
                 return $item['pk_fk_content'];
             }, $rs);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
 
@@ -469,14 +471,14 @@ class ContentCategory implements \JsonSerializable
                 $conn->executeUpdate($sql);
             }
 
-            \Photo::batchDelete($contentsArray);
             \Video::batchDelete($contentsArray);
             \Attachment::batchDelete($contentsArray);
             $conn->commit();
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             $conn->rollBack();
             return false;
         }
@@ -508,7 +510,8 @@ class ContentCategory implements \JsonSerializable
             dispatchEventWithParams('category.update', [ 'category' => $this ]);
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
@@ -541,7 +544,8 @@ class ContentCategory implements \JsonSerializable
             dispatchEventWithParams('category.update', [ 'category' => $this ]);
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $logger = getService('error.log');
+            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
         }
     }
