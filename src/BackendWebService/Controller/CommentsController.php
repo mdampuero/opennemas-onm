@@ -251,17 +251,10 @@ class CommentsController extends ContentController
             }
         }
 
-        $fm       = $this->get('data.manager.filter');
         $contents = $this->get('entity_repository')->findMulti($ids);
-        $contents = $fm->set($contents)->filter('localize', [
-            'keys' => \ContentCategory::getL10nKeys(),
-            'locale' => $this->getLocaleData('frontend')['default']
-        ])->get();
 
         $extra['contents'] = [];
         foreach ($contents as $content) {
-            $content->uri = $fm->set($content->uri)->filter('localize')->get();
-
             $extra['contents'][$content->pk_content] = $content;
         }
 
