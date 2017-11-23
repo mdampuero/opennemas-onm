@@ -28,7 +28,7 @@ services:
 
     monolog.processor.onm:
         class: Framework\Monolog\ONMFormatter
-        arguments: [ @request_stack ]
+        arguments: [ @request_stack, @core.loader ]
         tags:
             - { name: monolog.processor, method: processRecord }
 

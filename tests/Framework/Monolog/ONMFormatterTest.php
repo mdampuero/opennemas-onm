@@ -9,11 +9,20 @@ use Framework\Monolog\ONMFormatter;
 class ONMFormatterTest extends \PHPUnit_Framework_TestCase
 {
 
-    private function defineInstance($instanceName = null)
+    private function getLoader($instanceName = null)
     {
+        $instance = null;
         if (!empty($instanceName)) {
-            define('INSTANCE_UNIQUE_NAME', $instanceName);
+            $instance                = $this->getMockBuilder('instance')->getMock();
+            $instance->internal_name = $instanceName;
         }
+        $loader = $this->getMockBuilder('loader')
+            ->setMethods([ 'getInstance'])
+            ->getMock();
+        $loader->expects($this->any())
+            ->method('getInstance')
+            ->will($this->returnValue($instance));
+        return $loader;
     }
 
     private function getRequest($uri = 'unknown', $clientIp = 'unknown', $header = null)
@@ -79,20 +88,19 @@ class ONMFormatterTest extends \PHPUnit_Framework_TestCase
         $instanceName = 'formatterTest';
 
         //test without instance defined and request not defined
-        $oNMFormatter = new ONMFormatter($this->getRequestStack());
+        $oNMFormatter = new ONMFormatter($this->getRequestStack(), $this->getLoader());
         $this->assertSame($oNMFormatter->processRecord([]), ['extra' => ['instance' => 'unknown']]);
 
         //test without instance defined and request defined
         $request      = $this->getRequest($url, $ip, ['User-Agent' => $userAgent]);
-        $oNMFormatter = new ONMFormatter($this->getRequestStack($request));
+        $oNMFormatter = new ONMFormatter($this->getRequestStack($request), $this->getLoader());
         $this->assertSame(
             $oNMFormatter->processRecord([]),
             ['extra' => ['instance' => 'unknown', 'client_ip' => $ip, 'user-agent' => $userAgent, 'url' => $url]]
         );
 
-        $this->defineInstance($instanceName);
         //test with instance defined and request not defined
-        $oNMFormatter = new ONMFormatter($this->getRequestStack());
+        $oNMFormatter = new ONMFormatter($this->getRequestStack(), $this->getLoader($instanceName));
         $this->assertSame(
             $oNMFormatter->processRecord([]),
             ['extra' => ['instance' => $instanceName]]
@@ -100,7 +108,7 @@ class ONMFormatterTest extends \PHPUnit_Framework_TestCase
 
         //test with instance defined and request defined
         $request      = $this->getRequest($url, $ip, ['User-Agent' => $userAgent]);
-        $oNMFormatter = new ONMFormatter($this->getRequestStack($request));
+        $oNMFormatter = new ONMFormatter($this->getRequestStack($request), $this->getLoader($instanceName));
         $this->assertSame(
             $oNMFormatter->processRecord([]),
             ['extra' => [

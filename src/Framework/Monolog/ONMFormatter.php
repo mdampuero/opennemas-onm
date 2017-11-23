@@ -16,9 +16,10 @@ class ONMFormatter
 
     private $requestStack;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, $loader)
     {
         $this->requestStack = $requestStack;
+        $this->loader       = $loader;
     }
 
     /*
@@ -31,8 +32,11 @@ class ONMFormatter
      */
     public function processRecord(array $record)
     {
-        if (defined('INSTANCE_UNIQUE_NAME')) {
-            $record['extra']['instance'] = INSTANCE_UNIQUE_NAME;
+        if (!empty($this->instance)) {
+            $record['extra']['instance'] = $this->instance;
+        } elseif (!empty($this->loader->getInstance())) {
+            $this->instance              = $this->loader->getInstance()->internal_name;
+            $record['extra']['instance'] = $this->instance;
         } else {
             $record['extra']['instance'] = 'unknown';
         }
