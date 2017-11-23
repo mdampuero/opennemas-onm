@@ -65,7 +65,7 @@
               {if isset($id)}
                 {acl isAllowed="ARTICLE_UPDATE"}
                   <li class="quicklinks">
-                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving || articleForm.$invalid || !article.pk_fk_content_category" type="button">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
                       <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
                       <span class="text">{t}Update{/t}</span>
                     </button>
@@ -74,7 +74,7 @@
               {else}
                 {acl isAllowed="ARTICLE_CREATE"}
                   <li class="quicklinks">
-                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving || articleForm.$invalid || !article.pk_fk_content_category" type="button">
+                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
                       <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
                       <span class="text">{t}Save{/t}</span>
                     </button>
@@ -114,11 +114,11 @@
               </div>
               <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title_int.$invalid }">
                 <label class="form-label" for="title-int">
-                  {t}Inner title{/t}
+                  {t}Inner title{/t} *
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" id="title-int" maxlength="256" name="title-int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[data.extra.options.default] %]">
+                    <input class="form-control" id="title-int" maxlength="256" name="title_int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
