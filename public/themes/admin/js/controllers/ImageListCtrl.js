@@ -7,7 +7,6 @@ angular.module('BackendApp.controllers')
    * @requires $scope
    * @requires http
    * @requires $timeout
-   * @requires routing
    * @requires messenger
    * @requires oqlEncoder
    *
@@ -15,8 +14,8 @@ angular.module('BackendApp.controllers')
    *   Controller for opinion list.
    */
   .controller('ImageListCtrl', [
-    '$controller', '$location', '$scope', 'http', '$timeout', 'routing', 'messenger', 'oqlEncoder',
-    function($controller, $location, $scope, http, $timeout, routing, messenger, oqlEncoder) {
+    '$controller', '$location', '$scope', 'http', '$timeout', 'messenger', 'oqlEncoder',
+    function($controller, $location, $scope, http, $timeout, messenger, oqlEncoder) {
       'use strict';
 
       // Initialize the super class and extend it.
@@ -32,7 +31,7 @@ angular.module('BackendApp.controllers')
         if (!reset && $scope.mode === 'grid') {
           $scope.loadingMore = 1;
         } else {
-          $scope.loading  = 1;
+          $scope.loading = 1;
           $scope.contents = [];
           $scope.selected = { all: false, contents: [] };
         }
@@ -57,7 +56,7 @@ angular.module('BackendApp.controllers')
 
         http.get(route).then(function(response) {
           $scope.total = parseInt(response.data.total);
-          $scope.map   = response.data.map;
+          $scope.map = response.data.map;
 
           if (response.data.hasOwnProperty('extra')) {
             $scope.extra = response.data.extra;
@@ -70,10 +69,10 @@ angular.module('BackendApp.controllers')
           }
 
           // Disable spinner
-          $scope.loading     = 0;
+          $scope.loading = 0;
           $scope.loadingMore = 0;
-        }, function () {
-          $scope.loading     = 0;
+        }, function() {
+          $scope.loading = 0;
           $scope.loadingMore = 0;
 
           messenger.post({
