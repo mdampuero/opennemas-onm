@@ -138,9 +138,13 @@
                 return function(modalWindow) {
                   $scope.data.article = webStorage.session.get($scope.draftKey);
 
-                  $scope.config.linkers.article.link(
-                    $scope.data.article, $scope.article);
-                  $scope.config.linkers.article.update();
+                  if($scope.config.linkers.article) {
+                    $scope.config.linkers.article.link(
+                      $scope.data.article, $scope.article);
+                    $scope.config.linkers.article.update();
+                  } else {
+                    $scope.article = $scope.data.article;
+                  }
 
                   modalWindow.close({ response: true, success: true });
 
