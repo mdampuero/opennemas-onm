@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="articleForm" ng-controller="ArticleCtrl" ng-init="init('{$locale}', '{$id}')" novalidate>
+  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="init('{$locale}', '{$id}')" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -99,7 +99,7 @@
             <div class="grid-body">
               <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title.$invalid }">
                 <label class="form-label" for="title">
-                  {t}Title{/t}
+                  {t}Title{/t} *
                 </label>
                 <div class="controls">
                   <div class="input-group">
@@ -114,11 +114,11 @@
               </div>
               <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title_int.$invalid }">
                 <label class="form-label" for="title-int">
-                  {t}Inner title{/t}
+                  {t}Inner title{/t} *
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" id="title-int" maxlength="256" name="title-int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[data.extra.options.default] %]">
+                    <input class="form-control" id="title-int" maxlength="256" name="title_int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
@@ -255,9 +255,9 @@
                       {/acl}
                     </div>
                   </div>
-                  <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.category.$invalid }">
+                  <div class="form-group" ng-class="{ 'has-error': showRequired && !article.pk_fk_content_category }">
                     <label class="form-label" for="category">
-                      {t}Category{/t}
+                      {t}Category{/t} *
                     </label>
                     <div class="controls">
                       <ui-select class="form-control" name="pk_fk_content_category" theme="select2" ng-model="article.pk_fk_content_category">

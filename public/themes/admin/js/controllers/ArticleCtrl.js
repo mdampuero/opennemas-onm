@@ -138,9 +138,13 @@
                 return function(modalWindow) {
                   $scope.data.article = webStorage.session.get($scope.draftKey);
 
-                  $scope.config.linkers.article.link(
-                    $scope.data.article, $scope.article);
-                  $scope.config.linkers.article.update();
+                  if($scope.config.linkers.article) {
+                    $scope.config.linkers.article.link(
+                      $scope.data.article, $scope.article);
+                    $scope.config.linkers.article.update();
+                  } else {
+                    $scope.article = $scope.data.article;
+                  }
 
                   modalWindow.close({ response: true, success: true });
 
@@ -427,7 +431,7 @@
          *   Saves a new article.
          */
         $scope.save = function() {
-          if ($scope.articleForm.$invalid) {
+          if ($scope.articleForm.$invalid || !$scope.data.article.pk_fk_content_category) {
             $scope.showRequired = true;
             return;
           }

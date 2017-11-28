@@ -364,6 +364,8 @@ class Content implements \JsonSerializable
             $data[$key] = $this->__get($key);
         }
 
+        $data['uri'] = $this->uri;
+
         return $data;
     }
 

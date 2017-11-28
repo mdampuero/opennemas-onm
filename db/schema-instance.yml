@@ -558,7 +558,7 @@ contents:
             options: { default: 100, notnull: false, unsigned: true }
         frontpage:
             type: boolean
-            options: { default: 1, notnull: false }
+            options: { default: 0, notnull: false }
         in_litter:
             type: boolean
             options: { default: 0, notnull: false }

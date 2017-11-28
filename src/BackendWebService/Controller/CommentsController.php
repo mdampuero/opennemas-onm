@@ -255,10 +255,10 @@ class CommentsController extends ContentController
 
         $extra['contents'] = [];
         foreach ($contents as $content) {
-            $content->uri = $content->uri;
-
             $extra['contents'][$content->pk_content] = $content;
         }
+
+        $this->get('core.locale')->setContext('frontend');
 
         return $extra;
     }
