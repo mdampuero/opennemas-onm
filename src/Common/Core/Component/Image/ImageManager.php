@@ -14,7 +14,7 @@ use Imagine\Image\ImageInterface;
 /*
  * This class in charge of image processing and transformation
  */
-class Image
+class ImageManager
 {
 
     /*
@@ -171,21 +171,17 @@ class Image
      *  @param String   $image      path to the image
      *
      *  @return imagine recover from the filesystem
-     *
-     *  @codeCoverageIgnore
      */
     public function getImage($image)
     {
-        if (gettype($image) != 'string') {
+        //@codeCoverageIgnoreStart
+        if (gettype($image) != 'string' || !file_exists($image) || !is_file($image)) {
             return null;
         }
 
-        if (file_exists($image) && is_file($image)) {
-            $imagine = new \Imagine\Imagick\Imagine();
-            return $imagine->open($image);
-        } else {
-            return null;
-        }
+        $imagine = new \Imagine\Imagick\Imagine();
+        return $imagine->open($image);
+        //@codeCoverageIgnoreEnd
     }
 
     /*

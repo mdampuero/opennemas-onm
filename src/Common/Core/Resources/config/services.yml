@@ -76,7 +76,7 @@ services:
         arguments: [ '@service_container' ]
 
     core.image.image:
-        class:     Common\Core\Component\Image\Image
+        class:     Common\Core\Component\Image\ImageManager
 
     core.instance:
         class:     Common\ORM\Entity\Instance

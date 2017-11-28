@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Image;
 
-use Common\Core\Component\Image\Image;
+use Common\Core\Component\Image\ImageManager;
 use PHPUnit\Framework\TestCase;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
@@ -18,25 +18,31 @@ use Imagine\Imagick\Imagine;
 use Tests\Common\Core\Component\Image\BoxMockTest;
 use Tests\Common\Core\Component\Image\ImagineMockTest;
 
-class ImageTest extends TestCase
+class ImageManagerTest extends TestCase
 {
 
+    /**
+     *  Method for get mock some methods of the ImageManager for the process method
+     */
     private function getMocketImageForProcess()
     {
-        return $this->getMockBuilder('Common\Core\Component\Image\Image')
+        return $this->getMockBuilder('Common\Core\Component\Image\ImageManager')
             ->setMethods([ 'crop', 'resize', 'thumbnail', 'zoomCrop' ])
             ->getMock();
     }
 
+    /**
+     * Method for get mock some methods of the ImageManager
+     */
     private function getMocketImage()
     {
-        return $this->getMockBuilder('Common\Core\Component\Image\Image')
+        return $this->getMockBuilder('Common\Core\Component\Image\ImageManager')
             ->setMethods([ 'getBox', 'getPoint', 'getImage' ])
             ->getMock();
     }
 
     /**
-     *  Generete a new imagine
+     *  Method for get mock some methods of the Imagine
      */
     private function getMocketImagine()
     {
@@ -45,6 +51,9 @@ class ImageTest extends TestCase
             ->getMock();
     }
 
+    /**
+     *  Method for get mock the element box
+     */
     private function getMocketBox()
     {
         return $this->getMockBuilder('BoxMockTest')
@@ -52,12 +61,18 @@ class ImageTest extends TestCase
             ->getMock();
     }
 
+    /**
+     *  Method for get mock some methods of the Point element
+     */
     private function getMocketPoint()
     {
         return $this->getMockBuilder('PointMockTest')
             ->getMock();
     }
 
+    /**
+     *  Method for get mock some methods of the Imagick
+     */
     private function getMocketImagick()
     {
         return $this->getMockBuilder('ImagickMockTest')
@@ -68,16 +83,16 @@ class ImageTest extends TestCase
 
 
     /**
-     * this method performs tests for the operation proccess. For that, check all method of image transformation
-     * that you can call with the process method. The result of that is compare with the result of call the same method
+     * this method performs tests for the operation proccess. In this process, check all method of image transformation
+     * that you can execute. The result of that is compare with the result of call the same method
      *
      */
     public function testProcess()
     {
         //Check if the process method call the method resize if the method name not exist
         $parameters = [];
-        $image   = $this->getMocketImageForProcess();
-        $imagine = $this->getMocketImagine();
+        $image      = $this->getMocketImageForProcess();
+        $imagine    = $this->getMocketImagine();
         $image->expects($this->once())
             ->method('resize')
             ->with($imagine, $parameters)
@@ -86,8 +101,8 @@ class ImageTest extends TestCase
 
         //Check if the process method call the method resize
         $parameters = [];
-        $image   = $this->getMocketImageForProcess();
-        $imagine = $this->getMocketImagine();
+        $image      = $this->getMocketImageForProcess();
+        $imagine    = $this->getMocketImagine();
         $image->expects($this->once())
             ->method('resize')
             ->with($imagine, $parameters)
@@ -174,17 +189,21 @@ class ImageTest extends TestCase
         $this->zoomCropTest($parameters);
     }
 
-    private function zoomCropTest($parameters) {
-        $box        = $this->getMocketBox($parameters[2], $parameters[3], ImageInterface::THUMBNAIL_OUTBOUND);
+    /**
+     *  Check ZoomCrop method
+     */
+    private function zoomCropTest($parameters)
+    {
+        $box = $this->getMocketBox($parameters[2], $parameters[3], ImageInterface::THUMBNAIL_OUTBOUND);
         $box->expects($this->once())
             ->method('getWidth')
             ->will($this->returnValue($parameters[2]));
         $box->expects($this->once())
             ->method('getHeight')
             ->will($this->returnValue($parameters[3]));
-        $box2       = $this->getMocketBox($parameters[0], $parameters[1]);
-        $point      = $this->getMocketPoint($parameters[4], $parameters[5]);
-        $image      = $this->getMocketImage();
+        $box2  = $this->getMocketBox($parameters[0], $parameters[1]);
+        $point = $this->getMocketPoint($parameters[4], $parameters[5]);
+        $image = $this->getMocketImage();
         $image->expects($this->exactly(2))
             ->method('getBox')
             ->withConsecutive(
@@ -240,6 +259,10 @@ class ImageTest extends TestCase
         $this->assertSame($image->resize($imagine, $parameters), $imagine);
     }
 
+    /**
+     * Check Strip method
+     *
+     */
     public function testStrip()
     {
         $imagine = $this->getMocketImagine();
@@ -249,6 +272,10 @@ class ImageTest extends TestCase
         $image->strip($imagine);
     }
 
+    /**
+     * Check get method
+     *
+     */
     public function testGet()
     {
         $parameters = [];
@@ -256,7 +283,7 @@ class ImageTest extends TestCase
         $imagick->expects($this->once())
             ->method('getImageFormat')
             ->will($this->returnValue('hh'));
-        $imagine    = $this->getMocketImagine();
+        $imagine = $this->getMocketImagine();
         $imagine->expects($this->once())
             ->method('getImagick')
             ->will($this->returnValue($imagick));
@@ -268,6 +295,10 @@ class ImageTest extends TestCase
         $image->get($imagine, $parameters);
     }
 
+    /**
+     * Check getImageFormat method
+     *
+     */
     public function testGetImageFormat()
     {
         $parameters = [];
@@ -275,7 +306,7 @@ class ImageTest extends TestCase
         $imagick->expects($this->once())
             ->method('getImageFormat')
             ->will($this->returnValue('HH'));
-        $imagine    = $this->getMocketImagine();
+        $imagine = $this->getMocketImagine();
         $imagine->expects($this->once())
             ->method('getImagick')
             ->will($this->returnValue($imagick));
@@ -284,12 +315,12 @@ class ImageTest extends TestCase
     }
 
     /**
-     *  Check Crop method
+     *  Check getImage method
      */
     public function testGetImage()
     {
-        $image      = $this->getMocketImage();
-        $imagick    = $this->getMocketImagick();
+        $image   = $this->getMocketImage();
+        $imagick = $this->getMocketImagick();
         $image->expects($this->once())
             ->method('getImage')
             ->with($this->equalTo('prueba'))
