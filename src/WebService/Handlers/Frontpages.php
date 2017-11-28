@@ -25,15 +25,12 @@ class Frontpages
     */
     public function allContent($category)
     {
-        // Init the Content and Database object
         $ccm = \ContentCategoryManager::get_instance();
 
         // Check if category exists and initialize contents var
-        $existsCategory     = $ccm->exists($category);
         $contentsInHomepage = null;
-
+        $existsCategory     = $ccm->exists($category);
         if (!$existsCategory) {
-            // throw RestException bad category
             throw new RestException(404, 'parameter is not valid');
         } else {
             // Run entire logic
@@ -50,7 +47,7 @@ class Frontpages
             $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
 
             // Get all frontpages images
-            $imageIdsList = array();
+            $imageIdsList = [];
             foreach ($contentsInHomepage as $content) {
                 if (isset($content->img1)) {
                     $imageIdsList [] = $content->img1;
@@ -59,14 +56,14 @@ class Frontpages
 
             if (count($imageIdsList) > 0) {
                 $er         = getService('entity_repository');
-                $order      = array('created' => 'DESC');
-                $imgFilters = array(
-                    'content_type_name' => array(array('value' => 'photo')),
-                    'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
-                );
+                $order      = [ 'created' => 'DESC' ];
+                $imgFilters = [
+                    'content_type_name' => [[ 'value' => 'photo' ]],
+                    'pk_content'        => [[ 'value' => $imageIdsList, 'operator' => 'IN' ]],
+                ];
                 $imageList  = $er->findBy($imgFilters, $order);
             } else {
-                $imageList = array();
+                $imageList = [];
             }
 
             foreach ($imageList as &$img) {
@@ -92,8 +89,8 @@ class Frontpages
 
                 //Change uri for href links except widgets
                 if ($content->content_type_name != 'widget') {
-                    $content->uri = "ext" . $content->uri;
-
+                    $content->uri      = "ext" . $content->uri;
+                    $content->external = true;
                     // Overload floating ads with external url's
                     if ($content->content_type_name == 'advertisement') {
                         $content->extWsUrl    = SITE_URL;
@@ -111,10 +108,8 @@ class Frontpages
                     } elseif ($item->fk_content_type == 3) {
                         // Get instance media
                         $basePath = INSTANCE_MEDIA;
-
                         // Get file path for attachments
                         $filePath = \ContentManager::getFilePathFromId($item->id);
-
                         // Compose the full url to the file
                         $item->fullFilePath = $basePath . FILE_DIR . $filePath;
                     } else {
@@ -134,9 +129,8 @@ class Frontpages
     public function allContentBlog($categoryName, $page = 1)
     {
         // Get category object
-        $categoryManager = getService('category_repository');
-        $category        = $categoryManager->findBy(
-            array('name' => array(array('value' => $categoryName))),
+        $category = getService('category_repository')->findBy(
+            [ 'name' => [[ 'value' => $categoryName ]] ],
             '1'
         );
 
@@ -150,25 +144,25 @@ class Frontpages
         $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $order   = [ 'starttime' => 'DESC' ];
-        $filters = array(
-            'content_type_name' => array(array('value' => 'article')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'category_name'     => array(array('value' => $category->name)),
-            'starttime'         => array(
+        $filters = [
+            'content_type_name' => [[ 'value' => 'article' ]],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'category_name'     => [[ 'value' => $category->name ]],
+            'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            )
-        );
+            ]
+        ];
 
         // Get all articles for this page
         $er            = getService('entity_repository');
         $articles      = $er->findBy($filters, $order, $epp, $page);
         $countArticles = $er->countBy($filters);
 
-        $imageIdsList = array();
+        $imageIdsList = [];
         foreach ($articles as $content) {
             if (isset($content->img1) && !empty($content->img1)) {
                 $imageIdsList [] = $content->img1;
@@ -178,13 +172,13 @@ class Frontpages
         $imageIdsList = array_unique($imageIdsList);
 
         if (count($imageIdsList) > 0) {
-            $imgFilters = array(
-                'content_type_name' => array(array('value' => 'photo')),
-                'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
-            );
+            $imgFilters = [
+                'content_type_name' => [[ 'value' => 'photo' ]],
+                'pk_content'        => [[ 'value' => $imageIdsList, 'operator' => 'IN' ]],
+            ];
             $imageList  = $er->findBy($imgFilters, $order);
         } else {
-            $imageList = array();
+            $imageList = [];
         }
 
         foreach ($imageList as &$img) {
@@ -206,7 +200,8 @@ class Frontpages
 
              //Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
-                $content->uri = "ext" . $content->uri;
+                $content->uri      = "ext" . $content->uri;
+                $content->external = true;
             }
 
             // Load attached and related contents from array
@@ -214,9 +209,6 @@ class Frontpages
                 ->loadAttachedVideo()
                 ->loadRelatedContents($categoryName);
         }
-
-        // Get url generator
-        $generator = getService('router');
 
         // Set pagination
         $pagination = getService('paginator')->get([
@@ -231,6 +223,6 @@ class Frontpages
             ]
         ]);
 
-        return utf8_encode(serialize(array($pagination->links, $articles)));
+        return utf8_encode(serialize([ $pagination->links, $articles ]));
     }
 }
