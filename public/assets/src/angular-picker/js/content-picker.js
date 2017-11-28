@@ -44,21 +44,24 @@ angular.module('onm.picker')
                       </div>\
                     </li>\
                     <li>\
-                      <select name=\"content-type\" ng-model=\"criteria.contentType\">\
-                        <option value=\"\">[% picker.params.explore.allContentTypes %]</option>\
-                        <option value=\"contents-in-frontpage\" ng-if=\"picker.section == 'newsletter'\">[% picker.params.explore.contentsInFrontpage %]</option>\
-                        <option value=\"[% type %]\" ng-repeat=\"type in picker.types.enabled\">\
-                          [% picker.params.explore.contentTypes[type] %]\
-                        </option>\
-                      </select>\
+                      <ui-select class=\" select2-border w-200\" name=\"content-type\" theme=\"select2\" ng-model=\"criteria.contentType\">\
+                        <ui-select-match>\
+                          [% $select.selected.title %]\
+                        </ui-select-match>\
+                        <ui-select-choices repeat=\"type.name as type in picker.params.explore.contentTypes | filter: { title: $select.search }\">\
+                          <div ng-bind-html=\"type.title | highlight: $select.search\"></div>\
+                        </ui-select-choices>\
+                      </ui-select>\
                     </li>\
                     <li ng-if=\"criteria.contentType != 'contents-in-frontpage'\">\
-                      <select name=\"category\" ng-model=\"criteria.category\">\
-                        <option value=\"\">[% picker.params.explore.allCategories %]</option>\
-                        <option value=\"[% category.pk_content_category %]\" ng-repeat=\"category in picker.params.explore.categories\">\
-                          [% category.title %]\
-                        </option>\
-                      </select>\
+                      <ui-select class=\" select2-border\" name=\"category\" theme=\"select2\" ng-model=\"criteria.category\">\
+                        <ui-select-match>\
+                          [% $select.selected.title %]\
+                        </ui-select-match>\
+                        <ui-select-choices group-by=\"groupCategories\" repeat=\"category.pk_content_category as category in picker.params.explore.categories | filter: { title: $select.search }\">\
+                          <div ng-bind-html=\"category.title | highlight: $select.search\"></div>\
+                        </ui-select-choices>\
+                      </ui-select>\
                     </li>\
                   </ul>\
                 </div>\
@@ -262,8 +265,8 @@ angular.module('onm.picker')
              * @param string type The content type.
              */
             setType: function(type) {
-              if (this.types.available.indexOf(type) !== -1
-                  && this.types.enabled.indexOf(type) === -1) {
+              if (this.types.available.indexOf(type) !== -1 &&
+                  this.types.enabled.indexOf(type) === -1) {
                 this.types.enabled.push(type);
               }
             }
@@ -334,6 +337,13 @@ angular.module('onm.picker')
             $http.post(url).then(function(response) {
               $scope.loading = false;
               $scope.picker.params = response.data;
+
+              $scope.picker.params.explore.contentTypes =
+                $scope.picker.params.explore.contentTypes.filter(function(e) {
+                  return e.name === null ||
+                    e.name === 'contents-in-frontpage' ||
+                    $scope.picker.types.enabled.indexOf(e.name) !== -1;
+                });
 
               $scope.explore();
             });
@@ -442,6 +452,30 @@ angular.module('onm.picker')
         $timeout(function() {
           $scope.list();
         }, 100);
+      };
+
+      /**
+       * @function groupCategories
+       * @memberOf ContentPickerCtrl
+       *
+       * @description
+       *   Groups categories in the ui-select.
+       *
+       * @param {Object} item The category to group.
+       *
+       * @return {String} The group name.
+       */
+      $scope.groupCategories = function(item) {
+        var category = $scope.picker.params.explore.categories
+          .filter(function(e) {
+            return e.pk_content_category === item.fk_content_category;
+          });
+
+        if (category.length > 0 && category[0].pk_content_category) {
+          return category[0].title;
+        }
+
+        return '';
       };
 
       /**

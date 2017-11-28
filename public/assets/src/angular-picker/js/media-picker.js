@@ -56,12 +56,14 @@ angular.module('onm.picker')
                       '</select>' +
                     '</li>' +
                     '<li class="hidden-xs" ng-if="picker.isTypeEnabled(\'video\')">' +
-                      '<select name="category" ng-model="$parent.category">' +
-                        '<option value="">[% picker.params.explore.allCategories %]</option>' +
-                        '<option value="[% category.id %]" ng-repeat="category in picker.params.explore.categories">' +
-                          '[% category.name %]' +
-                        '</option>' +
-                      '</select>' +
+                      '<ui-select class=" select2-border" name="category" theme="select2" ng-model="criteria.category">' +
+                        '<ui-select-match>' +
+                          '[% $select.selected.title %]' +
+                        '</ui-select-match>' +
+                        '<ui-select-choices group-by="groupCategories" repeat="category.pk_content_category as category in picker.params.explore.categories | filter: { title: $select.search }">' +
+                          '<div ng-bind-html="category.title | highlight: $select.search"></div>' +
+                        '</ui-select-choices>' +
+                      '</ui-select>' +
                     '</li>' +
                   '</ul>' +
                 '</div>' +
@@ -610,6 +612,31 @@ angular.module('onm.picker')
           $scope.list(true);
         }, 100);
       };
+
+      /**
+       * @function groupCategories
+       * @memberOf MediaPickerCtrl
+       *
+       * @description
+       *   Groups categories in the ui-select.
+       *
+       * @param {Object} item The category to group.
+       *
+       * @return {String} The group name.
+       */
+      $scope.groupCategories = function(item) {
+        var category = $scope.picker.params.explore.categories
+          .filter(function(e) {
+            return e.pk_content_category === item.fk_content_category;
+          });
+
+        if (category.length > 0 && category[0].pk_content_category) {
+          return category[0].title;
+        }
+
+        return '';
+      };
+
 
       /**
        * @function insert
