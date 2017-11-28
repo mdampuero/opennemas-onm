@@ -154,13 +154,26 @@ class PickerController extends Controller
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
 
         try {
-            $sql  = "UPDATE contents SET `description`=? WHERE pk_content=?";
-            $conn = $this->get('orm.manager')->getConnection('instance');
+            $photo = $this->get('entity_repository')->find('Photo', $id);
 
-            $conn->executeUpdate($sql, [$description, $id]);
+            // Check if the photo exists
+            if (!is_object($photo)) {
+                return new JsonResponse('Photo doesnt exists', 404);
+            }
 
-            $this->get('cache')->delete('Photo' . "-" . $id);
-            return new JsonResponse();
+            $this->get('orm.manager')->getConnection('instance')->executeUpdate(
+                "UPDATE contents SET `description`=? WHERE pk_content=?",
+                [ $description, $id ]
+            );
+
+            // Invalidate the cache for the photo
+            dispatchEventWithParams('content.update', [ 'content' => $photo ]);
+            dispatchEventWithParams(
+                $photo->content_type_name . '.update',
+                [ 'content' => $photo ]
+            );
+
+            return new JsonResponse('ok');
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 500);
         }

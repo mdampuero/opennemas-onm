@@ -895,11 +895,13 @@
             $scope.saved = true;
 
             $timeout(function() {
-              $scope.saved = false;
+              $scope.saving = false;
+              $scope.saved  = false;
             }, 2000);
           }, function() {
-            $scope.saved = false;
-            $scope.error = true;
+            $scope.saving = false;
+            $scope.saved  = false;
+            $scope.error  = true;
 
             $timeout(function() {
               $scope.error = false;
@@ -986,9 +988,9 @@
             return;
           }
 
-          // Remove element
           var index = $scope.selected.ids.indexOf(item.id);
 
+          // Remove element
           if (index !== -1) {
             $scope.selected.ids.splice(index, 1);
             $scope.selected.items.splice(index, 1);

@@ -1,26 +1,25 @@
-(function () {
- 'use strict';
+angular.module('BackendApp.controllers')
+  /**
+   * @ngdoc controller
+   * @name  ImageListCtrl
+   *
+   * @requires $controller
+   * @requires $scope
+   * @requires http
+   * @requires $timeout
+   * @requires messenger
+   * @requires oqlEncoder
+   *
+   * @description
+   *   Controller for opinion list.
+   */
+  .controller('ImageListCtrl', [
+    '$controller', '$location', '$scope', 'http', '$timeout', 'messenger', 'oqlEncoder',
+    function($controller, $location, $scope, http, $timeout, messenger, oqlEncoder) {
+      'use strict';
 
-  angular.module('BackendApp.controllers')
-    /**
-     * @ngdoc controller
-     * @name  ImageListCtrl
-     *
-     * @requires $controller
-     * @requires $scope
-     * @requires messenger
-     * @requires oqlEncoder
-     * @requires queryManager
-     *
-     * @description
-     *   Controller for opinion list.
-     */
-    .controller('ImageListCtrl', [
-      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
-      function($controller, $location, $scope, http, messenger, oqlEncoder) {
-
-        // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+      // Initialize the super class and extend it.
+      $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
 
       /**
        * Updates the array of contents.
@@ -32,7 +31,7 @@
         if (!reset && $scope.mode === 'grid') {
           $scope.loadingMore = 1;
         } else {
-          $scope.loading  = 1;
+          $scope.loading = 1;
           $scope.contents = [];
           $scope.selected = { all: false, contents: [] };
         }
@@ -57,7 +56,7 @@
 
         http.get(route).then(function(response) {
           $scope.total = parseInt(response.data.total);
-          $scope.map   = response.data.map;
+          $scope.map = response.data.map;
 
           if (response.data.hasOwnProperty('extra')) {
             $scope.extra = response.data.extra;
@@ -70,10 +69,10 @@
           }
 
           // Disable spinner
-          $scope.loading     = 0;
+          $scope.loading = 0;
           $scope.loadingMore = 0;
-        }, function () {
-          $scope.loading     = 0;
+        }, function() {
+          $scope.loading = 0;
           $scope.loadingMore = 0;
 
           messenger.post({
@@ -82,5 +81,41 @@
           });
         });
       };
+
+      /**
+       * Saves the last selected item description.
+       */
+      $scope.saveDescription = function() {
+        $scope.saving = true;
+
+        var data = { description: $scope.selected.lastSelected.description };
+
+        var route = {
+          name: 'backend_ws_picker_save_description',
+          params:  {
+            id: $scope.selected.lastSelected.id
+          }
+        };
+
+        http.post(route, data).then(function() {
+          $scope.saving = false;
+          $scope.saved = true;
+
+          $timeout(function() {
+            $scope.saved = false;
+          }, 2000);
+
+          return true;
+        }, function() {
+          $scope.saving = false;
+          $scope.saved = false;
+          $scope.error = true;
+
+          $timeout(function() {
+            $scope.error = false;
+          }, 2000);
+
+          return false;
+        });
+      };
     }]);
-})();
