@@ -48,6 +48,10 @@ class UrlGeneratorHelper
                 ->getCurrentRequest()->getSchemeAndHttpHost();
         }
 
+        if ($content->externalUri) {
+            return $content->externalUri;
+        }
+
         return $url . '/' . $this->getUriForContent($content);
     }
 
@@ -60,7 +64,6 @@ class UrlGeneratorHelper
     {
         return [
             'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'extarticle'  => 'extarticulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
             'opinion'     => 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html',
             'blog'        => 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html',
             'video'       => 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html',
@@ -152,9 +155,7 @@ class UrlGeneratorHelper
      */
     private function getUriForArticle($content)
     {
-        $articleType = $content->external ? 'extarticle' : 'article';
-
-        return $this->generateUriFromConfig($articleType, [
+        return $this->generateUriFromConfig('article', [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($content->created)),
             'category' => $content->category_name,
