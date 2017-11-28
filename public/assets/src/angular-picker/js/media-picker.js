@@ -543,14 +543,14 @@ angular.module('onm.picker')
        *
        * @type {integer}
        */
-      $scope.total;
+      $scope.total = 0;
 
       /**
        * The uploader object.
        *
        * @type {FileUploader}
        */
-      $scope.uploader;
+      $scope.uploader = null;
 
       /**
        * @function addItem
@@ -847,28 +847,26 @@ angular.module('onm.picker')
           { id: $scope.selected.lastSelected.id }
         );
 
-        $http.post(url, data).then(function(response) {
+        $http.post(url, data).then(function() {
           $scope.saving = false;
           $scope.saved = true;
 
-          if (response.status === 200) {
-            $timeout(function() {
-              $scope.saved = false;
-            }, 2000);
-
-            return true;
-          }
-
-          if (response.status !== 200) {
+          $timeout(function() {
+            $scope.saving = false;
             $scope.saved = false;
-            $scope.error = true;
+          }, 2000);
 
-            $timeout(function() {
-              $scope.error = false;
-            }, 2000);
+          return true;
+        }, function() {
+          $scope.saved = false;
+          $scope.error = true;
 
-            return false;
-          }
+          $timeout(function() {
+            $scope.saving = false;
+            $scope.error = false;
+          }, 2000);
+
+          return false;
         });
       };
 
