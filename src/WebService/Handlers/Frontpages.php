@@ -90,7 +90,16 @@ class Frontpages
                 //Change uri for href links except widgets
                 if ($content->content_type_name != 'widget') {
                     $content->uri      = "ext" . $content->uri;
-                    $content->external = true;
+                    $content->externalUri = getService('router')
+                        ->generate(
+                            'frontend_external_article_show',
+                            [
+                                'category_name' => $content->category_name,
+                                'slug'          => $content->slug,
+                                'article_id'    => date('YmdHis', strtotime($content->created)) .
+                                                   sprintf('%06d', $content->pk_content),
+                            ]
+                        );
                     // Overload floating ads with external url's
                     if ($content->content_type_name == 'advertisement') {
                         $content->extWsUrl    = SITE_URL;
@@ -201,7 +210,16 @@ class Frontpages
              //Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
                 $content->uri      = "ext" . $content->uri;
-                $content->external = true;
+                $content->externalUri = getService('router')
+                    ->generate(
+                        'frontend_external_article_show',
+                        [
+                            'category_name' => $content->category_name,
+                            'slug'          => $content->slug,
+                            'article_id'    => date('YmdHis', strtotime($content->created)) .
+                                               sprintf('%06d', $content->pk_content),
+                        ]
+                    );
             }
 
             // Load attached and related contents from array
