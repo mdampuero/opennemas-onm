@@ -20,8 +20,6 @@
     .controller('NewsletterListCtrl', [
       '$controller', '$http', '$scope', '$uibModal', 'messenger', 'routing',
       function($controller, $http, $scope, $uibModal, messenger, routing) {
-        'use strict';
-
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
 
