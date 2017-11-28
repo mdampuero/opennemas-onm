@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  YesNoModalCtrl
@@ -18,7 +19,7 @@
       '$uibModalInstance', '$scope', 'template', 'yes', 'no',
       function($uibModalInstance, $scope, template, yes, no) {
         /**
-         * memberOf YesNoModalCtrl
+         * @memberOf YesNoModalCtrl
          *
          * @description
          *   The template parameters.
