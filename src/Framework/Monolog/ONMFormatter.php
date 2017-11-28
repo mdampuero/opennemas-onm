@@ -13,36 +13,46 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ONMFormatter
 {
-
+    /**
+     * The current request stack
+     *
+     * @var RequestStack
+     */
     private $requestStack;
 
+    /**
+     * Initializes the OnmFormatter.
+     *
+     * @param RequestStack $requestStack The current request stack.
+     * @param Loader       $loader       The core loader service.
+     */
     public function __construct(RequestStack $requestStack, $loader)
     {
         $this->requestStack = $requestStack;
         $this->loader       = $loader;
+        $this->instance     = $this->loader->getInstance();
     }
 
     /*
-     *     Adds extra info to the monolog processor. With this we can enrich our
-     * logs
+     * Adds extra info to the monolog processor. With this we can enrich our
+     * logs.
      *
-     * @param array $record the current log record
+     * @param array $record The current log record.
      *
-     * @return array the modified record
+     * @return array The modified record.
      */
     public function processRecord(array $record)
     {
+        $record['extra']['instance'] = 'unknown';
+
         if (!empty($this->instance)) {
-            $record['extra']['instance'] = $this->instance;
-        } elseif (!empty($this->loader->getInstance())) {
-            $this->instance              = $this->loader->getInstance()->internal_name;
-            $record['extra']['instance'] = $this->instance;
-        } else {
-            $record['extra']['instance'] = 'unknown';
+            $record['extra']['instance'] = $this->instance->internal_name;
         }
 
+        $request = $this->requestStack->getCurrentRequest();
+
         // Ensure we have a request (maybe we're in a console command)
-        if (! $request = $this->requestStack->getCurrentRequest()) {
+        if (empty($request)) {
             return $record;
         }
 
