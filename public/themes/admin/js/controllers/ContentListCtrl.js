@@ -129,7 +129,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         name: $scope.route,
         params:  {
           contentType: $scope.criteria.content_type_name ?
-            $scope.criteria.content_type_name : 'content' ,
+            $scope.criteria.content_type_name : 'content',
           oql: oql
         }
       };
@@ -155,7 +155,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         // Disable spinner
         $scope.loading     = 0;
         $scope.loadingMore = 0;
-      }, function () {
+      }, function() {
         $scope.loading     = 0;
         $scope.loadingMore = 0;
 
@@ -191,11 +191,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $http.post(url, { positions: ids }).success(function(response) {
         messenger.post(response.messages);
-      }).error(function() {});
+      });
     };
 
     $scope.saveOpinionsFrontpage = function() {
-      var ids = { director: [], editorial: [], opinions: [] };
+      var ids = {
+        director: [],
+        editorial: [],
+        opinions: []
+      };
 
       for (var name in ids) {
         for (var i = 0; i < $scope[name].length; i++) {
@@ -207,12 +211,12 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $http.post(url, { positions: ids }).success(function(response) {
         messenger.post(response.messages);
-      }).error(function() {});
+      });
     };
 
     $scope.scroll = function() {
       if ($scope.total === $scope.contents.length) {
-        return false;
+        return;
       }
 
       $scope.criteria.page++;
@@ -230,28 +234,21 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         { id: $scope.selected.lastSelected.id }
       );
 
-      $http.post(url, data).then(function(response) {
+      $http.post(url, data).then(function() {
         $scope.saving = false;
-        $scope.saved = true;
+        $scope.saved  = true;
 
-        if (response.status === 200) {
-          $timeout(function() {
-            $scope.saved = false;
-          }, 2000);
-
-          return true;
-        }
-
-        if (response.status !== 200) {
+        $timeout(function() {
           $scope.saved = false;
-          $scope.error = true;
+        }, 2000);
+      }, function() {
+        $scope.saving = false;
+        $scope.saved  = false;
+        $scope.error  = true;
 
-          $timeout(function() {
-            $scope.error = false;
-          }, 2000);
-
-          return false;
-        }
+        $timeout(function() {
+          $scope.error = false;
+        }, 2000);
       });
     };
 
@@ -287,15 +284,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       var maxHeight = $(window).height() - $('.header').height() -
         $('.actions-navbar').height();
-      var maxWidth = $(window).width() - $('.sidebar').width();
+      var maxWidth  = $(window).width() - $('.sidebar').width();
+      var padding   = 15;
 
       if ($('.content-wrapper').length > 0) {
-        maxWidth -=parseInt($('.content-wrapper').css('padding-right'));
+        maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
       }
 
-      var height = $('.infinite-col').width() + 15;
-      var width = $('.infinite-col').width() + 15;
-
+      var height = $('.infinite-col').width() + padding;
+      var width = $('.infinite-col').width() + padding;
 
       var rows = Math.ceil(maxHeight / height);
       var cols = Math.floor(maxWidth / width);
@@ -376,7 +373,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.selected.lastSelected = null;
 
         $scope.selected.contents.splice(
-            $scope.selected.contents.indexOf(content.id), 1);
+          $scope.selected.contents.indexOf(content.id), 1);
       }
     };
 
@@ -518,7 +515,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Permanently removes a list of keywords by using a confirmation dialog
      */
-    $scope.deleteSelected = function (route) {
+    $scope.deleteSelected = function(route) {
       // Enable spinner
       $scope.deleting = 1;
 
@@ -536,7 +533,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
             return function() {
               var url = routing.generate(route);
 
-              return $http.post(url, {ids: $scope.selected.contents});
+              return $http.post(url, { ids: $scope.selected.contents });
             };
           }
         }
@@ -611,7 +608,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Permanently removes a list of keywords by using a confirmation dialog
      */
-    $scope.deleteSelectedKeywords = function () {
+    $scope.deleteSelectedKeywords = function() {
       // Enable spinner
       $scope.deleting = 1;
 
@@ -629,7 +626,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
             return function() {
               var url = routing.generate('backend_ws_keywords_batch_delete');
 
-              return $http.post(url, {ids: $scope.selected.contents});
+              return $http.post(url, { ids: $scope.selected.contents });
             };
           }
         }
@@ -688,7 +685,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Sends a list of selected contents to trash by using a confirmation dialog
      */
-    $scope.sendToTrashSelected = function () {
+    $scope.sendToTrashSelected = function() {
       // Enable spinner
       $scope.deleting = 1;
 
@@ -709,7 +706,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
                 { contentType: $scope.criteria.content_type_name }
               );
 
-              return $http.post(url, {ids: $scope.selected.contents});
+              return $http.post(url, { ids: $scope.selected.contents });
             };
           }
         }
