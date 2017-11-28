@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  YesNoModalCtrl
@@ -16,9 +17,9 @@
      */
     .controller('YesNoModalCtrl', [
       '$uibModalInstance', '$scope', 'template', 'yes', 'no',
-      function ($uibModalInstance, $scope, template, yes, no) {
+      function($uibModalInstance, $scope, template, yes, no) {
         /**
-         * memberOf YesNoModalCtrl
+         * @memberOf YesNoModalCtrl
          *
          * @description
          *   The template parameters.
@@ -49,12 +50,14 @@
           $scope.noLoading = 1;
 
           var getType = {};
+
           if (no && getType.toString.call(no) === '[object Function]') {
             no($uibModalInstance, $scope.template, $scope.yesLoading);
           } else {
             $uibModalInstance.close(true);
           }
         };
+
         /**
          * @function no
          * @memberOf YesNoModalCtrl
@@ -66,6 +69,7 @@
           $scope.yesLoading = 1;
 
           var getType = {};
+
           if (yes && getType.toString.call(yes) === '[object Function]') {
             yes($uibModalInstance, $scope.template, $scope.yesLoading);
           } else {

@@ -275,30 +275,37 @@ class ContentController extends Controller
 
         $ids = $request->request->get('ids');
 
-        if (!is_array($ids) || empty($ids)) {
+        $criteria = [
+            'pk_content' => [
+                [ 'value' => $ids, 'operator' => 'IN']
+            ],
+        ];
+
+        $contents = $this->get('entity_repository')->findBy($criteria);
+
+        if (!is_array($contents) || empty($contents)) {
             return new JsonResponse([
                 'messages' => array_merge($success, $errors)
             ]);
         }
 
-        foreach ($ids as $id) {
-            $content = $em->find(\classify($contentType), $id);
-
+        foreach ($contents as $content) {
             if (!is_null($content->id)) {
                 try {
-                    $content->restoreFromTrash($id);
-                    $updated[] = $id;
+                    $content->restoreFromTrash($content->id);
+
+                    $updated[] = $content->id;
                 } catch (Exception $e) {
                     $errors[] = [
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to restore from trash the item with id "%d"'), $id),
+                        'id'      => $content->id,
+                        'message' => sprintf(_('Unable to restore from trash the item with id "%d"'), $content->id),
                         'type'    => 'error'
                     ];
                 }
             } else {
                 $errors[] = [
-                    'id'      => $id,
-                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'id'      => $content->id,
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $content->id),
                     'type'    => 'error'
                 ];
             }
@@ -312,11 +319,9 @@ class ContentController extends Controller
             ];
         }
 
-        return new JsonResponse(
-            [
-                'messages'  => array_merge($success, $errors)
-            ]
-        );
+        return new JsonResponse([
+            'messages'  => array_merge($success, $errors)
+        ]);
     }
 
     /**
@@ -384,30 +389,36 @@ class ContentController extends Controller
 
         $ids = $request->request->get('ids');
 
-        if (!is_array($ids) || empty($ids)) {
+        $criteria = [
+            'pk_content' => [
+                [ 'value' => $ids, 'operator' => 'IN']
+            ],
+        ];
+
+        $contents = $this->get('entity_repository')->findBy($criteria);
+
+        if (!is_array($contents) || empty($contents)) {
             return new JsonResponse([
                 'messages' => array_merge($success, $errors)
             ]);
         }
 
-        foreach ($ids as $id) {
-            $content = $em->find(\classify($contentType), $id);
-
+        foreach ($contents as $content) {
             if (!is_null($content->id)) {
                 try {
-                    $content->remove($id);
-                    $updated[] = $id;
+                    $content->remove($content->id);
+                    $updated[] = $content->id;
                 } catch (Exception $e) {
                     $errors[] = [
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
+                        'id'      => $content->id,
+                        'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $content->id),
                         'type'    => 'error'
                     ];
                 }
             } else {
                 $errors[] = [
                     'id'      => $id,
-                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $content->id),
                     'type'    => 'error'
                 ];
             }

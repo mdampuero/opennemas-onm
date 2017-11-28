@@ -74,10 +74,7 @@
             <input class="no-boarder" type="text" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name{/t}" />
           </li>
           <li class="quicklinks hidden-xs">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks hidden-xs">
-            <select id="content_type_name" ng-model="criteria.content_type_name" data-label="{t}Content Type{/t}" class="select2">
+            <select id="content_type_name" ng-model="criteria.content_type_name" data-label="<strong>{t}Content Type{/t}</strong>" class="select2">
               <option value="">{t}All{/t}</option>
 
               {is_module_activated name="ARTICLE_MANAGER"}
@@ -168,6 +165,11 @@
               </ui-select-choices>
             </ui-select>
           </li>
+          <li class="ng-cloak">
+            <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
+            </button>
+          </li>
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
@@ -216,7 +218,11 @@
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="listing-inline-actions">
-                    <a ng-href="[% edit(content.id, 'admin_'+content.content_type_name+'_show') %]" class="link">
+                    <a ng-if="content.content_type_name == 'static_page'" ng-href="[% edit(content.id, 'backend_'+content.content_type_name+'_show') %]" class="link">
+                      <i class="fa fa-pencil"></i>
+                      {t}Edit{/t}
+                    </a>
+                    <a ng-if="content.content_type_name != 'static_page'" ng-href="[% edit(content.id, 'admin_'+content.content_type_name+'_show') %]" class="link">
                       <i class="fa fa-pencil"></i>
                       {t}Edit{/t}
                     </a>
@@ -255,22 +261,9 @@
   <script type="text/ng-template" id="modal-batch-remove-permanently">
     {include file="common/modals/_modalBatchRemovePermanently.tpl"}
   </script>
+
   <script type="text/ng-template" id="modal-remove-all">
-    <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
-    <h4 class="modal-title">
-        <i class="fa fa-trash-o"></i>
-        {t}Delete all trashed contents{/t}
-    </h4>
-  </div>
-  <div class="modal-body">
-      <p>{t escape=off}Are you sure you want to remove permanently all the contents inside the trash?{/t}</p>
-  </div>
-  <div class="modal-footer">
-      <span class="loading" ng-if="deleting == 1"></span>
-      <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove all{/t}</button>
-      <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
-  </div>
+    {include file="trash/modals/_modalTrashRemoveAll.tpl"}
   </script>
 </div>
 {/block}
