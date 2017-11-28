@@ -160,9 +160,9 @@
          */
         $scope.removePermanently = function(content) {
           $uibModal.open({
-            templateUrl: 'modal-remove-permanently',
             backdrop: 'static',
-            controller: 'YesNoModalCtrl',
+            controller:  'YesNoModalCtrl',
+            templateUrl: 'modal-remove-permanently',
             resolve: {
               template: function() {
                 return {
@@ -208,9 +208,9 @@
          */
         $scope.removePermanentlySelected = function() {
           $uibModal.open({
-            templateUrl: 'modal-batch-remove-permanently',
             backdrop: 'static',
             controller: 'YesNoModalCtrl',
+            templateUrl: 'modal-batch-remove-permanently',
             resolve: {
               template: function() {
                 return {
@@ -240,6 +240,11 @@
 
                     $scope.list($scope.route);
                   });
+                };
+              },
+              no: function() {
+                return function(modalWindow) {
+                  modalWindow.close({ response: false, success: true });
                 };
               }
             }
