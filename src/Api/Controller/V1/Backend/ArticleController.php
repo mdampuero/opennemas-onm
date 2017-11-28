@@ -149,7 +149,7 @@ class ArticleController extends Controller
 
         $converter = $this->get('orm.manager')->getConverter('User');
         $users     = $this->get('orm.manager')->getRepository('User')
-            ->findBy('fk_user_group regexp "^3($|,)|,\s*3\s*,|(^|,)\s*3$"');
+            ->findBy('fk_user_group regexp "^3($|,)|,\s*3\s*,|(^|,)\s*3$" order by name asc');
 
         foreach ($users as $user) {
             $user->eraseCredentials();
@@ -245,12 +245,11 @@ class ArticleController extends Controller
      */
     protected function getRelated(&$article)
     {
-        $em     = $this->get('entity_repository');
-        $extra  = [];
-        $fm     = $this->get('data.manager.filter');
-        $keys   = [ 'frontpage', 'inner', 'home' ];
-        $locale = $this->get('core.locale')->getLocale('frontend');
-        $rm     = $this->get('related_contents');
+        $em    = $this->get('entity_repository');
+        $extra = [];
+        $fm    = $this->get('data.manager.filter');
+        $keys  = [ 'frontpage', 'inner', 'home' ];
+        $rm    = $this->get('related_contents');
 
         foreach ($keys as $key) {
             $name = 'related' . ucfirst(str_replace('page', '', $key));
