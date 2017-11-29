@@ -37,6 +37,29 @@ class AdvertisementRenderer
     }
 
     /**
+     * Returns the list of CSS classes according to device restrictions for an Ad
+     *
+     * @param Advertisement $ad the advertisement to get restrictions from
+     *
+     * @return string the css classes to apply
+     */
+    public function getDeviceCSSClasses(\Advertisement $ad)
+    {
+        if (!array_key_exists('devices', $ad->params)) {
+            return '';
+        }
+
+        $cssClasses = [];
+        foreach ($ad->params['devices'] as $device => $status) {
+            if ($status === 0) {
+                $cssClasses[] = 'hidden-' . $device;
+            }
+        }
+
+        return implode(' ', $cssClasses);
+    }
+
+    /**
      * Renders an advertisement given some params
      *
      * @param Advertisement $ad The advertisement to render.
@@ -53,7 +76,7 @@ class AdvertisementRenderer
             return $this->renderSafeFrameSlot($ad, $params);
         }
 
-        $deviceClasses = $this->getDeviceCSSClases($ad);
+        $deviceClasses = $this->getDeviceCSSClasses($ad);
 
         $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s">%s</div>';
         $content     = $this->renderInline($ad, $params);
@@ -493,29 +516,6 @@ class AdvertisementRenderer
 
         return $this->container->get('core.template.admin')
             ->fetch('advertisement/helpers/safeframe/image.tpl', $params);
-    }
-
-    /**
-     * Returns the list of CSS classes according to device restrictions for an Ad
-     *
-     * @param Advertisement $ad the advertisement to get restrictions from
-     *
-     * @return string the css classes to apply
-     */
-    public function getDeviceCSSClases(\Advertisement $ad)
-    {
-        if (!array_key_exists('devices', $ad->params)) {
-            return '';
-        }
-
-        $cssClasses = [];
-        foreach ($ad->params['devices'] as $device => $status) {
-            if ($status === 0) {
-                $cssClasses[] = 'hidden-' . $device;
-            }
-        }
-
-        return implode(' ', $cssClasses);
     }
 
     /**

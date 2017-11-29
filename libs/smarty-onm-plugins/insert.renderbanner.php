@@ -63,7 +63,7 @@ function smarty_insert_renderbanner($params, $smarty)
         }
         $format = empty($format) ? 'inline' : $format;
 
-        $deviceClasses = $renderer->getDeviceCSSClases($ad);
+        $deviceClasses = $renderer->getDeviceCSSClasses($ad);
         $class   = ' oat-visible oat-' . $orientation . ' ' . $deviceClasses;
         $content = $renderer->renderInline($ad, $format);
         $content = sprintf($tpl, $class, $content);
