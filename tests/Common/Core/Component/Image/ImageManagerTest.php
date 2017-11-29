@@ -22,7 +22,7 @@ class ImageManagerTest extends TestCase
 {
 
     /**
-     *  Method for get mock some methods of the ImageManager for the process method
+     *  Method for get mock some methods of the ImageManager for the process method.
      */
     private function getMocketImageForProcess()
     {
@@ -32,7 +32,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     * Method for get mock some methods of the ImageManager
+     * Method for get mock some methods of the ImageManager.
      */
     private function getMocketImage()
     {
@@ -42,7 +42,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Method for get mock some methods of the Imagine
+     *  Method for get mock some methods of the Imagine.
      */
     private function getMocketImagine()
     {
@@ -52,7 +52,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Method for get mock the element box
+     *  Method for get mock the element box.
      */
     private function getMocketBox()
     {
@@ -62,7 +62,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Method for get mock some methods of the Point element
+     *  Method for get mock some methods of the Point element.
      */
     private function getMocketPoint()
     {
@@ -71,7 +71,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Method for get mock some methods of the Imagick
+     *  Method for get mock some methods of the Imagick.
      */
     private function getMocketImagick()
     {
@@ -83,13 +83,13 @@ class ImageManagerTest extends TestCase
 
 
     /**
-     * this method performs tests for the operation proccess. In this process, check all method of image transformation
-     * that you can execute. The result of that is compare with the result of call the same method
+     * Here we proceed to test all the methods that we have to transform images. The system is check the method called
+     * directly with the response gived for this method.
      *
      */
     public function testProcess()
     {
-        //Check if the process method call the method resize if the method name not exist
+        //Check if the process method call the method resize if the method name not exist.
         $parameters = [];
         $image      = $this->getMocketImageForProcess();
         $imagine    = $this->getMocketImagine();
@@ -99,7 +99,7 @@ class ImageManagerTest extends TestCase
             ->will($this->returnValue($imagine));
         $this->assertSame($image->process('fdsa', $imagine, $parameters), $imagine);
 
-        //Check if the process method call the method resize
+        //Check if the process method call the method resize.
         $parameters = [];
         $image      = $this->getMocketImageForProcess();
         $imagine    = $this->getMocketImagine();
@@ -111,7 +111,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Check Crop method
+     *  Check Crop method.
      */
     public function testCrop()
     {
@@ -136,7 +136,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Check Thumbnail method
+     *  Check Thumbnail method.
      */
     public function testThumbnail()
     {
@@ -178,7 +178,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Check ZoomCrop method
+     *  Check ZoomCrop method.
      */
     public function testZoomCrop()
     {
@@ -190,7 +190,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Check ZoomCrop method
+     *  Check ZoomCrop method.
      */
     private function zoomCropTest($parameters)
     {
@@ -240,7 +240,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Check Resize method
+     *  Check Resize method.
      */
     public function testResize()
     {
@@ -260,7 +260,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     * Check Strip method
+     * Check Strip method.
      *
      */
     public function testStrip()
@@ -273,7 +273,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     * Check get method
+     * Check get method.
      *
      */
     public function testGet()
@@ -296,7 +296,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     * Check getImageFormat method
+     * Check getImageFormat method.
      *
      */
     public function testGetImageFormat()
@@ -315,7 +315,7 @@ class ImageManagerTest extends TestCase
     }
 
     /**
-     *  Check getImage method
+     *  Check getImage method.
      */
     public function testGetImage()
     {
