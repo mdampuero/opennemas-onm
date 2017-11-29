@@ -48,7 +48,7 @@ class UrlGeneratorHelper
                 ->getCurrentRequest()->getSchemeAndHttpHost();
         }
 
-        if ($content->externalUri) {
+        if (!empty($content->externalUri)) {
             return $content->externalUri;
         }
 
