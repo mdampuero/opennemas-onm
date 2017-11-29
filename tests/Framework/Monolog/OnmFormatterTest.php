@@ -10,96 +10,6 @@ class OnmFormatterTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * This method create the mockup for the loader element
-     *
-     *  @param string Name for the instance
-     *
-     *  @return object The mockup loader
-     */
-    private function getLoader($instanceName = null)
-    {
-        $instance = null;
-        if (!empty($instanceName)) {
-            $instance                = $this->getMockBuilder('instance')->getMock();
-            $instance->internal_name = $instanceName;
-        }
-        $loader = $this->getMockBuilder('loader')
-            ->setMethods([ 'getInstance'])
-            ->getMock();
-        $loader->expects($this->any())
-            ->method('getInstance')
-            ->will($this->returnValue($instance));
-        return $loader;
-    }
-
-    /**
-     * This method create the mockup for the request element
-     *
-     * @param string $uri      The request uri
-     * @param string $clientIp The request Ip
-     * @param array  $header   Array with all needed headers for the request.
-     *
-     * @param object The request mockup
-     */
-    private function getRequest($uri = 'unknown', $clientIp = 'unknown', $header = null)
-    {
-        $request = $this->getMockBuilder('request')
-            ->setMethods([ 'getClientIp', 'getUri'])
-            ->getMock();
-        $request->expects($this->once())
-            ->method('getClientIp')
-            ->will($this->returnValue($clientIp));
-
-        $request->expects($this->once())
-            ->method('getUri')
-            ->will($this->returnValue($uri));
-
-        if ($header === null) {
-            return $request;
-        }
-        $headerObj = $this->getMockBuilder('header')
-            ->setMethods([ 'get'])
-            ->getMock();
-
-        $request->headers = $headerObj;
-
-        if (empty($header)) {
-            $request->expects($this->once())
-                ->method('get')
-                ->with($this->anything())
-                ->will($this->returnValue(null));
-            return $request;
-        }
-
-        array_map(function ($headerKey) use ($header, $headerObj) {
-            $headerObj->expects($this->once())
-                ->method('get')
-                ->with($headerKey)
-                ->will($this->returnValue($header[$headerKey]));
-        }, array_keys($header));
-
-        return $request;
-    }
-
-    /**
-     * This method create the mockup for the request stack
-     *
-     * @param object $request the request for the mockup request stack
-     *
-     * @return object The request stack mockup
-     */
-    private function getRequestStack($request = null)
-    {
-        $requestStack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
-            ->setMethods([ 'getCurrentRequest'])
-            ->getMock();
-        $requestStack->expects($this->once())
-            ->method('getCurrentRequest')
-            ->will($this->returnValue($request));
-        return $requestStack;
-    }
-
-    /**
      * This method check if the OnmFormatter return the correct formant for the
      * logs system
      */
@@ -109,29 +19,152 @@ class OnmFormatterTest extends \PHPUnit_Framework_TestCase
         $ip           = '10.1.0.60';
         $url          = '/unittestFormatter';
         $instanceName = 'formatterTest';
+        $header       = ['User-Agent' => $userAgent];
 
         //test without instance defined and request not defined
-        $onmFormatter = new OnmFormatter($this->getRequestStack(), $this->getLoader());
+
+        //Create a request stack
+        $requestStack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
+            ->setMethods([ 'getCurrentRequest'])
+            ->getMock();
+        $requestStack->expects($this->once())
+            ->method('getCurrentRequest')
+            ->will($this->returnValue(null));
+
+        // Create a empty loader
+        $loader = $this->getMockBuilder('loader')
+            ->setMethods([ 'getInstance'])
+            ->getMock();
+        $loader->expects($this->any())
+            ->method('getInstance')
+            ->will($this->returnValue(null));
+
+        $onmFormatter = new OnmFormatter($requestStack, $loader);
         $this->assertSame($onmFormatter->processRecord([]), ['extra' => ['instance' => 'unknown']]);
 
         //test without instance defined and request defined
-        $request      = $this->getRequest($url, $ip, ['User-Agent' => $userAgent]);
-        $onmFormatter = new OnmFormatter($this->getRequestStack($request), $this->getLoader());
+
+        //Create a request
+        $request = $this->getMockBuilder('request')
+            ->setMethods([ 'getClientIp', 'getUri'])
+            ->getMock();
+        $request->expects($this->once())
+            ->method('getClientIp')
+            ->will($this->returnValue($ip));
+
+        $request->expects($this->once())
+            ->method('getUri')
+            ->will($this->returnValue($url));
+
+        $headerObj = $this->getMockBuilder('header')
+            ->setMethods([ 'get'])
+            ->getMock();
+
+        $request->headers = $headerObj;
+
+        array_map(function ($headerKey) use ($header, $headerObj) {
+            $headerObj->expects($this->once())
+                ->method('get')
+                ->with($headerKey)
+                ->will($this->returnValue($header[$headerKey]));
+        }, array_keys(['User-Agent' => $userAgent]));
+
+        //Create a request stack
+        $requestStack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
+            ->setMethods([ 'getCurrentRequest'])
+            ->getMock();
+        $requestStack->expects($this->once())
+            ->method('getCurrentRequest')
+            ->will($this->returnValue($request));
+
+        // Create a empty loader
+        $loader = $this->getMockBuilder('loader')
+            ->setMethods([ 'getInstance'])
+            ->getMock();
+        $loader->expects($this->any())
+            ->method('getInstance')
+            ->will($this->returnValue(null));
+
+        $onmFormatter = new OnmFormatter($requestStack, $loader);
         $this->assertSame(
             $onmFormatter->processRecord([]),
             ['extra' => ['instance' => 'unknown', 'client_ip' => $ip, 'user-agent' => $userAgent, 'url' => $url]]
         );
 
         //test with instance defined and request not defined
-        $onmFormatter = new OnmFormatter($this->getRequestStack(), $this->getLoader($instanceName));
+
+        //Create a request stack
+        $requestStack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
+            ->setMethods([ 'getCurrentRequest'])
+            ->getMock();
+        $requestStack->expects($this->once())
+            ->method('getCurrentRequest')
+            ->will($this->returnValue(null));
+
+        //create a loader with instance
+        $instance                = $this->getMockBuilder('instance')->getMock();
+        $instance->internal_name = $instanceName;
+
+        $loader = $this->getMockBuilder('loader')
+            ->setMethods([ 'getInstance'])
+            ->getMock();
+        $loader->expects($this->any())
+            ->method('getInstance')
+            ->will($this->returnValue($instance));
+
+        $onmFormatter = new OnmFormatter($requestStack, $loader);
         $this->assertSame(
             $onmFormatter->processRecord([]),
             ['extra' => ['instance' => $instanceName]]
         );
 
         //test with instance defined and request defined
-        $request      = $this->getRequest($url, $ip, ['User-Agent' => $userAgent]);
-        $onmFormatter = new OnmFormatter($this->getRequestStack($request), $this->getLoader($instanceName));
+
+        //Create a request
+        $request = $this->getMockBuilder('request')
+            ->setMethods([ 'getClientIp', 'getUri'])
+            ->getMock();
+        $request->expects($this->once())
+            ->method('getClientIp')
+            ->will($this->returnValue($ip));
+
+        $request->expects($this->once())
+            ->method('getUri')
+            ->will($this->returnValue($url));
+
+        $headerObj = $this->getMockBuilder('header')
+            ->setMethods([ 'get'])
+            ->getMock();
+
+        $request->headers = $headerObj;
+
+        array_map(function ($headerKey) use ($header, $headerObj) {
+            $headerObj->expects($this->once())
+                ->method('get')
+                ->with($headerKey)
+                ->will($this->returnValue($header[$headerKey]));
+        }, array_keys(['User-Agent' => $userAgent]));
+
+        //Create a request stack
+        $requestStack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
+            ->setMethods([ 'getCurrentRequest'])
+            ->getMock();
+        $requestStack->expects($this->once())
+            ->method('getCurrentRequest')
+            ->will($this->returnValue($request));
+
+        //create a loader with instance
+        $instance                = $this->getMockBuilder('instance')->getMock();
+        $instance->internal_name = $instanceName;
+
+        $loader = $this->getMockBuilder('loader')
+            ->setMethods([ 'getInstance'])
+            ->getMock();
+        $loader->expects($this->any())
+            ->method('getInstance')
+            ->will($this->returnValue($instance));
+
+        $onmFormatter = new OnmFormatter($requestStack, $loader);
         $this->assertSame(
             $onmFormatter->processRecord([]),
             ['extra' => [
