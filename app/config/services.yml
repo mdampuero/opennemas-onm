@@ -27,7 +27,7 @@ services:
             format: "%%datetime%% | %%level_name%% | %%extra.user-agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%%: %%message%% %%context%%\n"
 
     monolog.processor.onm:
-        class: Framework\Monolog\ONMFormatter
+        class: Framework\Monolog\OnmFormatter
         arguments: [ @request_stack, @core.loader ]
         tags:
             - { name: monolog.processor, method: processRecord }

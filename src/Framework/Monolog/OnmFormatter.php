@@ -11,7 +11,7 @@ namespace Framework\Monolog;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ONMFormatter
+class OnmFormatter
 {
     /**
      * The current request stack
