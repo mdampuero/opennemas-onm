@@ -89,7 +89,7 @@ class Frontpages
 
                 //Change uri for href links except widgets
                 if ($content->content_type_name != 'widget') {
-                    $content->uri      = "ext" . $content->uri;
+                    $content->uri         = "ext" . $content->uri;
                     $content->externalUri = getService('router')
                         ->generate(
                             'frontend_external_article_show',
@@ -207,9 +207,9 @@ class Frontpages
                 $content->author->external         = 1;
             }
 
-             //Change uri for href links except widgets
+             // Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
-                $content->uri      = "ext" . $content->uri;
+                $content->uri         = "ext" . $content->uri;
                 $content->externalUri = getService('router')
                     ->generate(
                         'frontend_external_article_show',

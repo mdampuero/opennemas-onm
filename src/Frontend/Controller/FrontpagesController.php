@@ -115,7 +115,7 @@ class FrontpagesController extends Controller
             }
 
             $relatedIds = array_unique($relatedIds);
-            $date = date('Y-m-d H:i:s');
+            $date       = date('Y-m-d H:i:s');
 
             if (!empty($relatedIds)) {
                 $data = $this->get('entity_repository')->findBy([
@@ -149,7 +149,7 @@ class FrontpagesController extends Controller
                     && !is_object($content->img1)
                     && array_key_exists($content->img1, $related)
                 ) {
-                    $content->img1 = $related[$content->img1];
+                    $content->img1      = $related[$content->img1];
                     $content->img1_path = $content->img1->path_file
                         . $content->img1->name;
                 }
@@ -216,8 +216,8 @@ class FrontpagesController extends Controller
         }
 
         // Get category id correspondence
-        $cm = new \ContentManager;
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
+        $cm                 = new \ContentManager;
+        $wsActualCategoryId = $cm->getUrlContent($wsUrl . '/ws/categories/id/' . $categoryName);
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
@@ -229,7 +229,7 @@ class FrontpagesController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
 
             // Check if category exists
-            $existsCategory = $cm->getUrlContent($wsUrl.'/ws/categories/exist/'.$categoryName);
+            $existsCategory = $cm->getUrlContent($wsUrl . '/ws/categories/exist/' . $categoryName);
 
             // If no home category name
             if ($categoryName != 'home') {
@@ -239,7 +239,7 @@ class FrontpagesController extends Controller
                 }
             }
 
-            $actualCategory = (empty($subcategory_name))? $categoryName : $subcategory_name;
+            $actualCategory = (empty($subcategory_name)) ? $categoryName : $subcategory_name;
             $this->view->assign([
                 'category_name'         => $categoryName,
                 'actual_category'       => $actualCategory,
@@ -249,30 +249,29 @@ class FrontpagesController extends Controller
 
             // Get all contents for this frontpage
             $allContentsInHomepage = $cm->getUrlContent(
-                $wsUrl.'/ws/frontpages/allcontent/'.$categoryName,
+                $wsUrl . '/ws/frontpages/allcontent/' . $categoryName,
                 true
             );
 
             $this->view->assign('column', unserialize(utf8_decode(htmlspecialchars_decode($allContentsInHomepage))));
 
             // Fetch layout for categories
-            $layout = $cm->getUrlContent($wsUrl.'/ws/categories/layout/'.$categoryName, true);
+            $layout = $cm->getUrlContent($wsUrl . '/ws/categories/layout/' . $categoryName, true);
             if (!$layout) {
                 $layout = 'default';
             }
 
-
-            $layoutFile = 'layouts/'.$layout.'.tpl';
+            $layoutFile = 'layouts/' . $layout . '.tpl';
 
             $this->view->assign('layoutFile', $layoutFile);
         }
 
-        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
+        $ads = unserialize($cm->getUrlContent($wsUrl . '/ws/ads/frontpage/' . $wsActualCategoryId, true));
 
         return $this->render('frontpage/frontpage.tpl', [
             'advertisements' => $ads,
             'cache_id'       => $cacheID,
-            'x-tags'         => 'frontpage-page,frontpage-page-external,'.$categoryName,
+            'x-tags'         => 'frontpage-page,frontpage-page-external,' . $categoryName,
             'x-cache-for'    => '+3 hour',
         ]);
     }
@@ -289,10 +288,10 @@ class FrontpagesController extends Controller
      */
     public static function getAds($category, $contents)
     {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // TODO: Use $this->get when the function changes to non-static
-        $positions = getService('core.helper.advertisement')
+        $positions        = getService('core.helper.advertisement')
             ->getPositionsForGroup('frontpage');
         $positionsToFetch = $positions;
 
@@ -307,7 +306,7 @@ class FrontpagesController extends Controller
         if (is_array($contents)) {
             foreach ($contents as $content) {
                 if ($content->content_type_name == 'advertisement') {
-                    $advertisements []= $content;
+                    $advertisements[] = $content;
                 }
             }
         }
