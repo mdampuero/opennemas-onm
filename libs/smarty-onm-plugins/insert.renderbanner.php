@@ -1,6 +1,4 @@
 <?php
-use \Common\Core\Component\Renderer\AdvertisementRenderer;
-
 /**
  * Smarty plugin for rendering a banner for a position.
  *
@@ -9,65 +7,53 @@ use \Common\Core\Component\Renderer\AdvertisementRenderer;
  */
 function smarty_insert_renderbanner($params, $smarty)
 {
-    $safeFrameSettingEnabled = getService('setting_repository')
+    $safeframeEnabled = $smarty->getContainer()->get('setting_repository')
         ->get('ads_settings')['safe_frame'];
 
-    $tpl   = '<div class="ad-slot oat%s">%s</div>';
-    $class = '" data-type="' . $params['type'];
+    $tpl    = '<div class="ad-slot oat%s">%s</div>';
+    $class  = '" data-type="' . $params['type'];
+    $format = 'safeframe';
 
-    // Allow to force the rendering format != safeframe by passing the
-    // format=XXX parameter to the plugin or by using a template variable
-    // render_params['ads-format']
-    $formatFromParam = array_key_exists('format',$params) ? $params['format'] : null;
-    $formatFromTemplateVar = (
-            array_key_exists('render_params', $smarty->tpl_vars)
-            && array_key_exists('ads-format', $smarty->tpl_vars['render_params']->value)
-            && $smarty->tpl_vars['render_params']->value['ads-format']
-        ) ? $smarty->tpl_vars['render_params']->value['ads-format']
-        : null;
+    if (array_key_exists('render_params', $smarty->tpl_vars)
+        && array_key_exists('ads-format', $smarty->tpl_vars['render_params']->value)
+        && !empty($smarty->tpl_vars['render_params']->value['ads-format'])
+    ) {
+        $format = $smarty->tpl_vars['render_params']->value['ads-format'];
+    }
 
-    $avoidSafeframe = ($formatFromParam !== null && $formatFromTemplateVar !== null)
-        || (!is_null($formatFromParam) && $formatFromParam !== 'safeframe')
-        || (!is_null($formatFromTemplateVar) && $formatFromTemplateVar !== 'safeframe');
+    if (array_key_exists('format', $params) && !empty($params['format'])) {
+        $format = $params['format'];
+    }
 
-    if ($safeFrameSettingEnabled && !$avoidSafeframe) {
+    if ($safeframeEnabled && $format === 'safeframe') {
         return sprintf($tpl, $class, '');
     }
 
-    $renderer = getService('core.renderer.advertisement');
-    $type     = $params['type'];
-    $ads      = $smarty->tpl_vars['advertisements']->value;
+    $ads  = $smarty->tpl_vars['advertisements']->value;
+    $type = $params['type'];
 
     if (!is_array($ads)) {
-        $ads = [];
+        return '';
     }
 
     $ads = array_filter($ads, function ($ad) use ($type) {
         return $ad->type_advertisement == $type && $ad->isInTime();
     });
 
-    // Render the advertisement content
-    $content = '';
-
-    if (count($ads) > 0) {
-        $ad = $ads[array_rand($ads)];
-
-        $orientation = empty($ad->params['orientation']) ?
-            'top' : $ad->params['orientation'];
-
-        $format = $formatFromTemplateVar;
-        if ($formatFromParam != $formatFromTemplateVar
-            && $formatFromParam != null
-        ) {
-            $format = $formatFromParam;
-        }
-        $format = empty($format) ? 'inline' : $format;
-
-        $deviceClasses = $renderer->getDeviceCSSClasses($ad);
-        $class   = ' oat-visible oat-' . $orientation . ' ' . $deviceClasses;
-        $content = $renderer->renderInline($ad, $format);
-        $content = sprintf($tpl, $class, $content);
+    if (empty($ads)) {
+        return '';
     }
 
-    return $content;
+    $ad = $ads[array_rand($ads)];
+
+    $renderer    = $smarty->getContainer()->get('core.renderer.advertisement');
+    $orientation = empty($ad->params['orientation']) ?
+        'top' : $ad->params['orientation'];
+
+    $content = $renderer->renderInline($ad, $format);
+
+    $class = ' oat-visible oat-' . $orientation . ' '
+        . $renderer->getDeviceCssClasses($ad);
+
+    return sprintf($tpl, $class, $content);
 }
