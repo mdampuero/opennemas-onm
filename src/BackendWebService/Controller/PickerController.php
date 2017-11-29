@@ -154,13 +154,26 @@ class PickerController extends Controller
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
 
         try {
-            $sql  = "UPDATE contents SET `description`=? WHERE pk_content=?";
-            $conn = $this->get('orm.manager')->getConnection('instance');
+            $photo = $this->get('entity_repository')->find('Photo', $id);
 
-            $conn->executeUpdate($sql, [$description, $id]);
+            // Check if the photo exists
+            if (!is_object($photo)) {
+                return new JsonResponse('Photo doesnt exists', 404);
+            }
 
-            $this->get('cache')->delete('Photo' . "-" . $id);
-            return new JsonResponse();
+            $this->get('orm.manager')->getConnection('instance')->executeUpdate(
+                "UPDATE contents SET `description`=? WHERE pk_content=?",
+                [ $description, $id ]
+            );
+
+            // Invalidate the cache for the photo
+            dispatchEventWithParams('content.update', [ 'content' => $photo ]);
+            dispatchEventWithParams(
+                $photo->content_type_name . '.update',
+                [ 'content' => $photo ]
+            );
+
+            return new JsonResponse('ok');
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 500);
         }
@@ -206,7 +219,13 @@ class PickerController extends Controller
     private function exploreMode()
     {
         $contentTypes         = \ContentManager::getContentTypes();
-        $contentTypesFiltered = [];
+        $contentTypesFiltered = [ [
+            'name'  => null,
+            'title' => _('All content types'),
+        ], [
+            'name'  => 'contents-in-frontpage',
+            'title' => _('Contents in frontpage'),
+        ] ];
 
         foreach ($contentTypes as $contentType) {
             switch ($contentType['name']) {
@@ -230,37 +249,41 @@ class PickerController extends Controller
             $moduleName = strtoupper($moduleName . '_MANAGER');
 
             if ($this->get('core.security')->hasExtension($moduleName)) {
-                $contentTypesFiltered[$contentType['name']] = $contentType['title'];
+                $contentTypesFiltered[] = [
+                    'name'  => $contentType['name'],
+                    'title' => $contentType['title']
+                ];
             }
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
-
         $fm         = $this->get('data.manager.filter');
-        $categories = $ccm->find();
+        $categories = $this->get('orm.manager')->getRepository('Category')
+            ->findBy('internal_category = 1 order by title asc');
 
-        $cleanCategories = [];
+        $cleanCategories = [ [
+            'pk_content_category' => null,
+            'name'                => null,
+            'fk_content_category' => 0,
+            'title'               => _('All categories'),
+        ] ];
+
         foreach ($categories as $category) {
-            $categoryInfo = [
+            $cleanCategories[] = [
                 'pk_content_category' => $category->pk_content_category,
-                'name' => $category->name,
-                'title' => $fm->set($category->title)
+                'name'                => $category->name,
+                'fk_content_category' => $category->fk_content_category,
+                'title'               => $fm->set($category->title)
                     ->filter('localize')
                     ->get(),
             ];
-
-            $cleanCategories[] = $categoryInfo;
         }
 
         $categories = $cleanCategories;
 
         return [
-            'allCategories'       => _('All categories'),
-            'allContentTypes'     => _('All content types'),
             'allMonths'           => _('All months'),
             'category'            => _('Category'),
             'categories'          => $categories,
-            'contentsInFrontpage' => _('Contents in frontpage'),
             'contentTypes'        => $contentTypesFiltered,
             'created'             => _('Created'),
             'dates'               => $this->getDates(),

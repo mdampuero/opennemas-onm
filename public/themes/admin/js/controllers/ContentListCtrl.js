@@ -129,7 +129,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         name: $scope.route,
         params:  {
           contentType: $scope.criteria.content_type_name ?
-            $scope.criteria.content_type_name : 'content' ,
+            $scope.criteria.content_type_name : 'content',
           oql: oql
         }
       };
@@ -155,7 +155,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         // Disable spinner
         $scope.loading     = 0;
         $scope.loadingMore = 0;
-      }, function () {
+      }, function() {
         $scope.loading     = 0;
         $scope.loadingMore = 0;
 
@@ -191,11 +191,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $http.post(url, { positions: ids }).success(function(response) {
         messenger.post(response.messages);
-      }).error(function() {});
+      });
     };
 
     $scope.saveOpinionsFrontpage = function() {
-      var ids = { director: [], editorial: [], opinions: [] };
+      var ids = {
+        director:  [],
+        editorial: [],
+        opinions:  []
+      };
 
       for (var name in ids) {
         for (var i = 0; i < $scope[name].length; i++) {
@@ -207,52 +211,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       $http.post(url, { positions: ids }).success(function(response) {
         messenger.post(response.messages);
-      }).error(function() {});
+      });
     };
 
     $scope.scroll = function() {
       if ($scope.total === $scope.contents.length) {
-        return false;
+        return;
       }
 
       $scope.criteria.page++;
-    };
-
-    /**
-     * Saves the last selected item description.
-     */
-    $scope.saveDescription = function() {
-      $scope.saving = true;
-
-      var data = { description: $scope.selected.lastSelected.description };
-      var url  = routing.generate(
-        'backend_ws_picker_save_description',
-        { id: $scope.selected.lastSelected.id }
-      );
-
-      $http.post(url, data).then(function(response) {
-        $scope.saving = false;
-        $scope.saved = true;
-
-        if (response.status === 200) {
-          $timeout(function() {
-            $scope.saved = false;
-          }, 2000);
-
-          return true;
-        }
-
-        if (response.status !== 200) {
-          $scope.saved = false;
-          $scope.error = true;
-
-          $timeout(function() {
-            $scope.error = false;
-          }, 2000);
-
-          return false;
-        }
-      });
     };
 
     /**
@@ -287,15 +254,15 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       var maxHeight = $(window).height() - $('.header').height() -
         $('.actions-navbar').height();
-      var maxWidth = $(window).width() - $('.sidebar').width();
+      var maxWidth  = $(window).width() - $('.sidebar').width();
+      var padding   = 15;
 
       if ($('.content-wrapper').length > 0) {
-        maxWidth -=parseInt($('.content-wrapper').css('padding-right'));
+        maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
       }
 
-      var height = $('.infinite-col').width() + 15;
-      var width = $('.infinite-col').width() + 15;
-
+      var height = $('.infinite-col').width() + padding;
+      var width = $('.infinite-col').width() + padding;
 
       var rows = Math.ceil(maxHeight / height);
       var cols = Math.floor(maxWidth / width);
@@ -376,7 +343,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.selected.lastSelected = null;
 
         $scope.selected.contents.splice(
-            $scope.selected.contents.indexOf(content.id), 1);
+          $scope.selected.contents.indexOf(content.id), 1);
       }
     };
 
@@ -518,7 +485,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Permanently removes a list of keywords by using a confirmation dialog
      */
-    $scope.deleteSelected = function (route) {
+    $scope.deleteSelected = function(route) {
       // Enable spinner
       $scope.deleting = 1;
 
@@ -536,7 +503,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
             return function() {
               var url = routing.generate(route);
 
-              return $http.post(url, {ids: $scope.selected.contents});
+              return $http.post(url, { ids: $scope.selected.contents });
             };
           }
         }
@@ -611,7 +578,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Permanently removes a list of keywords by using a confirmation dialog
      */
-    $scope.deleteSelectedKeywords = function () {
+    $scope.deleteSelectedKeywords = function() {
       // Enable spinner
       $scope.deleting = 1;
 
@@ -629,85 +596,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
             return function() {
               var url = routing.generate('backend_ws_keywords_batch_delete');
 
-              return $http.post(url, {ids: $scope.selected.contents});
-            };
-          }
-        }
-      });
-
-      modal.result.then(function(response) {
-        messenger.post(response.data.messages);
-
-        $scope.selected.total = 0;
-        $scope.selected.contents = [];
-
-        if (response.success) {
-          $scope.list($scope.route);
-        }
-      });
-    };
-
-    /**
-     * Permanently removes a contents by using a confirmation dialog
-     */
-    $scope.removePermanently = function(content) {
-      var modal = $uibModal.open({
-        templateUrl: 'modal-remove-permanently',
-        backdrop: 'static',
-        controller: 'modalCtrl',
-        resolve: {
-          template: function() {
-            return {
-              content: content
-            };
-          },
-          success: function() {
-            return function() {
-              var url = routing.generate(
-                'backend_ws_content_remove_permanently',
-                { contentType: content.content_type_name, id: content.id }
-              );
-
-              return $http.post(url);
-            };
-          }
-        }
-      });
-
-      modal.result.then(function(response) {
-        messenger.post(response.data.messages);
-
-        if (response.success) {
-          $scope.list($scope.route);
-        }
-      });
-    };
-
-    /**
-     * Permanently removes a list of contents by using a confirmation dialog
-     */
-    $scope.removePermanentlySelected = function () {
-      // Enable spinner
-      $scope.deleting = 1;
-
-      var modal = $uibModal.open({
-        templateUrl: 'modal-batch-remove-permanently',
-        backdrop: 'static',
-        controller: 'modalCtrl',
-        resolve: {
-          template: function() {
-            return {
-              selected: $scope.selected
-            };
-          },
-          success: function() {
-            return function() {
-              var url = routing.generate(
-                'backend_ws_contents_batch_remove_permanently',
-                { contentType: 'content' }
-              );
-
-              return $http.post(url, {ids: $scope.selected.contents});
+              return $http.post(url, { ids: $scope.selected.contents });
             };
           }
         }
@@ -766,7 +655,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Sends a list of selected contents to trash by using a confirmation dialog
      */
-    $scope.sendToTrashSelected = function () {
+    $scope.sendToTrashSelected = function() {
       // Enable spinner
       $scope.deleting = 1;
 
@@ -787,7 +676,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
                 { contentType: $scope.criteria.content_type_name }
               );
 
-              return $http.post(url, {ids: $scope.selected.contents});
+              return $http.post(url, { ids: $scope.selected.contents });
             };
           }
         }

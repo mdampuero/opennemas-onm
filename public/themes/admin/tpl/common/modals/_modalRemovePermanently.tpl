@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="no();">&times;</button>
     <h4 class="modal-title">
       <i class="fa fa-trash-o"></i>
       {t}Permanently remove item{/t}
@@ -11,6 +11,6 @@
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>
-    <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove{/t}</button>
-    <button class="btn secondary" ng-click="close()">{t}No{/t}</button>
+    <button class="btn btn-primary" ng-click="yes()" type="button">{t}Yes, remove{/t}</button>
+    <button class="btn secondary" ng-click="no()">{t}No{/t}</button>
 </div>

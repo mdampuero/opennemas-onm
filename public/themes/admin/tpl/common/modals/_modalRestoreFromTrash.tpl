@@ -1,7 +1,7 @@
 <div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="no();">&times;</button>
   <h4 class="modal-title">
-      <i class="fa fa-trash-o"></i>
+      <i class="fa fa-retweet"></i>
       {t}Restore item{/t}
   </h4>
 </div>
@@ -9,7 +9,12 @@
     <p>{t escape=off}Are you sure that do you want restore from trash "[% template.content.title %]"?{/t}</p>
 </div>
 <div class="modal-footer">
-    <span class="loading" ng-if="deleting == 1"></span>
-    <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, restore{/t}</button>
-    <button class="btn secondary" ng-click="close()">{t}No{/t}</button>
+    <button class="btn btn-primary" ng-click="yes()" ng-disabled="yesLoading" type="button">
+      <i class="fa fa-absolute fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': yesLoading }"></i>
+      {t}Yes, restore{/t}
+    </button>
+    <button class="btn secondary" data-dismiss="modal" ng-click="no()" ng-disabled="noLoading" type="button">
+      <i class="fa fa-absolute fa-times m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': noLoading }"></i>
+      {t}No{/t}
+    </button>
 </div>
