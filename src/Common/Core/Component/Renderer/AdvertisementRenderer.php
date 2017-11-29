@@ -97,14 +97,20 @@ class AdvertisementRenderer
     public function renderInline(\Advertisement $ad, $format = null)
     {
         if ($ad->with_script == 1) {
-            return $ad->script;
+            return $this->getHtml($ad);
         } elseif ($ad->with_script == 2) {
             return $this->renderInlineReviveSlot($ad);
         } elseif ($ad->with_script == 3) {
             return $this->renderInlineDFPSlot($ad);
         }
 
-        return $this->renderInlineImage($ad, $format);
+        $img = $this->getImage($ad);
+
+        if (empty($img)) {
+            return '';
+        }
+
+        return $this->renderInlineImage($ad, $img, $format);
     }
 
     /**
@@ -174,22 +180,14 @@ class AdvertisementRenderer
     /**
      * Renders an image/swf based advertisement.
      *
-     * @param string $ad The advertisement to render.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param string $ad     The advertisement to render.
+     * @param Photo  $img    The image object.
+     * @param string $format The render format to use 'amp' or 'inline'
      *
      * @return string The HTML code for the advertisement.
      */
-    public function renderInlineImage($ad, $format = null)
+    public function renderInlineImage($ad, $img, $format = null)
     {
-        try {
-            $img = $this->container->get('entity_repository')
-                ->find('Photo', $ad->img);
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-
-            return '';
-        }
-
         $publicId = date('YmdHis', strtotime($ad->created)) .
             sprintf('%06d', $ad->pk_advertisement);
         $template = 'advertisement/helpers/inline/image.tpl';
@@ -388,9 +386,13 @@ class AdvertisementRenderer
             return $this->renderSafeFrameDFP($ad, $params);
         }
 
-        $img = $this->container->get('entity_repository')->find('Photo', $ad->img);
+        $img = $this->getImage($ad);
 
-        if (!empty($img) && strtolower($img->type_img) == 'swf') {
+        if (empty($img)) {
+            return '';
+        }
+
+        if (strtolower($img->type_img) == 'swf') {
             return $this->renderSafeFrameFlash($ad, $img);
         }
 
@@ -482,7 +484,7 @@ class AdvertisementRenderer
     protected function renderSafeFrameHtml($ad)
     {
         $tpl   = '<html><style>%s</style><body><div class="content">%s</div></body>';
-        $html  = $ad->script;
+        $html  = $this->getHtml($ad);
         $style = 'body { margin: 0; overflow: hidden; padding: 0; text-align:'
             . ' center; } img { max-width: 100% }';
 
@@ -571,5 +573,50 @@ class AdvertisementRenderer
         }
 
         return $targetingCode;
+    }
+
+    /**
+     * Returns the advertisement script.
+     *
+     * @param Advertisement $ad The advertisement object.
+     *
+     * @return string The advertisement script.
+     */
+    protected function getHtml($ad)
+    {
+        if (empty($ad->script)) {
+            $this->container->get('application.log')->info(
+                'The advertisement ' . $ad->id . ' is empty'
+            );
+        }
+
+        return $ad->script;
+    }
+
+    /**
+     * Returns the image object for the advertisement.
+     *
+     * @param Advertisement $ad The advertisement object.
+     *
+     * @return Photo The image for the advertisement.
+     */
+    protected function getImage($ad)
+    {
+        if (empty($ad->img)) {
+            $this->container->get('application.log')->info(
+                'The advertisement ' . $ad->id . ' is empty'
+            );
+
+            return null;
+        }
+
+        try {
+            return $this->container->get('entity_repository')
+                ->find('Photo', $ad->img);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+        }
+
+        return null;
     }
 }
