@@ -16,15 +16,14 @@ use Imagine\Image\ImageInterface;
  */
 class ImageManager
 {
-
     /**
      * It is responsible for calling by reference to any of the transformation methods available in the class.
      *
-     *  @param string  $method     Name of the method to call (crop, thumbnail, zoomCrop, resize).
-     *  @param Imagine $image      Image to transform.
-     *  @param array   $parameters Parameters needed for the transformation method.
+     * @param string  $method     Name of the method to call (crop, thumbnail, zoomCrop, resize).
+     * @param Imagine $image      Image to transform.
+     * @param array   $parameters Parameters needed for the transformation method.
      *
-     *  @return Imagine the transformed image.
+     * @return Imagine the transformed image.
      */
     public function process($method, $image, $parameters)
     {
@@ -38,10 +37,10 @@ class ImageManager
     /**
      * Performs the crop transformation.
      *
-     *  @param Imagine $image      Image to transform.
-     *  @param array   $parameters Parameters needed for the transformation [topX, topY, width, height].
+     * @param Imagine $image      Image to transform.
+     * @param array   $parameters Parameters needed for the transformation [topX, topY, width, height].
      *
-     *  @return Imagine The transformed image.
+     * @return Imagine The transformed image.
      */
     public function crop($image, array $parameters)
     {
@@ -59,11 +58,11 @@ class ImageManager
     /**
      * Performs the thumbnail transformation.
      *
-     *  @param Imagine $image      Image to transform.
-     *  @param array   $parameters Parameters needed for the transformation [width, height, *type]
+     * @param Imagine $image      Image to transform.
+     * @param array   $parameters Parameters needed for the transformation [width, height, *type]
      *                             *type is not required.
      *
-     *  @return Imagine The transformed image.
+     * @return Imagine The transformed image.
      */
     public function thumbnail($image, array $parameters)
     {
@@ -84,10 +83,10 @@ class ImageManager
     /**
      * Performs the zoomCrop transformation.
      *
-     *  @param Imagine $image      Image to transform.
-     *  @param array   $parameters Parameters needed for the transformation [width, height].
+     * @param Imagine $image      Image to transform.
+     * @param array   $parameters Parameters needed for the transformation [width, height].
      *
-     *  @return Imagine The transformed image.
+     * @return Imagine The transformed image.
      */
     public function zoomCrop($image, array $parameters)
     {
@@ -129,10 +128,10 @@ class ImageManager
     /**
      * Performs the resize transformation.
      *
-     *  @param Imagine $image      Image to transform.
-     *  @param array   $parameters Parameters needed for the transformation [width, height].
+     * @param Imagine $image      Image to transform.
+     * @param array   $parameters Parameters needed for the transformation [width, height].
      *
-     *  @return Imagine The transformed image.
+     * @return Imagine The transformed image.
      */
     public function resize($image, array $parameters)
     {
@@ -145,7 +144,7 @@ class ImageManager
     /**
      * Performs the strip transformation.
      *
-     *  @return Imagine the transformed image.
+     * @return Imagine the transformed image.
      */
     public function strip($image)
     {
@@ -155,10 +154,10 @@ class ImageManager
     /*
      * Sets parameters to an image.
      *
-     *  @param Imagine $image      Image to parametrize.
-     *  @param array   $parameters Parameters for the image.
+     * @param Imagine $image      Image to parametrize.
+     * @param array   $parameters Parameters for the image.
      *
-     *  @return Imagine The parametrized image.
+     * @return Imagine The parametrized image.
      */
     public function get($image, array $parameters)
     {
@@ -168,28 +167,28 @@ class ImageManager
     /**
      * Get Image from filesystem.
      *
-     *  @param string $image path to the image.
+     * @param string $image path to the image.
      *
-     *  @return Imagine recover from the filesystem.
+     * @return Imagine recover from the filesystem.
+     *
+     * @codeCoverageIgnore
      */
     public function getImage($image)
     {
-        //@codeCoverageIgnoreStart
         if (gettype($image) != 'string' || !file_exists($image) || !is_file($image)) {
             return null;
         }
 
         $imagine = new \Imagine\Imagick\Imagine();
         return $imagine->open($image);
-        //@codeCoverageIgnoreEnd
     }
 
     /**
      * Recover the image format.
      *
-     *  @param string $image  the image.
+     * @param string $image  the image.
      *
-     *  @return string Image format.
+     * @return string Image format.
      */
     public function getImageFormat($image)
     {
@@ -197,13 +196,13 @@ class ImageManager
     }
 
     /**
-     *  Method for muckup propouses. This method create a new Box element.
+     * Method for muckup propouses. This method create a new Box element.
      *
-     *  @param int    box width.
-     *  @param int    box hegith.
-     *  @param string box mode.
+     * @param int    box width.
+     * @param int    box hegith.
+     * @param string box mode.
      *
-     *  @codeCoverageIgnore
+     * @codeCoverageIgnore
      */
     public function getBox($widthResize, $heightResize, $mode = null)
     {
@@ -211,12 +210,12 @@ class ImageManager
     }
 
     /**
-     *  Method for muckup propouses. This method create a new Point element.
+     * Method for muckup propouses. This method create a new Point element.
      *
-     *  @param int x point.
-     *  @param int y point.
+     * @param int x point.
+     * @param int y point.
      *
-     *  @codeCoverageIgnore
+     * @codeCoverageIgnore
      */
     public function getPoint($topX, $topY)
     {
