@@ -10,11 +10,9 @@
  */
 function smarty_outputfilter_adsense_validator($output, $smarty)
 {
-    $request = getService('request');
-    $uri     = $request->getUri();
+    $uri = $smarty->getContainer()->get('request')->getUri();
 
-    if (!preg_match('/\/admin\/frontpages/', $referer)
-        && !preg_match('/\/manager/', $uri)
+    if (!preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
         && !preg_match('/\/share-by-email/', $uri)
         && !preg_match('/\/sharrre/', $uri)
@@ -23,7 +21,7 @@ function smarty_outputfilter_adsense_validator($output, $smarty)
         && !preg_match('/\/fb\/instant-articles/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
-        $adsenseId = getService('setting_repository')->get('adsense_id');
+        $adsenseId = $smarty->getContainer()->get('setting_repository')->get('adsense_id');
 
         if (!empty($adsenseId)) {
             $code = '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -34,7 +32,7 @@ enable_page_level_ads: true
 });
 </script>';
 
-            $output = preg_replace('@(</head>)@', "\n" . $code, $output);
+            $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);
         }
     }
 
