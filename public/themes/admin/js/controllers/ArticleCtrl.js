@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  ArticleCtrl
@@ -88,8 +89,10 @@
               $scope.data.article.metadata.split(',');
           }
 
-          var keys = [ 'img1', 'img2', 'fk_video', 'fk_video2','relatedFront',
-            'relatedInner', 'relatedHome' ];
+          var keys = [
+            'img1', 'img2', 'fk_video', 'fk_video2', 'relatedFront',
+            'relatedInner', 'relatedHome'
+          ];
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope.data.extra[keys[i]]) {
@@ -99,8 +102,10 @@
             $scope.article[keys[i]] = $scope.data.extra[keys[i]];
           }
 
-          keys = [ 'imageHome', 'withGallery', 'withGalleryInt',
-            'withGalleryHome' ];
+          keys = [
+            'imageHome', 'withGallery', 'withGalleryInt',
+            'withGalleryHome'
+          ];
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope.data.extra[keys[i]]) {
@@ -138,7 +143,7 @@
                 return function(modalWindow) {
                   $scope.data.article = webStorage.session.get($scope.draftKey);
 
-                  if($scope.config.linkers.article) {
+                  if ($scope.config.linkers.article) {
                     $scope.config.linkers.article.link(
                       $scope.data.article, $scope.article);
                     $scope.config.linkers.article.update();
@@ -218,8 +223,10 @@
             }
           }
 
-          keys = [ 'imageHome', 'withGallery', 'withGalleryInt',
-            'withGalleryHome' ];
+          keys = [
+            'imageHome', 'withGallery', 'withGalleryInt',
+            'withGalleryHome'
+          ];
 
           for (var i = 0; i < keys.length; i++) {
             if (!article.params[keys[i]]) {
@@ -369,7 +376,7 @@
             $scope.config.linkers[keys[i]].link($scope.data.article[keys[i]],
               $scope.article[keys[i]]);
           }
-       };
+        };
 
         /**
          * @function preview
@@ -398,7 +405,7 @@
             data.created = null;
           }
 
-          var data = { 'article': data, 'locale': $scope.config.locale };
+          var data = { article: data, locale: $scope.config.locale };
 
           http.post(previewUrl, data).success(function() {
             $uibModal.open({
@@ -512,9 +519,9 @@
                   for (var i = 0; i < $scope.data.extra.keys.length; i++) {
                     var key = $scope.data.extra.keys[i];
 
-                    if ($scope.data.article[key] && angular.isObject(
-                        $scope.data.article[key]) && $scope.data
-                        .article[key][params.from]) {
+                    if ($scope.data.article[key] &&
+                        angular.isObject($scope.data.article[key]) &&
+                        $scope.data.article[key][params.from]) {
                       params.data[key] = $scope.data.article[key][params.from];
                     }
                   }
@@ -523,6 +530,7 @@
                     .then(function(response) {
                       for (var i = 0; i < $scope.data.extra.keys.length; i++) {
                         var key = $scope.data.extra.keys[i];
+
                         $scope.article[key] = response.data[key];
                       }
 
@@ -552,14 +560,15 @@
 
               if (angular.isObject(nv[i]) &&
                   (angular.isUndefined(model[footer]) ||
-                  model[footer] === null || (ov && ov[i] &&
-                  model[footer] === ov[i].description))) {
+                  model[footer] === null || ov && ov[i] &&
+                  model[footer] === ov[i].description)) {
                 model[footer] = nv[i].description;
               }
             }
 
-            if ($scope.articleForm.$dirty && (!$scope.article.img2) ||
-                angular.equals($scope.article.img2, ov[1])) {
+            if ($scope.articleForm.$dirty &&
+                (!nv[1] && angular.equals(nv[1], ov[1]) ||
+                angular.equals(nv[1], ov[0]))) {
               $scope.article.img2 = $scope.article.img1;
             }
           }, true);
@@ -579,21 +588,24 @@
                 footer = 'footer_video2';
               }
 
-              if (angular.isUndefined(model[footer]) || model[footer] === null ||
-                  (ov && ov[i] && model[footer] === ov[i].description)) {
+              if (angular.isObject(nv[i]) &&
+                (angular.isUndefined(model[footer]) ||
+                  model[footer] === null || ov && ov[i] &&
+                  model[footer] === ov[i].description)) {
                 model[footer] = nv[i].description;
               }
             }
 
-            if ($scope.articleForm.$dirty && (!$scope.article.fk_video2) ||
-                angular.equals($scope.article.fk_video2, ov[1])) {
+            if ($scope.articleForm.$dirty &&
+                (!nv[1] && angular.equals(nv[1], ov[1]) ||
+                angular.equals(nv[1], ov[0]))) {
               $scope.article.fk_video2 = $scope.article.fk_video;
             }
           }, true);
 
         // Sets relatedInner equals to relatedFront
         $scope.$watch('article.relatedFront', function(nv, ov) {
-          if ((!ov && $scope.article.relatedInner) ||
+          if (!ov && $scope.article.relatedInner ||
               angular.equals(ov, $scope.article.relatedInner)) {
             $scope.article.relatedInner = angular.copy(nv);
           }
@@ -615,7 +627,7 @@
 
           // Show a message when leaving before saving
           $($window).bind('beforeunload', function() {
-            if ($scope.articleForm.$dirty){
+            if ($scope.articleForm.$dirty) {
               return $window.leaveMessage;
             }
           });
@@ -663,7 +675,7 @@
 
         // Update metadata when title or category change
         $scope.$watch('[ article.title, article.category ]', function(nv, ov) {
-          if (($scope.article.metadata && $scope.article.metadata.length > 0) ||
+          if ($scope.article.metadata && $scope.article.metadata.length > 0 ||
               !nv || nv === ov) {
             return;
           }
