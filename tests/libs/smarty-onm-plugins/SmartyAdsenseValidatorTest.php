@@ -29,6 +29,10 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->requestStack = $this->getMockBuilder('RequestStack')
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
         $this->request = $this->getMockBuilder('Request')
             ->setMethods([ 'getUri' ])
             ->getMock();
@@ -39,6 +43,9 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -53,8 +60,8 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'request') {
-            return $this->request;
+        if ($name === 'request_stack') {
+            return $this->requestStack;
         }
 
         if ($name === 'setting_repository') {
