@@ -283,7 +283,7 @@
                       {t}Slug{/t}
                     </label>
                     <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !articleForm.pk_fk_content_category.$dirty && !articleForm.content_status.$dirty">
-                      <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% data.extra.options.default === config.locale ? '' : config.locale + '/' %]articulo/[% (categories | filter: { pk_content_category: article.pk_fk_content_category })[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% ('000000' + article.pk_content).substr(-6) %].html" target="_blank">
+                      <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% data.extra.options.default === config.locale ? '' : config.locale + '/' %]articulo/[% (categories | filter: { pk_content_category: article.pk_fk_content_category })[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% article.pk_content.toString().length < 6 ? ('000000' + article.pk_content).substr(-6) : article.pk_content %].html" target="_blank">
                         <i class="fa fa-external-link"></i>
                         {t}Link{/t}
                       </a>
