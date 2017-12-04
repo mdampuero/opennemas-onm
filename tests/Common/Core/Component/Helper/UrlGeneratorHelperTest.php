@@ -121,6 +121,12 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
             'http://www.example.com/articulo/actualidad/'
             . 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html'
         );
+
+        // Test relative url generation for external article
+        $this->assertEquals(
+            $this->urlGenerator->generate($this->getFixture('externalarticle')),
+            'extarticulo/madrid/leganes-violencia-nueva-politica/20160817191702294608.html'
+        );
     }
 
     /**
@@ -348,6 +354,21 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
                 $content->created           = '2015-01-14 23:49:40';
                 $content->content_type_name = 'opinion';
                 $content->slug              = 'opinion-author-slug';
+                break;
+            case 'externalarticle':
+                $content = new \Article();
+
+                $content->id                = 252;
+                $content->fk_author         = 1;
+                $content->author            = new \User();
+                $content->author->name      = 'Name';
+                $content->created           = '2015-01-14 23:49:40';
+                $content->content_type_name = 'article';
+                $content->category_name     = 'actualidad';
+                $content->slug              = 'opinion-author-slug';
+                $content->externalUri       = 'extarticulo/madrid/'
+                    . 'leganes-violencia-nueva-politica/20160817191702294608.html';
+
                 break;
         }
 

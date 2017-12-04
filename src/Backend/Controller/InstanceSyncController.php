@@ -112,11 +112,12 @@ class InstanceSyncController extends Controller
         $username = $request->request->filter('username', '', FILTER_SANITIZE_STRING);
         $password = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
 
-        $element = [];
+        $element   = [];
         $authError = false;
+        $result    = '';
         if (!empty($siteUrl)) {
-            $siteUrl = rtrim($siteUrl, '/\\');
-            $url = $siteUrl.'/ws/categories/lists.xml';
+            $siteUrl = rtrim(trim($siteUrl), '/\\');
+            $url     = $siteUrl . '/ws/categories/lists.xml';
 
             // Fetch content using digest authentication
             $xmlString = $this->getContentFromUrlWithDigestAuth($url, $username, $password);
@@ -133,7 +134,7 @@ class InstanceSyncController extends Controller
             // Get site values if exists
             if ($syncParams) {
                 foreach ($syncParams as $site => $values) {
-                    if (preg_match('@'.$site.'@', $siteUrl)) {
+                    if (preg_match('@' . $site . '@', $siteUrl)) {
                         $element = $values;
                     }
                 }
@@ -168,7 +169,7 @@ class InstanceSyncController extends Controller
         $element = $syncParams[$siteUrl];
 
         // Set url to fetch categories
-        $url = $siteUrl.'/ws/categories/lists.xml';
+        $url = $siteUrl . '/ws/categories/lists.xml';
         // Fetch content using digest authentication
         $xmlString = $this->getContentFromUrlWithDigestAuth(
             $url,
@@ -262,11 +263,12 @@ class InstanceSyncController extends Controller
             CURLOPT_USERPWD        => $username . ":" . $password,
             CURLOPT_HTTPAUTH       => CURLAUTH_DIGEST,
         ];
+
         $ch = curl_init();
         curl_setopt_array($ch, $options);
 
-        $httpCode = '';
-        $maxRedirects = 0;
+        $httpCode         = '';
+        $maxRedirects     = 0;
         $redirectsAllowed = 3;
 
         do {
@@ -284,10 +286,10 @@ class InstanceSyncController extends Controller
                     throw new \Exception("Response with Status Code [" . $httpCode . "].", 500);
                 }
                 $response = explode("\r\n\r\n", $content);
-                $content = $response[count($response) -1];
+                $content  = $response[count($response) - 1];
 
                 if ($httpCode == 301 || $httpCode == 302) {
-                    $matches = array();
+                    $matches = [];
                     preg_match('/(Location:|URI:)(.*?)\n/', $response[0], $matches);
                     $url = trim(array_pop($matches));
                 }

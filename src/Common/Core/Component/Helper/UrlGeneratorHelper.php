@@ -48,6 +48,10 @@ class UrlGeneratorHelper
                 ->getCurrentRequest()->getSchemeAndHttpHost();
         }
 
+        if (!empty($content->externalUri)) {
+            return $content->externalUri;
+        }
+
         return $url . '/' . $this->getUriForContent($content);
     }
 
