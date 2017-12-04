@@ -18,7 +18,15 @@
  */
 function smarty_modifier_clearslash($string)
 {
-	$string = stripslashes($string);
-	$string = str_replace("\\", '', $string);
-    return stripslashes($string);
+    $clearSlash = function ($text) {
+        $text = stripslashes($text);
+        $text = str_replace("\\", '', $text);
+        return stripslashes($text);
+    };
+
+    if (is_array($string)) {
+        return array_map($clearSlash, $string);
+    }
+
+    return $clearSlash($string);
 }
