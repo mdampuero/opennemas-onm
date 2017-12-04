@@ -45,13 +45,13 @@ class Articles
         $article->category_title   = $ccm->getTitle($article->category_name);
         $article->actualCategoryId = $ccm->get_id($article->category_name);
         // Assigned media_url used with author photo & related or machine articles with photo
-        $article->media_url        = MEDIA_IMG_ABSOLUTE_URL;
+        $article->media_url = MEDIA_IMG_ABSOLUTE_URL;
 
         // Get inner image for this article
         if (isset($article->img2) && ($article->img2 != 0)) {
-            $photoInt = $er->find('Photo', $article->img2);
+            $photoInt            = $er->find('Photo', $article->img2);
             $photoInt->media_url = MEDIA_IMG_ABSOLUTE_URL;
-            $article->photoInt = $photoInt;
+            $article->photoInt   = $photoInt;
         }
 
         if (is_object($article->author) && !empty($article->author)) {
@@ -62,10 +62,10 @@ class Articles
 
         // Get inner video for this article
         if (isset($article->fk_video2)) {
-            $videoInt = $er->find('Video', $article->fk_video2);
+            $videoInt          = $er->find('Video', $article->fk_video2);
             $article->videoInt = $videoInt;
         } else {
-            $video =  $this->cm->find_by_category(
+            $video = $this->cm->find_by_category(
                 'Video',
                 $article->actualCategoryId,
                 'contents.content_status=1',
@@ -92,7 +92,7 @@ class Articles
 
                 // Generate content uri if it's not an attachment
                 if ($content->fk_content_type == '4') {
-                    $content->uri = "ext".preg_replace('@//@', '/author/', $content->uri);
+                    $content->uri = "ext" . preg_replace('@//@', '/author/', $content->uri);
                 } elseif ($content->fk_content_type == 3) {
                     // Get instance media
                     $basePath = INSTANCE_MEDIA;
@@ -101,9 +101,9 @@ class Articles
                     $filePath = \ContentManager::getFilePathFromId($content->id);
 
                     // Compose the full url to the file
-                    $content->fullFilePath = $basePath.FILE_DIR.$filePath;
+                    $content->fullFilePath = $basePath . FILE_DIR . $filePath;
                 } else {
-                    $content->uri = "ext".$content->uri;
+                    $content->uri = "ext" . $content->uri;
                 }
                 $relatedContents[] = $content;
             }
@@ -113,20 +113,20 @@ class Articles
         // Retrieve the related contents for the given
         $article->suggested = getService('automatic_contents')->searchSuggestedContents(
             'article',
-            "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
+            "category_name= '" . $article->category_name . "' AND pk_content <>" . $article->id,
             4
         );
 
         // Generate external url for suggested
         foreach ($article->suggested as &$element) {
-            $element['uri'] = 'ext'.\Uri::generate(
+            $element['uri'] = 'ext' . \Uri::generate(
                 'article',
-                array(
+                [
                     'id'       => $element['pk_content'],
                     'date'     => date('YmdHis', strtotime($element['created'])),
                     'category' => $element['catName'],
                     'slug'     => urlencode(\Onm\StringUtils::generateSlug($element['title'])),
-                )
+                ]
             );
         }
 
