@@ -58,7 +58,7 @@ class AssetController extends Controller
                 return new Response(
                     file_get_contents($path),
                     200,
-                    array('Content-Type' => $imageFormat)
+                    [ 'Content-Type' => $imageFormat ]
                 );
             }
 
@@ -95,7 +95,7 @@ class AssetController extends Controller
         $cm                 = new \ContentManager;
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($currentCategoryId);
         //content_id | title_catID | serialize(font-family:;font-size:;color:)
-        if (!is_array($contentsInHomepage)) {
+        if (is_array($contentsInHomepage)) {
             $bgColor    = 'bgcolor_' . $currentCategoryId;
             $titleColor = "title_" . $currentCategoryId;
 
@@ -201,7 +201,7 @@ class AssetController extends Controller
                 }
             }
 
-            $selectedCategories = array();
+            $selectedCategories = [];
             if (is_array($ccm->categories) && !empty($ccm->categories)) {
                 foreach ($ccm->categories as &$category) {
                     $commonCategoryNames = [
