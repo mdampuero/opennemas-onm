@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace tests\publi\themes\admin\plugins;
+namespace tests\libs\Smarty;
 
 /**
  * Defines test cases for SmartyUrl class.
@@ -19,7 +19,7 @@ class ModifierClearsplashTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        include_once './public/themes/admin/plugins/modifier.clearslash.php';
+        include_once './libs/smarty-onm-plugins/modifier.clearslash.php';
     }
 
     /**
