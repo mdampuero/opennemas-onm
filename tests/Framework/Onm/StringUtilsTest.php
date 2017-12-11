@@ -154,6 +154,15 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
+            'cambio-look-mariana-antoniale',
+            $this->object->generateSlug(
+                $this->object->generateSlug(
+                    'cambio-look-mariana-antoniale'
+                )
+            )
+        );
+
+        $this->assertEquals(
             '0001-cambio-look-mariana-antoniale-padre',
             $this->object->generateSlug(
                 '0001 ¡El cambio de look de Mariana Antoniale y su padre! ??'
