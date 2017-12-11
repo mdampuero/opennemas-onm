@@ -41,6 +41,10 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->security = $this->getMockBuilder('Security')
+            ->setMethods([ 'hasExtension' ])
+            ->getMock();
+
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -66,6 +70,10 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
 
         if ($name === 'setting_repository') {
             return $this->repository;
+        }
+
+        if ($name === 'core.security') {
+            return $this->security;
         }
 
         return null;
@@ -142,6 +150,65 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test plugin when Ads module is activated
+     */
+    public function testAdsModuleActivated()
+    {
+        $this->repository->expects($this->once())
+            ->method('get')
+            ->with('adsense_id')
+            ->willReturn('ca-pub-999999999999999');
+
+        $this->security->expects($this->once())
+            ->method('hasExtension')
+            ->with('ADS_MANAGER')
+            ->willReturn(true);
+
+        $output = '<html><head>Hello World' . "\n"
+            . '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' . "\n"
+            . '<script>' . "\n"
+            . '(adsbygoogle = window.adsbygoogle || []).push({' . "\n"
+            . 'google_ad_client: "ca-pub-999999999999999",' . "\n"
+            . 'enable_page_level_ads: true' . "\n"
+            . '});' . "\n"
+            . '</script></head><body></body></html>';
+
+        $this->assertEquals($output, smarty_outputfilter_adsense_validator(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test plugin when Ads module is not activated
+     */
+    public function testAdsModuleNotActivated()
+    {
+        $this->repository->expects($this->once())
+            ->method('get')
+            ->with('adsense_id')
+            ->willReturn('ca-pub-999999999999999');
+
+        $this->security->expects($this->once())
+            ->method('hasExtension')
+            ->with('ADS_MANAGER')
+            ->willReturn(false);
+
+        $output = '<html><head>Hello World' . "\n"
+            . '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' . "\n"
+            . '<script>' . "\n"
+            . '(adsbygoogle = window.adsbygoogle || []).push({' . "\n"
+            . 'google_ad_client: "ca-pub-7694073983816204",' . "\n"
+            . 'enable_page_level_ads: true' . "\n"
+            . '});' . "\n"
+            . '</script></head><body></body></html>';
+
+        $this->assertEquals($output, smarty_outputfilter_adsense_validator(
+            $this->output,
+            $this->smarty
+        ));
+    }
+    /**
      * Test plugin when adSense code is invalid
      */
     public function testInvalidAdsenseCode()
@@ -150,6 +217,11 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('adsense_id')
             ->willReturn('');
+
+        $this->security->expects($this->once())
+            ->method('hasExtension')
+            ->with('ADS_MANAGER')
+            ->willReturn(true);
 
         $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
             $this->output,
@@ -166,6 +238,11 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('adsense_id')
             ->willReturn('ca-pub-999999999999999');
+
+        $this->security->expects($this->once())
+            ->method('hasExtension')
+            ->with('ADS_MANAGER')
+            ->willReturn(true);
 
         $output = '<html><head>Hello World' . "\n"
             . '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' . "\n"
