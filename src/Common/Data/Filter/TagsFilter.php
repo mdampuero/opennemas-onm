@@ -45,6 +45,7 @@ class TagsFilter extends Filter
         }
 
         // Remove invalid words
+        $str = $this->utils->removePunctuation($str);
         $str = $this->utils->removeShorts($str);
 
         // Remove duplicates

@@ -64,7 +64,7 @@ class TagsFilterTest extends KernelTestCase
     {
         $this->assertEquals(
             'Sánchez,obligará,españa,español,letras,você,tildes',
-            $this->filter->filter("Sánchez obligará españa español con letras você tildes")
+            $this->filter->filter("Sánchez obligará españa español! con letras você tildes?")
         );
     }
 }
