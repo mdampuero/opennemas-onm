@@ -23,8 +23,16 @@ function smarty_outputfilter_adsense_validator($output, $smarty)
     ) {
         $adsenseId = $smarty->getContainer()->get('setting_repository')->get('adsense_id');
 
-        if (!empty($adsenseId)) {
-            $code = '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        // Check for activated module
+        if (!$smarty->getContainer()->get('core.security')->hasExtension('ADS_MANAGER')) {
+            $adsenseId = 'ca-pub-7694073983816204';
+        }
+
+        if (empty($adsenseId)) {
+            return $output;
+        }
+
+        $code = '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({
 google_ad_client: "' . $adsenseId . '",
@@ -32,8 +40,7 @@ enable_page_level_ads: true
 });
 </script>';
 
-            $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);
-        }
+        $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);
     }
 
     return $output;
