@@ -429,4 +429,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             $this->object->getWeightBadWords('fillo de puta')
         );
     }
+
+    public function testRemovePunctuation()
+    {
+        $this->assertEquals(
+            'Urna quam congue vulputate',
+            $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?')
+        );
+    }
 }

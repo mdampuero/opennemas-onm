@@ -951,6 +951,26 @@ class StringUtils
     }
 
     /**
+     * Removes punctuation characters from a string.
+     *
+     * @param string $str The string to clean.
+     *
+     * @return The string without punctuation characters.
+     */
+    public static function removePunctuation($str)
+    {
+        $punctuation = array_slice(
+            self::$trade,
+            0,
+            array_search('À', array_keys(self::$trade))
+        );
+
+        $str = strtr($str, $punctuation);
+
+        return trim(preg_replace('/\s+/', ' ', $str));
+    }
+
+    /**
      * Converts all object properties to utf-8.
      *
      * @param  mixed $objects Object or list of objects to convert.
