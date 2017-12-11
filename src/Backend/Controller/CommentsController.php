@@ -293,10 +293,13 @@ class CommentsController extends Controller
 
         if (!is_null($comment->id)) {
             $comment->content = new \Content($comment->content_id);
-
+            $languageData     = $this->getLocaleData('frontend', $request, true);
             return $this->render(
                 'comment/new.tpl',
-                [ 'comment' => $comment ]
+                [
+                    'comment'       => $comment,
+                    'language_data' => $languageData
+                ]
             );
         }
 
