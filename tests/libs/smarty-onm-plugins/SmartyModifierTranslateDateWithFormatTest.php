@@ -60,9 +60,9 @@ class SmartyModifierTranslateDateWithFormatTest extends \PHPUnit_Framework_TestC
      */
     public function testTranslateDateWithFormatNull()
     {
-        $this->assertEquals(
-            null,
-            smarty_modifier_translate_date_with_format(new \DateTime())
+        $this->assertRegExp(
+            '/[A-Za-z]+,\s[0-9]+\s[A-Za-z]+/',
+            smarty_modifier_translate_date_with_format(null)
         );
     }
 
