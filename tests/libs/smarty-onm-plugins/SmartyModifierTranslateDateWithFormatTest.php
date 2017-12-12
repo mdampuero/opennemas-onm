@@ -50,10 +50,20 @@ class SmartyModifierTranslateDateWithFormatTest extends \PHPUnit_Framework_TestC
      */
     public function testTranslateDateWithFormatNoString()
     {
-        $this->assertEmpty(smarty_modifier_translate_date_with_format(null));
         $this->assertEmpty(smarty_modifier_translate_date_with_format(123));
         $this->assertEmpty(smarty_modifier_translate_date_with_format([]));
         $this->assertEmpty(smarty_modifier_translate_date_with_format(new \StdClass()));
+    }
+
+    /**
+     * Tests smarty_modifier_translate_date_with_format when date is null
+     */
+    public function testTranslateDateWithFormatNull()
+    {
+        $this->assertEquals(
+            null,
+            smarty_modifier_translate_date_with_format(new \DateTime())
+        );
     }
 
     /**

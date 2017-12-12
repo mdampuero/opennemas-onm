@@ -6,7 +6,7 @@
  */
 function smarty_modifier_translate_date_with_format($date, $format = "l, j \d\\e F")
 {
-    if (!is_string($date)) {
+    if (!is_null($date) && !is_string($date)) {
         return '';
     }
 
