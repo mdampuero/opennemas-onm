@@ -216,20 +216,28 @@ class ArticleController extends Controller
         $keys  = [ 'img1', 'img2' ];
 
         foreach ($keys as $key) {
-            if (!empty($article->{$key})) {
-                $extra[$key] = \Onm\StringUtils::convertToUtf8(
-                    $em->find('Photo', $article->{$key})
-                );
+            if (empty($article->{$key})) {
+                continue;
+            }
+
+            $photo = $em->find('Photo', $article->{$key});
+
+            if (!empty($photo)) {
+                $extra[$key] = \Onm\StringUtils::convertToUtf8($photo);
             }
         }
 
-        if (is_array($article->params)
-            && (array_key_exists('imageHome', $article->params))
-            && !empty($article->params['imageHome'])
+        if (!is_array($article->params)
+            || !array_key_exists('imageHome', $article->params)
+            || empty($article->params['imageHome'])
         ) {
-            $extra['imageHome'] = \Onm\StringUtils::convertToUtf8(
-                $em->find('Photo', $article->params['imageHome'])
-            );
+            return $extra;
+        }
+
+        $photo = $em->find('Photo', $article->params['imageHome']);
+
+        if (!empty($photo)) {
+            $extra['imageHome'] = \Onm\StringUtils::convertToUtf8($photo);
         }
 
         return $extra;
