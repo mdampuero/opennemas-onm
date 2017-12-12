@@ -4,8 +4,12 @@
  * @package Smarty
  * @subpackage plugins
  */
-function smarty_modifier_translate_date_with_format($date, $format = "L, j de F")
+function smarty_modifier_translate_date_with_format($date, $format = "l, j \d\\e F")
 {
+    if (!is_string($date)) {
+        return '';
+    }
+
     $namesEN = [
         "/January/", "/February/", "/March/", "/April/", "/May/", "/June/",
         "/July/", "/August/", "/September/", "/October/", "/November/", "/December/",
@@ -27,23 +31,23 @@ function smarty_modifier_translate_date_with_format($date, $format = "L, j de F"
     $namesGL = [
         "Xaneiro", "Febreiro", "Marzo", "Abril", "Maio", "Xuño", "Xullo",
         "Agosto", "Septembro", "Outubro", "Novembro", "Decembro",
-        "Domingo", "Lúns", "Martes", "Mércores", "Xoves", "Vernes", "Sábado",
+        "Domingo", "Luns", "Martes", "Mércores", "Xoves", "Vernes", "Sábado",
         "Xan", "Feb", "Mar", "Abr", "Mai", "Xuñ", "Xul",
         "Ago", "Sep", "Out", "Nov", "Dec",
         "Dom", "Lun", "Mar", "Mer", "Xov", "Ver", "Sab"
     ];
 
-    $datetime = new DateTime($date);
-    $dateEn = $datetime->format($format);
-
+    $date   = new DateTime($date);
+    $str    = $date->format($format);
     $locale = getService('core.locale')->getLocale();
+
     if ($locale == 'es_ES' || $locale == 'es') {
-        $dateR = preg_replace($namesEN, $namesES, $dateEn);
+        $str = preg_replace($namesEN, $namesES, $str);
     } elseif ($locale == 'gl_ES' || $locale == 'gl') {
-        $dateR = preg_replace($namesEN, $namesGL, $dateEn);
+        $str = preg_replace($namesEN, $namesGL, $str);
     } else {
-        $dateR = preg_replace('/de/', '', $dateEn);
+        $str = preg_replace('/\s+de\s+/', ' ', $str);
     }
 
-    return $dateR;
+    return $str;
 }
