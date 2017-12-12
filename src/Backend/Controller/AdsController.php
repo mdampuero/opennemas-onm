@@ -461,6 +461,7 @@ class AdsController extends Controller
                 'tradedoubler_id' => $formValues->getDigits('tradedoubler_id'),
                 'iadbox_id'       => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
                 'ads_txt'         => $formValues->filter('ads_txt', '', FILTER_SANITIZE_STRING),
+                'adsense_id'      => $formValues->filter('adsense_id', '', FILTER_SANITIZE_STRING),
             ];
 
             if ($this->getUser()->isMaster()) {
@@ -484,7 +485,7 @@ class AdsController extends Controller
         } else {
             $keys = [
                 'ads_settings', 'dfp_options',  'iadbox_id', 'revive_ad_server',
-                'tradedoubler_id', 'dfp_custom_code', 'ads_txt'
+                'tradedoubler_id', 'dfp_custom_code', 'ads_txt', 'adsense_id'
             ];
 
             $configurations = $this->get('setting_repository')->get($keys);
