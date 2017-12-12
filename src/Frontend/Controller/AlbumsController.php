@@ -277,65 +277,6 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Returns via ajax the albums of the category in a page.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function ajaxAlbumPaginatedAction(Request $request)
-    {
-        // Fetch album settings
-        $albumSettings = s::get('album_settings');
-        $totalAlbumMoreFrontpage   = isset($albumSettings['total_front_more'])?$albumSettings['total_front_more']:6;
-
-        if (empty($this->category)) {
-            $this->category = $request->query->getDigits('category', 0);
-        }
-
-        $order = array('created' => 'DESC');
-        $filters = array(
-            'content_type_name' => array(array('value' => 'album')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-        );
-
-        if ($this->category != 0) {
-            $category = $this->get('category_repository')->find($this->category);
-            $filters['category_name'] = array(array('value' => $category->name));
-        }
-
-        $em           = $this->get('entity_repository');
-        $othersAlbums = $em->findBy($filters, $order, $totalAlbumMoreFrontpage, $this->page);
-        $countAlbums  = $em->countBy($filters);
-
-        if ($countAlbums == 0) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_album_ajax_paginated')
-            );
-        }
-
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => false,
-            'directional' => true,
-            'maxLinks'    => 0,
-            'epp'         => $totalAlbumMoreFrontpage,
-            'page'        => $this->page,
-            'total'       => count($othersAlbums)+1,
-            'route'       => [
-                'name'   => 'frontend_album_ajax_paginated',
-                'params' => ['category' => $this->category]
-            ]
-        ]);
-
-        return $this->render('album/partials/_widget_more_albums.tpl', [
-            'others_albums'      => $othersAlbums,
-            'page'               => $this->page,
-           'pagination'         => $pagination,
-        ]);
-    }
-
-    /**
      * Returns a list of advertisements for a category and page.
      *
      * @param mixed  $category The category id.
