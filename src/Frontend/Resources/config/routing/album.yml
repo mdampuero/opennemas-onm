@@ -4,12 +4,6 @@ frontend_album_ajax:
     options:
         l10n: true
 
-frontend_album_ajax_paginated:
-    path: /album/more
-    defaults: { _controller: FrontendBundle:Albums:ajaxAlbumPaginated }
-    options:
-        l10n: true
-
 frontend_album_frontpage:
     path: /album/{page}
     defaults: { _controller: FrontendBundle:Albums:frontpage, page : 1 }

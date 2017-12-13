@@ -401,10 +401,6 @@
             }).join(',');
           }
 
-          if (data.created instanceof Date) {
-            data.created = null;
-          }
-
           var data = { article: data, locale: $scope.config.locale };
 
           http.post(previewUrl, data).success(function() {
