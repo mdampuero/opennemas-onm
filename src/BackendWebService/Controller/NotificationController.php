@@ -57,8 +57,8 @@ class NotificationController extends Controller
             ]
         );
 
-        $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
-            . ' and enabled = 1 and start <= "%s" and (end is null or end > "%s")';
+        $oql = "(target ~ '%s' or target ~ '\"all\"' or target ~ '%s')"
+            . " and enabled = 1 and start <= '%s' and (end is null or end > '%s')";
 
         if (!empty($read)) {
             $oql .= ' and id !in [' . implode(', ', array_keys($read)) . ']';
@@ -102,9 +102,9 @@ class NotificationController extends Controller
         $theme = $this->get('core.instance')->settings['TEMPLATE_USER'];
         $date  = date('Y-m-d H:i:s');
 
-        $oql = '(target ~ "%s" or target ~ "all" or target ~ "%s")'
-            .  ' and enabled = 1 and start <= "%s"'
-            .  ' and (end is null or end > "%s")';
+        $oql = "(target ~ '%s' or target ~ '\"all\"' or target ~ '%s')"
+            . " and enabled = 1 and start <= '%s'"
+            . " and (end is null or end > '%s')";
 
         if (!$this->getUser()->isAdmin()) {
             $oql .= ' and (users is null or users = 0)';
@@ -164,7 +164,7 @@ class NotificationController extends Controller
                 'user_id'         => $userId
             ]);
         } catch (EntityNotFoundException $e) {
-            $un = new UserNotification();
+            $un                  = new UserNotification();
             $un->instance_id     = $this->get('core.instance')->id;
             $un->user_id         = $userId;
             $un->notification_id = $id;
@@ -248,7 +248,7 @@ class NotificationController extends Controller
                 $un = new UserNotification();
 
                 $un->instance_id     = $instance;
-                $un->user = [
+                $un->user            = [
                     'username' => $this->getUser()->username,
                     'email'    => $this->getUser()->email
                 ];
@@ -295,14 +295,14 @@ class NotificationController extends Controller
             $notification['body'] =
                 $notification['body'][CURRENT_LANGUAGE_SHORT];
         } else {
-            $notification['body']  = $notification['body']['en'];
+            $notification['body'] = $notification['body']['en'];
         }
 
         $notification['read'] = 0;
         $notification['view'] = 0;
 
         if (!empty($view) && in_array($notification['id'], array_keys($view))) {
-            $notification['view']= 1;
+            $notification['view'] = 1;
         }
 
         $time = $notification['start']->getTimeStamp();
@@ -317,6 +317,6 @@ class NotificationController extends Controller
         }
 
         $notification['time'] = $notification['start']->format('H:i');
-        $notification['am'] = $notification['start']->format('a');
+        $notification['am']   = $notification['start']->format('a');
     }
 }
