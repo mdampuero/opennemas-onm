@@ -57,7 +57,7 @@ class NotificationController extends Controller
             ]
         );
 
-        $oql = "(target ~ '%s' or target ~ '\"all\"' or target ~ '%s')"
+        $oql = "(target ~ '\"%s\"' or target ~ '\"all\"' or target ~ '\"%s\"')"
             . " and enabled = 1 and start <= '%s' and (end is null or end > '%s')";
 
         if (!empty($read)) {
@@ -102,7 +102,7 @@ class NotificationController extends Controller
         $theme = $this->get('core.instance')->settings['TEMPLATE_USER'];
         $date  = date('Y-m-d H:i:s');
 
-        $oql = "(target ~ '%s' or target ~ '\"all\"' or target ~ '%s')"
+        $oql = "(target ~ '\"%s\"' or target ~ '\"all\"' or target ~ '\"%s\"')"
             . " and enabled = 1 and start <= '%s'"
             . " and (end is null or end > '%s')";
 
