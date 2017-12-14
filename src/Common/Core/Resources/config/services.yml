@@ -6,6 +6,7 @@ parameters:
         output:
             - ads_generator
             - ads_scripts
+            - adsense_validator
             - canonical_url
             - comscore
             - chartbeat

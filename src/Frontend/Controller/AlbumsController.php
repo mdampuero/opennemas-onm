@@ -37,8 +37,7 @@ class AlbumsController extends Controller
         $this->page         = $this->request->query->getDigits('page', 1);
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
-            $categoryManager = $this->get('category_repository');
-            $category = $categoryManager->findBy(
+            $category = $this->get('category_repository')->findBy(
                 [ 'name' => [[ 'value' => $this->categoryName ]] ],
                 'name ASC'
             );
@@ -47,8 +46,8 @@ class AlbumsController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            $category         = $category[0];
-            $this->category   = $category->pk_content_category;
+            $category       = $category[0];
+            $this->category = $category->pk_content_category;
 
             $this->view->assign([
                 'category_name'         => $this->categoryName ,
@@ -85,18 +84,18 @@ class AlbumsController extends Controller
         ) {
             $albumSettings = s::get('album_settings');
             $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
-            $days          = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
             $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
-            $order = array();
-            $filters = array(
+            $order   = [];
+            $filters = [
                 'content_type_name' => [[ 'value' => 'album' ]],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            );
+            ];
 
             if ($this->category != 0) {
                 $category = $this->get('category_repository')->find($this->category);
+
                 $filters['category_name'] = [[ 'value' => $category->name ]];
             }
 
@@ -109,7 +108,6 @@ class AlbumsController extends Controller
             $em          = $this->get('entity_repository');
             $albums      = $em->findBy($filters, $order, $itemsPerPage, $this->page);
             $countAlbums = $em->countBy($filters);
-
 
             $pagination = $this->get('paginator')->get([
                 'boundary'    => false,
@@ -136,7 +134,7 @@ class AlbumsController extends Controller
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
-            'x-tags'         => 'album-frontpage,'.$this->page
+            'x-tags'         => 'album-frontpage,' . $this->page
         ]);
     }
 
@@ -162,6 +160,7 @@ class AlbumsController extends Controller
         }
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
+
         $cacheable = $subscriptionFilter->subscriptionHook($album);
 
         // Setup templating cache layer
@@ -173,25 +172,24 @@ class AlbumsController extends Controller
         ) {
             // Get the other albums for the albums widget
             $settings = s::get('album_settings');
-            $total    = isset($settings['total_front'])?($settings['total_front']):2;
-            $days     = isset($settings['time_last'])?($settings['time_last']):4;
+            $total    = isset($settings['total_front']) ? ($settings['total_front']) : 2;
+            $days     = isset($settings['time_last']) ? ($settings['time_last']) : 4;
 
             $otherAlbums = $this->cm->findAll(
                 'Album',
-                'content_status=1 AND pk_content !='.$album->id
-                .' AND `contents_categories`.`pk_fk_content_category` ='.$this->category
-                .' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
-                ' ORDER BY created DESC LIMIT '.$total
+                'content_status=1 AND pk_content !=' . $album->id
+                 . ' AND `contents_categories` . `pk_fk_content_category` =' . $this->category
+                 . ' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ',
+                ' ORDER BY created DESC LIMIT ' . $total
             );
 
             foreach ($otherAlbums as &$content) {
-                $content->cover_image = $this->get('entity_repository')->find('Photo', $content->cover_id);
-
-                $content->cover = is_object($content->cover_image)
-                    ? $content->cover_image->path_file.$content->cover_image->name
-                    : '';
+                $content->cover_image    = $this->get('entity_repository')->find('Photo', $content->cover_id);
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
+
+                $content->cover = is_object($content->cover_image) ?
+                    $content->cover_image->path_file . $content->cover_image->name : '';
             }
 
             // Fetch album author
@@ -201,11 +199,12 @@ class AlbumsController extends Controller
             $album->category_name  = $album->loadCategoryName($album->id);
             $album->category_title = $album->loadCategoryTitle($album->id);
 
-            // TODO: Improve this.
-            // In order to make subscription module to work remove the attached album photos when not cacheable
-            $_albumArray           = (!isset($album->album_content_replaced))
+            // In order to make subscription module to work remove the attached
+            // album photos when not cacheable
+            $_albumArray = (!isset($album->album_content_replaced))
                 ? $album->_getAttachedPhotos($album->id) : null;
-            $_albumArrayPaged      = (!isset($album->album_content_replaced))
+
+            $_albumArrayPaged = (!isset($album->album_content_replaced))
                 ? $album->getAttachedPhotosPaged($album->id, 8, $this->page) : null;
 
             if (count($_albumArrayPaged) > $itemsPerPage) {
@@ -230,7 +229,7 @@ class AlbumsController extends Controller
             'page'           => $this->page,
             'cache_id'       => $cacheID,
             'contentId'      => $album->id,
-            'x-tags'         => 'album,'.$album->id,
+            'x-tags'         => 'album,' . $album->id,
             'x-cache-for'    => '+1 day',
             'x-cacheable'    => $cacheable
         ]);
@@ -273,65 +272,6 @@ class AlbumsController extends Controller
             'page'               => $page,
             'items_page'         => $itemsPage,
             'album'              => $album,
-        ]);
-    }
-
-    /**
-     * Returns via ajax the albums of the category in a page.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function ajaxAlbumPaginatedAction(Request $request)
-    {
-        // Fetch album settings
-        $albumSettings = s::get('album_settings');
-        $totalAlbumMoreFrontpage   = isset($albumSettings['total_front_more'])?$albumSettings['total_front_more']:6;
-
-        if (empty($this->category)) {
-            $this->category = $request->query->getDigits('category', 0);
-        }
-
-        $order = array('created' => 'DESC');
-        $filters = array(
-            'content_type_name' => array(array('value' => 'album')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-        );
-
-        if ($this->category != 0) {
-            $category = $this->get('category_repository')->find($this->category);
-            $filters['category_name'] = array(array('value' => $category->name));
-        }
-
-        $em           = $this->get('entity_repository');
-        $othersAlbums = $em->findBy($filters, $order, $totalAlbumMoreFrontpage, $this->page);
-        $countAlbums  = $em->countBy($filters);
-
-        if ($countAlbums == 0) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_album_ajax_paginated')
-            );
-        }
-
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => false,
-            'directional' => true,
-            'maxLinks'    => 0,
-            'epp'         => $totalAlbumMoreFrontpage,
-            'page'        => $this->page,
-            'total'       => count($othersAlbums)+1,
-            'route'       => [
-                'name'   => 'frontend_album_ajax_paginated',
-                'params' => ['category' => $this->category]
-            ]
-        ]);
-
-        return $this->render('album/partials/_widget_more_albums.tpl', [
-            'others_albums'      => $othersAlbums,
-            'page'               => $this->page,
-           'pagination'         => $pagination,
         ]);
     }
 

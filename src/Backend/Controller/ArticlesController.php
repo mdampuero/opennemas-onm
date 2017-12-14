@@ -320,6 +320,9 @@ class ArticlesController extends Controller
             }
         }
 
+        // Disable comments on preview
+        $article->with_comment = 0;
+
         // Set a dummy Id for the article if doesn't exists
         if (empty($article->pk_article) && empty($article->id)) {
             $article->pk_article = '-1';

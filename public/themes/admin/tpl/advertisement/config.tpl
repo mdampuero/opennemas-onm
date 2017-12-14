@@ -66,6 +66,14 @@
         {/acl}
       </uib-tab>
       <uib-tab heading="{t}External services{/t}">
+        <h4>{t}AdSense integration{/t}</h4>
+        <div class="form-group">
+          <label for="adsense_id" class="form-label">{t}AdSense ID{/t}</label>
+          <div class="controls">
+            <input class="form-control" type="text" name="adsense_id" value="{$configs['adsense_id']}">
+            <div class="help">{t}The AdSense ID (i.e. ca-pub-0000000000000000){/t}</div>
+          </div>
+        </div>
         <h4>{t}OpenX/Revive Ad server integration{/t}</h4>
         <div class="form-group">
           <label for="revive_ad_server_url" class="form-label">{t}Ad server base url{/t}</label>

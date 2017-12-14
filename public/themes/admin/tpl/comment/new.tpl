@@ -64,7 +64,7 @@
           <div class="form-group">
             <label class="form-label" for="title">{t}Commented on{/t}</label>
             <div class="controls">
-              <strong>{t}{$comment->content->content_type_name|capitalize}{/t}</strong> - {$comment->content->title|clearslash}
+              <strong>{t}{$comment->content->content_type_name|capitalize}{/t}</strong> - {localize_filter field=$comment->content->title|clearslash params=$language_data}
             </div>
           </div>
           {acl isAllowed="COMMENT_AVAILABLE"}
