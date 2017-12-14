@@ -40,9 +40,6 @@ class UtilsController extends Controller
         $fm   = $this->get('data.manager.filter');
         $tags = $fm->set($tags)->filter('tags')->get();
 
-        // $tags2 = StringUtils::getTags($tags);
-        // $tags2 = trim(str_replace(', ', ',', $tags2), ',');
-
         return new Response($tags, 200);
     }
 }

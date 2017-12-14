@@ -12,7 +12,7 @@ namespace Common\Data\Filter;
 class TagsFilter extends Filter
 {
     /**
-     * Initializes the SlugFilter.
+     * Initializes the TagFilter.
      *
      * @param ServiceContainer $container The service container.
      * @param array            $params    The filter parameters.
@@ -20,13 +20,6 @@ class TagsFilter extends Filter
     public function __construct($container, $params = [])
     {
         $this->utils = new \Onm\StringUtils;
-
-        $this->defaultParams = [
-            'lowercase' => false,
-            'separator' => ','
-        ];
-
-        $params = array_merge($this->defaultParams, $params);
 
         parent::__construct($container, $params);
     }
@@ -40,44 +33,43 @@ class TagsFilter extends Filter
      */
     public function filter($str)
     {
-        //WIP
         // Convert to UTF-8
-        $str  = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
+        $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
 
         // ensure that we have utf-8 used
         $beforeEncoding = mb_internal_encoding();
         mb_internal_encoding("utf-8");
 
-        if ($this->getParameter('lowercase')) {
-            $str  = mb_strtolower($str, 'UTF-8');
+        if ($this->getParameter('lowercase', false)) {
+            $str = mb_strtolower($str, 'UTF-8');
         }
 
-        // $kanjis = $this->tokenizeJapannese($str);
-
         // Remove invalid words
-        $str = \Onm\StringUtils::removeShorts($str);
+        $str = $this->utils->removePunctuation($str);
+        $str = $this->utils->removeShorts($str);
 
         // Remove duplicates
         $str = preg_replace('/[\,]+/', ',', $str);
         $str = preg_replace('/[\.]+/', '', $str);
-        $str = \Onm\StringUtils::setSeparator($str, ',');
+
+        $str = trim($str);
+        $str = preg_replace('/[ ]+/', ',', $str);
+
         $str = array_unique(explode(',', $str));
+        $str = implode($this->getParameter('separator', ','), $str);
 
-        $str = implode($this->defaultParams['separator'].' ', $str);
-
-        // reset encoding
+        // Reset encoding
         mb_internal_encoding($beforeEncoding);
 
         return $str;
     }
 
-
     /**
-     * Returns a list of words tokenized for Hiragana and Katagana
+     * Returns a list of words tokenized for Hiragana and Katagana.
      *
-     * @return array
+     * @return array The list of words.
      */
-    private function tokenizeJapannese($string)
+    protected function tokenizeJapannese($string)
     {
         $hiraganaTokens = [
             'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ',
@@ -89,6 +81,7 @@ class TagsFilter extends Filter
             'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'ぁ', 'ぃ', 'ぅ', 'ぇ',
             'ぉ',
         ];
+
         $katakanaTokens = [
             'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ',
             'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ',
@@ -107,7 +100,7 @@ class TagsFilter extends Filter
         $tokens = [];
 
         $currentSystem = null;
-        $currentToken = '';
+        $currentToken  = '';
 
         for ($i = 0; $i <= mb_strlen($string); $i++) {
             $character = mb_substr($string, $i, 1);
@@ -130,8 +123,8 @@ class TagsFilter extends Filter
                 $currentToken .= $character;
             } else {
                 // Write ended token to tokens and start a new one
-                $tokens[] = $currentToken;
-                $currentToken = $character;
+                $tokens[]      = $currentToken;
+                $currentToken  = $character;
                 $currentSystem = $system;
             }
         }

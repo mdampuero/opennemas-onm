@@ -289,7 +289,7 @@ class Content implements \JsonSerializable
                 }
 
                 if ($name === 'slug' && empty($this->slug)) {
-                    $this->slug = \Onm\StringUtils::getTitle($this->title);
+                    $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
 
                 if ($this->content_type_name === 'article'
@@ -680,10 +680,12 @@ class Content implements \JsonSerializable
 
         if (empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = $this->slug;
+                $data['slug'] = \Onm\StringUtils::generateSlug($this->slug);
             } else {
                 $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
             }
+        } else {
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
         }
 
         $contentData = [

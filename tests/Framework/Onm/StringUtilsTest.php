@@ -26,14 +26,6 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-    }
-
-    /**
      * @covers Onm\StringUtils::normalizeName
      */
     public function testNormalizeName()
@@ -49,42 +41,6 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         // I have a lot of problems with char encoding
         // $this->assertEquals('a marinha lucense na que c��mpre ir no d��a',
         //     $this->object->normalize('Á marinha lucense na que cómpre ir no día'));
-    }
-
-    /**
-     * @covers Onm\StringUtils::clearSpecialChars
-     * @todo   Implement testClearSpecialChars().
-     */
-    public function testClearSpecialChars()
-    {
-        $this->assertEquals(
-            'a mariña lucense na que cómpre ir no día',
-            $this->object->clearSpecialChars('A mariña lucense na que cómpre ir no día')
-        );
-    }
-
-    /**
-     * @covers Onm\StringUtils::setSeparator
-     */
-    public function testSetSeparator()
-    {
-        $this->assertEquals(
-            'Lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-Cras-elit-sapien,' .
-            '-porttitor-non-aliquam-ac,-sagittis-a-urna.',
-            $this->object->setSeparator(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit ' .
-                'sapien, porttitor non aliquam ac, sagittis a urna.'
-            )
-        );
-        $this->assertEquals(
-            'Lorem=ipsum=dolor=sit=amet,=consectetur=adipiscing=elit.=Cras=elit=sapien,' .
-            '=porttitor=non=aliquam=ac,=sagittis=a=urna.',
-            $this->object->setSeparator(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit ' .
-                'sapien, porttitor non aliquam ac, sagittis a urna.',
-                '='
-            )
-        );
     }
 
     /**
@@ -198,6 +154,15 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
+            'cambio-look-mariana-antoniale',
+            $this->object->generateSlug(
+                $this->object->generateSlug(
+                    'cambio-look-mariana-antoniale'
+                )
+            )
+        );
+
+        $this->assertEquals(
             '0001-cambio-look-mariana-antoniale-padre',
             $this->object->generateSlug(
                 '0001 ¡El cambio de look de Mariana Antoniale y su padre! ??'
@@ -238,6 +203,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         ], $this->object->generateSlug([
             'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
             '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
+        ]));
+
+        $this->assertEquals([
+            'chorando-aprendese-fito-musica-contemporanea'
+        ], $this->object->generateSlug([
+            ' “Chorando apréndese\' é un fito na música contemporánea”'
         ]));
 
         $this->assertEquals([], $this->object->generateSlug([]));
@@ -332,87 +303,11 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testRemoveShorts()
     {
         $this->assertEquals(
-            'cousa non lembraba ven vagar.',
-            $this->object->removeShorts('unha cousa que non me lembraba e ven de vagar.')
+            'españa cousa non lembraba ven vagar.',
+            $this->object->removeShorts('españa a unha cousa que non me lembraba e ven de vagar.')
         );
-    }
 
-    /**
-     * @covers Onm\StringUtils::strStop
-     */
-    public function testStrStop()
-    {
-        $this->assertEquals(
-            'Example phrase to test...',
-            $this->object->strStop('Example phrase to test strStop method')
-        );
-    }
-
-    /**
-     * @covers Onm\StringUtils::strStop
-     */
-    public function testStrStopWithLimit()
-    {
-        $this->assertEquals(
-            'Example phrase to...',
-            $this->object->strStop('Example phrase to test strStop method', 20)
-        );
-    }
-
-    /**
-     * @covers Onm\StringUtils::strStop
-     */
-    public function testStrStopWithPhraseWithoutSpaces()
-    {
-        $this->assertEquals(
-            'Examplephrasetotests...',
-            $this->object->strStop('ExamplephrasetoteststrStopmethod', 20)
-        );
-    }
-
-    /**
-     * @covers Onm\StringUtils::strStop
-     */
-    public function testStrStopReturnsOriginalStringIfLongerThanLimit()
-    {
-        $this->assertEquals(
-            'Example phrase to test strStop method',
-            $this->object->strStop('Example phrase to test strStop method', 100)
-        );
-    }
-
-    // /**
-    //  * @covers Onm\StringUtils::unhtmlentities
-    //  * @todo   Implement testUnhtmlentities().
-    //  */
-    // public function testUnhtmlentities()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
-
-    // /**
-    //  * @covers Onm\StringUtils::disabledMagicQuotes
-    //  * @todo   Implement testdisabledMagicQuotes().
-    //  */
-    // public function testdisabledMagicQuotes()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
-
-    /**
-     * @covers Onm\StringUtils::clearBadChars
-     * @todo   Implement testClearBadChars().
-     */
-    public function testClearBadChars()
-    {
-        $text = $this->object->clearBadChars('Text' . chr(226) . chr(128) . chr(169));
-        $this->assertTrue(strpos(chr(226), $text) == false);
+        $this->assertEquals(' a unha', $this->object->removeShorts(' a unha'));
     }
 
     /**
@@ -541,38 +436,11 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers Onm\StringUtils::toHttpParams
-     * @todo   Implement testToHttpParams().
-     */
-    public function testToHttpParams()
+    public function testRemovePunctuation()
     {
         $this->assertEquals(
-            'action=test&action=1',
-            $this->object->toHttpParams([
-                [ 'action' => 'test' ],
-                [ 'action' => '1' ],
-            ])
-        );
-    }
-
-    /**
-     * @covers Onm\StringUtils::generatePassword
-     */
-    public function testGeneratePasswordReturnsStringWithExactLength()
-    {
-        $this->assertTrue(
-            9 == strlen($this->object->generatePassword(9))
-        );
-    }
-
-    /**
-     * @covers Onm\StringUtils::generatePassword
-     */
-    public function testGeneratePasswordReturnsRandomString()
-    {
-        $this->assertTrue(
-            $this->object->generatePassword(9) != $this->object->generatePassword(9)
+            'Urna quam congue vulputate',
+            $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?')
         );
     }
 }
