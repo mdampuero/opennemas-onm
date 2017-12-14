@@ -184,6 +184,10 @@ class ArticlesController extends Controller
         // Get full article
         $article = $cm->getUrlContent($wsUrl . '/ws/articles/complete/' . $dirtyID, true);
 
+        if (empty($article)) {
+            throw new ResourceNotFoundException();
+        }
+
         if (is_string($article)) {
             $article = @unserialize($article);
         }
