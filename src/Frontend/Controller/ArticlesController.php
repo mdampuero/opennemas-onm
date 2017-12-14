@@ -184,12 +184,14 @@ class ArticlesController extends Controller
         // Get full article
         $article = $cm->getUrlContent($wsUrl . '/ws/articles/complete/' . $dirtyID, true);
 
-        if (empty($article)) {
-            throw new ResourceNotFoundException();
-        }
-
         if (is_string($article)) {
             $article = @unserialize($article);
+        }
+
+        if (empty($article) ||
+            (!empty($article->error) && !empty($article->error->code) && $article->error->code === 404)
+        ) {
+            throw new ResourceNotFoundException();
         }
 
         // Setup templating cache layer
