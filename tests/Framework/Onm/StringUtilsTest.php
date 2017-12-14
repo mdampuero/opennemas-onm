@@ -205,6 +205,13 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             '0001 ¡El cambio de look de Mariana Antoniale! -‐‒–—―⁃'
         ]));
 
+        $this->assertEquals([
+            'chorando-aprendese-fito-musica-contemporanea'
+        ], $this->object->generateSlug([
+            ' “Chorando apréndese\' é un fito na música contemporánea”'
+        ]));
+
+
         $this->assertEquals([], $this->object->generateSlug([]));
 
         $this->assertEquals([1 => null], $this->object->generateSlug([1 => null]));
