@@ -403,7 +403,7 @@ class StringUtils
      *
      * @var array
      */
-    static protected $spanishWords = [
+    static protected $shortWords = [
         'a',
         'al',
         'ante',
@@ -426,8 +426,11 @@ class StringUtils
         'conmigo',
         'contra',
         'cuatro',
+        'cun',
+        'cunha',
         'de',
         'del',
+        'dela',
         'desde',
         'dos',
         'durante',
@@ -461,6 +464,8 @@ class StringUtils
         'me',
         'mediante',
         'mi',
+        'na',
+        'no',
         'nosotras',
         'nosotros',
         'nove',
@@ -932,7 +937,7 @@ class StringUtils
     {
         $parsed = $str;
 
-        foreach (self::$spanishWords as $word) {
+        foreach (self::$shortWords as $word) {
             $parsed = preg_replace(
                 "/(^|[\s\.\,]+)$word($|[\s\.\,]+)/i",
                 ' ',
