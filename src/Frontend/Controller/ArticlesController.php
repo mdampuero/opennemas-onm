@@ -59,19 +59,19 @@ class ArticlesController extends Controller
         }
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->get('core.user'));
-        $cacheable = $subscriptionFilter->subscriptionHook($article);
+        $cacheable          = $subscriptionFilter->subscriptionHook($article);
 
         // Advertisements for single article NO CACHE
-        $this->ccm  = \ContentCategoryManager::get_instance();
-        $actualCategoryId = $this->ccm->get_id($categoryName);
+        $this->ccm                        = \ContentCategoryManager::get_instance();
+        $actualCategoryId                 = $this->ccm->get_id($categoryName);
         list($positions, $advertisements) = $this->getAds($actualCategoryId);
 
         // Fetch general layout
-        $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId);
+        $layout = $this->get('setting_repository')->get('frontpage_layout_' . $actualCategoryId);
         if (empty($layout)) {
             $layout = 'default';
         }
-        $layoutFile = 'layouts/'.$layout.'.tpl';
+        $layoutFile = 'layouts/' . $layout . '.tpl';
         $this->view->assign('layoutFile', $layoutFile);
 
         // Setup templating cache layer
@@ -137,7 +137,7 @@ class ArticlesController extends Controller
             // Machine suggested contents code -----------------------------
             $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
                 'article',
-                "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
+                "category_name= '" . $article->category_name . "' AND pk_content <>" . $article->id,
                 4
             );
 
@@ -154,7 +154,7 @@ class ArticlesController extends Controller
             'content'         => $article,
             'actual_category' => $categoryName,
             'time'            => '12345',
-            'x-tags'          => 'article,'.$article->id,
+            'x-tags'          => 'article,' . $article->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable,
         ]);
@@ -182,7 +182,8 @@ class ArticlesController extends Controller
         $cm = new \ContentManager;
 
         // Get full article
-        $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
+        $article = $cm->getUrlContent($wsUrl . '/ws/articles/complete/' . $dirtyID, true);
+
         if (is_string($article)) {
             $article = @unserialize($article);
         }
@@ -215,7 +216,7 @@ class ArticlesController extends Controller
             'suggested'             => $article->suggested,
             'videoInt'              => $article->videoInt,
             'x-cache-for'           => '+1 day',
-            'x-tags'                => 'ext-article,'.$article->id
+            'x-tags'                => 'ext-article,' . $article->id
         ]);
     }
 
@@ -230,7 +231,7 @@ class ArticlesController extends Controller
      */
     public static function getAds($category = 'home')
     {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // TODO: Use $this->get when the function changes to non-static
         $positionManager = getService('core.helper.advertisement');
