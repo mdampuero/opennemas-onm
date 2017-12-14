@@ -211,7 +211,6 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             ' “Chorando apréndese\' é un fito na música contemporánea”'
         ]));
 
-
         $this->assertEquals([], $this->object->generateSlug([]));
 
         $this->assertEquals([1 => null], $this->object->generateSlug([1 => null]));

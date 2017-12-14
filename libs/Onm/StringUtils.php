@@ -598,7 +598,7 @@ class StringUtils
 
         // Remove UTF-8 C0 controls chars encoded in HTML entities
         // http://www.w3schools.com/charsets/ref_utf_basic_latin.asp
-        $string = preg_replace('/&#(0?[0-9]|1[0-9]|2[0-9]|3[0-1]);/', '', $string);
+        $string = preg_replace('/&#[0-9]+;/', '', $string);
 
         // Use intl extension to clean
         $string = transliterator_transliterate(
@@ -617,45 +617,16 @@ class StringUtils
             }
         }
 
-        // Convert nbsp, ndash and mdash to hyphens
-        $string = str_replace(['%c2%a0', '%e2%80%93', '%e2%80%94'], '-', $string);
-        // Convert nbsp, ndash and mdash HTML entities to hyphens
-        $string = str_replace(
-            ['&nbsp;', '&#160;', '&ndash;', '&#8211;', '&mdash;', '&#8212;'],
-            '-',
-            $string
-        );
-
-        $charEntities = [
-            // iexcl and iquest
-            '%c2%a1', '%c2%bf',
-            // angle quotes
-            '%c2%ab', '%c2%bb', '%e2%80%b9', '%e2%80%ba',
-            // curly quotes
-            '%e2%80%98', '%e2%80%99', '%e2%80%9c', '%e2%80%9d',
-            '%e2%80%9a', '%e2%80%9b', '%e2%80%9e', '%e2%80%9f',
-            // copy, reg, deg, hellip and trade
-            '%c2%a9', '%c2%ae', '%c2%b0', '%e2%80%a6', '%e2%84%a2',
-            // acute accents
-            '%c2%b4', '%cb%8a', '%cc%81', '%cd%81',
-            // grave accent, macron, caron
-            '%cc%80', '%cc%84', '%cc%8c',
-        ];
-
-        // Strip these characters entirely
-        $string = str_replace($charEntities, '', $string);
-
-        // Convert times to x
-        $string = str_replace('%c3%97', 'x', $string);
-        // Remove punctuation marks
-        $string = str_replace(
-            [
-                '"', "'", "…", ".", ",", "“", "”", ",", ".",
-                ":", ";", "?", "¿", "!", "¡", "'", ")", ")"
-            ],
-            '',
-            $string
-        );
+        // Remove some characters
+        $string = str_replace([
+            "%c2%a0", "%c2%a1", "%c2%a9", "%c2%ab", "%c2%ae", "%c2%b0",
+            "%c2%b4", "%c2%bb", "%c2%bf", "%c3%97", "%cb%8a", "%cc%80",
+            "%cc%81", "%cc%84", "%cc%8c", "%cd%81", "%e2%80%93", "%e2%80%94",
+            "%e2%80%98", "%e2%80%99", "%e2%80%9a", "%e2%80%9b", "%e2%80%9c",
+            "%e2%80%9d", "%e2%80%9e", "%e2%80%9f", "%e2%80%a6", "%e2%80%b9",
+            "%e2%80%ba", "%e2%84%a2", "&#160;", "&mdash;", "&nbsp;", "&ndash;",
+            "\xc2\xa0",
+        ], ' ', $string);
 
         // Clean trailing and duplicated spaces
         $string = preg_replace(['/\s+/', '/[\t\n]/'], ' ', $string);
