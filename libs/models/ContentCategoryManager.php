@@ -808,35 +808,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns the category name of a Content throw ID
-     *
-     * @param  int $id Content ID
-     * @return int Return category name
-     */
-    public function getCategoryNameByContentId($id)
-    {
-        if (!is_numeric($id)) {
-            return null;
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT catName FROM contents_categories WHERE pk_fk_content=?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return null;
-            }
-
-            return $rs['catName'];
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-            return false;
-        }
-    }
-
-    /**
      * Resets ContentCategoryManager.
      */
     public function reset()

@@ -1563,35 +1563,6 @@ class ContentManager
     }
 
     /**
-     * Returns the name of a category for a content given its id
-     *
-     * @param int $contentId the id of the content
-     *
-     * @return string the category name
-     */
-    public function getCategoryNameByContentId($contentId)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT pk_fk_content_category, catName FROM `contents_categories` WHERE pk_fk_content = ?',
-                [ $contentId ]
-            );
-
-            if (array_key_exists('catName', $rs)) {
-                return $rs['catName'];
-            }
-
-            return '';
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            return false;
-        }
-    }
-
-    /**
      * Returns the content objects from a list of content ids
      *
      * @param array $contentIds list of content ids to fetch
