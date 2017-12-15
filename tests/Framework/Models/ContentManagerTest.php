@@ -195,7 +195,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers ContentManager::isInTime
      */
-    public function testIsInTime2()
+    public function testIsInTime()
     {
         $now = '2012-08-22 03:03:12';
 
@@ -211,43 +211,35 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
 
         // Check Content::isInTime with no starttime
-        $startTime = '0000-00-00 00:00:00';
-        $endTime   = '2012-08-23 03:03:12';
-        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = null;
-        $endTime   = '2012-08-23 03:03:12';
+        $endTime   = '9999-12-12 03:03:12';
         $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
-        $startTime = '0000-00-00 00:00:00';
-        $endTime   = '2012-08-21 03:03:12';
-        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
         $startTime = null;
         $endTime   = '2012-08-21 03:03:12';
         $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
 
         // Check Content::isInTime with no endtime
         $startTime = '2012-08-21 03:03:12';
-        $endTime   = '0000-00-00 00:00:00';
-        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
-        $startTime = '2012-08-21 03:03:12';
         $endTime   = null;
         $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
-        $startTime = '2012-08-23 03:03:12';
-        $endTime   = '0000-00-00 00:00:00';
-        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
+
         $startTime = '2012-08-23 03:03:12';
         $endTime   = null;
-        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
 
         // Check Content::isInTime with starttime and endtime defined
         $startTime = '2012-08-21 03:03:12';
-        $endTime   = '2012-08-23 03:03:12';
+        $endTime   = '9999-08-23 03:03:12';
         $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
+
         $startTime = '2012-08-23 03:03:12';
         $endTime   = '2012-08-24 03:03:12';
         $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
+
         $startTime = '2012-08-20 03:03:12';
         $endTime   = '2012-08-21 03:03:12';
         $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
+
         $startTime = '2012-08-21 03:03:12';
         $endTime   = '2012-08-20 03:03:12';
         $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
