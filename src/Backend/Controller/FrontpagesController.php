@@ -72,37 +72,6 @@ class FrontpagesController extends Controller
             }
         }
 
-        // Fetch menu categories and override group
-        $menu        = new \Menu();
-        $menu        = $menu->getMenu('frontpage');
-        $menu->items = (is_object($menu) && $menu instanceof \Menu) ? $menu->items : [];
-        foreach ($menu->items as $item) {
-            $id = $ccm->get_id($item->link);
-            if ($item->type == 'category') {
-                $categories[$id] = [
-                    'id'    => $id,
-                    'name'  => $item->title,
-                    'value' => $item->link,
-                    'group' => _('Frontpages')
-                ];
-            }
-
-            if (!empty($item->submenu)) {
-                foreach ($item->submenu as $subitem) {
-                    if ($subitem->type == 'category') {
-                        $id = $ccm->get_id($subitem->link);
-
-                        $categories[$id] = [
-                            'id'    => $id,
-                            'name'  => $subitem->title,
-                            'value' => $subitem->link,
-                            'group' => _('Frontpages')
-                        ];
-                    }
-                }
-            }
-        }
-
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_' . $categoryId, 'default');
         // Check if layout is valid,if not use the default value
