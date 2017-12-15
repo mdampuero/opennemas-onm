@@ -40,17 +40,16 @@ class OnmAuth implements \Luracast\Restler\iAuthenticate
         // Get valid user
         $validUser = s::get('onm_digest_user');
         $validPass = s::get('onm_digest_pass');
-
         // Based on all the info we gathered we can figure out what the response should be
-        $A1 = md5($digestParts['username'].':'.$realm.':'.$validPass);
-        $A2 = md5($_SERVER['REQUEST_METHOD'].':'.$digestParts['uri']);
+        $A1            = md5($validUser . ':' . $realm . ':' . $validPass);
+        $A2            = md5($_SERVER['REQUEST_METHOD'] . ':' . $digestParts['uri']);
         $validResponse = md5(
-            $A1.
-            ':'.$digestParts['nonce'].
-            ':'.$digestParts['nc'].
-            ':'.$digestParts['cnonce'].
-            ':'.$digestParts['qop'].
-            ':'.$A2
+            $A1 .
+            ':' . $digestParts['nonce'] .
+            ':' . $digestParts['nc'] .
+            ':' . $digestParts['cnonce'] .
+            ':' . $digestParts['qop'] .
+            ':' . $A2
         );
 
         $response = true;
@@ -100,9 +99,17 @@ class OnmAuth implements \Luracast\Restler\iAuthenticate
     private function digestParse($digest)
     {
         // Protect against missing data
-        $needed_parts = array('nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1, 'uri'=>1, 'response'=>1);
-        $data = array();
-        $keys = implode('|', array_keys($needed_parts));
+        $needed_parts = [
+            'nonce'    => 1,
+            'nc'       => 1,
+            'cnonce'   => 1,
+            'qop'      => 1,
+            'username' => 1,
+            'uri'      => 1,
+            'response' => 1
+        ];
+        $data         = [];
+        $keys         = implode('|', array_keys($needed_parts));
 
         preg_match_all('@(' . $keys . ')=(?:([\'"])([^\2]+?)\2|([^\s,]+))@', $digest, $matches, PREG_SET_ORDER);
 
