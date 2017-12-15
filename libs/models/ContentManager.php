@@ -1046,7 +1046,7 @@ class ContentManager
                     if (is_object($item)) {
                         return $item->isInTime();
                     } else {
-                        return self::isInTime2($item['starttime'], $item['endtime'], $time);
+                        return self::isInTime($item['starttime'], $item['endtime'], $time);
                     }
                 }
             );
@@ -1064,7 +1064,7 @@ class ContentManager
      *
      * @return boolean
      */
-    public static function isInTime2($starttime = null, $endtime = null, $currentTime = null)
+    public static function isInTime($starttime = null, $endtime = null, $currentTime = null)
     {
         $start       = ($starttime !== '0000-00-00 00:00:00' && !empty($starttime)) ? strtotime($starttime) : null;
         $end         = ($endtime !== '0000-00-00 00:00:00' && !empty($endtime)) ? strtotime($endtime) : null;

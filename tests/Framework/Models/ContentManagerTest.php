@@ -65,12 +65,9 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetEarlierStarttimeOfScheduledContents()
     {
         $contents = [];
-        $expires = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
+        $expires  = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
+
         $this->assertEquals($expires, false);
-
-        $contents = [
-
-        ];
     }
 
     /**
@@ -87,6 +84,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '2012-08-22 03:03:12',
             'endtime'   => '3012-08-27 03:03:12',
         ]);
+
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
         // Check with content with scheduling incorrent (start = end)
@@ -95,6 +93,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '2012-08-22 03:03:12',
             'endtime'   => '2012-08-22 03:03:12',
         ]);
+
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content scheduled in the future
@@ -103,8 +102,8 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '3059-08-22 03:03:12',
             'endtime'   => '3059-08-23 03:03:12',
         ]);
-        $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
+        $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content dued in the past
         $content = new \Content();
@@ -112,6 +111,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '2010-08-22 03:03:12',
             'endtime'   => '2010-08-23 03:03:12',
         ]);
+
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content with null values
@@ -120,6 +120,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => null,
             'endtime'   => null,
         ]);
+
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content with zeroed values
@@ -128,6 +129,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '0000-00-00 00:00:00',
             'endtime'   => '0000-00-00 00:00:00',
         ]);
+
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Now with Arrays
@@ -138,6 +140,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '2013-08-22 03:03:12',
             'endtime'   => '3012-08-27 03:03:12',
         ];
+
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
         // Check with content with scheduling incorrent (start = end)
@@ -145,6 +148,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '2012-08-22 03:03:12',
             'endtime'   => '2012-08-22 03:03:12',
         ];
+
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
         // Check with content scheduled in the future
@@ -152,6 +156,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '3059-08-22 03:03:12',
             'endtime'   => '3059-08-23 03:03:12',
         ];
+
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content dued in the past
@@ -159,6 +164,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '2010-08-22 03:03:12',
             'endtime'   => '2010-08-23 03:03:12',
         ];
+
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content with null values
@@ -166,6 +172,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => null,
             'endtime'   => null,
         ];
+
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
         // Check with content with zeroed values
@@ -173,6 +180,7 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '0000-00-00 00:00:00',
             'endtime'   => '0000-00-00 00:00:00',
         ];
+
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
         // Check with content with zeroed values
@@ -180,12 +188,12 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
             'starttime' => '0000-00-00 00:00:00',
             'endtime'   => '0000-00-00 00:00:00',
         ];
-        $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
+        $this->assertEquals(1, count($cm->getinTime([ $content ])));
     }
 
     /**
-     * @covers ContentManager::isInTime2
+     * @covers ContentManager::isInTime
      */
     public function testIsInTime2()
     {
@@ -194,66 +202,65 @@ class ContentManagerTest extends \PHPUnit_Framework_TestCase
         $rc = new \ReflectionClass('ContentManager');
         $cm = $rc->newInstanceWithoutConstructor();
 
-        // Check Content::isInTime2 with no endtime and no starttime
+        // Check Content::isInTime with no endtime and no starttime
         $startTime = null;
         $endTime   = null;
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = '0000-00-00 00:00:00';
         $endTime   = '0000-00-00 00:00:00';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
 
-        // Check Content::isInTime2 with no starttime
+        // Check Content::isInTime with no starttime
         $startTime = '0000-00-00 00:00:00';
         $endTime   = '2012-08-23 03:03:12';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = null;
         $endTime   = '2012-08-23 03:03:12';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = '0000-00-00 00:00:00';
         $endTime   = '2012-08-21 03:03:12';
-        $this->assertFalse($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
         $startTime = null;
         $endTime   = '2012-08-21 03:03:12';
-        $this->assertFalse($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
 
-        // Check Content::isInTime2 with no endtime
+        // Check Content::isInTime with no endtime
         $startTime = '2012-08-21 03:03:12';
         $endTime   = '0000-00-00 00:00:00';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-21 03:03:12';
         $endTime   = null;
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-23 03:03:12';
         $endTime   = '0000-00-00 00:00:00';
-        $this->assertFalse($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-23 03:03:12';
         $endTime   = null;
-        $this->assertFalse($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
 
-        // Check Content::isInTime2 with starttime and endtime defined
+        // Check Content::isInTime with starttime and endtime defined
         $startTime = '2012-08-21 03:03:12';
         $endTime   = '2012-08-23 03:03:12';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-23 03:03:12';
         $endTime   = '2012-08-24 03:03:12';
-        $this->assertFalse($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-20 03:03:12';
         $endTime   = '2012-08-21 03:03:12';
-        $this->assertFalse($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-21 03:03:12';
         $endTime   = '2012-08-20 03:03:12';
-        $this->assertFalse($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertFalse($cm->isInTime($startTime, $endTime, $now));
 
-        // Check Content::isInTime2 with starttime and endtime are equals
+        // Check Content::isInTime with starttime and endtime are equals
         $startTime = '2012-08-21 03:03:12';
         $endTime   = '2012-08-21 03:03:12';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-22 03:03:12';
         $endTime   = '2012-08-22 03:03:12';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
         $startTime = '2012-08-23 03:03:12';
         $endTime   = '2012-08-23 03:03:12';
-        $this->assertTrue($cm->isInTime2($startTime, $endTime, $now));
+        $this->assertTrue($cm->isInTime($startTime, $endTime, $now));
     }
-
 }
