@@ -444,48 +444,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns first subcategory given the parente category id
-     *
-     * @param int $categoryId the category id
-     *
-     * @return string the category name
-     */
-    public function getFirstSubcategory($categoryId)
-    {
-        if (is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAssoc(
-                    'SELECT name FROM content_categories '
-                    . 'WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0 '
-                    . 'ORDER BY posmenu LIMIT 1',
-                    [ $categoryId ]
-                );
-
-                if (!$rs) {
-                    return null;
-                }
-
-                return $rs['name'];
-            } catch (\Exception $e) {
-                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-                return false;
-            }
-        }
-
-        // Singleton version
-        $categories = $this->orderByPosmenu($this->categories);
-
-        foreach ($categories as $category) {
-            if ($category->fk_content_category == $categoryId
-                && $category->inmenu == 1
-                && $category->internal_category != 0
-            ) {
-                return $category->name;
-            }
-        }
-    }
-
-    /**
      * Returns the father of a category given its name
      *
      * @param string $category_name the category name
