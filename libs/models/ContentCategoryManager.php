@@ -101,6 +101,24 @@ class ContentCategoryManager
     }
 
     /**
+     * Checks if exists one category given its name
+     *
+     * @param string $category_name the name of the category
+     *
+     * @return boolean true if the category exists
+     */
+    public function exists($categoryName)
+    {
+        foreach ($this->categories as $category) {
+            if ($category->name == $categoryName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Find objects of category and subcategory.
      *
      * @param string $filter  SQL WHERE clause.
@@ -216,119 +234,67 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns the category name given its id.
+     * Order array of category menu and submenues.
+     * Get category info if there is one selected or get first category info
      *
-     * @param integer $id The category id.
+     * @param int $category the category id
+     * @param int $internalCategory 1 if only return internal categories
      *
-     * @return mixed The category name if it exists. False otherwise.
+     * @return array principal categories, childs categorys and category info
      */
-    public function getName($id)
+    public function getArraysMenu($category = null, $internalCategory = [1])
     {
-        if (array_key_exists($id, $this->categories)
-            && !empty($this->categories[$id])
-            && isset($this->categories[$id]->name)
-        ) {
-            return $this->categories[$id]->name;
+        //fullcat contains array with all cats order by posmenu
+        //parentCategories is an array with all menu cats in frontpage
+        //subcat is an array with all subcat form the parentCategories array
+        //$categoryData is the info of the category selected
+
+        $fullcat = $this->groupByType($this->categories);
+
+        $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
+            'keys' => \ContentCategory::getL10nKeys(),
+            'locale' => getService('core.locale')->setContext('frontend')->getLocale()
+        ])->get();
+
+        if (!is_array($internalCategory)) {
+            $internalCategory = [$internalCategory];
         }
 
-        return false;
-    }
+        $parentCategories = [];
+        $categoryData     = [];
+        foreach ($fullcat as $prima) {
+            if (!empty($category)
+                && $prima->pk_content_category == $category
+                && $category != 'home'
+                && $category != 'todos'
+            ) {
+                $categoryData[] = $prima;
+            }
 
-    /**
-     * Returns a list of subcategories given the id of the parent category.
-     *
-     * @param integer $parent The parent id.
-     *
-     * @return array The list of subcategories.
-     */
-    public function getSubcategories($parent)
-    {
-        return array_filter($this->categories, function ($a) use ($parent) {
-            return $a->fk_content_category == $parent;
-        });
-    }
-
-    /**
-     * Returns the title "Human readable name" of a category given its name.
-     *
-     * @param string $categoryName The category name.
-     *
-     * @return string The category title.
-     */
-    public function getTitle($categoryName)
-    {
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                return $category->title;
+            if (($prima->internal_category == 1
+                || in_array($prima->internal_category, $internalCategory))
+                && ($prima->fk_content_category == 0)
+            ) {
+                $parentCategories[] = $prima;
             }
         }
 
-        return '';
-    }
+        $subcat = [];
+        foreach ($parentCategories as $k => $v) {
+            $subcat[$k] = [];
 
-    /**
-     * Sorts an array of categories by its posmenu property
-     *
-     * @param array $categories the list of categories to sort
-     *
-     * @return array the sorted list of categories
-     */
-    public function orderByPosmenu($categories)
-    {
-        $categories = array_values($categories);
-
-        if (count($categories) == 0) {
-            return $categories;
+            foreach ($fullcat as $child) {
+                if ($v->pk_content_category == $child->fk_content_category) {
+                    $subcat[$k][] = $child;
+                }
+            }
         }
 
-        usort($categories, function ($a, $b) {
-            if ($b->inmenu == 0) {
-                return 0;
-            }
-
-            if ($a->inmenu == 0) {
-                return +1;
-            }
-
-            return ($a->posmenu > $b->posmenu) ? +1 : -1;
-        });
-
-        return $categories;
-    }
-
-    /**
-     * Sorts an array of categories by its internal_category property
-     *
-     * @param array $categories the list of categories to sort
-     *
-     * @return array the sorted list of categories
-     */
-    public function groupByType($categories)
-    {
-        $categories = array_values($categories);
-
-        if (count($categories) > 0) {
-            return $categories;
+        if (empty($category) && !empty($parentCategories)) {
+             $categoryData[] = $parentCategories[0];
         }
 
-        usort($categories, function ($a, $b) {
-            // Those that are not in the menu put them at the end of the list
-            if ($b->internal_category == 0) {
-                 return 0;
-            }
-
-            if ($a->internal_category == 0) {
-                 return +1;
-            }
-
-            if ($a->internal_category == $b->internal_category) {
-                return ($a->posmenu > $b->posmenu) ? +1 : -1;
-            }
-
-            return ($a->internal_category < $b->internal_category) ? 1 : +1;
-        });
-
-        return $categories;
+        return [ $parentCategories, $subcat, $categoryData ];
     }
 
     /**
@@ -399,21 +365,54 @@ class ContentCategoryManager
     }
 
     /**
-     * Checks if exists one category given its name
+     * Returns the category name given its id.
      *
-     * @param string $category_name the name of the category
+     * @param integer $id The category id.
      *
-     * @return boolean true if the category exists
+     * @return mixed The category name if it exists. False otherwise.
      */
-    public function exists($categoryName)
+    public function getName($id)
     {
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                return true;
-            }
+        if (array_key_exists($id, $this->categories)
+            && !empty($this->categories[$id])
+            && isset($this->categories[$id]->name)
+        ) {
+            return $this->categories[$id]->name;
         }
 
         return false;
+    }
+
+    /**
+     * Returns a list of subcategories given the id of the parent category.
+     *
+     * @param integer $parent The parent id.
+     *
+     * @return array The list of subcategories.
+     */
+    public function getSubcategories($parent)
+    {
+        return array_filter($this->categories, function ($a) use ($parent) {
+            return $a->fk_content_category == $parent;
+        });
+    }
+
+    /**
+     * Returns the title "Human readable name" of a category given its name.
+     *
+     * @param string $categoryName The category name.
+     *
+     * @return string The category title.
+     */
+    public function getTitle($categoryName)
+    {
+        foreach ($this->categories as $category) {
+            if ($category->name == $categoryName) {
+                return $category->title;
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -448,67 +447,33 @@ class ContentCategoryManager
     }
 
     /**
-     * Order array of category menu and submenues.
-     * Get category info if there is one selected or get first category info
+     * Sorts an array of categories by its posmenu property
      *
-     * @param int $category the category id
-     * @param int $internalCategory 1 if only return internal categories
+     * @param array $categories the list of categories to sort
      *
-     * @return array principal categories, childs categorys and category info
+     * @return array the sorted list of categories
      */
-    public function getArraysMenu($category = null, $internalCategory = [1])
+    public function orderByPosmenu($categories)
     {
-        //fullcat contains array with all cats order by posmenu
-        //parentCategories is an array with all menu cats in frontpage
-        //subcat is an array with all subcat form the parentCategories array
-        //$categoryData is the info of the category selected
+        $categories = array_values($categories);
 
-        $fullcat = $this->groupByType($this->categories);
-
-        $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
-            'keys' => \ContentCategory::getL10nKeys(),
-            'locale' => getService('core.locale')->setContext('frontend')->getLocale()
-        ])->get();
-
-        if (!is_array($internalCategory)) {
-            $internalCategory = [$internalCategory];
+        if (count($categories) == 0) {
+            return $categories;
         }
 
-        $parentCategories = [];
-        $categoryData     = [];
-        foreach ($fullcat as $prima) {
-            if (!empty($category)
-                && $prima->pk_content_category == $category
-                && $category != 'home'
-                && $category != 'todos'
-            ) {
-                $categoryData[] = $prima;
+        usort($categories, function ($a, $b) {
+            if ($b->inmenu == 0) {
+                return 0;
             }
 
-            if (($prima->internal_category == 1
-                || in_array($prima->internal_category, $internalCategory))
-                && ($prima->fk_content_category == 0)
-            ) {
-                $parentCategories[] = $prima;
+            if ($a->inmenu == 0) {
+                return +1;
             }
-        }
 
-        $subcat = [];
-        foreach ($parentCategories as $k => $v) {
-            $subcat[$k] = [];
+            return ($a->posmenu > $b->posmenu) ? +1 : -1;
+        });
 
-            foreach ($fullcat as $child) {
-                if ($v->pk_content_category == $child->fk_content_category) {
-                    $subcat[$k][] = $child;
-                }
-            }
-        }
-
-        if (empty($category) && !empty($parentCategories)) {
-             $categoryData[] = $parentCategories[0];
-        }
-
-        return [ $parentCategories, $subcat, $categoryData ];
+        return $categories;
     }
 
     /**
@@ -519,5 +484,40 @@ class ContentCategoryManager
         $this->categories = [];
 
         getService('cache')->delete('content_categories');
+    }
+
+    /**
+     * Sorts an array of categories by its internal_category property
+     *
+     * @param array $categories the list of categories to sort
+     *
+     * @return array the sorted list of categories
+     */
+    private function groupByType($categories)
+    {
+        $categories = array_values($categories);
+
+        if (count($categories) > 0) {
+            return $categories;
+        }
+
+        usort($categories, function ($a, $b) {
+            // Those that are not in the menu put them at the end of the list
+            if ($b->internal_category == 0) {
+                 return 0;
+            }
+
+            if ($a->internal_category == 0) {
+                 return +1;
+            }
+
+            if ($a->internal_category == $b->internal_category) {
+                return ($a->posmenu > $b->posmenu) ? +1 : -1;
+            }
+
+            return ($a->internal_category < $b->internal_category) ? 1 : +1;
+        });
+
+        return $categories;
     }
 }
