@@ -263,13 +263,19 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
-            $author       = $this->get('user_repository')->find($blog->fk_author);
+            $author = $this->get('user_repository')->find($blog->fk_author);
+            if (null === $author || empty($author)) {
+                throw new ResourceNotFoundException();
+            }
+
             $blog->author = $author;
 
             // This assignation is required to get the frontpage opinion link generated properly
             $blog->author_name_slug = $author->username;
-            if (!array_key_exists('is_blog', $author->meta)
-                || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)
+            if (!isset($author->meta)
+                || is_array($author->meta)
+                || !array_key_exists('is_blog', $author->meta)
+                || ($author->meta['is_blog'] != 1)
             ) {
                 return new RedirectResponse(
                     $this->generateUrl('frontend_opinion_show', [
