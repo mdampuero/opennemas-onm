@@ -192,35 +192,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns an array with subcetegories from a single category
-     * with internal_name as index
-     *
-     * @param int $id the id of the parent category
-     *
-     * @return array list of ContentCategory objects
-     */
-    public function getAllSubcategories($id)
-    {
-        // Singleton version
-        $categories = $this->orderByPosmenu($this->categories);
-
-        $items = [];
-        foreach ($categories as $category) {
-            if (($category->internal_category)
-                && ($category->inmenu == 1)
-                && ($category->fk_content_category == $id)
-            ) {
-                $items[$category->pk_content_category] = [
-                    'title'         => $category->title,
-                    'name'          => $category->name,
-                ];
-            }
-        }
-
-        return $items;
-    }
-
-    /**
      * Sorts an array of categories by its posmenu property
      *
      * @param array $categories the list of categories to sort
