@@ -192,24 +192,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns a category object given its name
-     *
-     * @param string $categoryName
-     *
-     * @return string the category object
-     */
-    public function getByName($categoryName)
-    {
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                return $category;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Returns an array with subcetegories from a single category
      * with internal_name as index
      *
