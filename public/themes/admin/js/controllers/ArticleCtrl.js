@@ -440,6 +440,8 @@
             return;
           }
 
+          $scope.articleForm.$setPristine(true);
+
           $scope.flags.saving = true;
 
           var data = $scope.clean($scope.data.article);
@@ -459,7 +461,6 @@
               $window.location.href = response.headers().location;
             }
 
-            $scope.articleForm.$setPristine(true);
             messenger.post(response.data);
             $scope.backup.content_status = $scope.article.content_status;
           };
@@ -619,8 +620,10 @@
         // TODO: Remove when no target="_blank" in URI for external
         $scope.$watch('article.uri', function(nv, ov) {
           if (nv !== ov) {
-            $scope.article.uri = $scope.article.uri
-              .replace('" target="_blank', '');
+            if (typeof $scope.article.uri === 'string') {
+              $scope.article.uri = $scope.article.uri
+                .replace('" target="_blank', '');
+            }
           }
         }, true);
 
@@ -632,11 +635,9 @@
 
           // Show a message when leaving before saving
           $($window).bind('beforeunload', function() {
-            if (!$scope.articleForm.$dirty) {
-              return false;
+            if ($scope.articleForm.$dirty) {
+              return $window.leaveMessage;
             }
-
-            return $window.leaveMessage;
           });
 
           $scope.articleForm.$setDirty(true);
