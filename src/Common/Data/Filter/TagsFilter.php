@@ -33,6 +33,9 @@ class TagsFilter extends Filter
      */
     public function filter($str)
     {
+        // Remove numeric separators from numbers
+        $str = preg_replace('/([0-9]+)[.,]([0-9]+)/', '$1$2', $str);
+
         // Convert to UTF-8
         $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
 
