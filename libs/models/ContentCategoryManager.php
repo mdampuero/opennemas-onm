@@ -14,7 +14,7 @@ class ContentCategoryManager
      *
      * @var array
      */
-    public $categories = null;
+    public $categories = [];
 
     /**
      * The instance of this class, use for the Singleton pattern.
