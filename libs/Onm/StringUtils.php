@@ -596,6 +596,9 @@ class StringUtils
 
         $string = strip_tags($string);
 
+        // Remove points and/or commas from numbers
+        $string = preg_replace('/([0-9]+)[.,]([0-9]+)/', '$1$2', $string);
+
         // Remove UTF-8 C0 controls chars encoded in HTML entities
         // http://www.w3schools.com/charsets/ref_utf_basic_latin.asp
         $string = preg_replace('/&#[0-9]+;/', '', $string);

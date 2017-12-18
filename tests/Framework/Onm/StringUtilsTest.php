@@ -128,6 +128,13 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
+            '10000-foo-bar-300',
+            $this->object->generateSlug(
+                '10.000 foo bar 3,00'
+            )
+        );
+
+        $this->assertEquals(
             'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-' .
             'porttitor-non-aliquam-ac-sagittis-urna',
             $this->object->generateSlug(
