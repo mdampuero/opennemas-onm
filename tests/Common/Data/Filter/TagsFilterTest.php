@@ -46,6 +46,11 @@ class TagsFilterTest extends KernelTestCase
             $filter->filter($str)
         );
 
+        $this->assertEquals(
+            '10000,foo,bar,300',
+            $filter->filter('10.000 foo bar 3,00')
+        );
+
         $params = [ 'separator' => '-', 'lowercase' => true ];
         $filter = new TagsFilter($this->container, $params);
 
@@ -53,6 +58,11 @@ class TagsFilterTest extends KernelTestCase
             '通訳・翻訳キャリアガイド・オンライン-2017-otras-cosas-mas-español-م'
             . 'توقعًا-إفلاسه،-النظام-ينتهج-استراتيجية-القمع-الوقائي-đ-ó-3',
             $filter->filter($str)
+        );
+
+        $this->assertEquals(
+            '10000-foo-bar-300',
+            $filter->filter('10.000 foo bar 3,00')
         );
     }
 
