@@ -547,32 +547,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns true if there is no contents in that category id
-     *
-     * @param int $category the category id
-     *
-     * @return boolean
-     */
-    public static function isEmptyByCategoryId($category)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT count(pk_content) AS number FROM `contents`, `contents_categories` '
-                . 'WHERE `fk_content_type`=1 '
-                . 'AND `in_litter`=0 '
-                . 'AND contents_categories.pk_fk_content_category=? '
-                . 'AND contents.pk_content=pk_fk_content',
-                [ $category ]
-            );
-
-            return $rs['number'] == 0;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-            return false;
-        }
-    }
-
-    /**
      * Counts the contents from a category
      *
      * @param int    $category the category id
