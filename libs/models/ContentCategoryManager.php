@@ -582,8 +582,6 @@ class ContentCategoryManager
      * @param string $filter the WHERE SQL clause to filter contents from
      *
      * @return array the counters for all the group types
-     *
-     * @see ContentCategoryManager::countContentByType
      */
     public static function countContentsByGroupType($type, $filter = null)
     {
@@ -631,7 +629,6 @@ class ContentCategoryManager
         //subcat is an array with all subcat form the parentCategories array
         //$categoryData is the info of the category selected
 
-        //$fullcat = $this->orderByPosmenu($this->categories);
         $fullcat = $this->groupByType($this->categories);
 
         $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
@@ -710,6 +707,7 @@ class ContentCategoryManager
     public function reset()
     {
         $this->categories = [];
+
         getService('cache')->delete('content_categories');
     }
 }
