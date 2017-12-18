@@ -57,11 +57,9 @@ class ContentCategoryManager
     {
         if (is_null(self::$instance)) {
             self::$instance = new ContentCategoryManager();
-
-            return self::$instance;
-        } else {
-            return self::$instance;
         }
+
+        return self::$instance;
     }
 
     /**
