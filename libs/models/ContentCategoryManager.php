@@ -40,6 +40,67 @@ class ContentCategoryManager
     }
 
     /**
+     * Counts the contents from a group type.
+     *
+     * @param string $type The group type where to search from.
+     *
+     * @return array The counters for all the group types.
+     */
+    public static function countContentsByGroupType($type)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT count(contents.pk_content) AS number,'
+                . '`contents_categories`.`pk_fk_content_category` AS cat '
+                . 'FROM `contents`,`contents_categories` '
+                . 'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
+                . 'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
+                . ' GROUP BY `contents_categories`.`pk_fk_content_category`',
+                [ $type ]
+            );
+
+            $groups = [];
+            foreach ($rs as $row) {
+                $groups[$row['cat']] = $row['number'];
+            }
+
+            return $groups;
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
+            return false;
+        }
+    }
+
+    /**
+     * Counts the contents from a category.
+     *
+     * @param integer $category The category id.
+     * @param string  $type The group type where to search from.
+     *
+     * @return array The counters for a category.
+     */
+    public function countContentByType($category, $type)
+    {
+        try {
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
+                . 'WHERE contents.pk_content=pk_fk_content '
+                . 'AND pk_fk_content_category=? AND `fk_content_type`=?',
+                [ $category, $type ]
+            );
+
+            if (array_key_exists('number', $rs) && $rs['number']) {
+                return $rs['number'];
+            } else {
+                return 0;
+            }
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
+            return false;
+        }
+    }
+
+    /**
      * Find objects of category and subcategory.
      *
      * @param string $filter  SQL WHERE clause.
@@ -380,73 +441,6 @@ class ContentCategoryManager
             );
 
             return $rs['content_count'] == 0 && $rs2['content_count'] == 0;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-            return false;
-        }
-    }
-
-    /**
-     * Counts the contents from a category
-     *
-     * @param int    $category the category id
-     * @param string $type the group type where to search from
-     *
-     * @return array the counters for a category
-     */
-    public function countContentByType($category, $type)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
-                . 'WHERE contents.pk_content=pk_fk_content '
-                . 'AND pk_fk_content_category=? AND `fk_content_type`=?',
-                [ $category, $type ]
-            );
-
-            if (array_key_exists('number', $rs) && $rs['number']) {
-                return $rs['number'];
-            } else {
-                return 0;
-            }
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-            return false;
-        }
-    }
-
-    /**
-     * Counts the contents from a group type
-     *
-     * @param string $type the group type where to search from
-     * @param string $filter the WHERE SQL clause to filter contents from
-     *
-     * @return array the counters for all the group types
-     */
-    public static function countContentsByGroupType($type, $filter = null)
-    {
-        $where = '';
-        if (!is_null($filter)) {
-            $where = ' AND ' . $filter;
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT count(contents.pk_content) AS number,'
-                . '`contents_categories`.`pk_fk_content_category` AS cat '
-                . 'FROM `contents`,`contents_categories` '
-                . 'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
-                . 'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
-                . $where . ' GROUP BY `contents_categories`.`pk_fk_content_category`',
-                [ $type ]
-            );
-
-            $groups = [];
-            foreach ($rs as $row) {
-                $groups[$row['cat']] = $row['number'];
-            }
-
-            return $groups;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
