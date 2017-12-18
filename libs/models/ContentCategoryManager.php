@@ -1,31 +1,24 @@
 <?php
 /**
- * Defines the ContentCategoryManager class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  Model
- */
-/**
- * Class for handling content-category relations operations
- *
- * @package Model
  */
 class ContentCategoryManager
 {
     /**
-     * List of available categories
+     * List of available categories.
      *
      * @var array
      */
     public $categories = null;
 
     /**
-     * The instance of this class, use for the Singleton pattern
+     * The instance of this class, use for the Singleton pattern.
+     *
      * @var ContentCategoryManager
      */
     private static $instance = null;
@@ -39,9 +32,7 @@ class ContentCategoryManager
 
     /**
      * Initializes the object class or returns the initialized instance if
-     * it was previously created
-     *
-     * @return ContentCategoryManager
+     * it was previously created.
      */
     public function __construct()
     {
