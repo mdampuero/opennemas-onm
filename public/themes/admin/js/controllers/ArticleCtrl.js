@@ -24,7 +24,8 @@
      */
     .controller('ArticleCtrl', [
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'webStorage',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, linker, localizer, messenger, webStorage) {
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner,
+          http, linker, localizer, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -560,6 +561,10 @@
                   model[footer] === ov[i].description)) {
                 model[footer] = nv[i].description;
               }
+
+              if (!nv[i]) {
+                model[footer] = null;
+              }
             }
 
             if ($scope.articleForm.$dirty &&
@@ -589,6 +594,10 @@
                   model[footer] === null || ov && ov[i] &&
                   model[footer] === ov[i].description)) {
                 model[footer] = nv[i].description;
+              }
+
+              if (!nv[i]) {
+                model[footer] = null;
               }
             }
 
@@ -623,9 +632,11 @@
 
           // Show a message when leaving before saving
           $($window).bind('beforeunload', function() {
-            if ($scope.articleForm.$dirty) {
-              return $window.leaveMessage;
+            if (!$scope.articleForm.$dirty) {
+              return false;
             }
+
+            return $window.leaveMessage;
           });
 
           $scope.articleForm.$setDirty(true);
@@ -710,7 +721,8 @@
 
         // Shows a modal window to translate content automatically
         $scope.$watch('config.locale', function(nv, ov) {
-          if (!nv || nv === ov || $scope.isTranslated($scope.data.article,
+          if (!nv || nv === ov ||
+            $scope.isTranslated($scope.data.article,
               $scope.data.extra.keys, nv)) {
             return;
           }
