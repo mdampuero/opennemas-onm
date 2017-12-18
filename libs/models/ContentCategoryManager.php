@@ -24,21 +24,12 @@ class ContentCategoryManager
     private static $instance = null;
 
     /**
-     * Cache handler
-     *
-     * @var MethodCacheManager
-     */
-    public $cache = null;
-
-    /**
      * Initializes the object class or returns the initialized instance if
      * it was previously created.
      */
     public function __construct()
     {
         if (is_null(self::$instance)) {
-            $this->cache = new MethodCacheManager($this, [ 'ttl' => 300 ]);
-
             // Fill categories from cache
             $this->categories = $this->findAll();
 
@@ -155,25 +146,6 @@ class ContentCategoryManager
      */
     public function getName($id)
     {
-        if (is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAssoc(
-                    'SELECT name FROM content_categories '
-                    . 'WHERE pk_content_category = ?',
-                    [ (int) $id ]
-                );
-
-                if (!$rs) {
-                    return false;
-                }
-
-                return $rs['name'];
-            } catch (\Exception $e) {
-                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-                return false;
-            }
-        }
-
         if (isset($this->categories[$id]->name)) {
             return $this->categories[$id]->name;
         } else {
@@ -190,25 +162,6 @@ class ContentCategoryManager
      */
     public function get_id($categoryName)
     {
-        if (is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAssoc(
-                    'SELECT pk_content_category FROM content_categories WHERE name = ?',
-                    [ $categoryName ]
-                );
-
-                if (!$rs) {
-                    return false;
-                }
-
-                return $rs['pk_content_category'];
-            } catch (\Exception $e) {
-                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-                return false;
-            }
-        }
-
-        // Singleton version
         foreach ($this->categories as $category) {
             if ($category->name == $categoryName) {
                 return $category->pk_content_category;
@@ -227,25 +180,6 @@ class ContentCategoryManager
      */
     public function getTitle($categoryName)
     {
-        if (is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAssoc(
-                    'SELECT title FROM content_categories WHERE name = ?',
-                    [ $categoryName ]
-                );
-
-                if (!$rs) {
-                    return false;
-                }
-
-                return $rs['title'];
-            } catch (\Exception $e) {
-                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-                return false;
-            }
-        }
-
-        // Singleton version
         foreach ($this->categories as $category) {
             if ($category->name == $categoryName) {
                 return $category->title;
@@ -264,28 +198,6 @@ class ContentCategoryManager
      */
     public function getByName($categoryName)
     {
-        if (is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAssoc(
-                    'SELECT * FROM content_categories WHERE name = ?',
-                    [ $categoryName ]
-                );
-
-                if (!$rs) {
-                    return false;
-                }
-
-                $category = new \ContentCategory();
-                $category->load($rs);
-
-                return $category;
-            } catch (\Exception $e) {
-                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-                return false;
-            }
-        }
-
-        // Singleton version
         foreach ($this->categories as $category) {
             if ($category->name == $categoryName) {
                 return $category;
@@ -305,10 +217,6 @@ class ContentCategoryManager
      */
     public function getAllSubcategories($id)
     {
-        if (is_null($this->categories)) {
-            $this->categories = $this->cache->populateCategories();
-        }
-
         // Singleton version
         $categories = $this->orderByPosmenu($this->categories);
 
@@ -441,26 +349,6 @@ class ContentCategoryManager
      */
     public function getFather($categoryName)
     {
-        if (is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAll(
-                    'SELECT content2.name '
-                    . 'FROM `content_categories` as content1, `content_categories` as content2 '
-                    . 'WHERE content1.name=? AND content1.fk_content_category=content2.pk_content_category',
-                    [ $categoryName ]
-                );
-
-                if (!$rs) {
-                    return null;
-                }
-
-                return $rs[0]['name'];
-            } catch (\Exception $e) {
-                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-                return false;
-            }
-        }
-
         // Singleton version
         $fk_content_category = '';
         // Search fk_content_category
@@ -490,22 +378,6 @@ class ContentCategoryManager
      */
     public function exists($categoryName)
     {
-        if (is_null($this->categories)) {
-            try {
-                $rs = getService('dbal_connection')->fetchAssoc(
-                    'SELECT count(*) AS total FROM content_categories WHERE name=?',
-                    [ $categoryName ]
-                );
-
-                return intval($rs['total']) > 0;
-            } catch (\Exception $e) {
-                getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-                return false;
-            }
-        }
-
-        // Singleton version
-        // searches within the interal categories array ($this->categories)
         foreach ($this->categories as $category) {
             if ($category->name == $categoryName) {
                 return true;
