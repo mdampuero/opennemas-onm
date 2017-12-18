@@ -154,30 +154,31 @@ class ContentCategoryManager
         return self::$instance;
     }
 
-
     /**
-     * Returns the category name given its id
+     * Returns the category name given its id.
      *
-     * @param int $id the category id
+     * @param integer $id The category id.
      *
-     * @return string the category name
-     * @return boolean false if the category doesn't exists
+     * @return mixed The category name if it exists. False otherwise.
      */
     public function getName($id)
     {
-        if (isset($this->categories[$id]->name)) {
+        if (array_key_exists($id, $this->categories)
+            && !empty($this->categories[$id])
+            && isset($this->categories[$id]->name)
+        ) {
             return $this->categories[$id]->name;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
-     * Returns the title "Human readablle name" of a category given its name
+     * Returns the title "Human readable name" of a category given its name.
      *
-     * @param string $categoryName the category name
+     * @param string $categoryName The category name.
      *
-     * @return string the category title
+     * @return string The category title.
      */
     public function getTitle($categoryName)
     {
@@ -230,7 +231,6 @@ class ContentCategoryManager
                 $items[$category->pk_content_category] = [
                     'title'         => $category->title,
                     'name'          => $category->name,
-                    'internal_name' => $category->internal_name,
                 ];
             }
         }
