@@ -40,17 +40,39 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns an unique instance, Singleton pattern
+     * Find objects of category and subcategory.
      *
-     * @return ContentCategoryManager the object instance
+     * @param string $filter  SQL WHERE clause.
+     * @param string $orderBy ORDER BY clause.
+     *
+     * @return array List of ContentCategory objects.
      */
-    public static function get_instance()
+    public function find($filter = null, $orderBy = '')
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new ContentCategoryManager();
+        $items = [];
+
+        $where = '';
+        if (!is_null($filter)) {
+            $where = ' AND ' . $filter;
         }
 
-        return self::$instance;
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                'SELECT * FROM content_categories ' .
+                'WHERE internal_category<>0 ' . $where . ' ' . $orderBy
+            );
+            foreach ($rs as $row) {
+                $obj = new ContentCategory();
+                $obj->load($row);
+
+                $items[] = $obj;
+            }
+
+            return $items;
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
+            return [];
+        }
     }
 
     /**
@@ -101,40 +123,37 @@ class ContentCategoryManager
     }
 
     /**
-     * find objects of category and subcategory
+     * Returns the category id from its name
      *
-     * @param string $filter SQL WHERE clause
-     * @param string $orderBy ORDER BY clause
+     * @param string $categoryName the category name
      *
-     * @return array List of ContentCategory objects
+     * @return int the category id, 0 if not found
      */
-    public function find($filter = null, $orderBy = '')
+    public function get_id($categoryName)
     {
-        $items = [];
-
-        $where = '';
-        if (!is_null($filter)) {
-            $where = ' AND ' . $filter;
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT * FROM content_categories ' .
-                'WHERE internal_category<>0 ' . $where . ' ' . $orderBy
-            );
-            foreach ($rs as $row) {
-                $obj = new ContentCategory();
-                $obj->load($row);
-
-                $items[] = $obj;
+        foreach ($this->categories as $category) {
+            if ($category->name == $categoryName) {
+                return $category->pk_content_category;
             }
-
-            return $items;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-            return [];
         }
+
+        return 0;
     }
+
+    /**
+     * Returns an unique instance, Singleton pattern
+     *
+     * @return ContentCategoryManager the object instance
+     */
+    public static function get_instance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new ContentCategoryManager();
+        }
+
+        return self::$instance;
+    }
+
 
     /**
      * Returns the category name given its id
@@ -151,24 +170,6 @@ class ContentCategoryManager
         } else {
             return false;
         }
-    }
-
-    /**
-     * Returns the category id from its name
-     *
-     * @param string $categoryName the category name
-     *
-     * @return int the category id, 0 if not found
-     */
-    public function get_id($categoryName)
-    {
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                return $category->pk_content_category;
-            }
-        }
-
-        return 0;
     }
 
     /**
