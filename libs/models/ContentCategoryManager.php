@@ -121,30 +121,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Normalize names of category and subcategory
-     *
-     * @param $categoryName Name of category
-     * @param $subcategoryName Name of subcategory
-     *
-     * @return array Return categoryName and subcategoryName fixed
-    */
-    public function normalize($categoryName, $subcategoryName = null)
-    {
-        if (!empty($subcategoryName)) {
-            // It's a father category
-            return [ $categoryName, $subcategoryName ];
-        }
-
-        $father = $this->getFather($categoryName);
-        if (!empty($father)) {
-            return [ $father, $categoryName ];
-        }
-
-        // If don't match return same values
-        return [ $categoryName, $subcategoryName ];
-    }
-
-    /**
      * find objects of category and subcategory
      *
      * @param string $filter SQL WHERE clause
