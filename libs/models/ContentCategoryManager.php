@@ -174,6 +174,20 @@ class ContentCategoryManager
     }
 
     /**
+     * Returns a list of subcategories given the id of the parent category.
+     *
+     * @param integer $parent The parent id.
+     *
+     * @return array The list of subcategories.
+     */
+    public function getSubcategories($parent)
+    {
+        return array_filter($this->categories, function ($a) use ($parent) {
+            return $a->fk_content_category == $parent;
+        });
+    }
+
+    /**
      * Returns the title "Human readable name" of a category given its name.
      *
      * @param string $categoryName The category name.
@@ -501,30 +515,6 @@ class ContentCategoryManager
         }
 
         return [ $parentCategories, $subcat, $categoryData ];
-    }
-
-    /**
-     *
-     * Get array with subcategories info from a category id
-     *
-     * @param int $categoryId the category id
-     *
-     * @return array childs categorys
-     */
-    public function getSubcategories($categoryId)
-    {
-        if (is_null($this->categories)) {
-            $this->categories = $this->cache->populateCategories();
-        }
-
-        $items = [];
-        foreach ($this->categories as $category) {
-            if ($category->fk_content_category == $categoryId) {
-                $items[] = $category;
-            }
-        }
-
-        return $items;
     }
 
     /**
