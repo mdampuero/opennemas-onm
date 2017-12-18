@@ -373,7 +373,8 @@ class ContentCategoryManager
      */
     public function getName($id)
     {
-        if (array_key_exists($id, $this->categories)
+        if (!empty($id)
+            && array_key_exists($id, $this->categories)
             && !empty($this->categories[$id])
             && isset($this->categories[$id]->name)
         ) {
@@ -406,6 +407,10 @@ class ContentCategoryManager
      */
     public function getTitle($categoryName)
     {
+        if (empty($categoryName)) {
+            return '';
+        }
+
         foreach ($this->categories as $category) {
             if ($category->name == $categoryName) {
                 return $category->title;
