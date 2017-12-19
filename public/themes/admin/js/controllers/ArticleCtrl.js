@@ -97,6 +97,7 @@
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope.data.extra[keys[i]]) {
+              $scope.article[keys[i]] = null;
               continue;
             }
 

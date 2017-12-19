@@ -1019,12 +1019,17 @@ class StringUtils
     /**
      * Converts all object properties to utf-8.
      *
-     * @param  mixed $objects Object or list of objects to convert.
-     * @return mixed          Object or list of objects with properties in utf-8.
+     * @param mixed $objects Object or list of objects to convert.
+     *
+     * @return mixed Object or list of objects with properties in utf-8.
      */
     public static function convertToUtf8($objects)
     {
-        if (!is_array($objects)) {
+        if (!is_array($objects) && !is_object($objects)) {
+            return $objects;
+        }
+
+        if (is_object($objects)) {
             self::convertObjectToUtf8($objects);
             return $objects;
         }
@@ -1039,9 +1044,9 @@ class StringUtils
     /**
      * Converts all object properties to utf-8.
      *
-     * @param Object $objects Objects to convert
+     * @param Object $objects Objects to convert.
      */
-    public static function convertObjectToUtf8(&$object)
+    protected static function convertObjectToUtf8(&$object)
     {
         $keys = array_keys(get_object_vars($object));
 
