@@ -307,7 +307,7 @@ class Article extends Content
      */
     public function update($data)
     {
-        foreach ($this->getL10nKeys() as $key) {
+        foreach ($this->getL10nKeys(true) as $key) {
             if (array_key_exists($key, $data) && is_array($data[$key])) {
                 $data[$key] = serialize($data[$key]);
             }
@@ -499,14 +499,23 @@ class Article extends Content
     /**
      * Returns the list of properties that support multiple languages.
      *
+     * @param boolean $exclusive The list of article's exclusive properties
+     *                           that support multiple languages.
+     *
      * @return array The list of properties that can be localized to multiple
      *               languages.
      */
-    public static function getL10nKeys()
+    public static function getL10nKeys($exclusive = false)
     {
-        return array_merge(parent::getL10nKeys(), [
+        $keys = [
             'footer_video', 'footer_video2', 'img1_footer', 'img2_footer',
             'subtitle', 'summary', 'title_int'
-        ]);
+        ];
+
+        if ($exclusive) {
+            return $keys;
+        }
+
+        return array_merge(parent::getL10nKeys(), $keys);
     }
 }
