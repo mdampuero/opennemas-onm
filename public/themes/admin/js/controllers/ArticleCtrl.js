@@ -610,10 +610,13 @@
           }, true);
 
         // Sets relatedInner equals to relatedFront
-        $scope.$watch('article.relatedFront', function(nv, ov) {
-          if (!ov && $scope.article.relatedInner ||
-              angular.equals(ov, $scope.article.relatedInner)) {
-            $scope.article.relatedInner = angular.copy(nv);
+        $scope.$watch('data.article.relatedFront', function(nv, ov) {
+          if ($scope.data && (
+                !ov && $scope.data.article.relatedInner ||
+                angular.equals(ov, $scope.data.article.relatedInner)
+              )
+          ) {
+            $scope.data.article.relatedInner = angular.copy(nv);
           }
         }, true);
 
