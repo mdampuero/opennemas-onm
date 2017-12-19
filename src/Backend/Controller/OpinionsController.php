@@ -613,6 +613,8 @@ class OpinionsController extends Controller
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
 
+        $this->get('core.locale')->setContext('frontend');
+
         $opinionContents = $request->request->filter('contents');
 
         // Fetch all opinion properties and generate a new object
