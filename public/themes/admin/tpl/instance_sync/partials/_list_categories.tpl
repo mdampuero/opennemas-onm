@@ -26,7 +26,3 @@
   <p>{t}Also check if the credentials are correct.{/t}</p>
 </div>
 {/if}
-<div class="spinner-wrapper" id="loading">
-  <div class="loading-spinner"></div>
-  <div class="spinner-text">{t}Loading{/t}...</div>
-</div>
