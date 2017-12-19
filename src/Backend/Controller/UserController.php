@@ -338,14 +338,15 @@ class UserController extends Controller
 
         try {
             // Check if the user is already registered
-            $user = $em->getRepository('User')->findOneBy(
+            $em->getRepository('User')->findOneBy(
                 'name ~ "' . $data['username'] . '" or email ~ "' . $data['email'] . '"'
             );
 
-            if (!empty($user)) {
-                throw new \Exception(_('The email address or user name is already in use.'));
-            }
+            throw new \Exception(_('The email address or user name is already in use.'));
+        } catch (\Exception $e) {
+        }
 
+        try {
             $file = $request->files->get('avatar');
 
             // Upload user avatar if exists

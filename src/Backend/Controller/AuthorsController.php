@@ -119,14 +119,15 @@ class AuthorsController extends Controller
 
         try {
             // Check if the user email is already in use
-            $user = $em->getRepository('User')->findOneBy(
+            $em->getRepository('User')->findOneBy(
                 'email ~ "' . $data['email'] . '"'
             );
 
-            if (!empty($user)) {
-                throw new \Exception(_('The email address is already in use.'));
-            }
+            throw new \Exception(_('The email address is already in use.'));
+        } catch (\Exception $e) {
+        }
 
+        try {
             $file = $request->files->get('avatar');
 
             // Upload user avatar if exists
