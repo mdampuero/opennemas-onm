@@ -1172,7 +1172,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','','',0,'editorial@opennemas.com','Editorial',0,NULL,0,'3'),(2,'director','a5d0bc6537be17bf937c9fd3fc4b30a4','','',0,'director@opennemas.com','Director',0,NULL,0,'3'),(8,'xabier.r.blanco','a5d0bc6537be17bf937c9fd3fc4b30a4','','',588,'xabi.blanco@opennemas.com','Xabier R. Blanco',0,NULL,0,'3'),(9,'jose.luis.gomez','2d434b078be9d75b50325508fafe1f90','','Editor de Mundiario. Comentarista de Europa Press, TVG, RG y La RegiÃ³n. ',594,'joseluis@opennemas.com','Jose Luis Gomez',0,NULL,0,'3'),(10,'joaquin.vidal','57f671569ad7c429203371a9fd1a2881','','Director de Estrella Digital',597,'jvidal@estrelladigital.es','JoaquÃ­n Vidal',0,NULL,0,'3'),(11,'alberto.j.rey','7cae6b5e96239c2d38b78de6395da31d','','Socio-director de wecom Consultora de ComunicaciÃ³n y Relaciones PÃºblicas',600,'alberto.rey@opennemas.com','Alberto J. Rey',0,NULL,0,'3');
+INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'editorial@opennemas.com','Editorial',0,NULL,0,'3'),(2,'director','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'director@opennemas.com','Director',0,NULL,0,'3'),(8,'xabier.r.blanco','a5d0bc6537be17bf937c9fd3fc4b30a4','','',588,'xabi.blanco@opennemas.com','Xabier R. Blanco',0,NULL,0,'3'),(9,'jose.luis.gomez','2d434b078be9d75b50325508fafe1f90','','Editor de Mundiario. Comentarista de Europa Press, TVG, RG y La RegiÃ³n. ',594,'joseluis@opennemas.com','Jose Luis Gomez',0,NULL,0,'3'),(10,'joaquin.vidal','57f671569ad7c429203371a9fd1a2881','','Director de Estrella Digital',597,'jvidal@estrelladigital.es','JoaquÃ­n Vidal',0,NULL,0,'3'),(11,'alberto.j.rey','7cae6b5e96239c2d38b78de6395da31d','','Socio-director de wecom Consultora de ComunicaciÃ³n y Relaciones PÃºblicas',600,'alberto.rey@opennemas.com','Alberto J. Rey',0,NULL,0,'3');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1288,4 +1288,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-04 10:50:42
+-- Dump completed on 2017-12-19 10:30:31
