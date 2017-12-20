@@ -362,12 +362,6 @@
 
             $scope.data.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
               [ 'title' ], $scope.config.locale);
-
-            $scope.config.linkers[keys[i]] = linker.get([ 'title' ], $scope);
-
-            $scope.config.linkers[keys[i]].setKey($scope.config.locale);
-            $scope.config.linkers[keys[i]].link($scope.data.article[keys[i]],
-              $scope.article[keys[i]]);
           }
         };
 
