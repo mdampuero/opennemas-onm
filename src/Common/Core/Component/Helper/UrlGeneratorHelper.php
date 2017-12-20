@@ -182,27 +182,23 @@ class UrlGeneratorHelper
             $type = 'blog';
         }
 
+        $authorName = 'author';
         if ($content->fk_author == 0) {
             if ((int) $content->type_opinion == 1) {
                 $authorName = 'editorial';
             } elseif ((int) $content->type_opinion == 2) {
                 $authorName = 'director';
-            } else {
-                $authorName = 'author';
             }
         } else {
-            if (!is_object($content->author)) {
-                $content->author = $this->container->get('user_repository')
+            $authorAux = $content->author;
+            if (!is_object($authorAux)) {
+                $authorAux = $this->container->get('user_repository')
                     ->find($content->fk_author);
             }
 
-            if (is_object($content->author)) {
-                $authorName = $content->author->name;
-            } else {
-                $authorName = 'author';
+            if (is_object($authorAux)) {
+                $authorName = $authorAux->name;
             }
-
-            $authorName = $content->author->name;
         }
 
         $authorName = \Onm\StringUtils::generateSlug($authorName);
