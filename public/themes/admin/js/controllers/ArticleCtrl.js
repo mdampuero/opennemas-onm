@@ -297,14 +297,6 @@
             $scope.article    = $scope.data.article;
             $scope.categories = $scope.data.extra.categories;
 
-            var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
-
-            for (var i = 0; i < keys.length; i++) {
-              if ($scope.data.extra[keys[i]]) {
-                $scope[keys[i]] = response.data.extra[keys[i]];
-              }
-            }
-
             $scope.build();
 
             if ($scope.config.multilanguage && $scope.config.locale) {
@@ -364,11 +356,11 @@
           $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
 
           for (var i = 0; i < keys.length; i++) {
-            if (!$scope[keys[i]]) {
+            if (!$scope.article[keys[i]]) {
               continue;
             }
 
-            $scope.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
+            $scope.data.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
               [ 'title' ], $scope.config.locale);
 
             $scope.config.linkers[keys[i]] = linker.get([ 'title' ], $scope);
