@@ -298,14 +298,6 @@
             $scope.article    = $scope.data.article;
             $scope.categories = $scope.data.extra.categories;
 
-            var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
-
-            for (var i = 0; i < keys.length; i++) {
-              if ($scope.data.extra[keys[i]]) {
-                $scope[keys[i]] = response.data.extra[keys[i]];
-              }
-            }
-
             $scope.build();
 
             if ($scope.config.multilanguage && $scope.config.locale) {
@@ -365,18 +357,12 @@
           $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
 
           for (var i = 0; i < keys.length; i++) {
-            if (!$scope[keys[i]]) {
+            if (!$scope.article[keys[i]]) {
               continue;
             }
 
-            $scope.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
+            $scope.data.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
               [ 'title' ], $scope.config.locale);
-
-            $scope.config.linkers[keys[i]] = linker.get([ 'title' ], $scope);
-
-            $scope.config.linkers[keys[i]].setKey($scope.config.locale);
-            $scope.config.linkers[keys[i]].link($scope.data.article[keys[i]],
-              $scope.article[keys[i]]);
           }
         };
 
@@ -611,10 +597,13 @@
           }, true);
 
         // Sets relatedInner equals to relatedFront
-        $scope.$watch('article.relatedFront', function(nv, ov) {
-          if (!ov && $scope.article.relatedInner ||
-              angular.equals(ov, $scope.article.relatedInner)) {
-            $scope.article.relatedInner = angular.copy(nv);
+        $scope.$watch('data.article.relatedFront', function(nv, ov) {
+          if ($scope.data && (
+                !ov && $scope.data.article.relatedInner ||
+                angular.equals(ov, $scope.data.article.relatedInner)
+              )
+          ) {
+            $scope.data.article.relatedInner = angular.copy(nv);
           }
         }, true);
 

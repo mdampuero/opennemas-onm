@@ -289,7 +289,7 @@ class Content implements \JsonSerializable
                 }
 
                 if ($name === 'slug' && empty($this->slug)) {
-                    $this->slug = \Onm\StringUtils::getTitle($this->title);
+                    $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
 
                 if ($this->content_type_name === 'article'
@@ -649,6 +649,16 @@ class Content implements \JsonSerializable
     {
         $this->read($data['id']);
 
+        if (empty($data['slug'])) {
+            if (!empty($this->slug)) {
+                $data['slug'] = \Onm\StringUtils::generateSlug($this->slug);
+            } else {
+                $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
+            }
+        } else {
+            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
+        }
+
         foreach ($this->getL10nKeys() as $key) {
             if (array_key_exists($key, $data) && is_array($data[$key])) {
                 $data[$key] = serialize($data[$key]);
@@ -676,14 +686,6 @@ class Content implements \JsonSerializable
             && !isset($data['fk_user_last_editor'])
         ) {
             $data['fk_user_last_editor'] = getService('session')->get('user')->id;
-        }
-
-        if (empty($data['slug'])) {
-            if (!empty($this->slug)) {
-                $data['slug'] = $this->slug;
-            } else {
-                $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
-            }
         }
 
         $contentData = [
