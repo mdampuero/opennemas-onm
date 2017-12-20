@@ -9,18 +9,18 @@
     <div class="m-b-40">
       <div class="clearfix">
         <h5 class="pull-left">{t}Related in frontpage{/t}</h5>
-        <button class="btn btn-white btn-mini pull-right m-t-5" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedFront" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+        <button class="btn btn-white btn-mini pull-right m-t-5" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="data.article.relatedFront" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
           <i class="fa fa-plus"></i>
           {t}Add contents{/t}
         </button>
       </div>
-      <div ui-sortable class="ng-cloak" ng-model="article.relatedFront">
-        <div class="related-item" ng-repeat="content in article.relatedFront">
+      <div ui-sortable class="ng-cloak" ng-model="data.article.relatedFront">
+        <div class="related-item" ng-repeat="content in data.article.relatedFront">
           <div class="related-item-info">
             <span class="sort-icon"></span>
             [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
           </div>
-          <button class="btn btn-white" ng-click="removeItem('article.relatedFront', $index)">
+          <button class="btn btn-white" ng-click="removeItem('data.article.relatedFront', $index)">
             <i class="fa fa-trash-o text-danger"></i>
           </button>
         </div>
@@ -29,18 +29,18 @@
     <div class="m-b-40">
       <div class="clearfix">
         <h5 class="pull-left">{t}Related in inner{/t}</h5>
-        <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedInner" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+        <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="data.article.relatedInner" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
           <i class="fa fa-plus"></i>
           {t}Add contents{/t}
         </button>
       </div>
-      <div ui-sortable class="ng-cloak" ng-model="article.relatedInner">
-        <div class="related-item" ng-repeat="content in article.relatedInner">
+      <div ui-sortable class="ng-cloak" ng-model="data.article.relatedInner">
+        <div class="related-item" ng-repeat="content in data.article.relatedInner">
           <div class="related-item-info">
             <span class="sort-icon"></span>
             [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
           </div>
-          <button class="btn btn-white" ng-click="removeItem('article.relatedInner', $index)">
+          <button class="btn btn-white" ng-click="removeItem('data.article.relatedInner', $index)">
             <i class="fa fa-trash-o text-danger"></i>
           </button>
         </div>
@@ -50,18 +50,18 @@
       <div class="m-b-40">
         <div class="clearfix">
           <h5 class="pull-left">{t}Related in home{/t}</h5>
-          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="article.relatedHome" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="data.article.relatedHome" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
             <i class="fa fa-plus"></i>
             {t}Add contents{/t}
           </button>
         </div>
-        <div ui-sortable class="ng-cloak" ng-model="article.relatedHome">
-          <div class="related-item" ng-repeat="content in article.relatedHome">
+        <div ui-sortable class="ng-cloak" ng-model="data.article.relatedHome">
+          <div class="related-item" ng-repeat="content in data.article.relatedHome">
             <div class="related-item-info">
               <span class="sort-icon"></span>
               [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
             </div>
-            <button class="btn btn-white" ng-click="removeItem('article.relatedHome', $index)">
+            <button class="btn btn-white" ng-click="removeItem('data.article.relatedHome', $index)">
               <i class="fa fa-trash-o text-danger"></i>
             </button>
           </div>
