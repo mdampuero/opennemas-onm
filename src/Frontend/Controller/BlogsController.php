@@ -265,7 +265,12 @@ class BlogsController extends Controller
         ) {
             $author = $this->get('user_repository')->find($blog->fk_author);
             if (null === $author || empty($author)) {
-                throw new ResourceNotFoundException();
+                return new RedirectResponse(
+                    $this->generateUrl('frontend_opinion_show', [
+                        'opinion_id' => $dirtyID,
+                        'opinion_title'  => $blog->slug,
+                    ])
+                );
             }
 
             $blog->author = $author;
@@ -279,9 +284,8 @@ class BlogsController extends Controller
             ) {
                 return new RedirectResponse(
                     $this->generateUrl('frontend_opinion_show', [
-                        'blog_id' => $dirtyID,
-                        'author_name' => $author->username,
-                        'blog_title'  => $blog->slug,
+                        'opinion_id' => $dirtyID,
+                        'opinion_title'  => $blog->slug,
                     ])
                 );
             }
