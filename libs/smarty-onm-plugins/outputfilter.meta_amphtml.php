@@ -1,41 +1,33 @@
 <?php
+
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.piwik.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints Piwik code
- * -------------------------------------------------------------
- */
 function smarty_outputfilter_meta_amphtml($output, $smarty)
 {
-    if (getService('core.security')->hasExtension('AMP_MODULE')
-        && strstr(getService('request')->getUri(), 'amp.html') === false
-        && array_key_exists('content', $smarty->tpl_vars)
-        && is_object($smarty->tpl_vars['content']->value)
-        && $smarty->tpl_vars['content']->value->content_type_name == 'article'
+    $container = $smarty->getContainer();
+
+    if (!$container->get('core.security')->hasExtension('AMP_MODULE')
+        || strstr($container->get('request')->getUri(), 'amp.html') !== false
+        || !array_key_exists('content', $smarty->tpl_vars)
+        || !is_object($smarty->tpl_vars['content']->value)
+        || $smarty->tpl_vars['content']->value->content_type_name !== 'article'
     ) {
-        $content = $smarty->tpl_vars['content']->value;
-        // SHITTY CODE: we need to create a proper way to generate urls for contents.
-        $params = [
-            'category_name' => $content->category_name,
-            'slug'          => $content->slug,
-            'article_id'    => date('YmdHis', strtotime($content->created)).
-                               sprintf('%06d', $content->pk_content),
-        ];
-
-        $url = getService('router')->generate(
-            'frontend_article_show_amp',
-            $params,
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $code   = '<link rel="amphtml" href="'.$url.'" />';
-        $output = preg_replace('@(</head>)@', $code.'${1}', $output);
+        return $output;
     }
 
-    return $output;
+    $content = $smarty->tpl_vars['content']->value;
+
+    $url = $container->get('router')->generate('frontend_article_show_amp', [
+        'category_name' => $content->category_name,
+        'slug'          => $content->slug,
+        'article_id'    => date('YmdHis', strtotime($content->created))
+            . sprintf('%06d', $content->pk_content),
+    ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+    $url = $container->get('core.helper.l10n_route')
+        ->localizeUrl($url);
+
+    $code = '<link rel="amphtml" href="' . $url . '"/>';
+
+    return preg_replace('@(</head>)@', $code . '${1}', $output);
 }
