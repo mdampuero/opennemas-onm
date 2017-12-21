@@ -118,7 +118,7 @@ class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '/en/glork/fred',
-            $this->helper->localizeUrl('/glork/fred', 'foo_fubar_wibble', false)
+            $this->helper->localizeUrl('/glork/fred', 'foo_fubar_wibble')
         );
 
         $this->assertEquals(
@@ -134,8 +134,7 @@ class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
             'http://quux.waldo/en/glork/fred',
             $this->helper->localizeUrl(
                 'http://quux.waldo/glork/fred',
-                'foo_fubar_wibble',
-                true
+                'foo_fubar_wibble'
             )
         );
 
@@ -143,8 +142,7 @@ class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
             'http://quux.waldo:8080/en/glork/fred?garply=quux&xyzzy=flob',
             $this->helper->localizeUrl(
                 'http://quux.waldo:8080/glork/fred?garply=quux&xyzzy=flob',
-                'foo_fubar_wibble',
-                false
+                'foo_fubar_wibble'
             )
         );
 
@@ -152,11 +150,9 @@ class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
             'http://glorp:corge@quux.waldo:8080/en/glork/fred?garply=quux&xyzzy=flob',
             $this->helper->localizeUrl(
                 'http://glorp:corge@quux.waldo:8080/glork/fred?garply=quux&xyzzy=flob',
-                'foo_fubar_wibble',
-                true
+                'foo_fubar_wibble'
             )
         );
-
     }
 
     /**
@@ -172,12 +168,12 @@ class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '/foo/bar',
-            $this->helper->localizeUrl('/foo/bar', '', false)
+            $this->helper->localizeUrl('/foo/bar', '')
         );
 
         $this->assertEquals(
             'http://example.com/foo/bar',
-            $this->helper->localizeUrl('http://example.com/foo/bar', '', true)
+            $this->helper->localizeUrl('http://example.com/foo/bar', '')
         );
     }
 
@@ -195,12 +191,12 @@ class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '/foo/bar',
-            $this->helper->localizeUrl('/foo/bar', '', false)
+            $this->helper->localizeUrl('/foo/bar', '')
         );
 
         $this->assertEquals(
             'http://example.com/foo/bar',
-            $this->helper->localizeUrl('http://example.com/foo/bar', '', true)
+            $this->helper->localizeUrl('http://example.com/foo/bar', '')
         );
     }
 
@@ -216,7 +212,7 @@ class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '/glork/fred',
-            $this->helper->localizeUrl('/glork/fred', 'glork_fred', false)
+            $this->helper->localizeUrl('/glork/fred', 'glork_fred')
         );
     }
 }

@@ -116,7 +116,7 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
             ->with('AMP_MODULE')->willReturn(true);
 
         $this->request->expects($this->any())->method('getUri')
-            ->willReturn('wibble.html');
+            ->willReturn('http://t.co/wibble.html');
 
         $output = '<html><head></head><body>Hello World!</body></html>';
 
@@ -141,7 +141,7 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
             ->with('AMP_MODULE')->willReturn(true);
 
         $this->request->expects($this->any())->method('getUri')
-            ->willReturn('wibble.html');
+            ->willReturn('http://test.com/wibble.html');
 
         $this->router->expects($this->any())->method('generate')
             ->willReturn('/wibble/wubble');
@@ -163,15 +163,7 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
         ]), false) ];
 
         $this->assertEquals(
-            '<html><head><link rel="amphtml" href="/wibble/wubble"/></head><body>Hello World!</body></html>',
-            smarty_outputfilter_meta_amphtml(
-                '<html><head></head><body>Hello World!</body></html>',
-                $this->smarty
-            )
-        );
-
-        $this->assertEquals(
-            '<html><head><link rel="amphtml" href="/es/wibble/wubble"/></head><body>Hello World!</body></html>',
+            '<html><head><link rel="amphtml" href="http://t.co/wibble/wubble"/></head><body>Hello World!</body></html>',
             smarty_outputfilter_meta_amphtml(
                 '<html><head></head><body>Hello World!</body></html>',
                 $this->smarty
