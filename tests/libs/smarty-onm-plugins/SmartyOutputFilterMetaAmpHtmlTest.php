@@ -141,7 +141,7 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
             ->with('AMP_MODULE')->willReturn(true);
 
         $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://test.com/wibble.html');
+            ->willReturn('http://t.co/wibble.html');
 
         $this->router->expects($this->any())->method('generate')
             ->willReturn('/wibble/wubble');
