@@ -35,7 +35,7 @@ function smarty_function_get_url($params, $smarty)
         ->generate($params['item'], [ 'absolute' => $absolute ]);
 
     $url = $smarty->getContainer()->get('core.helper.l10n_route')
-        ->localizeUrl($url, '', $absolute);
+        ->localizeUrl($url, '');
 
     return $escape ? rawurlencode($url) : $url;
 }

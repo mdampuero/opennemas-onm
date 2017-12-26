@@ -76,6 +76,9 @@ services:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]
 
+    core.helper.url:
+        class:     Common\Core\Component\Helper\UrlHelper
+
     core.helper.url_generator:
         class:     Common\Core\Component\Helper\UrlGeneratorHelper
         arguments: [ '@service_container' ]
