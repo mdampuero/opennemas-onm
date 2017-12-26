@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  UserCtrl
@@ -81,10 +82,11 @@
          */
         $scope.parseOptions = function(options) {
           var options = options.split(/\s*,\s*/);
+          var values  = [];
 
-          var values = [];
           for (var i = 0; i < options.length; i++) {
             var option = options[i].trim().split(/\s*:\s*/);
+
             values.push({ key: option[0], value: option[1] });
           }
 
@@ -93,20 +95,23 @@
 
         // Updates activated changed flag when activated changes
         $scope.$watch('activated', function(nv, ov) {
-          if (ov !== null && nv && nv!== ov) {
+          if (ov !== null && nv && nv !== ov) {
             $scope.activatedChanged = true;
           }
         }, true);
 
         // Parses options for fields when settings change
         $scope.$watch('extra.settings.fields', function(nv) {
+          if (!nv) {
+            return;
+          }
+
           for (var i = 0; i < nv.length; i++) {
             if (nv[i].type === 'options' && typeof nv[i].values === 'string') {
               nv[i].values = $scope.parseOptions(nv[i].values);
             }
           }
         }, true);
-
       }
     ]);
 })();

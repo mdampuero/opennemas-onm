@@ -36,55 +36,9 @@ class L10nRouteHelper
     }
 
     /**
-     * Returns a localized url
+     * Returns the list of localizable routes.
      *
-     * @param string $url The url to localize.
-     * @param array  $routeName Route name to know if the route should be localized or not.
-     *
-     * @return string The generated URI.
-     */
-    public function localizeUrl($url, $routeName = '', $forceAbsolute = false)
-    {
-        $localeService = $this->container->get('core.locale');
-        $requestLocale = $localeService->getRequestLocale();
-        $defaultLocale = $localeService->getLocale('frontend');
-
-        // If no locale or locale is the default locale skip the l10n setting
-        if ($requestLocale == $defaultLocale
-            || !in_array($requestLocale, $localeService->getSlugs())
-        ) {
-            return $url;
-        }
-
-        $routes = [];
-        if (!empty($routeName)) {
-            $routes = $this->getLocalizableRoutes();
-        }
-
-        // Only localize urls if the user comes from a localized site
-        // and if the url can be localized
-        if ((!empty($routeName) && in_array($routeName, $routes))
-            || empty($routeName)
-        ) {
-            // Append the locale for uri to the url path part
-            if ($forceAbsolute) {
-                $parts         = parse_url($url);
-                $parts['path'] = $localeForUri . $parts['path'];
-                $url           = implode('/', $parts);
-
-                return $url;
-            }
-
-            $url = '/' . $requestLocale . $url;
-        }
-
-        return $url;
-    }
-
-    /**
-     * Returns the list of localizable routes
-     *
-     * @return array the list of localizable routes
+     * @return array The list of localizable routes.
      */
     public function getLocalizableRoutes()
     {
@@ -102,5 +56,50 @@ class L10nRouteHelper
         }
 
         return $this->routes;
+    }
+
+    /**
+     * Returns a localized url.
+     *
+     * @param string  $url           The url to localize.
+     * @param array   $routeName     Route name to know if the route should be
+     *                               localized or not.
+     * @param boolean $forceAbsolute Whether the route has to be absolute.
+     *
+     * @return string The generated URI.
+     */
+    public function localizeUrl($url, $routeName = '')
+    {
+        $localeService = $this->container->get('core.locale');
+        $requestLocale = $localeService->getRequestLocale();
+        $defaultLocale = $localeService->getLocale('frontend');
+        $urlHelper     = $this->container->get('core.helper.url');
+
+        // If no locale or locale is the default locale skip the l10n setting
+        if ($requestLocale === $defaultLocale
+            || !in_array($requestLocale, $localeService->getSlugs())
+        ) {
+            return $url;
+        }
+
+        $routes = [];
+        if (!empty($routeName)) {
+            $routes = $this->getLocalizableRoutes();
+        }
+
+        // Only localize urls if the user comes from a localized site
+        // and if the url can be localized
+        if ((!empty($routeName) && in_array($routeName, $routes))
+            || empty($routeName)
+        ) {
+            $parts = $urlHelper->parse($url);
+
+            $parts['path'] = '/' . $requestLocale
+                . (array_key_exists('path', $parts) ? $parts['path'] : '');
+
+            $url = $urlHelper->unparse($parts);
+        }
+
+        return $url;
     }
 }

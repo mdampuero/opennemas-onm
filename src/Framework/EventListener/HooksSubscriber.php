@@ -102,7 +102,8 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.delete' => [
-                ['mockHookAction', 0],
+                ['removeObjectCacheForContent', 10],
+                ['removeObjectCacheContentMeta', 10],
             ],
             'content.set_positions' => [
                 ['mockHookAction', 0],

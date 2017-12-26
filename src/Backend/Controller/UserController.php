@@ -13,6 +13,7 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Entity\User;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -343,7 +344,6 @@ class UserController extends Controller
 
             throw new \Exception(_('The email address or user name is already in use.'));
         } catch (\Exception $e) {
-            $userExists = true;
         }
 
         try {
@@ -362,17 +362,11 @@ class UserController extends Controller
                 _('User created successfully.')
             );
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_acl_user_show',
-                    ['id' => $user->id]
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_acl_user_show', [
+                'id' => $user->id
+            ]));
         } catch (\Exception $e) {
-            $request->getSession()->getFlashBag()->add(
-                'error',
-                $e->getMessage()
-            );
+            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect($this->generateUrl('admin_acl_user_create'));
@@ -644,6 +638,12 @@ class UserController extends Controller
 
             $file = $request->files->get('avatar');
 
+            // avatar: null = new, 0 = removed, 1 = empty/unchanged
+            if (empty($request->get('avatar'))) {
+                $this->removeAvatar($user);
+                $user->avatar_img_id = null;
+            }
+
             if (!empty($file)) {
                 $user->avatar_img_id =
                     $this->createAvatar($file, \Onm\StringUtils::getTitle($user->name));
@@ -723,5 +723,31 @@ class UserController extends Controller
         $photoId = $photo->create($data);
 
         return $photoId;
+    }
+
+    /**
+     * Removes the user's avatar.
+     *
+     * @param User $user The user object.
+     */
+    protected function removeAvatar($user)
+    {
+        $data = $user->getStored();
+
+        if (!array_key_exists('avatar_img_id', $data)
+            || empty($data['avatar_img_id'])
+        ) {
+            return;
+        }
+
+        $avatar = $this->get('entity_repository')
+            ->find('Photo', $data['avatar_img_id']);
+
+        $path = MEDIA_IMG_PATH . $avatar->path_img;
+        $fs   = new Filesystem();
+
+        if ($fs->exists($path)) {
+            $fs->remove($path);
+        }
     }
 }

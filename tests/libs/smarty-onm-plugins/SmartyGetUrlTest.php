@@ -117,7 +117,7 @@ class SmartyGetUrlTest extends \PHPUnit_Framework_TestCase
             ->willReturn('http://grault.com/glorp/1');
 
         $this->helper->expects($this->once())->method('localizeUrl')
-            ->with('http://grault.com/glorp/1', '', true)
+            ->with('http://grault.com/glorp/1', '')
             ->willReturn('http://grault.com/es/glorp/1');
 
         $this->assertEquals(

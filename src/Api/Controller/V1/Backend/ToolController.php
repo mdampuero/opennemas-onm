@@ -14,7 +14,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Common\Core\Controller\Controller;
 
 /**
- * Lists and displays files for content.
+ * The ToolController provides common actions to parse and transform values
+ * and return them to the client.
  */
 class ToolController extends Controller
 {
@@ -36,7 +37,7 @@ class ToolController extends Controller
     /**
      * Returns the information translated to the locale.
      *
-     * @param Request $request The resquest object.
+     * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
      */

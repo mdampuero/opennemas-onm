@@ -24,7 +24,8 @@
      */
     .controller('ArticleCtrl', [
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'webStorage',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, linker, localizer, messenger, webStorage) {
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner,
+          http, linker, localizer, messenger, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -96,6 +97,7 @@
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope.data.extra[keys[i]]) {
+              $scope.article[keys[i]] = null;
               continue;
             }
 
@@ -296,14 +298,6 @@
             $scope.article    = $scope.data.article;
             $scope.categories = $scope.data.extra.categories;
 
-            var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
-
-            for (var i = 0; i < keys.length; i++) {
-              if ($scope.data.extra[keys[i]]) {
-                $scope[keys[i]] = response.data.extra[keys[i]];
-              }
-            }
-
             $scope.build();
 
             if ($scope.config.multilanguage && $scope.config.locale) {
@@ -363,18 +357,12 @@
           $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
 
           for (var i = 0; i < keys.length; i++) {
-            if (!$scope[keys[i]]) {
+            if (!$scope.article[keys[i]]) {
               continue;
             }
 
-            $scope.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
+            $scope.data.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
               [ 'title' ], $scope.config.locale);
-
-            $scope.config.linkers[keys[i]] = linker.get([ 'title' ], $scope);
-
-            $scope.config.linkers[keys[i]].setKey($scope.config.locale);
-            $scope.config.linkers[keys[i]].link($scope.data.article[keys[i]],
-              $scope.article[keys[i]]);
           }
         };
 
@@ -439,6 +427,8 @@
             return;
           }
 
+          $scope.articleForm.$setPristine(true);
+
           $scope.flags.saving = true;
 
           var data = $scope.clean($scope.data.article);
@@ -458,7 +448,6 @@
               $window.location.href = response.headers().location;
             }
 
-            $scope.articleForm.$setPristine(true);
             messenger.post(response.data);
             $scope.backup.content_status = $scope.article.content_status;
           };
@@ -560,6 +549,10 @@
                   model[footer] === ov[i].description)) {
                 model[footer] = nv[i].description;
               }
+
+              if (!nv[i]) {
+                model[footer] = null;
+              }
             }
 
             if ($scope.articleForm.$dirty &&
@@ -590,6 +583,10 @@
                   model[footer] === ov[i].description)) {
                 model[footer] = nv[i].description;
               }
+
+              if (!nv[i]) {
+                model[footer] = null;
+              }
             }
 
             if ($scope.articleForm.$dirty &&
@@ -600,18 +597,23 @@
           }, true);
 
         // Sets relatedInner equals to relatedFront
-        $scope.$watch('article.relatedFront', function(nv, ov) {
-          if (!ov && $scope.article.relatedInner ||
-              angular.equals(ov, $scope.article.relatedInner)) {
-            $scope.article.relatedInner = angular.copy(nv);
+        $scope.$watch('data.article.relatedFront', function(nv, ov) {
+          if ($scope.data && (
+                !ov && $scope.data.article.relatedInner ||
+                angular.equals(ov, $scope.data.article.relatedInner)
+              )
+          ) {
+            $scope.data.article.relatedInner = angular.copy(nv);
           }
         }, true);
 
         // TODO: Remove when no target="_blank" in URI for external
         $scope.$watch('article.uri', function(nv, ov) {
           if (nv !== ov) {
-            $scope.article.uri = $scope.article.uri
-              .replace('" target="_blank', '');
+            if (typeof $scope.article.uri === 'string') {
+              $scope.article.uri = $scope.article.uri
+                .replace('" target="_blank', '');
+            }
           }
         }, true);
 
@@ -710,7 +712,8 @@
 
         // Shows a modal window to translate content automatically
         $scope.$watch('config.locale', function(nv, ov) {
-          if (!nv || nv === ov || $scope.isTranslated($scope.data.article,
+          if (!nv || nv === ov ||
+            $scope.isTranslated($scope.data.article,
               $scope.data.extra.keys, nv)) {
             return;
           }

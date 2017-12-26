@@ -281,9 +281,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \Common\ORM\Core\Exception\InvalidPersisterException
      */
-    public function testGetPeristerNoPersisters()
+    public function testGetPersisterNoPersisters()
     {
-
         $this->em->getPersister(new Client());
     }
 
@@ -295,7 +294,11 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity();
 
         $this->assertNotEmpty($this->em->getPersister($entity));
-        $this->assertEquals(1, count($this->em->getPersister($entity, 'Entity')));
+        $this->assertNotEmpty($this->em->getPersister($entity, 'Entity'));
+        $this->assertEquals(
+            $this->em->getPersister($entity),
+            $this->em->getPersister($entity, 'Entity')
+        );
     }
 
     /**
@@ -368,7 +371,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     public function testParseArgs()
     {
         $reflection = new \ReflectionClass($this->em);
-        $method = $reflection->getMethod('parseArgs');
+        $method     = $reflection->getMethod('parseArgs');
+
         $method->setAccessible(true);
 
         $this->assertEmpty($method->invokeArgs($this->em, [ [] ]));
@@ -381,7 +385,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     public function testParseArg()
     {
         $reflection = new \ReflectionClass($this->em);
-        $method = $reflection->getMethod('parseArg');
+        $method     = $reflection->getMethod('parseArg');
+
         $method->setAccessible(true);
 
         $this->assertEquals(123, $method->invokeArgs($this->em, [ 123 ]));

@@ -74,7 +74,7 @@
           <div class="form-group">
             <label for="site_url" class="form-label">{t}Site URL{/t}</label>
             <div class="controls">
-              <input type="text" required name="site_url" id="site_url" value="{$site['site_url']}" placeholder="{t}http://example.com{/t}" class="form-control">
+              <input type="text" required name="site_url" id="site_url" value="{$site['site_url']}" placeholder="{t}http://example.com{/t}" class="form-control" {if !empty($site['site_url'])} readonly {/if}>
             </div>
           </div>
           <div class="form-group">
@@ -115,10 +115,10 @@
           </p>
           <div id="categories">
             {$output}
-            <div class="spinner-wrapper" id="loading" style="display: none;">
-              <div class="loading-spinner"></div>
-              <div class="spinner-text">{t}Loading{/t}...</div>
-            </div>
+          </div>
+          <div class="spinner-wrapper" id="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@ class Locale
         'frontend' => [
             'language' => [
                 'selected' => 'en_US',
-                'slug'     => [ 'en_US' => 'en']
+                'slug'     => []
             ],
             'timezone' => 'UTC'
         ],
