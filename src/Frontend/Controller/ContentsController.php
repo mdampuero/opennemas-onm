@@ -44,7 +44,11 @@ class ContentsController extends Controller
         // Resolve content ID, we dont know which type the content is so we have to
         // perform some calculations
         preg_match("@(?P<date>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
-        $dirtyID   = $matches['date'] . sprintf('%06d', $matches['id']);
+
+        if (empty($matches)) {
+            throw new ResourceNotFoundException();
+        }
+
         $contentID = $matches['id'];
 
         $content = new \Content($contentID);
