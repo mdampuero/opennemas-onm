@@ -598,11 +598,8 @@
 
         // Sets relatedInner equals to relatedFront
         $scope.$watch('data.article.relatedFront', function(nv, ov) {
-          if ($scope.data && (
-                !ov && $scope.data.article.relatedInner ||
-                angular.equals(ov, $scope.data.article.relatedInner)
-              )
-          ) {
+          if ($scope.data && (!$scope.data.article.relatedInner ||
+              angular.equals(ov, $scope.data.article.relatedInner))) {
             $scope.data.article.relatedInner = angular.copy(nv);
           }
         }, true);
