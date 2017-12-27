@@ -278,7 +278,7 @@ class BlogsController extends Controller
             // This assignation is required to get the frontpage opinion link generated properly
             $blog->author_name_slug = $author->username;
             if (!isset($author->meta)
-                || is_array($author->meta)
+                || !is_array($author->meta)
                 || !array_key_exists('is_blog', $author->meta)
                 || ($author->meta['is_blog'] != 1)
             ) {
