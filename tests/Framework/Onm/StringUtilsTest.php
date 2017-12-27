@@ -224,15 +224,18 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([''], $this->object->generateSlug(['']));
 
-        $this->assertEquals([
-            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
-            '',
-        ],
-
-        $this->object->generateSlug([
-            'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
-            ''
-        ]));
+        $this->assertEquals(
+            [
+                'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+                '',
+            ],
+            $this->object->generateSlug(
+                [
+                    'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
+                    ''
+                ]
+            )
+        );
     }
 
     /**
@@ -448,6 +451,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'Urna quam congue vulputate',
             $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?')
+        );
+    }
+
+    public function testCleanFileName()
+    {
+        $this->assertEquals(
+            'FileName-for-testing.pdf',
+            $this->object->cleanFileName(' FileName "for" testing.pdf ')
         );
     }
 }
