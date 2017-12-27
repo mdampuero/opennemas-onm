@@ -516,9 +516,12 @@ class StringUtils
     {
         $name = trim($name);
         $name = html_entity_decode($name, ENT_COMPAT, 'UTF-8');
-        $name = mb_strtolower($name, 'UTF-8');
-        $name = preg_replace('/\s/', '-', $name);
-        $name = StringUtils::normalize($name);
+        // Keep . for filename extension
+        $trade = self::$trade;
+        unset($trade['.']);
+        $name = strtr($name, $trade);
+        // Trade white spaces to hyphen
+        $name = preg_replace('/[\s]+/', '-', $name);
 
         return $name;
     }
