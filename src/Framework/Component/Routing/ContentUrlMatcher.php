@@ -63,7 +63,6 @@ class ContentUrlMatcher
         $date = \DateTime::createFromFormat('YmdHis', $matches['date'])->format('Y-m-d H:i:s');
 
         $content = $this->em->find(\classify($type), $id);
-
         // Check if the content matches the info provided and is ready for publish.
         if (is_object($content)
             && $content->pk_content === $id
