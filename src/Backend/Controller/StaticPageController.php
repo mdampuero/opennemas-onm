@@ -33,12 +33,12 @@ class StaticPageController extends Controller
         $req = $request->request;
 
         // If the action is an Ajax request handle it, if not redirect to list
-        $data = array(
+        $data = [
             'title'    => $req->filter('title', null, FILTER_SANITIZE_STRING),
             'slug'     => $req->filter('slug', null, FILTER_SANITIZE_STRING),
             'metadata' => \Onm\StringUtils::normalizeMetadata($req->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'id'       => $req->filter('id', 0, FILTER_SANITIZE_STRING),
-        );
+        ];
 
         if ($request->isXmlHttpRequest()) {
             try {
@@ -97,6 +97,7 @@ class StaticPageController extends Controller
 
         $entity->contentTypeName     = 'static_page';
         $entity->fk_content_type     = 13;
+        $entity->created             = new \DateTime();
         $entity->fk_author           = $this->get('core.user')->id;
         $entity->fk_publisher        = $entity->fk_author;
         $entity->fk_user_last_editor = $entity->fk_author;
@@ -187,6 +188,8 @@ class StaticPageController extends Controller
         }
 
         $entity->setData($converter->objectify($request->request->all()));
+
+        $entity->changed = new \DateTime();
 
         // TODO: Remove after fixing database definition
         $entity->category_name = ' ';
