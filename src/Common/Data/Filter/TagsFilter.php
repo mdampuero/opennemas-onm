@@ -47,13 +47,17 @@ class TagsFilter extends Filter
             $str = mb_strtolower($str, 'UTF-8');
         }
 
+        $str = $this->utils->removePunctuation(
+            $str,
+            $this->getParameter('exclude', [])
+        );
+
         // Remove invalid words
-        $str = $this->utils->removePunctuation($str);
         $str = $this->utils->removeShorts($str);
 
         // Remove duplicates
         $str = preg_replace('/[\,]+/', ',', $str);
-        $str = preg_replace('/[\.]+/', '', $str);
+        $str = preg_replace('/[\.]+/', '.', $str);
 
         $str = trim($str);
         $str = preg_replace('/[ ]+/', ',', $str);
