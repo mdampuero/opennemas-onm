@@ -57,9 +57,10 @@ class ArticleController extends Controller
             'img1_footer'    => $postReq->get('img1_footer'),
             'img2'           => $postReq->getDigits('img2'),
             'img2_footer'    => $postReq->get('img2_footer'),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $postReq->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
+            'metadata'       => $this->get('data.manager.filter')
+                ->set($postReq->filter('metadata', '', FILTER_SANITIZE_STRING))
+                ->filter('tags', [ 'exclude' => [ '.' ] ])
+                ->get(),
             'slug'           => $postReq->get('slug'),
             'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING),
             'subtitle'       => $postReq->get('subtitle'),
@@ -194,9 +195,10 @@ class ArticleController extends Controller
             'img1_footer'    => $postReq->get('img1_footer'),
             'img2'           => $postReq->getDigits('img2'),
             'img2_footer'    => $postReq->get('img2_footer'),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)
-            ),
+            'metadata'       => $this->get('data.manager.filter')
+                ->set($postReq->filter('metadata', '', FILTER_SANITIZE_STRING))
+                ->filter('tags', [ 'exclude' => [ '.' ] ])
+                ->get(),
             'relatedFront'   => $postReq->get('relatedFront', []),
             'relatedHome'    => $postReq->get('relatedHome', []),
             'relatedInner'   => $postReq->get('relatedInner', []),
