@@ -435,7 +435,6 @@ class StringUtils
         'eles',
         'en',
         'entre',
-        'es',
         'esa',
         'esas',
         'ese',
@@ -930,17 +929,22 @@ class StringUtils
     /**
      * Removes punctuation characters from a string.
      *
-     * @param string $str The string to clean.
+     * @param string $str     The string to clean.
+     * @param array  $exclude The list of characters to exclude.
      *
      * @return The string without punctuation characters.
      */
-    public static function removePunctuation($str)
+    public static function removePunctuation($str, $exclude = [])
     {
         $punctuation = array_slice(
             self::$trade,
             0,
             array_search('À', array_keys(self::$trade))
         );
+
+        if (!empty($exclude)) {
+            $punctuation = array_diff_key($punctuation, array_flip($exclude));
+        }
 
         $str = strtr($str, $punctuation);
 
