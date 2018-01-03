@@ -48,7 +48,7 @@ class ContentUrlMatcher
         }
 
         // Check for valid Id
-        preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyId, $matches);
+        preg_match("@(?P<date>\d{14})(?P<id>\d+)@", $dirtyId, $matches);
 
         // Get real content id and date from url
         $id = $date = 0;
