@@ -59,7 +59,7 @@ class ArticleController extends Controller
             'img2_footer'    => $postReq->get('img2_footer'),
             'metadata'       => $this->get('data.manager.filter')
                 ->set($postReq->filter('metadata', '', FILTER_SANITIZE_STRING))
-                ->filter('tags', [ 'exclude' => [ '.' ] ])
+                ->filter('tags', [ 'exclude' => [ '.', '-', '#' ] ])
                 ->get(),
             'slug'           => $postReq->get('slug'),
             'starttime'      => $postReq->filter('starttime', '', FILTER_SANITIZE_STRING),
@@ -197,7 +197,7 @@ class ArticleController extends Controller
             'img2_footer'    => $postReq->get('img2_footer'),
             'metadata'       => $this->get('data.manager.filter')
                 ->set($postReq->filter('metadata', '', FILTER_SANITIZE_STRING))
-                ->filter('tags', [ 'exclude' => [ '.' ] ])
+                ->filter('tags', [ 'exclude' => [ '.', '-', '#' ] ])
                 ->get(),
             'relatedFront'   => $postReq->get('relatedFront', []),
             'relatedHome'    => $postReq->get('relatedHome', []),
