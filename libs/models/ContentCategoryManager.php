@@ -32,6 +32,10 @@ class ContentCategoryManager
         if (is_null(self::$instance)) {
             // Fill categories from cache
             $this->categories = $this->findAll();
+            if (!$this->categories) {
+                $this->categories = [];
+                getService('error.log')->error("an error has occurred in retrieving the BD categories");
+            }
 
             self::$instance = $this;
         }
