@@ -180,7 +180,7 @@
               target: attrs.contentPickerTarget,
               types: {
                 enabled:   [ ],
-                available: [ 'album', 'article', 'opinion', 'poll', 'video', 'attachment' ]
+                available: [ 'album', 'article', 'attachment', 'opinion', 'poll', 'video', 'special' ]
               },
 
               /**
