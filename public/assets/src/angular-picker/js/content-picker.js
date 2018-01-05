@@ -300,8 +300,8 @@
 
                 $scope.picker.types.enabled = [];
 
-                for (var i = 0; i < types.length; i++) {
-                  $scope.picker.setType(types[i]);
+                for (var j = 0; j < types.length; j++) {
+                  $scope.picker.setType(types[j]);
                 }
               }
 
@@ -312,8 +312,8 @@
                   target = [ target ];
                 }
 
-                for (var i = 0; i < target.length; i++) {
-                  $scope.selected.ids.push(target[i].id);
+                for (var z = 0; z < target.length; z++) {
+                  $scope.selected.ids.push(target[z].id);
                 }
 
                 $scope.selected.items = target;
