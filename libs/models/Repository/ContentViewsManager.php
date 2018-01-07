@@ -27,27 +27,28 @@ class ContentViewsManager extends EntityManager
     {
         $sql = "SELECT * FROM `content_views`";
         if (is_array($id)) {
-            if (count($id) > 0) {
-                $sql .= " WHERE pk_fk_content IN (" . implode(',', $id) . ")";
-            } else {
+            if (count($id) <= 0) {
                 return [];
             }
+
+            $sql .= " WHERE pk_fk_content IN (" . implode(',', $id) . ")";
         } else {
-            $sql .= " WHERE pk_fk_content = ".intval($id);
+            $sql .= " WHERE pk_fk_content = " . intval($id);
         }
 
         $rs = $this->dbConn->fetchAll($sql);
 
         if (!$rs) {
-            return 0;
+            return (is_array($id) ? [] : 0);
         }
 
         if (is_array($id)) {
-            $views = array();
+            $views = [];
 
             foreach ($rs as $value) {
                 $views[$value['pk_fk_content']] = $value['views'];
             }
+
             return $views;
         } else {
             return $rs[0]['views'];
@@ -64,10 +65,10 @@ class ContentViewsManager extends EntityManager
     {
         $sql = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)';
         if (is_null($views)) {
-            $sql .= ' ON DUPLICATE KEY UPDATE views = views + 1';
+            $sql   .= ' ON DUPLICATE KEY UPDATE views = views + 1';
             $params = [$id, 1];
         } else {
-            $sql .=' ON DUPLICATE KEY UPDATE views = ?';
+            $sql   .= ' ON DUPLICATE KEY UPDATE views = ?';
             $params = [$id, $views, $views];
         }
 
