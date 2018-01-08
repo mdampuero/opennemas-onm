@@ -151,7 +151,7 @@
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox" id="inmenu" ng-model="category.inmenu" ng-true-value="1" ng-false-value="'0'">
+                    <input type="checkbox" id="inmenu" ng-model="category.inmenu" ng-true-value="1" ng-true-value="1">
                     <label for="inmenu" class="form-label">{t}Available{/t}</label>
                   </div>
                 </div>
@@ -159,7 +159,7 @@
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox" ng-model="category.params.inrss" id="inrss" name="inrss" ng-true-value="'1'">
+                    <input type="checkbox" ng-model="category.params.inrss" id="inrss" name="inrss" ng-true-value="1">
                     <label for="inrss" class="form-label">{t}Show in RSS{/t}</label>
                   </div>
                 </div>
