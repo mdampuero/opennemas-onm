@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Common\Core\Component\StructuredData;
+namespace Test\Common\Core\Component\Helper;
 
-use Common\Core\Component\StructuredData\StructuredData;
+use Common\Core\Component\Helper\StructuredData;
 use Common\Data\Core\FilterManager;
 
 /**

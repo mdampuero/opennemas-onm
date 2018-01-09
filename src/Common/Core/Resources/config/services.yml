@@ -76,6 +76,10 @@ services:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]
 
+    core.helper.structured_data:
+        class:     Common\Core\Component\Helper\StructuredData
+        arguments: [ '@setting_repository' ]
+
     core.helper.url:
         class:     Common\Core\Component\Helper\UrlHelper
 

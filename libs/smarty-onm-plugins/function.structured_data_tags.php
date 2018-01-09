@@ -1,7 +1,5 @@
 <?php
 
-use \Common\Core\Component\StructuredData\StructuredData;
-
 function smarty_function_structured_data_tags($params, &$smarty)
 {
     // Only generate tags if is a content page
@@ -9,12 +7,13 @@ function smarty_function_structured_data_tags($params, &$smarty)
         return '';
     }
 
-    $content   = $smarty->tpl_vars['content']->value;
-    $container = $smarty->getContainer();
-    $sm        = $container->get('setting_repository');
-    $category  = $container->get('category_repository')->find($content->category);
-    $user      = $container->get('user_repository')->find($content->fk_author);
-    $url       = $container->get('request_stack')->getCurrentRequest()->getUri();
+    $content    = $smarty->tpl_vars['content']->value;
+    $container  = $smarty->getContainer();
+    $sm         = $container->get('setting_repository');
+    $category   = $container->get('category_repository')->find($content->category);
+    $user       = $container->get('user_repository')->find($content->fk_author);
+    $url        = $container->get('request_stack')->getCurrentRequest()->getUri();
+    $structData = $container->get('core.helper.structured_data');
 
     // Set content data for tags
     $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
@@ -44,8 +43,9 @@ function smarty_function_structured_data_tags($params, &$smarty)
     if (!empty($logo)) {
         $logo = [
             'url'    => SITE_URL
-                . 'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter/'
-                . MEDIA_DIR_URL . 'sections/' . $logo,
+                . 'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter'
+                . $container->get('core.instance')->getMediaShortPath()
+                . '/sections/' . $logo,
             'width'  => '260',
             'height' => '60'
         ];
@@ -56,8 +56,6 @@ function smarty_function_structured_data_tags($params, &$smarty)
             'height' => '60'
         ];
     }
-
-    $structData = new StructuredData($sm);
 
     // Populate the media element if exists
     $mediaObject = $smarty->getContainer()->get('core.helper.content_media')
