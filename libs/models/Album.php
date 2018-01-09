@@ -66,19 +66,18 @@ class Album extends Content
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate(
+                $uri = Uri::generate(
                     'album',
-                    array(
+                    [
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => urlencode($this->category_name),
                         'slug'     => urlencode($this->slug),
-                    )
+                    ]
                 );
 
                 return ($uri !== '') ? $uri : $this->permalink;
 
-                break;
             case 'content_type_name':
                 $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
 
@@ -91,10 +90,8 @@ class Album extends Content
 
                 return $returnValue;
 
-                break;
             default:
                 return parent::__get($name);
-                break;
         }
     }
 
@@ -110,16 +107,16 @@ class Album extends Content
         parent::load($properties);
 
         if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
-            $this->pk_album    = $properties['pk_album'];
+            $this->pk_album       = $properties['pk_album'];
             $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
         }
         if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
-            $this->subtitle    = $properties['subtitle'];
+            $this->subtitle = $properties['subtitle'];
         }
         if (array_key_exists('cover_id', $properties) && !is_null($properties['cover_id'])) {
             $this->cover_id    = $properties['cover_id'];
             $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
-            $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
+            $this->cover       = $this->cover_image->path_file . $this->cover_image->name;
         }
 
         return $this;
@@ -142,7 +139,7 @@ class Album extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN albums ON pk_content = pk_album WHERE pk_content=?',
+                . 'LEFT JOIN albums ON pk_content = pk_album WHERE pk_content=?',
                 [ $id ]
             );
 
@@ -154,6 +151,9 @@ class Album extends Content
 
             return $this;
         } catch (\Exception $e) {
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return;
         }
     }
@@ -167,7 +167,7 @@ class Album extends Content
      */
     public function create($data)
     {
-        $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
+        $data['subtitle'] = (empty($data['subtitle'])) ? '' : $data['subtitle'];
 
         parent::create($data);
 
@@ -190,7 +190,9 @@ class Album extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -206,7 +208,7 @@ class Album extends Content
     {
         parent::update($data);
 
-        $data['subtitle'] = (empty($data['subtitle']))? 0 : $data['subtitle'];
+        $data['subtitle'] = (empty($data['subtitle'])) ? 0 : $data['subtitle'];
 
         try {
             $rs = getService('dbal_connection')->update(
@@ -226,7 +228,9 @@ class Album extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -250,7 +254,9 @@ class Album extends Content
 
             return $this->removeAttachedImages($id);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -265,14 +271,14 @@ class Album extends Content
     public function _getAttachedPhotos($albumID)
     {
         if ($albumID == null) {
-            return false ;
+            return false;
         }
 
         $photosAlbum = [];
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT DISTINCT pk_photo, description, position'
-                .' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
+                . ' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
                 [
                     $albumID
                 ]
@@ -284,7 +290,7 @@ class Album extends Content
                     continue;
                 }
 
-                $photosAlbum []= [
+                $photosAlbum [] = [
                     'id'          => $photo['pk_photo'],
                     'position'    => $photo['position'],
                     'description' => $photo['description'],
@@ -294,7 +300,9 @@ class Album extends Content
 
             return $photosAlbum;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -312,36 +320,38 @@ class Album extends Content
     public function getAttachedPhotosPaged($albumID, $items_page, $page = 1)
     {
         if ($albumID == null) {
-            return false ;
+            return false;
         }
 
         if (empty($page)) {
-            $limit= "LIMIT ".($items_page+1);
+            $limit = "LIMIT " . ($items_page + 1);
         } else {
-            $limit= "LIMIT ".($page-1) * $items_page .', '.($items_page+1);
+            $limit = "LIMIT " . ($page - 1) * $items_page . ', ' . ($items_page + 1);
         }
 
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT DISTINCT pk_photo, description, position'
-                .' FROM albums_photos '
-                .' WHERE pk_album =? ORDER BY position ASC '.$limit,
+                . ' FROM albums_photos '
+                . ' WHERE pk_album =? ORDER BY position ASC ' . $limit,
                 [ $albumID ]
             );
 
             $photosAlbum = [];
             foreach ($rs as $photo) {
-                $photosAlbum []= array(
+                $photosAlbum [] = [
                     'id'          => $photo['pk_photo'],
                     'position'    => $photo['position'],
                     'description' => $photo['description'],
                     'photo'       => new Photo($photo['pk_photo']),
-                );
+                ];
             }
 
             return $photosAlbum;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -377,7 +387,9 @@ class Album extends Content
                         ]
                     );
                 } catch (\Exception $e) {
-                    error_log($e->getMessage());
+                    getService('error.log')->error(
+                        $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+                    );
                     return false;
                 }
             }
@@ -406,7 +418,9 @@ class Album extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
