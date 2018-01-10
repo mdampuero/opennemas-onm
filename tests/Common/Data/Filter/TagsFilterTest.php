@@ -47,7 +47,7 @@ class TagsFilterTest extends KernelTestCase
         );
 
         $this->assertEquals(
-            '10000,foo,bar,300',
+            '10000,foo,bar,3,00',
             $filter->filter('10.000 foo bar 3,00')
         );
 
@@ -61,7 +61,7 @@ class TagsFilterTest extends KernelTestCase
         );
 
         $this->assertEquals(
-            '10000-foo-bar-300',
+            '10000-foo-bar-3-00',
             $filter->filter('10.000 foo bar 3,00')
         );
 
