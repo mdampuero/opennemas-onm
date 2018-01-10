@@ -390,10 +390,6 @@ class ContentCategory implements \JsonSerializable
      */
     public function delete($id)
     {
-        if (!ContentCategoryManager::isEmptyByCategoryId($id)) {
-            return false;
-        }
-
         try {
             $rs = getService('dbal_connection')->delete(
                 'content_categories',
