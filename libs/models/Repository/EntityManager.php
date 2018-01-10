@@ -72,7 +72,6 @@ class EntityManager extends BaseManager
                 $this->cache->save($cacheId, $entity);
             }
         }
-
         return $entity;
     }
 
@@ -238,31 +237,90 @@ class EntityManager extends BaseManager
             return [];
         }
 
+        $contentMap = array_filter($contentMap, "is_object");
+
         $searchMap = array_map(function ($a) {
             return 'content-meta-' . $a->id;
         }, $contentMap);
 
         // Fetch all content metas in one request
-        $contentMetaMap = $this->cache->fetch($searchMap);
+        $contentMetaMap  = $this->cache->fetch($searchMap);
+        $missingContents = [];
 
-        $contentMap = array_filter($contentMap, "is_object");
+        foreach ($searchMap as $key) {
+            if (!array_key_exists($key, $contentMetaMap)) {
+                $missingContents[] = substr($key, 13);
+            }
+        }
+        $missingContents = $this->populateContentMetasFromDB($missingContents);
+
+
         // Populate contents with fetched content metas
-        foreach ($contentMap as $content) {
-            // If content metas weren't in cache fetch them from mysql
-            if (!array_key_exists('content-meta-' . $content->id, $contentMetaMap)) {
-                $content->loadAllContentProperties();
-            } else {
-                $contentMeta = $contentMetaMap['content-meta-' . $content->id];
 
-                if (!empty($contentMeta)) {
-                    foreach ($contentMeta as $key => $value) {
-                        $content->{$key} = $value;
-                    }
-                }
+        foreach ($contentMap as $content) {
+            $contentMeta = [];
+            // If content metas weren't in cache fetch them from mysql
+            if (array_key_exists('content-meta-' . $content->id, $contentMetaMap)) {
+                $contentMeta = $contentMetaMap['content-meta-' . $content->id];
+            } elseif (array_key_exists($content->id, $missingContents)) {
+                $contentMeta = $missingContents[$content->id];
+            }
+            foreach ($contentMeta as $key => $value) {
+                $content->{$key} = $value;
             }
         }
 
         return $contentMap;
+    }
+
+    /**
+     *  Populates content meta for a given array of content objects from DB
+     *
+     * @return array the list of contents with populated metadata
+     */
+    private function populateContentMetasFromDB($contents)
+    {
+        if (is_null($contents)) {
+            return null;
+        }
+
+        $contentsToRetrieve = (is_array($contents)) ? $contents : [$contents];
+
+        if (count($contentsToRetrieve) == 0) {
+            return [];
+        }
+
+        $contentProperties = [];
+
+        $sqlAux = substr(str_repeat(',?', count($contentsToRetrieve)), 1);
+        $sql    = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content IN ('
+            . $sqlAux . ')';
+
+        $properties = $this->dbConn->fetchAll(
+            $sql,
+            $contentsToRetrieve
+        );
+        if (!is_null($properties) && is_array($properties)) {
+            foreach ($properties as $property) {
+                if (!array_key_exists($property['fk_content'], $contentProperties)) {
+                    $contentProperties[$property['fk_content']] = [];
+                }
+                $contentProperties[$property['fk_content']][$property['meta_name']] = $property['meta_value'];
+            }
+        }
+
+
+        $cacheValues = [];
+        foreach ($contentProperties as $id => $content) {
+            $cacheValues['content-meta-' . $id] = serialize($content);
+        }
+
+        $this->cache->save($cacheValues);
+
+        if (!is_array($contents) && count($contentProperties) > 0) {
+            return array_values($contentProperties)[0];
+        }
+        return $contentProperties;
     }
 
     /**

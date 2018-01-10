@@ -33,7 +33,7 @@ class ArticleController extends Controller
             ->get();
         $page    = $request->query->getDigits('page', 1);
 
-        $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
+        $tag = strtolower($tagName);
         $epp = $this->get('setting_repository')->get('items_in_blog', 10);
         $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
@@ -56,11 +56,10 @@ class ArticleController extends Controller
         $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
         $total    = count($contents) + 1;
 
-        $results     = [];
-        $articlesIds = [];
-        $photoIds    = [];
-        $albumIds    = [];
-        $tag         = strtolower($tag);
+        $results      = [];
+        $photoIds     = [];
+        $albumIds     = [];
+        $albumsPhotos = [];
         foreach ($contents as &$item) {
             $arrayMetadatas = explode(',', $item->metadata);
 
@@ -97,19 +96,36 @@ class ArticleController extends Controller
                 }
 
                 // Add item to final array
-                $results[]     = $item;
-                $articlesIds[] = $item->pk_article;
+                $results[$item->pk_article] = $item;
             }
         }
+        $results = $em->populateContentMetasInContents($results);
 
-        $extra    = ['photo' => [], 'album' => []];
+        $extra    = $this->getExtra($em, $results, $photoIds, $albumIds);
+        $instance = $this->get('core.instance');
+
+        $headers = [
+            'x-cache-for'  => '1d',
+            'x-cacheable'  => true,
+            'x-instance'   => $instance->internal_name,
+            'x-tags'       => $this->getItemTags(array_keys($extra['contents']), $tagName, $instance),
+        ];
+
+        $response = [
+            'elements_per_page' => $epp,
+            'page'              => $page,
+            'results'           => array_keys($results),
+            'total'             => $total,
+            'extra'             => $extra
+        ];
+
+        return new JsonResponse($response, 200, $headers);
+    }
+
+    private function getExtra($em, $results, $photoIds, $albumIds)
+    {
+        $extra    = ['contents' => []];
         $contents = [];
-        if (count($photoIds) > 0) {
-            $photoIds = array_unique($photoIds);
-            foreach ($photoIds as $photoId) {
-                $contents[] = ['photo', $photoId];
-            }
-        }
 
         if (count($albumIds) > 0) {
             $albumIds = array_unique($albumIds);
@@ -118,37 +134,37 @@ class ArticleController extends Controller
             }
         }
 
+        $albumsPhotos = \Album::getAttachedPhotos($albumIds);
+        foreach ($albumsPhotos as $photos) {
+            foreach ($photos as $photo) {
+                $photoIds[] = $photo['pk_photo'];
+            }
+        }
+
+        if (count($photoIds) > 0) {
+            $photoIds = array_unique($photoIds);
+            foreach ($photoIds as $photoId) {
+                $contents[] = ['photo', $photoId];
+            }
+        }
+
         $contents = $em->findMulti($contents);
 
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
-                $extra['photo'][$content->pk_photo] = $content;
+                $extra['contents'][$content->pk_photo] = $content;
                 continue;
             }
-            $extra['album'][$content->pk_album] = $content;
+            if (array_key_exists($content->pk_album, $albumsPhotos)) {
+                $content->album_photos = $albumsPhotos[$content->pk_album];
+            }
+            $extra['contents'][$content->pk_album] = $content;
         }
 
+        $extra['contents'] = $extra['contents'] + $results;
+
         $results = \Onm\StringUtils::convertToUtf8($results);
-
-        $contentsId = array_merge($articlesIds, $photoIds, $albumIds);
-        $instance   = $this->get('core.instance');
-
-        $headers = [
-            'x-cache-for'  => '1d',
-            'x-cacheable'  => true,
-            'x-instance'   => $instance->internal_name,
-            'x-tags'       => $this->getItemTags($contentsId, $tagName, $instance),
-        ];
-
-        $response = [
-            'elements_per_page' => $epp,
-            'page'              => $page,
-            'results'           => $results,
-            'total'             => $total,
-            'extra'             => $extra
-        ];
-
-        return new JsonResponse($response, 200, $headers);
+        return $extra;
     }
 
 
@@ -161,7 +177,7 @@ class ArticleController extends Controller
      */
     protected function getItemTags($contentsId, $tag, $instance)
     {
-        $tags     = [
+        $tags = [
             'instance-' . $instance->internal_name,
             'tag-page',
             'tag-' . $tag

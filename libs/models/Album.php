@@ -38,6 +38,8 @@ class Album extends Content
      */
     public $cover_id = null;
 
+    public $album_photos = null;
+
     /**
      * Initializes the Album class.
      *
@@ -451,5 +453,51 @@ class Album extends Content
         }
 
         return $html;
+    }
+
+    /**
+     * Returns a multidimensional array with the images related to this album
+     *
+     * @param int $albumID the album id
+     *
+     * @return mixed array of array(pk_photo, position, description)
+     */
+    public static function getAttachedPhotos($albumID)
+    {
+        if (is_null($albumID)) {
+            return false;
+        }
+
+        $attachPhotosToRetrieve = (is_array($albumID)) ? $albumID : [$albumID];
+
+        if (count($attachPhotosToRetrieve) == 0) {
+            return [];
+        }
+
+        $attachPhotos = [];
+
+        $sqlAux = substr(str_repeat(',?', count($attachPhotosToRetrieve)), 1);
+
+        $photosAlbum = [];
+        $sql         = 'SELECT DISTINCT pk_album, pk_photo, description, position'
+            . ' FROM albums_photos WHERE pk_album IN (' . $sqlAux . ') ORDER BY position ASC';
+        $rs          = getService('dbal_connection')->fetchAll($sql, $albumID);
+        foreach ($rs as $photo) {
+            if (!array_key_exists($photo['pk_album'], $photosAlbum)) {
+                $photosAlbum[$photo['pk_album']] = [];
+            }
+
+            $photosAlbum[$photo['pk_album']][] = [
+                'pk_photo'    => $photo['pk_photo'],
+                'position'    => $photo['position'],
+                'description' => $photo['description'],
+            ];
+        }
+
+        if (!is_array($albumID) && count($photosAlbum) > 0) {
+            return array_values($photosAlbum)[0];
+        }
+
+        return $photosAlbum;
     }
 }
