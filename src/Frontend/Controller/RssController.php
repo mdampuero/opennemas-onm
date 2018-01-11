@@ -282,20 +282,6 @@ class RssController extends Controller
                 ) {
                     unset($contents[$key]);
                 } else {
-                    $relations = getService('related_contents')->getRelations($content->id, 'inner');
-                    if (count($relations) > 0) {
-                        $contentObjects = $this->get('entity_repository')->findMulti($relations);
-
-                        // Filter out not ready for publish contents.
-                        foreach ($contentObjects as $contentID) {
-                            if (!$content->isReadyForPublish()) {
-                                continue;
-                            }
-
-                            $relatedContents[] = $content;
-                        }
-                    }
-
                     // Wrap img with figure and add caption
                     $content->body = preg_replace(
                         '@(<p>)*(<img[^>]+>)@',
@@ -303,15 +289,17 @@ class RssController extends Controller
                         $content->body
                     );
 
-                    // Wrap social embed and iframes
+                    // Wrap social embed and iframes also add absolute url for images
                     $patterns      = [
                         '@(<blockquote.*class="(instagram-media|twitter-tweet)"[^>]+>.+'
                         . '<\/blockquote>\n*<script[^>]+><\/script>)@',
-                        '@(<p>)*(<iframe[^>]+><\/iframe>)@'
+                        '@(<p>)*(<iframe[^>]+><\/iframe>)@',
+                        '@src="/media/@'
                     ];
                     $replacements  = [
-                        '<figure class="op-social"><iframe>${1}</iframe></figure>',
-                        '<figure class="op-interactive">${2}</figure>${1}'
+                        '<figure class="op-interactive"><iframe>${1}</iframe></figure>',
+                        '<figure class="op-interactive">${2}</figure>${1}',
+                        'src="' . SITE_URL . 'media/'
                     ];
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
@@ -319,9 +307,11 @@ class RssController extends Controller
                     $content->body = preg_replace("@<br[\s]*\/?>[\s]*?\n?[\s]*@", "</p>\n<p>", $content->body);
 
                     // Clean empty HTML tags
-                    $content->body = preg_replace('@<(.*)>\s*<\/\1>@', '', $content->body);
+                    $content->body = preg_replace('@<(.*)>(\s*|&nbsp;)<\/\1>@', '', $content->body);
                 }
             }
+
+            $this->getRelatedContents($contents);
 
             $this->view->assign('contents', $contents);
         }
