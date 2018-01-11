@@ -493,6 +493,7 @@ class RssController extends Controller
     {
         // Fetch photo for each article
         $er = getService('entity_repository');
+
         foreach ($contents as $key => $content) {
             // Fetch photo for each content
             if (isset($content->img1) && !empty($content->img1)) {
@@ -509,29 +510,27 @@ class RssController extends Controller
 
             // Exclude articles with external link from RSS
             if (isset($content->params['bodyLink'])
-                && !empty($content->params['bodyLink'])) {
+               && !empty($content->params['bodyLink'])) {
                 unset($contents[$key]);
             }
 
-            // Related contents code ---------------------------------------
             $relations = getService('related_contents')->getRelations($content->id, 'inner');
-
             if (count($relations) > 0) {
                 $relatedContents = [];
-                $relatedContents = $this->get('entity_repository')->findMulti($relations);
-                $ccm             = new \ContentCategoryManager();
+                $relateds        = $this->get('entity_repository')->findMulti($relations);
+                $ccm             = \ContentCategoryManager::get_instance();
 
                 // Filter out not ready for publish contents.
-                foreach ($relatedContents as $contentID) {
-                    if ($content->isReadyForPublish()) {
-                        $content->category_name = $ccm->getName($content->category);
-                        if ($content->content_type == 1 && !empty($content->img1)) {
-                            $content->photo = $er->find('Photo', $content->img1);
-                        } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                            $content->video = $er->find('Video', $content->fk_video);
+                foreach ($relateds as $related) {
+                    if ($related->isReadyForPublish()) {
+                        $related->category_name = $ccm->getName($related->category);
+                        if ($related->content_type == 1 && !empty($related->img1)) {
+                            $related->photo = $er->find('Photo', $related->img1);
+                        } elseif ($related->content_type == 1 && !empty($related->fk_video)) {
+                            $related->video = $er->find('Video', $related->fk_video);
                         }
 
-                        $relatedContents[] = $content;
+                        $relatedContents[] = $related;
                     }
                 }
 
