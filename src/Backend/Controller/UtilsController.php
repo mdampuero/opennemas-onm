@@ -35,10 +35,10 @@ class UtilsController extends Controller
      */
     public function calculateTagsAction(Request $request)
     {
-        $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
-
-        $fm   = $this->get('data.manager.filter');
-        $tags = $fm->set($tags)->filter('tags')->get();
+        $tags = $this->get('data.manager.filter')
+            ->set($request->query->filter('data', '', FILTER_SANITIZE_STRING))
+            ->filter('tags', [ 'exclude' => [ '.', '-', '#' ] ])
+            ->get();
 
         return new Response($tags, 200);
     }

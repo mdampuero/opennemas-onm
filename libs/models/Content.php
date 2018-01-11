@@ -655,7 +655,8 @@ class Content implements \JsonSerializable
             } else {
                 $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
             }
-        } else {
+        } elseif ($data['content_status'] == 0) {
+            // Only regenerate slug if content is unpublished
             $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
         }
 
