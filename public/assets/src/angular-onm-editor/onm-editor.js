@@ -31,7 +31,7 @@
          */
         this.defaults = {
           plugins: 'a11yhelp,autogrow,autokeywords,autolink,basicstyles,blockquote,clipboard,contextmenu,elementspath'+
-            ',enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image2,imageresize,'+
+            ',enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image,imageresize,'+
             'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,resize,'+
             'scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
           disableNativeSpellChecker: false,
