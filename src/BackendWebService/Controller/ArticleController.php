@@ -95,6 +95,22 @@ class ArticleController extends Controller
 
         $msg = $this->get('core.messenger');
 
+        $metaDataFields = [
+            ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
+            ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
+            ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
+            ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
+            ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
+        ];
+
+        $metadataAux = null;
+        foreach ($metaDataFields as $metaDataField) {
+            $metadataAux = $postReq->get($metaDataField['key']);
+            if (!empty($metadataAux)) {
+                $data[$metaDataField['key']] = $metadataAux;
+            }
+        }
+
         if (!$article->create($data)) {
             $msg->add(_('Unable to create the new article.'), 'error', 400);
 
@@ -229,6 +245,22 @@ class ArticleController extends Controller
                 'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
             ],
         ];
+
+        $metaDataFields = [
+                ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
+                ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
+                ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
+                ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
+                ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
+            ];
+
+        $metadataAux = null;
+        foreach ($metaDataFields as $metaDataField) {
+            $metadataAux = $postReq->get($metaDataField['key']);
+            if (!empty($metadataAux)) {
+                $data[$metaDataField['key']] = $metadataAux;
+            }
+        }
 
         if (!$article->update($data)) {
             $msg->add(_('Unable to update the article.'), 'error');

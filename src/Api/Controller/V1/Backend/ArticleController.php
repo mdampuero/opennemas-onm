@@ -70,7 +70,10 @@ class ArticleController extends Controller
      */
     public function showAction($id)
     {
-        $article = $this->get('entity_repository')->find('Article', $id);
+        $er          = $this->get('entity_repository');
+        $article     = $er->find('Article', $id);
+        $articleList = [$article];
+        $er->populateContentMetasInContents($articleList);
 
         if (is_null($article->id)) {
             return new JsonResponse(
@@ -198,6 +201,14 @@ class ArticleController extends Controller
                 })
             )
         ];
+
+        $extra['moduleFields'] = [['title' => 'Travel Fields', 'fields' => [
+            ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
+            ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
+            ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
+            ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
+            ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
+        ]]];
 
         return $extra;
     }

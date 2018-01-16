@@ -195,7 +195,10 @@ class Article extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error fetching article (ID:' . $id . '): ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error fetching article (ID:' . $id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -290,10 +293,27 @@ class Article extends Content
                 $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
             }
 
+            $metaDataFields = [
+                ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
+                ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
+                ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
+                ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
+                ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
+            ];
+
+            foreach ($metaDataFields as $metaDataField) {
+                if (array_key_exists($metaDataField['key'], $data) && !empty($metaDataField['key'])) {
+                    parent::setMetadata($metaDataField['key'], $data[$metaDataField['key']]);
+                }
+            }
+
             return $this->id;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error creating article: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -388,12 +408,29 @@ class Article extends Content
                 );
             }
 
+            $metaDataFields = [
+                ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
+                ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
+                ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
+                ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
+                ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
+            ];
+
+            foreach ($metaDataFields as $metaDataField) {
+                if (array_key_exists($metaDataField['key'], $data) && !empty($metaDataField['key'])) {
+                    parent::setMetadata($metaDataField['key'], $data[$metaDataField['key']]);
+                }
+            }
+
             $this->category_name = $this->loadCategoryName($this->id);
 
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error updating article (ID:' . $data['id'] . ': ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -432,7 +469,10 @@ class Article extends Content
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error deleting article (ID:' . $id . '): ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error deleting article (ID:' . $id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
 
