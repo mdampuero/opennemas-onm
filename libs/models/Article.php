@@ -293,19 +293,7 @@ class Article extends Content
                 $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
             }
 
-            $metaDataFields = [
-                ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
-                ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
-                ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
-                ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
-                ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
-            ];
-
-            foreach ($metaDataFields as $metaDataField) {
-                if (array_key_exists($metaDataField['key'], $data) && !empty($metaDataField['key'])) {
-                    parent::setMetadata($metaDataField['key'], $data[$metaDataField['key']]);
-                }
-            }
+            $this->loadMetadataFields($data);
 
             return $this->id;
         } catch (\Exception $e) {
@@ -408,19 +396,8 @@ class Article extends Content
                 );
             }
 
-            $metaDataFields = [
-                ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
-                ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
-                ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
-                ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
-                ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
-            ];
+            $this->loadMetadataFields($data);
 
-            foreach ($metaDataFields as $metaDataField) {
-                if (array_key_exists($metaDataField['key'], $data) && !empty($metaDataField['key'])) {
-                    parent::setMetadata($metaDataField['key'], $data[$metaDataField['key']]);
-                }
-            }
 
             $this->category_name = $this->loadCategoryName($this->id);
 
@@ -557,5 +534,19 @@ class Article extends Content
         }
 
         return array_merge(parent::getL10nKeys(), $keys);
+    }
+
+
+    public function loadMetadataFields($data)
+    {
+        $metaDataFields = getService('setting_repository')->get('article_extra_fields');
+
+        foreach ($metaDataFields as $metaDataField) {
+            foreach ($metaDataField['fields'] as $field) {
+                if (array_key_exists($field['key'], $data) && !empty($data[$field['key']])) {
+                    parent::setMetadata($field['key'], $data[$field['key']]);
+                }
+            }
+        }
     }
 }

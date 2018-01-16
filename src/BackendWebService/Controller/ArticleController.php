@@ -95,19 +95,15 @@ class ArticleController extends Controller
 
         $msg = $this->get('core.messenger');
 
-        $metaDataFields = [
-            ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
-            ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
-            ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
-            ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
-            ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
-        ];
+        $metaDataFields = $this->get('setting_repository')->get('article_extra_fields');
 
         $metadataAux = null;
         foreach ($metaDataFields as $metaDataField) {
-            $metadataAux = $postReq->get($metaDataField['key']);
-            if (!empty($metadataAux)) {
-                $data[$metaDataField['key']] = $metadataAux;
+            foreach ($metaDataField['fields'] as $field) {
+                $metadataAux = $postReq->get($field['key']);
+                if (!empty($metadataAux)) {
+                    $data[$field['key']] = $metadataAux;
+                }
             }
         }
 
@@ -246,19 +242,15 @@ class ArticleController extends Controller
             ],
         ];
 
-        $metaDataFields = [
-                ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
-                ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
-                ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
-                ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
-                ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
-            ];
+        $metaDataFields = $this->get('setting_repository')->get('article_extra_fields');
 
         $metadataAux = null;
         foreach ($metaDataFields as $metaDataField) {
-            $metadataAux = $postReq->get($metaDataField['key']);
-            if (!empty($metadataAux)) {
-                $data[$metaDataField['key']] = $metadataAux;
+            foreach ($metaDataField['fields'] as $field) {
+                $metadataAux = $postReq->get($field['key']);
+                if (!empty($metadataAux)) {
+                    $data[$field['key']] = $metadataAux;
+                }
             }
         }
 

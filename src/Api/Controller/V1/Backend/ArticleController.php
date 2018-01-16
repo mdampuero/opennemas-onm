@@ -202,13 +202,7 @@ class ArticleController extends Controller
             )
         ];
 
-        $extra['moduleFields'] = [['title' => 'Travel Fields', 'fields' => [
-            ['key' => 'wCapital', 'type' => 'text', 'name' => 'Capital'],
-            ['key' => 'wCurrency', 'type' => 'text', 'name' => 'Currency'],
-            ['key' => 'wPopulation', 'type' => 'text', 'name' => 'Population'],
-            ['key' => 'wTimeZone', 'type' => 'text', 'name' => 'Time Zone'],
-            ['key' => 'wWeather', 'type' => 'text', 'name' => 'Weather']
-        ]]];
+        $extra['moduleFields'] = $this->get('setting_repository')->get('article_extra_fields');
 
         return $extra;
     }

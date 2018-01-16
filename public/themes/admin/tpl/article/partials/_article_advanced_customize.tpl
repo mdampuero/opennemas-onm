@@ -107,7 +107,7 @@
   </div>
 </div>
 
-<div class="row" ng-if="fieldsByModule !== undefined">
+<div class="row" ng-if="fieldsByModule !== undefined && !empty(fieldsByModule)">
   <div class="col-md-12">
     <div class="grid simple">
       <div class="grid-title">
