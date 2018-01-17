@@ -33,8 +33,8 @@ class TagsFilter extends Filter
      */
     public function filter($str)
     {
-        // Remove numeric separators from numbers
-        $str = preg_replace('/([0-9]+)[.,]([0-9]+)/', '$1$2', $str);
+        // Remove dot from numbers
+        $str = preg_replace('/([0-9]+)[.]([0-9]+)/', '$1$2', $str);
 
         // Convert to UTF-8
         $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
@@ -47,13 +47,17 @@ class TagsFilter extends Filter
             $str = mb_strtolower($str, 'UTF-8');
         }
 
+        $str = $this->utils->removePunctuation(
+            $str,
+            $this->getParameter('exclude', [])
+        );
+
         // Remove invalid words
-        $str = $this->utils->removePunctuation($str);
         $str = $this->utils->removeShorts($str);
 
         // Remove duplicates
         $str = preg_replace('/[\,]+/', ',', $str);
-        $str = preg_replace('/[\.]+/', '', $str);
+        $str = preg_replace('/[\.]+/', '.', $str);
 
         $str = trim($str);
         $str = preg_replace('/[ ]+/', ',', $str);

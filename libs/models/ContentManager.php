@@ -1029,24 +1029,21 @@ class ContentManager
     /**
      * Filter content objects by starttime and endtime
      *
-     * @see Content::isInTime()
      * @param array  $items Array of Content objects
-     * @param string $time  Time filter, by default is now.
-     *                      Syntax: 'YYYY-MM-DD HH:MM:SS'
      *
      * @return array Items filtered
     */
-    public function getInTime($items, $time = null)
+    public function getInTime($items)
     {
         $filtered = [];
         if (is_array($items)) {
             $filtered = array_filter(
                 $items,
-                function ($item) use ($time) {
+                function ($item) {
                     if (is_object($item)) {
                         return $item->isInTime();
                     } else {
-                        return self::isInTime2($item['starttime'], $item['endtime'], $time);
+                        return self::isInTime($item['starttime'], $item['endtime']);
                     }
                 }
             );
@@ -1060,35 +1057,34 @@ class ContentManager
      *
      * @param string $starttime the initial time from it will be available
      * @param string $endtime   the initial time until it will be available
-     * @param string $currentTime      time to compare with the previous parameters
      *
      * @return boolean
      */
-    public static function isInTime2($starttime = null, $endtime = null, $currentTime = null)
+    public static function isInTime($starttime = null, $endtime = null)
     {
-        $start       = ($starttime !== '0000-00-00 00:00:00' && !empty($starttime)) ? strtotime($starttime) : null;
-        $end         = ($endtime !== '0000-00-00 00:00:00' && !empty($endtime)) ? strtotime($endtime) : null;
-        $currentTime = (is_null($currentTime)) ? time() : strtotime($currentTime);
+        $start       = !empty($starttime) ? strtotime($starttime) : null;
+        $end         = !empty($endtime) ? strtotime($endtime) : null;
+        $currentTime = time();
 
         // If $start and $end not defined or they are equals  => is in time
         if ((empty($start) && empty($end))
-            || ($start == $end)
+            || $start == $end
         ) {
             return true;
         }
 
         // only setted $end -> check endttime
         if (empty($start)) {
-            return ($currentTime < $end);
+            return $currentTime < $end;
         }
 
         // only setted $start -> check startime
         if (empty($end) || $end <= 0) {
-            return ($currentTime > $start);
+            return $currentTime > $start;
         }
 
         // $start < $currentTime < $end
-        return (($currentTime < $end) && ($currentTime > $start));
+        return ($currentTime < $end) && ($currentTime > $start);
     }
 
     /**
@@ -1563,35 +1559,6 @@ class ContentManager
     }
 
     /**
-     * Returns the name of a category for a content given its id
-     *
-     * @param int $contentId the id of the content
-     *
-     * @return string the category name
-     */
-    public function getCategoryNameByContentId($contentId)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT pk_fk_content_category, catName FROM `contents_categories` WHERE pk_fk_content = ?',
-                [ $contentId ]
-            );
-
-            if (array_key_exists('catName', $rs)) {
-                return $rs['catName'];
-            }
-
-            return '';
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            return false;
-        }
-    }
-
-    /**
      * Returns the content objects from a list of content ids
      *
      * @param array $contentIds list of content ids to fetch
@@ -1693,9 +1660,7 @@ class ContentManager
     */
     public function getUrlContent($url, $decodeJson = false)
     {
-        // TODO: Replace by getService function call
-        global $kernel;
-        $cache = $kernel->getContainer()->get('cache');
+        $cache = getService('cache');
 
         $cacheKey        = CACHE_PREFIX . '_' . urlencode($url);
         $externalContent = $cache->fetch($cacheKey);

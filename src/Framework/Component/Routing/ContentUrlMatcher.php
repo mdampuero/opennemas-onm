@@ -48,7 +48,7 @@ class ContentUrlMatcher
         }
 
         // Check for valid Id
-        preg_match("@(?P<date>\d{14})(?P<id>\d{6,})@", $dirtyId, $matches);
+        preg_match("@(?P<date>\d{14})(?P<id>\d+)@", $dirtyId, $matches);
 
         // Get real content id and date from url
         $id = $date = 0;
@@ -63,7 +63,6 @@ class ContentUrlMatcher
         $date = \DateTime::createFromFormat('YmdHis', $matches['date'])->format('Y-m-d H:i:s');
 
         $content = $this->em->find(\classify($type), $id);
-
         // Check if the content matches the info provided and is ready for publish.
         if (is_object($content)
             && $content->pk_content === $id

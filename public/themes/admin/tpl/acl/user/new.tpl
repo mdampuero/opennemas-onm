@@ -139,6 +139,7 @@
                       <span class="fileinput-new">{t}Add new photo{/t}</span>
                       <span class="fileinput-exists">{t}Change{/t}</span>
                       <input type="file"/>
+                      <input type="hidden" name="avatar" class="file-input" value="1">
                     </span>
                     <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
                       <i class="fa fa-trash-o"></i>

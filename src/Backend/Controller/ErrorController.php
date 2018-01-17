@@ -167,7 +167,8 @@ class ErrorController extends Controller
         }
 
         if (!empty($logMessage)) {
-            error_log($logMessage);
+            $logger = $this->container->get('error.log');
+            $logger->error($logMessage);
         }
 
         return $response;

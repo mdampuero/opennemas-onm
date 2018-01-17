@@ -105,7 +105,7 @@ class ArticleController extends Controller
 
         $em    = $this->get('entity_repository');
         $extra = [];
-        $keys  = [ 'withGallery', 'withGalleryFrontpage', 'withGalleryHome' ];
+        $keys  = [ 'withGallery', 'withGalleryInt', 'withGalleryHome' ];
 
         foreach ($keys as $key) {
             if (array_key_exists($key, $article->params)

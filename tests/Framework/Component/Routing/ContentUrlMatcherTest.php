@@ -77,8 +77,25 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->content);
 
         $return = $this->matcher->matchContentUrl(
-            'article', '20150114235016000184',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto', 'ciencia'
+            'article',
+            '20150114235016000184',
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
+            'ciencia'
+        );
+
+        $this->assertTrue(is_object($return), 'The content is not matching');
+    }
+
+    public function testValidContentWithShortId()
+    {
+        $this->em->expects($this->once())->method('find')
+            ->willReturn($this->content);
+
+        $return = $this->matcher->matchContentUrl(
+            'article',
+            '20150114235016184',
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
+            'ciencia'
         );
 
         $this->assertTrue(is_object($return), 'The content is not matching');
@@ -90,7 +107,8 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->content);
 
         $return = $this->matcher->matchContentUrl(
-            'article', '23501600014'
+            'article',
+            '23501600014'
         );
 
         $this->assertFalse(is_object($return), 'The content is not matching');
@@ -154,8 +172,10 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->willReturn($content);
 
         $return = $this->matcher->matchContentUrl(
-            'article', '20150114235016000336',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto', 'ciencia'
+            'article',
+            '20150114235016000336',
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
+            'ciencia'
         );
 
         $this->assertFalse(is_object($return), 'The content is not matching');
@@ -170,8 +190,10 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->willReturn($content);
 
         $return = $this->matcher->matchContentUrl(
-            'article', '20150114235016000336',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto', 'ciencia'
+            'article',
+            '20150114235016000336',
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
+            'ciencia'
         );
         $this->assertFalse(is_object($return), 'The content is not matching');
     }

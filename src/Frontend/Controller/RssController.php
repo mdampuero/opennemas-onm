@@ -282,20 +282,6 @@ class RssController extends Controller
                 ) {
                     unset($contents[$key]);
                 } else {
-                    $relations = getService('related_contents')->getRelations($content->id, 'inner');
-                    if (count($relations) > 0) {
-                        $contentObjects = $this->get('entity_repository')->findMulti($relations);
-
-                        // Filter out not ready for publish contents.
-                        foreach ($contentObjects as $contentID) {
-                            if (!$content->isReadyForPublish()) {
-                                continue;
-                            }
-
-                            $relatedContents[] = $content;
-                        }
-                    }
-
                     // Wrap img with figure and add caption
                     $content->body = preg_replace(
                         '@(<p>)*(<img[^>]+>)@',
@@ -303,15 +289,17 @@ class RssController extends Controller
                         $content->body
                     );
 
-                    // Wrap social embed and iframes
+                    // Wrap social embed and iframes also add absolute url for images
                     $patterns      = [
                         '@(<blockquote.*class="(instagram-media|twitter-tweet)"[^>]+>.+'
                         . '<\/blockquote>\n*<script[^>]+><\/script>)@',
-                        '@(<p>)*(<iframe[^>]+><\/iframe>)@'
+                        '@(<p>)*(<iframe[^>]+><\/iframe>)@',
+                        '@src="/media/@'
                     ];
                     $replacements  = [
-                        '<figure class="op-social"><iframe>${1}</iframe></figure>',
-                        '<figure class="op-interactive">${2}</figure>${1}'
+                        '<figure class="op-interactive"><iframe>${1}</iframe></figure>',
+                        '<figure class="op-interactive">${2}</figure>${1}',
+                        'src="' . SITE_URL . 'media/'
                     ];
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
@@ -319,9 +307,11 @@ class RssController extends Controller
                     $content->body = preg_replace("@<br[\s]*\/?>[\s]*?\n?[\s]*@", "</p>\n<p>", $content->body);
 
                     // Clean empty HTML tags
-                    $content->body = preg_replace('@<(.*)>\s*<\/\1>@', '', $content->body);
+                    $content->body = preg_replace('@<(.*)>(\s*|&nbsp;)<\/\1>@', '', $content->body);
                 }
             }
+
+            $this->getRelatedContents($contents);
 
             $this->view->assign('contents', $contents);
         }
@@ -493,6 +483,7 @@ class RssController extends Controller
     {
         // Fetch photo for each article
         $er = getService('entity_repository');
+
         foreach ($contents as $key => $content) {
             // Fetch photo for each content
             if (isset($content->img1) && !empty($content->img1)) {
@@ -509,29 +500,27 @@ class RssController extends Controller
 
             // Exclude articles with external link from RSS
             if (isset($content->params['bodyLink'])
-                && !empty($content->params['bodyLink'])) {
+               && !empty($content->params['bodyLink'])) {
                 unset($contents[$key]);
             }
 
-            // Related contents code ---------------------------------------
             $relations = getService('related_contents')->getRelations($content->id, 'inner');
-
             if (count($relations) > 0) {
                 $relatedContents = [];
-                $relatedContents = $this->get('entity_repository')->findMulti($relations);
-                $ccm             = new \ContentCategoryManager();
+                $relateds        = $this->get('entity_repository')->findMulti($relations);
+                $ccm             = \ContentCategoryManager::get_instance();
 
                 // Filter out not ready for publish contents.
-                foreach ($relatedContents as $contentID) {
-                    if ($content->isReadyForPublish()) {
-                        $content->category_name = $ccm->getName($content->category);
-                        if ($content->content_type == 1 && !empty($content->img1)) {
-                            $content->photo = $er->find('Photo', $content->img1);
-                        } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                            $content->video = $er->find('Video', $content->fk_video);
+                foreach ($relateds as $related) {
+                    if ($related->isReadyForPublish()) {
+                        $related->category_name = $ccm->getName($related->category);
+                        if ($related->content_type == 1 && !empty($related->img1)) {
+                            $related->photo = $er->find('Photo', $related->img1);
+                        } elseif ($related->content_type == 1 && !empty($related->fk_video)) {
+                            $related->video = $er->find('Video', $related->fk_video);
                         }
 
-                        $relatedContents[] = $content;
+                        $relatedContents[] = $related;
                     }
                 }
 

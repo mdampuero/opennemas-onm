@@ -44,7 +44,11 @@ class ContentsController extends Controller
         // Resolve content ID, we dont know which type the content is so we have to
         // perform some calculations
         preg_match("@(?P<date>\d{1,14})(?P<id>\d+)@", $dirtyID, $matches);
-        $dirtyID   = $matches['date'].sprintf('%06d', $matches['id']);
+
+        if (empty($matches)) {
+            throw new ResourceNotFoundException();
+        }
+
         $contentID = $matches['id'];
 
         $content = new \Content($contentID);
@@ -73,7 +77,7 @@ class ContentsController extends Controller
             'cache_id' => $cacheID,
             'content'  => $content,
             'article'  => $content,
-            'x-tags'   => 'content-print,'.$contentID
+            'x-tags'   => 'content-print,' . $contentID
         ]);
     }
 
@@ -98,10 +102,10 @@ class ContentsController extends Controller
         }
 
         // Resolve article ID
-        $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+        $contentID = $cm->getUrlContent($wsUrl . '/ws/contents/resolve/' . $dirtyID, true);
 
         // Fetch content
-        $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
+        $content = $cm->getUrlContent($wsUrl . '/ws/contents/read/' . $contentID, true);
         $content = @unserialize($content);
 
         if (isset($content->img2) && ($content->img2 != 0)) {
@@ -117,7 +121,7 @@ class ContentsController extends Controller
             'cache_id' => $cacheID,
             'content'  => $content,
             'article'  => $content,
-            'x-tags'   => 'ext-content-print,'.$contentID
+            'x-tags'   => 'ext-content-print,' . $contentID
         ]);
     }
 
@@ -131,7 +135,7 @@ class ContentsController extends Controller
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $valid = false;
+            $valid  = false;
             $errors = [];
 
             $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
@@ -156,8 +160,8 @@ class ContentsController extends Controller
                     throw new ResourceNotFoundException();
                 }
 
-                $cm = new \ContentManager();
-                $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
+                $cm      = new \ContentManager();
+                $content = $cm->getUrlContent($wsUrl . '/ws/contents/read/' . $contentID, true);
                 $content = unserialize($content);
             } else {
                 $content = new \Content($contentID);
@@ -172,33 +176,33 @@ class ContentsController extends Controller
             }
 
             // Fetch information required for sending the mail
-            $senderEmail  = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
-            $senderName   = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
-            $mailSubject  = sprintf(
+            $senderEmail = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
+            $senderName  = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
+            $mailSubject = sprintf(
                 _('%s has shared with you a content from %s.'),
                 $senderName,
                 s::get('site_name')
             );
-            $recipients   = explode(',', $request->request->get('recipients', array()));
+            $recipients  = explode(',', $request->request->get('recipients', []));
 
             if (empty($senderEmail)) {
-                $errors []= _('Fill your Email address');
+                $errors [] = _('Fill your Email address');
             }
             if (empty($senderName)) {
-                $errors []= _('Complete your name');
+                $errors [] = _('Complete your name');
             }
-            $cleanRecipients = array();
+            $cleanRecipients = [];
             foreach ($recipients as $recipient) {
                 if (filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-                    $cleanRecipients []= $recipient;
+                    $cleanRecipients [] = $recipient;
                 }
             }
             if (count($cleanRecipients) <= 0) {
-                $errors []= _('Provide a list of valid emails separated by commas.');
+                $errors [] = _('Provide a list of valid emails separated by commas.');
             }
 
             if (count($errors) > 0) {
-                $content = json_encode($errors);
+                $content  = json_encode($errors);
                 $httpCode = 400;
 
                 return new Response($content, $httpCode);
@@ -221,8 +225,8 @@ class ContentsController extends Controller
                 ->setBody($mailBody, 'text/html')
                 ->setBody($mailBodyPlain, 'text/plain')
                 ->setTo($recipients[0])
-                ->setFrom(array($senderEmail => $senderName))
-                ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')))
+                ->setFrom([$senderEmail => $senderName])
+                ->setSender(['no-reply@postman.opennemas.com' => s::get('site_name')])
                 ->setBcc($recipients);
 
             try {
@@ -230,17 +234,18 @@ class ContentsController extends Controller
                 $mailer->send($message);
 
                 $this->get('application.log')->notice(
-                    "Email sent. Share-by-email (sender:".$senderEmail.", to: ".$recipients[0].", content_id:".$contentID.")"
+                    "Email sent. Share-by-email (sender:" . $senderEmail . ", to: " . $recipients[0] . ", content_id:"
+                    . $contentID . ")"
                 );
 
-                $content = _('Article sent successfully');
+                $content  = _('Article sent successfully');
                 $httpCode = 200;
             } catch (\Exception $e) {
                 // Log this error
                 $logger = $this->get('application.log');
-                $logger->notice("Unable to send by email the content [$contentID]: ".$e->getMessage());
+                $logger->notice("Unable to send by email the content [$contentID]: " . $e->getMessage());
 
-                $content = array(_('Unable to send the email. Please try to send it later.'));
+                $content = [_('Unable to send the email. Please try to send it later.')];
 
                 $content = json_encode($content);
 
@@ -249,8 +254,8 @@ class ContentsController extends Controller
 
             return new Response($content, $httpCode);
         } else {
-            $contentID    = $request->query->getDigits('content_id', null);
-            $ext          = $request->query->getDigits('ext', 0);
+            $contentID = $request->query->getDigits('content_id', null);
+            $ext       = $request->query->getDigits('ext', 0);
 
             // $token = md5(uniqid('sendform'));
             // $this->get('session')->set('sendformtoken', $token);
@@ -265,8 +270,8 @@ class ContentsController extends Controller
                     throw new ResourceNotFoundException();
                 }
 
-                $cm = new \ContentManager();
-                $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
+                $cm      = new \ContentManager();
+                $content = $cm->getUrlContent($wsUrl . '/ws/contents/read/' . $contentID, true);
                 $content = unserialize($content);
             } else {
                 $content = new \Content($contentID);
@@ -306,10 +311,10 @@ class ContentsController extends Controller
         if ($request->isXmlHttpRequest()) {
             $this->get('content_views_repository')->setViews($contentId);
             $httpCode = 200;
-            $content = "Ok";
+            $content  = "Ok";
         } else {
             $httpCode = 400;
-            $content = "Not AJAX request";
+            $content  = "Not AJAX request";
         }
 
         return new Response($content, $httpCode);
@@ -322,13 +327,13 @@ class ContentsController extends Controller
      */
     public function paywallHook(&$content)
     {
-        $paywallActivated = $this->get('core.security')->hasExtension('PAYWALL');
+        $paywallActivated         = $this->get('core.security')->hasExtension('PAYWALL');
         $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
 
         if ($paywallActivated && $onlyAvailableSubscribers) {
             $newContent = $this->renderView(
                 'paywall/partials/content_only_for_subscribers.tpl',
-                array('id' => $content->id)
+                ['id' => $content->id]
             );
 
             $user = $this->getUser();
@@ -351,7 +356,7 @@ class ContentsController extends Controller
                 $hasSubscription = $userSubscriptionDate > $now;
 
                 if (!$hasSubscription) {
-                    $newContent = $this->renderView(
+                    $newContent    = $this->renderView(
                         'paywall/partials/content_only_for_subscribers.tpl',
                         [
                             'logged' => $isLogged,

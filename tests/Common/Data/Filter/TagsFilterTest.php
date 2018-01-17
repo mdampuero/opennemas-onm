@@ -47,11 +47,11 @@ class TagsFilterTest extends KernelTestCase
         );
 
         $this->assertEquals(
-            '10000,foo,bar,300',
+            '10000,foo,bar,3,00',
             $filter->filter('10.000 foo bar 3,00')
         );
 
-        $params = [ 'separator' => '-', 'lowercase' => true ];
+        $params = [ 'separator' => '-', 'lowercase' => true, 'exclude' => [ '.' ]  ];
         $filter = new TagsFilter($this->container, $params);
 
         $this->assertEquals(
@@ -61,8 +61,18 @@ class TagsFilterTest extends KernelTestCase
         );
 
         $this->assertEquals(
-            '10000-foo-bar-300',
+            '10000-foo-bar-3-00',
             $filter->filter('10.000 foo bar 3,00')
+        );
+
+        $this->assertEquals(
+            'clm24.es',
+            $filter->filter('clm24.es')
+        );
+
+        $this->assertEquals(
+            'diariodeferrol.com',
+            $filter->filter('diariodeferrol.com')
         );
     }
 

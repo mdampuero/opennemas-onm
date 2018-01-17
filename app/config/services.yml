@@ -21,10 +21,16 @@ services:
         class: Drak\NativeSession\NativeMemcachedSessionHandler
         arguments: [%session_handler_savepath%, %session_handler_options%]
 
-    monolog.processor.instance_name:
-        class: Framework\Monolog\InstanceNameFormatter
+    monolog.formatter.standard:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            format: "%%datetime%% | %%level_name%% | %%extra.user-agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%%: %%message%% %%context%%\n"
+
+    monolog.processor.onm:
+        class: Framework\Monolog\OnmFormatter
+        arguments: [ @request_stack, @core.loader ]
         tags:
-            - { name: monolog.processor, method: processRecord, handler: applog }
+            - { name: monolog.processor, method: processRecord }
 
     application.log:
         alias: monolog.logger.applog
