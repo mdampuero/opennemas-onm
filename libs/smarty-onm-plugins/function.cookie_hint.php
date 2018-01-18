@@ -2,8 +2,6 @@
 
 function smarty_function_cookie_hint($params, &$smarty)
 {
-    $html = '';
-
     $url = $smarty->getContainer()->get('setting_repository')->get('cookies_hint_url');
 
     $message = sprintf(
