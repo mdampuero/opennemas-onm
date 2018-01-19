@@ -311,7 +311,8 @@ class RssController extends Controller
                 }
             }
 
-            $this->getRelatedContents($contents);
+            // Limit related contents to 3
+            $this->getRelatedContents($contents, 3);
 
             $this->view->assign('contents', $contents);
         }
@@ -479,7 +480,7 @@ class RssController extends Controller
      *
      * @param array $contents The list of contents.
      */
-    protected function getRelatedContents(&$contents)
+    protected function getRelatedContents(&$contents, $limit = null)
     {
         // Fetch photo for each article
         $er = getService('entity_repository');
@@ -504,7 +505,8 @@ class RssController extends Controller
                 unset($contents[$key]);
             }
 
-            $relations = getService('related_contents')->getRelations($content->id, 'inner');
+            $relations = getService('related_contents')
+                ->getRelations($content->id, 'inner', $limit);
             if (count($relations) > 0) {
                 $relatedContents = [];
                 $relateds        = $this->get('entity_repository')->findMulti($relations);
