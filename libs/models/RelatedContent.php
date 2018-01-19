@@ -25,14 +25,14 @@ class RelatedContent
      *
      * @var int
      */
-    public $pk_content1  = null;
+    public $pk_content1 = null;
 
     /**
      * Content id of the second content
      *
      * @var int
      */
-    public $pk_content2  = null;
+    public $pk_content2 = null;
 
     /**
      * Relation type (inner, home, ...)
@@ -46,35 +46,35 @@ class RelatedContent
      *
      * @var string
      */
-    public $text         = null;
+    public $text = null;
 
     /**
      * Position in the list when multiple relations of the same type
      *
      * @var int
      */
-    public $position     = null;
+    public $position = null;
 
     /**
      * Position in the list of inner
      *
      * @var int
      */
-    public $posinterior  = null;
+    public $posinterior = null;
 
     /**
      * Whether showing this relation in frontpage
      *
      * @var boolean
      */
-    public $verportada   = null;
+    public $verportada = null;
 
     /**
      * Whether showing this relation in inner
      *
      * @var boolean
      */
-    public $verinterior  = null;
+    public $verinterior = null;
 
     /**
      * Initializes the RelatedContent.
@@ -118,11 +118,10 @@ class RelatedContent
         $verint = null,
         $relation = null
     ) {
-
-        $sql = "INSERT INTO related_contents ".
-               "(`pk_content1`, `pk_content2`, `position`, ".
-               "`posinterior`, `verportada`, `verinterior`, `relationship`) ".
-               "VALUES (?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO related_contents "
+               . "(`pk_content1`, `pk_content2`, `position`, "
+               . "`posinterior`, `verportada`, `verinterior`, `relationship`) "
+               . "VALUES (?,?,?,?,?,?,?)";
 
         $values = [
             $contentID, $contentID2, $position,
@@ -143,16 +142,16 @@ class RelatedContent
      */
     public function update($data)
     {
-        $sql = "UPDATE related_contents SET `pk_content2`=?, `relationship`=?,".
-               " `text`=?, `position`=? WHERE pk_content1=?";
+        $sql = "UPDATE related_contents SET `pk_content2`=?, `relationship`=?,"
+               . " `text`=?, `position`=? WHERE pk_content1=?";
 
-        $values = array(
+        $values = [
             $data['pk_content2'],
             $data['relationship'],
             $data['text'],
             $data['position'],
             $data['id'],
-        );
+        ];
 
         if ($this->dbConn->executeUpdate($sql, $values) === false) {
             return false;
@@ -189,8 +188,8 @@ class RelatedContent
      */
     public function deleteAll($contentID)
     {
-        $sql = "DELETE FROM related_contents WHERE pk_content1=? OR pk_content2=?";
-        $values = array($contentID, $contentID);
+        $sql    = "DELETE FROM related_contents WHERE pk_content1 = ? OR pk_content2 = ?";
+        $values = [ $contentID, $contentID ];
 
         if ($this->dbConn->executeUpdate($sql, $values) === false) {
             return false;
@@ -208,7 +207,8 @@ class RelatedContent
      */
     public function getRelations($contentID, $position = 'frontpage')
     {
-        $sql = 'SELECT pk_content2, content_type_name FROM related_contents LEFT JOIN contents ON pk_content2 =  pk_content WHERE pk_content1=? ';
+        $sql = 'SELECT pk_content2, content_type_name FROM related_contents '
+            . 'LEFT JOIN contents ON pk_content2 =  pk_content WHERE pk_content1=? ';
 
         switch ($position) {
             case 'frontpage': // Old getRelations
@@ -236,7 +236,7 @@ class RelatedContent
         }
 
         $related = [];
-        foreach ($rs as $key => $value) {
+        foreach ($rs as $value) {
             if (!empty($value['content_type_name']) && !empty($value['pk_content2'])) {
                 $related[] = [ classify($value['content_type_name']), $value['pk_content2'] ];
             }
@@ -257,9 +257,9 @@ class RelatedContent
      */
     public function setRelationPosition($contentID, $position, $relationID)
     {
-        $sql = "INSERT INTO related_contents ".
-               "(`pk_content1`, `pk_content2`, `position`, `verportada`) ".
-               "VALUES (?,?,?,?)";
+        $sql = "INSERT INTO related_contents "
+               . "(`pk_content1`, `pk_content2`, `position`, `verportada`) "
+               . "VALUES (?,?,?,?)";
 
         $rs = $this->dbConn->executeUpdate(
             $sql,
@@ -285,9 +285,9 @@ class RelatedContent
      */
     public function setRelationPositionForInner($contentID, $position, $relationID)
     {
-        $sql = "INSERT INTO related_contents ".
-               "(`pk_content1`, `pk_content2`, `posinterior`,`verinterior`) ".
-               " VALUES (?,?,?,?)";
+        $sql = "INSERT INTO related_contents "
+               . "(`pk_content1`, `pk_content2`, `posinterior`,`verinterior`) "
+               . " VALUES (?,?,?,?)";
 
         $rs = $this->dbConn->executeUpdate(
             $sql,
@@ -313,9 +313,9 @@ class RelatedContent
      */
     public function setHomeRelations($contentID, $position, $relationID)
     {
-        $sql = "INSERT INTO related_contents ".
-               "(`pk_content1`, `pk_content2`, `position`,`verportada`) ".
-               " VALUES (?,?,?,?)";
+        $sql = "INSERT INTO related_contents "
+               . "(`pk_content1`, `pk_content2`, `position`,`verportada`) "
+               . " VALUES (?,?,?,?)";
 
         $rs = $this->dbConn->executeUpdate(
             $sql,
@@ -370,7 +370,7 @@ class RelatedContent
         }
 
         $related = [];
-        foreach ($rs as $key => $value) {
+        foreach ($rs as $value) {
             $related[$value['pk_content1']][] = $value['pk_content2'];
         }
 
