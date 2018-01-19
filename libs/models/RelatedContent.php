@@ -205,7 +205,7 @@ class RelatedContent
      *
      * @return array Array of related content IDs
      */
-    public function getRelations($contentID, $position = 'frontpage')
+    public function getRelations($contentID, $position = 'frontpage', $limit = null)
     {
         $sql = 'SELECT pk_content2, content_type_name FROM related_contents '
             . 'LEFT JOIN contents ON pk_content2 =  pk_content WHERE pk_content1=? ';
@@ -228,6 +228,10 @@ class RelatedContent
         }
 
         $sql .= " ORDER BY related_contents.position ASC";
+
+        if (!is_null($limit)) {
+            $sql = $sql . " LIMIT " . $limit;
+        }
 
         $rs = $this->dbConn->fetchAll($sql, [$contentID]);
 
