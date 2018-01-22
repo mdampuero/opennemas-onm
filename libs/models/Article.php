@@ -397,8 +397,6 @@ class Article extends Content
             }
 
             $this->loadMetadataFields($data);
-
-
             $this->category_name = $this->loadCategoryName($this->id);
 
             return true;
