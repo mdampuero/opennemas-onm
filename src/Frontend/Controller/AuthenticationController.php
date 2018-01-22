@@ -44,6 +44,7 @@ class AuthenticationController extends Controller
      */
     public function loginAction(Request $request)
     {
+        $auth    = $this->get('core.security.authentication');
         $error   = null;
         $referer = $request->query->filter('referer', '', FILTER_SANITIZE_STRING);
         $session = $request->getSession();
@@ -52,38 +53,18 @@ class AuthenticationController extends Controller
             $referer = $this->generateUrl('frontend_frontpage');
         }
 
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } else {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
+        if ($auth->hasError()) {
+            $auth->failure();
+
+            $error = $auth->getErrorMessage();
+
+            $session->getFlashBag()->add('error', $error);
         }
-
-        if ($error) {
-            if ($error instanceof BadCredentialsException) {
-                $msg = _('Username or password incorrect.');
-            } elseif ($error instanceof InvalidCsrfTokenException) {
-                $msg = _('Login token is not valid. Try to authenticate again.');
-            } else {
-                $msg = $error->getMessage();
-            }
-
-            $session->getFlashBag()->add('error', $msg);
-            $session->set('failed_login_attempts', $session->get('failed_login_attempts') + 1);
-        }
-
-        // Generate CSRF token
-        $intention = time() . rand();
-        $token     = $this->get('security.csrf.token_manager')->getToken($intention);
-
-        $session->set('intention', $intention);
 
         return $this->render('authentication/login.tpl', [
-            'failed_login_attempts' => $session->get('failed_login_attempts'),
-            'recaptcha' => $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml(),
-            'token'                 => $token,
-            'referer'               => $referer
+            'recaptcha' => $auth->getRecaptchaFromSettings(),
+            'token'     => $auth->getCsrfToken(),
+            'referer'   => $referer
         ]);
     }
 }
