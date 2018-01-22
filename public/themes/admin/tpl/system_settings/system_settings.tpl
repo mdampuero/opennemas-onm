@@ -359,19 +359,6 @@
                         {t}Cookies agreement{/t}
                       </h4>
                       <div class="form-group">
-                        <div class="checkbox">
-                          <input class="form-control" id="cookies-hint-enabled" name="cookies-hint-enabled" ng-model="settings.cookies_hint_enabled" ng-true-value="'1'" type="checkbox" >
-                          <label class="form-label" for="cookies-hint-enabled">
-                            {t}Enable cookies agreement{/t}
-                          </label>
-                        </div>
-                        <div class="controls">
-                          <span class="help">
-                            {t}Mark this if you want to show a message to your users that your site is using cookies.{/t}
-                          </span>
-                        </div>
-                      </div>
-                      <div class="form-group">
                         <label class="form-label" for="cookies-hint-url">
                           {t}Cookie agreement page URL{/t}
                         </label>

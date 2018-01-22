@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Common\Core\Component\StructuredData;
+namespace Test\Common\Core\Component\Helper;
 
-use Common\Core\Component\StructuredData\StructuredData;
+use Common\Core\Component\Helper\StructuredData;
 use Common\Data\Core\FilterManager;
 
 /**
@@ -219,15 +219,15 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($albumPhotos);
 
         $albumPhotosJson = ',"associatedMedia":[{
-                            "url": "http://image0-url.com",
+                            "url": "' . MEDIA_IMG_ABSOLUTE_URL . '0-url.com",
                             "height": 450,
                             "width": 700
                     },{
-                            "url": "http://image1-url.com",
+                            "url": "' . MEDIA_IMG_ABSOLUTE_URL . '1-url.com",
                             "height": 451,
                             "width": 701
                     },{
-                            "url": "http://image2-url.com",
+                            "url": "' . MEDIA_IMG_ABSOLUTE_URL . '2-url.com",
                             "height": 452,
                             "width": 702
                     }]';
@@ -236,7 +236,7 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             "@context": "http://schema.org",
             "@type": "ImageObject",
             "author": "John Doe",
-            "contentUrl": "http://image0-url.com",
+            "contentUrl": "' . MEDIA_IMG_ABSOLUTE_URL . '0-url.com",
             "height": 450,
             "width": 700,
             "datePublished": "2016-10-13 11:40:32",
@@ -246,7 +246,7 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             "@context": "http://schema.org",
             "@type": "ImageObject",
             "author": "John Doe",
-            "contentUrl": "http://image1-url.com",
+            "contentUrl": "' . MEDIA_IMG_ABSOLUTE_URL . '1-url.com",
             "height": 451,
             "width": 701,
             "datePublished": "2016-10-13 11:40:32",
@@ -256,16 +256,13 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             "@context": "http://schema.org",
             "@type": "ImageObject",
             "author": "John Doe",
-            "contentUrl": "http://image2-url.com",
+            "contentUrl": "' . MEDIA_IMG_ABSOLUTE_URL . '2-url.com",
             "height": 452,
             "width": 702,
             "datePublished": "2016-10-13 11:40:32",
             "caption": "Image description/caption 2",
             "name": "This is the object title"
         }';
-
-        // Define constant
-        define('MEDIA_IMG_ABSOLUTE_URL', 'http://image');
 
         // Gallery with several photos
         $severalImages = $galleryJson . $albumPhotosJson . '}' . $albumPhotosObjectJson;

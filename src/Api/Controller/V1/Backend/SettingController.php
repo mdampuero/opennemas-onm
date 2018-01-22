@@ -30,7 +30,6 @@ class SettingController extends Controller
         'chartbeat',
         'comscore',
         'contact_email',
-        'cookies_hint_enabled',
         'cookies_hint_url',
         'elements_in_rss',
         'facebook',
