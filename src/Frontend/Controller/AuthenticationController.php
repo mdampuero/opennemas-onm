@@ -9,17 +9,32 @@
  */
 namespace Frontend\Controller;
 
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
-use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the user authentication in frontend.
  */
 class AuthenticationController extends Controller
 {
+    /**
+     * Checks if the current user  is authenticated.
+     *
+     * @return Response The response object.
+     */
+    public function authenticatedAction()
+    {
+        if (!empty($this->get('core.user'))) {
+            return new Response('', 200);
+        }
+
+        return new Response('', 401);
+    }
+
     /**
      * Displays the login form template.
      *
