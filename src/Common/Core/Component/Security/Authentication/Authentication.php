@@ -130,8 +130,13 @@ class Authentication
         }
 
         // Error in session
-        return $this->container->get('session')
+        $error = $this->container->get('session')
             ->get(Security::AUTHENTICATION_ERROR);
+
+        $this->container->get('session')
+            ->set(Security::AUTHENTICATION_ERROR, null);
+
+        return $error;
     }
 
     /**
@@ -204,6 +209,17 @@ class Authentication
     public function isAuthenticated()
     {
         return !empty($this->container->get('core.user'));
+    }
+
+    /**
+     * Checks if recaptcha is required basing on failed login attemps stored in
+     * session.
+     *
+     * @return boolean True if recaptcha is required. False otherwise.
+     */
+    public function isRecaptchaRequired()
+    {
+        return $this->session->get('failed_login_attempts') >= 3;
     }
 
     /**
