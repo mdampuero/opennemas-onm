@@ -20,6 +20,3 @@ api_v1_frontend_tool:
 
 api_v1_frontend_advertisement:
     resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
-
-api_v1_frontend_article:
-    resource: '@ApiBundle/Resources/config/routing/v1/frontend/article.yml'

@@ -1,4 +1,0 @@
-api_v1_article_tag_show:
-    path:     /articles/tags/{tagName}
-    defaults: { _controller: ApiBundle:V1/Frontend/Article:showArticlesByTag }
-    methods:  [ GET ]
