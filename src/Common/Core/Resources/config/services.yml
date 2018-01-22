@@ -187,6 +187,10 @@ services:
     core.security:
         class:     Common\Core\Component\Security\Security
 
+    core.security.authentication:
+        class:     Common\Core\Component\Security\Authentication\Authentication
+        arguments: [ '@service_container' ]
+
     core.security.encoder.password:
         class:     Common\Core\Component\Security\Encoder\PasswordEncoder
 
