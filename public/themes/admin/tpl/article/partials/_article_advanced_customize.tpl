@@ -107,7 +107,7 @@
   </div>
 </div>
 
-<div class="row" ng-if="fieldsByModule !== undefined && !empty(fieldsByModule)">
+<div class="row" ng-if="fieldsByModule !== undefined && fieldsByModule">
   <div class="col-md-12">
     <div class="grid simple">
       <div class="grid-title">
@@ -117,24 +117,7 @@
         </h4>
       </div>
       <div class="grid-body">
-        <div class="col-md-12" ng-repeat="moduleFields in fieldsByModule">
-          <h5>[% moduleFields.title %]</h5>
-          <div class="form-group" ng-repeat="field in moduleFields.fields">
-            <label class="form-label" for="[% field.key %]">[% field.name %]</label>
-            <div class="controls">
-              <input class="form-control" id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'text'" ng-model="article[field.key]" type="text">
-              <input class="form-control" datetime-picker id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'date'" ng-model="article[field.key]" type="text">
-              <select class="form-control" id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'country'" ng-model="article[field.key]">
-                <option value="">{t}Select a country{/t}...</option>
-                <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% article[field.key] === value %]">[% value %]</option>
-              </select>
-              <div class="radio" ng-if="field.type === 'options'" ng-repeat="option in field.values">
-                <input id="option-[% option.key %]" name="[% field.key %]" ng-model="article[field.key]" value="[% option.key %]" type="radio">
-                <label for="option-[% option.key %]">[% option.value %]</label>
-              </div>
-            </div>
-          </div>
-        </div>
+        <autoform ng-model="article" fields-by-module="fieldsByModule"/>
       </div>
     </div>
   </div>

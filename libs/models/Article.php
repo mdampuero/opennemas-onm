@@ -536,10 +536,21 @@ class Article extends Content
         return array_merge(parent::getL10nKeys(), $keys);
     }
 
-
+    /**
+     * Method for load in the article all the metadatas recover
+     *
+     *  @param mixed $data the data to load in the object
+     */
     public function loadMetadataFields($data)
     {
+        if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return null;
+        }
+
         $metaDataFields = getService('setting_repository')->get('article_extra_fields');
+        if (!is_array($metaDataFields)) {
+            return;
+        }
 
         foreach ($metaDataFields as $metaDataField) {
             foreach ($metaDataField['fields'] as $field) {
