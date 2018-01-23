@@ -38,6 +38,9 @@ class Album extends Content
      */
     public $cover_id = null;
 
+    /**
+     * List of photos ids for the album
+     */
     public $album_photos = null;
 
     /**
