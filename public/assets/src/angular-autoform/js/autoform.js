@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('onm.autoform', [])
+
     /**
      * @ngdoc directive
      * @name  autoform
@@ -9,16 +10,16 @@
      * @description
      *   Directive to create forms dynamically.
      */
-    .directive('autoform', [ '$window',
-      function ($window) {
+    .directive('autoform', [
+      '$window',
+      function() {
         return {
-          restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
+          restrict: 'E',
           scope: {
             fieldsByModule: '=',
             ngModel:        '=',
           },
-          template: function(elem, attrs) {
-
+          template: function() {
             return '<div class="col-md-12" ng-repeat="moduleFields in fieldsByModule">' +
               '<h5>{{ moduleFields.title }}</h5>' +
               '<div class="form-group" ng-repeat="field in moduleFields.fields">' +
@@ -37,9 +38,6 @@
                 '</div>' +
               '</div>' +
             '</div>';
-          },
-          link: function($scope) {
-
           }
         };
       }
