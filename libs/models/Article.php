@@ -293,7 +293,7 @@ class Article extends Content
                 $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
             }
 
-            $this->loadMetadataFields($data);
+            $this->saveMetadataFields($data);
 
             return $this->id;
         } catch (\Exception $e) {
@@ -396,7 +396,7 @@ class Article extends Content
                 );
             }
 
-            $this->loadMetadataFields($data);
+            $this->saveMetadataFields($data);
             $this->category_name = $this->loadCategoryName($this->id);
 
             return true;
@@ -535,11 +535,11 @@ class Article extends Content
     }
 
     /**
-     * Method for load in the article all the metadatas recover
+     * Method for set in the object the metadatas values
      *
      *  @param mixed $data the data to load in the object
      */
-    public function loadMetadataFields($data)
+    public function saveMetadataFields($data)
     {
         if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             return null;

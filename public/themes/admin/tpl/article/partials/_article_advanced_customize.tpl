@@ -106,19 +106,3 @@
     </div>
   </div>
 </div>
-
-<div class="row" ng-if="fieldsByModule !== undefined && fieldsByModule">
-  <div class="col-md-12">
-    <div class="grid simple">
-      <div class="grid-title">
-        <h4>
-          <i class="fa fa-magic"></i>
-          {t}Additional data{/t}
-        </h4>
-      </div>
-      <div class="grid-body">
-        <autoform ng-model="article" fields-by-module="fieldsByModule"/>
-      </div>
-    </div>
-  </div>
-</div>
