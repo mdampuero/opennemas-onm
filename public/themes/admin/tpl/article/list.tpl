@@ -30,6 +30,12 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
+              <a class="btn btn-link" href="{url name=admin_articles_config}" class="admin_add" title="{t}Config article module{/t}">
+                <span class="fa fa-cog fa-lg"></span>
+              </a>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
               {acl isAllowed="ARTICLE_CREATE"}
               <a class="btn btn-primary ng-cloak" href="{url name=admin_article_create}[% config.multilanguage ? '?locale=' + config.locale : '' %]" id="create-button">
                 <i class="fa fa-plus"></i>

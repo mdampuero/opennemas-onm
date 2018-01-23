@@ -607,6 +607,10 @@ admin_articles_content_provider_in_frontpage:
     path:     /articles/content-provider-in-frontpage
     defaults: { _controller  : BackendBundle:Articles:contentProviderInFrontpage }
 
+admin_articles_config:
+    path:     /articles/config
+    defaults: { _controller  : BackendBundle:Articles:config }
+
 # Opinion controller routes
 admin_opinions:
     path:     /opinions
