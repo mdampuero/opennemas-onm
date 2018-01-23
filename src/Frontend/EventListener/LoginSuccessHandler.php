@@ -96,11 +96,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         if ($this->auth->hasError()) {
             $this->auth->failure();
 
-            $error = $auth->getErrorMessage();
+            $error = $this->auth->getErrorMessage();
 
             $session->getFlashBag()->add('error', $error);
             $this->logger->info($error);
-            $this->context->setToken(null);
+            $this->ts->setToken(null);
 
             return new RedirectResponse($request->headers->get('referer'));
         }
