@@ -78,7 +78,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         TokenInterface $token
     ) {
         $user      = $token->getUser();
-        $valid     = true;
         $recaptcha = $request->get('g-recaptcha-response');
 
         $session = $request->getSession();
