@@ -1,3 +1,7 @@
+admin_welcome:
+    path:     /admin
+    defaults: { _controller  : BackendBundle:Welcome:default }
+
 admin_content_set_available:
     path:     /content/set-available
     defaults: { _controller  : BackendBundle:Content:setAvailable }
