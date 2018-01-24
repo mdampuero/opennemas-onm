@@ -6,7 +6,6 @@ parameters:
     locale: en
 
     logger_file_path: tmp/log/application.log
-    dev_token: 1234
 
     password_min_level: 1 # Weak(0) | Good(1) | Strong(2)
 
@@ -54,6 +53,9 @@ parameters:
             server: 127.0.0.1
             port:   6379
             prefix: onm
+
+    hwi_oauth.target_path_parameter: _target_path
+
     mailer_transport:  mail
     mailer_host:       localhost
     mailer_user:       ~
