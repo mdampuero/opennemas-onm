@@ -70,7 +70,10 @@ class ArticleController extends Controller
      */
     public function showAction($id)
     {
-        $article = $this->get('entity_repository')->find('Article', $id);
+        $er          = $this->get('entity_repository');
+        $article     = $er->find('Article', $id);
+        $articleList = [$article];
+        $er->populateContentMetasInContents($articleList);
 
         if (is_null($article->id)) {
             return new JsonResponse(
@@ -198,6 +201,10 @@ class ArticleController extends Controller
                 })
             )
         ];
+
+        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            $extra['moduleFields'] = $this->get('setting_repository')->get('article_extra_fields');
+        }
 
         return $extra;
     }
