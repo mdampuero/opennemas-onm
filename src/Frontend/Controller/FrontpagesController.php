@@ -142,9 +142,6 @@ class FrontpagesController extends Controller
 
             // Overloading information for contents
             foreach ($contents as &$content) {
-                $content->category_name  = $content->loadCategoryName($content->id);
-                $content->category_title = $content->loadCategoryTitle($content->id);
-
                 if (isset($content->img1) && !empty($content->img1)
                     && !is_object($content->img1)
                     && array_key_exists($content->img1, $related)
