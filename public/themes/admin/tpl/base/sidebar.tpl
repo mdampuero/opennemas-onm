@@ -68,7 +68,7 @@
         </a>
       </li>
       <li>
-        <a role="menuitem" tabindex="-1" href="{url name=admin_logout}">
+        <a role="menuitem" tabindex="-1" href="{url name=core_authentication_logout}">
           <i class="fa fa-power-off m-r-10"></i>
           <span class="title">{t}Log out{/t}</span>
         </a>
