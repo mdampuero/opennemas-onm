@@ -4,9 +4,6 @@ services:
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 99 }
-    frontend_login_success_handler:
-        class:     Frontend\EventListener\LoginSuccessHandler
-        arguments: [ '@core.security.authentication', '@security.token_storage', '@router', '@application.log' ]
 
     frontend.listener.share_by_email:
         class:     Frontend\EventListener\ShareByEmailListener
