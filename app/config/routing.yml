@@ -36,3 +36,8 @@ oauth:
 webservice:
     resource: '@WebServiceBundle/Resources/config/routing.yml'
     prefix:   /ws
+
+# Don't move this or infinite redirect at /admin
+admin_welcome:
+    path:     /admin
+    defaults: { _controller: BackendBundle:Welcome:default }
