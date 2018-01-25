@@ -87,16 +87,14 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests failure.
+     * Tests addError.
      */
-    public function testFailure()
+    public function testAddError()
     {
-        $this->session->expects($this->once())->method('get')
-            ->with('failed_login_attempts')->willReturn(1);
         $this->session->expects($this->once())->method('set')
-            ->with('failed_login_attempts', 2);
+            ->with(Security::AUTHENTICATION_ERROR, 'grault');
 
-        $this->auth->failure();
+        $this->auth->addError('grault');
     }
 
     /**
@@ -150,6 +148,19 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->with('foo', '198.165.167.18')->willReturn(true);
 
         $this->assertTrue($this->auth->checkRecaptcha('foo', '198.165.167.18'));
+    }
+
+    /**
+     * Tests failure.
+     */
+    public function testFailure()
+    {
+        $this->session->expects($this->once())->method('get')
+            ->with('failed_login_attempts')->willReturn(1);
+        $this->session->expects($this->once())->method('set')
+            ->with('failed_login_attempts', 2);
+
+        $this->auth->failure();
     }
 
     /**

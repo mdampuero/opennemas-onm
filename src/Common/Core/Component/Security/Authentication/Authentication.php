@@ -44,6 +44,16 @@ class Authentication
     }
 
     /**
+     * Adds an authentication related error to the Authentication service.
+     *
+     * @param Exception $error The error Exception.
+     */
+    public function addError($error)
+    {
+        $this->session->set(Security::AUTHENTICATION_ERROR, $error);
+    }
+
+    /**
      * Checks if the CSRF token is valid.
      *
      * @param string $id    The CSRF token id.
@@ -130,11 +140,9 @@ class Authentication
         }
 
         // Error in session
-        $error = $this->container->get('session')
-            ->get(Security::AUTHENTICATION_ERROR);
+        $error = $this->session->get(Security::AUTHENTICATION_ERROR);
 
-        $this->container->get('session')
-            ->set(Security::AUTHENTICATION_ERROR, null);
+        $this->session->set(Security::AUTHENTICATION_ERROR, null);
 
         return $error;
     }
