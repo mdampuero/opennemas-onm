@@ -1,0 +1,13 @@
+core_authentication_authenticated:
+    path:     /auth/authenticated
+    defaults: { _controller: CoreBundle:Authentication:authenticated }
+
+core_authentication_check:
+    path:     /auth/check
+    defaults: { _controller: CoreBundle:Authentication:check }
+
+core_authentication_login:
+    path:     /auth/login
+
+core_authentication_logout:
+    path:     /auth/logout

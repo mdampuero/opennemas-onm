@@ -1,0 +1,3 @@
+backend_authentication_login:
+    path:     /login
+    defaults: { _controller  : BackendBundle:Authentication:login }
