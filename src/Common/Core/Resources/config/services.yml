@@ -53,7 +53,7 @@ services:
         arguments: [ '@core.locale' ]
 
     core.helper.advertisement:
-        class: Common\Core\Component\Helper\AdvertisementHelper
+        class:     Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
 
     core.helper.instance_sync:
@@ -190,6 +190,14 @@ services:
     core.security.authentication:
         class:     Common\Core\Component\Security\Authentication\Authentication
         arguments: [ '@service_container' ]
+
+    core.security.authentication.success:
+        class:     Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler
+        arguments: [ '@core.security.authentication', '@application.log', '@security.token_storage' ]
+
+    core.security.authentication.failure:
+        class:     Common\Core\Component\Security\Authentication\AuthenticationFailureHandler
+        arguments: [ '@core.security.authentication', '@application.log', '@router' ]
 
     core.security.encoder.password:
         class:     Common\Core\Component\Security\Encoder\PasswordEncoder
