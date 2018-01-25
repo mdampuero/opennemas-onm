@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles all the request for Welcome actions
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L.
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +13,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles all the request for Welcome actions
@@ -47,21 +41,20 @@ class WelcomeController extends Controller
 
         $youtubeVideoIds = $this->getYoutubeVideoIds();
 
-        return $this->render(
-            'welcome/index.tpl',
-            [ 'youtube_videos' => $youtubeVideoIds ]
-        );
+        return $this->render('welcome/index.tpl', [
+            'youtube_videos' => $youtubeVideoIds
+        ]);
     }
 
     /**
-     * Fetches the Youtube video ids to print in the welcome page
+     * Returns a list of videos from YouTube to show in dashboard.
      *
-     * @return void
+     * @return array The list of videos from YouTube.
      */
-    public function getYoutubeVideoIds()
+    protected function getYoutubeVideoIds()
     {
-        $cm = new \ContentManager();
-        $params = getContainerParameter('panorama');
+        $cm     = new \ContentManager();
+        $params = $this->getParameter('panorama');
 
         if (!array_key_exists('youtube', $params)
             && !array_key_exists('api_key', $params['youtube'])
@@ -70,37 +63,32 @@ class WelcomeController extends Controller
             throw new \Exception("Missing Youtube configuration.");
         }
 
-        $apiKey = $params['youtube']['api_key'];
+        $apiKey    = $params['youtube']['api_key'];
         $channelId = 'UUQ-DzmEvQXw5zHgN3qV0T-A';
 
         // Fetch videos for this playlist
         $playlist = $cm->getUrlContent(
-            'https://www.googleapis.com/youtube/v3/playlistItems?'.
-            'part=snippet&maxResults=50&playlistId='.$channelId.'&key='.$apiKey,
+            'https://www.googleapis.com/youtube/v3/playlistItems?'
+            . 'part=snippet&maxResults=50&playlistId=' . $channelId . '&key='
+            . $apiKey,
             true
         );
 
-        $videosYoutube = [];
-        if (!is_null($playlist) &&
-            $playlist->items &&
-            !empty($playlist->items)
-        ) {
+        $videos = [];
+        if (!is_null($playlist) && $playlist->items && !empty($playlist->items)) {
             foreach ($playlist->items as $video) {
-                if (!property_exists($video->snippet->thumbnails, 'maxres')) {
-                    continue;
+                if (property_exists($video->snippet->thumbnails, 'maxres')) {
+                    $videos[] = [
+                        'id'        => $video->snippet->resourceId->videoId,
+                        'thumbnail' => $video->snippet->thumbnails->maxres->url,
+                        'title'     => $video->snippet->title,
+                    ];
                 }
-
-                $videosYoutube[] = [
-                    'id'        => $video->snippet->resourceId->videoId,
-                    'thumbnail' => $video->snippet->thumbnails->maxres->url,
-                    'title'     => $video->snippet->title,
-                ];
             }
         }
 
-        shuffle($videosYoutube);
-        $videosYoutube = array_splice($videosYoutube, 0, 5);
+        shuffle($videos);
 
-        return $videosYoutube;
+        return array_splice($videos, 0, 5);
     }
 }
