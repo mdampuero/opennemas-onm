@@ -37,7 +37,7 @@
     <div class="overlay"></div>
     <main>
       {block name="login_content"}
-        <form method="post" autocomplete="off" action="{url name=admin_login_check}" id="loginform" name="loginform">
+        <form method="post" autocomplete="off" action="{url name=core_authentication_check}" id="loginform" name="loginform">
           <div class="container">
             <div class="row login-container animated fadeInUp">
               <div class="col-md-6 col-md-offset-3 tiles white no-padding">
@@ -87,7 +87,7 @@
             </div>
           </div>
           <input type="hidden" id="_token" name="_token" value="{$token}">
-          <input type="hidden" id="_referer" name="_referer" value="{$referer}">
+          <input type="hidden" id="_target" name="_target" value="{$referer}">
         </form>
       {/block}
     </main>
