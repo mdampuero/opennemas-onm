@@ -29,7 +29,7 @@ class UserController extends Controller
     public function showAction()
     {
         if (empty($this->getUser())) {
-            return $this->redirect($this->generateUrl('frontend_auth_login'));
+            return $this->redirect($this->generateUrl('frontend_authentication_login'));
         }
 
         $user = $this->get('orm.manager')->getRepository('User')
@@ -45,7 +45,7 @@ class UserController extends Controller
         // Fetch paywall settings
         $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
 
-        return $this->render( 'user/show.tpl', [
+        return $this->render('user/show.tpl', [
             'countries'        => $this->get('core.geo')->getCountries(),
             'current_time'     => $currentTime,
             'paywall_settings' => $paywallSettings,
@@ -77,9 +77,9 @@ class UserController extends Controller
                     ->isValid($response, $ip);
 
                 if (!$valid) {
-                    $errors []= _(
-                        'The reCAPTCHA wasn\'t entered correctly.'.
-                        ' Try to authenticate again.'
+                    $errors[] = _(
+                        'The reCAPTCHA wasn\'t entered correctly.'
+                        . ' Try to authenticate again.'
                     );
                 }
             }
@@ -105,17 +105,17 @@ class UserController extends Controller
 
             // Check if pwd and cpwd are the same
             if (($data['password'] != $data['cpwd'])) {
-                $errors []= _('Password and confirmation must be equal.');
+                $errors[] = _('Password and confirmation must be equal.');
             }
 
             // Check existing mail
             if ($user->checkIfExistsUserEmail($data['email'])) {
-                $errors []= _('The email address is already in use.');
+                $errors[] = _('The email address is already in use.');
             }
 
             // Check existing user name
             if ($user->checkIfExistsUserName($data['username'])) {
-                $errors []= _('The user name is already in use.');
+                $errors[] = _('The user name is already in use.');
             }
 
             // If checks are both false and pass is valid then send mail
@@ -135,7 +135,7 @@ class UserController extends Controller
 
                 // If user is successfully created, send an email
                 if (!$user->create($data)) {
-                    $errors []=_('An error has occurred. Try to complete the form with valid data.');
+                    $errors[] = _('An error has occurred. Try to complete the form with valid data.');
                 } else {
                     $user->setMeta($request->request->get('meta'));
 
@@ -152,13 +152,15 @@ class UserController extends Controller
                             ->setSubject($mailSubject)
                             ->setBody($mailBody, 'text/plain')
                             ->setTo($data['email'])
-                            ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
+                            ->setFrom([
+                                'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
+                            ]);
 
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
 
                         $this->get('application.log')->notice(
-                            "Email sent. Frontend register user (to: ".$data['email'].")"
+                            "Email sent. Frontend register user (to: " . $data['email'] . ")"
                         );
 
                         $this->view->assign([
@@ -169,7 +171,7 @@ class UserController extends Controller
                         // Log this error
                         $this->get('application.log')->notice(
                             "Unable to send the user activation email for the "
-                            ."user {$user->id}: ".$e->getMessage()
+                            . "user {$user->id}: " . $e->getMessage()
                         );
 
                         $this->get('session')->getFlashBag()->add(
@@ -204,7 +206,7 @@ class UserController extends Controller
     public function updateAction(Request $request)
     {
         if (empty($this->getUser())) {
-            return $this->redirect($this->generateUrl('frontend_auth_login'));
+            return $this->redirect($this->generateUrl('frontend_authentication_login'));
         }
 
         $data = $request->request->all();
@@ -233,6 +235,7 @@ class UserController extends Controller
 
             if (!empty($data['password'])) {
                 $encoder = $this->get('security.password_encoder');
+
                 $data['password'] = $encoder->encodePassword($user, $data['password']);
             }
 
@@ -240,7 +243,7 @@ class UserController extends Controller
             $em->persist($user);
 
             $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
-            $this->get('core.dispatcher')->dispatch('author.update', array('id' => $user->id));
+            $this->get('core.dispatcher')->dispatch('author.update', [ 'id' => $user->id ]);
         } catch (EntityNotFoundException $e) {
             $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
         } catch (\Exception $e) {
@@ -260,9 +263,9 @@ class UserController extends Controller
     public function activateAction(Request $request)
     {
         // When user confirms registration from email
-        $token    = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-        $em       = $this->get('orm.manager');
-        $oql      = sprintf('token = "%s"', $token);
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+        $em    = $this->get('orm.manager');
+        $oql   = sprintf('token = "%s"', $token);
 
         try {
             $user = $em->getRepository('User')->findOneBy($oql);
@@ -310,7 +313,7 @@ class UserController extends Controller
                 $mailer->send($message);
 
                 $this->get('application.log')->notice(
-                    "Email sent. Frontend activate user (to: ".$user->email.")"
+                    "Email sent. Frontend activate user (to: " . $user->email . ")"
                 );
 
                 $this->view->assign('mailSent', true);
@@ -318,7 +321,7 @@ class UserController extends Controller
                 // Log this error
                 $this->get('application.log')->notice(
                     "Unable to send the user welcome email for the "
-                    ."user {$user->id}: ".$e->getMessage()
+                    . "user {$user->id}: " . $e->getMessage()
                 );
 
                 $this->get('session')->getFlashBag()->add('error', _('Unable to send your welcome email.'));
@@ -366,7 +369,7 @@ class UserController extends Controller
             $this->view->setCaching(0);
 
             $mailSubject = sprintf(_('Password reminder for %s'), $this->get('setting_repository')->get('site_title'));
-            $mailBody = $this->renderView(
+            $mailBody    = $this->renderView(
                 'user/emails/recoverpassword.tpl',
                 [
                     'user' => $user,
@@ -387,7 +390,7 @@ class UserController extends Controller
                 $mailer->send($message);
 
                 $this->get('application.log')->notice(
-                    "Email sent. Frontend recover password (to: ".$user->email.")"
+                    "Email sent. Frontend recover password (to: " . $user->email . ")"
                 );
 
                 $this->view->assign([
@@ -398,7 +401,7 @@ class UserController extends Controller
                 // Log this error
                 $this->get('application.log')->notice(
                     "Unable to send the recover password email for the "
-                    ."user {$user->id}: ".$e->getMessage()
+                    . "user {$user->id}: " . $e->getMessage()
                 );
 
                 $this->get('session')->getFlashBag()->add(
@@ -434,7 +437,7 @@ class UserController extends Controller
                     'error',
                     _(
                         'Unable to find the password reset request. '
-                        .'Please check the url we sent you in the email.'
+                        . 'Please check the url we sent you in the email.'
                     )
                 );
 
