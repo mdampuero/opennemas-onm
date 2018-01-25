@@ -69,48 +69,19 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-        if ($session->get('_security.backend.target_path')) {
-            $referer = $session->get('_security.backend.target_path');
-        }
-
-        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(Security::AUTHENTICATION_ERROR);
-        } else {
-            $error = $request->getSession()->get(Security::AUTHENTICATION_ERROR);
-        }
-
-        if (!empty($error)) {
-            if ($error instanceof BadCredentialsException) {
-                $msg = _('Username or password incorrect.');
-            } elseif ($error instanceof InvalidCsrfTokenException) {
-                $msg = _('Login token is not valid. Try to authenticate again.');
-            } else {
-                $msg = $error->getMessage();
-            }
-
-            $session->getFlashBag()->add('error', $msg);
-            $session->set('failed_login_attempts', $session->get('failed_login_attempts') + 1);
-        }
-
-        // Generate CSRF token
-        $intention = time() . rand();
-        $token     = $this->get('security.csrf.token_manager')->getToken($intention);
-
-        $session->set('intention', $intention);
-
+        $auth      = $this->get('core.security.authentication');
         $recaptcha = '';
-        if ($session->get('failed_login_attempts') >= 3) {
-            $recaptcha = $this->get('core.recaptcha')
-                ->configureFromParameters()
-                ->getHtml();
+
+        if ($auth->isRecaptchaRequired()) {
+            $recaptcha = $auth->getRecaptchaFromParameters();
         }
 
         return $this->render('login/login.tpl', [
-            'recaptcha' => $recaptcha,
-            'token'     => $token,
-            'referer'   => $referer,
             'locale'    => $this->get('core.locale')->getLocale(),
-            'locales'   => $this->get('core.locale')->getAvailableLocales()
+            'locales'   => $this->get('core.locale')->getAvailableLocales(),
+            'recaptcha' => $recaptcha,
+            'referer'   => $referer,
+            'token'     => $auth->getCsrfToken()
         ]);
     }
 
