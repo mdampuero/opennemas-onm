@@ -12,9 +12,6 @@ namespace Frontend\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Handles the actions for the user authentication in frontend.
@@ -44,10 +41,10 @@ class AuthenticationController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $auth    = $this->get('core.security.authentication');
-        $error   = null;
-        $referer = $request->query->filter('referer', '', FILTER_SANITIZE_STRING);
-        $session = $request->getSession();
+        $auth      = $this->get('core.security.authentication');
+        $referer   = $request->query->filter('referer', '', FILTER_SANITIZE_STRING);
+        $session   = $request->getSession();
+        $recaptcha = '';
 
         if (empty($referer)) {
             $referer = $this->generateUrl('frontend_frontpage');
@@ -56,13 +53,15 @@ class AuthenticationController extends Controller
         if ($auth->hasError()) {
             $auth->failure();
 
-            $error = $auth->getErrorMessage();
+            $session->getFlashBag()->add('error', $auth->getErrorMessage());
+        }
 
-            $session->getFlashBag()->add('error', $error);
+        if ($auth->isRecaptchaRequired()) {
+            $recaptcha = $auth->getRecaptchaFromParameters();
         }
 
         return $this->render('authentication/login.tpl', [
-            'recaptcha' => $auth->getRecaptchaFromSettings(),
+            'recaptcha' => $recaptcha,
             'token'     => $auth->getCsrfToken(),
             'referer'   => $referer
         ]);
