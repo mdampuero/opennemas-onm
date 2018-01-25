@@ -29,7 +29,10 @@ class AuthenticationController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $error   = null;
+        if (!empty($this->get('core.user'))) {
+            return $this->redirect($this->generateUrl('admin_welcome'));
+        }
+
         $referer = $this->generateUrl('admin_welcome');
         $session = $request->getSession();
         $token   = $request->get('token');
