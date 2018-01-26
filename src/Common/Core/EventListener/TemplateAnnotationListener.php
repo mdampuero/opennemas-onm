@@ -9,7 +9,7 @@
  */
 namespace Common\Core\EventListener;
 
-use Framework\Annotation\Template;
+use Common\Core\Annotation\Template;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
