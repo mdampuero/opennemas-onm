@@ -94,12 +94,12 @@ class OAuthUserProviderTest extends KernelTestCase
 
         $user = new User([ 'id' => 1 ]);
 
-        $this->resource->expects($this->once())->method('getName')->willReturn('wibble');
+        $this->resource->expects($this->exactly(2))->method('getName')->willReturn('wibble');
 
-        $this->response->expects($this->once())->method('getUsername')->willReturn('1234');
+        $this->response->expects($this->exactly(2))->method('getUsername')->willReturn('1234');
         $this->response->expects($this->once())->method('getRealname')->willReturn('Qux Flob');
         $this->response->expects($this->once())->method('getEmail')->willReturn('garply@glork.com');
-        $this->response->expects($this->once())->method('getResourceOwner')->willReturn($this->resource);
+        $this->response->expects($this->exactly(2))->method('getResourceOwner')->willReturn($this->resource);
 
         $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
         $this->repository->expects($this->any())->method('find')->willReturn($user);
@@ -120,10 +120,10 @@ class OAuthUserProviderTest extends KernelTestCase
     {
         $user = new User([ 'id' => 1 ]);
 
-        $this->resource->expects($this->once())->method('getName')->willReturn('wibble');
+        $this->resource->expects($this->exactly(2))->method('getName')->willReturn('wibble');
 
-        $this->response->expects($this->once())->method('getUsername')->willReturn('1234');
-        $this->response->expects($this->once())->method('getResourceOwner')->willReturn($this->resource);
+        $this->response->expects($this->exactly(2))->method('getUsername')->willReturn('1234');
+        $this->response->expects($this->exactly(2))->method('getResourceOwner')->willReturn($this->resource);
 
         $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
         $this->repository->expects($this->any())->method('find')->will($this->throwException(new \Exception()));
@@ -138,8 +138,6 @@ class OAuthUserProviderTest extends KernelTestCase
     /**
      * Test loadUserByOAuthUserResponse when no user found basing on the
      * response from resource.
-     *
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function testLoadUserByOAuthUserResponseWhenNoUserInSession()
     {
@@ -151,17 +149,34 @@ class OAuthUserProviderTest extends KernelTestCase
             ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
             ->getMock();
 
-        $user = new User([ 'id' => 1 ]);
+        $user = new User([
+            'name'          => 'Grault Thud',
+            'username'      => 'fred@bar.norf',
+            'email'         => 'fred@bar.norf',
+            'activated'     => true,
+            'type'          => 1,
+            'fk_user_group' => [],
+            'wibble_email'    => 'fred@bar.norf',
+            'wibble_id'       => 1234,
+            'wibble_realname' => 'Grault Thud',
+            'wibble_token'    => 'bazflobplugh',
+        ]);
 
-        $this->response->expects($this->once())->method('getResourceOwner')->willReturn($this->resource);
-        $this->resource->expects($this->once())->method('getName')->willReturn('wibble');
-        $this->response->expects($this->once())->method('getUsername')->willReturn('1234');
+        $this->response->expects($this->exactly(2))->method('getResourceOwner')->willReturn($this->resource);
+        $this->resource->expects($this->exactly(2))->method('getName')->willReturn('wibble');
+        $this->response->expects($this->exactly(2))->method('getUsername')->willReturn(1234);
+        $this->response->expects($this->exactly(3))->method('getEmail')->willReturn('fred@bar.norf');
+        $this->response->expects($this->exactly(2))->method('getRealName')->willReturn('Grault Thud');
+        $this->response->expects($this->once())->method('getAccessToken')->willReturn('bazflobplugh');
         $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
         $this->repository->expects($this->any())->method('find')->willReturn($user);
 
         $this->session->expects($this->once())->method('get')->with('user')->willReturn(null);
 
-        $this->provider->loadUserByOAuthUserResponse($this->response);
+        $this->assertEquals(
+            $user,
+            $this->provider->loadUserByOAuthUserResponse($this->response)
+        );
     }
 
     /**
