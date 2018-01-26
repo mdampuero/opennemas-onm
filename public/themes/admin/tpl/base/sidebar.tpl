@@ -26,7 +26,7 @@
         </span>
         <div class="user-action no-padding" ng-click="mode = 'profile'">
           <div class="profile-pic">
-            {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$_template->getImageDir() image=true size="35"}
+            {gravatar email=$app.user->email image_dir=$_template->getImageDir() image=true size="35"}
           </div>
         </div>
       </div>
@@ -44,11 +44,11 @@
     </ul>
     <ul class="collapsed" ng-class="{ 'collapsed': mode != 'profile'}">
       <li class="list-title">
-        <span class="title">{$smarty.session._sf2_attributes.user->name}</span>
+        <span class="title">{$app.user->name}</span>
       </li>
       <li>
-        {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-          <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session._sf2_attributes.user->id}/show" target="_blank">
+        {if is_object($app.user) && $app.user->isMaster()}
+          <a ng-href="{get_parameter name=manager_url}manager#/user/{$app.user->id}/show" target="_blank">
             <i class="fa fa-user"></i>
             <span class="title">{t}Profile{/t}</span>
           </a>

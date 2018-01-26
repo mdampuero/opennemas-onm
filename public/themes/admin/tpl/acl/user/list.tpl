@@ -259,7 +259,7 @@
       {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-update-selected">
-      {if $smarty.session._sf2_attributes.user->isMaster()}
+      {if $app.user->isMaster()}
         {include file="common/modals/_modalBatchUpdate.tpl"}
       {else}
         {include file="acl/user/modals/_modalBatchUpdate.tpl"}

@@ -390,7 +390,7 @@
                         </div>
                         {/is_module_activated}
                       </div>
-                      {if $smarty.session._sf2_attributes.user->isMaster()}
+                      {if $app.user->isMaster()}
                       <h4>
                         <i class="fa fa-rss"></i>
                         RSS
@@ -776,7 +776,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                              <div class="row" ng-show="{if $app.user->isMaster()}true{/if}">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label class="form-label">
@@ -844,7 +844,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row" ng-show="{if $smarty.session._sf2_attributes.user->isMaster()}true{/if}">
+                              <div class="row" ng-show="{if $app.user->isMaster()}true{/if}">
                                 <div class="col-md-12">
                                   <div class="form-group">
                                     <label class="form-label">
@@ -1427,7 +1427,7 @@
                 </div>
               </div>
             </uib-tab>
-            {if $smarty.session._sf2_attributes.user->isMaster()}
+            {if $app.user->isMaster()}
               <uib-tab>
                 <uib-tab-heading>
                   <i class="fa fa-rebel m-r-5"></i>
