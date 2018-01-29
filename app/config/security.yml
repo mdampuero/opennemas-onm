@@ -100,17 +100,21 @@ security:
                 failure_handler:                core.security.authentication.failure
                 success_handler:                core.security.authentication.success
             logout:
+                invalidate_session: true
                 path:   core_authentication_logout
+                delete_cookies:
+                    __onm_sess: { path: null, domain: null }
+                    __onm_user: { path: null, domain: null }
             oauth:
                 resource_owners:
                     facebook: "/oauth/login/check-facebook"
                     twitter:  "/oauth/login/check-twitter"
-                login_path:          core_authentication_login
+                login_path:          core_authentication_complete
                 default_target_path: core_authentication_callback
                 check_path:          core_authentication_check
                 use_forward:         false
-                failure_path:        core_authentication_login
-                success_handler:     oauth_login_success_handler
+                failure_path:        core_authentication_complete
+                success_handler:     core.security.authentication.oauth.success
                 oauth_user_provider:
                     service: backend.security.user.oauth_provider
 
