@@ -193,7 +193,7 @@ services:
 
     core.security.authentication.success:
         class:     Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler
-        arguments: [ '@core.security.authentication', '@application.log', '@security.token_storage' ]
+        arguments: [ '@core.security.authentication', '@application.log', '@router', '@security.token_storage' ]
 
     core.security.authentication.failure:
         class:     Common\Core\Component\Security\Authentication\AuthenticationFailureHandler
