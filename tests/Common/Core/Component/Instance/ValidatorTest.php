@@ -153,7 +153,7 @@ class ValidatorTest extends KernelTestCase
     /**
      * Check the validate method
      */
-    public function testValidate()
+    public function testValidateForInvalidInstance()
     {
         $instance = new \Common\ORM\Entity\Instance();
         $instance->internal_name = 'test';
@@ -163,5 +163,23 @@ class ValidatorTest extends KernelTestCase
         $instance->contact_mail = 'test@opennemas.com';
         $this->validator->validate($instance);
         $this->assertTrue(count($this->validator->getErrors()) > 0);
+    }
+
+    /**
+     * Tests validate when no instance found by email or domains.
+     */
+    public function testValidateForValidInstance()
+    {
+        $this->repository->expects($this->exactly(2))->method('findOneBy')
+            ->will($this->throwException(new \Exception()));
+
+        $instance = new \Common\ORM\Entity\Instance();
+        $instance->internal_name = 'foofubarnorf';
+        $instance->domains = [
+            'test.domain.com'
+        ];
+        $instance->contact_mail = 'test@opennemas.com';
+        $this->validator->validate($instance);
+        $this->assertTrue(count($this->validator->getErrors()) === 0);
     }
 }
