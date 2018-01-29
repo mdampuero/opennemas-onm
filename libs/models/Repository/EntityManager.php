@@ -72,6 +72,7 @@ class EntityManager extends BaseManager
                 $this->cache->save($cacheId, $entity);
             }
         }
+
         return $entity;
     }
 
@@ -249,11 +250,11 @@ class EntityManager extends BaseManager
 
         foreach ($searchMap as $key) {
             if (!array_key_exists($key, $contentMetaMap)) {
+                // This substr is for remove the "content-meta-" of the key
                 $missingContents[] = substr($key, 13);
             }
         }
         $missingContents = $this->populateContentMetasFromDB($missingContents);
-
 
         // Populate contents with fetched content metas
 
@@ -276,7 +277,9 @@ class EntityManager extends BaseManager
     /**
      *  Populates content meta for a given array of content objects from DB
      *
-     * @return array the list of contents with populated metadata
+     * @param mixed $contents the list of content ids
+     *
+     * @return mixed the list of contents with populated metadata
      */
     private function populateContentMetasFromDB($contents)
     {
@@ -368,5 +371,49 @@ class EntityManager extends BaseManager
                 $criterias = str_replace($result[0][$count], 'fk_content_type=' . $contentTypeName . ' ', $criterias);
             }
         }
+    }
+
+    /**
+     * Returns a multidimensional array with the images related to this album
+     *
+     * @param int $albumID the album id
+     *
+     * @return mixed array of array(pk_photo, position, description)
+     */
+    public function getAttachedPhotos($albumID)
+    {
+        if (is_null($albumID)) {
+            return false;
+        }
+
+        $attachPhotosToRetrieve = (is_array($albumID)) ? $albumID : [$albumID];
+
+        if (count($attachPhotosToRetrieve) == 0) {
+            return [];
+        }
+
+        $sqlAux = substr(str_repeat(',?', count($attachPhotosToRetrieve)), 1);
+
+        $photosAlbum = [];
+        $sql         = 'SELECT DISTINCT pk_album, pk_photo, description, position'
+            . ' FROM albums_photos WHERE pk_album IN (' . $sqlAux . ') ORDER BY position ASC';
+        $rs          = $this->dbConn->fetchAll($sql, $albumID);
+        foreach ($rs as $photo) {
+            if (!array_key_exists($photo['pk_album'], $photosAlbum)) {
+                $photosAlbum[$photo['pk_album']] = [];
+            }
+
+            $photosAlbum[$photo['pk_album']][] = [
+                'pk_photo'    => $photo['pk_photo'],
+                'position'    => $photo['position'],
+                'description' => $photo['description'],
+            ];
+        }
+
+        if (!is_array($albumID) && count($photosAlbum) > 0) {
+            return array_values($photosAlbum)[0];
+        }
+
+        return $photosAlbum;
     }
 }
