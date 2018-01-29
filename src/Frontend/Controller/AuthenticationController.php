@@ -19,20 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthenticationController extends Controller
 {
     /**
-     * Checks if the current user  is authenticated.
-     *
-     * @return Response The response object.
-     */
-    public function authenticatedAction()
-    {
-        if (!empty($this->get('core.user'))) {
-            return new Response('', 200);
-        }
-
-        return new Response('', 401);
-    }
-
-    /**
      * Displays the login form template.
      *
      * @param Request $request The request object.
