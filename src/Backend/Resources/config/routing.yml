@@ -918,10 +918,6 @@ admin_utils_calculate_tags:
         expose: true
 
 # Auth system routes
-admin_login_callback:
-    path:     /login/callback
-    defaults: { _controller  : BackendBundle:Authentication:loginCallback }
-
 admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
     defaults: { _controller  : BackendBundle:User:recoverPassword }

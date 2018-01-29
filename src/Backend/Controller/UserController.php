@@ -268,7 +268,7 @@ class UserController extends Controller
                     _('Unable to find the password reset request.  Please check the url we sent you in the email.')
                 );
 
-                return $this->redirect($this->generateUrl('admin_login'));
+                return $this->redirect($this->generateUrl('backend_authentication_login'));
             }
 
             $this->view->assign('user', $user);
@@ -285,7 +285,7 @@ class UserController extends Controller
 
                 $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
 
-                return $this->redirect($this->generateUrl('admin_login'));
+                return $this->redirect($this->generateUrl('backend_authentication_login'));
             } elseif ($password != $passwordVerify) {
                 $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
             } else {
@@ -294,7 +294,7 @@ class UserController extends Controller
                     _('Unable to find the password reset request.  Please check the url we sent you in the email.')
                 );
 
-                return $this->redirect($this->generateUrl('admin_login'));
+                return $this->redirect($this->generateUrl('backend_authentication_login'));
             }
         }
 
@@ -539,7 +539,7 @@ class UserController extends Controller
 
         $session->set(
             '_security.backend.target_path',
-            $this->generateUrl('admin_login_callback')
+            $this->generateUrl('core_authentication_complete')
         );
 
         if (!$user) {

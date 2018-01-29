@@ -48,7 +48,7 @@ class AuthenticationController extends Controller
                     ->findOneBy(sprintf('token = "%s"', $token));
             } catch (\Exception $e) {
                 $session->getFlashBag()->add('error', _('Invalid token'));
-                return $this->redirect($this->generateUrl('admin_login'));
+                return $this->redirect($this->generateUrl('backend_authentication_login'));
             }
 
             $user->token = null;
@@ -86,25 +86,5 @@ class AuthenticationController extends Controller
             'referer'   => $referer,
             'token'     => $auth->getCsrfToken()
         ]);
-    }
-
-    /**
-     * Displays a popup after login/connect with social accounts.
-     *
-     * @return Response The response object.
-     */
-    public function loginCallbackAction(Request $request)
-    {
-        $redirect = $request->getSession()->get('_security.backend.target_path');
-
-        if ($redirect === '/admin/login/callback') {
-            return $this->render('common/close_popup.tpl');
-        }
-
-        if (!empty($redirect)) {
-            return $this->redirect($redirect);
-        }
-
-        return $this->redirect($this->generateUrl('admin_welcome'));
     }
 }
