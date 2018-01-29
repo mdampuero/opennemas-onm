@@ -168,12 +168,12 @@ class Security
             return true;
         }
 
-        // ADMIN and PARTER have all permissions for their instances
+        // ADMIN and PARTNER have all permissions for their instances
         // TODO: Remove isAdmin when using ADMIN permission for administrators
         if ($this->instance->internal_name !== 'manager'
             && $permission !== 'MASTER'
             && (in_array('ADMIN', $this->permissions)
-                ||  (!empty($this->user) && $this->user->isAdmin())
+                || (!empty($this->user) && $this->user->isAdmin())
                 || (in_array('PARTNER', $this->permissions)
                     && $this->hasInstance($this->instance->internal_name)
                 )
