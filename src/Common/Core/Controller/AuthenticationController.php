@@ -9,8 +9,9 @@
  */
 namespace Common\Core\Controller;
 
-use Common\Core\Controller\Controller;
 use Common\Core\Annotation\Template;
+use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,11 +27,7 @@ class AuthenticationController extends Controller
      */
     public function authenticatedAction()
     {
-        if (!empty($this->get('core.user'))) {
-            return new Response('', 200);
-        }
-
-        return new Response('', 401);
+        return new JsonResponse([ 'success' => !empty($this->get('core.user')) ]);
     }
 
     /**
