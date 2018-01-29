@@ -199,6 +199,10 @@ services:
         class:     Common\Core\Component\Security\Authentication\AuthenticationFailureHandler
         arguments: [ '@core.security.authentication', '@application.log', '@router' ]
 
+    core.security.authentication.oauth.success:
+        class:     Common\Core\EventListener\OAuthAuthenticationSuccessHandler
+        arguments: [ '@service_container' ]
+
     core.security.encoder.password:
         class:     Common\Core\Component\Security\Encoder\PasswordEncoder
 

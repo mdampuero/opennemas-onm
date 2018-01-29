@@ -16,7 +16,3 @@ services:
     backend_login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
         arguments: [ '@service_container' ]
-
-    oauth_login_success_handler:
-        class:     Backend\EventListener\OAuthLoginSuccessHandler
-        arguments: [ '@security.token_storage', '@router', '@session' ]
