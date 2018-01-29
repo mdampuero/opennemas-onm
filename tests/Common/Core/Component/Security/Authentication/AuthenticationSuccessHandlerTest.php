@@ -47,7 +47,11 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->setMethods([ 'get', 'getClientIp', 'getSession' ])
+            ->setMethods([ 'get', 'getClientIp', 'getSession', 'isXmlHttpRequest' ])
+            ->getMock();
+
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'generate' ])
             ->getMock();
 
         $this->session = $this->getMockBuilder('Session')
@@ -78,7 +82,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->request->headers = $this->headers;
 
-        $this->handler = new AuthenticationSuccessHandler($this->auth, $this->logger, $this->ts);
+        $this->handler = new AuthenticationSuccessHandler($this->auth, $this->logger, $this->router, $this->ts);
     }
 
     /**
@@ -93,10 +97,17 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn('corge');
         $this->fb->expects($this->once())->method('add')->with('error', 'corge');
         $this->logger->expects($this->once())->method('info');
+
         $this->request->expects($this->at(0))->method('get')
             ->with('g-recaptcha-response')->willReturn('quux');
-        $this->request->expects($this->at(3))->method('get')
+        $this->request->expects($this->at(2))->method('get')
+            ->with('_target')->willReturn('flob');
+        $this->request->expects($this->at(4))->method('get')
             ->with('_token')->willReturn('glorp');
+        $this->request->expects($this->at(5))->method('isXmlHttpRequest')
+            ->willReturn(false);
+        $this->request->expects($this->at(6))->method('isXmlHttpRequest')
+            ->willReturn(false);
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/mumble/gorp');
 
@@ -117,10 +128,10 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->expects($this->at(0))->method('get')
             ->with('g-recaptcha-response')->willReturn('quux');
-        $this->request->expects($this->at(3))->method('get')
-            ->with('_token')->willReturn('glorp');
-        $this->request->expects($this->at(4))->method('get')
+        $this->request->expects($this->at(2))->method('get')
             ->with('_target')->willReturn('/mumble/waldo');
+        $this->request->expects($this->at(4))->method('get')
+            ->with('_token')->willReturn('glorp');
 
         $this->auth->expects($this->once())->method('hasError')
             ->willReturn(false);
@@ -135,5 +146,38 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('/mumble/waldo', $response->getTargetUrl());
+    }
+
+    /**
+     * Tests onAuthenticationSuccess when reCAPTCHA and CSRF token are valid for
+     * a XmlHttpRequest.
+     */
+    public function testOnAuthenticationSuccessWhenRecaptchaAndCsrfValidForXmlHttpRequest()
+    {
+        $this->request->expects($this->at(0))->method('get')
+            ->with('g-recaptcha-response')->willReturn('quux');
+        $this->request->expects($this->at(2))->method('get')
+            ->with('_target')->willReturn('/mumble/waldo');
+        $this->request->expects($this->at(4))->method('get')
+            ->with('_token')->willReturn('glorp');
+
+        $this->auth->expects($this->once())->method('hasError')
+            ->willReturn(false);
+        $this->auth->expects($this->once())->method('success');
+        $this->logger->expects($this->once())->method('info');
+
+        $this->request->expects($this->at(5))->method('isXmlHttpRequest')
+            ->willReturn(true);
+        $this->router->expects($this->once())->method('generate')
+            ->with('core_authentication_authenticated')->willReturn('/auth/authenticated');
+
+        $response = $this->handler->onAuthenticationSuccess($this->request, $this->ts);
+
+        $this->assertInstanceOf(
+            'Symfony\Component\HttpFoundation\RedirectResponse',
+            $response
+        );
+
+        $this->assertEquals('/auth/authenticated', $response->getTargetUrl());
     }
 }

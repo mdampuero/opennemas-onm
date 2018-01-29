@@ -34,6 +34,13 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
     protected $logger;
 
     /**
+     * The router service.
+     *
+     * @var Router
+     */
+    protected $router;
+
+    /**
      * The token storage.
      *
      * @var TokenStorage
@@ -45,12 +52,14 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
      *
      * @param Authentication $auth   The authentication service.
      * @param Logger         $logger The logger service.
+     * @param Router         $router The router service.
      * @param TokenStorage   $ts     The token storage.
      */
-    public function __construct($auth, $logger, $ts)
+    public function __construct($auth, $logger, $router, $ts)
     {
         $this->auth   = $auth;
         $this->logger = $logger;
+        $this->router = $router;
         $this->ts     = $ts;
     }
 
@@ -69,6 +78,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         $user      = $token->getUser();
         $recaptcha = $request->get('g-recaptcha-response');
         $session   = $request->getSession();
+        $target    = $request->get('_target');
 
         $session->set('user', $user);
         $session->set('user_language', $user->user_language);
@@ -80,6 +90,10 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
 
         $this->auth->checkCsrfToken($request->get('_token'));
 
+        if ($request->isXmlHttpRequest()) {
+            $target = $this->router->generate('core_authentication_authenticated');
+        }
+
         if ($this->auth->hasError()) {
             $this->auth->failure();
 
@@ -89,12 +103,16 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
             $this->logger->info($error);
             $this->ts->setToken(null);
 
-            return new RedirectResponse($request->headers->get('referer'));
+            if (!$request->isXmlHttpRequest()) {
+                $target = $request->headers->get('referer');
+            }
+
+            return new RedirectResponse($target);
         }
 
         $this->auth->success();
         $this->logger->info("User $user->username (ID: $user->id) has logged in.");
 
-        return new RedirectResponse($request->get('_target'));
+        return new RedirectResponse($target);
     }
 }

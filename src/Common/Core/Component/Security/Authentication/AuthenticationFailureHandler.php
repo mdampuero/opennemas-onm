@@ -70,6 +70,12 @@ class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterf
 
         $session->getFlashBag()->add('error', $error);
 
+        if ($request->isXmlHttpRequest()) {
+            return new RedirectResponse(
+                $this->router->generate('core_authentication_authenticated')
+            );
+        }
+
         if (preg_match('/admin\/login/', $referer)) {
             return new RedirectResponse(
                 $this->router->generate('backend_authentication_login')

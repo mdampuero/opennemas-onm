@@ -41,7 +41,7 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->setMethods([ 'getSession' ])
+            ->setMethods([ 'getSession', 'isXmlHttpRequest' ])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
@@ -103,6 +103,31 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('referer')->willReturn('/fred');
         $this->router->expects($this->once())->method('generate')
             ->with('frontend_authentication_login')->willReturn('wubble/foo');
+
+        $response = $this->handler->onAuthenticationFailure(
+            $this->request,
+            $this->exception
+        );
+
+        $this->assertInstanceOf(
+            'Symfony\Component\HttpFoundation\RedirectResponse',
+            $response
+        );
+
+        $this->assertEquals('wubble/foo', $response->getTargetUrl());
+    }
+
+    /**
+     * Tests onAuthenticationFailure when the URL used to log in is in backend.
+     */
+    public function testOnAuthenticationFailureForXmlHttpRequest()
+    {
+        $this->headers->expects($this->once())->method('get')
+            ->with('referer')->willReturn('/admin/login');
+        $this->router->expects($this->once())->method('generate')
+            ->with('core_authentication_authenticated')->willReturn('wubble/foo');
+        $this->request->expects($this->once())->method('isXmlHttpRequest')
+            ->willReturn(true);
 
         $response = $this->handler->onAuthenticationFailure(
             $this->request,
