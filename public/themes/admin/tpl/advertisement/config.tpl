@@ -106,7 +106,7 @@
             <div class="help">{t}Set a key for targeting your ads by content ID. Note that the value for targeting will always be the current content ID{/t}</div>
           </div>
         </div>
-        {if $smarty.session._sf2_attributes.user->isMaster()}
+        {if $app.user->isMaster()}
         <h4>{t}DFP custom code{/t}</h4>
         <div class="form-group">
           <label for="dfp_custom_code" class="form-label">{t}Custom code at the end of DFP tags{/t}</label>
