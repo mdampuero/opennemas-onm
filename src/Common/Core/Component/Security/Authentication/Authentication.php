@@ -142,8 +142,6 @@ class Authentication
         // Error in session
         $error = $this->session->get(Security::AUTHENTICATION_ERROR);
 
-        $this->session->set(Security::AUTHENTICATION_ERROR, null);
-
         return $error;
     }
 
@@ -235,6 +233,7 @@ class Authentication
      */
     public function success()
     {
+        $this->session->set(Security::AUTHENTICATION_ERROR, null);
         $this->session->set('failed_login_attempts', 0);
     }
 

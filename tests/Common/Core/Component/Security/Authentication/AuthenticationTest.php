@@ -202,8 +202,6 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     {
         $this->session->expects($this->any())->method('get')
             ->with(Security::AUTHENTICATION_ERROR)->willReturn('glork');
-        $this->session->expects($this->any())->method('set')
-            ->with(Security::AUTHENTICATION_ERROR, null);
 
         $this->assertEquals('glork', $this->auth->getError());
     }
@@ -351,9 +349,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests success.
      */
-    public function testSucess()
+    public function testSuccess()
     {
-        $this->session->expects($this->once())->method('set')
+        $this->session->expects($this->at(0))->method('set')
+            ->with(Security::AUTHENTICATION_ERROR, null);
+        $this->session->expects($this->at(1))->method('set')
             ->with('failed_login_attempts', 0);
 
         $this->auth->success();
