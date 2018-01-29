@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\EventListener;
 
-use Common\Core\EventListener\OAuthAuthenticationSuccessHandler;
+use Common\Core\Component\Security\Authentication\OAuthAuthenticationSuccessHandler;
 
 /**
  * Defines test cases for OAuthAuthenticationSuccessHandler class.

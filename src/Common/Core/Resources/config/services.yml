@@ -200,7 +200,7 @@ services:
         arguments: [ '@core.security.authentication', '@application.log', '@router' ]
 
     core.security.authentication.oauth.success:
-        class:     Common\Core\EventListener\OAuthAuthenticationSuccessHandler
+        class:     Common\Core\Component\Security\Authentication\OAuthAuthenticationSuccessHandler
         arguments: [ '@service_container' ]
 
     core.security.encoder.password:
