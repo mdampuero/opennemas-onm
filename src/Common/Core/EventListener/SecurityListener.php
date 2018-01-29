@@ -56,15 +56,12 @@ class SecurityListener implements EventSubscriberInterface
         $instance = $this->container->get('core.instance');
 
         // Instance not registered
-        if (empty($instance)) {
+        if (empty($instance) || !$this->hasSecurity($uri)) {
             return;
         }
 
-        if (!$this->hasSecurity($uri)) {
-            return;
-        }
+        $user = $this->context->getToken()->getUser();
 
-        $user      = $this->context->getToken()->getUser();
         $instances = $this->getInstances($user);
         // TODO: Uncomment when checking by category name
         //$categories  = $this->getCategories($user);
@@ -132,7 +129,7 @@ class SecurityListener implements EventSubscriberInterface
      */
     protected function getInstances(UserInterface $user)
     {
-        $oql = sprintf('owner_id ="%s"', $user->id);
+        $oql = sprintf('owner_id = "%s"', $user->id);
 
         $instances = $this->container->get('orm.manager')
             ->getRepository('Instance')
@@ -156,7 +153,7 @@ class SecurityListener implements EventSubscriberInterface
             return [];
         }
 
-        $oql = sprintf('pk_user_group in [%s]', implode(',', $user->fk_user_group));
+        $oql = sprintf('pk_user_group in [%s]', implode(', ', $user->fk_user_group));
 
         $userGroups = $this->container->get('orm.manager')
             ->getRepository('UserGroup', $user->getOrigin())
@@ -236,7 +233,9 @@ class SecurityListener implements EventSubscriberInterface
     protected function logout($event, $instance, $uri)
     {
         $exception = new BadCredentialsException();
-        $response  = new RedirectResponse($this->router->generate('admin_login'));
+        $response  = new RedirectResponse(
+            $this->router->generate('backend_authentication_login')
+        );
 
         if ($instance->blocked) {
             $exception = new InstanceBlockedException($instance->internal_name);
@@ -246,7 +245,7 @@ class SecurityListener implements EventSubscriberInterface
 
             // Redirect to login callback when login with social networks
             if (empty($target)) {
-                $target = $this->router->generate('admin_login_callback');
+                $target = $this->router->generate('core_authentication_complete');
             }
 
             // Prevent redirection to login after logging in
