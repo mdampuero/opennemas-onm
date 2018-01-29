@@ -9,8 +9,8 @@
  */
 namespace Common\Core\EventListener;
 
-use Common\Core\Component\Exception\InstanceNotActivatedException;
-use Common\Core\Component\Exception\InstanceNotRegisteredException;
+use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
+use Common\Core\Component\Exception\Instance\InstanceNotRegisteredException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

@@ -9,6 +9,7 @@
  */
 namespace Framework\Command;
 
+use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,7 +60,7 @@ EOF
 
         if ($instance->activated != '1') {
             $message = _('Instance not activated');
-            throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
+            throw new InstanceNotActivatedException($message);
         }
 
         // TODO: Remove this when using new ORM for contents
@@ -121,7 +122,9 @@ EOF
                         }
                     }
                 } catch (\Exception $e) {
-                    $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>");
+                    $output->writeln(
+                        "<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>"
+                    );
                 }
             }
         }

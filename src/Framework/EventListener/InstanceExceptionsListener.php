@@ -11,8 +11,8 @@
 
 namespace Framework\EventListener;
 
-use Common\Core\Component\Exception\InstanceNotActivatedException;
-use Common\Core\Component\Exception\InstanceNotRegisteredException;
+use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
+use Common\Core\Component\Exception\Instance\InstanceNotRegisteredException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
