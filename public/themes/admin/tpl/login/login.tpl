@@ -47,14 +47,14 @@
                 </div>
                 <div class="row m-l-5 m-r-5 p-b-20">
                   <div class="col-sm-6">
-                    <a class="btn btn-info btn-block" href="{hwi_oauth_login_url name=facebook}">
+                    <button class="btn btn-info btn-block" data-url="{hwi_oauth_login_url name=facebook}" onclick="connect(this)" type="button">
                       <i class="social-icon icon-facebook"></i> Facebook
-                    </a>
+                    </button>
                   </div>
                   <div class="col-sm-6">
-                    <a class="btn btn-success btn-block" href="{hwi_oauth_login_url name=twitter}">
+                    <button class="btn btn-success btn-block" data-url="{hwi_oauth_login_url name=twitter}" onclick="connect(this)" type="button">
                       <i class="social-icon icon-twitter"></i> Twitter
-                    </a>
+                    </button>
                   </div>
                 </div>
                 <div class="tiles grey p-t-20 p-b-20 text-black">
@@ -122,6 +122,24 @@
         @Common/components/modernizr/modernizr.js,
         @Common/js/onm/md5.min.js" output="login"}
       <script type="text/javascript">
+        function connect(btn) {
+          var win = window.open(
+            btn.getAttribute('data-url'),
+            btn.getAttribute('id'),
+            'height=400, width=400'
+          );
+
+          var interval = window.setInterval(function() {
+            if (win == null || win.closed) {
+              window.clearInterval(interval);
+
+              if (win.success) {
+                window.location = '{url name=admin_welcome}';
+              }
+            }
+          }, 1000);
+        };
+
         jQuery(document).ready(function($) {
           'use strict';
 
