@@ -141,6 +141,8 @@ class OAuthUserProviderTest extends KernelTestCase
      */
     public function testLoadUserByOAuthUserResponseWhenNoUserInSession()
     {
+        $this->provider = new OAuthUserProvider($this->em, $this->session, []);
+
         $this->resource = $this->getMockBuilder('ResourceOwner')
             ->setMethods([ 'getName' ])
             ->getMock();
