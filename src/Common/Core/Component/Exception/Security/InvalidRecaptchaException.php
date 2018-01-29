@@ -9,9 +9,18 @@
  */
 namespace Common\Core\Component\Exception\Security;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
 /**
  * Exception thrown when the current instance is not activated.
  */
-class InvalidRecaptchaException extends \Exception
+class InvalidRecaptchaException extends AuthenticationException
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessageKey()
+    {
+        return 'Invalid reCAPTCHA response';
+    }
 }
