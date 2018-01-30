@@ -101,7 +101,8 @@ security:
                 success_handler:                core.security.authentication.success
             logout:
                 invalidate_session: true
-                path:   core_authentication_logout
+                path:               core_authentication_logout
+                success_handler:    core.security.http.logout.failure
                 delete_cookies:
                     __onm_sess: { path: null, domain: null }
                     __onm_user: { path: null, domain: null }
