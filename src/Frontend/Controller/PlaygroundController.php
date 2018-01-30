@@ -82,10 +82,12 @@ class PlaygroundController extends Controller
         }
 
         $criteria = [
-            'tables'            => [ 'widgets' ],
-            'pk_content'        => [
-                [ 'value' => 'pk_widget', 'field' => true ]
-            ],
+            'join'              => [ [
+                'table'         => 'widgets',
+                'pk_content'    => [
+                    [ 'value'   => 'pk_widget', 'field' => true ]
+                ],
+            ] ],
             'content'           => [ [ 'value' => $name ] ],
             'content_type_name' => [ [ 'value' => 'widget' ] ],
             'content_status'    => [ [ 'value' => 1 ] ],
