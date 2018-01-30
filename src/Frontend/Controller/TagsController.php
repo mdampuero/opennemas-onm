@@ -136,7 +136,6 @@ class TagsController extends Controller
                 }
 
                 if (in_array($tag, $arrayMetadatas)) {
-                    $item = $item->get($item->id);
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $image = $em->find('Photo', $item->img1);
                         if (is_object($image) && !is_null($image->id)) {
