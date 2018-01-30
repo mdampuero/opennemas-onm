@@ -88,7 +88,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests onAuthenticationSuccess when reCAPTCHA and CSRF token are invalid.
      */
-    public function testOnAuthenticationSuccessWhenRecaptchaAndCsrfInValid()
+    public function testOnAuthenticationSuccessWhenRecaptchaAndCsrfInvalid()
     {
         $this->auth->expects($this->once())->method('hasError')
             ->willReturn(true);
@@ -122,9 +122,40 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests onAuthenticationSuccess when reCAPTCHA and CSRF token are valid.
+     * Tests onAuthenticationSuccess when reCAPTCHA and CSRF token are valid
+     * and target is not provided in the request.
      */
-    public function testOnAuthenticationSuccessWhenRecaptchaAndCsrfValid()
+    public function testOnAuthenticationSuccessWhenRecaptchaAndCsrfValidByDefault()
+    {
+        $this->request->expects($this->at(0))->method('get')
+            ->with('g-recaptcha-response')->willReturn('quux');
+        $this->request->expects($this->at(2))->method('get')
+            ->with('_target')->willReturn(null);
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_user_show')->willReturn('/user/me');
+        $this->request->expects($this->at(4))->method('get')
+            ->with('_token')->willReturn('glorp');
+
+        $this->auth->expects($this->once())->method('hasError')
+            ->willReturn(false);
+        $this->auth->expects($this->once())->method('success');
+        $this->logger->expects($this->once())->method('info');
+
+        $response = $this->handler->onAuthenticationSuccess($this->request, $this->ts);
+
+        $this->assertInstanceOf(
+            'Symfony\Component\HttpFoundation\RedirectResponse',
+            $response
+        );
+
+        $this->assertEquals('/user/me', $response->getTargetUrl());
+    }
+
+    /**
+     * Tests onAuthenticationSuccess when reCAPTCHA and CSRF token are valid
+     * and target is provided in the request.
+     */
+    public function testOnAuthenticationSuccessWhenRecaptchaAndCsrfValidForTarget()
     {
         $this->request->expects($this->at(0))->method('get')
             ->with('g-recaptcha-response')->willReturn('quux');

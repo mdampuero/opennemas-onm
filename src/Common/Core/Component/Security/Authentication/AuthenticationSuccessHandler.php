@@ -80,6 +80,10 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         $session   = $request->getSession();
         $target    = $request->get('_target');
 
+        if (empty($target)) {
+            $target = $this->router->generate('frontend_user_show');
+        }
+
         $session->set('user', $user);
         $session->set('user_language', $user->user_language);
 
