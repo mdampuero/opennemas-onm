@@ -64,23 +64,28 @@ class OAuthUserProvider extends BaseOAuthUserProvider
         $userId   = $response->getUsername();
         $oql      = sprintf('%s_id = "%s"', $resource, $userId);
 
-        $user = $this->loadUserBy($oql);
+        $user    = $this->loadUserBy($oql);
+        $current = $this->session->get('user');
 
-        // User exists
-        if (!empty($user)) {
+        // Login with external account when user exists
+        if (empty($current) && !empty($user)) {
             // Prevent password deletion after external eraseCredentials call
             return clone($user);
         }
 
-        $user = $this->session->get('user');
-
-        // Create fake user basing on response
-        if (empty($user)) {
+        // Login with external account creates a new user (frontend)
+        if (empty($current) && empty($user)) {
             return $this->createUser($response);
         }
 
         try {
-            return $this->connectUser($user, $response);
+            // Account already connected
+            if (!empty($user) && $current !== $user) {
+                return $current;
+            }
+
+            // Connect accounts
+            return $this->connectUser($current, $response);
         } catch (\Exception $e) {
             throw new UsernameNotFoundException(
                 sprintf(
@@ -168,7 +173,6 @@ class OAuthUserProvider extends BaseOAuthUserProvider
                 return $this->em->getRepository('User', $name)
                     ->findOneBy($oql);
             } catch (\Exception $e) {
-                return null;
             }
         }
 
