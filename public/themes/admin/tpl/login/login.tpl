@@ -132,10 +132,7 @@
           var interval = window.setInterval(function() {
             if (win == null || win.closed) {
               window.clearInterval(interval);
-
-              if (win.success) {
-                window.location = '{url name=admin_welcome}';
-              }
+              window.location = '{url name=admin_welcome}';
             }
           }, 1000);
         };
