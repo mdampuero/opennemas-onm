@@ -82,26 +82,25 @@
         </ul>
         <p>{t 1=$resource_name}Allows you to login into Opennemas with %1{/t}.</p>
       {else}
-      {if $current_user_id == $user->id}
-        <button class="btn btn-social btn-{$resource}" data-url="{hwi_oauth_login_url name={$resource}}{if !empty($target)}?_target_path=/auth/social/{$resource}/connect{/if}" onclick="connect(this)" type="button">
-          <i class="fa fa-{$resource}"></i> {t}Connect with {if $resource == 'facebook'}Facebook{else}Twitter{/if}{/t}
-        </button>
-        <div class="help-block">{t}Associate your {if $resource == 'facebook'}Facebook{else}Twitter{/if} account to login into Opennemas with it.{/t}</div>
-      {else}
-        <p>Only the user can connect their social accounts with Opennemas.</p>
+        {if $current_user_id == $user->id}
+        <button class="btn btn-social btn-{$resource}" data-url="{hwi_oauth_login_url name=$resource}?_target_path={url name=core_authentication_connect}" onclick="connect(this)" type="button">
+            <i class="fa fa-{$resource}"></i> {t}Connect with {if $resource == 'facebook'}Facebook{else}Twitter{/if}{/t}
+          </button>
+          <div class="help-block">{t}Associate your {if $resource == 'facebook'}Facebook{else}Twitter{/if} account to login into Opennemas with it.{/t}</div>
+        {else}
+          <p>Only the user can connect their social accounts with Opennemas.</p>
+        {/if}
       {/if}
-      {/if}
-      {render_messages}
     </div>
   </body>
   {block name="footer-js"}
   <script>
 function connect(btn) {
   var win = window.open(
-      btn.getAttribute('data-url'),
-      btn.getAttribute('id'),
-      'height=400, width=400'
-      );
+    btn.getAttribute('data-url'),
+    btn.getAttribute('id'),
+    'height=400, width=400'
+  );
 
   var interval = window.setInterval(function() {
     if (win == null || win.closed) {
