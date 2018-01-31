@@ -195,7 +195,10 @@ class Article extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error fetching article (ID:' . $id . '): ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error fetching article (ID:' . $id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -290,10 +293,15 @@ class Article extends Content
                 $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
             }
 
+            $this->saveMetadataFields($data);
+
             return $this->id;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error creating article: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -388,12 +396,16 @@ class Article extends Content
                 );
             }
 
+            $this->saveMetadataFields($data);
             $this->category_name = $this->loadCategoryName($this->id);
 
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error updating article (ID:' . $data['id'] . ': ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -432,7 +444,10 @@ class Article extends Content
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error deleting article (ID:' . $id . '): ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error deleting article (ID:' . $id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
 
@@ -517,5 +532,30 @@ class Article extends Content
         }
 
         return array_merge(parent::getL10nKeys(), $keys);
+    }
+
+    /**
+     * Method for set in the object the metadatas values
+     *
+     *  @param mixed $data the data to load in the object
+     */
+    public function saveMetadataFields($data)
+    {
+        if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return null;
+        }
+
+        $metaDataFields = getService('setting_repository')->get('article_extra_fields');
+        if (!is_array($metaDataFields)) {
+            return;
+        }
+
+        foreach ($metaDataFields as $metaDataField) {
+            foreach ($metaDataField['fields'] as $field) {
+                if (array_key_exists($field['key'], $data) && !empty($data[$field['key']])) {
+                    parent::setMetadata($field['key'], $data[$field['key']]);
+                }
+            }
+        }
     }
 }

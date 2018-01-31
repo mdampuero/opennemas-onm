@@ -93,7 +93,8 @@ class ArticleController extends Controller
             ],
         ];
 
-        $msg = $this->get('core.messenger');
+        $msg  = $this->get('core.messenger');
+        $data = $this->loadMetaDataFields($data, $postReq);
 
         if (!$article->create($data)) {
             $msg->add(_('Unable to create the new article.'), 'error', 400);
@@ -230,6 +231,8 @@ class ArticleController extends Controller
             ],
         ];
 
+        $data = $this->loadMetaDataFields($data, $postReq);
+
         if (!$article->update($data)) {
             $msg->add(_('Unable to update the article.'), 'error');
             return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -241,5 +244,35 @@ class ArticleController extends Controller
 
         $msg->add(_('Article successfully updated.'), 'success');
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * This method load from the request the metadata fields,
+     *
+     * @param mixed   $data Data where load the metadata fields.
+     * @param Request $postReq Request where the metadata are.
+     */
+    private function loadMetaDataFields($data, $postReq)
+    {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return $data;
+        }
+
+        // If I don't have the extension, I don't check the settings
+        $metaDataFields = $this->get('setting_repository')->get('article_extra_fields');
+        if (!is_array($metaDataFields)) {
+            return $data;
+        }
+
+        $metadataAux = null;
+        foreach ($metaDataFields as $metaDataField) {
+            foreach ($metaDataField['fields'] as $field) {
+                $metadataAux = $postReq->get($field['key']);
+                if (!empty($metadataAux)) {
+                    $data[$field['key']] = $metadataAux;
+                }
+            }
+        }
+        return $data;
     }
 }

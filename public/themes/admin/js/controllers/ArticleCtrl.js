@@ -109,12 +109,12 @@
             'withGalleryHome'
           ];
 
-          for (var i = 0; i < keys.length; i++) {
-            if (!$scope.data.extra[keys[i]]) {
+          for (var j = 0; j < keys.length; j++) {
+            if (!$scope.data.extra[keys[j]]) {
               continue;
             }
 
-            $scope.article.params[keys[i]] = $scope.data.extra[keys[i]];
+            $scope.article.params[keys[j]] = $scope.data.extra[keys[j]];
           }
         };
 
@@ -194,34 +194,34 @@
 
           var keys = [ 'img1', 'img2', 'fk_video', 'fk_video2' ];
 
-          for (var i = 0; i < keys.length; i++) {
-            if (!article[keys[i]]) {
+          for (var k = 0; k < keys.length; k++) {
+            if (!article[keys[k]]) {
               continue;
             }
 
-            data[keys[i]] = article[keys[i]].pk_content;
+            data[keys[k]] = article[keys[k]].pk_content;
           }
 
           keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
 
-          for (var i = 0; i < keys.length; i++) {
-            if (!article[keys[i]]) {
+          for (var l = 0; l < keys.length; l++) {
+            if (!article[keys[l]]) {
               continue;
             }
 
-            data[keys[i]] = [];
+            data[keys[l]] = [];
 
-            for (var j = 0; j < article[keys[i]].length; j++) {
-              var item = article[keys[i]][j].pk_content;
+            for (var m = 0; m < article[keys[l]].length; m++) {
+              var item = article[keys[l]][m].pk_content;
 
               if (preview) {
                 item = {
-                  id: article[keys[i]][j].pk_content,
-                  type: article[keys[i]][j].content_type_name
+                  id: article[keys[l]][m].pk_content,
+                  type: article[keys[l]][m].content_type_name
                 };
               }
 
-              data[keys[i]].push(item);
+              data[keys[l]].push(item);
             }
           }
 
@@ -230,12 +230,12 @@
             'withGalleryHome'
           ];
 
-          for (var i = 0; i < keys.length; i++) {
-            if (!article.params[keys[i]]) {
+          for (var n = 0; n < keys.length; n++) {
+            if (!article.params[keys[n]]) {
               continue;
             }
 
-            data.params[keys[i]] = article.params[keys[i]].pk_content;
+            data.params[keys[n]] = article.params[keys[n]].pk_content;
           }
 
           return data;
@@ -295,8 +295,9 @@
               angular.extend($scope.article, $scope.data.article);
 
             // Load items
-            $scope.article    = $scope.data.article;
-            $scope.categories = $scope.data.extra.categories;
+            $scope.article      = $scope.data.article;
+            $scope.categories   = $scope.data.extra.categories;
+            $scope.fieldsByModule = $scope.data.extra.moduleFields;
 
             $scope.build();
 
@@ -389,9 +390,9 @@
             }).join(',');
           }
 
-          var data = { article: data, locale: $scope.config.locale };
+          var postData = { article: data, locale: $scope.config.locale };
 
-          http.post(previewUrl, data).success(function() {
+          http.post(previewUrl, postData).success(function() {
             $uibModal.open({
               templateUrl: 'modal-preview',
               windowClass: 'modal-fullscreen',
