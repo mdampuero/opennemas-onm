@@ -28,7 +28,10 @@ class AuthenticationController extends Controller
     public function loginAction(Request $request)
     {
         $auth      = $this->get('core.security.authentication');
-        $referer   = $request->query->filter('referer', '', FILTER_SANITIZE_STRING);
+        $referer   = '/' . trim(
+            $request->query->filter('referer', '', FILTER_SANITIZE_STRING),
+            '/'
+        );
         $session   = $request->getSession();
         $recaptcha = '';
 
