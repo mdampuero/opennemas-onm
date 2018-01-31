@@ -238,31 +238,92 @@ class EntityManager extends BaseManager
             return [];
         }
 
+        $contentMap = array_filter($contentMap, "is_object");
+
         $searchMap = array_map(function ($a) {
             return 'content-meta-' . $a->id;
         }, $contentMap);
 
         // Fetch all content metas in one request
-        $contentMetaMap = $this->cache->fetch($searchMap);
+        $contentMetaMap  = $this->cache->fetch($searchMap);
+        $missingContents = [];
 
-        $contentMap = array_filter($contentMap, "is_object");
+        foreach ($searchMap as $key) {
+            if (!array_key_exists($key, $contentMetaMap)) {
+                // This substr is for remove the "content-meta-" of the key
+                $missingContents[] = substr($key, 13);
+            }
+        }
+        $missingContents = $this->populateContentMetasFromDB($missingContents);
+
         // Populate contents with fetched content metas
-        foreach ($contentMap as $content) {
-            // If content metas weren't in cache fetch them from mysql
-            if (!array_key_exists('content-meta-' . $content->id, $contentMetaMap)) {
-                $content->loadAllContentProperties();
-            } else {
-                $contentMeta = $contentMetaMap['content-meta-' . $content->id];
 
-                if (!empty($contentMeta)) {
-                    foreach ($contentMeta as $key => $value) {
-                        $content->{$key} = $value;
-                    }
-                }
+        foreach ($contentMap as $content) {
+            $contentMeta = [];
+            // If content metas weren't in cache fetch them from mysql
+            if (array_key_exists('content-meta-' . $content->id, $contentMetaMap)) {
+                $contentMeta = $contentMetaMap['content-meta-' . $content->id];
+            } elseif (array_key_exists($content->id, $missingContents)) {
+                $contentMeta = $missingContents[$content->id];
+            }
+            foreach ($contentMeta as $key => $value) {
+                $content->{$key} = $value;
             }
         }
 
         return $contentMap;
+    }
+
+    /**
+     *  Populates content meta for a given array of content objects from DB
+     *
+     * @param mixed $contents the list of content ids
+     *
+     * @return mixed the list of contents with populated metadata
+     */
+    private function populateContentMetasFromDB($contents)
+    {
+        if (is_null($contents)) {
+            return null;
+        }
+
+        $contentsToRetrieve = (is_array($contents)) ? $contents : [$contents];
+
+        if (count($contentsToRetrieve) == 0) {
+            return [];
+        }
+
+        $contentProperties = [];
+
+        $sqlAux = substr(str_repeat(',?', count($contentsToRetrieve)), 1);
+        $sql    = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content IN ('
+            . $sqlAux . ')';
+
+        $properties = $this->dbConn->fetchAll(
+            $sql,
+            $contentsToRetrieve
+        );
+        if (!is_null($properties) && is_array($properties)) {
+            foreach ($properties as $property) {
+                if (!array_key_exists($property['fk_content'], $contentProperties)) {
+                    $contentProperties[$property['fk_content']] = [];
+                }
+                $contentProperties[$property['fk_content']][$property['meta_name']] = $property['meta_value'];
+            }
+        }
+
+
+        $cacheValues = [];
+        foreach ($contentProperties as $id => $content) {
+            $cacheValues['content-meta-' . $id] = serialize($content);
+        }
+
+        $this->cache->save($cacheValues);
+
+        if (!is_array($contents) && count($contentProperties) > 0) {
+            return array_values($contentProperties)[0];
+        }
+        return $contentProperties;
     }
 
     /**
@@ -310,5 +371,49 @@ class EntityManager extends BaseManager
                 $criterias = str_replace($result[0][$count], 'fk_content_type=' . $contentTypeName . ' ', $criterias);
             }
         }
+    }
+
+    /**
+     * Returns a multidimensional array with the images related to this album
+     *
+     * @param int $albumID the album id
+     *
+     * @return mixed array of array(pk_photo, position, description)
+     */
+    public function getAttachedPhotos($albumID)
+    {
+        if (is_null($albumID)) {
+            return false;
+        }
+
+        $attachPhotosToRetrieve = (is_array($albumID)) ? $albumID : [$albumID];
+
+        if (count($attachPhotosToRetrieve) == 0) {
+            return [];
+        }
+
+        $sqlAux = substr(str_repeat(',?', count($attachPhotosToRetrieve)), 1);
+
+        $photosAlbum = [];
+        $sql         = 'SELECT DISTINCT pk_album, pk_photo, description, position'
+            . ' FROM albums_photos WHERE pk_album IN (' . $sqlAux . ') ORDER BY position ASC';
+        $rs          = $this->dbConn->fetchAll($sql, $albumID);
+        foreach ($rs as $photo) {
+            if (!array_key_exists($photo['pk_album'], $photosAlbum)) {
+                $photosAlbum[$photo['pk_album']] = [];
+            }
+
+            $photosAlbum[$photo['pk_album']][] = [
+                'pk_photo'    => $photo['pk_photo'],
+                'position'    => $photo['position'],
+                'description' => $photo['description'],
+            ];
+        }
+
+        if (!is_array($albumID) && count($photosAlbum) > 0) {
+            return array_values($photosAlbum)[0];
+        }
+
+        return $photosAlbum;
     }
 }
