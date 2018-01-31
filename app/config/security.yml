@@ -111,7 +111,7 @@ security:
                     facebook: "/oauth/login/check-facebook"
                     twitter:  "/oauth/login/check-twitter"
                 login_path:          core_authentication_complete
-                default_target_path: core_authentication_callback
+                default_target_path: core_authentication_complete
                 check_path:          core_authentication_check
                 use_forward:         false
                 failure_path:        core_authentication_complete
