@@ -400,6 +400,21 @@
       {is_module_activated name="CRONICAS_MODULES"}
         {include file ="article/partials/_article_advanced_customize.tpl"}
       {/is_module_activated}
+      <div class="row" ng-if="fieldsByModule !== undefined && fieldsByModule">
+        <div class="col-md-12">
+          <div class="grid simple">
+            <div class="grid-title">
+              <h4>
+                <i class="fa fa-magic"></i>
+                {t}Additional data{/t}
+              </h4>
+            </div>
+            <div class="grid-body">
+              <autoform ng-model="article" fields-by-module="fieldsByModule"/>
+            </div>
+          </div>
+        </div>
+      </div>
       <input type="hidden" id="action" name="action" value="{$action}" />
     </div><!-- /wrapper-content contentform -->
     <script type="text/ng-template" id="modal-preview">

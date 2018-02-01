@@ -11,6 +11,7 @@ angular.module(
     'ngSanitize',
     'ngTouch',
     'ngTagsInput',
+    'onm.autoform',
     'onm.gravatar',
     'onm.cleaner',
     'onm.editor',
