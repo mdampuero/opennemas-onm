@@ -1,6 +1,7 @@
 <?php
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 /*
  * Returns the url given a set of params
@@ -36,11 +37,22 @@ function smarty_function_url($params, &$smarty)
     unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
 
     try {
+        // Remove empty params
+        foreach ($params as $key => $value) {
+            if (empty($value)) {
+                throw new InvalidParameterException(
+                    sprintf('Parameter "%s" for route "%s" is empty.', $key, $name)
+                );
+            }
+        }
+
         $url = $smarty->getContainer()
             ->get('router')
             ->generate($name, $params, $absoluteUrl);
     } catch (RouteNotFoundException $e) {
         $url = '#not-found-' . $name;
+    } catch (InvalidParameterException $e) {
+        $url = '#not-found-invalid-parameter';
     } catch (\Exception $e) {
         $url = '#not-found';
     }
