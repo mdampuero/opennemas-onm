@@ -84,7 +84,7 @@
       {else}
         {if $current_user_id == $user->id}
         <button class="btn btn-social btn-{$resource}" data-url="{hwi_oauth_login_url name=$resource}?_target_path={url name=core_authentication_connect}" onclick="connect(this)" type="button">
-            <i class="fa fa-{$resource}"></i> {t}Connect with {if $resource == 'facebook'}Facebook{else}Twitter{/if}{/t}
+          <i class="fa fa-{$resource}"></i> {t}Connect with{/t} {if $resource == 'facebook'}Facebook{else}Twitter{/if}
           </button>
           <div class="help-block">{t}Associate your {if $resource == 'facebook'}Facebook{else}Twitter{/if} account to login into Opennemas with it.{/t}</div>
         {else}

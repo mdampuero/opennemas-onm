@@ -52,7 +52,8 @@
       <div id="test"></div>
       {if $current_user_id == $user->id}
       <button class="btn btn-social btn-{$resource}" data-url="{hwi_oauth_login_url name={$resource}}{if !empty($target)}?_target_path={$target}{/if}" onclick="connect(this)" type="button">
-            <i class="fa fa-{$resource}"></i> {if $resource == 'facebook'}Facebook{else}Twitter{/if}
+            <i class="fa fa-{$resource}"></i>
+            {t}Connect with{/t} {if $resource == 'facebook'}Facebook{else}Twitter{/if}
           </button>
       {/if}
     </div>
