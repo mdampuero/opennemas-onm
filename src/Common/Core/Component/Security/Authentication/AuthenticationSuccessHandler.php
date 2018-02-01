@@ -84,8 +84,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
             $target = $this->router->generate('frontend_user_show');
         }
 
-        $session->set('user', $user);
-        $session->set('user_language', $user->user_language);
+        $session->remove('_target');
 
         // Check reCAPTCHA only if present
         if (!is_null($recaptcha)) {

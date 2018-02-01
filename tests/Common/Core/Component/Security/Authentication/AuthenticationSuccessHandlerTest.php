@@ -55,7 +55,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->session = $this->getMockBuilder('Session')
-            ->setMethods([ 'getFlashBag', 'set' ])
+            ->setMethods([ 'getFlashBag', 'remove', 'set' ])
             ->getMock();
 
         $this->ts = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')
@@ -71,10 +71,8 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
         $this->auth->expects($this->once())->method('checkCsrfToken')->with('glorp');
         $this->request->expects($this->once())->method('getSession')
             ->willReturn($this->session);
-        $this->session->expects($this->at(0))->method('set')
-            ->with('user', $this->user);
-        $this->session->expects($this->at(1))->method('set')
-            ->with('user_language', 'es');
+        $this->session->expects($this->at(0))->method('remove')
+            ->with('_target');
         $this->session->expects($this->any())->method('getFlashBag')
             ->willReturn($this->fb);
         $this->ts->expects($this->once())->method('getUser')
