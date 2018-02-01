@@ -110,6 +110,12 @@ services:
         class:     Common\Core\Component\Instance\Validator
         arguments: [ '@orm.manager' ]
 
+    backend.listener.access_denied.exception:
+        class:     Common\Core\EventListener\AccessDeniedExceptionListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
     core.listener.controller:
         class:     Common\Core\EventListener\ControllerListener
         arguments: [ '@core.globals', '@core.locale' ]

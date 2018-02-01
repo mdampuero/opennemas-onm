@@ -2,12 +2,12 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Backend\EventListener;
+namespace Common\Core\EventListener;
 
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -58,11 +58,14 @@ class AccessDeniedExceptionListener implements EventSubscriberInterface
 
         // Redirect to login when no user
         if (empty($this->container->get('core.user'))) {
-            $event->setResponse(new RedirectResponse(
-                $this->container->get('router')
-                    ->generate('backend_authentication_login')
-            ));
+            $request->getSession()->set('_target', $request->getRequestUri());
 
+            $event->setResponse(
+                new RedirectResponse(
+                    $this->container->get('router')
+                        ->generate('backend_authentication_login')
+                )
+            );
             return;
         }
 
