@@ -22,18 +22,18 @@ use Symfony\Component\Security\Core\SecurityContext;
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * The security context.
+     * The authentication service.
      *
-     * @var SecurityContext
+     * @var Authentication
      */
-    protected $context;
+    protected $auth;
 
     /**
-     * The recaptcha service.
+     * The logger service.
      *
-     * @var Recaptcha
+     * @var Logger
      */
-    protected $recaptcha;
+    protected $logger;
 
     /**
      * The router service.
@@ -43,18 +43,26 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     protected $router;
 
     /**
+     * The token storage.
+     *
+     * @var TokenStorage
+     */
+    protected $ts;
+
+    /**
      * Constructs a new handler.
      *
-     * @param SecurityContext $context   The security context.
-     * @param Router          $router    The router service.
-     * @param Recaptcha       $recaptcha The Google Recaptcha.
+     * @param Authentication $auth   The authentication service.
+     * @param TokenStorage   $ts     The token storage.
+     * @param Router         $router The router service.
+     * @param Logger         $logger The logger service.
      */
-    public function __construct($context, $router, $recaptcha, $logger)
+    public function __construct($auth, $ts, $router, $logger)
     {
-        $this->context   = $context;
-        $this->router    = $router;
-        $this->recaptcha = $recaptcha;
-        $this->logger    = $logger;
+        $this->auth   = $auth;
+        $this->logger = $logger;
+        $this->router = $router;
+        $this->ts     = $ts;
     }
 
     /**
@@ -69,58 +77,35 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $user  = $token->getUser();
-        $valid = true;
-
-        // Check reCaptcha if is set
-        $response = $request->get('g-recaptcha-response');
-        if (!is_null($response)) {
-            $valid = $this->recaptcha->configureFromSettings()->isValid(
-                $request->get('g-recaptcha-response'),
-                $request->getClientIp()
-            );
-        }
+        $user      = $token->getUser();
+        $recaptcha = $request->get('g-recaptcha-response');
 
         $session = $request->getSession();
         $session->set('user', $user);
         $session->set('user_language', $user->user_language);
 
-        $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
-            $session->get('intention'),
-            $request->get('_token')
-        );
+        // Check reCaptcha if is set
+        if (!is_null($recaptcha)) {
+            $this->auth->checkRecaptcha($recaptcha, $request->getClientIp());
+        }
+
+        $this->auth->checkCsrfToken($request->get('_token'));
 
         // Login fails because of CSRF token or reCaptcha
-        if (!$isTokenValid || $valid === false) {
-            $session->set(
-                'failed_login_attempts',
-                $session->get('failed_login_attempts') + 1
-            );
+        if ($this->auth->hasError()) {
+            $this->auth->failure();
 
-            if (!$isTokenValid) {
-                $session->getFlashBag()->add(
-                    'error',
-                    _('Login token is not valid. Try to authenticate again.')
-                );
-                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Invalid token");
-            }
+            $error = $this->auth->getErrorMessage();
 
-            if ($valid === false) {
-                $session->getFlashBag()->add(
-                    'error',
-                    _('The reCAPTCHA was not entered correctly. Try to authenticate'
-                    . ' again.')
-                );
-                $this->logger->info("User ".$user->username." (ID:".$user->id.") tried to log in. Recaptcha failed.");
-            }
-
-            $this->context->setToken(null);
+            $session->getFlashBag()->add('error', $error);
+            $this->logger->info($error);
+            $this->ts->setToken(null);
 
             return new RedirectResponse($request->headers->get('referer'));
         }
 
-        $session->set('failed_login_attempts', 0);
-        $this->logger->info("User ".$user->username." (ID:".$user->id.") has logged in.");
+        $this->auth->success();
+        $this->logger->info("User $user->username (ID: $user->id) has logged in.");
 
         $response = new RedirectResponse($request->get('_referer'));
 
