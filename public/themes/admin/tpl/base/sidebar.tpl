@@ -8,7 +8,7 @@
       </div>
       <div class="user-info" ng-click="mode = 'list'">
         <div class="greeting">{t}Welcome{/t}</div>
-        <div class="username" title="{$smarty.session._sf2_attributes.instance->name}">{$smarty.session._sf2_attributes.instance->name}</div>
+        <div class="username" title="{$app.instance->name}">{$app.instance->name}</div>
       </div>
     </div>
     <div class="user-action-wrapper visible-xs">
