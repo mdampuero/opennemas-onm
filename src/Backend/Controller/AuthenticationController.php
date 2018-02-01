@@ -33,11 +33,13 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-        $referer = $this->generateUrl('admin_welcome');
+        $target  = $this->generateUrl('admin_welcome');
         $session = $request->getSession();
         $token   = $request->get('token');
 
-        $session->set('login_callback', $referer);
+        if ($request->getSession()->has('_target')) {
+            $target = $request->getSession()->get('_target');
+        }
 
         // Login from URL token
         if (!empty($token)) {
@@ -83,7 +85,7 @@ class AuthenticationController extends Controller
             'locale'    => $this->get('core.locale')->getLocale(),
             'locales'   => $this->get('core.locale')->getAvailableLocales(),
             'recaptcha' => $recaptcha,
-            'referer'   => $referer,
+            'target'    => $target,
             'token'     => $auth->getCsrfToken()
         ]);
     }

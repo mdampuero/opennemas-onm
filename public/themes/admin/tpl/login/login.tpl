@@ -87,7 +87,7 @@
             </div>
           </div>
           <input type="hidden" id="_token" name="_token" value="{$token}">
-          <input type="hidden" id="_target" name="_target" value="{$referer}">
+          <input type="hidden" id="_target" name="_target" value="{$target}">
         </form>
       {/block}
     </main>
