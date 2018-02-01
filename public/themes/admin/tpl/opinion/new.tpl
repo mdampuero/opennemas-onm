@@ -185,7 +185,7 @@
                                     </label>
                                     <div class="controls">
                                         <select id="type_opinion" name="type_opinion" required>
-                                            <option value="-1">{t}-- Select opinion type --{/t}</option>
+                                            <option value="">{t}-- Select opinion type --{/t}</option>
                                             <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
                                             <option value="1" {if $opinion->type_opinion eq 1} selected {/if}>{t}Opinion from editorial{/t}</option>
                                             <option value="2" {if $opinion->type_opinion eq 2} selected {/if}>{t}Director's letter{/t}</option>
@@ -199,7 +199,7 @@
                                     <div class="controls">
                                         {acl isAllowed="CONTENT_OTHER_UPDATE"}
                                             <select id="fk_author" name="fk_author" required>
-                                                <option value="0" {if is_null($author->id)}selected{/if}>{t} - Select one author - {/t}</option>
+                                                <option value="" {if is_null($author->id)}selected{/if}>{t} - Select one author - {/t}</option>
                                                 {foreach from=$all_authors item=author}
                                                 <option value="{$author->id}" {if $opinion->fk_author eq $author->id}selected{/if}>{$author->name} {if $author->meta['is_blog'] eq 1} (Blogger) {/if}</option>
                                                 {/foreach}
