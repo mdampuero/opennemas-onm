@@ -187,7 +187,8 @@ class SettingController extends Controller
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
                     . '/sections/',
                 'translation_services' =>
-                    $this->get('core.factory.translator')->getTranslatorsData()
+                    $this->get('core.factory.translator')->getTranslatorsData(),
+                'theme_styles' => $this->get('core.theme')->getStyles()
             ],
             'settings' => $settings,
         ]);
