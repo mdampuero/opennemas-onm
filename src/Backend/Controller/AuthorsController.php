@@ -313,7 +313,7 @@ class AuthorsController extends Controller
         $path = MEDIA_IMG_PATH . $avatar->path_img;
         $fs   = new Filesystem();
 
-        if ($fs->exists($path)) {
+        if ($fs->exists($path) && is_file($path)) {
             $fs->remove($path);
         }
     }
