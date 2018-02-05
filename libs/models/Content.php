@@ -1478,6 +1478,10 @@ class Content implements \JsonSerializable
             $category = ContentCategoryManager::get_instance()
                  ->findById($this->category);
 
+            if (!is_object($category)) {
+                return null;
+            }
+
             return $category->name;
         } catch (\Exception $e) {
             error_log('Error on Content::loadCategoyName (ID:' . $pkContent . ')' . $e->getMessage());
@@ -1511,6 +1515,10 @@ class Content implements \JsonSerializable
                 ->set($category->title)
                 ->filter('localize')
                 ->get();
+
+            if (!is_object($category)) {
+                return null;
+            }
 
             return $this->category_title;
         } catch (\Exception $e) {
