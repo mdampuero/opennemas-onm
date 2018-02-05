@@ -260,6 +260,9 @@ class Content implements \JsonSerializable
             case 'category_name':
                 return $this->category_name = $this->loadCategoryName($this->id);
 
+            case 'category_title':
+                return $this->category_name = $this->loadCategoryTitle($this->id);
+
             case 'comments':
                 return 0;
 
@@ -1461,29 +1464,30 @@ class Content implements \JsonSerializable
      *
      * @return string the category name
      */
-    public function loadCategoryName($pkContent)
+    public function loadCategoryName($pkContent = null)
     {
-        if (!empty($this->category_name)) {
+        if (empty($pkContent)) {
+            $pkContent = $this->id;
+        }
+
+        if (is_null($this->category) || $this->category === 0) {
+            return null;
+        }
+
+        try {
+            $category = ContentCategoryManager::get_instance()
+                 ->findById($this->category);
+
+            $this->category_name = getService('data.manager.filter')
+                ->set($category->title)
+                ->filter('localize')
+                ->get();
+
             return $this->category_name;
+        } catch (\Exception $e) {
+            error_log('Error on Content::loadCategoyName (ID:' . $pkContent . ')' . $e->getMessage());
+            return '';
         }
-
-        if (empty($this->category) && !empty($pkContent)) {
-            try {
-                $rs = getService('dbal_connection')->fetchColumn(
-                    'SELECT pk_fk_content_category '
-                    . 'FROM `contents_categories` WHERE pk_fk_content =?',
-                    [ $pkContent ]
-                );
-
-                $this->category = $rs;
-            } catch (\Exception $e) {
-                error_log('Error on Content::loadCategoyName (ID:' . $pkContent . ')' . $e->getMessage());
-            }
-        }
-
-        $this->category_name = ContentCategoryManager::get_instance()->getName($this->category);
-
-        return $this->category_name;
     }
 
     /**
@@ -1494,31 +1498,22 @@ class Content implements \JsonSerializable
      *
      * @return string the category title
      */
-    public function loadCategoryTitle($pkContent)
+    public function loadCategoryTitle($pkContent = null)
     {
-        if (!empty($this->category_title)) {
-            return $this->category_title;
-        }
-
         if (empty($pkContent)) {
             $pkContent = $this->id;
         }
 
+        if (is_null($this->category) || $this->category === 0) {
+            return null;
+        }
+
         try {
-            $rs = getService('dbal_connection')->fetchColumn(
-                'SELECT pk_fk_content_category '
-                . 'FROM `contents_categories` WHERE pk_fk_content =?',
-                [ $pkContent ]
-            );
-
-            $this->category      = $rs;
-            $this->category_name = $this->loadCategoryName($this->category);
-
-            $category_title_aux = ContentCategoryManager::get_instance()
-                 ->getTitle($this->category_name);
+            $category = ContentCategoryManager::get_instance()
+                 ->findById($this->category);
 
             $this->category_title = getService('data.manager.filter')
-                ->set($category_title_aux)
+                ->set($category->title)
                 ->filter('localize')
                 ->get();
 

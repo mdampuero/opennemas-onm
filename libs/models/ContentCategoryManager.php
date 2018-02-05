@@ -206,6 +206,24 @@ class ContentCategoryManager
     }
 
     /**
+     * Returns a category object given its id
+     *
+     * @param int $categoryID the Category ID
+     *
+     * @return ContentCategory|null the category if found
+     **/
+    public function findById($categoryId)
+    {
+        if (!is_array($this->categories)
+            || !array_key_exists($categoryId, $this->categories)
+        ) {
+            return null;
+        }
+
+        return $this->categories[$categoryId];
+    }
+
+    /**
      * Returns the category id from its name
      *
      * @param string $categoryName the category name
@@ -385,7 +403,7 @@ class ContentCategoryManager
             return $this->categories[$id]->name;
         }
 
-        return false;
+        return null;
     }
 
     /**
