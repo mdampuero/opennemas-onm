@@ -261,7 +261,7 @@ class Content implements \JsonSerializable
                 return $this->category_name = $this->loadCategoryName($this->id);
 
             case 'category_title':
-                return $this->category_name = $this->loadCategoryTitle($this->id);
+                return $this->category_title = $this->loadCategoryTitle($this->id);
 
             case 'comments':
                 return 0;
@@ -1478,12 +1478,7 @@ class Content implements \JsonSerializable
             $category = ContentCategoryManager::get_instance()
                  ->findById($this->category);
 
-            $this->category_name = getService('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
-
-            return $this->category_name;
+            return $category->name;
         } catch (\Exception $e) {
             error_log('Error on Content::loadCategoyName (ID:' . $pkContent . ')' . $e->getMessage());
             return '';
