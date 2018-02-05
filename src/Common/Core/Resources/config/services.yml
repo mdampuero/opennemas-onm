@@ -220,6 +220,14 @@ services:
         class:     Common\ORM\Entity\User
         factory:   [ '@core.security', 'getUser' ]
 
+    core.security.user.provider:
+        class:     Common\Core\Component\Security\User\UserProvider
+        arguments: [ '@orm.manager', [ 'instance', 'manager' ] ]
+
+    core.security.user.oauth_provider:
+        class:     Common\Core\Component\Security\User\OAuthUserProvider
+        arguments: [ '@orm.manager', '@security.token_storage', [ 'instance', 'manager' ] ]
+
     core.template:
         class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.filters%' ]

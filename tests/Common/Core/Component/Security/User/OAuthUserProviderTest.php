@@ -40,8 +40,12 @@ class OAuthUserProviderTest extends KernelTestCase
             ->setMethods([ 'getAccessToken', 'getEmail', 'getRealName', 'getResourceOwner', 'getUsername' ])
             ->getMock();
 
-        $this->session = $this->getMockBuilder('Session')
-            ->setMethods([ 'get' ])
+        $this->token = $this->getMockBuilder('Token')
+            ->setMethods([ 'getUser' ])
+            ->getMock();
+
+        $this->ts = $this->getMockBuilder('TokenStorage')
+            ->setMethods([ 'getToken' ])
             ->getMock();
 
         $this->em->expects($this->any())->method('getRepository')
@@ -49,7 +53,7 @@ class OAuthUserProviderTest extends KernelTestCase
         $this->response->expects($this->any())->method('getResourceOwner')
             ->willReturn($this->resource);
 
-        $this->provider = new OAuthUserProvider($this->em, $this->session, [ 'foo' ]);
+        $this->provider = new OAuthUserProvider($this->em, $this->ts, [ 'foo' ]);
     }
 
     /**
@@ -95,7 +99,7 @@ class OAuthUserProviderTest extends KernelTestCase
         $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
         $this->repository->expects($this->any())->method('find')->will($this->throwException(new \Exception()));
 
-        $this->session->expects($this->once())->method('get')->with('user')->willReturn(null);
+        $this->ts->expects($this->once())->method('getToken')->willReturn(null);
 
         $user = $this->provider->loadUserByOAuthUserResponse($this->response);
 
@@ -130,7 +134,8 @@ class OAuthUserProviderTest extends KernelTestCase
         $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
         $this->repository->expects($this->any())->method('find')->willReturn($user);
 
-        $this->session->expects($this->once())->method('get')->with('user')->willReturn($user);
+        $this->ts->expects($this->once())->method('getToken')->willReturn($this->token);
+        $this->token->expects($this->once())->method('getUser')->willReturn($user);
 
         $this->assertEquals($user, $this->provider->loadUserByOAuthUserResponse($this->response));
         $this->assertEquals('Qux Flob', $user->wibble_realname);
@@ -157,8 +162,10 @@ class OAuthUserProviderTest extends KernelTestCase
 
         $this->repository->expects($this->any())->method('findOneBy')
             ->willReturn($userInDatabase);
-        $this->session->expects($this->once())->method('get')
-            ->with('user')->willReturn($userInSession);
+        $this->ts->expects($this->once())->method('getToken')
+            ->willReturn($this->token);
+        $this->token->expects($this->once())->method('getUser')
+            ->willReturn($userInSession);
 
         $this->assertEquals(
             $userInSession,
@@ -194,7 +201,10 @@ class OAuthUserProviderTest extends KernelTestCase
         $this->repository->expects($this->any())->method('findOneBy')->will($this->throwException(new \Exception()));
         $this->repository->expects($this->any())->method('find')->willReturn($user);
 
-        $this->session->expects($this->once())->method('get')->with('user')->willReturn($user);
+        $this->ts->expects($this->once())->method('getToken')
+            ->willReturn($this->token);
+        $this->token->expects($this->once())->method('getUser')
+            ->willReturn($user);
         $this->em->expects($this->once())->method('persist')
             ->will($this->throwException(new \Exception()));
 

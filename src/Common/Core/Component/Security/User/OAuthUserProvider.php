@@ -28,11 +28,11 @@ class OAuthUserProvider extends BaseOAuthUserProvider
     protected $em;
 
     /**
-     * The current session.
+     * The token storage.
      *
-     * @var Session
+     * @var TokenStorage
      */
-    protected $session;
+    protected $ts;
 
     /**
      * The list of repositories to use.
@@ -45,13 +45,13 @@ class OAuthUserProvider extends BaseOAuthUserProvider
      * Initializes the OAuthUserProvider.
      *
      * @param EntityManager $em           The entity manager.
-     * @param Session       $session      The current session.
+     * @param TokenStorage  $ts           The token storage.
      * @param array         $repositories The list of repositories to use.
      */
-    public function __construct($em, $session, $repositories)
+    public function __construct($em, $ts, $repositories)
     {
         $this->em           = $em;
-        $this->session      = $session;
+        $this->ts           = $ts;
         $this->repositories = $repositories;
     }
 
@@ -65,7 +65,8 @@ class OAuthUserProvider extends BaseOAuthUserProvider
         $oql      = sprintf('%s_id = "%s"', $resource, $userId);
 
         $user    = $this->loadUserBy($oql);
-        $current = $this->session->get('user');
+        $token   = $this->ts->getToken();
+        $current = empty($token) ? null : $token->getUser();
 
         // Login with external account when user exists
         if (empty($current) && !empty($user)) {
