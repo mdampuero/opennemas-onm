@@ -39,7 +39,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
      *
      * @var array
      */
-    protected $stats = array();
+    protected $stats = [];
 
     /**
      * Array of database translations
@@ -77,7 +77,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 InputOption::VALUE_NONE,
                 'If set, command will check and configure the translations table'
             )
-           ->addOption(
+            ->addOption(
                 'debug',
                 false,
                 InputOption::VALUE_NONE,
@@ -151,8 +151,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('session')
-            ->set('user', json_decode(json_encode(['id' => 0, 'username' => 'cli'])));
+        // TODO: Remove ASAP
+        $this->getContainer()->get('core.security')->setCliUser();
 
         $start            = time();
         $basePath         = APPLICATION_PATH;
@@ -169,6 +169,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
 
         $path = $input->getArgument('conf-file');
         $yaml = new Parser();
+
         $this->settings = $yaml->parse(file_get_contents($path));
 
         $this->configureMigrator();

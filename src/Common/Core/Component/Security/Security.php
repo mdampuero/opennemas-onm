@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Security;
 
 use Common\ORM\Entity\Instance;
+use Common\ORM\Entity\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -213,6 +214,16 @@ class Security
         }
 
         $this->categories = $categories;
+    }
+
+    /**
+     * Sets an empty user for console commands.
+     *
+     * TODO: Remove when no user usage in data model
+     */
+    public function setCliUser()
+    {
+        $this->user = new User([ 'id' => 0, 'username' => 'cli' ]);
     }
 
     /**

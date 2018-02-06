@@ -9,7 +9,6 @@
  */
 namespace Framework\Command;
 
-use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,11 +25,9 @@ class NewsAgencySyncCommand extends ContainerAwareCommand
         $this
             ->setName('sync:newagency')
             ->setDescription('Cleans all the Symfony generated files')
-            ->setDefinition(
-                array(
-                    new InputArgument('instance', InputArgument::REQUIRED, 'The instance internal name.'),
-                )
-            )
+            ->setDefinition([
+                new InputArgument('instance', InputArgument::REQUIRED, 'The instance internal name.'),
+            ])
             ->setHelp(
                 <<<EOF
 The <info>sync:newagency</info> command synchronizes the instance new agencies.
@@ -46,10 +43,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // TODO: Remove ASAP
-        $this->getContainer()->get('session')->set(
-            'user',
-            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
-        );
+        $this->getContainer()->get('core.security')->setCliUser();
 
         $loader       = $this->getContainer()->get('core.loader');
         $logger       = $this->getContainer()->get('logger');
@@ -60,7 +54,7 @@ EOF
 
         if ($instance->activated != '1') {
             $message = _('Instance not activated');
-            throw new InstanceNotActivatedException($message);
+            throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
         }
 
         // TODO: Remove this when using new ORM for contents
@@ -70,15 +64,15 @@ EOF
             ->selectDatabase($instance->getDatabaseName());
 
         $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
-        $logger->info("Start synchronizing {$instance->internal_name} instance", array('cron'));
+        $logger->info("Start synchronizing {$instance->internal_name} instance", [ 'cron' ]);
 
         $servers = $this->getContainer()->get('setting_repository')
             ->get('news_agency_config');
 
-        $tpl  = $this->getContainer()->get('view')->getBackendTemplate();
-        $path = $this->getContainer()->getParameter('core.paths.cache')
-            . '/' . $instance->internal_name;
         $logger = $this->getContainer()->get('error.log');
+        $tpl    = $this->getContainer()->get('view')->getBackendTemplate();
+        $path   = $this->getContainer()->getParameter('core.paths.cache')
+            . '/' . $instance->internal_name;
 
         $synchronizer = new Synchronizer($path, $tpl, $logger);
 
@@ -99,9 +93,9 @@ EOF
                     $output->writeln("<fg=red> ==> {$synchronizer->stats['deleted']} files deleted</>");
                     $output->writeln("<info> ==> {$synchronizer->stats['downloaded']} files downloaded</>");
                     $output->writeln("<info> ==> {$synchronizer->stats['contents']} contents found</>");
-                    $logger->info("{$synchronizer->stats['deleted']} files deleted", array('cron'));
-                    $logger->info("{$synchronizer->stats['downloaded']} files downloaded", array('cron'));
-                    $logger->info("{$synchronizer->stats['contents']} contents found", array('cron'));
+                    $logger->info("{$synchronizer->stats['deleted']} files deleted", [ 'cron' ]);
+                    $logger->info("{$synchronizer->stats['downloaded']} files downloaded", [ 'cron' ]);
+                    $logger->info("{$synchronizer->stats['contents']} contents found", [ 'cron' ]);
 
                     if (array_key_exists('auto_import', $server) && $server['auto_import']) {
                         $timezone = $this->getContainer()->get('setting_repository')->get('time_zone');
@@ -113,12 +107,12 @@ EOF
 
                         if (!empty($results[1])) {
                             $output->writeln("<fg=yellow> ==> " . $results[1] . " contents already imported</>");
-                            $logger->info($results[1] . " contents already imported", array('cron'));
+                            $logger->info($results[1] . " contents already imported", [ 'cron' ]);
                         }
 
                         if (!empty(count($results[0]))) {
                             $output->writeln("<info> ==> " . count($results[0]) . " contents imported</>\n");
-                            $logger->info(count($results[0]) . " files downloaded", array('cron'));
+                            $logger->info(count($results[0]) . " files downloaded", [ 'cron' ]);
                         }
                     }
                 } catch (\Exception $e) {
