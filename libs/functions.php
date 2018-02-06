@@ -57,7 +57,7 @@ function clearslash($string)
 function logContentEvent($action = null, $content = null)
 {
     $logger = getService('application.log');
-    $user   = getService('session')->get('user');
+    $user   = getService('core.user');
 
     $msg = "User {$user->username} ({$user->id}) has executed the action {$action}";
     if (!empty($content)) {
@@ -105,7 +105,7 @@ function logUserEvent($action = null, $id = null, $data = null)
  *
  * @return string  the url
  */
-function url($urlName, $params = array(), $absolute = false)
+function url($urlName, $params = [], $absolute = false)
 {
     if ($absolute) {
         $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
@@ -158,12 +158,13 @@ function getUserRealIP()
             $entry = trim($entry);
             if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
                 // http://www.faqs.org/rfcs/rfc1918.html
-                $privateIp = array(
-                      '/^0\./',
-                      '/^127\.0\.0\.1/',
-                      '/^192\.168\..*/',
-                      '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
-                      '/^10\..*/');
+                $privateIp = [
+                    '/^0\./',
+                    '/^127\.0\.0\.1/',
+                    '/^192\.168\..*/',
+                    '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
+                    '/^10\..*/'
+                ];
 
                 $foundIP = preg_replace($privateIp, $clientIp, $ipList[1]);
 
@@ -216,7 +217,7 @@ function html_attribute($string)
  * @return void
  * @author
  */
-function dispatchEventWithParams($eventName, $params = array())
+function dispatchEventWithParams($eventName, $params = [])
 {
     if (php_sapi_name() == 'cli') {
         return;
