@@ -79,6 +79,7 @@ class CoreListener implements EventSubscriberInterface
             || strpos($uri, '/_profiler') === 0
             || strpos($uri, '/api') === 0
             || strpos($uri, '/asset') === 0
+            || strpos($uri, '/auth') === 0
             || strpos($uri, '/build/assets') === 0
             || strpos($uri, '/content/share-by-email') === 0
             || strpos($uri, '/manager') === 0
