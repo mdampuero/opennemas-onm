@@ -16,7 +16,7 @@
         </a>
         <ul class="dropdown-menu pull-right">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_widget_show id=$content->id category=$params['category']}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_widget_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
@@ -32,7 +32,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a href="{url name=admin_widget_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
+                <a href="{url name=backend_ws_content_send_to_trash id=$content->id contentType=$content->content_type_name}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="fa fa-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
