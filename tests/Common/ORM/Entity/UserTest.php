@@ -149,7 +149,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsEqualTo()
     {
-        $user = new User([ 'username' => 'garply', 'fk_user_group' =>  [] ]);
+        $user = new User([ 'username' => 'garply', 'fk_user_group' => [] ]);
 
         $this->assertFalse($this->user->isEqualTo($user));
 

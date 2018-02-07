@@ -41,8 +41,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFilter()
     {
-        $template = new Template($this->container, []);
-        $filtersProperty   = new \ReflectionProperty($template, 'filters');
+        $template        = new Template($this->container, []);
+        $filtersProperty = new \ReflectionProperty($template, 'filters');
         $filtersProperty->setAccessible(true);
 
         $template->addFilter('pre', 'filterone');
@@ -127,7 +127,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetThemeWithTheme()
     {
-        $theme = $this->getMockBuilder('Theme')
+        $theme       = $this->getMockBuilder('Theme')
             ->setMethods([ 'getData' ])
             ->getMock();
         $theme->uuid = 'com.openhost.foobar';
@@ -135,7 +135,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $template = new Template($this->container, []);
 
-        $themeProperty   = new \ReflectionProperty($template, 'theme');
+        $themeProperty = new \ReflectionProperty($template, 'theme');
         $themeProperty->setAccessible(true);
         $template->theme = $theme;
 
@@ -147,7 +147,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetThemeVariantName()
     {
-        $theme = $this->getMockBuilder('Theme')
+        $theme       = $this->getMockBuilder('Theme')
             ->setMethods([ 'getData', 'getCurrentStyle' ])
             ->getMock();
         $theme->uuid = 'com.openhost.foobar';
@@ -174,7 +174,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $template = new Template($this->container, []);
 
-        $themeProperty   = new \ReflectionProperty($template, 'theme');
+        $themeProperty = new \ReflectionProperty($template, 'theme');
         $themeProperty->setAccessible(true);
         $template->theme = $theme;
 
@@ -186,7 +186,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetThemeVariantFile()
     {
-        $theme = $this->getMockBuilder('Theme')
+        $theme       = $this->getMockBuilder('Theme')
             ->setMethods([ 'getData', 'getCurrentStyle' ])
             ->getMock();
         $theme->uuid = 'com.openhost.foobar';
@@ -213,7 +213,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $template = new Template($this->container, []);
 
-        $themeProperty   = new \ReflectionProperty($template, 'theme');
+        $themeProperty = new \ReflectionProperty($template, 'theme');
         $themeProperty->setAccessible(true);
         $template->theme = $theme;
 
