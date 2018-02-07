@@ -29,12 +29,17 @@ class AuthenticationController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $error   = null;
-        $referer = $this->generateUrl('admin_welcome');
+        if (!empty($this->get('core.user'))) {
+            return $this->redirect($this->generateUrl('admin_welcome'));
+        }
+
+        $target  = $this->generateUrl('admin_welcome');
         $session = $request->getSession();
         $token   = $request->get('token');
 
-        $session->set('login_callback', $referer);
+        if ($request->getSession()->has('_target')) {
+            $target = $request->getSession()->get('_target');
+        }
 
         // Login from URL token
         if (!empty($token)) {
@@ -45,7 +50,7 @@ class AuthenticationController extends Controller
                     ->findOneBy(sprintf('token = "%s"', $token));
             } catch (\Exception $e) {
                 $session->getFlashBag()->add('error', _('Invalid token'));
-                return $this->redirect($this->generateUrl('admin_login'));
+                return $this->redirect($this->generateUrl('backend_authentication_login'));
             }
 
             $user->token = null;
@@ -69,68 +74,19 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-        if ($session->get('_security.backend.target_path')) {
-            $referer = $session->get('_security.backend.target_path');
-        }
-
-        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(Security::AUTHENTICATION_ERROR);
-        } else {
-            $error = $request->getSession()->get(Security::AUTHENTICATION_ERROR);
-        }
-
-        if (!empty($error)) {
-            if ($error instanceof BadCredentialsException) {
-                $msg = _('Username or password incorrect.');
-            } elseif ($error instanceof InvalidCsrfTokenException) {
-                $msg = _('Login token is not valid. Try to authenticate again.');
-            } else {
-                $msg = $error->getMessage();
-            }
-
-            $session->getFlashBag()->add('error', $msg);
-            $session->set('failed_login_attempts', $session->get('failed_login_attempts') + 1);
-        }
-
-        // Generate CSRF token
-        $intention = time() . rand();
-        $token     = $this->get('security.csrf.token_manager')->getToken($intention);
-
-        $session->set('intention', $intention);
-
+        $auth      = $this->get('core.security.authentication');
         $recaptcha = '';
-        if ($session->get('failed_login_attempts') >= 3) {
-            $recaptcha = $this->get('core.recaptcha')
-                ->configureFromParameters()
-                ->getHtml();
+
+        if ($auth->isRecaptchaRequired()) {
+            $recaptcha = $auth->getRecaptchaFromParameters();
         }
 
         return $this->render('login/login.tpl', [
-            'recaptcha' => $recaptcha,
-            'token'     => $token,
-            'referer'   => $referer,
             'locale'    => $this->get('core.locale')->getLocale(),
-            'locales'   => $this->get('core.locale')->getAvailableLocales()
+            'locales'   => $this->get('core.locale')->getAvailableLocales(),
+            'recaptcha' => $recaptcha,
+            'target'    => $target,
+            'token'     => $auth->getCsrfToken()
         ]);
-    }
-
-    /**
-     * Displays a popup after login/connect with social accounts.
-     *
-     * @return Response The response object.
-     */
-    public function loginCallbackAction(Request $request)
-    {
-        $redirect = $request->getSession()->get('_security.backend.target_path');
-
-        if ($redirect === '/admin/login/callback') {
-            return $this->render('common/close_popup.tpl');
-        }
-
-        if (!empty($redirect)) {
-            return $this->redirect($redirect);
-        }
-
-        return $this->redirect($this->generateUrl('admin_welcome'));
     }
 }

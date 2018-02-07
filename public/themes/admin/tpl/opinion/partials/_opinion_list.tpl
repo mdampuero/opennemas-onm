@@ -209,7 +209,7 @@
               </td>
               <td class="text-center">
                 {acl isAllowed="OPINION_AVAILABLE"}
-                <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$smarty.session._sf2_attributes.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$app.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
                 </button>
                 {/acl}

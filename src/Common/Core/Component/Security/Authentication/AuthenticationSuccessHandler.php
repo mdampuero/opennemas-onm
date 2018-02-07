@@ -7,19 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Frontend\EventListener;
+namespace Common\Core\Component\Security\Authentication;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Handler to load user data when an user logs in the system successfully.
  */
-class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
      * The authentication service.
@@ -53,11 +51,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * Constructs a new handler.
      *
      * @param Authentication $auth   The authentication service.
-     * @param TokenStorage   $ts     The token storage.
-     * @param Router         $router The router service.
      * @param Logger         $logger The logger service.
+     * @param Router         $router The router service.
+     * @param TokenStorage   $ts     The token storage.
      */
-    public function __construct($auth, $ts, $router, $logger)
+    public function __construct($auth, $logger, $router, $ts)
     {
         $this->auth   = $auth;
         $this->logger = $logger;
@@ -79,19 +77,26 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     ) {
         $user      = $token->getUser();
         $recaptcha = $request->get('g-recaptcha-response');
+        $session   = $request->getSession();
+        $target    = $request->get('_target');
 
-        $session = $request->getSession();
-        $session->set('user', $user);
-        $session->set('user_language', $user->user_language);
+        if (empty($target)) {
+            $target = $this->router->generate('frontend_user_show');
+        }
 
-        // Check reCaptcha if is set
+        $session->remove('_target');
+
+        // Check reCAPTCHA only if present
         if (!is_null($recaptcha)) {
             $this->auth->checkRecaptcha($recaptcha, $request->getClientIp());
         }
 
         $this->auth->checkCsrfToken($request->get('_token'));
 
-        // Login fails because of CSRF token or reCaptcha
+        if ($request->isXmlHttpRequest()) {
+            $target = $this->router->generate('core_authentication_authenticated');
+        }
+
         if ($this->auth->hasError()) {
             $this->auth->failure();
 
@@ -101,14 +106,16 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $this->logger->info($error);
             $this->ts->setToken(null);
 
-            return new RedirectResponse($request->headers->get('referer'));
+            if (!$request->isXmlHttpRequest()) {
+                $target = $request->headers->get('referer');
+            }
+
+            return new RedirectResponse($target);
         }
 
         $this->auth->success();
         $this->logger->info("User $user->username (ID: $user->id) has logged in.");
 
-        $response = new RedirectResponse($request->get('_referer'));
-
-        return $response;
+        return new RedirectResponse($target);
     }
 }

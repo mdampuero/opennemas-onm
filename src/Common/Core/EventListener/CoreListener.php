@@ -9,8 +9,8 @@
  */
 namespace Common\Core\EventListener;
 
-use Common\Core\Component\Exception\InstanceNotActivatedException;
-use Common\Core\Component\Exception\InstanceNotRegisteredException;
+use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
+use Common\Core\Component\Exception\Instance\InstanceNotRegisteredException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -79,6 +79,8 @@ class CoreListener implements EventSubscriberInterface
             || strpos($uri, '/_profiler') === 0
             || strpos($uri, '/api') === 0
             || strpos($uri, '/asset') === 0
+            || strpos($uri, '/auth') === 0
+            || strpos($uri, '/oauth') === 0
             || strpos($uri, '/build/assets') === 0
             || strpos($uri, '/content/share-by-email') === 0
             || strpos($uri, '/manager') === 0

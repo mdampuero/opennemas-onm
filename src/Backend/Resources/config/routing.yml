@@ -918,25 +918,6 @@ admin_utils_calculate_tags:
         expose: true
 
 # Auth system routes
-admin_login:
-    path:     /login
-    defaults: { _controller  : BackendBundle:Authentication:login }
-
-admin_login_check:
-    path:     /login/check
-    defaults: { _controller  : BackendBundle:Authentication:check }
-    methods:  [POST]
-
-admin_login_callback:
-    path:     /login/callback
-    defaults: { _controller  : BackendBundle:Authentication:loginCallback }
-
-admin_logout:
-    path:     /logout
-    defaults: { _controller  : BackendBundle:Authentication:logout }
-    options:
-        expose: true
-
 admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
     defaults: { _controller  : BackendBundle:User:recoverPassword }
@@ -975,6 +956,10 @@ admin_menu_sidebar_get:
         expose: true
 
 # Routing refactoring starts here
+backend_authentication:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/authentication.yml'
+
 backend_author:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/author.yml'

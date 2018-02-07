@@ -251,7 +251,7 @@
                           </div>
                         </div>
                       {aclelse}
-                          <input type="hidden" name="fk_author" ng-model="article.fk_author" ng-init="article.fk_author ? article.fk_author: article.fk_author = {$smarty.session._sf2_attributes.user->id}">
+                          <input type="hidden" name="fk_author" ng-model="article.fk_author" ng-init="article.fk_author ? article.fk_author: article.fk_author = {$app.user->id}">
                       {/acl}
                     </div>
                   </div>
@@ -397,9 +397,6 @@
       <div id="related-contents">
         {include file ="article/partials/_related_list.tpl"}
       </div>
-      {is_module_activated name="CRONICAS_MODULES"}
-        {include file ="article/partials/_article_advanced_customize.tpl"}
-      {/is_module_activated}
       <div class="row" ng-if="fieldsByModule !== undefined && fieldsByModule">
         <div class="col-md-12">
           <div class="grid simple">
@@ -415,6 +412,9 @@
           </div>
         </div>
       </div>
+      {is_module_activated name="CRONICAS_MODULES"}
+        {include file ="article/partials/_article_advanced_customize.tpl"}
+      {/is_module_activated}
       <input type="hidden" id="action" name="action" value="{$action}" />
     </div><!-- /wrapper-content contentform -->
     <script type="text/ng-template" id="modal-preview">

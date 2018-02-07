@@ -93,14 +93,16 @@ class Checker
         }
 
         $oql = implode(' or ', $oql);
+        $i   = null;
 
         try {
-            $i   = $this->em->getRepository('Instance')->findOneBy($oql);
-
-            if (!empty($instance) && $instance->id != $i->id) {
-                throw new InstanceAlreadyExistsException();
-            }
+            $i = $this->em->getRepository('Instance')->findOneBy($oql);
         } catch (\Exception $e) {
+            return;
+        }
+
+        if (!empty($instance) && !empty($i) && $instance->id != $i->id) {
+            throw new InstanceAlreadyExistsException();
         }
     }
 }

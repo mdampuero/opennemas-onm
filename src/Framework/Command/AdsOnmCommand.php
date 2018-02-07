@@ -22,13 +22,11 @@ class AdsOnmCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    new InputArgument('action', InputArgument::REQUIRED, 'action'),
-                    new InputArgument('instance-name', InputArgument::REQUIRED, 'instance-name'),
-                    new InputArgument('ads-file', InputArgument::REQUIRED, 'ads-file'),
-                )
-            )
+            ->setDefinition([
+                new InputArgument('action', InputArgument::REQUIRED, 'action'),
+                new InputArgument('instance-name', InputArgument::REQUIRED, 'instance-name'),
+                new InputArgument('ads-file', InputArgument::REQUIRED, 'ads-file'),
+            ])
             ->setName('ads:onm')
             ->setDescription(
                 'Executes command to create onm ads on instace'
@@ -63,10 +61,9 @@ EOF
         $database = $instance->getDatabaseName();
 
         $this->getContainer()->get('dbal_connection')->selectDatabase($database);
-        $this->getContainer()->get('session')->set(
-            'user',
-            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
-        );
+
+        // TODO: Remove ASAP
+        $this->getContainer()->get('core.security')->setCliUser();
 
         $yaml = new Parser();
         $ads  = $yaml->parse(file_get_contents($ads));
@@ -183,7 +180,6 @@ EOF
 
     /**
      * Update ads on a instance
-     *
      */
     public function updateAds($ads)
     {

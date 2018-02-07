@@ -206,7 +206,7 @@
                                             </select>
                                         {aclelse}
                                             <select id="fk_author" name="fk_author">
-                                              <option value="{$smarty.session._sf2_attributes.user->id}" selected >{$smarty.session._sf2_attributes.user->name}</option>
+                                              <option value="{$app.user->id}" selected >{$app.user->name}</option>
                                             </select>
                                         {/acl}
                                     </div>

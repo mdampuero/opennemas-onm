@@ -1,0 +1,23 @@
+core_authentication_authenticated:
+    path:     /auth/authenticated
+    defaults: { _controller: 'CoreBundle:Authentication:authenticated' }
+
+core_authentication_check:
+    path:     /auth/check
+
+core_authentication_complete:
+    path:     /auth/complete
+    defaults: { _controller: 'CoreBundle:Authentication:complete' }
+
+core_authentication_connect:
+    path:     /auth/connect
+
+core_authentication_create:
+    path:     /auth/create
+
+core_authentication_login_social:
+    path:     /auth/login/{resource}
+    defaults: { _controller: 'CoreBundle:Authentication:loginSocial' }
+
+core_authentication_logout:
+    path:     /auth/logout

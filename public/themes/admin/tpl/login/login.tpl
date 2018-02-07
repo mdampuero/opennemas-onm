@@ -37,7 +37,7 @@
     <div class="overlay"></div>
     <main>
       {block name="login_content"}
-        <form method="post" autocomplete="off" action="{url name=admin_login_check}" id="loginform" name="loginform">
+        <form method="post" autocomplete="off" action="{url name=core_authentication_check}" id="loginform" name="loginform">
           <div class="container">
             <div class="row login-container animated fadeInUp">
               <div class="col-md-6 col-md-offset-3 tiles white no-padding">
@@ -47,14 +47,14 @@
                 </div>
                 <div class="row m-l-5 m-r-5 p-b-20">
                   <div class="col-sm-6">
-                    <a class="btn btn-info btn-block" href="{hwi_oauth_login_url name=facebook}">
+                    <button class="btn btn-info btn-block" data-url="{hwi_oauth_login_url name=facebook}" onclick="connect(this)" type="button">
                       <i class="social-icon icon-facebook"></i> Facebook
-                    </a>
+                    </button>
                   </div>
                   <div class="col-sm-6">
-                    <a class="btn btn-success btn-block" href="{hwi_oauth_login_url name=twitter}">
+                    <button class="btn btn-success btn-block" data-url="{hwi_oauth_login_url name=twitter}" onclick="connect(this)" type="button">
                       <i class="social-icon icon-twitter"></i> Twitter
-                    </a>
+                    </button>
                   </div>
                 </div>
                 <div class="tiles grey p-t-20 p-b-20 text-black">
@@ -87,7 +87,7 @@
             </div>
           </div>
           <input type="hidden" id="_token" name="_token" value="{$token}">
-          <input type="hidden" id="_referer" name="_referer" value="{$referer}">
+          <input type="hidden" id="_target" name="_target" value="{$target}">
         </form>
       {/block}
     </main>
@@ -122,6 +122,21 @@
         @Common/components/modernizr/modernizr.js,
         @Common/js/onm/md5.min.js" output="login"}
       <script type="text/javascript">
+        function connect(btn) {
+          var win = window.open(
+            btn.getAttribute('data-url'),
+            btn.getAttribute('id'),
+            'height=400, width=400'
+          );
+
+          var interval = window.setInterval(function() {
+            if (win == null || win.closed) {
+              window.clearInterval(interval);
+              window.location = '{url name=admin_welcome}';
+            }
+          }, 1000);
+        };
+
         jQuery(document).ready(function($) {
           'use strict';
 

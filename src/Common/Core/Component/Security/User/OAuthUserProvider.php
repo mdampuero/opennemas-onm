@@ -9,8 +9,9 @@
  */
 namespace Common\Core\Component\Security\User;
 
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider as BaseOAuthUserProvider;
+use Common\ORM\Entity\User;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider as BaseOAuthUserProvider;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
@@ -27,11 +28,11 @@ class OAuthUserProvider extends BaseOAuthUserProvider
     protected $em;
 
     /**
-     * The current session.
+     * The token storage.
      *
-     * @var Session
+     * @var TokenStorage
      */
-    protected $session;
+    protected $ts;
 
     /**
      * The list of repositories to use.
@@ -44,13 +45,13 @@ class OAuthUserProvider extends BaseOAuthUserProvider
      * Initializes the OAuthUserProvider.
      *
      * @param EntityManager $em           The entity manager.
-     * @param Session       $session      The current session.
+     * @param TokenStorage  $ts           The token storage.
      * @param array         $repositories The list of repositories to use.
      */
-    public function __construct($em, $session, $repositories)
+    public function __construct($em, $ts, $repositories)
     {
         $this->em           = $em;
-        $this->session      = $session;
+        $this->ts           = $ts;
         $this->repositories = $repositories;
     }
 
@@ -63,38 +64,29 @@ class OAuthUserProvider extends BaseOAuthUserProvider
         $userId   = $response->getUsername();
         $oql      = sprintf('%s_id = "%s"', $resource, $userId);
 
-        $user = $this->loadUserBy($oql);
+        $user    = $this->loadUserBy($oql);
+        $token   = $this->ts->getToken();
+        $current = empty($token) ? null : $token->getUser();
 
-        if (!empty($user)) {
+        // Login with external account when user exists
+        if (empty($current) && !empty($user)) {
             // Prevent password deletion after external eraseCredentials call
             return clone($user);
         }
 
-        $user = $this->session->get('user');
-
-        if (empty($user)) {
-            throw new UsernameNotFoundException(
-                _('Unable to find an user linked to that account.') . ' '
-                . sprintf(
-                    _('First you have to link your %s account to your opennemas account.'),
-                    $resource
-                )
-            );
+        // Login with external account creates a new user (frontend)
+        if (empty($current) && empty($user)) {
+            return $this->createUser($response);
         }
 
         try {
-            $user = $this->em->getRepository('User', $user->getOrigin())->find($user->id);
+            // Account already connected
+            if (!empty($user) && $current !== $user) {
+                return $current;
+            }
 
             // Connect accounts
-            $user->{$resource . '_email'}    = $response->getEmail();
-            $user->{$resource . '_id'}       = $userId;
-            $user->{$resource . '_realname'} = $response->getRealName();
-            $user->{$resource . '_token'}    = $response->getAccessToken();
-
-            $this->em->persist($user);
-
-            // Prevent password deletion after external eraseCredentials call
-            return clone($user);
+            return $this->connectUser($current, $response);
         } catch (\Exception $e) {
             throw new UsernameNotFoundException(
                 sprintf(
@@ -111,6 +103,61 @@ class OAuthUserProvider extends BaseOAuthUserProvider
     public function supportsClass($class)
     {
         return $class === 'User';
+    }
+
+    /**
+     * Connects the current user to the account.
+     *
+     * @param User     $user     The authenticated user in the current session.
+     * @param Response $response The resource response.
+     *
+     * @return User The authenticated user with the updated information.
+     */
+    protected function connectUser($user, $response)
+    {
+        $resource = $response->getResourceOwner()->getName();
+        $userId   = $response->getUsername();
+
+        // Connect user in session to the account
+        $user = $this->em->getRepository('User', $user->getOrigin())->find($user->id);
+
+        // Connect accounts
+        $user->{$resource . '_email'}    = $response->getEmail();
+        $user->{$resource . '_id'}       = $userId;
+        $user->{$resource . '_realname'} = $response->getRealName();
+        $user->{$resource . '_token'}    = $response->getAccessToken();
+
+        $this->em->persist($user);
+
+        // Prevent password deletion after external eraseCredentials call
+        return clone($user);
+    }
+
+    /**
+     * Creates a new fake user basing on the response. This user may or may not
+     * be stored in database depending on the request target path.
+     *
+     * @param Response $response The resource response.
+     *
+     * @return User The new fake user.
+     */
+    protected function createUser($response)
+    {
+        $resource = $response->getResourceOwner()->getName();
+
+        return new User([
+            'name'          => $response->getRealName(),
+            'username'      => $response->getEmail(),
+            'email'         => $response->getEmail(),
+            'activated'     => true,
+            'type'          => 1,
+            'fk_user_group' => [],
+
+            $resource . '_email'    => $response->getEmail(),
+            $resource . '_id'       => $response->getUserName(),
+            $resource . '_realname' => $response->getRealName(),
+            $resource . '_token'    => $response->getAccessToken(),
+        ]);
     }
 
     /**

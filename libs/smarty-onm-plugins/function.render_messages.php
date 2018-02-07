@@ -21,13 +21,13 @@ function smarty_function_render_messages($params, &$smarty)
         if (!empty($innerHTML)) {
             $messagesHTML .= sprintf(
                 "<div class=\"alert alert-{$type}\" data-created=\"$created\">"
-                ."<button class=\"close\" data-dismiss=\"alert\" type=\"button\">×</button>"
-                ."%s"
-                ."</div>\n",
+                . "<button class=\"close\" data-dismiss=\"alert\" type=\"button\">×</button>"
+                . "%s"
+                . "</div>\n",
                 $innerHTML
             );
         }
     }
 
-    return  "<div class='messages'>".$messagesHTML."</div>";
+    return "<div class='messages'>" . $messagesHTML . "</div>";
 }

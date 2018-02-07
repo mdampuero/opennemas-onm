@@ -8,7 +8,7 @@
       </div>
       <div class="user-info" ng-click="mode = 'list'">
         <div class="greeting">{t}Welcome{/t}</div>
-        <div class="username" title="{$smarty.session._sf2_attributes.instance->name}">{$smarty.session._sf2_attributes.instance->name}</div>
+        <div class="username" title="{$app.instance->name}">{$app.instance->name}</div>
       </div>
     </div>
     <div class="user-action-wrapper visible-xs">
@@ -26,7 +26,7 @@
         </span>
         <div class="user-action no-padding" ng-click="mode = 'profile'">
           <div class="profile-pic">
-            {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$_template->getImageDir() image=true size="35"}
+            {gravatar email=$app.user->email image_dir=$_template->getImageDir() image=true size="35"}
           </div>
         </div>
       </div>
@@ -44,11 +44,11 @@
     </ul>
     <ul class="collapsed" ng-class="{ 'collapsed': mode != 'profile'}">
       <li class="list-title">
-        <span class="title">{$smarty.session._sf2_attributes.user->name}</span>
+        <span class="title">{$app.user->name}</span>
       </li>
       <li>
-        {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-          <a ng-href="{get_parameter name=manager_url}manager#/user/{$smarty.session._sf2_attributes.user->id}/show" target="_blank">
+        {if is_object($app.user) && $app.user->isMaster()}
+          <a ng-href="{get_parameter name=manager_url}manager#/user/{$app.user->id}/show" target="_blank">
             <i class="fa fa-user"></i>
             <span class="title">{t}Profile{/t}</span>
           </a>
@@ -68,7 +68,7 @@
         </a>
       </li>
       <li>
-        <a role="menuitem" tabindex="-1" href="{url name=admin_logout}">
+        <a role="menuitem" tabindex="-1" href="{url name=core_authentication_logout}">
           <i class="fa fa-power-off m-r-10"></i>
           <span class="title">{t}Log out{/t}</span>
         </a>

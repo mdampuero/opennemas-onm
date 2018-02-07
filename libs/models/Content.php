@@ -583,8 +583,8 @@ class Content implements \JsonSerializable
             'frontpage'           => (!isset($data['frontpage'])
                 || empty($data['frontpage'])) ? 0 : intval($data['frontpage']),
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? 0 : (int) $data['fk_author'],
-            'fk_publisher'        => (int) getService('session')->get('user')->id,
-            'fk_user_last_editor' => (int) getService('session')->get('user')->id,
+            'fk_publisher'        => (int) getService('core.user')->id,
+            'fk_user_last_editor' => (int) getService('core.user')->id,
             'in_home'             => (empty($data['in_home'])) ? 0 : intval($data['in_home']),
             'favorite'            => (empty($data['favorite'])) ? 0 : intval($data['favorite']),
             'available'           => (int) $data['content_status'],
@@ -686,7 +686,7 @@ class Content implements \JsonSerializable
         if (empty($data['fk_user_last_editor'])
             && !isset($data['fk_user_last_editor'])
         ) {
-            $data['fk_user_last_editor'] = getService('session')->get('user')->id;
+            $data['fk_user_last_editor'] = getService('core.user')->id;
         }
 
         $contentData = [
@@ -912,14 +912,14 @@ class Content implements \JsonSerializable
                 'contents',
                 [
                     'in_litter'           => 1,
-                    'fk_user_last_editor' => (int) getService('session')->get('user')->id,
+                    'fk_user_last_editor' => (int) getService('core.user')->id,
                     'changed'             => date("Y-m-d H:i:s")
                 ],
                 [ 'pk_content' => $this->id ]
             );
 
             $this->in_litter           = 1;
-            $this->fk_user_last_editor = (int) getService('session')->get('user')->id;
+            $this->fk_user_last_editor = (int) getService('core.user')->id;
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -1137,7 +1137,7 @@ class Content implements \JsonSerializable
         }
 
         if ($lastEditor == null) {
-            $lastEditor = (int) getService('session')->get('user')->id;
+            $lastEditor = (int) getService('core.user')->id;
         }
 
         try {
@@ -1269,7 +1269,7 @@ class Content implements \JsonSerializable
                 [
                     'content_status'      => 0,
                     'available'           => 0,
-                    'fk_user_last_editor' => (int) getService('session')->get('user')->id,
+                    'fk_user_last_editor' => (int) getService('core.user')->id,
                     'changed'             => date("Y-m-d H:i:s"),
                 ],
                 [ 'pk_content' => $this->id, ]
@@ -1353,7 +1353,7 @@ class Content implements \JsonSerializable
                 [
                     'content_status'      => $this->content_status,
                     'frontpage'           => $this->frontpage,
-                    'fk_user_last_editor' => (int) getService('session')->get('user')->id,
+                    'fk_user_last_editor' => (int) getService('core.user')->id,
                     'changed'             => date("Y-m-d H:i:s")
                 ],
                 [ 'pk_content' => $this->id ]
@@ -1767,7 +1767,7 @@ class Content implements \JsonSerializable
                 );
             }
 
-            $user = getService('session')->get('user');
+            $user = getService('core.user');
             getService('application.log')->notice(
                 'User ' . $user->username . ' (' . (int) $user->id . ') has executed '
                 . 'action Drop from frontpage to content with ID id ' . $this->id

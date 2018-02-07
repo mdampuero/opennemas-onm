@@ -141,8 +141,8 @@
                   </select>
                 {aclelse}
                   {if !isset($video->fk_author) || empty($video->fk_author)}
-                    {$smarty.session._sf2_attributes.user->name}
-                    <input type="hidden" name="fk_author" value="{$smarty.session._sf2_attributes.user->id}">
+                    {$app.user->name}
+                    <input type="hidden" name="fk_author" value="{$app.user->id}">
                   {else}
                     {$authors[$video->fk_author]}
                     <input type="hidden" name="fk_author" value="{$video->fk_author}">

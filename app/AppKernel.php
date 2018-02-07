@@ -14,7 +14,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             // Base symfony deps
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new CometCult\BraintreeBundle\CometCultBraintreeBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
+            new Http\HttplugBundle\HttplugBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
 
             // Opennemas internal bundles
@@ -46,9 +47,9 @@ class AppKernel extends Kernel
             new Common\Data\DataBundle(),
             new Common\Migration\MigrationBundle(),
             new Common\ORM\OrmBundle(),
-        );
+        ];
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
+        if (in_array($this->getEnvironment(), [ 'dev', 'test' ], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
@@ -71,7 +72,7 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 
     /**
@@ -79,7 +80,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return realpath($this->getRootDir().'/../tmp/cache').'/'.$this->getEnvironment();
+        return realpath($this->getRootDir() . '/../tmp/cache') . '/' . $this->getEnvironment();
     }
 
     /**
@@ -87,6 +88,6 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return realpath($this->getRootDir().'/../tmp/logs');
+        return realpath($this->getRootDir() . '/../tmp/logs');
     }
 }

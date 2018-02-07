@@ -147,8 +147,8 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function getConfiguration()
     {
-        $this->getContainer()->get('session')
-            ->set('user', json_decode(json_encode(['id' => 0, 'username' => 'cli'])));
+        // TODO: Remove ASAP
+        $this->getContainer()->get('core.security')->setCliUser();
 
         // Load instance and force ORM and Cache initialization
         $loader = $this->getContainer()->get('core.loader');

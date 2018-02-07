@@ -102,10 +102,8 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
         // define('CACHE_PREFIX', '');
 
         // // Set session variable
-        // $this->getContainer()->get('session')->set(
-        //     'user',
-        //     json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
-        // );
+        // TODO: Remove ASAP
+        // $this->getContainer()->get('core.security')->setCliUser();
 
         // $commonCachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . 'common';
         // if (!file_exists($commonCachepath)) {

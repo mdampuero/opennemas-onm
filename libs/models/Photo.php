@@ -293,8 +293,8 @@ class Photo extends Content
             'height'              => $fileInformation->height,
             'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : $data['fk_author'],
-            'fk_user_last_editor' => getService('session')->get('user')->id,
-            'fk_publisher'        => getService('session')->get('user')->id,
+            'fk_user_last_editor' => getService('core.user')->id,
+            'fk_publisher'        => getService('core.user')->id,
         ];
 
         if (array_key_exists('extension', $filePathInfo) &&

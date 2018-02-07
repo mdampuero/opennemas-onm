@@ -273,7 +273,7 @@
                 <li class="quicklinks" ng-if="offline">
                   <span class="h-seperate"></span>
                 </li>
-                {if is_object($smarty.session._sf2_attributes.user)}
+                {if is_object($app.user)}
                   <li class="quicklinks dropdown dropdown-notifications" ng-click="markAllAsView()">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-bell"></i>
@@ -355,19 +355,19 @@
                 </li>
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
-                    {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
+                    {if is_object($app.user) && $app.user->isMaster()}
                       <i class="fa fa-rebel pull-left m-r-5"></i>
                     {/if}
                     <i class="fa fa-angle-down"></i>
                     <div class="profile-pic">
-                      {gravatar email=$smarty.session._sf2_attributes.user->email image_dir=$_template->getImageDir() image=true size="25"}
+                      {gravatar email=$app.user->email image_dir=$_template->getImageDir() image=true size="25"}
                     </div>
                     <span class="title">
-                      {$smarty.session._sf2_attributes.user->name}
+                      {$app.user->name}
                     </span>
                   </span>
                   <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
-                    {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
+                    {if is_object($app.user) && $app.user->isMaster()}
                       <li class="text-danger">
                         <span class="fake-a fake-a-static text-danger">
                           {t}You are a master{/t}
@@ -382,8 +382,8 @@
                       </a>
                     </li>
                     <li>
-                      {if is_object($smarty.session._sf2_attributes.user) && $smarty.session._sf2_attributes.user->isMaster()}
-                        <a ng-href="{get_parameter name=manager_url}manager#/users/{$smarty.session._sf2_attributes.user->id}" target="_blank">
+                      {if is_object($app.user) && $app.user->isMaster()}
+                        <a ng-href="{get_parameter name=manager_url}manager#/users/{$app.user->id}" target="_blank">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>
@@ -404,7 +404,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                      <a role="menuitem" tabindex="-1" href="{url name=admin_logout}">
+                      <a role="menuitem" tabindex="-1" href="{url name=core_authentication_logout}">
                         <i class="fa fa-power-off m-r-10"></i>
                         {t}Log out{/t}
                       </a>

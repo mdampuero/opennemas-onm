@@ -17,7 +17,7 @@ security:
             chain:
                 providers: [ backend, manager_ws ]
         backend:
-            id: backend.security.user.provider
+            id: core.security.user.provider
         manager_ws:
             id: manager_ws.security.user.provider
 
@@ -30,8 +30,8 @@ security:
             pattern:  ^/(css|images|js|dynamic|asset)/
             security: false
 
-        backend_login:
-            pattern:  ^/admin/(login$|connect)
+        oauth:
+            pattern:  ^/oauth/connect
             security: false
 
         manager:
@@ -66,32 +66,6 @@ security:
             pattern:  ^/framework
             security: false
 
-        backend:
-            pattern:    ^/(api/v1/backend|admin)/*
-            form_login:
-                check_path:                     admin_login_check
-                login_path:                     admin_login
-                always_use_default_target_path: false
-                default_target_path:            admin_welcome
-                target_path_parameter:          _referer
-                use_referer:                    true
-                success_handler:                backend_login_success_handler
-            logout:
-                path:   admin_logout
-                target: admin_login
-            oauth:
-                resource_owners:
-                    facebook: "/admin/login/check-facebook"
-                    twitter:  "/admin/login/check-twitter"
-                login_path:          admin_login
-                default_target_path: admin_login_callback
-                check_path:          admin_login_check
-                use_forward:         false
-                failure_path:        admin_login
-                success_handler:     oauth_login_success_handler
-                oauth_user_provider:
-                    service: backend.security.user.oauth_provider
-
         manager_ws_login:
             pattern:  ^/managerws/(login|check)
             stateless: true
@@ -114,25 +88,41 @@ security:
                     enabled: true
                     name:    token
 
-        frontend:
+        opennemas:
             pattern:    ^/*
             anonymous:  ~
             form_login:
-                check_path:                     frontend_auth_check
-                login_path:                     frontend_auth_login
+                check_path:                     core_authentication_check
                 always_use_default_target_path: false
-                default_target_path:            frontend_user_show
-                target_path_parameter:          _referer
-                use_referer:                    true
-                success_handler:                frontend_login_success_handler
+                target_path_parameter:          _target
+                always_use_default_target_path: false
+                use_referer:                    false
+                failure_handler:                core.security.authentication.failure
+                success_handler:                core.security.authentication.success
             logout:
-                path:   frontend_auth_logout
-                target: frontend_auth_login
+                invalidate_session: true
+                path:               core_authentication_logout
+                success_handler:    core.security.http.logout.failure
+                delete_cookies:
+                    __onm_sess: { path: null, domain: null }
+                    __onm_user: { path: null, domain: null }
+            oauth:
+                resource_owners:
+                    facebook: "/oauth/login/check-facebook"
+                    twitter:  "/oauth/login/check-twitter"
+                login_path:          core_authentication_complete
+                default_target_path: core_authentication_complete
+                check_path:          core_authentication_check
+                use_forward:         false
+                failure_path:        core_authentication_complete
+                success_handler:     core.security.authentication.oauth.success
+                oauth_user_provider:
+                    service: core.security.user.oauth_provider
 
     access_control:
-        - { path: ^/admin/(login$|connect), roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/*, roles: [ ROLE_BACKEND ] }
-        - { path: ^/api/v1/backend/*, roles: [ ROLE_BACKEND ] }
-        - { path: ^/managerws/(login|check), roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/managerws, roles: [ ROLE_MANAGER ] }
-        - { path: ^/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/(admin|auth)/(login$|connect), roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/admin/*,                       roles: [ ROLE_BACKEND ] }
+        - { path: ^/api/v1/backend/*,              roles: [ ROLE_BACKEND ] }
+        - { path: ^/managerws/(login|check),       roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/managerws,                     roles: [ ROLE_MANAGER ] }
+        - { path: ^/*,                             roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }

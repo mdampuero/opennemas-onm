@@ -59,7 +59,7 @@ class ErrorController extends Controller
 
         $requestAddress = $request->getSchemeAndHttpHost() . $request->getRequestUri();
         switch ($exceptionName) {
-            case 'Common\Core\Component\Exception\InstanceNotRegisteredException':
+            case 'Common\Core\Component\Exception\Instance\InstanceNotRegisteredException':
                 $trace = $error->getTrace();
 
                 $logMessage = 'Backend instance not registered error at ' . $requestAddress;
@@ -81,7 +81,7 @@ class ErrorController extends Controller
                 $response = new Response($content, 404);
                 $response->headers->set('x-cache-for', '5s');
                 break;
-            case 'Common\Core\Component\Exception\InstanceNotActivatedException':
+            case 'Common\Core\Component\Exception\Instance\InstanceNotActivatedException':
                 $trace = $error->getTrace();
 
                 $logMessage = 'Backend instance not activated error at ' . $requestAddress;

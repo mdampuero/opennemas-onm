@@ -28,6 +28,7 @@ framework:
     trusted_hosts:   ~
     session:
         name:            __onm_sess
+        cookie_httponly: false
         gc_maxlifetime:  %session.gc_maxlifetime%
         handler_id:      %session_handler_id%
     fragments:       ~
@@ -123,7 +124,7 @@ monolog:
             formatter: monolog.formatter.standard
 
 hwi_oauth:
-    firewall_names: [ 'backend' ]
+    firewall_names: [ 'opennemas' ]
     resource_owners:
         facebook:
             type:          facebook

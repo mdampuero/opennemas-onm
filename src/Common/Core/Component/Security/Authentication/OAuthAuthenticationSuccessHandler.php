@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
@@ -8,8 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Backend\EventListener;
+namespace Common\Core\Component\Security\Authentication;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,36 +20,28 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Handler to load user data when an user logs in the system successfully by
  * using their social accounts.
  */
-class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * The security context.
+     * The service container.
      *
-     * @var SecurityContext
+     * @var ServiceContainer
      */
-    private $context;
-
-    /**
-     * The router service.
-     *
-     * @var Router
-     */
-    protected $router;
+    protected $container;
 
     /**
      * Constructs a new handler.
      *
-     * @param SecurityContext $context The security context.
-     * @param Router          $router  The router service.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct($context, $router)
+    public function __construct($container)
     {
-        $this->context = $context;
-        $this->router  = $router;
+        $this->container = $container;
     }
 
     /**
-     * This is called when an interactive authentication attempt succeeds.
+     * Redirects to target after a successful OAuth-based authentication. This
+     * will save the current user in database basing on the target.
      *
      * @param Request        $request The request object.
      * @param TokenInterface $token   The security token.
@@ -62,16 +52,17 @@ class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $referer = $this->router->generate('admin_welcome');
-        $user    = $token->getUser();
+        $target = $request->getSession()->get('_security.opennemas.target_path');
+        $user   = $token->getUser();
 
-        // Set session array
-        $request->getSession()->set('user', $user);
-
-        if ($request->getSession()->get('_security.backend.target_path')) {
-            $referer = $request->getSession()->get('_security.backend.target_path');
+        // Create a new user
+        if (!preg_match('/connect$/', $target) && !$user->exists()) {
+            $this->container->get('orm.manager')->persist($user, 'instance');
         }
 
-        return new RedirectResponse($referer);
+        return new RedirectResponse(
+            $this->container->get('router')
+                ->generate('core_authentication_complete')
+        );
     }
 }

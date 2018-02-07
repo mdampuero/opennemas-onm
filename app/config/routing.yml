@@ -1,3 +1,7 @@
+api:
+    resource: '@ApiBundle/Resources/config/routing.yml'
+    prefix:   /api
+
 backend:
     resource: '@BackendBundle/Resources/config/routing.yml'
     prefix:   /admin
@@ -6,48 +10,38 @@ backend_webservice:
     resource: '@BackendWebServiceBundle/Resources/config/routing.yml'
     prefix:   /admin/entityws
 
+core:
+    resource: '@CoreBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fos_js_routing:
+    resource: '@FOSJsRoutingBundle/Resources/config/routing/routing.xml'
+
+frontend:
+    resource: '@FrontendBundle/Resources/config/routing.yml'
+    prefix:   /
+
 frontendmobile:
     resource: '@FrontendMobileBundle/Resources/config/routing.yml'
+    prefix:   /
+
+manager:
+    resource: '@ManagerBundle/Resources/config/routing.yml'
     prefix:   /
 
 manager_webservice:
     resource: '@ManagerWebServiceBundle/Resources/config/routing.yml'
     prefix:   /managerws
 
-manager:
-    resource: '@ManagerBundle/Resources/config/routing.yml'
+oauth:
+    resource: '@OnmFrameworkBundle/Resources/config/routing/oauth.yml'
     prefix:   /
 
 webservice:
     resource: '@WebServiceBundle/Resources/config/routing.yml'
     prefix:   /ws
 
-api:
-    resource: '@ApiBundle/Resources/config/routing.yml'
-    prefix:   /api
-
-frontend:
-    resource: '@FrontendBundle/Resources/config/routing.yml'
-    prefix:   /
-
-fos_js_routing:
-    resource: '@FOSJsRoutingBundle/Resources/config/routing/routing.xml'
-
-# base paths
+# Don't move this or infinite redirect at /admin
 admin_welcome:
-    path: '/admin'
-    defaults: { _controller  : BackendBundle:Welcome:default }
-
-hwi_oauth_redirect:
-    resource: '@HWIOAuthBundle/Resources/config/routing/redirect.xml'
-    prefix:   /admin/connect
-
-hwi_oauth_login:
-    resource: '@HWIOAuthBundle/Resources/config/routing/login.xml'
-    prefix:   /admin/login
-
-facebook_login:
-    path: /admin/login/check-facebook
-
-twitter_login:
-    path: /admin/login/check-twitter
+    path:     /admin
+    defaults: { _controller: BackendBundle:Welcome:default }

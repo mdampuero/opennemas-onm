@@ -23,13 +23,11 @@ class FrontpageRestoreCommand extends ContainerAwareCommand
         $this
             ->setName('frontpage:restore')
             ->setDescription('Restores the frontpage contents.')
-            ->setDefinition(
-                array(
-                    new InputArgument('database', InputArgument::REQUIRED, 'database'),
-                    new InputOption('file', 'f', InputOption::VALUE_REQUIRED, 'The frontpage positions file'),
-                    new InputOption('category', 'c', InputOption::VALUE_REQUIRED, 'The frontpage positions file'),
-                )
-            )
+            ->setDefinition([
+                new InputArgument('database', InputArgument::REQUIRED, 'database'),
+                new InputOption('file', 'f', InputOption::VALUE_REQUIRED, 'The frontpage positions file'),
+                new InputOption('category', 'c', InputOption::VALUE_REQUIRED, 'The frontpage positions file'),
+            ])
             ->setHelp(
                 <<<EOF
 The <info>cache:clear</info> cache the app.
@@ -53,19 +51,18 @@ EOF
         $loader->loadInstanceFromOql($oql);
         $loader->init();
 
-        $this->getContainer()->get('session')->set(
-            'user',
-            json_decode(json_encode([ 'id' => 0, 'username' => 'console' ]))
-        );
+        // TODO: Remove ASAP
+        $this->getContainer()->get('core.security')->setCliUser();
 
-        $conn   = getService('orm.manager')->getConnection('instance');
+        $conn = getService('orm.manager')->getConnection('instance');
+
         $conn->selectDatabase($databaseName);
-        $logger = getService('application.log');
 
-        $rs = $conn->fetchAssoc('SELECT count(*) FROM contents');
+        $conn->fetchAssoc('SELECT count(*) FROM contents');
 
         $positionsJson = file_get_contents($file);
-        $positions = json_decode($positionsJson, true);
+        $positions     = json_decode($positionsJson, true);
+
         if (is_null($positions)) {
             $output->writeln('<error>File provided is not valid</error>');
             return 1;

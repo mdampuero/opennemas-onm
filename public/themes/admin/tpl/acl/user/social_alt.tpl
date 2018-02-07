@@ -78,24 +78,21 @@
   </div>
 </body>
 {block name="footer-js"}
-<script>
-  function connect(btn) {
-    var win = window.open(
-      btn.getAttribute('data-url'),
-      btn.getAttribute('id'),
-      'height=400, width=400'
+  <script>
+    function connect(btn) {
+      var win = window.open(
+        btn.getAttribute('data-url'),
+        btn.getAttribute('id'),
+        'height=400, width=400'
       );
 
-    var interval = window.setInterval(function() {
-      if (win == null || win.closed) {
-        window.clearInterval(interval);
-
-        if (win.success) {
+      var interval = window.setInterval(function() {
+        if (win == null || win.closed) {
+          window.clearInterval(interval);
           window.location.reload();
         }
-      }
-    }, 1000);
-  };
-</script>
+      }, 1000);
+    };
+  </script>
 {/block}
 </html>

@@ -1,16 +1,4 @@
 services:
-    backend.security.user.provider:
-        class:     Common\Core\Component\Security\User\UserProvider
-        arguments: [ '@orm.manager', [ 'instance', 'manager' ] ]
-
-    backend.security.user.oauth_provider:
-        class:     Common\Core\Component\Security\User\OAuthUserProvider
-        arguments: [ '@orm.manager', '@session', [ 'instance', 'manager' ] ]
-
     backend_login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
         arguments: [ '@service_container' ]
-
-    oauth_login_success_handler:
-        class:     Backend\EventListener\OAuthLoginSuccessHandler
-        arguments: [ '@security.token_storage', '@router', '@session' ]
