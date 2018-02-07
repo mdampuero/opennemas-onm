@@ -30,6 +30,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 ],
             ]
         ];
+
         $entity = new Theme($data);
 
         $this->assertEquals($entity->getData(), $data);
