@@ -50,7 +50,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a href="{url name=admin_opinion_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
+                <a href="{url name=backend_ws_content_send_to_trash id=$content->id contentType=$content->content_type_name}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="fa fa-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>

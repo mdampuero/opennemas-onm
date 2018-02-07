@@ -42,7 +42,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_polls category=$category}" title="{t}Go back{/t}">
+                <a class="btn btn-link" href="{url name=admin_polls}" title="{t}Go back{/t}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>

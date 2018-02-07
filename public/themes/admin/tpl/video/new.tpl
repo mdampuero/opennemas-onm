@@ -60,7 +60,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a href="{url name=admin_videos category=$category|default:""}" class="btn btn-link" title="{t}Go Back{/t}">
+              <a href="{url name=admin_videos}" class="btn btn-link" title="{t}Go Back{/t}">
                 <span class="fa fa-reply"></span>
               </a>
             </li>

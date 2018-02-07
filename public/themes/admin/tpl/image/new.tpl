@@ -23,26 +23,22 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                {if !isset($smarty.request.stringSearch)}
                 <a class="btn btn-link" href="{url name=admin_images}" title="{t}Go back to list{/t}">
-                  {else}
-                  <a class="btn btn-link" href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0" title="{t}Go back to list{/t}">
-                    {/if}
-                    <i class="fa fa-reply"></i>
-                  </a>
-                </li>
-                <li class="quicklinks">
-                  <span class="h-seperate"></span>
-                </li>
-                {acl isAllowed="PHOTO_UPDATE"}
-                <li class="quicklinks">
-                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="save-button">
-                    <span class="fa fa-save"></span>
-                    <span class="text">{t}Update{/t}</span>
-                  </button>
-                </li>
-                {/acl}
-              </ul>
+                  <i class="fa fa-reply"></i>
+                </a>
+              </li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
+              {acl isAllowed="PHOTO_UPDATE"}
+              <li class="quicklinks">
+                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="save-button">
+                  <span class="fa fa-save"></span>
+                  <span class="text">{t}Update{/t}</span>
+                </button>
+              </li>
+              {/acl}
+            </ul>
           </div>
         </div>
       </div>
