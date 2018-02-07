@@ -21,7 +21,7 @@ class GoogleTagsManagerTest extends KernelTestCase
     {
         $this->id = "GMT-0000000";
 
-        $this->object =  new GoogleTagsManager();
+        $this->object = new GoogleTagsManager();
     }
     /**
      * Generates Google Tags Manager head code

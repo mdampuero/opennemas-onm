@@ -155,12 +155,12 @@ class ValidatorTest extends KernelTestCase
      */
     public function testValidateForInvalidInstance()
     {
-        $instance = new \Common\ORM\Entity\Instance();
+        $instance                = new \Common\ORM\Entity\Instance();
         $instance->internal_name = 'test';
-        $instance->domains = [
+        $instance->domains       = [
             'test.domain.com'
         ];
-        $instance->contact_mail = 'test@opennemas.com';
+        $instance->contact_mail  = 'test@opennemas.com';
         $this->validator->validate($instance);
         $this->assertTrue(count($this->validator->getErrors()) > 0);
     }

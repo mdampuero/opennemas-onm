@@ -122,6 +122,5 @@ class TranslatorFactoryTest extends KernelTestCase
                 'parameters' => [ 'xyzzy' => 'mumble' ]
             ]
         ], $factory->getTranslatorsData());
-
     }
 }
