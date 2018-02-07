@@ -39,7 +39,7 @@ function smarty_function_url($params, &$smarty)
     try {
         // Remove empty params
         foreach ($params as $key => $value) {
-            if (empty($value)) {
+            if (empty($value) && $value != 0) {
                 throw new InvalidParameterException(
                     sprintf('Parameter "%s" for route "%s" is empty.', $key, $name)
                 );
