@@ -71,7 +71,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_acl_user type=$user->type}">
+              <a class="btn btn-link" href="{url name=admin_acl_user}">
                 <i class="fa fa-reply"></i>
               </a>
             </li>

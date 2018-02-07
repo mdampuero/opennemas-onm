@@ -33,7 +33,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li>
-              <a class="btn btn-link" href="{url name=admin_specials category=$category}">
+              <a class="btn btn-link" href="{url name=admin_specials}">
                 <span class="fa fa-reply"></span>
               </a>
             </li>
