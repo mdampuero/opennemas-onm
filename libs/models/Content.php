@@ -258,10 +258,10 @@ class Content implements \JsonSerializable
     {
         switch ($name) {
             case 'category_name':
-                return $this->category_name = $this->loadCategoryName($this->id);
+                return $this->category_name = $this->loadCategoryName();
 
             case 'category_title':
-                return $this->category_title = $this->loadCategoryTitle($this->id);
+                return $this->category_title = $this->loadCategoryTitle();
 
             case 'comments':
                 return 0;
