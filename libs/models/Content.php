@@ -1458,6 +1458,8 @@ class Content implements \JsonSerializable
 
     /**
      * TODO:  move to ContentCategory class
+     * TODO: Remove the $pkContent parameter
+     *
      * Loads the category name for a given content id
      *
      * @param int $pk_content the content id
@@ -1466,31 +1468,22 @@ class Content implements \JsonSerializable
      */
     public function loadCategoryName($pkContent = null)
     {
-        if (empty($pkContent)) {
-            $pkContent = $this->id;
-        }
+        $category = ContentCategoryManager::get_instance()
+             ->findById($this->category);
 
-        if (is_null($this->category) || $this->category === 0) {
+        if (!is_object($category)) {
             return null;
         }
 
-        try {
-            $category = ContentCategoryManager::get_instance()
-                 ->findById($this->category);
+        $this->category_name = $category->name;
 
-            if (!is_object($category)) {
-                return null;
-            }
-
-            return $category->name;
-        } catch (\Exception $e) {
-            error_log('Error on Content::loadCategoyName (ID:' . $pkContent . ')' . $e->getMessage());
-            return '';
-        }
+        return $this->category_name;
     }
 
     /**
      * TODO:  move to ContentCategory class
+     * TODO: Remove the $pkContent parameter
+     *
      * Loads the category title for a given content id
      *
      * @param int $pk_content the content id
@@ -1499,32 +1492,19 @@ class Content implements \JsonSerializable
      */
     public function loadCategoryTitle($pkContent = null)
     {
-        if (empty($pkContent)) {
-            $pkContent = $this->id;
-        }
+        $category = ContentCategoryManager::get_instance()
+             ->findById($this->category);
 
-        if (is_null($this->category) || $this->category === 0) {
+        if (!is_object($category)) {
             return null;
         }
 
-        try {
-            $category = ContentCategoryManager::get_instance()
-                 ->findById($this->category);
+        $this->category_title = getService('data.manager.filter')
+            ->set($category->title)
+            ->filter('localize')
+            ->get();
 
-            $this->category_title = getService('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
-
-            if (!is_object($category)) {
-                return null;
-            }
-
-            return $this->category_title;
-        } catch (\Exception $e) {
-            error_log('Error on Content::loadCategoyTitle (ID:' . $pkContent . ')' . $e->getMessage());
-            return '';
-        }
+        return $this->category_title;
     }
 
     /**
