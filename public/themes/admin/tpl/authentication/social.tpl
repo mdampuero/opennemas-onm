@@ -6,6 +6,7 @@
     <link href="/assets/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <style>
       html, body {
+        background: none;
         margin:0 auto;
         padding:0;
         min-height:0;
@@ -20,6 +21,7 @@
       .btn-social:focus,
       .btn-social:hover {
         color: #fff;
+        height: 100%;
         width: 100%;
       }
 
