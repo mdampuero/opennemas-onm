@@ -1518,8 +1518,8 @@
                             </span>
                             <div class="controls">
                               <div class="input-group">
-                                <select id="theme-style" name="theme-style" ng-model="settings.theme_style" required>
-                                  <option value="[% code %]" ng-repeat="(code,style) in extra.theme_styles" ng-selected="[% code === settings.theme_style || settings.theme_style == undefined %]">[% style.name %]</option>
+                                <select id="theme-style" name="theme-style" ng-model="settings.theme_skin" required>
+                                  <option value="[% code %]" ng-repeat="(code,style) in extra.theme_skins" ng-selected="[% code === settings.theme_skin || settings.theme_skin == undefined %]">[% style.name %]</option>
                                 </select>
                               </div>
                             </div>

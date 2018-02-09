@@ -188,7 +188,7 @@ class SettingController extends Controller
                     . '/sections/',
                 'translation_services' =>
                     $this->get('core.factory.translator')->getTranslatorsData(),
-                'theme_styles' => $this->get('core.theme')->getStyles()
+                'theme_skins' => $this->get('core.theme')->getSkins()
             ],
             'settings' => $settings,
         ]);

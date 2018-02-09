@@ -20,12 +20,16 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 'styles' => [
                     'default' => [
                         'default' => true,
-                        'name' => 'Default',
-                        'file' => 'style.css',
+                        'name'    => 'Default',
+                        'params'  => [
+                            'css_file' => 'style.css',
+                        ]
                     ],
                     'style-two' => [
-                        'name' => 'Style two',
-                        'file' => 'style-two.css',
+                        'name'   => 'Skin two',
+                        'params' => [
+                            'css_file' => 'style-two.css',
+                        ]
                     ],
                 ],
             ]
@@ -40,112 +44,136 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGetStylesWithOneStyle()
+    public function testGetSkinsWithOneSkin()
     {
         $styles = [
             'default' => [
-                'default' => true,
-                'name' => 'Default',
-                'file' => 'style.css',
+                'default'       => true,
+                'name'          => 'Default',
+                'internal_name' => 'default',
+                'params'        => [
+                    'css_file' => 'style.css',
+                ]
             ],
             'style-two' => [
-                'name' => 'Style two',
-                'file' => 'style-two.css',
+                'name'          => 'Skin two',
+                'internal_name' => 'style-two',
+                'params'        => [
+                    'css_file' => 'style-two.css',
+                ]
             ],
         ];
 
         $entity = new Theme([
             'parameters' => [
-                'styles' => $styles,
+                'skins' => $styles,
             ]
         ]);
 
-        $this->assertEquals($styles, $entity->getStyles());
+        $this->assertEquals($styles, $entity->getSkins());
     }
 
-    public function testGetStylesWithNoStyles()
+    public function testGetSkinsWithNoSkins()
     {
         $entity = new Theme([]);
 
-        $this->assertEquals([], $entity->getStyles());
+        $this->assertEquals([], $entity->getSkins());
     }
 
-    public function testGetDefaultStyleWithNoStyles()
+    public function testGetDefaultSkinWithNoSkins()
     {
         $entity = new Theme([]);
 
-        $this->assertEquals(null, $entity->getDefaultStyle());
+        $this->assertEquals(null, $entity->getDefaultSkin());
     }
 
-    public function testGetDefaultStyleWithStyles()
+    public function testGetDefaultSkinWithSkins()
     {
         $styles = [
             'default' => [
-                'name' => 'Default',
-                'file' => 'style.css',
+                'default' => true,
+                'name'   => 'Default',
+                'params' => [
+                    'css_file' => 'style.css',
+                ]
             ],
             'style-two' => [
-                'default' => true,
-                'name' => 'Style two',
-                'file' => 'style-two.css',
+                'name'    => 'Skin two',
+                'params'  => [
+                    'css_file' => 'style-two.css',
+                ]
             ],
         ];
 
         $entity = new Theme([
             'parameters' => [
-                'styles' => $styles,
+                'skins' => $styles,
             ]
         ]);
 
         $this->assertEquals(
             [
+                'internal_name' => 'default',
                 'default' => true,
-                'name' => 'Style two',
-                'file' => 'style-two.css',
+                'name'   => 'Default',
+                'params' => [
+                    'css_file' => 'style.css',
+                ]
             ],
-            $entity->getDefaultStyle()
+            $entity->getDefaultSkin()
         );
     }
 
-    public function testGetDefaultStyleWithStylesButNoDefault()
+    public function testGetDefaultSkinWithSkinsButNoDefault()
     {
         $styles = [
             'default' => [
-                'name' => 'Default',
-                'file' => 'style.css',
+                'name'   => 'Default',
+                'params' => [
+                    'css_file' => 'style.css',
+                ]
             ],
             'style-two' => [
-                'name' => 'Style two',
-                'file' => 'style-two.css',
+                'name'    => 'Skin two',
+                'params'  => [
+                    'css_file' => 'style-two.css',
+                ]
             ],
         ];
 
         $entity = new Theme([
             'parameters' => [
-                'styles' => $styles,
+                'skins' => $styles,
             ]
         ]);
 
         $this->assertEquals(
             [
-                'name' => 'Default',
-                'file' => 'style.css',
+                'internal_name' => 'default',
+                'name'   => 'Default',
+                'params' => [
+                    'css_file' => 'style.css',
+                ]
             ],
-            $entity->getDefaultStyle()
+            $entity->getDefaultSkin()
         );
     }
 
 
-    public function testGetCurrentStyleWithValidSelected()
+    public function testGetCurrentSkinWithValidSelected()
     {
         $styles = [
             'default' => [
-                'name' => 'Default',
-                'file' => 'style.css',
+                'name'   => 'Default',
+                'params' => [
+                    'css_file' => 'style.css',
+                ]
             ],
             'style-two' => [
-                'name' => 'Style two',
-                'file' => 'style-two.css',
+                'name'    => 'Skin two',
+                'params'  => [
+                    'css_file' => 'style-two.css',
+                ]
             ],
         ];
 
@@ -153,30 +181,37 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         $entity = new Theme([
             'parameters' => [
-                'styles' => $styles,
+                'skins' => $styles,
             ]
         ]);
 
         $this->assertEquals(
             [
-                'name' => 'Default',
-                'file' => 'style.css',
+                'name'   => 'Default',
+                'internal_name' => 'default',
+                'params' => [
+                    'css_file' => 'style.css',
+                ]
             ],
-            $entity->getCurrentStyle($selected)
+            $entity->getCurrentSkin($selected)
         );
     }
 
-    public function testGetCurrentStyleWithInValidSelected()
+    public function testGetCurrentSkinWithInValidSelected()
     {
         $styles = [
             'default' => [
                 'default' => true,
                 'name'    => 'Default',
-                'file'    => 'style.css',
+                'params'  => [
+                    'css_file' => 'style.css',
+                ]
             ],
             'style-two' => [
-                'name' => 'Style two',
-                'file' => 'style-two.css',
+                'name'    => 'Skin two',
+                'params'  => [
+                    'css_file' => 'style-two.css',
+                ]
             ],
         ];
 
@@ -184,21 +219,24 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         $entity = new Theme([
             'parameters' => [
-                'styles' => $styles,
+                'skins' => $styles,
             ]
         ]);
 
         $this->assertEquals(
             [
-                'default' => true,
-                'name' => 'Default',
-                'file' => 'style.css',
+                'default'       => true,
+                'name'          => 'Default',
+                'internal_name' => 'default',
+                'params'        => [
+                    'css_file' => 'style.css',
+                ]
             ],
-            $entity->getCurrentStyle($selected)
+            $entity->getCurrentSkin($selected)
         );
     }
 
-    public function testGetCurrentStyleWithInValidSelectedAndNoStyles()
+    public function testGetCurrentSkinWithInValidSelectedAndNoSkins()
     {
         $selected = 'style-not-valid';
 
@@ -206,6 +244,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             'parameters' => []
         ]);
 
-        $this->assertEquals(null, $entity->getCurrentStyle($selected));
+        $this->assertEquals(null, $entity->getCurrentSkin($selected));
     }
 }
