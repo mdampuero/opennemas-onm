@@ -22,12 +22,16 @@ class Theme extends Extension
      *
      * @return array|null the list of available styles
      **/
-    public function getStyles()
+    public function getSkins()
     {
         if (array_key_exists('parameters', $this->data)
-            && array_key_exists('styles', $this->data['parameters'])
+            && array_key_exists('skins', $this->data['parameters'])
         ) {
-            return $this->data['parameters']['styles'];
+            foreach ($this->data['parameters']['skins'] as $key => &$value) {
+                $value['internal_name'] = $key;
+            }
+
+            return $this->data['parameters']['skins'];
         }
 
         return [];
@@ -40,24 +44,28 @@ class Theme extends Extension
      *
      * @return array|null the defeault style
      **/
-    public function getDefaultStyle()
+    public function getDefaultSkin()
     {
-        $styles = $this->getStyles();
+        $skins = $this->getSkins();
 
-        if (empty($styles)) {
+        if (empty($skins)) {
             return null;
         }
 
-        $default = array_filter($styles, function ($el) {
-            return (array_key_exists('default', $el) && $el['default'] == true);
-        });
+        $default = null;
+        foreach ($skins as $key => &$value) {
+            if (array_key_exists('default', $value)
+                && $value['default'] == true
+            ) {
+                return $value;
+            }
+        }
+
 
         // If no default style just pick the first one
         if (empty($default)) {
-            return array_shift($styles);
+            return array_shift($skins);
         }
-
-        return array_pop($default);
     }
 
     /**
@@ -69,19 +77,61 @@ class Theme extends Extension
      *
      * @return array|null the defeault style
      **/
-    public function getCurrentStyle($name)
+    public function getCurrentSkin($name)
     {
-        $styles = $this->getStyles();
+        $skins = $this->getSkins();
 
-        if (empty($styles)) {
+        if (empty($skins)) {
             return null;
         }
 
         // Return the default style if the name doesnt exists
-        if (!array_key_exists($name, $styles)) {
-            return $this->getDefaultStyle();
+        if (!array_key_exists($name, $skins)) {
+            return $this->getDefaultSkin();
         }
 
-        return $styles[$name];
+        $skins['internal_name'] = $name;
+
+        return $skins[$name];
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getCurrentSkinName($internalName)
+    {
+        $skin = $this->getCurrentSkin($internalName);
+
+        if (!is_array($skin)
+            || !array_key_exists('internal_name', $skin)
+        ) {
+            return null;
+        }
+
+        return $skin['internal_name'];
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getCurrentSkinProperty($internalName, $property)
+    {
+        $skin = $this->getCurrentSkin($internalName);
+
+        if (!is_array($skin)
+            || !array_key_exists('params', $skin)
+            || !is_array($skin['params'])
+            || !array_key_exists($property, $skin['params'])
+        ) {
+            return null;
+        }
+
+        return $skin['params'][$property];
     }
 }

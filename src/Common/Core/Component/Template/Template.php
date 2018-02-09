@@ -242,21 +242,13 @@ class Template extends \Smarty
      *
      * @return string the name of the variant
      **/
-    public function getThemeVariantName()
+    public function getThemeSkinName()
     {
-        $themeVariant = $this->theme->getCurrentStyle(
+        return $this->theme->getCurrentSkinName(
             $this->container->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get('theme_style', 'default')
+                ->get('theme_skin', 'default')
         );
-
-        if (!is_array($themeVariant)
-            || !array_key_exists('name', $themeVariant)
-        ) {
-            return null;
-        }
-
-        return $themeVariant['name'];
     }
 
     /**
@@ -264,21 +256,14 @@ class Template extends \Smarty
      *
      * @return string the file name of the variant
      **/
-    public function getThemeVariantFile()
+    public function getThemeSkinProperty($propertyName)
     {
-        $themeVariant = $this->theme->getCurrentStyle(
+        return $this->theme->getCurrentSkinProperty(
             $this->container->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get('theme_style', 'default')
+                ->get('theme_skin', 'default'),
+            $propertyName
         );
-
-        if (!is_array($themeVariant)
-            || !array_key_exists('file', $themeVariant)
-        ) {
-            return null;
-        }
-
-        return $themeVariant['file'];
     }
 
     /**

@@ -143,22 +143,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getThemeVariantName
+     * @covers Common\Core\Component\Template\Template::getThemeSkinName
      */
-    public function testGetThemeVariantName()
+    public function testGetThemeSkinName()
     {
         $theme       = $this->getMockBuilder('Theme')
-            ->setMethods([ 'getData', 'getCurrentStyle' ])
+            ->setMethods([ 'getData', 'getCurrentSkinName' ])
             ->getMock();
         $theme->uuid = 'com.openhost.foobar';
         $theme->path = 'public/themes/foobar';
 
-        $theme->expects($this->any())->method('getCurrentStyle')
-            ->will($this->returnValue([
-                'default' => true,
-                'name' => 'default',
-                'file' => 'style.css'
-            ]));
+        $theme->expects($this->any())->method('getCurrentSkinName')
+            ->will($this->returnValue('default'));
 
         $dataSet = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
@@ -169,7 +165,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($dataSet));
 
         $dataSet->expects($this->any())->method('get')
-            ->with('theme_style', 'default')
+            ->with('theme_skin', 'default')
             ->will($this->returnValue('default'));
 
         $template = new Template($this->container, []);
@@ -178,26 +174,22 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $themeProperty->setAccessible(true);
         $template->theme = $theme;
 
-        $this->assertEquals('default', $template->getThemeVariantName());
+        $this->assertEquals('default', $template->getThemeSkinName());
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getThemeVariantFile
+     * @covers Common\Core\Component\Template\Template::getThemeSkinProperty
      */
     public function testGetThemeVariantFile()
     {
         $theme       = $this->getMockBuilder('Theme')
-            ->setMethods([ 'getData', 'getCurrentStyle' ])
+            ->setMethods([ 'getData', 'getCurrentSkinProperty' ])
             ->getMock();
         $theme->uuid = 'com.openhost.foobar';
         $theme->path = 'public/themes/foobar';
 
-        $theme->expects($this->any())->method('getCurrentStyle')
-            ->will($this->returnValue([
-                'default' => true,
-                'name' => 'default',
-                'file' => 'style.css'
-            ]));
+        $theme->expects($this->any())->method('getCurrentSkinProperty')
+            ->will($this->returnValue('style.css'));
 
         $dataSet = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
@@ -208,7 +200,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($dataSet));
 
         $dataSet->expects($this->any())->method('get')
-            ->with('theme_style', 'default')
+            ->with('theme_skin', 'default')
             ->will($this->returnValue('default'));
 
         $template = new Template($this->container, []);
@@ -217,6 +209,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $themeProperty->setAccessible(true);
         $template->theme = $theme;
 
-        $this->assertEquals('style.css', $template->getThemeVariantFile());
+        $this->assertEquals('style.css', $template->getThemeSkinProperty('css_file'));
     }
 }
