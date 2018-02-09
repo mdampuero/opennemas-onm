@@ -374,12 +374,11 @@ class Menu
             return false;
         }
 
-        // Delete previous menu elements
-        if ($parentID == 0) {
-            $connAux->delete('menu_items', [ 'pk_menu' => $id ]);
-        }
-
         try {
+            // Delete previous menu elements
+            if ($parentID == 0) {
+                $connAux->delete('menu_items', [ 'pk_menu' => $id ]);
+            }
             $position = 1;
 
             $fm = getService('data.manager.filter');
