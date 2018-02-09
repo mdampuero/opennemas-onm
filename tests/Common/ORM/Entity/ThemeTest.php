@@ -13,6 +13,9 @@ use Common\ORM\Entity\Theme;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers Common\ORM\Entity\Theme::__construct
+     */
     public function testConstructor()
     {
         $data = [
@@ -44,6 +47,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @covers Common\ORM\Entity\Theme::getSkins
+     */
     public function testGetSkinsWithOneSkin()
     {
         $styles = [
@@ -73,6 +79,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($styles, $entity->getSkins());
     }
 
+    /**
+     * @covers Common\ORM\Entity\Theme::getSkins
+     */
     public function testGetSkinsWithNoSkins()
     {
         $entity = new Theme([]);
@@ -80,6 +89,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $entity->getSkins());
     }
 
+    /**
+     * @covers Common\ORM\Entity\Theme::getSkins
+     */
     public function testGetDefaultSkinWithNoSkins()
     {
         $entity = new Theme([]);
@@ -87,6 +99,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $entity->getDefaultSkin());
     }
 
+    /**
+     * @covers Common\ORM\Entity\Theme::getDefaultSkin
+     */
     public function testGetDefaultSkinWithSkins()
     {
         $styles = [
@@ -124,6 +139,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers Common\ORM\Entity\Theme::getDefaultSkin
+     */
     public function testGetDefaultSkinWithSkinsButNoDefault()
     {
         $styles = [
@@ -159,7 +177,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
+    /**
+     * @covers Common\ORM\Entity\Theme::getDefaultSkin
+     */
     public function testGetCurrentSkinWithValidSelected()
     {
         $styles = [
@@ -197,6 +217,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers Common\ORM\Entity\Theme::getCurrentSkin
+     */
     public function testGetCurrentSkinWithInValidSelected()
     {
         $styles = [
@@ -236,6 +259,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers Common\ORM\Entity\Theme::getCurrentSkin
+     */
     public function testGetCurrentSkinWithInValidSelectedAndNoSkins()
     {
         $selected = 'style-not-valid';
@@ -245,5 +271,139 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals(null, $entity->getCurrentSkin($selected));
+    }
+
+    /**
+     * @covers Common\ORM\Entity\Theme::getCurrentSkinName
+     */
+    public function testgetCurrentSkinNameWithInValidSelectedAndNoSkins()
+    {
+        $selected = 'style-not-valid';
+
+        $entity = new Theme([
+            'parameters' => []
+        ]);
+
+        $this->assertEquals(null, $entity->getCurrentSkinName($selected));
+    }
+
+    /**
+     * @covers Common\ORM\Entity\Theme::getCurrentSkinName
+     */
+    public function testgetCurrentSkinNameWithValidSelected()
+    {
+        $styles = [
+            'default' => [
+                'default' => true,
+                'name'    => 'Default',
+                'params'  => [
+                    'css_file' => 'style.css',
+                ]
+            ],
+            'style-two' => [
+                'name'    => 'Skin two',
+                'params'  => [
+                    'css_file' => 'style-two.css',
+                ]
+            ],
+        ];
+
+        $selected = 'default';
+
+        $entity = new Theme([
+            'parameters' => [
+                'skins' => $styles,
+            ]
+        ]);
+
+        $this->assertEquals('default', $entity->getCurrentSkinName($selected));
+    }
+
+    /**
+     * @covers Common\ORM\Entity\Theme::getCurrentSkinProperty
+     */
+    public function testgetCurrentSkinPropertyWithInValidSelectedAndNoSkins()
+    {
+        $selected = 'style-not-valid';
+
+        $entity = new Theme([
+            'parameters' => []
+        ]);
+
+        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
+    }
+
+    /**
+     * @covers Common\ORM\Entity\Theme::getCurrentSkinProperty
+     */
+    public function testgetCurrentSkinPropertyWithValidSelected()
+    {
+        $styles = [
+            'default' => [
+                'default' => true,
+                'name'    => 'Default',
+                'params'  => [
+                    'css_file' => 'style.css',
+                ]
+            ],
+            'style-two' => [
+                'name'    => 'Skin two',
+                'params'  => [
+                    'css_file' => 'style-two.css',
+                ]
+            ],
+        ];
+
+        $selected = 'default';
+
+        $entity = new Theme([
+            'parameters' => [
+                'skins' => $styles,
+            ]
+        ]);
+
+        $this->assertEquals('style.css', $entity->getCurrentSkinProperty($selected, 'css_file'));
+
+        $selected = 'default';
+
+        $entity = new Theme([
+            'parameters' => [
+                'skins' => [
+                    'default' => [
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
+
+        $selected = 'default';
+
+        $entity = new Theme([
+            'parameters' => [
+                'skins' => [
+                    'default' => [
+                        'params' => [
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
+
+        $selected = 'default';
+
+        $entity = new Theme([
+            'parameters' => [
+                'skins' => [
+                    'default' => [
+                        'params' => null
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
     }
 }

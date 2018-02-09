@@ -61,11 +61,12 @@ class Theme extends Extension
             }
         }
 
-
         // If no default style just pick the first one
         if (empty($default)) {
-            return array_shift($skins);
+            $default = array_shift($skins);
         }
+
+        return $default;
     }
 
     /**
@@ -89,8 +90,6 @@ class Theme extends Extension
         if (!array_key_exists($name, $skins)) {
             return $this->getDefaultSkin();
         }
-
-        $skins['internal_name'] = $name;
 
         return $skins[$name];
     }
