@@ -1509,7 +1509,7 @@
                             <i class="fa fa-paint-brush"></i>
                             {t}Style{/t}
                           </h4>
-                          <div class="form-group">
+                          <div class="form-group" ng-if="extra.theme_skins.length !== 0">
                             <label class="form-label" for="site-color">
                               {t}Default style{/t}
                             </label>
