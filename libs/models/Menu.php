@@ -444,7 +444,7 @@ class Menu
                 throw $e;
             }
             $connAux->rollback();
-            getService('error.log')->error($e->getMessage() . var_export($data, true), ["exception" => $e]);
+            getService('error.log')->error($e->getMessage() . var_export($params, true), ["exception" => $e]);
             return false;
         }
     }
