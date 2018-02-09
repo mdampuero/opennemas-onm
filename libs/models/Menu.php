@@ -374,6 +374,11 @@ class Menu
             return false;
         }
 
+        $isMultilanguageEnable = !in_array(
+            'es.openhost.module.multilanguage',
+            getService('core.instance')->activated_modules
+        );
+
         try {
             // Delete previous menu elements
             if ($parentID == 0) {
@@ -388,10 +393,7 @@ class Menu
 
                 // If the content multilanguage is disabled
                 // remove additional translations
-                if (!in_array(
-                    'es.openhost.module.multilanguage',
-                    getService('core.instance')->activated_modules
-                )) {
+                if ($isMultilanguageEnable) {
                     $item = $fm->set($item)
                         ->filter('localize', [
                             'keys' => $this->getL10nKeys(),
