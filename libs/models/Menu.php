@@ -369,14 +369,14 @@ class Menu
             $connAux->beginTransaction();
         }
 
-        // Delete previous menu elements
-        if ($parentID == 0) {
-            $connAux->delete('menu_items', [ 'pk_menu' => $id ]);
-        }
-
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
             return false;
+        }
+
+        // Delete previous menu elements
+        if ($parentID == 0) {
+            $connAux->delete('menu_items', [ 'pk_menu' => $id ]);
         }
 
         try {
