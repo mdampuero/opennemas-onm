@@ -42,17 +42,17 @@ class ContentViewsManager extends EntityManager
             return (is_array($id) ? [] : 0);
         }
 
-        if (is_array($id)) {
-            $views = [];
-
-            foreach ($rs as $value) {
-                $views[$value['pk_fk_content']] = $value['views'];
-            }
-
-            return $views;
-        } else {
+        if (!is_array($id)) {
             return $rs[0]['views'];
         }
+
+        $views = [];
+
+        foreach ($rs as $value) {
+            $views[$value['pk_fk_content']] = $value['views'];
+        }
+
+        return $views;
     }
 
     /**
