@@ -217,11 +217,15 @@ class ContentMediaHelperTest extends KernelTestCase
         $opinion->author->photo           = new \Photo();
         $opinion->author->photo->path_img = '/route/to/file.name';
 
-        $opinionInner       = new \Opinion();
-        $opinionInner->img2 = 123;
+        $opinionInner                = new \Opinion();
+        $opinionInner->author        = new \User();
+        $opinionInner->author->photo = new \Photo();
+        $opinionInner->img2          = 123;
 
-        $opinionFront       = new \Opinion();
-        $opinionFront->img1 = 123;
+        $opinionFront                = new \Opinion();
+        $opinionFront->author        = new \User();
+        $opinionFront->author->photo = new \Photo();
+        $opinionFront->img1          = 123;
 
         // Photo object
         $photo            = new \Photo();

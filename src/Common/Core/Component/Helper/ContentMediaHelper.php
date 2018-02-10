@@ -100,11 +100,17 @@ class ContentMediaHelper
         // Check images
         $mediaObject = $this->getImageMediaObject($content);
 
+        // Check author
+        $authorPhoto = null;
+        if (isset($content->author) && is_object($content->author)) {
+            $authorPhoto = $content->author->photo;
+        }
+
         if (empty($mediaObject)
-            && !empty($content->author->photo)
+            && !empty($authorPhoto)
         ) {
             // Photo author
-            $mediaObject      = $content->author->photo;
+            $mediaObject      = $authorPhoto;
             $mediaObject->url = $this->mediaUrl . '/'
                 . ltrim($mediaObject->path_img, '/');
         }
