@@ -57,6 +57,8 @@ EOF
             throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
         }
 
+        $this->getContainer()->get('core.security')->setInstance($instance);
+
         // TODO: Remove this when using new ORM for contents
         $cache = $this->getContainer()->get('cache');
         $cache->setNamespace($instance->internal_name);
@@ -93,6 +95,7 @@ EOF
                     $output->writeln("<fg=red> ==> {$synchronizer->stats['deleted']} files deleted</>");
                     $output->writeln("<info> ==> {$synchronizer->stats['downloaded']} files downloaded</>");
                     $output->writeln("<info> ==> {$synchronizer->stats['contents']} contents found</>");
+
                     $logger->info("{$synchronizer->stats['deleted']} files deleted", [ 'cron' ]);
                     $logger->info("{$synchronizer->stats['downloaded']} files downloaded", [ 'cron' ]);
                     $logger->info("{$synchronizer->stats['contents']} contents found", [ 'cron' ]);
@@ -117,7 +120,8 @@ EOF
                     }
                 } catch (\Exception $e) {
                     $output->writeln(
-                        "<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking...</error>"
+                        "<error>Sync report for '{$instance->internal_name}': "
+                        . $e->getMessage() . ". Unlocking...</error>"
                     );
                 }
             }
