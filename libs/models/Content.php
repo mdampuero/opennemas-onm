@@ -258,7 +258,10 @@ class Content implements \JsonSerializable
     {
         switch ($name) {
             case 'category_name':
-                return $this->category_name = $this->loadCategoryName($this->id);
+                return $this->category_name = $this->loadCategoryName();
+
+            case 'category_title':
+                return $this->category_title = $this->loadCategoryTitle();
 
             case 'comments':
                 return 0;
@@ -1455,78 +1458,53 @@ class Content implements \JsonSerializable
 
     /**
      * TODO:  move to ContentCategory class
+     * TODO: Remove the $pkContent parameter
+     *
      * Loads the category name for a given content id
      *
      * @param int $pk_content the content id
      *
      * @return string the category name
      */
-    public function loadCategoryName($pkContent)
+    public function loadCategoryName($pkContent = null)
     {
-        if (!empty($this->category_name)) {
-            return $this->category_name;
+        $category = ContentCategoryManager::get_instance()
+             ->findById($this->category);
+
+        if (!is_object($category)) {
+            return null;
         }
 
-        if (empty($this->category) && !empty($pkContent)) {
-            try {
-                $rs = getService('dbal_connection')->fetchColumn(
-                    'SELECT pk_fk_content_category '
-                    . 'FROM `contents_categories` WHERE pk_fk_content =?',
-                    [ $pkContent ]
-                );
-
-                $this->category = $rs;
-            } catch (\Exception $e) {
-                error_log('Error on Content::loadCategoyName (ID:' . $pkContent . ')' . $e->getMessage());
-            }
-        }
-
-        $this->category_name = ContentCategoryManager::get_instance()->getName($this->category);
+        $this->category_name = $category->name;
 
         return $this->category_name;
     }
 
     /**
      * TODO:  move to ContentCategory class
+     * TODO: Remove the $pkContent parameter
+     *
      * Loads the category title for a given content id
      *
      * @param int $pk_content the content id
      *
      * @return string the category title
      */
-    public function loadCategoryTitle($pkContent)
+    public function loadCategoryTitle($pkContent = null)
     {
-        if (!empty($this->category_title)) {
-            return $this->category_title;
+        $category = ContentCategoryManager::get_instance()
+             ->findById($this->category);
+
+        if (!is_object($category)) {
+            return null;
         }
 
-        if (empty($pkContent)) {
-            $pkContent = $this->id;
-        }
+        $this->category_title = getService('data.manager.filter')
+            ->set($category->title)
+            ->filter('localize')
+            ->get();
 
-        try {
-            $rs = getService('dbal_connection')->fetchColumn(
-                'SELECT pk_fk_content_category '
-                . 'FROM `contents_categories` WHERE pk_fk_content =?',
-                [ $pkContent ]
-            );
-
-            $this->category      = $rs;
-            $this->category_name = $this->loadCategoryName($this->category);
-
-            $category_title_aux = ContentCategoryManager::get_instance()
-                 ->getTitle($this->category_name);
-
-            $this->category_title = getService('data.manager.filter')
-                ->set($category_title_aux)
-                ->filter('localize')
-                ->get();
-
-            return $this->category_title;
-        } catch (\Exception $e) {
-            error_log('Error on Content::loadCategoyTitle (ID:' . $pkContent . ')' . $e->getMessage());
-            return '';
-        }
+        return $this->category_title;
     }
 
     /**

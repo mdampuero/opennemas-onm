@@ -397,10 +397,6 @@ class FrontpagesController extends Controller
 
         // Overloading information for contents
         foreach ($contentsInHomepage as &$content) {
-            // Load category related information
-            $content->category_name  = $content->loadCategoryName($content->id);
-            $content->category_title = $content->loadCategoryTitle($content->id);
-
             // Load attached and related contents from array
             $content->loadFrontpageImageFromHydratedArray($imageList)
                 ->loadAttachedVideo()
