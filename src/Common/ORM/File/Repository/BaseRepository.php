@@ -382,7 +382,8 @@ class BaseRepository extends Repository
             if (class_exists($class)) {
                 $entity = new $class($this->converter->objectify($config));
 
-                $entity->path = $path;
+                $entity->path     = substr($path, strpos($path, '/public') + 7);
+                $entity->realpath = $path;
 
                 $this->entities[] = $entity;
             }

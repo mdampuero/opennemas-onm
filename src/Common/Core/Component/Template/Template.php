@@ -125,14 +125,14 @@ class Template extends \Smarty
     {
         $wm = $this->container->get('widget_repository');
 
-        $path = $theme->path . '/tpl';
+        $path = $theme->realpath . '/tpl';
         $this->addTemplateDir($path);
 
-        $path = $theme->path . '/tpl/widgets';
+        $path = $theme->realpath . '/tpl/widgets';
         $wm->addPath($path);
 
         if (!empty($theme->text_domain)) {
-            $path = $theme->path . '/locale';
+            $path = $theme->realpath . '/locale';
 
             $this->container->get('core.locale')
                 ->addTextDomain($theme->text_domain, $path);
