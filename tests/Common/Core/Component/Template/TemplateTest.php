@@ -156,15 +156,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->any())->method('getCurrentSkinName')
             ->will($this->returnValue('default'));
 
-        $dataSet = $this->getMockBuilder('DataSet')
+        $dataSet2 = $this->getMockBuilder('DataSet2')
             ->setMethods([ 'get' ])
             ->getMock();
 
         $this->ormManager->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')
-            ->will($this->returnValue($dataSet));
+            ->will($this->returnValue($dataSet2));
 
-        $dataSet->expects($this->any())->method('get')
+        $dataSet2->expects($this->any())->method('get')
             ->with('theme_skin', 'default')
             ->will($this->returnValue('default'));
 
@@ -180,7 +180,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Common\Core\Component\Template\Template::getThemeSkinProperty
      */
-    public function testGetThemeVariantFile()
+    public function testGetThemeVariantProperty()
     {
         $theme       = $this->getMockBuilder('Theme')
             ->setMethods([ 'getData', 'getCurrentSkinProperty' ])
@@ -191,15 +191,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->any())->method('getCurrentSkinProperty')
             ->will($this->returnValue('style.css'));
 
-        $dataSet = $this->getMockBuilder('DataSet')
+        // I have to put the dataSet2 weird name due to class alias collision on
+        // PHPUnit.
+        $dataSet2 = $this->getMockBuilder('DataSet2')
             ->setMethods([ 'get' ])
             ->getMock();
 
         $this->ormManager->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')
-            ->will($this->returnValue($dataSet));
+            ->will($this->returnValue($dataSet2));
 
-        $dataSet->expects($this->any())->method('get')
+        $dataSet2->expects($this->any())->method('get')
             ->with('theme_skin', 'default')
             ->will($this->returnValue('default'));
 
