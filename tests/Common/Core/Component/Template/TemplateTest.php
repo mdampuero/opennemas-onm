@@ -90,6 +90,54 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Common\Core\Component\Template\Template::setConfig
+     */
+    public function testSetConfig()
+    {
+        $template = $this->createMock(\Common\Core\Component\Template\Template::class);
+
+        $template->method('configLoad')
+            ->willReturn(true);
+
+        $template->method('getConfigVars')
+            ->willReturn([]);
+
+
+        $this->assertEquals(
+            null,
+            $template->setConfig('frontpage')
+        );
+    }
+
+    /**
+     * @covers Common\Core\Component\Template\Template::generateCacheId
+     */
+    public function testGenerateCacheId()
+    {
+        $template = new Template($this->container, []);
+
+        $this->assertEquals(
+            'home|',
+            $template->generateCacheId('')
+        );
+
+        $this->assertEquals(
+            'categoryname|1234234234234',
+            $template->generateCacheId('frontend', 'category-name', '1234234234234')
+        );
+
+        $this->assertEquals(
+            'categoryname|',
+            $template->generateCacheId('frontend', 'category-name')
+        );
+
+        $this->assertEquals(
+            'frontend|',
+            $template->generateCacheId('frontend', '')
+        );
+    }
+
+    /**
      * @covers Common\Core\Component\Template\Template::getContainer
      */
     public function testGetContainer()
