@@ -69,7 +69,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->repository =
-            new BaseRepository('foo', $this->container, $this->paths, 'THEMES_DEPLOYED_AT', $this->metadata, $this->cache);
+            new BaseRepository('foo', $this->container, $this->paths, $this->metadata, $this->cache);
 
         $this->repository->entities = [
             new Entity([ 'foo' => 'thud', 'bar' => 'flob' ]),
@@ -84,7 +84,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $repository = $this->getMockBuilder('Common\ORM\File\Repository\BaseRepository')
             ->setMethods([ 'load' ])
-            ->setConstructorArgs([ 'foo', $this->container, [ 'foo' ], 'THEMES_DEPLOYED_AT', $this->metadata, $this->cache ])
+            ->setConstructorArgs([ 'foo', $this->container, [ 'foo' ], $this->metadata, $this->cache ])
             ->getMock();
 
         $method = new \ReflectionMethod($repository, 'load');
