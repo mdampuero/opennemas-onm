@@ -37,14 +37,6 @@ if (!defined('DEPLOYED_AT')) {
     define('DEPLOYED_AT', '0000000000');
 }
 
-if (file_exists(APPLICATION_PATH . '/.deploy.themes.php')) {
-    include_once APPLICATION_PATH . '/.deploy.themes.php';
-}
-
-if (!defined('THEMES_DEPLOYED_AT')) {
-    define('THEMES_DEPLOYED_AT', '0000000000');
-}
-
 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
     || (array_key_exists('SERVER_PORT', $_SERVER) && $_SERVER['SERVER_PORT'] == 443)
     || (array_key_exists('HTTP_X_FORWARDED_PROTO', $_SERVER) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')

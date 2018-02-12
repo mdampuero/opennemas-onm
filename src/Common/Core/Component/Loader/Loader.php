@@ -112,6 +112,16 @@ class Loader
                 $this->{'load' . $key}($values, $theme->uuid);
             }
         }
+
+        if (file_exists($theme->path . '.deploy.themes.php')) {
+            include_once $theme->path . '.deploy.themes.php';
+        } elseif (file_exists(APPLICATION_PATH . '/.deploy.themes.php')) {
+            include_once APPLICATION_PATH . '/.deploy.themes.php';
+        }
+
+        if (!defined('THEMES_DEPLOYED_AT')) {
+            define('THEMES_DEPLOYED_AT', '0000000000');
+        }
     }
 
     /**
