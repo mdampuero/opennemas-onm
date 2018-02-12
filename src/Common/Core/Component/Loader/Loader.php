@@ -113,8 +113,8 @@ class Loader
             }
         }
 
-        if (file_exists($theme->path . '.deploy.themes.php')) {
-            include_once $theme->path . '.deploy.themes.php';
+        if (file_exists($theme->realpath . '.deploy.themes.php')) {
+            include_once $theme->realpath . '.deploy.themes.php';
         } elseif (file_exists(APPLICATION_PATH . '/.deploy.themes.php')) {
             include_once APPLICATION_PATH . '/.deploy.themes.php';
         }
