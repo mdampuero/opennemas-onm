@@ -95,10 +95,11 @@ class Theme extends Extension
     }
 
     /**
-     * undocumented function
+     * Returns the name of the currently sking given its name
      *
-     * @return void
-     * @author
+     * @param string $internalName the internal name of the skin
+     *
+     * @return string|null the skin name
      **/
     public function getCurrentSkinName($internalName)
     {
@@ -114,23 +115,26 @@ class Theme extends Extension
     }
 
     /**
-     * undocumented function
+     * Returns a property value defined for the current skin given the property name
      *
-     * @return void
+     * @param string $internalName the internal name of the skin to select
+     * @param string $propertyName the property name of the skin to select
+     *
+     * @return string|null the property value
      * @author
      **/
-    public function getCurrentSkinProperty($internalName, $property)
+    public function getCurrentSkinProperty($internalName, $propertyName)
     {
         $skin = $this->getCurrentSkin($internalName);
 
         if (!is_array($skin)
             || !array_key_exists('params', $skin)
             || !is_array($skin['params'])
-            || !array_key_exists($property, $skin['params'])
+            || !array_key_exists($propertyName, $skin['params'])
         ) {
             return null;
         }
 
-        return $skin['params'][$property];
+        return $skin['params'][$propertyName];
     }
 }
