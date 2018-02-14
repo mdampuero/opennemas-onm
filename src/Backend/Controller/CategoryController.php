@@ -259,7 +259,7 @@ class CategoryController extends Controller
     public function toggleRssAction(Request $request)
     {
         $id     = $request->query->getDigits('id', 0);
-        $status = $request->query->getDigits('status', 0);
+        $status = $request->query->getInt('status', 0);
 
         $category = new \ContentCategory($id);
 
