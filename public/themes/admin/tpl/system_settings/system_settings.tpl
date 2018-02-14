@@ -1511,10 +1511,10 @@
                           </h4>
                           <div class="form-group" ng-if="extra.theme_skins.length !== 0">
                             <label class="form-label" for="site-color">
-                              {t}Default style{/t}
+                              {t}Default skin{/t}
                             </label>
                             <span class="help">
-                              {t}Your theme offers multiple styles select which one do you want.{/t}
+                              {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
                             </span>
                             <div class="controls">
                               <div class="input-group">
