@@ -139,6 +139,10 @@ class ContentCategory implements \JsonSerializable
 
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
+            // Force integer on inrss param
+            if (array_key_exists('inrss', $this->params)) {
+                $this->params['inrss'] = (int) $this->params['inrss'];
+            }
         }
     }
 
@@ -177,9 +181,9 @@ class ContentCategory implements \JsonSerializable
     public function __set($name, $value)
     {
         if (in_array(
-                'es.openhost.module.multilanguage',
-                getService('core.instance')->activated_modules
-            )
+            'es.openhost.module.multilanguage',
+            getService('core.instance')->activated_modules
+        )
             && in_array($name, $this->getL10nKeys())
         ) {
             $value = getService('data.manager.filter')
