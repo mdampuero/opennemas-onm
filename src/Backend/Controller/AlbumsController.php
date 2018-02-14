@@ -305,9 +305,10 @@ class AlbumsController extends Controller
             'agency'         => $requestPost
                 ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $requestPost->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $requestPost->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
+            'metadata'       => $this->get('data.manager.filter')
+                ->set($requestPost->filter('metadata', '', FILTER_SANITIZE_STRING))
+                ->filter('tags', [ 'exclude' => [ '.', '-', '#' ] ])
+                ->get(),
             'with_comment'   => $requestPost->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $requestPost->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $requestPost->get('album_photos_id'),
