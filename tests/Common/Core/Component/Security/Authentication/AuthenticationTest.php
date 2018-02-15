@@ -123,11 +123,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests checkRecaptcha for backend URL.
+     * Tests checkRecaptcha for frontend URL.
      */
-    public function testCheckRecaptchaForBackend()
+    public function testCheckRecaptchaForFrontend()
     {
-        $this->recaptcha->expects($this->once())->method('configureFromParameters')
+        $this->recaptcha->expects($this->once())->method('configureFromSettings')
             ->willReturn($this->recaptcha);
         $this->recaptcha->expects($this->once())->method('isValid')
             ->with('foo', '198.165.167.18')->willReturn(true);
@@ -135,7 +135,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->auth->checkRecaptcha(
             'foo',
             '198.165.167.18',
-            'http://garply.wobble/admin'
+            'http://garply.wobble'
         ));
     }
 
@@ -144,7 +144,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckRecaptchaWhenInvalid()
     {
-        $this->recaptcha->expects($this->once())->method('configureFromSettings')
+        $this->recaptcha->expects($this->once())->method('configureFromParameters')
             ->willReturn($this->recaptcha);
         $this->recaptcha->expects($this->once())->method('isValid')
             ->with('foo', '198.165.167.18')->willReturn(false);
@@ -159,7 +159,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckRecaptchaWhenValid()
     {
-        $this->recaptcha->expects($this->once())->method('configureFromSettings')
+        $this->recaptcha->expects($this->once())->method('configureFromParameters')
             ->willReturn($this->recaptcha);
         $this->recaptcha->expects($this->once())->method('isValid')
             ->with('foo', '198.165.167.18')->willReturn(true);

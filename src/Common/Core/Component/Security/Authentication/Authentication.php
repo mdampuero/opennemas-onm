@@ -91,10 +91,10 @@ class Authentication
      */
     public function checkRecaptcha($response, $ip, $referer = '')
     {
-        $this->recaptcha->configureFromSettings();
+        $this->recaptcha->configureFromParameters();
 
-        if (!empty($referer) && !$this->isRecaptchaForFrontend($referer)) {
-            $this->recaptcha->configureFromParameters();
+        if (!empty($referer) && $this->isRecaptchaForFrontend($referer)) {
+            $this->recaptcha->configureFromSettings();
         }
 
         $valid = $this->recaptcha->isValid($response, $ip);
