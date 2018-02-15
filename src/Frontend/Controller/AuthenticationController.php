@@ -46,7 +46,7 @@ class AuthenticationController extends Controller
         }
 
         if ($auth->isRecaptchaRequired()) {
-            $recaptcha = $auth->getRecaptchaFromParameters();
+            $recaptcha = $auth->getRecaptchaFromSettings();
         }
 
         return $this->render('authentication/login.tpl', [
