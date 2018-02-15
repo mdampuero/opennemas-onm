@@ -140,6 +140,11 @@ class ContentCategory implements \JsonSerializable
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
         }
+
+        // Force integer on inrss param
+        $this->params['inrss'] = is_array($this->params)
+            && array_key_exists('inrss', $this->params)
+            && $this->params['inrss'] == 0 ? 0 : 1;
     }
 
     /**
@@ -176,10 +181,7 @@ class ContentCategory implements \JsonSerializable
      */
     public function __set($name, $value)
     {
-        if (in_array(
-                'es.openhost.module.multilanguage',
-                getService('core.instance')->activated_modules
-            )
+        if (getService('core.instance')->hasMultilanguage()
             && in_array($name, $this->getL10nKeys())
         ) {
             $value = getService('data.manager.filter')
@@ -245,10 +247,7 @@ class ContentCategory implements \JsonSerializable
         // Generate slug for category
         // $data['name'] = \Onm\StringUtils::generateSlug($data['title']);
 
-        if (!in_array(
-            'es.openhost.module.multilanguage',
-            getService('core.instance')->activated_modules
-        )) {
+        if (!getService('core.instance')->hasMultilanguage()) {
             $aux           = new stdClass();
             $aux->title    = $data['title'];
             $aux           = getService('data.manager.filter')->set($aux)
@@ -318,10 +317,7 @@ class ContentCategory implements \JsonSerializable
         $data['params'] = serialize($data['params']);
         $data['name']   = $this->name;
 
-        if (!in_array(
-            'es.openhost.module.multilanguage',
-            getService('core.instance')->activated_modules
-        )) {
+        if (!getService('core.instance')->hasMultilanguage()) {
             $aux           = new stdClass();
             $aux->title    = $data['title'];
             $aux           = getService('data.manager.filter')->set($aux)

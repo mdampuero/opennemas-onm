@@ -151,7 +151,7 @@
               <div class="form-group">
                 <div class="controls">
                   <div class="checkbox">
-                    <input type="checkbox" id="inmenu" ng-model="category.inmenu" ng-true-value="1" ng-true-value="1">
+                    <input type="checkbox" id="inmenu" ng-model="category.inmenu" ng-true-value="1">
                     <label for="inmenu" class="form-label">{t}Available{/t}</label>
                   </div>
                 </div>
