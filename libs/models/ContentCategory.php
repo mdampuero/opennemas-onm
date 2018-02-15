@@ -139,11 +139,12 @@ class ContentCategory implements \JsonSerializable
 
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
-            // Force integer on inrss param
-            if (array_key_exists('inrss', $this->params)) {
-                $this->params['inrss'] = (int) $this->params['inrss'];
-            }
         }
+
+        // Force integer on inrss param
+        $this->params['inrss'] = is_array($this->params)
+            && array_key_exists('inrss', $this->params)
+            && $this->params['inrss'] == 0 ? 0 : 1;
     }
 
     /**
