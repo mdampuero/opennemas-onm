@@ -351,11 +351,11 @@ class Menu
     /**
      * Sets the menu elements to one menu given its id and the list of items.
      *
-     * @param int    $id          The menu id to set the elements in
-     * @param array  $items       The list of elements to set.
-     * @param Object $transaction The actual connection for the transaction
-     * @param int    $parentId    The id of the item parent.
-     * @param int    $elementId   The id of the element to insert.
+     * @param int     $id          The menu id to set the elements in
+     * @param array   $items       The list of elements to set.
+     * @param boolean $transaction If exist a transaction
+     * @param int     $parentId    The id of the item parent.
+     * @param int     $elementId   The id of the element to insert.
      *
      * @return boolean True if items were saved successfully. Otherwise, returns
      *                 false.
