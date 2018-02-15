@@ -1,7 +1,7 @@
 
 angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
   '$uibModalInstance', '$scope',
-  function ($uibModalInstance, $scope) {
+  function($uibModalInstance, $scope) {
     'use strict';
 
     $scope.selected = [];
@@ -13,20 +13,24 @@ angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
      */
     $scope.addItem = function() {
       if ($scope.type === 'external') {
-        var item = {
-          link:    $scope.externalLinkUrl,
-          pk_item: $scope.externalLinkTitle,
-          title:   $scope.externalLinkTitle,
-          type:    $scope.type,
-          submenu: []
-        };
+        var items = [];
 
-        $uibModalInstance.close({ items: [ item ] });
+        if ($scope.externalLinkUrl && $scope.externalLinkUrl !== '') {
+          items.push({
+            link:    $scope.externalLinkUrl,
+            pk_item: $scope.externalLinkTitle,
+            title:   $scope.externalLinkTitle,
+            type:    $scope.type,
+            submenu: []
+          });
+        }
 
+        $uibModalInstance.close({ items: items });
         return;
       }
 
       var items = [];
+
       for (var i = 0; i < $scope.selected.length; i++) {
         var item = {
           link:    $scope.selected[i].name,
@@ -61,7 +65,7 @@ angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
     /**
      * Closes the current modal
      */
-     $scope.close = function() {
+    $scope.close = function() {
       $uibModalInstance.dismiss();
     };
 

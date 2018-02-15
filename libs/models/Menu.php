@@ -51,7 +51,7 @@ class Menu
     {
         try {
             $conn = getService('dbal_connection');
-
+            $conn->beginTransaction();
             $conn->insert('menues', [
                 'name'     => $data['name'],
                 'params'   => $data['params'],
@@ -60,13 +60,19 @@ class Menu
             ]);
 
             $this->pk_menu = $conn->lastInsertId();
-            $this->setMenuItems($this->pk_menu, $data['items']);
+            $updateItems   = $this->setMenuItems($this->pk_menu, $data['items'], true);
 
+            if (!$updateItems) {
+                $conn->rollback();
+                return $updateItems;
+            }
+
+            $conn->commit();
             dispatchEventWithParams('menu.create', ['content' => $this]);
-
             return $this;
         } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
+            $conn->rollback();
+            getService('error.log')->error($e->getMessage(), ["exception" => $e]);
             return false;
         }
     }
@@ -145,7 +151,9 @@ class Menu
     public function update($data)
     {
         try {
-            getService('dbal_connection')->update(
+            $conn = getService('dbal_connection');
+            $conn->beginTransaction();
+            $conn->update(
                 'menues',
                 [
                     'name'     => $data['name'],
@@ -156,12 +164,16 @@ class Menu
                 [ 'pk_menu' => $this->pk_menu ]
             );
 
-            $this->setMenuItems($this->pk_menu, $data['items']);
-
+            if (!$this->setMenuItems($this->pk_menu, $data['items'], true)) {
+                $conn->rollback();
+                return false;
+            }
+            $conn->commit();
             dispatchEventWithParams('menu.update', ['content' => $this]);
             return $this;
         } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
+            $conn->rollback();
+            getService('error.log')->error($e->getMessage(), ["exception" => $e]);
             return false;
         }
     }
@@ -342,61 +354,38 @@ class Menu
     /**
      * Sets the menu elements to one menu given its id and the list of items.
      *
-     * @param int   $id     The menu id to set the elements in
-     * @param array $items  The list of elements to set.
-     * @param array $parent The id of the item parent.
+     * @param int     $id          The menu id to set the elements in
+     * @param array   $items       The list of elements to set.
+     * @param boolean $transaction If exist a transaction
+     * @param int     $parentId    The id of the item parent.
+     * @param int     $elementId   The id of the element to insert.
      *
      * @return boolean True if items were saved successfully. Otherwise, returns
      *                 false.
      */
-    public function setMenuItems($id, $items = [], $parentID = 0, &$elementID = 1)
+    public function setMenuItems($id, $items = [], $transaction = false, $parentID = 0, &$elementID = 1)
     {
-        $conn = getService('dbal_connection');
-
-        // Delete previous menu elements
-        if ($parentID == 0) {
-            $conn->delete('menu_items', [ 'pk_menu' => $id ]);
-        }
-
+        $params = null;
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
             return false;
         }
 
+        $isMultilanguageEnable = getService('core.instance')->hasMultilanguage();
+        $fm                    = getService('data.manager.filter');
         try {
+            $conn = getService('dbal_connection');
+            if (!$transaction) {
+                $conn->beginTransaction();
+            }
+            // Delete previous menu elements
+            if ($parentID == 0) {
+                $conn->delete('menu_items', [ 'pk_menu' => $id ]);
+            }
             $position = 1;
-
-            $fm = getService('data.manager.filter');
             foreach ($items as $item) {
-                $item->title = get_object_vars($item->title);
-                $item->link  = get_object_vars($item->link);
-
-                // If the content multilanguage is disabled
-                // remove additional translations
-                if (!in_array(
-                    'es.openhost.module.multilanguage',
-                    getService('core.instance')->activated_modules
-                )) {
-                    $item = $fm->set($item)
-                        ->filter('localize', [
-                            'keys' => $this->getL10nKeys(),
-                            'locale' => getService('core.locale')
-                                ->setContext('frontend')->getLocale()
-                        ])
-                        ->get();
-                }
-
-                if (is_array($item->title)) {
-                    $item->title = serialize($item->title);
-                }
-
-                if (is_array($item->link)) {
-                    $item->link = serialize($item->link);
-                }
-
-                $item->type = filter_var($item->type, FILTER_SANITIZE_STRING);
-
-                $conn->insert('menu_items', [
+                $item   = $this->prepareItem($item, $isMultilanguageEnable, $fm);
+                $params = [
                     'pk_item'   => $elementID,
                     'pk_menu'   => $id,
                     'title'     => $item->title,
@@ -404,22 +393,71 @@ class Menu
                     'type'      => $item->type,
                     'position'  => $position,
                     'pk_father' => $parentID
-                ]);
+                ];
+                $conn->insert('menu_items', $params);
                 $parent = $elementID;
                 $elementID++;
                 $position++;
 
-                if (!empty($item->submenu)) {
-                    if (!$this->setMenuItems($id, $item->submenu, $parent, $elementID)) {
-                        return false;
-                    }
+                if (empty($item->submenu) || $this->setMenuItems($id, $item->submenu, true, $parent, $elementID)) {
+                    continue;
                 }
+                if ($transaction) {
+                    $conn->rollback();
+                }
+                return false;
+            }
+
+            if (!$transaction) {
+                $conn->commit();
             }
 
             return true;
         } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
+            if ($transaction) {
+                throw $e;
+            }
+            $conn->rollback();
+            getService('error.log')->error($e->getMessage() . var_export($params, true), ["exception" => $e]);
             return false;
         }
+    }
+
+    /**
+     *  Prepare menu item for insert in the database
+     *
+     *  @param Object  $item                  Menu item to prepare
+     *  @param boolean $isMultilanguageEnable If the multilanguage is enable
+     *  @param Object  $fm                    The instance of the filter manager
+     *
+     *  @return Object The prepare item
+     */
+    private function prepareItem($item, $isMultilanguageEnable, $fm)
+    {
+        $item->title = get_object_vars($item->title);
+        $item->link  = get_object_vars($item->link);
+
+        // If the content multilanguage is disabled
+        // remove additional translations
+        if ($isMultilanguageEnable) {
+            $item = $fm->set($item)
+                ->filter('localize', [
+                    'keys' => $this->getL10nKeys(),
+                    'locale' => getService('core.locale')
+                        ->setContext('frontend')->getLocale()
+                ])
+                ->get();
+        }
+
+        if (is_array($item->title)) {
+            $item->title = serialize($item->title);
+        }
+
+        if (is_array($item->link)) {
+            $item->link = serialize($item->link);
+        }
+
+        $item->type = filter_var($item->type, FILTER_SANITIZE_STRING);
+        return $item;
     }
 }
