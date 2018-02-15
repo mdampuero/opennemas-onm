@@ -77,6 +77,8 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->fb);
         $this->ts->expects($this->once())->method('getUser')
             ->willReturn($this->user);
+        $this->headers->expects($this->once())->method('get')
+            ->with('referer')->willReturn('/mumble/gorp');
 
         $this->request->headers = $this->headers;
 
@@ -106,8 +108,6 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->request->expects($this->at(6))->method('isXmlHttpRequest')
             ->willReturn(false);
-        $this->headers->expects($this->once())->method('get')
-            ->with('referer')->willReturn('/mumble/gorp');
 
         $response = $this->handler->onAuthenticationSuccess($this->request, $this->ts);
 
