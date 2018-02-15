@@ -115,12 +115,10 @@ class Loader
 
         if (file_exists($theme->realpath . '.deploy.themes.php')) {
             include_once $theme->realpath . '.deploy.themes.php';
-        } elseif (file_exists(APPLICATION_PATH . '/.deploy.themes.php')) {
-            include_once APPLICATION_PATH . '/.deploy.themes.php';
         }
 
         if (!defined('THEMES_DEPLOYED_AT')) {
-            define('THEMES_DEPLOYED_AT', '0000000000');
+            define('THEMES_DEPLOYED_AT', '00000000000000');
         }
     }
 
