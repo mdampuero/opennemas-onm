@@ -374,11 +374,6 @@ class Menu
             return false;
         }
 
-        $isMultilanguageEnable = !in_array(
-            'es.openhost.module.multilanguage',
-            getService('core.instance')->activated_modules
-        );
-
         try {
             // Delete previous menu elements
             if ($parentID == 0) {
@@ -386,7 +381,8 @@ class Menu
             }
             $position = 1;
 
-            $fm = getService('data.manager.filter');
+            $isMultilanguageEnable = getService('core.instance')->hasMultilanguage();
+            $fm                    = getService('data.manager.filter');
             foreach ($items as $item) {
                 $item->title = get_object_vars($item->title);
                 $item->link  = get_object_vars($item->link);
