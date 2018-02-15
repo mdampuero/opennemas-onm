@@ -34,7 +34,7 @@ if (file_exists(APPLICATION_PATH . '/.deploy.php')) {
 }
 
 if (!defined('DEPLOYED_AT')) {
-    define('DEPLOYED_AT', '0000000000');
+    define('DEPLOYED_AT', '00000000000000');
 }
 
 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
