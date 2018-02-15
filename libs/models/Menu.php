@@ -60,7 +60,7 @@ class Menu
             ]);
 
             $this->pk_menu = $conn->lastInsertId();
-            $updateItems   = $this->setMenuItems($this->pk_menu, $data['items'], $conn);
+            $updateItems   = $this->setMenuItems($this->pk_menu, $data['items'], true);
 
             if (!$updateItems) {
                 $conn->rollback();
@@ -164,7 +164,7 @@ class Menu
                 [ 'pk_menu' => $this->pk_menu ]
             );
 
-            $this->setMenuItems($this->pk_menu, $data['items'], $conn);
+            $this->setMenuItems($this->pk_menu, $data['items'], true);
             $conn->commit();
             dispatchEventWithParams('menu.update', ['content' => $this]);
             return $this;
@@ -351,64 +351,37 @@ class Menu
     /**
      * Sets the menu elements to one menu given its id and the list of items.
      *
-     * @param int    $id        The menu id to set the elements in
-     * @param array  $items     The list of elements to set.
-     * @param Object $conn      The actual connection for the transaction
-     * @param int    $parentId  The id of the item parent.
-     * @param int    $elementId The id of the element to insert.
+     * @param int    $id          The menu id to set the elements in
+     * @param array  $items       The list of elements to set.
+     * @param Object $transaction The actual connection for the transaction
+     * @param int    $parentId    The id of the item parent.
+     * @param int    $elementId   The id of the element to insert.
      *
      * @return boolean True if items were saved successfully. Otherwise, returns
      *                 false.
      */
-    public function setMenuItems($id, $items = [], $conn = null, $parentID = 0, &$elementID = 1)
+    public function setMenuItems($id, $items = [], $transaction = false, $parentID = 0, &$elementID = 1)
     {
-        $connAux = $conn;
-        $params  = null;
-        if (is_null($connAux)) {
-            $connAux = getService('dbal_connection');
-            $connAux->beginTransaction();
-        }
-
+        $params = null;
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
             return false;
         }
 
+        $isMultilanguageEnable = getService('core.instance')->hasMultilanguage();
+        $fm                    = getService('data.manager.filter');
         try {
+            $conn = getService('dbal_connection');
+            if (!$transaction) {
+                $conn->beginTransaction();
+            }
             // Delete previous menu elements
             if ($parentID == 0) {
-                $connAux->delete('menu_items', [ 'pk_menu' => $id ]);
+                $conn->delete('menu_items', [ 'pk_menu' => $id ]);
             }
             $position = 1;
-
-            $isMultilanguageEnable = getService('core.instance')->hasMultilanguage();
-            $fm                    = getService('data.manager.filter');
             foreach ($items as $item) {
-                $item->title = get_object_vars($item->title);
-                $item->link  = get_object_vars($item->link);
-
-                // If the content multilanguage is disabled
-                // remove additional translations
-                if ($isMultilanguageEnable) {
-                    $item = $fm->set($item)
-                        ->filter('localize', [
-                            'keys' => $this->getL10nKeys(),
-                            'locale' => getService('core.locale')
-                                ->setContext('frontend')->getLocale()
-                        ])
-                        ->get();
-                }
-
-                if (is_array($item->title)) {
-                    $item->title = serialize($item->title);
-                }
-
-                if (is_array($item->link)) {
-                    $item->link = serialize($item->link);
-                }
-
-                $item->type = filter_var($item->type, FILTER_SANITIZE_STRING);
-
+                $item   = $this->prepareItem($item, $isMultilanguageEnable, $fm);
                 $params = [
                     'pk_item'   => $elementID,
                     'pk_menu'   => $id,
@@ -418,30 +391,69 @@ class Menu
                     'position'  => $position,
                     'pk_father' => $parentID
                 ];
-                $connAux->insert('menu_items', $params);
+                $conn->insert('menu_items', $params);
                 $parent = $elementID;
                 $elementID++;
                 $position++;
 
-                if (!empty($item->submenu)) {
-                    if (!$this->setMenuItems($id, $item->submenu, $connAux, $parent, $elementID)) {
-                        return false;
-                    }
+                if (empty($item->submenu)) {
+                    continue;
+                }
+                if (!$this->setMenuItems($id, $item->submenu, true, $parent, $elementID)) {
+                    return false;
                 }
             }
 
-            if (is_null($conn)) {
-                $connAux->commit();
+            if (!$transaction) {
+                $conn->commit();
             }
 
             return true;
         } catch (\Exception $e) {
-            if (!is_null($conn)) {
+            if ($transaction) {
                 throw $e;
             }
-            $connAux->rollback();
+            $conn->rollback();
             getService('error.log')->error($e->getMessage() . var_export($params, true), ["exception" => $e]);
             return false;
         }
+    }
+
+    /**
+     *  Prepare menu item for insert in the database
+     *
+     *  @param Object  $item                  Menu item to prepare
+     *  @param boolean $isMultilanguageEnable If the multilanguage is enable
+     *  @param Object  $fm                    The instance of the filter manager
+     *
+     *  @return Object The prepare item
+     */
+    private function prepareItem($item, $isMultilanguageEnable, $fm)
+    {
+        $item->title = get_object_vars($item->title);
+        $item->link  = get_object_vars($item->link);
+
+        // If the content multilanguage is disabled
+        // remove additional translations
+        if ($isMultilanguageEnable) {
+            $item = $fm->set($item)
+                ->filter('localize', [
+                    'keys' => $this->getL10nKeys(),
+                    'locale' => getService('core.locale')
+                        ->setContext('frontend')->getLocale()
+                ])
+                ->get();
+        }
+
+        if (is_array($item->title)) {
+            $item->title = serialize($item->title);
+        }
+
+        if (is_array($item->link)) {
+            $item->link = serialize($item->link);
+        }
+
+        $item->type = filter_var($item->type, FILTER_SANITIZE_STRING);
+        return $item;
     }
 }
