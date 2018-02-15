@@ -123,11 +123,28 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests checkRecaptchaToken when token is invalid.
+     * Tests checkRecaptcha for frontend URL.
+     */
+    public function testCheckRecaptchaForFrontend()
+    {
+        $this->recaptcha->expects($this->once())->method('configureFromSettings')
+            ->willReturn($this->recaptcha);
+        $this->recaptcha->expects($this->once())->method('isValid')
+            ->with('foo', '198.165.167.18')->willReturn(true);
+
+        $this->assertTrue($this->auth->checkRecaptcha(
+            'foo',
+            '198.165.167.18',
+            'http://garply.wobble'
+        ));
+    }
+
+    /**
+     * Tests checkRecaptcha when token is invalid.
      */
     public function testCheckRecaptchaWhenInvalid()
     {
-        $this->recaptcha->expects($this->once())->method('configureFromSettings')
+        $this->recaptcha->expects($this->once())->method('configureFromParameters')
             ->willReturn($this->recaptcha);
         $this->recaptcha->expects($this->once())->method('isValid')
             ->with('foo', '198.165.167.18')->willReturn(false);
@@ -138,11 +155,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests checkRecaptchaToken when token is valid.
+     * Tests checkRecaptcha when token is valid.
      */
     public function testCheckRecaptchaWhenValid()
     {
-        $this->recaptcha->expects($this->once())->method('configureFromSettings')
+        $this->recaptcha->expects($this->once())->method('configureFromParameters')
             ->willReturn($this->recaptcha);
         $this->recaptcha->expects($this->once())->method('isValid')
             ->with('foo', '198.165.167.18')->willReturn(true);
@@ -368,5 +385,19 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->assertRegexp('/[0-9]{14,}/', $method->invokeArgs($this->auth, []));
+    }
+
+    /**
+     * Tests isRecaptchaForFrontend when the referer is and is not a frontend
+     * URL.
+     */
+    public function testIsRecaptchaForFrontend()
+    {
+        $method = new \ReflectionMethod($this->auth, 'isRecaptchaForFrontend');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($this->auth, [ 'http://qux.glork' ]));
+        $this->assertFalse($method->invokeArgs($this->auth, [ 'http://qux.glork/admin' ]));
+        $this->assertFalse($method->invokeArgs($this->auth, [ 'http://qux.glork/manager' ]));
     }
 }

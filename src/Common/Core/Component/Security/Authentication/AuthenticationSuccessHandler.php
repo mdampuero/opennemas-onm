@@ -79,6 +79,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         $recaptcha = $request->get('g-recaptcha-response');
         $session   = $request->getSession();
         $target    = $request->get('_target');
+        $referer   = $request->headers->get('referer');
 
         if (empty($target)) {
             $target = $this->router->generate('frontend_user_show');
@@ -88,7 +89,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
 
         // Check reCAPTCHA only if present
         if (!is_null($recaptcha)) {
-            $this->auth->checkRecaptcha($recaptcha, $request->getClientIp());
+            $this->auth->checkRecaptcha($recaptcha, $request->getClientIp(), $referer);
         }
 
         $this->auth->checkCsrfToken($request->get('_token'));
@@ -107,7 +108,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
             $this->ts->setToken(null);
 
             if (!$request->isXmlHttpRequest()) {
-                $target = $request->headers->get('referer');
+                $target = $referer;
             }
 
             return new RedirectResponse($target);

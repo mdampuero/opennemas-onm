@@ -84,13 +84,20 @@ class Authentication
      *
      * @param string $response The recaptcha response.
      * @param string $ip       The client IP.
+     * @param string $referer  The referer URL to find out if recaptcha has to
+     *                         be checked with keys from settings or parameters.
      *
      * @return boolean True if the response is valid. False otherwise.
      */
-    public function checkRecaptcha($response, $ip)
+    public function checkRecaptcha($response, $ip, $referer = '')
     {
-        $valid = $this->recaptcha->configureFromSettings()
-            ->isValid($response, $ip);
+        $this->recaptcha->configureFromParameters();
+
+        if (!empty($referer) && $this->isRecaptchaForFrontend($referer)) {
+            $this->recaptcha->configureFromSettings();
+        }
+
+        $valid = $this->recaptcha->isValid($response, $ip);
 
         if (!$valid) {
             $this->session->set(
@@ -249,5 +256,17 @@ class Authentication
         $this->session->set('intention', $intention);
 
         return $intention;
+    }
+
+    /**
+     * Checks if the current request is for frontend login.
+     *
+     * @param string $url The request URL.
+     *
+     * @return boolean True if the referer URL is for frontend. False otherwise.
+     */
+    protected function isRecaptchaForFrontend($url)
+    {
+        return !strpos($url, '/admin') && !strpos($url, '/manager');
     }
 }
