@@ -164,7 +164,10 @@ class Menu
                 [ 'pk_menu' => $this->pk_menu ]
             );
 
-            $this->setMenuItems($this->pk_menu, $data['items'], true);
+            if (!$this->setMenuItems($this->pk_menu, $data['items'], true)) {
+                $conn->rollback();
+                return false;
+            }
             $conn->commit();
             dispatchEventWithParams('menu.update', ['content' => $this]);
             return $this;
@@ -396,12 +399,13 @@ class Menu
                 $elementID++;
                 $position++;
 
-                if (empty($item->submenu)) {
+                if (empty($item->submenu) || $this->setMenuItems($id, $item->submenu, true, $parent, $elementID)) {
                     continue;
                 }
-                if (!$this->setMenuItems($id, $item->submenu, true, $parent, $elementID)) {
-                    return false;
+                if ($transaction) {
+                    $conn->rollback();
                 }
+                return false;
             }
 
             if (!$transaction) {
