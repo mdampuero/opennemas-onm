@@ -62,10 +62,10 @@ class StylesheetManagerTest extends AssetManagerTest
         $method->setAccessible(true);
 
         $src = $method->invokeArgs($this->manager, [ 'foo.css' ]);
-        $this->assertEquals(1, preg_match('/baz\/quux\/foo\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.css/', $src));
+        $this->assertEquals(1, preg_match('/baz\/quux\/foo\.[a-z0-9]{8}\.[0-9]{14}\.xzy\.css/', $src));
 
         $src = $method->invokeArgs($this->manager, [ [ 'foo.css', 'bar.less' ] ]);
-        $this->assertEquals(1, preg_match('/baz\/quux\/default\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.css/', $src));
+        $this->assertEquals(1, preg_match('/baz\/quux\/default\.[a-z0-9]{8}\.[0-9]{14}\.xzy\.css/', $src));
     }
 
     public function testGetFilterManager()
