@@ -1444,7 +1444,7 @@ class Content implements \JsonSerializable
             $schedulingState = $this->getSchedulingState();
 
             return [
-                'title'           => $this->title,
+                'title'           => $this->__get('title'),
                 'category'        => $ccm->getName($this->category),
                 'views'           => $this->views,
                 'starttime'       => $this->starttime,
