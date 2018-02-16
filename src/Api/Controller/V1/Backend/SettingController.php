@@ -74,6 +74,7 @@ class SettingController extends Controller
         'site_logo',
         'site_name',
         'site_title',
+        'theme_skin',
         'translators',
         'twitter_page',
         'vimeo_page',
