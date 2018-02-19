@@ -29,6 +29,10 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->fb = $this->getMockBuilder('FlashBag')
+            ->setMethods([ 'add' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getRepository' ])
             ->getMock();
@@ -55,7 +59,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->session = $this->getMockBuilder('Session')
-            ->setMethods([ 'get', 'set' ])
+            ->setMethods([ 'get', 'getFlashBag', 'set' ])
             ->getMock();
 
         $this->security = $this->getMockBuilder('Security')
@@ -93,6 +97,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->request->expects($this->any())->method('getSession')
             ->willReturn($this->session);
+
+        $this->session->expects($this->any())->method('getFlashBag')
+            ->willReturn($this->fb);
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this,  'serviceContainerCallback' ]));
@@ -457,10 +464,37 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests isAllowed when the current user is a PARTNER who owns the current
-     * instance.
+     * Tests isAllowed for an user when the current instance is blocked.
      */
-    public function testIsAllowedForUser()
+    public function testIsAllowedForUserWhenInstanceBlocked()
+    {
+        $listener = new SecurityListener($this->container);
+        $method   = new \ReflectionMethod($listener, 'isAllowed');
+
+        $method->setAccessible(true);
+
+        $this->user->expects($this->any())->method('isEnabled')
+            ->willReturn(true);
+        $this->security->expects($this->at(0))->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
+        $this->security->expects($this->at(1))->method('hasPermission')
+            ->with('PARTNER')->willReturn(false);
+        $this->security->expects($this->at(2))->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
+        $this->security->expects($this->at(3))->method('hasPermission')
+            ->with('PARTNER')->willReturn(false);
+
+        $this->user->type        = 0;
+        $this->instance->blocked = true;
+
+        $this->assertFalse($method->invokeArgs($listener, [ $this->instance, $this->user, '/admin' ]));
+        $this->assertFalse($method->invokeArgs($listener, [ $this->instance, $this->user, '/managerws/instance' ]));
+    }
+
+    /**
+     * Tests isAllowed for an user when the current instance is not blocked.
+     */
+    public function testIsAllowedForUserWhenInstanceNotBlocked()
     {
         $listener = new SecurityListener($this->container);
         $method   = new \ReflectionMethod($listener, 'isAllowed');
@@ -527,8 +561,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->with('referer')->willReturn('/admin/login');
         $this->router->expects($this->once())->method('generate')
             ->with('backend_authentication_login')->willReturn('/admin/login');
-        $this->session->expects($this->once())->method('set')
-            ->with('_security.last_error');
+
+        $this->fb->expects($this->once())->method('add')
+            ->with('error', 'The instance "mumble" is blocked');
         $this->ts->expects($this->once())->method('setToken')->with(null);
 
         $method->invokeArgs($listener, [
