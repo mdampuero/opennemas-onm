@@ -212,7 +212,7 @@ class SecurityListener implements EventSubscriberInterface
             return false;
         }
 
-        if (!preg_match('@^/(admin|managerws)/.*@', $uri)) {
+        if (!preg_match('@^/(admin|managerws).*@', $uri)) {
             return true;
         }
 
@@ -266,10 +266,8 @@ class SecurityListener implements EventSubscriberInterface
         if (preg_match('@^/admin.*@', $uri)) {
             $this->context->setToken(null);
 
-            $event->getRequest()->getSession()->set(
-                \Symfony\Component\Security\Core\Security::AUTHENTICATION_ERROR,
-                $exception
-            );
+            $event->getRequest()->getSession()->getFlashBag()
+                ->add('error', $exception->getMessage());
         }
 
         $event->setResponse($response);
