@@ -167,13 +167,15 @@ class RedirectorTest extends KernelTestCase
 
         $this->connection->expects($this->at(0))->method('fetchAssoc')
             ->with(
-                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? AND `type` = ? LIMIT 1', [ 4796, 'norf' ]
+                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? AND `type` = ? LIMIT 1',
+                [ 4796, 'norf' ]
             )
             ->willReturn($translation);
 
         $this->connection->expects($this->at(1))->method('fetchAssoc')
             ->with(
-                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1', [ 4796 ]
+                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1',
+                [ 4796 ]
             )
             ->willReturn($translation);
 

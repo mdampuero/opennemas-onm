@@ -58,13 +58,15 @@ class GoogleTranslatorTest extends KernelTestCase
     public function testTranslate()
     {
         $this->client->expects($this->at(0))->method('get')->willReturn($this->response)
-            ->with('https://translation.googleapis.com/language/translate/v2?format=html&key=barfooglork&q=foobar&source=foo&target=fred');
+            ->with('https://translation.googleapis.com/language/translate/'
+                . 'v2?format=html&key=barfooglork&q=foobar&source=foo&target=fred');
         $this->response->expects($this->at(0))->method('getBody')->willReturn(json_encode([
             'data' => [ 'translations' => [ [ 'translatedText' => 'fubar' ] ] ]
         ]));
 
         $this->client->expects($this->at(1))->method('get')->willReturn($this->response)
-            ->with('https://translation.googleapis.com/language/translate/v2?format=html&key=barfooglork&q=wubble&source=mumble&target=garply');
+            ->with('https://translation.googleapis.com/language/translate/'
+                . 'v2?format=html&key=barfooglork&q=wubble&source=mumble&target=garply');
         $this->response->expects($this->at(1))->method('getBody')->willReturn(json_encode([
             'data' => [ 'translations' => [ [ 'translatedText' => 'baz' ] ] ]
         ]));
@@ -122,7 +124,7 @@ class GoogleTranslatorTest extends KernelTestCase
     public function testGetClient()
     {
         $translator = new GoogleTranslator();
-        $method = new \ReflectionMethod($translator, 'getClient');
+        $method     = new \ReflectionMethod($translator, 'getClient');
         $method->setAccessible(true);
 
         $c1 = $method->invokeArgs($translator, []);

@@ -74,6 +74,7 @@ class SettingController extends Controller
         'site_logo',
         'site_name',
         'site_title',
+        'theme_skin',
         'translators',
         'twitter_page',
         'vimeo_page',
@@ -187,7 +188,8 @@ class SettingController extends Controller
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
                     . '/sections/',
                 'translation_services' =>
-                    $this->get('core.factory.translator')->getTranslatorsData()
+                    $this->get('core.factory.translator')->getTranslatorsData(),
+                'theme_skins' => $this->get('core.theme')->getSkins()
             ],
             'settings' => $settings,
         ]);

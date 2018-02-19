@@ -74,7 +74,7 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->once())->method('insert')->with(
             'users',
             [ 'id' => null, 'name' => 'xyzzy' ],
-            [ 'id' => \PDO::PARAM_STR, 'name' =>\PDO::PARAM_STR ]
+            [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
             'replace into users_content_categories values (?,?),(?,?)',

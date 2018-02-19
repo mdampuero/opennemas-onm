@@ -238,6 +238,35 @@ class Template extends \Smarty
     }
 
     /**
+     * Returns the theme name for the variant selected
+     *
+     * @return string the name of the variant
+     **/
+    public function getThemeSkinName()
+    {
+        return $this->theme->getCurrentSkinName(
+            $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('theme_skin', 'default')
+        );
+    }
+
+    /**
+     * Returns the theme file name for the variant selected
+     *
+     * @return string the file name of the variant
+     **/
+    public function getThemeSkinProperty($propertyName)
+    {
+        return $this->theme->getCurrentSkinProperty(
+            $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('theme_skin', 'default'),
+            $propertyName
+        );
+    }
+
+    /**
      * Configures the Smarty cache for the section.
      *
      * @param string $section The section.
