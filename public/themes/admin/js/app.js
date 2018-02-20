@@ -12,6 +12,7 @@ angular.module(
     'ngTouch',
     'ngTagsInput',
     'onm.autoform',
+    'onm.autoformEditor',
     'onm.gravatar',
     'onm.cleaner',
     'onm.editor',

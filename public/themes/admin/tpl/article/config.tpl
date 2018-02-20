@@ -1,5 +1,4 @@
 {extends file="base/admin.tpl"}
-
 {block name="content"}
   <form action="{url name=admin_categories_config}" method="POST" name="formulario" id="formulario">
   <form method="post" name="formulario" ng-controller="ArticleConfCtrl">
@@ -21,7 +20,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_categories}" title="{t}Go back to list{/t}">
+                <a class="btn btn-link" href="{url name=admin_articles}" title="{t}Go back to list{/t}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>
@@ -41,10 +40,9 @@
     <div class="content panel">
       <div class="grid simple">
         <div class="grid-body">
-          <autoform ng-model="article" fields-by-module="fieldsByModule"/>
+          <autoform-editor ng-model="extraFields" extra-fields="{}"/>
         </div>
       </div>
-      <input type="hidden" id="action" name="action" value="save_config" />
     </div>
   </form>
 {/block}
