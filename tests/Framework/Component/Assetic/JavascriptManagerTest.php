@@ -57,13 +57,13 @@ class JavascriptManagerTest extends AssetManagerTest
         $method->setAccessible(true);
 
         $src = $method->invokeArgs($this->manager, [ 'foo.js' ]);
-        $this->assertEquals(1, preg_match('/baz\/quux\/foo\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.js/', $src));
+        $this->assertEquals(1, preg_match('/baz\/quux\/foo\.[a-z0-9]{8}\.[0-9]{14}\.xzy\.js/', $src));
 
         $src = $method->invokeArgs($this->manager, [ 'foo.js', 'default', true ]);
-        $this->assertEquals(1, preg_match('/baz\/quux\/dist\/foo\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.js/', $src));
+        $this->assertEquals(1, preg_match('/baz\/quux\/dist\/foo\.[a-z0-9]{8}\.[0-9]{14}\.xzy\.js/', $src));
 
         $src = $method->invokeArgs($this->manager, [ [ 'foo.js', 'bar.js' ], 'norf' ]);
-        $this->assertEquals(1, preg_match('/baz\/quux\/norf\.[a-z0-9]{8}\.[0-9]{10}\.xzy\.js/', $src));
+        $this->assertEquals(1, preg_match('/baz\/quux\/norf\.[a-z0-9]{8}\.[0-9]{14}\.xzy\.js/', $src));
     }
 
     public function testGetFilterManager()

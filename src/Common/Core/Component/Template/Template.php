@@ -123,20 +123,16 @@ class Template extends \Smarty
      */
     public function addTheme($theme)
     {
-        $basePath = $this->container->getParameter('core.paths.themes');
-        $wm       = $this->container->get('widget_repository');
+        $wm = $this->container->get('widget_repository');
 
-        $path = str_replace('/themes', '', $basePath) . $theme->path . '/tpl';
+        $path = $theme->realpath . '/tpl';
         $this->addTemplateDir($path);
 
-        $path = str_replace('/themes', '', $basePath) . $theme->path
-            . '/tpl/widgets';
-
+        $path = $theme->realpath . '/tpl/widgets';
         $wm->addPath($path);
 
         if (!empty($theme->text_domain)) {
-            $path = $this->container->getParameter('core.paths.public')
-                . $theme->path . 'locale';
+            $path = $theme->realpath . '/locale';
 
             $this->container->get('core.locale')
                 ->addTextDomain($theme->text_domain, $path);
