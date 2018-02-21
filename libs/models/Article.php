@@ -147,6 +147,9 @@ class Article extends Content
                     'slug'     => urlencode($this->__get('slug')),
                 ]);
 
+            case 'pretitle':
+                return parent::__get('subtitle');
+
             default:
                 return parent::__get($name);
         }
