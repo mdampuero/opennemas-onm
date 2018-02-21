@@ -27,6 +27,16 @@ $default = [
     ],
 ];
 
+// Pre head tag smart
+$preScript = '<script src="//ced.sascdn.com/tag/3035/smart.js" async></script>
+<script>
+    var sas = sas || {};
+    sas.cmd = sas.cmd || [];
+    sas.cmd.push(function() {
+        sas.setup({ networkid: 3035, domain: "//www8.smartadserver.com", async: true });
+    });
+</script>';
+
 $i = 1;
 return array_map(function ($ad) use (&$i, $default) {
     $adObject = new Advertisement();
@@ -50,100 +60,48 @@ return array_map(function ($ad) use (&$i, $default) {
     1 => [
         'type_advertisement' => '1',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-728x90 Leaderboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="2721775077"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64035"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64035, // Format : megabanner_header 980x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 980,
+                    'height' => 250,
                     'device' => 'desktop'
                 ],
                 '1' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 980,
+                    'height' => 250,
                     'device' => 'tablet'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
-            ],
-        ],
-    ],
-    '1m' => [
-        'type_advertisement' => '1',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 320x100 Large mobile -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:320px;height:100px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4186659580"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
+                '2' => [
                     'width' => 320,
                     'height' => 100,
                     'device' => 'phone'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 0,
-                'tablet' => 0,
-                'phone' => 1
-            ],
-        ],
-    ],
-    2 => [
-        'type_advertisement' => '2',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
-            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
-            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
-            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'tablet'
-                ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
             ],
         ],
     ],
     3 => [
         'type_advertisement' => '3',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 970x250 Billboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:970px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="5734231891"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64119"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64119, // Format : megabanner_middle 970x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -157,90 +115,42 @@ return array_map(function ($ad) use (&$i, $default) {
                     'height' => 250,
                     'device' => 'tablet'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
-            ],
-        ],
-    ],
-    '3m' => [
-        'type_advertisement' => '3',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-format="fluid"
-                 data-ad-layout="image-top"
-                 data-ad-layout-key="-8i+1w-dq+e9+ft"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9036619446"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'devices' => [
-                'desktop' => 0,
-                'tablet' => 0,
-                'phone' => 1
+                '2' => [
+                    'width' => 320,
+                    'height' => 100,
+                    'device' => 'phone'
+                ],
             ],
         ],
     ],
     5 => [
         'type_advertisement' => '5',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-728x90 Leaderboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="2721775077"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64112"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64112, // Format : megabanner_footer 970x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 970,
+                    'height' => 250,
                     'device' => 'desktop'
                 ],
                 '1' => [
-                    'width' => 728,
-                    'height' => 90,
-                    'device' => 'tablet'
-                ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
-            ],
-        ],
-    ],
-    6 => [
-        'type_advertisement' => '6',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
-            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
-            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
-            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 234,
-                    'height' => 90,
+                    'width' => 970,
+                    'height' => 250,
                     'device' => 'tablet'
                 ],
                 '2' => [
-                    'width' => 234,
-                    'height' => 90,
+                    'width' => 320,
+                    'height' => 100,
                     'device' => 'phone'
                 ],
             ],
@@ -249,14 +159,15 @@ return array_map(function ($ad) use (&$i, $default) {
     11 => [
         'type_advertisement' => '11',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 300x600 Large Skyscraper -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:600px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4024853965"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64438"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64438, // Format : rectangle_1.1 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -278,120 +189,25 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
-    21 => [
-        'type_advertisement' => '21',
+    12 => [
+        'type_advertisement' => '12',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 320x100 Large mobile -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:320px;height:100px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4186659580"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64439"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64439, // Format : rectangle_1.2 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 320,
-                    'height' => 100,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 320,
-                    'height' => 100,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 320,
-                    'height' => 100,
+                    'width' => 300,
+                    'height' => 600,
                     'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    31 => [
-        'type_advertisement' => '31',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 300,
-                    'height' => 250,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 300,
-                    'height' => 250,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 300,
-                    'height' => 250,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    101 => [
-        'type_advertisement' => '101',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 970x250 Billboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:970px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="5734231891"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 970,
-                    'height' => 250,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 970,
-                    'height' => 250,
-                    'device' => 'tablet'
-                ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
-            ],
-        ],
-    ],
-    '101m' => [
-        'type_advertisement' => '101',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 320x100 Large mobile -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:320px;height:100px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4186659580"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 320,
-                    'height' => 100,
-                    'device' => 'desktop'
                 ],
             ],
             'devices' => [
@@ -401,17 +217,333 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
+    21 => [
+        'type_advertisement' => '21',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64442"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64442, // Format : rectangle_2.1 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 0,
+                'tablet' => 0,
+                'phone' => 1
+            ],
+        ],
+    ],
+    22 => [
+        'type_advertisement' => '22',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64443"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64443, // Format : rectangle_2.2 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    31 => [
+        'type_advertisement' => '31',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64036"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64036, // Format : rectangle_3.1 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    32 => [
+        'type_advertisement' => '32',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64113"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64113, // Format : rectangle_3.2 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    33 => [
+        'type_advertisement' => '33',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64114"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64114, // Format : rectangle_3.3 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    34 => [
+        'type_advertisement' => '34',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64115"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64115, // Format : rectangle_3.4 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    35 => [
+        'type_advertisement' => '35',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64116"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64116, // Format : rectangle_3.5 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    91 => [
+        'type_advertisement' => '91',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64109"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64109, // Format : Skyscraper_left 160x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 160,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 0,
+                'phone' => 0
+            ],
+        ],
+    ],
+    92 => [
+        'type_advertisement' => '92',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64108"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64108, // Format : Skyscraper_right 160x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 160,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 0,
+                'phone' => 0
+            ],
+        ],
+    ],
+    101 => [
+        'type_advertisement' => '101',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64035"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64035, // Format : megabanner_header 980x250
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 980,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 980,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 980,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
     103 => [
         'type_advertisement' => '103',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 300x600 Large Skyscraper -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:600px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4024853965"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64036"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64036, // Format : rectangle_3.1 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -436,30 +568,31 @@ return array_map(function ($ad) use (&$i, $default) {
     104 => [
         'type_advertisement' => '104',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-468x60-robapagina -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:468px;height:60px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="7755935294"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64572"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64572, // Format : banner_under_body 728x550
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 468,
-                    'height' => 60,
+                    'width' => 728,
+                    'height' => 550,
                     'device' => 'desktop'
                 ],
                 '1' => [
-                    'width' => 468,
-                    'height' => 60,
+                    'width' => 728,
+                    'height' => 550,
                     'device' => 'tablet'
                 ],
                 '2' => [
-                    'width' => 468,
-                    'height' => 60,
+                    'width' => 320,
+                    'height' => 100,
                     'device' => 'phone'
                 ],
             ],
@@ -468,30 +601,130 @@ return array_map(function ($ad) use (&$i, $default) {
     105 => [
         'type_advertisement' => '105',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64113"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64113, // Format : rectangle_3.2 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'desktop'
                 ],
                 '1' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'tablet'
                 ],
                 '2' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    106 => [
+        'type_advertisement' => '106',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64114"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64114, // Format : rectangle_3.3 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    107 => [
+        'type_advertisement' => '107',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64115"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64115, // Format : rectangle_3.4 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    108 => [
+        'type_advertisement' => '108',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64116"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64116, // Format : rectangle_3.5 300x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
+                    'height' => 600,
                     'device' => 'phone'
                 ],
             ],
@@ -500,73 +733,104 @@ return array_map(function ($ad) use (&$i, $default) {
     109 => [
         'type_advertisement' => '109',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-728x90 Leaderboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="2721775077"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64112"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64112, // Format : megabanner_footer 970x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 970,
+                    'height' => 250,
                     'device' => 'desktop'
                 ],
                 '1' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 970,
+                    'height' => 250,
                     'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    191 => [
+        'type_advertisement' => '191',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64109"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64109, // Format : Skyscraper_left 160x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 160,
+                    'height' => 600,
+                    'device' => 'desktop'
                 ],
             ],
             'devices' => [
                 'desktop' => 1,
-                'tablet' => 1,
+                'tablet' => 0,
                 'phone' => 0
             ],
         ],
     ],
-    110 => [
-        'type_advertisement' => '110',
+    192 => [
+        'type_advertisement' => '192',
         'fk_content_categories' => [ '0' ],
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
-            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
-            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
-            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
+        'script' => $preScript . '<div id="sas_64108"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64108, // Format : Skyscraper_right 160x600
+                    });
+                });
+            </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 234,
-                    'height' => 90,
+                    'width' => 160,
+                    'height' => 600,
                     'device' => 'desktop'
                 ],
-                '1' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'phone'
-                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 0,
+                'phone' => 0
             ],
         ],
     ],
     193 => [
         'type_advertisement' => '193',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-120x600-Skycraper -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:120px;height:600px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="2407405696"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64110"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64110, // Format : Skyscraper_inbody 120x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -591,100 +855,48 @@ return array_map(function ($ad) use (&$i, $default) {
     601 => [
         'type_advertisement' => '601',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-728x90 Leaderboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="2721775077"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64035"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64035, // Format : megabanner_header 980x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 980,
+                    'height' => 250,
                     'device' => 'desktop'
                 ],
                 '1' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 980,
+                    'height' => 250,
                     'device' => 'tablet'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
-            ],
-        ],
-    ],
-    '601m' => [
-        'type_advertisement' => '601',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 320x100 Large mobile -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:320px;height:100px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4186659580"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 320,
-                    'height' => 100,
+                '2' => [
+                    'width' => 980,
+                    'height' => 250,
                     'device' => 'phone'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 0,
-                'tablet' => 0,
-                'phone' => 1
-            ],
-        ],
-    ],
-    602 => [
-        'type_advertisement' => '602',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
-            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
-            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
-            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'tablet'
-                ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
             ],
         ],
     ],
     603 => [
         'type_advertisement' => '603',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 300x600 Large Skyscraper -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:600px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4024853965"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64036"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64036, // Format : rectangle_3.1 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -709,30 +921,31 @@ return array_map(function ($ad) use (&$i, $default) {
     605 => [
         'type_advertisement' => '605',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64113"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64113, // Format : rectangle_3.2 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'desktop'
                 ],
                 '1' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'tablet'
                 ],
                 '2' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'phone'
                 ],
             ],
@@ -741,14 +954,15 @@ return array_map(function ($ad) use (&$i, $default) {
     609 => [
         'type_advertisement' => '609',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 970x250 Billboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:970px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="5734231891"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64112"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64112, // Format : megabanner_footer 970x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -762,84 +976,59 @@ return array_map(function ($ad) use (&$i, $default) {
                     'height' => 250,
                     'device' => 'tablet'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
+                '2' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
             ],
         ],
     ],
     701 => [
         'type_advertisement' => '701',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 970x250 Billboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:970px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="5734231891"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64035"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64035, // Format : megabanner_header 980x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 970,
+                    'width' => 980,
                     'height' => 250,
                     'device' => 'desktop'
                 ],
                 '1' => [
-                    'width' => 970,
+                    'width' => 980,
                     'height' => 250,
                     'device' => 'tablet'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 1,
-                'tablet' => 1,
-                'phone' => 0
-            ],
-        ],
-    ],
-    '701m' => [
-        'type_advertisement' => '701',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 320x100 Large mobile -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:320px;height:100px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4186659580"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 320,
-                    'height' => 100,
-                    'device' => 'desktop'
+                '2' => [
+                    'width' => 980,
+                    'height' => 250,
+                    'device' => 'phone'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 0,
-                'tablet' => 0,
-                'phone' => 1
             ],
         ],
     ],
     703 => [
         'type_advertisement' => '703',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm - 300x600 Large Skyscraper -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:600px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="4024853965"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64036"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64036, // Format : rectangle_3.1 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -856,6 +1045,39 @@ return array_map(function ($ad) use (&$i, $default) {
                 '2' => [
                     'width' => 300,
                     'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    704 => [
+        'type_advertisement' => '704',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64572"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64572, // Format : banner_under_body 728x550
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 550,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 550,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 320,
+                    'height' => 100,
                     'device' => 'phone'
                 ],
             ],
@@ -864,30 +1086,31 @@ return array_map(function ($ad) use (&$i, $default) {
     705 => [
         'type_advertisement' => '705',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-300x250 - Medium Rectangle - #1 -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:300px;height:250px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="9055006270"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64113"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64113, // Format : rectangle_3.2 300x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'desktop'
                 ],
                 '1' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'tablet'
                 ],
                 '2' => [
                     'width' => 300,
-                    'height' => 250,
+                    'height' => 600,
                     'device' => 'phone'
                 ],
             ],
@@ -896,73 +1119,104 @@ return array_map(function ($ad) use (&$i, $default) {
     709 => [
         'type_advertisement' => '709',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-728x90 Leaderboard -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:728px;height:90px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="2721775077"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64112"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64112, // Format : megabanner_footer 970x250
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 970,
+                    'height' => 250,
                     'device' => 'desktop'
                 ],
                 '1' => [
-                    'width' => 728,
-                    'height' => 90,
+                    'width' => 970,
+                    'height' => 250,
                     'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 970,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    791 => [
+        'type_advertisement' => '791',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64109"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64109, // Format : Skyscraper_left 160x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 160,
+                    'height' => 600,
+                    'device' => 'desktop'
                 ],
             ],
             'devices' => [
                 'desktop' => 1,
-                'tablet' => 1,
+                'tablet' => 0,
                 'phone' => 0
             ],
         ],
     ],
-    710 => [
-        'type_advertisement' => '710',
+    792 => [
+        'type_advertisement' => '792',
         'fk_content_categories' => [ '0' ],
-        'script' => '<a target="_blank" href="https://www.opennemas.com/es/'
-            . 'registro?utm_source=Opennemas_free&utm_medium=banner&utm_term=free_newspapers'
-            . '&utm_content=234x90&utm_campaign=periodico_gratuito" rel="nofollow">'
-            . '<img alt="" src="/assets/images/advertisement/static/onm_ad234x90.jpg" width="234" height="90"></a>',
+        'script' => $preScript . '<div id="sas_64108"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64108, // Format : Skyscraper_right 160x600
+                    });
+                });
+            </script>',
         'params' => [
             'sizes' => [
                 '0' => [
-                    'width' => 234,
-                    'height' => 90,
+                    'width' => 160,
+                    'height' => 600,
                     'device' => 'desktop'
                 ],
-                '1' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 234,
-                    'height' => 90,
-                    'device' => 'phone'
-                ],
+            ],
+            'devices' => [
+                'desktop' => 1,
+                'tablet' => 0,
+                'phone' => 0
             ],
         ],
     ],
     793 => [
         'type_advertisement' => '793',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-120x600-Skycraper -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:120px;height:600px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="2407405696"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64110"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64110, // Format : Skyscraper_inbody 120x600
+                    });
+                });
             </script>',
         'params' => [
             'sizes' => [
@@ -984,64 +1238,88 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
-    704 => [
-        'type_advertisement' => '704',
+    2201 => [
+        'type_advertisement' => '2201',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Onm-468x60-robapagina -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:468px;height:60px"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="7755935294"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 468,
-                    'height' => 60,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 468,
-                    'height' => 60,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 468,
-                    'height' => 60,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    2202 => [
-        'type_advertisement' => '2202',
-        'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <ins class="adsbygoogle"
-                 style="display:block; text-align:center;"
-                 data-ad-format="fluid"
-                 data-ad-layout="in-article"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="8755647912"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64120"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64120, // Format : banner_intext_1 600x300
+                    });
+                });
             </script>',
     ],
-    3202 => [
-        'type_advertisement' => '3202',
+    3201 => [
+        'type_advertisement' => '3201',
         'fk_content_categories' => [ '0' ],
-        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <ins class="adsbygoogle"
-                 style="display:block; text-align:center;"
-                 data-ad-format="fluid"
-                 data-ad-layout="in-article"
-                 data-ad-client="ca-pub-7694073983816204"
-                 data-ad-slot="8755647912"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
+        'script' => $preScript . '<div id="sas_64120"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64120, // Format : banner_intext_1 600x300
+                    });
+                });
+            </script>',
+    ],
+    2203 => [
+        'type_advertisement' => '2203',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64457"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64457, // Format : Intext_video 1x1
+                    });
+                });
+            </script>',
+    ],
+    3203 => [
+        'type_advertisement' => '3203',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64457"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64457, // Format : Intext_video 1x1
+                    });
+                });
+            </script>',
+    ],
+    2205 => [
+        'type_advertisement' => '2205',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64121"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64121, // Format : banner_intext_2 600x300
+                    });
+                });
+            </script>',
+    ],
+    3205 => [
+        'type_advertisement' => '3205',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64121"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64121, // Format : banner_intext_2 600x300
+                    });
+                });
             </script>',
     ],
 ]);
