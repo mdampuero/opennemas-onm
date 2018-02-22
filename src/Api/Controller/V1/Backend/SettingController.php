@@ -287,6 +287,8 @@ class SettingController extends Controller
      * @param array $files The list of files to save.
      *
      * @return array The list of filenames.
+     *
+     * @Security("hasPermission('MASTER')")
      */
     public function extraFieldArticleSaveAction(Request $request)
     {
