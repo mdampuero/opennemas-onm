@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form action="{url name=admin_categories_config}" method="POST" name="formulario" id="formulario">
-  <form method="post" name="formulario" ng-controller="ArticleConfCtrl">
+  <form action="{url name=admin_categories_config}"   method="POST" name="formulario" id="formulario" ng-submit="saveConf($event)" ng-controller="ArticleConfCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -40,7 +39,7 @@
     <div class="content panel">
       <div class="grid simple">
         <div class="grid-body">
-          <autoform-editor ng-model="extraFields" extra-fields="{}"/>
+          <autoform-editor ng-model="extraFields" />
         </div>
       </div>
     </div>

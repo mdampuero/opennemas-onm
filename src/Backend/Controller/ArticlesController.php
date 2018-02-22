@@ -422,6 +422,9 @@ class ArticlesController extends Controller
      */
     public function configAction()
     {
+        $this->view->assign([
+            'extra_fields'     => $this->get('setting_repository')->get('extrafield_article')
+        ]);
         return $this->render('article/config.tpl');
     }
 

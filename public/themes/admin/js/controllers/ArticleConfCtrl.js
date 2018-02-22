@@ -27,29 +27,17 @@
          * @memberOf UserSettingsCtrl
          *
          * @description
-         *  The settings object.
+         *  The extraFields object.
          *
          * @type {Object}
          */
-        $scope.settings = {};
+        $scope.extraFields = {};
+        $scope.saving = false;
 
-        /**
-         * @function add
-         * @memberOf UserSettingsCtrl
-         *
-         * @description
-         *   Adds a new field to the field list.
-         */
-        $scope.addGroup = function() {
-          $scope.settings.push({
-            group: '',
-            title: '',
-            fields: {
-              name: '',
-              type: '',
-              key: ''
-            }
-          });
+        $scope.init = function(extraFields) {
+          if (extraFields !== null) {
+            $scope.extraFields = extraFields;
+          }
         };
 
         /**
@@ -62,12 +50,13 @@
          * @param mixed  value   New value.
          * @param string loading Name of the property used to show work-in-progress.
          */
-        $scope.saveConf = function(index, id, route, name, value, loading, reload) {
-          $scope.saving = true;
+        $scope.saveConf = function($event) {
+          $event.preventDefault();
 
-          var data = cleaner.clean($scope.settings);
+          var data = { extraFields: cleaner.clean($scope.extraFields) };
 
-          http.put('backend_ws_users_settings_save', data)
+          $scope.saving = false;
+          http.put('api_v1_backend_extra_fields_article_save', data)
             .then(function(response) {
               $scope.saving = false;
 
@@ -77,7 +66,6 @@
 
               messenger.post(response.data);
             });
-          $scope.list();
         };
       }
     ]);
