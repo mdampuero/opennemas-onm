@@ -64,7 +64,7 @@
                 '<div class="pull-left">' +
                   '<div class="controls">' +
                     '<label class="form-label">&nbsp;</label>' +
-                    '<button class="btn btn-danger" ng-click="removeField(group.group, field.key)">' +
+                    '<button class="btn btn-danger" ng-click="removeField(group.group, field.key, $event)">' +
                       '<i class="fa fa-trash-o"></i>' +
                     '</button>' +
                   '</div>' +
@@ -118,12 +118,8 @@
             $scope.fieldKeys            = {};
             $scope.autoformEditorErrors = '';
 
-            var capitalize = function(str) {
-              var aux = str.replace(/\w\S*/g, function(txt) {
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-              });
-
-              return aux.replace(/\s+/g, '');
+            var underscore = function(str) {
+              return str.split(' ').join('_');
             };
 
             if (!$scope.ngModel) {
@@ -142,14 +138,14 @@
                 return;
               }
 
-              if ($scope.groupKey in $scope.ngModel) {
+              var groupKey = underscore($scope.groupKey);
+
+              if (groupKey in $scope.ngModel) {
                 $scope.addGroupError = 'The identifier for the group \'' + $scope.groupKey + '\' already exists';
                 return;
               }
 
-              var groupKey = capitalize($scope.groupKey);
-
-              $scope.ngModel[$scope.groupKey] = {
+              $scope.ngModel[groupKey] = {
                 group:  groupKey,
                 title:  '',
                 fields: {}
@@ -187,12 +183,12 @@
                 return;
               }
 
-              if (!(group in $scope.ngModel) || $scope.fieldKeys[group] in $scope.ngModel[group].fields) {
+              var fieldKey = underscore($scope.fieldKeys[group]);
+
+              if (!(group in $scope.ngModel) || fieldKey in $scope.ngModel[group].fields) {
                 $scope.addFieldErrors[group] = 'The identifier for the field \'' + $scope.fieldKeys[group] + '\' already exists in the group ' + group;
                 return;
               }
-
-              var fieldKey = capitalize($scope.fieldKeys[group]);
 
               $scope.ngModel[group].fields[$scope.fieldKeys[group]] = {
                 name:  '',

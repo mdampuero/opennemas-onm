@@ -21,8 +21,11 @@
      *   Provides actions to list articles.
      */
     .controller('ArticleConfCtrl', [
-      '$scope', 'cleaner', 'http', 'messenger',
-      function($scope, cleaner, http, messenger) {
+      '$controller', '$scope', 'cleaner', 'http', 'messenger',
+      function($controller, $scope, cleaner, http, messenger) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
         /**
          * @memberOf UserSettingsCtrl
          *
