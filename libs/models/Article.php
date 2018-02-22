@@ -136,17 +136,6 @@ class Article extends Content
             case 'author':
                 return $this->getAuthor();
 
-            case 'content_type_name':
-                return 'Article';
-
-            case 'permalink':
-                return Uri::generate('article', [
-                    'id'       => $this->id,
-                    'date'     => date('Y-m-d', strtotime($this->created)),
-                    'category' => urlencode($this->category_name),
-                    'slug'     => urlencode($this->__get('slug')),
-                ]);
-
             case 'pretitle':
                 return parent::__get('subtitle');
 

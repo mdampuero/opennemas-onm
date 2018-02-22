@@ -192,13 +192,6 @@ class Content implements \JsonSerializable
     public $params = null;
 
     /**
-     * The permalink/slug of this content
-     *
-     * @var string
-     */
-    public $permalink = null;
-
-    /**
      * The order of this content
      *
      * @var int
@@ -431,7 +424,6 @@ class Content implements \JsonSerializable
                 ->getName($this->pk_fk_content_category);
         }
 
-        $this->permalink = '';
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
         }
