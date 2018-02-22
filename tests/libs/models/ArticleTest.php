@@ -77,11 +77,16 @@ class ArticleTest extends \PHPUnit_Framework_TestCase
         $this->article->content_type_name = 'article';
         $this->article->created           = '2018-01-01 10:10:10';
         $this->article->id                = 1;
-        $this->article->subtitle          = 'gorp';
         $this->article->title             = 'wibble';
 
         $this->assertEquals('article', $this->article->content_type_name);
         $this->assertEquals('wibble', $this->article->title);
+        $this->assertTrue(empty($this->article->pretitle));
+        $this->assertTrue(empty($this->article->subtitle));
+
+        $this->article->subtitle = 'gorp';
+
+        $this->assertFalse(empty($this->article->pretitle));
         $this->assertEquals('gorp', $this->article->subtitle);
         $this->assertEquals('gorp', $this->article->pretitle);
     }
