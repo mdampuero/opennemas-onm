@@ -430,7 +430,7 @@
             <div class="form-group">
               <label class="form-label" for="template">{t}Database{/t}</label>
               <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.database.$invalid }">
-                <input class="form-control" id="database" name="database" ng-model="instance.settings.BD_DATABASE" ng-required="instance.id" type="text">
+                <input class="form-control" id="database" name="database" ng-model="instance.settings.BD_DATABASE" ng-required="instance.id" readonly type="text">
               </div>
               <span class="error" ng-show="formValidated && instanceForm.database.$invalid">
                 <label for="database" class="error">{t}This field is required{/t}</label>
