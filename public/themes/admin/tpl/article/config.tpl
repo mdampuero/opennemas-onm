@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form action="{url name=admin_categories_config}"   method="POST" name="formulario" id="formulario" ng-submit="saveConf($event)" ng-controller="ArticleConfCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
+  <form action="{url name=admin_categories_config}" method="POST" name="formulario" id="formulario" ng-controller="ArticleConfCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -27,7 +27,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" type="button" ng-click="saveConf($event)">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
               </li>
