@@ -190,7 +190,7 @@
                 return;
               }
 
-              $scope.ngModel[group].fields[$scope.fieldKeys[group]] = {
+              $scope.ngModel[group].fields[fieldKey] = {
                 name:  '',
                 type:  '',
                 key:   fieldKey
