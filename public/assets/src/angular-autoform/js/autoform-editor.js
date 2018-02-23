@@ -200,7 +200,7 @@
               }
 
               $scope.ngModel[group].fields[fieldKey] = {
-                name:  '',
+                title:  '',
                 type:  '',
                 key:   fieldKey
               };
