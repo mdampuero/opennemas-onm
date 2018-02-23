@@ -259,18 +259,19 @@ class ArticleController extends Controller
         }
 
         // If I don't have the extension, I don't check the settings
-        $metaDataFields = $this->get('setting_repository')->get('article_extra_fields');
-        if (!is_array($metaDataFields)) {
+        $groups = $this->get('setting_repository')
+            ->get('extraInfoContents.ARTICLE_MANAGER');
+        if (!is_array($groups)) {
             return $data;
         }
 
-        $metadataAux = null;
-        foreach ($metaDataFields as $metaDataField) {
-            foreach ($metaDataField['fields'] as $field) {
-                $metadataAux = $postReq->get($field['key']);
-                if (!empty($metadataAux)) {
-                    $data[$field['key']] = $metadataAux;
+        foreach ($groups as $group) {
+            foreach ($group['fields'] as $field) {
+                if (empty($postReq->get($field['key']))) {
+                    continue;
                 }
+
+                $data[$field['key']] = $postReq->get($field['key']);
             }
         }
         return $data;
