@@ -104,20 +104,25 @@
             '</div>' +
           '</div>' +
           '<div class="row">' +
-            '<div class="col-md-2">' +
-              '<label class="form-label">Group internal name</label>' +
-                '<div class="controls">' +
-                  '<input class="form-control" name="groupKey" ng-model="groupKey" type="text" placeholder="Internal name for the new fields group">' +
+            '<div class="col-md-4">' +
+              '<div class="row">' +
+                '<div class="col-md-6">' +
+                  '<label class="form-label">Group internal name</label>' +
+                  '<div class="controls">' +
+                    '<input class="form-control" name="groupKey" ng-model="groupKey" type="text" placeholder="Internal name for the new fields group">' +
+                  '</div>' +
                 '</div>' +
-                '<span class="text-danger">[% addGroupError ? addGroupError : \'&nbsp;\' %]</label>' +
-            '</div>' +
-            '<div class="col-md-2">' +
-              '<label class="form-label">&nbsp;</label>' +
-              '<button class="btn btn-block btn-success" ng-click="addGroup($event)">' +
-                '<i class="fa fa-plus m-r-5"></i>' +
-                'Add Group' +
-              '</button>' +
-            '<div>' +
+                '<div class="col-md-6">' +
+                  '<label class="form-label">&nbsp;</label>' +
+                  '<button class="btn btn-block btn-success" ng-click="addGroup($event)">' +
+                    '<i class="fa fa-plus m-r-5"></i>' +
+                    'Add Group' +
+                  '</button>' +
+                '</div>' +
+              '</div>' +
+              '<div class="row">' +
+                '<div class="help text-danger p-t-15">[% addGroupError ? addGroupError : \'&nbsp;\' %]</div>' +
+              '</div>' +
           '</div>';
           },
           link: function($scope) {
@@ -143,7 +148,7 @@
             $scope.addGroup = function($event) {
               $event.preventDefault();
               if (!$scope.groupKey || $scope.groupKey === '') {
-                $scope.addGroupError = 'you need to add an identifier for the group to be added';
+                $scope.addGroupError = 'You need to add an identifier for the group to be added';
                 return;
               }
 
@@ -188,7 +193,7 @@
             $scope.addField = function(group, $event) {
               $event.preventDefault();
               if (!$scope.fieldKeys[group] || $scope.fieldKeys[group] === '') {
-                $scope.addFieldErrors[group] = 'you need to add an identifier for the field to be added';
+                $scope.addFieldErrors[group] = 'You need to add an identifier for the field to be added';
                 return;
               }
 
