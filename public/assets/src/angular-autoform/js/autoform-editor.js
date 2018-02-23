@@ -38,8 +38,8 @@
             '</div>' +
             '<div class="row" ng-repeat="field in group.fields track by field.key">' +
               '<div class="form-group col-md-2">' +
-                '<label class="form-label" for="label-[% $index %]-name">Internal name</label>' +
-                '<div class="controls">' +
+                '<label class="form-label p-l-15" for="label-[% $index %]-name">Internal name</label>' +
+                '<div class="controls p-l-15">' +
                   '[% field.key %]' +
                 '</div>' +
               '</div>' +
@@ -62,8 +62,8 @@
               '</div>' +
               '<div class="form-group col-md-6">' +
                 '<div class="pull-left">' +
+                  '<label class="form-label">&nbsp;</label>' +
                   '<div class="controls">' +
-                    '<label class="form-label">&nbsp;</label>' +
                     '<button class="btn btn-danger" ng-click="removeField(group.group, field.key, $event)">' +
                       '<i class="fa fa-trash-o"></i>' +
                     '</button>' +
@@ -80,18 +80,23 @@
             '</div>' +
             '<div class="row">' +
               '<div class="col-md-4">' +
-                '<label class="form-label">[% addFieldErrors[group.group] %]</label>' +
-                '<div class="controls">' +
-                  '<input class="form-control" name="fieldKeys" ng-model="fieldKeys[group.group]" type="text" placeholder="Internal name for the new fields">' +
-                  '<button class="btn btn-block btn-success" ng-click="addField(group.group, $event)">' +
-                    '<i class="fa fa-plus m-r-5"></i>' +
-                    'Add Field' +
-                  '</button>' +
+                '<label class="form-label p-l-15">Internal name</label>' +
+                '<div class="controls row p-l-15">' +
+                  '<div class="col-md-6">' +
+                    '<input class="form-control" name="fieldKeys" ng-model="fieldKeys[group.group]" type="text" placeholder="Internal name for the new fields">' +
+                  '</div>' +
+                  '<div class="col-md-6">' +
+                    '<button class="btn btn-block btn-success" ng-click="addField(group.group, $event)">' +
+                      '<i class="fa fa-plus m-r-5"></i>' +
+                      'Add Field' +
+                    '</button>' +
+                  '</div>' +
                 '</div>' +
+                '<div class="help text-danger p-l-15 p-t-5">[% addFieldErrors[group.group] ? addFieldErrors[group.group] : \'&nbsp;\' %]</div>' +
               '</div>' +
             '</div>' +
-            '<div class="row">' +
-              '<div class="col-md-4 text-center">' +
+            '<div class="row p-b-50 p-t-5">' +
+              '<div class="col-md-6">' +
                 '<button class="btn btn-block btn-danger" ng-click="removeGroup(group.group, $event)" type="button">' +
                   '<i class="fa fa-trash-o"></i> Delete Group' +
                 '</button>' +
@@ -99,16 +104,20 @@
             '</div>' +
           '</div>' +
           '<div class="row">' +
-            '<div class="col-md-4">' +
-              '<label class="form-label">[% addGroupError %]</label>' +
+            '<div class="col-md-2">' +
+              '<label class="form-label">Group internal name</label>' +
                 '<div class="controls">' +
                   '<input class="form-control" name="groupKey" ng-model="groupKey" type="text" placeholder="Internal name for the new fields group">' +
-                  '<button class="btn btn-block btn-success" ng-click="addGroup($event)">' +
-                    '<i class="fa fa-plus m-r-5"></i>' +
-                    'Add Group' +
-                  '</button>' +
                 '</div>' +
+                '<span class="text-danger">[% addGroupError ? addGroupError : \'&nbsp;\' %]</label>' +
             '</div>' +
+            '<div class="col-md-2">' +
+              '<label class="form-label">&nbsp;</label>' +
+              '<button class="btn btn-block btn-success" ng-click="addGroup($event)">' +
+                '<i class="fa fa-plus m-r-5"></i>' +
+                'Add Group' +
+              '</button>' +
+            '<div>' +
           '</div>';
           },
           link: function($scope) {
@@ -119,7 +128,7 @@
             $scope.autoformEditorErrors = '';
 
             var underscore = function(str) {
-              return str.split(' ').join('_');
+              return str.split(' ').join('_').toLowerCase();
             };
 
             if (!$scope.ngModel) {
