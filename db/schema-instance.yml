@@ -191,7 +191,10 @@ articles:
             options: { default: null, notnull: false, unsigned: true }
         subtitle:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { default: null, notnull: false, length: 512 }
+        pretitle:
+            type: string
+            options: { default: null, notnull: false, length: 512 }
         img1_footer:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -1158,7 +1161,10 @@ polls:
             options: { default: null, length: 65532, notnull: false }
         subtitle:
             type: string
-            options: { default: null, notnull: false, length: 150 }
+            options: { default: null, notnull: false, length: 512 }
+        pretitle:
+            type: string
+            options: { default: null, notnull: false, length: 512 }
         visualization:
             type: smallint
             options: { default: '0', notnull: false }
