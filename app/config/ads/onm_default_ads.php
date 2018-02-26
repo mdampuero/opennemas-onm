@@ -1238,6 +1238,105 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
+    1211 => [
+        'type_advertisement' => '1211',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64435"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64435, // Format : horizontal_banner_1 728x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 320,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    1212 => [
+        'type_advertisement' => '1212',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64436"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64436, // Format : horizontal_banner_2 728x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 320,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
+    1213 => [
+        'type_advertisement' => '1213',
+        'fk_content_categories' => [ '0' ],
+        'script' => $preScript . '<div id="sas_64437"></div>
+            <script type="application/javascript">
+                sas.cmd.push(function() {
+                    sas.call("std", {
+                        siteId: 214597, //
+                        pageId: 905245, // Page : Opennemas/global
+                        formatId: 64437, // Format : horizontal_banner_3 728x600
+                    });
+                });
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 728,
+                    'height' => 600,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 728,
+                    'height' => 600,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 320,
+                    'height' => 600,
+                    'device' => 'phone'
+                ],
+            ],
+        ],
+    ],
     2201 => [
         'type_advertisement' => '2201',
         'fk_content_categories' => [ '0' ],
