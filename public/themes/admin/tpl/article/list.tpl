@@ -36,6 +36,7 @@
                 </a>
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
+            {/acl}
               <li class="quicklinks">
                 {acl isAllowed="ARTICLE_CREATE"}
                 <a class="btn btn-primary ng-cloak" href="{url name=admin_article_create}[% config.multilanguage ? '?locale=' + config.locale : '' %]" id="create-button">
@@ -44,7 +45,6 @@
                 </a>
                 {/acl}
               </li>
-            {/acl}
           </ul>
         </div>
       </div>
