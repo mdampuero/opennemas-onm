@@ -145,26 +145,15 @@ class Poll extends Content
     {
         parent::load($properties);
 
-        if (array_key_exists('pk_poll', $properties)) {
-            $this->pk_poll = $properties['pk_poll'];
-        }
-        if (array_key_exists('subtitle', $properties)) {
-            $this->subtitle = $properties['subtitle'];
-        }
-        if (array_key_exists('total_votes', $properties)) {
-            $this->total_votes = $properties['total_votes'];
-        }
-        if (array_key_exists('visualization', $properties)) {
-            $this->visualization = $properties['visualization'];
-        }
-        if (array_key_exists('used_ips', $properties)) {
-            $this->used_ips = unserialize($properties['used_ips']);
-        }
+        // Force pretitle to use __get until properties separated
+        unset($this->pretitle);
 
         $this->status = 'opened';
+
         if (is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
+
         if (is_array($this->params)
             && array_key_exists('closetime', $this->params)
             && (!empty($this->params['closetime']))
@@ -188,26 +177,21 @@ class Poll extends Content
 
         $conn = getService('dbal_connection');
         try {
-            $conn->insert(
-                'polls',
-                [
-                    'pk_poll'       => (int) $this->id,
-                    'subtitle'      => $data['subtitle'],
-                    'total_votes'   => 0,
-                    'visualization' => $data['visualization'],
-                ]
-            );
+            $conn->insert('polls', [
+                'pk_poll'       => (int) $this->id,
+                'subtitle'      => $data['subtitle'],
+                'pretitle'      => $data['pretitle'],
+                'total_votes'   => 0,
+                'visualization' => $data['visualization'],
+            ]);
 
             // Save poll items
             if (is_array($data['item']) && !empty($data['item'])) {
                 foreach ($data['item'] as $item) {
-                    $conn->insert(
-                        'poll_items',
-                        [
-                            'fk_pk_poll' => $this->id,
-                            'item'       => $item->item,
-                        ]
-                    );
+                    $conn->insert('poll_items', [
+                        'fk_pk_poll' => $this->id,
+                        'item'       => $item->item,
+                    ]);
                 }
             }
 
@@ -241,15 +225,12 @@ class Poll extends Content
             }
 
             // Update the poll info
-            $conn->update(
-                'polls',
-                [
-                    'subtitle'      => $data['subtitle'],
-                    'visualization' => $data['visualization'],
-                    'total_votes'   => $total,
-                ],
-                [ 'pk_poll' => $data['id'] ]
-            );
+            $conn->update('polls', [
+                'subtitle'      => $data['subtitle'],
+                'pretitle'      => $data['pretitle'],
+                'visualization' => $data['visualization'],
+                'total_votes'   => $total,
+            ], [ 'pk_poll' => $data['id'] ]);
 
             $this->total   = $total;
             $this->pk_poll = $data['id'];
@@ -261,15 +242,12 @@ class Poll extends Content
 
             // Save poll items
             foreach ($data['item'] as $key => &$item) {
-                $conn->insert(
-                    'poll_items',
-                    [
-                        'pk_item'    => (int) $item->pk_item,
-                        'fk_pk_poll' => (int) $this->id,
-                        'item'       => $item->item,
-                        'votes'      => $item->votes,
-                    ]
-                );
+                $conn->insert('poll_items', [
+                    'pk_item'    => (int) $item->pk_item,
+                    'fk_pk_poll' => (int) $this->id,
+                    'item'       => $item->item,
+                    'votes'      => $item->votes,
+                ]);
                 $total += $item->votes;
             }
 
