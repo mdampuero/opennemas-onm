@@ -251,8 +251,10 @@ class Article extends Content
                 ? null : $data['agency'],
                 'summary'   => (!array_key_exists('summary', $data) || empty($data['summary']))
                     ? null : $data['summary'],
-                'subtitle'   => (!array_key_exists('subtitle', $data) || empty($data['subtitle']))
-                    ? null : $data['subtitle'],
+                'subtitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
+                    ? null : $data['pretitle'],
+                'pretitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
+                    ? null : $data['pretitle'],
                 'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
                     ? null : $data['title_int'],
                 'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
@@ -326,8 +328,10 @@ class Article extends Content
             ? null : $data['agency'],
             'summary'   => (!array_key_exists('summary', $data) || empty($data['summary']))
                 ? null : $data['summary'],
-            'subtitle'   => (!array_key_exists('subtitle', $data) || empty($data['subtitle']))
-                ? null : $data['subtitle'],
+            'subtitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
+                ? null : $data['pretitle'],
+            'pretitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
+                ? null : $data['pretitle'],
             'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
                 ? null : $data['title_int'],
             'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
