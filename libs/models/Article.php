@@ -534,10 +534,10 @@ class Article extends Content
     public function saveMetadataFields($data)
     {
         if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            return null;
+            return;
         }
 
-        $metaDataFields = getService('setting_repository')->get('article_extra_fields');
+        $metaDataFields = getService('setting_repository')->get('extraInfoContents.ARTICLE_MANAGER');
         if (!is_array($metaDataFields)) {
             return;
         }
