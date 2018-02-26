@@ -23,7 +23,7 @@
             return '<div class="col-md-12" ng-repeat="moduleFields in fieldsByModule">' +
               '<h5>{{ moduleFields.title }}</h5>' +
               '<div class="form-group" ng-repeat="field in moduleFields.fields">' +
-                '<label class="form-label" for="{{ field.key }}">{{ field.name }}</label>' +
+                '<label class="form-label" for="{{ field.key }}">{{ field.title }}</label>' +
                 '<div class="controls">' +
                   '<input class="form-control" id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'text\'" ng-model="ngModel[field.key]" type="text">' +
                   '<input class="form-control" datetime-picker id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'date\'" ng-model="ngModel[field.key]" type="text">' +

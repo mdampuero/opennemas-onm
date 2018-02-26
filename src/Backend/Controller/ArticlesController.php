@@ -414,6 +414,21 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Config for article system
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('MASTER')")
+     */
+    public function configAction()
+    {
+        return $this->render('article/config.tpl', [
+            'extra_fields' => $this->get('setting_repository')
+                ->get('extraInfoContents.ARTICLE_MANAGER')
+        ]);
+    }
+
+    /**
      * Common code for all the actions
      *
      * @return void

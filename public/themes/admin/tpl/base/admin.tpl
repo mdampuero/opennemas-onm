@@ -542,7 +542,7 @@
       @Common/js/jquery/localization/messages_es.js,
       @Common/js/onm/jquery.password-strength.js,
       @Common/src/fablock/fablock.js,
-      @Common/src/angular-autoform/js/autoform.js,
+      @Common/src/angular-autoform/js/*,
       @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-image-preview/js/image-preview.js,
