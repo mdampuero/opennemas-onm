@@ -203,7 +203,8 @@ class ArticleController extends Controller
         ];
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            $extra['moduleFields'] = $this->get('setting_repository')->get('article_extra_fields');
+            $extra['moduleFields'] = $this->get('setting_repository')
+                ->get('extraInfoContents.ARTICLE_MANAGER');
         }
 
         return $extra;

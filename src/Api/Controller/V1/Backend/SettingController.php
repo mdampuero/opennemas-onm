@@ -282,6 +282,27 @@ class SettingController extends Controller
     }
 
     /**
+     * Saves the extrafields setting for article
+     *
+     * @param array $files The list of files to save.
+     *
+     * @return array The list of filenames.
+     *
+     * @Security("hasPermission('MASTER')")
+     */
+    public function extraFieldArticleSaveAction(Request $request)
+    {
+        $msg      = $this->get('core.messenger');
+        $settings = $request->get('extraFields');
+
+        $this->get('setting_repository')->set('extraInfoContents.ARTICLE_MANAGER', $settings);
+
+        $msg->add(_('Settings saved.'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getcode());
+    }
+
+    /**
      * Saves a list of files and returns the list of filenames.
      *
      * @param array $files The list of files to save.
