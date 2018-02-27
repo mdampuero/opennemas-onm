@@ -1335,7 +1335,10 @@ specials:
             options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         subtitle:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { default: null, notnull: false, length: 512 }
+        pretitle:
+            type: string
+            options: { default: null, notnull: false, length: 512 }
         pdf_path:
             type: string
             options: { default: '0', notnull: false, length: 250 }

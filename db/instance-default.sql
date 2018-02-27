@@ -994,6 +994,7 @@ DROP TABLE IF EXISTS `specials`;
 CREATE TABLE `specials` (
   `pk_special` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `subtitle` varchar(250) DEFAULT NULL,
+  `pretitle` varchar(512) DEFAULT NULL,
   `pdf_path` varchar(250) DEFAULT '0',
   `img1` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`pk_special`),
@@ -1288,4 +1289,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-27 12:27:02
+-- Dump completed on 2018-02-27 15:13:03
