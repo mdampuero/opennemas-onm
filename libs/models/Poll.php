@@ -23,28 +23,28 @@ class Poll extends Content
      *
      * @var int
      */
-    public $pk_poll       = null;
+    public $pk_poll = null;
 
     /**
      * The poll subtitle
      *
      * @var string
      */
-    public $subtitle      = null;
+    public $subtitle = null;
 
     /**
      * The total amount of votes for this poll
      *
      * @var int
      */
-    public $total_votes   = null;
+    public $total_votes = null;
 
     /**
      * Ips that have voted this poll
      *
      * @var array
      */
-    public $used_ips      = null;
+    public $used_ips = null;
 
     /**
      * Type of visualization (bars, pie, ...)
@@ -77,26 +77,25 @@ class Poll extends Content
     public function __get($name)
     {
         switch ($name) {
+            case 'pretitle':
+                return $this->subtitle;
+
             case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate(
-                    'poll',
-                    array(
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => urlencode($this->slug),
-                        'category' => urlencode($this->category_name),
-                    )
-                );
+
+                $uri = Uri::generate('poll', [
+                    'id'       => sprintf('%06d', $this->id),
+                    'date'     => date('YmdHis', strtotime($this->created)),
+                    'slug'     => urlencode($this->slug),
+                    'category' => urlencode($this->category_name),
+                ]);
 
                 return ($uri !== '') ? $uri : $this->permalink;
 
-                break;
             default:
                 return parent::__get($name);
-                break;
         }
     }
 
@@ -110,12 +109,14 @@ class Poll extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if ((int) $id <= 0) {
+            return;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN polls ON pk_content = pk_poll WHERE pk_content=?',
+                . 'LEFT JOIN polls ON pk_content = pk_poll WHERE pk_content=?',
                 [ $id ]
             );
 
@@ -157,7 +158,7 @@ class Poll extends Content
             $this->visualization = $properties['visualization'];
         }
         if (array_key_exists('used_ips', $properties)) {
-            $this->used_ips      = unserialize($properties['used_ips']);
+            $this->used_ips = unserialize($properties['used_ips']);
         }
 
         $this->status = 'opened';
@@ -300,7 +301,6 @@ class Poll extends Content
                 'poll_items',
                 [ 'fk_pk_poll' => $id ]
             );
-
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -324,7 +324,6 @@ class Poll extends Content
                 [ $pkPoll ]
             );
 
-            $i     = 0;
             $total = 0;
             foreach ($rs as $item) {
                 $items[] = [
@@ -378,7 +377,7 @@ class Poll extends Content
                 [ $pkItem ]
             );
 
-            $rs = $conn->executeUpdate(
+            $conn->executeUpdate(
                 "UPDATE polls SET `total_votes`=?, `used_ips`=? WHERE pk_poll=?",
                 [
                     $this->total_votes,
@@ -404,7 +403,7 @@ class Poll extends Content
      */
     public function addCount($ips_count, $ip)
     {
-        $ips = array();
+        $ips = [];
         if ($ips_count) {
             foreach ($ips_count as $ip_array) {
                 $ips[] = $ip_array['ip'];
@@ -415,9 +414,9 @@ class Poll extends Content
 
         if ($kip_count === false) {
             //No se ha votado desde esa ip
-            $ips_count[] = array('ip' => $ip, 'count' => 1);
+            $ips_count[] = [ 'ip' => $ip, 'count' => 1 ];
         } else {
-            if ($ips_count[$kip_count]['count'] ==50) {
+            if ($ips_count[$kip_count]['count'] == 50) {
                 return false;
             }
             $ips_count[$kip_count]['count']++;
