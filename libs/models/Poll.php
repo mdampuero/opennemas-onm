@@ -182,7 +182,7 @@ class Poll extends Content
         try {
             $conn->insert('polls', [
                 'pk_poll'       => (int) $this->id,
-                'subtitle'      => $data['subtitle'],
+                'subtitle'      => $data['pretitle'],
                 'pretitle'      => $data['pretitle'],
                 'total_votes'   => 0,
                 'visualization' => $data['visualization'],
@@ -229,7 +229,7 @@ class Poll extends Content
 
             // Update the poll info
             $conn->update('polls', [
-                'subtitle'      => $data['subtitle'],
+                'subtitle'      => $data['pretitle'],
                 'pretitle'      => $data['pretitle'],
                 'visualization' => $data['visualization'],
                 'total_votes'   => $total,
