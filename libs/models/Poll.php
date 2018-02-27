@@ -26,11 +26,11 @@ class Poll extends Content
     public $pk_poll = null;
 
     /**
-     * The poll subtitle
+     * The poll pretitle
      *
      * @var string
      */
-    public $subtitle = null;
+    public $pretitle = null;
 
     /**
      * The total amount of votes for this poll
@@ -77,9 +77,6 @@ class Poll extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'pretitle':
-                return $this->subtitle;
-
             case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
@@ -145,8 +142,8 @@ class Poll extends Content
     {
         parent::load($properties);
 
-        // Force pretitle to use __get until properties separated
-        unset($this->pretitle);
+        // Ignore subtitle property from database
+        unset($this->subtitle);
 
         $this->status = 'opened';
 
@@ -179,7 +176,6 @@ class Poll extends Content
         try {
             $conn->insert('polls', [
                 'pk_poll'       => (int) $this->id,
-                'subtitle'      => $data['subtitle'],
                 'pretitle'      => $data['pretitle'],
                 'total_votes'   => 0,
                 'visualization' => $data['visualization'],
@@ -226,7 +222,6 @@ class Poll extends Content
 
             // Update the poll info
             $conn->update('polls', [
-                'subtitle'      => $data['subtitle'],
                 'pretitle'      => $data['pretitle'],
                 'visualization' => $data['visualization'],
                 'total_votes'   => $total,
