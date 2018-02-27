@@ -565,6 +565,7 @@ class OpinionsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
+            $extra = json_decode($request->request->get('extra-fields'), true);
             $configsRAW = $request->request->get('opinion_settings');
 
             $configs = [
@@ -575,7 +576,8 @@ class OpinionsController extends Controller
                     'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
                     'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                     'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
-                ]
+                ],
+                'extraInfoContents.OPINION_MANAGER' => $extra
             ];
 
             foreach ($configs as $key => $value) {
@@ -592,7 +594,9 @@ class OpinionsController extends Controller
             $configurations = s::get([ 'opinion_settings' ]);
 
             return $this->render('opinion/config.tpl', [
-                'configs' => $configurations
+                'configs'      => $configurations,
+                'extra_fields' => $this->get('setting_repository')
+                    ->get('extraInfoContents.OPINION_MANAGER')
             ]);
         }
     }
