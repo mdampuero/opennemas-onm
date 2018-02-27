@@ -155,6 +155,8 @@ class Special extends Content
         $this->subtitle   = $properties['subtitle'];
         $this->img1       = $properties['img1'];
         $this->pdf_path   = $properties['pdf_path'];
+
+        unset($this->pretitle);
     }
 
     /**
@@ -181,7 +183,8 @@ class Special extends Content
                 'specials',
                 [
                     'pk_special' => $this->id,
-                    'subtitle'   => $data['subtitle'],
+                    'subtitle'   => $data['pretitle'],
+                    'pretitle'   => $data['pretitle'],
                     'img1'       => (int) $data['img1'],
                     'pdf_path'   => $data['pdf_path']
                 ]
@@ -219,6 +222,7 @@ class Special extends Content
                 'specials',
                 [
                     'subtitle' => $data['subtitle'],
+                    'pretitle' => $data['pretitle'],
                     'img1'     => (int) $data['img1'],
                     'pdf_path' => $data['pdf_path'],
                 ],
