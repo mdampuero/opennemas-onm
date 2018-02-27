@@ -867,7 +867,7 @@ CREATE TABLE `polls` (
 
 LOCK TABLES `polls` WRITE;
 /*!40000 ALTER TABLE `polls` DISABLE KEYS */;
-INSERT INTO `polls` VALUES (163,4,'a:2:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:4;}i:1;a:2:{s:2:\"ip\";s:14:\"178.139.12.224\";s:5:\"count\";i:1;}}','Interesante reflexiÃ³n',NULL,0),(164,17,'a:4:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:16;}i:1;a:2:{s:2:\"ip\";s:11:\"95.16.86.69\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:14:\"83.165.253.141\";s:5:\"count\";i:1;}i:3;a:2:{s:2:\"ip\";s:9:\"127.0.0.1\";s:5:\"count\";i:1;}}','Cine o libros',NULL,1),(165,9,'a:3:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:7;}i:1;a:2:{s:2:\"ip\";s:11:\"95.16.86.69\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:14:\"213.60.224.181\";s:5:\"count\";i:1;}}','Presidente de los EE.UU.',NULL,0),(166,23,'a:3:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:21;}i:1;a:2:{s:2:\"ip\";s:14:\"91.116.137.243\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:11:\"95.16.86.29\";s:5:\"count\";i:1;}}','La mejor liga del mundo',NULL,1);
+INSERT INTO `polls` VALUES (163,4,'a:2:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:4;}i:1;a:2:{s:2:\"ip\";s:14:\"178.139.12.224\";s:5:\"count\";i:1;}}','Interesante reflexiÃ³n','Interesante reflexiÃ³n',0),(164,17,'a:4:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:16;}i:1;a:2:{s:2:\"ip\";s:11:\"95.16.86.69\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:14:\"83.165.253.141\";s:5:\"count\";i:1;}i:3;a:2:{s:2:\"ip\";s:9:\"127.0.0.1\";s:5:\"count\";i:1;}}','Cine o libros','Cine o libros',1),(165,9,'a:3:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:7;}i:1;a:2:{s:2:\"ip\";s:11:\"95.16.86.69\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:14:\"213.60.224.181\";s:5:\"count\";i:1;}}','Presidente de los EE.UU.','Presidente de los EE.UU.',0),(166,23,'a:3:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:21;}i:1;a:2:{s:2:\"ip\";s:14:\"91.116.137.243\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:11:\"95.16.86.29\";s:5:\"count\";i:1;}}','La mejor liga del mundo','La mejor liga del mundo',1);
 /*!40000 ALTER TABLE `polls` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1288,4 +1288,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-26 17:25:41
+-- Dump completed on 2018-02-27 11:31:14
