@@ -151,9 +151,6 @@ class Special extends Content
         $this->pk_special = $properties['pk_special'];
         $this->img1       = $properties['img1'];
         $this->pdf_path   = $properties['pdf_path'];
-
-        // Ignore subtitle property from database
-        unset($this->subtitle);
     }
 
     /**
