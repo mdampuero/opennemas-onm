@@ -173,6 +173,9 @@ class Poll extends Content
         ) {
             $this->status = 'closed';
         }
+
+        // Force pretitle to use __get until properties separated
+        unset($this->pretitle);
     }
 
     /**
