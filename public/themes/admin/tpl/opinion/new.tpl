@@ -296,6 +296,21 @@
           {include  file="opinion/partials/_images.tpl" article=$opinion withoutVideo='true'}
         </div>
       </div>
+      <div class="row ng-cloak" ng-init="fieldsByModule = {json_encode($extra_fields)|escape:"html"}">
+        <div class="col-md-12" ng-if="fieldsByModule !== undefined && fieldsByModule">
+          <div class="grid simple">
+            <div class="grid-title">
+              <h4>
+                <i class="fa fa-magic"></i>
+                {t}Additional data{/t}
+              </h4>
+            </div>
+            <div class="grid-body">
+              <autoform ng-model="article" fields-by-module="fieldsByModule"/>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     </div>
     <script type="text/ng-template" id="modal-preview">

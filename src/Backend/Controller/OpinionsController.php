@@ -241,6 +241,8 @@ class OpinionsController extends Controller
             'all_authors'    => $allAuthors,
             'author'         => $author,
             'commentsConfig' => s::get('comments_config'),
+            'extra_fields' => $this->get('setting_repository')
+                ->get('extraInfoContents.OPINION_MANAGER')
         ]);
     }
 
@@ -265,6 +267,8 @@ class OpinionsController extends Controller
             return $this->render('opinion/new.tpl', [
                 'all_authors'    => $allAuthors,
                 'commentsConfig' => s::get('comments_config'),
+                'extra_fields'   => $this->get('setting_repository')
+                    ->get('extraInfoContents.OPINION_MANAGER')
             ]);
         }
 
@@ -565,7 +569,7 @@ class OpinionsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $extra = json_decode($request->request->get('extra-fields'), true);
+            $extra      = $request->request->get('extra-fields');
             $configsRAW = $request->request->get('opinion_settings');
 
             $configs = [
@@ -577,7 +581,7 @@ class OpinionsController extends Controller
                     'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                     'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
                 ],
-                'extraInfoContents.OPINION_MANAGER' => $extra
+                'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
             ];
 
             foreach ($configs as $key => $value) {
