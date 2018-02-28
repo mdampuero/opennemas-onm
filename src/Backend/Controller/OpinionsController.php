@@ -236,13 +236,19 @@ class OpinionsController extends Controller
             $this->view->assign('photo2', $photo2);
         }
 
+        $extraFields = null;
+
+        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            $extraFields = $this->get('setting_repository')
+                ->get('extraInfoContents.OPINION_MANAGER');
+        }
+
         return $this->render('opinion/new.tpl', [
             'opinion'        => $opinion,
             'all_authors'    => $allAuthors,
             'author'         => $author,
             'commentsConfig' => s::get('comments_config'),
-            'extra_fields' => $this->get('setting_repository')
-                ->get('extraInfoContents.OPINION_MANAGER')
+            'extra_fields'   => $extraFields
         ]);
     }
 
@@ -264,11 +270,17 @@ class OpinionsController extends Controller
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
+            $extraFields = null;
+
+            if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+                $extraFields = $this->get('setting_repository')
+                    ->get('extraInfoContents.OPINION_MANAGER');
+            }
+
             return $this->render('opinion/new.tpl', [
                 'all_authors'    => $allAuthors,
                 'commentsConfig' => s::get('comments_config'),
-                'extra_fields'   => $this->get('setting_repository')
-                    ->get('extraInfoContents.OPINION_MANAGER')
+                'extra_fields'   => $extraFields
             ]);
         }
 
