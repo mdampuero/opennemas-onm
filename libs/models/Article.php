@@ -155,6 +155,9 @@ class Article extends Content
     {
         parent::load($data);
 
+        // Force pretitle to use __get until properties separated
+        unset($this->pretitle);
+
         return $this;
     }
 

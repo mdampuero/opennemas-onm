@@ -155,6 +155,9 @@ class Special extends Content
         $this->subtitle   = $properties['subtitle'];
         $this->img1       = $properties['img1'];
         $this->pdf_path   = $properties['pdf_path'];
+
+        // Force pretitle to use __get until properties separated
+        unset($this->pretitle);
     }
 
     /**
