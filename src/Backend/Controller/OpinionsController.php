@@ -319,6 +319,8 @@ class OpinionsController extends Controller
             ]
         ];
 
+        $data = $this->loadMetaDataFields($data, $request->request);
+
         if ($opinion->create($data)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -417,6 +419,8 @@ class OpinionsController extends Controller
                 'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
         ];
+
+        $data = $this->loadMetaDataFields($data, $request->request);
 
         if ($opinion->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -763,5 +767,37 @@ class OpinionsController extends Controller
         $this->view->assign([
             'allcategorys' => $this->parentCategories,
         ]);
+    }
+
+    /**
+     * This method load from the request the metadata fields,
+     *
+     * @param mixed   $data Data where load the metadata fields.
+     * @param Request $jostReq Request where the metadata are.
+     */
+    private function loadMetaDataFields($data, $postReq)
+    {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return $data;
+        }
+
+        // If I don't have the extension, I don't check the settings
+        $groups = $this->get('setting_repository')
+            ->get('extraInfoContents.OPINION_MANAGER');
+        if (!is_array($groups)) {
+            return $data;
+        }
+
+        foreach ($groups as $group) {
+            foreach ($group['fields'] as $field) {
+                if (empty($postReq->get($field['key']))) {
+                    continue;
+                }
+
+                $data[$field['key']] = $postReq->get($field['key']);
+            }
+        }
+
+        return $data;
     }
 }
