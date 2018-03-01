@@ -185,16 +185,16 @@ articles:
             options: { length: 20, unsigned: true, default: null, notnull: false }
         img1_footer:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: {  length: 512, default: null, notnull: false }
         img2:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
         img2_footer:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { length: 512, default: null, notnull: false }
         agency:
             type: string
-            options: { default: null, notnull: false, length: 100 }
+            options: { length: 512, default: null, notnull: false }
         fk_video:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
