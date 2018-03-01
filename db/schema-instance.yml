@@ -1397,12 +1397,6 @@ translation_ids:
             options: { length: 255, default: null, notnull: false }
     index:
         -
-            name: PRIMARY
-            columns: [pk_content_old, pk_content, type]
-            primary: true
-            unique: true
-            flags: {  }
-        -
             name: slug
             columns: [slug]
         -
