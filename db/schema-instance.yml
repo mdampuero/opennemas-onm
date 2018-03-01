@@ -782,8 +782,8 @@ kioskos:
             type: boolean
             options: { default: 0, comment: '0 item - 1 subscription' }
         price:
-            type: float
-            options: { default: 0 }
+            type: decimal
+            options: { scale: 2, unsigned: true, default: 0 }
     index:
         -
             name: PRIMARY
@@ -1000,7 +1000,7 @@ orders:
             options: { length: 150, default: null }
         payment_amount:
             type: decimal
-            options: { default: null, scale: 2 }
+            options: { scale: 2, default: null }
         payment_method:
             type: string
             options: { length: 200, default: null }
@@ -1080,8 +1080,8 @@ photos:
             type: string
             options: { length: 150, default: null }
         size:
-            type: float
-            options: { default: null, notnull: false }
+            type: decimal
+            options: { scale: 2, default: null, notnull: false }
         width:
             type: integer
             options: { default: null, notnull: false }
